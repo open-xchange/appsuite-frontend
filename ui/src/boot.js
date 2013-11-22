@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -112,18 +112,13 @@ $(window).load(function () {
         // remove dom nodes
         $('#io-ox-login-footer').remove();
         // update form
-        $('#io-ox-login-username').attr('disabled', 'disabled');
+        $('#io-ox-login-username').prop('disabled', true);
         $('#io-ox-login-password').val('');
         // unbind
         $('#io-ox-login-form').off('submit');
         // free closures
         cleanUp = fnChangeLanguage = initialize = $.noop;
     };
-
-    // searchfield fix
-    if (!_.browser.Chrome) {
-        $('html').addClass('no-searchfield');
-    }
 
     // do we have a mouse?
     if (!Modernizr.touch) {
@@ -152,7 +147,7 @@ $(window).load(function () {
     }
 
     // be busy
-    $('#background_loader').busy();
+    $('#background-loader').busy();
 
     $(window).on('online offline', function (e) {
         ox.trigger('connection:' + e.type);
@@ -180,7 +175,7 @@ $(window).load(function () {
             )
             .on('click', function (e) { e.preventDefault(); location.reload(); })
         );
-        $('#background_loader').idle().fadeOut(DURATION);
+        $('#background-loader').idle().fadeOut(DURATION);
         console.warn('Server is down.');
         serverDown = $.noop;
     }
@@ -237,7 +232,7 @@ $(window).load(function () {
         gotoCore = function (viaAutoLogin) {
             if (ox.signin === true) {
                 // show loader
-                $('#background_loader').fadeIn(DURATION, function () {
+                $('#background-loader').fadeIn(DURATION, function () {
                     var ref = _.url.hash('ref'),
                         location = '#?' + enc(_.rot(
                             'session=' + ox.session +
@@ -576,6 +571,7 @@ $(window).load(function () {
             var ref = (location.hash || '').replace(/^#/, ''),
                 path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
                 glue = path.indexOf('#') > -1 ? '&' : '#';
+            path = path.replace("[hostname]", window.location.hostname);
             hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
             _.url.redirect((hash ? path + glue + hash : path));
         }
@@ -609,7 +605,12 @@ $(window).load(function () {
                             serverUp();
                             debug('boot.js: fetchGeneralServerConfig > success');
                             // set page title now
-                            document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login'
+                            if (_.device('!small')) {
+                                document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login';
+                            } else {
+                                document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                            }
+
                             themes.set(ox.serverConfig.signinTheme || 'login');
                             // continue
                             gettext.setLanguage('en_US');
@@ -794,8 +795,8 @@ $(window).load(function () {
                     for (id in langSorted) {
                         var link;
                         i++;
-                        node.append(
-                            $('<a href="#" aria-label="' + lang[langSorted[id]] + '">')
+                        node.attr({'role': 'menu', 'aria-labeledby': 'io-ox-languages-label'}).append(
+                            $('<a role="menuitem" href="#" aria-label="' + lang[langSorted[id]] + '">')
                                 .on('click', { id: langSorted[id] }, fnChangeLanguage)
                                 .text(lang[langSorted[id]])
                         );
@@ -856,10 +857,10 @@ $(window).load(function () {
 
             // disable password?
             if (!ox.online) {
-                $('#io-ox-login-password').attr('disabled', 'disabled');
+                $('#io-ox-login-password').prop('disabled', true);
                 feedback('info', 'Offline mode');
             } else {
-                $('#io-ox-login-password').removeAttr('disabled');
+                $('#io-ox-login-password').prop('disabled', false);
             }
 
             // set username input type to text in IE
@@ -883,7 +884,7 @@ $(window).load(function () {
 
                 // autologout message
                 if (_.url.hash("autologout")) {
-                    feedback('info', $.txt(gt('autologout')));
+                    feedback('info', $.txt(gt('You have been automatically signed out')));
                 }
 
                 debug('boot.js: Check browser support');
@@ -949,10 +950,10 @@ $(window).load(function () {
                 // show login dialog
                 $('#io-ox-login-blocker').on('mousedown', false);
                 $('#io-ox-login-form').on('submit', fnSubmit);
-                $('#io-ox-login-username').removeAttr('disabled').focus().select();
+                $('#io-ox-login-username').prop('disabled', false).focus().select();
 
                 debug('boot.js: Fade in ...');
-                $('#background_loader').idle().fadeOut(DURATION, cont);
+                $('#background-loader').idle().fadeOut(DURATION, cont);
             });
         };
 

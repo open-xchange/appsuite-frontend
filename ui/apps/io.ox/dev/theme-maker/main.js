@@ -1,17 +1,20 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicker"], function (themes) {
+define('io.ox/dev/theme-maker/main',
+    ['themes',
+     'io.ox/core/tk/simple-colorpicker'
+    ], function (themes) {
 
     'use strict';
 
@@ -75,23 +78,23 @@ define("io.ox/dev/theme-maker/main", ["themes", "io.ox/core/tk/simple-colorpicke
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/dev/theme-maker',
-            title: "Theme maker",
+            title: 'Theme maker',
             toolbar: true
         });
 
         app.setWindow(win);
 
         // left panel
-        left = $("<div>")
-            .addClass("leftside")
+        left = $('<div>')
+            .addClass('leftside')
             .css({
                 backgroundColor: 'transparent'
             })
             .appendTo(win.nodes.main);
 
         // right panel
-        right = $("<div>")
-            .addClass("rightside")
+        right = $('<div>')
+            .addClass('rightside')
             .css({
                 backgroundColor: 'transparent'
             })

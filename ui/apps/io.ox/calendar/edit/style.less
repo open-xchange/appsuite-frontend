@@ -1,28 +1,15 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
-@fluidGridColumnWidth:    6.382978723%;
-@fluidGridGutterWidth:    2.127659574%;
-
-#fluidGridSystem {
-
-  // Setup the mixins to be used
-  .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, @columns) {
-    width: 1% * (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1));
-    margin-left: @fluidGridGutterWidth;
-  }
-
-}
 
 .io-ox-calendar-edit {
     max-width: 800px;
@@ -30,29 +17,26 @@
     margin-right: auto;
     margin-top: 20px;
 
-
     .btn {
         &.save {
             float: right;
             margin-left: 13px;
         }
-        &.discard {
-            float: right;
-        }
+        &.discard { float: right; }
     }
+
     .app-bottom-toolbar {
         .btn {
             float: none;
             margin: 0;
         }
     }
+
     label.desc {
         font-size: 13px;
         color: #888;
-    }
 
-    label.desc span {
-        white-space: nowrap;
+        span { white-space: nowrap; }
     }
 
     div.section {
@@ -66,33 +50,14 @@
         float: left;
     }
 
-    input.title {
-        width: 99%;
-        font-weight: bold;
-        font-size: 14px;
-        text-overflow: ellipsis;
-    }
-
-    input.location {
-        width: 100%;
-    }
-
-    .inner-margin {
-        margin: 10px 17px;
-    }
-
-    .input-extra-small {
-        width: 25px;
-    }
-
-    input.startsat-date, input.endsat-date {
-        margin-right: 8px;
-        margin-bottom: 0px;
-    }
-
-    input.startsat-time, input.endsat-time {
-        margin-right: 8px;
-        margin-bottom: 0px;
+    input {
+        &.title {
+            width: 99%;
+            font-weight: bold;
+            font-size: 14px;
+            text-overflow: ellipsis;
+        }
+        &.location { width: 100%; }
     }
 
     .label {
@@ -116,40 +81,14 @@
         height: 100%;
         resize: vertical;
         padding: 10px;
-        margin: 0px;
+        margin: 0;
         min-height: 120px;
         .box-sizing(border-box);
-    }
 
-    textarea.note:focus {
-        border-color: white;
-        .box-shadow(0px 0px 4px 0px #006897);
-    }
-
-    ul {
-        list-style: none;
-    }
-
-    ul, ol {
-        margin: 0 0 9px 0px
-    }
-
-    div.edit-appointment-participant {
-
-        position: relative;
-        line-height: 1.5em;
-        background-color: white;
-        margin-bottom: 2px;
-        padding: 4px 0px 4px 0px;
-
-        .odd {
-            margin-left: 0px;
+        &:focus {
+            border-color: white;
+            .box-shadow(0 0 4px 0 #006897);
         }
-
-        .even {
-            #fluidGridSystem > .columns(@fluidGridGutterWidth, @fluidGridColumnWidth, 6);
-        }
-
     }
 
     .sectiontitle {
@@ -160,9 +99,7 @@
         color: #888;
     }
 
-    .find-free-time {
-        font-size: 13px;
-    }
+    .find-free-time { font-size: 13px; }
 
     legend {
         display: block;
@@ -175,34 +112,11 @@
         border: 0;
     }
 
-    input.add-participant {
-        width: 345px;
-    }
+    input.add-participant { width: 345px; }
 
-    select {
-        width: 100%;
-    }
+    select { width: 100%; }
 
-    .autocomplete-popup .autocomplete-item {
-
-        padding: 0px 5px 5px 1px;
-        line-height: 1.5em;
-        cursor: pointer;
-
-        &.selected {
-            background-color: #EEE;
-        }
-
-    }
-
-    .notify-participants {
-        text-align: right;
-        margin-top: 5px;
-    }
-
-    .participantsrow {
-        margin-bottom: 30px;
-    }
+    .participantsrow { margin-bottom: 30px; }
 
     .add-participants {
         margin-bottom: 200px;
@@ -213,49 +127,16 @@
         }
     }
 
-    label.label-inline {
-        display: inline;
-    }
-
-    .margin-left {
-        margin-left: 5px;
-    }
-
-    .margin-right {
-        margin-right: 5px;
-    }
-
-        .hard-conflict {
-        margin: 1em 0 0 0;
-    }
+    .hard-conflict { margin: 1em 0 0 0; }
 
     .filename {
         word-wrap: break-word;
         word-break: break-all;
     }
 
-    .attachment-edit-row {
-        margin-bottom: 9px;
-    }
-
-    .io-ox-core-tk-attachment {
-
-        .delete {
-            width: 25px;
-            font-size: 19px;
-            padding-left: 12px;
-            cursor: pointer;
-        }
-
-        .attachment-icon {
-            padding-left: 15px;
-            width: 45px;
-        }
-
-    }
+    .attachment-edit-row { margin-bottom: 9px; }
 
     .typeahead.calendaredit {
-
         height: 200px;
         overflow-y: auto;
         overflow-x: hidden;
@@ -265,14 +146,12 @@
             text-align: right;
             padding: 3px 15px 3px 3px;
         }
-
     }
-
 }
 
 .io-ox-calendar-edit-sidepanel {
-  padding: 13px;
-  background-color: whiteSmoke;
+    padding: 13px;
+    background-color: whiteSmoke;
 }
 
 .edit-appointment input[type="text"].discreet:focus {
@@ -297,17 +176,18 @@
     margin: 7px 0 20px 0;
     min-height: 140px;
 
-    .recurrence-detail-toggle .icon-remove {
-        color: #888;
-    }
+    .recurrence-detail-toggle .icon-remove { color: #888; }
 
     * {
         .box-sizing(border-box);
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
-    span.dropdown { position:static; }
-    span.dropdown.open { position:relative; }
+    span.dropdown {
+        position: static;
+
+        &.open { position: relative; }
+    }
 
     .inset {
         padding-left: 5px;
@@ -324,69 +204,45 @@
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
     .io-ox-calendar-edit {
-
-        margin-top: 0px;
+        margin-top: 0;
         padding: 0 13px;
 
-        .header {
-            margin-bottom: 9px;
-        }
+        .header { margin-bottom: 9px; }
 
-        h1.title {
-            float: none;
-        }
+        h1.title { float: none; }
 
-        .sectiontitle {
-            margin: 0;
-        }
+        .sectiontitle { margin: 0; }
 
         .dateinput .span6 {
-
             width: 50%;
             float: left;
 
-            &[data-extension-id="end-date"] .control-group {
-                float: right;
-            }
+            &[data-extension-id="end-date"] .control-group { float: right; }
 
-            .input-small {
-                width: 9em;
-            }
-
+            .input-small { width: 9em; }
         }
 
         .actionToggle {
             display: block;
             margin: 10px 0;
-            &.spacer {
-                padding-bottom: 40px;
+
+            &.spacer { padding-bottom: 40px; }
+        }
+
+        .collapsed { display: none; }
+
+        .control-group { margin-bottom: 0; }
+
+        textarea.note { min-height: 0; }
+
+        .io-ox-recurrence-view .inset { height: auto; }
+
+        .fileupload .uneditable-input { width: 185px; }
+
+        .participant-wrapper {
+            .participant-email {
+                display: block;
             }
         }
-
-        .collapsed {
-            display: none;
-        }
-
-        .control-group {
-            margin-bottom: 0;
-        }
-
-        textarea.note {
-            min-height: 0px;
-        }
-
-        .io-ox-recurrence-view {
-
-            .inset {
-                height: auto;
-            }
-
-        }
-
-        .fileupload .uneditable-input {
-            width: 185px;
-        }
-
     }
-
 }

@@ -1,44 +1,31 @@
-var tests = Object.keys(window.__karma__.files).filter(function (file) {
-    return /spec\.js$/.test(file);
-});
+var tests = [];
+for (var file in window.__karma__.files) {
+    if (window.__karma__.files.hasOwnProperty(file)) {
+        if (/spec\.js$/.test(file)) {
+            tests.push(file);
+        }
+    }
+}
 
-requirejs.config({
-    // Karma serves files from '/base/apps'
-    baseUrl: '/base/apps',
+require(['io.ox/core/extPatterns/stage'], function (Stage) {
+    ox.testUtils.stubAppsuiteBody();
 
-    // ask Require.js to load these files (all our tests)
-    deps: tests,
+    new Stage('io.ox/core/stages', {
+        id: 'run_tests',
+        index: 99999,
+        run: function (baton) {
+            requirejs.config({
+                // Karma serves files from '/base/apps'
+                baseUrl: '/base/apps',
 
-    // start test run, once Require.js is done
-    callback: window.__karma__.start
-});
+                // ask Require.js to load these files (all our tests)
+                deps: tests,
 
-var root = location.pathname.replace(/\/[^\/]*$/, '');
-window.ox = {
-    abs: location.protocol + '//' + location.host,
-    apiRoot: root + '/api',
-    base: '',
-    context_id: 0,
-    debug: true,
-    language: 'de_DE',
-    logoutLocation: 'signin',
-    online: navigator.onLine !== undefined ? navigator.onLine : true,
-    revision: '1',
-    root: root,
-    secretCookie: false, // auto-login
-    serverConfig: {},
-    session: '',
-    signin: false,
-    t0: new Date().getTime(), // for profiling
-    testTimeout: 30000,
-    ui: { session: {} },
-    user: '',
-    user_id: 0,
-    windowState: 'foreground'
-};
-
-require(['gettext'], function (gettext) {
-    gettext.setLanguage(ox.language);
+                // start test run, once Require.js is done
+                callback: window.__karma__.start
+            });
+        }
+    });
 });
 
 if (jasmine) {
@@ -74,20 +61,3 @@ if (jasmine) {
         this.results_.failedCount = 0;
     };
 }
-
-require(['io.ox/core/settings'], function (settings) {
-    var fakeServer = sinon.fakeServer.create();
-    fakeServer.respondWith("PUT", /api\/jslob\?action=list/, function (xhr) {
-        var fakeSettings = {data: [
-            {
-                id: 'io.ox/core',
-                meta: {},
-                tree: {}
-            }
-        ]};
-        xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(fakeSettings));
-    });
-    settings.load('io.ox/core');
-    fakeServer.respond();
-    fakeServer.restore();
-});

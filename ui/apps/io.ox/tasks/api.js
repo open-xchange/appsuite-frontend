@@ -1,19 +1,21 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define('io.ox/tasks/api',
-        ['io.ox/core/http',
-         'io.ox/core/api/factory',
-         'io.ox/core/api/folder', 'io.ox/tasks/util'], function (http, apiFactory, folderAPI, util) {
+    ['io.ox/core/http',
+     'io.ox/core/api/factory',
+     'io.ox/core/api/folder',
+     'io.ox/tasks/util'
+    ], function (http, apiFactory, folderAPI, util) {
 
     'use strict';
 
@@ -306,6 +308,12 @@ define('io.ox/tasks/api',
         if (task.alarm === null) {//task.alarm must not be null on creation, it's only used to delete an alarm on update actions
             delete task.alarm;    //leaving it in would throw a backend error
         }
+
+        if (task.status === 3 || task.status === '3') {
+            task.date_completed = task.date_completed || _.now();//make sure we have date_completed
+        } else {
+            delete task.date_completed;//remove invalid date_completed
+        }
         return http.PUT({
             module: 'tasks',
             params: { action: 'new', timezone: 'UTC' },
@@ -328,12 +336,12 @@ define('io.ox/tasks/api',
                     return $.when();
                 }
             });
-        }).then(function (cache) {
+        }).then(function () {
             if (attachmentHandlingNeeded) {
-                api.addToUploadList(task.folder_id + '.' + response.id);//to make the detailview show the busy animation
+                api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
             checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
-            //api.trigger('create', task);
+            api.trigger('create', task);
             return response;
         });
     };
@@ -343,6 +351,7 @@ define('io.ox/tasks/api',
      * @param  {object} task (id, folder_id, 'changed attributes')
      * @param  {string} newFolder (optional; target folder id)
      * @fires  api#refresh.all
+     * @fires  api#update:ecid
      * @return {[type]}
      */
     api.update = function (task, newFolder) {
@@ -375,7 +384,7 @@ define('io.ox/tasks/api',
         }
 
         if (task.status === 3 || task.status === '3') {
-            task.date_completed = _.now();
+            task.date_completed = task.date_completed || _.now();// make sure we have date_completed
         } else if (task.status !== 3 && task.status !== '3') {
             task.date_completed = null;
         }
@@ -399,13 +408,14 @@ define('io.ox/tasks/api',
             obj = {folder_id: useFolder, id: task.id};
             //notification check
             checkForNotifications([obj], task);
-            return obj;
-        }).done(function () {
             if (attachmentHandlingNeeded) {
                 api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
+            return obj;
+        }).done(function () {
             //trigger refresh, for vGrid etc
             api.trigger('refresh.all');
+            api.trigger('update:' + _.ecid({id: task.id, folder_id: useFolder}));
             refreshPortal();
         });
 
@@ -493,8 +503,8 @@ define('io.ox/tasks/api',
             },
             data: options.data, // object with confirmation attribute
             appendColumns: false
-        }).pipe(function (response) {
-            api.trigger("mark:task:confirmed", [{id: options.id, data: options.data}]);
+        }).pipe(function () {
+            api.trigger('mark:task:confirmed', [{id: options.id, data: options.data}]);
             // update cache
             return api.removeFromCache(key);
         });

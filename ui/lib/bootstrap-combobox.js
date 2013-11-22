@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
@@ -41,7 +41,7 @@ $(document).ready(function () {
                 .on('keyup',    $.proxy(this.keyup, this));
 
 
-            if ($.browser.webkit || $.browser.msie) {
+            if (_.browser.webkit || _.browser.msie) {
                 this.$element.on('keydown', $.proxy(this.keypress, this));
             }
             // bind to mousedown to intercept the blur event
@@ -58,8 +58,8 @@ $(document).ready(function () {
             });
             this.$menu
                 .on('click', $.proxy(this.click, this))
-                .on('mouseenter', 'li', $.proxy(this.mouseenter, this));
-
+                .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
+                .on('mouseleave', $.proxy(this.mouseleave, this));
         },
         hide: function () {
             this.$menu.hide();
@@ -81,6 +81,9 @@ $(document).ready(function () {
             setTimeout(function () {
                 self.select();
             }, 0);
+        },
+        mouseleave: function(e) {
+            this.$li.removeClass('active');
         },
         move: function (e) {
             if (!this.shown) return;

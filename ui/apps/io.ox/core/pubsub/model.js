@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -32,7 +33,7 @@ define('io.ox/core/pubsub/model',
             },
             update: function (model) {
                 return settingsUtil.yellOnReject(
-                     api.update(model.attributes)
+                    api.update(model.attributes)
                 );
             },
             destroy: function (model) {
@@ -99,11 +100,11 @@ define('io.ox/core/pubsub/model',
                         api.on('refresh:all', function () {
                             collection.fetch();
                         });
-                        this.on('change:enabled', function (model, value, opt) {
+                        this.on('change:enabled', function (model) {
                             model.collection.sort();
                         });
                     },
-                    sync: function (method, collection, options) {
+                    sync: function (method, collection) {
                         if (method !== 'read') return;
                         var self = this;
 

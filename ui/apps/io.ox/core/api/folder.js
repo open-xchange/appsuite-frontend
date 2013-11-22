@@ -1,11 +1,12 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012 Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -20,7 +21,9 @@ define('io.ox/core/api/folder',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
      'io.ox/core/extensions',
-     'gettext!io.ox/core'], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
+     'gettext!io.ox/core',
+     'io.ox/filter/folder'
+    ], function (http, cache, mailSettings, settings, account, Events, notifications, capabilities, ext, gt) {
 
     'use strict';
 
@@ -28,6 +31,7 @@ define('io.ox/core/api/folder',
         folderCache = new cache.SimpleCache('folder', false),
         subFolderCache = new cache.SimpleCache('subfolder', true),
         visibleCache = new cache.SimpleCache('visible-folder', true),
+        firstSubFolderFetch = {},
 
         /**
          * checks if folder is currently blacklisted
@@ -35,9 +39,16 @@ define('io.ox/core/api/folder',
          * @return {boolean} true if not blacklisted
          */
         visible = function (folder) {
-            var blacklist = settings.get('folder/blacklist') || {};
-            var blacklistedFolder = blacklist[String(folder.data ? folder.data.id : folder.id)];
-            return folder !== undefined && (blacklistedFolder === undefined || blacklistedFolder === false);
+            var point = ext.point('io.ox/folder/filter');
+            return point.filter(function (p) {
+                    return p.invoke('isEnabled', this, folder) !== false;
+                })
+                .map(function (p) {
+                    return p.invoke('isVisible', this, folder);
+                })
+                .reduce(function (acc, isVisible) {
+                    return acc && isVisible;
+                }, true);
         },
 
         // magic permission check
@@ -70,7 +81,7 @@ define('io.ox/core/api/folder',
                         timezone: 'UTC'
                     }
                 })
-                .then(function (data, timestamp) {
+                .then(function (data) {
                     // add to cache
                     return cache.add(data.id, data);
                 }, function (error) {
@@ -185,88 +196,110 @@ define('io.ox/core/api/folder',
             if (opt.all) opt.cache = false;
 
                 // get cache
-            var cache = opt.storage ? opt.storage.subFolderCache : subFolderCache,
-                // cache miss?
-                getter = function () {
-                    return http.GET({
-                        module: 'folders',
-                        params: {
-                            action: 'list',
-                            parent: opt.folder,
-                            tree: '1',
-                            all: opt.all ? '1' : '0',
-                            altNames: true,
-                            timezone: 'UTC'
-                        },
-                        appendColumns: true
-                    })
-                    .pipe(function (data, timestamp) {
+            var cache = opt.storage ? opt.storage.subFolderCache : subFolderCache;
 
-                        // rearrange on multiple ???
-                        if (data.timestamp) {
-                            timestamp = _.then(); // force update
-                            data = data.data;
-                        }
+            function updateFolderCache(folder, data, cache) {
+                firstSubFolderFetch[folder] = false;
+                return $.when.apply($,
+                    // add to cache
+                    [].concat(
+                        cache.add(folder, data),
+                        // also add to folder cache
+                        _(data).map(function (subfolder) {
+                            return folderCache.add(subfolder.id, subfolder);
+                        })
+                    )
+                )
+                .then(function () {
+                    return data;
+                });
+            }
 
-                        // apply blacklist
-                        data = _.filter(data, visible);
+            function getter() {
+                return http.GET({
+                    module: 'folders',
+                    params: {
+                        action: 'list',
+                        parent: opt.folder,
+                        tree: '1',
+                        all: opt.all ? '1' : '0',
+                        altNames: true,
+                        timezone: 'UTC'
+                    },
+                    appendColumns: true
+                })
+                .then(function (data, timestamp) {
 
-                        // fix order of mail folders (INBOX first)
-                        if (opt.folder === '1') {
+                    // rearrange on multiple ???
+                    if (data.timestamp) {
+                        timestamp = _.then(); // force update
+                        data = data.data;
+                    }
 
-                            var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
+                    // apply blacklist
+                    data = _.filter(data, visible);
 
-                            // get unified folder first
-                            _(data).find(function (folder) {
-                                return account.isUnified(folder.id) && !!(head[0] = folder);
-                            });
+                    // fix order of mail folders (INBOX first)
+                    if (opt.folder === '1') {
 
-                            // get standard folders
-                            _(data).each(function (folder) {
-                                _(types).find(function (type, index) {
-                                    return account.is(type, folder.id) && !!(head[index + 1] = folder);
-                                });
-                            });
+                        var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
 
-                            // exclude unified and standard folders
-                            data = _(data).reject(function (folder) {
-                                return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
-                            });
-
-                            // sort the rest
-                            data.sort(function (a, b) {
-                                // external accounts at last
-                                if (account.isExternal(a.id)) return +1;
-                                if (account.isExternal(b.id)) return -1;
-                                return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
-                            });
-
-                            // combine
-                            data.unshift.apply(data, _(head).compact());
-                        }
-
-                        return $.when(
-                            // add to cache
-                            cache.add(opt.folder, data),
-                            // also add to folder cache
-                            $.when.apply($,
-                                _(data).map(function (folder) {
-                                    return folderCache.add(folder.id, folder);
-                                })
-                            )
-                        )
-                        .pipe(function () {
-                            return data;
+                        // get unified folder first
+                        _(data).find(function (folder) {
+                            return account.isUnified(folder.id) && !!(head[0] = folder);
                         });
-                    })
-                    .fail(function (e) {
-                        if (ox.debug) {
-                            console.error('folder.getSubFolders', opt.folder, e.error, e);
-                        }
-                    });
-                };
 
-            return opt.cache === false ? getter() : cache.get(opt.folder, getter);
+                        // get standard folders
+                        _(data).each(function (folder) {
+                            _(types).find(function (type, index) {
+                                return account.is(type, folder.id) && !!(head[index + 1] = folder);
+                            });
+                        });
+
+                        // exclude unified and standard folders
+                        data = _(data).reject(function (folder) {
+                            return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
+                        });
+
+                        // sort the rest
+                        data.sort(function (a, b) {
+                            // external accounts at last
+                            if (account.isExternal(a.id)) return +1;
+                            if (account.isExternal(b.id)) return -1;
+                            return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
+                        });
+
+                        // combine
+                        data.unshift.apply(data, _(head).compact());
+                    }
+
+                    return $.when(
+                        // add to cache
+                        cache.add(opt.folder, data),
+                        // also add to folder cache
+                        $.when.apply($,
+                            _(data).map(function (folder) {
+                                return folderCache.add(folder.id, folder);
+                            })
+                        )
+                    )
+                    .pipe(function () {
+                        return data;
+                    });
+                })
+                .fail(function (e) {
+                    if (ox.debug) {
+                        console.error('folder.getSubFolders', opt.folder, e.error, e);
+                    }
+                });
+            }
+
+            return opt.cache === false ?
+                getter() :
+                cache.get(opt.folder, getter).then(function (data) {
+                    return firstSubFolderFetch[opt.folder] !== false ?
+                        updateFolderCache(opt.folder, data, cache) : data;
+                });
         },
 
         getPath: function (options) {
@@ -410,7 +443,6 @@ define('io.ox/core/api/folder',
 
             // get folder
             return this.get({ folder: opt.folder }).then(function (data) {
-
                 var id = data.id, folder_id = data.folder_id;
 
                 // clear caches first
@@ -429,7 +461,8 @@ define('io.ox/core/api/folder',
                         params: {
                             action: 'delete',
                             folder_id: opt.folder,
-                            tree: '1'
+                            tree: '1',
+                            failOnError: true
                         },
                         data: [opt.folder],
                         appendColumns: false
@@ -441,7 +474,7 @@ define('io.ox/core/api/folder',
                     });
                 });
             })
-            .fail(function (error) {
+            .fail(function () {
                 api.trigger('delete:fail', opt.folder);
             });
         },
@@ -866,7 +899,7 @@ define('io.ox/core/api/folder',
                             api.trigger('update', id, id, b);
                         }
                     })
-                    .always(function (e) {
+                    .always(function () {
                         delete pending[id];
                     });
             }
@@ -945,7 +978,7 @@ define('io.ox/core/api/folder',
 
     // central hub to coordinate events and caches
     // (see files/api.js for a full implementation for files)
-    api.propagate = function (type, id) {
+    api.propagate = function (type) {
 
         var ready = $.when();
 
@@ -957,6 +990,31 @@ define('io.ox/core/api/folder',
         }
 
         return ready;
+    };
+
+    // shortens the folder title and adds ellipsis
+    api.getFolderTitle = function (title, max) {
+
+        title = String(title || '').trim();
+
+        var split = title.split(/[ _-]+/),
+            delimiters = title.split(/[^ _-]+/),
+            length = title.length;
+
+        while (length > max && split.length > 2) {
+            var index = Math.floor(split.length / 2);
+
+            length -= split[index].length + 2;
+            split.splice(index, 1);
+            delimiters.splice(index + 1, 1);
+            delimiters[Math.floor(delimiters.length / 2)] = '\u2026';
+        }
+
+        if (length > max) {
+            return _.ellipsis(title, { charpos: 'middle', max: max, length: Math.floor(max / 2 - 1) });
+        }
+
+        return _(split).map(function (val, key) { return val + delimiters[key + 1]; }).join('');
     };
 
     /**
@@ -992,16 +1050,23 @@ define('io.ox/core/api/folder',
                 api.getSubFolders({ folder: id }).done(function (list) {
                     if (list.length) {
                         li.addClass('dropdown').append(
-                            $('<a href="#" class="dropdown-toggle" tabindex="1" data-toggle="dropdown">')
-                            .append(
-                                $.txt(gt.noI18n(title)),
+                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">')
+                            .attr(
+                                'title', title
+                            ).append(
+                                $.txt(gt.noI18n(api.getFolderTitle(title, 30))),
                                 $('<b class="caret">')
                             ),
-                            $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel" aria-haspopup="true">').append(
+                            $('<ul class="dropdown-menu">')
+                            .attr({
+                                'role': 'menu',
+                                'aria-haspopup': 'true',
+                                'aria-label': gt.format('subfolders of %s', gt.noI18n(api.getFolderTitle(title, 30)))
+                            }).append(
                                 _(list).map(function (folder) {
                                     var $a, $li = $('<li>').append(
                                         $a = $('<a href="#" tabindex="1" role="menuitem">')
-                                        .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
+                                        .attr({'data-folder-id': folder.id}).text(gt.noI18n(api.getFolderTitle(folder.title, 30)))
                                     );
                                     /**
                                      * special mobile handling due to on-the-fly bootstrap-dropdown mod on mobile
@@ -1036,17 +1101,18 @@ define('io.ox/core/api/folder',
 
             var li = $('<li>'), elem, isLast = i === list.length - 1,
                 properModule = options.module === undefined || folder.module === options.module,
-                clickable = properModule && options.handler !== undefined;
+                clickable = properModule && options.handler !== undefined,
+                displayTitle = gt.noI18n(api.getFolderTitle(folder.title, 30));
 
             if (isLast && options.subfolder && clickable) {
                 dropdown(elem = li, folder.id, folder.title, options);
             } else if (isLast && options.last) {
-                elem = li.addClass('active').text(gt.noI18n(folder.title));
+                elem = li.addClass('active').text(displayTitle);
             } else {
                 if (!clickable) {
-                    elem = li.addClass('active').text(gt.noI18n(folder.title));
+                    elem = li.addClass('active').text(displayTitle);
                 } else {
-                    li.append(elem = $('<a href="#" tabindex="1" role="menuitem">').text(gt.noI18n(folder.title)));
+                    li.append(elem = $('<a href="#" tabindex="1" role="menuitem">').attr('title', folder.title).text(displayTitle));
                 }
                 li.append(isLast ? $() : $('<span class="divider" role="presentation">').text(gt.noI18n(' / ')));
             }
@@ -1055,17 +1121,36 @@ define('io.ox/core/api/folder',
             this.append(li);
         };
 
+        var draw = function (list, ul, options) {
+            var exclude = _(options.exclude);
+            _(list).each(function (o, i, list) {
+                if (!exclude.contains(o.id)) {
+                    add.call(ul, o, i, list, options);
+                }
+            });
+            if (options.leaf) {
+                ul.append(
+                    $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
+                );
+            }
+            ul = null;
+        };
+
         return function (id, options) {
             var ul;
             options = _.extend({ subfolder: true, last: true, exclude: [] }, options);
             try {
-                ul = $('<ul class="breadcrumb">').on('click', 'a', function (e) {
-                    e.preventDefault();
-                    var id = $(this).attr('data-folder-id');
-                    if (id !== undefined) {
-                        _.call(options.handler, id, $(this).data());
-                    }
-                });
+                ul = $('<ul class="breadcrumb">')
+                    .attr({
+                        'role': 'menubar'
+                    })
+                    .on('click', 'a', function (e) {
+                        e.preventDefault();
+                        var id = $(this).attr('data-folder-id');
+                        if (id !== undefined) {
+                            _.call(options.handler, id, $(this).data());
+                        }
+                    });
                 if (options.prefix) {
                     ul.append($('<li class="prefix">').append(
                         $.txt(options.prefix), $('<span class="divider">').text(gt.noI18n(' '))
@@ -1076,23 +1161,20 @@ define('io.ox/core/api/folder',
             finally {
                 api.getPath({ folder: id }).then(
                     function success(list) {
-                        var exclude = _(options.exclude);
-                        _(list).each(function (o, i, list) {
-                            if (!exclude.contains(o.id)) {
-                                add.call(ul, o, i, list, options);
-                            }
-                        });
-                        if (options.leaf) {
-                            ul.append(
-                                $('<li>').append($('<span class="divider">').text(gt.noI18n(' / ')), options.leaf)
-                            );
-                        }
-                        ul = null;
+                        draw(list, ul, options);
                     },
                     function fail() {
-                        // cannot show breadcrumb, for example due to disabled GAB
-                        ul.remove();
-                        ul = null;
+                        api.get({ folder: id }).then(
+                            function (folder) {
+                                draw([folder], ul, options);
+                            },
+                            function () {
+                                // cannot show breadcrumb, for example due to disabled GAB
+
+                                ul.remove();
+                                ul = null;
+                            }
+                        );
                     }
                 );
             }
@@ -1110,6 +1192,14 @@ define('io.ox/core/api/folder',
         folderCache: folderCache,
         subFolderCache: subFolderCache,
         visibleCache: visibleCache
+    };
+
+    api.clearCaches = function () {
+        return $.when(
+            folderCache.clear(),
+            subFolderCache.clear(),
+            visibleCache.clear()
+        );
     };
 
     // filename validator

@@ -1,11 +1,12 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012 Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
@@ -22,7 +23,8 @@ define('io.ox/core/permissions/permissions',
      'io.ox/calendar/edit/view-addparticipants',
      'io.ox/core/http',
      'gettext!io.ox/core',
-     'less!io.ox/core/permissions/style.less'], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
+     'less!io.ox/core/permissions/style.less'
+    ], function (ext, notifications, api, userAPI, groupAPI, dialogs, contactsAPI, contactsUtil, AddParticipantsView, http, gt) {
 
     'use strict';
 
@@ -45,7 +47,7 @@ define('io.ox/core/permissions/permissions',
         ],
 
         Permission = Backbone.Model.extend({
-            idAttribute: "entity",
+            idAttribute: 'entity',
             defaults: {
                 group: false,
                 bits: 0
@@ -67,7 +69,7 @@ define('io.ox/core/permissions/permissions',
                 this.model.on('remove', performRemove, this);
             },
 
-            className: "permission row-fluid",
+            className: 'permission row-fluid',
 
             events: {
                 'click a.bit': 'updateDropdown',
@@ -100,6 +102,7 @@ define('io.ox/core/permissions/permissions',
             },
 
             applyRole: function (e) {
+                e.preventDefault();
                 var node = $(e.target), bits = node.attr('data-value');
                 this.model.set('bits', parseInt(bits, 10), {validate: true});
             },
@@ -283,7 +286,6 @@ define('io.ox/core/permissions/permissions',
     addDropdown = function (permission, baton) {
         var bits = baton.model.get('bits'),
             selected = api.Bitmask(bits).get(permission),
-            admin = isFolderAdmin,
             menu, ul;
 
         if (preventAdminPermissions(permission, baton)) {
@@ -380,7 +382,7 @@ define('io.ox/core/permissions/permissions',
 
                     dialog.getContentNode().busy();
 
-                    userAPI.getList(ids, true, { allColumns: true }).done(function (list) {
+                    userAPI.getList(ids, true, { allColumns: true }).done(function () {
                         // stop being busy
                         dialog.getContentNode().idle();
                         // draw users

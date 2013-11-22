@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -11,19 +12,26 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
-                                   'io.ox/calendar/util',
-                                   'gettext!io.ox/tasks',
-                                   'io.ox/core/extensions',
-                                   'io.ox/core/extPatterns/links',
-                                   'io.ox/tasks/api',
-                                   'io.ox/tasks/actions',
-                                   'less!io.ox/tasks/style.less' ], function (util, calendarUtil, gt, ext, links, api) {
+define('io.ox/tasks/view-detail',
+    ['io.ox/tasks/util',
+     'io.ox/calendar/util',
+     'gettext!io.ox/tasks',
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/tasks/api',
+     'io.ox/tasks/actions',
+     'less!io.ox/tasks/style.less'
+    ], function (util, calendarUtil, gt, ext, links, api) {
+
     'use strict';
 
     var taskDetailView = {
 
-        draw: function (data) {
+        draw: function (baton) {
+
+            // make sure we have a baton
+            var baton = ext.Baton.ensure(baton),
+                data = baton.data;
 
             if (!data) return $('<div>');
 
@@ -36,7 +44,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                 .addClass('tasks-detailview');
 
             // inline links
-            ext.point('io.ox/tasks/detail-inline').invoke('draw', node, data);
+            ext.point('io.ox/tasks/detail-inline').invoke('draw', node, baton);
 
             var header = $('<header>');
 
@@ -75,30 +83,9 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             }
             infoPanel.append(
                 $('<br>'),
+                // status
                 $('<div>').text(task.status).addClass('status ' +  task.badge)
             );
-
-            var blackStars,
-                grayStars;
-
-            switch (data.priority) {
-            case 1:
-                blackStars = '\u2605';
-                grayStars = '\u2605\u2605';
-                break;
-            case 2:
-                blackStars = '\u2605\u2605';
-                grayStars = '\u2605';
-                break;
-            case 3:
-                blackStars = '\u2605\u2605\u2605';
-                grayStars = '';
-                break;
-            }
-            $('<br>').appendTo(infoPanel);
-            $('<div>').append($('<span>').text(gt.noI18n(grayStars)).css('color', '#aaa'),
-                              $('<span>').text(gt.noI18n(blackStars))).addClass('priority').appendTo(infoPanel);
-            blackStars = grayStars = null;
 
             //check to see if there is a leading <br> and remove it
             var firstBr = infoPanel.find('br:first');
@@ -109,8 +96,16 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             node.append(
                 header.append(
                     infoPanel,
-                    data.private_flag ? $('<i class="icon-lock private-flag">') : [],
-                    $('<div class="title clear-title">').text(gt.noI18n(task.title))
+                    $('<div class="title clear-title">').append(
+                        // lock icon
+                        data.private_flag ? $('<i class="icon-lock private-flag">') : [],
+                        // title
+                        $.txt(gt.noI18n(task.title)),
+                        // priority
+                        $('<span class="priority">').append(
+                            util.getPriority(task)
+                        )
+                    )
                 )
             );
 
@@ -228,14 +223,14 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
                     });
                     if (intParticipants.length > 0) {
                         node.append($('<label class="detail-label">').text(gt('Participants')),
-                                table = $("<div class='task-participants-table'>"));
+                                table = $('<div class="task-participants-table">'));
                         _(intParticipants).each(function (participant) {
                             lookupParticipant(node, table, participant);
                         });
                     }
                     if (extParticipants.length > 0) {
                         node.append($('<label class="detail-label">').text(gt('External participants')),
-                                table = $("<div class='task-participants-table'>"));
+                                table = $('<div class="task-participants-table">'));
                         _(extParticipants).each(function (participant) {
                             lookupParticipant(node, table, participant);
                         });
@@ -268,7 +263,7 @@ define('io.ox/tasks/view-detail', ['io.ox/tasks/util',
             $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments').appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
                 api.getAll({folder_id: task.folder_id, id: task.id, module: 4}).done(function (data) {
-                    _(data).each(function (a, index) {
+                    _(data).each(function (a) {
                         // draw
                         buildDropdown(attachmentNode, _.noI18n(a.filename), a);
                     });

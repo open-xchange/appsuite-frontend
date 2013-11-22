@@ -1,19 +1,16 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-define('io.ox/settings/accounts/email/model',
-      ['io.ox/core/tk/model',
-       'io.ox/core/api/account'
-       ], function (Model, AccountAPI) {
+define('io.ox/settings/accounts/email/model', function () {
 
     'use strict';
 

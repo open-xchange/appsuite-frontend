@@ -1,21 +1,23 @@
  /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  *
  */
 
-define("io.ox/dev/ajaxDebug/callHandling",
-    ["io.ox/core/http", "io.ox/core/event"], function (http, Events) {
+define('io.ox/dev/ajaxDebug/callHandling',
+    ['io.ox/core/http',
+     'io.ox/core/event'
+    ], function (http, Events) {
 
-    "use strict";
+    'use strict';
 
     var callHandler = {
         history: [],
@@ -27,13 +29,13 @@ define("io.ox/dev/ajaxDebug/callHandling",
                 deferred: null
             };
             this.history.push(entry);
-            this.trigger("historychanged", this);
+            this.trigger('historychanged', this);
             options.appendColumns = false;
             options.processResponse = false;
 
             function process(data) {
                 entry.response = data;
-                callHandler.trigger("entrychanged", entry);
+                callHandler.trigger('entrychanged', entry);
             }
 
             // GO!

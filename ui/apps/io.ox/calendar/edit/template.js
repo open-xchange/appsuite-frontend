@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
@@ -15,19 +15,33 @@ define('io.ox/calendar/edit/template',
     ['io.ox/core/extensions',
      'gettext!io.ox/calendar/edit/main',
      'io.ox/calendar/util',
+     'io.ox/contacts/util',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
      'io.ox/core/tk/attachments',
      'io.ox/calendar/edit/recurrence-view',
      'io.ox/calendar/api',
      'io.ox/participants/views',
+     'settings!io.ox/calendar',
+     'io.ox/core/notifications',
      'io.ox/core/capabilities'
-    ], function (ext, gt, util, views, forms, attachments, RecurrenceView, api, pViews, capabilities) {
+    ], function (ext, gt, calendarUtil, contactUtil, views, forms, attachments, RecurrenceView, api, pViews, settings, notifications, capabilities) {
 
     'use strict';
 
     var point = views.point('io.ox/calendar/edit/section'),
         collapsed = false;
+
+    // create blacklist
+    var blackList = null,
+        blackListStr = settings.get('participantBlacklist') || '';
+
+    if (blackListStr) {
+        blackList = {};
+        _(blackListStr.split(',')).each(function (item) {
+            blackList[item.trim()] = true;
+        });
+    }
 
     // subpoint for conflicts
     var pointConflicts = point.createSubpoint('conflicts', {
@@ -60,7 +74,7 @@ define('io.ox/calendar/edit/template',
         id: 'save',
         draw: function (baton) {
             this.append($('<button type="button" class="btn btn-primary save" data-action="save" >')
-                .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
+                .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     //check if attachments are changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
@@ -80,7 +94,7 @@ define('io.ox/calendar/edit/template',
         id: 'discard',
         draw: function (baton) {
             this.append($('<button type="button" class="btn discard" data-action="discard" >')
-                .text(gt("Discard"))
+                .text(gt('Discard'))
                 .on('click', function () {
                     baton.app.quit();
                 })
@@ -200,7 +214,7 @@ define('io.ox/calendar/edit/template',
         labelClassName: 'control-label desc',
         control: '<textarea class="note">',
         attribute: 'note',
-        label: gt("Description")
+        label: gt('Description')
     }));
 
     // separator or toggle
@@ -208,7 +222,6 @@ define('io.ox/calendar/edit/template',
         id: 'noteSeparator',
         index: 750,
         draw: function (baton) {
-            var self = this;
             if (_.device('small')) {
                 this.append(
                     $('<a href="#">')
@@ -237,10 +250,10 @@ define('io.ox/calendar/edit/template',
             id: 'alarm',
             index: 800,
             labelClassName: 'control-label desc',
-            className: "span4",
+            className: 'span4',
             attribute: 'alarm',
-            label: gt("Reminder"),
-            selectOptions: util.getReminderOptions()
+            label: gt('Reminder'),
+            selectOptions: calendarUtil.getReminderOptions()
         }), {
             rowClass: 'collapsed'
         });
@@ -250,10 +263,10 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.SelectBoxField({
         id: 'shown_as',
         index: 900,
-        className: "span4",
+        className: 'span4',
         attribute: 'shown_as',
         label: //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-               gt("Shown as"),
+               gt('Shown as'),
         labelClassName: 'control-label desc',
         selectOptions: {
             1: gt('Reserved'),
@@ -310,21 +323,33 @@ define('io.ox/calendar/edit/template',
         id: 'add-participant',
         index: 1500,
         rowClass: 'collapsed',
-        draw: function (options) {
-            var node = this,
-            pNode;
-            node.append(
-                    pNode = $('<div class="input-append span6">').append(
-                        $('<input type="text" class="add-participant" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
-                        $('<button type="button" class="btn" data-action="add" tabindex="1">')
-                            .append($('<i class="icon-plus">'))
-                    )
-                );
+        draw: function (baton) {
+            var pNode;
+            this.append(
+                pNode = $('<div class="input-append span6">').append(
+                    $('<input type="text" class="add-participant" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
+                    $('<button type="button" class="btn" data-action="add" tabindex="1">')
+                        .append($('<i class="icon-plus">'))
+                )
+            );
 
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
-                var collection = options.model.getParticipants(),
-                    autocomplete = new AddParticipantsView({ el: pNode });
+                var collection = baton.model.getParticipants(),
+                    autocomplete = new AddParticipantsView({ el: pNode, blackList: blackList });
+
+                if (blackList) {
+                    collection.each(function (item) {
+                        if (item && blackList[item.getEmail()]) {
+                            collection.remove(item);
+                        }
+                    });
+                    collection.on('change', function (item) {
+                        if (item && blackList[item.getEmail()]) {
+                            collection.remove(item);
+                        }
+                    });
+                }
 
                 if (!_.browser.Firefox) { pNode.addClass('input-append-fix'); }
 
@@ -333,7 +358,7 @@ define('io.ox/calendar/edit/template',
                 //add recipents to baton-data-node; used to filter sugestions list in view
                 autocomplete.on('update', function () {
                     var baton = {list: []};
-                    collection.any(function (item) {
+                    collection.each(function (item) {
                         //participant vs. organizer
                         var email = item.get('email1') || item.get('email2');
                         if (email !== null)
@@ -354,31 +379,34 @@ define('io.ox/calendar/edit/template',
                             return (item.id === data.id && item.get('type') === data.type);
                         }
                     });
+
                     if (!alreadyParticipant) {
-                        if (data.type !== 5) {
-
-                            if (data.mark_as_distributionlist) {
-                                _.each(data.distribution_list, function (val) {
-                                    var def = $.Deferred();
-                                    if (val.folder_id === 6) {
-                                        util.getUserIdByInternalId(val.id, def);
-                                        def.done(function (id) {
-                                            userId = id;
-                                            obj = {id: userId, type: 1 };
-                                            collection.add(obj);
-                                        });
-                                    } else {
-                                        obj = {type: 5, mail: val.mail, display_name: val.display_name};
-                                        collection.add(obj);
-                                    }
-                                });
-                            } else {
-                                collection.add(data);
-                            }
-
+                        if (blackList && blackList[contactUtil.getMail(data)]) {
+                            notifications.yell('warning', gt('This email address cannot be used for appointments'));
                         } else {
-                            obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
-                            collection.add(obj);
+                            if (data.type !== 5) {
+
+                                if (data.mark_as_distributionlist) {
+                                    _.each(data.distribution_list, function (val) {
+                                        if (val.folder_id === 6) {
+                                            calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
+                                                userId = id;
+                                                obj = {id: userId, type: 1 };
+                                                collection.add(obj);
+                                            });
+                                        } else {
+                                            obj = {type: 5, mail: val.mail, display_name: val.display_name};
+                                            collection.add(obj);
+                                        }
+                                    });
+                                } else {
+                                    collection.add(data);
+                                }
+
+                            } else {
+                                obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
+                                collection.add(obj);
+                            }
                         }
                     }
                 });
@@ -396,10 +424,10 @@ define('io.ox/calendar/edit/template',
         attribute: 'notification',
         index: 1510,
         customizeNode: function () {
-            this.$el.css("paddingTop", "5px");
+            this.$el.css('paddingTop', '5px');
         }
     }), {
-        nextTo: "add-participant",
+        nextTo: 'add-participant',
         rowClass: 'collapsed'
     });
 
@@ -469,7 +497,7 @@ define('io.ox/calendar/edit/template',
                     }
                 };
             $input.on('change', changeHandler);
-            $inputWrap.on('change.fileupload', function (e) {
+            $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
@@ -477,10 +505,10 @@ define('io.ox/calendar/edit/template',
         }
     });
 
-    ext.point("io.ox/calendar/edit/dnd/actions").extend({
+    ext.point('io.ox/calendar/edit/dnd/actions').extend({
         id: 'attachment',
         index: 10,
-        label: gt("Drop here to upload a <b class='dndignore'>new attachment</b>"),
+        label: gt('Drop here to upload a <b class="dndignore">new attachment</b>'),
         multiple: function (files, app) {
             _(files).each(function (fileData) {
                 app.view.baton.attachmentList.addFile(fileData);
@@ -549,8 +577,8 @@ define('io.ox/calendar/edit/template',
     });
 
     if (!capabilities.has('infostore')) {
-        ext.point("io.ox/calendar/edit/section").disable("attachments_legend");
-        ext.point("io.ox/calendar/edit/section").disable("attachments_upload");
+        ext.point('io.ox/calendar/edit/section').disable('attachments_legend');
+        ext.point('io.ox/calendar/edit/section').disable('attachments_upload');
     }
 
     return null;

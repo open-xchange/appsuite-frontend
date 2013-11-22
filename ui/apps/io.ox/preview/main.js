@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Stefan Preuss <stefan.preuss@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -27,7 +27,7 @@ define('io.ox/preview/main',
     var clickableLink = $.noop;
 
     if (supportsDragOut) {
-        dragOutHandler = function ($node, desc) {
+        dragOutHandler = function ($node) {
             $node.on('dragstart', function (e) {
                 e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
             });
@@ -57,11 +57,12 @@ define('io.ox/preview/main',
 
         point: ext.point('io.ox/preview/engine'),
 
-        getByExtension: function (fileExtension) {
+        getByExtension: function (fileExtension, file) {
             return this.point.chain().find(function (ext) {
-                var tmp = ext.metadata('supports');
+                var tmp = ext.metadata('supports', fileExtension, file), match;
                 tmp = _.isArray(tmp) ? tmp : [tmp];
-                return _(tmp).contains(fileExtension);
+                match = _(tmp).contains(fileExtension);
+                return (match && _.isFunction(ext.verify)) ? ext.verify(file) : match;
             }).value();
         }
     };
@@ -121,9 +122,13 @@ define('io.ox/preview/main',
             supports: (function () {
                 return mediasupport.supportedExtensionsArray('audio');
             }()),
+            verify: function (file) {
+                // chrome cannot play audio files attachments (content-length issue; see bug 29491)
+                return !file || !file.attachment || !_.device('chrome');
+            },
             draw: function (file) {
-                var audiofile = $('<audio>').attr({
-                    src: file.dataURL + '&delivery=view&content_type=' + file.mimetype,
+                $('<audio>').attr({
+                    src: file.dataURL + '&delivery=view&content_type=' + String(file.mimetype || '').split(';')[0],
                     type: file.mimetype,
                     preload: 'metadata',
                     controls: 'control',
@@ -133,7 +138,7 @@ define('io.ox/preview/main',
                 require(['apps/mediaelement/mediaelement-and-player.js',
                         'css!mediaelement/mediaelementplayer.css'], function () {
 
-                    var pw = self.closest('.file-details').width();
+                    var pw = self.closest('.file-details, .scrollable-pane').width() || '100%';
 
                     self.find('audio').mediaelementplayer({
                         audioWidth: pw,
@@ -180,8 +185,7 @@ define('io.ox/preview/main',
         supports: ['eml', 'message/rfc822'],
         draw: function (file) {
             var self = this;
-            require(['io.ox/mail/view-detail',
-                      'io.ox/mail/util'], function (view, util) {
+            require(['io.ox/mail/view-detail'], function (view) {
                 var data = file.data.nested_message;
                 data.parent = file.parent;
                 //preview during compose (forward mail as attachment)
@@ -256,7 +260,7 @@ define('io.ox/preview/main',
 
         // get matching renderer
         if (this.extension || this.file.mimetype) {
-            this.renderer = Renderer.getByExtension(this.extension || this.file.mimetype);
+            this.renderer = Renderer.getByExtension(this.extension || this.file.mimetype, this.file);
         }
     };
 

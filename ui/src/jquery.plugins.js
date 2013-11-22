@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
 */
@@ -120,14 +120,14 @@
 
             // get pane
             var pane = $(node),
-            // get pane height
-            height = 0,
-            // get visible area
-            y1 = pane.scrollTop(),
-            y2 = 0,
-            // get top position
-            top = this.offset().top + y1 - pane.offset().top,
-            h = 0;
+                // get pane height
+                height = 0,
+                // get visible area
+                y1 = pane.scrollTop(),
+                y2 = 0,
+                // get top position
+                top = this.offset().top + y1 - pane.offset().top,
+                h = 0, left = 0;
             // out of visible area?
             if (top < y1) {
                 // scroll up!
@@ -141,6 +141,9 @@
                     pane.scrollTop(y1 + top + h - y2);
                 }
             }
+            // custom offset?
+            left = this.data('offset-left');
+            if (left !== undefined) pane.scrollLeft(left);
 
         } catch (e) {
             // IE sometimes crashes

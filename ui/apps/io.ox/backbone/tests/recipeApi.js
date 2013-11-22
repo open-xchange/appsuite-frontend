@@ -1,25 +1,25 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/tests/recipeApi", ["io.ox/core/event"], function (Events) {
-    "use strict";
+define('io.ox/backbone/tests/recipeApi', ['io.ox/core/event'], function (Events) {
+    'use strict';
 
     var db = {
         1: {
             id: 1,
             folder_id: 12,
             title: 'Water',
-            ingredients: ["A glass", "Some Water"],
-            description: "Pour the water into the glass. Serve with desired temperature.",
+            ingredients: ['A glass', 'Some Water'],
+            description: 'Pour the water into the glass. Serve with desired temperature.',
             servings: 1
         },
         2: {
@@ -27,7 +27,7 @@ define("io.ox/backbone/tests/recipeApi", ["io.ox/core/event"], function (Events)
             folder_id: 12,
             title: 'Pieces of melon',
             ingredients: ['A melon', 'Marshmellows', 'Peanut Butter'],
-            description: "Half the melon. Serve on a plate with a spoon. Dig holes with the spoon and dump in marshmellows or peanut butter to you liking",
+            description: 'Half the melon. Serve on a plate with a spoon. Dig holes with the spoon and dump in marshmellows or peanut butter to you liking',
             servings: 2
         },
         3: {
@@ -35,7 +35,7 @@ define("io.ox/backbone/tests/recipeApi", ["io.ox/core/event"], function (Events)
             folder_id: 12,
             title: 'Chocolate Milk',
             ingredients: ['Chocolate', 'Milk', 'Sugar'],
-            description: "Pour milk into a kettle and heat it (don't boil it!). Add pieces of chocolate and melt them, again make sure not to boil them. Try it and add sugar to your taste. Serve and enjoy. Yummy.",
+            description: 'Pour milk into a kettle and heat it (don\'t boil it!). Add pieces of chocolate and melt them, again make sure not to boil them. Try it and add sugar to your taste. Serve and enjoy. Yummy.',
             servings: 12
         }
     };
@@ -83,7 +83,7 @@ define("io.ox/backbone/tests/recipeApi", ["io.ox/core/event"], function (Events)
         update: function (options) {
             if (db[options.id] && db[options.id].folder_id === options.folder) {
                 _.extend(db[options.id], options);
-                this.trigger("update", {id: options.id, folder: options.folder});
+                this.trigger('update', {id: options.id, folder: options.folder});
                 return $.Deferred().resolve({});
             }
 
@@ -93,7 +93,7 @@ define("io.ox/backbone/tests/recipeApi", ["io.ox/core/event"], function (Events)
         remove: function (options) {
             if (db[options.id] && db[options.id].folder_id === options.folder) {
                 delete db[options.id];
-                this.trigger("delete", {id: options.id, folder: options.folder});
+                this.trigger('delete', {id: options.id, folder: options.folder});
                 return $.Deferred().resolve({});
             }
             return $.Deferred.rejec({error: 'Cannot resolve id %1$s in folder %2$s', error_params: [options.id, options.folder]});

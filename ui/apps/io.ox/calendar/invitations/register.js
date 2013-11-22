@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
@@ -17,25 +17,26 @@ define('io.ox/calendar/invitations/register',
      'settings!io.ox/calendar',
      'io.ox/calendar/util',
      'gettext!io.ox/calendar/main',
-     "io.ox/core/notifications",
-     "less!io.ox/calendar/style.less"], function (ext, http, settings, util, gt, notifications) {
+     'io.ox/core/notifications',
+     'less!io.ox/calendar/style.less'
+    ], function (ext, http, settings, util, gt, notifications) {
 
     'use strict';
 
     var regex = /text\/calendar.*?method=(.+)/i;
 
     var i18n = {
-        'accept': gt("Accept"),
-        'accept_and_replace': gt("Accept changes"),
-        'accept_and_ignore_conflicts': gt("Accept"),
-        'accept_party_crasher': gt("Add new participant"),
-        'create': gt("Accept"),
-        'update': gt("Accept changes"),
-        'delete': gt("Delete"),
-        'declinecounter': gt("Reject changes"),
-        'tentative': gt("Tentative"),
-        'decline': gt("Decline"),
-        'ignore': gt("Ignore")
+        'accept': gt('Accept'),
+        'accept_and_replace': gt('Accept changes'),
+        'accept_and_ignore_conflicts': gt('Accept'),
+        'accept_party_crasher': gt('Add new participant'),
+        'create': gt('Accept'),
+        'update': gt('Accept changes'),
+        'delete': gt('Delete'),
+        'declinecounter': gt('Reject changes'),
+        'tentative': gt('Tentative'),
+        'decline': gt('Decline'),
+        'ignore': gt('Ignore')
     };
 
     var buttonClasses = {
@@ -53,22 +54,22 @@ define('io.ox/calendar/invitations/register',
     };
 
     var success = {
-        'accept': gt("You have accepted the appointment"),
-        'accept_and_replace': gt("Changes have been saved"),
-        'accept_and_ignore_conflicts': gt("You have accepted the appointment"),
-        'accept_party_crasher': gt("Added the new participant"),
-        'create': gt("You have accepted the appointment"),
-        'update': gt("The appointment has been updated"),
-        'delete': gt("The appointment has been deleted"),
-        'declinecounter': gt("The changes have been rejected"),
-        'tentative': gt("You have tentatively accepted the appointment"),
-        'decline': gt("You have declined the appointment")
+        'accept': gt('You have accepted the appointment'),
+        'accept_and_replace': gt('Changes have been saved'),
+        'accept_and_ignore_conflicts': gt('You have accepted the appointment'),
+        'accept_party_crasher': gt('Added the new participant'),
+        'create': gt('You have accepted the appointment'),
+        'update': gt('The appointment has been updated'),
+        'delete': gt('The appointment has been deleted'),
+        'declinecounter': gt('The changes have been rejected'),
+        'tentative': gt('You have tentatively accepted the appointment'),
+        'decline': gt('You have declined the appointment')
     };
 
     var successInternal = {
-        1: gt("You have accepted the appointment"),
-        2: gt("You have declined the appointment"),
-        3: gt("You have tentatively accepted the appointment")
+        1: gt('You have accepted the appointment'),
+        2: gt('You have declined the appointment'),
+        3: gt('You have tentatively accepted the appointment')
     };
 
     var priority = ['update', 'ignore', 'accept', 'tentative', 'decline', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
@@ -77,8 +78,8 @@ define('io.ox/calendar/invitations/register',
     function discoverIMipAttachment(baton) {
         return _(baton.data.attachments).find(function (attachment) {
             var match = attachment.content_type.match(regex);
-            if (match && match[1].toLowerCase() !== "publish") {
-                var index = match[1].indexOf(";");
+            if (match && match[1].toLowerCase() !== 'publish') {
+                var index = match[1].indexOf(';');
                 var method = index !== -1 ? match[1].substr(0, index) : match[1];
                 method = method.toLowerCase();
 
@@ -96,12 +97,12 @@ define('io.ox/calendar/invitations/register',
                     action: 'analyze',
                     dataSource: 'com.openexchange.mail.ical',
                     descriptionFormat: 'html',
-                    timezone: "UTC"
+                    timezone: 'UTC'
                 },
                 data: {
-                    "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
-                    "com.openexchange.mail.conversion.mailid": baton.data.id,
-                    "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
+                    'com.openexchange.mail.conversion.fullname': baton.data.folder_id,
+                    'com.openexchange.mail.conversion.mailid': baton.data.id,
+                    'com.openexchange.mail.conversion.sequenceid': baton.imip.attachment.id
                 }
             });
         } else {
@@ -119,6 +120,11 @@ define('io.ox/calendar/invitations/register',
         }
 
         function render(baton) {
+
+            if (!baton.analysis) {
+                if (baton.$.well) baton.$.well.remove();
+                return;
+            }
 
             if (baton.analysis.actions.length !== 1 || baton.analysis.actions[0] !== 'ignore') {
 
@@ -155,81 +161,81 @@ define('io.ox/calendar/invitations/register',
                     baton.analysis.actions = _(baton.analysis.actions).without('decline', 'tentative', 'accept');
                 }
 
-                baton.$.well.find('.itip-actions').addClass('block').append(
-
-                    _(priority).chain()
+                var actionButtons = _(priority).chain()
                     .filter(function (action) {
                         return _(baton.analysis.actions).contains(action);
                     })
                     .map(function (action) {
-                        return $('<button type="button" class="btn">')
+                        var button = $('<button type="button" class="btn">')
                             .attr('data-action', action)
                             .addClass(buttonClasses[action])
-                            .text(i18n[action])
-                            .add($.txt('\u00A0'));
+                            .text(i18n[action]);
+                        return button
+                            .add($('<span>').text('\u00A0'))
+                            .addClass(button.hasClass('pull-left') ? 'pull-left' : '');
                     })
-                    .value()
-                )
-                .on('click', 'button', function (e) {
-                    e.preventDefault();
-                    var action = $(this).attr('data-action');
-                    if (action === 'ignore') {
-                        //deleteMailIfNeeded(baton);
-                    }
-                    // be busy
-                    baton.$.well.empty().busy();
-                    http.PUT({
-                        module: 'calendar/itip',
-                        params: {
-                            action: action,
-                            dataSource: 'com.openexchange.mail.ical',
-                            descriptionFormat: 'html'
-                        },
-                        data: {
-                            "com.openexchange.mail.conversion.fullname": baton.data.folder_id,
-                            "com.openexchange.mail.conversion.mailid": baton.data.id,
-                            "com.openexchange.mail.conversion.sequenceid": baton.imip.attachment.id
-                        }
-                    })
-                    .then(
-                        function done() {
-                            notifications.yell('success', success[action]);
-                            // deleteMailIfNeeded(baton);
-                            rerender(baton);
-                        },
-                        function fail(e) {
-                            notifications.yell(e);
-                            rerender(baton);
-                        }
-                    );
-                })
-                // disable buttons - don't know why we have an array of appointments but just one set of buttons
-                // so, let's use the first one
-                .find(selector).addClass('disabled').attr('disabled', 'disabled');
+                    .value();
+
+                if (actionButtons && actionButtons.length > 0) {
+                    baton.$.well
+                        .find('.itip-actions')
+                        .addClass('block')
+                        .append(actionButtons)
+                        .on('click', 'button', function (e) {
+                            e.preventDefault();
+                            var action = $(this).attr('data-action');
+
+                            // be busy
+                            baton.$.well.empty().busy();
+                            http.PUT({
+                                module: 'calendar/itip',
+                                params: {
+                                    action: action,
+                                    dataSource: 'com.openexchange.mail.ical',
+                                    descriptionFormat: 'html'
+                                },
+                                data: {
+                                    'com.openexchange.mail.conversion.fullname': baton.data.folder_id,
+                                    'com.openexchange.mail.conversion.mailid': baton.data.id,
+                                    'com.openexchange.mail.conversion.sequenceid': baton.imip.attachment.id
+                                }
+                            })
+                            .then(
+                                function done() {
+                                    notifications.yell('success', success[action]);
+                                    rerender(baton);
+                                },
+                                function fail(e) {
+                                    notifications.yell(e);
+                                    rerender(baton);
+                                }
+                            );
+                        })
+                        // disable buttons - don't know why we have an array of appointments but just one set of buttons
+                        // so, let's use the first one
+                        .find(selector).addClass('disabled').prop('disabled', true);
+                } else {
+                    baton.$.well.find('.itip-action-container').remove();
+                }
 
                 if (baton.analysis.messageType !== 'request' && introductions[0]) {
                     baton.$.well.find('.muted').html(introductions[0]);
                 }
 
-                baton.$.well.find('.appointmentInfo').append(
-                    _(appointments).map(function (appointment) {
-                        return $('<div>').append(drawSummary(appointment));
-                    })
-                );
-
                 _(baton.analysis.changes).each(function (change) {
-                    baton.$.well.find('.appointmentInfo').append(renderDiffDescription(change));
+                    var app = change.deletedAppointment || change.newAppointment || change.currentAppointment;
+                    baton.$.well.find('.appointmentInfo').append(
+                        $('<div>').append(drawSummary(app)), renderDiffDescription(change)
+                    );
                 });
 
                 if (appointments.length === 0) {
-                    baton.$.well.find(".muted").remove();
+                    baton.$.well.find('.muted').remove();
                 }
 
                 $node.append(baton.$.well.show());
             } else {
-                if (baton.$.well) {
-                    baton.$.well.remove();
-                }
+                if (baton.$.well) baton.$.well.remove();
             }
 
             // draw appointment details and well
@@ -281,13 +287,32 @@ define('io.ox/calendar/invitations/register',
         );
     }
 
-    function renderAppointment(appointment, baton) {
+    function renderAppointment(appointment) {
         if (!appointment) {
             return $();
         }
-        var node = $("<div>");
-        require(["io.ox/calendar/view-detail"], function (viewDetail) {
-            node.append(viewDetail.draw(appointment, {brief: true}));
+        var node = $('<div class="appointment well">'),
+            baton = ext.Baton.ensure(appointment);
+        // disable actions and appointment-details in detail view
+        baton.disable('io.ox/calendar/detail', 'inline-actions');
+        baton.disable('io.ox/calendar/detail', 'details');
+        require(['io.ox/calendar/view-detail'], function (viewDetail) {
+            node.append(viewDetail.draw(baton));
+        });
+
+        return node;
+    }
+
+    function renderTask(task) {
+        if (!task) {
+            return $();
+        }
+        var node = $('<div class="task well">'),
+            baton = ext.Baton.ensure(task);
+        // disable actions and appointment-details in detail view
+        baton.disable('io.ox/tasks/detail-inline', 'inline-links');
+        require(['io.ox/tasks/view-detail'], function (viewDetail) {
+            node.append(viewDetail.draw(baton));
         });
 
         return node;
@@ -311,7 +336,7 @@ define('io.ox/calendar/invitations/register',
         if (!change.conflicts) {
             return $();
         }
-        var $node = $("<div>");
+        var $node = $('<div>');
         var text = gt.format(gt.ngettext('There is already %1$d appointment in this timeframe.',
             'There are already %1$d appointments in this timeframe.', change.conflicts.length), change.conflicts.length);
 
@@ -321,10 +346,10 @@ define('io.ox/calendar/invitations/register',
                 $.txt(' '),
                 $('<a href="#">').text(gt('Show conflicts')).on('click', function (e) {
                     e.preventDefault();
-                    require(["io.ox/calendar/conflicts/conflictList"], function (conflictList) {
-                        $node.find(".alert").remove();
+                    require(['io.ox/calendar/conflicts/conflictList'], function (conflictList) {
+                        $node.find('.alert').remove();
                         $node.append(
-                            $('<div>').css({marginTop: "2em", marginBottom: "2em"}).append(
+                            $('<div>').css({marginTop: '2em', marginBottom: '2em'}).append(
                                 conflictList.drawList(change.conflicts)
                             )
                         );
@@ -336,14 +361,6 @@ define('io.ox/calendar/invitations/register',
         return $node;
     }
 
-    function deleteMailIfNeeded(baton) {
-        require(["io.ox/mail/api", "settings!io.ox/calendar"], function (api, settings) {
-            if (settings.get("deleteInvitationMailAfterAction")) {
-                api.remove([baton.data]);
-            }
-        });
-    }
-
     ext.point('io.ox/mail/detail').extend({
         index: 'first',
         id: 'imip-check',
@@ -352,8 +369,9 @@ define('io.ox/calendar/invitations/register',
             var imipAttachment = discoverIMipAttachment(baton);
             if (imipAttachment) {
                 baton.imip = { attachment: imipAttachment };
+                baton.hideOriginalMail = true;
                 // change flow
-                //baton.disable('io.ox/mail/detail', 'content');
+                // baton.disable('io.ox/mail/detail', 'content');
             }
         }
     });
@@ -399,12 +417,13 @@ define('io.ox/calendar/invitations/register',
     }
 
     function loadAppointment(baton) {
-        require(['io.ox/calendar/api', 'settings!io.ox/calendar'], function (api, settings) {
-            api.get({ folder: baton.appointment.folder_id, id: baton.appointment.id }).then(
+        return require(['io.ox/calendar/api', 'settings!io.ox/calendar']).then(function (api, settings) {
+            return api.get({ folder: baton.appointment.folder_id, id: baton.appointment.id }).then(
                 function success(appointment) {
                     appointment.type = 'appointment';
                     baton.appointment = appointment;
                     drawDetails(baton, api, settings);
+                    return appointment;
                 }
                 /* see Bug 26489 for more information */
                 // ,
@@ -425,12 +444,13 @@ define('io.ox/calendar/invitations/register',
     }
 
     function loadTask(baton) {
-        require(['io.ox/tasks/api', 'settings!io.ox/tasks'], function (api, settings) {
-            api.get({ folder: baton.task.folder_id, id: baton.task.id }).then(
+        return require(['io.ox/tasks/api', 'settings!io.ox/tasks']).then(function (api, settings) {
+            return api.get({ folder: baton.task.folder_id, id: baton.task.id }).then(
                 function success(task) {
                     task.type = 'task';
                     baton.task = task;
                     drawDetails(baton, api, settings);
+                    return task;
                 }
                 /* see Bug 26489 for more information */
                 // ,
@@ -534,22 +554,22 @@ define('io.ox/calendar/invitations/register',
                     $('<div class="controls">').append(
                         $('<select id="reminderSelect" data-property="reminder">')
                         .css({ margin: '0' })
-                        .append(function (i, html) {
+                        .append(function () {
                             var self = $(this),
                                 options = util.getReminderOptions();
                             _(options).each(function (label, value) {
-                                self.append($("<option>", {value: value}).text(label));
+                                self.append($('<option>', {value: value}).text(label));
                             });
                         }).val(defaultReminder)
                     )
                 )
             )
             .append(
-                $('<button type="button" class="btn btn-success" data-action="1">').text(gt("Accept")),
+                $('<button type="button" class="btn btn-success" data-action="1">').text(gt('Accept')),
                 '&nbsp;',
-                $('<button type="button" class="btn btn-warning" data-action="3">').text(gt("Tentative")),
+                $('<button type="button" class="btn btn-warning" data-action="3">').text(gt('Tentative')),
                 '&nbsp;',
-                $('<button type="button" class="btn btn-danger" data-action="2">').text(gt("Decline"))
+                $('<button type="button" class="btn btn-danger" data-action="2">').text(gt('Decline'))
             )
             .on('click', 'button', function (e) {
 
@@ -559,7 +579,7 @@ define('io.ox/calendar/invitations/register',
                     folder: data.folder_id,
                     id: data.id,
                     data: {
-                        confirmation: Number($(e.target).data("action"))
+                        confirmation: Number($(e.target).data('action'))
                     }
                 })
                 .done(function () {
@@ -571,8 +591,8 @@ define('io.ox/calendar/invitations/register',
                         }
                     }
                     var dep = data.type === 'appointment' ? 'settings!io.ox/calendar' : 'settings!io.ox/tasks';
-                    require(["io.ox/mail/api", dep], function (api, settings) {
-                        if (settings.get("deleteInvitationMailAfterAction")) {
+                    require(['io.ox/mail/api', dep], function (api, settings) {
+                        if (settings.get('deleteInvitationMailAfterAction')) {
                             // remove mail
                             notifications.yell('success', successInternal[Number($(e.target).data('action'))]);
                             api.remove([baton.data]);
@@ -587,7 +607,7 @@ define('io.ox/calendar/invitations/register',
                         }
                     });
                 })
-                .fail(function (error) {
+                .fail(function () {
                     //appointment or task was deleted in the meantime
                     baton.$.well.idle();
                     baton.$.well.hide();
@@ -599,7 +619,7 @@ define('io.ox/calendar/invitations/register',
                 });
             })
             // disable button matching current status
-            .find(selector).addClass('disabled').attr('disabled', 'disabled');
+            .find(selector).addClass('disabled').prop('disabled', true);
         }
 
         baton.$.well.show();
@@ -609,11 +629,19 @@ define('io.ox/calendar/invitations/register',
         before: 'content',
         id: 'accept-decline',
         draw: function (baton) {
-            var $well, module, reminder = baton.data.headers['X-OX-Reminder'], address;
+            var module,
+                reminder = baton.data.headers['X-OX-Reminder'],
+                address,
+                node;
 
             if (reminder) {
-
+                baton.hideOriginalMail = true;
+                baton.imip = true;
                 module = baton.data.headers['X-Open-Xchange-Module'];
+
+                this.append(
+                    node = $('<section class="itip-section">')
+                );
 
                 // appointment or task?
                 if (/^(Appointments|Tasks)/.test(module)) {
@@ -621,19 +649,31 @@ define('io.ox/calendar/invitations/register',
                     address = reminder.split(/,\s*/);
 
                     if (module === 'Appointments') {
-                        this.append(
+                        node.append(
                             drawScaffold.call(baton.$.well = drawWell(), 'appointment')
                         );
                         baton.appointment = { folder_id: address[1], id: address[0] };
-                        return loadAppointment(baton);
+                        return loadAppointment(baton).then(function (app) {
+                            node.append(
+                                $('<div class="io-ox-calendar-itip-analysis">').append(
+                                    $('<div class="change">').append(renderAppointment(app))
+                                )
+                            );
+                        });
                     }
 
                     if (module === 'Tasks') {
-                        this.append(
+                        node.append(
                             drawScaffold.call(baton.$.well = drawWell(), 'task')
                         );
                         baton.task = { folder_id: address[1], id: address[0] };
-                        return loadTask(baton);
+                        return loadTask(baton).then(function (task) {
+                            node.append(
+                                $('<div class="io-ox-calendar-itip-analysis">').append(
+                                    $('<div class="change">').append(renderTask(task))
+                                )
+                            );
+                        });
                     }
                 }
             }

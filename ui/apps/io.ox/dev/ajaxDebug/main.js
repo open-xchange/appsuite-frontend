@@ -1,24 +1,25 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/dev/ajaxDebug/main",
-    ["io.ox/core/tk/vgrid",
-     "io.ox/dev/ajaxDebug/callHandling",
-     "io.ox/dev/ajaxDebug/callViews",
+define('io.ox/dev/ajaxDebug/main',
+    ['io.ox/core/tk/vgrid',
+     'io.ox/dev/ajaxDebug/callHandling',
+     'io.ox/dev/ajaxDebug/callViews',
      'io.ox/core/extensions',
-     'io.ox/core/extPatterns/links'], function (VGrid, callHandler, callViews, ext, links) {
+     'io.ox/core/extPatterns/links'
+    ], function (VGrid, callHandler, callViews, ext, links) {
 
-    "use strict";
+    'use strict';
 
     // toolbar actions
 
@@ -67,18 +68,18 @@ define("io.ox/dev/ajaxDebug/main",
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/dev/ajaxDebug',
-            title: "API debug",
+            title: 'API debug',
             toolbar: true,
             search: false
         }));
 
         // left side
-        left = $("<div>").addClass("leftside border-right")
+        left = $('<div>').addClass('leftside border-right')
             .appendTo(win.nodes.main);
 
-        right = $("<div>")
-            .addClass("rightside")
-            .css({ padding: "20px 40px 20px 40px" })
+        right = $('<div>')
+            .addClass('rightside')
+            .css({ padding: '20px 40px 20px 40px' })
             .appendTo(win.nodes.main);
 
 
@@ -97,12 +98,12 @@ define("io.ox/dev/ajaxDebug/main",
         grid.addTemplate({
             build: function () {
                 var name;
-                this.addClass("ajaxRequest")
-                    .append(name = $("<div>").addClass("name"));
+                this.addClass('ajaxRequest')
+                    .append(name = $('<div>').addClass('name'));
                 return { name: name };
             },
-            set: function (data, fields, index) {
-                fields.name.text(data.query.module + "." + data.query.params.action);
+            set: function (data, fields) {
+                fields.name.text(data.query.module + '.' + data.query.params.action);
             }
         });
 
@@ -122,13 +123,13 @@ define("io.ox/dev/ajaxDebug/main",
             return new $.Deferred().resolve(entries);
         });
 
-        grid.selection.on("change", function (e, selection) {
+        grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
                 viewer.draw(selection[0]);
             }
         });
 
-        callHandler.on("historychanged", function () {
+        callHandler.on('historychanged', function () {
             grid.refresh();
             grid.selection.set(_(callHandler.history).last());
         });

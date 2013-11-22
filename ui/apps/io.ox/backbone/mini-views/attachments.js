@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -14,9 +15,8 @@ define('io.ox/backbone/mini-views/attachments',
     ['io.ox/backbone/mini-views/abstract',
      'io.ox/core/api/attachment',
      'io.ox/core/tk/attachments',
-     'io.ox/core/strings',
-     'gettext!io.ox/core'
-    ], function (AbstractView, api, attachments, strings, gt) {
+     'io.ox/core/strings'
+    ], function (AbstractView, api, attachments, strings) {
 
     'use strict';
 
@@ -37,7 +37,7 @@ define('io.ox/backbone/mini-views/attachments',
             this.deleteAttachment(attachment);
         },
 
-        setup: function (options) {
+        setup: function () {
 
             var self = this;
 

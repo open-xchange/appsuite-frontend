@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -28,6 +29,11 @@ define('io.ox/calendar/list/perspective',
 
     var perspective = new ox.ui.Perspective('list');
 
+    perspective.refresh = function () {
+        this.updateGridOptions();
+        this.grid.refresh(true);
+    };
+
     perspective.render = function (app) {
 
         var win = app.getWindow(),
@@ -39,11 +45,21 @@ define('io.ox/calendar/list/perspective',
                 settings: settings,
                 showToggle: _.device('smartphone') ? false: true
             },
-            grid = new VGrid(left, gridOptions),
+            grid,
             findRecurrence = false,
-            optDropdown = null;
+            optDropdown = null,
+            months = 1; // how many months do we display
 
         this.grid = grid;
+
+        // show "load more" link
+        gridOptions.tail = function () {
+            return $('<div class="vgrid-cell tail">').append(
+                $('<a href="#" tabindex="-1">').text(gt('More'))
+            );
+        };
+
+        grid = new VGrid(left, gridOptions);
 
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
             findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
@@ -51,7 +67,7 @@ define('io.ox/calendar/list/perspective',
 
         // fix selection's serialize
         grid.selection.serialize = function (obj) {
-            return typeof obj === "object" ? (obj.folder_id || obj.folder || 0) + "." + obj.id + "." + (obj.recurrence_position || 0) : obj;
+            return typeof obj === 'object' ? (obj.folder_id || obj.folder || 0) + '.' + obj.id + '.' + (obj.recurrence_position || 0) : obj;
         };
 
         commons.wireGridAndAPI(grid, api);
@@ -83,7 +99,7 @@ define('io.ox/calendar/list/perspective',
         });
 
         // special search: list request
-        grid.setListRequest("search", function (ids) {
+        grid.setListRequest('search', function (ids) {
             return $.Deferred().resolve(ids);
         });
 
@@ -142,7 +158,7 @@ define('io.ox/calendar/list/perspective',
 
         function drawFail(obj) {
             right.idle().empty().append(
-                $.fail(gt("Couldn't load appointment data."), function () {
+                $.fail(gt('Couldn\'t load appointment data.'), function () {
                     showAppointment(obj);
                 })
             );
@@ -191,9 +207,7 @@ define('io.ox/calendar/list/perspective',
                             $('<ul class="dropdown-menu" role="menu">')
                                 .append(
                                     buildOption('asc', gt('Ascending')),
-                                    buildOption('desc', gt('Descending')),
-                                    $('<li class="divider">'),
-                                    buildOption('all', gt('show all'))
+                                    buildOption('desc', gt('Descending'))
                                 )
                                 .on('click', 'a', { grid: grid }, function () {
                                     var option = $(this).attr('data-option');
@@ -202,14 +216,6 @@ define('io.ox/calendar/list/perspective',
                                     case 'desc':
                                         grid.prop('order', option).refresh(true);
                                         break;
-                                    case 'all':
-                                        settings.set('showAllPrivateAppointments', !settings.get('showAllPrivateAppointments', false)).save();
-                                        //no folder change trigger here (folderview would throw error)
-                                        self.updateGridOptions();
-                                        grid.refresh(true);
-                                        break;
-                                    default:
-                                        break;
                                     }
                                 })
                         )
@@ -217,54 +223,84 @@ define('io.ox/calendar/list/perspective',
             }
         });
 
-        grid.setAllRequest(function () {
-            var prop = grid.prop(),
-                start = new date.Local().setHours(0, 0, 0, 0),
-                end = new date.Local(start).setMonth(start.getMonth() + 1);
 
-            return app.folder.getData().pipe(function (folder) {
-                // set folder data to view and update
-                return api.getAll({
-                    start: start.getTime(),
-                    end: end.getTime(),
-                    folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
-                    order: prop.order
-                }).pipe(function (data) {
-                    if (!settings.get('showDeclinedAppointments', false)) {
-                        data = _.filter(data, function (obj) {
-                            return util.getConfirmationStatus(obj) !== 2;
-                        });
-                    }
-                    if (findRecurrence) {
+        /**
+         * returns the all request for the vgrid
+         * @param  {Object} dates   contains a start end end date
+         * @return {function}       the all request function for the vgrid
+         */
+        var generateAllRequest = function (dates) {
+            return function () {
+                var prop = grid.prop(),
+                    start = dates.start,
+                    end = dates.end;
 
-                        var foundRecurrence = false,
-                            searchItem = _.url.hash('id').split('.');
-
-                        _(data).each(function (obj) {
-                            if (obj.id.toString() === searchItem[1] && obj.folder_id.toString() === searchItem[0]) {
-                                if (foundRecurrence) {
-                                    if (foundRecurrence > obj.recurrence_position) {
-                                        foundRecurrence = obj.recurrence_position;
-                                    }
-
-                                } else {
-                                    foundRecurrence = obj.recurrence_position || 0;
-                                }
-                            }
-                        });
-
-                        //found valid recurrence, append it
-                        if (foundRecurrence !== false) {
-                            _.url.hash({id: _.url.hash('id') + '.' + foundRecurrence});
-                        } else {//ok its not in the list lets show it directly
-                            app.trigger('show:appointment', {id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0}, true);
+                return app.folder.getData().pipe(function (folder) {
+                    // set folder data to view and update
+                    return api.getAll({
+                        start: start.getTime(),
+                        end: end.getTime(),
+                        folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
+                        order: prop.order
+                    }).pipe(function (data) {
+                        if (!settings.get('showDeclinedAppointments', false)) {
+                            data = _.filter(data, function (obj) {
+                                return util.getConfirmationStatus(obj) !== 2;
+                            });
                         }
+                        if (findRecurrence) {
 
-                        findRecurrence = false;//only search once
-                    }
-                    return data;
+                            var foundRecurrence = false,
+                                searchItem = _.url.hash('id').split('.');
+
+                            _(data).each(function (obj) {
+                                if (obj.id.toString() === searchItem[1] && obj.folder_id.toString() === searchItem[0]) {
+                                    if (foundRecurrence) {
+                                        if (foundRecurrence > obj.recurrence_position) {
+                                            foundRecurrence = obj.recurrence_position;
+                                        }
+
+                                    } else {
+                                        foundRecurrence = obj.recurrence_position || 0;
+                                    }
+                                }
+                            });
+
+                            //found valid recurrence, append it
+                            if (foundRecurrence !== false) {
+                                _.url.hash({id: _.url.hash('id') + '.' + foundRecurrence});
+                            } else {//ok its not in the list lets show it directly
+                                app.trigger('show:appointment', {id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0}, true);
+                            }
+
+                            findRecurrence = false;//only search once
+                        }
+                        return data;
+                    });
                 });
-            });
+            };
+        };
+
+        // calculates the timeframe for appointments to fetch
+        // based on the months variable which will be increased each time
+        // this gets called
+        var getIncreasedTimeFrame = function () {
+            var start = new date.Local().setHours(0, 0, 0, 0);
+            var end = new date.Local(start).setMonth(start.getMonth() + months);
+            // increase for next run
+            months++;
+            return {start: start, end: end};
+        };
+
+        // standard call will get the first month
+        grid.setAllRequest(generateAllRequest(getIncreasedTimeFrame()));
+
+        // click on "load more" will fetch one month more
+        $(left).on('click', '.tail', function () {
+            // set new all request with extend range
+            grid.setAllRequest(generateAllRequest(getIncreasedTimeFrame()));
+            // refresh the grid
+            grid.refresh();
         });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/calendar', showAppointment, right, api);
@@ -286,6 +322,11 @@ define('io.ox/calendar/list/perspective',
             grid.refresh(true);
         });
 
+        //jump to newly created items
+        api.on('create', function (e, data) {
+            grid.selection.set(data);
+        });
+
         // to show an appointment without it being in the grid, needed for direct links
         app.on('show:appointment', showAppointment);
 
@@ -300,10 +341,8 @@ define('io.ox/calendar/list/perspective',
     /**
      * handle different views in this perspective
      * triggered by desktop.js
-     * @param  {object} app the application
-     * @param  {object} opt options from perspective
      */
-    perspective.afterShow = function (app, opt) {
+    perspective.afterShow = function () {
         this.updateGridOptions();
         this.grid.refresh(true);
     };

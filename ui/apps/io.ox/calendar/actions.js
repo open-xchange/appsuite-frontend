@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -75,9 +76,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         action: function (baton) {
-            var def = $.Deferred();
-            util.createArrayOfRecipients(baton.data.participants, def);
-            def.done(function (arrayOfRecipients) {
+            util.createArrayOfRecipients(baton.data.participants).done(function (arrayOfRecipients) {
                 ox.load(['io.ox/mail/write/main']).done(function (m) {
                     m.getApp().launch().done(function () {
                         this.compose({to: arrayOfRecipients, subject: baton.data.title});
@@ -87,16 +86,31 @@ define('io.ox/calendar/actions',
         }
     });
 
+    new Action('io.ox/calendar/detail/actions/invite', {
+        capabilities: 'calendar',
+        action: function (baton) {
+            require(['io.ox/calendar/edit/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    // open create dialog with same participants
+                    var data = {
+                        folder_id: coreSettings.get('folder/calendar'),
+                        participants: baton.data.participants,
+                        title: baton.data.title
+                    };
+                    this.create(data);
+                    this.model.toSync = data;
+                });
+            });
+        }
+    });
+
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         action: function (baton) {
-            var contactsFolder = coreSettings.get('folder/contacts'),
-                def = $.Deferred();
-            util.createDistlistArrayFromPartisipantList(baton.data.participants, def);
-            def.done(function (initdata) {
+            util.createDistlistArrayFromPartisipantList(baton.data.participants).done(function (initdata) {
                 ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
                     m.getApp().launch().done(function () {
-                        this.create(contactsFolder, initdata);
+                        this.create(coreSettings.get('folder/contacts'), initdata);
                     });
                 });
             });
@@ -318,7 +332,7 @@ define('io.ox/calendar/actions',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!small');
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             print.request('io.ox/calendar/print', list);
         }
     });
@@ -363,7 +377,7 @@ define('io.ox/calendar/actions',
             ox.load(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder']).done(function (dialogs, views, folderAPI) {
 
                 function commit(target) {
-                    if (type === "move" && vGrid) vGrid.busy();
+                    if (type === 'move' && vGrid) vGrid.busy();
                     api[type](list, target).then(
                         function () {
                             var response = type === 'move' ?
@@ -371,7 +385,7 @@ define('io.ox/calendar/actions',
                                 gt.ngettext('Appointment has been copied', 'Appointments have been copied', list.length);
                             notifications.yell('success', response);
                             folderAPI.reload(target, list);
-                            if (type === "move" && vGrid) vGrid.idle();
+                            if (type === 'move' && vGrid) vGrid.idle();
                         },
                         notifications.yell
                     );
@@ -429,10 +443,10 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/actions/freebusy', {
         capabilities: 'freebusy !alone',
-        requires: function (e) {
+        requires: function () {
             return _.device('!small');
         },
-        action: function (baton, obj) {
+        action: function (baton) {
             ox.launch('io.ox/calendar/freebusy/main', {
                 baton: baton,
                 folder: baton.app.folder.get(),
@@ -596,7 +610,15 @@ define('io.ox/calendar/actions',
     }));
 
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
-        index: 100,
+        index: 200,
+        prio: 'hi',
+        id: 'invite',
+        label: gt('Invite to new appointment'),
+        ref: 'io.ox/calendar/detail/actions/invite'
+    }));
+
+    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
+        index: 300,
         prio: 'hi',
         id: 'save as distlist',
         label: gt('Save as distribution list'),

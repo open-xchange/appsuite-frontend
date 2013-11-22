@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -90,7 +91,7 @@ define('io.ox/backbone/mini-views/date',
                 this.model.set(this.name, tempDate.getTime());
             } else {
                 this.model.set(this.name, null);
-                this.$el.find('.date').children().attr('disabled', false);//enable all
+                this.$el.find('.date').children().prop('disabled', false);//enable all
             }
         },
 
@@ -98,8 +99,8 @@ define('io.ox/backbone/mini-views/date',
             var value = this.model.get(this.name), d, year, text;
             // change boxes only for valid dates
             if (_.isNumber(value)) {
-                d = new date.UTC(value);
-                year = String(d.getYear());
+                d = new Date(value);
+                year = String(d.getFullYear());
                 if (year !== '1') {
                     // if the year is not our dropdown we add it
                     var yearValues = [];
@@ -116,13 +117,14 @@ define('io.ox/backbone/mini-views/date',
                 this.$el.find('.year').val(year);
                 this.$el.find('.month').val(d.getMonth());
                 this.$el.find('.date').val(d.getDate());
-                //disable invalid dayfields
+                // disable invalid dayfields
+                d.setDate(1);
                 d.setMonth(d.getMonth() + 1);
                 d.setDate(0);
                 var validDays = d.getDate(),
-                    options = this.$el.find('.date').children().attr('disabled', false);
+                    options = this.$el.find('.date').children().prop('disabled', false);
                 options = options.slice(validDays + 1, options.length);
-                options.attr('disabled', true);
+                options.prop('disabled', true);
             }
         },
 

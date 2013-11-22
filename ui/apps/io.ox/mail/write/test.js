@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -20,7 +20,8 @@ define('io.ox/mail/write/test',
      'io.ox/mail/sender',
      'io.ox/mail/write/test/html_send',
      'io.ox/mail/write/test/text_send',
-     'io.ox/mail/write/test/html_reply'], function (writer, mailAPI, mailUtil, accountAPI, ext, sender) {
+     'io.ox/mail/write/test/html_reply'
+    ], function (writer, mailAPI, mailUtil, accountAPI, ext, sender) {
 
     'use strict';
 
@@ -268,7 +269,7 @@ define('io.ox/mail/write/test',
                 if (!_.browser.IE) {
 
                     j.it('sends mail successfully', function () {
-                        var data = app.getMail().data, done = new Done(), myself = ox.user_id;
+                        var data = app.getMail().data, done = new Done();
                         j.waitsFor(done, 'mail being send', TIMEOUT);
                         // get myself
                         accountAPI.getPrimaryAddress().done(function (address) {
@@ -631,45 +632,45 @@ define('io.ox/mail/write/test',
 
                 var api = accountAPI,
                     account0 = {
-                        addresses: "matthias.biggeleben@OX.IO", // uppercase!
-                        confirmed_ham: "confirmed-ham",
-                        confirmed_ham_fullname: "default0/INBOX/confirmed-ham",
-                        confirmed_spam: "confirmed-spam",
-                        confirmed_spam_fullname: "default0/INBOX/confirmed-spam",
-                        drafts: "Entwürfe",
-                        drafts_fullname: "default0/INBOX/Entwürfe",
+                        addresses: 'matthias.biggeleben@OX.IO', // uppercase!
+                        confirmed_ham: 'confirmed-ham',
+                        confirmed_ham_fullname: 'default0/INBOX/confirmed-ham',
+                        confirmed_spam: 'confirmed-spam',
+                        confirmed_spam_fullname: 'default0/INBOX/confirmed-spam',
+                        drafts: 'Entwürfe',
+                        drafts_fullname: 'default0/INBOX/Entwürfe',
                         id: 0,
-                        login: "matthias.biggeleben",
+                        login: 'matthias.biggeleben',
                         mail_port: 143,
-                        mail_protocol: "imap",
+                        mail_protocol: 'imap',
                         mail_secure: false,
-                        mail_server: "ox.open-xchange.com",
-                        mail_url: "imap://ox.open-xchange.com:143",
+                        mail_server: 'ox.open-xchange.com',
+                        mail_url: 'imap://ox.open-xchange.com:143',
                         meta: null,
-                        name: "Email",
+                        name: 'Email',
                         password: null,
-                        personal: "Biggeleben", // just last_name
+                        personal: 'Biggeleben', // just last_name
                         pop3_delete_write_through: false,
                         pop3_expunge_on_quit: false,
-                        pop3_path: "INBOX/EMail",
+                        pop3_path: 'INBOX/EMail',
                         pop3_refresh_rate: null,
                         pop3_storage : null,
-                        primary_address: "matthias.biggeleben@OX.IO", // uppercase!
+                        primary_address: 'matthias.biggeleben@OX.IO', // uppercase!
                         reply_to: null,
-                        sent: "Gesendete Objekte",
-                        sent_fullname: "default0/INBOX/Gesendete Objekte",
-                        spam: "Spam",
-                        spam_fullname: "default0/INBOX/Spam",
-                        spam_handler: "NoSpamHandler",
-                        transport_login: "matthias.biggeleben",
+                        sent: 'Gesendete Objekte',
+                        sent_fullname: 'default0/INBOX/Gesendete Objekte',
+                        spam: 'Spam',
+                        spam_fullname: 'default0/INBOX/Spam',
+                        spam_handler: 'NoSpamHandler',
+                        transport_login: 'matthias.biggeleben',
                         transport_password: null,
                         transport_port: 25,
-                        transport_protocol: "smtp",
+                        transport_protocol: 'smtp',
                         transport_secure: false,
-                        transport_server: "ox.open-xchange.com",
-                        transport_url: "smtp://ox.open-xchange.com:25",
-                        trash: "Papierkorb",
-                        trash_fullname: "default0/INBOX/Papierkorb",
+                        transport_server: 'ox.open-xchange.com',
+                        transport_url: 'smtp://ox.open-xchange.com:25',
+                        trash: 'Papierkorb',
+                        trash_fullname: 'default0/INBOX/Papierkorb',
                         unified_inbox_enabled: false
                     };
 
@@ -792,7 +793,7 @@ define('io.ox/mail/write/test',
                     account0.addresses = ' ALL@open-xchange.com, matthias.biggeleben@ox.io,mattes@open-xchange.com ';
 
                     api.cache.add(account0)
-                    .done(function (name) {
+                    .done(function () {
 
                         api.getSenderAddresses(0).done(function (addresses) {
                             var expected = [
@@ -820,7 +821,7 @@ define('io.ox/mail/write/test',
                     });
 
                     api.cache.add(account1)
-                    .done(function (name) {
+                    .done(function () {
 
                         api.getAllSenderAddresses().done(function (addresses) {
                             var expected = [

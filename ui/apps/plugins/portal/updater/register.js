@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
@@ -12,7 +13,8 @@
 
 define('plugins/portal/updater/register',
     ['io.ox/core/extensions',
-     'gettext!plugins/portal'], function (ext, gt) {
+     'gettext!plugins/portal'
+    ], function (ext, gt) {
 
     'use strict';
 
@@ -20,7 +22,7 @@ define('plugins/portal/updater/register',
 
         title: gt('Updater'),
 
-        preview: function (baton) {
+        preview: function () {
 
             var href = ox.apiRoot + '/updater/installer/oxupdater-install.exe?session=' + ox.session;
 

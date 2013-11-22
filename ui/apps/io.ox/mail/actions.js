@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
@@ -40,6 +40,15 @@ define('io.ox/mail/actions',
 
     // actions
 
+    new Action('io.ox/mail/actions/unselect', {
+        requires: function (e) {
+            return e.collection.has('toplevel', 'multiple');
+        },
+        multiple: function (list, baton) {
+            if (baton.grid) baton.grid.selection.clear();
+        }
+    });
+
     new Action('io.ox/mail/actions/compose', {
         id: 'compose',
         action: function (baton) {
@@ -54,8 +63,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/delete', {
         id: 'delete',
         requires: 'toplevel some delete',
-        multiple: function (list, baton) {
-
+        multiple: function (list) {
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
@@ -68,23 +76,26 @@ define('io.ox/mail/actions',
 
             if (check) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
+                    new dialogs.ModalDialog({tabTrap: true})
                         .append(
-                            $('<div>').text(question)
+                            $('<div role="document" tabindex="0">').text(question)
                         )
-                        .addPrimaryButton("delete", gt('Delete'))
-                        .addButton("cancel", gt('Cancel'))
+                        .addPrimaryButton('delete', gt('Delete'), 'delete', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .on('delete', function () {
                             api.remove(list).fail(notifications.yell);
                         })
-                        .show();
+                        .show(function () {
+                            this.find('[role="document"]').focus();
+                        });
                 });
             } else {
-                api.remove(list).fail(function (e) {
+                api.remove(list).done(function () {
+                }).fail(function (e) {
                     // mail quota exceeded?
                     if (e.code === 'MSG-0039') {
                         require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.ModalDialog()
+                            new dialogs.ModalDialog({tabTrap: true})
                                 .header(
                                     $('<h4>').text(gt('Mail quota exceeded'))
                                 )
@@ -92,8 +103,8 @@ define('io.ox/mail/actions',
                                     $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
                                     $('<div>').text(question)
                                 )
-                                .addPrimaryButton("delete", gt('Delete'))
-                                .addButton("cancel", gt('Cancel'))
+                                .addPrimaryButton('delete', gt('Delete'), 'delete', {tabIndex: '1'})
+                                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                                 .on('delete', function () {
                                     api.remove(list, { force: true });
                                 })
@@ -173,9 +184,9 @@ define('io.ox/mail/actions',
         requires: 'toplevel one',
         action: function (baton) {
             var getSource = api.getSource(baton.data), textarea;
-            require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                new dialogs.ModalDialog({ width: 700 })
-                    .addPrimaryButton("close", gt("Close"))
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                new dialogs.ModalDialog({ width: 700, tabTrap: true })
+                    .addPrimaryButton('close', gt('Close'), 'close', {tabIndex: '1'})
                     .header(
                         $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
                     )
@@ -203,93 +214,16 @@ define('io.ox/mail/actions',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!small');
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             print.request('io.ox/mail/print', list);
         }
     });
 
-    new Action('io.ox/mail/actions/print#disabled', {
-        id: 'print',
-        requires: function () {
-            return _.device('!small');
-        },
-        multiple: function (list, baton) {
-                var data = baton.data,
-                    win;
-                //single vs. multi
-                if (list.length === 1) {
-                    win = print.open('mail', data, {
-                            template: 'infostore://70170',
-                            id: data.id,
-                            folder: data.folder_id,
-                            view: 'text',
-                            format: 'template'
-                        });
-                    win.print();
-                } else {
-                    win = print.openURL();
-                    win.document.title = gt('Print');
+    /*
+     *  Move and Copy
+     */
 
-                    require(['io.ox/core/http'], function (http) {
-                        /**
-                         * returns data for requested list elements
-                         * @param  {array} list of data objects
-                         * @return {deferred} arrray of objects sorted by received_date
-                         */
-                        var getList = function (list) {
-                            return api.getList(list)
-                            .pipe(function (data) {
-                                //sort and map for print request
-                                return _.chain(data)
-                                        .sortBy(function (mail) {
-                                            return 1 - mail.received_date;
-                                        })
-                                        .map(function (mail) {
-                                            return { id: mail.id, folder: mail.folder_id };
-                                        })
-                                        .value();
-                            });
-                        };
-                        /**
-                         * returns printable content ob submitted ids
-                         * @param  {array} listmin of data objects
-                         * @return {deferred} print content
-                         */
-                        var getPrintable = function (listmin) {
-                            return http.PUT({
-                                module: 'mail',
-                                dataType: 'text',
-                                params: {
-                                    action: 'list',
-                                    template: 'infostore://70170',
-                                    view: 'text',
-                                    format: 'template',
-                                    columns: '602,603,604,605,606,607,610'
-                                },
-                                data: listmin
-                            });
-                        };
-
-                        //get received_date for sorting
-                        getList(list)
-                        .pipe(function (listmin) {
-                            //get content for popup
-                            getPrintable(listmin)
-                            .done(function (print) {
-                                var $content = $('<div>').append(print),
-                                    head = $('<div>').append($content.find('style')),
-                                    body = $('<div>').append($content.find('.mail-detail'));
-                                win.document.write(head.html() + body.html());
-                                win.print();
-                            });
-                        });
-                    });
-                }
-                win.focus();
-            }
-    });
-
-    function moveAndCopy(type, label, success) {
+    function generate(type, label, success) {
 
         new Action('io.ox/mail/actions/' + type, {
             id: type,
@@ -297,10 +231,10 @@ define('io.ox/mail/actions',
             multiple: function (list, baton) {
                 var vGrid = baton.grid || ('app' in baton && baton.app.getGrid());
 
-                require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                     function commit(target) {
-                        if (type === "move" && vGrid) vGrid.busy();
+                        if (type === 'move' && vGrid) vGrid.busy();
                         api[type](list, target).then(
                             function (resp) {
                                 if (resp) {
@@ -309,7 +243,7 @@ define('io.ox/mail/actions',
                                     notifications.yell('success', list.length > 1 ? success.multi : success.single);
                                 }
                                 folderAPI.reload(target, list);
-                                if (type === "move" && vGrid) vGrid.idle();
+                                if (type === 'move' && vGrid) vGrid.idle();
                             },
                             notifications.yell
                         );
@@ -321,10 +255,10 @@ define('io.ox/mail/actions',
                         }
 
                     } else {
-                        var dialog = new dialogs.ModalDialog()
+                        var dialog = new dialogs.ModalDialog({tabTrap: true})
                             .header($('<h4>').text(label))
-                            .addPrimaryButton("ok", label)
-                            .addButton("cancel", gt("Cancel"));
+                            .addPrimaryButton('ok', label, 'ok', {tabIndex: '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                         dialog.getBody().css({ height: '250px' });
                         var folderId = String(list[0].folder_id),
                             id = settings.get('folderpopup/last') || folderId,
@@ -363,8 +297,8 @@ define('io.ox/mail/actions',
         });
     }
 
-    moveAndCopy('move', gt('Move'), { multi: gt('Mails have been moved'), single: gt('Mail has been moved') });
-    moveAndCopy('copy', gt('Copy'), { multi: gt('Mails have been copied'), single: gt('Mail has been copied') });
+    generate('move', gt('Move'), { multi: gt('Mails have been moved'), single: gt('Mail has been moved') });
+    generate('copy', gt('Copy'), { multi: gt('Mails have been copied'), single: gt('Mail has been copied') });
 
     new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
@@ -386,8 +320,9 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             var self = this;
-            api.markUnread(list).done(function () {
-                $(self).parents('.io-ox-multi-selection').trigger('redraw');
+            api.markUnread(list).done(function (trackerResponse, updateResponse) {
+                $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
             });
         }
     });
@@ -412,8 +347,9 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             var self = this;
-            api.markRead(list).done(function () {
-                $(self).parents('.io-ox-multi-selection').trigger('redraw');
+            api.markRead(list).done(function (trackerResponse, updateResponse) {
+                $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
             });
         }
     });
@@ -463,7 +399,8 @@ define('io.ox/mail/actions',
                 return e.collection.has('some') && _.device('!smartphone') && _(list).reduce(function (memo, obj) {
                     return memo || new p.Preview({
                         filename: obj.filename,
-                        mimetype: obj.content_type
+                        mimetype: String(obj.content_type || '').split(';')[0], // fixes 'audio/mp3; name="Metallica - 01 - Enter Sandman.mp3"''
+                        attachment: true
                     })
                     .supportsPreview();
                 }, false);
@@ -476,7 +413,7 @@ define('io.ox/mail/actions',
             // open side popup
             require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, p) {
                 new dialogs.SidePopup().show(baton.e, function (popup) {
-                    _(list).each(function (data, i) {
+                    _(list).each(function (data) {
                         var pre = new p.Preview({
                             data: data,
                             filename: data.filename,
@@ -541,20 +478,16 @@ define('io.ox/mail/actions',
             return _.device('!ios') && e.collection.has('some');
         },
         multiple: function (list) {
-            var url;
-            if (list.length === 1) {
-                // download single attachment
-                url = api.getUrl(_(list).first(), 'download');
-            } else {
-                // download zip file
-                url = api.getUrl(list, 'zip');
-            }
+
+            // download single attachment or zip file
+            var url = list.length === 1 ?
+                api.getUrl(_(list).first(), 'download') :
+                api.getUrl(list, 'zip');
+
             // download via iframe
-            // window.location.assign(url); has a weird impact on ongoing uploads (see Bug 27420)
-            // window.open(url); might leave open tabs
-            $('#tmp').append(
-                $('<iframe>', { src: url }).addClass('hidden download-frame')
-            );
+            require(['io.ox/core/download'], function (download) {
+                download.url(url);
+            });
         }
     });
 
@@ -563,12 +496,9 @@ define('io.ox/mail/actions',
         capabilities: 'infostore',
         requires: 'some',
         multiple: function (list) {
-            notifications.yell('busy', gt('Attachments will be saved'));
-            api.saveAttachments(list)
-                .done(function (data) {
-                    notifications.yell('success', gt('Attachments have been saved'));
-                })
-                .fail(notifications.yell);
+            require(['io.ox/mail/actions/attachmentSave'], function (action) {
+                action.multiple(list);
+            });
         }
     });
 
@@ -660,7 +590,7 @@ define('io.ox/mail/actions',
                         {'com.openexchange.groupware.task.folder': coreConfig.get('folder/tasks')}
                     ]
                 })
-                .done(function (data) {
+                .done(function () {
                     notifications.yell('success', gt('The appointment has been added to your calendar'));
                 })
                 .fail(notifications.yell);
@@ -675,25 +605,29 @@ define('io.ox/mail/actions',
             return _.device('!ios') && e.collection.has('some', 'read');
         },
         multiple: function (data) {
-            var url;
-            if (_(data).first().msgref && _.isObject(_(data).first().parent)) {
-                //using msgref reference if previewing during compose (forward previewed mail as attachment)
-                url = api.getUrl(data, 'eml:reference');
-            } else if (!_.isObject(_(data).first().parent)) {
-                url = api.getUrl(data, 'eml');
-            } else {
-                // adjust attachment id for previewing nested email within compose view
-                var adjustFn = _(data).first().parent.adjustid || '';
-                _(data).first().id = _.isFunction(adjustFn) ? adjustFn(_(data).first().id) : _(data).first().id;
-                // download attachment eml
-                url = api.getUrl(_(data).first(), 'download');
-            }
-            // download via iframe
-            // window.location.assign(url); has a weird impact on ongoing uploads (see Bug 27420)
-            // window.open(url); might leave open tabs
-            $('#tmp').append(
-                $('<iframe>', { src: url }).addClass('hidden download-frame')
-            );
+
+            require(['io.ox/core/download'], function (download) {
+
+                var url, first = _(data).first();
+
+                // download plain EML?
+                if (!_.isObject(first.parent)) {
+                    return download.mails(data);
+                }
+
+                if (first.msgref && _.isObject(first.parent)) {
+                    // using msgref reference if previewing during compose (forward previewed mail as attachment)
+                    url = api.getUrl(data, 'eml:reference');
+                } else {
+                    // adjust attachment id for previewing nested email within compose view
+                    var adjustFn = first.parent.adjustid || '';
+                    first.id = _.isFunction(adjustFn) ? adjustFn(first.id) : first.id;
+                    // download attachment eml
+                    url = api.getUrl(first, 'download');
+                }
+
+                download.url(url);
+            });
         }
     });
 
@@ -841,7 +775,7 @@ define('io.ox/mail/actions',
 
             lengthValue = collectedRecipients.length;
 
-            _(collectedRecipients).each(function (mail, index) {
+            _(collectedRecipients).each(function (mail) {
                 contactAPI.search(mail).done(function (obj) {
                     var currentObj = (obj[0]) ? obj[0] : {email1: mail, display_name: mail},
                         internalUser = {id: currentObj.internal_userid, type: 1},
@@ -879,44 +813,44 @@ define('io.ox/mail/actions',
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {
                 //create popup dialog
-                var popup = new dialogs.ModalDialog()
-                    .addPrimaryButton('create', gt('Create reminder'))
-                    .addButton('cancel', gt('Cancel'));
+                var popup = new dialogs.ModalDialog({tabTrap: true})
+                    .addPrimaryButton('create', gt('Create reminder'), 'create', {tabIndex: '1'})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
 
                 //Header
                 popup.getHeader()
-                    .append($("<h4>")
+                    .append($('<h4>')
                             .text(gt('Remind me')));
 
                 //fill popup body
                 var popupBody = popup.getBody();
 
-                popupBody.append($('<div>').text(gt('Subject')));
-                var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, width: '90%' })
+                popupBody.append($('<div>', {id: 'subject'}).text(gt('Subject')));
+                var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, width: '90%', tabindex: '1', 'aria-labeledby': 'subject' })
                     .focus(function () {
                             this.select();
                         })
                     .appendTo(popupBody);
 
-                popupBody.append("<div>" + gt('Note') + "</div>");
-                var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
-                    gt('From') + ": " + util.formatSender(data.from[0]) })
+                popupBody.append('<div id="note">' + gt('Note') + '</div>');
+                var noteInput = $('<textarea>', { width: '90%', rows: '5', tabindex: '1', 'aria-labeledby': 'note', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' +
+                    gt('From') + ': ' + util.formatSender(data.from[0]) })
                     .focus(function () {
                         this.select();
                     })
                     .appendTo(popupBody);
 
-                popupBody.append("<div>" + gt('Remind me') + "</div>");
-                var dateSelector = $('<select>', {name: "dateselect"})
+                popupBody.append('<div id="remindme">' + gt('Remind me') + '</div>');
+                var dateSelector = $('<select>', {name: 'dateselect', tabindex: '1', 'aria-labeledby': 'remindme'})
                 .appendTo(popupBody);
                 var endDate = new Date();
-                dateSelector.append(tasksUtil.buildDropdownMenu(endDate));
+                dateSelector.append(tasksUtil.buildDropdownMenu({time: endDate}));
 
                 //ready for work
                 var def = popup.show();
                 titleInput.focus();
                 def.done(function (action) {
-                    if (action === "create") {
+                    if (action === 'create') {
 
                         //Calculate the right time
                         var dates = tasksUtil.computePopupTime(endDate, dateSelector.val());
@@ -985,6 +919,14 @@ define('io.ox/mail/actions',
     var INDEX = 0;
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 10, // should be first
+        prio: 'hi',
+        id: 'unselect',
+        label: gt('Unselect all'),
+        ref: 'io.ox/mail/actions/unselect'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'hi',
         id: 'reply',
@@ -997,7 +939,8 @@ define('io.ox/mail/actions',
         prio: 'hi',
         id: 'reply-all',
         label: gt('Reply All'),
-        ref: 'io.ox/mail/actions/reply-all'
+        ref: 'io.ox/mail/actions/reply-all',
+        drawDisabled: true
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -1020,12 +963,20 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'hi',
+        id: 'delete',
+        label: gt('Delete'),
+        ref: 'io.ox/mail/actions/delete'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'hi',
         id: 'markunread',
         label:
             //#. Translation should be as short a possible
-            //#. Instead of "Mark as unread" or "Mark unread" it's just "Unread"
-            //#. German, for example, should be "Ungelesen"
-            gt('Unread'),
+            //#. Instead of "Mark as unread" it's just "Mark unread"
+            //#. German, for example, should be just "Ungelesen"
+            gt('Mark unread'),
         ref: 'io.ox/mail/actions/markunread'
     }));
 
@@ -1036,7 +987,7 @@ define('io.ox/mail/actions',
         label:
             //#. Translation should be as short a possible
             //#. Instead of "Mark as read" it's just "Mark read"
-            //#. German, for example, should be "Gelesen"
+            //#. German, for example, should be just "Gelesen"
             gt('Mark read'),
         ref: 'io.ox/mail/actions/markread'
     }));
@@ -1059,7 +1010,7 @@ define('io.ox/mail/actions',
         index: INDEX + 1,
         prio: 'hi',
         id: 'nospam',
-        label: gt('No spam'),
+        label: gt('Not spam'),
         ref: 'io.ox/mail/actions/nospam'
     }));
 
@@ -1090,14 +1041,6 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
-        prio: 'hi',
-        id: 'delete',
-        label: gt('Delete'),
-        ref: 'io.ox/mail/actions/delete'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
         prio: 'lo',
         id: 'print',
         label: gt('Print'),
@@ -1108,7 +1051,7 @@ define('io.ox/mail/actions',
         index: INDEX += 100,
         prio: 'lo',
         id: 'reminder',
-        label: gt("Reminder"),
+        label: gt('Reminder'),
         ref: 'io.ox/mail/actions/reminder'
     }));
 

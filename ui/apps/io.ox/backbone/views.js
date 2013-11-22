@@ -1,17 +1,18 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], function (ext, Events) {
-    "use strict";
+
+    'use strict';
 
     var views;
 
@@ -27,7 +28,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 return attributeDefinition;
             }
 
-            var canonicalName = "";
+            var canonicalName = '';
             var forceUpcase = true;
             for (var i = 0, length = attributeDefinition.length; i < length; i++) {
                 var c = attributeDefinition.charAt(i);
@@ -81,7 +82,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
             if (options.modelEvents) {
                 _(options.modelEvents).each(function (methodNames, evt) {
-                    _(methodNames.split(" ")).each(function (methodName) {
+                    _(methodNames.split(' ')).each(function (methodName) {
                         self.observeModel(evt, function () {
                             self[methodName].apply(self, $.makeArray(arguments));
                         });
@@ -182,9 +183,9 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         };
 
         this.createSubpoint = function (subpath, options, extOptions) {
-            var point = views.point(name + "/" + subpath),
+            var point = views.point(name + '/' + subpath),
                 ViewClass = point.createView(options);
-            var id = options.id || name + "/" + subpath;
+            var id = options.id || name + '/' + subpath;
 
             if (options.id) {
                 delete options.id;
@@ -207,7 +208,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         this.createView = function (options) {
             options = options || {};
 
-            var id = options.id || '';
             delete options.id;
 
             options.render = options.render || function () {
@@ -226,7 +226,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     self.$el.empty();
                     self.render();
                 }
-                this.point.on("extended", redraw);
+                this.point.on('extended', redraw);
                 self.$el.on('dispose', function () {
                     self.point.off('extended', redraw);
                 });
@@ -269,8 +269,8 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 });
 
             },
-            separator: function (attribute) {
-                return " ";
+            separator: function () {
+                return ' ';
             },
             updateNode: function () {
                 this.$el.empty();

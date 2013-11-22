@@ -1,39 +1,39 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
 define('io.ox/calendar/edit/main',
-      ['io.ox/calendar/model',
-       'io.ox/calendar/api',
-       'io.ox/core/extPatterns/dnd',
-       'io.ox/calendar/edit/view-main',
-       'io.ox/core/notifications',
-       'gettext!io.ox/calendar/edit/main',
-       'settings!io.ox/calendar',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
+    ['io.ox/calendar/model',
+     'io.ox/calendar/api',
+     'io.ox/core/extPatterns/dnd',
+     'io.ox/calendar/edit/view-main',
+     'io.ox/core/notifications',
+     'gettext!io.ox/calendar/edit/main',
+     'settings!io.ox/calendar',
+     'less!io.ox/calendar/edit/style.less'
+    ], function (appointmentModel, api, dnd, MainView, notifications, gt, settings) {
 
     'use strict';
 
     function createInstance() {
 
-        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true }),
+        var app = ox.ui.createApp({name: 'io.ox/calendar/edit', title: 'Edit Appointment', userContent: true, closable: true }),
 
         controller = _.extend(app, {
 
             start: function () {
-                var self = this;
                 if (_.browser.IE === undefined || _.browser.IE > 9) {
                     this.dropZone = new dnd.UploadZone({
-                        ref: "io.ox/calendar/edit/dnd/actions"
+                        ref: 'io.ox/calendar/edit/dnd/actions'
                     }, this);
                 }
             },
@@ -45,10 +45,10 @@ define('io.ox/calendar/edit/main',
                 //be gently
                 if (self.getDirtyStatus()) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog()
-                            .text(gt("Do you really want to discard your changes?"))
-                            .addPrimaryButton('delete', gt('Discard'))
-                            .addButton('cancel', gt('Cancel'))
+                        new dialogs.ModalDialog({'tabTrap': true})
+                            .text(gt('Do you really want to discard your changes?'))
+                            .addPrimaryButton('delete', gt('Discard'), 'delete', {'tabIndex': '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                             .show()
                             .done(function (action) {
                                 if (action === 'delete') {
@@ -64,6 +64,7 @@ define('io.ox/calendar/edit/main',
                     self.dispose();
                     df.resolve();
                 }
+                app.getWindow().nodes.main.find('input')[0].focus();
                 return df;
             },
             /*
@@ -143,7 +144,7 @@ define('io.ox/calendar/edit/main',
 
                                 ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
                                     var dialog = new dialogs.ModalDialog({
-                                            top: "20%",
+                                            top: '20%',
                                             center: false,
                                             container: self.getWindowNode()
                                         })
@@ -221,7 +222,7 @@ define('io.ox/calendar/edit/main',
                             }
 
                             // init alarm
-                            if (!self.model.get('alarm')) {
+                            if (self.model.get('alarm') === undefined || self.model.get('alarm') === null) {//0 is valid don't change to -1 then
                                 self.model.set('alarm', -1, { silent: true, validate: true });
                             }
 
@@ -306,7 +307,14 @@ define('io.ox/calendar/edit/main',
                     self.getWindow().setTitle(self.model.get('title'));
                     self.setTitle(self.model.get('title'));
                 }
-                self.model.on('change:title', function (model, value, source) {
+                self.model.on('keyup:title', function (model, value) {
+                    if (!value) {
+                        if (model.get('id')) {
+                            value = gt('Edit appointment');
+                        } else {
+                            value = gt('Create appointment');
+                        }
+                    }
                     self.getWindow().setTitle(value);
                     self.setTitle(value);
                 });

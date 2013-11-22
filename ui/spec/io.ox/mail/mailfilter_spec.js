@@ -1,89 +1,92 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012 Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define(["io.ox/core/api/mailfilter",
-        "shared/examples/for/api"], function (api, sharedExamplesFor) {
+define(['io.ox/core/api/mailfilter',
+        'shared/examples/for/api'], function (api, sharedExamplesFor) {
 
     'use strict';
 
-     describe('Mailfilter Api', function () {
+    describe('Mailfilter Api', function () {
 
 //         sharedExamplesFor(api);
 
-         var listResult = {
-             "data": [{
-                 "position": 0,
-                 "id": 0,
-                 "flags":["vacation"],
-                 "test": {"id":"true"},
-                 "actioncmds": [{
-                     "id": "vacation",
-                     "text": "Testtext",
-                     "days": "7",
-                     "subject": "Test",
-                     "addresses": ["test@test.open-xchange.com"]
-                 }],
-                 "rulename": "vacation notice",
-                 "active": false
-             },
-             {
-                 "position": 1,
-                 "id": 1,
-                 "flags": ["autoforward"],
-                 "test": {
-                     "headers": ["To"],
-                     "id": "header",
-                     "values": ["test@test.open-xchange.com"],
-                     "comparison": "contains"
-                 },
-                 "actioncmds": [{
-                     "to": "test2@test.open-xchange.com",
-                     "id": "redirect"
-                     },
-                     {"id": "keep"
-                 }],
-                 "rulename": "autoforward",
-                 "active": false
-             }]
-         };
+        var listResult = {
+                'data': [{
+                    'position': 0,
+                    'id': 0,
+                    'flags': ['vacation'],
+                    'test': {'id': 'true'},
+                    'actioncmds': [{
+                        'id': 'vacation',
+                        'text': 'Testtext',
+                        'days': '7',
+                        'subject': 'Test',
+                        'addresses': ['test@test.open-xchange.com']
+                    }],
+                    'rulename': 'vacation notice',
+                    'active': false
+                },
+                {
+                    'position': 1,
+                    'id': 1,
+                    'flags': ['autoforward'],
+                    'test': {
+                        'headers': ['To'],
+                        'id': 'header',
+                        'values': ['test@test.open-xchange.com'],
+                        'comparison': 'contains'
+                    },
+                    'actioncmds': [{
+                            'to': 'test2@test.open-xchange.com',
+                            'id': 'redirect'
+                        }, {
+                            'id': 'keep'
+                        }
+                    ],
+                    'rulename': 'autoforward',
+                    'active': false
+                }]
+            };
 
 
-         beforeEach(function () {
-             this.server = sinon.fakeServer.create();
+        beforeEach(function () {
+            this.server = ox.fakeServer.create();
 
-             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(listResult));
-             });
+            this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(listResult));
+            });
 
-             this.server.respondWith('PUT', /api\/mailfilter\?action=delete/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
-             });
+            this.server.respondWith('PUT', /api\/mailfilter\?action=delete/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
+            });
 
-             this.server.respondWith('PUT', /api\/mailfilter\?action=new/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":1}');
-             });
+            this.server.respondWith('PUT', /api\/mailfilter\?action=new/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":1}');
+            });
 
-             this.server.respondWith('PUT', /api\/mailfilter\?action=update/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
-             });
+            this.server.respondWith('PUT', /api\/mailfilter\?action=update/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
+            });
 
-             this.server.respondWith('PUT', /api\/mailfilter\?action=reorder/, function (xhr) {
-                 xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
-             });
-         });
-         afterEach(function () {
-             this.server.restore();
-         });
+            this.server.respondWith('PUT', /api\/mailfilter\?action=reorder/, function (xhr) {
+                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
+            });
+        });
+
+        afterEach(function () {
+            this.server.restore();
+        });
 
         it('should return available filters', function () {
             var result = api.getRules();

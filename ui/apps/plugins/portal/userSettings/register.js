@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -15,13 +15,14 @@
 define('plugins/portal/userSettings/register',
     ['io.ox/core/extensions',
      'io.ox/core/main',
-     'gettext!io.ox/core'], function (ext, main, gt) {
+     'gettext!io.ox/core'
+    ], function (ext, main, gt) {
 
     'use strict';
 
-    function changeUserData(e) {
+    function changeUserData() {
 
-        require(["io.ox/core/tk/dialogs", "io.ox/core/settings/user"], function (dialogs, users) {
+        require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
             var usermodel,
                 dialog = new dialogs.ModalDialog({
                     top: 60,
@@ -29,8 +30,8 @@ define('plugins/portal/userSettings/register',
                     center: false,
                     maximize: true
                 })
-                .addPrimaryButton("save", gt('Save'))
-                .addButton('discard', gt("Discard"));
+                .addPrimaryButton('save', gt('Save'))
+                .addButton('discard', gt('Discard'));
 
             var $node = dialog.getContentNode();
 
@@ -38,7 +39,7 @@ define('plugins/portal/userSettings/register',
                 usermodel = model;
             }).fail(function () {
                 $node.append(
-                    $.fail(gt("Couldn't load your contact data."), function () {
+                    $.fail(gt('Couldn\'t load your contact data.'), function () {
                         users.editCurrentUser($node).done(function () {
                             $node.find('[data-action="discard"]').hide();
                         });
@@ -70,11 +71,11 @@ define('plugins/portal/userSettings/register',
                     $('<div class="alert alert-block alert-info">')
                     .css('margin', '14px 0px')
                     .text(
-                        gt('If you change the password, you will be logged out. Please ensure that everything is closed and saved.')
+                        gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
                     )
                 );
             })
-            .addPrimaryButton('change', gt('Change password and logout'))
+            .addPrimaryButton('change', gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
                 var node = dialog.getContentNode();
@@ -111,7 +112,7 @@ define('plugins/portal/userSettings/register',
 
         title: gt('User data'),
 
-        preview: function (baton) {
+        preview: function () {
             var content;
             this.append(
                 content = $('<div class="content">').append(

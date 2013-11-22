@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -26,10 +26,11 @@ define('plugins/notifications/mail/register',
     ext.point('io.ox/core/notifications/mail/header').extend({
         draw: function (baton) {
             this.append(
-                $('<legend class="section-title">').text(gt('New Mails')),
+                $('<legend class="section-title">').text(gt('New Mails'))
+                .attr('focusId', 'mail-notification-'),//special attribute to restore focus on redraw
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
-                    $('<a href="#" data-action="open-app" tabindex="1">').text(
+                    $('<a role="button" href="#" data-action="open-app" tabindex="1" class="refocus" focus-id="mail-notification-open-app">').text(
                         baton.more ? gt('Show all %1$d messages in inbox', baton.size) : gt('Show inbox')
                     )
                 )
@@ -38,14 +39,23 @@ define('plugins/notifications/mail/register',
     });
 
     function drawItem(node, data) {
-        var f = data.from || [['', '']];
-        node.append(
-            $('<div class="item" tabindex="1">').attr('data-cid', _.cid(data)).append(
-                $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
-                $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
-                // TODO: re-add teaser once we get this via getList(...)
-            )
-        );
+        if (data) {
+            var f = data.from || [['', '']];
+            node.append(
+                $('<div class="item refocus" tabindex="1" role="listItem">')
+                    .attr({'focus-id': 'mail-notification-' + _.cid(data),//special attribute to restore focus on redraw
+                           'data-cid': _.cid(data),
+                            //#. %1$s mail sender
+                            //#. %2$s mail subject
+                            //#, c-format
+                            'aria-label': gt('New Mail from %1$s %2$s. Press [enter] to open', _.noI18n(util.getDisplayName(f[0])), _.noI18n(data.subject) || gt('No subject'))
+                          }).append(
+                    $('<div class="title">').text(_.noI18n(util.getDisplayName(f[0]))),
+                    $('<div class="subject">').text(_.noI18n(data.subject) || gt('No subject')).addClass(data.subject ? '' : 'empty')
+                    // TODO: re-add teaser once we get this via getList(...)
+                )
+            );
+        }
     }
 
     ext.point('io.ox/core/notifications/mail/item').extend({
@@ -76,18 +86,37 @@ define('plugins/notifications/mail/register',
             baton = ext.Baton({ view: view, size: size, more: size > $i });
             ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
 
-            // draw placeholders
             for (i = 0; i < $i; i++) {
                 mails[i] = api.reduce(this.collection.at(i).toJSON());
             }
 
-            api.getList(mails).done(function (response) {
-                // draw placeholders
+            //no need to request mails where we have all the information already
+            mails = _(mails).filter(function (item) {
+                return view.collection._byId[item.id].get('subject') === undefined;
+            });
+
+            if (mails.length > 0) {
+                api.getList(mails).done(function (response) {
+                    view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
+                    //save data to model so we don't need to ask again everytime
+                    for (i = 0; i < mails.length; i++) {
+                        view.collection._byId[response[i].id].attributes = response[i];
+                    }
+                    // draw mails
+                    for (i = 0; i < $i; i++) {
+                        baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
+                        ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
+                    }
+                    
+                });
+            } else {
+                view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
+                // draw mails
                 for (i = 0; i < $i; i++) {
-                    baton = ext.Baton({ data: response[i], view: view });
+                    baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
                     ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
                 }
-            });
+            }
 
             return this;
         },
@@ -116,7 +145,6 @@ define('plugins/notifications/mail/register',
                         var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay.empty())
                             .on('close', function () {
-                                overlay.trigger('mail-detail-closed');
                                 api.off('delete', cleanUp);
                                 if (_.device('smartphone') && overlay.children().length > 0) {
                                     overlay.addClass('active');
@@ -124,6 +152,7 @@ define('plugins/notifications/mail/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                $('#io-ox-notifications .item').first().focus();//focus first for now
                             })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));

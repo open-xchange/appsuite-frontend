@@ -1,11 +1,12 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
@@ -16,7 +17,7 @@ define('io.ox/mail/accounts/view-form',
      'io.ox/core/notifications',
      'io.ox/core/api/account',
      'text!io.ox/mail/accounts/account_detail.html',
-      'settings!io.ox/mail',
+     'settings!io.ox/mail',
      'gettext!io.ox/settings/settings'
     ], function (View, notifications, AccountAPI, tmpl, settings, gt) {
 
@@ -24,29 +25,29 @@ define('io.ox/mail/accounts/view-form',
 
 
     var staticStrings =  {
-            TITLE_ACCOUNT_SETTINGS: gt('Account Settings'),
-            ACCOUNT_NAME: gt('Account Name:'),
-            PERSONAL: gt('Your name:'),
-            EMAIL_ADDRESS: gt('Email Address:'),
-            UNIFIED_MAIL: gt('Use Unified Mail for this account'),
-            SERVER_SETTINGS: gt('Server Settings'),
-            SERVER_TYPE: gt('Server Type:'),
+            TITLE_ACCOUNT_SETTINGS: gt('Account settings'),
+            ACCOUNT_NAME: gt('Account name'),
+            PERSONAL: gt('Your name'),
+            EMAIL_ADDRESS: gt('Email address'),
+            UNIFIED_MAIL: gt('Use unified mail for this account'),
+            SERVER_SETTINGS: gt('Server settings'),
+            SERVER_TYPE: gt('Server type'),
             SERVER_SSL: gt('Use SSL connection'),
-            SERVER_NAME: gt('Server Name:'),
-            SERVER_PORT: gt('Server Port:'),
-            LOGIN: gt('Login'),
+            SERVER_NAME: gt('Server name'),
+            SERVER_PORT: gt('Server port'),
+            LOGIN: gt('Username'),
             PASSWORD: gt('Password'),
             POP_3_REFRESH: gt('Refresh rate in minutes:'),
             EXPUNGE_MESSAGES: gt('Remove copy from server after retrieving a message'),
             DELETING_ON_LOCAL: gt('Deleting messages on local storage also deletes them on server'),
-            TITLE_SERVER_OUT: gt('Outgoing Server Settings (SMTP)'),
+            TITLE_SERVER_OUT: gt('Outgoing server settings (SMTP)'),
             SERVER_OUT_SSL: gt('Use SSL connection'),
-            SERVER_OUT_NAME: gt('Server Name:'),
-            SERVER_OUT_PORT: gt('Server Port:'),
-            LOGIN_AND_PASS: gt('Use Login and Password'),
-            LOGIN_OUT: gt('Login'),
+            SERVER_OUT_NAME: gt('Server name'),
+            SERVER_OUT_PORT: gt('Server port'),
+            LOGIN_AND_PASS: gt('Use username and password'),
+            LOGIN_OUT: gt('Username'),
             PASSWORD_OUT: gt('Password'),
-            TITLE_FOLDER_SETTINGS: gt('Folder Settings'),
+            TITLE_FOLDER_SETTINGS: gt('Folder settings'),
             FOLDER_SENT: gt('Sent folder'),
             FOLDER_TRASH: gt('Trash folder'),
             FOLDER_DRAFTS: gt('Drafts folder'),
@@ -82,9 +83,9 @@ define('io.ox/mail/accounts/view-form',
         },
 
         AccountDetailView = Backbone.View.extend({
-            tagName: "div",
+            tagName: 'div',
             _modelBinder: undefined,
-            initialize: function (options) {
+            initialize: function () {
                 // create template
                 this.template = doT.template(tmpl);
                 this._modelBinder = new Backbone.ModelBinder();
@@ -161,7 +162,7 @@ define('io.ox/mail/accounts/view-form',
                         }
                     });
                 } else {//primary account does not allow editing besides display name and unified mail
-                    self.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').attr('disabled', 'disabled');
+                    self.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').prop('disabled', true);
                     self.$el.find('button.btn.folderselect').hide();
                 }
                 //disable folderselect if no account is defined
@@ -220,13 +221,13 @@ define('io.ox/mail/accounts/view-form',
                         }
                     })
                     .fail(function (data) {
-                        if (data.code === "ACC-0004" && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
-                            notifications.yell('error', gt('Login must not be empty.'));
-                        } else if (data.code === "SVL-0002") {
+                        if (data.code === 'ACC-0004' && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
+                            notifications.yell('error', gt('Username must not be empty.'));
+                        } else if (data.code === 'SVL-0002') {
                             notifications.yell('error',
                                //#. %1$s the missing request parameter
                                //#, c-format
-                               gt("Please enter the following data: %1$s", _.noI18n(data.error_params[0])));
+                               gt('Please enter the following data: %1$s', _.noI18n(data.error_params[0])));
                         } else {
                             notifications.yell('error', _.noI18n(data.error));
                         }
@@ -256,19 +257,18 @@ define('io.ox/mail/accounts/view-form',
 
                 if (self.model.get('id') !== 0) {
                     var property = $(e.currentTarget).prev().attr('data-property'),
-                        id = self.model.get(property),
-                        accountName = self.model.get('name');
-                    require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
+                        id = self.model.get(property);
+                    require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                         var label = gt('Select folder'),
                             dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
-                            .addPrimaryButton("select", label)
-                            .addButton("cancel", gt("Cancel"));
+                            .addPrimaryButton('select', label, 'select', {'tabIndex': '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
                         dialog.getBody().css({ height: '250px' });
                         var tree = new views.FolderTree(dialog.getBody(), {
                                 type: 'mail',
-                                tabindex: 0,
+                                tabindex: 1,
                                 rootFolderId: 'default' + self.model.get('id')
                             });
                         dialog.show(function () {

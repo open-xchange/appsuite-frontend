@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -17,7 +18,8 @@ define('io.ox/mail/folderview-extensions',
      'io.ox/mail/api',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
-     'gettext!io.ox/mail'], function (ext, folderAPI, mailAPI, notifications, capabilities, gt) {
+     'gettext!io.ox/mail'
+    ], function (ext, folderAPI, mailAPI, notifications, capabilities, gt) {
 
     'use strict';
 
@@ -31,13 +33,13 @@ define('io.ox/mail/folderview-extensions',
     }
 
     if (capabilities.has('multiple_mail_accounts')) {
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/links').extend({
             id: 'add-account',
             index: 300,
-            draw: function (baton) {
+            draw: function () {
                 if (_.device('!smartphone')) {
-                    this.append($('<li>').append(
-                        $('<a href="#" data-action="add-mail-account" tabindex="1" role="menuitem">')
+                    this.append($('<div>').append(
+                        $('<a href="#" data-action="add-mail-account" tabindex="1" role="button">')
                         .text(gt('Add mail account'))
                         .on('click', addAccount)
                     ));
@@ -45,24 +47,6 @@ define('io.ox/mail/folderview-extensions',
             }
         });
     }
-
-    function subscribeIMAPFolder(e) {
-        e.preventDefault();
-        e.data.app.folderView.subscribe(e.data);
-    }
-
-    ext.point(POINT + '/sidepanel/toolbar/add').extend({
-        id: 'subscribe-folder',
-        index: 400,
-        draw: function (baton) {
-            if (_.device('!smartphone')) {
-                this.append($('<li>').append(
-                    $('<a href="#" data-action="subscribe" tabindex="1" role="menuitem">').text(gt('Subscribe IMAP folders'))
-                    .on('click', { app: baton.app, selection: baton.tree.selection }, subscribeIMAPFolder)
-                ));
-            }
-        }
-    });
 
     function markMailFolderRead(e) {
         var folder = e.data.folder;
@@ -95,7 +79,7 @@ define('io.ox/mail/folderview-extensions',
             .value();
     }
 
-    ext.point(POINT + '/sidepanel/toolbar/options').extend({
+    ext.point(POINT + '/sidepanel/context-menu').extend({
         id: 'mark-folder-read',
         index: 50,
         draw: function (baton) {
@@ -119,7 +103,7 @@ define('io.ox/mail/folderview-extensions',
         });
     }
 
-    ext.point(POINT + '/sidepanel/toolbar/options').extend({
+    ext.point(POINT + '/sidepanel/context-menu').extend({
         id: 'expunge',
         index: 75,
         draw: function (baton) {
@@ -143,10 +127,10 @@ define('io.ox/mail/folderview-extensions',
             folderAPI.get({ folder: id }),
             ox.load(['io.ox/core/tk/dialogs'])
         ).done(function (folder, dialogs) {
-            new dialogs.ModalDialog()
-                .text(gt('Do you really want to empty folder "%s"?', folder.title))
-                .addPrimaryButton('delete', gt('Empty folder'))
-                .addButton('cancel', gt('Cancel'))
+            new dialogs.ModalDialog({tabTrap: true})
+                .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
+                .addPrimaryButton('delete', gt('Empty folder'), 'delete', {tabIndex: '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                 .show()
                 .done(function (action) {
                     if (action === 'delete') {
@@ -156,7 +140,7 @@ define('io.ox/mail/folderview-extensions',
         });
     }
 
-    ext.point(POINT + '/sidepanel/toolbar/options').extend({
+    ext.point(POINT + '/sidepanel/context-menu').extend({
         id: 'clear',
         index: 450,
         draw: function (baton) {

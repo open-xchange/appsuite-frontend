@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -84,8 +85,7 @@ define('io.ox/editor/main',
         },
 
         updateModel: function () {
-            var filename = this.getFilename(),
-                title = this.getTitle();
+            var filename = this.getFilename();
             this.model.set({
                 title: filename,
                 filename: filename,
@@ -99,7 +99,9 @@ define('io.ox/editor/main',
 
         getFilename: function () {
             var title = this.getTitle(),
-                filename = String(title || this.getContent().substr(0, 20).split('.')[0] || 'unnamed');
+                filename = String(title || this.getContent().substr(0, 20).split('.')[0]
+                .replace(/(\r\n|\n|\r)/gm, '')//remove linebreaks
+                .replace(/[%&#\/$*!`´'"=:@+\^\\.+?{}|]/g, '_') || 'unnamed');//remove unsupported characters
             // has file extension?
             if (!/\.\w{1,4}$/.test(filename)) {
                 filename += '.txt';
@@ -116,12 +118,12 @@ define('io.ox/editor/main',
         },
 
         busy: function () {
-            this.$el.find('input.title, button.save').attr('disabled', 'disabled');
+            this.$el.find('input.title, button.save').prop('disabled', true);
             this.$el.find('button.save').empty().append($('<i class="icon-refresh icon-spin">'));
         },
 
         idle: function () {
-            this.$el.find('input.title, button.save').removeAttr('disabled');
+            this.$el.find('input.title, button.save').prop('disabled', false);
             this.$el.find('button.save').text(gt('Save'));
         },
 
@@ -284,11 +286,11 @@ define('io.ox/editor/main',
         app.setQuit(function () {
             var def = $.Deferred();
             if (app.isDirty()) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                    .text(gt("Do you really want to discard your changes?"))
-                    .addPrimaryButton("quit", gt('Discard'))
-                    .addButton("cancel", gt('Cancel'))
+                    .text(gt('Do you really want to discard your changes?'))
+                    .addPrimaryButton('quit', gt('Discard'))
+                    .addButton('cancel', gt('Cancel'))
                     .on('quit', def.resolve)
                     .on('cancel', def.reject)
                     .show();

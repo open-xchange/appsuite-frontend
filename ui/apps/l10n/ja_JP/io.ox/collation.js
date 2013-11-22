@@ -5,12 +5,13 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('l10n/ja_JP/io.ox/collation', [], function () {
+define('l10n/ja_JP/io.ox/collation', function () {
 
     'use strict';
 
@@ -23,7 +24,7 @@ define('l10n/ja_JP/io.ox/collation', [], function () {
             'さ し す せ そ ざ じ ず ぜ ぞ',
             'た ち つ て と だ ぢ づ で ど',
             'な に ぬ ね の',
-            'は ひ ふ へ ほ ば び ぶ べ ぼ ぱ ぴ ぷ ぺ ぽ',
+            'は ひ ふ へ ほ ば び ぶ ぺ ぼ ぱ ぴ ぷ ぺ ぽ',
             'ま み む め も',
             'や ゆ よ',
             'ら り る れ ろ',

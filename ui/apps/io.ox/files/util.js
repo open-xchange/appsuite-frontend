@@ -1,19 +1,20 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2013
- * Mail: info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
 define('io.ox/files/util',
     ['io.ox/core/tk/dialogs',
-     'gettext!io.ox/files'], function (dialogs, gt) {
+     'gettext!io.ox/files'
+    ], function (dialogs, gt) {
 
     'use strict';
 
@@ -25,8 +26,11 @@ define('io.ox/files/util',
          * @return {promise} resolves if user confirms or dialogie needen
          */
         confirmDialog: function (formFilename, serverFilename) {
+                    //be robust
+                    serverFilename = serverFilename || '';
+
                     var def = $.Deferred(),
-                        name = formFilename,
+                        name = formFilename || '',
                         extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) :  '',
                         extForm = _.last(name.split('.')),
                         $hint = $('<div class="row-fluid muted inset">').append(
@@ -37,21 +41,21 @@ define('io.ox/files/util',
                         message;
 
                     //set message
-                    if (name.split('.').length === 1) {
-                        //file extensionext missing
+                    if (name !== '' && name.split('.').length === 1) {
+                        //file extension ext missing
                         message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extServer);
                     } else if (extServer !== extForm && extServer !== '') {
                         //ext changed
                         message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s" ?', extServer, extForm);
                     }
-                    //missing extension
+                    //confirmation needed
                     if (message) {
-                        new dialogs.ModalDialog()
+                        new dialogs.ModalDialog({'tabTrap': true})
                             .header($('<h4>').text(gt('Confirmation')))
                             .append(message)
                             .append($hint)
-                            .addPrimaryButton('rename', gt('Yes'))
-                            .addButton('change', gt('Adjust'))
+                            .addPrimaryButton('rename', gt('Yes'), 'rename', {'tabIndex': '1'})
+                            .addButton('change', gt('Adjust'), 'change', {'tabIndex': '1'})
                             .show()
                             .done(function (action) {
                                 if (action === 'rename')
@@ -59,11 +63,13 @@ define('io.ox/files/util',
                                 else
                                     def.reject();
                             });
+                    } else if (name === '') {
+                        //usually prevented from ui
+                        def.reject();
                     } else {
                         def.resolve();
                     }
                     return def.promise();
                 }
-
     };
 });

@@ -1,11 +1,12 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -394,9 +395,10 @@ define(['io.ox/core/extensions',
                 c.add({id: "100"}),
                 c.add({id: "102"})
             ).then(function () {
-                c.size().done(function (r) {
+                return c.size().done(function (r) {
                     expect(r).toBe(2);
                 });
+            }).then(function () {
                 // remove ids … (common use-case, values are numbers)
                 c.remove([100]).then(function () {
                     c.size().done(function (r) {

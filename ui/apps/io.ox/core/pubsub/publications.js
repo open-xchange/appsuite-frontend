@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -22,7 +23,8 @@ define('io.ox/core/pubsub/publications',
      'io.ox/core/tk/dialogs',
      'settings!io.ox/core',
      'gettext!io.ox/core/pubsub',
-     'less!io.ox/core/pubsub/style.less'], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
+     'less!io.ox/core/pubsub/style.less'
+    ], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
 
     'use strict';
 
@@ -70,11 +72,11 @@ define('io.ox/core/pubsub/publications',
         }
     },
     PublicationView = Backbone.View.extend({
-        tagName: "div",
+        tagName: 'div',
         _modelBinder: undefined,
         editMode: undefined,
         infostoreItem: false,
-        initialize: function (options) {
+        initialize: function () {
             if (this.model.id) {
                 this.editMode = true;
             } else {
@@ -87,6 +89,28 @@ define('io.ox/core/pubsub/publications',
 
             this._modelBinder = new Backbone.ModelBinder();
         },
+
+        finish: function (url) {
+
+            url = _.escape(url);
+
+            var isFolder = !!this.model.attributes.entity.folder,
+                message = isFolder ?
+                    //#. %1$s is the publication link http://...
+                    gt('The folder is available at %1$s') :
+                    //#. %1$s is the publication link http://...
+                    gt('The file is available at %1$s');
+
+            new dialogs.ModalDialog()
+                .append(
+                    $('<div>').html(
+                        gt.format(message, '<a href="' + url + '" target="_blank">' + url + '</a>')
+                    )
+                )
+                .addPrimaryButton('cancel', gt('Close'))
+                .show();
+        },
+
         render: function () {
             var self = this;
             //build popup
@@ -104,27 +128,17 @@ define('io.ox/core/pubsub/publications',
 
             var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
 
-            popup.on('publish', function (action) {
+            popup.on('publish', function () {
 
                 self.model.save().done(function (id) {
 
                     //set id, if none is present (new model)
                     if (!self.model.id) { self.model.id = id; }
 
-                    self.model.fetch().done(function (model, collection) {
+                    self.model.fetch().done(function (model) {
 
                         var publications = pubsub.publications(),
                             pubUrl = model[model.target].url;
-
-                        notifications.yell({
-                            type: 'success',
-                            html: true,
-                            message: gt(
-                                'The publication has been made available as %s',
-                                '<a href="' + pubUrl + '" target="_blank">' + pubUrl + '</a>'
-                            ),
-                            duration: 10000
-                        });
 
                         //update the model-(collection)
                         publications.add(model, {merge: true});
@@ -134,10 +148,12 @@ define('io.ox/core/pubsub/publications',
                             baton.model.attributes = $.extend(true, baton.model.attributes, model);
                             sendInvitation(baton).always(function () {
                                 popup.close();
+                                self.finish(pubUrl);
                             });
                         } else {
                             // close popup now
                             popup.close();
+                            self.finish(pubUrl);
                         }
                         folderAPI.reload(baton.model.get('entity').folder);
                     });
@@ -249,7 +265,7 @@ define('io.ox/core/pubsub/publications',
                 buildTemplates(node, templates);
             } else {//no matching templates found on server
                 baton.popup.close();
-                notifications.yell('error', gt("No matching templates on this Server"));
+                notifications.yell('error', gt('No matching templates on this Server'));
             }
 
             //prefill
@@ -366,7 +382,7 @@ define('io.ox/core/pubsub/publications',
             } else {
                 var temp = $('<label>').addClass('checkbox').text(gt('Share link by email')).append(
                                node = $('<input>').attr('type', 'checkbox').addClass('invite-checkbox').on('change', function () {
-                                    if (node.attr('checked') === 'checked') {
+                                    if (node.prop('checked')) {
                                         baton.model.attributes.invite = true;
                                     } else {
                                         baton.model.attributes.invite = false;

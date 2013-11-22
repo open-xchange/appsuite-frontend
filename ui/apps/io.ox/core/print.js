@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -13,7 +14,8 @@
 define('io.ox/core/print',
     ['io.ox/core/http',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (http, notifications, gt) {
+     'gettext!io.ox/core'
+    ], function (http, notifications, gt) {
 
     'use strict';
 
@@ -27,6 +29,10 @@ define('io.ox/core/print',
 
         callbacks = {};
 
+    function escapeTitle(str) {
+        return (str || '').replace(/[#%&§\/$*!`´'"=:@+\^\\.+?{}|]/g, '_');
+    }
+
     function addCallback(options, it) {
 
         var id = 'print_' + _.now();
@@ -37,9 +43,11 @@ define('io.ox/core/print',
                 //do not use 'item' as doT variable name for current element
                 var selector = options.selector || 'script',
                     template = $(document.body).find('[type="text/template"]').filter(selector).html(),
-                    compiled = doT.template(template);
+                    compiled = doT.template(template),
+                    title = (options.title  || '').trim();
                 $(document.body).html(compiled(it));
-                document.title = ox.serverConfig.pageTitle + ' ' + gt('Printout');
+                //hint: in case title contains a '.' chrome will cut off at this char when suggesting a filename
+                document.title = escapeTitle(ox.serverConfig.pageTitle) + escapeTitle(title.length ? ' ' + title : '') + ' ' + gt('Printout');
             } catch (e) {
                 console.error(e);
             }
@@ -100,12 +108,12 @@ define('io.ox/core/print',
                             width: window.innerWidth * 0.9,
                             height: dHeight
                         })
-                        .addPrimaryButton("print", gt('Print'), null, {
+                        .addPrimaryButton('print', gt('Print'), null, {
                             click: function () {
                                 win.print();
                             }
                         })
-                        .addButton("cancel", gt("Cancel"));
+                        .addButton('cancel', gt('Cancel'));
                     dHeight -= 100;
                     dialog.getBody().css({
                         height: dHeight,
@@ -195,7 +203,7 @@ define('io.ox/core/print',
             http.resume();
         },
 
-        getWindowOptions: function (url) {
+        getWindowOptions: function () {
             var o = { width: 750, height: Math.min(screen.availHeight - 100, 1050), top: 40 };
             o.left = (screen.availWidth - o.width) / 2 >> 0;
             o.string = 'width=' + o.width + ',height=' + o.height + ',left=' + o.left + ',top=' + o.top + ',menubar=no,toolbar=no,location=no,scrollbars=yes,status=no';

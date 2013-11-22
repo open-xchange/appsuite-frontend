@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -15,7 +16,8 @@ define('io.ox/core/commons',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/core',
      'io.ox/core/commons-folderview',
-     'io.ox/core/api/folder'], function (ext, links, gt, folderview, folderAPI) {
+     'io.ox/core/api/folder'
+    ], function (ext, links, gt, folderview, folderAPI) {
 
     'use strict';
 
@@ -37,33 +39,54 @@ define('io.ox/core/commons',
          */
         multiSelection: (function () {
 
-            var points = {};
+            var points = {},
+                options = {};
 
-            function draw(id, selection, grid) {
-                // inline links
-                var node = $('<div>');
-                (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
-                    .draw.call(node, {data: selection, grid: grid});//needs grid to add busy animations without using global selectors
-                return $().add(
-                    $('<div>').addClass('summary').html(
-                        gt('<b>%1$d</b> elements selected', selection.length)
-                    )
-                )
-                .add(node.children().first());
-            }
+            ext.point('io.ox/links/multi-selection')
+            .extend({
+                id: 'summary',
+                index: 100,
+                draw: function (baton) {
+                    this.append(
+                        $('<div class="summary">').html(
+                            gt('<b>%1$d</b> elements selected', baton.selection.length)
+                        )
+                    );
+                }
+            })
+            .extend({
+                id: 'links',
+                index: 200,
+                draw: function (baton) {
+                    // inline links
+                    var node = $('<div>'), id = baton.id, opt = baton.opt || {};
+                    (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline', forcelimit: opt.forcelimit})))
+                        .draw.call(node, { data: baton.selection, grid: baton.grid }); // needs grid to add busy animations without using global selectors
+                    this.append(
+                        node.children().first()
+                    );
+                }
+            });
 
-            return function (id, node, selection, api, grid) {
+            return function (id, node, selection, api, grid, opt) {
+                opt = _.extend({}, options, opt || {});
+
                 if (selection.length > 1) {
                     // draw
-                    node.idle().empty().append(
-                        (api ? $.createViewContainer(selection, api) : $('<div>'))
+                    var baton = ext.Baton({ id: id, grid: grid, selection: selection, opt: opt });
+                    node.idle().empty().append(function () {
+                        var container, box;
+                        container = (api ? $.createViewContainer(selection, api) : $('<div>'))
                         .on('redraw', function () {
-                            $(this).empty().append(draw(id, selection, grid));
+                            ext.point('io.ox/links/multi-selection').invoke('draw', box.empty(), baton);
                         })
                         .addClass('io-ox-multi-selection')
-                        .append(draw(id, selection, grid))
-                        .center()
-                    );
+                        .append(
+                            box = $('<div class="box">')
+                        );
+                        ext.point('io.ox/links/multi-selection').invoke('draw', box, baton);
+                        return container.center();
+                    });
                 }
             };
         }()),
@@ -96,15 +119,23 @@ define('io.ox/core/commons',
             return function (id, node, selection, api, grid) {
                 var buttons = $('.window-toolbar .toolbar-button'),
                     toolbar = $('.window-toolbar'),
-                    container = $('<div id="multi-select-toolbar">');
+                    toolbarID = 'multi-select-toolbar',
+                    container;
+                if ($('#' + toolbarID).length > 0) {
+                    // reuse old toolbar
+                    container = $('#' + toolbarID);
+                } else {
+                    // or creaet a new one
+                    container = $('<div>', {id: toolbarID});
+                }
                 if (selection.length > 0) {
-
+                    // update selection in toolbar
                     buttons.hide();
-                    $('#multi-select-toolbar').remove();
+                    $('#' + toolbarID).remove();
                     toolbar.append(container.append(draw(id, selection, grid)));
                 } else {
                     // selection empty
-                    $('#multi-select-toolbar').remove();
+                    $('#' + toolbarID).remove();
                     buttons.show();
                 }
             };
@@ -136,7 +167,7 @@ define('io.ox/core/commons',
                         node.css('height', '100%').idle().empty().append(
                             $('<div class="io-ox-center">').append(
                                 $('<div class="io-ox-multi-selection">').append(
-                                    $('<div class="summary">').text(gt('No elements selected'))
+                                    $('<div class="summary empty">').text(gt('No elements selected'))
                                 )
                             )
                         );
@@ -152,8 +183,7 @@ define('io.ox/core/commons',
                 }
             });
 
-            grid.selection.on('_m_change', function (e, selection) {
-                var len = selection.length;
+            grid.selection.on('_m_change', function () {
                 commons.mobileMultiSelection(id, node, this.unique(this.unfold()), api, grid);
             });
 
@@ -186,9 +216,12 @@ define('io.ox/core/commons',
                 grid.selection.removeFromIndex(ids);
 
                 var list = grid.selection.get(), index;
-                if (list.length === 1 && !_.device('small')) {//don't jump to next item on mobile devices (jump back to grid view to be consistent)
+                if (list.length > 0 && !_.device('small')) {//don't jump to next item on mobile devices (jump back to grid view to be consistent)
                     index = grid.selection.getIndex(list[0]);
                     grid.selection.clear(true).selectIndex(index + 1);
+                    if (grid.getIds().length === list.length) {
+                        grid.selection.trigger('change', []);
+                    }
                 }
             });
         },
@@ -237,17 +270,12 @@ define('io.ox/core/commons',
          */
         addGridToolbarFolder: function (app, grid) {
 
-            function fnOpen(e) {
-                e.preventDefault();
-                app.showFolderView();
-            }
-
             ext.point(app.get('name') + '/vgrid/toolbar').extend({
                 id: 'info',
                 index: 200,
                 draw: function () {
                     this.append(
-                        $('<div class="grid-info">').on('click', '.folder-name', fnOpen)
+                        $('<div class="grid-info">')
                     );
                 }
             });
@@ -272,7 +300,7 @@ define('io.ox/core/commons',
                 node.empty()
                 .attr('data-folder-id', folder_id)
                 .append(
-                    $('<a href="#" class="folder-name" data-action="open-folderview" tabindex="1">'),
+                    $('<span class="folder-name">'),
                     $.txt(' '),
                     $('<span class="folder-count">')
                 );
@@ -281,7 +309,7 @@ define('io.ox/core/commons',
 
                     var total = countGridData ? grid.getIds().length : data.total,
                         node = grid.getToolbar().find('[data-folder-id="' + folder_id + '"]');
-
+                    grid.getContainer().attr('aria-setsize', total);
                     node.find('.folder-name').text(data.title);
 
                     if (total > 0) {
@@ -290,7 +318,7 @@ define('io.ox/core/commons',
                 });
             }
 
-            grid.on('change:prop:folder change:mode change:ids', function (e, value) {
+            grid.on('change:prop:folder change:mode change:ids', function () {
 
                 var folder_id = grid.prop('folder'), mode = grid.getMode(), node;
                 if (mode === 'all') {
@@ -318,7 +346,7 @@ define('io.ox/core/commons',
             });
 
             // unread counter for mail
-            folderAPI.on('update:total', function (e, id, data) {
+            folderAPI.on('update:total', function (e, id) {
                 // check for current folder (otherwise we get cross-app results! see bug #28558)
                 if (id === app.folder.get()) drawFolderInfo(id);
             });
@@ -351,7 +379,7 @@ define('io.ox/core/commons',
          * Wire grid and API refresh
          */
         wireGridAndRefresh: function (grid, api, win) {
-            var refreshAll = function (e) {
+            var refreshAll = function () {
                     grid.refresh(true);
                     if (_.device('smartphone')) grid.selection.retrigger();
                 },
@@ -411,28 +439,28 @@ define('io.ox/core/commons',
             win.on('show', function () {
                 oldPerspective = win.currentPerspective;
                 if (win.currentPerspective) {
-                    app.trigger('perspective:' + win.currentPerspective + ":show");
+                    app.trigger('perspective:' + win.currentPerspective + ':show');
                 }
             });
 
             win.on('hide', function () {
                 oldPerspective = win.currentPerspective;
                 if (win.currentPerspective) {
-                    app.trigger('perspective:' + win.currentPerspective + ":hide");
+                    app.trigger('perspective:' + win.currentPerspective + ':hide');
                 }
             });
 
             win.on('change:perspective', function (e, newPerspective) {
                 if (oldPerspective) {
-                    app.trigger('perspective:' + oldPerspective + ":hide");
+                    app.trigger('perspective:' + oldPerspective + ':hide');
                 }
                 oldPerspective = newPerspective;
-                app.trigger('perspective:' + newPerspective + ":show");
+                app.trigger('perspective:' + newPerspective + ':show');
             });
 
             win.on('change:initialPerspective', function (e, newPerspective) {
                 oldPerspective = newPerspective;
-                app.trigger('perspective:' + newPerspective + ":show");
+                app.trigger('perspective:' + newPerspective + ':show');
             });
         },
 
@@ -468,6 +496,84 @@ define('io.ox/core/commons',
             }
         },
 
+        /**
+         * stores state of propery collection for a specfied key property
+         * @param {object} grid
+         * @param {object} options
+         * @param {string} options.keyprop  cache id / changes on this trigger cache set
+         * @param {array}  options.props    cached properties
+         */
+        addPropertyCaching: function (grid, options) {
+            //be robust
+            grid = grid || {prop: $.noop()};
+
+            var mapping = {},
+                superprop = grid.prop,
+                opt = $.extend({
+                    keyprop: 'folder',
+                    props: ['sort', 'order']
+                }, options || {}),
+                //fluent cache
+                storage = {},
+                cache = {
+                    set: function (id, key, value) {
+                        storage[id] = storage[id] || {};
+                        storage[id][key] = value;
+                    },
+                    get: function (id, key) {
+                        //return specific/all prop(s)
+                        return !key ? storage[id] || {} : (storage[id] || {})[key];
+                    },
+                    remove: function (id) {
+                        storage[id] = {};
+                    },
+                    clear: function () {
+                        storage = {};
+                    }
+                };
+
+            //ensure array
+            opt.props = [].concat(opt.props);
+
+            //register props
+            _.each(opt.props, function (key) {
+                mapping[key] = true;
+            });
+
+            //save state if key property is changed
+            function process(key, value) {
+                var id,
+                    fulfilled = key === opt.keyprop &&
+                               typeof value !== 'undefined' &&
+                               value !== superprop(opt.keyprop);
+                //condition fulfilled
+                if (fulfilled) {
+                    //current key property value valid (used as cache id)
+                    id = superprop(opt.keyprop);
+                    if (id) {
+                        //collect and store current props
+                        cache.remove(id);
+                        _.each(opt.props, function (prop) {
+                            cache.set(id, prop, superprop(prop));
+                        });
+                    }
+                }
+            }
+            if (_.isUndefined(grid.propcache)) {
+                //access property cache via grid
+                grid.propcache = function (key, fallback, id) {
+                    id = id || superprop(opt.keyprop);
+                    return mapping[key] ? cache.get(id, key) || fallback : fallback;
+                };
+
+                //overwrite prop method
+                grid.prop = function (key, value) {
+                    process(key, value);
+                    return superprop.call(grid, key, value);
+                };
+            }
+        },
+
         addGridFolderSupport: function (app, grid) {
             app.folder.updateGrid(grid);
             app.getWindow().on('show', function () {
@@ -495,7 +601,7 @@ define('io.ox/core/commons',
                 }
             };
 
-            var select = function (e) {
+            var select = function () {
                 var node = $(this);
                 selectionInProgress = true;
                 setTimeout(function () {
@@ -589,7 +695,7 @@ define('io.ox/core/commons',
 
             // checks if folder permissions etc. have changed, and triggers redraw.
             // Important to update inline links
-            checkFolder = function (e, folder, folderId, folderObj) {
+            checkFolder = function (e, folder) {
                 if (folder === e.data.folder.toString() && api) {
                     api.trigger('update:' + e.data.cid);
                 }
@@ -641,7 +747,7 @@ define('io.ox/core/commons',
     // located here since we need a translation for 'Retry'
 
     $.fail = function (msg, retry) {
-        var tmp = $("<div>")
+        var tmp = $('<div>')
             .addClass('io-ox-fail')
             .append(
                 $('<span>').text(msg)

@@ -1,21 +1,28 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", "io.ox/core/capabilities", "io.ox/core/uuids", "io.ox/core/http"], function (ext, Event, caps, uuids, http) {
+define.async('io.ox/realtime/rt',
+    ['io.ox/core/extensions',
+     'io.ox/core/event',
+     'io.ox/core/capabilities',
+     'io.ox/core/uuids',
+     'io.ox/core/http'
+    ], function (ext, Event, caps, uuids, http) {
+
     'use strict';
 
-    if (!caps.has("rt")) {
-        console.error("Backend doesn't support realtime communication!");
+    if (!caps.has('rt')) {
+        console.error('Backend doesn\'t support realtime communication!');
         var dummy = {
             send: $.noop
         };
@@ -37,9 +44,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     var transmitting = false;
     var purging = false;
     var enroled = false;
+    var traceAll = false;
 
-    var INFINITY = 10;
     var TIMEOUT = 2 * 60 * 1000;
+    var INFINITY = TIMEOUT / 5000;
+    var offlineCountdown;
+    var purgingCountdown = 10;
 
     var mode = 'lazy';
     var intervals = {
@@ -47,6 +57,31 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         eager: 1000, // When traffic is high, ask for data more frequently
         lazyThreshhold: 5 * 60 * 1000 // Switch from eager to lazy mode when 5 minutes without a message have elapsed
     };
+
+    var damage = {
+        value: 0,
+        threshhold: 10,
+        state: 'working',
+        increase: function (value) {
+            this.value += value;
+            this.trigger('change');
+            if (api.debug) {
+                console.log('Connection does not seem to be working well. ', this.value, this.threshhold);
+            }
+            if (this.value > this.threshhold && this.state === 'working') {
+                this.state = 'broken';
+                this.trigger('broken');
+            }
+        },
+        reset: function () {
+            this.value = 0;
+            if (this.state !== 'working') {
+                this.state = 'working';
+                this.trigger('working');
+            }
+        }
+    };
+    Event.extend(damage);
 
     var queue = {
         stanzas: []
@@ -84,55 +119,61 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         running = false;
     }
 
-    
+
     // Keep sending stanzas until buffer is empty
     function purge() {
         if (api.debug) {
-            console.log("Drain buffer");
+            console.log('Drain buffer');
         }
         purging = true;
-
+        if (api.debug) {
+            console.log('Starting purge, so setting purging to true');
+        }
         if (transmitting) {
             if (api.debug) {
-                console.log("Transmitting so skipping purge");
+                console.log('Transmitting so skipping purge');
             }
+            purging = false;
+            if (api.debug) {
+                console.log('Aborting purge, transmission in progress so setting purging to false');
+            }
+
             return;
         }
         if (!enroled) {
             if (api.debug) {
-                console.log("Not enrolled, so skipping purge");
+                console.log('Not enrolled, so skipping purge, setting purging to false');
             }
 
             purging = false;
             return;
         }
-        
+
         if (_.isEmpty(queue.stanzas) && _.isEmpty(ackBuffer)) {
             if (api.debug) {
-                console.log("No stanzas enqueued, so skipping purge");
+                console.log('No stanzas enqueued, so skipping purge, setting purging to false');
             }
             purging = false;
-
             return;
         }
         // Send queue.stanzas
         if (api.debug) {
-            console.log("SENDING", queue.stanzas);
+            console.log('SENDING', queue.stanzas);
         }
         var stanzas = queue.stanzas;
         queue.stanzas = [];
         // prepend ack stanza
         if (!_.isEmpty(ackBuffer)) {
             stanzas.unshift({
-                type: "ack",
+                type: 'ack',
                 seq: _(ackBuffer).keys()
             });
             ackBuffer = {};
         }
         if (api.debug) {
-            console.log("->", stanzas);
+            console.log('->', stanzas);
         }
-        
+
         transmitting = true;
         http.PUT({
             module: 'rt',
@@ -145,19 +186,29 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             timeout: TIMEOUT
         }).done(function (resp) {
             transmitting = false;
+            purging = false;
+            if (api.debug) {
+                console.log('Purged stanzas, so setting purging to false');
+            }
+
             handleResponse(resp);
             if (!_.isEmpty(queue.stanzas) || !_.isEmpty(ackBuffer)) {
                 purge();
-            } else {
-                purging = false;
             }
         }).fail(function (resp) {
             transmitting = false;
+            purging = false;
+            if (api.debug) {
+                console.log('Purging call failed, setting purging to false', resp);
+            }
+
             handleError(resp);
             if (!_.isEmpty(queue.stanzas) || !_.isEmpty(ackBuffer)) {
+                purging = true;
+                if (api.debug) {
+                    console.log('Still have stanzas to send, so purging again (purging = true)');
+                }
                 purge();
-            } else {
-                purging = false;
             }
         });
 
@@ -165,7 +216,19 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     actions.purge = function () {
         if (!purging && !_.isEmpty(queue.stanzas)) {
+            purgingCountdown = 10;
             purge();
+        }
+        if (purging) {
+            purgingCountdown--;
+            if (purgingCountdown === 0) {
+                purging = false;
+                purgingCountdown = 10;
+                if (api.debug) {
+                    console.log('10 seconds of detected, setting purging to false to get back to normal');
+                }
+
+            }
         }
     };
 
@@ -175,6 +238,14 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         var interval = _.now() - lastDelivery;
         if (lastFetchInterval >= intervals[mode] && !purging) {
             lastCheck = _.now();
+            if (api.debug) {
+                console.log('Polling');
+            }
+            purging = true;
+            if (api.debug) {
+                console.log('Polling, so setting purging to true');
+            }
+
             http.GET({
                 module: 'rt',
                 params: {
@@ -194,14 +265,22 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     // Periodically flush resend buffer
     actions.flushResendBuffer = function (ticks) {
+        var hasBegunCountout = false;
         if (ticks % 5 !== 0) {
             return;
         }
         if (purging) {
+            if (api.debug) {
+                console.log('Skipping flush, purging or transmission in progress');
+            }
             return;
         }
+
         _(resendBuffer).each(function (m) {
             m.count++;
+            if (m.count > 2) {
+                hasBegunCountout = true;
+            }
             if (m.count < INFINITY) {
                 api.sendWithoutSequence(m.msg);
             } else {
@@ -210,6 +289,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 delete resendDeferreds[Number(m.msg.seq)];
             }
         });
+        if (hasBegunCountout) {
+            damage.increase(1);
+        }
     };
 
     Event.extend(api);
@@ -297,7 +379,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         } else {
         }
         if (api.debug) {
-            console.log("Received receipt for " + sequenceNumber);
+            console.log('Received receipt for ' + sequenceNumber);
         }
         delete resendDeferreds[sequenceNumber];
     }
@@ -310,10 +392,16 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         resendDeferreds = {};
         queue.stanzas = [];
         queue.timer = false;
+        if (api.debug) {
+            console.log('Flushing buffers and rejecting all sends');
+        }
         rejectAll = true;
     }
 
     function resetSequence(newSequence) {
+        if (api.debug) {
+            console.log('Resetting sequence to ', newSequence);
+        }
         flushAllBuffers();
         http.PUT({
             module: 'rt',
@@ -324,6 +412,9 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             timeout: TIMEOUT,
             data: {type: 'nextSequence', seq: newSequence}
         }).done(function () {
+            if (api.debug) {
+                console.log('Done resetting the sequence, no longer rejecting all sends.');
+            }
             rejectAll = false;
             resendBuffer = {};
             _(resendDeferreds).chain().values().each(function (def) {
@@ -333,48 +424,61 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             queue.stanzas = [];
             queue.timer = false;
             if (api.debug) {
-                console.log("Got reset command, nextSequence is ", seq);
+                console.log('Got reset command, nextSequence is ', seq);
             }
             seq = newSequence;
             serverSequenceThreshhold = -1;
-            api.trigger("reset");
+            if (api.debug) {
+                console.log('Sequence number was reset to ' + seq + '. Triggering reset event.');
+            }
+            api.trigger('reset');
         });
 
     }
 
     function received(stanza) {
         if (api.debug) {
-            console.log("Received  Stanza");
+            console.log('Received  Stanza');
         }
-        if (stanza.get("", "error")) {
+        if (stanza.get('', 'error')) {
             if (api.debug) {
-                console.log("Received Stanza contained an error");
+                console.log('Received Stanza contained an error');
             }
-            var error = stanza.get("", "error");
+            var error = stanza.get('', 'error');
             if (error.data && error.data.code === 1005) {
                 ox.trigger('relogin:required');
             } else if (error.data && error.data.code === 1006) {
+                if (api.debug) {
+                    console.log('Got error 1006, so resetting sequence');
+                }
                 resetSequence(-1);
             }
-        } else if (stanza.get("atmosphere", "received")) {
-            _(stanza.getAll("atmosphere", "received")).each(function (receipt) {
+        } else if (stanza.get('atmosphere', 'received')) {
+            _(stanza.getAll('atmosphere', 'received')).each(function (receipt) {
                 var sequenceNumber = Number(receipt.data);
                 receivedAcknowledgement(sequenceNumber);
             });
-        } else if (stanza.get("atmosphere", "pong")) {
-            _(stanza.getAll("atmosphere", "pong")).each(function (pong) {
-                // Discard
-            });
-        } else if (stanza.get("atmosphere", "nextSequence")) {
+        } else if (stanza.get('atmosphere', 'pong')) {
+            _(stanza.getAll('atmosphere', 'pong')).each($.noop);
+        } else if (stanza.get('atmosphere', 'nextSequence') || stanza.get('ox', 'nextSequence')) {
             if (!initialReset) {
-                resetSequence(stanza.get("atmosphere", "nextSequence").data);
+                if (api.debug) {
+                    console.log('Got nextSequence stanza, so resetting sequence');
+                }
+                resetSequence(stanza.get('atmosphere', 'nextSequence').data);
             } else {
                 initialReset = false;
+            }
+        } else if (stanza.get('ox', 'tracingDemand')) {
+            if (stanza.get('ox', 'tracingDemand').data) {
+                traceAll = true;
+            } else {
+                traceAll = false;
             }
         } else {
             if (stanza.seq > -1) {
                 if (api.debug) {
-                    console.log("Enqueueing receipt " + stanza.seq);
+                    console.log('Enqueueing receipt ' + stanza.seq);
                 }
                 ackBuffer[Number(stanza.seq)] = 1;
                 purge();
@@ -383,12 +487,12 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 serverSequenceThreshhold = stanza.seq - 1;
             }
             if (api.debug) {
-                console.log("SERVER THRESHHOLD: ", serverSequenceThreshhold, stanza.seq);
+                console.log('SERVER THRESHHOLD: ', serverSequenceThreshhold, stanza.seq);
             }
             if (stanza.seq === -1 || stanza.seq > serverSequenceThreshhold || stanza.seq === 0) {
                 var outOfOrder = false;
                 if (stanza.seq > 0 && stanza.seq - serverSequenceThreshhold > 1) {
-                    console.error("Received a sequence number that is too far out of order: Expected: " + serverSequenceThreshhold + 1 + ", but got: " + stanza.seq);
+                    console.error('Received a sequence number that is too far out of order: Expected: ' + serverSequenceThreshhold + 1 + ', but got: ' + stanza.seq);
                     outOfOrder = true;
                 }
                 if (stanza.seq > 0 && stanza.seq <= serverSequenceThreshhold) {
@@ -396,32 +500,55 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
                 }
                 if (!outOfOrder) {
                     if (api.debug) {
-                        console.log("RECEIVED", stanza.seq, stanza);
+                        console.log('RECEIVED', stanza.seq, stanza);
                     }
-                    api.trigger("receive", stanza);
-                    api.trigger("receive:" + stanza.selector, stanza);
+                    api.trigger('receive', stanza);
+                    api.trigger('receive:' + stanza.selector, stanza);
                     if (stanza.seq !== -1) {
                         serverSequenceThreshhold = stanza.seq;
                     }
                 } else {
+                    if (api.debug) {
+                        console.log('Out of order, so resetting sequence to 0');
+                    }
                     resetSequence(0);
+                }
+            } else {
+                if (api.debug) {
+                    console.log('Already received ' + stanza.seq + '. Waiting for ' + (serverSequenceThreshhold + 1));
                 }
             }
         }
     }
 
     function handleError(error) {
-        if (error.code === "RT_STANZA-1006" || error.code === 'RT_STANZA-0006' || error.code === 1006 || error.code === 6) {
-            resetSequence(0);
+        purging = false;
+        if (api.debug) {
+            console.log('handleError: setting purging to false');
         }
 
-        if (error.code === "RT_STANZA-1007" || error.code === 1007) {
+        if (error.code === 'RT_STANZA-1006' || error.code === 'RT_STANZA-0006' || error.code === 1006 || error.code === 6) {
+            if (api.debug) {
+                console.log('Got error 1006, so resetting sequence');
+            }
+            resetSequence(0);
+            return;
+        }
+
+        if (error.code === 'RT_STANZA-1007' || error.code === 1007) {
             enroled = false;
             enrol();
+            return;
         }
     }
 
     function handleResponse(resp) {
+        purging = false;
+        if (api.debug) {
+            console.log('handleResponse: setting purging to false');
+        }
+        damage.reset();
+
         var result = null;
         if (resp.acks) {
             _(resp.acks).each(function (sequenceNumber) {
@@ -467,72 +594,61 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         }
     }
 
-    ox.on("relogin:required", function () {
+    ox.on('relogin:required', function () {
+        if (api.debug) {
+            console.log('Session seems to have expired. Relogin requiered.');
+        }
         flushAllBuffers();
         stop();
     });
 
     ox.on('relogin:success', function () {
-        start();
-    });
-
-    ox.on("change:session", function () {
-        start();
-    });
-
-    ox.on("connection:down connection:offline", function () {
-        api.trigger("offline");
-        stop();
-    });
-
-    ox.on("connetion:up connection:online", function () {
-        api.trigger("online");
-        start();
-    });
-
-    function drainAckBuffer() {
-        if (_(ackBuffer).isEmpty()) {
-            return;
+        if (api.debug) {
+            console.log('Relogin was successful, resuming operation');
         }
-        var start, stop;
+        start();
+    });
 
-        start = stop = -1;
-        var seqExpression = [];
+    ox.on('change:session', function () {
+        if (api.debug) {
+            console.log('Got a new sessionID. Resuming operation.');
+        }
+        start();
+    });
 
-        function addToSeqExpression(start, stop) {
-            if (start === stop) {
-                seqExpression.push(start);
-            } else {
-                seqExpression.push([start, stop]);
-            }
+    ox.on('connection:down connection:offline', function () {
+        damage.increase(1);
+    });
+
+    ox.on('connection:up connection:online', function () {
+        damage.reset();
+    });
+
+    damage.on('broken', function () {
+        if (api.debug) {
+            console.log('Connection seems to be broken. Waiting 2 minutes for the connection to return.');
         }
 
-        _(_(ackBuffer).keys().sort()).each(function (seq) {
-            if (start === -1) {
-                start = stop = seq;
-            } else if (seq === stop + 1) {
-                stop = seq;
-            } else {
-                addToSeqExpression(start, stop);
-                start = stop = seq;
+        offlineCountdown = setTimeout(function () {
+            if (api.debug) {
+                console.log('Connection was still broken after 2 minute grace period. Triggering offline event.');
             }
-        });
+            api.trigger('offline');
+            stop();
+        }, 10000);
+    });
 
-        addToSeqExpression(start, stop);
-        http.PUT({
-            module: 'rt',
-            params: {
-                action: 'send',
-                resource: tabId
-            },
-            timeout: TIMEOUT,
-            data: {type: 'ack', seq: seqExpression}
-        }).done(handleResponse).fail(handleError);
-        ackBuffer = {};
+    damage.on('working', function () {
+        if (api.debug) {
+            console.log('Connection seems to be working again. Triggering online event');
+        }
+        if (offlineCountdown) {
+            clearTimeout(offlineCountdown);
+        }
+        api.trigger('online');
+        start();
 
-    }
-
-    
+    });
 
     api.internal = {
         setSequence: function (newSequence) {
@@ -541,12 +657,17 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     };
 
     api.query = function (options) {
-        if (options.trace) {
+        if (options.trace || traceAll) {
             delete options.trace;
-            options.tracer = uuids.randomUUID();
+            options.tracer = ox.user + '@' + ox.context_id + ' [' + uuids.randomUUID() + ']';
         }
         options.seq = seq;
         seq++;
+        purging = true;
+        if (api.debug) {
+            console.log('Transmitting query, so setting purging to true');
+        }
+
         return http.PUT({
             module: 'rt',
             params: {
@@ -556,12 +677,22 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             timeout: TIMEOUT,
             data: options
         }).pipe(function (resp) {
+            purging = false;
+            if (api.debug) {
+                console.log('Query completed, setting purging to false');
+            }
+            var stanzas = resp.stanzas;
+            resp.stanzas = [];
+            // Handle the regular stanzas later
+            setTimeout(function () {
+                handleResponse({stanzas: stanzas});
+            }, 0);
             return handleResponse(resp);
         }).fail(function (resp) {
             handleError(resp);
             // Send a dummy message to consume the sequence number
             api.send({
-                to: "devnull://sequenceDiscard",
+                to: 'devnull://sequenceDiscard',
                 seq: options.seq,
                 element: 'message'
             });
@@ -570,7 +701,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
 
     api.send = function (options) {
         if (api.debug) {
-            console.log("Send", options);
+            console.log('Send', options);
         }
         if (!options.seq) {
             options.seq = seq;
@@ -583,13 +714,13 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
         var def = $.Deferred();
         if (rejectAll || !running) {
             if (api.debug) {
-                console.log("Not connected, so rejecting all");
+                console.log('Not connected, so rejecting all');
             }
             return def.reject();
         }
-        if (options.trace) {
+        if (options.trace || traceAll) {
             delete options.trace;
-            options.tracer = uuids.randomUUID();
+            options.tracer = ox.user + '@' + ox.context_id + ' [' + uuids.randomUUID() + ']';
         }
         if (_.isNumber(options.bufferinterval)) {
             delete options.bufferinterval;  // Do not send bufferinterval to server
@@ -598,23 +729,23 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
             def.resolve(); // Pretend a message without sequence numbers always arrives
         } else {
             if (api.debug) {
-                console.log("Enqueuing in resendBuffer", options.seq);
+                console.log('Enqueuing in resendBuffer', options.seq);
             }
-            resendBuffer[Number(options.seq)] = {count: 0, msg: options};
             if (resendDeferreds[Number(options.seq)]) {
                 def = resendDeferreds[Number(options.seq)];
             } else {
                 resendDeferreds[Number(options.seq)] = def;
+                resendBuffer[Number(options.seq)] = {count: 0, msg: options};
             }
         }
-        
+
         if (api.debug) {
-            console.log("Adding to sender queue", queue);
+            console.log('Adding to sender queue', queue);
         }
         queue.stanzas.push(JSON.parse(JSON.stringify(options)));
         if (!purging) {
             if (api.debug) {
-                console.log("Start purge process");
+                console.log('Start purge process');
             }
             purge();
         }
@@ -627,7 +758,7 @@ define.async('io.ox/realtime/rt', ['io.ox/core/extensions', "io.ox/core/event", 
     start();
 
     var def = $.Deferred();
-    
+
     enrol().done(function () {
         def.resolve(api);
     }).fail(def.reject);

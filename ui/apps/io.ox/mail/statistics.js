@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -14,7 +15,8 @@ define('io.ox/mail/statistics',
     ['io.ox/mail/api',
      'io.ox/core/api/account',
      'gettext!io.ox/mail',
-     'apps/io.ox/core/tk/charts.js'], function (api, accountAPI, gt) {
+     'apps/io.ox/core/tk/charts.js'
+    ], function (api, accountAPI, gt) {
 
     'use strict';
 

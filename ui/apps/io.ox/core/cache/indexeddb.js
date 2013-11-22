@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -15,7 +16,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     'use strict';
 
     var SCHEMA = 1,
-        QUEUE_DELAY = 5000,
         MAX_LENGTH = 1024 * 1024, // 1MB
         instances = {},
         moduleDefined = $.Deferred(),
@@ -48,7 +48,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         opened.onupgradeneeded = function (e) {
             // Set up object stores
             myDB = e.target.result;
-            myDB.createObjectStore("cache", { keyPath: "key" });
+            myDB.createObjectStore('cache', { keyPath: 'key' });
         };
         OP(opened).then(dbOpened.resolve, dbOpened.reject);
 
@@ -80,8 +80,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 // get shallow copy
                 dbOpened.then(function (db) {
                     var tx = db.transaction('cache', 'readwrite'),
-                        store = tx.objectStore('cache'),
-                        key;
+                        store = tx.objectStore('cache');
                     // loop
                     _(queue.hash).each(function (data, key) {
                         key = String(id + '//' + key);
@@ -164,7 +163,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                 });
             },
 
-            set: function (key, data, options) {
+            set: function (key, data) {
                 key = String(key);
                 try {
                     data = JSON.stringify(data);
@@ -275,7 +274,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         // api = require('io.ox/core/api/folder'); api.caches.subFolderCache.clear().done(function () { api.caches.subFolderCache.keys().done(_.inspect); });
         if ((type === 'clear' || type === 'delete') && request.transaction) {
             request.transaction.oncomplete = function (e) {
-                def.resolve(e);
+                def.resolve(e.target.result);
             };
         } else {
             request.onsuccess = function (e) { def.resolve(e.target.result); };
@@ -337,8 +336,8 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     }
 
     function initializeDB() {
-        var tx = db.transaction("meta", "readwrite");
-        return OP(tx.objectStore("meta").put({
+        var tx = db.transaction('meta', 'readwrite');
+        return OP(tx.objectStore('meta').put({
             id: 'default',
             version: ox.version
         }));
@@ -372,7 +371,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
         opened.onupgradeneeded = function (e) {
             // Set up object stores
             var db = e.target.result;
-            db.createObjectStore("meta", {keyPath: "id"});
+            db.createObjectStore('meta', {keyPath: 'id'});
         };
 
         OP(opened).then(
@@ -386,12 +385,12 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
 
                 // Setup
                 db.onerror = function (event) {
-                    console.error("IndexedDB error: ", event.target.errorCode, event);
+                    console.error('IndexedDB error: ', event.target.errorCode, event);
                 };
 
-                var tx = db.transaction("meta");
+                var tx = db.transaction('meta');
 
-                OP(tx.objectStore("meta").get("default")).done(function (meta) {
+                OP(tx.objectStore('meta').get('default')).done(function (meta) {
                     var setupCompleted = null;
                     if (!meta) {
                         setupCompleted = initializeDB();
@@ -403,7 +402,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                         setupCompleted = destroyDB().done(function () {
                             meta.cleanUp = false;
                             meta.version = ox.version;
-                            OP(db.transaction("meta", "readwrite").objectStore("meta").put(meta));
+                            OP(db.transaction('meta', 'readwrite').objectStore('meta').put(meta));
                         });
                     } else {
                         setupCompleted = $.when();
@@ -420,7 +419,7 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
                     );
                 });
             },
-            function fail(event) {
+            function fail() {
                 defunct = true;
                 console.warn('Failed to use IndexedDB');
                 moduleDefined.resolve(that);
@@ -433,6 +432,6 @@ define.async('io.ox/core/cache/indexeddb', ['io.ox/core/extensions'], function (
     }
 
     return moduleDefined.done(function (storage) {
-        ext.point("io.ox/core/cache/storage").extend(storage);
+        ext.point('io.ox/core/cache/storage').extend(storage);
     });
 });

@@ -1,47 +1,88 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/core', 'gettext!io.ox/core'], function (ext, settings, gt) {
+define('io.ox/core/notifications',
+    ['io.ox/core/extensions',
+     'settings!io.ox/core',
+     'gettext!io.ox/core'
+    ], function (ext, settings, gt) {
 
     'use strict';
 
     var BadgeView = Backbone.View.extend({
         tagName: 'a',
         className: 'notifications-icon',
-        initialize: function (options) {
+        initialize: function () {
             this.model.on('change', _.bind(this.onChange, this));
         },
         onChange: function () {
             var count = this.model.get('count');
             this.$el.find('.badge').toggleClass('empty', count === 0);
             this.$el.find('.number').text(_.noI18n(count >= 100 ? '99+' : count));
+
+            this.$el.attr(
+                    //#. %1$d number of notifications
+                    //#, c-format
+                    'aria-label', gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
+                            'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')));
+
         },
         onToggle: function (open) {
             this.$el.find('.badge i').attr('class', open ? 'icon-caret-down' : 'icon-caret-right');
         },
         render: function () {
-            this.$el.attr({ href: '#', tabindex: '1' }).append(
+            var numberNode;
+            this.$el.attr({ href: '#',
+                            tabindex: '1',
+                            role: 'button',
+                            //#. %1$d number of notifications
+                            //#, c-format
+                            'aria-label': gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
+                                    'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count'))})
+                .append(
                 $('<span class="badge">').append(
-                    $('<span class="number">'), $.txt(' '),
+                    numberNode = $('<span class="number">'),
+                    $.txt(' '),
                     $('<i class="icon-caret-right">')
                 )
-            );
+             );
+
+            var autoOpenSetting = settings.get('autoOpenNotification', 'noEmail');
+            if (autoOpenSetting === 'never') {
+                numberNode.attr({role: 'alert',
+                    'aria-atomic': false,
+                    'aria-live': 'polite',
+                    'aria-relevant': 'all',
+                    //#. %1$d number of notifications
+                    //#, c-format
+                    'aria-label': gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count'))
+                });
+            } else {
+                numberNode.attr({role: 'alert',
+                    'aria-atomic': false,
+                    'aria-live': 'polite',
+                    'aria-relevant': 'all',
+                    //#. %1$d number of notifications
+                    //#, c-format
+                    'aria-label': gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count'))
+                });
+            }
             this.onChange();
             return this;
         },
         setNotifier: function (b) {
-            this.$el.attr('aria-disabled', !b).find('.badge').toggleClass('active', !!b);
+            this.$el.find('.badge').toggleClass('active', !!b);
         },
         setCount: function (count, newMails) {
             var newOther = count - this.model.get('count') - newMails;//check if there are new notifications, that are not mail
@@ -64,10 +105,32 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
         initialize: function (options) {
             options = options || {};
             this.subviews = options.subviews || {};
+            this.$el.attr('role', 'list');
         },
         render: function (notifications) {
             var self = this,
+                refocus = false,
+                lastFocused = $(document.activeElement),//save focus
+                nextFocus, //focus in case lastFocus got lost (item not there anymore)
                 empty = true; //check if notification area is empty
+
+            if (lastFocused.hasClass('refocus')) {//refocusable elements have this marker class
+                //find next possible focus
+                var items = $('#io-ox-notifications .item'),
+                    lastFocusItemId = lastFocused.closest('.item').attr('focus-id');
+                for (var i = 0; i < items.length; i++) {
+                    if (lastFocusItemId === $(items[i]).attr('focus-id')) {
+                        if ((i + 1) < items.length) { //prevent index out fo bounds
+                            nextFocus = $(items[i + 1]).attr('focus-id');
+                        }
+                        break;
+                    } else {
+                        nextFocus = $(items[i]).attr('focus-id');
+                    }
+                }
+                lastFocused = lastFocused.attr('focus-id');
+                refocus = true;
+            }
             self.$el.empty();
 
             if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
@@ -89,6 +152,19 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 self.$el.append($('<legend class="section-title">').text(gt('No notifications')));
             }
 
+            if (refocus) {//restore focus if possible
+                var found = self.$el.find('[focus-id="' + lastFocused + '"]');
+                if (found.length > 0) {
+                    found.focus();
+                } else {//item was deleted. try focusing the next item
+                    found = self.$el.find('[focus-id="' + nextFocus + '"]');
+                    if (found.length > 0) {//focus if its there
+                        found.focus();
+                    } else {//just focus first
+                        $('#io-ox-notifications .item').first().focus();
+                    }
+                }
+            }
             return self;
         }
     });
@@ -110,7 +186,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             this.notificationsView = new NotificationsView();
 
             $('#io-ox-core').prepend(
-                $('<div id="io-ox-notifications" tabindex="-1">'),
+                $('<div id="io-ox-notifications" tabindex="-1">').append(this.notificationsView.el),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
                     if (e.target === this) {
                         self.hideList();
@@ -145,8 +221,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             //close if count set to 0
             self.badgeView.on('lastItemDeleted', function () {
                 var overlay = $('#io-ox-notifications-overlay');
-                if (overlay.has('.mail-detail-decorator').length > 0) {
-                    overlay.on("mail-detail-closed", _.bind(self.slowClose, self));
+                if (overlay.children().length > 0) {//if there is an open popup, wait till this is closed
+                    overlay.prop('sidepopup').one('close', _.bind(self.slowClose, self));
                 } else {
                     self.hideList();
                 }
@@ -158,8 +234,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             });
 
             function focusNotifications(e) {
-                if (e.which === 13) {
-                    _.defer(function () { $('#io-ox-notifications').focus(); });
+                if (e.which === 13) { //enter
+                    if (self.opened()) {//focus badge when closing
+                        _.defer(function () { self.badgeView.$el.focus(); });
+                    } else {//focus notifications when opening
+                        _.defer(function () { $('#io-ox-notifications .item').first().focus(); });
+                    }
                 }
             }
 
@@ -169,6 +249,9 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 $.proxy(this.toggleList, this)
             ).attr('id', 'io-ox-notifications-icon');
         },
+        opened: function () {
+            return $('#io-ox-notifications').hasClass('active');
+        },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 var module = {};
@@ -176,20 +259,29 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                 module.collection = new Backbone.Collection();
                 module.collection
                     .on('add reset', _.bind(this.updateNotification, this))
-                    .on('remove', _.bind(this.update, this));
+                    .on('remove', _.bind(this.delayedUpdate, this));
                 this.notifications[key] = module;
             }
             return this.notifications[key];
         },
         slowClose: function () {
-            $('#io-ox-notifications-overlay').off("mail-detail-closed");
+            $('#io-ox-notifications-overlay').off('mail-detail-closed');
             this.hideList();
+        },
+        delayedUpdate: function () {//delays updating by 100ms (prevents updating the view multiple times in a row)
+            var self = this;
+            if (!this.updateTimer) {
+                this.updateTimer = setTimeout(function () {
+                    self.update();
+                    self.updateTimer = undefined;
+                }, 100);
+            }
         },
         updateNotification: function () {
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(true);
             });
-            this.update();
+            this.delayedUpdate();
         },
         update: function () {
             var newMails = 0,
@@ -213,15 +305,31 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     badgeView.setNotifier(false);
                 }
             });
+            var focusBadge =  function (e) {
+                e.preventDefault();//prevent default to not jump to reload button
+                if (e.which === 9) { //tabkey
+                    $('#io-ox-notifications .item').first().focus();
+                }
+            };
 
-            $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
+            this.notificationsView.render(this.notifications);
+            //clear last item reference
+            if (this.lastItem) {
+                this.lastItem.off('keydown', focusBadge);
+                this.lastItem = undefined;
+            }
+            //jump back to first item if tab is pressed on last item
+            this.lastItem = this.notificationsView.$el.find('[tabindex="1"]').last();
+            this.lastItem.on('keydown', focusBadge);
         },
         toggleList: function () {
             //create nice listing view of all notifications grouped by
             //their app
             if ($('#io-ox-notifications').hasClass('active')) {
                 this.hideList();
-                if (_.device('smartphone')) { $('#io-ox-notifications-overlay').empty().removeClass('active'); }
+                if (_.device('smartphone')) {
+                    $('#io-ox-notifications-overlay').empty().removeClass('active');
+                }
             } else {
                 this.showList();
             }
@@ -230,28 +338,31 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
             }
-            $('#io-ox-notifications').find('[tabindex="1"]').focus();
+            //$('#io-ox-notifications').find('[tabindex="1"]').focus();
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
             this.badgeView.onToggle(true);
             $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27) { // escapekey
+                if (e.which === 27 && !($('#io-ox-notifications-overlay').prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
                     $(document).off('keydown.notification');
+                    //focus badge when closing
+                    this.badgeView.$el.focus();
                     this.hideList();
                 }
             }, this));
         },
-        hideList: function (softmode) {
+        hideList: function () {
+
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });
             this.badgeView.onToggle(false);
             $('#io-ox-notifications').removeClass('active');
-            if (_.device('!smartphone')) {
-                $('#io-ox-notifications-overlay').empty().removeClass('active');
-            } else {
+            $('#io-ox-notifications-overlay').empty().removeClass('active');
+            if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
             }
+
         },
 
         // type = info | warning | error | success
@@ -287,7 +398,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions', 'settings!io.ox/cor
                     clearTimeout(timer);
 
                     $('.io-ox-alert')
-                        .on('transitionEnd webkitTransitionEnd', function () {
+                        .trigger('notification:removed')
+                        .on('transitionend webkitTransitionEnd', function () {
                             $(this).remove();
                         })
                         .removeClass('slide-in');

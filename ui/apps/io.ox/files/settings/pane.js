@@ -1,39 +1,52 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 define('io.ox/files/settings/pane',
-       ['settings!io.ox/files', 'io.ox/files/settings/model',
-        'dot!io.ox/files/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/files'], function (settings, filesSettingsModel, tmpl, ext, gt) {
+    ['settings!io.ox/files',
+     'io.ox/files/settings/model',
+     'dot!io.ox/files/settings/form.html',
+     'io.ox/core/extensions',
+     'gettext!io.ox/files'
+    ], function (settings, filesSettingsModel, tmpl, ext, gt) {
 
     'use strict';
 
     var filesSettings =  settings.createModel(filesSettingsModel),
         staticStrings =  {
             TITLE_FILES: gt.pgettext('app', 'Files'),
-            DEFAULT_VIEW: gt('Default view')
+            DEFAULT_VIEW: gt('Default view'),
+            SHOW_HIDDEN: gt('Show hidden files and folders')
         },
-        optionsView = [{label: gt('Icon view'), value: 'icons'},
-                       {label: gt('List view'), value: 'list'}],
+        optionsView = [
+            {label: gt('List'), value: 'fluid:list'},
+            {label: gt('Icons'), value: 'fluid:icon'},
+            {label: gt('Tiles'), value: 'fluid:tile'}
+        ],
         filesViewSettings;
 
     var FilesSettingsView = Backbone.View.extend({
         tagName: 'div',
         _modelBinder: undefined,
-        initialize: function (options) {
+        initialize: function () {
             // create template
             this._modelBinder = new Backbone.ModelBinder();
 
+            this.model.on('change:showHidden', function () {
+                require(['io.ox/core/api/folder'], function (folderAPI) {
+                    folderAPI.clearCaches();
+                    folderAPI.trigger('refresh');
+                });
+            });
         },
         render: function () {
             var self = this;
@@ -52,8 +65,7 @@ define('io.ox/files/settings/pane',
     ext.point('io.ox/files/settings/detail').extend({
         index: 200,
         id: 'filessettings',
-        draw: function (data) {
-
+        draw: function () {
             filesViewSettings = new FilesSettingsView({model: filesSettings});
             var holder = $('<div>').css('max-width', '800px');
             this.append(holder.append(

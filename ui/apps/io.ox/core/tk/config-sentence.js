@@ -1,17 +1,18 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyListener) {
-    "use strict";
+define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyListener) {
+
+    'use strict';
 
     var Widgets = {
         toggle: function ($anchor, attribute, options) {
@@ -25,25 +26,24 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             self[attribute] = 0;
             $anchor.text(options.values[self.value]);
 
-            $anchor.on("click", function (e) {
+            $anchor.on('click', function (e) {
                 e.preventDefault();
                 var newValue = (self.value === 0) ? 1 : 0;
                 self[attribute] = newValue;
-                self.trigger("change", self);
-                self.trigger("change:" + attribute, self);
+                self.trigger('change', self);
+                self.trigger('change:' + attribute, self);
                 drawState();
             });
 
             function drawState() {
                 $anchor.text(options.values[self[attribute]]);
-                self.trigger("redraw", self);
+                self.trigger('redraw', self);
             }
 
-            this.on("change:" + attribute, drawState);
+            this.on('change:' + attribute, drawState);
         },
         number: function ($anchor, attribute, options) {
             var self = this,
-                gt = options.gt,
                 originalContent = $anchor.html();
 
             // check options
@@ -56,7 +56,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             function drawState() {
                 var value = self[attribute];
                 $anchor.text(options.phrase(value)).focus();
-                self.trigger("redraw", self);
+                self.trigger('redraw', self);
             }
 
             $anchor.on('click', function (e) {
@@ -70,7 +70,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 var keys = new KeyListener($numberInput);
 
 
-                var $content = $("<span>" + originalContent + "</span>");
+                var $content = $('<span>' + originalContent + '</span>');
                 $content.find('.number-control').empty().append(
                     $numberInput
                 );
@@ -91,22 +91,22 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                     } catch (e) { }
                     $anchor.show();
                     self[attribute] = value;
-                    self.trigger("change", self);
-                    self.trigger("change:" + attribute, self);
+                    self.trigger('change', self);
+                    self.trigger('change:' + attribute, self);
                     drawState();
                     keys.destroy();
                 }
-                $numberInput.on("blur", function () {
+                $numberInput.on('blur', function () {
                     updateValue();
                 });
 
                 // Enter
-                keys.on("enter", function () {
+                keys.on('enter', function () {
                     updateValue();
                 });
 
                 // Escape
-                keys.on("esc", function () {
+                keys.on('esc', function () {
                     $numberInput.val(self[attribute]);
                     keys.destroy();
                     try {
@@ -116,7 +116,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 });
             });
 
-            this.on("change:" + attribute, drawState);
+            this.on('change:' + attribute, drawState);
         },
         options: function ($anchor, attribute, options) {
             // First we need to wrap the anchor
@@ -139,7 +139,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                     label = options.chooseLabel(self[attribute]);
                 }
                 $anchor.text(label).focus();
-                self.trigger("redraw", self);
+                self.trigger('redraw', self);
             }
 
             // Now build the menu
@@ -147,11 +147,11 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
             _(options.options).each(function (label, value) {
                 $menu.append(
                     $('<li>')
-                        .append($('<a href="#">').attr({ tabindex: $anchor.attr('tabindex') }).text(label).on("click", function (e) {
+                        .append($('<a href="#">').attr({ tabindex: $anchor.attr('tabindex') }).text(label).on('click', function (e) {
                             e.preventDefault();
                             self[attribute] = value;
-                            self.trigger("change", self);
-                            self.trigger("change:" + attribute, self);
+                            self.trigger('change', self);
+                            self.trigger('change:' + attribute, self);
                             drawState();
                         })
                     )
@@ -168,7 +168,7 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
 
             $anchor.dropdown();
 
-            this.on("change:" + attribute, drawState);
+            this.on('change:' + attribute, drawState);
         },
         custom: function ($anchor, attribute, func, options) {
             func.call(this, $anchor, attribute, options);
@@ -182,8 +182,8 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
         this.$el = $('<span>').html(sentence);
         this.$el.find('a').each(function () {
             var $anchor = $(this),
-                attribute = $anchor.data("attribute") || 'value',
-                widget = $anchor.data("widget"),
+                attribute = $anchor.data('attribute') || 'value',
+                widget = $anchor.data('widget'),
                 opts = options[attribute] || options;
             if (options.tabindex) {
                 $anchor.attr({ tabindex: options.tabindex});
@@ -196,13 +196,13 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
 
         this.set = function (key, value) {
             this[key] = value;
-            this.trigger("change", this);
-            this.trigger("change:" + key, this);
+            this.trigger('change', this);
+            this.trigger('change:' + key, this);
         };
 
         this.ghost = function () {
             var $ghost = this.$el.clone(false);
-            $ghost.find(".no-clone, .datepicker, .popover")
+            $ghost.find('.no-clone, .datepicker, .popover')
                 .remove();
             $ghost
                 .find('*')

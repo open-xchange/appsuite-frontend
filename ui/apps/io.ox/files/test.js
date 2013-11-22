@@ -1,5 +1,10 @@
-define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
-    "use strict";
+define('io.ox/files/test',
+    ['io.ox/core/extensions',
+     'io.ox/files/main',
+     'io.ox/files/api'
+    ], function (ext, files, api) {
+
+    'use strict';
 
     function Done() {
         var f = function () {
@@ -17,11 +22,10 @@ define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/
         index: 100,
         test: function (j) {
 
+            j.describe('Unit test for creating and reading info item via ALL request ', function () {
+                var expected = { title : 'expected Title', description : 'expected Description'};
 
-            j.describe("Unit test for creating and reading info item via ALL request ", function () {
-                var expected = { title : "expected Title", description : "expected Description"};
-
-                j.it("Verify via ALL method", function () {
+                j.it('Verify via ALL method', function () {
                     var ready = new Done();
                     var found = false;
                     var actual;
@@ -29,10 +33,9 @@ define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/
                     j.waitsFor(ready, 'Waited too long', 5000);
 
                     api.create({ json : expected }).done(function (createResp) {
-                        var fid = createResp.folder_id;
                         var id = createResp.id;
 
-                        api.getAll({ columns: "20,1,700,706" }).done(function (data) {
+                        api.getAll({ columns: '20,1,700,706' }).done(function (data) {
                             _.each(data, function (file) {
                                 if (file.id === id) {
                                     found = true;
@@ -51,12 +54,10 @@ define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/
                 });
             });
 
+            j.describe('Unit test for creating and reading info item via LIST request ', function () {
+                var expected = { title : 'expected Title', description : 'expected Description'};
 
-
-            j.describe("Unit test for creating and reading info item via LIST request ", function () {
-                var expected = { title : "expected Title", description : "expected Description"};
-
-                j.it("Verify via LIST method", function () {
+                j.it('Verify via LIST method', function () {
                     var ready = new Done();
                     var found = false;
                     var actual;
@@ -86,10 +87,10 @@ define("io.ox/files/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/
                 });
             });
 
-            j.describe("Unit test for creating and reading info item via GET request ", function () {
-                var expected = { title : "expected Title", description : "expected Description"};
+            j.describe('Unit test for creating and reading info item via GET request ', function () {
+                var expected = { title : 'expected Title', description : 'expected Description'};
 
-                j.it("Verify via GET method", function () {
+                j.it('Verify via GET method', function () {
                     var ready = new Done();
                     var found = false;
                     var actual;

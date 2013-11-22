@@ -1,10 +1,10 @@
 {
-    title: "Files",
-    company: "Open-Xchange",
-    icon: "files.png",
-    category: "Productivity",
-    settings: true,
-    requires: "infostore",
-    refreshable: true,
-    index: 900
+    "title": "Files",
+    "company": "Open-Xchange",
+    "icon": "files.png",
+    "category": "Productivity",
+    "settings": true,
+    "requires": "infostore",
+    "refreshable": true,
+    "index": 1000
 }

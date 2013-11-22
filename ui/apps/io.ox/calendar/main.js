@@ -1,25 +1,28 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/calendar/main",
-    ["io.ox/core/date",
-     "settings!io.ox/core",
-     "io.ox/core/commons",
-     "settings!io.ox/calendar",
-     "io.ox/calendar/actions",
-     "less!io.ox/calendar/style.less"], function (date, coreConfig, commons, settings) {
+define('io.ox/calendar/main',
+    ['io.ox/core/date',
+     'settings!io.ox/core',
+     'io.ox/core/commons',
+     'io.ox/core/extensions',
+     'settings!io.ox/calendar',
+     'gettext!io.ox/calendar',
+     'io.ox/calendar/actions',
+     'less!io.ox/calendar/style.less'
+    ], function (date, coreConfig, commons, ext, settings, gt) {
 
-    "use strict";
+    'use strict';
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
@@ -47,7 +50,43 @@ define("io.ox/calendar/main",
         app.settings = settings;
         app.refDate = new date.Local();
 
-        win.addClass("io-ox-calendar-main");
+        win.addClass('io-ox-calendar-main');
+
+        // "show all" extension for folder view
+
+        function changeShowAll() {
+            settings.set('showAllPrivateAppointments', $(this).prop('checked')).save();
+            win.getPerspective().refresh();
+        }
+
+        ext.point('io.ox/foldertree/section/links').extend({
+            index: 100,
+            id: 'show-all',
+            draw: function (baton) {
+
+                if (baton.id !== 'private') return;
+                if (!baton.data || !baton.options) return;
+                if (baton.options.type !== 'calendar') return;
+
+                // hide "show all" checkbox when only one calendar is available
+                var count =
+                    (_.isArray(baton.data['private']) ? baton.data['private'].length : 0) +
+                    (_.isArray(baton.data['public']) ? baton.data['public'].length : 0);
+
+                if (count <= 1) return;
+
+                this.append(
+                    $('<div class="show-all-checkbox">').append(
+                        $('<label class="checkbox">').append(
+                            $('<input type="checkbox" tabindex="1">')
+                                .prop('checked', settings.get('showAllPrivateAppointments', false))
+                                .on('change', changeShowAll),
+                            $.txt(gt('Show all my appointments from all calendars'))
+                        )
+                    )
+                );
+            }
+        });
 
         // folder tree
         commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });

@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -13,8 +14,8 @@
 define('plugins/portal/contacts/register',
     ['io.ox/core/extensions',
      'io.ox/contacts/api',
-     'io.ox/portal/widgets',
-     'gettext!plugins/portal'], function (ext, api, portalWidgets, gt) {
+     'io.ox/portal/widgets'
+    ], function (ext, api, portalWidgets) {
 
     'use strict';
 

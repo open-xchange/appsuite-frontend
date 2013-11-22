@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -15,7 +16,8 @@ define('io.ox/core/tk/selection',
     ['io.ox/core/event',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'], function (Events, ext, notifications, gt) {
+     'gettext!io.ox/core'
+    ], function (Events, ext, notifications, gt) {
 
     'use strict';
 
@@ -38,7 +40,10 @@ define('io.ox/core/tk/selection',
             dragType: '',
             dropzone: false,
             dropzoneSelector: '.selectable',
-            dropType: ''
+            dropType: '',
+            scrollpane: container,
+            focus: '[tabindex]',
+            tabFix: false
         }, options);
 
         this.classFocus = 'focussed';
@@ -72,6 +77,7 @@ define('io.ox/core/tk/selection',
             selectOnly,
             deselect,
             toggle,
+            isSelectable,
             isCheckbox,
             isMultiple,
             isRange,
@@ -88,10 +94,13 @@ define('io.ox/core/tk/selection',
             hasMultiple,
             mobileSelectMode;
 
+        isSelectable = function (e) {
+            return !$(e.target).hasClass('not-selectable');
+        };
+
         isCheckbox = function (e) {
-            var closest = $(e.target).closest(editableSelector),
-                isEditable = editable && closest.length;
-            return isEditable;
+            var closest = $(e.target).closest(editableSelector);
+            return editable && closest.length;
         };
 
         isMultiple = function (e) {
@@ -210,24 +219,29 @@ define('io.ox/core/tk/selection',
         fnKey = function (e) {
             // also trigger keyboard event to internal hub
             self.trigger('keyboard', e, e.which);
+
             // process event
             switch (e.which) {
             case 38:
+                e.preventDefault();
+                if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
                 // cursor up
                 if (e.metaKey || e.ctrlKey) {
                     selectFirst(e);
                 } else {
                     selectPrevious(e);
                 }
-                return false;
+                break;
             case 40:
+                e.preventDefault();
+                if ($(e.target).hasClass('folder-options-badge dropdown-opened')) return;
                 // cursor down
                 if (e.metaKey || e.crtlKey) {
                     selectLast(e);
                 } else {
                     selectNext(e);
                 }
-                return false;
+                break;
             }
         };
 
@@ -238,7 +252,7 @@ define('io.ox/core/tk/selection',
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
                 // checkbox click?
-                if (id !== undefined && isCheckbox(e)) {
+                if (id !== undefined && isCheckbox(e) && isSelectable(e)) {
                     apply(id, e);
                 }
             }
@@ -289,7 +303,7 @@ define('io.ox/core/tk/selection',
                 setTimeout(function () {
                     // exists?
                     if (id !== undefined) {
-                        if (node.hasClass('pending-select')) {
+                        if (node.hasClass('pending-select') && isSelectable(e)) {
                             clear();
                             apply(id, e);
                         }
@@ -301,11 +315,10 @@ define('io.ox/core/tk/selection',
         };
 
         touchstartHandler = function (e) {
-            var node, key, id,
-                cancelAction = $(e.target).hasClass('cell-button') || $(e.target).hasClass('folder-label');
+            var node, key, id;
 
             // check if the touchstart was triggerd from a inline button or folder tree
-            if (/*!e.isDefaultPrevented() && !cancelAction*/ mobileSelectMode) {
+            if (mobileSelectMode) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
@@ -328,17 +341,25 @@ define('io.ox/core/tk/selection',
 
         fastSelect = function (id, node) {
             var key = self.serialize(id);
-            (node || getNode(key))
-                .addClass(self.classSelected)
-                .find('input.reflect-selection')
-                .attr('checked', 'checked');
             selectedItems[key] = id;
+            var $node = (node || getNode(key));
+            if (options.tabFix !== false) {
+                $node.focus();
+            }
+            return $node
+                .addClass(self.classSelected)
+                .attr({
+                    'aria-selected': 'true',
+                    'tabindex': options.tabFix !== false ? options.tabFix : null
+                })
+                .find('input.reflect-selection')
+                .prop('checked', true)
+                .end();
         };
 
         select = function (id, silent) {
             if (id) {
-                fastSelect(id);
-
+                fastSelect(id).intoViewport(options.scrollpane);
                 last = id;
                 lastIndex = getIndex(id);
                 if (prev === empty) {
@@ -356,7 +377,11 @@ define('io.ox/core/tk/selection',
             delete selectedItems[key];
             getNode(key)
                 .removeClass(self.classSelected)
-                .find('input.reflect-selection').removeAttr('checked');
+                .attr({
+                    'aria-selected': 'false',
+                    tabindex: options.tabFix !== false ? -1 : null
+                })
+                .find('input.reflect-selection').prop('checked', false);
             self.trigger('deselect', key);
         };
 
@@ -369,7 +394,6 @@ define('io.ox/core/tk/selection',
         };
 
         update = function (updateIndex) {
-
             if (container.is(':hidden')) return;
 
             updateIndex = updateIndex || false;
@@ -377,9 +401,12 @@ define('io.ox/core/tk/selection',
 
             // get nodes
             var nodes = $('.selectable:visible', container),
-                i = 0, $i = nodes.length, node = null;
+                i = 0, node = null;
 
-            for (; i < $i; i++) {
+            // clear
+            nodes.removeClass(self.classSelected).find('input.reflect-selection').prop('checked', false);
+
+            for (; i < nodes.length; i++) {
                 node = nodes.eq(i);
                 // is selected?
                 var objID = node.attr('data-obj-id');
@@ -387,11 +414,8 @@ define('io.ox/core/tk/selection',
                     self.addToIndex(objID);
                 }
                 if (isSelected(objID)) {
-                    $('input.reflect-selection', node).attr('checked', 'checked');
+                    $('input.reflect-selection', node).prop('checked', true);
                     node.addClass(self.classSelected);
-                } else {
-                    $('input.reflect-selection', node).removeAttr('checked');
-                    node.removeClass(self.classSelected);
                 }
             }
         };
@@ -400,8 +424,11 @@ define('io.ox/core/tk/selection',
             // clear hash
             selectedItems = {};
             // clear nodes
-            container.find('.selectable.' + self.classSelected).removeClass(self.classSelected);
-            container.find('.selectable input.reflect-selection').removeAttr('checked');
+            container.find('.selectable.' + self.classSelected).removeClass(self.classSelected).attr({
+                'aria-selected': 'false',
+                'tabindex': options.tabFix !== false ? -1 : null
+            });
+            container.find('.selectable input.reflect-selection').prop('checked', false);
         };
 
         /**
@@ -431,31 +458,45 @@ define('io.ox/core/tk/selection',
             observedItemsIndex = {};
             last = prev = empty;
 
+            // reset index but ignore 'empty runs'
+            if (all.length > 0) lastIndex = -1;
+
             // build index
-            var i = 0, $i = all.length, data, cid, index = lastIndex;
+            var i = 0, $i = all.length, data, cid, updateLast = true;
             for (; i < $i; i++) {
                 data = all[i];
                 cid = this.serialize(data);
                 observedItems[i] = { data: data, cid: cid };
                 observedItemsIndex[cid] = i;
+                if (cid in hash && updateLast) {
+                    lastValidIndex = lastIndex = i;
+                    last = cid;
+                    updateLast = false;
+                }
             }
 
             $('.selectable', container).each(function () {
                 var node = $(this),
                     cid = node.attr('data-obj-id');
                 if (cid in hash) {
-                    $('input.reflect-selection', node).attr('checked', 'checked');
-                    node.addClass(self.classSelected);
+                    $('input.reflect-selection', node).prop('checked', true);
+                    node.addClass(self.classSelected).attr({
+                        'aria-selected': 'true',
+                        'tabindex': options.tabFix !== false ? options.tabFix : null
+                    });
+                    if (options.tabFix !== false) {
+                        node.focus();
+                    }
                 } else {
-                    $('input.reflect-selection', node).removeAttr('checked');
-                    node.removeClass(self.classSelected);
+                    $('input.reflect-selection', node).prop('checked', false);
+                    node.removeClass(self.classSelected).attr({
+                        'aria-selected': 'true',
+                        'tabindex': options.tabFix !== false ? -1 : null
+                    });
                 }
             });
 
             selectedItems = hash;
-
-            // reset index but ignore 'empty runs'
-            if (all.length > 0) lastIndex = -1;
 
             // fire event?
             if (!_.isEqual(tmp, this.get())) changed();
@@ -656,34 +697,43 @@ define('io.ox/core/tk/selection',
             // previous
             var previous = this.get(),
                 self = this,
-                hash = {};
+                hash = {},
+                updateLast = true;
 
             // clear
             clear();
+
+            // reset last index
+            lastIndex = -1;
 
             $('.selectable', container).each(function () {
                 var node = $(this), cid = node.attr('data-obj-id');
                 hash[cid] = node;
             });
 
-            _(!list || _.isArray(list) ? list : [list]).each(function (elem) {
-                var cid = self.serialize(elem), item;
+            _(!list || _.isArray(list) ? list : [list]).each(function (elem, index) {
+                var cid = self.serialize(elem), item, node;
                 // existing node?
                 if (cid in hash) {
                     if (typeof elem === 'string' && bHasIndex && (item = observedItems[getIndex(elem)]) !== undefined) {
-                        fastSelect(item.data, hash[cid]);
+                        node = fastSelect(item.data, hash[cid]);
                     } else {
-                        fastSelect(elem, hash[cid]);
+                        node = fastSelect(elem, hash[cid]);
                     }
+                    // put first item into viewport
+                    if (index === 0) node.intoViewport(options.scrollpane);
                 } else {
                     selectedItems[cid] = elem;
+                }
+                // update last / lastIndex
+                if (updateLast) {
+                    lastIndex = getIndex(cid);
+                    last = cid;
+                    updateLast = false;
                 }
             });
 
             hash = null;
-
-            // reset last index
-            lastIndex = -1;
 
             // event?
             if (!_.isEqual(previous, this.get()) && silent !== true) changed();
@@ -773,7 +823,7 @@ define('io.ox/core/tk/selection',
             return this;
         };
 
-        this.selectIndex = function (index) {
+        this.selectIndex = function () {
             var item = observedItems[lastValidIndex];
             if (item !== undefined) {
                 this.select(item.data);
@@ -801,10 +851,7 @@ define('io.ox/core/tk/selection',
         };
 
         this.isEmpty = function () {
-            for (var id in selectedItems) {
-                return false;
-            }
-            return true;
+            return _.isEmpty(selectedItems);
         };
 
         this.contains = function (ids) {
@@ -974,7 +1021,7 @@ define('io.ox/core/tk/selection',
                         scrollSpeed = 0;
                     }
                     scroll();
-                }).on('mouseleave.dnd', function (e) {
+                }).on('mouseleave.dnd', function () {
                     scrollSpeed = 0;
                     scroll();
                     $(node).off('mousemove.dnd mouseleave.dnd');
@@ -1038,7 +1085,7 @@ define('io.ox/core/tk/selection',
                 }
             }
 
-            function drop(e) {
+            function drop() {
                 clearTimeout(expandTimer);
                 var target = $(this).attr('data-obj-id') || $(this).attr('data-cid'),
                     baton = new ext.Baton({ data: data, dragType: options.dragType, dropzone: this, target: target });
@@ -1066,7 +1113,7 @@ define('io.ox/core/tk/selection',
                     .on('mouseup.dnd', stop);
                 // prevent text selection and kills the focus
                 if (!_.browser.IE) { // Not needed in IE - See #27981
-                    container.focus();
+                    (options.focus ? container.find(options.focus).first() : container).focus();
                 }
                 e.preventDefault();
             }

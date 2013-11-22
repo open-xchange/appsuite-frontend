@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -63,18 +63,6 @@ define('io.ox/core/api/account',
         });
 
         return isArray ? data : data[0];
-    };
-
-    var invalidateRoot = function () {
-        ox.api.cache.folder0.setComplete('1', false);
-        ox.api.cache.folder1.setComplete('1', false);
-    };
-
-    var invalidateFolder = function (id) {
-        ox.api.cache.folder0.removeChildren(id, true); // deep
-        ox.api.cache.folder0.remove(id);
-        ox.api.cache.folder1.removeChildren(id, true); // deep
-        ox.api.cache.folder1.remove(id);
     };
 
     var regParseAccountId = new RegExp('^default\\d+' + separator + '[^' + separator + ']+' + separator),
@@ -143,7 +131,7 @@ define('io.ox/core/api/account',
                 folderAPI.getSubFolders(),
                 api.all()
             ).then(function (folders, accounts) {
-                var mailFolders, mailAccounts, unified, diff;
+                var mailFolders, mailAccounts, diff;
 
                 mailFolders = _(folders).chain()
                     .filter(function (folder) { return folder.id.match(/^default(\d+)/);  })

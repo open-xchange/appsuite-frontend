@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
@@ -15,10 +15,10 @@
 define('plugins/portal/facebook/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
-     'io.ox/core/strings',
      'io.ox/keychain/api',
      'gettext!plugins/portal',
-     'less!plugins/portal/facebook/style.less'], function (ext, proxy, strings, keychain, gt) {
+     'less!plugins/portal/facebook/style.less'
+    ], function (ext, proxy, keychain, gt) {
 
     'use strict';
 
@@ -50,12 +50,12 @@ define('plugins/portal/facebook/register',
             JSON.stringify(post));
     };
 
-    var loadFromFacebook = function (baton) {
+    var loadFromFacebook = function () {
         return proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: "SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0",
-                    profiles: "SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
+                    newsfeed: 'SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
+                    profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)'
                 })
             })
             .pipe(JSON.parse);
@@ -79,7 +79,7 @@ define('plugins/portal/facebook/register',
                 $('<div class="paragraph">').text(gt('No wall posts yet.')));
         } else {
             _(wall).each(function (post) {
-                var message = strings.shorten(post.message || post.description || post.attachment.caption || '', 150);
+                var message = _.ellipsis(post.message || post.description || post.attachment.caption || '', {max: 150});
                 content.append(
                     $('<div class="paragraph">').append(
                         $('<span class="bold">').text(getProfile(profiles, post.actor_id).name + ': '),
@@ -98,7 +98,7 @@ define('plugins/portal/facebook/register',
                 keychain.submodules.facebook.reauthorize(account).done(function () {
                     keychain.submodules.facebook.trigger('update');
                 }).fail(function () {
-                    console.error(gt("Something went wrong reauthorizing the %s account.", 'Facebook'));
+                    console.error(gt('Something went wrong reauthorizing the %s account.', 'Facebook'));
                 });
             });
         console.error('Facebook reported an error', resultsets.error);
@@ -129,7 +129,7 @@ define('plugins/portal/facebook/register',
             });
         },
 
-        action: function (baton) {
+        action: function () {
             window.open('https://www.facebook.com/me', 'facebook');
         },
 
@@ -142,11 +142,11 @@ define('plugins/portal/facebook/register',
         },
 
         performSetUp: function (baton) {
-            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return $.when(
                 keychain.createInteractively('facebook', win))
             .then(function () {
-                baton.model.node.removeClass("requires-setup");
+                baton.model.node.removeClass('requires-setup');
                 ox.trigger('refresh^');
             });
         },
@@ -166,8 +166,8 @@ define('plugins/portal/facebook/register',
             return proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: "SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0",
-                    profiles: "SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
+                    newsfeed: 'SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
+                    profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)'
                 })
             })
             .pipe(JSON.parse)
@@ -208,10 +208,6 @@ define('plugins/portal/facebook/register',
                         $('<div class="wall-post-content">'),
                         $('<span class="datetime">').text(new Date(post.created_time * 1000))
                     ));
-
-                //use extension mechanism to enable rendering of different contents
-                var extPoints = ext.point('io.ox/plugins/portal/facebook/renderer'),
-                    sortedExtPoints = _(extPoints).sortBy(function (elem) {return elem.index; });
 
                 ext.point('io.ox/plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
@@ -259,7 +255,7 @@ define('plugins/portal/facebook/register',
 
         error: function (error) {
 
-            if (error.code !== "OAUTH-0006") return; // let the default handling do the job
+            if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
 
             $(this).empty().append(
                 $('<div class="decoration">').append(
@@ -287,8 +283,8 @@ define('plugins/portal/facebook/register',
         draw: function (post) {
             var media = post.attachment.media[0];
             this.append(
-                $('<a>', {'class': "posted-image", 'href': media.href}).append(
-                    $('<img>', {'class': "posted-image", 'src': media.src, alt: media.alt, title: media.alt}),
+                $('<a>', {'class': 'posted-image', 'href': media.href}).append(
+                    $('<img>', {'class': 'posted-image', 'src': media.src, alt: media.alt, title: media.alt}),
                     $('<div>').text(post.description || ''),
                     $('<div>').text(post.message || '')
                 )
@@ -422,7 +418,7 @@ define('plugins/portal/facebook/register',
         index: 196,
         accepts: function (post) {
             return post.type === 80 &&
-                post.attachment.caption !== "www.youtube.com" &&
+                post.attachment.caption !== 'www.youtube.com' &&
                 post.attachment.media[0];
         },
         draw: function (post) {
@@ -441,7 +437,7 @@ define('plugins/portal/facebook/register',
         id: 'video',
         index: 196,
         accepts: function (post) {
-            return (post.type === 128) || (post.type === 80 && post.attachment.caption === "www.youtube.com");
+            return (post.type === 128) || (post.type === 80 && post.attachment.caption === 'www.youtube.com');
         },
         draw: function (post) {
             var media = post.attachment.media[0];
@@ -496,7 +492,7 @@ define('plugins/portal/facebook/register',
     ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'fallback',
         index: 256,
-        accepts: function (post) {
+        accepts: function () {
             return true;
         },
         draw: function (post) {

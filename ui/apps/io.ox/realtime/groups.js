@@ -1,24 +1,30 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], function (rt, Event) {
+define('io.ox/realtime/groups',
+    ['io.ox/realtime/rt',
+     'io.ox/core/event'
+    ], function (rt, Event) {
+
     'use strict';
+
     var counter = 0;
+
     function RealtimeGroup(id) {
-        var self = this, heartbeat = null, selector = "rt-group-" + counter, destroyed = false;
+        var self = this, heartbeat = null, selector = 'rt-group-' + counter, destroyed = false;
         counter++;
-        rt.on("receive:" + selector, function (e, m) {
-            self.trigger("receive", m);
+        rt.on('receive:' + selector, function (e, m) {
+            self.trigger('receive', m);
         });
 
         function relayEvent(name) {
@@ -27,21 +33,21 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             };
         }
 
-        var relayOfflineEvent = relayEvent("offline");
-        var relayOnlineEvent = relayEvent("online");
-        var relayResetEvent = relayEvent("reset");
-        var relayHighLoadEvent = relayEvent("highLoad");
+        var relayOfflineEvent = relayEvent('offline'),
+            relayOnlineEvent = relayEvent('online'),
+            relayResetEvent = relayEvent('reset'),
+            relayHighLoadEvent = relayEvent('highLoad');
 
-        rt.on("offline", relayOfflineEvent);
-        rt.on("online", relayOnlineEvent);
-        rt.on("reset", relayResetEvent);
-        rt.on("highLoad", relayHighLoadEvent);
+        rt.on('offline', relayOfflineEvent);
+        rt.on('online', relayOnlineEvent);
+        rt.on('reset', relayResetEvent);
+        rt.on('highLoad', relayHighLoadEvent);
 
         this.id = id;
 
         function checkState() {
             if (destroyed) {
-                throw new Error("This group has already been destroyed");
+                throw new Error('This group has already been destroyed');
             }
         }
 
@@ -50,12 +56,12 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             if (!heartbeat) {
                 heartbeat = setInterval(function () {
                     rt.sendWithoutSequence({
-                        element: "message",
+                        element: 'message',
                         to: id,
                         payloads: [
                             {
-                                element: "ping",
-                                namespace: "group",
+                                element: 'ping',
+                                namespace: 'group',
                                 data: 1
                             }
                         ]
@@ -64,14 +70,14 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             }
             options = options || {};
             var stanza = {
-                element: "message",
+                element: 'message',
                 trace: options.trace,
                 selector: selector,
                 payloads: [
                     {
-                        element: "command",
-                        namespace: "group",
-                        data: "join"
+                        element: 'command',
+                        namespace: 'group',
+                        data: 'join'
                     }
                 ]
             };
@@ -92,13 +98,13 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             clearInterval(heartbeat);
             heartbeat = null;
             var stanza = {
-                element: "message",
+                element: 'message',
                 trace: options.trace,
                 payloads: [
                     {
-                        element: "command",
-                        namespace: "group",
-                        data: "leave"
+                        element: 'command',
+                        namespace: 'group',
+                        data: 'leave'
                     }
                 ]
             };
@@ -132,11 +138,11 @@ define('io.ox/realtime/groups', ['io.ox/realtime/rt', 'io.ox/core/event'], funct
             if (heartbeat) {
                 this.leave();
             }
-            rt.off("receive:" + selector);
-            rt.off("offline", relayOfflineEvent);
-            rt.off("online", relayOnlineEvent);
-            rt.off("reset", relayResetEvent);
-            rt.off("highLoad", relayHighLoadEvent);
+            rt.off('receive:' + selector);
+            rt.off('offline', relayOfflineEvent);
+            rt.off('online', relayOnlineEvent);
+            rt.off('reset', relayResetEvent);
+            rt.off('highLoad', relayHighLoadEvent);
             delete groups[id];
             destroyed = true;
         };

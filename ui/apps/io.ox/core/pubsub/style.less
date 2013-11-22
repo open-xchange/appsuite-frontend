@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
  * Copyright (C) Open-Xchange Inc., 2013
- * Mail: info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
@@ -14,21 +14,19 @@
 .pubsub.settings {
 
     ul {
+        @padding: 20px;
 
         margin-left: 0;
         list-style-type: none;
 
-        @padding: 20px;
-
         li.item {
+            @margin: 6px;
+            @lineHeight: 18px;
 
             padding: 0 0 @padding 0;
             margin: 0 0 @padding 0;
             min-height: 66px;
             border-bottom: 1px solid #ddd;
-
-            @margin: 6px;
-            @lineHeight: 18px;
 
             .content {
                 line-height: @lineHeight;
@@ -37,7 +35,7 @@
                     margin-bottom: @margin;
                 }
                 .url {
-                    a { word-break:break-all; }
+                    a { word-break: break-all; }
                     a, i { color: #888; }
                     a:hover { color: #555; }
                     margin-bottom: @margin;
@@ -46,24 +44,24 @@
                     background-color: transparent;
                     li { line-height: @lineHeight; }
                 }
-                .icon-spin {
-                    margin-left: 0.5em;
-                }
+                .icon-spin { margin-left: 0.5em; }
             }
 
             &.disabled {
                 .name {
-                    color: #aaa; font-weight: normal;
+                    color: #aaa;
+                    font-weight: normal;
                 }
                 .url {
-                    i { color: #ccc; font-style: italic; }
+                    i {
+                        color: #ccc;
+                        font-style: italic;
+                    }
                 }
             }
         }
 
-        li.item:last-child {
-            border-bottom: 0px none;
-        }
+        li.item:last-child { border-bottom: 0 none; }
     }
 
     .breadcrumb {
@@ -76,29 +74,20 @@
         }
     }
 
-    .actions {
-        float: right;
-    }
+    .actions { float: right; }
 
     .action {
         margin-right: 2em;
         display: inline-block;
     }
 
-    .close {
-        line-height: 16px;
-    }
+    .close { line-height: 16px; }
 
-    .remove-filter {
-        text-decoration: underline;
-    }
+    .remove-filter { text-decoration: underline; }
 }
 
 .publication-dialog {
-
     height: 240px;
 
-    .url-value {
-        word-break: break-all;
-    }
+    .url-value { word-break: break-all; }
 }

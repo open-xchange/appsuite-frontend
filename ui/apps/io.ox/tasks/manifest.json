@@ -1,10 +1,10 @@
 {
-    title: "Tasks",
-    company: "Open-Xchange",
-    icon: "tasks.png",
-    category: "Productivity",
-    settings: true,
-    requires: "tasks",
-    refreshable: true,
-    index: 1000
+    "title": "Tasks",
+    "company": "Open-Xchange",
+    "icon": "tasks.png",
+    "category": "Productivity",
+    "settings": true,
+    "requires": "tasks",
+    "refreshable": true,
+    "index": 900
 }

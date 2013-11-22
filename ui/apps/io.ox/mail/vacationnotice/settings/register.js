@@ -1,19 +1,22 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 define('io.ox/mail/vacationnotice/settings/register',
-        ['io.ox/core/extensions', 'io.ox/core/notifications',
-         'io.ox/core/api/user', 'gettext!io.ox/mail'], function (ext, notifications, userAPI, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/core/notifications',
+     'io.ox/core/api/user',
+     'gettext!io.ox/mail'
+    ], function (ext, notifications, userAPI, gt) {
 
     'use strict';
 
@@ -33,23 +36,23 @@ define('io.ox/mail/vacationnotice/settings/register',
         return objectOfValues;
     };
 
-    ext.point("io.ox/settings/pane").extend({
+    ext.point('io.ox/settings/pane').extend({
         id: 'io.ox/vacation',
-        title: gt("Vacation Notice"),
+        title: gt('Vacation Notice'),
         ref: 'io.ox/vacation',
         loadSettingPane: false,
         index: 400,
         lazySaveSettings: true
     });
 
-    ext.point("io.ox/vacation/settings/detail").extend({
+    ext.point('io.ox/vacation/settings/detail').extend({
         index: 100,
         draw: function () {
             var $node = this,
                 $container = $('<div>');
 
             $node.append($container);
-            require(["io.ox/mail/vacationnotice/settings/filter"], function (filters) {
+            require(['io.ox/mail/vacationnotice/settings/filter'], function (filters) {
                 userAPI.get().done(function (user) {
 
                     var multiValues = {
@@ -66,7 +69,7 @@ define('io.ox/mail/vacationnotice/settings/register',
                             msg = gt('Unable to load mail filter settings.');
                         }
                         $container.append(
-                            $.fail(msg || gt("Couldn't load your vacation notice."), function () {
+                            $.fail(msg || gt('Couldn\'t load your vacation notice.'), function () {
                                 filters.editVacationtNotice($node).done(function () {
                                     $node.find('[data-action="discard"]').hide();
                                 });

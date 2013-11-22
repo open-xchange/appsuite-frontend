@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
@@ -23,13 +23,15 @@ define('io.ox/mail/write/main',
      'io.ox/core/tk/upload',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
-     'moxiecode/tiny_mce/plugins/emoji/main',
+     'io.ox/emoji/main',
      'io.ox/core/notifications',
      'io.ox/mail/sender',
      'settings!io.ox/mail',
+     'settings!io.ox/core',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style.less',
-     'less!io.ox/mail/write/style.less'], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, gt) {
+     'less!io.ox/mail/write/style.less'
+    ], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, emoji, notifications, sender, settings, coreSettings, gt) {
 
     'use strict';
 
@@ -45,7 +47,12 @@ define('io.ox/mail/write/main',
     // actions (define outside of multi-instance app)
     ext.point(ACTIONS + '/draft').extend({
         action: function (baton) {
-            baton.app.saveDraft();
+            var self = this;
+            self.busy();
+            baton.app.saveDraft()
+                .done(function () {
+                    self.idle();
+                });
         }
     });
 
@@ -55,9 +62,9 @@ define('io.ox/mail/write/main',
         }
     });
 
-    var UUID = 1;
-    var blocked = {};
-    var timerScale = {
+    var UUID = 1,
+        blocked = {},
+        timerScale = {
         minute: 60000, //60s
         minutes: 60000
     },
@@ -100,6 +107,25 @@ define('io.ox/mail/write/main',
 
         app.autosave = {};
         delay();
+    }
+
+    function attachmentsExceedQouta(mail) {
+        var allAttachmentsSizes = [].concat(mail.files).concat(mail.data.attachments)
+                .map(function (m) {
+                    return m.size || 0;
+                }),
+            quota = coreSettings.get('properties/attachmentQuota', 0),
+            accumulatedSize = allAttachmentsSizes
+                .reduce(function (acc, size) {
+                    return acc + size;
+                }, 0),
+            singleFileExceedsQuota = allAttachmentsSizes
+                .reduce(function (acc, size) {
+                    var quotaPerFile = coreSettings.get('properties/attachmentQuotaPerFile', 0);
+                    return acc || (quotaPerFile > 0 && size > quotaPerFile);
+                }, false);
+
+        return singleFileExceedsQuota || (quota > 0 && accumulatedSize > quota);
     }
 
     function prepareMailForSending(mail) {
@@ -169,7 +195,8 @@ define('io.ox/mail/write/main',
         app = ox.ui.createApp({
             name: 'io.ox/mail/write',
             title: gt('Compose'),
-            userContent: true
+            userContent: true,
+            closable: true
         });
 
         model = new MailModel();
@@ -183,8 +210,17 @@ define('io.ox/mail/write/main',
 
         window.newmailapp = function () { return app; };
 
-        view.signatures = _.device('smartphone') ?
-            [{ id: 0, content: settings.get('mobileSignature') }] : [];
+        app.getMobileSignature = function () {
+            var value = settings.get('mobileSignature');
+            if (value === undefined) {
+                value =
+                    //#. %s is the product name
+                    gt('Sent from %s via mobile', ox.serverConfig.productName);
+            }
+            return value;
+        };
+
+        view.signatures = _.device('smartphone') ? [{ id: 0, content: app.getMobileSignature() }] : [];
 
         function trimSignature(text) {
             // remove white-space and evil \r
@@ -345,7 +381,7 @@ define('io.ox/mail/write/main',
 
             function changeMode(mode) {
                 // be busy
-                view.textarea.attr('disabled', 'disabled').busy();
+                view.textarea.prop('disabled', true).busy();
                 if (app.getEditor()) {
                     var content = app.getEditor().getPlainText();
                     app.getEditor().clear();
@@ -515,47 +551,29 @@ define('io.ox/mail/write/main',
 
         app.setAttachments = function (data) {
             // look for real attachments
-            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-            if (_.browser.IE !== 9) {
-                var items = _.chain(data.attachments || [])
-                            .filter(function (attachment) {
-                                //only real attachments
-                                return attachment.disp === 'attachment';
-                            })
-                            .map(function (attachment) {
-                                // add as linked attachment
-                                if (data.msgref) {
-                                    attachment.atmsgref = data.msgref;
-                                }
-                                attachment.type = attachment.filename && attachment.filename.split('.').length > 1  ? attachment.filename.split('.').pop() : 'file';
-                                attachment.group = 'attachment';
-                                return attachment;
-                            })
-                            .value();
-                //add to file list and show section
-                if (items.length) {
-                    view.fileList.add(items);
-                }
-            } else {
-                _(data.attachments || []).each(function (attachment) {
-                    if (attachment.disp === 'attachment') {
-                        // add as linked attachment
-                        if (data.msgref) {
-                            attachment.atmsgref = data.msgref;
-                        }
-                        attachment.type = 'file';
-
-                        view.form.find('input[type=file]').last()
-                            .prop('attachment', attachment)
-                            .trigger('change');
-                    }
-                });
+            var items = _.chain(data.attachments || [])
+                        .filter(function (attachment) {
+                            //only real attachments
+                            return attachment.disp === 'attachment';
+                        })
+                        .map(function (attachment) {
+                            // add as linked attachment
+                            if (data.msgref) {
+                                attachment.atmsgref = data.msgref;
+                            }
+                            attachment.type = attachment.filename && attachment.filename.split('.').length > 1  ? attachment.filename.split('.').pop() : 'file';
+                            attachment.group = 'attachment';
+                            return attachment;
+                        })
+                        .value();
+            //add to file list and show section
+            if (items.length) {
+                view.fileList.add(items);
             }
         };
 
         app.setNestedMessages = function (data) {
-            var list = data.nested_msgs, parent;
-
+            var list = data.nested_msgs, parent, items;
             //fixes preview: mail compose save of an forwarded mail with previewable attachment
             if (data.folder_id && data.id) {
                 parent = {
@@ -563,38 +581,21 @@ define('io.ox/mail/write/main',
                     id: data.id
                 };
             }
-            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-            if (_.browser.IE !== 9) {
-                var items = _(list || []).map(function (obj) {
-                    return _.extend(obj, { content_type: 'message/rfc822', parent: parent, group: 'nested'});
-                });
-                if (items.length) {
-                    view.fileList.add(items);
-                }
-            } else {
-                _(list || []).each(function (obj) {
-                    view.form.find('input[type=file]').last()
-                        .prop('nested', { message: obj, name: obj.subject, content_type: 'message/rfc822' })
-                        .trigger('change');
-                });
+            items = _(list || []).map(function (obj) {
+                return _.extend(obj, { content_type: 'message/rfc822', parent: parent, group: 'nested'});
+            });
+            if (items.length) {
+                view.fileList.add(items);
             }
         };
 
         app.addFiles = function (list, group) {
-            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-            if (_.browser.IE !== 9) {
-                var items = _.map(list || [], function (obj) {
-                    return $.extend(obj, {group: group || 'file'});
-                });
-                if (items.length) {
-                    view.fileList.add(items);
-                }
-            } else {
-                _(list || []).each(function (obj) {
-                    view.form.find('input[type=file]').last()
-                        .prop('file', obj)
-                        .trigger('change');
-                });
+            var items;
+            items = _.map(list || [], function (obj) {
+                return $.extend(obj, {group: group || 'file'});
+            });
+            if (items.length && view.fileList) {
+                view.fileList.add(items);
             }
         };
 
@@ -937,8 +938,8 @@ define('io.ox/mail/write/main',
                 ) {
                     // we are editing a message with html format, keep it
                     data.format = 'html';
-                    view.form.find('input[name=format][value=text]').attr('checked', null);
-                    view.form.find('input[name=format][value=html]').attr('checked', 'checked');
+                    view.form.find('input[name=format][value=text]').prop('checked', false);
+                    view.form.find('input[name=format][value=html]').prop('checked', true);
                     return $.Deferred().resolve(data);
                 } else {
                     return $.Deferred().resolve(data);
@@ -992,6 +993,7 @@ define('io.ox/mail/write/main',
                 attachments,
                 mail,
                 files = [],
+                fileList = view.baton.fileList,
                 parse = function (list) {
                     return _(mailUtil.parseRecipients([].concat(list).join(', ')))
                         .map(function (recipient) {
@@ -1007,8 +1009,6 @@ define('io.ox/mail/write/main',
             if (editorMode === 'html') {
                 attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
-                        // reverse img fix
-                        .replace(/(<img[^>]+src=")(\/appsuite\/)?api\//g, '$1/ajax/')
                 };
                 //don’t send emoji images, but unicode characters
                 attachments.content = emoji.imageTagsToUnified(attachments.content);
@@ -1016,8 +1016,6 @@ define('io.ox/mail/write/main',
                 attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
                     raw: true
-                        // .replace(/</g, '&lt;') // escape <
-                        // .replace(/\n/g, '<br>\n') // escape line-breaks
                 };
             }
 
@@ -1056,62 +1054,17 @@ define('io.ox/mail/write/main',
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
 
             // get files
-            //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-            if (_.browser.IE !== 9) {
-                var fileList = view.baton.fileList;
+            //attachments
+            mail.attachments = mail.attachments.concat(fileList.get('attachment'));
+            //nested message (usually multiple mail forward)
+            mail.nested_msgs = mail.nested_msgs.concat(fileList.get('nested'));
+            //referenced contacts (vcards)
+            mail.contacts_ids = (mail.contacts_ids || []).concat(fileList.get('vcard'));
+            //referenced inforstore files
+            mail.infostore_ids = (mail.infostore_ids || []).concat(fileList.get('infostore'));
+            //local files
+            files = files.concat(fileList.get('file'));
 
-                //attachments
-                mail.attachments = mail.attachments.concat(fileList.get('attachment'));
-                //nested message (usually multiple mail forward)
-                mail.nested_msgs = mail.nested_msgs.concat(fileList.get('nested'));
-                //referenced contacts (vcards)
-                mail.contacts_ids = (mail.contacts_ids || []).concat(fileList.get('vcard'));
-                //referenced inforstore files
-                mail.infostore_ids = (mail.infostore_ids || []).concat(fileList.get('infostore'));
-                //local files
-                files = files.concat(fileList.get('file'));
-                //local files (form input)
-                //files = files.concat(fileList.get('input'));
-
-                //TODO: removeable?
-                /*if (this.files && this.files.length) {
-                    // process normal upload
-                    _(this.files).each(function (file) {
-                        files.push(file);
-                    });
-                }*/
-
-            } else {
-                view.form.find(':input[name][type=file]').each(function () {
-                    // link to existing attachments (e.g. in forwards)
-                    var attachment = $(this).prop('attachment'),
-                        // get file via property (DND) or files array and add to list
-                        file = $(this).prop('file'),
-                        // get nested messages
-                        nested = $(this).prop('nested');
-                    if (attachment) {
-                        // add linked attachment
-                        mail.attachments.push(attachment);
-                    } else if (nested) {
-                        // add nested message (usually multiple mail forward)
-                        mail.nested_msgs.push(nested.message);
-                    } else if ('File' in window && file instanceof window.File) {
-                        // add dropped file
-                        files.push(file);
-                    } else if (file && ('id' in file) && ('file_size' in file)) {
-                        // infostore id
-                        (mail.infostore_ids = (mail.infostore_ids || [])).push(file);
-                    } else if (file && ('id' in file) && ('display_name' in file)) {
-                        // contacts id
-                        (mail.contacts_ids = (mail.contacts_ids || [])).push(file);
-                    } else if (this.files && this.files.length) {
-                        // process normal upload
-                        _(this.files).each(function (file) {
-                            files.push(file);
-                        });
-                    }
-                });
-            }
             // return data, file references, mode, format
             return {
                 data: mail,
@@ -1139,6 +1092,12 @@ define('io.ox/mail/write/main',
                 mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
             }
 
+            // fix inline images
+            mail.data.attachments[0].content = mail.data.attachments[0].content
+                    .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
+                    .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
+                    .replace(/data-mce-src="[^"]+"\s?/, '');
+
             function cont() {
                 // start being busy
                 win.busy();
@@ -1148,6 +1107,19 @@ define('io.ox/mail/write/main',
                 if (autoSavedMail) {
                     mail.data.deleteDraft = true;
                 }
+
+                if (attachmentsExceedQouta(mail)) {
+                    notifications.yell({
+                        type: 'info',
+                        message: gt(
+                            'One or more attached files exceed the size limit per email. ' +
+                            'Therefore, the files are not sent as attachments but kept on the server. ' +
+                            'The email you have sent just contains links to download these files.'
+                        ),
+                        duration: 30000
+                    });
+                }
+
                 // send!
                 mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
                     if (result.error && !result.warnings) {
@@ -1220,11 +1192,11 @@ define('io.ox/mail/write/main',
                     def.reject();
                 } else if ($.trim(mail.data.subject) === '') {
                     // show dialog
-                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
                         new dialogs.ModalDialog()
-                            .text(gt("Mail has empty subject. Send it anyway?"))
-                            .addPrimaryButton("send", gt('Yes, send without subject'))
-                            .addButton("subject", gt('Add subject'))
+                            .text(gt('Mail has empty subject. Send it anyway?'))
+                            .addPrimaryButton('send', gt('Yes, send without subject'))
+                            .addButton('subject', gt('Add subject'))
                             .show(function () {
                                 def.notify('empty subject');
                             })
@@ -1289,19 +1261,23 @@ define('io.ox/mail/write/main',
                 var base = _(result.data.split(mailAPI.separator)),
                     id = base.last(),
                     folder = base.without(id).join(mailAPI.separator);
-                mailAPI.get({ folder_id: folder, id: id, edit: '1' }).then(function (draftMail) {
-                    var format = draftMail.content_type === 'text/plain' ? 'text' : 'html';
+                return mailAPI.get({ folder_id: folder, id: id, edit: '1' });
+            })
+            .then(function (draftMail) {
+                //using draftMail.attachments[0].content_type instead of draftMail.content_type because if there are attachments this becomes multipart/mixed and you cannot get the right type
+                var format = draftMail.attachments[0].content_type === 'text/plain' ? 'text' : 'html',
+                    def = $.Deferred();
 
-                    view.form.find('.section-item.file').remove();
-                    $(_.initial(view.form.find(':input[name][type=file]'))).remove();
-                    //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-                    if (_.browser.IE !== 9) {
-                        view.baton.fileList.clear();
-                    }
-                    draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                    draftMail.vcard = old_vcard_flag;
-                    app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
-                });
+                view.form.find('.section-item.file').remove();
+                $(_.initial(view.form.find(':input[name][type=file]'))).remove();
+                view.baton.fileList.clear();
+                draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                draftMail.vcard = old_vcard_flag;
+                app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format})
+                    .then(function () {
+                        def.resolve(draftMail);
+                    });
+                return def;
             });
         };
 
@@ -1335,19 +1311,19 @@ define('io.ox/mail/write/main',
             };
 
             if (app.dirty()) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to discard this mail?"))
-                        .addPrimaryButton("delete", gt('Discard'))
-                        .addAlternativeButton('savedraft', gt("Save as draft"))
-                        .addButton("cancel", gt('Cancel'))
+                        .text(gt('Do you really want to discard this mail?'))
+                        .addPrimaryButton('delete', gt('Discard'))
+                        .addAlternativeButton('savedraft', gt('Save as draft'))
+                        .addButton('cancel', gt('Cancel'))
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
                                 clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
                                 def.resolve();
                             } else if (action === 'savedraft') {
-                                app.saveDraft().done(function (mail) {
+                                app.saveDraft().done(function () {
                                     clean();
                                     def.resolve();
                                 }).fail(function (e) {

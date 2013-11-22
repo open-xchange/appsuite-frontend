@@ -1,25 +1,22 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/autoforward/settings/filter', [
-    'io.ox/core/extensions',
-    'io.ox/core/api/mailfilter',
-    'io.ox/mail/autoforward/settings/model',
-    'io.ox/mail/autoforward/settings/view-form',
-    'io.ox/core/tk/dialogs',
-    'io.ox/core/date',
-    'gettext!io.ox/mail'
-], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
+define('io.ox/mail/autoforward/settings/filter',
+    ['io.ox/core/extensions',
+     'io.ox/core/api/mailfilter',
+     'io.ox/mail/autoforward/settings/model',
+     'io.ox/mail/autoforward/settings/view-form'
+    ], function (ext, api, mailfilterModel, ViewForm) {
 
     'use strict';
 

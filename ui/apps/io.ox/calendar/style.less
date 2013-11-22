@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -16,13 +16,18 @@
     .toolbar {
         height: @calendarToolbarHeight;
         text-align: center;
+        padding-top: @calendarToolbarTopPadding;
 
         .info {
             position: absolute;
             left: @weekviewTimeWith;
-            line-height: 38px;
+            line-height: @calendarToolbarHeight - @calendarToolbarTopPadding;
             font-family: @lightFontFamily;
             font-size: 20px;
+            .cw {
+                font-size: 14px;
+                color: #888;
+            }
         }
 
         .showall {
@@ -30,7 +35,7 @@
             position: absolute;
             display: inline;
             right: 20px;
-            top: 10px;
+            top: 20px;
 
             label {
                 display: inline;
@@ -46,7 +51,7 @@
 
         .pagination {
 
-            margin: 3px 0 0 58px;
+            margin:  0 0 0 @weekviewTimeWith;
 
             a {
                 line-height: 26px;
@@ -57,18 +62,53 @@
 
     }
 
+    .footer-container {
+
+        height: @weekviewFooterHeight;
+        left: 0;
+        right: 0;
+        width: 100%;
+        .overflow(hidden);
+
+        .footer {
+
+            position: absolute;
+            line-height: normal;
+            right: 0;
+            left: @weekviewTimeWith;
+            white-space: nowrap;
+            padding-top: 13px;
+
+            .weekday {
+
+                display: inline-block;
+                font-size: 13px;
+                text-align: left;
+                .ellipsis();
+
+                &.today {
+                    font-weight: bold;
+                    color: @weekviewToday;
+                }
+            }
+        }
+    }
+
     /* Mobile */
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
         .toolbar {
 
             height: @calendarToolbarHeight + 15;
+            padding-top: 0;
 
             .info {
                 top: 9px;
                 left: 10px;
                 font-size: 15px;
                 line-height: 20px;
+                width: 140px;
+                text-align: left;
             }
 
             .showall {
@@ -268,8 +308,8 @@
         padding-bottom: 14px;
         background-image: none;
         background-color: #fff;
-        border-top: 0px none;
-        border-bottom: 0px none;
+        border-top: 0 none;
+        border-bottom: 0 none;
     }
 
     .shown_as {
@@ -297,7 +337,7 @@
 
     .vgrid-cell.calendar {
 
-        padding: 7px 0px;
+        padding: 7px 0;
 
         &:last-child {
             border: none;
@@ -307,7 +347,7 @@
     .buttons {
         display: inline-block;
         width: 100%;
-        margin: 10px 0px;
+        margin: 10px 0;
 
         .span12 {
             position: relative;
@@ -388,13 +428,11 @@
 
     .io-ox-label.participants-block .io-ox-inline-links {
         float: right;
-        margin: 0px;
+        margin: 0;
         font-size: 9pt;
         font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 
-        a {
-            color: #333;
-        }
+        a { color: #333; }
     }
 
     .io-ox-label.sublabel {
@@ -431,13 +469,11 @@
 
     .participant {
         line-height: 2em;
+        position: relative; //needed so icons position correctly if participants are displayed in 2 columns
         display: inline-block;
         width: 250px;
-        overflow: hidden;
-        text-overflow: ellipsis;
         margin: 0 20px 0em 0;
         float: left;
-        white-space: nowrap;
         cursor: pointer;
     }
 
@@ -461,8 +497,9 @@
     .detail.shown_as {
 
         display: inline-block;
-        height: 1em;
-        width: 1em;
+        height: 14px;
+        width: 14px;
+        line-height: 14px;
 
         &.reserved {
             background-color: @appointmentReserved;
@@ -482,6 +519,12 @@
 
         .person {
 
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			max-width: 236px; //icons are 14px
+			display: inline-block;
+
             &.accepted {
                 color: #799952;  /* green */
             }
@@ -493,6 +536,9 @@
         }
 
         .status {
+
+			position: absolute;
+			margin-left: 2px;
 
             &.accepted {
 
@@ -536,9 +582,15 @@
 
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
         .io-ox-inline-links:first-child {
-            margin:0;
+            margin: 0;
+            padding: 15px 0px;
             span.io-ox-action-link.dropdown {
-                float:right;
+                float: right;
+            }
+        }
+        .io-ox-inline-links {
+            &.embedded {
+                text-align: left;
             }
         }
     }
@@ -585,7 +637,7 @@
 
 /* Invitations */
 .itip-section {
-    min-height: 100px;
+    min-height: 40px;
 }
 
 .itip-actions {
@@ -607,7 +659,6 @@
 .io-ox-calendar-itip-analysis {
 
     margin: 20px 0 0 0;
-    min-height: 110px;
 
     .date {
         margin-right: 14px;
@@ -619,7 +670,7 @@
 
     .confirmation-status {
 
-        margin: 1em 0 1em 0;
+        margin: 0.5em 0 0.5em 0;
 
         &.accepted {
             color: @green;
@@ -635,17 +686,30 @@
 
     }
 
+    .change {
+
+        .appointment, .task {
+            background-color: white;
+        }
+
+    }
 
     .changes {
+
         margin: 1em 0;
         font-size: 11pt;
 
         .original, .recurrencePosition, .updated {
             font-weight: bold;
         }
+    }
+}
 
-        .updated {
-            color: @green;
-        }
+.show-all-checkbox {
+    padding-right: 14px;
+    margin-bottom: 14px;
+    label {
+        font-weight: 300;
+        color: #777;
     }
 }

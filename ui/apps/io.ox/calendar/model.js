@@ -1,32 +1,33 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/calendar/model',
-        ['io.ox/calendar/api',
-        'io.ox/backbone/modelFactory',
-        'io.ox/core/extensions',
-        'gettext!io.ox/calendar',
-        'io.ox/backbone/validation',
-        'io.ox/participants/model',
-        'io.ox/core/date',
-        'io.ox/core/api/folder',
-        'settings!io.ox/calendar'], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
+    ['io.ox/calendar/api',
+     'io.ox/backbone/modelFactory',
+     'io.ox/core/extensions',
+     'gettext!io.ox/calendar',
+     'io.ox/backbone/validation',
+     'io.ox/participants/model',
+     'io.ox/core/date',
+     'io.ox/core/api/folder',
+     'settings!io.ox/calendar'
+    ], function (api, ModelFactory, ext, gt, Validators, pModel, date, folderAPI, settings) {
 
-    "use strict";
+    'use strict';
 
     var defStart = new date.Local();
     defStart.setHours(defStart.getHours() + 1, 0, 0, 0);
 
-    var RECURRENCE_FIELDS = "recurrence_type interval days day_in_month month until occurrences".split(" ");
+    var RECURRENCE_FIELDS = 'recurrence_type interval days day_in_month month until occurrences'.split(' ');
 
     var factory = new ModelFactory({
         ref: 'io.ox/calendar/model',
@@ -58,19 +59,18 @@ define('io.ox/calendar/model',
                     }
                 });
             },
-            getParticipants: function (options) {
+            getParticipants: function () {
                 if (this._participants) {
                     return this._participants;
                 }
                 var self = this,
-                    defaults = _.extend({sortBy: 'display_name'}, options),
                     resetListUpdate = false,
                     changeParticipantsUpdate = false,
                     participants = this._participants = new pModel.Participants(this.get('participants'));
 
                 participants.invoke('fetch');
 
-                function resetList(participant) {
+                function resetList() {
                     if (changeParticipantsUpdate) {
                         return;
                     }
@@ -123,12 +123,12 @@ define('io.ox/calendar/model',
         }
     });
 
-    ext.point("io.ox/calendar/model/validation").extend({
+    ext.point('io.ox/calendar/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
             if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
-                this.add('start_date', gt("The start date must be before the end date."));
-                this.add('end_date', gt("The start date must be before the end date."));
+                this.add('start_date', gt('The start date must be before the end date.'));
+                this.add('end_date', gt('The start date must be before the end date.'));
             }
         }
     });
@@ -166,13 +166,13 @@ define('io.ox/calendar/model',
     };
 
     DAYS.i18n = {
-        SUNDAY: gt("Sunday"),
-        MONDAY: gt("Monday"),
-        TUESDAY: gt("Tuesday"),
-        WEDNESDAY: gt("Wednesday"),
-        THURSDAY: gt("Thursday"),
-        FRIDAY: gt("Friday"),
-        SATURDAY: gt("Saturday")
+        SUNDAY: gt('Sunday'),
+        MONDAY: gt('Monday'),
+        TUESDAY: gt('Tuesday'),
+        WEDNESDAY: gt('Wednesday'),
+        THURSDAY: gt('Thursday'),
+        FRIDAY: gt('Friday'),
+        SATURDAY: gt('Saturday')
     };
 
     // Usage: DAYS.pack('monday', 'wednesday', 'friday') -> some bitmask
@@ -182,7 +182,7 @@ define('io.ox/calendar/model',
             var dayConst = DAYS[day.toUpperCase()];
 
             if (_.isUndefined(dayConst)) {
-                throw "Invalid day: " + day;
+                throw 'Invalid day: ' + day;
             }
             result = result | dayConst;
         });
@@ -204,7 +204,7 @@ define('io.ox/calendar/model',
         return days;
     };
 
-    DAYS.values = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+    DAYS.values = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
     return {
         setDefaultParticipants: function (model, options) {
@@ -302,6 +302,12 @@ define('io.ox/calendar/model',
                     // handle time
                     var startDate = new date.Local(model.get('start_date')),
                         endDate = new date.Local(model.get('end_date') + 1);
+
+                    // if cache dates are unuseable
+                    if (_end - _start === api.DAY) {
+                        _start = defStart.getTime();
+                        _end = defStart.getTime() + date.HOUR;
+                    }
 
                     _start = new date.Local(_start);
                     _end = new date.Local(_end);

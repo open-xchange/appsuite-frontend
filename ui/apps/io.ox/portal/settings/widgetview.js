@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -27,7 +27,7 @@ define('io.ox/portal/settings/widgetview',
 
         tagName: 'li',
 
-        className: "widget-settings-view",
+        className: 'widget-settings-view',
 
         events: {
             'click [data-action="edit"]': 'onEdit',
@@ -107,7 +107,7 @@ define('io.ox/portal/settings/widgetview',
             // do we have custom data that might be lost?
             if (!_.isEmpty(this.model.get('props'))) {
                 var dialog = new dialogs.ModalDialog()
-                .header($("<h4>").text(gt('Delete widget')))
+                .header($('<h4>').text(gt('Delete widget')))
                 .append($('<span>').text(gt('Do you really want to delete this widget?')))
                 .addPrimaryButton('delete',
                     //#. Really delete portal widget - in contrast to "just disable"

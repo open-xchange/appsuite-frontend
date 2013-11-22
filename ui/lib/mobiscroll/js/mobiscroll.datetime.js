@@ -29,6 +29,11 @@
             stepSecond: 1,
             separator: ' '
         },
+        /**
+         * @class Mobiscroll.datetime
+         * @extends Mobiscroll
+         * Mobiscroll Datetime component
+         */
         preset = function (inst) {
             var that = $(this),
                 html5def = {},
@@ -65,13 +70,19 @@
             }
 
             // Set year-month-day order
-            var s = $.extend({}, defaults, html5def, inst.settings),
+            var i,
+                k,
+                keys,
+                values,
+                wg,
+                start,
+                end,
+                orig = $.extend({}, inst.settings),
+                s = $.extend(inst.settings, defaults, html5def, orig),
                 offset = 0,
                 wheels = [],
                 ord = [],
                 o = {},
-                i,
-                k,
                 f = { y: 'getFullYear', m: 'getMonth', d: 'getDate', h: getHour, i: getMinute, s: getSecond, a: getAmPm },
                 p = s.preset,
                 dord = s.dateOrder,
@@ -86,11 +97,9 @@
                 stepS = s.stepSecond,
                 mind = s.minDate || new Date(s.startYear, 0, 1),
                 maxd = s.maxDate || new Date(s.endYear, 11, 31, 23, 59, 59);
-                
-            inst.settings = s;
 
             format = format || hformat;
-                
+
             if (p.match(/date/i)) {
 
                 // Determine the order of year, month, day wheels
@@ -105,32 +114,41 @@
                     o[v.v] = i;
                 });
 
-                var w = {};
+                wg = [];
                 for (k = 0; k < 3; k++) {
                     if (k == o.y) {
                         offset++;
-                        w[s.yearText] = {};
-                        var start = mind.getFullYear(),
-                            end = maxd.getFullYear();
+                        values = [];
+                        keys = [];
+                        start = mind.getFullYear();
+                        end = maxd.getFullYear();
                         for (i = start; i <= end; i++) {
-                            w[s.yearText][i] = dord.match(/yy/i) ? i : (i + '').substr(2, 2);
+                            keys.push(i);
+                            values.push(dord.match(/yy/i) ? i : (i + '').substr(2, 2));
                         }
+                        addWheel(wg, keys, values, s.yearText);
                     } else if (k == o.m) {
                         offset++;
-                        w[s.monthText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 0; i < 12; i++) {
                             var str = dord.replace(/[dy]/gi, '').replace(/mm/, i < 9 ? '0' + (i + 1) : i + 1).replace(/m/, (i + 1));
-                            w[s.monthText][i] = str.match(/MM/) ? str.replace(/MM/, '<span class="dw-mon">' + s.monthNames[i] + '</span>') : str.replace(/M/, '<span class="dw-mon">' + s.monthNamesShort[i] + '</span>');
+                            keys.push(i);
+                            values.push(str.match(/MM/) ? str.replace(/MM/, '<span class="dw-mon">' + s.monthNames[i] + '</span>') : str.replace(/M/, '<span class="dw-mon">' + s.monthNamesShort[i] + '</span>'));
                         }
+                        addWheel(wg, keys, values, s.monthText);
                     } else if (k == o.d) {
                         offset++;
-                        w[s.dayText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 1; i < 32; i++) {
-                            w[s.dayText][i] = dord.match(/dd/i) && i < 10 ? '0' + i : i;
+                            keys.push(i);
+                            values.push(dord.match(/dd/i) && i < 10 ? '0' + i : i);
                         }
+                        addWheel(wg, keys, values, s.dayText);
                     }
                 }
-                wheels.push(w);
+                wheels.push(wg);
             }
 
             if (p.match(/time/i)) {
@@ -150,35 +168,43 @@
                     o[v.v] = offset + i;
                 });
 
-                w = {};
+                wg = [];
                 for (k = offset; k < offset + 4; k++) {
                     if (k == o.h) {
                         offset++;
-                        w[s.hourText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 0; i < (hampm ? 12 : 24); i += stepH) {
-                            w[s.hourText][i] = hampm && i == 0 ? 12 : tord.match(/hh/i) && i < 10 ? '0' + i : i;
+                            keys.push(i);
+                            values.push(hampm && i == 0 ? 12 : tord.match(/hh/i) && i < 10 ? '0' + i : i);
                         }
+                        addWheel(wg, keys, values, s.hourText);
                     } else if (k == o.i) {
                         offset++;
-                        w[s.minuteText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 0; i < 60; i += stepM) {
-                            w[s.minuteText][i] = tord.match(/ii/) && i < 10 ? '0' + i : i;
+                            keys.push(i);
+                            values.push(tord.match(/ii/) && i < 10 ? '0' + i : i);
                         }
+                        addWheel(wg, keys, values, s.minuteText);
                     } else if (k == o.s) {
                         offset++;
-                        w[s.secText] = {};
+                        values = [];
+                        keys = [];
                         for (i = 0; i < 60; i += stepS) {
-                            w[s.secText][i] = tord.match(/ss/) && i < 10 ? '0' + i : i;
+                            keys.push(i);
+                            values.push(tord.match(/ss/) && i < 10 ? '0' + i : i);
                         }
+                        addWheel(wg, keys, values, s.secText);
                     } else if (k == o.a) {
                         offset++;
                         var upper = tord.match(/A/);
-                        w[s.ampmText] = { 0: upper ? 'AM' : 'am', 1: upper ? 'PM' : 'pm' };
+                        addWheel(wg, [0, 1], upper ? ['AM', 'PM'] : ['am', 'pm'], s.ampmText);
                     }
-                    
                 }
 
-                wheels.push(w);
+                wheels.push(wg);
             }
 
             function get(d, i, def) {
@@ -189,6 +215,14 @@
                     return def;
                 }
                 return defd[f[i]] ? defd[f[i]]() : f[i](defd);
+            }
+
+            function addWheel(wg, k, v, lbl) {
+                wg.push({
+                    values: v,
+                    keys: k,
+                    label: lbl
+                });
             }
 
             function step(v, st) {
@@ -218,57 +252,85 @@
                 return new Date(get(d, 'y'), get(d, 'm'), get(d, 'd', 1), get(d, 'a') ? hour + 12 : hour, get(d, 'i', 0), get(d, 's', 0));
             }
 
-            inst.setDate = function (d, fill, time, temp) {
+            // Extended methods
+            // ---
+
+            /**
+             * Sets the selected date
+             *
+             * @param {Date} d Date to select.
+             * @param {Boolean} [fill=false] Also set the value of the associated input element. Default is true.
+             * @param {Number} [time=0] Animation time to scroll to the selected date.
+             * @param {Boolean} [temp=false] Set temporary value only.
+             * @param {Boolean} [manual=false] Indicates that the action was triggered by the user or from code.
+             */
+            inst.setDate = function (d, fill, time, temp, manual) {
                 var i;
+
                 // Set wheels
                 for (i in o) {
-                    this.temp[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
+                    inst.temp[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
                 }
-                this.setValue(true, fill, time, temp);
+                inst.setValue(inst.temp, fill, time, temp, manual);
             };
 
-            inst.getDate = function (d) {
-                return getDate(d);
+            /**
+             * Returns the currently selected date.
+             *
+             * @param {Boolean} [temp=false] If true, return the currently shown date on the picker, otherwise the last selected one.
+             * @return {Date}
+             */
+            inst.getDate = function (temp) {
+                return getDate(temp ? inst.temp : inst.values);
             };
+
+            inst.convert = function (obj) {
+                var x = obj;
+
+                if (!$.isArray(obj)) { // Convert from old format
+                    x = [];
+                    $.each(obj, function (i, o) {
+                        $.each(o, function (j, o) {
+                            if (i === 'daysOfWeek') {
+                                if (o.d) {
+                                    o.d = 'w' + o.d;
+                                } else {
+                                    o = 'w' + o;
+                                }
+                            }
+                            x.push(o);
+                        });
+                    });
+                }
+
+                return x;
+            };
+
+            inst.format = hformat;
+
+            // ---
 
             return {
                 button3Text: s.showNow ? s.nowText : undefined,
-                button3: s.showNow ? function () { inst.setDate(new Date(), false, 0.3, true); } : undefined,
+                button3: s.showNow ? function () { inst.setDate(new Date(), false, 0.3, true, true); } : undefined,
                 wheels: wheels,
                 headerText: function (v) {
                     return ms.formatDate(hformat, getDate(inst.temp), s);
                 },
-                /**
-                * Builds a date object from the wheel selections and formats it to the given date/time format
-                * @param {Array} d - An array containing the selected wheel values
-                * @return {String} - The formatted date string
-                */
                 formatResult: function (d) {
                     return ms.formatDate(format, getDate(d), s);
                 },
-                /**
-                * Builds a date object from the input value and returns an array to set wheel values
-                * @return {Array} - An array containing the wheel values to set
-                */
                 parseValue: function (val) {
-                    var d = new Date(),
+                    var d = ms.parseDate(format, val, s),
                         i,
                         result = [];
-                    try {
-                        d = ms.parseDate(format, val, s);
-                    } catch (e) {
-                    }
+
                     // Set wheels
                     for (i in o) {
                         result[o[i]] = d[f[i]] ? d[f[i]]() : f[i](d);
                     }
                     return result;
                 },
-                /**
-                * Validates the selected date to be in the minDate / maxDate range and sets unselectable values to disabled
-                * @param {Object} dw - jQuery object containing the generated html
-                * @param {Integer} [i] - Index of the changed wheel, not set for initial validation
-                */
                 validate: function (dw, i) {
                     var temp = inst.temp, //.slice(0),
                         mins = { y: mind.getFullYear(), m: 0, d: 1, h: 0, i: 0, s: 0, a: 0 },
@@ -327,31 +389,18 @@
                             }
                             // Disable some days
                             if (s.invalid && i == 'd') {
-                                var idx = [];
-                                // Disable exact dates
-                                if (s.invalid.dates) {
-                                    $.each(s.invalid.dates, function (i, v) {
-                                        if (v.getFullYear() == y && v.getMonth() == m) {
-                                            idx.push(v.getDate() - 1);
-                                        }
-                                    });
-                                }
-                                // Disable days of week
-                                if (s.invalid.daysOfWeek) {
-                                    var first = new Date(y, m, 1).getDay(),
-                                        j;
-                                    $.each(s.invalid.daysOfWeek, function (i, v) {
-                                        for (j = v - first; j < maxdays; j += 7) {
-                                            if (j >= 0) {
-                                                idx.push(j);
-                                            }
-                                        }
-                                    });
-                                }
-                                // Disable days of month
-                                if (s.invalid.daysOfMonth) {
-                                    $.each(s.invalid.daysOfMonth, function (i, v) {
-                                        v = (v + '').split('/');
+                                var d, j, k, v,
+                                    first = new Date(y, m, 1).getDay(),
+                                    idx = [],
+                                    invalid = inst.convert(s.invalid);
+
+                                for (j = 0; j < invalid.length; j++) {
+                                    d = invalid[j];
+                                    v = d + '';
+                                    if (d.getTime && d.getFullYear() == y && d.getMonth() == m) { // Exact date
+                                        idx.push(d.getDate() - 1);
+                                    } else if (!v.match(/w/i)) { // Day of month
+                                        v = v.split('/');
                                         if (v[1]) {
                                             if (v[0] - 1 == m) {
                                                 idx.push(v[1] - 1);
@@ -359,7 +408,14 @@
                                         } else {
                                             idx.push(v[0] - 1);
                                         }
-                                    });
+                                    } else { // Day of week
+                                        v = +v.replace('w', '');
+                                        for (k = v - first; k < maxdays; k += 7) {
+                                            if (k >= 0) {
+                                                idx.push(k);
+                                            }
+                                        }
+                                    }
                                 }
                                 $.each(idx, function (i, v) {
                                     $('.dw-li', t).eq(v).removeClass('dw-v');
@@ -370,33 +426,6 @@
                             temp[o[i]] = val;
                         }
                     });
-                },
-                methods: {
-                    /**
-                    * Returns the currently selected date.
-                    * @param {Boolean} temp - If true, return the currently shown date on the picker, otherwise the last selected one
-                    * @return {Date}
-                    */
-                    getDate: function (temp) {
-                        var inst = $(this).mobiscroll('getInst');
-                        if (inst) {
-                            return inst.getDate(temp ? inst.temp : inst.values);
-                        }
-                    },
-                    /**
-                    * Sets the selected date
-                    * @param {Date} d - Date to select.
-                    * @param {Boolean} [fill] - Also set the value of the associated input element. Default is true.
-                    * @return {Object} - jQuery object to maintain chainability
-                    */
-                    setDate: function (d, fill, time, temp) {
-                        return this.each(function () {
-                            var inst = $(this).mobiscroll('getInst');
-                            if (inst) {
-                                inst.setDate(d, fill, time, temp);
-                            }
-                        });
-                    }
                 }
             };
         };
@@ -408,10 +437,10 @@
 
     /**
     * Format a date into a string value with a specified format.
-    * @param {String} format - Output format.
-    * @param {Date} date - Date to format.
-    * @param {Object} settings - Settings.
-    * @return {String} - Returns the formatted date string.
+    * @param {String} format Output format.
+    * @param {Date} date Date to format.
+    * @param {Object} [settings={}] Settings.
+    * @return {String} Returns the formatted date string.
     */
     ms.formatDate = function (format, date, settings) {
         if (!date) {
@@ -505,13 +534,14 @@
 
     /**
     * Extract a date from a string value with a specified format.
-    * @param {String} format - Input format.
-    * @param {String} value - String to parse.
-    * @param {Object} settings - Settings.
-    * @return {Date} - Returns the extracted date.
+    * @param {String} format Input format.
+    * @param {String} value String to parse.
+    * @param {Object} [settings={}] Settings.
+    * @return {Date} Returns the extracted date.
     */
     ms.parseDate = function (format, value, settings) {
-        var def = new Date();
+        var s = $.extend({}, defaults, settings),
+            def = s.defaultValue || new Date();
 
         if (!format || !value) {
             return def;
@@ -519,8 +549,7 @@
 
         value = (typeof value == 'object' ? value.toString() : value + '');
 
-        var s = $.extend({}, defaults, settings),
-            shortYearCutoff = s.shortYearCutoff,
+        var shortYearCutoff = s.shortYearCutoff,
             year = def.getFullYear(),
             month = def.getMonth() + 1,
             day = def.getDate(),
@@ -647,7 +676,7 @@
         hours = (ampm == -1) ? hours : ((ampm && hours < 12) ? (hours + 12) : (!ampm && hours == 12 ? 0 : hours));
         var date = new Date(year, month - 1, day, hours, minutes, seconds);
         if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != day) {
-            throw 'Invalid date';
+            return def; // Invalid date
         }
         return date;
     };

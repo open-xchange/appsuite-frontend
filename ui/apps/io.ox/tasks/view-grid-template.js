@@ -1,19 +1,20 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
 define('io.ox/tasks/view-grid-template',
     ['io.ox/core/tk/vgrid',
-     'less!io.ox/tasks/style.less'], function (VGrid) {
+     'less!io.ox/tasks/style.less'
+    ], function (VGrid) {
 
     'use strict';
 
@@ -41,7 +42,8 @@ define('io.ox/tasks/view-grid-template',
                 },
 
                 set: function (data, fields, index) {
-                    fields.title.text(_.noI18n(data.title));
+                    var a11yLabel = '';
+                    fields.title.text(a11yLabel = _.noI18n(data.title));
                     fields.end_date.text(_.noI18n(data.end_date));
                     fields.status.attr('class', 'status ' + data.badge) //important. with addClass old classes aren't removed correctly
                         .text(data.status || _.noI18n('\u00A0'));
@@ -56,7 +58,10 @@ define('io.ox/tasks/view-grid-template',
                     } else {
                         fields.progress.hide();
                     }
-                    this.attr('data-index', index);
+                    this.attr({
+                        'data-index': index,
+                        'aria-label': a11yLabel
+                    });
                 }
             },
 

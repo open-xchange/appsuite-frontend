@@ -18,7 +18,8 @@ define('io.ox/calendar/month/view',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/month/style.less',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, ext, folderAPI, gt, settings) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'
+    ], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';
 
@@ -117,9 +118,8 @@ define('io.ox/calendar/month/view',
                 weekinfo = $('<div>')
                     .addClass('week-info')
                     .append(
-                        $('<span>').addClass('cw').append(
-                            gt('CW'),
-                            gt.noI18n(' ' + new date.Local(this.weekStart + date.DAY).format('w'))
+                        $('<span>').addClass('cw').text(
+                            gt('CW %1$d', new date.Local(this.weekStart + date.DAY).format('w'))
                         )
                     );
             _(list.days).each(function (day, i) {
@@ -145,7 +145,12 @@ define('io.ox/calendar/month/view',
                 );
 
                 if (day.isFirst) {
-                    weekinfo.prepend(gt.noI18n(date.locale.months[day.month]) + '<br>' + gt.noI18n(day.year));
+                    // prepend month name, like January 2013
+                    weekinfo.prepend(
+                        $('<span class="month-name">').text(
+                            gt.noI18n(date.locale.monthsShort[day.month]) + ' ' + gt.noI18n(day.year)
+                        )
+                    );
                 }
             }, this);
 
@@ -246,7 +251,7 @@ define('io.ox/calendar/month/view',
                         return false;
                     }
                 },
-                start: function (e, ui) {
+                start: function () {
                     $(this).hide();
                 }
             });
@@ -280,12 +285,14 @@ define('io.ox/calendar/month/view',
         return $('<div>')
             .addClass('abs')
             .append(
-                $('<div>').addClass('daylabel').append(function () {
-                    _(days).each(function (day) {
-                        tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
-                    });
-                    return tmp;
-                }),
+                $('<div>').addClass('footer-container').append(
+                    $('<div>').addClass('footer').append(function () {
+                        _(days).each(function (day) {
+                            tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
+                        });
+                        return tmp;
+                    })
+                ),
                 $('<div class="scrollpane f6-target" tabindex="1">')
             );
     };

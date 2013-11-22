@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -21,14 +21,14 @@ define('io.ox/mail/api',
      'io.ox/core/notifications',
      'io.ox/mail/util',
      'settings!io.ox/mail',
-     'gettext!io.ox/mail'], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, settings, gt) {
+     'gettext!io.ox/mail'
+    ], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
     'use strict';
 
     var DONE = $.when(),
-        DELAY = 1000 * 60, // 60 seconds (kind of protection against unwanted selection; e.g. Bug #26575)
         DELIM = '//';
 
     var tracker = (function () {
@@ -43,10 +43,6 @@ define('io.ox/mail/api',
             // track mails that are manually marked as unseen
             unseen = {},
             colorLabel = {};
-
-        var extend = function (a, b) {
-            return _.extend(a, { flags: b.flags, color_label: b.color_label });
-        };
 
         var calculateUnread = function (memo, obj) {
             return memo + ((obj.flags & 32) !== 32 ? 1 : 0);
@@ -184,8 +180,7 @@ define('io.ox/mail/api',
              */
             remove: function (obj) {
                 var cid = getCID(obj),
-                    root = this.getThreadCID(cid),
-                    thread;
+                    root = this.getThreadCID(cid);
                 if (root) {
                     threads[root] = _(threads[root]).filter(function (item) {
                         return cid !== getCID(item);
@@ -360,6 +355,11 @@ define('io.ox/mail/api',
                 }
                 return options;
             }
+        },
+        simplify: function (options) {//special function for list requests that fall back to a get request (only one item in the array)
+            // fix mail unseen issue
+            options.simplified.unseen = true;
+            return options.simplified;
         }
     });
 
@@ -644,12 +644,6 @@ define('io.ox/mail/api',
         };
     };
 
-    var refreshAll = function (obj) {
-        $.when.apply($, obj).done(function () {
-            api.trigger('refresh.all');
-        });
-    };
-
     api.update = function () {
         console.error('Do not call this directly because mail is so special');
     };
@@ -783,6 +777,7 @@ define('io.ox/mail/api',
         .done(function () {
             notifications.yell('success', gt('The folder has been emptied.'));
             folderAPI.reload(folder_id);
+            folderAPI.sync();
         });
     };
 
@@ -1067,7 +1062,7 @@ define('io.ox/mail/api',
                                     if (/^> /.test(line)) {
                                         quote += line.substr(2) + '\n';
                                     } else {
-                                        tmp += (quote !== '' ? '<blockquote><p>' + quote + '</p></blockquote>' : '') + line + '\n';
+                                        tmp += (quote !== '' ? '<blockquote type="cite"><p>' + quote + '</p></blockquote>' : '') + line + '\n';
                                         quote = '';
                                     }
                                 });
@@ -1236,54 +1231,54 @@ define('io.ox/mail/api',
         }
 
         return deferred
-            .done(function (text) {
+            .done(function () {
                 api.trigger('send', { data: data, files: files, form: form });
             })
             .then(function (text) {
-            // wait a moment, then update mail index
-            setTimeout(function () {
-                // clear inbox & sent folder
-                var folders = [].concat(
-                    accountAPI.getFoldersByType('inbox'),
-                    accountAPI.getFoldersByType('sent'),
-                    accountAPI.getFoldersByType('drafts')
-                );
-                $.when.apply(
-                    _(folders).map(function (id) {
-                        return api.caches.all.grepRemove(id + DELIM);
-                    })
-                )
-                .done(function () {
-                    api.trigger('refresh.all');
-                });
-            }, 3000);
-            // IE9
-            if (_.isObject(text))
-                return text;
-            // process HTML-ish non-JSONP response
-            var a = text.indexOf('{'),
-                b = text.lastIndexOf('}');
-            if (a > -1 && b > -1) {
-                return JSON.parse(text.substr(a, b - a + 1));
-            } else {
-                return {};
-            }
-        })
-        .then(function (result) {
-            //skip block if error returned
-            if (result.data) {
-                var base = _(result.data.toString().split(api.separator)),
-                    id = base.last(),
-                    folder = base.without(id).join(api.separator);
-                api.get({ folder_id: folder, id: id }).then(function (mail) {
-                    $.when(api.caches.list.add(data), api.caches.get.add(data))
+                // wait a moment, then update mail index
+                setTimeout(function () {
+                    // clear inbox & sent folder
+                    var folders = [].concat(
+                        accountAPI.getFoldersByType('inbox'),
+                        accountAPI.getFoldersByType('sent'),
+                        accountAPI.getFoldersByType('drafts')
+                    );
+                    $.when.apply(
+                        _(folders).map(function (id) {
+                            return api.caches.all.grepRemove(id + DELIM);
+                        })
+                    )
                     .done(function () {
-                        api.trigger('refresh.list');
+                        api.trigger('refresh.all');
                     });
-                });
-            }
-            return result;
-        });
+                }, 3000);
+                // IE9
+                if (_.isObject(text))
+                    return text;
+                // process HTML-ish non-JSONP response
+                var a = text.indexOf('{'),
+                    b = text.lastIndexOf('}');
+                if (a > -1 && b > -1) {
+                    return JSON.parse(text.substr(a, b - a + 1));
+                } else {
+                    return {};
+                }
+            })
+            .then(function (result) {
+                //skip block if error returned
+                if (result.data) {
+                    var base = _(result.data.toString().split(api.separator)),
+                        id = base.last(),
+                        folder = base.without(id).join(api.separator);
+                    api.get({ folder_id: folder, id: id }).then(function () {
+                        $.when(api.caches.list.add(data), api.caches.get.add(data))
+                        .done(function () {
+                            api.trigger('refresh.list');
+                        });
+                    });
+                }
+                return result;
+            });
     };
 
     function handleSendXHR2(data, files) {
@@ -1397,12 +1392,14 @@ define('io.ox/mail/api',
                 });
             } else {
                 // single EML
-                return url + '?' + $.param($.extend(api.reduce(first), {
-                    action: 'get',
-                    src: 1,
-                    save: 1,
-                    session: ox.session
-                }));
+                url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:]/g, '_') + '.eml') : '') + '?' +
+                    $.param($.extend(api.reduce(first), {
+                        action: 'get',
+                        src: 1,
+                        save: 1,
+                        session: ox.session
+                    }));
+                return url;
             }
         } else {
             // inject filename for more convenient file downloads
@@ -1451,6 +1448,9 @@ define('io.ox/mail/api',
             }
         })
         .then(function (unseen) {
+            //update the tracker
+            //needed if mail app was not opened before to prevent mails not being marked as read because the tracker doesn't know them
+            tracker.reset(unseen);
 
             // check most recent mail
             var recent = _(unseen).filter(function (obj) {
@@ -1464,6 +1464,8 @@ define('io.ox/mail/api',
             if (recent.length > 0) {
                 lastUnseenMail = recent[0].received_date;
                 api.newMailTitle(true);
+            } else {//if no new mail set lastUnseenMail to now, to prevent mark as unread to trigger new mail
+                lastUnseenMail = _.utc();
             }
 
             return {
@@ -1478,7 +1480,7 @@ define('io.ox/mail/api',
      * @fires  api#refresh.all
      * @return {promise}
      */
-    api.refresh = function (e) {
+    api.refresh = function () {
         if (ox.online) {
             // reset cache control
             _(cacheControl).each(function (val, cid) {
@@ -1574,7 +1576,7 @@ define('io.ox/mail/api',
     api.beautifyMailText = function (str, lengthLimit) {
         lengthLimit = lengthLimit || 500;
         str = String(str)
-            .replace(/(\r\n|\n|\r)/gm, "") // remove line breaks
+            .replace(/(\r\n|\n|\r)/gm, '') // remove line breaks
             .substr(0, lengthLimit) // limit overall length
             .replace(/-{3,}/g, '---') // reduce dashes
             .replace(/<br\s?\/?>(&gt;)+/ig, ' ') // remove quotes after line breaks
@@ -1641,18 +1643,31 @@ define('io.ox/mail/api',
         });
     });
 
+    //If the folder api creates a new folder in mail, the mail api needs to be refreshed
+    folderAPI.on('create', function (e, data) {
+        if (data.module === 'mail') {
+            api.refresh();
+        }
+    });
+
+    api.on('delete', function () {
+        api.refresh();
+    });
+
     /**
      * sets title to 'New Mail' or default
      * @param  {boolean} state
      * @return {undefined}
      */
     api.newMailTitle = function (state) {
-        if (state === true) {//show new mail title
-            document.fixedtitle = true;
-            document.title = gt('New Mail');
-        } else {//stop showing new mail title
-            document.fixedtitle = false;
-            document.title = document.temptitle;
+        if (_.device('!small')) {
+            if (state === true) {//show new mail title
+                document.fixedtitle = true;
+                document.title = gt('New Mail');
+            } else {//stop showing new mail title
+                document.fixedtitle = false;
+                document.title = document.temptitle;
+            }
         }
     };
 

@@ -1,19 +1,19 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
 define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
 
-    "use strict";
+    'use strict';
 
     var n_size = [/*#. Bytes*/      gt('B'),
                   /*#. Kilobytes*/  gt('KB'),
@@ -27,17 +27,9 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
 
     return {
 
-        shorten: function (string, maxlen) {
-            string = string !== undefined && string !== null ? string : '';
-            if (string.length > maxlen) {
-                return string.substring(0, maxlen - 3) + "...";
-            }
-            return string;
-        },
-
         shortenUri: function (uriString, maxlen) {
             uriString = uriString !== undefined && uriString !== null ? uriString : '';
-            var string = uriString.replace(/^https?:\/\//, "");
+            var string = uriString.replace(/^https?:\/\//, '');
             var difference = string.length - maxlen;
             if (difference <= 0) {
                 return string;
@@ -46,7 +38,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
             var left = middle - (difference / 2) - 1;
             var right = middle + (difference / 2) + 1;
 
-            return string.substring(0, left)  + "..." + string.substring(right, string.length);
+            return string.substring(0, left)  + '...' + string.substring(right, string.length);
         },
 
         fileSize: function (size, decimalPlaces) {

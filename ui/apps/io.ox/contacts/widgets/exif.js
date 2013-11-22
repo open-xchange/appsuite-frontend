@@ -4,21 +4,19 @@
  *
  * Licensed under the MPL License [http://www.nihilogic.dk/licenses/mpl-license.txt]
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/contacts/widgets/exif',
-    [], function () {
+define('io.ox/contacts/widgets/exif', function () {
 
     'use strict';
 
     var debug = false;
 
     var TiffTags = {
-        0x0112 : "Orientation"
+        0x0112 : 'Orientation'
     };
 
     function findEXIFinJPEG(file) {
@@ -32,7 +30,7 @@ define('io.ox/contacts/widgets/exif',
 
         while (offset < length) {
             if (file.getByteAt(offset) !== 0xFF) {
-                if (debug) console.log("Not a valid marker at offset " + offset + ", found: " + file.getByteAt(offset));
+                if (debug) console.log('Not a valid marker at offset ' + offset + ', found: ' + file.getByteAt(offset));
                 return false; // not a valid marker, something is wrong
             }
 
@@ -42,28 +40,26 @@ define('io.ox/contacts/widgets/exif',
             // but we're only looking for 0xFFE1 for EXIF data
 
             if (marker === 22400) {
-                if (debug) console.log("Found 0xFFE1 marker");
+                if (debug) console.log('Found 0xFFE1 marker');
                 return readEXIFData(file, offset + 4, file.getShortAt(offset + 2, true) - 2);
             } else if (marker === 225) {
                 // 0xE1 = Application-specific 1 (for EXIF)
-                if (debug) console.log("Found 0xFFE1 marker");
+                if (debug) console.log('Found 0xFFE1 marker');
                 return readEXIFData(file, offset + 4, file.getShortAt(offset + 2, true) - 2);
             } else {
                 offset += 2 + file.getShortAt(offset + 2, true);
             }
-
         }
     }
 
     function readEXIFData(file, start) {
-        if (file.getStringAt(start, 4) !== "Exif") {
-            if (debug) console.log("Not valid EXIF data! " + file.getStringAt(start, 4));
+        if (file.getStringAt(start, 4) !== 'Exif') {
+            if (debug) console.log('Not valid EXIF data! ' + file.getStringAt(start, 4));
             return false;
         }
 
         var bigEnd,
-            tags, tag,
-            exifData, gpsData,
+            tags,
             tiffOffset = start + 6;
 
         // test for TIFF validity and endianness
@@ -72,17 +68,17 @@ define('io.ox/contacts/widgets/exif',
         } else if (file.getShortAt(tiffOffset) === 0x4D4D) {
             bigEnd = true;
         } else {
-            if (debug) console.log("Not valid TIFF data! (no 0x4949 or 0x4D4D)");
+            if (debug) console.log('Not valid TIFF data! (no 0x4949 or 0x4D4D)');
             return false;
         }
 
         if (file.getShortAt(tiffOffset + 2, bigEnd) !== 0x002A) {
-            if (debug) console.log("Not valid TIFF data! (no 0x002A)");
+            if (debug) console.log('Not valid TIFF data! (no 0x002A)');
             return false;
         }
 
         if (file.getLongAt(tiffOffset + 4, bigEnd) !== 0x00000008) {
-            if (debug) console.log("Not valid TIFF data! (First offset not 8)", file.getShortAt(tiffOffset + 4, bigEnd));
+            if (debug) console.log('Not valid TIFF data! (First offset not 8)', file.getShortAt(tiffOffset + 4, bigEnd));
             return false;
         }
 
@@ -100,7 +96,7 @@ define('io.ox/contacts/widgets/exif',
         for (i = 0; i < entries; i++) {
             entryOffset = dirStart + i * 12 + 2;
             tag = strings[file.getShortAt(entryOffset, bigEnd)];
-            if (!tag && debug) console.log("Unknown tag: " + file.getShortAt(entryOffset, bigEnd));
+            if (!tag && debug) console.log('Unknown tag: ' + file.getShortAt(entryOffset, bigEnd));
             tags[tag] = readTagValue(file, entryOffset, tiffStart, dirStart, bigEnd);
         }
         return tags;
@@ -213,7 +209,7 @@ define('io.ox/contacts/widgets/exif',
             return data;
         };
 
-        if (typeof strData === "string") {
+        if (typeof strData === 'string') {
             dataLength = iDataLength || data.length;
 
             this.getByteAt = function (iOffset) {
@@ -282,7 +278,7 @@ define('io.ox/contacts/widgets/exif',
             for (var j = 0; j < iLength; j++) {
                 aStr[j] = String.fromCharCode(aBytes[j]);
             }
-            return aStr.join("");
+            return aStr.join('');
         };
 
         this.getCharAt = function (iOffset) {

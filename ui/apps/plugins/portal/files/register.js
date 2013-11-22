@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -14,8 +15,8 @@ define('plugins/portal/files/register',
     ['io.ox/core/extensions',
      'io.ox/files/api',
      'io.ox/preview/main',
-     'io.ox/portal/widgets',
-     'gettext!plugins/portal'], function (ext, api, preview, portalWidgets, gt) {
+     'io.ox/portal/widgets'
+    ], function (ext, api, preview, portalWidgets) {
 
     'use strict';
 
@@ -88,7 +89,7 @@ define('plugins/portal/files/register',
 
             var popup = this.busy();
 
-            require(['io.ox/files/list/view-detail'], function (view) {
+            require(['io.ox/files/fluid/view-detail'], function (view) {
                 var obj = api.reduce(baton.data);
                 api.get(obj).done(function (data) {
                     popup.idle().append(view.draw(data));

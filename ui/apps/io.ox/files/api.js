@@ -1,13 +1,12 @@
 /**
- *
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -28,13 +27,10 @@ define('io.ox/files/api',
     'use strict';
 
 
-    var DELAY = 1000 * 3; // 3 seconds
-
     var tracker = (function () {
 
         var fileLocks = {},
-        explicitFileLocks = {},
-        fileLockTimers = {};
+        explicitFileLocks = {};
 
         var getCID = function (param) {
             return _.isString(param) ? param : _.cid(param);
@@ -65,7 +61,6 @@ define('io.ox/files/api',
              * @return {string|false}
              */
             getLockTime: function (obj) {
-                var cid = getCID(obj);
                 if (obj.locked_until < _.now() + date.WEEK) {
                     return new date.Local(obj.locked_until).format(date.DATE_TIME);
                 } else {
@@ -91,7 +86,7 @@ define('io.ox/files/api',
             },
 
             // clear tracker and clear timeouts
-            clear: function (obj) {
+            clear: function () {
                 fileLocks = {};
                 explicitFileLocks = {};
             }
@@ -109,6 +104,7 @@ define('io.ox/files/api',
         'gif' : 'image/gif',
         'tif' : 'image/tiff',
         'tiff': 'image/tiff',
+        'bmp' : 'image/bmp',
         // audio
         'mp3' : 'audio/mpeg',
         'ogg' : 'audio/ogg',
@@ -179,7 +175,7 @@ define('io.ox/files/api',
         return data;
     };
 
-    var allColumns = '20,23,1,5,700,702,703,705,707,3';
+    var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
 
     // generate basic API
     var api = apiFactory({
@@ -208,7 +204,7 @@ define('io.ox/files/api',
                 sort: '702',
                 order: 'asc',
                 omitFolder: true,
-                getData: function (query, options) {
+                getData: function (query) {
                     return { pattern: query };
                 }
             }
@@ -239,7 +235,7 @@ define('io.ox/files/api',
             },
             listPost: function (data) {
                 _(data).each(function (obj) {
-                    api.tracker.addFile(obj);
+                    if (obj) api.tracker.addFile(obj);
                 });
                 return data;
             },
@@ -254,6 +250,11 @@ define('io.ox/files/api',
                 });
                 return data;
             }
+        },
+        simplify: function (options) {//special function for list requests that fall back to a get request (only one item in the array)
+            //add version parameter again so you don't get the current version all the time
+            options.simplified.version = options.original.version;
+            return options.simplified;
         }
     });
 
@@ -311,7 +312,7 @@ define('io.ox/files/api',
         } else {
             e.data.custom = {
                 type: 'error',
-                text: gt('This file has not been added') + "\n" + e.error
+                text: gt('This file has not been added') + '\n' + e.error
             };
         }
         return e;
@@ -456,7 +457,6 @@ define('io.ox/files/api',
         }, options || {});
 
         var formData = options.form,
-            self = this,
             deferred = $.Deferred();
 
         if (options.json && !$.isEmptyObject(options.json)) {
@@ -678,13 +678,18 @@ define('io.ox/files/api',
      * @return {string} url
      */
     api.getUrl = function (file, mode, options) {
-        options = options || {};
+        options = $.extend({scaletype: 'contain'}, options || {});
         var url = ox.apiRoot + '/files',
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
                 (file.version !== undefined && options.version !== false ? '&version=' + file.version : ''),
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : ''),
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
-                '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '';
+                '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '',
+            userContext = '&' + $.param({
+                context: [String(ox.user_id), '_', String(ox.context_id)].join()
+            });
+
+        query += userContext;
         switch (mode) {
         case 'open':
         case 'view':
@@ -698,13 +703,13 @@ define('io.ox/files/api',
         case 'preview':
             return url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
         case 'cover':
-            return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg';
+            return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg' + userContext;
         case 'zip':
             return url + '?' + $.param({
                 action: 'zipdocuments',
                 body: JSON.stringify(_.map(file, function (o) { return { id: o.id, folder_id: o.folder_id }; })),
                 session: ox.session // required here!
-            });
+            }) + userContext;
         default:
             return url + query;
         }
@@ -867,7 +872,7 @@ define('io.ox/files/api',
      * @param  {array} list
      * @return {deferred}
      */
-    api.lock = function (list, targetFolderId) {
+    api.lock = function (list) {
         return lockToggle(list, 'lock');
     };
 

@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -20,7 +20,8 @@ define('io.ox/launchpad/main',
      'io.ox/core/extensions',
      'io.ox/core/upsell',
      'gettext!io.ox/core',
-     'less!io.ox/launchpad/style.less'], function (desktop, api, coreConfig, ext, upsell, gt) {
+     'less!io.ox/launchpad/style.less'
+    ], function (desktop, api, coreConfig, ext, upsell, gt) {
 
     'use strict';
 
@@ -40,7 +41,7 @@ define('io.ox/launchpad/main',
 
         firstRun = true,
 
-        pad, container,
+        pad,
 
         // app template
         appTmpl = _.template(
@@ -82,15 +83,17 @@ define('io.ox/launchpad/main',
                 running,
                 parent = pad.parent().parent(),
                 p = self.offset(),
-                pp = parent.offset(),
-                clone = $(this).clone()
+                pp = parent.offset();
+
+            parent.append(
+                $(this).clone()
                     .addClass('io-ox-app-clone')
                     .css({
                         position: 'absolute',
                         top: p.top - pp.top,
                         left: p.left - pp.left
                     })
-                    .appendTo(parent);
+            );
             // animate & launch
             parent.focus();
             // look for running app
@@ -107,7 +110,7 @@ define('io.ox/launchpad/main',
                 running[runIndex].app.launch();
             } else {
                 $.when(
-                    require([e.data.entryModule || e.data.id + "/main"]),
+                    require([e.data.entryModule || e.data.id + '/main']),
                     pad.fadeOut(FADE_DURATION >> 1)
                 )
                 .done(function (m) {
@@ -116,7 +119,7 @@ define('io.ox/launchpad/main',
                         app.launch.apply(app, e.data.launchArguments);
                     } else if (e.data.createArguments) {
                         //documents need a parameter to create a new document
-                        e.data.createArguments.folderId = String(coreConfig.get("folder/infostore"));
+                        e.data.createArguments.folderId = String(coreConfig.get('folder/infostore'));
                         m.getApp(e.data.createArguments).launch();
                     } else {
                         m.getApp().launch();
@@ -126,14 +129,14 @@ define('io.ox/launchpad/main',
         },
 
         fnHasAppStore = function () {
-            var managePoint = ext.point("io.ox/core/apps/manage");
+            var managePoint = ext.point('io.ox/core/apps/manage');
             return managePoint.list().length > 0;
         },
 
         fnOpenAppStore = function (e) {
             e.preventDefault();
             var openedStore = false;
-            ext.point("io.ox/core/apps/manage").each(function (extension) {
+            ext.point('io.ox/core/apps/manage').each(function (extension) {
                 if (openedStore) {
                     return;
                 }
@@ -224,11 +227,6 @@ define('io.ox/launchpad/main',
 
             pad.append(hApps, secInstalled).fadeIn(firstRun ? FADE_DURATION : 0);
             firstRun = false;
-        },
-
-        // hide launch pad
-        hide = function () {
-            ox.ui.screens.show('windowmanager');
         },
 
         // show launch pad

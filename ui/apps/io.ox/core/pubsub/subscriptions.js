@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -28,15 +29,27 @@ define('io.ox/core/pubsub/subscriptions',
 
     var POINT = 'io.ox/core/pubsub/subscribe',
 
-    buildSubscribeDialog = function (baton) {
-        var model = new pubsub.Subscription({ folder: baton.data.id, entity: {folder: baton.data.id}, entityModule: baton.data.module }),
-            view = new SubscriptionView({model: model}).render(baton.app);
+    // needs id and module (e.g. contacts)
+    buildSubscribeDialog = function (options) {
+        options = options || {};
+        var model = new pubsub.Subscription({
+                folder: options.folder,
+                entity: { folder: options.folder },
+                entityModule: options.module
+            });
+
+        new SubscriptionView({ model: model }).render(options.app);
+    },
+
+    isDestructiveSubscription = function (baton) {
+        console.log(baton, baton.data.entityModule, baton.data.entityModule === 'calendar');
+        return baton.data.entityModule === 'calendar';
     },
 
     SubscriptionView = Backbone.View.extend({
-        tagName: "div",
+        tagName: 'div',
         _modelBinder: undefined,
-        initialize: function (options) {
+        initialize: function () {
             this._modelBinder = new Backbone.ModelBinder();
         },
         render: function (app) {
@@ -65,7 +78,7 @@ define('io.ox/core/pubsub/subscriptions',
                             //set id, if none is present (new model)
                             if (!self.model.id) { self.model.id = id; }
                             api.subscriptions.refresh({ id: id, folder: folder }).then(
-                                function refreshSuccess(data) {
+                                function refreshSuccess() {
                                     notifications.yell('info', gt('Subscription successfully created.'));
                                     popup.close();
                                     return self.model;
@@ -82,7 +95,7 @@ define('io.ox/core/pubsub/subscriptions',
                                 }
                             ).then(function (model) {
                                 return model.fetch();
-                            }).then(function (model, collection) {
+                            }).then(function (model) {
                                 var subscriptions = pubsub.subscriptions();
                                 //update the model-(collection)
                                 subscriptions.add(model, {merge: true});
@@ -117,7 +130,7 @@ define('io.ox/core/pubsub/subscriptions',
                 popup.show(function () {
                     popup.getBody().find('select.service-value').focus();
                 });
-                popup.on('subscribe', function (action) {
+                popup.on('subscribe', function () {
 
                     popup.busy();
                     var invalid;
@@ -188,7 +201,7 @@ define('io.ox/core/pubsub/subscriptions',
         }
 
         function oauth() {
-            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return keychainAPI.createInteractively(service.displayName.toLowerCase(), win);
         }
 
@@ -212,7 +225,7 @@ define('io.ox/core/pubsub/subscriptions',
                     setSource(accounts[0].id);
                 } else {
                     controls = $('<button type="button" class="btn">').text(gt('Add new account')).on('click', function () {
-                        oauth().done(function (data) {
+                        oauth().done(function () {
                             buildForm(node, baton);
                         });
                     });
@@ -230,7 +243,7 @@ define('io.ox/core/pubsub/subscriptions',
             );
         });
         var source = {};
-        node.on('change blur', 'input[type="text"], input[type="password"]', function (e) {
+        node.on('change blur', 'input[type="text"], input[type="password"]', function () {
             var cgroup = $(this).closest('.control-group');
             if (!$(this).val()) {
                 cgroup.addClass('error');
@@ -276,17 +289,24 @@ define('io.ox/core/pubsub/subscriptions',
         }
     });
 
+
+
     ext.point(POINT + '/dialog').extend({
         id: 'targetfolder',
         index: 200,
         draw: function (baton) {
-            var node;
+            var destructive = isDestructiveSubscription(baton);
             this.append(
                 $('<div>').addClass('control-group').append(
                     $('<div>').addClass('controls').append(
                         $('<label>').addClass('checkbox').text(gt('Add new folder for this subscription')).append(
-                            $('<input type="checkbox">').attr('checked', 'checked').on('change', function () {
-                                if (!$(this).attr('checked')) {
+                            $('<input type="checkbox">').prop('checked', true).on('change', function () {
+                                if (destructive) {
+                                    baton.newFolder = true;
+                                    $(this).prop('checked', true);
+                                    return;
+                                }
+                                if (!$(this).prop('checked')) {
                                     baton.newFolder = false;
                                 }
                             })
@@ -294,18 +314,21 @@ define('io.ox/core/pubsub/subscriptions',
                     )
                 )
             );
+
+            if (destructive) {
+                this.append($('<p class="text-warning">').text(gt('Note: This subscription will replace the calendar content with the external content. Therefore you must create a new folder for this subscription.')));
+            }
         }
     });
 
     ext.point(POINT + '/dialog').extend({
         id: 'durationinformation',
         index: 300,
-        draw: function (baton) {
-
+        draw: function () {
             var fullNode = $('<div>').addClass('alert alert-info').append(
                 $('<b>').addClass('privacy-label').text(gt('Approximate Duration for Subscriptions')),
                         $('<div>').addClass('privacy-text').text(
-                            gt('Subscribing to items that are not delivered by another Open-Xchange Server (i.e. OXMF) may take some time. Example: Importing 100 contacts from Xing takes about 5 minutes. We are continually improving this functionality. Future releases will work significantly faster.')));
+                            gt('Updating subscribed data takes time. Importing 100 contacts from Xing, for example, takes up to 5 minutes. Please have some patience.')));
             var link = $('<div>').addClass('control-group').append($('<a href="#">').addClass('controls').text(gt('Approximate Duration for Subscriptions')).on('click', function (e) {
                     e.preventDefault();
                     link.replaceWith(fullNode);

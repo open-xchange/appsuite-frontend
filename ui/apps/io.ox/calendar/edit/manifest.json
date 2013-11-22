@@ -1,9 +1,9 @@
 {
-    title: "Edit Appointment",
-    company: "Open-Xchange",
-    icon: "calendar.png",
-    category: "Productivity",
-    settings: false,
-    requires: "calendar",
-    visible: false
+    "title": "Edit Appointment",
+    "company": "Open-Xchange",
+    "icon": "calendar.png",
+    "category": "Productivity",
+    "settings": false,
+    "requires": "calendar",
+    "visible": false
 }

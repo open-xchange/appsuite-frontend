@@ -1,30 +1,31 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/mail/accounts/model",
-    ["io.ox/core/extensions",
-     "io.ox/keychain/model",
-     "io.ox/core/api/account",
+define('io.ox/mail/accounts/model',
+    ['io.ox/core/extensions',
+     'io.ox/keychain/model',
+     'io.ox/core/api/account',
      'io.ox/core/api/folder',
-     'gettext!io.ox/mail/accounts/settings'], function (ext, keychainModel, AccountAPI, folderAPI, gt) {
+     'gettext!io.ox/mail/accounts/settings'
+    ], function (ext, keychainModel, AccountAPI, folderAPI, gt) {
 
-    "use strict";
+    'use strict';
 
     var AccountModel = keychainModel.Account.extend({
 
         defaults: {
             //some conditional defaults defined in view-form.render (pop3)
-            spam_handler: "NoSpamHandler"
+            spam_handler: 'NoSpamHandler'
         },
 
         validation: {
@@ -53,12 +54,29 @@ define("io.ox/mail/accounts/model",
                 if (this.attributes.id !== 0 && $.trim(value) === '')
                     return gt('This field has to be filled');
             },
+            password: {
+                required: true,
+                msg: gt('This field has to be filled')
+            },
             transport_server: {
                 required: true,
                 msg: gt('This field has to be filled')
             },
             transport_port: {
                 required: true,
+                msg: gt('This field has to be filled')
+            },
+            // pop3 credentials
+            transport_password: {
+                required: function (a, prop, attributes) {
+                    return !!attributes['mail-common-selectfirst'];
+                },
+                msg: gt('This field has to be filled')
+            },
+            transport_login: {
+                required: function (a, prop, attributes) {
+                    return !!attributes['mail-common-selectfirst'];
+                },
                 msg: gt('This field has to be filled')
             }
         },
@@ -80,7 +98,7 @@ define("io.ox/mail/accounts/model",
             }
         },
 
-        initialize: function (options) {
+        initialize: function () {
 
         },
 
@@ -138,7 +156,7 @@ define("io.ox/mail/accounts/model",
 //                    obj.name = obj.primary_address;
 
                     this.attributes = obj;
-                    this.attributes.spam_handler = "NoSpamHandler";
+                    this.attributes.spam_handler = 'NoSpamHandler';
                 }
                 return AccountAPI.create(this.attributes).done(function (response) {
                     return defered.resolve(response);
@@ -149,9 +167,8 @@ define("io.ox/mail/accounts/model",
 
         },
 
-        destroy: function (options) {
+        destroy: function () {
             AccountAPI.remove([this.attributes.id]);
-            var model = this;
         }
 
     });

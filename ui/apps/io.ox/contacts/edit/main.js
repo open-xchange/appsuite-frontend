@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -22,7 +22,7 @@ define('io.ox/contacts/edit/main',
      'io.ox/core/notifications',
      'io.ox/core/util',
      'less!io.ox/contacts/edit/style.less'
-     ], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
+    ], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil) {
 
     'use strict';
 
@@ -34,11 +34,13 @@ define('io.ox/contacts/edit/main',
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
             title: 'Edit Contact',
-            userContent: true
+            userContent: true,
+            closable: true
         });
 
-        app.setLauncher(function (def) {
+        app.setLauncher(function () {
 
+            var def = $.Deferred();
             var win = ox.ui.createWindow({
                 name: 'io.ox/contacts/edit',
                 title: 'Edit Contact',
@@ -102,21 +104,21 @@ define('io.ox/contacts/edit/main',
                         function fnToggleSave(isDirty) {
                             var node = container.find('.btn[data-action="save"]');
                             if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
-                            if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
+                            if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
                         }
 
                         if (!data.id) {
                             editView.listenTo(contact, 'change', function () {
-                                var isDirty = getDirtyStatus(),
-                                    node = container.find('.btn[data-action="save"]');
+                                if (!getDirtyStatus) return;
+                                var isDirty = getDirtyStatus();
                                 fnToggleSave(isDirty);
                             });
 
                             if (contact.id === undefined && _.keys(contact.attributes).length <= 1) {
-                                container.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+                                container.find('.btn[data-action="save"]').prop('disabled', true);
                             }
 
-                            container.find('input[type="text"]').on('keyup', _.debounce(function (e) {
+                            container.find('input[type="text"]').on('keyup', _.debounce(function () {
                                 var isDirty = getDirtyStatus();
                                 if (!isDirty && $(this).val()) {
                                     fnToggleSave(true);
@@ -124,7 +126,6 @@ define('io.ox/contacts/edit/main',
                                     fnToggleSave(false);
                                 }
                             }, 100));
-
                         }
 
                         editView.on('save:success', function (e, data) {
@@ -162,8 +163,18 @@ define('io.ox/contacts/edit/main',
                         ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 
                         contact.on('change:display_name', function () {
-                            app.setTitle(contact.get('display_name'));
+                            var newTitle = contact.get('display_name');
+                            if (!newTitle) {
+                                if (contact.get('id')) {
+                                    newTitle = gt('Edit Contact');
+                                } else {
+                                    newTitle = gt('Create contact');
+                                }
+                            }
+                            app.setTitle(newTitle);
                         });
+
+                        def.resolve();
                     }
 
                     // create model & view
@@ -210,22 +221,25 @@ define('io.ox/contacts/edit/main',
 
             if (data) {
                 // hash support
-                app.setState({ folder: data.folder_id, id: data.id });
+                app.setState(data.id ? { folder: data.folder_id, id: data.id }
+                                     : { folder: data.folder_id });
                 cont(data);
             } else {
                 cont({folder_id: app.getState().folder, id: app.getState().id});
             }
+
+            return def;
         });
 
         app.setQuit(function () {
             var def = $.Deferred();
 
             if (getDirtyStatus()) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to discard your changes?"))
-                        .addPrimaryButton("delete", gt('Discard'))
-                        .addButton("cancel", gt('Cancel'))
+                        .text(gt('Do you really want to discard your changes?'))
+                        .addPrimaryButton('delete', gt('Discard'), 'delete', {'tabIndex': '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
@@ -244,14 +258,38 @@ define('io.ox/contacts/edit/main',
             return def;
         });
 
+        app.failSave = function () {
+            if (this.contact) {
+                var title = this.contact.get('display_name');
+                return {
+                    description: gt('Contact') + (title ? ': ' + title : ''),
+                    module: 'io.ox/contacts/edit',
+                    point: this.contact.attributes
+                };
+            }
+            return false;
+        };
+
+        app.failRestore = function (point) {
+            if (_.isUndefined(point.id)) {
+                this.contact.set(point);
+            } else {
+                this.contact.set(point);
+                this.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
+                //this.setTitle(point.title || gt('Edit Contact'));
+            }
+            return $.when();
+        };
+
         ext.point('io.ox/contacts/edit/main/model').extend({
             id: 'io.ox/contacts/edit/main/model/auto_display_name',
-            customizeModel: function (contact, value, options) {
+            customizeModel: function (contact) {
                 contact.on('change:first_name change:last_name change:title',
-                    function (model, value, options) {
+                    function (model) {
                         if (model.changed.display_name) return;
-                        var dn = util.getFullName(model.toJSON());
-                        if (dn) model.set('display_name', dn);
+                        var mod = model.toJSON();
+                        delete mod.display_name;
+                        model.set('display_name', util.getFullName(mod));
                     });
             }
         });

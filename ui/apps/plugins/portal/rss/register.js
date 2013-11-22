@@ -1,85 +1,60 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
 define('plugins/portal/rss/register',
     ['io.ox/core/extensions',
-    'io.ox/core/strings',
-    'io.ox/messaging/accounts/api',
-    'io.ox/messaging/services/api',
-    'io.ox/messaging/messages/api',
-    'io.ox/keychain/api',
-    'io.ox/rss/api',
-    'io.ox/core/date',
-    'io.ox/core/tk/dialogs',
-    'gettext!io.ox/portal'], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
+     'io.ox/core/strings',
+     'io.ox/messaging/accounts/api',
+     'io.ox/messaging/services/api',
+     'io.ox/messaging/messages/api',
+     'io.ox/keychain/api',
+     'io.ox/rss/api',
+     'io.ox/core/date',
+     'io.ox/core/tk/dialogs',
+     'gettext!io.ox/portal'
+    ], function (ext, strings, accountAPI, serviceAPI, messageAPI, keychain, rss, date, dialogs, gt) {
 
     'use strict';
-
-    var migrate = function (settings) {
-
-        if (true || !settings.get('rss-migrated')) {
-            return $.when();
-        }
-
-        return accountAPI.all('com.openexchange.messaging.rss').pipe(function (accounts) {
-            var index = 0;
-            _(accounts).each(function (account) {
-                index += 100;
-                settings.set('widgets/user/rss-migrated-' + index, {
-                    plugin: 'plugins/portal/rss/register',
-                    color: 'lightblue',
-                    index: index,
-                    props: {
-                        url: account.configuration.url,
-                        description: account.displayName
-                    }
-                });
-            });
-            return settings.save();
-        });
-    };
 
     ext.point('io.ox/portal/widget/rss').extend({
 
         title: gt('RSS Feed'),
 
         load: function (baton) {
+            var urls = baton.model.get('props').url || [],
+                title = baton.model.attributes.title;
+            return rss.getMany(urls).done(function (data) {
+                //limit data manually till api call can be limited
+                data = data.slice(0, 100);
+                baton.data = {
+                    items: data,
+                    title: '',
+                    link: '',
+                    urls: urls
+                };
 
-            // console.log('RSS title fix', this);
-            // this.find('.title').text('YEAH!!!');
-            // var props = baton.model.get('props');
-            // props.title = "YEAH !!!!";
-            // baton.model.set('props', props);
+                //use existing title or the title of the first feed
+                if (title !== undefined && title !== '') {
+                    baton.data.title = title;
+                } else {
+                    var elem = _(data).first();
 
-            return migrate().pipe(function () {
-                var urls = baton.model.get('props').url || [];
-                return rss.getMany(urls).done(function (data) {
-                    //limit data manually till api call can be limited
-                    data = data.slice(0, 100);
-                    baton.data = {
-                        items: data,
-                        title: '',
-                        link: '',
-                        urls: urls
-                    };
-                    // get title & link of the first found feed
-                    _(data).find(function (item) {
-                        if (urls.length > 1) {
-                            baton.data.title = item.feedTitle || '';
-                        }
-                        baton.data.link = item.feedLink || '';
-                    });
-                });
+                    if (elem !== undefined && elem.feedTitle !== undefined) {
+                        baton.data.title = elem.feedTitle;
+                    } else {
+                        baton.data.title = gt('RSS Feed');
+                    }
+                }
             });
         },
 
@@ -125,7 +100,7 @@ define('plugins/portal/rss/register',
 
                 this.append(
                     $('<div class="text">').append(
-                        $('<h2>').html(_.noI18n(item.subject)),
+                        $('<h4>').html(_.noI18n(item.subject)),
                         $('<div class="text-body noI18n">').append($body),
                         $('<div class="rss-url">').append(
                             $('<a>').attr({ href: item.url, target: '_blank' }).text(_.noI18n(item.feedTitle + ' - ' + publishedDate))
@@ -140,7 +115,7 @@ define('plugins/portal/rss/register',
                     node = $('<div class="portal-feed">');
 
                 if (data.title) {
-                    node.append($('<h1>').text(_.noI18n(data.title)));
+                    node.append($('<h2>').text(_.noI18n(data.title)));
                 }
 
                 _(data.items).each(drawItem, node);
@@ -159,8 +134,7 @@ define('plugins/portal/rss/register',
             $url = $('<textarea class="input-block-level" rows="5">').attr('placeholder', 'http://').placeholder(),
             $description = $('<input type="text" class="input-block-level">'),
             $error = $('<div class="alert alert-error">').hide(),
-            props = model.get('props') || {},
-            that = this;
+            props = model.get('props') || {};
 
         dialog.header($('<h4>').text(gt('RSS Feeds')))
             .build(function () {
@@ -184,7 +158,7 @@ define('plugins/portal/rss/register',
             }
         });
 
-        dialog.on('save', function (e) {
+        dialog.on('save', function () {
 
             var url = $.trim($url.val()),
                 description = $.trim($description.val()),

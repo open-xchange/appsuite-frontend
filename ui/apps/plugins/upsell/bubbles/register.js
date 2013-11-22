@@ -5,16 +5,13 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/upsell/bubbles/register',
-    ['io.ox/core/extensions',
-     'io.ox/core/upsell',
-     'settings!plugins/upsell/simple-wizard',
-     'gettext!plugins/upsell/simple-wizard'], function (ext, upsell, settings, gt) {
+define('plugins/upsell/bubbles/register', function () {
 
     'use strict';
 
@@ -58,7 +55,7 @@ define('plugins/upsell/bubbles/register',
 
     Bubble.prototype.render = function () {
 
-        var o = this.options, node,
+        var o = this.options,
 
             // split at \n to replace by <br>
             lines = String(o.content || '').split('\n');

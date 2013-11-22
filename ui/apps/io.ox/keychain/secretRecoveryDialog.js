@@ -1,22 +1,28 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/keychain/secretRecoveryDialog', ['io.ox/keychain/api', 'io.ox/core/tk/dialogs', 'io.ox/core/notifications', 'gettext!io.ox/keychain'], function (api, dialogs, notifications, gt) {
+define('io.ox/keychain/secretRecoveryDialog',
+    ['io.ox/keychain/api',
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/notifications',
+     'gettext!io.ox/keychain'
+    ], function (api, dialogs, notifications, gt) {
+
     'use strict';
 
     return {
         show: function () {
-            new dialogs.ModalDialog({ easyOut: false, async: true, width: 500, enter: 'migrate' })
+            new dialogs.ModalDialog({ easyOut: false, async: true, width: 500, enter: 'migrate', tapTrap: true })
                 .build(function () {
                     this.getHeader().append(
                         $('<h4>').text(gt('Recover passwords'))
@@ -25,12 +31,12 @@ define('io.ox/keychain/secretRecoveryDialog', ['io.ox/keychain/api', 'io.ox/core
                         $('<p>').text(gt('Please provide the old password so the account passwords can be recovered.')),
                         $('<label>').append(
                             $.txt(gt('Your old password')), $('<br>'),
-                            $('<input type="password" name"recovery-password" class="input-xlarge">')
+                            $('<input type="password" name"recovery-password" class="input-xlarge" tabindex="1">')
                         )
                     );
                 })
-                .addPrimaryButton('migrate', gt('Recover'))
-                .addButton('cancel', gt('Cancel'))
+                .addPrimaryButton('migrate', gt('Recover'), 'migrate', {'tabIndex': '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                 .on('cancel', function () {
                     this.getContentNode().find('input').val('');
                 })

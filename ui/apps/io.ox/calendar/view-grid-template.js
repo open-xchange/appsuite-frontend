@@ -1,30 +1,31 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/calendar/view-grid-template",
-    ["io.ox/calendar/util",
-     "io.ox/core/tk/vgrid",
-     "io.ox/core/extensions",
-     "io.ox/core/api/folder",
-     "gettext!io.ox/calendar",
-     "io.ox/core/api/user",
-     "io.ox/core/api/resource",
-     "less!io.ox/calendar/style.less"], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
+define('io.ox/calendar/view-grid-template',
+    ['io.ox/calendar/util',
+     'io.ox/core/tk/vgrid',
+     'io.ox/core/extensions',
+     'io.ox/core/api/folder',
+     'gettext!io.ox/calendar',
+     'io.ox/core/api/user',
+     'io.ox/core/api/resource',
+     'less!io.ox/calendar/style.less'
+    ], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
 
-    "use strict";
+    'use strict';
     var fnClickPerson = function (e) {
         e.preventDefault();
-        ext.point("io.ox/core/person:action").each(function (ext) {
+        ext.point('io.ox/core/person:action').each(function (ext) {
             _.call(ext.action, e.data, e);
         });
     };
@@ -35,16 +36,16 @@ define("io.ox/calendar/view-grid-template",
         main: {
             build: function () {
                 var title, location, time, date, shown_as, conflicts, isPrivate;
-                this.addClass("calendar").append(
-                    time = $("<div>").addClass("time"),
-                    date = $("<div>").addClass("date"),
+                this.addClass('calendar').append(
+                    time = $('<div>').addClass('time'),
+                    date = $('<div>').addClass('date'),
                     isPrivate = $('<i class="icon-lock private-flag">').hide(),
-                    title = $("<div>").addClass("title"),
+                    title = $('<div>').addClass('title'),
                     $('<div class="location-row">').append(
                         shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
                         location = $('<span class="location">')
                     ),
-                    conflicts = $("<div>").addClass("conflicts").hide()
+                    conflicts = $('<div>').addClass('conflicts').hide()
                 );
 
                 return {
@@ -57,15 +58,20 @@ define("io.ox/calendar/view-grid-template",
                     isPrivate: isPrivate
                 };
             },
-            set: function (data, fields, index) {
-                var folder = folderAPI.get({ folder: data.folder_id }),
-                    self = this;
-                folder.done(function (folder) {
-                    var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
-                    self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
-                });
+            set: function (data, fields) {
+                var self = this,
+                    a11yLabel = '',
+                    tmpStr = '';
+                if (data.folder_id) {//conflicts with appointments, where you aren't a participant don't have a folder_id.
+                    var folder = folderAPI.get({ folder: data.folder_id });
+                    folder.done(function (folder) {
+                        var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                        self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
+                    });
+                }
+
                 fields.title
-                    .text(data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
+                    .text(a11yLabel = data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
                 if (data.conflict) {
                     fields.title
                         .append(
@@ -74,10 +80,15 @@ define("io.ox/calendar/view-grid-template",
                             $.txt(')')
                         );
                 }
+                if (data.location) {
+                    a11yLabel += ', ' + data.location;
+                }
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
-                fields.time.text(util.getTimeInterval(data));
-                fields.date.text(gt.noI18n(util.getDateInterval(data)));
-                fields.shown_as.get(0).className = "shown_as label " + util.getShownAsLabel(data);
+                fields.time.text(tmpStr = gt.noI18n(util.getTimeInterval(data)));
+                a11yLabel += ', ' + tmpStr;
+                fields.date.text(tmpStr = gt.noI18n(util.getDateInterval(data)));
+                a11yLabel += ', ' + tmpStr;
+                fields.shown_as.get(0).className = 'shown_as label ' + util.getShownAsLabel(data);
                 if (data.participants && data.conflict) {
                     var conflicts = $('<span>');
                     fields.conflicts
@@ -129,15 +140,16 @@ define("io.ox/calendar/view-grid-template",
                 } else {
                     fields.isPrivate.hide();
                 }
+                this.attr({ 'aria-label': a11yLabel });
             }
         },
 
         // template for labels
         label: {
             build: function () {
-                this.addClass("calendar-label");
+                this.addClass('calendar-label');
             },
-            set: function (data, fields, index) {
+            set: function (data) {
                 var d = util.getSmartDate(data);
                 this.text(gt.noI18n(d));
             }
@@ -157,7 +169,7 @@ define("io.ox/calendar/view-grid-template",
 
             // use template
             var tmpl = new VGrid.Template(),
-                $div = $("<div>");
+                $div = $('<div>');
 
             // add template
             tmpl.add(that.main);
@@ -166,9 +178,9 @@ define("io.ox/calendar/view-grid-template",
                 var clone = tmpl.getClone();
                 clone.update(data, i);
                 clone.appendTo($div).node
-                    .css("position", "relative")
-                    .data("appointment", data)
-                    .addClass("hover");
+                    .css('position', 'relative')
+                    .data('appointment', data)
+                    .addClass('hover');
             });
 
             return $div;

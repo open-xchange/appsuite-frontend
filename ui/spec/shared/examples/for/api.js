@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -18,12 +19,13 @@ define('shared/examples/for/api', [], function () {
         }, options);
 
         afterEach(function () {
-            this.server.restore();
+            this.server.autoRespond = true;
             this.handleExpectedFail(options.markedPending);
         });
 
         beforeEach(function () {
-            this.server = sinon.fakeServer.create();
+            this.server = ox.fakeServer;
+            this.server.autoRespond = false;
         });
 
         describe('a basic API class', function () {

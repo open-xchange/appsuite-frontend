@@ -1,21 +1,22 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
 define('io.ox/contacts/settings/pane',
-       ['settings!io.ox/contacts',
-        'io.ox/contacts/settings/model',
-        'io.ox/core/extensions',
-        'gettext!io.ox/contacts'], function (settings, contactsSettingsModel, ext, gt) {
+    ['settings!io.ox/contacts',
+     'io.ox/contacts/settings/model',
+     'io.ox/core/extensions',
+     'gettext!io.ox/contacts'
+    ], function (settings, contactsSettingsModel, ext, gt) {
 
     'use strict';
 
@@ -53,7 +54,7 @@ define('io.ox/contacts/settings/pane',
                 buildInputRadio = function (list, selected) {
                     return _.pairs(list).map(function (option) {
                         var o = $('<input type="radio" name="fullNameFormat">').val(option[0]);
-                        if (selected === option[0]) o.attr('checked', 'checked');
+                        if (selected === option[0]) o.prop('checked', true);
                         return $('<label class="radio">').text(option[1]).append(o);
                     });
                 };
@@ -63,7 +64,7 @@ define('io.ox/contacts/settings/pane',
                     $('<label for="displayformat" class="control-label">').text(gt('Display of names')),
                     $('<div class="controls">').append(
                         buildInputRadio(preferences, preference)
-                    ).on('click', 'input', function (e) {
+                    ).on('click', 'input', function () {
                         settings.set('fullNameFormat', this.value).save();
                     })
                 )
@@ -75,21 +76,20 @@ define('io.ox/contacts/settings/pane',
         index: 300,
         id: 'myaccount',
         draw: function () {
-            var self = this,
-                usermodel,
+            var usermodel,
                 button = $('<button type="button" class="btn btn-primary" data-action="add">')
                     .text(gt('My contact data'));
 
             button.on('click', function () {
-                require(["io.ox/core/tk/dialogs", "io.ox/core/settings/user"], function (dialogs, users) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
                     var dialog = new dialogs.ModalDialog({
                             top: 60,
                             width: 900,
                             center: false,
                             maximize: true
                         })
-                        .addPrimaryButton("save", gt('Save'))
-                        .addButton('discard', gt("Discard"));
+                        .addPrimaryButton('save', gt('Save'), 'save', {'tabIndex': '1'})
+                        .addButton('discard', gt('Discard'), 'discard', {'tabIndex': '1'});
 
                     var $node = dialog.getContentNode();
 
@@ -97,7 +97,7 @@ define('io.ox/contacts/settings/pane',
                         usermodel = model;
                     }).fail(function () {
                         $node.append(
-                            $.fail(gt("Couldn't load your contact data."), function () {
+                            $.fail(gt('Couldn\'t load your contact data.'), function () {
                                 users.editCurrentUser($node).done(function () {
                                     $node.find('[data-action="discard"]').hide();
                                 });

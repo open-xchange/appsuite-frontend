@@ -1,36 +1,37 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/edit/view-form', [
-    'io.ox/contacts/model',
-    'io.ox/backbone/views',
-    'io.ox/backbone/forms',
-    'io.ox/core/extPatterns/actions',
-    'io.ox/core/extPatterns/links',
-    'io.ox/contacts/widgets/pictureUpload',
-    'io.ox/core/tk/attachments',
-    'io.ox/contacts/api',
-    'io.ox/contacts/util',
-    'gettext!io.ox/contacts',
-    'io.ox/core/capabilities',
-    'io.ox/core/extensions',
-    'io.ox/core/date',
-    'io.ox/backbone/mini-views',
-    'io.ox/backbone/mini-views/attachments',
-    'less!io.ox/contacts/edit/style.less'
-], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, attachmentViews) {
+define('io.ox/contacts/edit/view-form',
+    ['io.ox/contacts/model',
+     'io.ox/backbone/views',
+     'io.ox/backbone/forms',
+     'io.ox/core/extPatterns/actions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/contacts/widgets/pictureUpload',
+     'io.ox/core/tk/attachments',
+     'io.ox/contacts/api',
+     'io.ox/contacts/util',
+     'gettext!io.ox/contacts',
+     'io.ox/core/capabilities',
+     'io.ox/core/extensions',
+     'io.ox/core/date',
+     'io.ox/backbone/mini-views',
+     'io.ox/backbone/mini-views/attachments',
+     'less!io.ox/contacts/edit/style.less'
+    ], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, attachmentViews) {
 
-    "use strict";
+    'use strict';
 
     var meta = {
         sections: {
@@ -164,7 +165,7 @@ define('io.ox/contacts/edit/view-form', [
                 } else {
                     this.$el
                         .css({ display: 'inline-block' })
-                        .addClass("contact-picture-upload f6-target");
+                        .addClass('contact-picture-upload f6-target');
                 }
             }
         }));
@@ -172,23 +173,23 @@ define('io.ox/contacts/edit/view-form', [
         // Save
         if (!isMyContactData) {
             point.basicExtend(new links.Button({
-                id: "save",
+                id: 'save',
                 index: 110,
-                label: gt("Save"),
-                ref: ref + "/actions/edit/save",
-                cssClasses: "btn btn-primary control f6-target",
+                label: gt('Save'),
+                ref: ref + '/actions/edit/save',
+                cssClasses: 'btn btn-primary control f6-target',
                 tabIndex: 2,
-                tagtype: "button"
+                tagtype: 'button'
             }));
 
             point.basicExtend(new links.Button({
-                id: "discard",
+                id: 'discard',
                 index: 120,
-                label: gt("Discard"),
-                ref: ref + "/actions/edit/discard",
-                cssClasses: "btn control",
+                label: gt('Discard'),
+                ref: ref + '/actions/edit/discard',
+                cssClasses: 'btn control',
                 tabIndex: 3,
-                tagtype: "button"
+                tagtype: 'button'
             }));
         }
 
@@ -198,7 +199,7 @@ define('io.ox/contacts/edit/view-form', [
         ext.point('io.ox/contacts/edit/bottomToolbar').extend({
             id: 'toolbar',
             index: 100,
-            draw: function (baton) {
+            draw: function () {
                 var node = $(this.attributes.window.nodes.body),
                     toolbar = $('<div class="app-bottom-toolbar">');
                 // due to the very strange usage of extension points in contacts module
@@ -251,11 +252,13 @@ define('io.ox/contacts/edit/view-form', [
         var FullnameView = mini.AbstractView.extend({
             tagName: 'h1',
             className: 'name',
-            setup: function (options) {
-                this.listenTo(this.model, 'change:first_name change:last_name change:title', this.render);
+            setup: function () {
+                this.listenTo(this.model, 'change:display_name', this.render);
             },
             render: function () {
-                this.$el.text(util.getFullName(this.model.toJSON()) || '\u00A0');
+                var mod = this.model.toJSON();
+                delete mod.display_name;
+                this.$el.text(util.getFullName(mod) || '\u00A0');
                 //fix top margin if picture upload was removed
                 if (isMyContactData && !capabilities.has('gab'))
                     this.$el.css('margin-top', '0px');
@@ -266,7 +269,7 @@ define('io.ox/contacts/edit/view-form', [
         var JobView = mini.AbstractView.extend({
             tagName: 'h2',
             className: 'job',
-            setup: function (options) {
+            setup: function () {
                 this.listenTo(this.model, 'change:position change:department change:company', this.render);
             },
             render: function () {
@@ -296,7 +299,7 @@ define('io.ox/contacts/edit/view-form', [
         point.basicExtend({
             id: 'final',
             index: 'last',
-            draw: function (baton) {
+            draw: function () {
                 var link;
                 this.append(
                     $('<nav class="toggle-compact clear">').append(
@@ -343,8 +346,8 @@ define('io.ox/contacts/edit/view-form', [
                 baton.parentView.trigger('save:start');
 
                 baton.model.save().then(
-                    function success() {
-                        baton.parentView.trigger('save:success');
+                    function success(e) {
+                        baton.parentView.trigger('save:success', e);
                     },
                     function fail(e) {
                         baton.parentView.trigger('save:fail', e);
@@ -355,7 +358,7 @@ define('io.ox/contacts/edit/view-form', [
 
         new actions.Action(ref + '/actions/edit/discard', {
             id: 'discard',
-            action: function (options, baton) {
+            action: function (options) {
                 if (ref === 'io.ox/core/user') {
                     //invoked by sidepopup (portal); uses event of hidden sidebar-close button
                     $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
@@ -376,17 +379,18 @@ define('io.ox/contacts/edit/view-form', [
         new actions.Action(ref + '/actions/edit/reset-image', {
             id: 'imagereset',
             action: function (baton) {
-                baton.model.set("image1", '', { validate: true });
+                baton.model.set('image1', '', { validate: true });
                 var imageUrl =  ox.base + '/apps/themes/default/dummypicture.png';
                 baton.parentView.$el.find('.picture-uploader').css('background-image', 'url(' + imageUrl + ')');
             }
         });
 
         function drawDefault(options, model) {
+            var input;
             this.append(
                 $('<label class="input">').append(
                     $.txt(options.label), $('<br>'),
-                    new mini.InputView({ name: options.field, model: model }).render().$el,
+                    input = new mini.InputView({ name: options.field, model: model }).render().$el,
                     $('<div class="inline-error" aria-live="assertive">').hide()
                 )
             )
@@ -404,6 +408,18 @@ define('io.ox/contacts/edit/view-form', [
                         .find('input').removeAttr('aria-invalid');
                 }
             });
+
+            // trigger change event on keyup for view updates
+            if (_.indexOf(['title', 'first_name', 'last_name'], options.field) >= 0) {
+                input.on('keyup', function () {
+                    // update model value silinet
+                    model.set(options.field, _.noI18n($(this).val()), { silent: true });
+                    if (model.changed.display_name) return;
+                    var mod = model.toJSON();
+                    delete mod.display_name;
+                    model.set('display_name', util.getFullName(mod));
+                });
+            }
         }
 
         function drawTextarea(options, model) {

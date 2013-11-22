@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -21,12 +21,13 @@ define('io.ox/contacts/actions',
      'io.ox/portal/util',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
-     'io.ox/core/extPatterns/actions'], function (ext, links, api, coreConfig, notifications, print, portalUtil, gt, settings, actions) {
+     'io.ox/core/extPatterns/actions'
+    ], function (ext, links, api, coreConfig, notifications, print, portalUtil, gt, settings, actions) {
 
     'use strict';
 
     //  actions
-    var Action = links.Action, Button = links.Button,
+    var Action = links.Action,
         ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
     new Action('io.ox/contacts/actions/delete', {
@@ -49,8 +50,8 @@ define('io.ox/contacts/actions',
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
                 new dialogs.ModalDialog()
                 .text(question)
-                .addPrimaryButton('delete', gt('Delete'), 'delete')
-                .addButton('cancel', gt('Cancel'), 'cancel')
+                .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                 .show()
                 .done(function (action) {
                     if (action === 'delete') {
@@ -93,12 +94,11 @@ define('io.ox/contacts/actions',
         },
         action: function (baton) {
             require(['io.ox/contacts/edit/main'], function (m) {
-                var def = $.Deferred();
                 baton.data.folder_id = baton.folder;
-                m.getApp(baton.data).launch(def);
-                def.done(function (data) {
-                    baton.app.getGrid().selection.set(data);
-                });
+                m.getApp(baton.data).launch()
+                    .done(function (data) {
+                        baton.app.getGrid().selection.set(data);
+                    });
             });
         }
     });
@@ -131,12 +131,12 @@ define('io.ox/contacts/actions',
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
 
                     function commit(target) {
-                        if (type === "move" && vGrid) vGrid.busy();
+                        if (type === 'move' && vGrid) vGrid.busy();
                         api[type](list, target).then(
                             function () {
                                 notifications.yell('success', success);
                                 folderAPI.reload(target, list);
-                                if (type === "move" && vGrid) vGrid.idle();
+                                if (type === 'move' && vGrid) vGrid.idle();
                             },
                             notifications.yell
                         );
@@ -147,15 +147,15 @@ define('io.ox/contacts/actions',
                     } else {
                         var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
-                            .addPrimaryButton("ok", label)
-                            .addButton("cancel", gt("Cancel"));
+                            .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
                         dialog.getBody().css({ height: '250px' });
                         var folderId = String(list[0].folder_id),
                             id = settings.get('folderpopup/last') || folderId,
                             tree = new views.FolderList(dialog.getBody(), {
                                 type: 'contacts',
                                 open: settings.get('folderpopup/open', []),
-                                tabindex: 0,
+                                tabindex: 1,
                                 toggle: function (open) {
                                     settings.set('folderpopup/open', open).save();
                                 },
@@ -280,7 +280,7 @@ define('io.ox/contacts/actions',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!small') && !e.context.mark_as_distributionlist;
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             print.request('io.ox/contacts/print', list);
         }
     });
@@ -365,16 +365,6 @@ define('io.ox/contacts/actions',
 
         multiple: function (list) {
             var distLists = [];
-
-            function mapList(obj) {
-                if (obj.id) {
-                    // internal
-                    return { type: 1, id: obj.id, display_name: obj.display_name, mail: obj.mail };
-                } else {
-                    // external
-                    return { type: 5, display_name: obj.display_name, mail: obj.mail };
-                }
-            }
 
             function mapContact(obj) {
                 if (obj.distribution_list && obj.distribution_list.length) {
@@ -523,7 +513,7 @@ define('io.ox/contacts/actions',
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentAPI, slideshow) {
                 var files = _(list).map(function (file) {
                     return {
@@ -562,7 +552,7 @@ define('io.ox/contacts/actions',
                      'io.ox/core/api/attachment'], function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup().show(baton.e, function (popup) {
-                    _(list).each(function (data, index) {
+                    _(list).each(function (data) {
                         data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
                             width: popup.parent().width(),
@@ -601,10 +591,10 @@ define('io.ox/contacts/actions',
         id: 'download',
         requires: 'some',
         multiple: function (list) {
-            require(['io.ox/core/api/attachment'], function (attachmentAPI) {
+            require(['io.ox/core/api/attachment', 'io.ox/core/download'], function (attachmentAPI, download) {
                 _(list).each(function (data) {
                     var url = attachmentAPI.getUrl(data, 'download');
-                    window.open(url);
+                    download.url(url);
                 });
             });
         }
@@ -632,8 +622,7 @@ define('io.ox/contacts/actions',
         id: 'sendmail',
         index: 10,
         draw: function (data) {
-            var selection = data.data,
-                baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({data: data.data});
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
@@ -656,8 +645,7 @@ define('io.ox/contacts/actions',
         id: 'delete',
         index: 20,
         draw: function (data) {
-            var selection = data.data,
-                baton = new ext.Baton({data: data.data});
+            var baton = new ext.Baton({data: data.data});
             $(this).append($('<div class="toolbar-button">')
                 .append($('<a href="#">')
                     .append(
@@ -722,7 +710,7 @@ define('io.ox/contacts/actions',
         id: 'vcard',
         index: INDEX += 100,
         prio: 'lo',
-        label: gt('Send vCard'),
+        label: gt('Send as vCard'),
         ref: 'io.ox/contacts/actions/vcard'
     }));
 

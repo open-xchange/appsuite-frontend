@@ -5,14 +5,18 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/upload"], function (ext, upload) {
+define('io.ox/core/extPatterns/dnd',
+    ['io.ox/core/extensions',
+     'io.ox/core/tk/upload'
+    ], function (ext, upload) {
 
-    "use strict";
+    'use strict';
 
     var UploadZone = function () {
 
@@ -44,7 +48,7 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
             }
 
             if (dropZone) {
-                dropZone.off("drop", handleDrop);
+                dropZone.off('drop', handleDrop);
             }
 
             point.each(function (ext) {
@@ -54,7 +58,7 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
 
                 actions.push({
                     id: ext.id,
-                    label: ext.metadata("label", args),
+                    label: ext.metadata('label', args),
                     extension: ext
                 });
             });
@@ -66,8 +70,8 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
             });
 
             if (_.isFunction(dropZone.on)) { // temp. fix: avoids strange opera runtime error
-                dropZone.on("drop", handleDrop);
-                dropZone.on("drop-multiple", handleMultiDrop);
+                dropZone.on('drop', handleDrop);
+                dropZone.on('drop-multiple', handleMultiDrop);
             }
 
             if (included) {
@@ -77,7 +81,7 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
 
         initDropZone();
 
-        point.on("extended", initDropZone);
+        point.on('extended', initDropZone);
 
         this.update = function () {
             initDropZone();

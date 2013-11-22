@@ -1,68 +1,40 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/calendar/util",
-    ["io.ox/core/date",
+define('io.ox/calendar/util',
+    ['io.ox/core/date',
      'gettext!io.ox/calendar',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
      'io.ox/core/api/group',
-     'io.ox/core/util'], function (date, gt, userAPI, contactAPI, groupAPI, util) {
+     'io.ox/core/util'
+    ], function (date, gt, userAPI, contactAPI, groupAPI, util) {
 
-    "use strict";
+    'use strict';
 
-    // week day names
-    var n_dayShort = date.locale.daysStandalone,
-        n_day = date.locale.days,
-        // month names
-        n_month = date.locale.months,
-        // day names
+    var // day names
         n_count = [gt('last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('last')],
         // shown as
-        n_shownAs = [gt("Reserved"), gt("Temporary"),
-                     gt("Absent"), gt("Free")
-                     ],
-        shownAsClass = "reserved temporary absent free".split(' '),
-        shownAsLabel = "label-info label-warning label-important label-success".split(' '),
+        n_shownAs = [gt('Reserved'), gt('Temporary'), gt('Absent'), gt('Free')],
+        shownAsClass = 'reserved temporary absent free'.split(' '),
+        shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
-        confirmClass = "unconfirmed accepted declined tentative".split(' '),
-        n_confirm = ['', '<i class="icon-ok">', '<i class="icon-remove">', '<i class="icon-question-sign">'],
-        // constants
-        MINUTE = 60000,
-        HOUR = 60 * MINUTE,
-        DAY = 24 * HOUR,
-        WEEK = 7 * DAY,
-        // day bitmask
-        SUNDAY = 1,
-        MONDAY = 2,
-        TUESDAY = 4,
-        WEDNESDAY = 8,
-        THURSDAY = 16,
-        FRIDAY = 32,
-        SATURDAY = 64,
-        // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
-        firstWeekDay = date.locale.weekStart;
+        confirmClass = 'unconfirmed accepted declined tentative'.split(' '),
+        n_confirm = ['', '<i class="icon-ok">', '<i class="icon-remove">', '<i class="icon-question-sign">'];
 
     var that = {
 
-        MINUTE: MINUTE,
-
-        HOUR: HOUR,
-
-        DAY: DAY,
-
-        WEEK: WEEK,
-
+        // day bitmask
         days: {
             SUNDAY: 1,
             MONDAY: 2,
@@ -74,11 +46,8 @@ define("io.ox/calendar/util",
         },
 
         getFirstWeekDay: function () {
-            return firstWeekDay;
-        },
-
-        getDayNames: function () {
-            return n_dayShort.slice(firstWeekDay).concat(n_dayShort.slice(0, firstWeekDay));
+            // week starts with (0=Sunday, 1=Monday, ..., 6=Saturday)
+            return date.locale.weekStart;
         },
 
         getDaysInMonth: function (year, month) {
@@ -87,27 +56,27 @@ define("io.ox/calendar/util",
         },
 
         isToday: function (timestamp) {
-            return Math.floor(timestamp / DAY) ===
-                Math.floor(new date.Local().getTime() / DAY);
+            return Math.floor(timestamp / date.DAY) ===
+                Math.floor(new date.Local().getTime() / date.DAY);
         },
 
         floor: function (timestamp, step) {
             // set defaults
             timestamp = timestamp || 0;
-            step = step || HOUR;
+            step = step || date.HOUR;
             // number?
-            if (typeof step === "number") {
+            if (typeof step === 'number') {
                 return Math.floor(timestamp / step) * step;
             } else {
-                if (step === "week") {
+                if (step === 'week') {
                     // get current date
                     var d = new date.Local(timestamp),
                         // get work day TODO: consider custom week start
                         day = d.getDay(),
                         // subtract
-                        t = d.getTime() - day * DAY;
+                        t = d.getTime() - day * date.DAY;
                     // round down to day and return
-                    return this.floor(t, DAY);
+                    return this.floor(t, date.DAY);
                 }
             }
         },
@@ -141,7 +110,7 @@ define("io.ox/calendar/util",
                 d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local(),
                 now = new date.Local(),
                 showDate = showDate || false,
-                weekStart = this.floor(now.getTime(), "week"),
+                weekStart = this.floor(now.getTime(), 'week'),
                 diff = 0,
                 diffWeek = 0;
 
@@ -155,26 +124,26 @@ define("io.ox/calendar/util",
 
             // past?
             if (diff < 0) {
-                if (diff >= -1 * DAY) {
-                    return gt("Yesterday");
-                } else if (diffWeek > -7 * DAY) {
-                    return gt("Last Week");
+                if (diff >= -1 * date.DAY) {
+                    return gt('Yesterday');
+                } else if (diffWeek > -7 * date.DAY) {
+                    return gt('Last Week');
                 }
             } else {
                 // future
-                if (diff < DAY) {
-                    return gt("Today");
-                } else if (diff < 2 * DAY) {
-                    return gt("Tomorrow");
-                } else if (diffWeek < 7 * DAY) {
-                    return n_day[d.getDay()]; // this week
-                } else if (diffWeek >= 7 * DAY && diffWeek < 14 * DAY) {
-                    return showDate ? d.format(date.DATE) : gt("Next Week");
+                if (diff < date.DAY) {
+                    return gt('Today');
+                } else if (diff < 2 * date.DAY) {
+                    return gt('Tomorrow');
+                } else if (diffWeek < 7 * date.DAY) {
+                    return date.locale.days[d.getDay()]; // this week
+                } else if (diffWeek >= 7 * date.DAY && diffWeek < 14 * date.DAY) {
+                    return showDate ? d.format(date.DATE) : gt('Next Week');
                 }
             }
 
             // any other month
-            return showDate ? d.format(date.DATE) : n_month[d.getMonth()] + " " + d.getYear();
+            return showDate ? d.format(date.DATE) : date.locale.months[d.getMonth()] + ' ' + d.getYear();
         },
 
         getDateInterval: function (data) {
@@ -189,18 +158,19 @@ define("io.ox/calendar/util",
                 if (this.onSameDay(startDate, endDate)) {
                     return this.getDate(startDate);
                 } else {
-                    return this.getDate(startDate) + " \u2013 " + this.getDate(endDate);
+                    return this.getDate(startDate) + ' \u2013 ' + this.getDate(endDate);
                 }
             } else {
-                return "";
+                return '';
             }
         },
 
         getReminderOptions: function () {
-            var inputid = _.uniqueId('dialog'),
-                reminderListValues = [
+            var reminderListValues = [
                 {value: -1, format: 'string'},
                 {value: 0, format: 'minutes'},
+                {value: 5, format: 'minutes'},
+                {value: 10, format: 'minutes'},
                 {value: 15, format: 'minutes'},
                 {value: 30, format: 'minutes'},
                 {value: 45, format: 'minutes'},
@@ -226,7 +196,7 @@ define("io.ox/calendar/util",
             ],
             options = {};
 
-            _(reminderListValues).each(function (item, index) {
+            _(reminderListValues).each(function (item) {
                 var i;
                 switch (item.format) {
                 case 'string':
@@ -258,10 +228,10 @@ define("io.ox/calendar/util",
         },
 
         getTimeInterval: function (data, D) {
-            var length, start, end, suffix;
+            var length;
             D = D || date.Local;
             if (data.full_time) {
-                length = (data.end_date - data.start_date) / DAY >> 0;
+                length = (data.end_date - data.start_date) / date.DAY >> 0;
                 return length <= 1 ? gt('Whole day') : gt.format(
                     //#. General duration (nominative case): X days
                     //#. %d is the number of days
@@ -370,13 +340,13 @@ define("io.ox/calendar/util",
                         gt('work days')
                     );
                 } else {
-                    if ((i & SUNDAY) !== 0) tmp.push(gt('Sunday'));
-                    if ((i & MONDAY) !== 0) tmp.push(gt('Monday'));
-                    if ((i & TUESDAY) !== 0) tmp.push(gt('Tuesday'));
-                    if ((i & WEDNESDAY) !== 0) tmp.push(gt('Wednesday'));
-                    if ((i & THURSDAY) !== 0) tmp.push(gt('Thursday'));
-                    if ((i & FRIDAY) !== 0) tmp.push(gt('Friday'));
-                    if ((i & SATURDAY) !== 0) tmp.push(gt('Saturday'));
+                    if ((i & that.days.SUNDAY) !== 0) tmp.push(gt('Sunday'));
+                    if ((i & that.days.MONDAY) !== 0) tmp.push(gt('Monday'));
+                    if ((i & that.days.TUESDAY) !== 0) tmp.push(gt('Tuesday'));
+                    if ((i & that.days.WEDNESDAY) !== 0) tmp.push(gt('Wednesday'));
+                    if ((i & that.days.THURSDAY) !== 0) tmp.push(gt('Thursday'));
+                    if ((i & that.days.FRIDAY) !== 0) tmp.push(gt('Friday'));
+                    if ((i & that.days.SATURDAY) !== 0) tmp.push(gt('Saturday'));
                 }
 
                 var and =
@@ -388,7 +358,8 @@ define("io.ox/calendar/util",
             }
 
             function getMonthString(i) {
-                return n_month[i];
+                // month names
+                return date.locale.months[i];
             }
 
             var str = '',
@@ -495,9 +466,9 @@ define("io.ox/calendar/util",
         },
 
         getNote: function (data) {
-            return $.trim(gt.noI18n(data.note) || "")
-                .replace(/\n{3,}/g, "\n\n")
-                .replace(/</g, "&lt;")
+            return $.trim(gt.noI18n(data.note) || '')
+                .replace(/\n{3,}/g, '\n\n')
+                .replace(/</g, '&lt;')
                 .replace(/(https?\:\/\/\S+)/g, function ($1) {
                     // soft-break long words (like long URLs)
                     return '<a href="' + $1 + '" target="_blank">' + util.breakableHTML($1) + '</a>';
@@ -511,14 +482,14 @@ define("io.ox/calendar/util",
                 _(data.users).each(function (obj) {
                     hash[String(obj.id)] = {
                         status: obj.confirmation || 0,
-                        comment: obj.confirmmessage || ""
+                        comment: obj.confirmmessage || ''
                     };
                 });
                 // external users
                 _(data.confirmations).each(function (obj) {
                     hash[obj.mail] = {
                         status: obj.status || 0,
-                        comment: obj.confirmmessage || ""
+                        comment: obj.confirmmessage || ''
                     };
                 });
             }
@@ -547,7 +518,7 @@ define("io.ox/calendar/util",
             var firstDayOfMonth = Date.UTC(year, month, 1),
                 // apply week day shift
                 shift = (7 + (new date.Local(firstDayOfMonth)).getDay() - that.getFirstWeekDay()) % 7,
-                day = firstDayOfMonth - DAY * shift,
+                day = firstDayOfMonth - date.DAY * shift,
                 // loop
                 rows = [], row, obj, d;
 
@@ -557,7 +528,7 @@ define("io.ox/calendar/util",
             }
 
             function loop(max) {
-                for (var i = 0; i < max || (i % 7 !== 0); i += 1, day += DAY) {
+                for (var i = 0; i < max || (i % 7 !== 0); i += 1, day += date.DAY) {
                     if (i % 7 === 0) {
                         row = [];
                         rows.push(row);
@@ -582,7 +553,7 @@ define("io.ox/calendar/util",
 
             // forerun?
             if (forerun > 0) {
-                day -= forerun * WEEK;
+                day -= forerun * date.WEEK;
                 loop(forerun * 7);
             }
 
@@ -597,7 +568,7 @@ define("io.ox/calendar/util",
         },
 
         getTodayStart: function (timestamp) {
-            return ((timestamp || _.now()) / DAY >> 0) * DAY;
+            return ((timestamp || _.now()) / date.DAY >> 0) * date.DAY;
         },
 
         getWeekStart: function (timestamp) {
@@ -608,7 +579,7 @@ define("io.ox/calendar/util",
                 // apply week day shift
                 shift = (7 + d.getDay() - this.getFirstWeekDay()) % 7;
 
-            return d.getTime() - DAY * shift;
+            return d.getTime() - date.DAY * shift;
         },
 
         getWeekScaffold: function (timestamp) {
@@ -636,10 +607,6 @@ define("io.ox/calendar/util",
             return ret;
         },
 
-        removeDuplicates: function (idsFromGrGroups, idsFromUsers) {
-            return _([].concat(idsFromGrGroups, idsFromUsers)).uniq();
-        },
-
         resolveGroupMembers: function (idsFromGroupMembers, collectedUserIds) {
 
             return groupAPI.getList(idsFromGroupMembers)
@@ -653,8 +620,7 @@ define("io.ox/calendar/util",
                         });
                     });
 
-                    collectedIdsFromGroups = that.removeDuplicates(collectedIdsFromGroups, collectedUserIds);
-                    return userAPI.getList(collectedIdsFromGroups);
+                    return userAPI.getList(_([].concat(collectedIdsFromGroups, collectedUserIds)).uniq());
                 })
                 .then(function (data) {
                     return _(data).map(function (single) {
@@ -669,56 +635,49 @@ define("io.ox/calendar/util",
                 });
         },
 
-        createArrayOfRecipients: function (participants, def) {
+        createArrayOfRecipients: function (participants) {
 
             var arrayOfRecipients = [],
                 arrayOfIds = [],
-                idsFromGroupMembers = [],
-                arrayOfGroupMembers = [],
-                currentUser = ox.user_id;
+                idsFromGroupMembers = [];
 
             _.each(participants, function (single) {
                 if (single.type === 5) {
                     arrayOfRecipients.push([single.display_name, single.mail]);
                 } else if (single.type === 2) {
                     idsFromGroupMembers.push(single.id);
-                } else if (single.type === 1 && single.id !== currentUser) {
+                } else if (single.type === 1 && single.id !== ox.user_id) {
                     arrayOfIds.push(single.id);
                 }
             });
 
-            that.resolveGroupMembers(idsFromGroupMembers, arrayOfIds).done(function (arrayOfGroupMembers) {
+            return that.resolveGroupMembers(idsFromGroupMembers, arrayOfIds).then(function (arrayOfGroupMembers) {
 
                 _.each(arrayOfGroupMembers, function (single) {
-                    if (single.id !== currentUser) {
+                    if (single.id !== ox.user_id) {
                         arrayOfRecipients.push([single.display_name, single.mail]);
                     }
                 });
 
-                userAPI.getList(arrayOfIds).done(function (obj) {
+                return userAPI.getList(arrayOfIds).then(function (obj) {
                     _.each(obj, function (single) {
                         arrayOfRecipients.push([single.display_name, single.email1]);
                     });
-                    def.resolve(
-                        arrayOfRecipients
-                    );
+                    return arrayOfRecipients;
                 });
             });
         },
 
-        getUserIdByInternalId: function (internal, def) {
-            contactAPI.get({id: internal, folder: 6}).done(function (data) {
-                def.resolve(data.user_id);
+        getUserIdByInternalId: function (internal) {
+            return contactAPI.get({id: internal, folder: 6}).then(function (data) {
+                return data.user_id;
             });
         },
 
-        createDistlistArrayFromPartisipantList: function (participants, def) {
-            var distlistArray = [],
-                idsFromGroupMembers = [],
-                collectedIdsFromGroups = [],
+        createDistlistArrayFromPartisipantList: function (participants) {
+            var idsFromGroupMembers = [],
                 returnArray = [],
-                arrayOfIds = [],
-                currentUser = ox.user_id;
+                arrayOfIds = [];
 
             _.each(participants, function (single) {
                 if (single.type === 2) {
@@ -736,9 +695,9 @@ define("io.ox/calendar/util",
 
             that.resolveGroupMembers(idsFromGroupMembers, returnArray, arrayOfIds);
 
-            userAPI.getList(arrayOfIds).done(function (obj) {
-                _.each(obj, function (single) {
-                    if (single.id !== currentUser) {
+            return userAPI.getList(arrayOfIds).then(function (obj) {
+                return _.each(obj, function (single) {
+                    if (single.id !== ox.user_id) {
                         returnArray.push({
                             display_name: single.display_name,
                             folder_id: single.folder_id,
@@ -748,7 +707,6 @@ define("io.ox/calendar/util",
                         });
                     }
                 });
-                def.resolve({distribution_list: returnArray});
             });
 
 

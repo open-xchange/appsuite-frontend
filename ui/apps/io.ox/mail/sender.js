@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -16,7 +17,8 @@ define('io.ox/mail/sender',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
      'io.ox/core/capabilities',
-     'settings!io.ox/mail'], function (util, api, userAPI, contactsAPI, capabilities, settings) {
+     'settings!io.ox/mail'
+    ], function (util, api, userAPI, contactsAPI, capabilities, settings) {
 
     'use strict';
 

@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -12,7 +13,8 @@
 
 define('plugins/portal/helloworld/register',
     ['io.ox/core/extensions',
-     'gettext!plugins/portal'], function (ext, gt) {
+     'gettext!plugins/portal'
+    ], function (ext, gt) {
 
     'use strict';
 
@@ -42,7 +44,7 @@ define('plugins/portal/helloworld/register',
         },
 
         // called right after initialize. Should return a deferred object when done
-        load: function (baton) {
+        load: function () {
             return $.when();
         },
 

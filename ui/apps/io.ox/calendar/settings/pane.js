@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -36,7 +36,7 @@ define('io.ox/calendar/settings/pane',
             TR_TEAM_VIEW: gt('Time range for the team view'),
             TR_LIST_VIEW: gt('Time range for the list view'),
             TITLE_NEW_APPOINTMENT: gt('New appointment'),
-            TIME_FOR_REMINDER: gt('Default time for reminder'),
+            TIME_FOR_REMINDER: gt('Default reminder'),
             TITLE_NOTIFICATIONS_FOR_APPOINTMENT: gt('Email notification for appointment'),
             NOTIFICATIONS_FOR_APPOINTMENTS: gt('Email notification for New, Changed, Deleted?'),
             TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('Email notification for Accept/Declined'),
@@ -44,8 +44,8 @@ define('io.ox/calendar/settings/pane',
             NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('Email notification for appointment participant?'),
             SHOW_DECLINED_APPOINTMENTS: gt('Show declined appointments'),
             NOTIFICATION_MAILS_ARE_DELETED: gt('Automatically delete a notification mail after it has been accepted or declined?'),
-            TITLE_NOTIFICATION_MAIL_HANDLING: gt("Incoming Notification Mails"),
-            MARK_FULLTIME_APPOINTMENTS_AS_FREE: gt("Mark all day appointments as free")
+            TITLE_NOTIFICATION_MAIL_HANDLING: gt('Incoming Notification Mails'),
+            MARK_FULLTIME_APPOINTMENTS_AS_FREE: gt('Mark all day appointments as free')
         },
 
         reloadMe = [],
@@ -102,9 +102,9 @@ define('io.ox/calendar/settings/pane',
 
         calendarViewSettings,
         CalendarSettingsView = Backbone.View.extend({
-            tagName: "div",
+            tagName: 'div',
             _modelBinder: undefined,
-            initialize: function (options) {
+            initialize: function () {
                 // create template
                 this._modelBinder = new Backbone.ModelBinder();
 
@@ -147,10 +147,10 @@ define('io.ox/calendar/settings/pane',
     ext.point('io.ox/calendar/settings/detail').extend({
         index: 200,
         id: 'calendarsettings',
-        draw: function (data) {
+        draw: function () {
             calendarViewSettings = new CalendarSettingsView({model: calendarSettings});
             this.append($('<div>').addClass('section').append(calendarViewSettings.render().el));
-            settings.on('change', function (e, path, value) {
+            settings.on('change', function (e, path) {
                 calendarSettings.saveAndYell().then(
                     function success() {
                         var showNotice = _(reloadMe).any(function (attr) {
@@ -159,7 +159,7 @@ define('io.ox/calendar/settings/pane',
                         if (showNotice) {
                             notifications.yell(
                                 'success',
-                                gt("The setting has been saved and will become active when you enter the application the next time.")
+                                gt('The setting has been saved and will become active when you enter the application the next time.')
                             );
                         }
                     }

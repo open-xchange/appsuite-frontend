@@ -1,23 +1,23 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 define('io.ox/mail/vacationnotice/settings/model',
-      ['io.ox/backbone/modelFactory',
-       'io.ox/backbone/validation',
-       'io.ox/core/api/mailfilter',
-       'io.ox/settings/util',
-       'gettext!io.ox/mail'
-       ], function (ModelFactory, Validators, api, settingsUtil, gt) {
+    ['io.ox/backbone/modelFactory',
+     'io.ox/backbone/validation',
+     'io.ox/core/api/mailfilter',
+     'io.ox/settings/util',
+     'gettext!io.ox/mail'
+    ], function (ModelFactory, Validators, api, settingsUtil, gt) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ define('io.ox/mail/vacationnotice/settings/model',
             },
 
             preparedData = {
-                "actioncmds": [newAttributes]
+                'actioncmds': [newAttributes]
             };
 
         if (attributes.id !== undefined) {
@@ -55,17 +55,17 @@ define('io.ox/mail/vacationnotice/settings/model',
 
 
         var testForTimeframe = {
-                "id": "allof",
-                "tests": []
+                'id': 'allof',
+                'tests': []
             };
 
         if (attributes.dateFrom) {
             testForTimeframe.tests.push(
                 {
-                    "id": "currentdate",
-                    "comparison": "ge",
-                    "datepart": "date",
-                    "datevalue": [attributes.dateFrom]
+                    'id': 'currentdate',
+                    'comparison': 'ge',
+                    'datepart': 'date',
+                    'datevalue': [attributes.dateFrom]
                 }
             );
         }
@@ -73,16 +73,16 @@ define('io.ox/mail/vacationnotice/settings/model',
         if (attributes.dateUntil) {
             testForTimeframe.tests.push(
                 {
-                    "id": "currentdate",
-                    "comparison": "le",
-                    "datepart": "date",
-                    "datevalue": [attributes.dateUntil]
+                    'id': 'currentdate',
+                    'comparison': 'le',
+                    'datepart': 'date',
+                    'datevalue': [attributes.dateUntil]
                 }
             );
         }
 
         if (testForTimeframe.tests.length === 0 || attributes.activateTimeFrame === false) {
-            testForTimeframe = { id: "true" };
+            testForTimeframe = { id: 'true' };
         }
 
         preparedData.test = testForTimeframe;
@@ -103,8 +103,8 @@ define('io.ox/mail/vacationnotice/settings/model',
 
             create: function (model) {
                 var preparedData = providePreparedData(model.attributes);
-                preparedData.rulename = gt("vacation notice");
-                preparedData.flags = ["vacation"];
+                preparedData.rulename = gt('vacation notice');
+                preparedData.flags = ['vacation'];
 
                 return settingsUtil.yellOnReject(
                     api.create(preparedData)

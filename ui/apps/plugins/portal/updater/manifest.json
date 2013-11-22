@@ -1,5 +1,5 @@
 {
-    namespace: "portal",
-    requires: "oxupdater",
-    device: "desktop"
+    "namespace": "portal",
+    "requires": "oxupdater",
+    "device": "desktop"
 }

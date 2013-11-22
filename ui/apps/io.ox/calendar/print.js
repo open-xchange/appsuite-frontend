@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -19,13 +20,14 @@ define('io.ox/calendar/print',
      'io.ox/core/api/group',
      'io.ox/core/api/resource',
      'io.ox/core/util',
-     'gettext!io.ox/calendar'], function (print, api, util, contactsUtil, userAPI, groupAPI, resourceAPI, coreUtil, gt) {
+     'gettext!io.ox/calendar'
+    ], function (print, api, util, contactsUtil, userAPI, groupAPI, resourceAPI, coreUtil, gt) {
 
     'use strict';
 
     function injectInternalConfirmations(users, confirmations) {
         _(users).each(function (user) {
-            var obj = confirmations[user.id];
+            var obj = confirmations[user.id] || {};
             user.status = obj.status || 0;
             user.comment = obj.comment || '';
             // polish display_name
@@ -36,7 +38,7 @@ define('io.ox/calendar/print',
 
     function injectExternalConfirmations(contacts, confirmations) {
         _(contacts).each(function (contact) {
-            var obj = confirmations[contact.mail];
+            var obj = confirmations[contact.mail] || {};
             contact.status = (obj && obj.status) || 0;
             contact.comment = (obj && obj.comment) || '';
             // fix missing display_name
@@ -187,6 +189,8 @@ define('io.ox/calendar/print',
                 get: function (obj) {
                     return api.get(obj);
                 },
+
+                title: selection.length === 1 ? selection[0].title : undefined,
 
                 i18n: {
                     accepted: gt('Accepted'),

@@ -687,6 +687,10 @@
       // ACCOUNT FOR FIXED POSITION ELEMENTS
       el.style.position = (step.fixedElement ? 'fixed' : 'absolute');
 
+      // custom fix: keep box in viewport
+      top = Math.max(0, top);
+      top = Math.min(top, $(window).height() - $(el).height());
+
       el.style.top = top + 'px';
       el.style.left = left + 'px';
     },

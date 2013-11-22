@@ -1,30 +1,32 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
-                                          'io.ox/backbone/views',
-                                          'io.ox/core/date',
-                                          'io.ox/core/notifications',
-                                          'io.ox/backbone/forms',
-                                          'io.ox/calendar/util',
-                                          'io.ox/tasks/edit/util',
-                                          'io.ox/calendar/edit/recurrence-view',
-                                          'io.ox/participants/views',
-                                          'io.ox/core/tk/attachments',
-                                          'io.ox/tasks/api',
-                                          'io.ox/core/extensions',
-                                          'io.ox/tasks/util'],
-                                          function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, reminderUtil) {
+define('io.ox/tasks/edit/view-template',
+    ['gettext!io.ox/tasks/edit',
+     'io.ox/backbone/views',
+     'io.ox/core/date',
+     'io.ox/core/notifications',
+     'io.ox/backbone/forms',
+     'io.ox/calendar/util',
+     'io.ox/tasks/edit/util',
+     'io.ox/calendar/edit/recurrence-view',
+     'io.ox/participants/views',
+     'io.ox/core/tk/attachments',
+     'io.ox/tasks/api',
+     'io.ox/core/extensions',
+     'io.ox/tasks/util'
+    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, reminderUtil) {
+
     'use strict';
 
     var point = views.point('io.ox/tasks/edit/view');
@@ -39,7 +41,6 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 headlineText = gt('Create task'),
                 headline,
                 saveBtn,
-                self = this,
                 app = baton.app;
             if (baton.model.attributes.id) {
                 saveBtnText = gt('Save');
@@ -160,7 +161,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                     $('<label>').text(gt('Remind me')).addClass('task-edit-label').attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('span12')
                     .append($('<option>')
                     .text(''), reminderUtil.buildDropdownMenu())
-                    .on('change', function (e) {
+                    .on('change', function () {
                         if (selector.prop('selectedIndex') === 0) {
                             baton.model.set('alarm', null, {validate: true});
                         } else {
@@ -183,12 +184,8 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         display: 'DATETIME',
         attribute: 'alarm',
         label: gt('Date'),
-        updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
-        },
-        updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
-        }
+        required: false,
+        clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '6'
     });
@@ -240,7 +237,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 1100,
         row: '7',
         draw: function (baton) {
-            var progressField = util.buildProgress();
+            var progressField = util.buildProgress(baton.model.get('percent_completed'));
             this.append($('<div class="span3 collapsed">')
                 .append(
                      $('<label>').text(gt('Progress in %')).addClass('task-edit-label').attr('for', 'task-edit-progress-field'), $(progressField.wrapper)
@@ -344,8 +341,8 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                 temp = $('<li>').css('width', 100 / tabs.length + '%').appendTo(table);
                 tabs[i].invoke('draw', temp, baton, contentNode, content[tabs[i].id], i);
             }
-            table.find('li :first').addClass('active');
-            contentNode.find('div :first').addClass('active');
+            table.find('li:first').addClass('active');
+            contentNode.find('div:first').addClass('active');
 
             if (tabs.length === 1) {//hide if only one tab is available
                 table.replaceWith($('<legend class="sectiontitle collapsed">' + tabs[0].title + '</legend>'));
@@ -639,7 +636,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
 
                 node.append(
                     input = $('<div class="input-append span6">').append(
-                        $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">').attr("placeholder", gt("Add participant/resource")),
+                        $('<input type="text" class="add-participant task-participant-input-field" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
                         $('<button type="button" class="btn" data-action="add" tabindex="1">')
                             .append($('<i class="icon-plus">'))
                     ),
@@ -681,10 +678,8 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
 
                             if (data.mark_as_distributionlist) {
                                 _.each(data.distribution_list, function (val) {
-                                    var def = $.Deferred();
                                     if (val.folder_id === 6) {
-                                        calendarUtil.getUserIdByInternalId(val.id, def);
-                                        def.done(function (id) {
+                                        calendarUtil.getUserIdByInternalId(val.id).done(function (id) {
                                             userId = id;
                                             obj = {id: userId, type: 1 };
                                             collection.add(obj);
@@ -720,7 +715,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
             var obj = {};
             obj.id = model.attributes.id || id;
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
-            api.removeFromCache(_.ecid(obj)).done(function () {
+            api.removeFromCache(_.cid(obj)).done(function () {
                 api.removeFromUploadList(_.ecid(obj));
             });
         }
@@ -764,7 +759,7 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
                     }
                 };
             $input.on('change', changeHandler);
-            $inputWrap.on('change.fileupload', function (e) {
+            $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
@@ -774,85 +769,18 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
 
     //DatePickers
 
-    //Datepickers need Custom methods because standard methods show odd behaviour with undefined dates
-    var CustomBinderUtils = {
-        _timeStrToDate: function (value, attribute, model) {
-            var myValue = parseInt(model.get(attribute), 10) || false;
-            if (!myValue) {
-                //check if attribute is undefined or null
-                if (model.get(attribute) === undefined || model.get(attribute) === null) {
-                    myValue = _.now();
-                } else { //attribute seems to be broken
-                    return null;
-                }
-            }
-            var mydate = new date.Local(myValue),
-                parsedDate = date.Local.parse(value, date.TIME);
-
-            // just reject the change, if it's not parsable
-            if (value !== '' && _.isNull(parsedDate)) {
-                model.trigger('change:' + attribute);//reset inputfields
-                return model.get(attribute);
-            }
-            //set hours to 6:00 am if nothing is set
-            if (value === '') {
-                mydate.setHours(6, 0, 0, 0);
-            } else {
-                mydate.setHours(parsedDate.getHours(), parsedDate.getMinutes(), 0, 0);
-            }
-            return mydate.getTime();
-        },
-        _dateStrToDate: function (value, attribute, model) {
-            var myValue = parseInt(model.get(attribute), 10) || false;
-            if (!myValue) {
-                //check if attribute is just undefined
-                if (model.get(attribute) === undefined || model.get(attribute) === null) {
-                    myValue = _.now();
-                } else { //attribute seems to be broken
-                    return null;
-                }
-            }
-            var mydate = new date.Local(date.Local.utc(myValue)),
-                parsedDate;
-
-            if (_.device('small')) {
-                parsedDate = date.Local.parse(value, date.DATE_TIME);
-            } else {
-                parsedDate = date.Local.parse(value, date.DATE);
-            }
-
-            if (value === '') { //empty input means date should be undefined
-                return null;
-            }
-            // just reject the change, if it's not parsable
-            if (_.isNull(parsedDate)) {
-                model.trigger('change:' + attribute);//reset inputfields
-                return model.get(attribute);
-            }
-            if (_.device('small')) {
-                return parsedDate.getTime();
-            } else {
-                mydate.setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate()).setSeconds(0, 0);
-                return date.Local.localTime(mydate.getTime());
-            }
-        }
-    };
-
     // start date
     point.extend(new forms.DatePicker({
         id: 'start_date',
         index: 500,
         className: 'span6 collapsed',
         labelClassName: 'task-edit-label',
-        display: 'DATETIME',
+        display: 'DATE',
         attribute: 'start_date',
+        required: false,
+        utc: true,
         label: gt('Starts on'),
-        updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), { validate: true });
-        },
-        updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), { validate: true });
-        }
+        clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '4'
     });
@@ -863,15 +791,12 @@ define('io.ox/tasks/edit/view-template', ['gettext!io.ox/tasks/edit',
         index: 600,
         className: 'span6 collapsed',
         labelClassName: 'task-edit-label',
-        display: 'DATETIME',
+        display: 'DATE',
         attribute: 'end_date',
+        required: false,
+        utc: true,
         label: gt('Due date'),
-        updateModelDate: function () {
-            this.model.set(this.attribute, CustomBinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), {validate: true});
-        },
-        updateModelTime: function () {
-            this.model.set(this.attribute, CustomBinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model), {validate: true});
-        }
+        clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '4'
     });

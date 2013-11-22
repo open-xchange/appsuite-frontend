@@ -1,28 +1,29 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
 define('io.ox/settings/main',
-     ['io.ox/core/tk/vgrid',
-      'io.ox/core/api/apps',
-      'io.ox/core/extensions',
-      'io.ox/core/tk/forms',
-      'io.ox/core/tk/view',
-      'io.ox/core/commons',
-      'gettext!io.ox/core',
-      'settings!io.ox/settings/configjump',
-      'io.ox/core/settings/errorlog/settings/pane',
-      'io.ox/core/settings/downloads/pane',
-      'less!io.ox/settings/style.less'], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings) {
+    ['io.ox/core/tk/vgrid',
+     'io.ox/core/api/apps',
+     'io.ox/core/extensions',
+     'io.ox/core/tk/forms',
+     'io.ox/core/tk/view',
+     'io.ox/core/commons',
+     'gettext!io.ox/core',
+     'settings!io.ox/settings/configjump',
+     'io.ox/core/settings/errorlog/settings/pane',
+     'io.ox/core/settings/downloads/pane',
+     'less!io.ox/settings/style.less'
+    ], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings) {
 
     'use strict';
 
@@ -35,11 +36,17 @@ define('io.ox/settings/main',
                         title = $('<div>')
                             .addClass('title')
                     );
-                if (_.device('smartphone')) title.prepend($('<i class="icon-chevron-right" style="float:right">'));
+                if (_.device('smartphone')) {
+                    title.css('margin', '4px 0'); // must use inline styles because vgrid's height calculon-o-mat does not respect any css values bound via classes for its calculation..
+                    title.prepend($('<i class="icon-chevron-right pull-right">'));
+                }
                 return { title: title };
             },
-            set: function (data, fields, index) {
+            set: function (data, fields) {
                 var title = gt.pgettext('app', data.title);
+                this.attr({
+                    'aria-label': title
+                });
                 fields.title.append($.txt(
                         title === data.title ? gt(data.title) : title
                     )
@@ -50,7 +57,7 @@ define('io.ox/settings/main',
             build: function () {
                 this.addClass('settings-label');
             },
-            set: function (data, fields, index) {
+            set: function (data) {
                 this.text(data.group || '');
             }
         }
@@ -189,37 +196,37 @@ define('io.ox/settings/main',
         _(configJumpSettings.get()).chain().keys().each(function (id) {
             var declaration = configJumpSettings.get(id);
             if (declaration.requires) {
-                if (!require("io.ox/core/capabilities").has(declaration.requires)) {
+                if (!require('io.ox/core/capabilities').has(declaration.requires)) {
                     return;
                 }
             }
-            ext.point("io.ox/settings/pane").extend(_.extend({
+            ext.point('io.ox/settings/pane').extend(_.extend({
                 id: id,
                 title: gt(declaration.title || ''),
                 ref: 'io.ox/configjump/' + id,
                 loadSettingPane: false
             }, declaration));
 
-            ext.point("io.ox/configjump/" + id + "/settings/detail").extend({
+            ext.point('io.ox/configjump/' + id + '/settings/detail').extend({
                 id: 'iframe',
                 index: 100,
                 draw: function () {
                     var $node = this;
-                    $node.css({height: "100%"});
+                    $node.css({height: '100%'});
                     var fillUpURL = $.Deferred();
 
-                    if (declaration.url.indexOf("[token]") > 0) {
+                    if (declaration.url.indexOf('[token]') > 0) {
                         // Grab token
                         $node.busy();
-                        require(["io.ox/core/http"], function (http) {
+                        require(['io.ox/core/http'], function (http) {
                             http.GET({
                                 module: 'token',
                                 params: {
                                     action: 'acquireToken'
                                 }
                             }).done(function (resp) {
-                                fillUpURL.resolve(declaration.url.replace("[token]", resp.token));
-                            }).fail(require("io.ox/core/notifications").yell);
+                                fillUpURL.resolve(declaration.url.replace('[token]', resp.token));
+                            }).fail(require('io.ox/core/notifications').yell);
                         });
                     } else {
                         fillUpURL.resolve(declaration.url);
@@ -275,7 +282,7 @@ define('io.ox/settings/main',
 
             right.empty().busy();
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
-                return require([settingsPath], function (m) {
+                return require([settingsPath], function () {
                     right.empty().idle(); // again, since require makes this async
                     ext.point(extPointPart).invoke('draw', right, baton);
                     updateExpertMode();
@@ -318,6 +325,7 @@ define('io.ox/settings/main',
 
         // listen for logout event
         ext.point('io.ox/core/logout').extend({
+            id: 'saveSettings',
             logout: function () {
                 return saveSettings('logout');
             }

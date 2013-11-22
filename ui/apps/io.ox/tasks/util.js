@@ -1,19 +1,20 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define('io.ox/tasks/util',
     ['gettext!io.ox/tasks',
      'settings!io.ox/tasks',
-     'io.ox/core/date'], function (gt, settings, date) {
+     'io.ox/core/date'
+    ], function (gt, settings, date) {
 
     'use strict';
 
@@ -122,7 +123,6 @@ define('io.ox/tasks/util',
                 }
 
                 endDate.setTime(prepareTime(endDate));
-                endDate.setHours(6);
                 if (weekDay < 1 || weekDay > 4) {
                     weekDay = (((endDate.getDay() - 1) % 7) + 7) % 7;
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - weekDay));
@@ -134,6 +134,8 @@ define('io.ox/tasks/util',
                 if (alarmDate.getTime() > endDate.getTime()) {//endDate should not be before alarmDate
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7);
                 }
+                //end Date does not have a time
+                endDate.setHours(0);
                 var result = {
                         endDate: endDate,
                         alarmDate: alarmDate
@@ -175,106 +177,74 @@ define('io.ox/tasks/util',
                 node.val(interval);
             },
 
-            //builds dropdownmenu nodes, if bootstrapDropdown is set listnodes are created else option nodes
-            buildDropdownMenu: function (time, bootstrapDropdown) {
-                if (!time) {
-                    time = new Date();
+            //builds dropdownmenu nodes, if o.bootstrapDropdown is set listnodes are created else option nodes
+            buildDropdownMenu: function (o) {
+                if (!o) {
+                    o = {};
+                }
+                if (!o.time) {
+                    o.time = new Date();
+                }
+                //get the values
+                var options = this.buildOptionArray(o),
+                    result = [];
+
+                //put the values in nodes
+                if (o.bootstrapDropdown) {
+                    _(options).each(function (obj) {
+                        result.push($('<li>').append($('<a tabindex="1" role="menuitem" href="#">').val(obj[0]).text(obj[1])));
+                    });
+                } else {
+                    _(options).each(function (obj) {
+                        result.push($('<option>').val(obj[0]).text(obj[1]));
+                    });
                 }
 
-                //normal times
-                var appendString = "<option value='5'>" + gt('in 5 minutes') + '</option>' +
-                "<option value='15'>" + gt('in 15 minutes') + '</option>' +
-                "<option value='30'>" + gt('in 30 minutes') + '</option>' +
-                "<option value='60'>" + gt('in one hour') + '</option>';
-
-                // variable daytimes
-                var i = time.getHours(),
-                    temp;
-
-                if (i < 6) {
-                    i = 0;
-                } else if (i < 12) {
-                    i = 1;
-                } else if (i < 15) {
-                    i = 2;
-                } else if (i < 18) {
-                    i = 3;
-                } else if (i < 22) {
-                    i = 4;
-                }
-
-                while (i < lookupDaytimeStrings.length) {
-                    temp = lookupDaytimeStrings[i];
-                    appendString = appendString + "<option value='d" + i + "'>" + temp + '</option>';
-                    i++;
-                }
-
-                //weekdays
-                var circleIncomplete = true,
-                    startday = time.getDay();
-
-                i = (time.getDay() + 2) % 7;
-
-                appendString = appendString + "<option value='t'>" + gt('tomorrow') + '</option>';
-
-                while (circleIncomplete) {
-                    temp = lookupWeekdayStrings[i];
-                    appendString = appendString + "<option value='w" + i + "'>" + temp + '</option>';
-                    if (i < 6) {
-                        i++;
-                    } else {
-                        i = 0;
-                    }
-
-                    if (i === startday) {
-                        appendString = appendString + "<option value='ww'>" + gt('in one week') + '</option>';
-                        circleIncomplete = false;
-                    }
-                }
-
-                if (bootstrapDropdown) {
-                    appendString = appendString.replace(/<option/g, '<li><a tabindex="1" role="menuitem" href="#"');
-                    appendString = appendString.replace(/option>/g, 'a></li>');
-                }
-
-                return appendString;
+                return result;
             },
 
             //returns the same as buildDropdownMenu but returns an array of value string pairs
-            buildOptionArray: function (time) {
-                if (!time) {
-                    time = new Date();
+            buildOptionArray: function (o) {
+                if (!o) {
+                    o = {};
                 }
-                var result = [ [5, gt('in 5 minutes')],
-                               [15, gt('in 15 minutes')],
-                               [30, gt('in 30 minutes')],
-                               [60, gt('in one hour')]];
-
-                // variable daytimes
-                var i = time.getHours();
-
-                if (i < 6) {
-                    i = 0;
-                } else if (i < 12) {
-                    i = 1;
-                } else if (i < 15) {
-                    i = 2;
-                } else if (i < 18) {
-                    i = 3;
-                } else if (i < 22) {
-                    i = 4;
+                if (!o.time) {
+                    o.time = new Date();
                 }
-
-                while (i < lookupDaytimeStrings.length) {
-                    result.push(['d' + i, lookupDaytimeStrings[i]]);
-                    i++;
+                var result = [],
+                    i;
+                if (!o.daysOnly) {
+                    result = [[5, gt('in 5 minutes')],
+                              [15, gt('in 15 minutes')],
+                              [30, gt('in 30 minutes')],
+                              [60, gt('in one hour')]];
+    
+                    // variable daytimes
+                    i = o.time.getHours();
+    
+                    if (i < 6) {
+                        i = 0;
+                    } else if (i < 12) {
+                        i = 1;
+                    } else if (i < 15) {
+                        i = 2;
+                    } else if (i < 18) {
+                        i = 3;
+                    } else if (i < 22) {
+                        i = 4;
+                    }
+    
+                    while (i < lookupDaytimeStrings.length) {
+                        result.push(['d' + i, lookupDaytimeStrings[i]]);
+                        i++;
+                    }
                 }
 
                 //weekdays
                 var circleIncomplete = true,
-                    startday = time.getDay();
+                    startday = o.time.getDay();
 
-                i = (time.getDay() + 2) % 7;
+                i = (o.time.getDay() + 2) % 7;
 
                 result.push(['t', gt('tomorrow')]);
 
@@ -342,14 +312,14 @@ define('io.ox/tasks/util',
                 }
 
                 if (task.end_date !== undefined && task.end_date !== null) {
-                    task.end_date = new date.Local(task.end_date).format();
+                    task.end_date = new date.Local(task.end_date).format(date.DATE);
                 } else {
                     task.end_date = '';
                 }
 
                 if (detail) {
                     if (task.start_date !== undefined && task.start_date !== null) {
-                        task.start_date = new date.Local(task.start_date).format();
+                        task.start_date = new date.Local(task.start_date).format(date.DATE);
                     } else {
                         task.start_date = '';
                     }
@@ -411,8 +381,19 @@ define('io.ox/tasks/util',
                     resultArray = _.flatten(resultArray);
                 }
                 return resultArray;
-            }
+            },
 
+            getPriority: function (data) {
+                // normal?
+                if (data && data.priority === 2) return $();
+                var i = '<i class="icon-exclamation"/>',
+                    indicator = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
+                if (data && data.priority === 3) {
+                    return indicator.addClass('high').attr('title', gt('High priority'));
+                } else {
+                    return indicator.addClass('low').attr('title', gt('Low priority'));
+                }
+            }
         };
 
     var prepareTime = function (time) {

@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
@@ -114,7 +114,7 @@ define('l10n/ja_JP/io.ox/register',
 
         ext.point(ref + '/edit').extend({
             index: 'last',
-            draw: function (baton) {
+            draw: function () {
                 // auto-complete for furigana fields?
                 if (settings.get('features/furiganaAutoComplete', false) === true) {
                     watchKana(this.find('input[name="last_name"]'),
@@ -165,9 +165,9 @@ define('l10n/ja_JP/io.ox/register',
             v0 = v;
 
             if (!v) {
-                yomiField.value = "";
+                yomiField.value = '';
                 yl = 0;
-                lv = "";
+                lv = '';
                 lp = 0;
                 ls = 0;
                 return;
@@ -230,7 +230,7 @@ define('l10n/ja_JP/io.ox/register',
 
     ext.point('io.ox/contacts/api/search').extend({
         id: 'furigana',
-        getData: function (query, options) {
+        getData: function () {
             if (this.last_name) this.yomiLastName = this.last_name;
             if (this.first_name) this.yomiFirstName = this.first_name;
             if (this.company) this.yomiCompany = this.company;
@@ -239,7 +239,7 @@ define('l10n/ja_JP/io.ox/register',
 
     // VGrid
 
-    var exceptions = { 0x3094: 0x3046, 0x3095: 0x304b, 0x3096: 0x3051,
+    var /*exceptions = { 0x3094: 0x3046, 0x3095: 0x304b, 0x3096: 0x3051,
             0x309f: 0x3088, 0x30f4: 0x30a6, 0x30f5: 0x30ab, 0x30f6: 0x30b1,
             0x30ff: 0x30b3, 0x31f0: 0x30af, 0x31f1: 0x30b7, 0x31f2: 0x30b9,
             0x31f3: 0x30c8, 0x31f4: 0x30cc, 0x31f5: 0x30cf, 0x31f6: 0x30d2,
@@ -248,6 +248,7 @@ define('l10n/ja_JP/io.ox/register',
             0x31ff: 0x30ed },
         ranges = [0x304a, 0x3054, 0x305e, 0x3069, 0x306e,
                   0x307d, 0x3082, 0x3088, 0x308d],
+        */
         letters = [0x3042, 0x304b, 0x3055, 0x305f, 0x306a,
                    0x306f, 0x307e, 0x3084, 0x3089, 0x308f],
         kana = _.map(letters, function (c) { return String.fromCharCode(c); });

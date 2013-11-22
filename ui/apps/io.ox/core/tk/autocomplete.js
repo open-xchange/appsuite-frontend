@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -12,8 +13,10 @@
  */
 
 define('io.ox/core/tk/autocomplete',
-    ['gettext!io.ox/mail',
-     'io.ox/core/util'], function (gt, util) {
+    ['io.ox/core/util',
+     'settings!io.ox/contacts',
+     'gettext!io.ox/mail'
+    ], function (util, settings, gt) {
 
     'use strict';
 
@@ -24,54 +27,51 @@ define('io.ox/core/tk/autocomplete',
     $.fn.autocomplete = function (o) {
 
         o = $.extend({
+            minLength: settings.get('search/minimumQueryLength', 3),
+            maxResults: 25,
+            delay: 100,
+            collection: null,
+            draw: null,
+            blur: $.noop,
+            click: $.noop,
+            parentSelector: 'body',
+            autoselect: false,
+            api: null,
+            node: null,
 
-                minLength: 1,
-                maxResults: 25,
-                delay: 100,
-                collection: null,
-                draw: null,
-                blur: $.noop,
-                click: $.noop,
-                parentSelector: 'body',
-                autoselect: false,
-                api: null,
-                node: null,
+            //get data
+            source: function (val) {
+                return this.api.search(val).then(function (data) {
+                    return o.placement === 'top' ? data.reverse() : data;
+                });
+            },
 
-                //get data
-                source: function (val) {
-                    return this.api.search(val).pipe(function (data) {
-                        return o.placement === 'top' ? data.reverse() : data;
-                    });
-                },
+            //remove untwanted items
+            reduce: function (data) {
+                return data;
+            },
 
-                //remove untwanted items
-                reduce: function (data) {
-                    return data;
-                },
+            name: function (data) {
+                return util.unescapeDisplayName(data.display_name);
+            },
 
-                name: function (data) {
-                    return util.unescapeDisplayName(data.display_name);
-                },
+            // object related unique string
+            stringify: function (data) {
 
-                // object related unique string
-                stringify: function (data) {
+                if (data.type === 2 || data.type === 3)
+                    return this.name(data.contact);
 
-                    if (data.type === 'resource' || data.type === 'group')
-                        return this.name(data.contact);
-
-                    var name = this.name(data);
-                    return name ? '"' + name + '" <' + data.email + '>' : data.email;
-                }
-
-            }, o || {});
-
+                var name = this.name(data);
+                return name ? '"' + name + '" <' + data.email + '>' : data.email;
+            }
+        }, o || {});
 
         var self = $(this),
 
             // last search
             lastValue = '',
             // no-results prefix
-            emptyPrefix = "\u0000",
+            emptyPrefix = '\u0000',
             // current search result index
             index = -1,
             // state
@@ -115,15 +115,15 @@ define('io.ox/core/tk/autocomplete',
             },
 
 
-            fnBlur = function (e) {
+            fnBlur = function () {
                     setTimeout(close, 200);
                 },
 
-            blurOff = function (e) {
+            blurOff = function () {
                     self.off('blur', fnBlur).focus();
                 },
 
-            blurOn = function (e) {
+            blurOn = function () {
                     _.defer(function () {
                         self.on('blur', fnBlur).focus();
                     });
@@ -209,7 +209,7 @@ define('io.ox/core/tk/autocomplete',
                             node.appendTo(scrollpane);
                         });
                         // leads to results
-                        emptyPrefix = "\u0000";
+                        emptyPrefix = '\u0000';
                         index = -1;
                         //select first element without updating input field
                         if (o.autoselect) {
@@ -223,7 +223,7 @@ define('io.ox/core/tk/autocomplete',
                 },
 
             // adds 'retry'-item to popup
-            cbSearchResultFail = function (query) {
+            cbSearchResultFail = function () {
                     popup.idle();
                     var node = $('<div>')
                         .addClass('io-ox-center')
@@ -334,7 +334,7 @@ define('io.ox/core/tk/autocomplete',
                         scrollpane.empty();
                         popup.busy();
                         o.source(val)
-                            .pipe(o.reduce)
+                            .then(o.reduce)
                             .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
                     }
                 } else {

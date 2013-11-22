@@ -1,32 +1,31 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("plugins/portal/tasks/register",
+define('plugins/portal/tasks/register',
     ['io.ox/core/extensions',
      'io.ox/tasks/api',
      'gettext!plugins/portal',
-     'io.ox/core/strings',
      'io.ox/tasks/util'
-    ], function (ext, taskAPI, gt, strings, util) {
+    ], function (ext, taskAPI, gt, util) {
 
-    "use strict";
+    'use strict';
 
-    ext.point("io.ox/portal/widget/tasks").extend({
+    ext.point('io.ox/portal/widget/tasks').extend({
 
         title: gt('Tasks'),
 
-        initialize: function (baton) {
-            taskAPI.on('update create delete', function (event, element) {
+        initialize: function () {
+            taskAPI.on('update create delete', function () {
                 require(['io.ox/portal/main'], function (portal) {//refresh portal
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.tasks_0;
@@ -38,7 +37,7 @@ define("plugins/portal/tasks/register",
             });
         },
 
-        action: function (baton) {
+        action: function () {
             ox.launch('io.ox/tasks/main');
         },
 
@@ -68,14 +67,14 @@ define("plugins/portal/tasks/register",
                 task = util.interpretTask(task);
                 content.append(
                     $('<div class="item">').data('item', task).append(
-                        $('<span class="bold">').text(gt.noI18n(strings.shorten(task.title, 50))), $.txt(' '),
+                        $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, {max: 50}))), $.txt(' '),
                         task.end_date === '' ? $() :
                             $('<span class="accent">').text(
                                 //#. Due on date
                                 gt('Due on %1$s', _.noI18n(task.end_date))
                             ),
                         $.txt(' '),
-                        $('<span class="gray">').text(gt.noI18n(strings.shorten(task.note, 100)))
+                        $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, {max: 100})))
                     )
                 );
             });

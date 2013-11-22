@@ -1,18 +1,18 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
-                                'io.ox/core/strings'], function (gt, strings) {
+define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
+
     'use strict';
 
     var util = {
@@ -37,8 +37,9 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
             return $('<label>').text(text).addClass('task-edit-label').attr('for', id);
         },
         //build progressField and buttongroup
-        buildProgress: function () {
-            var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val('0')
+        buildProgress: function (val) {
+            var val = val || 0,
+                progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val(val)
                 .addClass('span6 progress-field'),
 
                 wrapper = $('<div>').addClass('input-append').append(progress,
@@ -76,7 +77,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 extensions[i].invoke('draw', row, baton);
             }
             //find labels and make them focus the inputfield
-            row.find('label').each(function (label) {
+            row.find('label').each(function () {
                 if (this) {
                     $(this).attr('for', $(this).next().attr('id'));
                 }
@@ -130,19 +131,19 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks',
                 title = model.title || '\u2014';
                 note  = model.note || '\u2014';
             } else {
-                title = model.get("title") || '\u2014';
-                note  = model.get("note") || '\u2014';
+                title = model.get('title') || '\u2014';
+                note  = model.get('note') || '\u2014';
             }
 
-            body.append($("<h4>").text(_.noI18n(title)),
+            body.append($('<h4>').text(_.noI18n(title)),
                         $('<div>').text(_.noI18n(note)).css({color: '#888', 'margin-bottom': '5px'}));
-            util.buildRow(body, [[util.buildLabel(gt("Confirmation status", "confStateInput")),
-                        state = $('<select class="stateselect" data-action="selector">').attr("id", "confStateInput").append(
+            util.buildRow(body, [[util.buildLabel(gt('Confirmation status', 'confStateInput')),
+                        state = $('<select class="stateselect" data-action="selector">').attr('id', 'confStateInput').append(
                         $('<option>').text(gt('Confirm')),
                         $('<option>').text(gt('Decline')),
                         $('<option>').text(gt('Tentative')))],
-                        [util.buildLabel(gt("Confirmation message", "confMessageInput")), message = $('<input>')
-                             .attr({type: 'text', id: "confMessageInput"})]]);
+                        [util.buildLabel(gt('Confirmation message', 'confMessageInput')), message = $('<input>')
+                             .attr({type: 'text', id: 'confMessageInput'})]]);
             return {popup: popup, state: state, message: message};
         }
     };

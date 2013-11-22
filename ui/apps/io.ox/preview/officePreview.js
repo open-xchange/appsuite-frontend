@@ -1,4 +1,4 @@
-define('io.ox/preview/officePreview', ['io.ox/preview/officePreview/main'], function (officePreviewApp) {
+define('io.ox/preview/officePreview', function () {
 
     'use strict';
 

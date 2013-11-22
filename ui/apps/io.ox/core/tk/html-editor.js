@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -16,7 +16,7 @@ define.async('io.ox/core/tk/html-editor',
      'io.ox/core/capabilities',
      'settings!io.ox/core',
      'io.ox/core/extensions'
-     ], function (emoji, capabilities, settings, ext) {
+    ], function (emoji, capabilities, settings, ext) {
 
     'use strict';
 
@@ -267,7 +267,7 @@ define.async('io.ox/core/tk/html-editor',
         // range collapsed?
         if (!range.collapsed) {
             // delete selected content now
-            ed.execCommand("Delete", false, null);
+            ed.execCommand('Delete', false, null);
             // reselect new range
             range = ed.selection.getRng();
         }
@@ -291,13 +291,13 @@ define.async('io.ox/core/tk/html-editor',
                             node.childNodes[i].nodeValue = node.childNodes[i].nodeValue.replace('\u200B', '');
                         }
                     }
-                } else if (node.nodeName === "BR") {
+                } else if (node.nodeName === 'BR') {
                     // remember node
                     lastBR = node;
                 }
             }
         };
-        while (container && container.nodeName !== "BODY") {
+        while (container && container.nodeName !== 'BODY') {
             // set range to end of container
             range.setEndAfter(container);
             // get parent node
@@ -333,16 +333,16 @@ define.async('io.ox/core/tk/html-editor',
             }
         }
         // create new elements
-        var dummySpan = ed.getDoc().createElement("span");
-        dummySpan.innerHTML = "&nbsp;";
-        var para = ed.getDoc().createElement("p");
+        var dummySpan = ed.getDoc().createElement('span');
+        dummySpan.innerHTML = '&nbsp;';
+        var para = ed.getDoc().createElement('p');
         // and both elements to editor
         para.appendChild(dummySpan);
         range.insertNode(para);
         // select the span
         ed.selection.select(dummySpan);
         // and delete it
-        ed.execCommand("Delete", false, null);
+        ed.execCommand('Delete', false, null);
     }
 
     function splitContent(ed, e) {
@@ -368,8 +368,8 @@ define.async('io.ox/core/tk/html-editor',
         tinymce_langpacks = ['ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'ch', 'cn', 'cs', 'cy', 'da', 'de', 'dv', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'gl', 'gu', 'he', 'hi', 'hr', 'hu', 'hy', 'ia', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'kl', 'km', 'ko', 'lb', 'lt', 'lv', 'mk', 'ml', 'mn', 'ms', 'my', 'nb', 'nl', 'nn', 'no', 'pl', 'ps', 'pt', 'ro', 'ru', 'sc', 'se', 'si', 'sk', 'sl', 'sq', 'sr', 'sv', 'sy', 'ta', 'te', 'th', 'tn', 'tr', 'tt', 'tw', 'uk', 'ur', 'vi', 'zh', 'zu'],
 
         tinymce_special = {
-            zh_CN: "zh-cn",
-            zh_TW: "zh-tw"
+            zh_CN: 'zh-cn',
+            zh_TW: 'zh-tw'
         };
 
         if (_.has(tinymce_special, lookup_lang)) {
@@ -437,11 +437,11 @@ define.async('io.ox/core/tk/html-editor',
                 }
                 // add handler for focus/blur
                 $(ed.getWin())
-                    .on('focus', function (e) {
+                    .on('focus', function () {
                         $('#' + ed.id + '_tbl').addClass('focused');
                         ed.getBody().focus();
                     })
-                    .on('blur', function (e) {
+                    .on('blur', function () {
                         $('#' + ed.id + '_tbl').removeClass('focused');
                     });
                 // done!
@@ -463,7 +463,7 @@ define.async('io.ox/core/tk/html-editor',
             theme_advanced_toolbar_align: settings.get('tinyMCE/theme_advanced_toolbar_align', 'left'),
 
             // formats
-            theme_advanced_blockformats: 'h1,h2,h3,h4,p,blockquote',
+            theme_advanced_blockformats: 'h1,h2,h3,h4,p',
 
             // colors
             theme_advanced_more_colors: false,
@@ -626,10 +626,10 @@ define.async('io.ox/core/tk/html-editor',
                 str = str.substr(2);
             }
             // split & loop
-            _(str.split('\n').concat('')).each(function (line, i) {
+            _(str.split('\n').concat('')).each(function (line) {
                 var trimmed = $.trim(line);
                 if (trimmed === '' || (quote && trimmed.substr(0, 1) !== '>')) {
-                    lTag = quote ? '<blockquote><p>' : '<p>';
+                    lTag = quote ? '<blockquote type="cite"><p>' : '<p>';
                     rTag = quote ? '</blockquote></p>' : '</p>';
                     text += tmp !== '' ? lTag + tmp.replace(/<br>$/, '') + rTag : '';
                     tmp = '';
@@ -660,7 +660,7 @@ define.async('io.ox/core/tk/html-editor',
             }
         };
 
-        this.setCaretPosition = function (pos) {
+        this.setCaretPosition = function () {
             $(ed.getDoc()).scrollTop(0);
         };
 
@@ -743,7 +743,7 @@ define.async('io.ox/core/tk/html-editor',
 
         this.handleShow = function () {
             textarea.parents('.window-content').find('.editor-print-margin').hide();
-            textarea.removeAttr('disabled').idle().next().show();
+            textarea.prop('disabled', false).idle().next().show();
             textarea.hide();
             resizeEditor();
             $(window).on('resize', resizeEditor);
@@ -756,6 +756,8 @@ define.async('io.ox/core/tk/html-editor',
         this.destroy = function () {
             this.handleHide();
             if (ed) {
+                // fix IE9/10 focus bug (see bug 29616); similar: http://bugs.jqueryui.com/ticket/9122
+                $('iframe', ed.getContentAreaContainer()).attr('src', 'blank.html');
                 $(ed.getWin()).off('focus blur');
             }
             if (textarea.tinymce()) {

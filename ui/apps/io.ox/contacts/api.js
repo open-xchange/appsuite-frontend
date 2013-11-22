@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -20,7 +20,7 @@ define('io.ox/contacts/api',
      'io.ox/contacts/util',
      'l10n/ja_JP/io.ox/collation',
      'settings!io.ox/contacts'
-     ], function (ext, http, apiFactory, notifications, cache, util, collation, settings) {
+    ], function (ext, http, apiFactory, notifications, cache, util, collation, settings) {
 
     'use strict';
 
@@ -146,16 +146,16 @@ define('io.ox/contacts/api',
                 sort: '607', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
                     var queryFields = {
-                            names: ("display_name first_name last_name yomiFirstName yomiLastName company yomiCompany " +
-                            "email1 email2 email3").split(" "),
-                            addresses: ("street_home postal_code_home city_home state_home country_home " +
-                            "street_business postal_code_business city_business state_business country_business " +
-                            "street_other postal_code_other city_other state_other country_other").split(" "),
-                            phones: ("telephone_business1 telephone_business2 telephone_home1 telephone_home2 " +
-                            "telephone_other fax_business telephone_callback telephone_car telephone_company " +
-                            "fax_home cellular_telephone1 cellular_telephone2 fax_other telephone_isdn " +
-                            "telephone_pager telephone_primary telephone_radio telephone_telex telephone_ttytdd " +
-                            "telephone_ip telephone_assistant").split(" ")
+                            names: ('display_name first_name last_name yomiFirstName yomiLastName company yomiCompany ' +
+                            'email1 email2 email3').split(' '),
+                            addresses: ('street_home postal_code_home city_home state_home country_home ' +
+                            'street_business postal_code_business city_business state_business country_business ' +
+                            'street_other postal_code_other city_other state_other country_other').split(' '),
+                            phones: ('telephone_business1 telephone_business2 telephone_home1 telephone_home2 ' +
+                            'telephone_other fax_business telephone_callback telephone_car telephone_company ' +
+                            'fax_home cellular_telephone1 cellular_telephone2 fax_other telephone_isdn ' +
+                            'telephone_pager telephone_primary telephone_radio telephone_telex telephone_ttytdd ' +
+                            'telephone_ip telephone_assistant').split(' ')
                         },
                         filter = ['or'],
                         data,
@@ -280,7 +280,7 @@ define('io.ox/contacts/api',
                 )
                 .then(function () {
                     if (attachmentHandlingNeeded) {
-                        api.addToUploadList(d.folder_id + '.' + d.id); // to make the detailview show the busy animation
+                        api.addToUploadList(_.ecid(d)); // to make the detailview show the busy animation
                     }
                     api.trigger('create', { id: d.id, folder: d.folder_id });
                     api.trigger('refresh.all');
@@ -306,7 +306,7 @@ define('io.ox/contacts/api',
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
                 return $.when().pipe(function () {
-                    api.addToUploadList(o.folder + '.' + o.id);//to make the detailview show the busy animation
+                    api.addToUploadList(_.ecid(o));//to make the detailview show the busy animation
                     api.trigger('update:' + _.ecid(o));
                     return { folder_id: o.folder, id: o.id };
                 });
@@ -412,6 +412,7 @@ define('io.ox/contacts/api',
      * @return {promise}
      */
     api.remove =  function (list) {
+        api.trigger('beforedelete', list);
         // get array
         list = _.isArray(list) ? list : [list];
         // remove
@@ -846,7 +847,7 @@ define('io.ox/contacts/api',
                     })
                 );
             })
-            .done(function (data) {
+            .done(function () {
                 api.trigger('refresh.all');
             });
     };
@@ -940,5 +941,6 @@ define('io.ox/contacts/api',
         //trigger refresh
         api.trigger('update:' + key);
     };
+
     return api;
 });

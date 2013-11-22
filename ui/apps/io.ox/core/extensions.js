@@ -1,21 +1,20 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/extensions",
-    ["io.ox/core/event", "io.ox/core/async"], function (Events, async) {
+define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
-    "use strict";
+    'use strict';
 
     // global registry
     var registry = {},
@@ -38,16 +37,18 @@ define("io.ox/core/extensions",
                 return -1;
             }
             return a.index - b.index;
-        },
+        };
 
         // for debugging purposes
+        /*
         randomSorter = function () {
             return Math.random() > 0.5 ? -1 : +1;
         };
+        */
 
 
     // never leak
-    $(window).on("unload", function () {
+    $(window).on('unload', function () {
         _(registry).each(function (ext) {
             ext.clear();
         });
@@ -57,7 +58,7 @@ define("io.ox/core/extensions",
     var Point = function (options) {
 
         this.id = String(options.id);
-        this.description = options.description || "";
+        this.description = options.description || '';
 
         var extensions = [],
             orphans = {},
@@ -109,7 +110,7 @@ define("io.ox/core/extensions",
 
                 function fnAddExtension(ext) {
                     if (circleGuard[ext.id]) {
-                        throw "Circular References detected for extension point " + self.id + " and extension " + ext.id;
+                        throw 'Circular References detected for extension point ' + self.id + ' and extension ' + ext.id;
                     }
                     circleGuard[ext.id] = true;
                     var before = befores[ext.id];
@@ -159,7 +160,7 @@ define("io.ox/core/extensions",
 
             if (extension.invoke) {
                 console.error(extension);
-                throw "Extensions must not have their own invoke method";
+                throw 'Extensions must not have their own invoke method';
             }
 
             if (!extension.id) {
@@ -194,7 +195,7 @@ define("io.ox/core/extensions",
                     };
                 }
 
-                this.trigger("extended", extension);
+                this.trigger('extended', extension);
             }
 
             return this;
@@ -210,7 +211,7 @@ define("io.ox/core/extensions",
         this.replace = function (extension) {
 
             if (!extension.id) {
-                throw "Replacements must have an id!";
+                throw 'Replacements must have an id!';
             }
 
             var replaced = false;
@@ -422,8 +423,11 @@ define("io.ox/core/extensions",
 
         // shallow copy (since batons also contain DOM nodes)
         clone: function (options) {
-            var clone = new Baton(options);
+            var clone = new Baton();
             _(this).each(function (obj, key) {
+                clone[key] = _.extend({}, obj);
+            });
+            _(options || {}).each(function (obj, key) {
                 clone[key] = _.extend({}, obj);
             });
             return clone;
@@ -455,7 +459,7 @@ define("io.ox/core/extensions",
          * @return {point}
          */
         point: function (id) {
-            id = id || "";
+            id = id || '';
             if (registry[id] !== undefined) {
                 return registry[id];
             } else {

@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -22,7 +23,7 @@ define('plugins/portal/tumblr/register',
 
     'use strict';
 
-    var API_KEY = settings.get("apiKeys/tumblr"),
+    var API_KEY = settings.get('apiKeys/tumblr'),
         apiUrl = ['https://api.tumblr.com/v2/blog/', '/posts/?api_key=' + API_KEY + '&notes_info=&filter='];
 
     if (_.isUndefined(API_KEY)) {
@@ -43,7 +44,7 @@ define('plugins/portal/tumblr/register',
             function initFeed() {
                 var url = baton.model.get('props').url;
                 baton.feed = new Feed({
-                    url: '' + apiUrl.join(url) + "&jsonp="
+                    url: '' + apiUrl.join(url) + '&jsonp='
                 });
             }
 
@@ -137,7 +138,7 @@ define('plugins/portal/tumblr/register',
                     return tags;
                 },
                 postPhotos = function () {
-                    var img, node;
+                    var img;
                     if (_.isArray(post.photos) && post.photos.length && (sizes = post.photos[0].alt_sizes)) {
                         _(sizes).each(function (photo) {
                             if (width === 0 || (photo.width > 500 && photo.width < 1200)) {
@@ -159,7 +160,7 @@ define('plugins/portal/tumblr/register',
                 },
                 postBody = function () {
                     var strippedHtml = post.body
-                        .replace(/<(?!img\s*\/?)[^>]+>/g, "\n")
+                        .replace(/<(?!img\s*\/?)[^>]+>/g, '\n')
                         .replace(/<img.+?src=[\'"]([^\'"]+)[\'"].*?>/i, '<img src="$1">');
                     if (post.type === 'chat') {
                         strippedHtml = strippedHtml.replace(/\n/g, '<br />');
@@ -222,10 +223,9 @@ define('plugins/portal/tumblr/register',
             $url = $('<input type="text" class="input-block-level" placeholder=".tumblr.com">').placeholder(),
             $description = $('<input type="text" class="input-block-level">'),
             $error = $('<div>').addClass('alert alert-error').hide(),
-            props = model.get('props') || {},
-            that = this;
+            props = model.get('props') || {};
 
-        dialog.header($("<h4>").text(gt('Edit Tumblr feed')))
+        dialog.header($('<h4>').text(gt('Edit Tumblr feed')))
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('Feed URL')),
@@ -247,7 +247,7 @@ define('plugins/portal/tumblr/register',
             }
         });
 
-        dialog.on('save', function (e) {
+        dialog.on('save', function () {
 
             $error.hide();
 

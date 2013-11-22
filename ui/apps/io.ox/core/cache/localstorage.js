@@ -5,13 +5,14 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/cache/localstorage', ["io.ox/core/extensions"], function (ext) {
+define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -170,9 +171,9 @@ define('io.ox/core/cache/localstorage', ["io.ox/core/extensions"], function (ext
             return Modernizr.localstorage;
         },
 
-        gc: function (force) {
+        gc: function () {
 
-            var now = _.now(), cid, items = [], removed = 0, i = 0, $i;
+            var cid, items = [], removed = 0, i = 0, $i;
 
             // loop #1: get number of items
             for (cid in access) {
@@ -226,7 +227,7 @@ define('io.ox/core/cache/localstorage', ["io.ox/core/extensions"], function (ext
 
     };
 
-    ext.point("io.ox/core/cache/storage").extend(that);
+    ext.point('io.ox/core/cache/storage').extend(that);
 
     return that;
 });

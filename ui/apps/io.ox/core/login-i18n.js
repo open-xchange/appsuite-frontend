@@ -1,21 +1,24 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
 define('io.ox/core/login-i18n', ['gettext!io.ox/core/login'], function (gt) {
+
     'use strict';
+
     return gt;
 
     // A list of all strings to be included in the POT file.
+    /* jshint unused: false */
     function list() {
         gt('User name');
         gt('Password');
@@ -36,7 +39,7 @@ define('io.ox/core/login-i18n', ['gettext!io.ox/core/login'], function (gt) {
         gt('Your operating system is not supported.');
         gt('Please update your browser.');
         gt('For best results, please use ');
-        gt('You have been automatically logged out');
+        gt('You have been automatically signed out');
         gt('Unsupported Preview - Certain functions disabled and stability ' +
            'not assured until general release later this year');
         gt('Offline mode');

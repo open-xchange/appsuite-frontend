@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -21,6 +22,9 @@ define([], function () {
 
         it('loads underscore', function () {
             expect(_).toBeDefined();
+        });
+        it('loads chai', function () {
+            expect(chai).toBeDefined();
         });
     });
 });

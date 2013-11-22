@@ -1,22 +1,22 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("plugins/portal/calendar/register",
-    ["io.ox/core/extensions",
-     "io.ox/core/date",
-     "io.ox/calendar/util",
-     "gettext!plugins/portal",
+define('plugins/portal/calendar/register',
+    ['io.ox/core/extensions',
+     'io.ox/core/date',
+     'io.ox/calendar/util',
+     'gettext!plugins/portal',
      'settings!io.ox/calendar',
      'io.ox/core/strings',
      'io.ox/calendar/api'
@@ -53,12 +53,12 @@ define("plugins/portal/calendar/register",
     //     return unit.replace("%s", Math.round(delta));
     // };
 
-    ext.point("io.ox/portal/widget/calendar").extend({
+    ext.point('io.ox/portal/widget/calendar').extend({
 
         title: gt('Appointments'),
 
-        initialize: function (baton) {
-            api.on('update create delete', function (event, element) {
+        initialize: function () {
+            api.on('update create delete', function () {
                 require(['io.ox/portal/main'], function (portal) {//refresh portal
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.calendar_0;
@@ -70,7 +70,7 @@ define("plugins/portal/calendar/register",
             });
         },
 
-        action: function (baton) {
+        action: function () {
             ox.launch('io.ox/calendar/main', { perspective: 'list' });
         },
 
@@ -94,7 +94,7 @@ define("plugins/portal/calendar/register",
             if (appointments.length === 0) {
                 $content.append(
                     $('<div class="line">')
-                    .text(gt("You don't have any appointments in the near future."))
+                    .text(gt('You don\'t have any appointments in the near future.'))
                 );
             } else {
                 _(appointments).each(function (nextApp) {
@@ -137,7 +137,7 @@ define("plugins/portal/calendar/register",
 
         post: function (ext) {
             var self = this;
-            require(["io.ox/calendar/api"], function (api) {
+            require(['io.ox/calendar/api'], function (api) {
                 api.on('refresh.all', function () {
                     ext.load().done(_.bind(ext.draw, self));
                 });

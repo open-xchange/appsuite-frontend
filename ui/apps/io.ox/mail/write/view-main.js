@@ -1,31 +1,29 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
-define("io.ox/mail/write/view-main",
-    ["io.ox/core/extensions",
-     "io.ox/core/extPatterns/links",
-     "io.ox/mail/actions",
+define('io.ox/mail/write/view-main',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/mail/actions',
      'io.ox/mail/api',
      'io.ox/core/tk/view',
      'io.ox/core/tk/model',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/mail/util',
-     'io.ox/preview/main',
      'io.ox/core/api/user',
      'io.ox/core/capabilities',
-     'io.ox/core/tk/dialogs',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
      'io.ox/core/api/account',
@@ -37,7 +35,7 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/tk/attachments',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, pre, userAPI, capabilities, dialogs, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, attachments, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, userAPI, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, attachments, settings, gt) {
 
     'use strict';
 
@@ -57,7 +55,7 @@ define("io.ox/mail/write/view-main",
     ext.point(POINT + '/toolbar').extend(new links.Button({
         id: 'draft',
         index: 200,
-        label: gt('Save'), // is "Save as draft" but let's keep it short for small devices
+        label: gt('Save'), // is 'Save as draft' but let's keep it short for small devices
         cssClasses: 'btn',
         ref: POINT + '/actions/draft',
         tabIndex: '6'
@@ -86,7 +84,7 @@ define("io.ox/mail/write/view-main",
             ext.point(POINT + '/toolbar').disable('draft');
 
             // reorder button
-            ext.point(POINT + "/toolbar").replace({id: 'discard', index: 50});
+            ext.point(POINT + '/toolbar').replace({id: 'discard', index: 50});
 
             //invoke other buttons with new container
             ext.point(POINT + '/toolbar').invoke(
@@ -106,8 +104,7 @@ define("io.ox/mail/write/view-main",
 
     var View = ViewClass.extend({
 
-        initialize: function (app, model) {
-            var self = this;
+        initialize: function (app) {
             this.sections = {};
             this.baton = ext.Baton({
                 app: app,
@@ -190,25 +187,6 @@ define("io.ox/mail/write/view-main",
             return this.createLink(id, label).appendTo(this.scrollpane);
         },
 
-        createUpload: (function () {
-
-            var change = function (e) {
-                handleFileSelect(e, this);
-            };
-
-            return function () {
-
-                var inputOptions = Modernizr.filereader && 'FormData' in window ?
-                    { type: 'file', name: 'file_' + (this.fileCount++), multiple: 'multiple', tabindex: '7' } :
-                    { type: 'file', name: 'file_' + (this.fileCount++), tabindex: '7' };
-
-                return $('<div class="section-item upload">').append(
-                    $('<input>', inputOptions).on('change', $.proxy(change, this))
-                );
-            };
-
-        }()),
-
         createField: function (id) {
 
             var self = this, node = self.app.getWindowNode();
@@ -252,7 +230,7 @@ define("io.ox/mail/write/view-main",
                             copyRecipients.call(self, id, $(this), e);
                         },
                         blur: function (e) {
-                            copyRecipients.call(self, id, $(this));
+                            copyRecipients.call(self, id, $(this), e);
                         }
                     })
                     .on({
@@ -265,7 +243,7 @@ define("io.ox/mail/write/view-main",
                         },
                         keydown: function (e) {
                             if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
-                                copyRecipients.call(self, id, $(this));
+                                copyRecipients.call(self, id, $(this), e);
                             }
                         },
                         // shortcuts (to/cc/bcc)
@@ -411,11 +389,9 @@ define("io.ox/mail/write/view-main",
 
             e.preventDefault();
 
-            var recently = {},
-                icon = $(e.target).data('icon'),
+            var icon = $(e.target).data('icon'),
                 content = this.editor.val(),
-                caret = parseInt($(this.editor).attr('caretPosition'), 10),
-                subjectCaret = parseInt($(this.subject).attr('caretPosition'), 10);
+                caret = parseInt($(this.editor).attr('caretPosition'), 10);
 
             this.emoji.recent(icon.unicode);
 
@@ -539,7 +515,6 @@ define("io.ox/mail/write/view-main",
             );
 
             // CC
-
             this.addLink('cc', gt('Copy (CC) to'));
             this.addSection('cc', gt('Copy (CC) to'), false, true)
                 .append(this.createRecipientList('cc'))
@@ -549,7 +524,6 @@ define("io.ox/mail/write/view-main",
 
 
             // BCC
-
             this.addLink('bcc', gt('Blind copy (BCC) to'));
             this.addSection('bcc', gt('Blind copy (BCC) to'), false, true)
                 .append(this.createRecipientList('bcc'))
@@ -557,18 +531,17 @@ define("io.ox/mail/write/view-main",
                         .find('input').attr('placeholder', gt.format('%1$s ...', gt('in blind copy'))).placeholder().end()
                     );
 
-
             // Attachments
             this.fileCount = 0;
             var uploadSection = this.createSection('attachments', gt('Attachments'), _.device('!smartphone'), true),
                 dndInfo =  $('<div class="alert alert-info">').text(gt('You can drag and drop files from your computer here to add as attachment.'));
 
-            gt('Add Attachment'); // for next release
             var $inputWrap = attachments.fileUploadWidget({
                     multi: true,
                     displayLabel: false,
                     displayButton: true,
-                    buttontext: gt('Select file'),
+                    drive: true,
+                    buttontext: gt('Add Attachment'),
                     buttonicon: 'icon-paper-clip'
                 }),
                 $input = $inputWrap.find('input[type="file"]'),
@@ -601,15 +574,107 @@ define("io.ox/mail/write/view-main",
                             }
                         }
                     };
+            $inputWrap.on('change.fileupload', function () {
+                //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
+                $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
+            });
             $input.on('change', changeHandler);
+
+            $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
+                e.preventDefault();
+
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/cache', 'io.ox/files/api', 'io.ox/core/tk/selection']).done(function (dialogs, folderviews, cache, filesAPI, Selection) {
+
+                    var folderCache = new cache.SimpleCache('folder-all', false),
+                        subFolderCache = new cache.SimpleCache('subfolder-all', false),
+                        storage = {
+                            folderCache: folderCache,
+                            subFolderCache: subFolderCache
+                        },
+                        container = $('<div>'),
+                        filesPane = $('<div>').addClass('io-ox-fileselection').attr({ tabindex: 0}),
+                        tree = new folderviews.ApplicationFolderTree(container, {
+                            type: 'infostore',
+                            tabindex: 0,
+                            rootFolderId: '9',
+                            all: true,
+                            storage: storage
+                        }),
+                        pane = new dialogs.ModalDialog({
+                            width: window.innerWidth * 0.8,
+                            height: 350,
+                            addclass: 'add-infostore-file'
+                        }),
+                        self = this;
+
+                    Selection.extend(this, filesPane, {});
+
+                    this.selection.keyboard(filesPane, true);
+                    this.selection.setEditable(true, '.labelwrapper');
+
+                    pane.header($('<h4>').text(gt('Add files')))
+                        .build(function () {
+                            this.getContentNode().append(container, filesPane);
+                        })
+                        .addPrimaryButton('save', gt('Add'))
+                        .addButton('cancel', gt('Cancel'))
+                        .show(function () {
+                            tree.paint().done(function () {
+                                tree.selection.updateIndex().selectFirst();
+                                pane.getBody().find('.io-ox-foldertree').focus();
+                            });
+                        })
+                        .done(function (action) {
+                            if (action === 'save') {
+                                var result = [];
+                                filesPane.find('input:checked').each(function (index, el) {
+                                    result.push($(el).data('fileData'));
+                                });
+                                app.addFiles(result, 'infostore');
+                            }
+                            tree.destroy().done(function () {
+                                tree = pane = null;
+                            });
+                        });
+
+                    // add dbl-click option like native file-chooser
+                    filesPane.on('dblclick', '.file', function () {
+                        var data = $('input', this).data('fileData');
+                        if (data) {
+                            app.addFiles([data], 'infostore');
+                            pane.close();
+                        }
+                    });
+
+                    // on foldertree change update file selection
+                    tree.selection.on('select', function (e, folderId) {
+                        filesPane.empty();
+                        filesAPI.getAll({ folder: folderId }, false).then(function (files) {
+                            var fileArr = [];
+                            if (files.length) {
+                                for (var i = 0; i < files.length; i++) {
+                                    var file = files[i],
+                                        title = (file.filename || file.title),
+                                        input = $('<input type="checkbox" class="reflect-selection" tabindex="-1" value="' + file.id + '"/>').data('fileData', file),
+                                        label = $('<label class="checkbox" title="' + title + '">').append(input),
+                                        labelWrapper = $('<div class="labelwrapper">').append(label);
+                                    fileArr.push($('<div class="file selectable" data-obj-id="' + _.cid(file) + '">').append(labelWrapper, $('<span>').text(' ' + title)));
+                                }
+                            }
+                            filesPane.append(fileArr);
+                            self.selection.clear();
+                            self.selection.init(files);
+                            self.selection.selectFirst();
+                        });
+                    });
+                });
+            });
 
             this.scrollpane.append(
                 $('<form class="oldschool">').append(
                     this.createLink('attachments', gt('Attachments')),
-                    uploadSection.label,
                     uploadSection.section.append(
-                        //FIXME: when 28729 bug is fixed move IE9 also to fileUploadWidget an EditabelFileList (search for 28729 in source code)
-                        _.browser.IE !== 9 ? $inputWrap : this.createUpload(),
+                        $inputWrap,
                         (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')
                     )
                 )
@@ -627,10 +692,6 @@ define("io.ox/mail/write/view-main",
             }, this.baton), {
                 rowClass: 'collapsed'
             });
-            // add preview side-popup
-            if (_.browser.IE <= 10)
-                new dialogs.SidePopup().delegate(this.sections.attachments, '.attachment-preview', previewAttachment);
-
 
             // Signatures
             (function () {
@@ -652,7 +713,7 @@ define("io.ox/mail/write/view-main",
                                     .replace(/\s\s+/g, ' ')
                                     // remove ASCII art
                                     .replace(/([\-=+*°._!?\/\^]{4,})/g, '');
-                                preview = preview.length > 150 ? preview.substr(0, 150) + ' ...' : preview;
+                                preview = _.ellipsis(preview, {max: 150});
                                 return memo.add(
                                     $('<div class="section-item pointer">')
                                     .addClass(index >= signatures.length ? 'signature-remove' : '')
@@ -783,19 +844,24 @@ define("io.ox/mail/write/view-main",
             function createEditor() {
                 // autogrow function which expands a textarea while typing
                 // to prevent overflowing on mobile devices
-                var autogrow = function (e) {
+                var autogrow = function () {
                     var input = $(this),
                         scrollHeight = input[0].scrollHeight,
                         clientHeight = input[0].clientHeight,
+                        parentScrollpane = self.form.parent(),
                         paddingTop, paddingBottom, paddingHeight;
 
 
                     if (clientHeight < scrollHeight) {
-                        paddingTop = parseFloat(input.css("padding-top"));
-                        paddingBottom = parseFloat(input.css("padding-bottom"));
+                        paddingTop = parseFloat(input.css('padding-top'));
+                        paddingBottom = parseFloat(input.css('padding-bottom'));
                         paddingHeight = paddingTop + paddingBottom;
 
+                        var scroll = (scrollHeight - paddingHeight + 15) - input.height();
+
                         input.height(scrollHeight - paddingHeight + 15);
+                        //keep the scrollposition
+                        parentScrollpane.scrollTop(parentScrollpane.scrollTop() + scroll);
                     }
                 };
 
@@ -803,7 +869,7 @@ define("io.ox/mail/write/view-main",
                     .attr({ name: 'content', tabindex: '4', disabled: 'disabled', caretPosition: '0' })
                     .addClass('text-editor')
                     .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
-                    .on('keyup click', function (e) {
+                    .on('keyup click', function () {
                         /* disabled emoji input for subject */
                         //$(this).attr('emojiFocus', 'true');
                         //self.subject.attr('emojiFocus', 'false');
@@ -847,7 +913,21 @@ define("io.ox/mail/write/view-main",
                                     self.scrollEmoji();
                                 }
                             }
+                            if (_.device('android')) {//android needs special handling here
+                                setTimeout(function () {//use timeout because the onscreen keyboard resizes the window
+                                    self.form.parent().scrollTop(self.form.parent().height());
+                                }, 500);
+                            } else {
+                                self.spacer.show();//show spacer to prevent onscreen keyboard from overlapping
+                                self.form.parent().scrollTop(self.form.parent().scrollTop() + self.spacer.height());
+                            }
                         });
+                    if (_.device('!android')) {
+                        self.textarea.on('blur', function () {
+                            //hide spacer again after onscreen keyboard is closed
+                            self.spacer.hide();
+                        });
+                    }
                     // textarea only, no container overkill
                     return self.textarea;
                 }
@@ -964,223 +1044,6 @@ define("io.ox/mail/write/view-main",
     });
 
     var dummySignature = { displayname: gt('No signature') };
-    var handleFileSelect, addUpload, supportsPreview, previewAttachment, createPreview;
-
-    supportsPreview = function (file) {
-        // is not local?
-        if (file.message) { // mail
-            return new pre.Preview({ mimetype: 'message/rfc822' }).supportsPreview();
-        } else if (file.display_name) { // v-card
-            return true;
-        } else if (file.id && file.folder_id) { // infostore
-            return true;
-        } else if (file.atmsgref) { // forward mail attachment
-            return true;
-        } else {
-            return window.FileReader && (/^image\/(png|gif|jpe?g|bmp)$/i).test(file.type);
-        }
-    };
-
-    previewAttachment = function (popup, e, target) {
-
-        e.preventDefault();
-
-        var file = target.data('file'), message = file.message, app = target.data('app'),
-            editor = target.data('rightside').find('iframe').contents().find('body'),//get the editor in the iframe
-            preview, reader;
-
-        editor.one('click', this.close);//close if editor is selected(causes overlapping)
-        // nested message?
-        if (message) {
-            preview = new pre.Preview({
-                    data: { nested_message: message },
-                    mimetype: 'message/rfc822'
-                }, {
-                    width: popup.parent().width(),
-                    height: 'auto'
-                });
-            if (preview.supportsPreview()) {
-                preview.appendTo(popup);
-                popup.append($('<div>').text(_.noI18n('\u00A0')));
-            }
-        } else if (file.display_name || file.email1) {
-            // if is vCard
-            require(['io.ox/contacts/view-detail'], function (view) {
-                popup.append(view.draw(file));
-            });
-        } else if (file.id && file.folder_id) { // infostore
-            // if is infostore
-            require(['io.ox/files/api'], function (filesAPI) {
-                var prev = new pre.Preview({
-                    name: file.filename,
-                    filename: file.filename,
-                    mimetype: file.file_mimetype,
-                    size: file.file_size,
-                    dataURL: filesAPI.getUrl(file, 'bare'),
-                    version: file.version,
-                    id: file.id,
-                    folder_id: file.folder_id
-                }, {
-                    width: popup.parent().width(),
-                    height: 'auto'
-                });
-                if (prev.supportsPreview()) {
-                    popup.append(
-                        $('<h4>').addClass('mail-attachment-preview').text(file.filename)
-                    );
-                    prev.appendTo(popup);
-                    popup.append($('<div>').text('\u00A0'));
-                }
-            });
-        } else if (file.atmsgref) { // forward mail attachment
-            var pos = file.atmsgref.lastIndexOf('/');
-            file.parent = {
-                folder_id: file.atmsgref.substr(0, pos),
-                id: file.atmsgref.substr(pos + 1)
-            };
-            var prev = new pre.Preview({
-                data: file,
-                filename: file.filename,
-                source: 'mail',
-                folder_id: file.parent.folder_id,
-                id: file.parent.id,
-                attached: file.id,
-                parent: file.parent,
-                mimetype: file.content_type,
-                dataURL: mailAPI.getUrl(file, 'view')
-            }, {
-                width: popup.parent().width(),
-                height: 'auto'
-            });
-            if (prev.supportsPreview()) {
-                popup.append(
-                    $('<h4>').addClass('mail-attachment-preview').text(file.filename)
-                );
-                prev.appendTo(popup);
-                popup.append($('<div>').text('\u00A0'));
-            }
-
-        } else {
-            // inject image as data-url
-            reader = new FileReader();
-            reader.onload = function (e) {
-                popup.css({ width: '100%', height: '100%' })
-                .append(
-                    $('<div>')
-                    .css({
-                        width: '100%',
-                        height: '100%',
-                        backgroundImage: 'url(' + e.target.result + ')',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center center',
-                        backgroundSize: 'contain'
-                    })
-                );
-                reader = reader.onload = null;
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    createPreview = function (file, app, rightside) {//rightside is needed to let the popup check for events in the editor iframe
-        return $('<a href="#" class="attachment-preview">').data({file: file, app: app, rightside: rightside }).text(gt('Preview'));
-    };
-
-    function round(num, digits) {
-        // TODO: add localization (. vs ,)
-        digits = digits || 0;
-        var pow = Math.pow(10, digits);
-        return Math.round(num * pow) / pow;
-    }
-
-    handleFileSelect = function (e, view) {
-        // look for linked attachments or dropped files
-        var target = $(e.currentTarget),
-            item = target.prop('attachment') || target.prop('file') || target.prop('nested'),
-            list = item ? [item] : e.target.files;
-
-        // IE fallback
-        if (!list) {
-            var name = target.val();
-            list = [{
-                filename: name.split(/(\\|\/)/g).pop(),
-                size: 0
-            }];
-        }
-
-        if (list.length) {
-            var $section = view.sections.attachments,
-                $upload = $section.children().last();
-
-            // loop over all attachments
-            _(list).each(function (file) {
-
-                /*
-                 * Files, VCard, and Messages are very close here
-                 * there's no real separation
-                 */
-
-                var icon, name, size, info,
-                    isMessage = 'message' in file,
-                    isFile = 'size' in file || 'file_size' in file;
-
-                // message?
-                if (isMessage) {
-                    info = $('<span>').addClass('filesize').text('');
-                    icon = $('<i>').addClass('icon-paper-clip');
-                    name = file.message.subject || '\u00A0';
-                } else if (isFile) {
-                    // filesize
-                    size = file.size || file.file_size;
-                    size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
-                    info = $('<span>').addClass('filesize').text(size);
-                    icon = $('<i>').addClass('icon-paper-clip');
-                    name = file.filename || file.name || '';
-                } else {
-                    // vcard
-                    info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
-                    icon = $('<i>').addClass('icon-list-alt');
-                    name = contactsUtil.getFullName(file);
-                }
-
-                // draw
-                $section.append(
-                    $('<div>').addClass('section-item file').append(
-                        // icon
-                        icon,
-                        // filename
-                        $('<div class="row-1">').text(_.noI18n(name)),
-                        // filesize / preview
-                        $('<div class="row-2">').append(
-                            info,
-                            // preview?
-                            supportsPreview(file) ? createPreview(file, view.app, view.rightside) : $(),
-                            // nbsp
-                            $.txt('\u00A0')
-                        ),
-                        // remove
-                        $('<a href="#" class="remove" tabindex="6">')
-                        .attr('title', gt('Remove attachment'))
-                        .append(
-                            $('<i class="icon-trash">')
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            //remove upload container and all file 'label divs'
-                            $upload.nextUntil('.upload', '.file').remove();
-                            $upload.replaceWith('');
-                        })
-                    )
-                );
-            });
-            // hide current upload field
-            $(e.target).closest('.section-item.upload').hide();
-        }
-
-        view.sections.attachments.append(
-            view.createUpload()
-        );
-    };
 
     function fnToggleSection(e) {
         var id = e.data.id,
@@ -1191,18 +1054,6 @@ define("io.ox/mail/write/view-main",
         } else {
             this.showSection(id, target);
         }
-    }
-
-    function fnHideSection(e) {
-        var id = e.data.id;
-        e.preventDefault();
-        this.hideSection(id, e.target);
-    }
-
-    function fnShowSection(e) {
-        var id = e.data.id;
-        e.preventDefault();
-        this.showSection(id, e.target);
     }
 
     function togglePriority() {
@@ -1221,9 +1072,9 @@ define("io.ox/mail/write/view-main",
 
         var valBase, list;
 
-        //normalize data
-        if (e && e.data.distlistarray !== null) {
-            //distribution list
+        // normalize data
+        if (e && e.data && e.data.distlistarray !== null) {
+            // distribution list
             list = _(e.data.distlistarray).map(function (member) {
                 return {
                     full_name: member.display_name,
@@ -1231,9 +1082,9 @@ define("io.ox/mail/write/view-main",
                     email: member.mail
                 };
             });
-        } else if (e && e.data.id) {
-            //selected contact list
-            list = [ e.data ];
+        } else if (e && e.data && e.data.id) {
+            // selected contact list
+            list = [e.data];
         } else {
             valBase = node.val();
             list = mailUtil.parseRecipients(valBase);
@@ -1242,15 +1093,16 @@ define("io.ox/mail/write/view-main",
         if (list.length) {
             // add
             this.addRecipients(id, list);
-            node.val('').focus();
+            // don't refocus on blur
+            if (e.type !== 'blur') node.val('').focus();
         } else if ($.trim(node.val()) !== '') {
             // not accepted but has content
-            node.attr('disabled', 'disabled')
+            node.prop('disabled', true)
                 .css({ border: '1px solid #a00', backgroundColor: '#fee' })
                 .delay(600)
                 .queue(function () {
                     node.css({ border: '', backgroundColor: '' })
-                        .removeAttr('disabled')
+                        .prop('disabled', false)
                         .focus()
                         .dequeue();
                 });
@@ -1323,7 +1175,7 @@ define("io.ox/mail/write/view-main",
         return mapping[field] || '';
     }
 
-    function drawAutoCompleteItem(node, data, query) {
+    function drawAutoCompleteItem(node, data) {
         var url = contactsUtil.getImage(data.data, contactPictureOptions), labelnode = '';
         //source field label
         if (getFieldLabel(data.field) !== '')
@@ -1409,7 +1261,7 @@ define("io.ox/mail/write/view-main",
             radio, $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
         );
         if (isChecked) {
-            radio.attr('checked', 'checked');
+            radio.prop('checked', true);
         }
         // if (Modernizr.touch) {
         //     label.on('click', clickRadio);
@@ -1429,7 +1281,7 @@ define("io.ox/mail/write/view-main",
             box, $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
         );
         if (isChecked) {
-            box.attr('checked', 'checked');
+            box.prop('checked', true);
         }
         // if (Modernizr.touch) {
         //     label.on('click', clickCheckbox);

@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -12,17 +13,16 @@
 if (jasmine) {
     beforeEach(function () {
         this.addMatchers({
-            toTrigger: function (event_name) {
-                var spy = sinon.spy(),
-                    actual = this.actual;
+            toTrigger: function (eventName) {
+                var spy = sinon.spy();
 
-                this.spec.after(function() {
+                this.spec.after(function () {
                     expect(spy).toHaveBeenCalledOnce();
                 });
 
-                this.actual.on(event_name, spy);
+                this.actual.on(eventName, spy);
                 return true;
             }
         });
     });
-};
+}

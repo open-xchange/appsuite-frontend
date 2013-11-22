@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -15,7 +16,8 @@ define('io.ox/mail/print',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/mail/view-detail',
-     'gettext!io.ox/mail'], function (print, api, util, detailview,  gt) {
+     'gettext!io.ox/mail'
+    ], function (print, api, util, detailview,  gt) {
 
     'use strict';
 
@@ -26,8 +28,7 @@ define('io.ox/mail/print',
     function getContent(data) {
         if (!_.isArray(data.attachments)) return '';
         if (type === 'text') {
-            var source = String(data.attachments[0].content || ''),
-                isLarge = source.length > 1024 * 512; // > 512 KB
+            var source = String(data.attachments[0].content || '');
             // replace images on source level
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
             return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
@@ -64,6 +65,8 @@ define('io.ox/mail/print',
                 get: function (obj) {
                     return api.get(_.extend({ view: type}, obj));
                 },
+
+                title: selection.length === 1 ? selection[0].subject : undefined,
 
                 i18n: {
                     to: gt('To'),

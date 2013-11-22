@@ -1,20 +1,21 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs",
+define('io.ox/core/tk/dialogs',
     ['io.ox/core/event',
-    'gettext!io.ox/core',
-    'less!io.ox/core/tk/dialog.less'], function (Events, gt) {
+     'gettext!io.ox/core',
+     'less!io.ox/core/tk/dialog.less'
+    ], function (Events, gt) {
 
     'use strict';
 
@@ -36,7 +37,7 @@ define("io.ox/core/tk/dialogs",
                 center: true,
                 async: false,
                 maximize: false,
-                top: "50%",
+                top: '50%',
                 container: $('body')
             }, options),
 
@@ -50,7 +51,6 @@ define("io.ox/core/tk/dialogs",
             lastFocus = $(),
             innerFocus = $(),
             deferred = $.Deferred(),
-            lastSimpleScrollPos = 0,
             isBusy = false,
             self = this,
             data = {},
@@ -68,6 +68,10 @@ define("io.ox/core/tk/dialogs",
             },
 
             close = function () {
+
+                // disable scrollblocker - Bug 29011
+                o.container.removeClass('blockscroll');
+
                 self.trigger('close');
                 document.removeEventListener('focus', keepFocus, true); // not via jQuery!
                 nodes.popup.empty().remove();
@@ -93,11 +97,11 @@ define("io.ox/core/tk/dialogs",
             busy = function () {
                 nodes.footer
                     .find('input, select, button')
-                    .attr('disabled', 'disabled');
+                    .prop('disabled', true);
                 nodes.body
                     .css('opacity', 0.5)
                     .find('input, select, button, textarea')
-                    .attr('disabled', 'disabled');
+                    .prop('disabled', true);
                 innerFocus = $(document.activeElement);
                 nodes.popup.focus();
                 isBusy = true;
@@ -106,11 +110,11 @@ define("io.ox/core/tk/dialogs",
             idle = function () {
                 nodes.footer
                     .find('input, select, button')
-                    .removeAttr('disabled');
+                    .prop('disabled', false);
                 nodes.body
                     .css('opacity', '')
                     .find('input, select, button, textarea')
-                    .removeAttr('disabled');
+                    .prop('disabled', false);
                 innerFocus.focus();
                 isBusy = false;
             },
@@ -227,8 +231,8 @@ define("io.ox/core/tk/dialogs",
 
         this.text = function (str) {
             var p = nodes.body;
-            p.find(".plain-text").remove();
-            p.append($('<h4 class="plain-text" id="dialog-title">').text(str || ""));
+            p.find('.plain-text').remove();
+            p.append($('<h4 class="plain-text" id="dialog-title">').text(str || ''));
             return this;
         };
 
@@ -239,7 +243,7 @@ define("io.ox/core/tk/dialogs",
             return this;
         };
 
-        this.append = function (node) {
+        this.append = function () {
             nodes.body.append.apply(nodes.body, arguments);
             return this;
         };
@@ -268,7 +272,7 @@ define("io.ox/core/tk/dialogs",
             }
             var button = $.button(opt);
             nodes.buttons.push(button);
-            return button.addClass(options.classes);
+            return button.addClass(options.classes).attr('role', 'button');
         };
 
         this.addButton = function (action, label, dataaction, options) {
@@ -330,6 +334,9 @@ define("io.ox/core/tk/dialogs",
 
         this.show = function (callback) {
 
+            // enable scrollblocker - Bug 29011
+            o.container.addClass('blockscroll');
+
             // remember focussed element
             lastFocus = $(document.activeElement);
             document.addEventListener('focus', keepFocus, true); // not via jQuery!
@@ -345,9 +352,9 @@ define("io.ox/core/tk/dialogs",
                     height: parseInt(o.height || nodes.popup.height(), 10)
                 };
                 // limit width & height
-                _(["width", "height"]).each(function (d) {
+                _(['width', 'height']).each(function (d) {
                     // apply explicit limit
-                    var id = o[$.camelCase("max-" + d)];
+                    var id = o[$.camelCase('max-' + d)];
                     if (o[id] && dim[d] > o[id]) {
                         dim[d] = o[id];
                     }
@@ -574,7 +581,7 @@ define("io.ox/core/tk/dialogs",
             close(e);
         };
 
-        close = function (e) {
+        close = function () {
             // use this to check if it's open
             if (self.nodes.closest) {
 
@@ -585,7 +592,7 @@ define("io.ox/core/tk/dialogs",
                 // remove handlers & avoid leaks
                 $(document).off('keydown', closeByEscapeKey);
                 self.nodes.closest.prop('sidepopup', previousProp);
-                self.nodes.click.off("click", closeByClick);
+                self.nodes.click.off('click', closeByClick);
                 popup.off('view:remove', closeByEvent);
                 self.lastTrigger = previousProp = null;
                 // use time to avoid flicker
@@ -637,23 +644,23 @@ define("io.ox/core/tk/dialogs",
                 }
             });
 
-        popup.on("click", processEvent);
+        popup.on('click', processEvent);
 
         open = function (e, handler) {
             // get proper elements
             var my = $(this), zIndex, sidepopup;
             self.nodes = {
-                closest: target || my.parents(".io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay").first(),
-                click: my.parents(".io-ox-sidepopup-pane, .window-body, .window-container-center, .io-ox-dialog-popup, .notifications-overlay").first(),
-                target: target || my.parents(".window-body, .simple-window, .window-container-center, .notifications-overlay").first(),
+                closest: target || my.parents('.io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),
+                click: my.parents('.io-ox-sidepopup-pane, .window-body, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),
+                target: target || my.parents('.window-body, .simple-window, .window-container-center, .notifications-overlay').first(),
                 simple: my.closest('.simple-window')
             };
 
             // get active side popup & triggering element
-            sidepopup = self.nodes.closest.prop("sidepopup") || null;
+            sidepopup = self.nodes.closest.prop('sidepopup') || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
             // get zIndex for visual stacking
-            zIndex = my.parents(".io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .window-container-center, .notifications-overlay").css('zIndex');
+            zIndex = my.parents('.io-ox-sidepopup, .window-content, .io-ox-dialog-popup, .window-container-center, .notifications-overlay').css('zIndex');
             zIndex = parseInt(zIndex, 10);
             zIndex = _.isNumber(zIndex) ? zIndex + 2 : 100;
             // second click?
@@ -669,7 +676,7 @@ define("io.ox/core/tk/dialogs",
                 // remember as current trigger
                 self.lastTrigger = this;
                 previousProp = sidepopup;
-                self.nodes.closest.prop("sidepopup", self);
+                self.nodes.closest.prop('sidepopup', self);
 
                 // prevent default to avoid close
                 processEvent(e);
@@ -686,26 +693,25 @@ define("io.ox/core/tk/dialogs",
                 }
 
                 // add handlers to close popup
-                self.nodes.click.on("click", closeByClick);
+                self.nodes.click.on('click', closeByClick);
                 popup.on('view:remove', closeByEvent);
-                $(document).on("keydown", closeByEscapeKey);
+                $(document).on('keydown', closeByEscapeKey);
 
 
                 // decide for proper side
                 var docWidth = $('body').width(), mode,
-                    parentPopup = my.parents(".io-ox-sidepopup").first(),
-                    firstPopup = parentPopup.length === 0,
-                    x;
+                    parentPopup = my.parents('.io-ox-sidepopup').first(),
+                    firstPopup = parentPopup.length === 0;
 
                 // get side
                 if (/^(left|right)$/.test(options.side)) {
                     mode = options.side;
                 } else {
                     mode = (firstPopup && e.pageX > docWidth / 2) ||
-                        parentPopup.hasClass("right")  ? 'left' : 'right';
+                        parentPopup.hasClass('right')  ? 'left' : 'right';
                 }
 
-                popup.add(arrow).removeClass("left right").addClass(mode).css('z-index', zIndex);
+                popup.add(arrow).removeClass('left right').addClass(mode).css('z-index', zIndex);
                 arrow.css('zIndex', zIndex + 1);
 
                 if (options.closely && _.device('!small')) {
@@ -736,7 +742,7 @@ define("io.ox/core/tk/dialogs",
                 var halfHeight = (my.outerHeight(true) / 2 >> 0),
                     targetOffset = self.nodes.target.offset() ? self.nodes.target.offset().top : 0,
                     top = my.offset().top + halfHeight - targetOffset;
-                arrow.css("top", top);
+                arrow.css('top', top);
 
                 // finally, add arrow
                 (options.modal ? overlay : popup).css('visibility', '');
@@ -750,7 +756,7 @@ define("io.ox/core/tk/dialogs",
         };
 
         this.delegate = function (node, selector, handler) {
-            $(node).on("click", selector, function (e) {
+            $(node).on('click', selector, function (e) {
                 if ((e.originalEvent || e).processed !== true) {
                     open.call(this, e, handler);
                 }
@@ -775,48 +781,41 @@ define("io.ox/core/tk/dialogs",
         };
     };
 
-    //TODO: Less C&P
-    var pane = $('<div>').addClass('abs io-ox-dialog-pane')
-            .append(
-                $("<div>").addClass("content"),
-                $("<div>").addClass("form-actions")
-        );
-
     return {
         ModalDialog: Dialog,
         CreateDialog: CreateDialog,
         SidePopup: SidePopup,
         busy: function (node) {
-            node.find('button, input').attr('disabled', 'disabled');
+            node.find('button, input').prop('disabled', true);
         },
         idle: function (node) {
-            node.find('button, input').removeAttr('disabled');
+            node.find('button, input').prop('disabled', false);
         }
     };
 });
 
 /* Test
 
-require(["io.ox/core/tk/dialogs"], function (dialogs) {
+require(['io.ox/core/tk/dialogs'], function (dialogs) {
     new dialogs.ModalDialog()
-        .text("Are you really sure about your decision? Are you aware of all consequences you have to live with?")
-        .addButton("cancel", "No, rather not")
-        .addPrimaryButton("delete", "Shut up and delete it!")
+        .text('Are you really sure about your decision? Are you aware of all consequences you have to live with?')
+        .addButton('cancel', 'No, rather not')
+        .addPrimaryButton('delete', 'Shut up and delete it!')
         .show()
         .done(function (action) {
-            console.debug("Action", action);
+            console.debug('Action', action);
         });
 });
 
-require(["io.ox/core/tk/dialogs"], function (dialogs) {
+require(['io.ox/core/tk/dialogs'], function (dialogs) {
     new dialogs.CreateDialog()
-        .text(new Array(20).join("Lorem ipsum dolor sit amet, consetetur sadipscing elitr"))
+        .text(new Array(20).join('Lorem ipsum dolor sit amet, consetetur sadipscing elitr'))
         .data({ id: 1234 })
-        .addButton("cancel", "Cancel")
-        .addButton("yep", "Yep")
+        .addButton('cancel', 'Cancel')
+        .addButton('yep', 'Yep')
         .show()
         .done(function (action, data) {
-            console.debug("Action", action, data);
+            console.debug('Action', action, data);
         });
 });
 

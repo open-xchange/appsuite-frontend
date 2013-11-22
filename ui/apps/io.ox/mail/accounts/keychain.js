@@ -1,34 +1,35 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define.async("io.ox/mail/accounts/keychain",
-    ["io.ox/core/extensions",
-     "io.ox/core/api/account",
-     "io.ox/core/api/user",
-     "io.ox/core/capabilities",
-     "io.ox/core/event",
-     'gettext!io.ox/core'], function (ext, accountAPI, userAPI, capabilities, Events, gt) {
+define.async('io.ox/mail/accounts/keychain',
+    ['io.ox/core/extensions',
+     'io.ox/core/api/account',
+     'io.ox/core/api/user',
+     'io.ox/core/capabilities',
+     'io.ox/core/event',
+     'gettext!io.ox/core'
+    ], function (ext, accountAPI, userAPI, capabilities, Events, gt) {
 
-    "use strict";
+    'use strict';
 
     var moduleDeferred = $.Deferred(),
         extension;
 
-    require(["io.ox/mail/accounts/model"], function (AccountModel) {
-        ext.point("io.ox/keychain/model").extend({
+    require(['io.ox/mail/accounts/model'], function (AccountModel) {
+        ext.point('io.ox/keychain/model').extend({
             id: 'mail',
             index: 100,
-            accountType: "mail",
+            accountType: 'mail',
             wrap: function (thing) {
                 return new AccountModel(thing);
             }
@@ -65,7 +66,7 @@ define.async("io.ox/mail/accounts/keychain",
                 });
             });
             if (evt) {
-                evt = evt.namespace ? evt.type + "." + evt.namespace : evt.type;
+                evt = evt.namespace ? evt.type + '.' + evt.namespace : evt.type;
                 if (evt === 'create:account') {
                     extension.trigger('create');
                     extension.trigger('refresh.all');
@@ -80,7 +81,7 @@ define.async("io.ox/mail/accounts/keychain",
     init().done(function () {
         moduleDeferred.resolve({message: 'Loaded mail keychain'});
     });
-    accountAPI.on("create:account refresh.all refresh.list", init);
+    accountAPI.on('create:account refresh.all refresh.list', init);
 
     function trigger(evt) {
         return function () {
@@ -88,15 +89,15 @@ define.async("io.ox/mail/accounts/keychain",
         };
     }
 
-    accountAPI.on("deleted", trigger("deleted"));
-    accountAPI.on("updated", trigger("updated"));
+    accountAPI.on('deleted', trigger('deleted'));
+    accountAPI.on('updated', trigger('updated'));
 
 
     extension = {
-        id: "mail",
+        id: 'mail',
         // displayName appears in drop-down menu
         displayName: gt('Mail account'),
-        actionName: "mailaccount",
+        actionName: 'mailaccount',
         canAdd: function () {
             return capabilities.has('multiple_mail_accounts');
         },
@@ -133,7 +134,7 @@ define.async("io.ox/mail/accounts/keychain",
 
     Events.extend(extension);
 
-    ext.point("io.ox/keychain/api").extend(extension);
+    ext.point('io.ox/keychain/api').extend(extension);
 
     return moduleDeferred;
 });

@@ -1,357 +1,356 @@
 /**
- *
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
  */
 
-define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], function (Events, ext) {
+define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
     'use strict';
 
     // default columns for each module
     var idMapping = {
-        "common" : {
-            "1" : "id",
-            "2" : "created_by",
-            "3" : "modified_by",
-            "4" : "creation_date",
-            "5" : "last_modified",
-            "20" : "folder_id",
-            "100" : "categories",
-            "101" : "private_flag",
-            "102" : "color_label",
-            "104" : "number_of_attachments"
+        'common' : {
+            '1' : 'id',
+            '2' : 'created_by',
+            '3' : 'modified_by',
+            '4' : 'creation_date',
+            '5' : 'last_modified',
+            '20' : 'folder_id',
+            '100' : 'categories',
+            '101' : 'private_flag',
+            '102' : 'color_label',
+            '104' : 'number_of_attachments'
         },
-        "mail" : {
-            "102" : "color_label",
-            "600" : "id",
-            "601" : "folder_id",
-            "602" : "attachment",
-            "603" : "from",
-            "604" : "to",
-            "605" : "cc",
-            "606" : "bcc",
-            "607" : "subject",
-            "608" : "size",
-            "609" : "sent_date",
-            "610" : "received_date",
-            "611" : "flags",
-            "612" : "level",
-            "613" : "disp_notification_to",
-            "614" : "priority",
-            "615" : "msgref",
-            "651" : "flag_seen",
-            "652" : "account_name"
+        'mail' : {
+            '102' : 'color_label',
+            '600' : 'id',
+            '601' : 'folder_id',
+            '602' : 'attachment',
+            '603' : 'from',
+            '604' : 'to',
+            '605' : 'cc',
+            '606' : 'bcc',
+            '607' : 'subject',
+            '608' : 'size',
+            '609' : 'sent_date',
+            '610' : 'received_date',
+            '611' : 'flags',
+            '612' : 'level',
+            '613' : 'disp_notification_to',
+            '614' : 'priority',
+            '615' : 'msgref',
+            '651' : 'flag_seen',
+            '652' : 'account_name'
         },
-        "contacts" : {
-            "500" : "display_name",
-            "501" : "first_name",
-            "502" : "last_name",
-            "503" : "second_name",
-            "504" : "suffix",
-            "505" : "title",
-            "506" : "street_home",
-            "507" : "postal_code_home",
-            "508" : "city_home",
-            "509" : "state_home",
-            "510" : "country_home",
-            "511" : "birthday",
-            "512" : "marital_status",
-            "513" : "number_of_children",
-            "514" : "profession",
-            "515" : "nickname",
-            "516" : "spouse_name",
-            "517" : "anniversary",
-            "518" : "note",
-            "519" : "department",
-            "520" : "position",
-            "521" : "employee_type",
-            "522" : "room_number",
-            "523" : "street_business",
-            "524" : "internal_userid",
-            "525" : "postal_code_business",
-            "526" : "city_business",
-            "527" : "state_business",
-            "528" : "country_business",
-            "529" : "number_of_employees",
-            "530" : "sales_volume",
-            "531" : "tax_id",
-            "532" : "commercial_register",
-            "533" : "branches",
-            "534" : "business_category",
-            "535" : "info",
-            "536" : "manager_name",
-            "537" : "assistant_name",
-            "538" : "street_other",
-            "539" : "city_other",
-            "540" : "postal_code_other",
-            "541" : "country_other",
-            "542" : "telephone_business1",
-            "543" : "telephone_business2",
-            "544" : "fax_business",
-            "545" : "telephone_callback",
-            "546" : "telephone_car",
-            "547" : "telephone_company",
-            "548" : "telephone_home1",
-            "549" : "telephone_home2",
-            "550" : "fax_home",
-            "551" : "cellular_telephone1",
-            "552" : "cellular_telephone2",
-            "553" : "telephone_other",
-            "554" : "fax_other",
-            "555" : "email1",
-            "556" : "email2",
-            "557" : "email3",
-            "558" : "url",
-            "559" : "telephone_isdn",
-            "560" : "telephone_pager",
-            "561" : "telephone_primary",
-            "562" : "telephone_radio",
-            "563" : "telephone_telex",
-            "564" : "telephone_ttytdd",
-            "565" : "instant_messenger1",
-            "566" : "instant_messenger2",
-            "567" : "telephone_ip",
-            "568" : "telephone_assistant",
-            "569" : "company",
-            //"570" : "image1",
-            "571" : "userfield01",
-            "572" : "userfield02",
-            "573" : "userfield03",
-            "574" : "userfield04",
-            "575" : "userfield05",
-            "576" : "userfield06",
-            "577" : "userfield07",
-            "578" : "userfield08",
-            "579" : "userfield09",
-            "580" : "userfield10",
-            "581" : "userfield11",
-            "582" : "userfield12",
-            "583" : "userfield13",
-            "584" : "userfield14",
-            "585" : "userfield15",
-            "586" : "userfield16",
-            "587" : "userfield17",
-            "588" : "userfield18",
-            "589" : "userfield19",
-            "590" : "userfield20",
-            "592" : "distribution_list",
-            "594" : "number_of_distribution_list",
-            "596" : "contains_image1",
-            "597" : "image_last_modified",
-            "598" : "state_other",
-            "599" : "file_as",
-            "104" : "number_of_attachments",
-            "601" : "image1_content_type",
-            "602" : "mark_as_distributionlist",
-            "605" : "default_address",
-            "606" : "image1_url",
-            "607" : "sort_name",
-            "610" : "yomiFirstName",
-            "611" : "yomiLastName",
-            "612" : "yomiCompany"
+        'contacts' : {
+            '500' : 'display_name',
+            '501' : 'first_name',
+            '502' : 'last_name',
+            '503' : 'second_name',
+            '504' : 'suffix',
+            '505' : 'title',
+            '506' : 'street_home',
+            '507' : 'postal_code_home',
+            '508' : 'city_home',
+            '509' : 'state_home',
+            '510' : 'country_home',
+            '511' : 'birthday',
+            '512' : 'marital_status',
+            '513' : 'number_of_children',
+            '514' : 'profession',
+            '515' : 'nickname',
+            '516' : 'spouse_name',
+            '517' : 'anniversary',
+            '518' : 'note',
+            '519' : 'department',
+            '520' : 'position',
+            '521' : 'employee_type',
+            '522' : 'room_number',
+            '523' : 'street_business',
+            '524' : 'internal_userid',
+            '525' : 'postal_code_business',
+            '526' : 'city_business',
+            '527' : 'state_business',
+            '528' : 'country_business',
+            '529' : 'number_of_employees',
+            '530' : 'sales_volume',
+            '531' : 'tax_id',
+            '532' : 'commercial_register',
+            '533' : 'branches',
+            '534' : 'business_category',
+            '535' : 'info',
+            '536' : 'manager_name',
+            '537' : 'assistant_name',
+            '538' : 'street_other',
+            '539' : 'city_other',
+            '540' : 'postal_code_other',
+            '541' : 'country_other',
+            '542' : 'telephone_business1',
+            '543' : 'telephone_business2',
+            '544' : 'fax_business',
+            '545' : 'telephone_callback',
+            '546' : 'telephone_car',
+            '547' : 'telephone_company',
+            '548' : 'telephone_home1',
+            '549' : 'telephone_home2',
+            '550' : 'fax_home',
+            '551' : 'cellular_telephone1',
+            '552' : 'cellular_telephone2',
+            '553' : 'telephone_other',
+            '554' : 'fax_other',
+            '555' : 'email1',
+            '556' : 'email2',
+            '557' : 'email3',
+            '558' : 'url',
+            '559' : 'telephone_isdn',
+            '560' : 'telephone_pager',
+            '561' : 'telephone_primary',
+            '562' : 'telephone_radio',
+            '563' : 'telephone_telex',
+            '564' : 'telephone_ttytdd',
+            '565' : 'instant_messenger1',
+            '566' : 'instant_messenger2',
+            '567' : 'telephone_ip',
+            '568' : 'telephone_assistant',
+            '569' : 'company',
+            //'570' : 'image1',
+            '571' : 'userfield01',
+            '572' : 'userfield02',
+            '573' : 'userfield03',
+            '574' : 'userfield04',
+            '575' : 'userfield05',
+            '576' : 'userfield06',
+            '577' : 'userfield07',
+            '578' : 'userfield08',
+            '579' : 'userfield09',
+            '580' : 'userfield10',
+            '581' : 'userfield11',
+            '582' : 'userfield12',
+            '583' : 'userfield13',
+            '584' : 'userfield14',
+            '585' : 'userfield15',
+            '586' : 'userfield16',
+            '587' : 'userfield17',
+            '588' : 'userfield18',
+            '589' : 'userfield19',
+            '590' : 'userfield20',
+            '592' : 'distribution_list',
+            '594' : 'number_of_distribution_list',
+            '596' : 'contains_image1',
+            '597' : 'image_last_modified',
+            '598' : 'state_other',
+            '599' : 'file_as',
+            '104' : 'number_of_attachments',
+            '601' : 'image1_content_type',
+            '602' : 'mark_as_distributionlist',
+            '605' : 'default_address',
+            '606' : 'image1_url',
+            '607' : 'sort_name',
+            '610' : 'yomiFirstName',
+            '611' : 'yomiLastName',
+            '612' : 'yomiCompany'
         },
-        "calendar" : {
-            "200" : "title",
-            "201" : "start_date",
-            "202" : "end_date",
-            "203" : "note",
-            "204" : "alarm",
-            "206" : "recurrence_id",
-            "207" : "recurrence_position",
-            "208" : "recurrence_date_position",
-            "209" : "recurrence_type",
-            "210" : "change_exceptions",
-            "211" : "delete_exceptions",
-            "212" : "days",
-            "213" : "day_in_month",
-            "214" : "month",
-            "215" : "interval",
-            "216" : "until",
-            "217" : "notification",
-            "220" : "participants",
-            "221" : "users",
-            "222" : "occurrences",
-            "223" : "uid",
-            "224" : "organizer",
-            "225" : "sequence",
-            "226" : "confirmations",
-            "227" : "organizerId",
-            "228" : "principal",
-            "229" : "principalId",
-            "400" : "location",
-            "401" : "full_time",
-            "402" : "shown_as",
-            "408" : "timezone",
-            "410" : "recurrence_start"
+        'calendar' : {
+            '200' : 'title',
+            '201' : 'start_date',
+            '202' : 'end_date',
+            '203' : 'note',
+            '204' : 'alarm',
+            '206' : 'recurrence_id',
+            '207' : 'recurrence_position',
+            '208' : 'recurrence_date_position',
+            '209' : 'recurrence_type',
+            '210' : 'change_exceptions',
+            '211' : 'delete_exceptions',
+            '212' : 'days',
+            '213' : 'day_in_month',
+            '214' : 'month',
+            '215' : 'interval',
+            '216' : 'until',
+            '217' : 'notification',
+            '220' : 'participants',
+            '221' : 'users',
+            '222' : 'occurrences',
+            '223' : 'uid',
+            '224' : 'organizer',
+            '225' : 'sequence',
+            '226' : 'confirmations',
+            '227' : 'organizerId',
+            '228' : 'principal',
+            '229' : 'principalId',
+            '400' : 'location',
+            '401' : 'full_time',
+            '402' : 'shown_as',
+            '408' : 'timezone',
+            '410' : 'recurrence_start'
         },
-        "files" : {
-            "23" : "meta",
-            "700" : "title",
-            "701" : "url",
-            "702" : "filename",
-            "703" : "file_mimetype",
-            "704" : "file_size",
-            "705" : "version",
-            "706" : "description",
-            "707" : "locked_until",
-            "708" : "file_md5sum",
-            "709" : "version_comment",
-            "710" : "current_version",
-            "711" : "number_of_versions"
+        'files' : {
+            '23' : 'meta',
+            '700' : 'title',
+            '701' : 'url',
+            '702' : 'filename',
+            '703' : 'file_mimetype',
+            '704' : 'file_size',
+            '705' : 'version',
+            '706' : 'description',
+            '707' : 'locked_until',
+            '708' : 'file_md5sum',
+            '709' : 'version_comment',
+            '710' : 'current_version',
+            '711' : 'number_of_versions'
         },
-        "tasks" : {
-            "200" : "title",
-            "201" : "start_date",
-            "202" : "end_date",
-            "203" : "note",
-            "204" : "alarm",
-            "209" : "recurrence_type",
-            "212" : "days",
-            "213" : "day_in_month",
-            "214" : "month",
-            "215" : "internal",
-            "216" : "until",
-            "220" : "participants",
-            "221" : "users",
-            "300" : "status",
-            "301" : "percent_completed",
-            "302" : "actual_costs",
-            "303" : "actual_duration",
-            "305" : "billing_information",
-            "307" : "target_costs",
-            "308" : "target_duration",
-            "309" : "priority",
-            "312" : "currency",
-            "313" : "trip_meter",
-            "314" : "companies",
-            "315" : "date_completed"
+        'tasks' : {
+            '200' : 'title',
+            '201' : 'start_date',
+            '202' : 'end_date',
+            '203' : 'note',
+            '204' : 'alarm',
+            '209' : 'recurrence_type',
+            '212' : 'days',
+            '213' : 'day_in_month',
+            '214' : 'month',
+            '215' : 'internal',
+            '216' : 'until',
+            '220' : 'participants',
+            '221' : 'users',
+            '300' : 'status',
+            '301' : 'percent_completed',
+            '302' : 'actual_costs',
+            '303' : 'actual_duration',
+            '305' : 'billing_information',
+            '307' : 'target_costs',
+            '308' : 'target_duration',
+            '309' : 'priority',
+            '312' : 'currency',
+            '313' : 'trip_meter',
+            '314' : 'companies',
+            '315' : 'date_completed'
         },
-        "folders" : {
-            "1" : "id",
-            "2" : "created_by",
-            "3" : "modified_by",
-            "4" : "creation_date",
-            "5" : "last_modified",
-            "6" : "last_modified_utc",
-            "20" : "folder_id",
-            "23" : "meta",
-            "300" : "title",
-            "301" : "module",
-            "302" : "type",
-            "304" : "subfolders",
-            "305" : "own_rights",
-            "306" : "permissions",
-            "307" : "summary",
-            "308" : "standard_folder",
-            "309" : "total",
-            "310" : "new",
-            "311" : "unread",
-            "312" : "deleted",
-            "313" : "capabilities",
-            "314" : "subscribed",
-            "315" : "subscr_subflds",
-            "316" : "standard_folder_type",
-            "317" : "supported_capabilities",
-            "3010" : "com.openexchange.publish.publicationFlag",
-            "3020" : "com.openexchange.subscribe.subscriptionFlag",
-            "3030" : "com.openexchange.folderstorage.displayName"
+        'folders' : {
+            '1' : 'id',
+            '2' : 'created_by',
+            '3' : 'modified_by',
+            '4' : 'creation_date',
+            '5' : 'last_modified',
+            '6' : 'last_modified_utc',
+            '20' : 'folder_id',
+            '23' : 'meta',
+            '300' : 'title',
+            '301' : 'module',
+            '302' : 'type',
+            '304' : 'subfolders',
+            '305' : 'own_rights',
+            '306' : 'permissions',
+            '307' : 'summary',
+            '308' : 'standard_folder',
+            '309' : 'total',
+            '310' : 'new',
+            '311' : 'unread',
+            '312' : 'deleted',
+            '313' : 'capabilities',
+            '314' : 'subscribed',
+            '315' : 'subscr_subflds',
+            '316' : 'standard_folder_type',
+            '317' : 'supported_capabilities',
+            '3010' : 'com.openexchange.publish.publicationFlag',
+            '3020' : 'com.openexchange.subscribe.subscriptionFlag',
+            '3030' : 'com.openexchange.folderstorage.displayName'
         },
-        "user": {
-            "610" : "aliases",
-            "611" : "timezone",
-            "612" : "locale",
-            "613" : "groups",
-            "614" : "contact_id",
-            "615" : "login_info"
+        'user': {
+            '610' : 'aliases',
+            '611' : 'timezone',
+            '612' : 'locale',
+            '613' : 'groups',
+            '614' : 'contact_id',
+            '615' : 'login_info'
         },
-        "group": {
+        'group': {
         },
-        "resource": {
+        'resource': {
         },
-        "account": {
-            "1001": "id",
-            "1002": "login",
-            "1003": "password",
-            "1004": "mail_url",
-            "1005": "transport_url",
-            "1006": "name",
-            "1007": "primary_address",
-            "1008": "spam_handler",
-            "1009": "trash",
-            "1010": "sent",
-            "1011": "drafts",
-            "1012": "spam",
-            "1013": "confirmed_spam",
-            "1014": "confirmed_ham",
-            "1015": "mail_server",
-            "1016": "mail_port",
-            "1017": "mail_protocol",
-            "1018": "mail_secure",
-            "1019": "transport_server",
-            "1020": "transport_port",
-            "1021": "transport_protocol",
-            "1022": "transport_secure",
-            "1023": "transport_login",
-            "1024": "transport_password",
-            "1025": "unified_inbox_enabled",
-            "1026": "trash_fullname",
-            "1027": "sent_fullname",
-            "1028": "drafts_fullname",
-            "1029": "spam_fullname",
-            "1030": "confirmed_spam_fullname",
-            "1031": "confirmed_ham_fullname",
-            "1032": "pop3_refresh_rate",
-            "1033": "pop3_expunge_on_quit",
-            "1034": "pop3_delete_write_through",
-            "1035": "pop3_storage ",
-            "1036": "pop3_path",
-            "1037": "personal",
-            "1038": "reply_to",
-            "1039": "addresses",
-            "1040": "meta"
+        'account': {
+            '1001': 'id',
+            '1002': 'login',
+            '1003': 'password',
+            '1004': 'mail_url',
+            '1005': 'transport_url',
+            '1006': 'name',
+            '1007': 'primary_address',
+            '1008': 'spam_handler',
+            '1009': 'trash',
+            '1010': 'sent',
+            '1011': 'drafts',
+            '1012': 'spam',
+            '1013': 'confirmed_spam',
+            '1014': 'confirmed_ham',
+            '1015': 'mail_server',
+            '1016': 'mail_port',
+            '1017': 'mail_protocol',
+            '1018': 'mail_secure',
+            '1019': 'transport_server',
+            '1020': 'transport_port',
+            '1021': 'transport_protocol',
+            '1022': 'transport_secure',
+            '1023': 'transport_login',
+            '1024': 'transport_password',
+            '1025': 'unified_inbox_enabled',
+            '1026': 'trash_fullname',
+            '1027': 'sent_fullname',
+            '1028': 'drafts_fullname',
+            '1029': 'spam_fullname',
+            '1030': 'confirmed_spam_fullname',
+            '1031': 'confirmed_ham_fullname',
+            '1032': 'pop3_refresh_rate',
+            '1033': 'pop3_expunge_on_quit',
+            '1034': 'pop3_delete_write_through',
+            '1035': 'pop3_storage ',
+            '1036': 'pop3_path',
+            '1037': 'personal',
+            '1038': 'reply_to',
+            '1039': 'addresses',
+            '1040': 'meta'
         },
-        "attachment": {
-            "1": "id",
-            "2": "created_by",
-            "4": "creation_date",
-            "800": "folder",
-            "801": "attached",
-            "802": "module",
-            "803": "filename",
-            "804": "file_size",
-            "805": "file_mimetype",
-            "806": "rtf_flag"
+        'attachment': {
+            '1': 'id',
+            '2': 'created_by',
+            '4': 'creation_date',
+            '800': 'folder',
+            '801': 'attached',
+            '802': 'module',
+            '803': 'filename',
+            '804': 'file_size',
+            '805': 'file_mimetype',
+            '806': 'rtf_flag'
         },
-        "subscriptions": {
-            "id": "id",
-            "folder": "folder",
-            "source": "source",
-            "displayName": "displayName",
-            "enabled": "enabled"
+        'subscriptions': {
+            'id': 'id',
+            'folder': 'folder',
+            'source': 'source',
+            'displayName': 'displayName',
+            'enabled': 'enabled'
         },
-        "publications": {
-            "id": "id",
-            "entity": "entity",
-            "entityModule": "entityModule",
-            "target": "target",
-            "enabled": "enabled"
+        'publications': {
+            'id': 'id',
+            'entity': 'entity',
+            'entityModule': 'entityModule',
+            'target': 'target',
+            'enabled': 'enabled'
         },
-        "subscriptionSources": {
-            "id": "id",
-            "displayName": "displayName",
-            "icon": "icon",
-            "module": "module",
-            "formDescription": "formDescription"
+        'subscriptionSources': {
+            'id': 'id',
+            'displayName': 'displayName',
+            'icon': 'icon',
+            'module': 'module',
+            'formDescription': 'formDescription'
         }
     };
 
@@ -359,8 +358,8 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
     $.extend(idMapping.contacts, idMapping.common);
     $.extend(idMapping.calendar, idMapping.common);
     $.extend(idMapping.files, idMapping.common);
-    delete idMapping.files["101"]; // not "common" here (exception)
-    delete idMapping.files["104"];
+    delete idMapping.files['101']; // not "common" here (exception)
+    delete idMapping.files['104'];
     $.extend(idMapping.tasks, idMapping.common);
     // See bug #25300
     idMapping.user = $.extend({}, idMapping.contacts, idMapping.common, idMapping.user);
@@ -378,7 +377,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         if (xhr.status === 0) {
             return true;
         }
-        return (/^(5\d\d)$/).test(xhr.status);
+        return isLoss(xhr.status);
     };
 
     // error log
@@ -459,21 +458,21 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         // get ids
         var ids = idMapping[module] || {};
         // flatten this array
-        var tmp = [], column = "";
+        var tmp = [], column = '';
         for (column in ids) {
             tmp.push(column);
         }
         tmp.sort(function (a, b) {
             return a - b;
         });
-        return join === true ? tmp.join(",") : tmp;
+        return join === true ? tmp.join(',') : tmp;
     };
 
     // transform arrays to objects
     var makeObject = function (data, module, columns) {
         // primitive types may be mixed with column arrays
         // e. g. deleted objects from action=updates.
-        if (typeof data !== "object") {
+        if (typeof data !== 'object') {
             return data;
         }
         // columns set?
@@ -499,12 +498,12 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
     var processOptions = function (options, type) {
         // defaults
         var o = $.extend({
-                module: "",
+                module: '',
                 params: {},
                 data: {},
-                dataType: "json",
-                appendColumns: type === "GET" || type === "UPLOAD" ? false : true,
-                columnModule: options.module || "",
+                dataType: 'json',
+                appendColumns: type === 'GET' || type === 'UPLOAD' ? false : true,
+                columnModule: options.module || '',
                 appendSession: true,
                 processData: true,
                 processResponse: true,
@@ -514,7 +513,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         // store type for retry
         o.type = type;
         // prepend root
-        o.url = ox.apiRoot + "/" + o.module;
+        o.url = ox.apiRoot + '/' + o.module;
         if (o.jsessionid) o.url += ';jsessionid=' + o.jsessionid;
         // add session
         if (o.appendSession === true) {
@@ -524,28 +523,28 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         if (o.appendColumns === true && o.params.columns === undefined) {
             columns = getAllColumns(o.columnModule);
             if (columns.length) {
-                o.params.columns = columns.join(",");
+                o.params.columns = columns.join(',');
             }
         }
         // remove white space from columns (otherwise evil to debug)
         if (o.params.columns) {
-            o.params.columns.replace(/\s/g, "");
+            o.params.columns.replace(/\s/g, '');
         }
         // data & body
-        if (type === "GET" || type === "POST") {
+        if (type === 'GET' || type === 'POST') {
             // GET & POST
             o.data = o.params;
         }
-        else if (type === "PUT" || type === "DELETE") {
+        else if (type === 'PUT' || type === 'DELETE') {
             // PUT & DELETE
-            o.url += "?" + _.serialize(o.params);
+            o.url += '?' + _.serialize(o.params);
             o.original = o.data;
-            o.data = typeof o.data !== "string" ? JSON.stringify(o.data) : o.data;
+            o.data = typeof o.data !== 'string' ? JSON.stringify(o.data) : o.data;
             o.contentType = 'text/javascript; charset=UTF-8';
         }
-        else if (type === "UPLOAD") {
+        else if (type === 'UPLOAD') {
             // POST with FormData object
-            o.url += "?" + _.serialize(o.params);
+            o.url += '?' + _.serialize(o.params);
             o.contentType = false;
             o.processData = false;
             o.processResponse = false;
@@ -562,7 +561,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         } else {
             // POST/PUT - sanitize data
             var i = 0, $l = data.length, sanitized = [], obj,
-                columnList = columns.split(",");
+                columnList = columns.split(',');
             for (; i < $l; i++) {
                 obj = data[i];
                 sanitized.push(_.isArray(obj) ? makeObject(obj, module, columnList) : obj);
@@ -587,8 +586,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         if (isError) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
-                isServerConfig = o.module === 'apps/manifests' && o.data && /^config$/.test(o.data.action),
-                isAutoLogin = o.module === "login" && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
+                isAutoLogin = o.module === 'login' && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
             if (isSessionError && !isAutoLogin) {
                 // login dialog
                 ox.session = '';
@@ -602,13 +600,13 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
         }
 
         // success
-        if (o.dataType === "json" && o.processResponse === true) {
+        if (o.dataType === 'json' && o.processResponse === true) {
             // variables
             var data = [], timestamp;
             // response? (logout e.g. hasn't any)
             if (response) {
                 // multiple?
-                if (o.module === "multiple") {
+                if (o.module === 'multiple') {
                     var i = 0, $l = response.length, tmp;
                     for (; i < $l; i++) {
                         if (response[i]) { // to bypass temp. [null] bug
@@ -619,7 +617,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                                 // data
                                 var module = o.data[i].columnModule ? o.data[i].columnModule : o.data[i].module;
                                 // handling for GET requests
-                                if (typeof o.data === "string") {
+                                if (typeof o.data === 'string') {
                                     o.data = JSON.parse(o.data);
                                     module = o.data[i].module;
                                 }
@@ -721,10 +719,10 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 if (isLoss(status)) log.loss();
 
                 if (isUnreachable(xhr)) {
-                    that.trigger("unreachable");
+                    that.trigger('unreachable');
                     ox.trigger('connection:down');
                 } else {
-                    that.trigger("reachable");
+                    that.trigger('reachable');
                     ox.trigger('connection:up');
                 }
                 error = _.extend({ status: status, took: took }, error);
@@ -743,7 +741,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 })
                 .done(function (response) {
 
-                    that.trigger("reachable");
+                    that.trigger('reachable');
                     ox.trigger('connection:up');
 
                     // slow?
@@ -753,7 +751,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                         log.add({ error: 'Took: ' + (Math.round(took / 100) / 10) + 's', status: 200, took: took }, r.o);
                     }
                     // trigger event first since HTTP layer finishes work
-                    that.trigger("stop done", r.xhr);
+                    that.trigger('stop done', r.xhr);
                     // process response
                     if (r.o.processData) {
                         processResponse(r.def, response, r.o, r.o.type);
@@ -777,8 +775,8 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                     if (r.o.simulate)
                         r.def.resolve(this.targeturl);
                     else {
-                        that.trigger("stop fail", r.xhr);
-                        r.def.reject({ error: xhr.status + " " + (errorThrown || "general") }, xhr);
+                        that.trigger('stop fail', r.xhr);
+                        r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'general') }, xhr);
                     }
                     r = null;
                 });
@@ -786,23 +784,24 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
 
         function send(r) {
 
-            var hash;
+            var hash = null;
 
-            // look for concurrent identical GET requests
-            if (r.o.type === 'GET') {
-                // get hash value - we just use stringify here
-                hash = JSON.stringify(r.xhr);
-                if (requests[hash] !== undefined) {
+            // look for concurrent identical GET/PUT requests
+            if (r.o.type === 'GET' || r.o.type === 'PUT') {
+
+                // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
+                try { hash = JSON.stringify(r.xhr); } catch (e) { }
+
+                if (hash && requests[hash] !== undefined) {
                     // enqueue callbacks
-                    requests[hash]
-                        .then(r.def.resolve, r.def.reject)
+                    requests[hash].then(r.def.resolve, r.def.reject)
                         .then(
-                            function () {
-                                that.trigger("stop done", r.xhr);
+                            function success() {
+                                that.trigger('stop done', r.xhr);
                                 r = null;
                             },
-                            function () {
-                                that.trigger("stop fail", r.xhr);
+                            function fail() {
+                                that.trigger('stop fail', r.xhr);
                                 r  = null;
                             }
                         );
@@ -833,7 +832,6 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
             if (!o.params.session) {
                 // check whitelist
                 var whiteList = ['login#*', 'capabilities#*', 'apps/manifests#*', 'files#document', 'office#getFile'],
-                    req = o.module + '#' + o.params.action,
                     found = _.find(whiteList, function (moduleAction) {
                         var e = moduleAction.split('#');
                         return (o.module === e[0] && (e[1] === '*' || o.params.action === e[1]));
@@ -855,35 +853,35 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 o: o,
                 xhr: {
                     // type (GET, POST, PUT, ...)
-                    type: type === "UPLOAD" ? "POST" : type,
+                    type: type === 'UPLOAD' ? 'POST' : type,
                     // url
                     url: o.url,
                     // data
                     data: o.data,
                     dataType: o.dataType,
                     processData: o.processData,
-                    contentType: o.contentType !== undefined ? o.contentType : "application/x-www-form-urlencoded",
+                    contentType: o.contentType !== undefined ? o.contentType : 'application/x-www-form-urlencoded',
                     beforeSend: o.beforeSend
                 }
             };
             // use timeout?
-            if (typeof o.timeout === "number") {
+            if (typeof o.timeout === 'number') {
                 r.xhr.timeout = o.timeout;
             }
             // continuation
             function cont() {
-                if ((ox.fail || fail) && o.module !== "login" && Math.random() < Number(ox.fail || _.url.hash('fail') || 0)) {
+                if ((ox.fail || fail) && o.module !== 'login' && Math.random() < Number(ox.fail || _.url.hash('fail') || 0)) {
                     // simulate broken connection
-                    console.error("HTTP fail", r.o.url, r.xhr);
-                    r.def.reject({ error: "0 simulated fail" });
-                    that.trigger("stop fail", r.xhr);
+                    console.error('HTTP fail', r.o.url, r.xhr);
+                    r.def.reject({ error: '0 simulated fail' });
+                    that.trigger('stop fail', r.xhr);
                 } else {
                     // go!
                     send(r);
                 }
                 r = o = null;
             }
-            that.trigger("start", r.xhr);
+            that.trigger('start', r.xhr);
             if (slow && Number(_.url.hash('slow'))) {
                 // simulate slow connection
                 setTimeout(cont, 250 * Number(_.url.hash('slow')) + (Math.random() * 500 >> 0));
@@ -906,7 +904,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
          * http.GET({ module: "mail", params: { action: "all", folder: "default0/INBOX" }});
          */
         GET: function (options) {
-            return ajax(options, "GET");
+            return ajax(options, 'GET');
         },
 
         /**
@@ -917,7 +915,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
          * @returns {Object} jQuery's Deferred
          */
         POST: function (options) {
-            return ajax(options, "POST");
+            return ajax(options, 'POST');
         },
 
         /**
@@ -928,7 +926,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
          * @returns {Object} jQuery's Deferred
          */
         PUT: function (options) {
-            return ajax(options, "PUT");
+            return ajax(options, 'PUT');
         },
 
         /**
@@ -939,7 +937,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
          * @returns {Object} jQuery's Deferred
          */
         DELETE: function (options) {
-            return ajax(options, "DELETE");
+            return ajax(options, 'DELETE');
         },
 
         /**
@@ -950,7 +948,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
          * @returns {Object} jQuery's Deferred
          */
         UPLOAD: function (options) {
-            return ajax(options, "UPLOAD");
+            return ajax(options, 'UPLOAD');
         },
 
         FORM: function (options) {
@@ -970,8 +968,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 def = $.Deferred(),
                 data = JSON.stringify(options.data),
                 url = ox.apiRoot + '/' + options.module + '?action=' + options.action + '&session=' + ox.session,
-                form = options.form,
-                blank = $.Deferred();
+                form = options.form;
 
             $('#tmp').append(
                 $('<iframe>', { name: name, id: name, height: 1, width: 1, src: ox.base + '/blank.html' })
@@ -1102,7 +1099,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
          */
         retry: function (request) {
             // get type
-            var type = (request.type || "GET").toUpperCase();
+            var type = (request.type || 'GET').toUpperCase();
             return this[type](request);
         },
 
@@ -1111,7 +1108,7 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
          */
         pause: function () {
             paused = true;
-            this.trigger("paused");
+            this.trigger('paused');
         },
 
         /**
@@ -1140,12 +1137,12 @@ define('io.ox/core/http', ['io.ox/core/event', 'io.ox/core/extensions'], functio
                 // clear queue & remove "paused" flag
                 queue = [];
                 paused = false;
-                this.trigger("resumed");
+                this.trigger('resumed');
                 // send PUT
                 if (tmp.length > 0) {
                     this.PUT({
-                        module: "multiple",
-                        "continue": true,
+                        module: 'multiple',
+                        'continue': true,
                         data: tmp,
                         appendColumns: false
                     })

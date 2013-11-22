@@ -1,28 +1,27 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/mail/vacationnotice/settings/filter', [
-    'io.ox/core/extensions',
-    'io.ox/core/api/mailfilter',
-    'io.ox/mail/vacationnotice/settings/model',
-    'io.ox/mail/vacationnotice/settings/view-form',
-    'io.ox/core/tk/dialogs',
-    'io.ox/core/date',
-    'gettext!io.ox/mail'
-], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
+define('io.ox/mail/vacationnotice/settings/filter',
+    ['io.ox/core/extensions',
+     'io.ox/core/api/mailfilter',
+     'io.ox/mail/vacationnotice/settings/model',
+     'io.ox/mail/vacationnotice/settings/view-form',
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/date',
+     'gettext!io.ox/mail'
+    ], function (ext, api, mailfilterModel, ViewForm, dialogs, date, gt) {
 
     'use strict';
-
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/vacationnotice/model', api);
 
@@ -45,10 +44,10 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
             api.getRules('vacation').done(function (data) {
                 var defaultNotice = {
-                    days: "7",
+                    days: '7',
                     internal_id: 'vacation',
-                    subject: "",
-                    text: ""
+                    subject: '',
+                    text: ''
                 },
                     vacationData,
                     VacationEdit,
@@ -81,7 +80,6 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
                 vacationData.primaryMail = primaryMail;
 
-
                 VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/vacationnotice', multiValues, vacationData.activateTimeFrame);
                 vacationNotice = new VacationEdit({model: factory.create(vacationData)});
 
@@ -93,13 +91,13 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
                 $node.append(vacationNotice.render().$el);
 
-                ext.point("io.ox/core/vacationnotice/model/validation").extend({
+                ext.point('io.ox/core/vacationnotice/model/validation').extend({
                     id: 'start-date-before-end-date',
                     validate: function (attributes) {
 
                         if (attributes.dateFrom && attributes.dateUntil && attributes.dateUntil < attributes.dateFrom) {
-                            this.add('dateFrom', gt("The start date must be before the end date."));
-                            this.add('dateUntil', gt("The start date must be before the end date."));
+                            this.add('dateFrom', gt('The start date must be before the end date.'));
+                            this.add('dateUntil', gt('The start date must be before the end date.'));
                         }
                     }
                 });
@@ -107,8 +105,7 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                 ext.point('io.ox/core/vacationnotice/model').extend({
                     id: 'io.ox/core/vacationnotice/model/text',
                     triggerChange: function () {
-                        var that = this,
-                            textarea = $(this.el).find('textarea');
+                        var textarea = $(this.el).find('textarea');
                         textarea.on('keyup keydown', function () {
                             textarea.trigger('change');
                         });

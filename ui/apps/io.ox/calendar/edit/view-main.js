@@ -1,19 +1,20 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/calendar/edit/view-main',
-       ['io.ox/core/extensions',
-       'io.ox/backbone/views',
-       'io.ox/calendar/edit/template'], function (ext, views) {
+    ['io.ox/core/extensions',
+     'io.ox/backbone/views',
+     'io.ox/calendar/edit/template'
+    ], function (ext, views) {
 
     'use strict';
 
@@ -30,7 +31,7 @@ define('io.ox/calendar/edit/view-main',
                 ext.point('io.ox/calendar/edit/section/buttons').disable('discard');
             }
 
-            ext.point('io.ox/calendar/edit/section/header').invoke("draw", self.$el, self.baton);
+            ext.point('io.ox/calendar/edit/section/header').invoke('draw', self.$el, self.baton);
 
             this.point.each(function (extension) {
                 var row = null;
@@ -51,7 +52,7 @@ define('io.ox/calendar/edit/view-main',
                 var $rowNode = $('<div class="row-fluid">').appendTo(self.$el);
                 _(row).each(function (extension) {
                     $rowNode.addClass(extension.rowClass || '');
-                    extension.invoke("draw", $rowNode, self.baton);
+                    extension.invoke('draw', $rowNode, self.baton);
                 });
             });
 

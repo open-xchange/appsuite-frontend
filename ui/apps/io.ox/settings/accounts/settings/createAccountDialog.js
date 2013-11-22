@@ -1,20 +1,22 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/settings/accounts/settings/createAccountDialog",
-    ["io.ox/core/tk/dialogs", "io.ox/keychain/api"], function (dialogs, keychain) {
+define('io.ox/settings/accounts/settings/createAccountDialog',
+    ['io.ox/core/tk/dialogs',
+     'io.ox/keychain/api'
+    ], function (dialogs, keychain) {
 
-    "use strict";
+    'use strict';
 
     function chooseService() {
 
@@ -34,19 +36,19 @@ define("io.ox/settings/accounts/settings/createAccountDialog",
         _(keychain.submodules).each(function (submodule) {
             if (newRow === 0) {
                 $currentRow = $('<div class="row-fluid">').css({
-                    padding: "10px"
+                    padding: '10px'
                 }).appendTo($servicesPane);
             }
 
             newRow = (newRow + 1) % 2;
 
-            $('<div class="span6">').append($('<a href="#">').text(submodule.displayName).on("click", selectService(submodule.id))).appendTo($currentRow);
+            $('<div class="span6">').append($('<a href="#">').text(submodule.displayName).on('click', selectService(submodule.id))).appendTo($currentRow);
         });
 
         dialog = new dialogs.ModalDialog();
-        dialog.header($("<h4>").text("Add an account"));
-        dialog.append($servicesPane).addButton("cancel", "Cancel").show(function () {
-            $servicesPane.find("a:first").focus();
+        dialog.header($('<h4>').text('Add an account'));
+        dialog.append($servicesPane).addButton('cancel', 'Cancel').show(function () {
+            $servicesPane.find('a:first').focus();
         }).done(function () {
             def.resolve();
         });

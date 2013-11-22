@@ -1,17 +1,21 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/event'], function (http, cache, Event) {
+define('io.ox/core/settings',
+    ['io.ox/core/http',
+     'io.ox/core/cache',
+     'io.ox/core/event'
+    ], function (http, cache, Event) {
 
     'use strict';
 
@@ -130,7 +134,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
             });
         };
 
-        var change = function (model, e) {
+        var change = function (model) {
             _(model.changed).each(function (value, path) {
                 self.set(path, value, { validate: true });
             });
@@ -264,12 +268,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                 //options
                 opt = $.extend({
                     debug: false
-                }, options),
-                notify = function (e) {
-                    require(['io.ox/core/notifications'], function (notifications) {
-                        notifications.yell(e);
-                    });
-                };
+                }, options);
 
             //debug
             if (opt.debug) {
@@ -322,7 +321,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
                     }
                     return hash[path] || { tree: {}, meta: {} };
                 },
-                function defaultsFail(e) {
+                function defaultsFail() {
                     console.warn('Could not load defaults for', path);
                     return $.Deferred().resolve(
                         hash[path] || { tree: {}, meta: {} }
@@ -333,7 +332,7 @@ define('io.ox/core/settings', ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/cor
     }
 
     return {
-        load: function (name, req, load, config) {
+        load: function (name, req, load) {
             // init cache?
             if (!settingsCache) {
                 settingsCache = new cache.SimpleCache('settings', true);

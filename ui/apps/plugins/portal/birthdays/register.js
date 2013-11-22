@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  */
 
@@ -17,12 +17,12 @@ define('plugins/portal/birthdays/register',
      'io.ox/contacts/util',
      'gettext!plugins/portal',
      'settings!io.ox/core',
-     'less!plugins/portal/birthdays/style.less'], function (ext, api, date, util, gt, settings) {
+     'less!plugins/portal/birthdays/style.less'
+    ], function (ext, api, date, util, gt, settings) {
 
     'use strict';
 
     var WEEKS = 12,
-        RANGE = WEEKS * date.WEEK,
         sidepopup;
 
     function unifySpelling(name) {
@@ -80,7 +80,7 @@ define('plugins/portal/birthdays/register',
                     } else {
                         birthday = birthday.format(date.DATE);
                     }
-                        
+
                     if (!isDuplicate(name, hash)) {
                         $list.append(
                             $('<div class="line">').append(
@@ -114,8 +114,9 @@ define('plugins/portal/birthdays/register',
                 if (url !== 'none' && url !== '') {
                     $list.append(
                         $('<div class="buy-a-gift">').append(
-                            $('<i class="icon-gift">'), $.txt(' '),
-                            $('<a>', { href: url, target: '_blank' }).text(gt('Buy a gift'))
+                            $('<a>', { href: url, target: '_blank', title: gt('External link') }).text(gt('Buy a gift')),
+                            $.txt(' '),
+                            $('<i class="icon-external-link">')
                         )
                     );
                 }

@@ -1,13 +1,12 @@
 /**
- *
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -98,7 +97,7 @@ define('io.ox/files/carousel',
             this.inner.get(0).appendChild(frag);
 
             // Prevent default on click behaviour of Bootstraps carousel
-            this.inner.on('click', function (e) { return false; });
+            this.inner.on('click', function () { return false; });
 
             this.show();
             this.eventHandler();
@@ -213,7 +212,7 @@ define('io.ox/files/carousel',
             });
         },
 
-        drawItem: function (file, index, isfirst) {
+        drawItem: function (file, index) {
 
             var item = this.inner.find('[data-index=' + index + ']'), self = this;
 
@@ -235,7 +234,7 @@ define('io.ox/files/carousel',
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
-                            folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false })
+                            file.folder_id ? folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false }) : $()
                         )
                     );
                 } else {
@@ -265,6 +264,7 @@ define('io.ox/files/carousel',
         },
 
         show: function () {
+
             var win;
             if (this.config.attachmentMode) {
                 win = $('.window-container:visible');
@@ -273,6 +273,11 @@ define('io.ox/files/carousel',
             } else {
                 win = this.win.nodes.outer;
             }
+            ox.trigger('slideshow:start', {
+                controller: this,
+                window: win,
+                container: this.container
+            });
             win.busy();
             win.append(
                 this.container.append(
@@ -289,6 +294,10 @@ define('io.ox/files/carousel',
         },
 
         close: function () {
+            ox.trigger('slideshow:end', {
+                controller: this,
+                container: this.container
+            });
             this.container
                 .off('slid')
                 .off('slide')

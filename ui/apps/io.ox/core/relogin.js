@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -51,12 +52,14 @@ define('io.ox/core/relogin',
                             $('<input type="password" name"relogin-password" class="input-xlarge">')
                         );
                     })
-                    .addPrimaryButton('relogin', gt('Relogin'))
+                    .addPrimaryButton('relogin', gt('Sign in'))
                     .addAlternativeButton('cancel', gt('Cancel'))
                     .on('cancel', function () {
                         ox.trigger('relogin:cancel');
-                        var location = settings.get('customLocations/logout');
-                        _.url.redirect(location || ox.serverConfig.logoutLocation || ox.logoutLocation);
+                        var location = settings.get('customLocations/logout'),
+                            logoutLocation = location || ox.serverConfig.logoutLocation || ox.logoutLocation || '';
+                        logoutLocation = logoutLocation.replace('[hostname]', window.location.hostname);
+                        _.url.redirect(logoutLocation);
                     })
                     .on('relogin', function () {
                         var self = this.busy();
@@ -85,7 +88,7 @@ define('io.ox/core/relogin',
                                     e.error = gt('Please enter correct password');
                                 }
                                 notifications.yell({
-                                    headline: gt('Failed to relogin'),
+                                    headline: gt('Failed to sign in'),
                                     type: 'error',
                                     message: e.error
                                 });

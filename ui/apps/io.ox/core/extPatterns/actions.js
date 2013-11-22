@@ -1,23 +1,24 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/core/extPatterns/actions",
+define('io.ox/core/extPatterns/actions',
     ['io.ox/core/extensions',
      'io.ox/core/upsell',
-     'io.ox/core/collection'], function (ext, upsell, Collection) {
+     'io.ox/core/collection'
+    ], function (ext, upsell, Collection) {
 
-    "use strict";
+    'use strict';
 
     var requires = function (str) {
         return function (e) {
@@ -99,7 +100,6 @@ define("io.ox/core/extPatterns/actions",
     };
 
     var processActions = function (ref, collection, baton) {
-
         // allow extensions to cancel actions
         var stopped = false, stopPropagation = function () {
             stopped = true;
@@ -129,7 +129,6 @@ define("io.ox/core/extPatterns/actions",
                 if (ret !== undefined && !ret.promise) {
                     ret = $.Deferred().resolve(ret);
                 }
-
                 return ret;
             })
             .value();
@@ -141,11 +140,14 @@ define("io.ox/core/extPatterns/actions",
         invoke(e.data.ref, this, e.data.selection, e);
     };
 
-    var updateCustomControls = function (container, selection) {
-
+    var updateCustomControls = function (container, selection, options) {
         var deferred = $.Deferred(),
             collection = new Collection(selection),
-            controls = container.find('[data-action]');
+            controls = container.find('[data-action]'),
+            options = $.extend({
+                cssDisable: false,
+                eventType: 'click'
+            }, options);
 
         collection.getProperties().done(function () {
             // find nodes that refer to an action
@@ -155,10 +157,15 @@ define("io.ox/core/extPatterns/actions",
                     var ref = node.attr('data-action');
                     return processActions(ref, collection, selection).done(function (result) {
                         if (result === false) {
-                            node.attr('disabled', 'disabled').off('click.action');
+                            node.prop('disabled', true).off(options.eventType + '.action');
+                            if (options.cssDisable) {
+                                node.addClass('disabled');
+                            }
                         } else {
-                            node.removeAttr('disabled').off('click.action')
-                                .on('click.action', { ref: ref, selection: selection }, customClick);
+                            node.prop('disabled', false)
+                                .removeClass('disabled')
+                                .off(options.eventType + '.action')
+                                .on(options.eventType + '.action', { ref: ref, selection: selection }, customClick);
                         }
                     });
                 })
@@ -183,7 +190,7 @@ define("io.ox/core/extPatterns/actions",
         collection.getProperties().then(
             function () {
                 // get links (check for requirements)
-                var links = ext.point(ref).map(function (link, index) {
+                var links = ext.point(ref).map(function (link) {
                     // defer decision
                     var def = $.Deferred();
                     // store capabilities
@@ -208,9 +215,7 @@ define("io.ox/core/extPatterns/actions",
                 });
                 // wait for all links
                 $.when.apply($, links.value()).done(function () {
-                    linksResolved.resolve(
-                        _.chain(arguments).filter(function (o) { return o.state; }).pluck('link').value()
-                    );
+                    linksResolved.resolve(_(arguments).toArray());
                     links = null;
                 });
             },

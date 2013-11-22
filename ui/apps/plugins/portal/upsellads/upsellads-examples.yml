@@ -1,0 +1,101 @@
+io.ox/portal//widgets/protected:
+  upsellads_0:
+    plugin: "plugins/portal/upsellads/register"
+    type: "upsellads"
+    index: 0
+    changeable:
+      index: true
+    props:
+      ad: "lipsum"
+
+  upsellads_1:
+    plugin: "plugins/portal/upsellads/register"
+    type: "upsellads"
+    index: 2
+    changeable:
+      index: true
+    props:
+      ad: "countNumber"
+
+
+io.ox/upsell//ads:
+  delayInMilliseconds: 10000
+  lipsum:
+    capabilities: loremgibsum-active
+    startDate: 2013-01-01
+    endDate: 2013-12-31
+    upsellWizard: "shop"
+    slides:
+      en_US:
+        slide1:
+          type: text-only
+          text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+        slide2:
+          type: text-top
+          image: http://placekitten.com/1024/768
+          text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        slide3:
+          type: text-bottom
+          image: http://placekitten.com/960/720
+          text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        slide4:
+          type: text-only
+          text: "<strong>Lorem ipsum</strong> dolor sit amet, consectetur adipisicing elit, <em>sed do eiusmod tempor incididunt <strong>ut</strong> labore et dolore magna aliqua</em>. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> "
+        slide5:
+          type: image-only
+          image: http://placekitten.com/1280/1024
+          text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+  countNumber:
+    slides:
+      en_US:
+        slide1:
+          type: text-only
+          text: <h3>1</h3>
+        slide4:
+          type: text-only
+          text: <h3>4</h3>
+        slide2:
+          type: text-only
+          text: <h3>2</h3>
+        slide3:
+          type: text-only
+          text: <h3>3</h3>
+        slide5:
+          type: text-only
+          text: <h3>5</h3>
+
+
+
+io.ox/upsell//shop:
+  priceFormat: '$%sUSD'
+  target: 'http://localhost/order-confirmation?cartContents=OXUPSELLCART&context=OXUPSELLCONTEXT&user=OXUPSELLUSER'
+  disclaimer:
+    en_US: '<p><strong>Disclaimer:</strong> You agree that you will pay for all products you purchase through the Services, and that we may charge your payment method for any products purchased and for any additional amounts (including any taxes and late fees, as applicable) that may be accrued by or in connection with your Account. YOU ARE RESPONSIBLE FOR THE TIMELY PAYMENT OF ALL FEES AND FOR PROVIDING US WITH A VALID PAYMENT METHOD FOR PAYMENT OF ALL FEES. For details of how purchases are billed please visit support.us.com/legal.</p><p>Your total price will include the price of the product plus any applicable sales tax; such sales tax is based on the bill-to address and the sales tax rate in effect at the time you download the product. We will charge tax only in states where digital goods are taxable.</p><p>All sales and rentals of products are final.</p><p>Prices for products offered via this service may change at any time, and this service does not provide price protection or refunds in the event of a price reduction or promotional offering.</p><p>If a product becomes unavailable following a transaction but prior to download, your sole remedy is a refund. If technical problems prevent or unreasonably delay delivery of your product, your exclusive and sole remedy is either replacement or refund of the price paid, as determined by us.</p>'
+  products:
+    en_US:
+      p0:
+        image: 'https://appsuite-dev.open-xchange.com/publications/files/1/Upsell_Widget/119732/current?secret=679274d49b0d743d4c8721cf3d0069d7'
+        title: 'All - special offer'
+        price: 99
+        description: '<p>This Special Offer is only for a limited time. This is your chance to get the whole communication suite of products at a special monthly rate of $99/month.</p><p>This offer is only available this month and includes the following applications:</p><ul><li>Group Calendar</li><li>Mobile Synchronisation</li><li>Outlook Connector</li><li>File Synchronisation (OX Drive)</li></ul><p>Note that all orders must be placed this month and a minimum of 12 month subscription must be signed up for.</p>'
+      p1:
+        image: 'https://appsuite-dev.open-xchange.com/publications/files/1/Upsell_Widget/119727/current?secret=679274d49b0d743d4c8721cf3d0069d7'
+        title: 'Group Calendar'
+        price: 99
+        description: "<p>Keeping track of your appointments is one thing, but organising your life is something else. The Group Calendar lets you take control of your life and give it order.</p><p>Whether using this for your business or your personal life this calendar is lets you plan the days and weeks ahead. Share calendars with others and confirm everyone's availability before you even arrange a meeting.</p><p>This versatile scheduler can be yours at only $99/month. Buy it now and take control of your life.</p>"
+      p2:
+        image: 'https://appsuite-dev.open-xchange.com/publications/files/1/Upsell_Widget/119731/current?secret=679274d49b0d743d4c8721cf3d0069d7'
+        title: 'Mobile Sync'
+        price: 99
+        description: '<p>Today everyone has more than one device, be it business phone, personal phone, tablet or laptop. The problem is that some of your devices have some data on them while others have other.</p><p>The Mobile Sync lets you synchronise all your information (contacts, calendar appointments, emails etc.) between all your devices regardless of type or operating system. With the Mobile Sync it is now easy to synchronise between Apple, Microsoft and Android devices seamlessly.</p><p>This is not just convenient , but if your device gets damaged of lost, it is a breeze to restore everything without any hassle.</p><p>The Mobile Sync is only $99/month: How much is a trouble free life worth to you.</p>'
+      p3:
+        image: 'https://appsuite-dev.open-xchange.com/publications/files/1/Upsell_Widget/119734/current?secret=679274d49b0d743d4c8721cf3d0069d7'
+        title: 'Outlook Connector'
+        price: 99
+        description: '<p>We understand that even today people want to use off-line client solutions like Microsoft Outlook. Many offices still use Outlook as a standard for their staff.</p><p>Just because you use our solution does not mean you you can not still use products like Outlook. For a small fee of $99 per month you can connect your Outlook to our service. This gives you connectivity in the office as well as flexibility out of the office too.</p><p>Keep all your lives working together</p>'
+      p4:
+        image: 'https://appsuite-dev.open-xchange.com/publications/files/1/Upsell_Widget/119730/current?secret=679274d49b0d743d4c8721cf3d0069d7'
+        title: 'File Sync (OX Drive)'
+        price: 99
+        description: '<p>Synchronisation of files can sometimes be a problem. Some solutions are not as easy as they claim, others kill your device as they sync, but you still use them.</p><p>Sharing photos from you phone to your laptop is vital; sharing documents between colleagues leads to better efficiency and letting your other see your holiday snaps as you take them leads to a more fun and enjoyable life.</p><p>For only $99 get OX Drive and start sharing your files. It is designed to be mobile device friendly and will not kill your battery of your bandwidth. It synchronises your files intelligently and always give you the best result.</p><p>If you are already signed up to a storage or sharing solution OX Drive can simply add to it giving you a much batter extended experience.</p><p>Get your File Sync now.</p>'

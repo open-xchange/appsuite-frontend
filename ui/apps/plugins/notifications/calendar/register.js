@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -17,10 +17,12 @@ define('plugins/notifications/calendar/register',
      'io.ox/core/api/reminder',
      'io.ox/calendar/util',
      'io.ox/core/extensions',
+     'io.ox/core/api/folder',
      'io.ox/core/api/user',
      'io.ox/core/tk/reminder-util',
+     'settings!io.ox/calendar',
      'gettext!plugins/notifications'
-    ], function (calAPI, reminderAPI, util, ext, userAPI, reminderUtil, gt) {
+    ], function (calAPI, reminderAPI, util, ext, folderAPI, userAPI, reminderUtil, settings, gt) {
 
     'use strict';
 
@@ -46,16 +48,36 @@ define('plugins/notifications/calendar/register',
         draw: function (baton) {
             var model = baton.model;
             this.attr({
+                role: 'listItem',
                 'data-cid': model.get('cid'),
-                'tabindex': 1
+                'focus-id': 'calendar-invite-' + model.get('cid'),
+                'tabindex': 1,
+                            //#. %1$s Appointment title
+                            //#. %2$s Appointment date
+                            //#. %3$s Appointment time
+                            //#. %4$s Appointment location
+                            //#. %5$s Appointment Organizer
+                            //#, c-format
+                'aria-label': gt('Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open',
+                        _.noI18n(model.get('title')), _.noI18n(model.get('date')),
+                        _.noI18n(model.get('time')), _.noI18n(model.get('location')) || '',
+                        _.noI18n(model.get('organizer')))
             }).append(
                 $('<div class="time">').text(model.get('time')),
                 $('<div class="date">').text(model.get('date')),
                 $('<div class="title">').text(model.get('title')),
                 $('<div class="location">').text(model.get('location')),
-                $('<div class="organizer">').text(model.get('blue')),
+                $('<div class="organizer">').text(model.get('organizer')),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="accept_decline">').text(gt('Accept / Decline'))
+                    $('<button type="button" tabindex="1" class="refocus btn btn-inverse" data-action="accept_decline">')
+                        .attr('focus-id', 'calendar-invite-' + model.get('cid') + '-accept-decline')
+                        .css('margin-right', '14px')
+                        .text(gt('Accept / Decline')),
+                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                        .attr({'title': gt('Accept invitation'),
+                               'aria-label': gt('Accept invitation'),
+                               'focus-id': 'calendar-invite-' + model.get('cid') + '-accept'})
+                        .append('<i class="icon-ok">')
                 )
             );
         }
@@ -75,12 +97,13 @@ define('plugins/notifications/calendar/register',
 
     var InviteView = Backbone.View.extend({
 
-        className: 'item',
+        className: 'item refocus',
 
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
-            'click [data-action="accept_decline"]': 'onClickChangeStatus'
+            'click [data-action="accept_decline"]': 'onClickChangeStatus',
+            'click [data-action="accept"]': 'onClickAccept'
         },
 
         render: function () {
@@ -98,6 +121,7 @@ define('plugins/notifications/calendar/register',
             var obj = this.model.get('data'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
+                lastFocus = e.target,
                 cid = String(overlay.find('[data-cid]').data('cid'));
             // toggle?
             if (sidepopup && cid === _.cid(obj)) {
@@ -116,6 +140,8 @@ define('plugins/notifications/calendar/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                //restore focus
+                                $(lastFocus).focus();
                             })
                             .show(e, function (popup) {
                                 popup.append(view.draw(data));
@@ -126,6 +152,23 @@ define('plugins/notifications/calendar/register',
                     });
                 });
             }
+        },
+
+        onClickAccept: function (e) {
+            e.stopPropagation();
+            var o = calAPI.reduce(this.model.get('data'));
+            folderAPI.get({ folder: o.folder }).done(function (folder) {
+                o.data = {
+                    alarm: parseInt(settings.get('defaultReminder', 15), 10), // default reminder
+                    confirmmessage: '',
+                    confirmation: 1
+                };
+                // add current user id in shared or public folder
+                if (folderAPI.is('shared', folder)) {
+                    o.data.id = folder.created_by;
+                }
+                calAPI.confirm(o);
+            });
         },
 
         onClickChangeStatus: function (e) {
@@ -170,6 +213,7 @@ define('plugins/notifications/calendar/register',
             var obj = this.model.get('remdata'),
                 overlay = $('#io-ox-notifications-overlay'),
                 sidepopup = overlay.prop('sidepopup'),
+                lastFocus = e.target,
                 cid = String(overlay.find('[data-cid]').data('cid'));
             obj = {id: obj.target_id, folder: obj.folder};
             // toggle?
@@ -188,6 +232,8 @@ define('plugins/notifications/calendar/register',
                                 overlay.removeClass('active');
                                 $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                             }
+                            //restore focus
+                            $(lastFocus).focus();
                         })
                         .show(e, function (popup) {
                             popup.append(view.draw(data));
@@ -361,11 +407,10 @@ define('plugins/notifications/calendar/register',
             reminderAPI
                 .on('add:calendar:reminder', function (e, reminder) {
 
-                    var tmp = [],
-                        counter = reminder.length,
+                    var counter = reminder.length,
                         now = _.now();
 
-                    _(reminder).each(function (remObj, index) {
+                    _(reminder).each(function (remObj) {
                         var obj = {
                             id: remObj.target_id,
                             folder: remObj.folder,

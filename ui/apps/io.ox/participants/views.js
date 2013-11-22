@@ -5,13 +5,15 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  */
 
 define('io.ox/participants/views',
     ['gettext!io.ox/calendar/edit/main',
-     'less!io.ox/participants/participants.less'], function (gt) {
+     'less!io.ox/participants/participants.less'
+    ], function (gt) {
 
     'use strict';
 
@@ -51,7 +53,7 @@ define('io.ox/participants/views',
                 this.$el.addClass('removable');
             }
 
-            this.model.on('change', function (model, e) {
+            this.model.on('change', function (model) {
                 if (model && model.changed) {
                     self.$el.empty();
                     self.render();
@@ -91,8 +93,7 @@ define('io.ox/participants/views',
 
             if (!this.options.baton) return;
 
-            var organizer = this.options.baton.model.get('organizer'),
-                organizerId = this.options.baton.model.get('organizerId');
+            var organizerId = this.options.baton.model.get('organizerId');
 
             if (this.model.get('id') === organizerId) {
                 this.$el.addClass('three-rows');
@@ -130,7 +131,7 @@ define('io.ox/participants/views',
             case 1:
                 // uses emailparam as flag, to support adding users with their 2nd/3rd emailaddress
                 mail = this.model.get('emailparam') ? this.model.get('emailparam') : this.model.getEmail();
-                this.setRows(mail);
+                this.setRows(mail, this.model.get('external') ? gt('External contact') : '');
                 if (this.options.halo) {
                     this.nodes.$mail
                         .attr({ href: '#', tabindex: '1' })

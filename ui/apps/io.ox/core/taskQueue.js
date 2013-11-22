@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  *
@@ -18,7 +18,8 @@ define: true
 */
 
 define('io.ox/core/taskQueue', function () {
-    "use strict";
+
+    'use strict';
 
     /**
     * A task is a unit of work. A task is constructed form a task definition. The task definition must contain a method #perform which returns a deferred object.
@@ -119,7 +120,7 @@ define('io.ox/core/taskQueue', function () {
             if (tasks[taskId]) {
                 return tasks[taskId].start();
             }
-            throw "Unknown TaskId " + taskId;
+            throw 'Unknown TaskId ' + taskId;
         };
 
         this.get = function (taskId) {
@@ -130,7 +131,7 @@ define('io.ox/core/taskQueue', function () {
             if (tasks[taskId]) {
                 return tasks[taskId].when();
             }
-            throw "Unknown TaskId " + taskId;
+            throw 'Unknown TaskId ' + taskId;
         };
 
         this.start = function () {
@@ -141,7 +142,7 @@ define('io.ox/core/taskQueue', function () {
         };
 
         this.destroy = function () {
-            _(tasks).invoke("destroy");
+            _(tasks).invoke('destroy');
         };
 
         this.tasks = function () {

@@ -1,13 +1,12 @@
 /**
- *
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
@@ -29,13 +28,12 @@ define('io.ox/files/mediaplayer',
     ['io.ox/core/commons',
      'gettext!io.ox/files',
      'io.ox/files/api',
-     'io.ox/core/api/folder',
      'apps/mediaelement/mediaelement-and-player.js',
      'io.ox/files/actions',
      'less!io.ox/files/mediaplayer.less',
      'css!mediaelement/mediaelementplayer.css',
      'apps/io.ox/core/tk/jquery-ui.min.js'
-    ], function (commons, gt, api, folderAPI) {
+    ], function (commons, gt, api) {
 
     'use strict';
 
@@ -134,7 +132,7 @@ define('io.ox/files/mediaplayer',
         },
 
         getURL: function (file) {
-            return api.getUrl(file, 'play') + '&content_type=' + file.file_mimetype;
+            return api.getUrl(file, 'play') + '&content_type=' + String(file.file_mimetype).split(';')[0];
         },
 
         drawItems: function () {
@@ -143,9 +141,7 @@ define('io.ox/files/mediaplayer',
 
         drawTrackInfo: (function () {
 
-            var self = this;
-
-            function audioIconError(e) {
+            function audioIconError() {
                 this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
             }
 
@@ -216,18 +212,18 @@ define('io.ox/files/mediaplayer',
                     },
                     {
                         keys: [38], // UP
-                        action: function (player, media) {
+                        action: function () {
                             self.select('prev');
                         }
                     },
                     {
                         keys: [40], // DOWN
-                        action: function (player, media) {
+                        action: function () {
                             self.select('next');
                         }
                     }
                 ],
-                success: function (me, domObject) {
+                success: function (me) {
                     if (self.isMuted) {
                         me.setMuted(true);
                     }
@@ -242,7 +238,7 @@ define('io.ox/files/mediaplayer',
                         self.select('next');
 
                     }, false);
-                    me.addEventListener('volumechange', function (e) {
+                    me.addEventListener('volumechange', function () {
                         self.currentVolume = me.volume;
                         self.isMuted = me.muted;
                     }, false);
@@ -261,7 +257,7 @@ define('io.ox/files/mediaplayer',
             this.mediaelement = player[0].player;
         },
 
-        drawItem: function (file, i) {
+        drawItem: function (file) {
 
             var url = this.getURL(file),
                 item = $('<li>')
@@ -284,8 +280,6 @@ define('io.ox/files/mediaplayer',
         },
 
         show: function () {
-            var self = this,
-            inner;
             this.win.busy().nodes.outer.append(
                 this.container.append(
                     $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="1">').append(

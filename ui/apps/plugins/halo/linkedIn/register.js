@@ -1,23 +1,23 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/halo/linkedIn/register", ["io.ox/core/extensions"], function (ext) {
+define('plugins/halo/linkedIn/register', ['io.ox/core/extensions'], function (ext) {
 
-    "use strict";
+    'use strict';
 
-    ext.point("io.ox/halo/contact:renderer").extend({
+    ext.point('io.ox/halo/contact:renderer').extend({
 
-        id: "linkedin",
+        id: 'linkedin',
 
         handles: function (type) {
             return type === 'com.openexchange.halo.linkedIn.fullProfile';
@@ -27,7 +27,7 @@ define("plugins/halo/linkedIn/register", ["io.ox/core/extensions"], function (ex
 
             var node = this, def = $.Deferred();
 
-            require(["plugins/halo/linkedIn/view-halo", "less!io.ox/linkedIn/style.less"], function (base) {
+            require(['plugins/halo/linkedIn/view-halo', 'less!io.ox/linkedIn/style.less'], function (base) {
                 var data = baton.data.values ? baton.data.values[0] : baton.data;
                 node.append(base.draw(data));
                 def.resolve();

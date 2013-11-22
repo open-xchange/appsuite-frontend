@@ -1,11 +1,12 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -14,11 +15,10 @@ define('io.ox/contacts/edit/test',
     ['io.ox/core/extensions',
      'io.ox/contacts/main',
      'io.ox/contacts/api',
-     'settings!io.ox/core',
-     'io.ox/core/date'
-    ], function (ext, contacts, api, coreConfig, date) {
+     'settings!io.ox/core'
+    ], function (ext, contacts, api, coreConfig) {
 
-    "use strict";
+    'use strict';
 
     // test objects
     var testObject = {
@@ -133,7 +133,7 @@ define('io.ox/contacts/edit/test',
     }
 
  // get the current folder
-    var fId = coreConfig.get("folder/contacts");
+    var fId = coreConfig.get('folder/contacts');
     testObject.folder_id = fId;
 
     var testFactory = {
@@ -152,7 +152,7 @@ define('io.ox/contacts/edit/test',
         index: 100,
         test: function (j) {
 
-            j.describe("Contact edit", function () {
+            j.describe('Contact edit', function () {
 
                 var app = null,
                     data, itemFill, itemDelete, buttonUpdate, buttonSave,
@@ -468,11 +468,11 @@ define('io.ox/contacts/edit/test',
         id: 'contacts-extpoint',
         index: 100,
         test: function (j) {
-            j.describe("Contact extpoint", function () {
+            j.describe('Contact extpoint', function () {
                 var app = null,
-                data, itemFill, itemDelete, buttonUpdate, buttonSave, buttonClose,
-                buttonDelete, dialog, testfield, testfield2, formFrame = null,
-                dataId, dataFolder, dataObj, phrase;
+                data, buttonUpdate, buttonClose,
+                buttonDelete, dialog, testfield, formFrame = null,
+                phrase;
 
                 j.it('opens contact app', function () {
 
@@ -647,7 +647,7 @@ define('io.ox/contacts/edit/test',
 
                     app.launch();
                     j.runs(function () {
-                        ext.point("io.ox/contacts/edit/form/phone").disable("cellular_telephone1");
+                        ext.point('io.ox/contacts/edit/form/phone').disable('cellular_telephone1');
                     });
 
                     var grid = app.getGrid();

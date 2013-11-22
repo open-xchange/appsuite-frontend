@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -39,16 +39,29 @@ define('plugins/notifications/tasks/register',
     });
 
     function drawItem(node, model) {
+        var endText = '';
+        if (_.noI18n(model.get('end_date'))) {
+            endText = gt('end date ') + _.noI18n(model.get('end_date'));
+        }
+                //#. %1$s task title
+                //#. %2$s task end date
+                //#, c-format
+        var label = gt('Overdue Task. %1$s %2$s. Press [enter] to open', _.noI18n(model.get('title')), endText);
+
         node.append(
-            $('<div class="taskNotification item" tabindex="1">')
-            .attr('data-cid', model.get('cid'))
-            .attr('model-cid', model.cid)
+            $('<div class="taskNotification item refocus" tabindex="1" role="listItem">')
+            .attr({'data-cid': model.get('cid'),
+                   'focus-id': 'task-overdue-notification-' + model.get('cid'),
+                   'model-cid': model.cid,
+                   'aria-label': label})
             .append(
                 $('<div class="title">').text(_.noI18n(model.get('title'))),
                 $('<span class="end_date">').text(_.noI18n(model.get('end_date'))),
                 $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge')),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="btn btn-inverse" data-action="done">').text(gt('Done'))
+                    $('<button type="button" tabindex="1" class="refocus btn btn-inverse" data-action="done">')
+                    .attr('focus-id', 'task-overdue-notification-button-' + model.get('cid'))
+                    .text(gt('Done'))
                 )
             )
         );
@@ -110,10 +123,12 @@ define('plugins/notifications/tasks/register',
             if ((e.type !== 'click') && (e.which !== 13)) { return; }
             var cid = $(e.currentTarget).attr('data-cid'),
                 overlay = $('#io-ox-notifications-overlay'),
+                lastFocus = e.target,
                 sidepopup = overlay.prop('sidepopup');
 
             // toggle?
             if (sidepopup && cid === overlay.find('[data-cid]').attr('data-cid')) {
+                lastFocus = undefined;//no focus restore when toggling
                 sidepopup.close();
             } else {
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
@@ -129,6 +144,8 @@ define('plugins/notifications/tasks/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                //restore focus
+                                $(lastFocus).focus();
                             })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
@@ -214,7 +231,7 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            reminderUtil.draw(this, baton.model, util.buildOptionArray(new Date()));
+            reminderUtil.draw(this, baton.model, util.buildOptionArray({time: new Date()}));
         }
     });
 
@@ -247,7 +264,6 @@ define('plugins/notifications/tasks/register',
             e.stopPropagation();
             var endDate = new Date(),
                 dates,
-                reminder,
                 model = this.model,
                 time = ($(e.target).data('value') || $(e.target).val()).toString(),
                 key = [model.get('folder_id') + '.' + model.get('id')];
@@ -264,10 +280,11 @@ define('plugins/notifications/tasks/register',
         },
 
         onClickItem: function (e) {
-            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button')) {
+            if ($(e.target).is('a') || $(e.target).is('i') || $(e.target).is('button') || $(e.target).is('ul')) {
                 //ignore chevron and dropdownlinks
                 return;
             }
+
             if ((e.type !== 'click') && (e.which !== 13)) { return; }
 
             var overlay = $('#io-ox-notifications-overlay'),
@@ -276,10 +293,12 @@ define('plugins/notifications/tasks/register',
                     folder: this.model.get('folder_id')
                 },
                 sidepopup = overlay.prop('sidepopup'),
+                lastFocus = e.target,
                 cid = _.cid(obj);
 
                 // toggle?
             if (sidepopup && cid === overlay.find('.tasks-detailview').attr('data-cid')) {
+                lastFocus = undefined;//no focus restore when toggling
                 sidepopup.close();
             } else {
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
@@ -295,6 +314,8 @@ define('plugins/notifications/tasks/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                //restore focus
+                                $(lastFocus).focus();
                             })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
@@ -389,14 +410,33 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-confirmation/item').extend({
         draw: function (baton) {
-            var task = util.interpretTask(baton.model.toJSON());
-            this.attr('data-cid', baton.model.get('cid'))
+            var task = util.interpretTask(baton.model.toJSON()),
+                endText = '';
+            if (_.noI18n(baton.model.get('end_date'))) {
+                endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
+            }
+                    //#. %1$s task title
+                    //#. %2$s task end date
+                    //#, c-format
+            var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
+            this.attr({role: 'listItem',
+                       'data-cid': _.ecid(baton.model.attributes),
+                       'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
+                       tabindex: 1,
+                       'aria-label': label})
             .append(
                 $('<div class="title">').text(_.noI18n(task.title)),
                 $('<span class="end_date">').text(_.noI18n(task.end_date)),
                 $('<span class="status">').text(task.status).addClass(task.badge),
                 $('<div class="actions">').append(
-                    $('<button type="button" class="btn btn-inverse" data-action="change_state">').text(gt('Accept/Decline'))
+                    $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-inverse" data-action="change_state">')
+                    .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
+                    .text(gt('Accept/Decline')),
+                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                        .attr({'title': gt('Accept invitation'),
+                               'aria-label': gt('Accept invitation'),
+                               'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)})
+                        .append('<i class="icon-ok">')
                 )
             );
             task = null;
@@ -410,7 +450,10 @@ define('plugins/notifications/tasks/register',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
-            'click [data-action="change_state"]': 'onChangeState'
+            'click [data-action="change_state"]': 'onChangeState',
+            'keydown [data-action="change_state"]': 'onChangeState',
+            'click [data-action="accept"]': 'onClickAccept',
+            'keydown [data-action="accept"]': 'onClickAccept'
             //'dispose': 'close'
         },
 
@@ -432,11 +475,13 @@ define('plugins/notifications/tasks/register',
                     id: this.model.get('id'),
                     folder: this.model.get('folder_id')
                 },
+                lastFocus = e.target,
                 sidepopup = overlay.prop('sidepopup'),
                 cid = _.cid(obj);
 
                // toggle?
             if (sidepopup && cid === overlay.find('.tasks-detailview').attr('data-cid')) {
+                lastFocus = undefined;//no focus restore when toggling
                 sidepopup.close();
             } else {
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
@@ -452,6 +497,8 @@ define('plugins/notifications/tasks/register',
                                     overlay.removeClass('active');
                                     $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
                                 }
+                                //restore focus
+                                $(lastFocus).focus();
                             })
                             .show(e, function (popup) {
                                 popup.append(viewDetail.draw(taskData));
@@ -464,8 +511,25 @@ define('plugins/notifications/tasks/register',
             }
         },
 
+        onClickAccept: function (e) {
+            e.stopPropagation();
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
+
+            var model = this.model,
+                o = {id: model.get('id'),
+                     folder_id: model.get('folder_id'),
+                     data: {confirmmessage: '', confirmation: 1 }};
+            api.confirm(o).done(function () {
+                //update detailview
+                var data = model.toJSON();
+                api.trigger('update:' + _.ecid(data));
+            });
+        },
+
         onChangeState: function (e) {
             e.stopPropagation();
+            if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
+
             var model = this.model;
             require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs'], function (editUtil, dialogs) {
                 //build popup
@@ -483,7 +547,6 @@ define('plugins/notifications/tasks/register',
                             //update detailview
                             var data = model.toJSON();
                             api.trigger('update:' + _.ecid(data));
-                            model.collection.remove(model);
                         });
                     }
                 });

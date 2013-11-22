@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -14,7 +14,7 @@
 .io-ox-tasks-edit-main {
 
     label {
-        display:block;
+        display: block;
         font-size: 13px;
         color: #888;
     }
@@ -35,8 +35,8 @@
 
 
     .title {
-        float:left;
-        font-size:20px;
+        float: left;
+        font-size: 20px;
     }
     .collapsed      { display: none;      }
     .cancel         { float: right;       }
@@ -68,7 +68,7 @@
     .tab-pane { margin-bottom: 85px; }
 
     .tab-content {
-        min-height:364px;
+        min-height: 364px;
         overflow: visible;
     }
 
@@ -130,7 +130,7 @@
     @media all and (max-width: 980px) {
         .progress-field { width: 49px; }
     }
-    @media all and (max-width: 480px), (max-device-width: 480px) {
+    @media all and (max-width: 480px), all and (max-device-width: 480px) {
         .title {
             width: 100%; //to push the buttons under the title
         }
@@ -141,10 +141,16 @@
             margin-bottom: 9px;
         }
         .tab-content {
-            min-height: 0px;
+            min-height: 0;
         }
         .task-edit-wrapper {
-            margin-top: 0px;
+            margin-top: 0;
+        }
+
+        .participant-wrapper {
+            .participant-email {
+                display: block;
+            }
         }
     }
 }
@@ -154,6 +160,6 @@
         width:auto;
     }
     .io-ox-tasks-edit-main .private-flag {
-        top:5px;
+        top: 5px;
     }
 }

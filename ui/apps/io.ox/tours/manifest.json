@@ -1,9 +1,9 @@
 {
-    title: "Guided tours",
-    company: "Open-Xchange",
-    icon: "/images/icon.png",
-    category: "Dev",
-    settings: false,
-    requires: "dev",
-    index: 100
+    "title": "Guided tours",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "requires": "dev",
+    "index": 100
 }

@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -126,7 +126,8 @@ define('io.ox/tasks/main',
         // grid
         grid = new VGrid(left, {
             settings: settings,
-            swipeRightHandler: swipeRightHandler
+            swipeRightHandler: swipeRightHandler,
+            showToggle: _.device('smartphone') ? false: true,
         });
 
         grid.addTemplate(template.main);
@@ -230,7 +231,7 @@ define('io.ox/tasks/main',
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail(gt("Couldn't load that task."), function () {
+                $.fail(gt('Couldn\'t load that task.'), function () {
                     showTask(obj);
                 })
             );
@@ -288,6 +289,11 @@ define('io.ox/tasks/main',
         // drag & drop
         win.nodes.outer.on('selection:drop', function (e, baton) {
             actions.invoke('io.ox/tasks/actions/move', null, baton);
+        });
+
+        //jump to newly created items
+        api.on('create', function (e, data) {
+            grid.selection.set(data);
         });
 
         //ready for show

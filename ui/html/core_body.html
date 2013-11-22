@@ -1,15 +1,15 @@
 
 <!-- Visual overlays -->
-<div id="background_loader" class="busy"></div>
+<div id="background-loader" class="busy"></div>
 
 <!-- Core Panel -->
 <div id="io-ox-core" class="abs unselectable" style="display: none">
     <!-- top bar -->
     <div id="io-ox-topbar" role="navigation" class="f6-target">
         <ul class="launchers" role="menubar"></ul>
-        <div class="launcher-dropdown dropdown" aria-hidden="true">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-reorder"></i></a>
-            <ul class="dropdown-menu" role="menu"></ul>
+        <div class="launcher-dropdown dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1"><i class="icon-reorder" aria-hidden="true"></i></a>
+            <ul class="dropdown-menu"></ul>
         </div>
     </div>
     <!-- screens -->
@@ -99,7 +99,7 @@
 
             <div class="css-table-row">
             <div class="css-table-cell" id="io-ox-login-footer">
-                <div id="io-ox-languages"><i data-i18n="Languages" data-i18n-attr="text,aria-label" aria-label="Languages">Languages</i>:&nbsp; <span id="io-ox-language-list"></span></div>
+                <div id="io-ox-languages"><i id="io-ox-languages-label" data-i18n="Languages" data-i18n-attr="text,aria-label" aria-label="Languages">Languages</i>:&nbsp; <span id="io-ox-language-list"></span></div>
                 <div id="io-ox-copyright"></div>
             </div>
             </div>
@@ -115,4 +115,4 @@
 <div id="tmp" style="display: none;"></div>
 
 <!-- blur effect overlay for browsers without cssfilter support -->
-<svg><filter id="overlay-effect"><feGaussianBlur stdDeviation="2"/></filter></svg>
+<svg style="height:0;"><filter id="overlay-effect"><feGaussianBlur stdDeviation="2"/></filter></svg>

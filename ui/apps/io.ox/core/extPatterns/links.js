@@ -1,24 +1,25 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/extPatterns/links",
-    ["io.ox/core/extensions",
-     "io.ox/core/collection",
-     "io.ox/core/extPatterns/actions",
-     "gettext!io.ox/core"], function (ext, Collection, actions, gt) {
+define('io.ox/core/extPatterns/links',
+    ['io.ox/core/extensions',
+     'io.ox/core/collection',
+     'io.ox/core/extPatterns/actions',
+     'gettext!io.ox/core'
+    ], function (ext, Collection, actions, gt) {
 
-    "use strict";
+    'use strict';
 
     // common extension classes
 
@@ -32,28 +33,46 @@ define("io.ox/core/extPatterns/links",
             click = function (e) {
                 e.preventDefault();
                 var node = $(this),
-                    baton = node.data("baton"),
-                    ref = node.data("ref");
+                    baton = node.data('baton'),
+                    ref = node.data('ref');
                 baton.e = e;
                 actions.invoke(ref, this, baton, e);
+            },
+            drawDefault = function () {
+                return $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
+                    .addClass(self.cssClasses || 'io-ox-action-link')
+                    .attr({
+                        'data-section': self.section || 'default',
+                        'data-prio': self.prio || 'lo',
+                        'data-ref': self.ref,
+                        'data-prio-mobile': self.prioMobile || 'none',
+                        'role': 'menuitem'
+                    })
+                    .append(self.label ? $.txt(String(self.label)) : $())
+                    .append(self.icon ? $('<i>').addClass(String(self.icon)) : $());
             };
 
         this.draw = this.draw || function (baton) {
             baton = ext.Baton.ensure(baton);
+
             this.append(
-                $("<a>", { href: "#", tabindex: 1, "data-action": self.id })
-                .addClass(self.cssClasses || 'io-ox-action-link')
-                .attr({
-                    'data-section': self.section || 'default',
-                    'data-prio': self.prio || 'lo',
-                    'data-ref': self.ref,
-                    'data-prio-mobile': self.prioMobile || 'none'
-                })
+                drawDefault(baton)
                 .data({ ref: self.ref, baton: baton })
                 .click(click)
-                .text(String(self.label))
             );
         };
+
+        if (this.drawDisabled === true) {
+            this.drawDisabled = function () {
+                this.append(
+                    drawDefault()
+                    .addClass('disabled')
+                    .attr({
+                        'aria-disabled': true
+                    })
+                );
+            };
+        }
     };
 
     var XLink = function (id, options) {
@@ -92,24 +111,36 @@ define("io.ox/core/extPatterns/links",
             tag = options.tagtype ? options.tagtype : 'a',
 
             click = function (e) {
+                if (node.hasClass('io-ox-busy')) {
+                    return false;
+                }
                 e.preventDefault();
                 var extension = e.data.extension;
                 e.data.baton.e = e;
                 actions.invoke(extension.ref, extension, e.data.baton);
-            };
+            },
+            node;
 
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
             var attr = { href: '#', 'class': 'btn', 'data-action': self.id, tabIndex: self.tabIndex };
             if (tag === 'button') attr.type = 'button';
             this.append(
-                $('<' + tag + '>', attr)
+                node = $('<' + tag + '>', attr)
                 .addClass(self.cssClasses)
                 .css(self.css || {})
                 .on('click', { extension: self, baton: baton }, click)
                 .append(_.isString(self.label) ? $.txt(self.label) : $())
                 .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())
             );
+        };
+
+        this.busy = function () {
+            node.busy();
+        };
+
+        this.idle = function () {
+            node.idle();
         };
     };
 
@@ -120,7 +151,7 @@ define("io.ox/core/extPatterns/links",
     var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
 
         baton = ext.Baton.ensure(baton);
-        var nav = $('<nav role="presentation">').appendTo(node);
+        var nav = $('<ul role="menu">').appendTo(node);
 
         // customize
         if (extension.attributes) {
@@ -131,12 +162,19 @@ define("io.ox/core/extPatterns/links",
         }
 
         return getLinks(extension, collection, baton, args)
-            .always(function (links) {
-                // count resolved links
+            .always(function (items) {
+                // count resolved items
                 var count = 0;
-                // draw links
-                _(links).each(function (link) {
-                    if (_.isFunction(link.draw)) {
+                // draw items
+                _(items).each(function (item) {
+                    var link = item.link;
+                    if (item.state === false) {
+                        if (_.isFunction(link.drawDisabled)) {
+                            link.drawDisabled.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
+                            count++;
+                        }
+                    }
+                    else if (_.isFunction(link.draw)) {
                         link.draw.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
                         if (_.isFunction(link.customize)) {
                             link.customize.call(nav.find('a'), baton);
@@ -151,6 +189,50 @@ define("io.ox/core/extPatterns/links",
             })
             .then(function () {
                 return nav;
+            });
+    };
+
+    var drawInlineButtonGroup = function (extension, collection, node, baton, args, bootstrapMode) {
+        baton = ext.Baton.ensure(baton);
+        var group = $('<div class="btn-group">'),
+            nav = $('<nav role="presentation">').append(group).appendTo(node);
+
+        // customize
+        if (extension.attributes) {
+            nav.attr(extension.attributes);
+        }
+        if (extension.classes) {
+            nav.addClass(extension.classes);
+        }
+
+        return getLinks(extension, collection, baton, args)
+            .always(function (links) {
+                // count resolved links
+                var count = 0;
+                // draw links
+                _(links).each(function (item) {
+                    var link = item.link;
+                    if (item.state === false) {
+                        if (_.isFunction(link.drawDisabled)) {
+                            link.drawDisabled.call(bootstrapMode ? $('<li>').appendTo(group) : group, baton);
+                            count++;
+                        }
+                    }
+                    else if (_.isFunction(link.draw)) {
+                        link.draw.call(bootstrapMode ? $('<li>').appendTo(group) : group, baton);
+                        if (_.isFunction(link.customize)) {
+                            link.customize.call(group.find('a'), baton);
+                        }
+                        count++;
+                    }
+                });
+                // empty?
+                if (count === 0) {
+                    group.addClass('empty');
+                }
+            })
+            .then(function () {
+                return group;
             });
     };
 
@@ -178,13 +260,19 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
-    var wrapAsListItem = function () {
-        return $('<li>').append(this).get(0);
-    };
-
+    /**
+     * @param {object}  options
+     * @param {boolean} options.forcelimit force usage of 'more...'
+     * @param {string} add options.title for better accessibility (add context to 'Inline menu')
+     */
     var InlineLinks = function (options) {
 
-        var extension = _.extend(this, { classes: 'io-ox-inline-links' }, options);
+        var extension = _.extend(this, {
+            classes: 'io-ox-inline-links',
+            attributes: {
+                'aria-label': gt.format('Inline menu %s', options.title || '')
+            }
+        }, options);
 
         this.draw = function (baton) {
 
@@ -194,52 +282,56 @@ define("io.ox/core/extPatterns/links",
             var args = $.makeArray(arguments),
                 multiple = _.isArray(baton.data) && baton.data.length > 1;
 
-            drawLinks(extension, new Collection(baton.data), this, baton, args).done(function (nav) {
+            drawLinks(extension, new Collection(baton.data), this, baton, args, true).done(function (nav) {
 
                 // add toggle unless multi-selection
                 var all = nav.children(),
-                    lo = all.filter('[data-prio="lo"]'),
-                    stayOnTop = all.filter('[data-prio-mobile="none"]'),
+                    lo = all.children().filter('[data-prio="lo"]').parent(),
                     isSmall = _.device('small');
 
-                if (!multiple && (isSmall || (all.length > 5 && lo.length > 1))) {
+                if ((!multiple || options.forcelimit) && (isSmall || (all.length > 5 && lo.length > 1))) {
                     nav.append(
-                        $('<span class="io-ox-action-link dropdown">').append(
-                            $('<a href="#" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
-                            .append(
+                        $('<li class="dropdown">').append(
+                            $('<a class="actionlink">')
+                            .attr({
+                                'href': '#',
+                                'data-toggle': 'dropdown',
+                                'data-action': 'more',
+                                'aria-haspopup': 'true',
+                                'tabindex': '1',
+                                'role': 'menuitem'
+                            }).append(
                                 isSmall ?
                                     [$.txt(gt('Actions')), $('<b class="caret">')] :
                                     [$.txt(gt('More')), $.txt(_.noI18n(' ...')), $('<b class="caret">')]
                             )
-                            .on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
+                            .on(Modernizr.touch ? 'touchstart' : 'click', function () {
                                 // fix dropdown position on-the-fly
                                 var left = $(this).parent().position().left;
                                 $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' dropdown-right'));
                             }),
-                            $('<ul class="dropdown-menu dropdown-right" role="menu">').append((function () {
+                            $('<ul class="dropdown-menu dropdown-right">')
+                            .attr({
+                                'role': 'menu',
+                                'aria-label': isSmall ? gt('Actions') : gt('More')
+                            }).append((function () {
                                 if (isSmall) {
-                                    if (stayOnTop) {
-                                        return stayOnTop.map(wrapAsListItem);
-                                    } else {
-                                        return all.stayOnTop.map(wrapAsListItem);
-                                    }
-                                } else {
-                                    // loop over all items and visually group by "section"
-                                    var items = [], currentSection = '';
-                                    lo.each(function () {
-                                        var node = $(this), section = node.attr('data-section');
-                                        // add divider?
-                                        if (currentSection !== '' && currentSection !== section) {
-                                            items.push($('<li class="divider" role="presentation">'));
-                                        }
-                                        currentSection = section;
-                                        // add item
-                                        items.push($('<li>').append(node));
-                                    });
-                                    return items;
+                                    return all.children().filter('[data-prio-mobile="none"]').parent();
                                 }
-                            }())
-                            )
+                                // loop over all items and visually group by "section"
+                                var items = [], currentSection = '';
+                                lo.each(function () {
+                                    var node = $(this), section = node.attr('data-section');
+                                    // add divider?
+                                    if (currentSection !== '' && currentSection !== section) {
+                                        items.push($('<li class="divider" role="presentation">'));
+                                    }
+                                    currentSection = section;
+                                    // add item
+                                    items.push(node);
+                                });
+                                return items;
+                            }()))
                         )
                     );
                 }
@@ -251,13 +343,26 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
+    var InlineButtonGroup = function (options) {
+        var extension = _.extend(this, { classes: 'io-ox-inline-buttongroup' }, options);
+        this.draw = function (baton) {
+            baton = ext.Baton.ensure(baton);
+            drawInlineButtonGroup(extension, new Collection(baton.data), this, baton, $.makeArray(arguments))
+                .done(function (group) {
+                    if (options.customizeNode) {
+                        options.customizeNode(group);
+                    }
+                });
+        };
+    };
+
     var z = 0;
     var drawDropDown = function (options, baton) {
         if (options.zIndex !== undefined) {
             z = options.zIndex;
         }
         var args = $.makeArray(arguments),
-            $parent = $('<div>').addClass('dropdown')
+            node = $('<div>').addClass('dropdown')
                 .css('display', 'inline-block')
                 .appendTo(this),
             label = options.label || baton.label || '###',
@@ -268,29 +373,34 @@ define("io.ox/core/extPatterns/links",
                     $('<span>').text(_.noI18n(' ')),
                     $('<b>').addClass('caret')
                 )
-                .appendTo($parent);
+                .appendTo(node);
 
         if (options.zIndex !== undefined) {
-            $parent.css('zIndex', (z = z > 0 ? z - 1 : 11000));
+            node.css('zIndex', (z = z > 0 ? z - 1 : 11000));
         }
-        $toggle.addClass(options.classes);
-        $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
+
+        // TODO remove this whole 'inline-js-spacing' solution
+        // better use CSS :after to insert spaces
+        // dont' do this crap on mobile, textnode can not be styled or overwritten later...
+        if (_.device('!smartphone')) {
+            node.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
+        }
 
         // create & add node first, since the rest is async
-        var node = $('<ul role="menu">').addClass('dropdown-menu').appendTo($parent);
+        options.classes += ' dropdown-menu';
         if (options.open === 'left') {
-            node.addClass("pull-right").css({textAligh: 'left'});
+            options.classes += ' pull-right';
         } else {
-            $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function (e) {
+            $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function () {
                 // fix dropdown position on-the-fly
-                node.addClass($parent.position().left < 100 ? '' : ' dropdown-right');
+                node.find('ul.dropdown-menu').addClass(node.position().left < 100 ? '' : 'dropdown-right');
             });
         }
         drawLinks(options, new Collection(baton.data), node, baton, args, true);
 
         $toggle.dropdown();
 
-        return $parent;
+        return node;
     };
 
     var DropdownLinks = function (options) {
@@ -317,7 +427,7 @@ define("io.ox/core/extPatterns/links",
 
     var drawButtonGroup = function (options, baton) {
         var args = $.makeArray(arguments),
-            $parent = $("<div>").addClass('btn-group')
+            $parent = $('<div>').addClass('btn-group')
                 .addClass(options.classes)
                 .attr('data-toggle', (options.radio ? 'buttons-radio' : ''))
                 .appendTo(this);
@@ -359,47 +469,52 @@ define("io.ox/core/extPatterns/links",
                 )
             );
             // get links
-            return getLinks(extension, new Collection(baton.data), baton, args).done(function (links) {
-                if (links.length > 1) {
-                    // call draw method to fill dropdown
-                    _(links).chain()
-                        .filter(function (x) {
-                            return _.isFunction(x.draw);
-                        })
-                        .each(function (x) {
-                            title.push(x.label);
-                            x.draw.call(ul, baton);
-                        });
-                    // set title attribute
-                    a.attr('title', extension.label || title.join(', '))
-                     .attr('aria-label', extension.label || title.join(', '))
-                     .attr('aria-haspopup', true);
+            return getLinks(extension, new Collection(baton.data), baton, args)
+                .then(function (items) {
+                    // filter out disabled items
+                    return _.chain(items).filter(function (o) { return o.state; }).pluck('link').value();
+                })
+                .done(function (links) {
+                    if (links.length > 1) {
+                        // call draw method to fill dropdown
+                        _(links).chain()
+                            .filter(function (x) {
+                                return _.isFunction(x.draw);
+                            })
+                            .each(function (x) {
+                                title.push(x.label);
+                                x.draw.call(ul, baton);
+                            });
+                        // set title attribute
+                        a.attr('title', extension.label || title.join(', '))
+                         .attr('aria-label', extension.label || title.join(', '))
+                         .attr('aria-haspopup', true);
 
-                    div.attr('role', 'menu');
-                    // add footer label?
-                    if (extension.label) {
-                        ul.append(
-                            $('<li class="dropdown-footer">').attr('role', 'menuitem').text(extension.label)
-                        );
-                    }
-                } else {
-                    // disable dropdown
-                    a.removeAttr('data-toggle');
-                    ul.remove();
-                    if (links.length === 1) {
-                        // directly link actions
-                        a.attr({
-                            title: links[0].label || '',
-                            'aria-label': links[0].label || '',
-                            role: 'menuitem',
-                            tabindex: 1
-                        })
-                        .on('click', { baton: baton, extension: links[0] }, actionClick);
+                        div.attr('role', 'menu');
+                        // add footer label?
+                        if (extension.label) {
+                            ul.append(
+                                $('<li class="dropdown-footer">').attr('role', 'menuitem').text(extension.label)
+                            );
+                        }
                     } else {
-                        a.addClass('disabled').on('click', preventDefault);
+                        // disable dropdown
+                        a.removeAttr('data-toggle');
+                        ul.remove();
+                        if (links.length === 1) {
+                            // directly link actions
+                            a.attr({
+                                title: links[0].label || '',
+                                'aria-label': links[0].label || '',
+                                role: 'menuitem',
+                                tabindex: 1
+                            })
+                            .on('click', { baton: baton, extension: links[0] }, actionClick);
+                        } else {
+                            a.addClass('disabled').on('click', preventDefault);
+                        }
                     }
-                }
-            });
+                });
         }
 
         function icon() {
@@ -431,6 +546,7 @@ define("io.ox/core/extPatterns/links",
         ToolbarButtons: ToolbarButtons,
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
+        InlineButtonGroup: InlineButtonGroup,
         DropdownLinks: DropdownLinks,
         Dropdown: Dropdown,
         ButtonGroup: ButtonGroup,

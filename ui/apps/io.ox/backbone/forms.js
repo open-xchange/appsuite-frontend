@@ -1,16 +1,15 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-
 
 define('io.ox/backbone/forms',
     ['io.ox/core/extensions',
@@ -18,11 +17,10 @@ define('io.ox/backbone/forms',
      'io.ox/core/date',
      'settings!io.ox/calendar',
      'gettext!io.ox/core',
-     'io.ox/core/tk/mobiscroll',
      'less!io.ox/backbone/forms.less'
-     ], function (ext, Events, date, settings, gt, mobiSettings) {
+    ], function (ext, Events, date, settings, gt) {
 
-    "use strict";
+    'use strict';
 
     // Error Alert
 
@@ -51,14 +49,14 @@ define('io.ox/backbone/forms',
                 this.observeModel('backendError', showBackendError);
             },
 
-            isRelevant: function (response) {
+            isRelevant: function () {
                 return true;
             },
 
             errorTitle: gt('An error occurred'),
 
             formatError: function (error) {
-                return error.error || gt("An error occurred. Please try again later");
+                return error.error || gt('An error occurred. Please try again later');
             }
 
         }, options || {});
@@ -184,7 +182,7 @@ define('io.ox/backbone/forms',
                 this.nodes.element = $('<select tabindex="1">').addClass('control');
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.element.append(
-                        $("<option>", {value: value}).text(label)
+                        $('<option>', {value: value}).text(label)
                     );
                 });
 
@@ -335,10 +333,10 @@ define('io.ox/backbone/forms',
                     helpBlock.append($.txt(msg));
                 });
                 this.$el.append(helpBlock);
-                this.$el.addClass("error");
+                this.$el.addClass('error');
             },
             clearError: function () {
-                this.$el.removeClass("error");
+                this.$el.removeClass('error');
                 this.$el.find('.help-block').remove();
             }
         });
@@ -356,13 +354,13 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             render: function () {
                 this.nodes = {};
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.inputField = $(this.control || '<input type="text">'));
+                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label).append(this.nodes.inputField = $(this.control || '<input type="text">')));
                 this.nodes.inputField
                     .val(this.model.get(this.attribute))
                     .attr({ tabindex: 1 });
                 if (options.changeAppTitleOnKeyUp) {
-                    this.nodes.inputField.on('keyup', $.proxy(function (e) {
-                        this.baton.app.setTitle(this.nodes.inputField.val());
+                    this.nodes.inputField.on('keyup', $.proxy(function () {
+                        this.model.trigger('keyup:' + this.attribute, this.model, this.nodes.inputField.val());
                     }, this));
                 }
                 this.nodes.inputField.on('change', _.bind(this.updateModel, this));
@@ -402,19 +400,15 @@ define('io.ox/backbone/forms',
                         )
                 );
                 if (this.model.get(this.attribute)) {
-                    this.nodes.checkbox.attr({checked: "checked"});
+                    this.nodes.checkbox.prop('checked', true);
                 }
-                this.nodes.checkbox.attr('checked', this.model.get(this.attribute));
+                this.nodes.checkbox.prop('checked', this.model.get(this.attribute));
                 this.nodes.checkbox.on('change', function () {
-                    self.model.set(self.attribute, self.nodes.checkbox.is(':checked'), {validate: true});
+                    self.model.set(self.attribute, self.nodes.checkbox.prop('checked'), {validate: true});
                 });
             },
             updateCheckbox: function () {
-                if (this.model.get(this.attribute)) {
-                    this.nodes.checkbox.attr({checked: "checked"});
-                } else {
-                    this.nodes.checkbox.removeAttr("checked");
-                }
+                this.nodes.checkbox.prop('checked', this.model.get(this.attribute));
             }
         };
 
@@ -432,14 +426,14 @@ define('io.ox/backbone/forms',
                 this.nodes = {};
                 this.nodes.select = $('<select tabindex="1">');
                 if (options.multiple) {
-                    this.nodes.select.attr('multiple', 'multiple');
+                    this.nodes.select.prop('multiple', true);
                 }
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.select.append(
-                        $("<option>", {value: value}).text(label)
+                        $('<option>', {value: value}).text(label)
                     );
                 });
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
+                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label).append(this.nodes.select));
                 this.updateChoice();
                 this.nodes.select.on('change', function () {
                     self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
@@ -678,42 +672,14 @@ define('io.ox/backbone/forms',
     }
 
     function DatePicker(options) {
+        options = _.extend({
+            required: true,
+            display: 'DATETIME',
+            utc: false,
+            clearButton: false
+        }, options);
+
         var BinderUtils = {
-            convertDate: function (direction, value, attribute, model) {
-                var ret;
-                if (direction === 'ModelToView') {
-                    if (model.get('full_time')) {
-                        value = date.Local.utc(value);
-                        if (attribute === 'end_date') {
-                            value -= date.DAY;
-                        }
-                    }
-                    ret = BinderUtils._toDate(value, attribute, model);
-                } else {
-                    ret = BinderUtils._dateStrToDate(value, attribute, model);
-                    if (model.get('full_time') && attribute === 'end_date') {
-                        ret += date.DAY;
-                    }
-                }
-                return ret;
-            },
-
-            convertTime: function (direction, value, attribute, model) {
-                if (direction === 'ModelToView') {
-                    return BinderUtils._toTime(value, attribute, model);
-                } else {
-                    return BinderUtils._timeStrToDate(value, attribute, model);
-                }
-            },
-
-            numToString: function (direction, value, attribute, model) {
-                if (direction === 'ModelToView') {
-                    return value + '';
-                } else {
-                    return parseInt(value, 10);
-                }
-            },
-
             _toDate: function (value, attribute, model) {
                 if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
                     return null;
@@ -721,20 +687,25 @@ define('io.ox/backbone/forms',
                 if (!_.isNumber(value)) {
                     return value; //do nothing
                 }
+                if (model.get('full_time')) {
+                    value = date.Local.utc(value);
+                    if (attribute === 'end_date') {
+                        value -= date.DAY;
+                    }
+                }
                 var mydate = parseInt(value, 10);
                 if (_.isNull(mydate)) {
                     return value;
                 }
                 mydate = new date.Local(mydate);
-                if (options.display === "DATETIME" && _.device('small') && !model.get('full_time')) {
+                if (options.display === 'DATETIME' && _.device('small') && !model.get('full_time')) {
                     return mydate.format(date.DATE) + ' ' + mydate.format(date.TIME);
                 } else {
                     return mydate.format(date.DATE);
                 }
-
             },
 
-            _toTime: function (value, attribute) {
+            _toTime: function (value) {
                 if (value === undefined || value === null || value === '') {//dont use !value or 0 will result in false
                     return null;
                 }
@@ -752,29 +723,27 @@ define('io.ox/backbone/forms',
                 if (isNaN(myValue)) {
                     return value;
                 }
-                var parsedDate = date.Local.parse(value.toUpperCase(), date.TIME),
-                    mydate = new date.Local(myValue);
-                // parsing error
+                var parsedDate = date.Local.parse(value.toUpperCase(), date.TIME);
                 if (_.isNull(parsedDate)) {
                     // trigger validate error
                     return undefined;
                 }
-
-                mydate.setHours(parsedDate.getHours());
-                mydate.setMinutes(parsedDate.getMinutes());
-                mydate.setSeconds(parsedDate.getSeconds());
-
-                return mydate.getTime();
+                return new date.Local(myValue).setHours(parsedDate.getHours(), parsedDate.getMinutes(), parsedDate.getSeconds()).getTime();
             },
 
             _dateStrToDate: function (value, attribute, model) {
                 var myValue = parseInt(model.get(attribute), 10),
                     formatStr;
-                if (isNaN(myValue)) {
-                    return value;
+
+                if (value === '' && !options.required) {
+                    return null;
                 }
 
-                if (options.display === "DATETIME" && _.device('small') && !model.get('full_time')) {
+                if (isNaN(myValue)) {
+                    myValue = new date.Local().setHours(0, 0, 0, 0).getTime();
+                }
+
+                if (options.display === 'DATETIME' && _.device('small') && !model.get('full_time')) {
                     formatStr = date.getFormat(date.DATE) + ' ' + date.getFormat(date.TIME);
                 } else {
                     formatStr = date.DATE;
@@ -787,15 +756,15 @@ define('io.ox/backbone/forms',
 
                 // fulltime utc workaround
                 if (model.get('full_time')) {
-                    return parsedDate.local;
+                    return attribute === 'end_date' ? parsedDate.local + date.DAY : parsedDate.local;
                 }
 
-                if (options.display !== "DATETIME" || !_.device('small') || model.get('full_time')) {
-                    var mydate = new date.Local(myValue);
-                    mydate.setDate(parsedDate.getDate());
-                    mydate.setMonth(parsedDate.getMonth());
-                    mydate.setYear(parsedDate.getYear());
-                    parsedDate = mydate;
+                if (options.display !== 'DATETIME' || !_.device('small') || model.get('full_time')) {
+                    parsedDate = new date.Local(myValue).setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate());
+                }
+
+                if (options.utc) {
+                    return date.Local.localTime(parsedDate.getTime());
                 }
 
                 return parsedDate.getTime();
@@ -813,17 +782,18 @@ define('io.ox/backbone/forms',
             today: gt('Today')
         };
 
-        var modelEvents = {};
+        var mobileMode = _.device('small'),
+            modelEvents = {};
         modelEvents['change:' + options.attribute] = 'setValueInField';
         modelEvents['invalid:' + options.attribute] = 'showError';
         modelEvents.valid = 'removeError';
         modelEvents['change:full_time'] = 'onFullTimeChange';
-        var mobileMode = _.device('small');
         _.extend(this, {
             tagName: 'div',
             render: function () {
                 var self = this;
                 this.nodes = {};
+                this.mobileSet = {};
                 this.$el.append(
                     this.nodes.controlGroup = $('<div class="control-group">').append(
                         $('<label>').addClass(options.labelClassName || '').text(this.label),
@@ -831,10 +801,10 @@ define('io.ox/backbone/forms',
                             function () {
                                 self.nodes.dayField = $('<input type="text" tabindex="1" class="input-small datepicker-day-field">');
                                 if (options.initialStateDisabled) {
-                                    self.nodes.dayField.attr('disabled', true);
+                                    self.nodes.dayField.prop('disabled', true);
                                 }
 
-                                if (options.display === "DATETIME") {
+                                if (options.display === 'DATETIME') {
                                     self.nodes.timezoneField = $('<span class="label">');
                                     if (self.model.get(self.attribute)) {
                                         self.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr));
@@ -847,9 +817,9 @@ define('io.ox/backbone/forms',
                                     self.nodes.dayField.toggleClass('input-medium', 'input-small');
                                     return [self.nodes.dayField];
                                 } else {
-                                    if (options.display === "DATE") {
+                                    if (options.display === 'DATE') {
                                         return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
-                                    } else if (options.display === "DATETIME") {
+                                    } else if (options.display === 'DATETIME') {
 
                                         self.nodes.timeField = $('<input type="text" tabindex="1" class="input-mini">');
                                         if (self.model.get('full_time')) {
@@ -876,24 +846,35 @@ define('io.ox/backbone/forms',
                         todayHighlight: true,
                         todayBtn: true
                     });
-                } else {//do funky mobiscroll stuff
-                    if (options.display === "DATETIME") {
-                        this.nodes.dayField.mobiscroll().datetime();
-
-                    } else {
-                        this.nodes.dayField.mobiscroll().date();
-                    }
-
-                    this.nodes.dayField.val = function (value) {//repairing functionality
-                        if (arguments.length > 0) {
-                            this['0'].value = value;
+                } else {
+                    require(['io.ox/core/tk/mobiscroll'], function (defaultSettings) {
+                        //do funky mobiscroll stuff
+                        if (options.display === 'DATETIME') {
+                            self.nodes.dayField.mobiscroll().datetime(defaultSettings);
                         } else {
-                            return this['0'].value;
+                            self.nodes.dayField.mobiscroll().date(defaultSettings);
                         }
-                    };
+                        // self.nodes.dayField.mobiscroll('option', 'dateOrder', 'dmy');
+                        if (options.clearButton) {//add clear button
+                            self.nodes.dayField.mobiscroll('option', 'button3Text', gt('clear'));
+                            self.nodes.dayField.mobiscroll('option', 'button3', function () {
+                                self.model.set(self.attribute, null);
+                                self.nodes.dayField.mobiscroll('hide');
+                            });
+                        }
+
+                        self.nodes.dayField.val = function (value) {//repairing functionality
+                            if (arguments.length > 0) {
+                                this['0'].value = value;
+                            } else {
+                                return this['0'].value;
+                            }
+                        };
+                        self.mobileSet = defaultSettings;
+                    });
                 }
 
-                if (!mobileMode && options.display === "DATETIME") {
+                if (!mobileMode && options.display === 'DATETIME') {
                     var hours_typeahead = [],
                         filldate = new date.Local().setHours(0, 0, 0, 0),
                         interval = parseInt(settings.get('interval'), 10);
@@ -917,57 +898,43 @@ define('io.ox/backbone/forms',
                     };
 
                     this.nodes.timeField.combobox(comboboxHours);
-                    this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
+                    this.nodes.timeField.on('change', _.bind(this.updateModelTime, this));
                 }
 
-                this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
-
-                if (!mobileMode && options.overwritePositioning) {
-                    this.nodes.dayField.on('focus', _.bind(this.repositioning, this));
-                }
+                this.nodes.dayField.on('change', _.bind(this.updateModelDate, this));
 
                 return this;
             },
 
-            repositioning: function () {
-                var element = this.nodes.controlGroup;
-
-                this.nodes.controlGroup.find('.datepicker.dropdown-menu').css({
-                    top: $(element)[0].offsetTop + $(element)[0].offsetHeight,
-                    left: $(element)[0].offsetLeft
-                });
-            },
-
             setValueInField: function () {
                 var value = this.model.get(this.attribute);
-                if (options.display === "DATETIME") {
+                if (options.display === 'DATETIME') {
                     this.nodes.timezoneField.text(gt.noI18n(date.Local.getTTInfoLocal(value || _.now()).abbr));
                 }
+                this.nodes.dayField.val(BinderUtils._toDate(value, this.attribute, this.model));
 
-                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
-
-                if (!mobileMode && options.display === "DATETIME") {
-                    this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
+                if (!mobileMode && options.display === 'DATETIME') {
+                    this.nodes.timeField.val(BinderUtils._toTime(value, this.attribute, this.model));
                 }
             },
 
             updateModelDate: function () {
-                this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model), { validate: true });
+                this.model.set(this.attribute, BinderUtils._dateStrToDate(this.nodes.dayField.val(), this.attribute, this.model), { validate: true });
             },
 
             updateModelTime: function () {
-                var time = BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model);
+                var time = BinderUtils._timeStrToDate(this.nodes.timeField.val(), this.attribute, this.model);
                 if (time && _.isNumber(time)) {
                     this.model.set(this.attribute, time, {validate: true});
-                    this.model.trigger("valid");
+                    this.model.trigger('valid');
                 } else {
-                    this.model.trigger("invalid:" + this.attribute, [gt('Please enter a valid date')]);
+                    this.model.trigger('invalid:' + this.attribute, [gt('Please enter a valid date')]);
                 }
             },
 
             showError: function (messages) {
                 this.removeError();
-                this.nodes.controlGroup.addClass("error");
+                this.nodes.controlGroup.addClass('error');
                 var helpBlock =  this.nodes.helpBlock = $('<div class="help-block error">');
                 _(messages).each(function (msg) {
                     helpBlock.append($.txt(msg));
@@ -979,19 +946,19 @@ define('io.ox/backbone/forms',
                 if (this.nodes.helpBlock) {
                     this.nodes.helpBlock.remove();
                     delete this.nodes.helpBlock;
-                    this.nodes.controlGroup.removeClass("error");
+                    this.nodes.controlGroup.removeClass('error');
                 }
             },
 
             onFullTimeChange: function () {
-                if (_.device('small')) {
+                if (mobileMode) {
                     if (this.model.get('full_time')) {
                         this.nodes.dayField.mobiscroll('option', 'timeWheels', '');//remove the timewheels
                         this.nodes.dayField.mobiscroll('option', 'timeFormat', '');//remove the timeFormat
                         this.nodes.timezoneField.hide();
                     } else {
-                        this.nodes.dayField.mobiscroll('option', 'timeWheels', mobiSettings.timeWheels);//add the timewheels again
-                        this.nodes.dayField.mobiscroll('option', 'timeFormat', mobiSettings.timeFormat);//add the timeFormat again
+                        this.nodes.dayField.mobiscroll('option', 'timeWheels', this.mobileSet.timeWheels);//add the timewheels again
+                        this.nodes.dayField.mobiscroll('option', 'timeFormat', this.mobileSet.timeFormat);//add the timeFormat again
                         this.nodes.timezoneField.show();
                     }
                 } else {
@@ -999,8 +966,8 @@ define('io.ox/backbone/forms',
                         this.nodes.timeField.hide();
                         this.nodes.timezoneField.hide();
                     } else {
-                        this.nodes.timeField.show();
-                        this.nodes.timezoneField.show();
+                        this.nodes.timeField.css('display', '');
+                        this.nodes.timezoneField.css('display', '');
                     }
                 }
             },

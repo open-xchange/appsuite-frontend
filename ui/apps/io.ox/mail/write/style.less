@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -33,14 +34,14 @@
 
 .io-ox-mail-write .subject-wrapper {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 .io-ox-mail-write .priority-overlay {
     position: absolute;
-    top: 0px;
+    top: 0;
     right: 13px;
     line-height: 30px;
     font-weight: bold;
@@ -49,13 +50,6 @@
     z-index: 1;
     cursor: pointer;
     .user-select(none);
-    
-    .icon-exclamation {
-        margin-left: 1px;
-    }
-    .icon-exclamation:before {
-        content: "\f06a";
-    }
 }
 
 .io-ox-mail-write .priority-overlay.high {
@@ -73,8 +67,8 @@
 
 .io-ox-mail-write .sendbutton-wrapper {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
 }
 
 .io-ox-mail-write .sendbutton {
@@ -84,8 +78,8 @@
 
 .io-ox-mail-write .draftbutton-wrapper {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
 }
 
 .io-ox-mail-write .draftbutton {
@@ -148,7 +142,7 @@
 .io-ox-mail-write input[type=text]:focus,
 .io-ox-mail-write input[type=text].discreet:focus {
     border-color: rgba(82, 168, 236, 0.8);
-    .box-shadow(0px 0px 8px rgba(82, 168, 236, 0.6));
+    .box-shadow(0 0 8px rgba(82, 168, 236, 0.6));
 }
 
 .io-ox-mail-write input[type=text].discreet {
@@ -171,7 +165,7 @@
 }
 
 .io-ox-mail-write input[type=file]:focus {
-    .box-shadow(0px 0px 4px 0px @outlineColor);
+    .box-shadow(0 0 4px 0 @outlineColor);
 }
 
 .io-ox-mail-write .wrapping-label {
@@ -183,14 +177,14 @@
 .io-ox-mail-write .io-ox-label {
     color: #000;
     line-height: 1.25em;
-    padding: 0px 0px 5px 0px;
+    padding: 0 0 5px 0;
     font-family: @lightFontFamily;
     cursor: pointer;
 }
 
 .io-ox-mail-write .collapse {
     font-size: 11px;
-    padding: 0px 0px 3px 0px;
+    padding: 0 0 3px 0;
     float: right;
     display: inline-block;
 }
@@ -368,13 +362,13 @@
     height: 100%;
     resize: none;
     padding: 10px;
-    margin: 0px;
+    margin: 0;
     .box-sizing(border-box);
 }
 
 .io-ox-mail-write .text-editor:focus {
      border-color: rgba(82, 168, 236, 0.8);
-    .box-shadow(0px 0px 8px rgba(82, 168, 236, 0.6));
+    .box-shadow(0 0 8px rgba(82, 168, 236, 0.6));
 }
 
 .io-ox-mail-write .change-format {
@@ -408,13 +402,13 @@
 
     .oxSkin table.mceLayout.focused tr.mceLast td {
         border-color: rgba(82, 168, 236, 0.8);
-        .box-shadow(0px 0px 8px rgba(82, 168, 236, 0.6));
+        .box-shadow(0 0 8px rgba(82, 168, 236, 0.6));
     }
 
     .oxSkin table.mceLayout {
-        border: 0px none;
-        border-left: 0px none;
-        border-right: 0px none;
+        border: 0 none;
+        border-left: 0 none;
+        border-right: 0 none;
     }
 
     .oxSkin table.mceLayout tr.mceLast > td {
@@ -423,7 +417,7 @@
     }
 
     .oxSkin table.mceLayout tr.mceFirst > td {
-        border-top: 0px none;
+        border-top: 0 none;
         padding: 4px 0 12px 0;
     }
 
@@ -486,7 +480,7 @@
         /* only apply this adjustments on tablet, therefore checking for .touch */
         .touch & .mceEmojiPane {
             position: absolute;
-            right: 0px;
+            right: 0;
             top: 97px;
             bottom: 13px;
             height: auto;
@@ -520,7 +514,7 @@
 
             .emoji-tab.left {
                 right: 50%;
-                border-right: 0px none;
+                border-right: 0 none;
             }
 
             .emoji-tab.right {
@@ -687,34 +681,25 @@
             text-overflow: ellipsis;
         }
         .text-editor {
+            height: 200px;
             position: relative;
             bottom: 50px;
             top: 1px;
             padding: 5px;
+            margin-bottom: 60px;//to prevent buttons to overlap inputfield
             &:focus {
                 box-shadow: none;
                 -webkit-box-shadow: none;
                 border-color: #ccc;
             }
         }
-        input[type=text], textarea, .text-editor {
-            height: 200px;
-
-            border-top: none;
-            border-left: none;
-            border-right: none;
+        input[type=text], textarea, .text-editor, input[type=text]:focus, input[type=text].discreet:focus, textarea.discreet:focus {
+            border: 0;
+            border-bottom: 1px solid #ccc;
             box-shadow: none;
             -webkit-box-shadow: none;
         }
-        input[type=text]:focus, input[type=text].discreet:focus, textarea.discreet:focus {
-            border-top: none;
-            border-left: none;
-            border-right: none;
-            box-shadow: none;
-            -webkit-box-shadow: none;
 
-            border-color: #ccc;;
-        }
         input[type=text].subject {
             padding-left: 5px;
             padding-right: 30px;
@@ -793,8 +778,8 @@
     .touch & .mceEmojiPane {
         -webkit-touch-callout: none;
         position: fixed;
-        bottom: 0px;
-        left: 0px;
+        bottom: 0;
+        left: 0;
         height: 200px;
         width: 100%;
         z-index: 1000;
@@ -826,7 +811,7 @@
 
         .emoji-tab.left {
             right: 50%;
-            border-right: 0px none;
+            border-right: 0 none;
         }
 
         .emoji-tab.right {

@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -11,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-#background_loader.secure {
+#background-loader.secure {
     background-color: rgba(255, 255, 255, 0);
     /* bug 27760 */
     /* .transition(background-color 0.5 linear); */
@@ -62,6 +63,10 @@
     overflow: auto !important;
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
+}
+
+.blockscroll {
+    overflow: hidden !important;
 }
 
 .scrollable-pane {
@@ -233,17 +238,42 @@
             padding: 12px;
         }
 
+        & > a.closelink {
+            padding: 13px 0px 13px 0px;;
+        }
+
+        & > a.closelink:focus {
+            outline: 0;
+            background-color: #08c;
+            i[class^="icon-"] {
+                color: @topbarLauncherColor-hover;
+            }
+        }
+
         & > a:hover {
             text-decoration: none;
         }
 
+        & > a:focus {
+            outline: 0;
+            color: @topbarLauncherColor-hover;
+            background-color: #08c;
+        }
+
+    }
+
+    .launcher.closable {
+        color: @topbarLauncherColor-hover;
+        background-color: @topbarLauncherBackgroundHover;
     }
 
     .launcher {
 
-        max-width: 10em;
+        max-width: 15em; // see bug :29238
         cursor: pointer;
-        .ellipsis();
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
 
         // IE10 needs this :link class otherwise :active is not removed
         & > a:link {
@@ -281,14 +311,40 @@
             & > a { color: @topbarLauncherColorActive; }
         }
 
-        &.user-content i[class^="icon-"] {
+        &.closable {
+            max-width: none;
+            text-overflow: clip;
+
+            & > a {
+                max-width: 10em;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+             & > a.apptitle {
+                float: left;
+                line-height: 16px;
+            }
+        }
+
+        &.closable i[class^="icon-"]  {
             font-size: 14px; // default font size (see Bug 27900)
             top: 0px;
             margin-right: 7px;
             color: #ccc;
         }
 
-        &.active-app.user-content i[class^="icon-"] {
+        &.closable i.icon-remove {
+            padding: 13px 16px;
+            margin: 0px;
+        }
+
+        &.closable i.icon-remove:hover {
+            color: @topbarLauncherColor-hover;
+            background-color: @topbarLauncherBackgroundHover;
+        }
+
+        &.active-app.closable i[class^="icon-"]{
             color: @linkOnDark;
         }
 
@@ -400,34 +456,6 @@
             -moz-animation-play-state: paused;
             animation-play-state: paused;
             color: #888;
-        }
-    }
-    
-    .launcher a.notifications-icon {
-
-        height: 40px;
-        display: inline-block;
-
-        .badge {
-            color: #aaa;
-            background-color: @notificationIconBackground;
-        }
-
-        .badge.active {
-            color: white;
-            background-color: @notificationIconBackgroundActive;
-        }
-
-        &:focus .badge, &:active .badge {
-            color: white;
-            background-color: darken(@linkColor, 10%);
-        }
-
-        .badge i {
-            /* avoid flicker */
-            width: 8px;
-            text-align: center;
-            display: inline-block;
         }
     }
 
@@ -989,6 +1017,10 @@
     left: 10px;
 }
 
+.window-toolbar > ul{
+    margin: 0;
+}
+
 .window-toolbar > a {
     color: @toolbarLinkColor;
     display: inline-block;
@@ -1169,21 +1201,28 @@ a.button {
 
     .vgrid-scrollpane {
 
-        outline: none;
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         -webkit-tap-highlight-color: transparent;
         z-index: 1;
 
-        &:focus .vgrid-cell.selected {
+        & > div {
 
-            background-color: @selectedBackground;
+            outline: none;
 
-            * {
-                color: #fff !important;
+            &:focus .vgrid-cell.selected {
+
+                background-color: @selectedBackground;
+
+                * {
+                    color: #fff !important;
+                }
+
             }
+
         }
+
     }
 
     .vgrid-toolbar {
@@ -1705,16 +1744,37 @@ span.hint {
     z-index: 3;
     .user-select(none);
     min-height: 20px;
+
+    li {
+        display: inline-block;
+        white-space: nowrap;
+        margin-right: 22px;
+        list-style-type: none;
+    }
 }
 
-nav.io-ox-inline-links + header {
+ul.io-ox-inline-links + header {
     position: static; /* see Bug 27736: dropdowns; */
     z-index: 2;
+}
+
+.io-ox-inline-buttongroup {
+    .io-ox-inline-links;
+    margin: 0 0 0 0;
+    .io-ox-action-link {
+        margin-right: 0;
+    }
+    a:hover {
+        text-decoration: none;
+    }
 }
 
 .io-ox-inline-links.embedded {
     margin: 1em 0;
     text-align: right;
+    .io-ox-action-link {
+        margin: 0 0 0 22px;
+    }
 }
 
 .io-ox-inline-links.empty {
@@ -1723,9 +1783,13 @@ nav.io-ox-inline-links + header {
 }
 
 .io-ox-inline-links > a,
-.io-ox-inline-links > span.dropdown {
+.io-ox-inline-links > li.dropdown {
     color: @inlineLinkColor;
     text-decoration: none;
+
+    li {
+        margin-right: 0;
+    }
 }
 
 .io-ox-action-link {
@@ -1733,11 +1797,11 @@ nav.io-ox-inline-links + header {
     &.btn-primary:hover { text-decoration: none; }
 }
 
-.io-ox-inline-links span.dropdown ul {
+.io-ox-inline-links li.dropdown ul {
     text-align: left;
 }
 
-.io-ox-inline-links span.dropdown .caret {
+.io-ox-inline-links li.dropdown .caret {
     margin-right: 5px;
 }
 
@@ -1746,9 +1810,10 @@ nav.io-ox-inline-links + header {
 }
 
 .io-ox-action-link {
-    display: inline-block;
-    white-space: nowrap;
-    margin-right: 22px;
+}
+
+.io-ox-action-link.disabled {
+    color: #aaa;
 }
 
 .io-ox-action-link:last-child {
@@ -1757,28 +1822,44 @@ nav.io-ox-inline-links + header {
 
 .io-ox-multi-selection {
 
-    padding: 0 30px;
+    .box {
+        width: 300px;
+        max-width: 500px;
+        margin: 0 auto;
+        text-align: left;
+        display: table;
+    }
 
     .summary {
-        font-size: 24pt;
+        font-size: 28px;
         font-weight: 300;
         line-height: 1.2em;
         color: #ccc;
-    }
-
-    .summary b {
-        color: #aaa;
+        &.empty {
+            font-size: 14px;
+            color: #888;
+            font-weight: normal;
+        }
+        b {
+            color: #aaa;
+        }
     }
 
     .io-ox-inline-links {
-        text-align: center;
+        margin: 28px 0;
+        a {
+            color: @inlineLinkColor;
+        }
+        &.empty {
+            display: none;
+        }
     }
 
-    .io-ox-inline-links a {
-        color: @inlineLinkColor;
+    .io-ox-action-link {
+        display: block;
     }
 
-    .io-ox-inline-links.empty {
+    .io-ox-action-link.disabled {
         display: none;
     }
 }
@@ -1818,6 +1899,29 @@ nav.io-ox-inline-links + header {
 
     .window-container-center > &.left {
         left: @windowHeadWidth;
+    }
+}
+
+.content-v-shift .io-ox-sidepopup {
+    padding-top: 40px;
+    .io-ox-sidepopup-close {
+        background-color: #eee;
+        margin: 0;
+        padding-left: 14px;
+        border-bottom: 1px solid #ccc;
+        text-align: left;
+        .btn-sidepopup {
+            background-color: #EEE;
+            color: #555;
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid #CCC;
+            margin: 5px;
+        }
+        .btn-sidepopup:hover {
+            color: #555;
+            background-color: #D5D5D5;
+        }
     }
 }
 
@@ -2025,13 +2129,14 @@ input.nice-input {
 
     .folder {
 
-        line-height: 34px;
+        line-height: 30px;
         padding: 0 13px 0 0;
         overflow: visible;
         white-space: nowrap;
         width: 100%;
+        display: block;
         .box-sizing(border-box);
-        display: table;
+
 
         &.selectable, &.expandable {
             cursor: pointer;
@@ -2043,7 +2148,7 @@ input.nice-input {
 
         &.selected, &.selected:hover {
 
-            background-color: @selectedBackground;
+            background-color: @foldertreeSelectedBackground;
 
             * {
                 color: @foldertreeSelectedLabelColor;
@@ -2055,23 +2160,33 @@ input.nice-input {
             font-style: italic;
         }
 
-    }
+        &:focus {
 
-    &:focus .folder {
+            &.selected {
 
-        &.selected {
+                background-color: @foldertreeSelectedFocusBackground;
 
-            background-color: @foldertreeSelectedFocusBackground;
+                * {
+                    color: @foldertreeFocusedLabelColor;
+                }
+            }
+        }
 
-            * {
-                color: @foldertreeFocusedLabelColor;
+        .subscribe-wrapper {
+            display: inline-block;
+            padding: 0 4px;
+
+            input {
+                margin: 0;
             }
         }
     }
 
-    .folder-row {
-        display: block;
+    // more space for fat fingers
+    .touch & .folder {
+        line-height: 34px;
     }
+
 
     .subfolders.io-ox-busy {
         min-height: 70px;
@@ -2094,65 +2209,85 @@ input.nice-input {
 
     }
 
-    .folder-label {
+    .folder {
 
-        font-weight: 300;
-        display: inline-block;
-        margin: 0 1em 0 0;
+        .folder-label {
 
-        i {
-            color: @foldertreePassiveLabelColor;
+            font-weight: 300;
+            display: inline-block;
+            margin: 0 14px 0 0;
+
+            i {
+                color: @foldertreePassiveLabelColor;
+            }
+
+            .long-title { display: inline; }
+            .short-title { display: none; }
         }
 
-    }
-
-    .folder-pubsub {
-
-        margin-left: 0.7em;
-        color: @foldertreeBadgeBackground;
-        font-size: 20px;
-        line-height: 18px;
-        position: relative;
-        top: 3px;
-
-        &:hover {
-            color: @linkOnDark;
+        &.selected .folder-label {
+            .long-title { display: none; }
+            .short-title { display: inline; }
         }
 
+        .folder-pubsub {
+
+            margin-right: 7px;
+            color: rgba(0, 0, 0, 0.30);
+            font-size: 20px;
+            line-height: 18px;
+            position: relative;
+            top: 3px;
+
+            &:hover {
+                color: rgba(0, 0, 0, 0.50);
+            }
+        }
+
+        &.selected .folder-pubsub:hover {
+            color: rgba(0, 0, 0, 0.50);
+        }
+
+        .folder-counter, .folder-options {
+            display: none;
+            margin-right: 7px;
+        }
+
+        &.show-counter {
+            .folder-counter {
+                display: inline-block;
+            }
+        }
+
+        &.selected {
+            .folder-options {
+                display: inline-block;
+            }
+        }
     }
 
-    .folder.selected .folder-pubsub:hover {
-        color: @linkOnDark !important;
-    }
-
-    .folder-counter {
-        display: inline-block;
-    }
-
-    .folder-counter-badge {
+    .folder-counter-badge, .folder-options-badge {
         color: #888;
         line-height: 26px;
         padding: 0 0.75em 0 0.75em;
-        margin-top: 4px;
-        display: none;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        display: inline-block;
         background-color: #f0f0f0;
         border-radius: 5px;
+        &:focus i, &:hover i { text-decoration: none; }
     }
 
-    .show-counter {
-
-        .folder-counter-badge {
-            display: inline-block;
+    // more space for fat fingers
+    .touch & {
+        .folder-counter-badge, .folder-options-badge {
+            margin-top: 4px;
+            margin-bottom: 4px;
         }
     }
 
-    .folder.selected .folder-counter-badge {
-        color: white;
-        background-color: #069;
-    }
-
-    .foldertree-links {
-        padding: 1em 13px 1em 29px;
+    .folder-options-badge {
+        cursor: pointer;
     }
 
     .folder .shared-by {
@@ -2169,22 +2304,30 @@ input.nice-input {
             line-height: 26px;
             font-weight: 100;
             color: #ccc;
-            padding: 0 13px 0.5em 13px;
+            padding: 4px 13px 8px 21px;
         }
 
         .folder {
-            padding-left: 13px;
+            padding-left: 21px; // same as folder links
         }
 
         .folder .shared-by {
-            margin-top: -13px;
-        }
-
-        .folder-label {
-            display: block;
+            margin-top: -7px;
         }
     }
 }
+
+.foldertree-links,
+.folder-section-links {
+
+    padding: 14px 0 0 21px;
+    line-height: 28px;
+    font-weight: 300;
+
+    &:empty { padding: 0; }
+}
+
+
 
 /* DARK VARIANT */
 
@@ -2192,7 +2335,7 @@ input.nice-input {
 
     left: @windowHeadWidth;
 
-    box-shadow: 0 0 6px -1px rgba(0, 0, 0, 0.8) inset;
+    box-shadow: 0 0 3px -1px rgba(0, 0, 0, 1.0) inset;
 
     @c1: lighten(@foldertreeSidepanelBackground, 8%);
     @c2: @foldertreeSidepanelBackground;
@@ -2222,9 +2365,11 @@ input.nice-input {
 
     .foldertree-container {
 
-        bottom: 40px;
+        overflow: auto;
 
-        &.io-ox-foldertree {
+        .io-ox-foldertree {
+
+            overflow: visible;
 
             .section .section-title {
                 color: @foldertreeSectionTitleColor;
@@ -2273,25 +2418,34 @@ input.nice-input {
                     color: @foldertreeBadgeColor;
                 }
 
-            }
+                .folder-options-badge {
+                    background-color: darken(@foldertreeSelectedBackground, 10%);
+                    color: darken(@foldertreeSelectedBackground, 20%);
+                }
 
-            &:focus .folder {
+                &:focus {
 
-                &.selected {
+                    outline: none;
 
-                    background-color: @foldertreeSelectedFocusBackground;
+                    &.selected {
 
-                    .folder-counter-badge {
-                        background-color: @foldertreeBadgeFocusBackground;
-                    }
+                        background-color: @foldertreeSelectedFocusBackground;
 
-                    .folder-label {
-                        color: @foldertreeFocusedLabelColor;
+                        .folder-counter-badge,
+                        .folder-options-badge {
+                            background-color: @foldertreeBadgeFocusBackground;
+                        }
+
+                        .folder-label {
+                            color: @foldertreeFocusedLabelColor;
+                        }
+
                     }
 
                 }
 
             }
+
 
             .folder-icon {
                 display: none;
@@ -2302,7 +2456,7 @@ input.nice-input {
                 padding: 1em;
             }
 
-            .folder-arrow, a {
+            .folder-arrow {
                 font-size: 13px;
                 color: @linkColor;
             }
@@ -2360,7 +2514,36 @@ a.toolbar-action, .toolbar-action > a {
     i { color: white; }
 }
 
+/* context menu */
 
+.context-dropdown {
+
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10000;
+    background-color: rgba(255, 255, 255, 0.01);
+    display: none;
+
+    .dropdown-toggle {
+        display: none;
+    }
+
+    &.open {
+        display: block;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: 100px;
+        left: 100px;
+        z-index: 2;
+    }
+
+    .divider + .divider { display: none; }
+}
 
 /* Guidance view */
 
@@ -2798,22 +2981,8 @@ input.flat-input {
     }
 
     .ios {
-        .io-ox-foldertree {
-            .overflow();
-        }
-    }
-    .foldertree-sidepanel {
-        .foldertree-toolbar {
-            /*display: none;*/
-            /*background-color: #ebebeb;*/
-        }
         .foldertree-container {
-            bottom: 50px;
-            &.io-ox-foldertree {
-                .folder.selectable:hover {
-                    background-color: inherit;
-                }
-            }
+            .overflow();
         }
     }
 
@@ -2876,6 +3045,18 @@ input.flat-input {
             text-align: right;
         }
     }
+    //** blur style for body when mobile custom menus are shown **/
+    .ios {
+        #io-ox-core {
+             transition: -webkit-filter 100ms ease-in;
+             -webkit-filter: blur(0px);
+
+            &.menu-blur {
+                -webkit-filter: blur(5px);
+            }
+        }
+    }
+
     /** custom bootstrap dropdowns on mobile devices **/
     .custom-dropdown.dropdown-menu {
         z-index: 65500;
@@ -2902,6 +3083,9 @@ input.flat-input {
             border-radius: 1px;
             border-color: transparent;
         }
+        .divider + .divider {
+            display: none;
+        }
         .dropdown-header {
             display: none;
         }
@@ -2921,19 +3105,14 @@ input.flat-input {
             }
         }
         li > a, li > span {
-             .ellipsis;
+            .ellipsis;
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             user-select: none;
-            /*margin-left: -10px;
-            margin-right: -10px;*/
             line-height: 30px;
             font-size: 18px;
             font-weight: 300;
             max-width: none !important;
-            /*&:hover {
-                margin: 0;
-            };*/
         }
 
         .io-ox-action-link:last-child {
@@ -2970,9 +3149,10 @@ input.flat-input {
         .color-gray { background-color: darken(@grayLight, 20%); }
     }
 
-    #background_loader.secure.block {
+    #background-loader.secure.block {
         background-color: rgba(0,0,0,.6);
-        height: 150% !important;
+        height: 150%;
+        position: fixed; // always center this
     }
 
     #multi-select-toolbar {

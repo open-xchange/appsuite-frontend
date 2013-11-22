@@ -1,34 +1,29 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/validation",
-    ["io.ox/core/extensions",
-     "io.ox/core/util",
+define('io.ox/backbone/validation',
+    ['io.ox/core/extensions',
+     'io.ox/core/util',
      'settings!io.ox/core',
      'gettext!io.ox/backbone/validation'], function (ext, util, settings, gt) {
 
-    "use strict";
-
-    // var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
-    var regEmail = /\@\S/; // See also io.ox/mail/accounts/model.js
+    'use strict';
 
     var emptycheck  = function (value) {
         return (_.isUndefined(value) || value === null || value === '');
     };
 
     var formats = {
-        string: function (val) {
-            // always true!
+        string: function () {
             return true;
         },
         text: function () {
@@ -92,9 +87,9 @@ define("io.ox/backbone/validation",
         }
     };
 
-    ext.point("io.ox/backbone/validation/formats").invoke('customize', formats, formats);
+    ext.point('io.ox/backbone/validation/formats').invoke('customize', formats, formats);
 
-    ext.point("io.ox/backbone/validation/formats").on('extended', function (extension) {
+    ext.point('io.ox/backbone/validation/formats').on('extended', function (extension) {
         extension.invoke('customize', formats, formats);
     });
 
@@ -134,8 +129,8 @@ define("io.ox/backbone/validation",
                 });
 
                 if (definition.mandatory) {
-                    ext.point(validationNamespace + "/save").extend({
-                        id: attribute + "-is-mandatory",
+                    ext.point(validationNamespace + '/save').extend({
+                        id: attribute + '-is-mandatory',
                         validate: function (attributes, errors) {
                             var value = attributes[attribute];
 

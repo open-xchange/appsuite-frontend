@@ -1,19 +1,19 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define("io.ox/core/gettext", [], function () {
+define('io.ox/core/gettext', function () {
 
-    "use strict";
+    'use strict';
 
     // custom dictionary
     var custom = { '*': {} };
@@ -73,11 +73,11 @@ define("io.ox/core/gettext", [], function () {
 
     function gt(id, po) {
 
-        po.plural = new Function("n", "return " + po.plural + ";");
+        po.plural = new Function('n', 'return ' + po.plural + ';');
 
         function gettext(text) {
             var args;
-            text = gettext.pgettext("", text);
+            text = gettext.pgettext('', text);
             if (arguments.length < 2) {
                 return text;
             } else {
@@ -96,7 +96,7 @@ define("io.ox/core/gettext", [], function () {
                     if (isTranslated(arg)) {
                         arg = arg.slice(1, -1);
                     } else {
-                        console.error("Untranslated printf parameter", i, arg);
+                        console.error('Untranslated printf parameter', i, arg);
                         console.trace();
                     }
                     args[i] = arg;
@@ -114,11 +114,11 @@ define("io.ox/core/gettext", [], function () {
         }
 
         gettext.gettext = function (text) {
-            return gettext.pgettext("", text);
+            return gettext.pgettext('', text);
         };
 
         gettext.ngettext = function (singular, plural, n) {
-            return gettext.npgettext("", singular, plural, n);
+            return gettext.npgettext('', singular, plural, n);
         };
 
         gettext.getDictionary = function () {
@@ -126,19 +126,19 @@ define("io.ox/core/gettext", [], function () {
         };
 
         function get(key) {
-            assert(enabled, 'Early gettext call: ' + JSON.stringify(key));
+            assert(enabled, 'Early gettext call: ' + JSON.stringify(key) + '. This string cannot be replaced by custom translations.');
             if (key in custom['*']) return custom['*'][key];
             if (id in custom && key in custom[id]) return custom[id][key];
             return po.dictionary[key];
         }
 
         function pgettext(context, text) {
-            var key = context ? context + "\x00" + text : text;
+            var key = context ? context + '\x00' + text : text;
             return get(key) || text;
         }
 
         function npgettext(context, singular, plural, n) {
-            var key = (context ? context + "\x00" : "") + singular + "\x01" + plural,
+            var key = (context ? context + '\x00' : '') + singular + '\x01' + plural,
                 translation = get(key);
             return translation ?
                 translation[Number(po.plural(Number(n)))] :
@@ -154,7 +154,7 @@ define("io.ox/core/gettext", [], function () {
     gt.setLanguage = function (language) {
         gt.setLanguage = function (lang2) {
             if (lang2 !== language) {
-                throw new Error("Multiple setLanguage calls");
+                throw new Error('Multiple setLanguage calls');
             }
         };
         lang.resolve(language);

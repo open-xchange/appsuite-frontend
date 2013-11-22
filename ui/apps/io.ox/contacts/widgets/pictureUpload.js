@@ -1,20 +1,22 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012 Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/contacts/widgets/pictureUpload',
     ['io.ox/core/notifications',
      'gettext!io.ox/contacts',
-     'less!io.ox/contacts/widgets/widgets.less'], function (notifications, gt) {
+     'less!io.ox/contacts/widgets/widgets.less'
+    ], function (notifications, gt) {
 
-    "use strict";
+    'use strict';
 
     // For now specific to contacts
     // Might be generalized, who knows?
@@ -32,7 +34,7 @@ define('io.ox/contacts/widgets/pictureUpload',
 
             resetImage: function (e) {
                 e.stopImmediatePropagation();
-                this.model.set("image1", '', {validate: true});
+                this.model.set('image1', '', {validate: true});
                 this.closeBtn.hide();
                 this.addImgText.show();
                 this.setImageURL();
@@ -65,7 +67,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                 this.previewPictureFile();
             },
 
-            displayImageURL: function (e) {
+            displayImageURL: function () {
                 this.setImageURL(this.model.get('image1_url'));
             },
 
@@ -88,7 +90,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                         height: 0,
                         crop: false,
                         quality: 80,
-                        callback: function (data, width, height) {
+                        callback: function (data) {
                             self.setImageURL(data);
                             self.addImgText.hide();
                             self.closeBtn.show();
@@ -133,10 +135,10 @@ define('io.ox/contacts/widgets/pictureUpload',
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })
-                            .on('focus', function (e) {
+                            .on('focus', function () {
                                 self.imgCon.addClass('focussed');
                             })
-                            .on('blur', function (e) {
+                            .on('blur', function () {
                                 self.imgCon.removeClass('focussed');
                             })
                     )

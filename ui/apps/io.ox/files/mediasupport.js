@@ -1,19 +1,17 @@
 /**
- *
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/files/mediasupport',
-    [], function () {
+define('io.ox/files/mediasupport', function () {
 
     'use strict';
 
@@ -35,6 +33,8 @@ define('io.ox/files/mediasupport',
     var browserSupportsMedia = {
         hasSupport: function (mediatype) {
             // Early exit if mediatype is not supported
+            // Disable Audio for Android, see Bug #29438
+            if (mediatype === 'audio' && _.device('android')) return false;
             if (!Modernizr[mediatype]) return false;
             return true;
         },
@@ -42,7 +42,7 @@ define('io.ox/files/mediasupport',
             if (!mediatype) return false;
             var str = this.supportedExtensions(mediatype);
             if (!str) return false;
-            if (str.indexOf("|") >= 0) {
+            if (str.indexOf('|') >= 0) {
                 return str.split('|');
             } else if (str) {
                 return [str];

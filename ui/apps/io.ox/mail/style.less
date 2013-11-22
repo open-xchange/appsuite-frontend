@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -87,13 +87,13 @@
     }
 
     /* unread */
-    &.unread i.icon-unread { display: inline-block; float:left; color: @linkColor; }
+    &.unread i.icon-unread { display: inline-block; float: left; color: @linkColor; }
 
     /* answered */
-    &.answered i.icon-answered { display: inline-block; color: darken(@greenLight, 20%); float:left; }
+    &.answered i.icon-answered { display: inline-block; color: darken(@greenLight, 20%); float: left; }
 
     /* forward */
-    &.forwarded i.icon-forwarded { display: inline-block; color: #888; float:left;}
+    &.forwarded i.icon-forwarded { display: inline-block; color: #888; float: left;}
 
     &.unread .subject {
         font-weight: normal;
@@ -179,7 +179,7 @@
         background-color: darken(#ddd, 10%);
     }
 
-    .vgrid-scrollpane:focus &.selected .thread-size {
+    .vgrid-scrollpane-container:focus &.selected .thread-size {
         background-color: #08c;
     }
 }
@@ -208,7 +208,7 @@
         background-color: #ddd;
     }
 
-    .vgrid .vgrid-scrollpane:focus & {
+    .vgrid .vgrid-scrollpane-container:focus & {
         .thread-summary-item.selected,
         .thread-summary-item.selected:hover {
             background-color: @selectedBackground;
@@ -264,9 +264,6 @@
     }
 }
 
-
-
-
 /* Detail view */
 
 .rightside.mail-detail-pane {
@@ -284,7 +281,7 @@
 }
 
 .mail-detail-pane .thread-inline-actions {
-    padding: 20px 0 0px 20px;
+    padding: 20px 0 0 20px;
 
     .dropdown {
         z-index: 12007 !important;/* override so dropdown is above inline links. See: Bug 25687*/
@@ -292,9 +289,9 @@
 }
 
 .rightside-inline-actions {
-    float:right;
-    display:inline-block;
-    margin-right:17px;
+    float: right;
+    display: inline-block;
+    margin-right: 17px;
     a {
         .ellipsis;
     }
@@ -307,7 +304,7 @@
     .mail-detail-decorator {
 
         position: relative;
-        padding: 20px 20px 0px 20px;
+        padding: 20px 20px 0 20px;
         display: table;
         width: 100%;
         .box-sizing(border-box);
@@ -315,12 +312,12 @@
         .mail-detail {
             background-color: white;
             padding: 20px;
-            .box-shadow(0px 8px 20px -8px #333);
+            .box-shadow(0 8px 20px -8px #333);
         }
 
         .mail-detail:focus {
             outline: 0;
-            .box-shadow(0px 1px 3px 1px #ccc);
+            .box-shadow(0 1px 3px 1px #ccc);
         }
     }
 }
@@ -349,12 +346,12 @@
 
     .mail-detail-clear-left {
         clear: left;
-        height: 0px;
+        height: 0;
     }
 
     .mail-detail-clear-both {
         clear: both;
-        height: 0px;
+        height: 0;
     }
 
     .subscription-actions {
@@ -363,9 +360,9 @@
     }
 
     .thread-inline-actions {
-        border: 0px none;
+        border: 0 none;
         padding: 18px 20px 0 20px;
-        min-height: 0px;
+        min-height: 0;
         text-align: right;
 
         .io-ox-inline-links { margin: 0; }
@@ -398,7 +395,7 @@
     }
 
     .from.list {
-        display:block;
+        display: block;
     }
 
     .subject, .thread-size {
@@ -479,12 +476,6 @@
         font-weight: bold;
         vertical-align: top;
         white-space: nowrap;
-        .icon-exclamation {
-            margin-left: 1px;
-        }
-        .icon-exclamation:before {
-            content: "\f06a";
-        }
         .high {
             color: @mailPriority;
         }
@@ -515,6 +506,9 @@
         .dropdown {
             margin-right: 1em;
         }
+        .icon-paper-clip {
+            color: @linkColor;
+        }
     }
 
     .instant-preview {
@@ -523,7 +517,7 @@
 
     .spacer {
         background-color: #ccc;
-        border: 0px none;
+        border: 0 none;
         height: 1px;
         margin: 0.5em 0 1em 0;
     }
@@ -532,7 +526,7 @@
         font-size: 13px;
         border-left: 1px solid #08c;
         padding-top: 0.5em;
-        padding-bottom:0.5em;
+        padding-bottom: 0.5em;
         margin-top: 1em;
         margin-bottom: 1em;
     }
@@ -663,7 +657,7 @@
         }
 
         table {
-            border: 0px none; line-height: normal; border-collapse: initial;
+            border: 0 none; line-height: normal; border-collapse: initial;
         }
 
         li { line-height: 16px; margin-bottom: 0.7em; }
@@ -672,13 +666,13 @@
             word-break: keep-all; // for firefox
             word-break: initial;
             background-color: transparent;
-            border: 0px none;
-            .border-radius(0px);
+            border: 0 none;
+            .border-radius(0);
         }
 
         /* Fix for Bug 24995 */
         .calendar-detail .label {
-            display:block;
+            display: block;
             text-shadow: none;
             font-weight: normal;
             background-color: transparent;
@@ -723,6 +717,29 @@
 .flag_bg_8  { background-color: @pink; } /* pink */
 .flag_bg_4  { background-color: @grayLight; } /* dark gray */
 
+/* multi selection */
+
+.multi-selection-flag {
+    white-space: nowrap;
+    i {
+        font-size: 28px;
+        display: inline-block;
+        margin-right: 14px;
+    }
+    .icon-bookmark-empty {
+        color: #aaa;
+    }
+    a {
+        outline: 0;
+    }
+    a:hover {
+        text-decoration: none;
+    }
+    a:focus i {
+        text-shadow: 0 0 8px #888;
+    }
+}
+
 /* attachment preview */
 
 h4.mail-attachment-preview {
@@ -737,7 +754,7 @@ h4.mail-attachment-preview {
 }
 
 .rightside-navbar {
-    display:none;
+    display: none;
 }
 
 
@@ -754,7 +771,7 @@ h4.mail-attachment-preview {
             }
         }
         .mail-detail-decorator:last-child {
-            border-bottom: 0px none;
+            border-bottom: 0 none;
         }
         .scrollable-pane {
             background-color: #fff;
@@ -762,7 +779,7 @@ h4.mail-attachment-preview {
     }
 
     .rightside-navbar {
-        display:block;
+        display: block;
     }
 
     .rightside.mail-detail-pane { background-color: #fff; }
@@ -775,7 +792,7 @@ h4.mail-attachment-preview {
         content: ''
     }
     .mail-detail .contact-picture { display: none; }
-    .mail-detail .subject { padding-right: 0px; }
+    .mail-detail .subject { padding-right: 0; }
 }
 
 .mail-source-view {
@@ -798,7 +815,7 @@ h4.mail-attachment-preview {
     }
 
     div.dropdown {
-        position:static;
+        position: static;
         &.open {
             position: static;
         }
@@ -823,16 +840,16 @@ h4.mail-attachment-preview {
         position: relative;
         z-index: 11002;
         ul.dropdown-menu {
-            position:absolute;
-            z-index:11003;
+            position: absolute;
+            z-index: 11003;
         }
     }
     div.flag-dropdown {
-        position:relative;
+        position: relative;
         z-index: 12004; // to be above attachment dropdowns
         ul.dropdown-menu {
-            position:absolute;
-            z-index:12005;
+            position: absolute;
+            z-index: 12005;
         }
     }
 }
@@ -841,63 +858,69 @@ h4.mail-attachment-preview {
     .vgrid-cell.mail .from span.person {
         font-weight: 600;
     }
+    .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail {
+        padding: 5px;
+    }
+    .mail-detail-pane .mail-detail-decorator .mail-detail {
+        padding: 13px;
+    }
     .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail,
     .mail-detail-pane .mail-detail-decorator .mail-detail {
         a, span { font-size: 13px; }
         nav.io-ox-inline-links {
             float: right;
-            margin:0;
+            margin: 0;
         }
         .flag {
-            width:16px;
+            width: 16px;
             i { font-size: 15px; }
         }
         .mail-detail-clear-left { clear: both; }
-        padding: 13px;
+
         .from.list {
             font-size: 13px;
             a { word-break: break-all; font-weight: bold;}
-            i { display:none; }
+            i { display: none; }
         }
-        .to-cc.list, .attachment-list.list { margin-bottom:5px; }
+        .to-cc.list, .attachment-list.list { margin-bottom: 5px; }
         .attachment-list.list { margin-top: 5px; }
-        .person-link { white-space: normal; word-break:break-all;}
+        .person-link { white-space: normal; word-break: break-all;}
         .contact-picture {
-            margin:0;
-            margin-left:13px;
-            float:right;
-            display:block;
+            margin: 0;
+            margin-left: 13px;
+            float: right;
+            display: block;
             width: 24px;
             height: 24px;
         }
         .subject {
             font-size: 13px;
             font-weight: bold;
-            margin:5px 0 0 0;
+            margin: 5px 0 0 0;
         }
         .date {
             font-size: 13px;
-            float:none;
+            float: none;
             padding-bottom: 4px;
             border-bottom: 1px solid #f1f1f1;
         }
         a.attachment-link {
-            display:block;
+            display: block;
             word-break: break-all;
         }
-        div.dropdown.flag-dropdown.clear-title.flag { margin:0; }
+        div.dropdown.flag-dropdown.clear-title.flag { margin: 0; }
 
-        .recipient-actions { display:block; margin-bottom:5px; }
+        .recipient-actions { display: block; margin-bottom: 5px; }
 
         .content { margin-top: 13px; }
 
         .details-collapsed {
             .to-cc.list {
-                span, a { display:none; }
-                span:first-child, a:nth-child(2),span:nth-child(2) { display:inline; }
+                span, a { display: none; }
+                span:first-child, a:nth-child(2),span:nth-child(2) { display: inline; }
             }
             .recipient-actions {
-                display:none;
+                display: none;
             }
         }
     }

@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -15,7 +16,8 @@ define('plugins/upsell/simple-wizard/register',
      'io.ox/core/upsell',
      'settings!io.ox/mail',
      'settings!plugins/upsell/simple-wizard',
-     'gettext!plugins/upsell/simple-wizard'], function (ext, upsell, mailSettings, settings, gt) {
+     'gettext!plugins/upsell/simple-wizard'
+    ], function (ext, upsell, mailSettings, settings, gt) {
 
     'use strict';
 

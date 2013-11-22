@@ -11,17 +11,16 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("io.ox/help/center", [
-    'io.ox/core/extensions',
-    'io.ox/help/core_doc',
-    'gettext!io.ox/help',
-    'less!io.ox/help/style.less'
-], function (ext, core_doc, gt) {
+define('io.ox/help/center',
+    ['io.ox/core/extensions',
+     'io.ox/help/core_doc',
+     'gettext!io.ox/help',
+     'less!io.ox/help/style.less'
+    ], function (ext, core_doc, gt) {
     //TODO Launcher refactoren, hier hin
     'use strict';
 
-    var center = { active: false },
-        origPopovers = {};
+    var center = { active: false };
 
     var isVisible = function (elem) {
         var $elem = $(elem);
@@ -83,20 +82,20 @@ define("io.ox/help/center", [
             var dataRef = $elem.attr('data-ref');
             if (isVisible(elem)) {
                 var helpText = getHelpText(dataRef);
-                $("<div>").css({
+                $('<div>').css({
                     position: 'absolute',
                     top: offset.top,
                     left: offset.left,
                     width: $elem.width(),
                     height: $elem.height(),
-                    paddingLeft: $elem.css("paddingLeft"),
-                    paddingRight: $elem.css("paddingRight"),
-                    paddingTop: $elem.css("paddingTop"),
-                    paddingBottom: $elem.css("paddingBottom"),
-                    marginLeft: $elem.css("marginLeft"),
-                    marginRight: $elem.css("marginRight"),
-                    marginTop: $elem.css("marginTop"),
-                    marginBottom: $elem.css("marginBottom")
+                    paddingLeft: $elem.css('paddingLeft'),
+                    paddingRight: $elem.css('paddingRight'),
+                    paddingTop: $elem.css('paddingTop'),
+                    paddingBottom: $elem.css('paddingBottom'),
+                    marginLeft: $elem.css('marginLeft'),
+                    marginRight: $elem.css('marginRight'),
+                    marginTop: $elem.css('marginTop'),
+                    marginBottom: $elem.css('marginBottom')
                 })
                 .text($elem.text())
                 .addClass('io-ox-help-highlight')
@@ -115,7 +114,7 @@ define("io.ox/help/center", [
         });
 
         //add cancel button
-        console.log("Check help button:", $helpButton);
+        console.log('Check help button:', $helpButton);
         $('<i class="icon-remove-circle icon-white" id="io-ox-help-off">')
         .css({
             position: 'absolute',
@@ -130,7 +129,7 @@ define("io.ox/help/center", [
             placement: 'left'
         })
         .click(function () {
-            $(this).popover('disable').popover("hide");
+            $(this).popover('disable').popover('hide');
             disableHelp();
             center.active = false;
         })

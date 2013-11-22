@@ -1,28 +1,29 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
 define('io.ox/mail/settings/pane',
-   ['settings!io.ox/mail',
-    'io.ox/core/api/user',
-    'io.ox/core/capabilities',
-    'io.ox/contacts/api',
-    'io.ox/mail/util',
-    'io.ox/mail/settings/model',
-    'dot!io.ox/mail/settings/form.html',
-    'io.ox/core/extensions',
-    'io.ox/core/notifications',
-    'gettext!io.ox/mail',
-    'io.ox/core/api/account'], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, tmpl, ext, notifications, gt, api) {
+    ['settings!io.ox/mail',
+     'io.ox/core/api/user',
+     'io.ox/core/capabilities',
+     'io.ox/contacts/api',
+     'io.ox/mail/util',
+     'io.ox/mail/settings/model',
+     'dot!io.ox/mail/settings/form.html',
+     'io.ox/core/extensions',
+     'io.ox/core/notifications',
+     'gettext!io.ox/mail',
+     'io.ox/core/api/account'
+    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, tmpl, ext, notifications, gt, api) {
 
     'use strict';
 
@@ -66,13 +67,12 @@ define('io.ox/mail/settings/pane',
                            {label: gt('3 minutes'), value: '3_minutes'},
                            {label: gt('5 minutes'), value: '5_minutes'},
                            {label: gt('10 minutes'), value: '10_minutes'}],
-        mailViewSettings,
-        reloadMe = ['contactCollectOnMailTransport', 'contactCollectOnMailAccess'];
+        mailViewSettings;
 
     var MailSettingsView = Backbone.View.extend({
-        tagName: "div",
+        tagName: 'div',
         _modelBinder: undefined,
-        initialize: function (options) {
+        initialize: function () {
             // create template
             this._modelBinder = new Backbone.ModelBinder();
         },
@@ -139,24 +139,9 @@ define('io.ox/mail/settings/pane',
     ext.point('io.ox/mail/settings/detail').extend({
         index: 200,
         id: 'mailsettings',
-        draw: function (data) {
+        draw: function () {
 
             mailViewSettings = new MailSettingsView({model: mailSettings});
-
-            // mattes: please see bug 27510. maybe we don't need this
-
-            // mailViewSettings.model.on('change', function (model, e) {
-
-            //     var showNotice = _(reloadMe).any(function (attr) {
-            //         if (_.isBoolean(mailViewSettings.model.changed[attr])) {
-            //             return true;
-            //         }
-            //     });
-
-            //     if (showNotice) {
-            //         require("io.ox/core/notifications").yell("success", gt("The setting has been saved and will become active when you enter the application the next time."));
-            //     }
-            // });
 
             var holder = $('<div>').css('max-width', '800px');
             this.append(holder.append(
@@ -176,6 +161,30 @@ define('io.ox/mail/settings/pane',
             }).fail(function () {
                 notifications.yell('error', gt('Could not save settings'));
             });
+        }
+    });
+
+    function changeIMAPSubscription() {
+        ox.load(['io.ox/core/folder/imap-subscription']).done(function (subscription) {
+            subscription.show();
+        });
+    }
+
+    ext.point('io.ox/mail/settings/detail').extend({
+        index: 400,
+        id: 'imap-subscription',
+        draw: function () {
+            var button = $('<button type="button" class="btn btn-primary">').on('click', changeIMAPSubscription);
+
+            if (_.device('smartphone')) return;
+
+            this.append(
+                $('<div class="settings sectiondelimiter expertmode">'),
+                $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
+                $('<div class="sectioncontent">').append(
+                    button.text(gt('Change subscription'))
+                )
+            );
         }
     });
 

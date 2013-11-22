@@ -1,24 +1,24 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/files/views/create', [
-        'io.ox/core/tk/dialogs',
-        'io.ox/core/extensions',
-        'io.ox/files/api',
-        'io.ox/core/tk/upload',
-        'gettext!io.ox/files',
-        'io.ox/core/tk/attachments',
-        'io.ox/core/notifications'
+define('io.ox/files/views/create',
+    ['io.ox/core/tk/dialogs',
+     'io.ox/core/extensions',
+     'io.ox/files/api',
+     'io.ox/core/tk/upload',
+     'gettext!io.ox/files',
+     'io.ox/core/tk/attachments',
+     'io.ox/core/notifications'
     ], function (dialogs, ext, api, upload, gt, attachments, notifications) {
 
         'use strict';
@@ -26,10 +26,11 @@ define('io.ox/files/views/create', [
         var POINT = 'io.ox/files/create',
             baton = new ext.Baton(),
             oldMode = _.browser.IE < 10,
+            dndInfo = $('<div class="dndinfo alert alert-info">').text(gt('You can drag and drop files from your computer to upload either a new file or another version of a file.')),
 
             show = function (app) {
                 var win = app.getWindow(),
-                    dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true }),
+                    dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window'), 'tabTrap': true }),
                     $form = $('<form>', { 'class': 'files-create', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
                     queue, description = '';
                 dialog.getContentNode().css('height', '300px'); // 400 is quite much
@@ -50,7 +51,6 @@ define('io.ox/files/views/create', [
                  */
                 function uploadFiles() {
                     var $input = $form.find('input[type="file"]'),
-                        folder = app.folder.get(),
                         //fileList = ($input.length > 0 ? $input[0].files : []) || [],
                         files = baton.fileList.get();
                     if (files.length) {
@@ -70,6 +70,9 @@ define('io.ox/files/views/create', [
                     var files = ($form.find('input[type="file"]').length > 0 ? $form.find('input[type="file"]').prop('disabled', false)[0].files : []) || [],
                         folder = app.folder.get();
                     if ($form.find('input[type="file"]').val()) {
+                        // disable autologout -> bug 29389
+                        ox.autoLogout.stop();
+
                         api.uploadFile({
                             form: $form,
                             file: _(files).first(),
@@ -89,6 +92,10 @@ define('io.ox/files/views/create', [
                                 notifications.yell(e.data.custom.type, e.data.custom.text);
                             }
                             dialog.close();
+                        })
+                        .always(function () {
+                            // reenable autologout -> bug 29389
+                            ox.autoLogout.start();
                         });
                     } else {
                         notifications.yell('error', gt('No file selected for upload.'));
@@ -133,17 +140,20 @@ define('io.ox/files/views/create', [
                 //dialog
                 dialog.header($('<h4>').text(gt('Upload new files')));
                 dialog.getBody().append($('<div>').addClass('row-fluid').append($form));
+                dialog.getBody().append(
+                    (_.device('!touch') && (!_.browser.IE || _.browser.IE > 9) ? dndInfo : '')
+                );
                 dialog.getBody().append(baton.fileList.getNode());
                 dialog
-                    .addPrimaryButton('save', gt('Save'), 'save')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
-                    .on('save', function (e) {
+                    .addPrimaryButton('save', gt('Save'), 'save', {'tabIndex': '1'})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
+                    .on('save', function () {
                         if (oldMode)
                             uploadFilesIE9();
                         else
                             uploadFiles();
                     })
-                    .show(function () { $form.find('input:first').focus(); });
+                    .show(function () { $form.find('.btn-file').focus(); });
             };
 
         ext.point(POINT + '/form').extend({
@@ -171,6 +181,7 @@ define('io.ox/files/views/create', [
                                 });
                                 baton.fileList.add(list);
                                 $input.trigger('reset.fileupload');
+                                dndInfo.remove();
                             }
                         };
                     this.append($inputWrap);
@@ -191,9 +202,9 @@ define('io.ox/files/views/create', [
         //referenced via baton.fileList
         ext.point(POINT + '/filelist').extend(new attachments.EditableFileList({
                     id: 'attachment_list',
-                    itemClasses: 'span6',
                     fileClasses: 'background',
                     preview: false,
+                    labelmax: 18,
                     registerTo: baton,
                     index: 300
                 },

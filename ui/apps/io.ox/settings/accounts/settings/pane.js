@@ -1,27 +1,27 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
 define('io.ox/settings/accounts/settings/pane',
     ['io.ox/core/extensions',
-       'io.ox/core/tk/dialogs',
-       'io.ox/keychain/api',
-       'io.ox/keychain/model',
-       'io.ox/core/api/folder',
-       'io.ox/settings/util',
-       'io.ox/core/notifications',
-       'gettext!io.ox/settings/accounts',
-       'withPluginsFor!keychainSettings'
-   ], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, gt) {
+     'io.ox/core/tk/dialogs',
+     'io.ox/keychain/api',
+     'io.ox/keychain/model',
+     'io.ox/core/api/folder',
+     'io.ox/settings/util',
+     'io.ox/core/notifications',
+     'gettext!io.ox/settings/accounts',
+     'withPluginsFor!keychainSettings'
+    ], function (ext, dialogs, api, keychainModel, folderAPI, settingsUtil, notifications, gt) {
 
     'use strict';
 
@@ -36,20 +36,40 @@ define('io.ox/settings/accounts/settings/pane',
         drawItem = function (o) {
             return $('<div class="selectable deletable-item">')
                 .attr({
-                    'data-id': o.id,
-                    'data-accounttype': o.accountType
+                    'data-id': o.get('id'),
+                    'data-accounttype': o.get('accountType')
                 })
                 .append(
                     $('<div class="pull-right">').append(
                         // edit
-                        $('<a href="#" class="action" tabindex="3" data-action="edit">').text(gt('Edit')),
+                        $('<a class="action">').text(gt('Edit')).attr({
+                            href: '#',
+                            tabindex: 1,
+                            role: 'button',
+                            title: gt('Edit'),
+                            'data-action': 'edit',
+                            'aria-label': o.get('displayName') + ', ' + gt('Edit')
+                        }),
                         // delete
-                        o.id !== 0 ?
+                        o.get('id') !== 0 ?
                             // trash icon
-                            $('<a href="#" class="close" tabindex="3" data-action="delete">').attr({ title: gt('Delete') })
+                            $('<a class="close">').attr({
+                                href: '#',
+                                tabindex: 1,
+                                role: 'button',
+                                title: gt('Delete'),
+                                'data-action': 'delete',
+                                'aria-label': o.get('displayName') + ', ' + gt('Delete')
+                            })
                             .append($('<i class="icon-trash">')) :
                             // empty dummy
-                            $('<a href="#" class="close" tabindex="-1">')
+                            $('<a class="close">').attr({
+                                href: '#',
+                                tabindex: -1,
+                                role: 'button',
+                                title: gt('Delete'),
+                                'aria-label': o.get('displayName') + ', ' + gt('Delete')
+                            })
                             .append($('<i class="icon-trash" style="visibility: hidden">'))
                     ),
                     $('<span data-property="displayName" class="list-title">')
@@ -59,12 +79,19 @@ define('io.ox/settings/accounts/settings/pane',
         drawAddButton = function () {
             return $('<div class="controls">').append(
                 $('<div class="btn-group pull-right">').append(
-                    $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
+                    $('<a class="btn btn-primary dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
                         $.txt(gt('Add account')), $.txt(' '),
                         $('<span class="caret">')
                     ),
                     $('<ul class="dropdown-menu" role="menu">')
                 )
+            );
+        },
+
+        drawPrivacyNotice = function () {
+            return $('<div class="hint">').append(
+                $('<span>').text(gt('Social accounts are only used to download contact and/or calendar data') + '. '),
+                $('<b>').text(gt('Such data will never be uploaded') + '. ')
             );
         },
 
@@ -76,7 +103,11 @@ define('io.ox/settings/accounts/settings/pane',
                         'you can use your old password to recover all account passwords:')
                 ),
                 $.txt(' '),
-                $('<a href="#" data-action="recover">').text(gt('Recover passwords'))
+                $('<a href="#" data-action="recover">').text(gt('Recover passwords')).attr({
+                    role: 'button',
+                    title: gt('Recover passwords'),
+                    'aria-label': gt('Recover passwords')
+                })
                 .on('click', function (e) {
                     e.preventDefault();
                     ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (srd) {
@@ -86,7 +117,7 @@ define('io.ox/settings/accounts/settings/pane',
             );
         },
 
-        drawPane = function (collection) {
+        drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<h1 class="no-margin">').text(gt('Mail and Social Accounts')),
                 drawAddButton(),
@@ -105,16 +136,13 @@ define('io.ox/settings/accounts/settings/pane',
 
             _modelBinder: undefined,
 
-            initialize: function (options) {
+            initialize: function () {
                 this._modelBinder = new Backbone.ModelBinder();
             },
 
             render: function () {
                 var self = this;
-                self.$el.empty().append(drawItem({
-                    id: this.model.get('id'),
-                    accountType: this.model.get('accountType')
-                }));
+                self.$el.empty().append(drawItem(self.model));
 
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
@@ -145,7 +173,7 @@ define('io.ox/settings/accounts/settings/pane',
                                     self.model.collection.remove(self.model);
                                     popup.close();
                                 },
-                                function fail(e) {
+                                function fail() {
                                     popup.close();
                                 }
                             )
@@ -210,6 +238,8 @@ define('io.ox/settings/accounts/settings/pane',
 
                         self.$el.empty().append(drawPane);
 
+                        self.$el.find('.io-ox-accounts-settings').append(drawPrivacyNotice);
+
                         if (this.collection.length > 1) {
                             self.$el.find('.io-ox-accounts-settings').append(drawRecoveryButton);
                         }
@@ -264,7 +294,7 @@ define('io.ox/settings/accounts/settings/pane',
             redraw();
 
             api.on('refresh.all refresh.list', redraw);
-            data.grid.selection.on('change', function (a, b) {
+            data.grid.selection.on('change', function () {
                 api.off('refresh.all refresh.list', redraw);
             });
         },

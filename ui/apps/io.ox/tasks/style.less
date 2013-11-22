@@ -1,23 +1,19 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-// grid
-
 .vgrid-cell.tasks {
 
-    .vgrid-cell-checkbox {
-        padding-top: 10px;
-    }
+    .vgrid-cell-checkbox { padding-top: 10px; }
 
     .end_date {
         color: #777;
@@ -33,6 +29,7 @@
         index: 2;
         padding-bottom: 1px;
     }
+
     .priority {
         font-size: 16;
         font-weight: bold;
@@ -42,15 +39,10 @@
         position: relative;
         overflow:visible;
 
-        i.icon-star {
-            display: inline-block;
-        }
+        i.icon-star { display: inline-block; }
     }
 
-    .title {
-        color: black;
-        font-weight: 500;
-    }
+    .title { font-weight: 500; }
 
     .private-flag {
         float: left;
@@ -77,45 +69,31 @@
     }
 }
 
-//detailview
-
 .tasks-detailview {
 
-    .io-ox-inline-links:first-child {
-        margin: 0 0 26px 0;
-    }
+    .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
 
     header {
        margin-bottom: 26px;
-    }
 
-    //clearfix
-    header:after {
-        content: "\00A0";
-        display: block;
-        clear: both;
-        visibility: hidden;
-        line-height: 0;
-        height: 0;
+       &:after {
+            content: "\00A0";
+            display: block;
+            clear: both;
+            visibility: hidden;
+            line-height: 0;
+            height: 0;
+        }
     }
 
     .info-panel {
         margin-left: 2em;
         display: inline;
-        float: right;
     }
 
-    .priority,
-    .status,
-    .end-date,
-    .alarm-date,
-    .task-progress {
-        float: right;
-    }
+    .info-panel, .status, .end-date, .alarm-date, .task-progress { float: right; }
 
-    br {
-        line-height: 21px; // to correct strange behavior of priority
-    }
+    br { line-height: 21px; } // to correct strange behavior of priority
 
     .attachments {
         font-family: @lightFontFamily;
@@ -126,101 +104,86 @@
         margin-top: 0.8em;
         margin-bottom: 0.5em;
         font-weight: 300;
-        .dropdown {
-            margin-right: 1em;
-        }
 
+        .dropdown { margin-right: 1em; }
     }
-    .attachment-item{
+
+    .attachment-item {
         color: #333;
         word-break: break-all;
     }
-    .task-details {
-        margin: 1em 0 1em 0;
-    }
-    .detail-item {
-        display: inline-block;
-    }
-    .detail-label{
+
+    .task-details { margin: 1em 0 1em 0; }
+
+    .detail-item, .detail-label, .detail-value, .participants-table-colorsquare { display: inline-block; }
+
+    .detail-label {
         cursor: default;
         color: #aaa;
-        display: inline-block;
         margin-right: 0.5em;
     }
-    .detail-value {
-        display: inline-block;
-        margin-right: 1em;
-    }
-    .tasks-detailview .note,
-    .tasks-detailview .tasks-inline-links {
-        margin-top: 1em;
-    }
-    .title {
-        display: inline;
-    }
+
+    .detail-value { margin-right: 1em; }
+
     .private-flag {
         font-size: 20pt;
         margin-right: 12px;
         color: #aaa;
     }
 
-    .participants-table-name {
-        padding-right: 10px;
-    }
+    .participants-table-name { padding-right: 10px; }
 
     .participants-table-colorsquare {
         width: 13px;
         height: 13px;
-        display: inline-block;
         margin-right: 5px;
     }
-    .participants-table-confirmmessage {
-        padding-left: 10px;
-    }
-    .task-participant {
-        padding-bottom: 5px;
+
+    .participants-table-confirmmessage { padding-left: 10px; }
+
+    .task-participant { padding-bottom: 5px; }
+
+    .priority {
+        font-weight: bold;
+        vertical-align: top;
+        white-space: nowrap;
+        .high {
+            color: @taskPriority;
+        }
+        .low {
+            i:first-child { color: #888; }
+            color: #ccc;
+        }
     }
 }
-/* Mobile */
+
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
     .tasks-detailview {
-        header {
-            margin-bottom: 13px;
-        }
-        .detail-item {
-            display: block;
-            margin-bottom: 1.0em;
-        }
-        .detail-label {
-            display: block;
-            margin-bottom: 0px;
-        }
-        .detail-value {
-            display: block;
-        }
+
+        header { margin-bottom: 13px; }
+
+        .detail-item, .detail-label, .detail-value, .participants-table-confirmmessage { display: block; }
+
+        .detail-item { margin-bottom: 1.0em; }
+
+        .detail-label { margin-bottom: 0; }
+
         .io-ox-inline-links:first-child {
-            margin: 0 0 0 0;
+            margin: 0;
+            padding: 15px 0px;
         }
-        .task-details {
-            margin: 1em 0 0em 0;
-        }
-        .participants-table-confirmmessage {
-            padding-left: 0px;
-            display: block;
-        }
-        .attachments-container .dropdown {
-            margin-top: 5px;
-        }
-        .info-panel {
-            width: 100%; //to push the title under the info panel, prevents long titles to be ripped apart
-        }
+
+        .task-details { margin: 1em 0 0 0; }
+
+        .participants-table-confirmmessage { padding-left: 0; }
+
+        .attachments-container .dropdown { margin-top: 5px; }
+
+        .info-panel { width: 100%; } //to push the title under the info panel, prevents long titles to be ripped apart
     }
 
-    div.io-ox-tasks-edit.task-edit-wrapper.container-fluid.default-content-padding {
-        padding-bottom:40px;
-    }
-    .task-detail-container {
-        padding: 13px 13px 0px 13px;
-    }
+    div.io-ox-tasks-edit.task-edit-wrapper.container-fluid.default-content-padding { padding-bottom: 40px; }
+
+    .task-detail-container { padding: 13px 13px 0 13px; }
 }

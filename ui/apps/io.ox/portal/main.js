@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -84,7 +84,10 @@ define('io.ox/portal/main',
                     $btn.find('.controls')
                         .prepend($('<button type="button" class="btn btn-primary pull-right">')
                         .css({ marginLeft: '5px' })
-                        .attr('data-action', 'customize')
+                        .attr({
+                            'data-action': 'customize',
+                            tabindex: 1
+                        })
                         .text(gt('Customize this page'))
                         .on('click', openSettings));
                     $btn.append($greeting);
@@ -125,8 +128,14 @@ define('io.ox/portal/main',
                             $('<h2>').append(
                                 // add remove icon
                                 baton.model.get('protectedWidget') ? [] :
-                                    $('<a href="#" class="disable-widget"><i class="icon-remove"/></a>')
-                                    .attr('title', gt('Disable widget')),
+                                    $('<a class="disable-widget"><i class="icon-remove"/></a>')
+                                    .attr({
+                                        href: '#',
+                                        role: 'button',
+                                        'title': gt('Disable widget'),
+                                        'aria-label': gt('Disable widget'),
+                                        tabindex: 1
+                                    }),
                                 // title span
                                 $('<span class="title">').text('\u00A0')
                             )
@@ -237,7 +246,9 @@ define('io.ox/portal/main',
     app.drawScaffold = function (model, add) {
         add = add || false;
         var baton = ext.Baton({ model: model, app: app, add: add }),
-            node = $('<li>');
+            node = $('<li>').attr({
+                tabindex: 1
+            });
 
         if (_.device('small')) {
             node.css('minHeight', 300);
@@ -341,11 +352,15 @@ define('io.ox/portal/main',
             // set/update title
             var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
                 point = ext.point(baton.point),
-                title = node.find('h2 .title').text(_.noI18n(widgets.getTitle(model.toJSON(), point.prop('title')))),
+                title = widgets.getTitle(model.toJSON(), point.prop('title')),
+                $title = node.find('h2 .title').text(_.noI18n(title)),
                 requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
-
+            node.attr('aria-label', title);
+            node.find('a.disable-widget').attr({
+                'aria-label': title + ', ' + gt('Disable widget'),
+            });
             // setup?
             if (requiresSetUp) {
                 node.find('.decoration').removeClass('pending');
@@ -353,7 +368,7 @@ define('io.ox/portal/main',
             } else {
                 // add link?
                 if (point.prop('action') !== undefined) {
-                    title.addClass('action-link').css('cursor', 'pointer').on('click', { baton: baton }, runAction);
+                    $title.addClass('action-link').css('cursor', 'pointer').on('click', { baton: baton }, runAction);
                 }
                 // simple delay approach
                 _.delay(function () {
@@ -377,8 +392,7 @@ define('io.ox/portal/main',
 
             index = index || 0;
 
-            var type = model.get('type'),
-                node = model.node,
+            var node = model.node,
                 delay = (index / 2 >> 0) * 1000,
                 baton = model.get('baton'),
                 point = ext.point(baton.point);
@@ -411,7 +425,7 @@ define('io.ox/portal/main',
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/portal',
             chromeless: true,
-            simple: _.device('small')
+            simple: _.device('smartphone')
         }));
 
         win.nodes.main.addClass('io-ox-portal f6-target').attr('tabindex', '1');
@@ -423,7 +437,7 @@ define('io.ox/portal/main',
 
         win.show(function () {
             // draw scaffolds now for responsiveness
-            collection.each(function (model, index) {
+            collection.each(function (model) {
                 app.drawScaffold(model, false);
             });
 
@@ -443,7 +457,7 @@ define('io.ox/portal/main',
                     // do we have custom data that might be lost?
                     if (!_.isEmpty(model.get('props'))) {
                         var dialog = new dialogs.ModalDialog()
-                        .header($("<h4>").text(gt('Delete widget')))
+                        .header($('<h4>').text(gt('Delete widget')))
                         .append($('<span>').text(gt('Do you really want to delete this widget?')))
                         .addPrimaryButton('delete',
                             //#. Really delete portal widget - in contrast to "just disable"
@@ -476,6 +490,18 @@ define('io.ox/portal/main',
                 win.nodes.main.css('-webkit-overflow-scrolling', 'touch');
             }
 
+            // enable position fixed toolbar on mobile. This will keep the lazy loading for
+            // portal apps with a fixed position toolbar
+            if (_.device('smartphone')) {
+                app.getWindow().on('hide', function () {
+                    $('#io-ox-topbar').removeClass('toolbar-fixed-position');
+                    app.getWindow().nodes.outer.removeClass('content-v-shift');
+                }).on('show', function () {
+                    $('#io-ox-topbar').addClass('toolbar-fixed-position');
+                    app.getWindow().nodes.outer.addClass('content-v-shift');
+                });
+            }
+
             // make sortable, but not for Touch devices
             if (!Modernizr.touch) {
                 require(['apps/io.ox/core/tk/jquery-ui.min.js']).done(function () {
@@ -483,7 +509,7 @@ define('io.ox/portal/main',
                         containment: win.nodes.main,
                         scroll: true,
                         delay: 150,
-                        update: function (e, ui) {
+                        update: function () {
                             widgets.save(appBaton.$.widgets);
                         }
                     });
@@ -491,7 +517,7 @@ define('io.ox/portal/main',
             }
         });
 
-        var lazyLayout = _.debounce(function (e) {
+        var lazyLayout = _.debounce(function () {
             scrollPos = $(this).scrollTop() + this.innerHeight;
             widgets.loadUsedPlugins().done(function (cleanCollection) {
                 cleanCollection.each(app.drawWidget);
@@ -500,7 +526,7 @@ define('io.ox/portal/main',
 
         $(window).on('scrollstop resize', lazyLayout);
     });
-
+    window.kacke = app;
     return {
         getApp: app.getInstance
     };

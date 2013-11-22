@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -23,8 +23,7 @@ define('io.ox/tasks/actions',
     'use strict';
 
     //  actions
-    var Action = links.Action, Button = links.Button,
-        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
+    var Action = links.Action;
 
     new Action('io.ox/tasks/actions/create', {
         requires: function (e) {
@@ -69,12 +68,12 @@ define('io.ox/tasks/actions',
                 popup.on('deleteTask', function () {
                     require(['io.ox/tasks/api'], function (api) {
                         api.remove(data)
-                            .done(function (data) {
+                            .done(function () {
                                 notifications.yell('success', gt.ngettext('Task has been deleted!',
                                                                           'Tasks have been deleted!', numberOfTasks));
                                 popup.close();
                             }).fail(function (result) {
-                                if (result.code === "TSK-0019") { //task was already deleted somewhere else. everythings fine, just show info
+                                if (result.code === 'TSK-0019') { //task was already deleted somewhere else. everythings fine, just show info
                                     notifications.yell('info', gt('Task was already deleted!'));
                                     popup.close();
                                 } else if (result.error) {//there is an error message from the backend
@@ -136,7 +135,7 @@ define('io.ox/tasks/actions',
         require(['io.ox/tasks/api'], function (api) {
             if (data.length > 1) {
                 api.updateMultiple(data, mods.data)
-                    .done(function (result) {
+                    .done(function () {
                         _(data).each(function (item) {
                             //update detailview
                             api.trigger('update:' + _.ecid(item));
@@ -151,14 +150,13 @@ define('io.ox/tasks/actions',
                 mods.data.id = data.id;
                 mods.data.folder_id = data.folder_id || data.folder;
                 api.update(mods.data)
-                    .done(function (result) {
-                        api.trigger('update:' + _.ecid(data));
+                    .done(function () {
                         notifications.yell('success', mods.label);
                     })
                     .fail(function (result) {
-                        var errorMsg = gt("A severe error occurred!");
-                        if (result.code === "TSK-0007") {//task was modified before
-                            errorMsg = gt("Task was modified before, please reload");
+                        var errorMsg = gt('A severe error occurred!');
+                        if (result.code === 'TSK-0007') {//task was modified before
+                            errorMsg = gt('Task was modified before, please reload');
                         }
                         notifications.yell('error', errorMsg);
                     });
@@ -225,7 +223,7 @@ define('io.ox/tasks/actions',
                                     node.parent().idle();
                                     notifications.yell('success', gt.ngettext('Task moved.', 'Tasks moved.', numberOfTasks));
                                 })
-                                .fail(function (response) {
+                                .fail(function () {
                                     node.show();
                                     node.parent().idle();
                                     notifications.yell('error', gt('A severe error occurred!'));
@@ -263,7 +261,7 @@ define('io.ox/tasks/actions',
                 var popup = editUtil.buildConfirmationPopup(data, dialogs, true);
                 //go
                 popup.popup.show().done(function (action) {
-                    if (action === "ChangeConfState") {
+                    if (action === 'ChangeConfState') {
                         var state = popup.state.prop('selectedIndex') + 1,
                             message = popup.message.val();
                         api.confirm({id: data.id,
@@ -272,7 +270,7 @@ define('io.ox/tasks/actions',
                                             confirmmessage: message}
                         }).done(function () {
                             //update detailview
-                            api.trigger("update:" + _.ecid({id: data.id, folder_id: data.folder_id}));
+                            api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
                         });
                     }
                 });
@@ -284,7 +282,7 @@ define('io.ox/tasks/actions',
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!small');
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             print.request('io.ox/tasks/print', list);
         }
     });
@@ -332,7 +330,7 @@ define('io.ox/tasks/actions',
                 return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
             }, false);
         },
-        multiple: function (list, baton) {
+        multiple: function (list) {
             require(['io.ox/core/api/attachment', 'io.ox/files/carousel'], function (attachmentAPI, slideshow) {
                 var files = _(list).map(function (file) {
                     return {
@@ -371,7 +369,7 @@ define('io.ox/tasks/actions',
                      'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
                 new dialogs.SidePopup().show(baton.e, function (popup) {
-                    _(list).each(function (data, index) {
+                    _(list).each(function (data) {
                         data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
                             width: popup.parent().width(),
@@ -410,10 +408,10 @@ define('io.ox/tasks/actions',
         id: 'download',
         requires: 'some',
         multiple: function (list) {
-            ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
+            ox.load(['io.ox/core/api/attachment', 'io.ox/core/download']).done(function (attachmentAPI, download) {
                 _(list).each(function (data) {
                     var url = attachmentAPI.getUrl(data, 'download');
-                    window.open(url);
+                    download.url(url);
                 });
             });
         }
@@ -486,7 +484,7 @@ define('io.ox/tasks/actions',
 
     //strange workaround because extend only takes new links instead of plain objects with draw method
     new Action('io.ox/tasks/actions/placeholder', {
-        action: function (baton) {}
+        action: $.noop
     });
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
@@ -495,25 +493,30 @@ define('io.ox/tasks/actions',
         prio: 'lo',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
-            if (_.device('smartphone')) return;
             var data = baton.data;
             this.append(
                 $('<span class="dropdown io-ox-action-link">').append(
                     // link
-                    $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
+                    $('<a href="#" data-action="change-due-date" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                     .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
                     // drop down
                     $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
-                        util.buildDropdownMenu(new Date(), true)
+                        util.buildDropdownMenu({time: new Date(), bootstrapDropdown: true, daysOnly: true})
                     )
-                    .delegate('li a', 'click', {task: data}, function (e) {
+                    .on('click', 'li>a:not([data-action="close-menu"])', {task: data}, function (e) {
                         e.preventDefault();
-                        var finderId = $(this).attr("value");
+                        var finderId = $(e.target).val();
                         ox.load(['io.ox/tasks/api']).done(function (api) {
-                            var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
-                                modifications = {end_date: endDate.getTime(),
-                                                 id: e.data.task.id,
-                                                 folder_id: e.data.task.folder_id || e.data.task.folder};
+                            var endDate = util.computePopupTime(new Date(), finderId).alarmDate, modifications;
+                            //remove Time
+                            endDate.setHours(0);
+                            endDate.setMinutes(0);
+                            endDate.setSeconds(0);
+                            endDate.setMilliseconds(0);
+
+                            modifications = {end_date: endDate.getTime(),
+                                             id: e.data.task.id,
+                                             folder_id: e.data.task.folder_id || e.data.task.folder};
 
                             //check if startDate is still valid with new endDate, if not, show dialog
                             if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
@@ -536,7 +539,6 @@ define('io.ox/tasks/actions',
                                         } else {
                                             modifications.start_date = modifications.end_date;
                                             api.update(modifications).done(function () {
-                                                api.trigger('update:' + _.ecid(modifications));
                                                 notifications.yell('success', gt('Changed due date'));
                                             });
                                         }
@@ -544,7 +546,6 @@ define('io.ox/tasks/actions',
                                 });
                             } else {
                                 api.update(modifications).done(function () {
-                                    api.trigger('update:' + _.ecid(modifications));
                                     notifications.yell('success', gt('Changed due date'));
                                 });
                             }

@@ -1,13 +1,12 @@
 /**
- *
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
@@ -19,7 +18,8 @@ define('io.ox/calendar/api',
      'settings!io.ox/core',
      'io.ox/core/notifications',
      'io.ox/core/date',
-     'io.ox/core/api/factory'], function (http, Events, coreConfig, notifications, date, factory) {
+     'io.ox/core/api/factory'
+    ], function (http, Events, coreConfig, notifications, date, factory) {
 
     'use strict';
 
@@ -234,7 +234,7 @@ define('io.ox/calendar/api',
                         action: 'update',
                         id: o.id,
                         folder: folder_id,
-                        timestamp: _.now(),
+                        timestamp: o.timestamp || _.now(),
                         timezone: 'UTC'
                     },
                     data: o
@@ -368,7 +368,7 @@ define('io.ox/calendar/api',
                     },
                     data: obj
                 })
-                .done(function (resp) {
+                .done(function () {
                     all_cache = {};
                     _(keys).each(function (key) {
                         delete get_cache[key];
@@ -383,7 +383,7 @@ define('io.ox/calendar/api',
                 });
             });
 
-            return http.resume().then(function (response) {
+            return http.resume().then(function () {
                 api.trigger('refresh.all');
             });
         },
@@ -398,29 +398,47 @@ define('io.ox/calendar/api',
          * @return {deferred}
          */
         confirm: function (o) {
+
             var folder_id = o.folder_id || o.folder,
-                key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0);
+                key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
+                alarm = -1;
+
+            // contains alarm?
+            if ('alarm' in o.data) {
+                alarm = o.data.alarm;
+                delete o.data.alarm;
+            }
 
             return http.PUT({
                 module: 'calendar',
                 params: {
                     action: 'confirm',
                     folder: o.folder,
-                    id: o.id
+                    id: o.id,
+                    timestamp: _.now(),
+                    timezone: 'UTC'
                 },
                 data: o.data
             })
-            .pipe(function (resp) {
+            .then(function (resp, timestamp) {
+                if (alarm === -1) return;
+                return api.update({
+                    folder: o.folder,
+                    id: o.id,
+                    timestamp: timestamp,//ie gets conflict error so manual timestamp is needed here
+                    alarm: alarm
+                });
+            })
+            .then(function () {
                 get_cache = {};
                 api.trigger('mark:invite:confirmed', o); //redraw detailview to be responsive and remove invites
                 all_cache = {};
                 delete get_cache[key];
-                return api.get(o)
-                        .pipe(function (data) {
-                            api.trigger('update', data);
-                            api.trigger('update:' + _.ecid(data), data);
-                            return data;
-                        });
+                return api.get(o).then(function (data) {
+                    api.trigger('update', data);
+                    api.trigger('update:' + _.ecid(data), data);
+                    return data;
+                });
             });
         }
     };

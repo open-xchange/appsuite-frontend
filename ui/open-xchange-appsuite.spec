@@ -110,23 +110,20 @@ sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
     manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
 
+%define udpate /opt/open-xchange/appsuite/share/update-themes.sh
+
 %post manifest
-if [ "$1" = 1 ]; then
-    UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
-    [ -x $UPDATE ] && $UPDATE
-fi
+if [ $1 -eq 1 -a -x %{udpate} ]; then %{udpate}; fi
 
 %postun manifest
-if [ "$1" = 0 ]; then
+if [ $1 -lt 1 ]; then
     rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true
 else
-    UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
-    [ -x $UPDATE ] && $UPDATE
+    if [ -x %{udpate} ]; then %{udpate}; fi
 fi
 
 %triggerpostun manifest -- open-xchange-appsuite-manifest < 7.2.0
-UPDATE=/opt/open-xchange/appsuite/share/update-themes.sh
-[ -x $UPDATE ] && $UPDATE
+if [ -x %{udpate} ]; then %{udpate}; fi
 
 %files
 %defattr(-,root,root)

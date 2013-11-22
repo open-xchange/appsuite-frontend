@@ -1,27 +1,25 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/filter', [
-    'io.ox/core/extensions',
-    'io.ox/core/api/mailfilter',
-    'io.ox/mail/mailfilter/settings/model',
-    'io.ox/core/tk/dialogs',
-    'gettext!io.ox/mail',
-    'io.ox/settings/util',
-    'text!io.ox/mail/mailfilter/settings/tpl/listbox.html',
-    'text!io.ox/mail/mailfilter/settings/tpl/filter_select.html',
-    'io.ox/mail/mailfilter/settings/filter/view-form'
-], function (ext, api, mailfilterModel, dialogs, gt, settingsUtil, listboxtmpl, tmpl, FilterDetailView) {
+define('io.ox/mail/mailfilter/settings/filter',
+    ['io.ox/core/extensions',
+     'io.ox/core/api/mailfilter',
+     'io.ox/mail/mailfilter/settings/model',
+     'io.ox/core/tk/dialogs',
+     'io.ox/settings/util',
+     'io.ox/mail/mailfilter/settings/filter/view-form',
+     'gettext!io.ox/mail'
+    ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt) {
 
     'use strict';
 
@@ -72,14 +70,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
             width: 800,
             center: false,
             maximize: true,
-            async: true
+            async: true,
+            tabTrap: true
         }).header($('<h4>').text(header));
 
         myView.dialog.append(
             myView.render().el
         )
-        .addPrimaryButton("save", gt('Save'))
-        .addButton("cancel", gt('Cancel'));
+        .addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
+        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
 
         myView.dialog.show();
         myView.$el.find('input[name="rulename"]').focus();
@@ -97,9 +96,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
         });
     }
 
-    ext.point("io.ox/settings/mailfilter/filter/settings/detail").extend({
+    ext.point('io.ox/settings/mailfilter/filter/settings/detail').extend({
         index: 200,
-        id: "mailfiltersettings",
+        id: 'mailfiltersettings',
         draw: function (evt) {
             renderDetailView(evt, evt.data.obj);
         }
@@ -109,14 +108,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
         editMailfilter: function ($node) {
 
             var deferred = $.Deferred(),
-
-                staticStrings =  {
-                    BUTTON_ADD: gt('Add new rule'),
-                    TITLE: gt('Mail Filter'),
-                    EMPTY: gt('There is no rule defined')
-                },
-                createExtpointForSelectedFilter = function (args) {
-                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', args.data.node, args);
+                createExtpointForSelectedFilter = function (node, args) {
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args);
                 };
 
             api.getRules().done(function (data) {
@@ -124,143 +117,216 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 collection = factory.createCollection(data);
                 var AccountSelectView = Backbone.View.extend({
 
-                    _modelBinder: undefined,
-                    initialize: function (options) {
-                        this.template = doT.template(tmpl);
-                        this._modelBinder = new Backbone.ModelBinder();
+                    tagName: 'li',
 
-                    },
+                    saveTimeout: 0,
+
                     render: function () {
-                        var flagArray = this.model.get('flags');
+                        var flagArray = this.model.get('flags'),
+                            self = this;
 
                         function getEditableState() {
                             if (flagArray) {
-                                var value = flagArray[0] !== 'vacation' && flagArray[0] !== 'autoforward' ? 'editable' : 'fixed';
-                                return value;
+                                return flagArray[0] !== 'vacation' && flagArray[0] !== 'autoforward' ? 'editable' : 'fixed';
                             } else {
                                 return 'editable';
                             }
                         }
-                        this.$el.empty().append(this.template({
-                            id: this.model.get('id'),
-                            state: this.model.get('active') ? { 'value': 'active', 'text': gt('Disable') } : { 'value': 'disabled', 'text': gt('Enable') },
-                            edit: gt('Edit'),
-                            editable: getEditableState()
 
-                        }));
+                        var title = self.model.get('rulename');
+                        this.$el.attr({
+                                'data-id': self.model.get('id')
+                            })
+                            .addClass('selectable deletable-item ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
+                            .append(
+                                $('<a>').addClass('drag-handle').append(
+                                    $('<i/>').addClass('icon-reorder')
+                                ).attr({
+                                    href: '#',
+                                    role: 'button',
+                                    tabindex: 1,
+                                    'aria-label': title + ', ' + gt('Use cursor keys to change the item position')
+                                }),
+                                $('<div>').addClass('pull-right').append(function () {
+                                    if (getEditableState() !== 'editable') return;
+                                    $(this).append(
+                                        $('<a>').addClass('action').text(gt('Edit')).attr({
+                                            href: '#',
+                                            role: 'button',
+                                            'data-action': 'edit',
+                                            tabindex: 1,
+                                            'aria-label': title + ', ' + gt('Edit')
+                                        }),
+                                        $('<a>').addClass('action').text(self.model.get('active') ? gt('Disable') : gt('Enable')).attr({
+                                            href: '#',
+                                            role: 'button',
+                                            'data-action': 'toggle',
+                                            tabindex: 1,
+                                            'aria-label': title + ', ' + (self.model.get('active') ? gt('Disable') : gt('Enable'))
+                                        }),
+                                        $('<a>').addClass('close').append($('<i/>').addClass('icon-trash')).attr({
+                                            href: '#',
+                                            role: 'button',
+                                            'data-action': 'delete',
+                                            tabindex: 1,
+                                            'aria-label': title + ', ' + gt('remove')
+                                        })
+                                    );
+                                }),
+                                title = $('<span>').addClass('list-title').append(title)
+                            );
 
-                        this._modelBinder.bind(this.model, this.el, Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property'));
-
-                        return this;
+                        self.model.on('change:rulename', function (el, val) {
+                            title.text(val);
+                        });
+                        return self;
                     },
+
                     events: {
-                        'click .deletable-item.editable': 'onSelect'
+                        'click [data-action="toggle"]': 'onToggle',
+                        'click [data-action="delete"]': 'onDelete',
+                        'click [data-action="edit"]': 'onEdit',
+                        'keydown .drag-handle': 'dragViaKeyboard'
                     },
 
-                    onSelect: function () {
-                        this.$el.parent().find('li[selected="selected"]').attr('selected', null);
-                        this.$el.find('.deletable-item').attr('selected', 'selected');
-                    }
+                    onToggle: function (e) {
+                        e.preventDefault();
+                        var self = this;
+                        this.model.set('active', !this.model.get('active'));
 
+                        //yell on reject
+                        settingsUtil.yellOnReject(
+                            api.update(self.model).done(function () {
+                                self.$el.toggleClass('active disabled');
+                                $(e.target).text(self.model.get('active') ? gt('Disable') : gt('Enable'));
+                            })
+                        );
+                    },
+
+                    onDelete: function (e) {
+                        e.preventDefault();
+                        var self = this,
+                            id = self.model.get('id');
+                        if (id !== false) {
+                             //yell on reject
+                            settingsUtil.yellOnReject(
+                                api.deleteRule(id).done(function () {
+                                    self.model.collection.remove(id);
+                                    $node.find('.controls [data-action="add"]').focus();
+                                })
+                            );
+                        }
+                    },
+
+                    onEdit: function (e) {
+                        e.preventDefault();
+                        var self = this;
+                        e.data = {};
+                        e.data.id = self.model.get('id');
+                        e.data.obj = self.model;
+                        if (e.data.obj !== undefined) {
+                            createExtpointForSelectedFilter(this.$el.parent(), e);
+                        }
+                    },
+
+                    dragViaKeyboard: function (e) {
+                        var self = this,
+                            list = this.$el.closest('.widget-list'),
+                            items = list.children(),
+                            index = items.index(this.$el);
+
+                        function keyHandle(dir) {
+                            e.preventDefault();
+                            if (dir === 'up') {
+                                self.$el.insertBefore(self.$el.prev());
+                            } else {
+                                self.$el.insertAfter(self.$el.next());
+                            }
+                            clearTimeout(self.saveTimeout);
+                            self.saveTimeout = setTimeout(saveOrder, 500);
+                            self.$el.find('.drag-handle').focus();
+                        }
+
+                        function saveOrder() {
+                            var data = _.map(list.children(), function (single) {
+                                return parseInt($(single).attr('data-id'), 10);
+                            });
+                            //yell on reject
+                            settingsUtil.yellOnReject(
+                                api.reorder(data)
+                            );
+                        }
+
+                        switch (e.which) {
+                        case 38:
+                            if (index > 0) { // up
+                                keyHandle('up');
+                            }
+                            break;
+                        case 40:
+                            if (index < items.length) { // down
+                                keyHandle('down');
+                            }
+                            break;
+                        default:
+                            break;
+                        }
+                    }
                 }),
 
                 MailfilterEdit = Backbone.View.extend({
 
                     initialize: function () {
-                        this.template = doT.template(listboxtmpl);
-                        _.bindAll(this);
-
-                        this.collection = collection;
-                        this.collection.bind('add', this.render);
-                        this.collection.bind('remove', this.render);
-
+                        _.bindAll(this, 'render', 'onAdd', 'renderFilter');
+                        this.collection = collection.bind('add remove', this.renderFilter);
                     },
+
                     render: function () {
-                        var self = this;
-                        self.$el.empty().append(self.template({
-                            strings: staticStrings
-                        }));
-
-                        if (this.collection.length === 0) {
-                            self.$el.find('.widget-list').append($('<div>').text(staticStrings.EMPTY));
-                        } else {
-                            this.collection.each(function (item) {
-                                self.$el.find('.widget-list').append(
-                                    new AccountSelectView({ model: item }).render().el
-                                );
-                            });
-                            this.$el.trigger('makesortable');
-                        }
-
+                        this.$el.append(
+                            $('<h1>').addClass('no-margin').text(gt('Mail Filter')),
+                            $('<div>').addClass('controls').append(
+                                $('<div>').addClass('btn-group pull-right').append(
+                                    $('<button>').addClass('btn btn-primary').text(gt('Add new rule')).attr({
+                                        'data-action': 'add',
+                                        tabindex: 1,
+                                        type: 'button'
+                                    })
+                                )
+                            ),
+                            $('<ol>').addClass('widget-list')
+                        );
+                        this.renderFilter();
                         return this;
                     },
 
+                    renderFilter: function () {
+                        var self = this,
+                            list = self.$el.find('.widget-list').empty();
+                        if (this.collection.length === 0) {
+                            list.append($('<div>').text(gt('There is no rule defined')));
+                        } else {
+                            this.collection.each(function (item) {
+                                list.append(
+                                    new AccountSelectView({ model: item }).render().el
+                                );
+                            });
+                            this.makeSortable();
+                        }
+                    },
+
                     events: {
-                        'click [data-action="edit"]': 'onEdit',
-                        'click [data-action="delete"]': 'onDelete',
-                        'click [data-action="add"]': 'onAdd',
-                        'click [data-action="toggle"]': 'onToggle',
-                        'makesortable': 'onMakeSortable'
+                        'click [data-action="add"]': 'onAdd'
                     },
 
                     onAdd: function (args) {
                         args.data = {
-                            node: this.el,
                             listView: this,
                             obj: factory.create(mailfilterModel.protectedMethods.provideEmptyModel())
                         };
-                        createExtpointForSelectedFilter(args);
+                        createExtpointForSelectedFilter(this.el, args);
                     },
 
-                    onEdit: function (e) {
-                        e.preventDefault();
-                        var selected = this.$el.find('[selected]');
-                        e.data = {};
-                        e.data.id = selected.data('id');
-                        e.data.obj = this.collection.get(e.data.id);
-                        e.data.node = this.el;
-
-                        if (e.data.obj !== undefined) {
-                            createExtpointForSelectedFilter(e);
-                        }
-
-                    },
-
-                    onDelete: function (e) {
-                        e.preventDefault();
-                        var selected = this.$el.find('[selected]'),
-                            self = this,
-                            id = selected.data('id');
-                        if (id !== false) {
-                             //yell on reject
-                            settingsUtil.yellOnReject(
-                                api.deleteRule(id).done(function () {
-                                    self.collection.remove(id);
-                                })
-                            );
-                        }
-
-                    },
-
-                    onToggle: function (e) {
-                        e.preventDefault();
-                        var selected = this.$el.find('[selected]'),
-                            self = this,
-                            id = selected.data('id'),
-                            selectedObj = this.collection.get(id),
-                            state = selectedObj.get('active') ? false : true;
-
-                        selectedObj.set('active', state);
-
-                        //yell on reject
-                        settingsUtil.yellOnReject(
-                            api.update(selectedObj).done(function () {
-                                self.render();
-                            })
-                        );
-                    },
-
-                    onMakeSortable: function () {
+                    makeSortable: function () {
 
                         this.$el.find('ol').sortable({
                             containment: this.el,
@@ -268,7 +334,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
                             handle: '.drag-handle',
                             scroll: true,
                             delay: 150,
+                            start: function (e, ui) {
+                                ui.item.attr('aria-grabbed', 'true');
+                            },
                             stop: function (e, ui) {
+                                ui.item.attr('aria-grabbed', 'false');
                                 var arrayOfFilters = $node.find('li[data-id]'),
                                 data = _.map(arrayOfFilters, function (single) {
                                     return parseInt($(single).attr('data-id'), 10);
@@ -283,9 +353,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                 }),
 
-                    mailFilter = new MailfilterEdit();
+                mailFilter = new MailfilterEdit();
                 $node.append(mailFilter.render().$el);
-
 
             }).fail(function (error) {
                 deferred.reject(error);

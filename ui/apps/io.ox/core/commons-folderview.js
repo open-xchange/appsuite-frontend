@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -18,7 +19,8 @@ define('io.ox/core/commons-folderview',
      'settings!io.ox/core',
      'settings!io.ox/caldav',
      'io.ox/core/capabilities',
-     'gettext!io.ox/core'], function (ext, links, notifications, api, coreConfig, caldavConfig, capabilities, gt) {
+     'gettext!io.ox/core'
+    ], function (ext, links, notifications, api, coreConfig, caldavConfig, capabilities, gt) {
 
     'use strict';
 
@@ -46,17 +48,125 @@ define('io.ox/core/commons-folderview',
 
         // draw container
         ext.point(POINT + '/sidepanel').extend({
+            index: 100,
             draw: function (baton) {
                 this.prepend(
                     // sidepanel
                     baton.$.sidepanel = $('<div class="abs border-right foldertree-sidepanel">')
                     .append(
                         // container
-                        baton.$.container = $('<div class="abs foldertree-container">'),
-                        // toolbar
-                        baton.$.toolbar = $('<div class="abs foldertree-toolbar">')
+                        $('<div class="abs foldertree-container">').append(
+                            baton.$.container = $('<div class="foldertree">'),
+                            baton.$.links = $('<div class="foldertree-links">')
+                        )
                     )
                 );
+
+                ext.point(POINT + '/sidepanel/links').invoke('draw', baton.$.links, baton);
+            }
+        });
+
+        ext.point(POINT + '/sidepanel').extend({
+            id: 'context-menu',
+            index: 200,
+            draw: function (baton) {
+
+                var ul;
+
+                baton.$.sidepanel.append(
+                    $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
+                        $('<div class="abs context-dropdown-overlay">'),
+                        ul = $('<ul class="dropdown-menu" role="menu">')
+                    )
+                );
+
+                ext.point(POINT + '/sidepanel/context-menu').invoke('draw', ul, baton);
+
+                function openContextMenu(e) {
+
+                    // return early if not up, down, escape, enter, click or contextmenu
+                    if (!/(27|13|38|40|9)/.test(e.keyCode) && e.type !== 'click' && e.type !== 'contextmenu') return;
+
+                    var current = $(e.currentTarget),
+                        dropdown = baton.$.sidepanel.find('.context-dropdown');
+
+                    // get node of cog button if opened via contextmenu
+                    if (current.hasClass('folder')) current = current.find('a.folder-options-badge');
+
+                    // close dropdown when shift tabbing from button
+                    if (/(9)/.test(e.keyCode)) {
+                        if (e.shiftKey) {
+                            dropdown.removeClass('open');
+                            current.removeClass('dropdown-opened');
+                        }
+                        if (dropdown.hasClass('open')) dropdown.find('ul > li:first > a').focus();
+                        return;
+                    }
+
+                    // to refocus button on dropdown close
+                    ul.off('keydown.foldertreecontext')
+                      .on('keydown.foldertreecontext', 'a', function (e) {
+                        if (/(27)/.test(e.keyCode)) {
+                            dropdown.removeClass('open');
+                            current.removeClass('dropdown-opened').focus();
+                            return false;
+                        }
+                    });
+
+                    e.preventDefault();
+
+                    // close dropdown when still focussing button
+                    if (/(27)/.test(e.keyCode)) {
+                        dropdown.removeClass('open');
+                        current.removeClass('dropdown-opened');
+                        return;
+                    }
+
+                    // up
+                    if (/(38)/.test(e.keyCode)) {
+                        dropdown.find('ul > li:last > a').focus();
+                        return;
+                    }
+                    // down
+                    if (/(40)/.test(e.keyCode)) {
+                        dropdown.find('ul > li:first > a').focus();
+                        return;
+                    }
+
+                    setTimeout(function () {
+                        var offset, top, left, menu, height, maxHeight;
+                        // show first to get proper dimensions
+                        dropdown.find('.dropdown-toggle').dropdown('toggle');
+                        current.addClass('dropdown-opened');
+                        // exceeds window?
+                        if (e.type !== 'contextmenu') {
+                            offset = current.offset();
+                            top = offset.top - 4;
+                            left = offset.left + current.parent().width();
+                        } else {
+                            top = e.pageY - 15;
+                            left = e.pageX + 15;
+                        }
+                        menu = dropdown.find('.dropdown-menu');
+                        height = menu.outerHeight();
+                        maxHeight = $(document).height();
+
+                        if ((top + height) > maxHeight) top = Math.max(10, maxHeight - height - 10);
+                        // update position
+                        menu.css({ top: top, left: left });
+                    }, 0);
+                }
+
+                function closeContextMenu(e) {
+                    e.preventDefault();
+                    $(this).closest('.dropdown.open').removeClass('open');
+                }
+
+                baton.$.sidepanel
+                    .on('click keydown', '.folder-options-badge', openContextMenu)
+                    .on('contextmenu', '.folder', openContextMenu)
+                    .on('contextmenu', '.context-dropdown-overlay', closeContextMenu);
             }
         });
 
@@ -79,128 +189,95 @@ define('io.ox/core/commons-folderview',
             }
         });
 
-        // toolbar
-        ext.point(POINT + '/sidepanel/toolbar').extend({
-            id: 'add',
-            index: 100,
-            draw: function (baton) {
-                var ul;
-                this.append(
-                    $('<div class="toolbar-action pull-left dropdown dropup" data-action="add">').append(
-                        $('<a href="#" class="dropdown-toggle">')
-                            .attr({
-                                'data-toggle': 'dropdown',
-                                tabindex: 1,
-                                role: 'menuitem',
-                                'aria-haspopup': true,
-                                title: gt('Add folder menu'),
-                                'aria-label': gt('Add folder menu')
-                            })
-                            .append($('<i class="icon-plus">')),
-                        ul = $('<ul class="dropdown-menu" role="menu">')
-                    )
-                );
-                ext.point(POINT + '/sidepanel/toolbar/add').invoke('draw', ul, baton);
-            }
-        });
-
-        ext.point(POINT + '/sidepanel/toolbar').extend({
-            id: 'options',
-            index: 200,
-            draw: function (baton) {
-                var ul;
-                this.append(
-                    $('<div class="toolbar-action pull-left dropdown dropup" data-action="options">').append(
-                        $('<a href="#" class="dropdown-toggle">')
-                            .attr({
-                                'data-toggle': 'dropdown',
-                                tabindex: 1,
-                                role: 'menuitem',
-                                title: gt('Folder actions'),
-                                'aria-label': gt('Folder actions'),
-                                'aria-haspopup': true
-                            })
-                            .append($('<i class="icon-cog" aria-hidden="true" role="presentation">')),
-                        ul = $('<ul class="dropdown-menu" role="menu">').append(
-                            $('<li class="dropdown-header" role="presentation" aria-hidden="true">').text(_.noI18n(baton.data.title))
-                        )
-                    )
-                );
-                ext.point(POINT + '/sidepanel/toolbar/options').invoke('draw', ul, baton);
-            }
-        });
-
         function addTopLevelFolder(e) {
             e.preventDefault();
-            e.data.app.folderView.add('1', { module: 'mail' });
+            ox.load(['io.ox/core/folder/add']).done(function (add) {
+                add('1', { module: 'mail' });
+            });
         }
 
-        function addSubFolder(e) {
+        function addFolder(e) {
             e.preventDefault();
-            // set explicit folder?
-            if (/^(contacts|calendar|tasks)$/.test(e.data.type)) {
-                e.data.app.folderView.add(api.getDefaultFolder(e.data.type));
-            } else {
-                e.data.app.folderView.add();
-            }
+            ox.load(['io.ox/core/folder/add']).done(function (add) {
+                add(e.data.folder, { module: e.data.module });
+            });
         }
 
-         // toolbar actions
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        // toolbar actions
+        ext.point(POINT + '/sidepanel/links').extend({
             id: 'add-toplevel-folder',
             index: 100,
             draw: function (baton) {
-                if (baton.options.type === 'mail') {
-                    // only show for mail
-                    this.append($('<li>').append(
-                        $('<a href="#" data-action="add-toplevel-folder" tabindex="1" role="menuitem">').text(gt('Add new folder'))
-                        .on('click', { app: baton.app }, addTopLevelFolder)
-                    ));
-                }
+
+                if (baton.options.type !== 'mail') return;
+
+                // only show for mail
+                this.append($('<div>').append(
+                    $('<a href="#" data-action="add-toplevel-folder" tabindex="1" role="button">').text(gt('New folder'))
+                    .on('click', addTopLevelFolder)
+                ));
             }
         });
 
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'add-folder',
-            index: 200,
+            index: 90,
             draw: function (baton) {
+
+                if (/^(contacts|calendar|tasks)$/.test(baton.options.type)) return;
+                if (!api.can('create', baton.data)) return;
+
                 // only mail and infostore show hierarchies
-                var label = /^(contacts|calendar|tasks)$/.test(baton.options.type) ? gt('Add private folder') : gt('Add subfolder'),
-                    link = $('<a href="#" data-action="add-subfolder" role="menuitem">').text(label);
-                if (api.can('create', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { app: baton.app, type: baton.options.type }, addSubFolder);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled');
-                }
-                this.append($('<li>').append(link));
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                        .text(gt('New subfolder'))
+                        .on('click', { app: baton.app, folder: baton.data.id, module: baton.options.type }, addFolder)
+                    ),
+                    $('<li class="divider">')
+                );
             }
         });
 
-        function createPublicFolder(e) {
-            e.preventDefault();
-            // public folder has the magic id 2
-            e.data.app.folderView.add('2', { module: e.data.module });
-        }
+        // flat folder view
 
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
-            id: 'add-public-folder',
+        ext.point('io.ox/foldertree/section/links').extend({
             index: 200,
+            id: 'private',
             draw: function (baton) {
 
-                var type = baton.options.type,
-                    link = $('<a href="#" data-action="add-public-folder" role="menuitem">').text(gt('Add public folder'));
+                if (baton.id !== 'private') return;
 
+                this.append($('<div>').append(
+                    $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                    .text(gt('New private folder'))
+                    .on('click', { folder: api.getDefaultFolder(baton.options.type), module: baton.options.type }, addFolder)
+                ));
+            }
+        });
+
+        ext.point('io.ox/foldertree/section/links').extend({
+            index: 300,
+            id: 'public',
+            draw: function (baton) {
+
+                // yep, show this below private section.
+                // cause there might be no public folders, and in this case
+                // the section would be hidden
+                if (baton.id !== 'private') return;
                 if (!capabilities.has('edit_public_folders')) return;
-                if (!(type === 'contacts' || type === 'calendar' || type === 'tasks')) return;
 
-                api.get({folder: 2}).then(function (public_folder) {
-                    if (api.can('create', public_folder)) {
-                        link.attr('tabindex', 1).on('click', {app: baton.app, module: type}, createPublicFolder);
-                    } else {
-                        link.attr('aria-disabled', true).addClass('disabled');
-                    }
+                var node = $('<div>');
+                this.append(node);
+
+                api.get({ folder: 2 }).then(function (public_folder) {
+                    if (!api.can('create', public_folder)) return;
+                    node.append(
+                        $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
+                        .text(gt('New public folder'))
+                        .on('click', { folder: '2', module: baton.options.type }, addFolder)
+                    );
                 });
-                this.append($('<li>').append(link));
             }
         });
 
@@ -211,45 +288,60 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'publications',
-            index: 500,
+            index: 100,
             draw: function (baton) {
-                // do not draw if not available
-                if (capabilities.has('publication') && api.can('publish', baton.data)) {
-                    this.append(
-                        $('<li class="divider" aria-hidden="true" role="presentation">'),
-                        $('<li>').append(
-                            $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
-                            .text(gt('Share this folder'))
-                            .on('click', { baton: baton }, publish)
-                        )
-                    );
-                }
+
+                if (!capabilities.has('publication') || !api.can('publish', baton.data)) return;
+
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
+                        .text(gt('Share this folder'))
+                        .on('click', { baton: baton }, publish)
+                    )
+                );
             }
         });
 
         function subscribe(e) {
             e.preventDefault();
             require(['io.ox/core/pubsub/subscriptions'], function (subscriptions) {
-                subscriptions.buildSubscribeDialog(e.data.baton);
+                subscriptions.buildSubscribeDialog(e.data);
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/add').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'subscribe',
-            index: 600,
+            index: 200,
             draw: function (baton) {
-                // do not draw if not available
-                if (capabilities.has('subscription') && api.can('subscribe', baton.data)) {
-                    this.append(
-                        $('<li>').append(
-                            $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
-                            .text(gt('Subscription'))
-                            .on('click', { baton: baton }, subscribe)
-                        )
-                    );
+
+                if (!capabilities.has('subscription') || !api.can('subscribe', baton.data)) return;
+
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
+                        .text(gt('New subscription'))
+                        .on('click', { folder: baton.data.folder_id, module: baton.data.module, app: baton.app }, subscribe)
+                    )
+                );
+            }
+        });
+
+        ext.point(POINT + '/sidepanel/context-menu').extend({
+            id: 'pubsub-divider',
+            after: 'subscribe',
+            draw: function (baton) {
+                if ((!capabilities.has('publication') ||
+                    !api.can('publish', baton.data)) &&
+                    (!capabilities.has('subscription') ||
+                    !api.can('subscribe', baton.data)))
+                {
+                    return;
                 }
+
+                this.append($('<li class="divider">'));
             }
         });
 
@@ -258,16 +350,20 @@ define('io.ox/core/commons-folderview',
             e.data.app.folderView.rename();
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        // here
+
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'rename',
             index: 100,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="rename" role="menuitem">').text(gt('Rename'));
-                this.append($('<li>').append(link));
                 if (api.can('rename', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { app: baton.app }, renameFolder);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    this.append(
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="rename" role="menuitem">')
+                            .text(gt('Rename'))
+                            .on('click', { app: baton.app }, renameFolder)
+                        )
+                    );
                 }
             }
         });
@@ -277,19 +373,19 @@ define('io.ox/core/commons-folderview',
             e.data.app.folderView.remove();
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'delete',
             index: 500,
             draw: function (baton) {
-                var link = $('<a href="#" data-action="delete" role="menuitem">').text(gt('Delete'));
-                this.append(
-                    (baton.options.type === 'mail' ? '' : $('<li class="divider" role="presentation" aria-hidden="true">')),
-                    $('<li>').append(link)
-                );
                 if (api.can('deleteFolder', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { app: baton.app }, deleteFolder);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    this.append(
+                        (baton.options.type === 'mail' ? '' : $('<li class="divider" role="presentation" aria-hidden="true">')),
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="delete" role="menuitem">')
+                            .text(gt('Delete'))
+                            .on('click', { app: baton.app }, deleteFolder)
+                        )
+                    );
                 }
             }
         });
@@ -302,19 +398,19 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'export',
             index: 250,
             draw: function (baton) {
                 if (_.device('!ios && !android')) {
-                    var link = $('<a href="#" data-action="export">').text(gt('Export'));
-                    this.append(
-                        $('<li>').append(link)
-                    );
                     if (api.can('export', baton.data)) {
-                        link.attr('tabindex', 1).on('click', { baton: baton }, exportData);
-                    } else {
-                        link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                        this.append(
+                            $('<li>').append(
+                                $('<a href="#" tabindex="1" data-action="export">')
+                                .text(gt('Export'))
+                                .on('click', { baton: baton }, exportData)
+                            )
+                        );
                     }
                 }
             }
@@ -327,19 +423,19 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'import',
             index: 245,
             draw: function (baton) {
                 if (_.device('!ios && !android')) {
-                    var link = $('<a href="#" data-action="import">').text(gt('Import'));
-                    this.append(
-                        $('<li>').append(link)
-                    );
                     if (api.can('import', baton.data)) {
-                        link.attr('tabindex', 1).on('click', { baton: baton }, importData);
-                    } else {
-                        link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                        this.append(
+                            $('<li>').append(
+                                $('<a href="#" tabindex="1" data-action="import">')
+                                .text(gt('Import'))
+                                .on('click', { baton: baton }, importData)
+                            )
+                        );
                     }
                 }
             }
@@ -355,15 +451,18 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'permissions',
             index: 300,
             draw: function (baton) {
                 if (capabilities.has('!alone') && capabilities.has('gab') && _.device('!smartphone')) {
-                    var link = $('<a href="#" data-action="permissions" tabindex="1" role="menuitem">').text(gt('Permissions'));
                     this.append(
                         $('<li class="divider" aria-hidden="true" role="presentation">'),
-                        $('<li>').append(link.on('click', { app: baton.app }, setFolderPermissions))
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="permissions" role="menuitem">')
+                            .text(gt('Permissions'))
+                            .on('click', { app: baton.app }, setFolderPermissions)
+                        )
                     );
                 }
             }
@@ -377,7 +476,7 @@ define('io.ox/core/commons-folderview',
             var baton = e.data.baton, id = baton.app.folder.get();
 
             api.get({ folder: id }).done(function (folder) {
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     var title = gt('Properties'),
                     dialog = new dialogs.ModalDialog({
                         easyOut: true
@@ -397,7 +496,7 @@ define('io.ox/core/commons-folderview',
                                     .text(gt('Folder type')),
                                 $('<input>', { type: 'text' })
                                     .addClass('span9')
-                                    .attr('readonly', 'readonly')
+                                    .prop('readonly', true)
                                     .val(ucfirst(folder.module))
                             )
                         );
@@ -412,11 +511,11 @@ define('io.ox/core/commons-folderview',
                                         .text(gt('CalDAV URL')),
                                     $('<input>', { type: 'text' })
                                         .addClass('span9')
-                                        .attr('readonly', 'readonly')
+                                        .prop('readonly', true)
                                         .val(
                                             _.noI18n(caldavConfig.get('url')
-                                                .replace("[hostname]", location.host)
-                                                .replace("[folderId]", id)
+                                                .replace('[hostname]', location.host)
+                                                .replace('[folderId]', id)
                                         )
                                     )
                                 )
@@ -429,18 +528,24 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'properties',
             index: 400,
             draw: function (baton) {
                 if (_.device('!smartphone')) {
-                    var link = $('<a href="#" data-action="properties" tabindex="1" role="menuitem">').text(gt('Properties'));
                     if (!capabilities.has('gab')) {
                         //workaround: add divider if not set by permissions yet
-                        this.append($('<li class="divider" aria-hidden="true" role="presentation">'));
+                        this.append(
+                            $('<li class="divider" aria-hidden="true" role="presentation">')
+                        );
                     }
-                    this.append($('<li>').append(link));
-                    link.on('click', { baton: baton }, showFolderProperties);
+                    this.append(
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="properties" role="menuitem">')
+                            .text(gt('Properties'))
+                            .on('click', { baton: baton }, showFolderProperties)
+                        )
+                    );
                 }
             }
         });
@@ -503,7 +608,7 @@ define('io.ox/core/commons-folderview',
             });
         }
 
-        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+        ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'move',
             index: 200,
             draw: function (baton) {
@@ -511,12 +616,14 @@ define('io.ox/core/commons-folderview',
                 if (!/^(mail|infostore)$/.test(baton.options.type)) return;
                 if (_.device('smartphone')) return;
 
-                var link = $('<a href="#" data-action="delete" role="menuitem">').text(gt('Move'));
-                this.append($('<li>').append(link));
                 if (api.can('deleteFolder', baton.data)) {
-                    link.attr('tabindex', 1).on('click', { baton: baton }, moveFolder);
-                } else {
-                    link.attr('aria-disabled', true).addClass('disabled').on('click', $.preventDefault);
+                    this.append(
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="delete" role="menuitem">')
+                            .text(gt('Move'))
+                            .on('click', { baton: baton }, moveFolder)
+                        )
+                    );
                 }
             }
         });
@@ -553,21 +660,36 @@ define('io.ox/core/commons-folderview',
             app.off('folder:change', changeFolder);
         };
 
-        onChangeFolder = function (e, selection) {
-            var id = _(selection).first();
+        onChangeFolder = (function () {
 
-            api.get({ folder: id }).done(function (data) {
-                if (_.device('small')) {
-                    // close tree
-                    fnHideSml();
-                }
-                if (data.module === options.type) {
-                    changeFolderOff();
-                    app.folder.set(id);
-                    changeFolderOn();
-                }
-            });
-        };
+            var current = null;
+
+            return function (e, selection) {
+
+                var id = _(selection).first(),
+                    previous = current;
+
+                current = id;
+
+                api.get({ folder: id }).done(function (data) {
+                    if (_.device('small') && previous !== null) {
+                        // close tree
+                        fnHideSml();
+                    }
+                    // debugger;
+                    if (data.module === options.type) {
+                        if (id !== current) return;
+                        changeFolderOff();
+                        app.folder.set(id)
+                            .done(function () {
+                                if (id !== current) return;
+                                app.folderView.selection.set(id);
+                            })
+                            .always(changeFolderOn);
+                    }
+                });
+            };
+        }());
 
         restoreWidth = $.noop;
 
@@ -610,6 +732,7 @@ define('io.ox/core/commons-folderview',
                 windowContainer.on('mousemove', function (e) {
                     var newWidth = e.pageX;
                     if (newWidth < maxSidePanelWidth && newWidth > minSidePanelWidth) {
+                        app.trigger('folderview:resize');
                         applyWidth(newWidth);
                     }
                 });
@@ -617,13 +740,13 @@ define('io.ox/core/commons-folderview',
 
             getWidths();
 
-            windowContainer.on('mouseup', function (e) {
+            windowContainer.on('mouseup', function () {
                 windowContainer.off('mousemove');
                 var width = $(this).data('resize-width') || 250;
                 app.settings.set('folderview/width/' + _.display(), width).save();
             });
 
-            $(window).off('resize.folderview').on('resize.folderview', function (e) {
+            $(window).off('resize.folderview').on('resize.folderview', function () {
                 if (!visible) { fnHide(); } else { fnShow(true);  }
             });
             $(window).off('orientationchange.folderview').on('orientationchange.folderview', fnHide);
@@ -697,7 +820,6 @@ define('io.ox/core/commons-folderview',
         };
 
         initTree = function (views) {
-
             // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
             var open = app.settings.get('folderview/open', {});
             if (open && open[_.display()]) open = open[_.display()];
@@ -705,6 +827,7 @@ define('io.ox/core/commons-folderview',
 
             // init tree before running toolbar extensions
             var tree = baton.tree = app.folderView = new views[options.view](container, {
+                    app: app,
                     type: options.type,
                     rootFolderId: String(options.rootFolderId),
                     open: open,
@@ -720,7 +843,10 @@ define('io.ox/core/commons-folderview',
                     api.get({ folder: id }).done(function (data) {
                         baton.data = data;
                         // update toolbar
-                        ext.point(POINT + '/sidepanel/toolbar').invoke('draw', baton.$.toolbar.empty(), baton);
+                        ext.point(POINT + '/sidepanel/links').invoke('draw', baton.$.links.empty(), baton);
+                        // update context menu
+                        var ul = baton.$.sidepanel.find('.context-dropdown ul');
+                        ext.point(POINT + '/sidepanel/context-menu').invoke('draw', ul.empty(), baton);
                         // reload tree node
                         tree.reloadNode(id);
                     });
@@ -742,8 +868,12 @@ define('io.ox/core/commons-folderview',
                 sidepanel.on('swipeleft', toggle);
 
             }
+
+            tree.selection.on('change', onChangeFolder);
+            changeFolderOn();
+
             // paint now
-            return tree.paint().pipe(function () {
+            return tree.paint().then(function () {
 
                 if (options.visible === false) {
                     initResize();
@@ -751,11 +881,8 @@ define('io.ox/core/commons-folderview',
 
                 return tree.select(app.folder.get()).done(function () {
 
-                    tree.selection.on('change', onChangeFolder);
                     toggleTree = toggle;
                     sidepanel.idle();
-
-                    changeFolderOn();
 
                     api.on('create', function (e, data) {
                         tree.repaint().done(function () {
@@ -772,15 +899,15 @@ define('io.ox/core/commons-folderview',
                         tree.removeNode(id);
                     });
 
-                    api.on('delete', function (e, id) {
+                    api.on('delete', _.throttle(function (e, id) {
                         app.trigger('folder:delete', id);
-                    });
+                    }, 100));
 
                     api.on('refresh', function () {
                         tree.repaint();
                     });
 
-                    api.on('update', function (e, id, newId, data) {
+                    api.on('update', function (e, id, newId) {
                         // this is used by folder rename, since the id might change (mail folders)
                         var sel = tree.selection.get();
                         if (_.isEqual(sel, [id])) {
@@ -801,7 +928,7 @@ define('io.ox/core/commons-folderview',
                         tree.repaint();
                     });
 
-                    api.on('update:unread', function (e, id, data) {
+                    api.on('update:unread', function (e, id) {
                         tree.reloadNode(id);
                     });
 
@@ -817,7 +944,7 @@ define('io.ox/core/commons-folderview',
             });
         };
 
-        loadTree = function (e) {
+        loadTree = function () {
             toggle();
             app.showFolderView = _.device('smartphone') ? fnShowSml : fnShow;
             app.hideFolderView = _.device('smartphone') ? fnHideSml : fnHide;
@@ -875,7 +1002,7 @@ define('io.ox/core/commons-folderview',
         });
 
         new links.Action(ACTION, {
-            action: function (baton) {
+            action: function () {
                 toggleTree();
             }
         });

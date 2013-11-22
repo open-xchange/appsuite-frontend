@@ -1,19 +1,20 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define("io.ox/core/tk/dropdown-options",
+define('io.ox/core/tk/dropdown-options',
     ['io.ox/core/event',
-     'gettext!io.ox/core'], function (Events, gt) {
+     'gettext!io.ox/core'
+    ], function (Events, gt) {
 
     'use strict';
 
@@ -25,7 +26,7 @@ define("io.ox/core/tk/dropdown-options",
             data = {},
             //nodes
             $anchor,
-            $container = $('<span class="dropdown"">'),
+            $container = $('<span class="dropdown">'),
             $menu = $('<ul class="dropdown-menu no-clone" role="menu">'),
 
             /**
@@ -84,7 +85,12 @@ define("io.ox/core/tk/dropdown-options",
                     var stored = opt.settings.get('options/' + opt.id, data);
                     _.each(data, function (item) {
                         //only use options that are currently available
-                        data[item.name] = stored[item.name] || data[item.name];
+                        if (stored[item.name]) {
+                            data[item.name].name = data[item.name].name;
+                            data[item.name].checked = data[item.name].checked;
+                            //use stored label only as fallback or the language does not change when ui language changes
+                            data[item.name].label = data[item.name].label || stored[item.name].label;
+                        }
                     });
                 }
             },

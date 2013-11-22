@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2013
- * Mail: info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -26,11 +26,11 @@ define('io.ox/core/api/pubsub',
      */
     var clearCache = function (api, data) {
         var keys = {
-                general: api.cid(''),
-                folder: api.cid({folder: data.folder}),
-                pub: '.' + data.id,
-                sub: data.folder + '.'
-            };
+            general: api.cid(''),
+            folder: api.cid({ folder: data.folder }),
+            pub: '.' + data.id,
+            sub: data.folder + '.'
+        };
         return $.when(
             //api.caches.all.remove(keys.folder), //enable to support getAll({folder: folder})
             api.caches.all.remove(keys.general),
@@ -44,12 +44,13 @@ define('io.ox/core/api/pubsub',
      * @private
      * @return {deferred}
      */
-    var dumpKeys = function (api) {
+    /* var dumpKeys = function (api) {
         return $.when(
             api.caches.all.keys().pipe(function (data) { console.log('all', data); }),
             api.caches.get.keys().pipe(function (data) { console.log('get', data); })
         );
     };
+    */
 
     /**
      * gerneralized API for pubsub
@@ -65,7 +66,8 @@ define('io.ox/core/api/pubsub',
              * @return {deferred}
              */
             update: function (data) {
-                return clearCache(this, {id: data.id || '', folder: data.folder || data.entity.folder || ''}).pipe(function () {
+                return clearCache(this, { id: data.id || '', folder: data.folder || data.entity.folder || '' })
+                .then(function () {
                     return http.PUT({
                         module: opt.module,
                         params: {

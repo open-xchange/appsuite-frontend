@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -65,11 +65,15 @@
                     request = tx.objectStore('version').get('version');
                     request.onerror = fail;
                     request.onsuccess = function (e) {
+                        // check version
                         if (!e.target.result || e.target.result.version !== ox.version) {
                             // Clear the filecache
                             tx.objectStore('filecache').clear().onsuccess = initialization.resolve;
+                            if (ox.debug === true) {
+                                console.warn('FileCache: Clearing persistent file cache due to UI update');
+                            }
                             // Save the new version number
-                            tx.objectStore('version').put({name: 'version', version: ox.version});
+                            tx.objectStore('version').put({ name: 'version', version: ox.version });
                             if (request.transaction) {
                                 request.transaction.oncomplete = initialization.resolve;
                             }
@@ -196,7 +200,9 @@
         })();
     }
 
-
+    function badSource(source) {
+        return /throw new Error\("Could not read/.test(source);
+    }
 
     function dirname(filename) {
         return filename.replace(/(?:^|(\/))[^\/]+$/, "$1");
@@ -211,7 +217,7 @@
         if (node) return node.text(css);
         return $('<style type="text/css">' + css + '</style>')
             .attr("data-require-src", name)
-            .insertAfter(selector);
+            .insertBefore(selector);
     }
 
     // Replace the load function of RequireJS with our own, which fetches
@@ -255,23 +261,36 @@
                 return;
             }
 
-            // Try file cache
-            fileCache.retrieve(modulename).done(function (contents) {
-                runCode(modulename, contents);
-                context.completeLoad(modulename);
-                if (_.url.hash('debug-filecache')) {
-                    console.log("CACHE HIT!", modulename);
-                }
-            }).fail(function () {
-                if (_.url.hash('debug-filecache')) {
-                    console.log("CACHE MISS!", modulename);
-                }
+            function handleCacheMiss() {
                 // Append and load in bulk
                 req.nextTick(null, loaded);
                 var next = deps[modulename];
                 if (next && next.length) context.require(next);
                 queue.push(url);
-            });
+            }
+
+            // Try file cache
+            fileCache.retrieve(modulename).then(
+                function hit(contents) {
+                    // bad?
+                    if (badSource(contents)) {
+                        if (_.url.hash('debug-filecache')) console.warn('FileCache: Ignoring ' + modulename);
+                        handleCacheMiss();
+                        return $.Deferred().reject();
+                    }
+                    runCode(modulename, contents);
+                    context.completeLoad(modulename);
+                    if (_.url.hash('debug-filecache')) {
+                        console.log('FileCache: Cache HIT! ' + modulename);
+                    }
+                },
+                function miss() {
+                    if (_.url.hash('debug-filecache')) {
+                        console.log('FileCache: Cache MISS! ' + modulename);
+                    }
+                    handleCacheMiss();
+                }
+            );
 
             function load(module, modulename) {
                  $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), dataType: "text" })
@@ -287,14 +306,15 @@
                                     name = match[2].substr(1, match[2].length -2);
                                 }
                                 if (name) {
-                                    if (_.url.hash('debug-filecache')) {
-                                        console.log("Caching " + name);
+                                    // cache file?
+                                    if (badSource(moduleText)) {
+                                        if (_.url.hash('debug-filecache')) console.warn('FileCache: NOT Caching ' + name);
+                                        return;
                                     }
+                                    if (_.url.hash('debug-filecache')) console.log('FileCache: Caching ' + name);
                                     fileCache.cache(name, moduleText);
-                                } else {
-                                    if (_.url.hash('debug-filecache')) {
-                                        console.log("Couldn't determine name for " + moduleText);
-                                    }
+                                } else if (_.url.hash('debug-filecache')) {
+                                    console.log('FileCache: Could not determine name for ' + moduleText);
                                 }
                             })();
                         });
@@ -315,7 +335,7 @@
     // css plugin
     define("css", {
         load: function (name, parentRequire, load, config) {
-            require(["text!" + name]).done(function (css) {
+            require(["text!" + name], function (css) {
                 var path = config.baseUrl + name;
                 load(insert(path, relativeCSS(dirname(path), css), "#css"));
             });
@@ -339,8 +359,7 @@
     }
 
     function insertLess(file) {
-        return require(['text!themes/' + theme + '/less/' + file.name])
-            .done(function (css) {
+        return require(['text!themes/' + theme + '/less/' + file.name], function (css) {
                 file.node = insert(file.path, css, file.selector, file.node);
             });
     }
@@ -380,8 +399,11 @@
                 favicon: 'favicon.ico',
                 icon57: 'icon57.png',
                 icon72: 'icon72.png',
+                icon76: 'icon76.png',
                 icon114: 'icon114.png',
+                icon120: 'icon120.png',
                 icon144: 'icon144.png',
+                icon152: 'icon152.png',
                 splash460: 'splashscreen_460.jpg',
                 splash920: 'splashscreen_920.jpg',
                 splash1096: 'splashscreen_1096.jpg',
@@ -422,26 +444,33 @@
             lang = language;
             langDef.resolve();
             if (!ox.signin) {
-                require(['io.ox/core/gettext']).done(function (gettext) {
+                require(['io.ox/core/gettext'], function (gettext) {
                     gettext.setLanguage(lang);
                 });
             }
             if (_.isEmpty(callbacks)) return $.when();
             var names = _.keys(callbacks);
             var files = _.map(names, function (n) { return n + '.' + lang; });
-            return require(files).done(function () {
+            return require(files, function () {
                 var args = _.toArray(arguments);
                 _.each(names, function (n, i) { callbacks[n](args[i]); });
             });
         },
         enable: function () {
-            require(['io.ox/core/gettext']).done(function (gt) { gt.enable(); });
+            require(['io.ox/core/gettext'], function (gt) { gt.enable(); });
         },
         load: function (name, parentRequire, load, config) {
             assert(langDef.state !== 'pending', _.printf(
                 'Invalid gettext dependency on %s (before login).', name));
             langDef.done(function () {
-                parentRequire([name + '.' + lang], ox.signin ? wrap : load, error);
+                // use specific language?
+                // example: gettext!io.ox/core!ja_JP
+                var index = name.indexOf('!'), language = lang;
+                if (index !== -1) {
+                    language = name.substr(index + 1);
+                    name = name.substr(0, index);
+                }
+                parentRequire([name + '.' + language], ox.signin ? wrap : load, error);
             });
             function wrap(f) {
                 var f2 = function () { return f.apply(this, arguments); };
@@ -453,7 +482,7 @@
                 load(f2);
             }
             function error() {
-                require(['io.ox/core/gettext']).done(function (gt) {
+                require(['io.ox/core/gettext'], function (gt) {
                     load(gt(name, {
                         nplurals: 2,
                         plural: 'n != 1',

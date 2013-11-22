@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
@@ -19,7 +20,8 @@ define('io.ox/calendar/week/perspective',
      'io.ox/calendar/conflicts/conflictList',
      'io.ox/core/notifications',
      'gettext!io.ox/calendar',
-     'less!io.ox/calendar/week/style.less'], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
+     'less!io.ox/calendar/week/style.less'
+    ], function (View, api, ext, dialogs, detailView, conflictView, notifications, gt) {
 
     'use strict';
 
@@ -32,6 +34,7 @@ define('io.ox/calendar/week/perspective',
         app:            null,   // the app
         view:           null,   // the current view obj
         views:          {},     // containing all views
+        activeElement:  null,   // current focus in perspektive
 
         /**
          * open sidepopup to show appointment
@@ -54,7 +57,7 @@ define('io.ox/calendar/week/perspective',
                         }
                     }
                 },
-                function fail(e) {
+                function fail() {
                     notifications.yell('error', gt('An error occurred. Please try again.'));
                     $('.appointment', self.main).removeClass('opac current');
                 }
@@ -77,7 +80,7 @@ define('io.ox/calendar/week/perspective',
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog({
-                                top: "20%",
+                                top: '20%',
                                 center: false,
                                 container: self.main
                             })
@@ -184,7 +187,7 @@ define('io.ox/calendar/week/perspective',
             // fetch appointments
             var self = this,
                 obj = self.view.getRequestParam();
-            api.getAll(obj, useCache).done(function (list) {
+            return api.getAll(obj, useCache).done(function (list) {
                 self.view.reset(obj.start, list);
             }).fail(function () {
                 notifications.yell('error', gt('An error occurred. Please try again.'));
@@ -217,13 +220,20 @@ define('io.ox/calendar/week/perspective',
          */
         refresh: function (useCache) {
             var self = this;
+            if ($.contains(self.view.el, document.activeElement)) {
+                self.activeElement = $(document.activeElement);
+            }
             this.app.folder.getData().done(function (data) {
                 // update view folder data
                 self.view.folder(data);
                 // save folder data to view and update
-                self.getAppointments(useCache);
-                // refocus pane on update
-                self.view.pane.focus();
+                self.getAppointments(useCache).done(function () {
+                    // refocus pane on update
+                    if (self.activeElement) {
+                        self.activeElement.focus();
+                        self.activeElement = null;
+                    }
+                });
             });
         },
 
@@ -243,7 +253,7 @@ define('io.ox/calendar/week/perspective',
             if (this.views[opt.perspective] === undefined) {
                 this.view = new View({
                     collection: this.collection,
-                    mode: opt.perspective.split(":")[1],
+                    mode: opt.perspective.split(':')[1],
                     refDate: this.app.refDate,
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
@@ -285,9 +295,8 @@ define('io.ox/calendar/week/perspective',
         /**
          * initial rendering of the view
          * @param  {Object} app current application
-         * @param  {Object} opt perspective options
          */
-        render: function (app, opt) {
+        render: function (app) {
 
             var self = this;
 

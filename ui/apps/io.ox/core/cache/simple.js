@@ -5,13 +5,14 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/core/cache/simple', ["io.ox/core/extensions"], function (ext) {
+define('io.ox/core/cache/simple', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -19,8 +20,9 @@ define('io.ox/core/cache/simple', ["io.ox/core/extensions"], function (ext) {
         instances = {};
 
     function resolve(val) {
+        return $.Deferred().resolve(val);
         // $.Deferred().resolve(); wrapped by setTimeout(..., 0)
-        return _.wait(0).then(function () { return val; });
+        // return _.wait(0).then(function () { return val; });
     }
 
     function SimpleStorage(id) {
@@ -81,7 +83,7 @@ define('io.ox/core/cache/simple', ["io.ox/core/extensions"], function (ext) {
         }
     };
 
-    ext.point("io.ox/core/cache/storage").extend(that);
+    ext.point('io.ox/core/cache/storage').extend(that);
 
     return that;
 });

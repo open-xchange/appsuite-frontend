@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2013
- * Mail: info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
  */
@@ -18,20 +18,10 @@ define('plugins/portal/recentfiles/register',
      'io.ox/core/date',
      'gettext!plugins/portal',
      'settings!io.ox/core',
-     'less!plugins/portal/recentfiles/style.less'], function (ext, filesAPI, userAPI, date, gt, settings) {
+     'less!plugins/portal/recentfiles/style.less'
+    ], function (ext, filesAPI, userAPI, date, gt, settings) {
 
     'use strict';
-
-    var humanReadable = function (bytes) {
-        var pos = 0,
-            temp = bytes,
-            suffixes = ['Byte', 'kb', 'mb', 'gb', 'tb', 'pb'];
-        while ((temp / 1024 >= 1) && (pos < suffixes.length - 1)) {
-            temp = temp / 1024;
-            pos += 1;
-        }
-        return Math.round(temp) + " " + suffixes[pos];
-    };
 
     _(['recentfiles', 'myfiles']).each(function (type) {
 
@@ -103,7 +93,7 @@ define('plugins/portal/recentfiles/register',
 
             draw: function (baton) {
                 var popup = this.busy();
-                require(['io.ox/files/list/view-detail'], function (view) {
+                require(['io.ox/files/fluid/view-detail'], function (view) {
                     var obj = filesAPI.reduce(baton.item);
                     filesAPI.get(obj).done(function (data) {
                         popup.idle().append(view.draw(data));

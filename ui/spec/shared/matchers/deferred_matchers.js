@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -14,44 +15,61 @@ if (jasmine) {
 
         toBeDeferred: function () {
             var def = this.actual;
-
-            expect(def.state).toBeDefined();
-            expect(def.done).toBeDefined();
-            expect(def.fail).toBeDefined();
-            expect(def.then).toBeDefined();
-            expect(def.progress).toBeDefined();
-            expect(def.promise).toBeDefined();
-
-            return this.spec.results();
+            expect(def.promise).toBeFunction();
+            return true;
         },
         toBePromise: function () {
             var def = this.actual;
             deferredMatchers.toBeDeferred.call(this);
             expect(def.reject).not.toBeDefined();
             expect(def.resolve).not.toBeDefined();
-
-            return this.spec.results();
+            return true;
         },
         toResolve: function () {
-            var spy = sinon.spy(),
-                actual = this.actual;
-
-            this.spec.after(function() {
-                expect(spy).toHaveBeenCalledOnce();
-            });
-
-            this.actual.done(spy);
+            var actual = this.actual;
+            waitsFor(function () {
+                return actual.state() === 'resolved';
+            }, 'Deferred object never resolved', 1000);
             return true;
         },
         toReject: function () {
-            var spy = sinon.spy(),
-                actual = this.actual;
+            var actual = this.actual;
+            waitsFor(function () {
+                return actual.state() === 'rejected';
+            }, 'Deferred object never rejected', 1000);
+            return true;
+        },
+        toStayPending: function () {
+            var actual = this.actual;
+            waitsFor(function () {
+                return actual.state() === 'pending';
+            }, 'Deferred object not pending anymore', 1000);
+            return true;
+        },
+        toResolveWith: function (expected) {
+            var actual = this.actual,
+                isNot = this.isNot,
+                callback = expected instanceof Function ? _.bind(expected, this) : undefined;
 
-            this.spec.after(function() {
-                expect(spy).toHaveBeenCalledOnce();
+            waitsFor(function () {
+                return actual.state() === 'resolved';
+            }, 'Deferred object never resolved', 1000);
+
+            runs(function () {
+                actual.done(function (result) {
+                    if (callback) {
+                        //to fail use expect() within callback body or return false
+                        expect(callback(result)).not.toEqual(false);
+                        //notice not useful usage of 'isNot'
+                        expect(isNot).not.toBeTruthy();
+                    } else if (isNot) {
+                        expect(result).not.toEqual(expected);
+                    } else {
+                        expect(result).toEqual(expected);
+                    }
+                });
             });
-
-            this.actual.fail(spy);
+            this.isNot = false;
             return true;
         }
     };
@@ -59,4 +77,4 @@ if (jasmine) {
     beforeEach(function () {
         this.addMatchers(deferredMatchers);
     });
-};
+}

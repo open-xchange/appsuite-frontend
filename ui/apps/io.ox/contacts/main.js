@@ -1,35 +1,34 @@
 /**
- *
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  *
  */
 
-define("io.ox/contacts/main",
-    ["io.ox/contacts/util",
-     "io.ox/contacts/api",
-     "io.ox/core/tk/vgrid",
-     "io.ox/help/hints",
-     "io.ox/contacts/view-detail",
+define('io.ox/contacts/main',
+    ['io.ox/contacts/util',
+     'io.ox/contacts/api',
+     'io.ox/core/tk/vgrid',
+     'io.ox/help/hints',
+     'io.ox/contacts/view-detail',
      'io.ox/core/tk/dropdown-options',
-     "io.ox/core/extensions",
-     "io.ox/core/extPatterns/actions",
-     "io.ox/core/commons",
-     "gettext!io.ox/contacts",
-     "settings!io.ox/contacts",
-     "io.ox/core/api/folder",
-     "less!io.ox/contacts/style.less"
+     'io.ox/core/extensions',
+     'io.ox/core/extPatterns/actions',
+     'io.ox/core/commons',
+     'gettext!io.ox/contacts',
+     'settings!io.ox/contacts',
+     'io.ox/core/api/folder',
+     'less!io.ox/contacts/style.less'
     ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, gt, settings, folderAPI) {
 
-    "use strict";
+    'use strict';
 
     // application object
     var app = ox.ui.createApp({
@@ -61,7 +60,7 @@ define("io.ox/contacts/main",
         app.setWindow(win);
         app.settings = settings;
 
-        function thumbClick(e) {
+        function thumbClick() {
             var text = $(this).data('text');
             if (text) grid.scrollToLabelText(text, /* silent? */ _.device('small'));
         }
@@ -145,7 +144,7 @@ define("io.ox/contacts/main",
         grid = new VGrid(gridContainer, {
             settings: settings,
             swipeRightHandler: swipeRightHandler,
-            showToggle: true//_.device('smartphone') ? false: true
+            showToggle: true
         });
 
         // helper to remove button from grid
@@ -207,7 +206,7 @@ define("io.ox/contacts/main",
         grid.addLabelTemplate({
             build: function () {
             },
-            set: function (data, fields, index) {
+            set: function (data) {
                 this.text(_.noI18n(getLabel(data)));
             }
         });
@@ -263,7 +262,7 @@ define("io.ox/contacts/main",
 
         drawFail = function (obj) {
             right.idle().empty().append(
-                $.fail(gt("Couldn't load contact data."), function () {
+                $.fail(gt('Couldn\'t load contact data.'), function () {
                     showContact(obj);
                 })
             );
@@ -372,14 +371,6 @@ define("io.ox/contacts/main",
         button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
                 .append('<i class="icon-gear">');
         win.nodes.search.find('.search-query-container').after(button);
-
-        //add dropdown menue
-        var dropdown = dropdownOptions({
-            id: 'contacts.search',
-            anchor: button,
-            defaults: data,
-            settings: settings
-        });
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);

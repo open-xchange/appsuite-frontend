@@ -1,11 +1,12 @@
 /**
- * All content on this website (including text, images, source code and any
- * other original works), unless otherwise noted, is licensed under a Creative
- * Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011 Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
@@ -96,14 +97,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             return $(el).find('[data-test-id]');
         },
 
-        checkForPosition = function (array, target) {
-            var position;
-            _.each(array, function (val, index) {
-                if (_.isEqual(val, target)) {
-                    position = index;
-                }
-            });
-            return position;
+        setFocus = function (el, type) {
+            $(el).find('[data-' + type + '-id]').last().find('[tabindex="1"]').first().focus();
         },
 
         renderWarningForEmptyTests = function (node) {
@@ -112,19 +107,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         },
 
         prepareFolderForDisplay = function (folder) {
-            var arrayOfParts = folder.split("/");
+            var arrayOfParts = folder.split('/');
             arrayOfParts.shift();
-            return arrayOfParts.join("/");
+            return arrayOfParts.join('/');
         },
 
         AccountDetailView = Backbone.View.extend({
-            tagName: "div",
-            className: "io-ox-mailfilter-edit",
+            tagName: 'div',
+            className: 'io-ox-mailfilter-edit',
             _modelBinder: undefined,
-            initialize: function (options) {
-
-//                Backbone.Validation.bind(this, {selector: 'name', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
-            },
+            initialize: function () {},
             render: function () {
 
                 var baton = ext.Baton({ model: this.model, view: this });
@@ -190,7 +182,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             onSave: function () {
                 var self = this;
                 this.model.save().then(function (id) {
-                    if (id) {
+                    //first rule gets 0
+                    if (!_.isUndefined(id) && !_.isNull(id)) {
                         self.model.set('id', id);
                         self.options.listView.collection.add(self.model);
                     }
@@ -201,7 +194,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             onChangeValueExtern: function (e) {
                 e.preventDefault();
                 var node = $(e.target),
-                    data = node.data();
+                    data = node.data(),
+                    valueType = data.test ? 'test' : 'action';
                 if (data.target) {
                     var arrayOfTests = this.model.get('test');
                     arrayOfTests.id = data.value;
@@ -232,6 +226,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
                 this.render();
 
+                setFocus(this.el, valueType);
             },
 
             onChangeValue: function (e) {
@@ -243,7 +238,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     list = link.closest('li'),
                     type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
-                    testAction = list.attr('data-action'),
 
                     testArray =  this.model.get('test'),
                     translatedValue = type === 'size' ? sizeValues[value] : containsValues[value];
@@ -257,6 +251,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
                 this.model.set('test', testArray);
 
+                link.focus();
             },
 
             onChangeValueAction: function (e) {
@@ -266,7 +261,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     link = node.closest('.action').find('a.dropdown-toggle'),
 
                     list = link.closest('li'),
-                    type = list.attr('data-type'),
                     actionID = list.attr('data-action-id'),
                     actionsArray =  this.model.get('actioncmds'),
                     translatedValue = flagValues[value];
@@ -276,6 +270,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 actionsArray[actionID].flags = [value];
                 this.model.set('actioncmds', actionsArray);
 
+                link.focus();
             },
 
             onChangeTextTest: function (e) {
@@ -359,13 +354,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
                 self.dialog.getPopup().hide();
 
-                require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
+                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                     var label = gt('Select folder'),
-                        dialog = new dialogs.ModalDialog({ easyOut: true })
+                        dialog = new dialogs.ModalDialog({ easyOut: true, tabTrap: true })
                         .header($('<h4>').text(label))
-                        .addPrimaryButton("select", label)
-                        .addButton("cancel", gt("Cancel"));
+                        .addPrimaryButton('select', label, 'select', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                     dialog.getBody().css({ height: '250px' });
                     var tree = new views.FolderTree(dialog.getBody(), {
                             type: 'mail'
@@ -392,15 +387,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             tree = dialog = null;
                         });
                         self.dialog.getPopup().show();
+                        self.$el.find('[data-action-id="' + actionID + '"] .folderselect').focus();
                     });
                 });
             },
 
             onChangeColor: function (e) {
                 e.preventDefault();
-                var self = this,
-                    list = $(e.currentTarget).closest('li[data-action-id]'),
-                    type = list.attr('data-type'),
+                var list = $(e.currentTarget).closest('li[data-action-id]'),
                     actionID = list.attr('data-action-id'),
                     colorValue = list.find('div.flag').attr('data-color-value'),
                     actionArray =  this.model.get('actioncmds');
@@ -408,6 +402,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 actionArray[actionID].flags[0] = '$cl_' + colorValue;
                 this.model.set('actioncmds', actionArray);
                 this.render();
+
+                this.$el.find('[data-action-id="' + actionID + '"] .dropdown-toggle').focus();
             }
 
 
@@ -421,8 +417,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             var listTests = $('<ol class="widget-list tests">'),
                 listActions = $('<ol class="widget-list actions">'),
-                appliedTest = baton.model.get('test'),
-                pullRight = $('<div>').addClass('pull-right');
+                appliedTest = baton.model.get('test');
 
             if (appliedTest.tests) {
                 appliedTest = appliedTest.tests;
@@ -464,7 +459,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                         $('<div>').append(
                                             elements.drawOptions(test.comparison, containsValues),
                                             elements.drawInputfieldTest(test.values[0])
-
                                         )
                                     ),
 
@@ -551,7 +545,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                         } else {
                             listActions.append($('<li>').addClass('filter-settings-view').attr({'data-action-id': num, 'data-type': 'flags'}).text(actionsTranslations.tag).append(
                                     $('<div>').addClass('pull-right').append(
-                                        elements.drawInputfieldAction(action.flags[0].replace(/^\$+/, "")),
+                                        elements.drawInputfieldAction(action.flags[0].replace(/^\$+/, '')),
                                         elements.drawDeleteButton('action')
                                     )
                           ));
@@ -567,8 +561,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 }
             });
 
-            var headlineTest = $('<legend>').addClass("sectiontitle expertmode conditions").text(gt('Conditions')),
-                headlineActions = $('<legend>').addClass("sectiontitle expertmode actions").text(gt('Actions')),
+            var headlineTest = $('<legend>').addClass('sectiontitle expertmode conditions').text(gt('Conditions')),
+                headlineActions = $('<legend>').addClass('sectiontitle expertmode actions').text(gt('Actions')),
                 notification = $('<div>');
 
             if (_.isEqual(appliedTest[0], {id : 'true'})) {
@@ -598,7 +592,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         index: 100,
         fluid: true,
         label: gt('Rule name'),
-        control: '<input type="text" class="span7" name="rulename">',
+        control: '<input type="text" class="span7" name="rulename" tabindex="1">',
         attribute: 'rulename'
     }));
 
@@ -632,7 +626,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         draw: function (baton) {
 
             var checkStopAction = function (e) {
-                var currentState = $(e.currentTarget).find('[type="checkbox"]').attr('checked'),
+                var currentState = $(e.currentTarget).find('[type="checkbox"]').prop('checked'),
                     arrayOfActions = baton.model.get('actioncmds');
 
                 function getCurrentPosition(array) {
@@ -658,8 +652,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
                 target = baton.view.dialog.getFooter(),
-                arrayOfActions = baton.model.get('actioncmds'),
-                checkbox;
+                arrayOfActions = baton.model.get('actioncmds');
 
             function checkForStopAction(array) {
                 var stopAction;
@@ -667,7 +660,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     return true;
                 }
 
-                _.each(array, function (single, id) {
+                _.each(array, function (single) {
                     if (single.id === 'stop') {
                         stopAction = false;
                     }

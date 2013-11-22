@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -16,7 +17,8 @@ define('plugins/portal/flickr/register',
      'io.ox/portal/feed',
      'io.ox/core/tk/dialogs',
      'settings!io.ox/portal',
-     'gettext!plugins/portal'], function (ext, Feed, dialogs, settings, gt) {
+     'gettext!plugins/portal'
+    ], function (ext, Feed, dialogs, settings, gt) {
 
     'use strict';
 
@@ -39,7 +41,7 @@ define('plugins/portal/flickr/register',
 
         title: 'Flickr',
 
-        action: function (baton) {
+        action: function () {
             window.open('http://www.flickr.com/', 'flickr');
         },
 
@@ -53,7 +55,7 @@ define('plugins/portal/flickr/register',
                     url = '' + (apiUrl[props.method] || '') + encodeURIComponent(props.query) + '&jsoncallback=';
                     baton.feed = new Feed({ url: url });
                     baton.feed.process = function (data) {
-                        return data && data.stat === "ok" ? data.photos : { error: gt('Could not load data') };
+                        return data && data.stat === 'ok' ? data.photos : { error: gt('Could not load data') };
                     };
                 }
             }
@@ -147,8 +149,7 @@ define('plugins/portal/flickr/register',
 
             return function (baton) {
 
-                var data = baton.data,
-                    node = $('<div class="portal-feed">'),
+                var node = $('<div class="portal-feed">'),
                     flickrUrl = '';
 
                 if (baton.model.get('props').method === 'flickr.photos.search') {
@@ -208,10 +209,9 @@ define('plugins/portal/flickr/register',
                 $('<option>').attr('value', 'flickr.people.getPublicPhotos').text(gt('flickr.people.getPublicPhotos'))
             ),
             $error = $('<div>').addClass('alert alert-error').hide(),
-            that = this,
             props = model.get('props') || {};
 
-        dialog.header($("<h4>").text(gt('Edit Flickr photo stream')))
+        dialog.header($('<h4>').text(gt('Edit Flickr photo stream')))
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('Search')),
@@ -235,7 +235,7 @@ define('plugins/portal/flickr/register',
             }
         });
 
-        dialog.on('save', function (e) {
+        dialog.on('save', function () {
 
             $error.hide();
 

@@ -1,7 +1,8 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
@@ -12,18 +13,17 @@
  */
 
 define('io.ox/core/pubsub/settings/pane',
-        ['io.ox/core/extensions',
-         'io.ox/core/pubsub/model',
-         'io.ox/backbone/views',
-         'io.ox/core/api/folder',
-         'io.ox/core/tk/dialogs',
-         'io.ox/core/notifications',
-         'io.ox/core/capabilities',
-         'settings!io.ox/core/pubsub',
-         'gettext!io.ox/core/pubsub',
-         'less!io.ox/core/pubsub/style.less'
-        ],
-         function (ext, model, views, folderAPI, dialogs, notifications, capabilities, settings, gt) {
+    ['io.ox/core/extensions',
+     'io.ox/core/pubsub/model',
+     'io.ox/backbone/views',
+     'io.ox/core/api/folder',
+     'io.ox/core/tk/dialogs',
+     'io.ox/core/notifications',
+     'io.ox/core/capabilities',
+     'settings!io.ox/core/pubsub',
+     'gettext!io.ox/core/pubsub',
+     'less!io.ox/core/pubsub/style.less'
+    ], function (ext, model, views, folderAPI, dialogs, notifications, capabilities, settings, gt) {
 
     'use strict';
 
@@ -35,7 +35,7 @@ define('io.ox/core/pubsub/settings/pane',
         e.preventDefault();
         var cid = target.attr('data-cid'), obj = _.cid(cid);
         popup.busy();
-        require(['io.ox/files/api', 'io.ox/files/list/view-detail'], function (api, view) {
+        require(['io.ox/files/api', 'io.ox/files/fluid/view-detail'], function (api, view) {
             api.get(obj).done(function (data) {
                 popup.idle().append(view.draw(data));
             });
@@ -140,16 +140,6 @@ define('io.ox/core/pubsub/settings/pane',
         return folderAPI.getBreadcrumb(folder, options);
     }
 
-    function drawDisplayName(name, url) {
-        var nameNode = $('<span>').text(name);
-
-        if (!url) {
-            return nameNode.addClass('disabled');
-        }
-
-        return nameNode.after(' (', $('<a>', { href: url, target: '_blank', tabindex: 1 }).text(gt('Link')), ')');
-    }
-
     var getSiteNameRegex = /^http[^?]+\/(\w+)\?/,
         getShortUrlRegex = /\?secret=.+$/;
 
@@ -183,12 +173,12 @@ define('io.ox/core/pubsub/settings/pane',
     }
 
     isDestructiveRefresh.needsWarning = {
-        "com.openexchange.subscribe.crawler.google.calendar": true
+        'com.openexchange.subscribe.crawler.google.calendar': true
     };
 
     function refreshWarning(data) {
         if (isDestructiveRefresh(data)) {
-            return $('<span class="text-warning"></span>').text(gt("Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten"));
+            return $('<span class="text-warning"></span>').text(gt('Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten'));
         }
         return $();
     }
@@ -208,7 +198,7 @@ define('io.ox/core/pubsub/settings/pane',
                 // this is a subscription
                 dynamicAction = $('<a href="#" tabindex="1" class="action" data-action="refresh">').text(gt('Refresh'));
                 if (isDestructiveRefresh(data)) {
-                    dynamicAction.addClass("text-error");
+                    dynamicAction.addClass('text-error');
                 }
             } else if (data.source && (baton.model.refreshState() !== 'pending')) {
                 // this is a subscription and refresh should be disabled
@@ -279,7 +269,7 @@ define('io.ox/core/pubsub/settings/pane',
             var model = this.model;
             ev.preventDefault();
 
-            model.set('enabled', !model.get('enabled'), {validate: true}).save().fail(function (res) {
+            model.set('enabled', !model.get('enabled'), {validate: true}).save().fail(function () {
                 model.set('enabled', !model.get('enabled'), {validate: true});
             });
             this.render();
@@ -307,7 +297,7 @@ define('io.ox/core/pubsub/settings/pane',
             });
             baton.view.render();
         },
-        onRemove: function (ev) {
+        onRemove: function () {
             this.model.destroy();
         },
         close: function () {
@@ -342,7 +332,7 @@ define('io.ox/core/pubsub/settings/pane',
             );
         });
 
-        collection.on('add', function (model, collection, options) {
+        collection.on('add', function (model, collection) {
             var filteredIndex = _.chain(collection.forFolder(filter))
                 .map(function (e) { return e.id; })
                 .indexOf(model.id)
@@ -362,7 +352,7 @@ define('io.ox/core/pubsub/settings/pane',
 
         // handle empty lists
 
-        collection.on('remove', function (model, collection, options) {
+        collection.on('remove', function (model, collection) {
             if (collection.length === 0) {
                 addHint();
             }

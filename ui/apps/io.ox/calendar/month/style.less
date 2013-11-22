@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -17,22 +18,27 @@
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
-    .daylabel {
+    .toolbar {
 
-        width: 100%;
-        height: 24px;
-        left: 0;
-        font-family: @lightFontFamily;
-        font-size: 13px;
-        line-height: 24px;
-        z-index: 3;
+        .info {
+            left: 20px;
+        }
+
+    }
+
+    .footer-container {
+
         border-bottom: 1px solid #ccc;
 
-        .weekday {
-            width: 100/8%;
-            display: inline-block;
-            text-align: center;
-            .ellipsis;
+        .footer {
+
+            left: 0;
+
+            .weekday {
+                width: 100/8%;
+                text-align: center;
+            }
+
         }
 
     }
@@ -40,7 +46,7 @@
     .scrollpane {
 
         position: absolute;
-        top: @calendarToolbarHeight + 27;
+        top: @calendarToolbarHeight + @weekviewFooterHeight;
         right: 0;
         bottom: 0;
         left: 0;
@@ -54,29 +60,29 @@
 
             .week-info {
 
-                font-family: @lightFontFamily;
-                font-size: 22px;
-                line-height: 1.0em;
-                color: #555;
                 position: absolute;
-                right: 0px;
+                right: 0;
                 width: 100/8%; /* fix for different round functions */
                 height: 100/6%;
                 padding: 13px 13px 13px 1px;
+                font-size: 11px;
+                line-height: 1.0em;
                 text-align: right;
-                .ellipsis;
+                color: #888;
+                .ellipsis();
+
+                .month-name {
+                    font-family: @lightFontFamily;
+                    font-size: 18px;
+                    color: @linkColor;
+                }
 
                 .cw {
                     position: absolute;
                     right: 13px;
                     bottom: 5px;
                     z-index: 1;
-                    text-align: right;
-                    font-size: 11px;
-                    line-height: 1em;
-                    font-family: Arial, Helvetica, sans-serif;
                 }
-
             }
 
             .day {
@@ -102,8 +108,8 @@
                     position: absolute;
                     color: #aaa;
                     text-align: right;
-                    right: 0px;
-                    bottom: 0px;
+                    right: 0;
+                    bottom: 0;
                     padding: 5px 7px;
                     z-index: 1;
                     font-size: 11px;
@@ -204,7 +210,7 @@
             width: 100%;
             font-size: 12px;
             color: white;
-            padding: 2px 0px;
+            padding: 2px 0;
             .ellipsis;
         }
 

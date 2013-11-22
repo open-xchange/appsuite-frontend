@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -35,13 +35,10 @@ define('io.ox/mail/main',
 
     'use strict';
 
-    var draftFolderId = settings.get('defaultFolder/drafts'),
-
-        hToolbarOptions = function (e) {
+    var hToolbarOptions = function (e) {
             e.preventDefault();
             var option = $(this).attr('data-option'),
-                grid = e.data.grid,
-                folder;
+                grid = e.data.grid;
             if (/^(603|607|610|102|thread|from-to)$/.test(option)) {
                 grid.prop('sort', option).refresh();
                 // sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
@@ -64,10 +61,8 @@ define('io.ox/mail/main',
         // grid
         grid,
         // nodes
-        audio,
         left,
-        right,
-        scrollpane;
+        right;
 
     // for saving the persistent settings
     // app.updateGridSettings = function (type, value) {
@@ -80,7 +75,7 @@ define('io.ox/mail/main',
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
-            title: "Inbox",
+            title: 'Inbox',
             search: true
         });
 
@@ -205,11 +200,12 @@ define('io.ox/mail/main',
         };
 
         grid = new VGrid(left, options);
+        commons.addPropertyCaching(grid, {props: ['sort', 'order'], keyprop: 'folder'});
 
         // tail click
         left.on('click', '.vgrid-cell.tail', function (e) {
             e.preventDefault();
-            grid.prop('sort', 610).refresh();
+            grid.prop('sort', '610').refresh();
         });
 
         // add template
@@ -249,7 +245,8 @@ define('io.ox/mail/main',
         function drawGridOptions(e, type) {
             var ul = grid.getToolbar().find('ul.dropdown-menu'),
                 threadView = settings.get('threadView'),
-                isInbox = account.is('inbox', grid.prop('folder')),
+                folder = grid.prop('folder'),
+                isInbox = account.is('inbox', folder),
                 isOn = threadView === 'on' || (threadView === 'inbox' && isInbox),
                 //set current or default values
                 target = {
@@ -261,19 +258,20 @@ define('io.ox/mail/main',
             //reset properties on folder change
             if (type === 'folder') {
                 target = {
-                    sort: sortSettings.sort,
-                    order: sortSettings.order,
+                    //using last state of sort/order of folder
+                    sort: grid.propcache('sort', sortSettings.sort),
+                    order: grid.propcache('order', sortSettings.order),
                     unread: sortSettings.unread
                 };
             }
 
-            // some auto toggling
-            if (target.sort === 'thread' && !isOn) {
-                target.sort = '610';
-            } //jump back only if thread was the original setting
-            else if (target.sort === '610' && type === 'folder' && isOn && sortSettings.sort === 'thread') {
+            //jump back only if thread was the original setting
+            if (target.sort === '610' && type === 'folder' && isOn && sortSettings.sort === 'thread') {
                 target.sort = 'thread';
             }
+
+            //adjusts sort property for invalid values
+            target.sort = adjustSort(target.sort, folder);
 
             //update grid
             grid.prop('sort', target.sort)
@@ -320,7 +318,12 @@ define('io.ox/mail/main',
                 account.is('sent|drafts', props.folder) ? gt('To') : gt('From')
             );
             // unread
-            dropdown.find('.icon-envelope')[props.unread ? 'show' : 'hide']();
+            if (props.unread) {
+                // some browsers append style="display: block;" on this inline element. See bug 28956
+                dropdown.find('.icon-envelope').css('display', '');
+            } else {
+                dropdown.find('.icon-envelope').hide();
+            }
             // order
             var opacity = [1, 0.4][props.order === 'desc' ? 'slice' : 'reverse']();
             dropdown.find('.icon-arrow-down').css('opacity', opacity[0]).end()
@@ -464,17 +467,29 @@ define('io.ox/mail/main',
             });
         }
 
+        //adjusts sort property for invalid values (potential workaround for 28096)
+        function adjustSort(sort, folder) {
+            var threadView = settings.get('threadView'),
+                isInbox = account.is('inbox', folder),
+                isOn = threadView === 'on' || (threadView === 'inbox' && isInbox);
+            return sort === 'thread' && !isOn ? '610' : sort;
+        }
+
         grid.setAllRequest(function () {
 
-            var sort = this.prop('sort'),
+            var call,
                 unread = this.prop('unread'),
-                call = sort === 'thread' ? 'getAllThreads' : 'getAll',
                 options = {
                     folder: this.prop('folder'),
                     max: this.option('max'),
                     order: this.prop('order'),
-                    sort: sort
+                    sort: this.prop('sort')
                 };
+
+            //adjust invalid sort values
+            options.sort = adjustSort(options.sort, options.folder);
+            this.prop('sort', options.sort);
+            call = options.sort === 'thread' ? 'getAllThreads' : 'getAll';
 
             return api[call](options, 'auto').then(function (response) {
                 var data = response.data || response;
@@ -495,12 +510,15 @@ define('io.ox/mail/main',
         });
 
         grid.setListRequest(function (ids) {
-            var sort = this.prop('sort');
+            var sort = this.prop('sort'),
+                folder = this.prop('folder');
+            //adjust invalid sort values
+            sort = adjustSort(sort, folder);
+            this.prop('sort', sort);
             return api[sort === 'thread' ? 'getThreads' : 'getList'](ids);
         });
 
         grid.on('change:prop:unread', function (e, value) {
-            var state = grid.prop('unread');
             if (value === true) {
                 // turn on
                 grid.prop('unread', true);
@@ -535,11 +553,11 @@ define('io.ox/mail/main',
 
             // add label template
             grid.addLabelTemplate(tmpl.thread);
-            grid.requiresLabel = function (i, data, current) {
+            grid.requiresLabel = function (i) {
                 return openThreads[i] !== undefined && grid.prop('sort') === 'thread';
             };
 
-            function refresh(list, index) {
+            function refresh() {
                 grid.repaintLabels().done(function () {
                     grid.repaint();
                 });
@@ -672,7 +690,7 @@ define('io.ox/mail/main',
         app.showMail = showMail = function (obj) {
 
             // which mode?
-            if (grid.getMode() === "all" && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
+            if (grid.getMode() === 'all' && grid.prop('sort') === 'thread' && !isInOpenThreadSummary(obj)) {
                 // get thread
                 var thread = api.getThread(obj),
                     baton = ext.Baton({ data: thread, app: app }),
@@ -795,8 +813,8 @@ define('io.ox/mail/main',
 
         if (!_.isEmpty(app.queues)) {
             // drop zone
-            var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
-            win.on("show", dropZone.include).on('hide', dropZone.remove);
+            var dropZone = new dnd.UploadZone({ ref: 'io.ox/mail/dnd/actions' }, app);
+            win.on('show', dropZone.include).on('hide', dropZone.remove);
         }
 
         //if viewSetting ins changed redraw detailviews and grid
@@ -804,11 +822,27 @@ define('io.ox/mail/main',
             grid.selection.retrigger(true);//to refresh detailviews and grid
         });
 
+        //update trash after mail is deleted
+        folderAPI.on('delete:mail', function () {
+            var deletedId = arguments[1].id; //gets the id of the deleted folder
+
+            _(account.getFoldersByType('trash')).each(function (folder) {
+                //select appropriate trash folder
+                if (account.parseAccountId(folder, true) === account.parseAccountId(deletedId, true)) {
+                    folderAPI.getSubFolders({folder: folder, cache: false}).done(function () {
+                        //refresh folder tree
+                        folderAPI.trigger('refresh');
+                    });
+                }
+            });
+        });
+
         // search
         (function () {
 
             ext.point('io.ox/mail/search/defaults').extend({
                 from: true,
+                to: true,
                 cc: true,
                 subject: true
             });
@@ -821,7 +855,7 @@ define('io.ox/mail/main',
                 text: true
             });
 
-            var translations = { from: gt('From'), to: gt('To'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
+            var translations = { from: gt('Sender'), to: gt('Recipient'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
                 checkboxes = ext.point('io.ox/mail/search/checkboxes').options(),
                 defaults = ext.point('io.ox/mail/search/defaults').options(),
                 data = {}, button;
@@ -836,13 +870,14 @@ define('io.ox/mail/main',
                     };
                 }
             });
+
             //add dropdown button
             button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
                     .append('<i class="icon-gear">');
             win.nodes.search.find('.search-query-container').after(button);
 
             //add dropdown menue
-            var dropdown = dropdownOptions({
+            dropdownOptions({
                 id: 'mail.search',
                 anchor: button,
                 defaults: data,
@@ -859,12 +894,10 @@ define('io.ox/mail/main',
         win.on('show:initial', grid.focus);
 
         // Push mail
-        if (require("io.ox/core/capabilities").has("rt lab:pushMail")) {
-            require(["io.ox/realtime/events"], function (rtEvents) {
-                rtEvents.on("mail:new", function (data) {
-                    //if (data.folder === "default0/INBOX") {
+        if (require('io.ox/core/capabilities').has('rt lab:pushMail')) {
+            require(['io.ox/realtime/events'], function (rtEvents) {
+                rtEvents.on('mail:new', function () {
                     api.refresh();
-                    //}
                 });
             });
         }

@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -52,8 +53,7 @@ define('io.ox/mail/guidance/main',
             var data = baton.data,
                 total = data.total,
                 text,
-                ul,
-                link = $();
+                ul;
 
             if (total === 0) {
                 text = gt('No mails');
@@ -79,13 +79,13 @@ define('io.ox/mail/guidance/main',
 
                     // drop-down
                     $('<span class="dropdown">').append(
-                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1" >').text(gt('Folder actions')),
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').text(gt('Folder actions')),
                         ul = $('<ul class="dropdown-menu compact" role="menu">')
                     )
                 )
             );
 
-            ext.point('io.ox/mail/folderview/sidepanel/toolbar/options').invoke('draw', ul, baton);
+            ext.point('io.ox/mail/folderview/sidepanel/context-menu').invoke('draw', ul, baton);
         }
     });
 
@@ -95,21 +95,22 @@ define('io.ox/mail/guidance/main',
         ext.point('io.ox/mail/guidance').extend({
             id: 'folder-statistic-help',
             index: INDEX += 100,
-            draw: function (baton) {
+            draw: function () {
 
-                var topics = [
-                    [gt.pgettext('help', 'The E-Mail Components'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.gui.html'],
-                    [gt.pgettext('help', 'Managing E-Mail messages'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.manage.html'],
-                    [gt.pgettext('help', 'External E-Mail Accounts'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.externalaccounts.html'],
-                    [gt.pgettext('help', 'E-Mail Settings'), 'http://localhost/appsuite/help/de_DE/ox.appsuite.user.sect.email.settings.html']
-                ];
+                var helpDir = 'help/' + ox.language + '/',
+                    topics = [
+                        [gt.pgettext('help', 'The E-Mail Components'), 'ox.appsuite.user.sect.email.gui.html'],
+                        [gt.pgettext('help', 'Managing E-Mail messages'), 'ox.appsuite.user.sect.email.manage.html'],
+                        [gt.pgettext('help', 'External E-Mail Accounts'), 'ox.appsuite.user.sect.email.externalaccounts.html'],
+                        [gt.pgettext('help', 'E-Mail Settings'), 'ox.appsuite.user.sect.email.settings.html']
+                    ];
 
                 this.append(
                     $('<h2>').text(gt('Related articles')),
                     $('<section>').append(
                         _(topics).map(function (pair) {
                             return $('<div>').append(
-                                $('<a>', { href: pair[1], target: 'help' }).text(pair[0])
+                                $('<a>', { href: helpDir + pair[1], target: 'help' }).text(pair[0])
                             );
                         })
                     )
@@ -126,7 +127,7 @@ define('io.ox/mail/guidance/main',
     // ext.point('io.ox/mail/guidance').extend({
     //     id: 'upsell',
     //     index: INDEX += 100,
-    //     draw: function (baton) {
+    //     draw: function () {
 
     //         $('head').append(
     //             $('<link href="http://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">')

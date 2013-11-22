@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -14,22 +14,25 @@
 
 define('plugins/portal/mail/register',
     ['io.ox/core/extensions',
-     'io.ox/core/strings',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/date',
      'io.ox/core/api/account',
      'io.ox/portal/widgets',
-     'gettext!plugins/portal'], function (ext, strings, api, util, date, accountAPI, portalWidgets, gt) {
+     'gettext!plugins/portal'
+    ], function (ext, api, util, date, accountAPI, portalWidgets, gt) {
 
     'use strict';
 
+    // helper to remember tracked mails
+    var trackedMails = [];
+
     ext.point('io.ox/portal/widget/mail').extend({
 
-        title: gt("Inbox"),
+        title: gt('Inbox'),
 
-        initialize: function (baton) {
-            api.on('update create delete', function (event, element) {
+        initialize: function () {
+            api.on('update create delete', function () {
                 require(['io.ox/portal/main'], function (portal) {//refresh portal
                     var portalApp = portal.getApp(),
                         portalModel = portalApp.getWidgetCollection()._byId.mail_0;
@@ -42,15 +45,16 @@ define('plugins/portal/mail/register',
             });
         },
 
-        action: function (baton) {
+        action: function () {
             ox.launch('io.ox/mail/main', { folder: api.getDefaultFolder() });
         },
 
         load: function (baton) {
+            var LIMIT = _.device('small') ? 5 : 10;
             return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
                 var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder();
-                return api.getAll({ folder:  folderName, limit: 10 }, false).pipe(function (mails) {
-                    return api.getList(mails.slice(0, 10)).done(function (data) {
+                return api.getAll({ folder:  folderName, limit: LIMIT }, false).pipe(function (mails) {
+                    return api.getList(mails).done(function (data) {
                         baton.data = data;
                     });
                 });
@@ -58,25 +62,49 @@ define('plugins/portal/mail/register',
         },
 
         preview: function (baton) {
-
             var $content = $('<div class="content">');
-
+            var updater = function () {
+                require(['io.ox/portal/main'], function (portal) {
+                    var portalApp = portal.getApp(),
+                    portalModel = portalApp.getWidgetCollection()._byId.mail_0;
+                    if (portalModel) {
+                        portalApp.refreshWidget(portalModel, 0);
+                    }
+                });
+            };
             // remove deleted mails
             var list = _(baton.data).filter(function (obj) {
                 return !util.isDeleted(obj);
             });
 
-            var numOfItems = _.device('small') ? 5 : 15;
+            // unregister all old update handlers in this namespace
+            _(trackedMails).each(function (ecid) {
+                api.off('update:' + ecid + '.portalTile');
+            });
+            // reset list
+            trackedMails = [];
 
             if (list && list.length) {
                 $content.append(
-                    _(list.slice(0, numOfItems)).map(function (mail) {
+                    _(list).map(function (mail) {
+
+                        var ecid = _.ecid(mail);
+                        // store tracked ecids for unregistering
+                        trackedMails.push(ecid);
+                        // track updates for the mail
+                        api.on('update:' + ecid + '.portalTitle', updater);
+
                         var received = new date.Local(mail.received_date).format(date.DATE);
                         return $('<div class="item">')
                             .data('item', mail)
                             .append(
+                                (function () {
+                                    if ((mail.flags & 32) === 0) {
+                                        return $('<i class="icon-circle new-item accent">');
+                                    }
+                                })(),
                                 $('<span class="bold">').text(_.noI18n(util.getDisplayName(mail.from[0]))), $.txt(' '),
-                                $('<span class="normal">').text(_.noI18n(strings.shorten(mail.subject, 50))), $.txt(' '),
+                                $('<span class="normal">').text(_.noI18n(_.ellipsis(mail.subject, {max: 50}))), $.txt(' '),
                                 $('<span class="accent">').text(_.noI18n(received))
                             );
                     })
@@ -146,9 +174,9 @@ define('plugins/portal/mail/register',
                     .data('item', data)
                     .append(
                         $('<span class="bold">').text(util.getDisplayName(data.from[0])), $.txt(' '),
-                        $('<span class="normal">').text(strings.shorten(data.subject, 100)), $.txt(' '),
+                        $('<span class="normal">').text(_.ellipsis(data.subject, {max: 100})), $.txt(' '),
                         $('<span class="accent">').text(received), $.txt(' '),
-                        $('<span class="gray">').text(strings.shorten(content, 600))
+                        $('<span class="gray">').text(_.ellipsis(content, {max: 600}))
                     )
                 )
             );

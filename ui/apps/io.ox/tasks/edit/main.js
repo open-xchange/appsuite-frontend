@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -17,13 +17,14 @@ define('io.ox/tasks/edit/main',
      'io.ox/tasks/model',
      'io.ox/tasks/edit/view',
      'io.ox/core/extPatterns/dnd',
-     'less!io.ox/tasks/edit/style.less'], function (gt, ext, model, view, dnd) {
+     'less!io.ox/tasks/edit/style.less'
+    ], function (gt, ext, model, view, dnd) {
 
     'use strict';
 
     function createApp() {
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: gt('Edit task'), userContent: true }),
+        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: gt('Edit task'), userContent: true, closable: true }),
             // app window
             win,
             //app
@@ -166,12 +167,9 @@ define('io.ox/tasks/edit/main',
                 });
             } else {
                 if (app.edit) {
-                    require(['io.ox/tasks/api'], function (api) {
-                        api.trigger('update:' + _.ecid(taskModel.attributes));
-                        clean();
-                        model.factory.realm('edit').release();//old model no longer needed
-                        def.resolve();
-                    });
+                    clean();
+                    model.factory.realm('edit').release();//old model no longer needed
+                    def.resolve();
                 } else {
                     clean();
                     def.resolve();

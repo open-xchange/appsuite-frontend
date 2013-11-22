@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -15,7 +15,8 @@ define('io.ox/core/api/factory',
     ['io.ox/core/http',
      'io.ox/core/cache',
      'io.ox/core/event',
-     'io.ox/core/extensions'], function (http, cache, Events, ext) {
+     'io.ox/core/extensions'
+    ], function (http, cache, Events, ext) {
 
     'use strict';
 
@@ -76,7 +77,7 @@ define('io.ox/core/api/factory',
         // use module as id?
         o.id = o.id || o.module;
 
-        _.each(o.requests, function (request, action) {
+        _.each(o.requests, function (request) {
             if (!request.extendColumns) return;
             request.columns = factory.extendColumns(request.extendColumns,
                 o.module, request.columns);
@@ -174,7 +175,7 @@ define('io.ox/core/api/factory',
                     });
                 };
 
-                var hit = function (data) {
+                var hit = function () {
                     if (!(cid in readThrough)) {
                         readThrough[cid] = true;
                         setTimeout(function () {
@@ -233,17 +234,21 @@ define('io.ox/core/api/factory',
                 if (ids.length === 0) {
                     return $.Deferred().resolve([]).done(o.done.list || $.noop);
                 } else if (ids.length === 1) {
+
                     // if just one item, we use get request
                     if (typeof ids[0] === 'number') {
                         ids = [{id: ids[0]}];
                     }
-                    // fix mail unseen issue
+
                     var getOptions = http.simplify(ids)[0];
-                    if (o.module === 'mail') {
-                        getOptions.unseen = true;
+
+                    //look if special handling is needed
+                    if (_.isFunction(o.simplify)) {
+                        getOptions = o.simplify({ original: ids[0], simplified: getOptions });
                     }
+
                     // go!
-                    return this.get(getOptions)
+                    return this.get(getOptions, useCache)
                         .pipe(function (data) { return [data]; })
                         .pipe(o.pipe.listPost)
                         .done(o.done.list || $.noop);

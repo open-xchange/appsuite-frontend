@@ -1,19 +1,19 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 (function () {
 
-    "use strict";
+    'use strict';
 
     // shortcut
     var slice = Array.prototype.slice,
@@ -40,6 +40,9 @@
         queryData = deserialize(document.location.search.substr(1), /&/),
         // local timezone offset
         timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000,
+
+        //units
+        sizes = ['Byte', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
 
         // taken from backbone
         Class = function () {},
@@ -114,7 +117,9 @@
     _.browser = {
         /** is IE? */
         IE: navigator.appName === "Microsoft Internet Explorer" ?
-            Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : undefined,
+            Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
+                !!navigator.userAgent.match(/Trident/) ? Number(navigator.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined
+            ),
         /** is Opera? */
         Opera: isOpera ?
             ua.split('Opera/')[1].split(' ')[0].split('.')[0] : undefined,
@@ -421,11 +426,20 @@
         },
 
         /**
-         * Returns local current time as timestamp in UTC!
+         * Returns local current time as timestamp
          * @returns {long} Timestamp
          */
         now: function () {
             return (new Date()).getTime();
+        },
+
+        /**
+         *  Returns local current time as timestamp in UTC!
+         * @returns {long} Timestamp
+         */
+        utc: function () {
+            var t = new Date();
+            return t.getTime() - t.getTimezoneOffset() * 60000;
         },
 
         // return timestamp far away in the future
@@ -475,13 +489,13 @@
         },
 
         /**
-         * "Lastest function only
+         * Lastest function only
          * Works with non-anonymous functions only
          */
         lfo: function () {
             // call counter
             var curry = slice.call(arguments),
-                fn = curry.shift(),
+                fn = curry.shift() || $.noop,
                 count = (fn.count = (fn.count || 0) + 1);
             // wrap
             return function () {
@@ -527,19 +541,22 @@
          * format/printf
          */
         printf: function (str, params) {
+            str = _.isString(str) ? str : '';
             // is array?
             if (!_.isArray(params)) {
                 params = slice.call(arguments, 1);
             }
             var index = 0;
-            return String(str)
+            return str
                 .replace(
                     /%(([0-9]+)\$)?[A-Za-z]/g,
                     function (match, pos, n) {
                         if (pos) {
                             index = n - 1;
                         }
-                        return params[index++];
+                        //return params[index++];
+                        var val = params[index++]
+                        return val !== undefined ? val : 'unknown';
                     }
                 )
                 .replace(/%%/g, '%');
@@ -560,7 +577,7 @@
          */
         aprintf: function (str, formatCb, textCb) {
             var result = [], index = 0;
-            if (!textCb) textCb = formatCb;
+            if (!textCb) textCb = formatCb || $.noop;
             String(str).replace(
                 /%(([0-9]+)\$)?[A-Za-z]|((?:%%|[^%])+)/g,
                 function (match, pos, n, text) {
@@ -579,8 +596,9 @@
          * Format error
          */
         formatError: function (e, formatString) {
+            e = e || {};
             return _.printf(
-                formatString || "Error: %1$s (%2$s, %3$s)",
+                formatString || 'Error: %1$s (%2$s, %3$s)',
                 _.printf(e.error, e.error_params),
                 e.code,
                 e.error_id
@@ -593,9 +611,72 @@
             return (diff > 0 ? new Array(diff + 1).join(fill || "0") : "") + str;
         },
 
-        ellipsis: function (str, length) {
-            str = String(str || '');
-            return str.length > length ? str.substr(0, length - 4) + ' ...' : str;
+        /**
+         * return human readable filesize
+         * @param  {numeric} size    in bytes
+         * @param  {object} options
+         * @param  {numeric} options.digits    (number of digits) appear after the decimal point
+         * @param  {boolean} options.force     using fixed-point notation
+         * @param  {string} options.zerochar  replace value of 0 with this char
+         * @return {string}
+         */
+        //TODO: gt for sizes
+        filesize: function (size, options) {
+
+            var opt = _.extend({
+                    digits: 0,
+                    force: true,
+                    zerochar: undefined
+                }, options || {});
+
+            //for security so math.pow doesn't get really high values
+            if (opt.digits > 10) {
+                opt.digits = 10;
+            }
+            var i = 0, dp = Math.pow(10, opt.digits || 0), val;
+            while (size > 1024 && i < sizes.length) {
+                size = size / 1024;
+                i++;
+            }
+            val = (Math.round(size * dp, 1) / dp);
+            //replacement to 0
+            if (typeof opt.zerochar !== 'undefined' && val === 0)
+                return opt.zerochar;
+            return (opt.force ? val : val.toFixed(opt.digits)) + '\xA0' + sizes[i];
+        },
+
+        /**
+         * shortens a string
+         * @param  {string} str
+         * @param  {object} options
+         * @param  {number} options.max: max length
+         * @param  {string} options.char: ellipsis char
+         * @param  {string} options.charpos: 'middle' or 'end'
+         * @param  {number} options.length: if charpos 'middle' value defines length of head and tail part
+         * @return {string}
+         */
+        ellipsis: function (str, options) {
+            //be robust
+            str = String(str || '').trim();
+            var opt = _.extend({
+                    max: 70,
+                    char: '\u2026',
+                    charpos: 'end',
+                    length: undefined
+                }, options || {}),
+                space = opt.max - opt.char.length;
+            if (str.length <= opt.max) {
+                return str;
+            } else if (opt.charpos === 'end') {
+                return str.substr(0, opt.max - opt.char.length) + opt.char;
+            } else {
+                //fix invalid length
+                if (!opt.length || opt.length * 2 > space) {
+                    //save space for ellipse char
+                    opt.length = (space % 2 === 0 ? space  / 2 : (opt.max / 2) - 1) || 1;
+                }
+                return str.substr(0, opt.length).trim() + opt.char + str.substr(str.length - opt.length).trim();
+            }
         },
 
         // makes sure you have an array
@@ -605,6 +686,7 @@
 
         // call function 'every' 1 hour or 5 seconds
         tick: function (num, type, fn) {
+            fn = fn || $.noop;
             var interval = 1000;
             if (type === "hour") {
                 interval *= 3600;
@@ -629,11 +711,13 @@
 
         makeExtendable: (function () {
             return function (parent) {
-                parent.extend = function (protoProps, classProps) {
-                    var child = inherits(this, protoProps, classProps);
-                    child.extend = this.extend;
-                    return child;
-                };
+                if (_.isObject(parent)) {
+                    parent.extend = function (protoProps, classProps) {
+                        var child = inherits(this, protoProps, classProps);
+                        child.extend = this.extend;
+                        return child;
+                    };
+                }
                 return parent;
             };
         }()),
@@ -713,7 +797,8 @@
         toHash: function (array, prop) {
             var tmp = {};
             _(array).each(function (obj) {
-                tmp[obj[prop]] = obj;
+                if (prop && _.isString(prop))
+                    tmp[obj[prop]] = obj;
             });
             return tmp;
         },
@@ -734,7 +819,7 @@
     };
 
     _.escapeRegExp = function (s) {
-        return s.replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
+        return (s || '').replace(/([|^$\\.*+?()[\]{}])/g, '\\$1');
     };
 
     window.assert = function (value, message) {
@@ -750,7 +835,7 @@
      * @return The unescaped string with resolved entities.
      */
     _.unescapeHTML = function (html) {
-        return html.replace(/&(?:(\w+)|#x([0-9A-Fa-f]+)|#(\d+));/g,
+        return (html || '').replace(/&(?:(\w+)|#x([0-9A-Fa-f]+)|#(\d+));/g,
                             function (original, entity, hex, dec) {
                                 return entity ? _.unescapeHTML.entities[entity] || original :
                                        hex    ? String.fromCharCode(parseInt(hex, 16)) :

@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -36,7 +36,7 @@ define('io.ox/tasks/edit/view',
 
             //if recurrence is set make sure we have start and end date
             //this prevents errors on saving because recurrence needs both fields filled
-            this.model.on('change:recurrence_type', function (model, value, changes) {
+            this.model.on('change:recurrence_type', function (model, value) {
                 if (value) {
                     if (!(model.get('start_date')) && model.get('start_date') !== 0) {
                         if (model.get('end_date') !== undefined && model.get('end_date') !== null) {
@@ -88,14 +88,14 @@ define('io.ox/tasks/edit/view',
 
             // Disable Save Button if title is empty on startup
             if (!self.$el.find('#task-edit-title').val()) {
-                self.$el.find('.btn[data-action="save"]').attr('disabled', 'disabled');
+                self.$el.find('.btn[data-action="save"]').prop('disabled', true);
             }
 
             // Toggle disabled state of save button
             function fnToggleSave(isDirty) {
                 var node = self.$el.find('.btn[data-action="save"]');
                 if (_.device('smartphone')) node = self.$el.parent().parent().find('.btn[data-action="save"]');
-                if (isDirty) node.removeAttr('disabled'); else node.attr('disabled', 'disabled');
+                if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
             }
             //delegate some events
             self.$el.delegate('#task-edit-title', 'keyup blur', function () {

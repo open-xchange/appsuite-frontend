@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  * @author Markus Bode <markus.bode@open-xchange.com>
@@ -14,96 +14,86 @@
 
 define('plugins/portal/twitter/register',
     ['io.ox/core/extensions',
-     'io.ox/oauth/proxy',
      'io.ox/core/strings',
      'io.ox/keychain/api',
      'gettext!plugins/portal',
      'io.ox/core/notifications',
-     'io.ox/core/date',
-     'less!plugins/portal/twitter/style.less'], function (ext, proxy, strings, keychain, gt, notifications, date) {
+     'plugins/portal/twitter/network',
+     'io.ox/core/cache',
+     'plugins/portal/twitter/util',
+     'less!plugins/portal/twitter/style.less'
+    ], function (ext, strings, keychain, gt, notifications, network, cache, util) {
 
     'use strict';
 
-    var extensionId = 'twitter';
-    var loadEntriesPerPage = 10;
-    var offset = 0;
-    var $tweets = $('<div>').addClass('twitter');
-    var $busyIndicator = $('<div>').html('&nbsp;');
+    var loadEntriesPerPage = 10,
+        offset = 0,
+        $tweets = $('<div>').addClass('twitter'),
+        $busyIndicator = $('<div>').html('&nbsp;'),
+        tweetCache = new cache.SimpleCache('twitter-cache', true),
+        composeBox,
+        offline = false;
 
-    var parseTweet = function (text, entities) {
-        var offsets = {},
-            linkMatches;
+    util.setup({$tweets: $tweets, tweetCache: tweetCache});
 
-        _(entities.hashtags).each(function (hashtag) {
-            var elem = $('<a>', {href: 'https://twitter.com/#!/search/%23' + hashtag.text, target: '_blank'}).text('#' + hashtag.text);
-            offsets[hashtag.indices[0]] = {
-                elem: elem,
-                indices: hashtag.indices
-            };
-        });
-        _(entities.urls).each(function (url) {
-            var elem = $('<a>', {href: url.expanded_url, target: '_blank'}).text(url.display_url);
-            offsets[url.indices[0]] = {
-                elem: elem,
-                indices: url.indices
-            };
-        });
-        _(entities.user_mentions).each(function (user_mention) {
-            var elem = $('<a>', {href: 'https://twitter.com/#!/' + user_mention.screen_name, target: '_blank'}).text('@' + user_mention.screen_name);
-            offsets[user_mention.indices[0]] = {
-                elem: elem,
-                indices: user_mention.indices
-            };
-        });
 
-        //hack to highligh some t.co-URLs that Twitter does not identify as such:
-        linkMatches = text.match(/http:\/\/t\.co\/\w+/gi);
-        _(linkMatches).each(function (myLink) {
-            var index = text.indexOf(myLink),
-                length = myLink.length;
-            if (_(offsets).keys().indexOf(index.toString()) === -1) { //make sure there is nothing planned for this part already
-                offsets[index] = {
-                    elem: $('<a>', {href: myLink}).text(myLink),
-                    indices: [index, index + length]
-                };
+    var setOffline = function (options) {
+        if (options !== undefined && options.offline !== undefined && options.offline !== offline) {
+            offline = options.offline;
+
+            if (composeBox !== undefined && $(composeBox).is(':visible')) {
+                composeBox.replaceWith(getComposeBox());
             }
-        });
-
-        var keySet = _(offsets).keys().sort(function (a, b) {return a - b; });
-        var bob = $('<span>');
-        var cursor = 0;
-        _(keySet).each(function (key) {
-            var element = offsets[key];
-            bob.append(text.substring(cursor, element.indices[0])).append(element.elem);
-            cursor = element.indices[1];
-        });
-
-        if (cursor < text.length) {
-            bob.append(text.substr(cursor, text.length));
         }
-
-        return bob;
     };
 
     var loadFromTwitter = function (params) {
-        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1.1/statuses/home_timeline.json', params: params});
-        return def.pipe(function (response) {
-            if (response) {
-                var jsonResponse = JSON.parse(response);
+        var deferred = new $.Deferred();
 
-                if (!jsonResponse.error) {
-                    return jsonResponse;
+        network.loadFromTwitter(params).then(function success(response) {
+            if (response.errors && response.errors.length > 0) {
+                if (response.errors[0].code === 88) {
+                    tweetCache.keys().done(function (keys) {
+                        var deferreds = _(keys).map(function (key) { return tweetCache.get(key); });
+
+                        $.when.apply($, deferreds).then(function success() {
+                            var values = _(arguments).toArray().filter(function (e) { return e; });
+
+                            if (values.length > 0) {
+                                setOffline({offline: true});
+                                deferred.resolve(values);
+                            } else {
+                                deferred.reject(response);
+                            }
+                        }, function fail() {
+                            deferred.reject(response);
+                        });
+                    })
+                    .fail(function () {
+                        deferred.reject(response);
+                    });
                 } else {
-                    return {};
+                    deferred.reject(response);
                 }
             } else {
-                return {};
+                tweetCache.clear().done(function () {
+                    _(response).each(function (tweet) {
+                        tweetCache.add(tweet.id_str, tweet);
+                    });
+                    setOffline({offline: false});
+                    deferred.resolve(response);
+                });
             }
+        }, function fail(error) {
+            deferred.reject(error);
         });
+
+        return deferred;
     };
 
     var loadTweets = function (count, offset, newerThanId) {
         var params = {'include_entities': true};
+
         if (offset) {
             params.max_id = offset;
             // increment because max_id is inclusive and we're going to ignore the first tweet in our result
@@ -119,71 +109,68 @@ define('plugins/portal/twitter/register',
         return loadFromTwitter(params);
     };
 
-    var showTweet = function (tweet) {
-        if (tweet.retweeted_status) {
-            var $temp = renderTweet(tweet.retweeted_status);
-            $temp.find('.text').append(
-                $('<div class="io-ox-twitter-retweet-source">').append(
-                    $('<i class="icon-retweet">'),
-                    " ",
-                    $('<span>').text(gt('Retweeted by %s', tweet.user.screen_name))
-                )
-            );
-            return $temp;
+    var renderTweets = function (baton) {
+        var timeline = baton.data;
+
+        if ($tweets === undefined || !$($tweets).is(':visible')) {
+            return;
         }
-        return renderTweet(tweet);
+
+        $tweets.empty();
+
+        _(timeline).each(function (tweet) {
+            offset = tweet.id_str;
+            util.showTweet(tweet, {offline: offline}).appendTo($tweets);
+        });
     };
 
-    function followButton(tweet) {
-        var button_config = "show_count=false&align=right&show_screen_name=false&dnt=true";
-        // add lang parameter (use the first 2 letters as language indicator for twitter
-        button_config += "&lang=" + ox.language.split('_')[0];
-        button_config += "&screen_name=" + tweet.user.screen_name;
-        return $('<iframe>')
-            .attr("src", "//platform.twitter.com/widgets/follow_button.html?" + button_config)
-            .attr("allowtransparency", "true")
-            .attr("frameborder", "0")
-            .attr("scrolling", "no")
-            .addClass("io-ox-twitter-follow");
-    }
+    var getComposeBox = function () {
+        if (offline) {
+            composeBox = $('<div>').attr({style: 'color: #FF0000; padding: 15px; '}).text(gt('This widget is currently offline because the twitter rate limit exceeded.'));
+        } else {
+            composeBox = new util.TwitterTextBox('Tweet', {
+                open: function (options) {
+                    options.textArea
+                        .attr({rows: '4', placeholder: ''})
+                        .removeClass('io-ox-twitter-tweet-textarea-small');
+                    options.buttonContainer.removeClass('io-ox-twitter-hidden');
+                },
+                close: function (options) {
+                    if (options.textArea.val() === '') {
+                        options.textArea.attr({rows: '1', placeholder: 'Compose new tweet...'})
+                            .addClass('io-ox-twitter-tweet-textarea-small')
+                            .css('height', '');
+                        options.buttonContainer.addClass('io-ox-twitter-hidden');
+                    }
+                },
+                success: function (text, options) {
+                    $.when(network.sendTweet({ status: text })).then(function success(response) {
+                        var jsonResponse = JSON.parse(response);
 
-    function parseDate(str) {
-        var v = str.split(' ');
-        return new Date(Date.parse(v[1] + ' ' + v[2] + ', ' + v[5] + ' ' + v[3] + ' UTC'));
-        // thx for having exactly the same problem:
-        // http://stackoverflow.com/questions/3243546/problem-with-javascript-date-function-in-ie-7-returns-nan
-    }
+                        if (!jsonResponse.errors) {
+                            $tweets.prepend(util.renderTweet(jsonResponse));
+                            tweetCache.add(jsonResponse.id_str, jsonResponse);
+                        } else {
+                            if (_.isArray(jsonResponse.errors)) {
+                                notifications.yell('error', jsonResponse.errors[0].message);
+                            } else {
+                                notifications.yell('error', jsonResponse.errors);
+                            }
+                        }
 
-    var renderTweet = function (tweet) {
-        var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
-        var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
-        var tweeted = new date.Local(parseDate(tweet.created_at)).format(date.DATE_TIME);
-        var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
-            followButton(tweet),
-            $('<a>').attr({href: profileLink}).append(
-                $('<img>', {src: tweet.user.profile_image_url_https, 'class': 'profilePicture', alt: tweet.user.description})
-            ),
-            $('<div class="text">').append(
-                $('<strong class="io-ox-twitter-name">').text(tweet.user.name),
-                '<br />',
-                $('<a>', {'class': 'name', href: profileLink, target: '_blank'}).text('@' + tweet.user.screen_name),
-                '<br />',
-                parseTweet(tweet.text, tweet.entities)
-            ),
-            $('<div class="io-ox-twitter-details">').append(
-                $('<a>').attr({'class': 'io-ox-twitter-date', 'href': tweetLink, 'target': '_blank'}).text(tweeted),
-                $('<a>').attr({'class': 'io-ox-twitter-reply', 'href': 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str}).text(gt('Reply')),
-                $('<a>').attr({'class': 'io-ox-twitter-retweet', 'href': "https://twitter.com/intent/retweet?tweet_id=" + tweet.id_str}).text(gt('Retweet')),
-                $('<a>').attr({'class': 'io-ox-twitter-favorite', 'href': "https://twitter.com/intent/favorite?tweet_id=" + tweet.id_str}).text(gt('Favorite'))
-            )
-        );
-        if (tweet.favorited) {
-            $myTweet.find('.io-ox-twitter-favorite').addClass('favorited').text(gt('Favorited'));
+                        options.textArea.attr({rows: '1', placeholder: 'Compose new tweet...'})
+                            .addClass('io-ox-twitter-tweet-textarea-small')
+                            .css('height', '');
+                        options.buttonContainer.addClass('io-ox-twitter-hidden');
+                    },
+                    function fail() {
+                        notifications.yell('error', gt('An internal error occurred'));
+                    });
+                }
+            }).get();
         }
-        if (tweet.retweeted) {
-            $myTweet.find('.io-ox-twitter-retweet').addClass('retweeted').text(gt('Retweeted'));
-        }
-        return $myTweet;
+
+        return composeBox;
     };
 
     var onPullToRefresh = function () {
@@ -196,7 +183,7 @@ define('plugins/portal/twitter/register',
             .done(function (j) {
                 j.reverse();
                 _(j).each(function (tweet) {
-                    showTweet(tweet).prependTo($tweets);
+                    util.showTweet(tweet, {offline: offline}).prependTo($tweets);
                 });
 
                 var $o = $('div.io-ox-sidepopup-pane');
@@ -206,7 +193,7 @@ define('plugins/portal/twitter/register',
             })
             .fail(function () {
                 $tweets.removeClass('pulltorefresh-refreshing');
-                notifications.yell('error', gt('Could not load new tweets.'));
+                notifications.yell('error', gt('Could not load new Tweets.'));
             });
     };
 
@@ -214,14 +201,14 @@ define('plugins/portal/twitter/register',
         var content = baton.contentNode;
         if (baton.data.length === 0) {
             content.append(
-                $('<div class="paragraph">').text(gt('No tweets yet.'))
+                $('<div class="paragraph">').text(gt('No Tweets yet.'))
             );
 
         } else if (baton.data.errors && baton.data.errors.length > 0) {
             content.removeClass('pointer');
             $('<div class="paragraph">').text(gt('Twitter reported the following errors:')).appendTo(content);
             _(baton.data.errors).each(function (myError) {
-                $('<div class="error">').text("(" + myError.code + ") " + myError.message).appendTo(content);
+                $('<div class="error">').text('(' + myError.code + ') ' + myError.message).appendTo(content);
                 handleError(myError.code, this, baton).appendTo(content);
             });
 
@@ -239,15 +226,15 @@ define('plugins/portal/twitter/register',
         }
     };
 
-    var handleError = function (errorCode, baton) {
+    var handleError = function (errorCode) {
         if (errorCode === 32 || errorCode === 89 || errorCode === 135) {
             var account = keychain.getStandardAccount('twitter');
 
             return $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
                 keychain.submodules.twitter.reauthorize(account).done(function () {
-                    console.log(gt("You have reauthorized this %s account.", 'Twitter'));
+                    console.log(gt('You have reauthorized this %s account.', 'Twitter'));
                 }).fail(function () {
-                    console.error(gt("Something went wrong reauthorizing the %s account.", 'Twitter'));
+                    console.error(gt('Something went wrong reauthorizing the %s account.', 'Twitter'));
                 });
             });
         } else if (errorCode === 88 || errorCode === 130) {
@@ -269,11 +256,18 @@ define('plugins/portal/twitter/register',
                         baton.contentNode.empty();
                         drawPreview(baton);
                     }
+
+                    network.fetchUserID().then(function success(id) {
+                        util.setCurrentUserID(id);
+                    });
                 });
+            });
+            network.fetchUserID().then(function success(id) {
+                util.setCurrentUserID(id);
             });
         },
 
-        action: function (baton) {
+        action: function () {
             window.open('https://twitter.com/', 'twitter');
         },
 
@@ -286,7 +280,7 @@ define('plugins/portal/twitter/register',
         },
 
         performSetUp: function () {
-            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
             return keychain.createInteractively('twitter', win);
         },
 
@@ -297,6 +291,8 @@ define('plugins/portal/twitter/register',
 
             return loadFromTwitter({ count: loadEntriesPerPage, include_entities: true }).done(function (data) {
                 baton.data = data;
+
+                renderTweets(baton);
             });
         },
 
@@ -308,9 +304,7 @@ define('plugins/portal/twitter/register',
             this.append(content);
         },
 
-
         draw: function (baton) {
-
             var timeline = baton.data;
 
             // Pull to refresh
@@ -339,27 +333,14 @@ define('plugins/portal/twitter/register',
             script.src = 'https://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
 
             this.empty().append(
-                $('<a>').text(gt('Tweet')).attr({
-                    href: 'https://twitter.com/intent/tweet',
-                    target: '_blank',
-                    'class': 'twitter-share-button io-ox-twitter-action-tweet',
-                    'data-count': 'none',
-                    'data-size': 'large',
-                    'data-lang': ox.language.split('_')[0],
-                    'data-url': ' ', //need to provide %20 here, so twitter detects, we set some data
-                    'data-text': ' ' //there must be text in the text attribute, may be we could add an input field to the sidebar
-                                      //to pre-fill the popup, leaving the default message empty for now
-                }),
-                $('<div>').addClass('clear-title').text('Twitter'),
+                $('<div>').addClass('clear-title io-ox-twitter-title').text('Twitter'),
+                getComposeBox(),
                 script
             );
 
             this.append($tweets.empty(), $busyIndicator);
 
-            _(timeline).each(function (tweet) {
-                offset = tweet.id_str;
-                showTweet(tweet).appendTo($tweets);
-            });
+            renderTweets(baton);
         },
 
         loadMoreResults: function (finishFn) {
@@ -370,7 +351,7 @@ define('plugins/portal/twitter/register',
                     j = j.slice(1);
                     _(j).each(function (tweet) {
                         offset = tweet.id_str;
-                        showTweet(tweet).appendTo($tweets);
+                        util.showTweet(tweet, {offline: offline}).appendTo($tweets);
                     });
                     finishFn($busyIndicator);
                 })
@@ -391,7 +372,7 @@ define('plugins/portal/twitter/register',
 
         error: function (error) {
 
-            if (error.code !== "OAUTH-0006") return; // let the default handling do the job
+            if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
 
             $(this).empty().append(
                 $('<div class="decoration">').append(

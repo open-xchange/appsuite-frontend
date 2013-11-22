@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
@@ -12,22 +13,29 @@
 if (jasmine) {
 
     var typeMatchers = {
+            toBeBoolean: function () {
+                return this.actual === true || this.actual === false;
+            },
 
-        //arrays
-        toBeArray: function () {
-            return this.actual instanceof Array;
-        },
-        toBeArrayOfSize: function (size) {
-            return typeMatchers.toBeArray.call(this) && this.actual.length === size;
-        },
+            //functions
+            toBeFunction: function () {
+                return this.actual instanceof Function;
+            },
 
-        //functions
-        toBeFunction: function () {
-            return this.actual instanceof Function;
-        }
-    };
+            //special: jQuery
+            toBeJquery: function () {
+                var result = this.actual instanceof $;
+                expect(this.isNot ? !result : result).toBeTruthy();
+                return true;
+            },
+            toBeEmptyJquery: function () {
+                var result = this.actual && this.actual.length === 0;
+                expect(this.isNot ? !result : result).toBeTruthy();
+                return true;
+            }
+        };
 
     beforeEach(function () {
         this.addMatchers(typeMatchers);
     });
-};
+}

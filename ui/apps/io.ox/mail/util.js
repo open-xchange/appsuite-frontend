@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
@@ -20,7 +20,8 @@ define('io.ox/mail/util',
      'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'settings!io.ox/contacts',
-     'gettext!io.ox/core'], function (ext, date, util, accountAPI, capabilities, settings, contactsSetting, gt) {
+     'gettext!io.ox/core'
+    ], function (ext, date, util, accountAPI, capabilities, settings, contactsSetting, gt) {
 
     'use strict';
 
@@ -41,6 +42,8 @@ define('io.ox/mail/util',
         },
 
         getDateFormated = function (timestamp, options) {
+            if (!_.isNumber(timestamp))
+                return gt('unknown');
             var opt = $.extend({ fulldate: true, filtertoday: true }, options || {}),
                 now = new date.Local(),
                 d = new date.Local(timestamp),
@@ -296,7 +299,7 @@ define('io.ox/mail/util',
 
         // takes care of special edge-case: no from address
         hasFrom: function (data) {
-            return data && _.isArray(data.from) && !!data.from[0][1];
+            return data && _.isArray(data.from) && data.from.length > 0 && !!data.from[0][1];
         },
 
         getFrom: function (data, field) {
@@ -337,10 +340,10 @@ define('io.ox/mail/util',
 
         getPriority: function (data) {
             // normal?
-            if (data.priority === 3) return $();
+            if (data && data.priority === 3) return $();
             var i = '<i class="icon-exclamation"/>',
                 indicator = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
-            if (data.priority < 3) {
+            if (data && data.priority < 3) {
                 return indicator.addClass('high').attr('title', gt('High priority'));
             } else {
                 return indicator.addClass('low').attr('title', gt('Low priority'));
@@ -349,8 +352,8 @@ define('io.ox/mail/util',
 
         getAccountName: function (data) {
             // primary account?
-            var id = window.unescape(data.id);
-            return (/^default0/).test(id) ? gt('Primary account') : (data.account_name || 'N/A');
+            var id = window.unescape(data ? data.id : '');
+            return (/^default0/).test(id) ? gt('Primary account') : (data ? data.account_name : 'N/A');
         },
 
         getTime: function (timestamp) {
@@ -362,11 +365,21 @@ define('io.ox/mail/util',
         },
 
         getFullDate: function (timestamp) {
+            if (!_.isNumber(timestamp))
+                return gt('unknown');
             var t = new date.Local(timestamp);
             return t.format(date.DATE_TIME);
         },
 
         getSmartTime: function (timestamp) {
+            //FIXME: remove this method later
+            //this method is unused, because it brings a lot of problems to manually update the string
+            //without the page being reloaded. This might confuse the user and therefore we decided not
+            //to use this method any longer. It has not been removed, yet but should so in the future.
+            //The following warning is there to inform potential 3rd-party developers about the change.
+            console.warn('This method is deprecated and will be removed with 7.6.0 or at any random date later');
+            if (!_.isNumber(timestamp))
+                return gt('unknown');
             var now = new Date(),
                 zone = now.getTimezoneOffset(),
                 time = now.getTime() - zone * 60 * 1000,
@@ -397,35 +410,42 @@ define('io.ox/mail/util',
         },
 
         isUnseen: function (data) {
-            return (data.flags & 32) !== 32;
+            return data && data.hasOwnProperty('flags') ? (data.flags & 32) !== 32 : undefined;
         },
 
         isDeleted: function (data) {
-            return (data.flags & 2) === 2;
+            return data && data.hasOwnProperty('flags') ? (data.flags & 2) === 2 : undefined;
         },
 
         isSpam: function (data) {
-            return (data.flags & 128) === 128;
+            return data && data.hasOwnProperty('flags') ? (data.flags & 128) === 128 : undefined;
         },
 
         isAnswered: function () {
-            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
+            return _.chain(arguments || []).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 1) === 1;
             }, false).value();
         },
 
         isForwarded: function () {
-            return _.chain(arguments).flatten().compact().reduce(function (memo, data) {
+            return _.chain(arguments || []).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 256) === 256;
             }, false).value();
         },
 
+        //is obj only an attachment of another email
+        isAttachment: function (data) {
+            return typeof (data || {}).parent !== 'undefined';
+        },
+
         byMyself: function (data) {
+            data = data || {};
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
         },
 
         hasOtherRecipients: function (data) {
-            var list = [].concat(data.to, data.cc, data.bcc);
+            data = data || {};
+            var list = [].concat(data.to || [], data.cc || [], data.bcc || []);
             return 0 < _(list).reduce(function (memo, arr) {
                 var email = String(arr[1] || '').toLowerCase();
                 return memo + (email && !(email in addresses) ? 1 : 0);
@@ -455,7 +475,7 @@ define('io.ox/mail/util',
             };
 
             return function (data) {
-
+                data = data || {};
                 var i, $i, obj, dat, attachments = [],
                 mail = { id: data.id, folder_id: data.folder_id };
 
@@ -474,7 +494,7 @@ define('io.ox/mail/util',
                             id: obj.id,
                             content_type: 'message/rfc822',
                             filename: obj.filename ||
-                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
+                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), {max: 50}), // remove consecutive white-space
                             title: obj.filename || obj.subject || '',
                             mail: mail,
                             parent: data.parent || mail,

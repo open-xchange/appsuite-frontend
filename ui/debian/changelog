@@ -1,3 +1,39 @@
+open-xchange-appsuite (7.4.1-5) stable; urgency=low
+
+  * Fifth candidate for 7.4.1 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 20 Nov 2013 12:12:44 +0100
+
+open-xchange-appsuite (7.4.1-4) stable; urgency=low
+
+  * Fourth candidate for 7.4.1 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 18 Nov 2013 10:20:29 +0100
+
+open-xchange-appsuite (7.4.1-3) stable; urgency=low
+
+  * Third candidate for 7.4.1 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Thu, 07 Nov 2013 10:17:58 +0100
+
+open-xchange-appsuite (7.4.1-2) stable; urgency=low
+
+  * Second candidate for 7.4.1 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 23 Oct 2013 10:11:10 +0200
+
+open-xchange-appsuite (7.4.1-1) stable; urgency=low
+
+  * First sprint increment for 7.4.1 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Thu, 10 Oct 2013 17:57:24 +0200
+
+open-xchange-appsuite (7.4.1-0) unstable; urgency=low
+
+  * prepare for 7.4.1 release
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Fri, 20 Sep 2013 16:29:32 +0200
+
 open-xchange-appsuite (7.4.0-16) stable; urgency=low
 
   * Build for patch 2013-11-13
@@ -99,6 +135,12 @@ open-xchange-appsuite (7.4.0-0) unstable; urgency=low
   * prepare for 7.4.0
 
  -- Markus Wagner <markus.wagner@open-xchange.com>  Tue, 16 Jul 2013 14:54:25 +0200
+
+open-xchange-appsuite (7.2.2-17) stable; urgency=low
+
+  * Build for patch 2013-10-03
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 02 Oct 2013 17:06:23 +0200
 
 open-xchange-appsuite (7.2.2-16) stable; urgency=low
 

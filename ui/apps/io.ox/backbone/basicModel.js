@@ -1,17 +1,21 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/core'], function (ext, gt) {
-    "use strict";
+define('io.ox/backbone/basicModel',
+    ['io.ox/core/extensions',
+     'gettext!io.ox/core'
+    ], function (ext, gt) {
+
+    'use strict';
 
     function ValidationErrors() {
 
@@ -69,9 +73,9 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
             var self = this,
                 errors = new ValidationErrors();
             attributes = attributes || this.toJSON();
-            this.point("validation").invoke("validate", errors, attributes, errors, this);
+            this.point('validation').invoke('validate', errors, attributes, errors, this);
             if (options.isSave) {
-                this.point("validation/save").invoke("validate", errors, attributes, errors, this);
+                this.point('validation/save').invoke('validate', errors, attributes, errors, this);
             }
             if (errors.hasErrors()) {
                 var validAttributes = {};
@@ -80,7 +84,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 });
                 errors.each(function (messages, attribute) {
                     validAttributes[attribute] = false;
-                    self.trigger("invalid:" + attribute, messages, errors, self);
+                    self.trigger('invalid:' + attribute, messages, errors, self);
                 });
                 // Trigger a valid:attribute event for all attributes that have turned valid
                 _(self.attributeValidity).each(function (wasValid, attribute) {
@@ -108,7 +112,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 }
             }
         },
-        parse: function (model, resp) {
+        parse: function () {
             return {};
         },
         sync: function (action, model, callbacks) {
@@ -128,7 +132,7 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                 this.trigger(action + ':start');
                 this.trigger('sync:start');
 
-                return this.syncer[action].call(this.syncer, model)
+                return this.syncer[action](model)
                     .done(function (response) {
                         callbacks.success(model, response);
                         self.trigger(action, response);
@@ -140,11 +144,11 @@ define("io.ox/backbone/basicModel", [ "io.ox/core/extensions", 'gettext!io.ox/co
                         self.trigger(action + ':fail', response);
                         self.trigger('sync:fail', response);
                     }).always(function () {
-                        self.trigger(action + ":always");
+                        self.trigger(action + ':always');
                         self.trigger('sync:always');
                     });
             } else {
-                throw "No Syncer specified!";
+                throw 'No Syncer specified!';
             }
         },
         isSet: function () {

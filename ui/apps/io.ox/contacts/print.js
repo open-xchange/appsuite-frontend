@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -14,7 +15,8 @@ define('io.ox/contacts/print',
     ['io.ox/core/print',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
-     'gettext!io.ox/contacts'], function (print, api, util, gt) {
+     'gettext!io.ox/contacts'
+    ], function (print, api, util, gt) {
 
     'use strict';
 
@@ -70,6 +72,8 @@ define('io.ox/contacts/print',
                 get: function (obj) {
                     return api.get(obj);
                 },
+
+                title: selection.length === 1 ? selection[0].display_name : undefined,
 
                 i18n: {
                     phonelist: gt('Phone list'),

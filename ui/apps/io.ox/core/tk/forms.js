@@ -1,12 +1,12 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
@@ -14,28 +14,16 @@
 /*global
 define: true
 */
-define('io.ox/core/tk/forms',
-      ['io.ox/core/date'], function (date) {
+define('io.ox/core/tk/forms', ['io.ox/core/date'], function (date) {
 
     'use strict';
-
-    /**
-    options = {
-        class
-        update
-        name
-        model
-        validator
-        property
-        id
-    }
-*/
 
     // local handlers
     var boxChange = function () {
             var self = $(this);
             self.trigger('update.model', { property: self.attr('data-property'), value: self.prop('checked') });
         },
+
         boxChangeByModel = function (e, value) {
             $(this).prop('checked', !!value);
         },
@@ -44,10 +32,9 @@ define('io.ox/core/tk/forms',
             var self = $(this);
             self.trigger('update.model', { property: self.attr('data-property'), value: self.val() });
         },
+
         selectChangeByModel = function (e, value) {
-
             $(this).val(value);
-
         },
 
         dateChange = function () {
@@ -69,19 +56,21 @@ define('io.ox/core/tk/forms',
         },
 
         radioChange = selectChange,
+
         radioChangeByModel = function (e, value) {
             var self = $(this);
             self.prop('checked', self.attr('value') === value);
         },
 
         textChange = selectChange,
+
         textChangeByModel = selectChangeByModel,
 
         nodeChangeByModel = function (e, value) {
             $(this).text(value);
         },
 
-        invalid = function (e) {
+        invalid = function () {
             var node = $(this)
                 .addClass('invalid-value').css({
                     backgroundColor: '#fee',
@@ -146,7 +135,6 @@ define('io.ox/core/tk/forms',
             this.node = label.append(text, this.node);
         }
     };
-
 
     // allows global lookup
     var lastLabelId = '';
@@ -233,15 +221,6 @@ define('io.ox/core/tk/forms',
                         .css({ width: options.width + 'px', display: 'inline-block' })
                 );
         },
-//        createLabeledTextArea: function (options) {
-//            return utils.createLabel(options)
-//                .css({ width: '100%', display: 'inline-block' })
-//                .append(utils.createText({ text: options.label }))
-//                .append(utils.createTextArea({ property: options.property, value: options.value, model: options.model})
-//                        .css({ width: options.width + 'px', display: 'inline-block' })
-//                );
-//
-//        },
 
         createLabeledPasswordField: function (options) {
             var l = utils.createLabel(options).css({width: '100%', display: 'inline-block'});
@@ -253,7 +232,7 @@ define('io.ox/core/tk/forms',
         createLabel: function (options) {
             var label,
                 forTag = utils.connectLabelToField(options['for']);
-            options.text = options.text || "";
+            options.text = options.text || '';
 
             label = $('<label>');
             label.attr('for', forTag);
@@ -305,7 +284,7 @@ define('io.ox/core/tk/forms',
                 .append(utils.createSectionDelimiter());
         },
 
-        createSection: function (options) {
+        createSection: function () {
             return $('<div>').addClass('section');
         },
 
@@ -313,11 +292,11 @@ define('io.ox/core/tk/forms',
             return $('<legend>').addClass('sectiontitle').text(options.text);
         },
 
-        createSectionContent: function (options) {
+        createSectionContent: function () {
             return $('<div>').addClass('sectioncontent');
         },
 
-        createSectionGroup: function (options) {
+        createSectionGroup: function () {
             return $('<div>').addClass('section-group');
         },
 
@@ -342,13 +321,11 @@ define('io.ox/core/tk/forms',
             } else {
                 return $('<label>');
             }
-
         },
 
         createControlsWrapper: function () {
             return $('<div>').addClass('controls');
         },
-
 
         createPicUpload: function (options) {
             var o = _.extend({
@@ -367,7 +344,7 @@ define('io.ox/core/tk/forms',
                     utils.createFileField({
                         wrap: false,
                         accept: 'image/*',
-                        "data-property": o.name,
+                        'data-property': o.name,
                         name: o.name
                     })
                 )
@@ -397,22 +374,16 @@ define('io.ox/core/tk/forms',
 
         createListItem: function (options) {
             options.classStr = options.classStr || 'deletable-item';
-            var item = $('<div>');
-            item.addClass(options.classStr);
-            item.attr('data-item-id', options.dataid);
-
-            item.append(
-                    $('<a>').html('&times;').addClass('close')
-                  );
-
-            item.append($('<div>').html(options.html));
-
-
-            item.on('click', function () {
+            var item = $('<div>').addClass(options.classStr).attr('data-item-id', options.dataid)
+                .append(
+                    $('<a>').html('&times;').addClass('close'),
+                    $('<div>').html(options.html)
+                )
+                .on('click', function () {
                 // console.log('click');
-                item.parent().find('div[selected="selected"]').attr('selected', null);
-                item.attr('selected', 'selected');
-            });
+                    item.parent().find('div[selected="selected"]').prop('selected', false);
+                    item.prop('selected', true);
+                });
             return item;
         },
 

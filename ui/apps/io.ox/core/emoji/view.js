@@ -5,6 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -12,7 +13,7 @@
  */
 
 define('io.ox/core/emoji/view', [
-    'moxiecode/tiny_mce/plugins/emoji/main',
+    'io.ox/emoji/main',
     'gettext!io.ox/mail/emoji'
 ], function (emoji, gt) {
 
@@ -42,7 +43,7 @@ define('io.ox/core/emoji/view', [
         },
 
         // when user clicks on emoji. inserts emoji into editor
-        onInsertEmoji: function (e) {
+        onInsertEmoji: function () {
             console.warn('Overwrite onInsertEmoji!');
         },
 
@@ -114,8 +115,8 @@ define('io.ox/core/emoji/view', [
                     this.showDropdown ?
                         $('<div class="emoji-options dropdown pull-right">').append(
                             // link
-                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="5" role="menuitem" aria-haspopup="true">')
-                            .attr('arial-label', 'Options')
+                            $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="5">')
+                            .attr('arial-label', gt('Options'))
                             .append(
                                 $('<i class="icon-cog" aria-hidden="true" role="presentation">')
                             ),

@@ -1,22 +1,23 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
 define('io.ox/core/cache',
-    ["io.ox/core/extensions",
-     "io.ox/core/cache/indexeddb",
-     "io.ox/core/cache/localstorage",
-     "io.ox/core/cache/simple"], function (ext) {
+    ['io.ox/core/extensions',
+     'io.ox/core/cache/indexeddb',
+     'io.ox/core/cache/localstorage',
+     'io.ox/core/cache/simple'
+    ], function (ext) {
 
     'use strict';
 
@@ -35,7 +36,7 @@ define('io.ox/core/cache',
     ox.cache = {
         clear: function () {
             return $.when.apply($,
-                ext.point("io.ox/core/cache/storage").map(function (storage) {
+                ext.point('io.ox/core/cache/storage').map(function (storage) {
                     return storage.clear && storage.isUsable() ? storage.clear() : $.when();
                 })
             );
@@ -44,6 +45,7 @@ define('io.ox/core/cache',
 
     // listen for logout event
     ext.point('io.ox/core/logout').extend({
+        id: 'clearCache',
         logout: function (baton) {
             var clear = function () {
                 return ox.cache.clear();
@@ -52,11 +54,11 @@ define('io.ox/core/cache',
                 return clear();
             } else {
                 return ox.ui.App.canRestore().then(function (canRestore) {
-                    if (canRestore) {
+                    if (canRestore && !ox.online) {
                         return ox.load(['io.ox/core/tk/dialogs', 'gettext!io.ox/core']).then(function (dialogs, gt) {
                             var def = $.Deferred();
                             new dialogs.ModalDialog()
-                                .text(gt('Unsaved documents will be lost. Do you want to logout now?'))
+                                .text(gt('Unsaved documents will be lost. Do you want to sign out now?'))
                                 .addPrimaryButton('Yes', gt('Yes'))
                                 .addButton('No', gt('No'))
                                 .show()
@@ -81,7 +83,7 @@ define('io.ox/core/cache',
         }
     });
 
-    ext.point("io.ox/core/cache/storage").each(function (storage) {
+    ext.point('io.ox/core/cache/storage').each(function (storage) {
         if (storage.isUsable() && _.isNull(preferredPersistentCache)) {
             preferredPersistentCache = storage.id;
         }
@@ -165,8 +167,6 @@ define('io.ox/core/cache',
 
         // private fields
         var index = new CacheStorage(name + '.index', persistent);
-
-        var self = this;
 
         if (!name) {
             // not funny!
@@ -395,14 +395,14 @@ define('io.ox/core/cache',
                 // get key
                 key = String(this.keyGenerator(data));
 
-                return add(key, data, timestamp).then(function (result) {
+                return add(key, data, timestamp).then(function () {
                     return key;
                 });
             }
         };
 
         this.merge = function (data, timestamp) {
-            var key, target, id, changed = false, self = this;
+            var key, changed = false, self = this;
 
 
             if (_.isArray(data)) {
@@ -433,7 +433,7 @@ define('io.ox/core/cache',
                             }
                         }
                         if (changed) {
-                            return self.add(target, timestamp).then(function (addReturn) {
+                            return self.add(target, timestamp).then(function () {
                                 return changed;
                             });
                         } else {
