@@ -25,9 +25,10 @@
     };
 
     var ua, isOpera, webkit, chrome, phantom, MacOS, Windows, Blackberry, WindowsPhone, Android, iOS, standalone, uiwebview, browserLC = {};
+
     function detectBrowser (nav) {
         // browser detection - adopted from prototype.js
-        ua = nav.userAgent
+        ua = nav.userAgent;
         isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]";
         webkit = ua.indexOf('AppleWebKit/') > -1;
         chrome = ua.indexOf('Chrome/') > -1;
@@ -59,6 +60,8 @@
             /** PhantomJS (needed for headless spec runner) */
             PhantomJS: webkit && phantom ?
                 ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
+            /* Karma runner */
+            Karma: !!ox.testUtils,
             /** Chrome */
             Chrome: webkit && chrome ?
                 ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
