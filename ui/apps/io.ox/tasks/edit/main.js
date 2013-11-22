@@ -68,7 +68,7 @@ define('io.ox/tasks/edit/main',
 
             //now check if something changed with the attachments
             var attachmentList = taskView.baton.attachmentList;
-            if ((attachmentList.attachmentsToAdd.length > 0) || (attachmentList.attachmentsToDelete.length > 0)) {
+            if (attachmentList && ((attachmentList.attachmentsToAdd.length > 0) || (attachmentList.attachmentsToDelete.length > 0))) {
                 check = true;
             }
             return check;

@@ -93,6 +93,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
         });
 
         describe('content', function () {
+            var node;
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testUser) + '}');
@@ -101,10 +102,14 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testAttachments) + '}');
                 });
             });
+            //clean up the dom
+            afterEach(function () {
+                node.remove();
+            });
 
             it('should draw the whole content', function () {
-                var baton = ext.Baton({data: options.testData}),
-                    node = detailView.draw(baton);
+                var baton = ext.Baton({data: options.testData});
+                node = detailView.draw(baton);
                 expect(node.find('.title').length).toBe(1);
                 expect(node.find('.priority').length).toBe(1);
                 expect(node.find('.end-date').length).toBe(1);
@@ -117,8 +122,8 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
             });
 
             it('should draw every participant', function () {
-                var baton = ext.Baton({data: options.participantsTest}),
-                    node = detailView.draw(baton);
+                var baton = ext.Baton({data: options.participantsTest});
+                node = detailView.draw(baton);
                 waitsFor(function () {
                     return node.find('.task-participant').length === 2;
                 }, 'paint user', ox.testTimeout);
@@ -129,8 +134,8 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
             });
 
             it('should draw every attachment', function () {
-                var baton = ext.Baton({data: options.attachmentsTest}),
-                    node = detailView.draw(baton);
+                var baton = ext.Baton({data: options.attachmentsTest});
+                node = detailView.draw(baton);
                 waitsFor(function () {
                     return node.find('.attachments-container').children().length === 4;
                 }, 'paint attachments', ox.testTimeout);
@@ -141,20 +146,59 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
             });
         });
         describe('inline Links', function () {
-            var apiCallEdit = false;
+            var apiCallUpdate = false,
+                node;
             beforeEach(function () {
+                this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testData) + '}');
+                });
                 this.server.respondWith('PUT', /api\/tasks\?action=update/, function (xhr) {
-                    apiCallEdit = true;
+                    apiCallUpdate = true;
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": {}');
                 });
             });
+            //reset
+            afterEach(function () {
+                node.remove();
+                apiCallUpdate = false;
+            });
             it('mark Task undone should call api', function () {
-                var baton = ext.Baton({data: options.testData}),
-                    node = detailView.draw(baton);
+                var baton = ext.Baton({data: options.testData});
+                node = detailView.draw(baton);
                 node.find('[data-action="unDone"]').click();
                 waitsFor(function () {
-                    return apiCallEdit;
+                    return apiCallUpdate;
                 }, 'undone task', ox.testTimeout);
+            });
+            it('edit should launch edit app', function () {
+                var baton = ext.Baton({data: options.testData});
+                node = detailView.draw(baton);
+                node.find('[data-action="edit"]').click();
+
+                waitsFor(function () {
+                    return $.find('.title-field').length === 1;//if title is drawn the view is ready
+                }, 'start edit task', ox.testTimeout);
+
+                this.after(function () {//close app
+                    var editnode = $.find('.task-edit-cancel');
+                    if(editnode.length > 0) {
+                        $(editnode[0]).click();
+                    }
+                });
+            });
+            it('change due date should have a dropdown with correct structure', function () {
+                var baton = ext.Baton({data: options.testData});
+                node = detailView.draw(baton);
+                var inlineLink = node.find('[data-action="change-due-date"]').parent();
+                expect(inlineLink.find('ul li a').length).toBe(7);//one menuitem for every day
+            });
+            it('change due date should call Api', function () {
+                var baton = ext.Baton({data: options.testData});
+                node = detailView.draw(baton);
+                node.find('[data-action="change-due-date"]').parent().find('ul li a').first().click();//click tomorrow in dropdownmenu
+                waitsFor(function () {
+                    return apiCallUpdate;
+                });
             });
         });
     });
