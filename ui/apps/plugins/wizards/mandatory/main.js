@@ -162,17 +162,25 @@ define('plugins/wizards/mandatory/main', [
         },
 
         draw: function (baton) {
-            var forms = baton.libraries.forms;
+            var forms = baton.libraries.forms,
+                tzNode;
 
             this.append($('<h4>').text(gt('Your timezone')));
 
+            //TODO: port to miniviews, once there is a selectbox feature
+            this.append(
+                $('<form class="form-horizontal" />').append(
+                    $('<label class="control-label" for="">').text(gt('Timezone')),
+                    tzNode = $('<div class="controls" />')
+                )
+            );
             new forms.SelectBoxField({
-                label: gt('Timezone'),
                 attribute: 'timezone',
                 model: baton.model,
                 selectOptions: baton.availableTimeZones,
-                '$el': this
+                '$el': tzNode
             }).render();
+            tzNode.find('select').addClass('input-xlarge');
         },
 
         finish: function (baton) {
