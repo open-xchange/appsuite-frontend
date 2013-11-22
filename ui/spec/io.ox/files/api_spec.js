@@ -39,10 +39,10 @@ define(['io.ox/files/api',
                 return def.state() === 'resolved';
             });
         };
-        //init fake server
-        this.server = ox.fakeServer.create();
-        this.server.autoRespond = true;
-        this.server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
+
+    var setupFakeServer = function (server) {
+        server.autoRespond = true;
+        server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
                         JSON.stringify({
                             timestamp: 1368791630910,
@@ -50,7 +50,7 @@ define(['io.ox/files/api',
                         })
             );
         });
-        this.server.respondWith('GET', /api\/files\?action=get/, function (xhr) {
+        server.respondWith('GET', /api\/files\?action=get/, function (xhr) {
             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
                         JSON.stringify({
                             timestamp: 1368791630910,
@@ -58,7 +58,7 @@ define(['io.ox/files/api',
                         })
             );
         });
-        this.server.respondWith('PUT', /api\/files\?action=detach/, function (xhr) {
+        server.respondWith('PUT', /api\/files\?action=detach/, function (xhr) {
             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
                         JSON.stringify({
                             timestamp: 1368791630910,
@@ -66,6 +66,7 @@ define(['io.ox/files/api',
                         })
             );
         });
+    };
 
     describe('files API', function () {
 
@@ -234,7 +235,24 @@ define(['io.ox/files/api',
             });
             describe('to handle different file versions', function () {
                 beforeEach(function () {
-                    clearCache();
+                    //TODO: clear global cache (must also be possible in phantomJS)
+                    var def = api.caches.versions.clear();
+
+                    //wait for caches to be clear, then procceed
+                    waitsFor(function () {
+                        return def.state() === 'resolved';
+                    }, 'cache clear takes too long', 1000);
+                    runs(function () {
+                        //make fake server only respond on demand
+                        this.server = ox.fakeServer.create();
+
+                        setupFakeServer(this.server);
+                    });
+                });
+
+                afterEach(function () {
+                    //make fake server respond automatically
+                    this.server.restore();
                 });
                 xit('and use the provided versions cache', function () {
                     sinon.spy(api.caches.versions, 'add');
@@ -262,7 +280,7 @@ define(['io.ox/files/api',
                     beforeEach(function () {
                         sinon.spy(api, 'propagate');
                     });
-                    xit('after calling detach', function () {
+                    it('after calling detach', function () {
                         var def = api.detach($.extend({}, locked, {version: '1'}));
                         jexpect(def).toResolveWith(function () {
                             return api.propagate.callCount === 1;
