@@ -13,12 +13,6 @@
 
 define(['io.ox/settings/util'], function (util) {
 
-    // matthias: das $(document.body).empty(); zerlegt die TinyMCE tests
-    // trotz eines ox.testUtils.stubAppsuiteBody();
-    // müssen wir mal zusammen besprechen wofür das empty() gut ist und ob
-    // man das ggf. anders lösen kann
-    return;
-
     describe('Utilities for settings:', function () {
 
         describe('yellOnReject function', function () {
@@ -28,36 +22,39 @@ define(['io.ox/settings/util'], function (util) {
             });
 
             describe('reject should trigger a notification', function () {
+
                 var expect = chai.expect,
                     e = {
                         error: 'test error message',
                         error_params: ['test error param']
                     }, def, text;
 
-                //reset deferred
+                // reset deferred
                 beforeEach(function () {
                     def = new $.Deferred();
-                    $(document.body).empty();
+                    util.destroy();
                 });
 
                 it('with default message (reject without args)', function () {
                     util.yellOnReject(def.reject());
-                    text = $(document.body).find('.io-ox-alert-error').find('.message').find('div').text();
+                    text = $('.io-ox-alert-error').find('.message').find('div').text();
                     expect('unknown').to.equal(text);
                 });
+
                 it('with custom error message for MAIL_FILTER-0015', function () {
                     var e = {
                             code: 'MAIL_FILTER-0015'
                         };
                     util.yellOnReject(def);
                     def.reject(e);
-                    text = $(document.body).find('.io-ox-alert-error').find('.message').find('div').text();
+                    text = $('.io-ox-alert-error').find('.message').find('div').text();
                     expect(text).not.to.equal('unknown');
                 });
 
                 describe('with the submitted main error message', function () {
+
                     afterEach(function () {
-                        text = $(document.body).find('.io-ox-alert-error').find('.message').find('div').text();
+                        text = $('.io-ox-alert-error').find('.message').find('div').text();
                         expect(text).to.equal(e.error);
                     });
 
@@ -69,6 +66,7 @@ define(['io.ox/settings/util'], function (util) {
                         def.reject(e);
                         util.yellOnReject(def);
                     });
+
                     it('if options is disabled', function () {
                         var e = {
                                 error: 'test error message',
@@ -80,22 +78,24 @@ define(['io.ox/settings/util'], function (util) {
                 });
 
                 describe('with a detailed error message', function () {
+
                     afterEach(function () {
                         def.reject(e);
-                        text = $(document.body).find('.io-ox-alert-error').find('.message').find('div').text();
+                        text = $('.io-ox-alert-error').find('.message').find('div').text();
                         expect(text).to.equal(e.error_params[0]);
                     });
 
                     it('if options is enabled', function () {
                         util.yellOnReject(def, {details: true});
                     });
+
                     it('if options is undefined', function () {
                         util.yellOnReject(def, {details: undefined});
                     });
+
                     it('if options is unset', function () {
                         util.yellOnReject(def, {});
                     });
-
                 });
             });
         });

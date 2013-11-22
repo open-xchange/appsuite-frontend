@@ -10,7 +10,6 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-
 define(['io.ox/files/util'], function (util) {
 
     // matthias: das $(document.body).empty(); zerlegt die TinyMCE tests
@@ -22,26 +21,21 @@ define(['io.ox/files/util'], function (util) {
     describe('Utilities for files:', function () {
 
         describe('confirmDialog function', function () {
-
             it('should always return a promise', function () {
                 expect(util.confirmDialog(undefined)).toBePromise();
                 expect(util.confirmDialog('formfilename', 'serverfilename')).toBePromise();
             });
-
             it('returned promise should resolve if no confirmation is needed', function () {
                 expect(util.confirmDialog(undefined)).toReject();
             });
-
             it('returned promise should resolve if no confirmation is needed', function () {
                 expect(util.confirmDialog('nameOne.txt', 'nameTwo.txt')).toResolve();
             });
-
             it('should create a confirm dialog if file extension is removed', function () {
                 $(document.body).empty();
                 expect(util.confirmDialog('removeExtension', 'removeExtension.md')).toStayPending();
                 expect($(document.body).find('.io-ox-dialog-wrapper').length).toEqual(1);
             });
-
             it('should create a confirm dialog if file extension changes', function () {
                 $(document.body).empty();
                 expect(util.confirmDialog('changeExtension.txt', 'changeExtension.md')).toStayPending();
