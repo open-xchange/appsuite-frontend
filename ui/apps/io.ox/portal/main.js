@@ -536,7 +536,7 @@ define('io.ox/portal/main',
 
         $(window).on('scrollstop resize', lazyLayout);
     });
-    window.kacke = app;
+
     return {
         getApp: app.getInstance
     };
