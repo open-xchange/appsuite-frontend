@@ -21,7 +21,7 @@ var createCustomFileHandler = function(handlers, builddir) {
     });
 
     handlers.push({
-        urlRegex: /(^\/apps\/)/,
+        urlRegex: /(\/apps\/)/,
         handler: localFiles
     });
 }

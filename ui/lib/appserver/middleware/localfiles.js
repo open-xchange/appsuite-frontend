@@ -40,7 +40,7 @@
             if (/\/appsuite\/api\//.test(pathname)) {
                 return next();
             }
-            pathname = pathname.slice(pathname.indexOf('/appsuite/') + 10);
+            pathname = pathname.slice(pathname.indexOf('/apps/'));
             pathname = pathname.replace(/^v=[^\/]+\//, '');
             pathname = pathname.replace(/^$/, 'core');
             filename = prefixes.map(function (p) {
