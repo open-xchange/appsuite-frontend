@@ -49,14 +49,14 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     modified_by: 12345,
                     number_of_attachments: 0,
                     participants: [{mail: 'max@mustermann.test', display_name: 'Max Mustermann', type: 5},
-                                   {id: 12345, confirmmessage: 'hurra', confirmation: 1, type: 1}],
+                                   {id: 1337, confirmmessage: 'hurra', confirmation: 1, type: 1}],
                     percent_completed: 100,
                     priority: 2,
                     private_flag: false,
                     recurrence_type: 0,
                     status: 3,
                     title: 'Participant test',
-                    users: [{id:12345, confirmmessage: 'hurra', confirmation: 1}]
+                    users: [{id:1337, confirmmessage: 'hurra', confirmation: 1}]
                 },
                 attachmentsTest: {
                     folder_id: 555123456,
@@ -75,7 +75,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     display_name: 'Mister, Test',
                     first_name: 'Mister',
                     last_name: 'Test',
-                    id: 12345,
+                    id: 1337,
                     folder_id: 121212,
                     user_id: 12345,
                 },
@@ -83,11 +83,6 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     [[456, 0, 124, 4, 'Test.txt', 21, 'text/plain'],
                     [457, 0, 124, 4, 'Textdatei123.txt', 9, 'text/plain']]
             };
-
-        beforeEach(function () {
-            this.server = ox.fakeServer.create();
-            this.server.autoRespond = true;
-        });
         afterEach(function () {
             this.server.restore();
         });
@@ -95,6 +90,8 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
         describe('content', function () {
             var node;
             beforeEach(function () {
+                this.server = ox.fakeServer.create();
+                this.server.autoRespond = true;
                 this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testUser) + '}');
                 });
@@ -149,12 +146,22 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
             var apiCallUpdate = false,
                 node;
             beforeEach(function () {
+                this.server = ox.fakeServer.create();
+                this.server.autoRespond = true;
                 this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testData) + '}');
                 });
                 this.server.respondWith('PUT', /api\/tasks\?action=update/, function (xhr) {
                     apiCallUpdate = true;
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": {}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": {} }');
+                });
+                this.server.respondWith('PUT', /api\/tasks\?action=confirm/, function (xhr) {
+                    apiCallUpdate = true;
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": {} }');
+                });
+                this.server.respondWith('PUT', /api\/tasks\?action=delete/, function (xhr) {
+                    apiCallUpdate = true;
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": {} }');
                 });
             });
             //reset
@@ -176,12 +183,12 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                 node.find('[data-action="edit"]').click();
 
                 waitsFor(function () {
-                    return $.find('.title-field').length === 1;//if title is drawn the view is ready
+                    return $('.title-field').length === 1;//if title is drawn the view is ready
                 }, 'start edit task', ox.testTimeout);
 
                 this.after(function () {//close app
                     var editnode = $.find('.task-edit-cancel');
-                    if(editnode.length > 0) {
+                    if(editnode.length === 1) {
                         $(editnode[0]).click();
                     }
                 });
@@ -200,6 +207,35 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     return apiCallUpdate;
                 });
             });
+            it('confirm should open a popup', function () {
+                var baton = ext.Baton({data: options.participantsTest});
+                node = detailView.draw(baton);
+                node.find('[data-action="confirm"]').click();
+                waitsFor(function () {
+                    return $('.io-ox-dialog-popup').length === 1;
+                });
+
+                this.after(function () {//close popup
+                    $('.io-ox-dialog-popup [data-action="cancel"]').click();
+                });
+            });
+            it('confirm should call Api', function () {
+                var baton = ext.Baton({data: options.participantsTest});
+                node = detailView.draw(baton);
+                node.find('[data-action="confirm"]').click();
+                
+                waitsFor(function () {
+                    return $('.io-ox-dialog-popup').length === 1;
+                });
+                
+                runs(function () {
+                    $('[data-action="ChangeConfState"]').click();
+                    waitsFor(function () {
+                        return apiCallUpdate;
+                    });
+                });
+            });
+            
         });
     });
 });
