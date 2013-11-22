@@ -14,7 +14,8 @@
 define('io.ox/wizards/firstStart/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/extensions',
-    'settings!io.ox/wizards/firstStart'
+    'settings!io.ox/wizards/firstStart',
+    'less!io.ox/wizards/firstStart/style.less'
 ], function (Stage, ext, settings) {
 
     'use strict';
