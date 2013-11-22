@@ -83,4 +83,3 @@ define(['io.ox/mail/mailfilter/settings/model', 'gettext!io.ox/mail'], function 
 
     });
 });
-// returnedModel.should.deep.equal(emptyModel);
