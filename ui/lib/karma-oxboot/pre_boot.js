@@ -22,7 +22,7 @@ var root = location.pathname.replace(/\/[^\/]*$/, ''),
 window.ox = {
     abs: location.protocol + '//' + location.host,
     apiRoot: root + '/api',
-    base: '',
+    base: '/base',
     context_id: 0,
     debug: true,
     language: 'de_DE',
@@ -32,7 +32,7 @@ window.ox = {
     root: root,
     secretCookie: false, // auto-login
     serverConfig: {},
-    version: new Date(),
+    version: '0.0.0-0.' + new Date().getTime(),
     session: {
         context_id: 0,
         locale: "de_DE",
