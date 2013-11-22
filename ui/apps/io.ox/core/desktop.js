@@ -144,7 +144,7 @@ define("io.ox/core/desktop",
                                 api.get({ folder: id })
                                 .done(function (data) {
                                     // off
-                                    api.off('change:' + folder);
+//                                    api.off('change:' + folder);
                                     // remember
                                     folder = String(id);
                                     // update window title & toolbar?
