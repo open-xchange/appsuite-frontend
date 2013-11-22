@@ -234,7 +234,7 @@
         req.load = function (context, modulename, url) {
             var prefix = context.config.baseUrl;
             if (modulename.slice(0, 5) === 'apps/') {
-                url = ox.apiRoot + '/apps/load/' + ox.base + ',' + url.slice(5);
+                url = ox.apiRoot + '/apps/load/' + ox.version + ',' + url.slice(5);
                 return oldload.apply(this, arguments);
             } else if (modulename.charAt(0) !== '/') {
                 if (url.slice(0, prefix.length) !== prefix) {
@@ -257,7 +257,7 @@
             }
             if (_.url.hash('debug-js')) {
                 oldload(context, modulename,
-                    [ox.apiRoot, '/apps/load/', ox.base, ',', url].join(''));
+                    [ox.apiRoot, '/apps/load/', ox.version, ',', url].join(''));
                 return;
             }
 
@@ -293,9 +293,9 @@
             );
 
             function load(module, modulename) {
-                 $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), dataType: "text" })
+                 $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), dataType: "text" })
                  .done(function (concatenatedText) {
-                        runCode([ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), concatenatedText);
+                        runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
                         context.completeLoad(modulename);
                         // Chop up the concatenated modules and put them into file cache
                         _(concatenatedText.split("/*:oxsep:*/")).each(function (moduleText) {
