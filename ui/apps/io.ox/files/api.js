@@ -734,8 +734,10 @@ define('io.ox/files/api',
                     params: options,
                     appendColumns: true
                 })
-                .done(function (data) {
-                    api.caches.versions.add(id, data);
+                .then(function (data) {
+                    return $.when(api.caches.versions.add(id, data)).then(function () {
+                        return data;
+                    });
                 });
             }
         });
