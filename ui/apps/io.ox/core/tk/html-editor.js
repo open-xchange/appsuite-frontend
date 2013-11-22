@@ -417,6 +417,7 @@ define.async('io.ox/core/tk/html-editor',
             toolbar3 = toolbar3.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
         }
 
+        console.log('init tinyMCE');
         (textarea = $(textarea)).tinymce({
 
             gecko_spellcheck: true,
@@ -430,6 +431,7 @@ define.async('io.ox/core/tk/html-editor',
             theme: 'advanced',
 
             init_instance_callback: function () {
+                console.log('YEAH init_instance_callback');
                 // get internal editor reference
                 ed = textarea.tinymce();
                 if ($('#' + ed.id + '_ifr')) {
