@@ -49,7 +49,7 @@ define('io.ox/core/tk/list',
             'focus .list-item': 'onItemFocus',
             'blur .list-item': 'onItemBlur',
             'keydown .list-item': 'onItemKeydown',
-            'scroll': 'onScroll',
+            'scroll': 'onScroll'
         },
 
         onItemFocus: function () {
@@ -165,6 +165,9 @@ define('io.ox/core/tk/list',
 
             // make sure busy & idle use proper this (for convenient callbacks)
             _.bindAll(this, 'busy', 'idle');
+
+            // set special class if not on smartphones (different behavior)
+            if (_.device('!smartphone')) this.$el.addClass('visible-selection');
         },
 
         setCollection: function (collection) {

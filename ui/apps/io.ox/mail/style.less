@@ -48,7 +48,7 @@
         i.icon-forwarded { color: #888; }
     }
 
-    &.has-focus .list-item.selected i {
+    &.visible-selection.has-focus .list-item.selected i {
         color: rgba(255, 255, 255, 0.50);
     }
 
@@ -80,7 +80,7 @@
         }
     }
 
-    .list-item.selected .priority {
+    &.visible-selection .list-item.selected .priority {
         .low {
             i:first-child { opacity: 1; }
             i { opacity: 0.5; }
@@ -94,9 +94,10 @@
     .list-item.deleted {
         text-decoration: line-through;
         color: rgba(0, 0, 0, 0.20);
-        &.selected {
-            color: rgba(255, 255, 255, 0.50);
-        }
+    }
+
+    &.visible-selection .list-item.deleted.selected {
+        color: rgba(255, 255, 255, 0.50);
     }
 
     .thread-size {
@@ -124,7 +125,7 @@
         background-color: rgba(0, 0, 0, 0.15);
     }
 
-    &.has-focus .selected .thread-size {
+    &.visible-selection.has-focus .selected .thread-size {
         color: rgba(255, 255, 255, 0.8);
     }
 

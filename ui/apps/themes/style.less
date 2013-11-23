@@ -1313,15 +1313,21 @@ a.button {
     }
 
     .list-item.selected {
-        background-color: #ddd;
-        -webkit-font-smoothing: antialiased;
         .icon-checkmark {
-            color: #aaa;
+            color: #08c;
             &:before { content: "\f05d"; }
         }
     }
 
-    &.has-focus .list-item.selected {
+    &.visible-selection .list-item.selected {
+        background-color: #ddd;
+        -webkit-font-smoothing: antialiased;
+        .icon-checkmark {
+            color: #aaa;
+        }
+    }
+
+    &.visible-selection.has-focus .list-item.selected {
         color: white;
         background-color: @selectedBackground;
     }
@@ -1364,6 +1370,15 @@ a.button {
         list-style-type: none;
         padding: 0;
         margin: 0;
+    }
+
+    // swipe animation
+    .list-item {
+        left: 0px;
+        .transition(left 0.40s cubic-bezier(0.1, 0.7, 0.1, 1));
+        &.swipe-left {
+            left: -100px;
+        }
     }
 
     // just for debugging

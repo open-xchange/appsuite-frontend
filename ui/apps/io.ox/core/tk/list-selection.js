@@ -35,7 +35,9 @@ define('io.ox/core/tk/list-selection', [], function () {
             })
             .on('keydown', function (e) {
                 if (e.target === this) self.onKeydown(e);
-            });
+            })
+            .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
+            .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this));
     }
 
     _.extend(Selection.prototype, {
@@ -147,6 +149,10 @@ define('io.ox/core/tk/list-selection', [], function () {
             items.filter('.selected').removeClass('selected');
         },
 
+        resetSwipe: function (items) {
+            items.filter('.swipe-left').removeClass('swipe-left');
+        },
+
         select: function (index, items, e) {
 
             var start, end, node;
@@ -198,10 +204,22 @@ define('io.ox/core/tk/list-selection', [], function () {
 
             this.resetTabIndex(items);
             if (!this.isMultiple(e)) this.resetCheckmark(items);
+            if (Modernizr.touch) this.resetSwipe(items);
 
             // range select / single select
             this.select(index, items, e);
             if (!_.isEqual(previous, this.get())) this.triggerChange();
+        },
+
+        onSwipeLeft: function (e) {
+            var node = $(e.currentTarget);
+            if (node.hasClass('swipe-left')) return;
+            this.resetSwipe(this.getItems());
+            node.addClass('swipe-left');
+        },
+
+        onSwipeRight: function (e) {
+            $(e.currentTarget).removeClass('swipe-left');
         }
     });
 
