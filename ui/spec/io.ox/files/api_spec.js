@@ -22,51 +22,41 @@ define(['io.ox/files/api',
             locked_until: 0
         },
         locked = {
-            id: '2',
+            id: '83971',
             folder_id: '4711',
             //in 3 days
             locked_until: _.now() + (604800000 / 2),
             modified_by : ox.user_id
         },
         lockedOther = $.extend({}, locked, {id: 3, locked_until: _.now() + (604800000 * 2), modified_by: 'other'}),
-        versions = ["83971", 395, 395, 1376641135612, 1384501324622, "14048", null, null, 0, "136hs.jpg", null, "136hs.jpg", "image/jpeg", 44032, "1", "", 0, "b5d896b4e5caa1249300fad41d3670fc", null, true, 0];
-        clearCache = function () {
-            var def;
-            runs(function () {
-                def = api.caches.versions.clear();
+        versions = ['83971', 395, 395, 1376641135612, 1384501324622, '14048', null, null, 0, '136hs.jpg', null, '136hs.jpg', 'image/jpeg', 44032, '1', '', 0, 'b5d896b4e5caa1249300fad41d3670fc', null, true, 0],
+        setupFakeServer = function (server) {
+            server.autoRespond = true;
+            server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                            JSON.stringify({
+                                timestamp: 1368791630910,
+                                data: versions
+                            })
+                );
             });
-            waitsFor(function () {
-                return def.state() === 'resolved';
+            server.respondWith('GET', /api\/files\?action=get/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                            JSON.stringify({
+                                timestamp: 1368791630910,
+                                data: locked
+                            })
+                );
+            });
+            server.respondWith('PUT', /api\/files\?action=detach/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                            JSON.stringify({
+                                timestamp: 1368791630910,
+                                data: versions
+                            })
+                );
             });
         };
-
-    var setupFakeServer = function (server) {
-        server.autoRespond = true;
-        server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                        JSON.stringify({
-                            timestamp: 1368791630910,
-                            data: versions
-                        })
-            );
-        });
-        server.respondWith('GET', /api\/files\?action=get/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                        JSON.stringify({
-                            timestamp: 1368791630910,
-                            data: locked
-                        })
-            );
-        });
-        server.respondWith('PUT', /api\/files\?action=detach/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                        JSON.stringify({
-                            timestamp: 1368791630910,
-                            data: versions
-                        })
-            );
-        });
-    };
 
     describe('files API', function () {
 
@@ -185,7 +175,7 @@ define(['io.ox/files/api',
 
             });
         });
-        it('has a version cache', function () {
+        it('has a versions cache', function () {
             expect((api.caches.versions).get).to.be.a('function');
         });
         describe('has some methods for single files', function () {
@@ -203,29 +193,29 @@ define(['io.ox/files/api',
                 var mode, options = {};
                 it('to view a file', function () {
                     var resp = api.getUrl(locked, 'view'),
-                        exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=view';
+                        exp = '/api/files?action=document&folder=4711&id=83971&context=1337%2C_%2C0&delivery=view';
                     expect(resp).to.be.equal(exp);
                     //alias
                     expect(resp).to.be.equal(api.getUrl(locked, 'open'));
                 });
                 it('to play a file', function () {
-                    var exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=view';
+                    var exp = '/api/files?action=document&folder=4711&id=83971&context=1337%2C_%2C0&delivery=view';
                     expect(api.getUrl(locked, 'play')).to.be.equal(exp);
                 });
                 it('to download a file', function () {
-                    var exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=download';
+                    var exp = '/api/files?action=document&folder=4711&id=83971&context=1337%2C_%2C0&delivery=download';
                     expect(api.getUrl(locked, 'download')).to.be.equal(exp);
                 });
                 it('to get a thumbnail of a file', function () {
-                    var exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=view&content_type=undefined';
+                    var exp = '/api/files?action=document&folder=4711&id=83971&context=1337%2C_%2C0&delivery=view&content_type=undefined';
                     expect(api.getUrl(locked, 'thumbnail')).to.be.equal(exp);
                 });
                 it('to get a preview of a file', function () {
-                    var exp = '/api/files?action=document&folder=4711&id=2&context=1337%2C_%2C0&delivery=view&format=preview_image&content_type=image/jpeg';
+                    var exp = '/api/files?action=document&folder=4711&id=83971&context=1337%2C_%2C0&delivery=view&format=preview_image&content_type=image/jpeg';
                     expect(api.getUrl(locked, 'preview')).to.be.equal(exp);
                 });
                 it('to get a cover of a file', function () {
-                    var exp = '/api/image/file/mp3Cover?folder=4711&id=2&content_type=image/jpeg&context=1337%2C_%2C0';
+                    var exp = '/api/image/file/mp3Cover?folder=4711&id=83971&content_type=image/jpeg&context=1337%2C_%2C0';
                     expect(api.getUrl(locked, 'cover')).to.be.equal(exp);
                 });
                 it('to get a zip of a file', function () {
@@ -235,7 +225,6 @@ define(['io.ox/files/api',
             });
             describe('to handle different file versions', function () {
                 beforeEach(function () {
-                    //TODO: clear global cache (must also be possible in phantomJS)
                     var def = api.caches.versions.clear();
 
                     //wait for caches to be clear, then procceed
@@ -243,18 +232,15 @@ define(['io.ox/files/api',
                         return def.state() === 'resolved';
                     }, 'cache clear takes too long', 1000);
                     runs(function () {
-                        //make fake server only respond on demand
                         this.server = ox.fakeServer.create();
-
                         setupFakeServer(this.server);
                     });
                 });
-
                 afterEach(function () {
-                    //make fake server respond automatically
                     this.server.restore();
                 });
-                xit('and use the provided versions cache', function () {
+
+                it('and use the provided versions cache', function () {
                     sinon.spy(api.caches.versions, 'add');
                     var def = api.versions(locked),
                         first = $.Deferred();
@@ -274,6 +260,13 @@ define(['io.ox/files/api',
                             api.caches.versions.add.restore();
                             return resp;
                         });
+                    });
+                });
+                it('and use promises to finally return data', function () {
+                    jexpect(api.versions(locked)).toBePromise();
+                    jexpect(api.versions()).toReject();
+                    jexpect(api.versions(locked)).toResolveWith(function (data) {
+                        return !_.isEmpty(data);
                     });
                 });
                 describe('calling api.propagete to update caches and fire events', function () {
@@ -301,7 +294,6 @@ define(['io.ox/files/api',
                 });
             });
             it('that return promises', function () {
-                jexpect(api.versions(locked)).toBePromise();
                 jexpect(api.detach(locked)).toBePromise();
                 jexpect(api.uploadNewVersion(locked)).toBePromise();
                 jexpect(api.uploadNewVersionOldSchool({form: $('<div>'), json: '', file: '', id: ''})).toBePromise();
@@ -309,7 +301,6 @@ define(['io.ox/files/api',
                 jexpect(api.uploadFile(locked)).toBePromise();
             });
             it('that reject on missing arguments', function () {
-                jexpect(api.versions()).toReject();
                 jexpect(api.detach()).toReject();
                 jexpect(api.uploadNewVersion()).toReject();
                 jexpect(api.uploadNewVersionOldSchool()).toReject();
