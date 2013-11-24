@@ -1287,7 +1287,7 @@ a.button {
         position: relative;
         font-size: 13px;
         line-height: 19px;
-        padding: 10px @list-view-padding 12px (@list-view-padding + 30);
+        padding: 10px @list-view-padding 12px (@list-view-padding + 30px);
         cursor: pointer;
         outline: 0;
     }
@@ -1308,6 +1308,13 @@ a.button {
             font-size: 18px;
             margin-top: -10px;
             &:before { content: "\f10c"; }
+        }
+    }
+
+    &.hide-checkboxes .list-item {
+        padding-left: @list-view-padding;
+        .list-item-checkmark {
+            display: none;
         }
     }
 
@@ -1377,7 +1384,7 @@ a.button {
 
     .list-item {
         left: 0px;
-        .transition(left 0.40s cubic-bezier(0.1, 0.7, 0.1, 1));
+        .transition(e('left 0.40s cubic-bezier(0.1, 0.7, 0.1, 1), padding 0.40s cubic-bezier(0.1, 0.7, 0.1, 1)'));
         &.swipe-left {
             left: -@swipe-position;
         }

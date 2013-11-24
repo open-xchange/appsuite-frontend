@@ -154,8 +154,12 @@ define('io.ox/core/tk/list-selection', [], function () {
             items.filter('.selected').removeClass('selected');
         },
 
+        // resets all (usually one) items with swipe-left class
+        // return true if an item had to be reset
         resetSwipe: function (items) {
-            items.filter('.swipe-left').removeClass('swipe-left').find('.swipe-left-content').remove();
+            var nodes = items.filter('.swipe-left');
+            nodes.removeClass('swipe-left').find('.swipe-left-content').remove();
+            return !!nodes.length;
         },
 
         select: function (index, items, e) {
@@ -207,7 +211,7 @@ define('io.ox/core/tk/list-selection', [], function () {
                 index = items.index(current) || 0,
                 previous = this.get();
 
-            if (Modernizr.touch) this.resetSwipe(items);
+            if (Modernizr.touch && this.resetSwipe(items)) return;
             if (e.isDefaultPrevented()) return;
             if (!this.isMultiple(e)) this.resetCheckmark(items);
             this.resetTabIndex(items);
@@ -237,7 +241,12 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         onTapRemove: function (e) {
             e.preventDefault();
-            console.log('remove!');
+            var node = $(e.currentTarget).closest(SELECTABLE),
+                cid = node.attr('data-cid'),
+                model = this.view.collection.get(cid);
+            // mockup solution; would not directly remove
+            // this should be done by the API
+            if (model) this.view.collection.remove(model);
         }
     });
 

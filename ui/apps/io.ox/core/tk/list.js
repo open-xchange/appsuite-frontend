@@ -190,6 +190,10 @@ define('io.ox/core/tk/list',
             this.complete = !!state;
         },
 
+        toggleCheckboxes: function (state) {
+            this.$el.toggleClass('hide-checkboxes', state === undefined ? undefined : !state);
+        },
+
         // return alls items of this list
         // the filter is important, as we might have a header
         getItems: function () {
