@@ -1298,8 +1298,7 @@ a.button {
         top: 0;
         bottom: 0;
         left: 0;
-        width: 30px;
-        margin: 0;
+        width: @list-view-padding + 30;
 
         .icon-checkmark {
             color: #ccc;
@@ -1373,12 +1372,34 @@ a.button {
     }
 
     // swipe animation
+
+    @swipe-position: 80px;
+
     .list-item {
         left: 0px;
         .transition(left 0.40s cubic-bezier(0.1, 0.7, 0.1, 1));
         &.swipe-left {
-            left: -100px;
+            left: -@swipe-position;
         }
+        z-index: 2;
+    }
+
+    .swipe-left-content {
+        background-color: #FF4105; /* quite red */
+        position: absolute;
+        top: 0;
+        right: -@swipe-position;
+        bottom: 0;
+        width: @swipe-position;
+        i {
+            font-size: 20px;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -7px;
+        }
+        z-index: 1;
     }
 
     // just for debugging
@@ -2515,8 +2536,6 @@ input.nice-input {
 .foldertree-sidepanel {
 
     left: @window-head-width;
-
-    box-shadow: 0 0 2px -1px #aaa inset;
 
     @c1: lighten(@foldertree-sidepanel-background, 8%);
     @c2: @foldertree-sidepanel-background;

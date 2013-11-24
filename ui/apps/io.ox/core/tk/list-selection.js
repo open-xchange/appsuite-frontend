@@ -35,9 +35,14 @@ define('io.ox/core/tk/list-selection', [], function () {
             })
             .on('keydown', function (e) {
                 if (e.target === this) self.onKeydown(e);
-            })
-            .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
-            .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this));
+            });
+
+        if (Modernizr.touch) {
+            this.view.$el
+                .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
+                .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
+                .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this));
+        }
     }
 
     _.extend(Selection.prototype, {
@@ -150,7 +155,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         resetSwipe: function (items) {
-            items.filter('.swipe-left').removeClass('swipe-left');
+            items.filter('.swipe-left').removeClass('swipe-left').find('.swipe-left-content').remove();
         },
 
         select: function (index, items, e) {
@@ -202,9 +207,10 @@ define('io.ox/core/tk/list-selection', [], function () {
                 index = items.index(current) || 0,
                 previous = this.get();
 
-            this.resetTabIndex(items);
-            if (!this.isMultiple(e)) this.resetCheckmark(items);
             if (Modernizr.touch) this.resetSwipe(items);
+            if (e.isDefaultPrevented()) return;
+            if (!this.isMultiple(e)) this.resetCheckmark(items);
+            this.resetTabIndex(items);
 
             // range select / single select
             this.select(index, items, e);
@@ -215,11 +221,23 @@ define('io.ox/core/tk/list-selection', [], function () {
             var node = $(e.currentTarget);
             if (node.hasClass('swipe-left')) return;
             this.resetSwipe(this.getItems());
+            this.renderInplaceRemove(node);
             node.addClass('swipe-left');
         },
 
         onSwipeRight: function (e) {
-            $(e.currentTarget).removeClass('swipe-left');
+            this.resetSwipe($(e.currentTarget));
+        },
+
+        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="icon-trash"/></div>'),
+
+        renderInplaceRemove: function (node) {
+            node.append(this.inplaceRemoveScaffold.clone());
+        },
+
+        onTapRemove: function (e) {
+            e.preventDefault();
+            console.log('remove!');
         }
     });
 
