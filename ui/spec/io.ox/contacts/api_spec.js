@@ -18,12 +18,17 @@ define(['io.ox/contacts/api'], function (api) {
     describe('Contact API', function () {
 
         it('should return proper image path for internal users', function () {
-            var url = api.pictureHalo({ internal_userid: 0, folder_id: 6, id: 1337 });
-            expect(url).toBe(ox.apiRoot + '/halo/contact/picture?internal_userid=0');
+            var url = api.pictureHalo({ internal_userid: 1, folder_id: 6, id: 1337 });
+            expect(url).toBe(ox.apiRoot + '/halo/contact/picture?internal_userid=1');
         });
 
         it('should return proper image path for contacts', function () {
             var url = api.pictureHalo({ folder_id: 6, id: 1337 });
+            expect(url).toBe(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
+        });
+
+        it('should return proper image path for contacts while ignoring internal_userid = 0', function () {
+            var url = api.pictureHalo({ folder_id: 6, id: 1337, internal_userid: 0 });
             expect(url).toBe(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
         });
 
