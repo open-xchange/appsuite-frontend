@@ -14,12 +14,14 @@
 define('io.ox/wizards/firstStart/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/extensions',
-    'settings!io.ox/wizards/firstStart'
+    'settings!io.ox/wizards/firstStart',
+    'less!io.ox/wizards/firstStart/style.less'
 ], function (Stage, ext, settings) {
 
     'use strict';
 
-    var point = ext.point('io.ox/wizards/firstStart');
+    var point = ext.point('io.ox/wizards/firstStart'),
+        topbar = $('#io-ox-topbar');
 
     new Stage('io.ox/core/stages', {
         id: 'firstStartWizard',
@@ -30,6 +32,7 @@ define('io.ox/wizards/firstStart/main', [
                 return $.when();
             }
             var def = $.Deferred();
+            topbar.hide();
             ox.idle();
             ox.manifests.loadPluginsFor('io.ox/wizards/firstStart')
                 .then(function () {
@@ -49,10 +52,12 @@ define('io.ox/wizards/firstStart/main', [
                 })
                 .then(function (wizard, gt) {
                     wizard.navButtons.append(
-                        $('<button class="btn wizard-close">').text(gt('Close')).on('click', function () {
-                            def.reject();
-                            wizard.close();
-                        })
+                        $('<button class="btn wizard-close pull-left" tabindex="1">')
+                            .text(gt('Back to sign-in'))
+                            .on('click', function () {
+                                def.reject();
+                                wizard.close();
+                            })
                      );
                     wizard.start({cssClass: 'first-start-wizard'}).done(function () {
                         if (def.state() === 'pending') {
@@ -63,6 +68,7 @@ define('io.ox/wizards/firstStart/main', [
                 })
                 .done(function () {
                     settings.set({finished: true}).save();
+                    topbar.show();
                     ox.busy();
                 })
                 .fail(function () {
