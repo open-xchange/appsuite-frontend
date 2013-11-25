@@ -390,10 +390,6 @@ define('io.ox/calendar/util',
             return confirmClass[status || 0];
         },
 
-        isRecurring: function (data) {
-            return !!data.recurrence_type;
-        },
-
         getRecurrenceString: function (data) {
 
             function getCountString(i) {
@@ -574,80 +570,6 @@ define('io.ox/calendar/util',
             var hash = this.getConfirmations(obj),
                 user = id || ox.user_id;
             return hash[user] ? hash[user].comment : '';
-        },
-
-        // returns a set of rows, each containing 7 days
-        // helps at drawing a mini calendar or a month view
-        getMonthScaffold: function (year, month, forerun, overrun) {
-
-            forerun = forerun || 0;
-            overrun = overrun || 0;
-
-            var firstDayOfMonth = Date.UTC(year, month, 1),
-                // apply week day shift
-                shift = (7 + (new date.Local(firstDayOfMonth)).getDay() - that.getFirstWeekDay()) % 7,
-                day = firstDayOfMonth - date.DAY * shift,
-                // loop
-                rows = [], row, obj, d;
-
-            function getMax() {
-                // get number of days in month
-                return that.getDaysInMonth(year, month) + shift;
-            }
-
-            function loop(max) {
-                for (var i = 0; i < max || (i % 7 !== 0); i += 1, day += date.DAY) {
-                    if (i % 7 === 0) {
-                        row = [];
-                        rows.push(row);
-                    }
-                    d = new date.Local(day);
-                    row.push(obj = {
-                        year: d.getYear(),
-                        month: d.getMonth(),
-                        date: d.getDate(),
-                        day: d.getDay(),
-                        timestamp: day,
-                        isToday: that.isToday(day),
-                        col: i % 7,
-                        row: rows.length - 1
-                    });
-                    // is weekend?
-                    obj.isWeekend = obj.day === 0 || obj.day === 6;
-                    // is out of current month?
-                    obj.isOut = obj.year !== year || obj.month !== month;
-                }
-            }
-
-            // forerun?
-            if (forerun > 0) {
-                day -= forerun * date.WEEK;
-                loop(forerun * 7);
-            }
-
-            loop(getMax());
-
-            // overrun?
-            if (overrun > 0) {
-                loop(overrun * 7);
-            }
-
-            return rows;
-        },
-
-        getTodayStart: function (timestamp) {
-            return ((timestamp || _.now()) / date.DAY >> 0) * date.DAY;
-        },
-
-        getWeekStart: function (timestamp) {
-
-            timestamp = this.getTodayStart(timestamp);
-
-            var d = new date.Local(timestamp),
-                // apply week day shift
-                shift = (7 + d.getDay() - this.getFirstWeekDay()) % 7;
-
-            return d.getTime() - date.DAY * shift;
         },
 
         getWeekScaffold: function (timestamp) {
