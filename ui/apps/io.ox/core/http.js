@@ -685,11 +685,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                         obj.params.action === target.action) {
                         //write to console
                         console.groupCollapsed('extract: (module: "' + target.module + '", action: "' + target.action + '") ' + (obj.params.id || ''));
-                        console.log(JSON.stringify(resp));
+                        console.log(JSON.stringify(resp, undefined, 4));
                         console.groupEnd();
                         //store in array
                         ox.extract.output = ox.extract.output || [];
-                        ox.extract.output.unshift(JSON.stringify(resp));
+                        ox.extract.output.unshift(JSON.stringify(resp, undefined, 4));
                     }
                 });
             }
