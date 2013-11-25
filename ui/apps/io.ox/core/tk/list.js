@@ -185,11 +185,14 @@ define('io.ox/core/tk/list',
             return this;
         },
 
+        // if true current collection is regarded complete
+        // no more items are fetches
         toggleComplete: function (state) {
             this.$el.toggleClass('complete', state);
             this.complete = !!state;
         },
 
+        // shows/hides checkboxes
         toggleCheckboxes: function (state) {
             this.$el.toggleClass('hide-checkboxes', state === undefined ? undefined : !state);
         },
