@@ -38,7 +38,8 @@ define('io.ox/core/tk/dialogs',
                 async: false,
                 maximize: false,
                 top: '50%',
-                container: $('body')
+                container: $('body'),
+                tabTrap: true
             }, options),
 
             nodes = {
@@ -507,7 +508,8 @@ define('io.ox/core/tk/dialogs',
         options = _.extend({
             modal: false,
             arrow: true,
-            closely: false // closely positon to click/touch location
+            closely: false, // closely positon to click/touch location
+            tabTrap: true
         }, options || {});
 
         var processEvent,
