@@ -144,7 +144,7 @@ define('io.ox/calendar/actions',
             ox.load(['io.ox/calendar/edit/main']).done(function (m) {
                 if (params.recurrence_type > 0 || params.recurrence_position) {
                     ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
-                        new dialogs.ModalDialog({tabTrap: true})
+                        new dialogs.ModalDialog()
                             .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
                             .addPrimaryButton('series',
                                 //#. Use singular in this context
@@ -256,7 +256,7 @@ define('io.ox/calendar/actions',
                         // different warnings especially for events with
                         // recurrence_type > 0 should handled here
                         if (hasRec) {
-                            new dialogs.ModalDialog({tabTrap: true})
+                            new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
                                 .addPrimaryButton('appointment', gt('Delete appointment'), 'appointment', {tabIndex: '1'})
                                 .addPrimaryButton('series', gt('Delete whole series'), 'series', {tabIndex: '1'})
@@ -269,7 +269,7 @@ define('io.ox/calendar/actions',
                                     cont(action === 'series');
                                 });
                         } else {
-                            new dialogs.ModalDialog({tabTrap: true})
+                            new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete this appointment?'))
                                 .addPrimaryButton('ok', gt('Delete'), 'ok', {tabIndex: '1'})
                                 .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
@@ -401,7 +401,7 @@ define('io.ox/calendar/actions',
                 if (baton.target) {
                     commit(baton.target);
                 } else {
-                    var dialog = new dialogs.ModalDialog({tabTrap: true})
+                    var dialog = new dialogs.ModalDialog()
                         .header($('<h4>').text(title))
                         .addPrimaryButton('ok', gt('Move'), 'ok', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});

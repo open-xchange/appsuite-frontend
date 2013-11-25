@@ -70,8 +70,7 @@ define('io.ox/mail/mailfilter/settings/filter',
             width: 800,
             center: false,
             maximize: true,
-            async: true,
-            tabTrap: true
+            async: true
         }).header($('<h4>').text(header));
 
         myView.dialog.append(

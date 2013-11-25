@@ -74,7 +74,7 @@ define('io.ox/oauth/settings',
                 ) // End form
             ); // End detail-pane
 
-            dialog = new dialogs.ModalDialog({tabTrap: true});
+            dialog = new dialogs.ModalDialog();
             dialog
                 .append($form)
                 .addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})

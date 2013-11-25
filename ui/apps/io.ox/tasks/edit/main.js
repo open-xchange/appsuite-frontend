@@ -150,7 +150,7 @@ define('io.ox/tasks/edit/main',
 
             if (app.isDirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({tabTrap: true})
+                    new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
                         .addPrimaryButton('delete', gt('Discard changes'), 'delete', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})

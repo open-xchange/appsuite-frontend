@@ -482,9 +482,7 @@ define('io.ox/core/commons-folderview',
             api.get({ folder: id }).done(function (folder) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     var title = gt('Properties'),
-                    dialog = new dialogs.ModalDialog({
-                        easyOut: true
-                    })
+                    dialog = new dialogs.ModalDialog()
                     .header(
                         api.getBreadcrumb(folder.id, { prefix: title }).css({ margin: '0' })
                     )
@@ -564,7 +562,7 @@ define('io.ox/core/commons-folderview',
             api.get({ folder: id }).done(function (folder) {
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
                     var title = gt('Move folder'),
-                        dialog = new dialogs.ModalDialog({ easyOut: true })
+                        dialog = new dialogs.ModalDialog()
                             .header(
                                 api.getBreadcrumb(folder.id, { prefix: title }).css({ margin: '0' })
                             )

@@ -45,7 +45,7 @@ define('io.ox/calendar/edit/main',
                 //be gently
                 if (self.getDirtyStatus()) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog({'tabTrap': true})
+                        new dialogs.ModalDialog()
                             .text(gt('Do you really want to discard your changes?'))
                             .addPrimaryButton('delete', gt('Discard'), 'delete', {'tabIndex': '1'})
                             .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
@@ -144,7 +144,6 @@ define('io.ox/calendar/edit/main',
 
                                 ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
                                     var dialog = new dialogs.ModalDialog({
-                                            tabTrap: true,
                                             top: '20%',
                                             center: false,
                                             container: self.getWindowNode()

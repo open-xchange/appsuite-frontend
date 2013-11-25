@@ -603,8 +603,7 @@ define('io.ox/mail/write/view-main',
                         pane = new dialogs.ModalDialog({
                             width: window.innerWidth * 0.8,
                             height: 350,
-                            addclass: 'add-infostore-file',
-                            tabTrap: true
+                            addclass: 'add-infostore-file'
                         }),
                         self = this;
 

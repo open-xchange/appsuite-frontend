@@ -8,7 +8,7 @@ define('io.ox/contacts/edit/try',
 
     var view = new view.ContactEditView({model: window.c = model.factory.create({'suffix': 'Hajj', 'spouse_name': 'Marianne'})});
     // create modal popup
-    var pane = new dialogs.CreateDialog({ easyOut: true, async: true, width: 1000 });
+    var pane = new dialogs.CreateDialog({ async: true, width: 1000 });
     // header
     pane.header(
         $('<h3>').text('Edit contact')

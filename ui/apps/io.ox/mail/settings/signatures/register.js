@@ -100,7 +100,7 @@ define('io.ox/mail/settings/signatures/register',
 
         if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
 
-        var popup = new dialogs.ModalDialog({ async: true, tabTrap: true });
+        var popup = new dialogs.ModalDialog({ async: true });
         popup.header($('<h4>').text(signature.id === null ? gt('Add signature') : gt('Edit signature')));
 
         var baton = new ext.Baton();

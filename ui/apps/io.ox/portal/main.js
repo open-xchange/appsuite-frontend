@@ -466,7 +466,7 @@ define('io.ox/portal/main',
                 if (model) {
                     // do we have custom data that might be lost?
                     if (!_.isEmpty(model.get('props'))) {
-                        var dialog = new dialogs.ModalDialog({tabTrap: true})
+                        var dialog = new dialogs.ModalDialog()
                         .header($('<h4>').text(gt('Delete widget')))
                         .append($('<span>').text(gt('Do you really want to delete this widget?')))
                         .addPrimaryButton('delete',

@@ -108,7 +108,6 @@ define('io.ox/calendar/month/perspective',
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog({
-                                tabTrap: true,
                                 top: '20%',
                                 center: false,
                                 container: self.main
@@ -132,7 +131,7 @@ define('io.ox/calendar/month/perspective',
             };
 
             if (obj.recurrence_type > 0) {
-                new dialogs.ModalDialog({ tabTrap: true })
+                new dialogs.ModalDialog()
                     .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
                     .addButton('appointment', gt('Yes'), 'appointment', {tabIndex: '1'})
                     .addButton('cancel', gt('No'), 'cancel', {tabIndex: '1'})
