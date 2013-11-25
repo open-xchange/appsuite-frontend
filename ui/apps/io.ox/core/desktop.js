@@ -1297,6 +1297,10 @@ define('io.ox/core/desktop',
 
                 this.addPerspective = function (pers) {
                     var id = pers.name, node;
+                    // remove default main node if empty
+                    if (this.nodes.main && this.nodes.main.not(':empty')) {
+                        this.nodes.main.remove();
+                    }
                     if (this.nodes[id] === undefined) {
                         this.nodes.body.append(
                             node = $('<div class="abs window-content">').hide()
