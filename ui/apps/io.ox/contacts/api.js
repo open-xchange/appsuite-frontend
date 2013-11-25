@@ -554,12 +554,14 @@ define('io.ox/contacts/api',
         // already done?
         if (url) return node ? node.css('background-image', 'url(' + url + ')') : url;
 
-        // preference
-        if (options.internal_userid !== undefined) {
+        // preference; internal_userid must not be undefined, null, or zero
+        if (options.internal_userid) {
             delete options.contact_id;
             delete options.folder_id;
             delete options.folder;
             delete options.id;
+        } else {
+            delete options.internal_userid;
         }
 
         // empty extend trick to restrict to non-undefined values
