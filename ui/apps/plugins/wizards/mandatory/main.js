@@ -56,7 +56,7 @@ define('plugins/wizards/mandatory/main', [
                     user.set('last_name');
 
                     function updateButtonState() {
-                        if (!_.isEmpty(user.get('first_name')) && !_.isEmpty(user.get('last_name'))) {
+                        if (!_.isEmpty($.trim(user.get('first_name'))) && !_.isEmpty($.trim(user.get('last_name')))) {
                             baton.buttons.enableNext();
                         } else {
                             baton.buttons.disableNext();
@@ -84,7 +84,7 @@ define('plugins/wizards/mandatory/main', [
                     $('<div class="control-group" />').append(
                         $('<label class="control-label" for="first_name" />').text(gt('First name')),
                         $('<div class="controls" />').append(
-                            new mini.InputView({name: 'first_name', model: baton.user}).render().$el
+                            baton.focusNode = new mini.InputView({name: 'first_name', model: baton.user}).render().$el
                         )
                     ),
                     $('<div class="control-group" />').append(
@@ -96,6 +96,10 @@ define('plugins/wizards/mandatory/main', [
                 )
             );
 
+        },
+
+        activate: function (baton) {
+            baton.focusNode.focus();
         },
 
         finish: function (baton) {
@@ -180,7 +184,12 @@ define('plugins/wizards/mandatory/main', [
                 selectOptions: baton.availableTimeZones,
                 '$el': tzNode
             }).render();
+            baton.focusNode = tzNode.find('select');
             tzNode.find('select').addClass('input-xlarge');
+        },
+
+        activate: function (baton) {
+            baton.focusNode.focus();
         },
 
         finish: function (baton) {

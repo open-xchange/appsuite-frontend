@@ -51,11 +51,13 @@ define('io.ox/wizards/firstStart/main', [
                     );
                 })
                 .then(function (wizard, gt) {
-                    wizard.navButtons.prepend(
-                        $('<button class="btn wizard-close">').text(gt('Back to sign-in')).on('click', function () {
-                            def.reject();
-                            wizard.close();
-                        })
+                    wizard.navButtons.append(
+                        $('<button class="btn wizard-close pull-left" tabindex="1">')
+                            .text(gt('Back to sign-in'))
+                            .on('click', function () {
+                                def.reject();
+                                wizard.close();
+                            })
                      );
                     wizard.start({cssClass: 'first-start-wizard'}).done(function () {
                         if (def.state() === 'pending') {
