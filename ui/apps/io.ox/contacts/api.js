@@ -565,7 +565,6 @@ define('io.ox/contacts/api',
 
         // empty extend trick to restrict to non-undefined values
         params = $.extend({}, {
-            action: 'get',
             // identifier
             email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase(),
             folder: options.folder_id || options.folder,
