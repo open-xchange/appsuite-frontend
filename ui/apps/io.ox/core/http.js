@@ -668,6 +668,33 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         // helps joining identical requests
         var requests = {};
 
+        /**
+         * write response to console
+         * @example
+         * ox.extract = {
+         *      enabled: true,
+         *      matcher: [
+         *          { module: 'files', action: 'versions' }
+         *      ]
+         *  };
+         */
+        function extract(obj, resp) {
+            if (ox.extract && ox.extract.enabled) {
+                _.each([].concat(ox.extract.matcher || []), function (target) {
+                    if (obj.module === target.module &&
+                        obj.params.action === target.action) {
+                        //write to console
+                        console.groupCollapsed('extract: (module: "' + target.module + '", action: "' + target.action + '") ' + (obj.params.id || ''));
+                        console.log(JSON.stringify(resp));
+                        console.groupEnd();
+                        //store in array
+                        ox.extract.output = ox.extract.output || [];
+                        ox.extract.output.unshift(JSON.stringify(resp));
+                    }
+                });
+            }
+        }
+
         function lowLevelSend(r) {
             // TODO: remove backend fix
             var fixPost = r.o.fixPost && r.xhr.type === 'POST',
@@ -733,6 +760,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
                     that.trigger('reachable');
                     ox.trigger('connection:up');
+
+                    //write response to console
+                    if (ox.debug)
+                        extract(r.o, response);
 
                     // slow?
                     var took = _.now() - t0;
