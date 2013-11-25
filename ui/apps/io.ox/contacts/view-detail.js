@@ -119,7 +119,7 @@ define('io.ox/contacts/view-detail',
             this.append(
                 api.pictureHalo(
                     $('<div class="picture">'),
-                    { id: baton.data.id, folder: baton.data.folder_id, width: 64, height: 64, scaleType: 'cover' }
+                    $.extend(baton.data, { width: 64, height: 64, scaleType: 'cover' })
                 )
             );
         }

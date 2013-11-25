@@ -526,7 +526,6 @@ define('io.ox/contacts/api',
     api.pictureHalo = function (/* [node], options */) {
 
         var args = _(arguments).toArray(), node, options, params, fallback, url, img;
-
         if (args.length === 1) {
             options = args[0];
         } else {
@@ -565,10 +564,10 @@ define('io.ox/contacts/api',
         }
 
         // empty extend trick to restrict to non-undefined values
-        params = $.param($.extend({}, {
-            //action: 'get',
+        params = $.extend({}, {
+            action: 'get',
             // identifier
-            email: options.email && String(options.email).toLowerCase(),
+            email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase(),
             folder: options.folder_id || options.folder,
             id: options.contact_id || options.id,
             internal_userid: options.internal_userid,
@@ -576,9 +575,17 @@ define('io.ox/contacts/api',
             width: options.width,
             height: options.height,
             scaleType: options.scaleType
-        }));
+        });
+
+        // remove empty values
+        for (var k in params) {
+            if (params.hasOwnProperty(k) && !params[k]) {
+                delete params[k];
+            }
+        }
+
         fallback = ox.base + '/apps/themes/default/dummypicture.png';
-        url = ox.apiRoot + '/halo/contact/picture?' + params;
+        url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
 
         // just return URL
         if (!node) return url;
