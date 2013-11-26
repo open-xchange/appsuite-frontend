@@ -275,8 +275,7 @@ define('io.ox/core/tk/attachments',
             },
 
             add: function (file) {
-                var proceed = true,
-                    self = this,
+                var self = this,
                     list = [].concat(file),
                     properties = settings.get('properties'),
                     total = 0,
@@ -284,56 +283,55 @@ define('io.ox/core/tk/attachments',
                     quota,
                     usage,
                     maxFileSize,
-                    isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write');
+                    isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write'),
+                    filesLength = files.length;
 
-                if (list.length) {
-                    //check
-                    if (isMail) {
-                        maxFileSize = properties.attachmentMaxUploadSize;
-                        quota = properties.attachmentQuota;
-                        usage = 0;
-                    } else {
-                        maxFileSize = properties.infostoreMaxUploadSize;
-                        quota = properties.infostoreQuota;
-                        usage = properties.infostoreUsage;
+                function getQuota(a, b) {
+                    // 0 and -1 means that this is disabled
+                    return (a >= 0 && b >= 0 && Math.min(a, b)) || (a >= 0 && a) || b || 0;
+                }
+
+                if (!list.length) return;
+
+                //check
+                if (isMail) {
+                    maxFileSize = getQuota(properties.attachmentMaxUploadSize, properties.attachmentQuotaPerFile);
+                    quota = properties.attachmentQuota;
+                    usage = 0;
+                } else {
+                    maxFileSize = properties.infostoreMaxUploadSize;
+                    quota = properties.infostoreQuota;
+                    usage = properties.infostoreUsage;
+                }
+
+                _.find(list, function (item) {
+
+                    var fileTitle = item.filename || item.name || item.subject,
+                        fileSize = item.file_size || item.size;
+
+                    if (fileSize) {
+                        total += fileSize;
+                        if (maxFileSize > 0 && fileSize > maxFileSize) {
+                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
+                            return true;
+                        }
+                        if (quota > 0 && (total > (quota - usage))) {
+                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
+                            return true;
+                        }
                     }
 
-                    _.each(list, function (item) {
-                        if (!proceed) return;
-
-                        var fileTitle = item.filename || item.name || item.subject,
-                            fileSize = item.file_size || item.size;
-
-                        if (fileSize) {
-                            total += fileSize;
-                            if (maxFileSize > 0 && fileSize > maxFileSize) {
-                                proceed = false;
-                                notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
-                                return;
-                            }
-                            if (quota > 0) {
-                                if (total > quota - usage) {
-                                    proceed = false;
-                                    notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
-                                    return;
-                                }
-                            }
-                        }
-
-                        if (proceed) {
-                            files.push({
-                                file: (oldMode && item.hiddenField ? item.hiddenField : item),
-                                name: fileTitle,
-                                size: fileSize,
-                                group: item.group || 'unknown',
-                                cid: counter++
-                            });
-                        }
-
+                    files.push({
+                        file: (oldMode && item.hiddenField ? item.hiddenField : item),
+                        name: fileTitle,
+                        size: fileSize,
+                        group: item.group || 'unknown',
+                        cid: counter++
                     });
 
-                    if (proceed) self.listChanged();
-                }
+                });
+
+                if (filesLength + list.length === files.length) self.listChanged();
             },
 
             remove: function (attachment) {
