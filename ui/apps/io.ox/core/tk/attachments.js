@@ -280,14 +280,20 @@ define('io.ox/core/tk/attachments',
                     //check
                     require(['settings!io.ox/core', 'io.ox/core/notifications'], function (settings, notifications) {
 
-                        var properties = settings.get('properties');
-                        if (baton.app && baton.app.app.attributes.name !== 'io.ox/mail/write') {
-                            proceed = false;
+                        var properties = settings.get('properties'),
+                            total = 0,
+                            maxFileSize = properties.infostoreMaxUploadSize,
+                            quota = properties.infostoreQuota,
+                            usage = properties.infostoreUsage,
+                            isMail = false;
+
+                        if (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write') {
+                            maxFileSize = properties.attachmentMaxUploadSize;
+                            quota = properties.attachmentQuota;
+                            isMail = true;
                         }
                         if (properties && proceed) {
-                            var total = 0,
-                                maxFileSize = properties.infostoreMaxUploadSize,
-                                quota = properties.infostoreQuota;
+
                             _.each(list, function (item) {
                                 var fileTitle = item.filename || item.name || item.subject,
                                     fileSize = item.file_size || item.size;
@@ -298,8 +304,8 @@ define('io.ox/core/tk/attachments',
                                         notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
                                         return;
                                     }
-                                    if (quota > 0) {
-                                        if (total > quota - properties.infostoreUsage) {
+                                    if (!isMail && quota > 0) {
+                                        if (total > quota - usage) {
                                             proceed = false;
                                             notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
                                             return;
