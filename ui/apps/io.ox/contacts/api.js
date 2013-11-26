@@ -554,13 +554,15 @@ define('io.ox/contacts/api',
         if (url) return node ? node.css('background-image', 'url(' + url + ')') : url;
 
         // preference; internal_userid must not be undefined, null, or zero
-        if (options.internal_userid) {
+        if (options.internal_userid || options.userid || options.user_id) {
             delete options.contact_id;
             delete options.folder_id;
             delete options.folder;
             delete options.id;
         } else {
             delete options.internal_userid;
+            delete options.userid;
+            delete options.user_id;
         }
 
         // empty extend trick to restrict to non-undefined values
@@ -569,7 +571,7 @@ define('io.ox/contacts/api',
             email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase(),
             folder: options.folder_id || options.folder,
             id: options.contact_id || options.id,
-            internal_userid: options.internal_userid,
+            internal_userid: options.internal_userid || options.userid || options.user_id,
             // scale
             width: options.width,
             height: options.height,
