@@ -331,7 +331,7 @@ define('io.ox/core/tk/attachments',
 
                 });
 
-                if (filesLength + list.length === files.length) self.listChanged();
+                if (filesLength !== files.length) self.listChanged();
             },
 
             remove: function (attachment) {
