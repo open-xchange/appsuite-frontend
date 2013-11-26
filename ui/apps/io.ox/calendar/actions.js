@@ -75,10 +75,10 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         action: function (baton) {
-            util.createArrayOfRecipients(baton.data.participants).done(function (arrayOfRecipients) {
+            util.createRecipientsArray(baton.data.participants).done(function (recipients) {
                 ox.load(['io.ox/mail/write/main']).done(function (m) {
                     m.getApp().launch().done(function () {
-                        this.compose({to: arrayOfRecipients, subject: baton.data.title});
+                        this.compose({to: recipients, subject: baton.data.title});
                     });
                 });
             });
@@ -106,10 +106,10 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         action: function (baton) {
-            util.createDistlistArrayFromPartisipantList(baton.data.participants).done(function (initdata) {
+            util.createDistlistArray(baton.data.participants).done(function (distlist) {
                 ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
                     m.getApp().launch().done(function () {
-                        this.create(coreSettings.get('folder/contacts'), { distribution_list: initdata });
+                        this.create(coreSettings.get('folder/contacts'), { distribution_list: distlist });
                     });
                 });
             });
