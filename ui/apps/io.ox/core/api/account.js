@@ -392,7 +392,7 @@ define('io.ox/core/api/account',
      * get all accounts
      * @return {deferred} returns array of account object
      */
-    api.all = function () {
+    api.all = function (options) {
 
         var getter = function () {
             return http.GET({
@@ -400,24 +400,27 @@ define('io.ox/core/api/account',
                 params: { action: 'all' },
                 appendColumns: true,
                 processResponse: true
+            })
+            .then(function (data) {
+                data = process(data);
+                return accountsAllCache.add(data).then(function () {
+                    return data;
+                });
             });
         };
 
-        return accountsAllCache.keys().pipe(function (keys) {
-            if (keys.length > 0) {
+        options = options || {};
+
+        return accountsAllCache.keys().then(function (keys) {
+            if (options.cache !== false && keys.length > 0) {
                 return accountsAllCache.values();
             } else if (ox.online) {
-                return getter().pipe(function (data) {
-                    data = process(data);
-                    return accountsAllCache.add(data).then(function () {
-                        return data;
-                    });
-                });
+                return getter();
             } else {
                 return [];
             }
         })
-        .pipe(function (list) {
+        .then(function (list) {
 
             idHash = {};
             typeHash = {};

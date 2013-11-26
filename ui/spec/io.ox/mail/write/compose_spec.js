@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/mail/write/main'], function (writer) {
+define(
+    ['io.ox/mail/write/main',
+     'io.ox/mail/api',
+     'io.ox/core/api/account',
+     'fixture!io.ox/mail/write/accounts.json'], function (writer, mailAPI, accountAPI, accounts) {
 
     'use strict';
 
@@ -24,7 +28,16 @@ define(['io.ox/mail/write/main'], function (writer) {
 
     describe('Mail compose dialog', function () {
 
-        var app = null, ed = null, form = null;
+        var app = null, ed = null, form = $();
+
+        beforeEach(function () {
+            this.server = ox.fakeServer.create();
+            this.server.autoRespond = true;
+        });
+
+        afterEach(function () {
+            this.server.restore();
+        });
 
         it('opens in HTML mode', function () {
 
@@ -221,26 +234,42 @@ define(['io.ox/mail/write/main'], function (writer) {
             expect(data.vcard).toBe(0);
         });
 
-        // var sentMailId = {}, sentOriginalData;
+        var sentMailId = {}, sentOriginalData;
 
-        // it('sends mail successfully', function () {
-        //     var data = app.getMail().data, done = new Done();
-        //     waitsFor(done, 'mail being send');
-        //     // get myself
-        //     accountAPI.getPrimaryAddress().done(function (address) {
-        //             // just send to myself
-        //             data.to = [address];
-        //             data.cc = [];
-        //             data.bcc = [];
-        //             sentOriginalData = data;
-        //             mailAPI.send(data)
-        //                 .always(function (result) {
-        //                     done.yep();
-        //                     sentMailId = String(result.data);
-        //                     expect(result.error).toBeUndefined();
-        //                 });
-        //         });
-        // });
+        it('sends mail successfully', function () {
+
+            var data = app.getMail().data, done = new Done();
+
+            this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/html;charset=UTF-8' }, '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html><head><META http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>(parent.callback_new || window.opener && window.opener.callback_new)({"data":"default0/INBOX/Sent/1337"})</script></head></html>');
+            });
+
+            this.server.respondWith('GET', /api\/account\?action=all/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(accounts));
+            });
+
+            waitsFor(done, 'mail being sent');
+
+            accountAPI.getPrimaryAddress().then(
+                function success(address) {
+                    // just send to myself
+                    data.to = [address];
+                    data.cc = [];
+                    data.bcc = [];
+                    sentOriginalData = data;
+                    expect(address).toEqual(['Otto Xentner', 'otto.xentner@open-xchange.com']);
+                    mailAPI.send(data).always(function (result) {
+                        done.yep();
+                        sentMailId = String(result.data);
+                        expect(result.error).toBeUndefined();
+                        expect(result.data).toBe('default0/INBOX/Sent/1337');
+                    });
+                },
+                function fail() {
+                    console.warn('accountAPI.getPrimaryAddress() > failed');
+                }
+            );
+        });
 
         // it('verifies that sent mail is ok', function () {
         //     var done = new Done(),

@@ -771,9 +771,9 @@ define.async('io.ox/core/tk/html-editor',
         };
     }
 
-    return $.getScript(ox.base + '/apps/moxiecode/tiny_mce/jquery.tinymce.js')
-        .pipe(function () {
-            // publish editor class
-            return Editor;
-        });
+    // $.getScript adds cache busting query
+    return $.ajax({ url: ox.base + '/apps/moxiecode/tiny_mce/jquery.tinymce.js', cache: true, dataType: 'script' }).then(function () {
+        // publish editor class
+        return Editor;
+    });
 });
