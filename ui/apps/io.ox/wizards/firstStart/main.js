@@ -14,7 +14,7 @@
 define('io.ox/wizards/firstStart/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/extensions',
-    'settings!io.ox/wizards/firstStart',
+    'settings!io.ox/core',
     'less!io.ox/wizards/firstStart/style.less'
 ], function (Stage, ext, settings) {
 
@@ -28,7 +28,7 @@ define('io.ox/wizards/firstStart/main', [
         index: 550,
         run: function () {
             if (ox.manifests.pluginsFor('io.ox/wizards/firstStart').length === 0 ||
-                settings.get('finished', false)) {
+                settings.get('wizards/firstStart/finished', false)) {
                 return $.when();
             }
             var def = $.Deferred();
@@ -53,7 +53,7 @@ define('io.ox/wizards/firstStart/main', [
                 .then(function (wizard, gt) {
                     wizard.navButtons.append(
                         $('<button class="btn wizard-close pull-left" tabindex="1">')
-                            .text(gt('Back to sign-in'))
+                            .text(gt('Back to sign in'))
                             .on('click', function () {
                                 def.reject();
                                 wizard.close();
@@ -67,7 +67,7 @@ define('io.ox/wizards/firstStart/main', [
                     return def;
                 })
                 .done(function () {
-                    settings.set({finished: true}).save();
+                    settings.set('wizards/firstStart/finished', true).save();
                     topbar.show();
                     ox.busy();
                 })

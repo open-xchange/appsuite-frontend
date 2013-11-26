@@ -29,10 +29,10 @@ define('plugins/wizards/mandatory/main', [
      */
     point.extend({
         id: 'example_welcome',
-        title: 'Welcome',
+        title: gt.format('Welcome to %s', ox.serverConfig.productName),
         draw: function (baton) {
             this.append(
-                'Welcome to Appsuite, please enter some important information during the next steps'
+                'Before you can continue using the product, you have to enter some basic information. It will take less than a minute.'
             );
             baton.buttons.enableNext();
         }
@@ -40,7 +40,7 @@ define('plugins/wizards/mandatory/main', [
 
     point.extend({
         id: 'name',
-        title: gt('Personal information'),
+        title: gt('Your name'),
         load: function (baton) {
             var def = $.Deferred();
 
@@ -74,8 +74,6 @@ define('plugins/wizards/mandatory/main', [
         },
 
         draw: function (baton) {
-            this.append($('<h4>').text(gt('Your name')));
-
             // Now, on to the serious business
             var mini = baton.libraries.mini;
 
@@ -96,6 +94,17 @@ define('plugins/wizards/mandatory/main', [
                 )
             );
 
+            this.find('input[type="text"]').on('keyup', _.debounce(function () {
+                var valid = _($('input[type="text"]')).reduce(function (memo, element) {
+                    return memo && !_.isEmpty($.trim($(element).val()));
+                }, true);
+                if (valid) {
+                    baton.buttons.enableNext();
+                } else {
+                    baton.buttons.disableNext();
+                }
+            }, 100));
+
         },
 
         activate: function (baton) {
@@ -113,7 +122,7 @@ define('plugins/wizards/mandatory/main', [
 
     point.extend({
         id: 'timezone',
-        title: 'Timezone information',
+        title: gt('Your timezone'),
         load: function (baton) {
             return require([
                 'settings!io.ox/core',
@@ -168,8 +177,6 @@ define('plugins/wizards/mandatory/main', [
         draw: function (baton) {
             var forms = baton.libraries.forms,
                 tzNode;
-
-            this.append($('<h4>').text(gt('Your timezone')));
 
             //TODO: port to miniviews, once there is a selectbox feature
             this.append(
