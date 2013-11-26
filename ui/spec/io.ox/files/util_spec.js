@@ -32,12 +32,12 @@ define(['io.ox/files/util'], function (util) {
                 expect(util.confirmDialog('nameOne.txt', 'nameTwo.txt')).toResolve();
             });
             it('should create a confirm dialog if file extension is removed', function () {
-                $(document.body).empty();
+                $('.io-ox-dialog-wrapper').remove();
                 expect(util.confirmDialog('removeExtension', 'removeExtension.md')).toStayPending();
                 expect($(document.body).find('.io-ox-dialog-wrapper').length).toEqual(1);
             });
             it('should create a confirm dialog if file extension changes', function () {
-                $(document.body).empty();
+                $('.io-ox-dialog-wrapper').remove();
                 expect(util.confirmDialog('changeExtension.txt', 'changeExtension.md')).toStayPending();
                 expect($(document.body).find('.io-ox-dialog-wrapper').length).toEqual(1);
             });

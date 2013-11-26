@@ -41,7 +41,6 @@ define(['io.ox/files/fluid/view-detail', 'io.ox/core/extensions'], function (vie
 
         describe('creates a DOM structure', function () {
             var node = view.draw(baton);
-            $(document.body).empty().append(node);
 
             describe('with a container that', function () {
                 it('has class file-details', function () {
