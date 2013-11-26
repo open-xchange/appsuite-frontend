@@ -82,17 +82,286 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') +')').length).toBe(1);
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') +')').length).toBe(1);
             
-            // $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') +')').click();
-            // expect($popup.find('li.filter-settings-view').length).toBe(1);
-            
         });
 
         it('should draw the Sender/From condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') +')').click();
+
             expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-value="contains"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="is"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="matches"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="regex"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-test"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
         });
 
-    
+        it('should draw the Any recipient condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-value="contains"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="is"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="matches"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="regex"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-test"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Subject condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-value="contains"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="is"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="matches"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="regex"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-test"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Mailing list condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-value="contains"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="is"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="matches"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="regex"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-test"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the To condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-value="contains"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="is"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="matches"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="regex"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-test"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the CC condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-value="contains"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="is"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="matches"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="regex"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-test"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Header condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test-second"]').length).toBe(1);
+            
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-value="contains"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="is"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="matches"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="regex"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-test"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Envelope condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-value="contains"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="is"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="matches"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="regex"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-test"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Size (bytes) condition', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-value="over"]').length).toBe(1);
+            expect($popup.find('li li a[data-value="under"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-test"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-test"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Keep action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-action"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-action"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Discard action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li.filter-settings-view').hasClass('warning')).toBe(true);
+
+            expect($popup.find('li a[data-action="remove-action"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-action"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Redirect to action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-action"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-action"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-action"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Move to folder action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li a.folderselect').length).toBe(1);
+            expect($popup.find('li input[disabled="disabled"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-action"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-action"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Reject with reason action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-action"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-action"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-action"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Mark mail as action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li a.dropdown-toggle').length).toBe(1);
+
+            expect($popup.find('li li a[data-action="change-value-actions"]').length).toBe(2);
+
+            expect($popup.find('li a[data-action="remove-action"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-action"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Tag mail with action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li input[data-action="change-text-action"]').length).toBe(1);
+
+            expect($popup.find('li a[data-action="remove-action"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-action"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
+        it('should draw the Flag mail with action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') +')').click();
+
+            expect($popup.find('li.filter-settings-view').length).toBe(1);
+            expect($popup.find('li div.flag-dropdown').length).toBe(1);
+            expect($popup.find('li li a[data-action="change-color"]').length).toBe(11);
+
+            expect($popup.find('li a[data-action="remove-action"]').length).toBe(1);
+
+            $popup.find('li a[data-action="remove-action"]').click();
+            expect($popup.find('li.filter-settings-view').length).toBe(0);
+
+        });
+
     });
 
 });
