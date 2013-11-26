@@ -386,7 +386,7 @@ define('io.ox/mail/main',
         settings.on('change', handleSettingsChange);
         drawGridOptions();
 
-        commons.addGridToolbarFolder(app, grid);
+        commons.addGridToolbarFolder(app, grid, 'MAIL');
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now

@@ -1322,10 +1322,14 @@ define('io.ox/mail/api',
                 action: 'all',
                 folder: 'default0/INBOX',
                 columns: '610,600,601,611', //received_date, id, folder_id, flags
-                unseen: 'true',
-                deleted: 'true',
+                unseen: 'true', // only unseen mails are interesting here!
+                deleted: 'false', // any reason to see them?
                 sort: '610',
-                order: 'desc'
+                order: 'desc',
+                // not really sure if limit works as expected
+                // if I only fetch 10 mails and my inbox has some unread mails but the first 10 are seen
+                // I still get the unread mails
+                limit: 100
             }
         })
         .pipe(function (unseen) {
