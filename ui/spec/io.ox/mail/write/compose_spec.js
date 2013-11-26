@@ -15,7 +15,8 @@ define(
     ['io.ox/mail/write/main',
      'io.ox/mail/api',
      'io.ox/core/api/account',
-     'fixture!io.ox/mail/write/accounts.json'], function (writer, mailAPI, accountAPI, accounts) {
+     'fixture!io.ox/mail/write/email.json',
+     'fixture!io.ox/mail/write/accounts.json'], function (writer, mailAPI, accountAPI, fixtureEmail, fixtureAccounts) {
 
     'use strict';
 
@@ -234,8 +235,6 @@ define(
             expect(data.vcard).toBe(0);
         });
 
-        var sentMailId = {}, sentOriginalData;
-
         it('sends mail successfully', function () {
 
             var data = app.getMail().data, done = new Done();
@@ -245,7 +244,7 @@ define(
             });
 
             this.server.respondWith('GET', /api\/account\?action=all/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(accounts));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureAccounts));
             });
 
             waitsFor(done, 'mail being sent');
@@ -256,11 +255,9 @@ define(
                     data.to = [address];
                     data.cc = [];
                     data.bcc = [];
-                    sentOriginalData = data;
                     expect(address).toEqual(['Otto Xentner', 'otto.xentner@open-xchange.com']);
                     mailAPI.send(data).always(function (result) {
                         done.yep();
-                        sentMailId = String(result.data);
                         expect(result.error).toBeUndefined();
                         expect(result.data).toBe('default0/INBOX/Sent/1337');
                     });
@@ -271,26 +268,26 @@ define(
             );
         });
 
-        // it('verifies that sent mail is ok', function () {
-        //     var done = new Done(),
-        //         data = sentOriginalData,
-        //         split = sentMailId.split(/\/(\d+$)/);
-        //     waitsFor(done, 'mail being fetched');
-        //     mailAPI.get({ folder: split[0], id: split[1] })
-        //         .done(function (sent) {
-        //             done.yep();
-        //             expect(
-        //                     _.isEqual(sent.subject, data.subject) &&
-        //                     _.isEqual(sent.from, data.from) &&
-        //                     _.isEqual(sent.to, data.to) &&
-        //                     _.isEqual(sent.cc, data.cc) &&
-        //                     _.isEqual(sent.bcc, data.bcc) &&
-        //                     _.isEqual(sent.priority, data.priority) &&
-        //                     _.isEqual(sent.vcard || undefined, data.vcard || undefined)
-        //                 )
-        //                 .toEqual(true);
-        //         });
-        // });
+        it('verifies that sent mail is ok', function () {
+
+            var done = new Done();
+
+            this.server.respondWith('GET', /api\/mail\?action=get.+id=1337/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureEmail));
+            });
+
+            waitsFor(done, 'mail being fetched');
+
+            mailAPI.get({ folder: 'default0/INBOX/Sent', id: '1337' }).done(function (sent) {
+                done.yep();
+                expect(sent.subject).toBe('Test: Hello World');
+                expect(sent.to).toEqual([['Otto Xentner',"otto.xentner@open-xchange.com"]]);
+                expect(sent.cc).toEqual([]);
+                expect(sent.bcc).toEqual([]);
+                expect(sent.priority).toBe(3);
+                expect(sent.flags).toBe(32);
+            });
+        });
 
         it('closes compose dialog', function () {
             // mark app as clean so no save as draft question will pop up
