@@ -66,6 +66,8 @@ define(['io.ox/mail/write/main',
                         ]
                     };
 
+                    ox.testUtils.modules.caps('auto_publish_attachments', 'io.ox/mail/write/main', main);
+
                     if (notifications.yell.restore)
                         notifications.yell.restore();
                     this.notificationSpy = sinon.spy(notifications, 'yell');

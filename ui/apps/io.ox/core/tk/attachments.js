@@ -284,7 +284,8 @@ define('io.ox/core/tk/attachments',
                     usage,
                     maxFileSize,
                     isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write'),
-                    filesLength = files.length;
+                    filesLength = files.length,
+                    autoPublish = require('io.ox/core/capabilities').has('auto_publish_attachments');
 
                 function getQuota(a, b) {
                     // 0 and -1 means that this is disabled
@@ -295,8 +296,8 @@ define('io.ox/core/tk/attachments',
 
                 //check
                 if (isMail) {
-                    maxFileSize = getQuota(properties.attachmentMaxUploadSize, properties.attachmentQuotaPerFile);
-                    quota = properties.attachmentQuota;
+                    maxFileSize = autoPublish ? -1 : getQuota(properties.attachmentMaxUploadSize, properties.attachmentQuotaPerFile);
+                    quota = autoPublish ? -1 : properties.attachmentQuota;
                     usage = 0;
                 } else {
                     maxFileSize = properties.infostoreMaxUploadSize;
