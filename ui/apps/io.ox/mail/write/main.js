@@ -164,7 +164,9 @@ define('io.ox/mail/write/main',
             model,
             previous;
 
-        if (Modernizr.touch) messageFormat = 'text'; // See Bug 24802
+        // don’t force text on phantomjs, because phantomjs reports as a touch device
+        // see https://github.com/ariya/phantomjs/issues/10375
+        if (!_.device('phantomjs') && Modernizr.touch) messageFormat = 'text'; // See Bug 24802
 
         function blockReuse(sendtype) {
             blocked[sendtype] = (blocked[sendtype] || 0) + 1;

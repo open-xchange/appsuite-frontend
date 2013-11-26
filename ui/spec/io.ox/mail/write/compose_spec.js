@@ -26,8 +26,6 @@ define(['io.ox/mail/write/main'], function (writer) {
 
         var app = null, ed = null, form = null;
 
-        ox.testUtils.stubAppsuiteBody();
-
         it('opens in HTML mode', function () {
 
             var loaded = new Done();
@@ -176,7 +174,7 @@ define(['io.ox/mail/write/main'], function (writer) {
             var data = app.getMail().data;
             expect(data.attachments).toBeDefined();
             expect(data.attachments.length).toBeGreaterThan(0);
-            expect(data.attachments[0].content_type).toBe('alternative');
+            expect(data.attachments[0].content_type).toBe('text/html');
             expect(data.attachments[0].content).toBe('<p>Lorem ipsum</p>');
         });
 
