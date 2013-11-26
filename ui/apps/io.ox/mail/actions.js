@@ -571,15 +571,30 @@ define('io.ox/mail/actions',
                 })
                 .then(
                     function success(data) {
-                        //TODO: Handle data not being an array or containing more than one contact
-                        var contact = data[0];
-                        contact.folder_id = config.get('folder.contacts');
-                        require(['io.ox/contacts/edit/main'], function (m) {
-                            if (m.reuse('edit', contact)) {
-                                return;
-                            }
-                            m.getApp(contact).launch();
-                        });
+                        if (!_.isArray(data) || data.length === 0) {
+                            notifications.yell('error', gt('Failed to add. Maybe the VCard attachment is invalid.'));
+                            return;
+                        }
+
+                        var contact = data[0], folder = config.get('folder/contacts');
+
+                        if (contact.mark_as_distributionlist) {
+                            // edit distribution list
+                            require(['io.ox/contacts/distrib/main'], function (m) {
+                                m.getApp(contact).launch().done(function () {
+                                    this.create(folder, contact);
+                                });
+                            });
+                        } else {
+                            // edit contact
+                            require(['io.ox/contacts/edit/main'], function (m) {
+                                contact.folder_id = folder;
+                                if (m.reuse('edit', contact)) {
+                                    return;
+                                }
+                                m.getApp(contact).launch();
+                            });
+                        }
                     },
                     function fail(data) {
                         console.err('FAILED!', data);
