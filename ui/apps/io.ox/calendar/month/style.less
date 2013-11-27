@@ -252,7 +252,7 @@
                     }
 
                     .number {
-                        top: 12px;
+                        top: auto;
                         bottom: auto; // move number to top of cell
                         left: 0;
                         text-align: center;
@@ -263,7 +263,9 @@
                     }
 
                     &.today, &.today .number {
-                         background-color: transparent;
+                        font-weight: bold;
+                        color: rgba(1, 1, 1, 0.6);
+                        background-color: transparent;
                     }
 
                     &.out {
@@ -280,7 +282,7 @@
                     }
 
                     .list {
-                        top: 40%;
+                        top: auto;
                         font-size: 12px;
                         text-align: center;
                         color: @linkColor;

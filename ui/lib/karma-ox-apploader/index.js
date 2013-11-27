@@ -16,12 +16,12 @@ var createCustomFileHandler = function(handlers, builddir) {
     };
 
     handlers.push({
-        urlRegex: /^\/api\/apps\/load\/,/,
+        urlRegex: /^\/api\/apps\/load\/.*,/,
         handler: appsLoad
     });
 
     handlers.push({
-        urlRegex: /(^\/apps\/)/,
+        urlRegex: /(\/apps\/)/,
         handler: localFiles
     });
 }

@@ -33,8 +33,7 @@ define('io.ox/mail/accounts/settings',
 
         myView.dialog = new dialogs.ModalDialog({
             width: 600,
-            async: true,
-            tabTrap: true
+            async: true
         });
 
         myView.dialog.append(
@@ -53,6 +52,12 @@ define('io.ox/mail/accounts/settings',
             } else {
                 notifications.yell('error', gt('Account settings could not be saved.'));
                 myView.dialog.idle();
+
+                //disable fields for primary account again
+                if (myModel.get('id') === 0) {
+                    myView.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').prop('disabled', true);
+                }
+
             }
         });
 
@@ -241,8 +246,7 @@ define('io.ox/mail/accounts/settings',
                 new dialogs.ModalDialog({
                     width: 400,
                     async: true,
-                    enter: 'add',
-                    tabTrap: true
+                    enter: 'add'
                 })
                 .header(
                     $('<h4>').text(gt('Add mail account'))
@@ -296,8 +300,7 @@ define('io.ox/mail/accounts/settings',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var successDialogbox = new dialogs.ModalDialog({
                         width: 400,
-                        async: true,
-                        tabTrap: true
+                        async: true
                     });
                 successDialogbox.header()
                 .append(
@@ -319,8 +322,7 @@ define('io.ox/mail/accounts/settings',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var failDialogbox = new dialogs.ModalDialog({
                         width: 400,
-                        async: true,
-                        tabTrap: true
+                        async: true
                     });
                 failDialogbox.header()
                 .append(

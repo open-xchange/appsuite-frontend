@@ -20,8 +20,11 @@ define('io.ox/core/tk/attachments',
      'io.ox/core/tk/dialogs',
      'gettext!io.ox/core/tk/attachments',
      'io.ox/core/extPatterns/links',
-     'less!io.ox/core/tk/attachments.less'
-    ], function (ext, attachmentAPI, strings, util, pre, dialogs, gt, links) {
+     'settings!io.ox/core',
+     'io.ox/core/notifications',
+     'less!io.ox/core/tk/attachments.less',
+
+    ], function (ext, attachmentAPI, strings, util, pre, dialogs, gt, links, settings, notifications) {
 
     'use strict';
 
@@ -272,66 +275,64 @@ define('io.ox/core/tk/attachments',
             },
 
             add: function (file) {
-                var proceed = true, self = this,
-                    list = [].concat(file);
+                var self = this,
+                    list = [].concat(file),
+                    properties = settings.get('properties'),
+                    total = 0,
+                    maxFileSize,
+                    quota,
+                    usage,
+                    maxFileSize,
+                    isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write'),
+                    filesLength = files.length,
+                    autoPublish = require('io.ox/core/capabilities').has('auto_publish_attachments');
 
-
-                if (list.length) {
-                    //check
-                    require(['settings!io.ox/core', 'io.ox/core/notifications'], function (settings, notifications) {
-
-                        var properties = settings.get('properties');
-                        if (baton.app && baton.app.app.attributes.name !== 'io.ox/mail/write') {
-                            proceed = false;
-                        }
-                        if (properties && proceed) {
-                            var total = 0,
-                                maxFileSize = properties.infostoreMaxUploadSize,
-                                quota = properties.infostoreQuota;
-                            _.each(list, function (item) {
-                                var fileTitle = item.filename || item.name || item.subject,
-                                    fileSize = item.file_size || item.size;
-                                if (fileSize) {
-                                    total += fileSize;
-                                    if (maxFileSize > 0 && fileSize > maxFileSize) {
-                                        proceed = false;
-                                        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
-                                        return;
-                                    }
-                                    if (quota > 0) {
-                                        if (total > quota - properties.infostoreUsage) {
-                                            proceed = false;
-                                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
-                                            return;
-                                        }
-                                    }
-                                }
-                                //add
-                                if (proceed) {
-                                    files.push({
-                                        file: (oldMode && item.hiddenField ? item.hiddenField : item),
-                                        name: fileTitle,
-                                        size: fileSize,
-                                        group: item.group || 'unknown',
-                                        cid: counter++
-                                    });
-                                }
-                            });
-                        } else {
-                            _.each(list, function (item) {
-                                files.push({
-                                    file: (oldMode && item.hiddenField ? item.hiddenField : item),
-                                    name: item.filename || item.name || item.subject,
-                                    size: item.file_size || item.size,
-                                    group: item.group || 'unknown',
-                                    cid: counter++
-                                });
-                            });
-                            proceed = true;
-                        }
-                        if (proceed) self.listChanged();
-                    });
+                function getQuota(a, b) {
+                    // 0 and -1 means that this is disabled
+                    return (a >= 0 && b >= 0 && Math.min(a, b)) || (a >= 0 && a) || b || 0;
                 }
+
+                if (!list.length) return;
+
+                //check
+                if (isMail) {
+                    maxFileSize = autoPublish ? -1 : getQuota(properties.attachmentMaxUploadSize, properties.attachmentQuotaPerFile);
+                    quota = autoPublish ? -1 : properties.attachmentQuota;
+                    usage = 0;
+                } else {
+                    maxFileSize = properties.infostoreMaxUploadSize;
+                    quota = properties.infostoreQuota;
+                    usage = properties.infostoreUsage;
+                }
+
+                _.find(list, function (item) {
+
+                    var fileTitle = item.filename || item.name || item.subject,
+                        fileSize = item.file_size || item.size;
+
+                    if (fileSize) {
+                        total += fileSize;
+                        if (maxFileSize > 0 && fileSize > maxFileSize) {
+                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
+                            return true;
+                        }
+                        if (quota > 0 && (total > (quota - usage))) {
+                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
+                            return true;
+                        }
+                    }
+
+                    files.push({
+                        file: (oldMode && item.hiddenField ? item.hiddenField : item),
+                        name: fileTitle,
+                        size: fileSize,
+                        group: item.group || 'unknown',
+                        cid: counter++
+                    });
+
+                });
+
+                if (filesLength !== files.length) self.listChanged();
             },
 
             remove: function (attachment) {

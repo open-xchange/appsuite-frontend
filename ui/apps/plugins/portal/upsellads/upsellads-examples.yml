@@ -8,8 +8,34 @@ io.ox/portal//widgets/protected:
     props:
       ad: "lipsum"
 
+plugins/upsell//bubbles:
+  skipFirstLogin: true
+  repeatInMilliseconds: 900000
+  repeatPerLogins: 1
+  bubbles:
+    en_US:
+      bubble1:
+        app: 'io.ox/portal'
+        content: "A single view of your whole digital world, but did you know you could add many more widgets to your portal view? Simply press Add Widget and complete your custom portal view."
+        startDate: 2013-07-01
+        endDate: 2019-06-31
+      bubble2:
+        app: 'io.ox/tasks'
+        content: "Time management is never easy. Upgrade to Group Calendars and instantly share calendars and get access to the easiest scheduler ever made."
+      bubble3:
+        app: 'io.ox/calendar'
+        content: "Need to share calendars, want to maintain common calendars, want an easy way to find out when people are free? Just upgrade to Group Calendars and instantly share calendars and get access to the easiest scheduler ever made."
+      bubble4:
+        app: 'io.ox/files'
+        content: "Take a photo and instantly have it on your laptop? Work on a document at work and have it instantly on your home computer? Synchronise folders on computers, phones and tablets with OX Drive. Try it and you will wonder how you lived without it. "
+      bubble5:
+        app: 'io.ox/mail'
+        content: "Keep track of your emails from any device natively: Upgrade to Mobile Synchronisation and all your emails, appointments, tasks and contacts will appear on all your devices. Loose your device: No problem! Simply sync your new device and you are back in action again."
+      bubble6:
+        app: 'io.ox/contacts'
+        content: "Different address books on different devices? If you loose your phone or your computer breaks what would happen? Upgrade to Mobile Synchronisation and all your contacts will be synchronised to all your devices. Loose a device or get a new one: No problem."
 
-io.ox/upsell//ads:
+plugins/upsell//ads:
   delayInMilliseconds: 10000
   lipsum:
     capabilities: loremgibsum-active
@@ -38,7 +64,7 @@ io.ox/upsell//ads:
           text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
 
-io.ox/upsell//shop:
+plugins/upsell//shop:
   priceFormat: '$%sUSD'
   target: 'http://localhost/order-confirmation?cartContents=OXUPSELLCART&context=OXUPSELLCONTEXT&user=OXUPSELLUSER'
   disclaimer:

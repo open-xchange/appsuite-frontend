@@ -22,7 +22,7 @@ define('io.ox/core/upsell',
     function showUpgradeDialog(e, options) {
         console.debug('upsell:requires-upgrade', options);
         require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog({ easyOut: true })
+            new dialogs.ModalDialog()
                 .build(function () {
                     this.getHeader().append(
                         $('<h4>').text(gt('Upgrade required'))

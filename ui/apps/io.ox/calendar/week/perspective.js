@@ -85,7 +85,6 @@ define('io.ox/calendar/week/perspective',
                 api.update(obj).fail(function (con) {
                     if (con.conflicts) {
                         new dialogs.ModalDialog({
-                                tabTrap: true,
                                 top: '20%',
                                 center: false,
                                 container: self.main
@@ -123,7 +122,7 @@ define('io.ox/calendar/week/perspective',
             };
 
             if (obj.recurrence_type > 0) {
-                var dialog = new dialogs.ModalDialog({ tabTrap: true });
+                var dialog = new dialogs.ModalDialog();
                 if (obj.drag_move && obj.drag_move !== 0) {
                     dialog
                         .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))

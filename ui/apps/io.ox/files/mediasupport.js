@@ -33,15 +33,15 @@ define('io.ox/files/mediasupport', function () {
     var browserSupportsMedia = {
         hasSupport: function (mediatype) {
             // Early exit if mediatype is not supported
-            // Disable Audio for Android stock browser
-            if (mediatype === 'audio' && _.browser.chrome === 18 && _.device('android')) return false;
+            // Disable Audio for Android, see Bug #29438
+            if (mediatype === 'audio' && _.device('android')) return false;
             if (!Modernizr[mediatype]) return false;
             return true;
         },
         supportedExtensionsArray: function (mediatype) {
-            if (!mediatype) return false;
+            if (!mediatype) return [];
             var str = this.supportedExtensions(mediatype);
-            if (!str) return false;
+            if (!str.length) return [];
             if (str.indexOf('|') >= 0) {
                 return str.split('|');
             } else if (str) {
@@ -50,7 +50,7 @@ define('io.ox/files/mediasupport', function () {
         },
         supportedExtensions: function (mediatype) {
 
-            if (!this.hasSupport(mediatype)) return false;
+            if (!this.hasSupport(mediatype)) return '';
 
             var support;
             _.each(_.browser, function (v, b) {
@@ -62,6 +62,7 @@ define('io.ox/files/mediasupport', function () {
         },
         checkFile: function (mediatype, filename) {
             if (!this.hasSupport(mediatype)) return false;
+            if (this.supportedExtensions(mediatype) === '') return false;
             var pattern = '\\.(' + this.supportedExtensions(mediatype) + ')';
             return (new RegExp(pattern, 'i')).test(filename);
         }

@@ -68,7 +68,7 @@ define('io.ox/tasks/edit/main',
 
             //now check if something changed with the attachments
             var attachmentList = taskView.baton.attachmentList;
-            if ((attachmentList.attachmentsToAdd.length > 0) || (attachmentList.attachmentsToDelete.length > 0)) {
+            if (attachmentList && ((attachmentList.attachmentsToAdd.length > 0) || (attachmentList.attachmentsToDelete.length > 0))) {
                 check = true;
             }
             return check;
@@ -150,7 +150,7 @@ define('io.ox/tasks/edit/main',
 
             if (app.isDirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({tabTrap: true})
+                    new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
                         .addPrimaryButton('delete', gt('Discard changes'), 'delete', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})

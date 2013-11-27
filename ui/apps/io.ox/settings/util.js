@@ -20,6 +20,11 @@ define('io.ox/settings/util',
     'use strict';
 
     return {
+
+        destroy: function () {
+            notifications.yell('destroy');
+        },
+
         yellOnReject: function (def, options) {
 
             // be robust

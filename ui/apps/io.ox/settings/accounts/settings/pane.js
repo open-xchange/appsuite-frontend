@@ -158,7 +158,7 @@ define('io.ox/settings/accounts/settings/pane',
                     self = this;
 
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ easyOut: true, async: true, tabTrap: true })
+                    new dialogs.ModalDialog({ async: true })
                     .text(gt('Do you really want to delete this account?'))
                     .addPrimaryButton('delete', gt('Delete account'), 'delete', {tabIndex: '1'})
                     .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})

@@ -52,7 +52,7 @@ define('io.ox/calendar/acceptdeny',
                     );
             }
 
-            return new dialogs.ModalDialog({tabTrap: true})
+            return new dialogs.ModalDialog()
                 .build(function () {
 
                     var recurrenceString = util.getRecurrenceString(data);

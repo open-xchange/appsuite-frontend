@@ -7,6 +7,8 @@ for (var file in window.__karma__.files) {
     }
 }
 
+//console.log('-----[ running ' + tests.length + ' test files ]-----');
+
 require(['io.ox/core/extPatterns/stage'], function (Stage) {
 
     'use strict';

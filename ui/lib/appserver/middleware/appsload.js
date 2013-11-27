@@ -98,7 +98,7 @@ function create(options) {
         function remote(filename, fullName, name) {
             if (!options.server) {
                 return function() {
-                    console.log('Could not read', filename);
+                    if (verbose.remote) console.log('Could not read', filename);
                     response.write(
                         "define('" + escape(fullName) + "', function () {\n" +
                         "  if (ox.debug) console.log(\"Could not read '" +

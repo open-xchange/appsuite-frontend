@@ -24,10 +24,8 @@ define('io.ox/core/ping',
         intervalHandle = null;
 
     function ping() {
-        if (!ox.session || ox.session === 'unset') {
-            return;
-        }
-        if (ox.online) http.ping();
+        if (!ox.session || ox.session === 'unset' || !ox.online || _.device('phantomjs || karma')) return;
+        http.ping();
     }
 
     function stopInterval() {

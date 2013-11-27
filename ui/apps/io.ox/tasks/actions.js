@@ -55,7 +55,7 @@ define('io.ox/tasks/actions',
                 numberOfTasks = data.length || 1;
             ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
                 //build popup
-                var popup = new dialogs.ModalDialog({async: true, tabTrap: true})
+                var popup = new dialogs.ModalDialog({async: true})
                     .addPrimaryButton('deleteTask', gt('Delete'), 'deleteTask', {tabIndex: '1'})
                     .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                 //Header
@@ -190,7 +190,7 @@ define('io.ox/tasks/actions',
                 } else {
 
                     //build popup
-                    var popup = new dialogs.ModalDialog({tabTrap: true})
+                    var popup = new dialogs.ModalDialog()
                         .header($('<h4>').text(gt('Move')))
                         .addPrimaryButton('ok', gt('Move'), 'ok', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
@@ -521,7 +521,7 @@ define('io.ox/tasks/actions',
                             //check if startDate is still valid with new endDate, if not, show dialog
                             if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
                                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                                    var popup = new dialogs.ModalDialog({tabTrap: true})
+                                    var popup = new dialogs.ModalDialog()
                                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                                         .addPrimaryButton('change', gt('Adjust start date'), 'changechange', {tabIndex: '1'});
                                     //text

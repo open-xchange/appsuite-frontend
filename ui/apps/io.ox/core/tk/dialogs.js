@@ -38,7 +38,8 @@ define('io.ox/core/tk/dialogs',
                 async: false,
                 maximize: false,
                 top: '50%',
-                container: $('body')
+                container: $('body'),
+                tabTrap: true
             }, options),
 
             nodes = {
@@ -507,7 +508,8 @@ define('io.ox/core/tk/dialogs',
         options = _.extend({
             modal: false,
             arrow: true,
-            closely: false // closely positon to click/touch location
+            closely: false, // closely positon to click/touch location
+            tabTrap: true
         }, options || {});
 
         var processEvent,
@@ -520,6 +522,7 @@ define('io.ox/core/tk/dialogs',
             closeByEvent, //for example: The view within this SidePopup closes itself
             previousProp,
             timer = null,
+            lastFocus = $(),
 
             overlay,
 
@@ -643,6 +646,10 @@ define('io.ox/core/tk/dialogs',
                         popup.detach();
                     }
                     pane.empty();
+
+                    lastFocus = lastFocus.closest(':visible');
+                    lastFocus.focus();
+
                     self.trigger('close');
                 }, 100);
             }
@@ -673,6 +680,9 @@ define('io.ox/core/tk/dialogs',
         open = function (e, handler) {
             // get proper elements
             var my = $(this), zIndex, sidepopup;
+
+            lastFocus = $(document.activeElement);
+
             self.nodes = {
                 closest: target || my.parents('.io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),
                 click: my.parents('.io-ox-sidepopup-pane, .window-body, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),

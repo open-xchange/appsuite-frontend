@@ -21,7 +21,7 @@ define('io.ox/realtime/groups',
     var counter = 0;
 
     function RealtimeGroup(id) {
-        var self = this, heartbeat = null, selector = 'rt-group-' + counter, destroyed = false;
+        var self = this, heartbeat = null, selector = 'rt-group-' + counter, destroyed = false, pendingDeferreds = [];
         counter++;
         rt.on('receive:' + selector, function (e, m) {
             self.trigger('receive', m);
@@ -31,6 +31,19 @@ define('io.ox/realtime/groups',
             return function () {
                 self.trigger(name);
             };
+        }
+
+        function capture(deferred) {
+            var def = $.Deferred();
+            if (!deferred) {
+                return;
+            }
+            deferred.done(def.resolve).fail(def.reject);
+            pendingDeferreds.push(def);
+            def.always(function () {
+                pendingDeferreds = _(pendingDeferreds).without(def);
+            });
+            return def;
         }
 
         var relayOfflineEvent = relayEvent('offline'),
@@ -118,19 +131,19 @@ define('io.ox/realtime/groups',
         this.sendWithoutSequence = function (message) {
             checkState();
             message.to = id;
-            return rt.sendWithoutSequence(message);
+            return capture(rt.sendWithoutSequence(message));
         };
 
         this.send = function (message) {
             checkState();
             message.to = id;
-            return rt.send(message);
+            return capture(rt.send(message));
         };
 
         this.query = function (message) {
             checkState();
             message.to = id;
-            return rt.query(message);
+            return capture(rt.query(message));
         };
 
         this.destroy = function () {
@@ -138,6 +151,7 @@ define('io.ox/realtime/groups',
             if (heartbeat) {
                 this.leave();
             }
+            _(pendingDeferreds).invoke('reject');
             rt.off('receive:' + selector);
             rt.off('offline', relayOfflineEvent);
             rt.off('online', relayOnlineEvent);
@@ -148,8 +162,6 @@ define('io.ox/realtime/groups',
         };
 
         Event.extend(this);
-
-
     }
 
     var groups = {};

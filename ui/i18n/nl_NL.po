@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-11-10 10:11+0100\n"
+"PO-Revision-Date: 2013-11-13 21:39+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com >\n"
 "Language-Team: Dutch <kde-i18n-doc@kde.org>\n"
 "Language: nl\n"
@@ -3203,7 +3203,7 @@ msgstr "Conversatieoverzicht"
 
 #: apps/io.ox/mail/settings/pane.js:60
 msgid "Enabled for inbox only"
-msgstr "Alleen ingeschakeld voor inbox"
+msgstr "Alleen ingeschakeld voor Postvak IN"
 
 # (Reinout) Portal = portaal, niet portable
 #: apps/io.ox/mail/settings/pane.js:61
@@ -7399,11 +7399,11 @@ msgstr "Nieuwe e-mail"
 
 #: apps/plugins/notifications/mail/register.js:34
 msgid "Show all %1$d messages in inbox"
-msgstr "Toon alle %1$d berichten in de inbox"
+msgstr "Toon alle %1$d berichten in Postvak IN"
 
 #: apps/plugins/notifications/mail/register.js:34
 msgid "Show inbox"
-msgstr "Toon inbox"
+msgstr "Toon Postvak IN"
 
 #: apps/plugins/notifications/mail/register.js:51
 msgid "New Mail from %1$s %2$s. Press [enter] to open"
@@ -7473,11 +7473,11 @@ msgstr "Klik hier om het gratis te proberen."
 #: apps/plugins/portal/mail/register.js:32
 #: apps/plugins/portal/mail/register.js:130
 msgid "Inbox"
-msgstr "Inbox"
+msgstr "Postvak IN"
 
 #: apps/plugins/portal/mail/register.js:113
 msgid "No mails in your inbox"
-msgstr "Geen e-mailberichten in uw inbox"
+msgstr "Geen e-mailberichten in uw Postvak IN"
 
 #: apps/plugins/portal/helloworld/register.js:70
 msgid "Hello World"

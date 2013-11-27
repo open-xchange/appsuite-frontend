@@ -9,6 +9,7 @@
  * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define(['shared/examples/for/api',
        'io.ox/tasks/api'
@@ -92,13 +93,13 @@ define(['shared/examples/for/api',
                 //make copy of testData
                 var testCopy = _.copy(options.tempTestData, true),
                     result = api.create(testCopy);
-                expect(testCopy).not.hasKey('tempAttachmentIndicator');
+                expect(testCopy).not.toHaveKey('tempAttachmentIndicator');
             });
             it('should remove alarm if it\'s null', function () {
                 //make copy of testData
                 var testCopy = _.copy(options.tempTestData, true),
                     result = api.create(testCopy);
-                expect(testCopy).not.hasKey('alarm');
+                expect(testCopy).not.toHaveKey('alarm');
             });
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
                 //make copy of testData
@@ -117,7 +118,7 @@ define(['shared/examples/for/api',
                 //make copy of testData
                 var testCopy = _.copy(options.testData, true),
                     result = api.create(testCopy);
-                expect(testCopy).hasKey('date_completed');
+                expect(testCopy).toHaveKey('date_completed');
             });
         });
         describe('updating a task', function () {
@@ -147,7 +148,7 @@ define(['shared/examples/for/api',
                 //make copy of testData
                 var testCopy = _.copy(options.tempTestDataUpdate, true),
                     result = api.update(testCopy);
-                expect(testCopy).not.hasKey('tempAttachmentIndicator');
+                expect(testCopy).not.toHaveKey('tempAttachmentIndicator');
             });
             it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
               //make copy of testData
@@ -166,7 +167,7 @@ define(['shared/examples/for/api',
                 //make copy of testData
                 var testCopy = _.copy(options.testDataUpdate, true),
                     result = api.update(testCopy);
-                expect(testCopy).hasKey('date_completed');
+                expect(testCopy).toHaveKey('date_completed');
             });
             it('should set date_completed to null if status != 3', function () {
                 //make copy of testData
@@ -191,6 +192,25 @@ define(['shared/examples/for/api',
             it('should trigger mark:task:confirmed event', function () {
                 expect(api).toTrigger('mark:task:confirmed');
                 var result = api.confirm(options.testDataConfirm);
+                this.server.respond();
+                expect(result).toResolve();
+            });
+        });
+        describe('getting Task Notifications', function () {
+            beforeEach(function () {
+                this.server.respondWith('GET', /api\/tasks\?action=all/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": []}');
+                });
+            });
+            it('should trigger new-tasks event', function () {
+                expect(api).toTrigger('new-tasks');
+                var result = api.getTasks();
+                this.server.respond();
+                expect(result).toResolve();
+            });
+            it('should trigger set:tasks:to-be-confirmed event', function () {
+                expect(api).toTrigger('set:tasks:to-be-confirmed');
+                var result = api.getTasks();
                 this.server.respond();
                 expect(result).toResolve();
             });

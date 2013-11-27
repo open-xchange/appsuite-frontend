@@ -183,7 +183,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 var self = this;
                 this.model.save().then(function (id) {
                     //first rule gets 0
-                    if (!_.isUndefined(id)) {
+                    if (!_.isUndefined(id) && !_.isNull(id)) {
                         self.model.set('id', id);
                         self.options.listView.collection.add(self.model);
                     }
@@ -357,7 +357,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                     var label = gt('Select folder'),
-                        dialog = new dialogs.ModalDialog({ easyOut: true, tabTrap: true })
+                        dialog = new dialogs.ModalDialog()
                         .header($('<h4>').text(label))
                         .addPrimaryButton('select', label, 'select', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});

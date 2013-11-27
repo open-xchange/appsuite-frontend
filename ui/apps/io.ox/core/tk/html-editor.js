@@ -429,6 +429,9 @@ define.async('io.ox/core/tk/html-editor',
             skin: 'ox',
             theme: 'advanced',
 
+            // need this to work in karma/phantomjs
+            content_element: textarea.get(0),
+
             init_instance_callback: function () {
                 // get internal editor reference
                 ed = textarea.tinymce();
@@ -511,6 +514,7 @@ define.async('io.ox/core/tk/html-editor',
         }
 
         var resizeEditor = _.debounce(function () {
+                if (textarea === null) return;
                 var p = textarea.parent(), w = p.width(), h = p.height(),
                     iframeHeight = h - p.find('td.mceToolbar').outerHeight() - 2;
                 p.find('table.mceLayout').css({ width: w + 'px', height: iframeHeight + 'px' });
@@ -767,9 +771,9 @@ define.async('io.ox/core/tk/html-editor',
         };
     }
 
-    return $.getScript(ox.base + '/apps/moxiecode/tiny_mce/jquery.tinymce.js')
-        .pipe(function () {
-            // publish editor class
-            return Editor;
-        });
+    // $.getScript adds cache busting query
+    return $.ajax({ url: ox.base + '/apps/moxiecode/tiny_mce/jquery.tinymce.js', cache: true, dataType: 'script' }).then(function () {
+        // publish editor class
+        return Editor;
+    });
 });

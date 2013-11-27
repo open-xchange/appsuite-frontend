@@ -394,10 +394,15 @@ define('io.ox/core/notifications',
                     warning: 'icon-exclamation'
                 },
 
-                remove = function () {
+                remove = function (immediately) {
 
                     active = false;
                     clearTimeout(timer);
+
+                    if (immediately) {
+                        $('.io-ox-alert').remove();
+                        return;
+                    }
 
                     $('.io-ox-alert')
                         .trigger('notification:removed')
@@ -433,6 +438,7 @@ define('io.ox/core/notifications',
 
             return function (type, message) {
 
+                if (type === 'destroy') return remove(true);
                 if (type === 'close') return remove();
 
                 var o = {

@@ -12,6 +12,15 @@
  */
 
 .list-view {
+    .search-view {
+        .vgrid-cell {
+            &.calendar {
+                .date {
+                    display: block;
+                }
+            }
+        }
+    }
     .vgrid-cell {
 
         &.calendar {
@@ -118,6 +127,12 @@
             &.free {
                 border-color: @appointmentFree;
             }
+        }
+        .tail {
+            &.middle {
+
+            }
+
         }
     }
 }

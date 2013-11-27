@@ -75,10 +75,10 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         action: function (baton) {
-            util.createArrayOfRecipients(baton.data.participants).done(function (arrayOfRecipients) {
+            util.createRecipientsArray(baton.data.participants).done(function (recipients) {
                 ox.load(['io.ox/mail/write/main']).done(function (m) {
                     m.getApp().launch().done(function () {
-                        this.compose({to: arrayOfRecipients, subject: baton.data.title});
+                        this.compose({to: recipients, subject: baton.data.title});
                     });
                 });
             });
@@ -106,10 +106,10 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         action: function (baton) {
-            util.createDistlistArrayFromPartisipantList(baton.data.participants).done(function (initdata) {
+            util.createDistlistArray(baton.data.participants).done(function (distlist) {
                 ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
                     m.getApp().launch().done(function () {
-                        this.create(coreSettings.get('folder/contacts'), initdata);
+                        this.create(coreSettings.get('folder/contacts'), { distribution_list: distlist });
                     });
                 });
             });
@@ -144,7 +144,7 @@ define('io.ox/calendar/actions',
             ox.load(['io.ox/calendar/edit/main']).done(function (m) {
                 if (params.recurrence_type > 0 || params.recurrence_position) {
                     ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
-                        new dialogs.ModalDialog({tabTrap: true})
+                        new dialogs.ModalDialog()
                             .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
                             .addPrimaryButton('series',
                                 //#. Use singular in this context
@@ -256,7 +256,7 @@ define('io.ox/calendar/actions',
                         // different warnings especially for events with
                         // recurrence_type > 0 should handled here
                         if (hasRec) {
-                            new dialogs.ModalDialog({tabTrap: true})
+                            new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
                                 .addPrimaryButton('appointment', gt('Delete appointment'), 'appointment', {tabIndex: '1'})
                                 .addPrimaryButton('series', gt('Delete whole series'), 'series', {tabIndex: '1'})
@@ -269,7 +269,7 @@ define('io.ox/calendar/actions',
                                     cont(action === 'series');
                                 });
                         } else {
-                            new dialogs.ModalDialog({tabTrap: true})
+                            new dialogs.ModalDialog()
                                 .text(gt('Do you want to delete this appointment?'))
                                 .addPrimaryButton('ok', gt('Delete'), 'ok', {tabIndex: '1'})
                                 .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
@@ -401,7 +401,7 @@ define('io.ox/calendar/actions',
                 if (baton.target) {
                     commit(baton.target);
                 } else {
-                    var dialog = new dialogs.ModalDialog({tabTrap: true})
+                    var dialog = new dialogs.ModalDialog()
                         .header($('<h4>').text(title))
                         .addPrimaryButton('ok', gt('Move'), 'ok', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});

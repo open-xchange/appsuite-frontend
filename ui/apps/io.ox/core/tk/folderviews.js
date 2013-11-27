@@ -623,7 +623,6 @@ define('io.ox/core/tk/folderviews',
                     }
                     new dialogs.ModalDialog({
                         async: true,
-                        easyOut: true,
                         width: 400
                     })
                     .header(

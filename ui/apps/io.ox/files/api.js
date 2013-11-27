@@ -84,12 +84,13 @@ define('io.ox/files/api',
             },
 
             /**
-             * resolve inconsistencies
+             * wrapper to add/remove file; resolves inconsistencies
              * @param {object} obj
              * @return {object} tracker
              */
-            //resolve inconsistencies
             updateFile: function (obj) {
+                obj = _.isObject(obj) ? obj : {};
+
                 var cid = getCID(obj),
                     inconsistent = obj.locked_until !== (fileLocks[cid] ? fileLocks[cid] : 0);
                 if (inconsistent) {
@@ -295,28 +296,22 @@ define('io.ox/files/api',
     // publish tracker
     api.tracker = tracker;
 
-    /**
-     * TOOD: deprecated/unused? (31f5a4a, b856ca5)
-     * @param  {object} options
-     * @return {deferred}
-     */
-    api.getUpdates = function (options) {
-
-        var params = {
-            action: 'updates',
-            columns: '20,23,1,700,702,703,706',
-            folder: options.folder,
-            timestamp: options.timestamp,
-            ignore: 'deleted'
-            /*sort: '700',
-            order: 'asc'*/
-        };
-
-        return http.GET({
-            module: 'files',
-            params: params
-        });
-    };
+    // deprecated/unused? (31f5a4a, b856ca5)
+    // api.getUpdates = function (options) {
+    //     var params = {
+    //         action: 'updates',
+    //         columns: '20,23,1,700,702,703,706',
+    //         folder: options.folder,
+    //         timestamp: options.timestamp,
+    //         ignore: 'deleted'
+    //         /*sort: '700',
+    //         order: 'asc'*/
+    //     };
+    //     return http.GET({
+    //         module: 'files',
+    //         params: params
+    //     });
+    // };
 
     api.caches.versions = new cache.SimpleCache('files-versions', true);
 
@@ -350,6 +345,38 @@ define('io.ox/files/api',
             };
         }
         return e;
+    };
+
+    /**
+     * returns an error object in case arguments/properties are missing
+     * @param  {object}           obj
+     * @param  {string|array}     property keys
+     * @param  {object}           options
+     * @return {undefined|object}
+     */
+    var missing = function (obj, keys, options) {
+        var opt, empty = [], undef = [], response, missing;
+        //preparation
+        obj = obj || {};
+        keys = [].concat(keys.split(','));
+        opt = $.extend({type: 'undefined'}, options);
+        //idenfity undefined/empty
+        _.each(keys, function (key) {
+            if (!(key in obj))
+                undef.push(key);
+            else if (_.isEmpty(obj[key]))
+                empty.push(key);
+        });
+        //consider option
+        missing = opt.type === 'undefined' ? undef : undef.concat(empty);
+        //set response
+        if (missing.length) {
+            response = failedUpload({
+                    categories: 'ERROR',
+                    error: opt.message || gt('Please specify these missing variables: ') + missing
+                });
+        }
+        return response;
     };
 
     /**
@@ -452,6 +479,10 @@ define('io.ox/files/api',
         }
         formData.append('json', JSON.stringify(options.json));
 
+        //missing arguments / argument properties
+        var error = missing(options, 'file,id,json');
+        if (error) return $.Deferred().reject(error).promise();
+
         return http.UPLOAD({
                 module: 'files',
                 params: {
@@ -489,6 +520,10 @@ define('io.ox/files/api',
         options = $.extend({
             folder: coreConfig.get('folder/infostore')
         }, options || {});
+
+        //missing arguments / argument properties
+        var error = missing(options, 'form,file,json,id');
+        if (error) return $.Deferred().reject(error).promise();
 
         var formData = options.form,
             deferred = $.Deferred();
@@ -529,7 +564,7 @@ define('io.ox/files/api',
             target: tmpName
         });
         formData.submit();
-        return deferred;
+        return deferred.promise();
     };
 
     function handleExtendedResponse(file, response, options) {
@@ -564,6 +599,10 @@ define('io.ox/files/api',
             updateData = { version: file.version };
         }
 
+        //missing arguments / argument properties
+        var error = missing(file, 'id');
+        if (error) return $.Deferred().reject(error).promise();
+
         return http.PUT({
                 module: 'files',
                 params: {
@@ -580,33 +619,28 @@ define('io.ox/files/api',
             });
     };
 
-    /**
-     * TODO: deprecated/unused?
-     */
-    api.create = function (options) {
-
-        options = $.extend({
-            folder: coreConfig.get('folder/infostore')
-        }, options || {});
-
-        if (!options.json.folder_id) {
-            options.json.folder_id = options.folder;
-        }
-
-        return http.PUT({
-                module: 'files',
-                params: { action: 'new' },
-                data: options.json,
-                appendColumns: false
-            })
-            .pipe(function (data) {
-                // clear folder cache
-                return api.propagate('new', { folder_id: options.folder }).pipe(function () {
-                    api.trigger('create.file', {id: data, folder: options.folder});
-                    return { folder_id: String(options.folder), id: String(data ? data : 0) };
-                });
-            });
-    };
+    // deprecated/unused; commented out on 18.11.2013
+    // api.create = function (options) {
+    //     options = $.extend({
+    //         folder: coreConfig.get('folder/infostore')
+    //     }, options || {});
+    //     if (!options.json.folder_id) {
+    //         options.json.folder_id = options.folder;
+    //     }
+    //     return http.PUT({
+    //             module: 'files',
+    //             params: { action: 'new' },
+    //             data: options.json,
+    //             appendColumns: false
+    //         })
+    //         .pipe(function (data) {
+    //             // clear folder cache
+    //             return api.propagate('new', { folder_id: options.folder }).pipe(function () {
+    //                 api.trigger('create.file', {id: data, folder: options.folder});
+    //                 return { folder_id: String(options.folder), id: String(data ? data : 0) };
+    //             });
+    //         });
+    // };
 
     /**
      * update caches and fire events (if not suppressed)
@@ -678,15 +712,18 @@ define('io.ox/files/api',
     };
 
     /**
-     * [versions description]
-     * @param  {[type]} options
-     * @return {[type]}
+     * returns versions
+     * @param  {object} options
+     * @param  {string} options.id
+     * @return {deferred}
      */
     api.versions = function (options) {
         options = _.extend({ action: 'versions', timezone: 'utc' }, options);
-        if (!options.id) {
-            throw new Error('Please specify an id for which to fetch versions');
-        }
+
+        //missing arguments / argument properties
+        var error = missing(options, 'id');
+        if (error) return $.Deferred().reject(error).promise();
+
         var id = String(options.id);
         return api.caches.versions.get(id).pipe(function (data) {
             if (data !== null) {
@@ -697,8 +734,10 @@ define('io.ox/files/api',
                     params: options,
                     appendColumns: true
                 })
-                .done(function (data) {
-                    api.caches.versions.add(id, data);
+                .then(function (data) {
+                    return $.when(api.caches.versions.add(id, data)).then(function () {
+                        return data;
+                    });
                 });
             }
         });
@@ -718,7 +757,12 @@ define('io.ox/files/api',
                 (file.version !== undefined && options.version !== false ? '&version=' + file.version : ''),
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : ''),
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
-                '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '';
+                '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '',
+            userContext = '&' + $.param({
+                context: [String(ox.user_id), '_', String(ox.context_id)].join()
+            });
+
+        query += userContext;
         switch (mode) {
         case 'open':
         case 'view':
@@ -735,13 +779,13 @@ define('io.ox/files/api',
             return (file.meta && file.meta.previewUrl) ||
                 url + query + '&delivery=view' + thumbnail + '&format=preview_image&content_type=image/jpeg';
         case 'cover':
-            return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg';
+            return ox.apiRoot + '/image/file/mp3Cover?' + 'folder=' + file.folder_id + '&id=' + file.id + thumbnail + '&content_type=image/jpeg' + userContext;
         case 'zip':
             return url + '?' + $.param({
                 action: 'zipdocuments',
                 body: JSON.stringify(_.map(file, function (o) { return { id: o.id, folder_id: o.folder_id }; })),
                 session: ox.session // required here!
-            });
+            }) + userContext;
         default:
             return url + query;
         }
@@ -754,6 +798,10 @@ define('io.ox/files/api',
      * @return {deferred}
      */
     api.detach = function (version) {
+        //missing arguments / argument properties
+        var error = missing(version, 'id,folder_id,version');
+        if (error) return $.Deferred().reject(error).promise();
+
         return http.PUT({
             module: 'files',
             params: {

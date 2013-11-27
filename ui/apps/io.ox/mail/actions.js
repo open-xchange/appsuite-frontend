@@ -76,7 +76,7 @@ define('io.ox/mail/actions',
 
             if (check) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({tabTrap: true})
+                    new dialogs.ModalDialog()
                         .append(
                             $('<div role="document" tabindex="0">').text(question)
                         )
@@ -95,7 +95,7 @@ define('io.ox/mail/actions',
                     // mail quota exceeded?
                     if (e.code === 'MSG-0039') {
                         require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.ModalDialog({tabTrap: true})
+                            new dialogs.ModalDialog()
                                 .header(
                                     $('<h4>').text(gt('Mail quota exceeded'))
                                 )
@@ -185,7 +185,7 @@ define('io.ox/mail/actions',
         action: function (baton) {
             var getSource = api.getSource(baton.data), textarea;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({ width: 700, tabTrap: true })
+                new dialogs.ModalDialog({ width: 700 })
                     .addPrimaryButton('close', gt('Close'), 'close', {tabIndex: '1'})
                     .header(
                         $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
@@ -255,7 +255,7 @@ define('io.ox/mail/actions',
                         }
 
                     } else {
-                        var dialog = new dialogs.ModalDialog({tabTrap: true})
+                        var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
                             .addPrimaryButton('ok', label, 'ok', {tabIndex: '1'})
                             .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
@@ -823,7 +823,7 @@ define('io.ox/mail/actions',
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {
                 //create popup dialog
-                var popup = new dialogs.ModalDialog({tabTrap: true})
+                var popup = new dialogs.ModalDialog()
                     .addPrimaryButton('create', gt('Create reminder'), 'create', {tabIndex: '1'})
                     .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
 

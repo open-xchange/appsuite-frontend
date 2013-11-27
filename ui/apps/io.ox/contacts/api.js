@@ -522,11 +522,16 @@ define('io.ox/contacts/api',
         });
     };
 
-    api.pictureHalo = function (node, options) {
+    // node is optional. if missing function returns just the URL
+    api.pictureHalo = function (/* [node], options */) {
 
-        var params, fallback, url, img;
-
-        options = options || {};
+        var args = _(arguments).toArray(), node, options, params, fallback, url, img;
+        if (args.length === 1) {
+            options = args[0];
+        } else {
+            node = args[0];
+            options = args[1];
+        }
 
         // duck checks
         if (api.looksLikeResource(options)) {
@@ -546,38 +551,53 @@ define('io.ox/contacts/api',
         }
 
         // already done?
-        if (url) return node.css('background-image', 'url(' + url + ')');
+        if (url) return node ? node.css('background-image', 'url(' + url + ')') : url;
 
-        // preference
-        if (options.internal_userid) {
+        // preference; internal_userid must not be undefined, null, or zero
+        if (options.internal_userid || options.userid || options.user_id) {
+            delete options.contact_id;
             delete options.folder_id;
             delete options.folder;
             delete options.id;
+        } else {
+            delete options.internal_userid;
+            delete options.userid;
+            delete options.user_id;
         }
 
         // empty extend trick to restrict to non-undefined values
-        params = $.param($.extend({}, {
-            action: 'get',
+        params = $.extend({}, {
             // identifier
-            email: options.email && String(options.email).toLowerCase(),
+            email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase(),
             folder: options.folder_id || options.folder,
             id: options.contact_id || options.id,
-            internal_userid: options.internal_userid,
+            internal_userid: options.internal_userid || options.userid || options.user_id,
             // scale
             width: options.width,
             height: options.height,
             scaleType: options.scaleType
-        }));
-        fallback = ox.base + '/apps/themes/default/dummypicture.png';
-        url = ox.apiRoot + '/halo/contact/picture?' + params;
-        img = new Image();
+        });
 
+        // remove empty values
+        for (var k in params) {
+            if (params.hasOwnProperty(k) && !params[k]) {
+                delete params[k];
+            }
+        }
+
+        fallback = ox.base + '/apps/themes/default/dummypicture.png';
+        url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
+
+        // just return URL
+        if (!node) return url;
+
+        // load image and return node
+        img = new Image();
         $(img).one('load error', function (e) {
             var fail = img.width === 1 || e.type === 'error';
             node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
             node = img = null;
         });
-
         img.src = url;
 
         return node;

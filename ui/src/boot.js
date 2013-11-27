@@ -892,7 +892,9 @@ $(window).load(function () {
 
                 // autologout message
                 if (_.url.hash("autologout")) {
-                    feedback('info', $.txt(gt('You have been automatically signed out')));
+                    feedback('info', function () {
+                        return $.txt(gt('You have been automatically signed out'));
+                    });
                 }
 
                 debug('boot.js: Check browser support');

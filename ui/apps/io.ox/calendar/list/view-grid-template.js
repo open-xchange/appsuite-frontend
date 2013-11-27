@@ -13,12 +13,11 @@
 
 define('io.ox/calendar/list/view-grid-template',
     ['io.ox/calendar/util',
-     'io.ox/core/tk/vgrid',
      'io.ox/core/extensions',
      'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
      'less!io.ox/calendar/list/style.less'
-    ], function (util, VGrid, ext, folderAPI, gt) {
+    ], function (util, ext, folderAPI, gt) {
 
     'use strict';
 
@@ -82,9 +81,12 @@ define('io.ox/calendar/list/view-grid-template',
                     $('<div class="fragment">').text(gt.noI18n(timeSplits[1]))
                 ).addClass('custom_shown_as ' + util.getShownAsClass(data));
 
-                if ((util.getDurationInDays(data) > 0) && !data.full_time) {
-                    fields.date.empty().text(util.getDateInterval(data)).show();
+                fields.date.empty().text(util.getDateInterval(data));
+
+                if (!data.full_time && (util.getDurationInDays(data) > 0)) {
+                    fields.date.show();
                 }
+
                 tmpStr = gt.noI18n(util.getTimeInterval(data));
 
                 a11yLabel += ', ' + tmpStr;

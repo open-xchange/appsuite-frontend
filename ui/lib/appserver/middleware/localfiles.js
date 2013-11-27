@@ -40,9 +40,14 @@
             if (/\/appsuite\/api\//.test(pathname)) {
                 return next();
             }
-            pathname = pathname.slice(pathname.indexOf('/appsuite/') + 10);
-            pathname = pathname.replace(/^v=[^\/]+\//, '');
-            pathname = pathname.replace(/^$/, 'core');
+
+            //remove base directories (only /appsuite/ and /base/)
+            //TODO: handle custom base directories (?)
+            pathname = pathname.replace(/^\/appsuite\//, '/')
+            pathname = pathname.replace(/^\/base\//, '/')
+
+            pathname = pathname.replace(/^\/v=[^\/]+\//, '/');
+            pathname = pathname.replace(/^\/$/, '/core');
             filename = prefixes.map(function (p) {
                 return path.join(p, pathname);
             })
@@ -54,7 +59,7 @@
                 return next();
             }
 
-            if (pathname === 'core' || pathname === 'signin') {
+            if (pathname === '/core' || pathname === '/signin') {
                 type = 'text/html';
             } else {
                 type = mime.lookup(filename);

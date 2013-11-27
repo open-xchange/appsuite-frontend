@@ -9,6 +9,7 @@ var oxBoot = function(files) {
         ts = new Date().getTime();
     bootjs.watched = true;
     files.unshift(createPattern(__dirname + '/adapter.js'));
+    files.unshift({pattern: builddir + 'apps/**/*.js', included: false, served: true, watched: true});
     files.unshift(bootjs);
     files.unshift(createPattern(__dirname + '/pre_boot.js'));
     files.unshift(createPattern(__dirname + '/../node_modules/sinon/pkg/sinon.js'));

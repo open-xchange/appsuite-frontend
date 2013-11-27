@@ -143,40 +143,6 @@ define('io.ox/tasks/util',
                 return result;
             },
 
-            //selects the default reminder if its available, otherwise the next item
-            selectDefaultReminder: function (node) {
-                var interval = settings.get('interval', '5'),
-                    options  = [];
-                _(node.prop('options')).each(function (obj) {
-                    options.push($(obj).val());
-                });
-                if (!(_.contains(options, interval))) {//default option not present
-                    //check if its today or weekday
-                    if (interval[0] === 'd') {
-                        var found = false;
-                        for (var i = parseInt(interval[1], 10) + 1; i < 5; i++) {
-                            if (_.contains(options, 'd' + i)) {
-                                found = true;
-                                interval = 'd' + i;
-                                break;
-                            }
-                        }
-
-                        if (!found) {//too late for today. use tomorrow
-                            interval = 't';
-                        }
-                    } else {//weekday not found. must be either tomorrow or today
-                        var weekDay = new Date().getDay();
-                        if (weekDay === parseInt(interval[1], 10)) {//its today, make it next week
-                            interval = 'ww';
-                        } else {//must be tomorrow
-                            interval = 't';
-                        }
-                    }
-                }
-                node.val(interval);
-            },
-
             //builds dropdownmenu nodes, if o.bootstrapDropdown is set listnodes are created else option nodes
             buildDropdownMenu: function (o) {
                 if (!o) {
@@ -337,7 +303,7 @@ define('io.ox/tasks/util',
                 return task;
             },
 
-            sortTasks: function (tasks, order) {//done tasks last, overduetasks first, same date alphabetical
+            sortTasks: function (tasks, order) {//done tasks last, overduetasks first, same or no date alphabetical
                 tasks = _.copy(tasks, true);//make local copy
                 if (!order) {
                     order = 'asc';
@@ -345,33 +311,42 @@ define('io.ox/tasks/util',
 
                 var resultArray = [],
                     dateArray = [],
-                    emptyDateArray = [];
+                    emptyDateArray = [],
+                    alphabetSort = function (a, b) {//sort by alphabet
+                            if (a.title > b.title) {
+                                return 1;
+                            } else {
+                                return -1;
+                            }
+                        },
+                    dateSort = function (a, b) {//sort by endDate. If equal, sort by alphabet
+                            /* jshint eqeqeq: false */
+                            if (a.end_date > b.end_date) {
+                                return 1;
+                            } else if (a.end_date == b.end_date) {// use == here so end_date=null and end_date=undefined are equal. may happen with done tasks
+                                return alphabetSort(a, b);
+                            }
+                            else {
+                                return -1;
+                            }
+                            /* jshint eqeqeq: true */
+                        };
 
                 for (var i = 0; i < tasks.length; i++) {
                     if (tasks[i].status === 3) {
                         resultArray.push(tasks[i]);
                     } else if (tasks[i].end_date === null || tasks[i].end_date === undefined) {
-                        emptyDateArray.push(tasks[i]);
+                        emptyDateArray.push(tasks[i]);//tasks without end_date
                     } else {
-                        dateArray.push(tasks[i]);
+                        dateArray.push(tasks[i]);// tasks with end_date
                     }
                 }
-
-                emptyDateArray.sort(function (a, b) {
-                    if (a.title > b.title) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                });
-
-                dateArray.sort(function (a, b) {
-                    if (a.end_date > b.end_date) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                });
+                //sort by end_date and alphabet
+                resultArray.sort(dateSort);
+                //sort by alphabet
+                emptyDateArray.sort(alphabetSort);
+                //sort by end_date and alphabet
+                dateArray.sort(dateSort);
 
                 if (order === 'desc') {
                     resultArray.push(emptyDateArray.reverse(), dateArray.reverse());

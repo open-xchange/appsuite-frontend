@@ -24,5 +24,33 @@ define(function () {
                 expect(err.message).toBe('Could not read \'file/doesnt/exist.js\'');
             });
         });
+
+        describe('with fixture plugin', function () {
+            it('should load JSON data as objects', function () {
+                var testData;
+                require(['fixture!test/data.json'], function (data) {
+                    testData = data;
+                });
+                waitsFor(function () {
+                    return !!testData;
+                }, 'Loading JSON test data', ox.testTimeout);
+                runs(function () {
+                    expect(testData.test).toEqual('bar');
+                });
+            });
+
+            it('should load require modules', function () {
+                var testModule;
+                require(['fixture!test/module.js'], function (data) {
+                    testModule = data;
+                });
+                waitsFor(function () {
+                    return !!testModule;
+                }, 'Loading test module', ox.testTimeout);
+                runs(function () {
+                    expect(testModule.someMethod).toBeFunction();
+                });
+            });
+        });
     });
 });

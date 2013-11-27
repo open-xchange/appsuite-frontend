@@ -845,7 +845,8 @@ define('io.ox/mail/main',
         // search
         function initSearch() {
             var isSentfolder = (app.folder.get() === app.settings.get('defaultFolder/sent')) ? true : false,
-                searchSettingId = isSentfolder ? 'mail.search.sent' : 'mail.search';
+                searchSettingId = isSentfolder ? 'mail.search.sent' : 'mail.search',
+                order = ['from', 'to', 'cc', 'subject', 'text'];
 
             ext.point('io.ox/mail/search/defaults').extend({
                 from: true,
@@ -865,7 +866,7 @@ define('io.ox/mail/main',
             var translations = { from: gt('Sender'), to: gt('Recipient'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
                 checkboxes = ext.point('io.ox/mail/search/checkboxes').options(),
                 defaults = ext.point('io.ox/mail/search/defaults').options(),
-                data = {}, button;
+                data = {}, button, dataSettings;
 
             if (settings.get('options/' + searchSettingId) === undefined) {
                 //normalise data
@@ -879,7 +880,11 @@ define('io.ox/mail/main',
                     }
                 });
             } else {
-                data = settings.get('options/' + searchSettingId);
+                dataSettings = settings.get('options/' + searchSettingId);
+                _(order).each(function (name) {
+                    data[name] = dataSettings[name];
+                    data[name].label = translations[name] || name;
+                });
             }
 
             //add dropdown button

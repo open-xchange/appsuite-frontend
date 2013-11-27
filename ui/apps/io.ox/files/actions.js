@@ -259,7 +259,7 @@ define('io.ox/files/actions',
 
                 // create dialog
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ width: 500, 'tabTrap': true })
+                    new dialogs.ModalDialog({ width: 500 })
                         .build(function () {
                             // header
                             this.header($('<h4>').text('Direct link'));
@@ -321,10 +321,10 @@ define('io.ox/files/actions',
             );
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({'tabTrap': true})
+                new dialogs.ModalDialog()
                     .text(question)
                     .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
-                    .addButton('cancel', gt('Cancel'),  'cancel', {'tabIndex': '1'})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -472,7 +472,7 @@ define('io.ox/files/actions',
                         );
                 }
 
-                new dialogs.ModalDialog({ enter: 'rename', async: true, 'tabTrap': true })
+                new dialogs.ModalDialog({ enter: 'rename', async: true })
                     .header(
                         $('<h4>').text(gt('Rename'))
                     )
@@ -502,7 +502,7 @@ define('io.ox/files/actions',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
                 var keys = new KeyListener($input),
-                    dialog = new dialogs.ModalDialog({'tabTrap': true}),
+                    dialog = new dialogs.ModalDialog(),
                     $input = $('<textarea rows="10" tabindex="1"></textarea>')
                             .css({width: '507px'})
                             .val(baton.data.description),
@@ -583,7 +583,7 @@ define('io.ox/files/actions',
                     if (baton.target) {
                         commit(baton.target);
                     } else {
-                        var dialog = new dialogs.ModalDialog({'tabTrap': true})
+                        var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
                             .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
                             .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
@@ -681,7 +681,7 @@ define('io.ox/files/actions',
                         _.isArray(data) ? data.length : 1
                 );
                 // ask
-                new dialogs.ModalDialog({'tabTrap': true})
+                new dialogs.ModalDialog()
                     .text(question)
                     .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
                     .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})

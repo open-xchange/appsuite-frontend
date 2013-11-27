@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define('io.ox/upsell/settings/defaults', function () {
+define('plugins/upsell/settings/defaults', function () {
 	'use strict';
 
 	return {};

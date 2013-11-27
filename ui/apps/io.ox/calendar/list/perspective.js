@@ -60,13 +60,17 @@ define('io.ox/calendar/list/perspective',
 
         // show "load more" link
         gridOptions.tail = function () {
-            // no link in empty folders
-            if (this.getIds().length < 1) return $();
-            return $('<div class="vgrid-cell tail">').append(
+
+            // no tail for search
+            if (this.getMode() === 'search') return $();
+
+            var link = $('<div class="vgrid-cell tail">').append(
                 //#. Label for a button which shows more upcoming
-                //#. appointments in a listview
-                $('<a href="#" tabindex="1">').text(gt('Show more appointments'))
+                //#. appointments in a listview by extending the search
+                //#. by one month in the future
+                $('<a href="#" tabindex="1">').text(gt('Expand timeframe by one month'))
             );
+            return link;
         };
 
         grid = new VGrid(left, gridOptions);
@@ -118,6 +122,12 @@ define('io.ox/calendar/list/perspective',
         grid.on('change:mode', function (e, cur) {
             if (optDropdown && cur) {
                 optDropdown[cur === 'search' ? 'hide' : 'show']();
+            }
+            if (cur === 'search') {
+                $(grid.getContainer()).addClass('search-view');
+            } else {
+                $(grid.getContainer()).removeClass('search-view');
+
             }
         });
 
@@ -241,6 +251,15 @@ define('io.ox/calendar/list/perspective',
          * @return {function}       the all request function for the vgrid
          */
         var generateAllRequest = function (dates) {
+            //var timeframe = util.getDateInterval({start_date: dates.start, end_date: dates.end});
+            var endDate = new date.Local(dates.end).format(date.DATE);
+            grid.setEmptyMessage(function (mode) {
+                if (mode === 'search') {
+                    return gt.format('No appointments found for "%s"', win.search.query);
+                } else {
+                    return gt.format('No appointments found until %s', endDate);
+                }
+            });
             return function () {
                 var prop = grid.prop(),
                     start = dates.start,

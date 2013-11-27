@@ -22,7 +22,7 @@ var root = location.pathname.replace(/\/[^\/]*$/, ''),
 window.ox = {
     abs: location.protocol + '//' + location.host,
     apiRoot: root + '/api',
-    base: '',
+    base: '/base',
     context_id: 0,
     debug: true,
     language: 'de_DE',
@@ -32,7 +32,7 @@ window.ox = {
     root: root,
     secretCookie: false, // auto-login
     serverConfig: {},
-    version: new Date(),
+    version: '0.0.0-0.' + new Date().getTime(),
     session: {
         context_id: 0,
         locale: "de_DE",
@@ -88,8 +88,8 @@ if (sinon) {
             var fakeServer = sinon.fakeServer.create();
             sinon.FakeXMLHttpRequest.useFilters = true;
             sinon.FakeXMLHttpRequest.addFilter(function (method, url, async) {
-                //don’t filter out server calls from requirejs or static theme files
-                return async && url.indexOf('/api/apps/load/,') === 0;
+                // don’t filter out server calls from requirejs or static theme files 
+                return async && (url.indexOf('/api/apps/load/' + ox.version + ',') === 0 || url.indexOf('/base/spec/fixtures/') >= 0 || /\.js(?!on)/.test(url));
             });
             ox.fakeServer.setup(fakeServer);
             return fakeServer;

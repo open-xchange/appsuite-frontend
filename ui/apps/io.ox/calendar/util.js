@@ -119,24 +119,10 @@ define('io.ox/calendar/util',
             return localDate.format(date.TIME);
         },
 
-// OLD STUFF - looks nice
         getDate: function (timestamp) {
             var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
             return d.format(date.DAYOFWEEK_DATE);
         },
-
-// NEW STUFF - not yet done
-//
-//        getTime: function (timestamp) {
-//            return (new date.Local(date.Local.utc(timestamp)))
-//                .format(date.locale.time);
-//        },
-//
-//        getDate: function (timestamp) {
-//            var d = timestamp !== undefined ?
-//                new date.Local(date.Local.utc(timestamp)) : new date.Local();
-//            return d.format(date.locale.date);
-//        },
 
         getSmartDate: function (data, showDate) {
 
@@ -196,14 +182,16 @@ define('io.ox/calendar/util',
             // past?
             if (diff < 0) {
                 if (diff >= -1 * date.DAY) {
-                    return gt('Yesterday');
+                    return gt('Yesterday') + ', ' + d.format(date.DATE);
+                } else {
+                    return d.format('EE, ') + d.format(date.DATE);
                 }
             } else {
                 // future
                 if (diff < date.DAY) {
-                    return gt('Today');
+                    return gt('Today') + ', ' + d.format(date.DATE);
                 } else if (diff < 2 * date.DAY) {
-                    return gt('Tomorrow');
+                    return gt('Tomorrow') + ', ' + d.format(date.DATE);
                 } else {
                     return d.format('EE, ') + d.format(date.DATE);
                 }
@@ -211,9 +199,9 @@ define('io.ox/calendar/util',
         },
 
         getDateInterval: function (data) {
-            var startDate = data.start_date,
-                endDate = data.end_date;
-            if (startDate && endDate) {
+            if (data && data.start_date && data.end_date) {
+                var startDate = data.start_date,
+                    endDate = data.end_date;
                 if (data.full_time) {
                     startDate = date.Local.utc(startDate);
                     endDate = date.Local.utc(endDate);
@@ -232,6 +220,7 @@ define('io.ox/calendar/util',
         getReminderOptions: function () {
             var reminderListValues = [
                 {value: -1, format: 'string'},
+
                 {value: 0, format: 'minutes'},
                 {value: 5, format: 'minutes'},
                 {value: 10, format: 'minutes'},
@@ -291,42 +280,41 @@ define('io.ox/calendar/util',
             return new date.Local(t1).getDays() === new date.Local(t2).getDays();
         },
 
-        getTimeInterval: function (data, D) {
-            var length;
-            D = D || date.Local;
-            if (data.full_time) {
-                length = (data.end_date - data.start_date) / date.DAY >> 0;
-                return length <= 1 ? gt('Whole day') : gt.format(
-                    //#. General duration (nominative case): X days
-                    //#. %d is the number of days
-                    //#, c-format
-                    gt.ngettext('%d day', '%d days', length), length);
-            } else {
-                var L = date.locale,
-                    diff = L.intervals[(L.h12 ? 'hm' : 'Hm') +
-                                       (date.TIME & date.TIMEZONE ? 'v' : '')];
-                var stuff = new D(data.start_date).formatInterval(
-                        new D(data.end_date), diff.a || diff.m);
-                return stuff;
-            }
-        },
-        getStartAndEndTime: function (data, D) {
-            var length;
-            D = D || date.Local;
-            length = (data.end_date - data.start_date) / date.DAY >> 0;
-            if (data.full_time) {
-                return length <= 1 ? [gt('Whole day')] : [gt.format(
-                    //#. General duration (nominative case): X days
-                    //#. %d is the number of days
-                    //#, c-format
-                    gt.ngettext('%d day', '%d days', length), length)];
-            } else {
-                return [new D(data.start_date).format(date.TIME), new D(data.end_date).format(date.TIME)];
-            }
-        },
         getDurationInDays: function (data) {
             return (data.end_date - data.start_date) / date.DAY >> 0;
         },
+
+        getFullTimeInterval: function (data) {
+            var length = this.getDurationInDays(data);
+            return length <= 1 ? gt('Whole day') : gt.format(
+                //#. General duration (nominative case): X days
+                //#. %d is the number of days
+                //#, c-format
+                gt.ngettext('%d day', '%d days', length), length);
+        },
+
+        getTimeInterval: function (data, D) {
+            if (!data || !data.start_date || !data.end_date) return '';
+            if (data.full_time) {
+                return this.getFullTimeInterval(data);
+            } else {
+                D = D || date.Local;
+                var diff = date.locale.intervals[(date.locale.h12 ? 'hm' : 'Hm') + (date.TIME & date.TIMEZONE ? 'v' : '')];
+                return new D(data.start_date).formatInterval(new D(data.end_date), diff.a || diff.m);
+            }
+        },
+
+        getStartAndEndTime: function (data) {
+            var ret = [];
+            if (!data || !data.start_date || !data.end_date) return ret;
+            if (data.full_time) {
+                ret.push(this.getFullTimeInterval(data));
+            } else {
+                ret.push(new date.Local(data.start_date).format(date.TIME), new date.Local(data.end_date).format(date.TIME));
+            }
+            return ret;
+        },
+
         addTimezoneLabel: function (parent, data) {
 
             var current = date.Local.getTTInfoLocal(data.start_date);
@@ -400,10 +388,6 @@ define('io.ox/calendar/util',
 
         getConfirmationClass: function (status) {
             return confirmClass[status || 0];
-        },
-
-        isRecurring: function (data) {
-            return !!data.recurrence_type;
         },
 
         getRecurrenceString: function (data) {
@@ -588,80 +572,6 @@ define('io.ox/calendar/util',
             return hash[user] ? hash[user].comment : '';
         },
 
-        // returns a set of rows, each containing 7 days
-        // helps at drawing a mini calendar or a month view
-        getMonthScaffold: function (year, month, forerun, overrun) {
-
-            forerun = forerun || 0;
-            overrun = overrun || 0;
-
-            var firstDayOfMonth = Date.UTC(year, month, 1),
-                // apply week day shift
-                shift = (7 + (new date.Local(firstDayOfMonth)).getDay() - that.getFirstWeekDay()) % 7,
-                day = firstDayOfMonth - date.DAY * shift,
-                // loop
-                rows = [], row, obj, d;
-
-            function getMax() {
-                // get number of days in month
-                return that.getDaysInMonth(year, month) + shift;
-            }
-
-            function loop(max) {
-                for (var i = 0; i < max || (i % 7 !== 0); i += 1, day += date.DAY) {
-                    if (i % 7 === 0) {
-                        row = [];
-                        rows.push(row);
-                    }
-                    d = new date.Local(day);
-                    row.push(obj = {
-                        year: d.getYear(),
-                        month: d.getMonth(),
-                        date: d.getDate(),
-                        day: d.getDay(),
-                        timestamp: day,
-                        isToday: that.isToday(day),
-                        col: i % 7,
-                        row: rows.length - 1
-                    });
-                    // is weekend?
-                    obj.isWeekend = obj.day === 0 || obj.day === 6;
-                    // is out of current month?
-                    obj.isOut = obj.year !== year || obj.month !== month;
-                }
-            }
-
-            // forerun?
-            if (forerun > 0) {
-                day -= forerun * date.WEEK;
-                loop(forerun * 7);
-            }
-
-            loop(getMax());
-
-            // overrun?
-            if (overrun > 0) {
-                loop(overrun * 7);
-            }
-
-            return rows;
-        },
-
-        getTodayStart: function (timestamp) {
-            return ((timestamp || _.now()) / date.DAY >> 0) * date.DAY;
-        },
-
-        getWeekStart: function (timestamp) {
-
-            timestamp = this.getTodayStart(timestamp);
-
-            var d = new date.Local(timestamp),
-                // apply week day shift
-                shift = (7 + d.getDay() - this.getFirstWeekDay()) % 7;
-
-            return d.getTime() - date.DAY * shift;
-        },
-
         getWeekScaffold: function (timestamp) {
             var day = new date.Local(timestamp).setStartOfWeek(),
                 i = 0, obj, ret = {}, today = new date.Local().getDays();
@@ -687,110 +597,76 @@ define('io.ox/calendar/util',
             return ret;
         },
 
-        resolveGroupMembers: function (idsFromGroupMembers, collectedUserIds) {
+        resolveGroupMembers: function (groupIDs, userIDs) {
+            groupIDs = groupIDs || [];
+            userIDs = userIDs || [];
 
-            return groupAPI.getList(idsFromGroupMembers)
-                .then(function (data) {
-
-                    var collectedIdsFromGroups = [];
-
-                    _.each(data, function (single) {
-                        _.each(single.members, function (single) {
-                            collectedIdsFromGroups.push(single);
-                        });
+            return groupAPI.getList(groupIDs)
+                .then(function (groups) {
+                    _.each(groups, function (single) {
+                        userIDs = _.union(single.members, userIDs);
                     });
-
-                    return userAPI.getList(_([].concat(collectedIdsFromGroups, collectedUserIds)).uniq());
+                    return userAPI.getList(userIDs);
                 })
-                .then(function (data) {
-                    return _(data).map(function (single) {
-                        return {
-                            display_name: single.display_name,
-                            folder_id: single.folder_id,
-                            id: single.id,
-                            mail: single.email1,
-                            mail_field: 1
-                        };
+                .then(function (users) {
+                    return _(users).map(function (user) {
+                        return $.extend(user, { mail: user.email1, mail_field: 1 });
                     });
                 });
         },
 
-        createArrayOfRecipients: function (participants) {
+        resolveParticipants: function (participants, mode) {
+            var groupIDs = [],
+                userIDs = [],
+                result = [];
+            mode = mode || 'dist';
 
-            var arrayOfRecipients = [],
-                arrayOfIds = [],
-                idsFromGroupMembers = [];
-
-            _.each(participants, function (single) {
-                if (single.type === 5) {
-                    arrayOfRecipients.push([single.display_name, single.mail]);
-                } else if (single.type === 2) {
-                    idsFromGroupMembers.push(single.id);
-                } else if (single.type === 1 && single.id !== ox.user_id) {
-                    arrayOfIds.push(single.id);
+            _.each(participants, function (participant) {
+                if (participant.type === 5) { // external user
+                    if (mode === 'dist') {
+                        result.push({
+                            display_name: participant.display_name,
+                            mail: participant.mail,
+                            mail_field: 0
+                        });
+                    } else {
+                        result.push([participant.display_name, participant.mail]);
+                    }
+                } else if (participant.type === 2) { // group
+                    groupIDs.push(participant.id);
+                } else if (participant.type === 1) { // internal user
+                    userIDs.push(participant.id);
                 }
             });
 
-            return that.resolveGroupMembers(idsFromGroupMembers, arrayOfIds).then(function (arrayOfGroupMembers) {
-
-                _.each(arrayOfGroupMembers, function (single) {
-                    if (single.id !== ox.user_id) {
-                        arrayOfRecipients.push([single.display_name, single.mail]);
-                    }
-                });
-
-                return userAPI.getList(arrayOfIds).then(function (obj) {
-                    _.each(obj, function (single) {
-                        arrayOfRecipients.push([single.display_name, single.email1]);
+            return that.resolveGroupMembers(groupIDs, userIDs).then(function (users) {
+                if (mode === 'dist') {
+                    return _([].concat(result, users)).uniq();
+                } else {
+                    _.each(users, function (user) {
+                        if (user.id !== ox.user_id) {
+                            result.push([user.display_name, user.mail]);
+                        }
                     });
-                    return arrayOfRecipients;
-                });
+                    return result;
+                }
             });
+        },
+
+        createRecipientsArray: function (participants) {
+            return this.resolveParticipants(participants, 'rec');
+        },
+
+        createDistlistArray: function (participants) {
+            return this.resolveParticipants(participants, 'dist');
         },
 
         getUserIdByInternalId: function (internal) {
-            return contactAPI.get({id: internal, folder: 6}).then(function (data) {
+            return contactAPI.get({ id: internal, folder: 6 }).then(function (data) {
                 return data.user_id;
             });
-        },
-
-        createDistlistArrayFromPartisipantList: function (participants) {
-            var idsFromGroupMembers = [],
-                returnArray = [],
-                arrayOfIds = [];
-
-            _.each(participants, function (single) {
-                if (single.type === 2) {
-                    idsFromGroupMembers.push(single.id);
-                } else if (single.type === 5) {
-                    returnArray.push({
-                        display_name: single.display_name,
-                        mail: single.mail,
-                        mail_field: 0
-                    });
-                } else if (single.type === 1) {
-                    arrayOfIds.push(single.id);
-                }
-            });
-
-            that.resolveGroupMembers(idsFromGroupMembers, returnArray, arrayOfIds);
-
-            return userAPI.getList(arrayOfIds).then(function (obj) {
-                return _.each(obj, function (single) {
-                    if (single.id !== ox.user_id) {
-                        returnArray.push({
-                            display_name: single.display_name,
-                            folder_id: single.folder_id,
-                            id: single.contact_id,
-                            mail: single.email1,
-                            mail_field: 1
-                        });
-                    }
-                });
-            });
-
-
         }
+
     };
 
     return that;

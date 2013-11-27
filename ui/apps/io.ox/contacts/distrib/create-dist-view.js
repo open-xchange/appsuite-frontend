@@ -110,20 +110,12 @@ define('io.ox/contacts/distrib/create-dist-view',
                 // overwrite display_name
                 data.display_name = util.getMailFullName(data);
 
-                var newMember,
-                    mailValue = data.email1 || data.email2 || data.email3 || data.mail,
-                    nameValue = data.display_name;
+                var mailValue = data.email1 || data.email2 || data.email3 || data.mail,
+                    nameValue = data.display_name,
+                    newMember = self.copyContact(self.$el, data.id ? data : nameValue, mailValue);
 
-                if (data.id) {
-                    newMember = self.copyContact(self.$el, data, mailValue);
-                } else {
-                    newMember = self.copyContact(self.$el, nameValue, mailValue);
-                }
-
-                if (newMember) {
-                    if (self.isUnique(newMember)) {
-                        self.model.addMember(newMember);
-                    }
+                if (newMember && self.isUnique(newMember)) {
+                    self.model.addMember(newMember);
                 }
 
             });
@@ -237,7 +229,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     // contact picture
                     api.pictureHalo(
                         $('<div class="contact-image">'),
-                        $.extend(o, { width: 48, height: 48, scaleType: 'cover' })
+                        $.extend(_.copy(o), { width: 48, height: 48, scaleType: 'cover', userid: o.id })
                     ),
                     // name
                     $('<div class="person-name">').text(o.display_name),
