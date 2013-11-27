@@ -29,32 +29,32 @@ define(['io.ox/mail/mailfilter/settings/filter/defaults'], function (defaults) {
 
         it('should provide defaults for test From', function () {
             defaults.tests.should.have.a.property('From');
-            defaults.tests.From.should.be.deep.equal({'comparison': 'matches', 'headers': ['From'], 'id': 'header', 'values': ['']});
+            defaults.tests.From.should.be.deep.equal({'comparison': 'contains', 'headers': ['From'], 'id': 'header', 'values': ['']});
         });
 
         it('should provide defaults for test any', function () {
             defaults.tests.should.have.a.property('any');
-            defaults.tests.any.should.be.deep.equal({'comparison': 'matches', 'headers': ['To', 'Cc'], 'id': 'header', 'values': ['']});
+            defaults.tests.any.should.be.deep.equal({'comparison': 'contains', 'headers': ['To', 'Cc'], 'id': 'header', 'values': ['']});
         });
 
         it('should provide defaults for test Subject', function () {
             defaults.tests.should.have.a.property('Subject');
-            defaults.tests.Subject.should.be.deep.equal({'comparison': 'matches', 'headers': ['Subject'], 'id': 'header', 'values': ['']});
+            defaults.tests.Subject.should.be.deep.equal({'comparison': 'contains', 'headers': ['Subject'], 'id': 'header', 'values': ['']});
         });
 
         it('should provide defaults for test mailingList', function () {
             defaults.tests.should.have.a.property('mailingList');
-            defaults.tests.mailingList.should.be.deep.equal({'comparison': 'matches', 'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'], 'id': 'header', 'values': ['']});
+            defaults.tests.mailingList.should.be.deep.equal({'comparison': 'contains', 'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'], 'id': 'header', 'values': ['']});
         });
 
         it('should provide defaults for test To', function () {
             defaults.tests.should.have.a.property('To');
-            defaults.tests.To.should.be.deep.equal({'comparison': 'matches', 'headers': ['To'], 'id': 'header', 'values': ['']});
+            defaults.tests.To.should.be.deep.equal({'comparison': 'contains', 'headers': ['To'], 'id': 'header', 'values': ['']});
         });
 
         it('should provide defaults for test Cc', function () {
             defaults.tests.should.have.a.property('Cc');
-            defaults.tests.Cc.should.be.deep.equal({'comparison': 'matches', 'headers': ['Cc'], 'id': 'header', 'values': ['']});
+            defaults.tests.Cc.should.be.deep.equal({'comparison': 'contains', 'headers': ['Cc'], 'id': 'header', 'values': ['']});
         });
 
         it('should provide defaults for test cleanHeader', function () {
