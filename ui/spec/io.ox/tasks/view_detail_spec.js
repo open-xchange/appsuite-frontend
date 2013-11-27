@@ -82,7 +82,25 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                 },
                 testAttachments:
                     [[456, 0, 124, 4, 'Test.txt', 21, 'text/plain'],
-                    [457, 0, 124, 4, 'Textdatei123.txt', 9, 'text/plain']]
+                    [457, 0, 124, 4, 'Textdatei123.txt', 9, 'text/plain']],
+                testFolder: {
+                        created_by: 1337,
+                        creation_date: 1341997688886,
+                        folder_id: '1',
+                        id: '555123456',
+                        last_modified: 1383748605029,
+                        last_modified_utc: 1383748605029,
+                        modified_by: 1337,
+                        module: 'tasks',
+                        own_rights: 273686592,
+                        permissions: [{entity: 1337, bits: 273686592, group: false}],
+                        standard_folder: true,
+                        standard_folder_type: 1,
+                        supported_capabilities: ['quota', 'sort', 'permissions'],
+                        title: 'Tasks',
+                        total: 5,
+                        type: 1
+                }
             };
         afterEach(function () {
             this.server.restore();
@@ -240,7 +258,56 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     });
                 });
             });
+            describe('delete', function () {
+                beforeEach(function () {
+                    ox.cache.clear();//delete old cache entries
+                    //change folder get requests so permissions work and delete inline link is drawn
+                    this.server.responses = _(this.server.responses).reject(function (response) {
+                        return 'api/folders?action=get'.search(response.url) === 0;
+                    });
+                    this.server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testFolder) + '}');
+                    });
+                });
 
+                it('should open a popup', function () {
+                    var baton = ext.Baton({data: options.testData});
+                    node = detailView.draw(baton);
+                    waitsFor(function () {
+                        return node.find('[data-action="delete"]').length === 1;
+                    });
+                    runs(function () {
+                        node.find('[data-action="delete"]').click();
+                        waitsFor(function () {
+                            return $('.io-ox-dialog-popup').length === 1;
+                        });
+                    });
+    
+                    this.after(function () {//close popup
+                        $('.io-ox-dialog-popup [data-action="cancel"]').click();
+                    });
+                });
+                it('should call api', function () {
+                    var baton = ext.Baton({data: options.testData});
+                    node = detailView.draw(baton);
+                    waitsFor(function () {
+                        return node.find('[data-action="delete"]').length === 1;
+                    });
+                    runs(function () {
+                        node.find('[data-action="delete"]').click();
+                        waitsFor(function () {
+                            return $('.io-ox-dialog-popup').length === 1;
+                        });
+                        runs(function () {
+                            $('[data-action="deleteTask"]').click();
+                            waitsFor(function () {
+                                return apiCallUpdate;
+                            });
+                        });
+                    });
+                });
+            });
+            
         });
     });
 });
