@@ -258,7 +258,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     });
                 });
             });
-            describe('delete', function () {
+            describe('', function () {
                 beforeEach(function () {
                     ox.cache.clear();//delete old cache entries
                     //change folder get requests so permissions work and delete inline link is drawn
@@ -270,7 +270,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     });
                 });
 
-                it('should open a popup', function () {
+                it('delete should open a popup', function () {
                     var baton = ext.Baton({data: options.testData});
                     node = detailView.draw(baton);
                     waitsFor(function () {
@@ -287,7 +287,8 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                         $('.io-ox-dialog-popup [data-action="cancel"]').click();
                     });
                 });
-                it('should call api', function () {
+
+                it('delete should call api', function () {
                     var baton = ext.Baton({data: options.testData});
                     node = detailView.draw(baton);
                     waitsFor(function () {
@@ -307,7 +308,24 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     });
                 });
             });
-            
+            it('move should open a popup', function () {
+                //there is a missing api call for the foldertree. not important for this test
+                var baton = ext.Baton({data: options.testData});
+                node = detailView.draw(baton);
+                waitsFor(function () {
+                    return node.find('[data-action="move"]').length === 1;
+                });
+                runs(function () {
+                    node.find('[data-action="move"]').click();
+                    waitsFor(function () {
+                        return $('.io-ox-dialog-popup').length === 1;
+                    });
+                });
+
+                this.after(function () {//close popup
+                    $('.io-ox-dialog-popup [data-action="cancel"]').click();
+                });
+            });
         });
     });
 });
