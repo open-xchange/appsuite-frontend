@@ -314,7 +314,8 @@ define(['shared/examples/for/api',
                                         {id: '3', folder_id: 'hidden/test', title: '.drive'},
                                         {id: '4', folder_id: 'hidden/test', title: 'visible'},
                                         {id: '5', folder_id: 'hidden/test', title: '.hidden'},
-                                        {id: '6', folder_id: 'hidden/test', title: 'customHidden'}
+                                        {id: '6', folder_id: 'hidden/test', title: 'customHidden'},
+                                        {id: '0815', folder_id: 'hidden/test', title: 'for general files specs'}
                                     ]
                                 })
                     );

@@ -29,7 +29,7 @@ define(['io.ox/files/api',
             modified_by : ox.user_id
         },
         lockedOther = $.extend({}, locked, {id: 3, locked_until: _.now() + (604800000 * 2), modified_by: 'other'}),
-        versions = ['83971', 395, 395, 1376641135612, 1384501324622, '14048', null, null, 0, '136hs.jpg', null, '136hs.jpg', 'image/jpeg', 44032, '1', '', 0, 'b5d896b4e5caa1249300fad41d3670fc', null, true, 0],
+        versions = ['83971', 395, 395, 1376641135612, 1384501324622, '0815', null, null, 0, '136hs.jpg', null, '136hs.jpg', 'image/jpeg', 44032, '1', '', 0, 'b5d896b4e5caa1249300fad41d3670fc', null, true, 0],
         setupFakeServer = function (server) {
             server.autoRespond = true;
             server.respondWith('GET', /api\/files\?action=versions/, function (xhr) {
