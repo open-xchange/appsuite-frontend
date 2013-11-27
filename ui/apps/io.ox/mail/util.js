@@ -113,6 +113,7 @@ define('io.ox/mail/util',
          */
         getChannel: function (value, check) {
             //default value
+            value = String(value || '');
             check = check || typeof check === 'undefined';
             var type = value.indexOf(that.getChannelSuffixes().msisdn) > -1,
                 //no check OR activated cap
