@@ -853,8 +853,7 @@ define('io.ox/mail/actions',
                 popupBody.append('<div id="remindme">' + gt('Remind me') + '</div>');
                 var dateSelector = $('<select>', {name: 'dateselect', tabindex: '1', 'aria-labeledby': 'remindme'})
                 .appendTo(popupBody);
-                var endDate = new Date();
-                dateSelector.append(tasksUtil.buildDropdownMenu({time: endDate}));
+                dateSelector.append(tasksUtil.buildDropdownMenu());
 
                 //ready for work
                 var def = popup.show();
@@ -863,7 +862,7 @@ define('io.ox/mail/actions',
                     if (action === 'create') {
 
                         //Calculate the right time
-                        var dates = tasksUtil.computePopupTime(endDate, dateSelector.val());
+                        var dates = tasksUtil.computePopupTime(dateSelector.val());
 
                         taskAPI.create({title: titleInput.val(),
                             folder_id: coreConfig.get('folder/tasks'),

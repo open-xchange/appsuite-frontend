@@ -38,10 +38,10 @@ define('io.ox/tasks/util',
                                 gt('next Saturday')];
 
     var util = {
-            computePopupTime: function (time, value) {
-                var endDate = new Date(time.getTime()),
+            computePopupTime: function (value) {
+                var endDate = new date.Local(),
                     weekDay = endDate.getDay(),
-                    alarmDate = new Date(time.getTime());
+                    alarmDate = new date.Local();
 
                 switch (value) {
                 case '5':
@@ -57,7 +57,7 @@ define('io.ox/tasks/util',
                     alarmDate.setTime(alarmDate.getTime() + lookupArray[3]);
                     break;
                 default:
-                    alarmDate.setTime(prepareTime(alarmDate));
+                    prepareTime(alarmDate);
                     switch (value) {
                     case 'd0':
                         alarmDate.setHours(6);
@@ -122,7 +122,7 @@ define('io.ox/tasks/util',
                     break;
                 }
 
-                endDate.setTime(prepareTime(endDate));
+                prepareTime(endDate);
                 if (weekDay < 1 || weekDay > 4) {
                     weekDay = (((endDate.getDay() - 1) % 7) + 7) % 7;
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - weekDay));
@@ -149,7 +149,7 @@ define('io.ox/tasks/util',
                     o = {};
                 }
                 if (!o.time) {
-                    o.time = new Date();
+                    o.time = new date.Local();
                 }
                 //get the values
                 var options = this.buildOptionArray(o),
@@ -175,7 +175,7 @@ define('io.ox/tasks/util',
                     o = {};
                 }
                 if (!o.time) {
-                    o.time = new Date();
+                    o.time = new date.Local();
                 }
                 var result = [],
                     i;

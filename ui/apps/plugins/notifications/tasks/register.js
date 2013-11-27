@@ -256,7 +256,7 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            reminderUtil.draw(this, baton.model, util.buildOptionArray({time: new Date()}));
+            reminderUtil.draw(this, baton.model, util.buildOptionArray());
         }
     });
 
@@ -287,13 +287,13 @@ define('plugins/notifications/tasks/register',
 
         remindAgain: function (e) {
             e.stopPropagation();
-            var endDate = new Date(),
+            var endDate,
                 dates,
                 model = this.model,
                 time = ($(e.target).data('value') || $(e.target).val()).toString(),
                 key = [model.get('folder_id') + '.' + model.get('id')];
             if (time !== '0') {//0 means 'pick a time here' was selected. Do nothing.
-                dates = util.computePopupTime(endDate, time);
+                dates = util.computePopupTime(time);
                 endDate = dates.alarmDate;
                 reminderAPI.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
                     return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches

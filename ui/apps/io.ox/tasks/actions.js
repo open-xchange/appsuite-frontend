@@ -501,13 +501,13 @@ define('io.ox/tasks/actions',
                     .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
                     // drop down
                     $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
-                        util.buildDropdownMenu({time: new Date(), bootstrapDropdown: true, daysOnly: true})
+                        util.buildDropdownMenu({bootstrapDropdown: true, daysOnly: true})
                     )
                     .on('click', 'li>a:not([data-action="close-menu"])', {task: data}, function (e) {
                         e.preventDefault();
                         var finderId = $(e.target).val();
                         ox.load(['io.ox/tasks/api']).done(function (api) {
-                            var endDate = util.computePopupTime(new Date(), finderId).alarmDate, modifications;
+                            var endDate = util.computePopupTime(finderId).alarmDate, modifications;
                             //remove Time
                             endDate.setHours(0);
                             endDate.setMinutes(0);

@@ -10,8 +10,8 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['io.ox/tasks/util', 'gettext!io.ox/tasks'
-], function (util, gt) {
+define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
+], function (util, gt, date) {
     describe('tasks utility', function () {
         var options = {
                 testData: {
@@ -81,7 +81,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks'
             });
 
             it('should not contain past daytimes', function () {
-                var myDate = new Date(),
+                var myDate = new date.Local(),
                     result;
                 myDate.setHours(7);
                 result = util.buildOptionArray({time: myDate});
@@ -101,7 +101,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks'
             });
 
             it('should set weekdays correctly', function () {
-                var myDate = new Date(),
+                var myDate = new date.Local(),
                     result;
                 //today and tomorrow are special and should not be included in standard next ...day
                 myDate.setDate(myDate.getDate() - myDate.getDay());//sunday
@@ -152,7 +152,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks'
         describe('computePopupTime', function () {
 
             it('should only return full days', function () {
-                var result = util.computePopupTime(new Date(), 't');
+                var result = util.computePopupTime('t');
                 expect(result.endDate.getHours()).toEqual(0);
                 expect(result.endDate.getMinutes()).toEqual(0);
                 expect(result.endDate.getSeconds()).toEqual(0);

@@ -165,8 +165,7 @@ define('io.ox/tasks/edit/view-template',
                         if (selector.prop('selectedIndex') === 0) {
                             baton.model.set('alarm', null, {validate: true});
                         } else {
-                            var dates = reminderUtil.computePopupTime(new Date(),
-                                    selector.val());
+                            var dates = reminderUtil.computePopupTime(selector.val());
                             baton.model.set('alarm', dates.alarmDate.getTime(), {validate: true});
                         }
                     })
@@ -778,7 +777,6 @@ define('io.ox/tasks/edit/view-template',
         display: 'DATE',
         attribute: 'start_date',
         required: false,
-        utc: true,
         label: gt('Starts on'),
         clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
@@ -794,7 +792,6 @@ define('io.ox/tasks/edit/view-template',
         display: 'DATE',
         attribute: 'end_date',
         required: false,
-        utc: true,
         label: gt('Due date'),
         clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
