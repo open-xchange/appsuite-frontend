@@ -609,14 +609,8 @@ define('io.ox/calendar/util',
                     return userAPI.getList(userIDs);
                 })
                 .then(function (users) {
-                    return _(users).map(function (single) {
-                        return {
-                            display_name: single.display_name,
-                            folder_id: single.folder_id,
-                            id: single.id,
-                            mail: single.email1,
-                            mail_field: 1
-                        };
+                    return _(users).map(function (user) {
+                        return $.extend(user, { mail: user.email1, mail_field: 1 });
                     });
                 });
         },
