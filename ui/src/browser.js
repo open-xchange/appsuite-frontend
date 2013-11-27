@@ -24,60 +24,92 @@
         'iOS'       : 6.0
     };
 
-    var ua, isOpera, webkit, chrome, phantom, MacOS, Windows, Blackberry, WindowsPhone, Android, iOS, standalone, uiwebview, browserLC = {};
+    var ua,
+        isOpera,
+        webkit,
+        chrome,
+        phantom,
+        MacOS,
+        Windows,
+        Blackberry,
+        WindowsPhone,
+        Android,
+        iOS,
+        standalone,
+        uiwebview,
+        chromeIOS,
+        unknown,
+        browserLC = {};
 
     function detectBrowser (nav) {
-        // browser detection - adopted from prototype.js
-        ua = nav.userAgent;
-        isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]";
-        webkit = ua.indexOf('AppleWebKit/') > -1;
-        chrome = ua.indexOf('Chrome/') > -1;
-        phantom = ua.indexOf('PhantomJS/') > -1;
-        MacOS = ua.indexOf('Macintosh') > -1;
-        Windows = ua.indexOf('Windows') > -1;
-        Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1);
-        WindowsPhone = ua.indexOf('Windows Phone') > -1;
-        Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined;
-        iOS = (ua.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined;
-        standalone = ("standalone" in nav) && nav.standalone;
-        uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
+        try {
+            // browser detection - adopted from prototype.js
+            ua = nav.userAgent;
+            isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]";
+            webkit = ua.indexOf('AppleWebKit/') > -1;
+            chrome = ua.indexOf('Chrome/') > -1;
+            phantom = ua.indexOf('PhantomJS/') > -1;
+            MacOS = ua.indexOf('Macintosh') > -1;
+            Windows = ua.indexOf('Windows') > -1;
+            Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1);
+            WindowsPhone = ua.indexOf('Windows Phone') > -1;
+            Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined;
+            iOS = (ua.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined;
+            standalone = ("standalone" in nav) && nav.standalone;
+            uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
+            chromeIOS = ua.indexOf('CriOS/') > -1;
 
-        // add namespaces, just sugar
-        _.browser = {
-            /** is IE? */
-            IE: nav.appName === "Microsoft Internet Explorer" ?
-                Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
-                    !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined
-                ),
-            /** is Opera? */
-            Opera: isOpera ?
-                ua.split('Opera/')[1].split(' ')[0].split('.')[0] : undefined,
-            /** is WebKit? */
-            WebKit: webkit,
-            /** Safari */
-            Safari: !Android && webkit && !chrome && !phantom && !uiwebview ?
-                (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
-            /** PhantomJS (needed for headless spec runner) */
-            PhantomJS: webkit && phantom ?
-                ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
-            /* Karma runner */
-            Karma: !!ox.testUtils,
-            /** Chrome */
-            Chrome: webkit && chrome ?
-                ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
-            /** is Firefox? */
-            Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1) ?
-                ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
-            UIWebView: uiwebview,
-            /** OS **/
-            Blackberry: Blackberry ?
-                ua.split('Version/')[1].split(' ')[0] : undefined,
-            WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1 )) ? true : undefined, // no version here yet
-            iOS: iOS,
-            MacOS: MacOS,
-            Android : Android,
-            Windows: Windows
-        };
+            // add namespaces, just sugar
+            _.browser = {
+                /** is IE? */
+                IE: nav.appName === "Microsoft Internet Explorer" ?
+                    Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
+                        !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined
+                    ),
+                /** is Opera? */
+                Opera: isOpera ?
+                    ua.split('Opera/')[1].split(' ')[0].split('.')[0] : undefined,
+                /** is WebKit? */
+                WebKit: webkit,
+                /** Safari */
+                Safari: !Android && webkit && !chrome && !phantom && !uiwebview ?
+                    (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
+                /** PhantomJS (needed for headless spec runner) */
+                PhantomJS: webkit && phantom ?
+                    ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
+                /* Karma runner */
+                Karma: !!ox.testUtils,
+                /** Chrome */
+                Chrome: webkit && chrome ?
+                    ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
+                /** is Firefox? */
+                Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1) ?
+                    ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
+                ChromeiOS: chromeIOS,
+                UIWebView: uiwebview,
+                /** OS **/
+                Blackberry: Blackberry ?
+                    ua.split('Version/')[1].split(' ')[0] : undefined,
+                WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1 )) ? true : undefined, // no version here yet
+                iOS: iOS,
+                MacOS: MacOS,
+                Android : Android,
+                Windows: Windows
+            };
+
+        } catch (e) {
+            console.warn('Error while detecting browser, using fallback');
+
+            var browsers = "IE Opera WebKit Safari PhantomJS Karma Chrome Firefox ChromeiOS UIWebView Blackberry WindowsPhone iOS MacOS Android Windows".split(' ');
+            // set to unknown browser
+            _.browser = {
+                unknown: true
+            };
+            // reset all browsers
+            _(browsers).each(function (b) {
+                _.browser[b] = undefined;
+            });
+        }
 
         _(_.browser).each(function (value, key) {
             // ensure version is a number, not a string
