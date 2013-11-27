@@ -79,7 +79,11 @@ define("io.ox/core/desktop",
         launch: function () {
             var self = this, id = (this.get('name') || this.id) + '/main', requires = this.get('requires');
             if (upsell.has(requires)) {
-                return ox.launch(id).done(function () { self.quit(); });
+                //resolve/reject clears busy animation
+                var def = $.Deferred();
+                return ox.launch(id, { launched: def.promise() })
+                         .then(function () { self.quit(); })
+                         .always(def.resolve);
             } else {
                 upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
             }
@@ -119,9 +123,11 @@ define("io.ox/core/desktop",
             // add folder management
             this.folder = (function () {
 
-                var folder = null, that, win = null, grid = null, type;
+                var folder = null, that, win = null, grid = null, type, initialized = $.Deferred();
 
                 that = {
+
+                    initialized: initialized.promise(),
 
                     unset: function () {
                         // unset
@@ -134,39 +140,46 @@ define("io.ox/core/desktop",
                         if (grid) {
                             grid.clear();
                         }
-
                     },
 
                     set: function (id) {
                         var def = $.Deferred();
                         if (id !== undefined && id !== null && String(id) !== folder) {
+                            var activeApp = _.url.hash('app');
                             require(['io.ox/core/api/folder'], function (api) {
                                 api.get({ folder: id })
                                 .done(function (data) {
                                     // off
 //                                    api.off('change:' + folder);
+                                    var appchange = _.url.hash('app') !== activeApp; //app has changed while folder was requested
                                     // remember
                                     folder = String(id);
-                                    // update window title & toolbar?
-                                    if (win) {
-                                        win.setTitle(_.noI18n(data.title));
-                                        win.updateToolbar();
-                                    }
-                                    // update grid?
-                                    if (grid && grid.prop('folder') !== folder) {
-                                        grid.busy().prop('folder', folder);
-                                        if (win && win.search.active) {
-                                            win.search.close();
-                                        } else {
-                                            grid.refresh();
+                                    if (!appchange) {//only change if the app did not change
+                                        // update window title & toolbar?
+                                        if (win) {
+                                            win.setTitle(_.noI18n(data.title));
+                                            win.updateToolbar();
                                         }
-                                        // load fresh folder & trigger update event
-                                        api.reload(id);
+                                        // update grid?
+                                        if (grid && grid.prop('folder') !== folder) {
+                                            grid.busy().prop('folder', folder);
+                                            if (win && win.search.active) {
+                                                win.search.close();
+                                            } else {
+                                                grid.refresh();
+                                            }
+                                            // load fresh folder & trigger update event
+                                            api.reload(id);
+                                        }
+                                        // update hash
+                                        _.url.hash('folder', folder);
+                                        self.trigger('folder:change', folder, data);
                                     }
-                                    // update hash
-                                    _.url.hash('folder', folder);
-                                    self.trigger('folder:change', folder, data);
-                                    def.resolve(data);
+                                    def.resolve(data, appchange);
+
+                                    if (initialized.state() !== 'resolved') {
+                                        initialized.resolve(folder, data);
+                                    }
                                 })
                                 .fail(def.reject);
                             });
@@ -203,6 +216,9 @@ define("io.ox/core/desktop",
                     },
 
                     getData: function () {
+
+                        if (folder === null) return $.Deferred.resolve({});
+
                         return require(['io.ox/core/api/folder']).pipe(function (api) {
                             return api.get({ folder: folder });
                         });
@@ -362,8 +378,11 @@ define("io.ox/core/desktop",
                 if (force && self.destroy) {
                     self.destroy();
                 }
-                // update hash
-                _.url.hash({ app: null, folder: null, perspective: null, id: null });
+                // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
+                if (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0]) {
+                    //we are still in the app to close so we can clear the URL
+                    _.url.hash({ app: null, folder: null, perspective: null, id: null });
+                }
                 // don't save
                 clearInterval(self.get('saveRestorePointTimer'));
                 self.removeRestorePoint();
@@ -502,6 +521,14 @@ define("io.ox/core/desktop",
                 return true;
             }
             return false;
+        },
+
+        getCurrentApp: function () {
+            return currentWindow !== null ? currentWindow.app : null;
+        },
+
+        getCurrentWindow: function () {
+            return currentWindow;
         }
     });
 
@@ -574,6 +601,7 @@ define("io.ox/core/desktop",
     }());
 
     ox.ui.Perspective = (function () {
+
         var Perspective = function (name) {
             // init
             this.main = $();
@@ -583,8 +611,10 @@ define("io.ox/core/desktop",
             this.save = $.noop;
             this.restore = $.noop;
             this.afterShow = $.noop;
+            this.afterHide = $.noop;
 
             this.show = function (app, opt) {
+
                 var win = app.getWindow();
 
                 if (opt.perspective === win.currentPerspective) {
@@ -803,7 +833,8 @@ define("io.ox/core/desktop",
                     // perspectives
                     perspectives = {},
                     self = this,
-                    firstShow = true;
+                    firstShow = true,
+                    shown = $.Deferred();
 
                 this.updateToolbar = function () {
                     var folder = this.app && this.app.folder ? this.app.folder.get() : null,
@@ -857,6 +888,8 @@ define("io.ox/core/desktop",
                     }
                 });
 
+                this.shown = shown.promise();
+
                 this.show = function (cont) {
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
@@ -895,6 +928,8 @@ define("io.ox/core/desktop",
                             }
 
                             if (firstShow) {
+                                shown.resolve();
+                                self.trigger("show:initial"); // alias for open
                                 self.trigger("open");
                                 self.state.running = true;
                                 ox.ui.windowManager.trigger("window.open", self);

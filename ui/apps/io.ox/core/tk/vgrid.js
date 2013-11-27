@@ -380,7 +380,7 @@ define('io.ox/core/tk/vgrid',
 
                     // draw link
                     this.append(
-                        $('<div>').addClass('grid-info').append(
+                        $('<div class="grid-info">').append(
                             link = $('<a href="#">').on('click', fnShowAll)
                         )
                     );
