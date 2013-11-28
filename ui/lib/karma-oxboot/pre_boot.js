@@ -136,11 +136,22 @@ if (sinon) {
             });
             //faking a few folders
             fakeServer.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
-                var fakeFolder = {'1': {
-                        id: '1',
-                        folder_id: '0',
-                        title: 'Contacts'
-                    }},
+                var fakeFolder = {
+                        '1': {
+                            id: '1',
+                            folder_id: '0',
+                            title: 'Contacts'
+                        },
+                        '9': {
+                            id: '9',
+                            folder_id: '1',
+                            module: 'infostore',
+                            own_rights: 1,
+                            title: 'Drive',
+                            total: 0,
+                            type: 5
+                        }
+                    },
                     id = xhr.url.split('&').filter(function (str) {
                         return str.indexOf('id=') === 0;
                     })[0];
