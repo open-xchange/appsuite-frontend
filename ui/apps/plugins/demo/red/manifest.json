@@ -1,4 +1,5 @@
 {
     "namespace": "io.ox/portal/main",
-    "device": "smartphone"
+    "device": "smartphone",
+    "requires": "red"
 }
