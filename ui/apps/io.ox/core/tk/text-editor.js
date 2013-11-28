@@ -161,6 +161,10 @@ define('io.ox/core/tk/text-editor', function () {
             $(window).off('resize', resizeEditorMargin);
         };
 
+        this.getContainer = function () {
+            return textarea;
+        };
+
         this.destroy = function () {
             this.handleHide();
             this.setContent('');
