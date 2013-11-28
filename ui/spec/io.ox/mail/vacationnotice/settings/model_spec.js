@@ -43,9 +43,9 @@ define(['io.ox/mail/vacationnotice/settings/model'], function (model) {
         }
     };
 
-    describe('Vacationnotice with one active mail', function () {
+    describe('Vacationnotice', function () {
 
-        it('should draw the form', function () {
+        it('should prepare the data', function () {
 
             dataPrepared.should.be.deep.equal(model.protectedMethods.providePreparedData(dataViaModel));
 
