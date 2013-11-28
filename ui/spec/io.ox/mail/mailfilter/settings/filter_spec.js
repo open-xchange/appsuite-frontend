@@ -69,39 +69,36 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
 
     describe('Mailfilter filter with rules', function () {
 
-        beforeEach(function () {
-            this.server = ox.fakeServer.create();
-            // this.server.autoRespond = true;
+        it('should draw the list of tests', function () {
+            var def;
+
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFilter));
             });
             $('body', document).append(this.node = $('<div id="filtertestNode">'));
 
-        });
+            def = filters.editMailfilter(this.node);
 
-        afterEach(function () {
-            $('#filtertestNode', document).remove();
-            this.server.restore();
-        });
+            waitsFor(function () {
+                return def.state() === 'resolved';
+            }, 'paint edit mailfilter dialog', ox.testTimeout);
 
-        it('should draw the list of tests', function () {
-            
-            filters.editMailfilter(this.node);
-            this.server.respond();
+            runs(function () {
+                expect(this.node.find('h1').length).toBe(1);
+                expect(this.node.find('.btn-primary[data-action="add"]').length).toBe(1);
+                expect(this.node.find('li[data-id="0"]').length).toBe(1);
+                expect(this.node.find('li[data-id="0"]').hasClass('editable')).toBe(true);
+                expect(this.node.find('li[data-id="1"]').length).toBe(1);
+                expect(this.node.find('li[data-id="1"]').hasClass('editable')).toBe(false);
+                expect(this.node.find('li[data-id="2"]').hasClass('disabled')).toBe(true);
+                expect(this.node.find('li a.drag-handle').length).toBe(3);
+                expect(this.node.find('li .list-title').length).toBe(3);
+                expect(this.node.find('li [data-action="edit"]').length).toBe(2);
+                expect(this.node.find('li [data-action="toggle"]').length).toBe(2);
+                expect(this.node.find('li [data-action="delete"]').length).toBe(2);
 
-            expect(this.node.find('h1').length).toBe(1);
-            expect(this.node.find('.btn-primary[data-action="add"]').length).toBe(1);
-            expect(this.node.find('li[data-id="0"]').length).toBe(1);
-            expect(this.node.find('li[data-id="0"]').hasClass('editable')).toBe(true);
-            expect(this.node.find('li[data-id="1"]').length).toBe(1);
-            expect(this.node.find('li[data-id="1"]').hasClass('editable')).toBe(false);
-            expect(this.node.find('li[data-id="2"]').hasClass('disabled')).toBe(true);
-            expect(this.node.find('li a.drag-handle').length).toBe(3);
-            expect(this.node.find('li .list-title').length).toBe(3);
-            expect(this.node.find('li [data-action="edit"]').length).toBe(2);
-            expect(this.node.find('li [data-action="toggle"]').length).toBe(2);
-            expect(this.node.find('li [data-action="delete"]').length).toBe(2);
-
+                this.node.remove();
+            });
         });
 
     });
@@ -109,26 +106,23 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
     describe('Mailfilter filter without rules', function () {
 
         beforeEach(function () {
-           
-            this.server = ox.fakeServer.create();
-            // this.server.autoRespond = true;
+            var def;
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithoutFilter));
             });
             $('body', document).append(this.node = $('<div id="filtertestNode">'));
 
+            def = filters.editMailfilter(this.node);
+            waitsFor(function () {
+                return def.state() === 'resolved';
+            }, 'paint edit mailfilter dialog', ox.testTimeout);
         });
 
         afterEach(function () {
-
             $('#filtertestNode', document).remove();
-            this.server.restore();
         });
 
         it('should draw the empty list', function () {
-
-            filters.editMailfilter(this.node);
-            this.server.respond();
 
             expect(this.node.find('h1').length).toBe(1);
             expect(this.node.find('.btn-primary[data-action="add"]').length).toBe(1);
@@ -140,8 +134,6 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
         it('should trigger the create new rule dialog', function () {
             var addButton,
                 $popup;
-            filters.editMailfilter(this.node);
-            this.server.respond();
 
             addButton = this.node.find('.btn-primary[data-action="add"]');
             addButton.click();
@@ -149,7 +141,6 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
             $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
             expect($popup.length).toBe(1);
             $popup.remove();
-
         });
 
     });

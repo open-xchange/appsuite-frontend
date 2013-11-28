@@ -19,33 +19,34 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
     describe('Mailfilter filter without rules', function () {
 
-        var $container = $('<div>'),
+        var $container = $('<div id="testNode">'),
             addButton,
             $popup;
 
         beforeEach(function () {
-            this.server = ox.fakeServer.create();
-            // this.server.autoRespond = true;
+            var def;
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithoutFilter));
             });
 
+            def = filters.editMailfilter($container.empty());
+            waitsFor(function () {
+                return def.state() === 'resolved';
+            }, 'setup mailfilter edit view', ox.testTimeout);
+            runs(function () {
+                addButton = $container.find('.btn-primary[data-action="add"]');
+                addButton.click();
+                $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
+            });
+            $('body', document).append($container);
         });
 
         afterEach(function () {
-            this.server.restore();
+            $('#testNode').remove();
             $popup.remove();
         });
 
         it('should open the new rule dialog', function () {
-           
-            filters.editMailfilter($container);
-            this.server.respond();
-
-            addButton = $container.find('.btn-primary[data-action="add"]');
-            addButton.click();
-            $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
-
             expect($popup.length).toBe(1);
 
         });

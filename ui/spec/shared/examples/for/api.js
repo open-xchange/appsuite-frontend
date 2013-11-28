@@ -19,13 +19,7 @@ define('shared/examples/for/api', [], function () {
         }, options);
 
         afterEach(function () {
-            this.server.autoRespond = true;
             this.handleExpectedFail(options.markedPending);
-        });
-
-        beforeEach(function () {
-            this.server = ox.fakeServer;
-            this.server.autoRespond = false;
         });
 
         describe('a basic API class', function () {
@@ -67,6 +61,7 @@ define('shared/examples/for/api', [], function () {
                 });
                 xdescribe('with default events', function () {
                     beforeEach(function () {
+                        this.server.autoRespond = false;
                         this.server.respondWith("PUT", /.*action=new&/, function (xhr) {
                             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data": 1337}');
                         });

@@ -12,15 +12,9 @@
  */
 define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks/defaultTestData.json'], function (detailView, ext, testData) {
     describe('tasks detailview', function () {
-        afterEach(function () {
-            this.server.restore();
-        });
-
         describe('content', function () {
             var node;
             beforeEach(function () {
-                this.server = ox.fakeServer.create();
-                this.server.autoRespond = true;
                 this.server.respondWith('GET', /api\/attachment\?action=all/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testAttachments) + '}');
                 });
@@ -77,9 +71,6 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
             var apiCallUpdate = false,
                 node;
             beforeEach(function () {
-                $('.io-ox-dialog-popup').remove()//clean up popups from other tests
-                this.server = ox.fakeServer.create();
-                this.server.autoRespond = true;
                 this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testData) + '}');
                 });

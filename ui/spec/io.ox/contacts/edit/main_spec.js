@@ -162,8 +162,6 @@
         var app = null;
 
         beforeEach(function () {
-            this.server = ox.fakeServer.create();
-
             this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
             });
@@ -172,10 +170,6 @@
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(response));
             });
 
-        });
-
-        afterEach(function () {
-            this.server.restore();
         });
 
         it('should provide a getApp function ', function () {

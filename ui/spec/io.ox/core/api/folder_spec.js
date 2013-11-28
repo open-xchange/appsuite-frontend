@@ -110,15 +110,9 @@ define(['shared/examples/for/api',
                 }, 'cache clear takes too long', 1000);
                 runs(function () {
                     //make fake server only respond on demand
-                    this.server = ox.fakeServer.create();
-
+                    this.server.autoRespond = false;
                     setupFakeServer(this.server);
                 });
-            });
-
-            afterEach(function () {
-                //make fake server respond automatically
-                this.server.restore();
             });
 
             it('should return a folder with correct id', function () {
@@ -304,8 +298,6 @@ define(['shared/examples/for/api',
 
         describe('hidden objects', function () {
             beforeEach(function () {
-                this.server = ox.fakeServer.create();
-                this.server.autoRespond = true;
                 this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
                     xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
                                 JSON.stringify({
@@ -320,9 +312,6 @@ define(['shared/examples/for/api',
                                 })
                     );
                 });
-            });
-            afterEach(function () {
-                this.server.restore();
             });
             describe('with "show hidden files" option enabled', function () {
                 it('should show folders starting with a dot', function () {

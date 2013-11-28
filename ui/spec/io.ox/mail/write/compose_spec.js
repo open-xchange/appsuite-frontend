@@ -31,15 +31,6 @@ define(
 
         var app = null, ed = null, form = $();
 
-        beforeEach(function () {
-            this.server = ox.fakeServer.create();
-            this.server.autoRespond = true;
-        });
-
-        afterEach(function () {
-            this.server.restore();
-        });
-
         it('opens in HTML mode', function () {
 
             var loaded = new Done();

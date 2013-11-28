@@ -28,7 +28,6 @@ define(['io.ox/calendar/main',
     describe('calendar app and the corresponding listview ', function () {
 
         beforeEach(function () {
-            this.server = ox.fakeServer.create();
             this.server.autoRespond = true;
             this.server.respondWith('GET', /api\/calendar\?action=all/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.getList));
@@ -38,11 +37,6 @@ define(['io.ox/calendar/main',
             });
 
 
-        });
-
-        afterEach(function () {
-            // cleanup
-            this.server.restore();
         });
 
         it('should provide a getApp function ', function () {

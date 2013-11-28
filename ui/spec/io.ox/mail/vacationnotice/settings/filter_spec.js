@@ -67,7 +67,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
     describe('Vacationnotice with one active mail', function () {
 
         beforeEach(function () {
-            this.server = ox.fakeServer.create();
+            this.server.autoRespond = false;
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=vacation/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlag));
             });
@@ -77,7 +77,6 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
         afterEach(function () {
             $('#vacationnoticetestNode', document).remove();
-            this.server.restore();
         });
 
         it('should draw the form', function () {
@@ -105,7 +104,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
     describe('Vacationnotice with two active mails', function () {
 
         beforeEach(function () {
-            this.server = ox.fakeServer.create();
+            this.server.autoRespond = false;
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=vacation/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlagTwoMails));
             });
@@ -115,7 +114,6 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
         afterEach(function () {
             $('#vacationnoticetestNode', document).remove();
-            this.server.restore();
         });
 
         it('should check two aliases', function () {

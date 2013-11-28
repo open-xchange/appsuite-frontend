@@ -25,10 +25,6 @@ define(['io.ox/mail/write/main',
             waitsFor(function () {
                 return launched.state() === 'resolved';
             });
-            this.server = ox.fakeServer.create();
-        });
-        afterEach(function () {
-            this.server.restore();
         });
 
         describe('provides useful feedback', function () {

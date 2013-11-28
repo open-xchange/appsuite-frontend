@@ -51,9 +51,6 @@ define(['shared/examples/for/api',
 
         beforeEach(function () {
 
-            this.server = ox.fakeServer.create();
-            this.server.autoRespond = true;
-
             this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureUser.current));
             });
@@ -61,10 +58,6 @@ define(['shared/examples/for/api',
             this.server.respondWith('GET', /api\/account\?action=all/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureAccounts));
             });
-        });
-
-        afterEach(function () {
-            this.server.restore();
         });
 
         var account0 = {

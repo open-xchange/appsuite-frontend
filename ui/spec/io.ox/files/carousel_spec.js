@@ -26,13 +26,11 @@ define(['io.ox/files/carousel'], function (slideshow) {
         ];
 
         beforeEach(function () {
-            this.server = ox.fakeServer.create();
             $('body', document).append(this.node = $('<div id="testNode">'));
         });
 
         afterEach(function () {
             $('#testNode', document).remove();
-            this.server.restore();
         });
 
         describe('with multiple images', function () {

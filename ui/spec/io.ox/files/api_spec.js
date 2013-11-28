@@ -228,12 +228,8 @@ define(['io.ox/files/api',
                         return def.state() === 'resolved';
                     }, 'cache clear takes too long', 1000);
                     runs(function () {
-                        this.server = ox.fakeServer.create();
                         setupFakeServer(this.server);
                     });
-                });
-                afterEach(function () {
-                    this.server.restore();
                 });
 
 		xit('and use the provided versions cache', function () {

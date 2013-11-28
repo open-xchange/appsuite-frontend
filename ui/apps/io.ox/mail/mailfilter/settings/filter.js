@@ -106,12 +106,11 @@ define('io.ox/mail/mailfilter/settings/filter',
     return {
         editMailfilter: function ($node) {
 
-            var deferred = $.Deferred(),
-                createExtpointForSelectedFilter = function (node, args) {
+            var createExtpointForSelectedFilter = function (node, args) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args);
                 };
 
-            api.getRules().done(function (data) {
+            return api.getRules().then(function (data) {
 
                 collection = factory.createCollection(data);
                 var AccountSelectView = Backbone.View.extend({
@@ -355,11 +354,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                 mailFilter = new MailfilterEdit();
                 $node.append(mailFilter.render().$el);
 
-            }).fail(function (error) {
-                deferred.reject(error);
             });
-
-            return deferred;
 
         }
     };

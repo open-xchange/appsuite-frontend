@@ -42,7 +42,7 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
     describe('Vacationnotice', function () {
 
         beforeEach(function () {
-            this.server = ox.fakeServer.create();
+            this.server.autoRespond = false;
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=autoforward/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlag));
             });
@@ -52,7 +52,6 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
 
         afterEach(function () {
             $('#autoforwardtestNode', document).remove();
-            this.server.restore();
         });
 
         it('should draw the form', function () {

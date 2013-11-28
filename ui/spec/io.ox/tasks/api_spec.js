@@ -19,13 +19,6 @@ define(['shared/examples/for/api',
     describe('tasks API', function () {
         sharedExamplesFor(api, apiTestData);
 
-        beforeEach(function () {
-            this.server = ox.fakeServer.create();
-        });
-        afterEach(function () {
-            this.server.restore();
-        });
-
         describe('creating a task', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/tasks\?action=new/, function (xhr) {
