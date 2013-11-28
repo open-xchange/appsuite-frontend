@@ -31,10 +31,10 @@ define('sinon-wrapper', {
                         delete spies[id];
                         restore.apply(spy, arguments);
                     };
+                    spies[id] = spy;
                 } else {
                     obj[property].reset();
                 }
-                spies[id] = spy;
                 return obj[property];
             },
             stub: function (obj, method, fn) {
@@ -66,7 +66,7 @@ define('sinon-wrapper', {
                 return  {
                     spies: spies,
                     stubs: stubs
-                }
+                };
             }
         };
     }

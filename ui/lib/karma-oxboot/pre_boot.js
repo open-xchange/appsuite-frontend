@@ -88,7 +88,7 @@ if (sinon) {
             var fakeServer = sinon.fakeServer.create();
             sinon.FakeXMLHttpRequest.useFilters = true;
             sinon.FakeXMLHttpRequest.addFilter(function (method, url, async) {
-                // don’t filter out server calls from requirejs or static theme files 
+                // don’t filter out server calls from requirejs or static theme files
                 return async && (url.indexOf('/api/apps/load/' + ox.version + ',') === 0 || url.indexOf('/base/spec/fixtures/') >= 0 || /\.js(?!on)/.test(url));
             });
             ox.fakeServer.setup(fakeServer);

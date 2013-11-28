@@ -23,7 +23,7 @@ define(['io.ox/calendar/main',
             f.value = true;
         };
         return f;
-    };
+    }
 
     describe('calendar app and the corresponding listview ', function () {
 
@@ -77,7 +77,7 @@ define(['io.ox/calendar/main',
 
             runs(function () {
                 expect(this.grid.getIds().length).toBe(2);
-            })
+            });
         });
 
         it('should show 2 appointments in the grid', function () {

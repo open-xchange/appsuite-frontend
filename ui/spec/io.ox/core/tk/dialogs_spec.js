@@ -77,7 +77,7 @@ define(['io.ox/core/tk/dialogs'], function (dialogs) {
         });
 
         it('should remove blockscroll class on container when closed', function () {
-            this.dialog.done(function (dialog) { dialog.close() });
+            this.dialog.done(function (dialog) { dialog.close(); });
             expect(this.node.find('.io-ox-dialog-popup').hasClass('blockscroll')).toBeFalsy();
         });
 

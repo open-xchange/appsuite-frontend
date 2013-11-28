@@ -50,7 +50,7 @@ define(['io.ox/mail/mailfilter/settings/model', 'gettext!io.ox/mail'], function 
 
         it('should have a property id', function () {
             returnedModel.test.should.have.a.property('id', 'true');
-        })
+        });
 
         it('should have a property actioncmds', function () {
             returnedModel.should.have.a.property('actioncmds');
