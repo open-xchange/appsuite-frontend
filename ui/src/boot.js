@@ -609,6 +609,7 @@ $(window).load(function () {
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login';
                             } else {
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                                $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                             }
 
                             themes.set(ox.serverConfig.signinTheme || 'login');
@@ -737,6 +738,7 @@ $(window).load(function () {
                                 // apply session data (again) & page title
                                 session.set(data);
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                                $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                                 debug('boot.js: autoLogin > loginSuccess > loadCoreFiles ...');
                                 return loadCoreFiles();
                             })
