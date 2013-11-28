@@ -275,6 +275,13 @@ define('io.ox/core/tk/attachments',
             },
 
             add: function (file) {
+                var result = this.checkQuota(file);
+                if (result && result.error) {
+                    notifications.yell('error', result.error);
+                }
+            },
+
+            checkQuota: function (file) {
                 var self = this,
                     list = [].concat(file),
                     properties = settings.get('properties'),
@@ -285,7 +292,8 @@ define('io.ox/core/tk/attachments',
                     maxFileSize,
                     isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write'),
                     filesLength = files.length,
-                    autoPublish = require('io.ox/core/capabilities').has('auto_publish_attachments');
+                    autoPublish = require('io.ox/core/capabilities').has('auto_publish_attachments'),
+                    result = { added: [] };
 
                 function getQuota(a, b) {
                     // 0 and -1 means that this is disabled
@@ -313,26 +321,30 @@ define('io.ox/core/tk/attachments',
                     if (fileSize) {
                         total += fileSize;
                         if (maxFileSize > 0 && fileSize > maxFileSize) {
-                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
+                            result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize));
+                            result.reason = 'filesize';
                             return true;
                         }
                         if (quota > 0 && (total > (quota - usage))) {
-                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
+                            result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota));
+                            result.reason = 'quota';
                             return true;
                         }
                     }
 
-                    files.push({
+                    result.added.push({
                         file: (oldMode && item.hiddenField ? item.hiddenField : item),
                         name: fileTitle,
                         size: fileSize,
                         group: item.group || 'unknown',
                         cid: counter++
                     });
-
                 });
 
+                files = files.concat(result.added);
                 if (filesLength !== files.length) self.listChanged();
+
+                return result;
             },
 
             remove: function (attachment) {
