@@ -11,7 +11,8 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define(['io.ox/calendar/main'], function (main) {
+define(['io.ox/calendar/main',
+    'fixture!io.ox/calendar/list/calendar-list.json'], function (main, fixture) {
 
     function Done() {
         var f = function () {
@@ -24,22 +25,19 @@ define(['io.ox/calendar/main'], function (main) {
         return f;
     };
 
-    var responseAll = {
-        "timestamp":1385041701149,
-        "data":[
-            [268565,21401,false,null,null,1385042400000,"Termin 1",1385046000000,"Confroom 1",false,1,[{"id":249,"confirmation":1}],"alexander.quast@open-xchange.com",249,249,null,null,null,null,null,null,null,[{"id":249,"type":1}]],
-            [268566,21401,false,null,null,1385128800000,"Termin 2",1385132400000,"Confroom 2",false,4,[{"id":249,"confirmation":1}],"alexander.quast@open-xchange.com",249,249,null,null,null,null,null,null,null,[{"id":249,"type":1}]]
-        ]
-    };
-
     describe('calendar app and the corresponding listview ', function () {
 
         beforeEach(function () {
             this.server = ox.fakeServer.create();
             this.server.autoRespond = true;
             this.server.respondWith('GET', /api\/calendar\?action=all/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(responseAll));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.getList));
             });
+            this.server.respondWith('GET', /api\/calendar\?action=get.+id=1337/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.get1337));
+            });
+
+
         });
 
         afterEach(function () {
@@ -153,9 +151,113 @@ define(['io.ox/calendar/main'], function (main) {
             var timebars = $(cells).find('.time');
             expect($(timebars[0]).hasClass('reserved')).toBe(true);
             expect($(timebars[1]).hasClass('free')).toBe(true);
+        });
 
+        describe(' should show the right data in detailview ', function () {
+            beforeEach(function () {
+                this.gc = main.getApp().getGrid().getContainer();
+                this.g = main.getApp().getGrid();
+                this.app = main.getApp();
+                this.nodes = this.app.getWindow().nodes;
+                this.g.selection.selectFirst();
+
+                this.server = ox.fakeServer.create();
+                this.server.autoRespond = true;
+
+                this.server.respondWith('GET', /api\/calendar\?action=get.+id=1337/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.get1337));
+                });
+
+                this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userList));
+                });
+
+                this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userGet));
+                });
+            });
+
+            afterEach(function () {
+                this.server.restore();
+            });
+
+            it(' and should show an appointment in detail view if something is selected in list', function () {
+                var right = this.nodes.body.find('.rightside');
+                expect(right.length).toBeGreaterThan(0);
+            });
+
+            it(' and it should show the title of the appointment', function () {
+                var right = this.nodes.body.find('.rightside');
+                waitsFor(function () {
+                    return right.find('.title').text() === 'Termin 1';
+                }, 'did not find rightside content');
+
+                runs(function () {
+                    expect(right.find('.title').text()).toBe('Termin 1');
+                });
+            });
+
+            it('and it should show the locations of the appointment', function () {
+                var right = this.nodes.body.find('.rightside');
+                expect(right.find('.location').text()).toBe('Confroom');
+            });
+
+            it('and it should show the day and date of the appointment', function () {
+                var right = this.nodes.body.find('.rightside');
+                expect(right.find('.day').text()).toBe('Do., 28.11.2013');
+            });
+
+            it('and it should show the duration of the appointment', function () {
+                var right = this.nodes.body.find('.rightside');
+                expect(right.find('.interval').text()).toBe('13:00-14:00 UTC');
+            });
+
+            it('and it should show the notes of the appointment', function () {
+                var right = this.nodes.body.find('.rightside');
+                expect(right.find('.note').text()).toBe('Some Text');
+            });
+
+            it('and it should show the participants of the appointment', function () {
+                var right = this.nodes.body.find('.rightside');
+                waitsFor(function () {
+                    return right.find('.person').length > 0;
+                }, 'could not find participants');
+                runs(function () {
+                    expect($(right.find('.person')[0]).text()).toBe('Horst Hrubesch');
+                    expect($(right.find('.person')[1]).text()).toBe('Karl Napp');
+                });
+            });
+            it('and it should show the participants confirm message for the appointment', function () {
+                var right = this.nodes.body.find('.rightside');
+                waitsFor(function () {
+                    return right.find('.comment').length > 0;
+                }, 'could not find comment');
+                runs(function () {
+                    expect($(right.find('.comment')[0]).text()).toBe('super');
+                    expect($(right.find('.comment')[1]).text()).toBe('immer gerne');
+                });
+            });
+
+            it('and it should show the details section for the appointment', function () {
+                var right = this.nodes.body.find('.rightside');
+                waitsFor(function () {
+                    return right.find('.organizer').text().length > 0;
+                }, 'could not find details');
+                runs(function () {
+                    var d = right.find('.details');
+                    var orga = d.find('.organizer').text();
+                    var shown_as = d.find('.shown_as').hasClass('reserved');
+                    var created = d.find('.created').text();
+                    var modified = d.find('.modified').text();
+                    expect(orga).toBe('Horst Hrubesch');
+                    expect(shown_as).toBe(true);
+                    expect(created).toBe('Do., 28.11.2013 – Horst Hrubesch');
+                    expect(modified).toBe('Do., 28.11.2013 – Horst Hrubesch');
+                });
+            });
         });
 
     });
+
 });
 
