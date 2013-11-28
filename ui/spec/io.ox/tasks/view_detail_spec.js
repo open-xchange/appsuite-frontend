@@ -10,98 +10,8 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailView, ext) {
-
+define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks/defaultTestData.json'], function (detailView, ext, testData) {
     describe('tasks detailview', function () {
-        var options = {
-                testData: {
-                    actual_costs: 0,
-                    actual_duration: '1',
-                    alarm: 1402571572000,
-                    billing_information: 'Ich hab keine Kohle.',
-                    color_label: 0,
-                    companies: 'Mc Test in Testhausen',
-                    confirmations: [],
-                    created_by: 12345,
-                    creation_date: 1348748789000,
-                    currency: 'EUR',
-                    date_completed: 1382709674000,
-                    end_date: 1359720808000,
-                    folder_id: 555123456,
-                    id: 123,
-                    modified_by: 12345,
-                    note: 'Ich bin Detailreich',
-                    number_of_attachments: 0,
-                    participants: [],
-                    percent_completed: 100,
-                    priority: 2,
-                    private_flag: false,
-                    recurrence_type: 0,
-                    start_date: 1357034452000,
-                    status: 3,
-                    target_costs: 5,
-                    target_duration: '10',
-                    title: 'Test Termin',
-                    trip_meter: '1000 Meilen'
-                },
-                participantsTest: {
-                    folder_id: 555123456,
-                    id: 123,
-                    modified_by: 12345,
-                    number_of_attachments: 0,
-                    participants: [{mail: 'max@mustermann.test', display_name: 'Max Mustermann', type: 5},
-                                   {id: 1337, confirmmessage: 'hurra', confirmation: 1, type: 1}],
-                    percent_completed: 100,
-                    priority: 2,
-                    private_flag: false,
-                    recurrence_type: 0,
-                    status: 3,
-                    title: 'Participant test',
-                    users: [{id:1337, confirmmessage: 'hurra', confirmation: 1}]
-                },
-                attachmentsTest: {
-                    folder_id: 555123456,
-                    id: 124,
-                    modified_by: 12345,
-                    number_of_attachments: 1,
-                    participants: [],
-                    percent_completed: 100,
-                    priority: 2,
-                    private_flag: false,
-                    recurrence_type: 0,
-                    status: 3,
-                    title: 'Attachment test'
-                },
-                testUser: {
-                    display_name: 'Mister, Test',
-                    first_name: 'Mister',
-                    last_name: 'Test',
-                    id: 1337,
-                    folder_id: 121212,
-                    user_id: 12345,
-                },
-                testAttachments:
-                    [[456, 0, 124, 4, 'Test.txt', 21, 'text/plain'],
-                    [457, 0, 124, 4, 'Textdatei123.txt', 9, 'text/plain']],
-                testFolder: {
-                        created_by: 1337,
-                        creation_date: 1341997688886,
-                        folder_id: '1',
-                        id: '555123456',
-                        last_modified: 1383748605029,
-                        last_modified_utc: 1383748605029,
-                        modified_by: 1337,
-                        module: 'tasks',
-                        own_rights: 273686592,
-                        permissions: [{entity: 1337, bits: 273686592, group: false}],
-                        standard_folder: true,
-                        standard_folder_type: 1,
-                        supported_capabilities: ['quota', 'sort', 'permissions'],
-                        title: 'Tasks',
-                        total: 5,
-                        type: 1
-                }
-            };
         afterEach(function () {
             this.server.restore();
         });
@@ -111,11 +21,11 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
             beforeEach(function () {
                 this.server = ox.fakeServer.create();
                 this.server.autoRespond = true;
-                this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testUser) + '}');
-                });
                 this.server.respondWith('GET', /api\/attachment\?action=all/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testAttachments) + '}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testAttachments) + '}');
+                });
+                this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testUser) + '}');
                 });
             });
             //clean up the dom
@@ -124,7 +34,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
             });
 
             it('should draw the whole content', function () {
-                var baton = ext.Baton({data: options.testData});
+                var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 expect(node.find('.title').length).toBe(1);
                 expect(node.find('.priority').length).toBe(1);
@@ -137,9 +47,9 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                 expect(node.find('.task-details').children().length).toBe(9);
             });
 
-            xit('should draw every participant', function () {
+            xit('should draw every participant', function () {//find out why this fails in phantom, chrome is fine
 
-                var baton = ext.Baton({ data: options.participantsTest });
+                var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
 
                 waitsFor(function () {
@@ -152,7 +62,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
             });
 
             it('should draw every attachment', function () {
-                var baton = ext.Baton({data: options.attachmentsTest});
+                var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 waitsFor(function () {
                     return node.find('.attachments-container').children().length === 4;
@@ -167,10 +77,11 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
             var apiCallUpdate = false,
                 node;
             beforeEach(function () {
+                $('.io-ox-dialog-popup').remove()//clean up popups from other tests
                 this.server = ox.fakeServer.create();
                 this.server.autoRespond = true;
                 this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
-                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testData) + '}');
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testData) + '}');
                 });
                 this.server.respondWith('PUT', /api\/tasks\?action=update/, function (xhr) {
                     apiCallUpdate = true;
@@ -191,7 +102,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                 apiCallUpdate = false;
             });
             it('mark Task undone should call api', function () {
-                var baton = ext.Baton({data: options.testData});
+                var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 node.find('[data-action="unDone"]').click();
                 waitsFor(function () {
@@ -199,8 +110,8 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                 }, 'undone task', ox.testTimeout);
             });
 
-            xit('edit should launch edit app', function () {
-                var baton = ext.Baton({data: options.testData});
+            it('edit should launch edit app', function () {
+                var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 node.find('[data-action="edit"]').click();
 
@@ -208,54 +119,62 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                     return $('.title-field').length === 1;//if title is drawn the view is ready
                 }, 'start edit task', ox.testTimeout);
 
-                this.after(function () {//close app
+                //if the app is closed mail app as fallback is opened. because of missing fakeserver responses this lets some mail tests fail
+                //just leave it open until this is solved
+                /*this.after(function () {//close app
                     var editnode = $.find('.task-edit-cancel');
                     if(editnode.length === 1) {
                         $(editnode[0]).click();
+                    }
+                });*/
+                this.after(function () {//remove node
+                    var editnode = $.find('.task-edit-wrapper');
+                    if(editnode.length === 1) {
+                        $(editnode[0]).remove();
                     }
                 });
             });
 
             it('change due date should have a dropdown with correct structure', function () {
-                var baton = ext.Baton({data: options.testData});
+                var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 var inlineLink = node.find('[data-action="change-due-date"]').parent();
                 expect(inlineLink.find('ul li a').length).toBe(7);//one menuitem for every day
             });
             it('change due date should call Api', function () {
-                var baton = ext.Baton({data: options.testData});
+                var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 node.find('[data-action="change-due-date"]').parent().find('ul li a').first().click();//click tomorrow in dropdownmenu
                 waitsFor(function () {
                     return apiCallUpdate;
-                });
+                }, 'call api update', ox.testTimeout);
             });
             it('confirm should open a popup', function () {
-                var baton = ext.Baton({data: options.participantsTest});
+                var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 node.find('[data-action="confirm"]').click();
                 waitsFor(function () {
                     return $('.io-ox-dialog-popup').length === 1;
-                });
+                }, 'open popup', ox.testTimeout);
 
-                this.after(function () {//close popup
+                runs(function () {//close popup
                     $('.io-ox-dialog-popup [data-action="cancel"]').click();
                 });
             });
             it('confirm should call Api', function () {
-                var baton = ext.Baton({data: options.participantsTest});
+                var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 node.find('[data-action="confirm"]').click();
 
                 waitsFor(function () {
                     return $('.io-ox-dialog-popup').length === 1;
-                });
+                }, 'open popup', ox.testTimeout);
 
                 runs(function () {
                     $('[data-action="ChangeConfState"]').click();
                     waitsFor(function () {
                         return apiCallUpdate;
-                    });
+                    }, 'call api confirm', ox.testTimeout);
                 });
             });
             describe('', function () {
@@ -266,21 +185,21 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                         return 'api/folders?action=get'.search(response.url) === 0;
                     });
                     this.server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
-                        xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(options.testFolder) + '}');
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(testData.testFolder) + '}');
                     });
                 });
 
                 it('delete should open a popup', function () {
-                    var baton = ext.Baton({data: options.testData});
+                    var baton = ext.Baton({data: testData.testData});
                     node = detailView.draw(baton);
                     waitsFor(function () {
                         return node.find('[data-action="delete"]').length === 1;
-                    });
+                    }, 'draw link', ox.testTimeout);
                     runs(function () {
                         node.find('[data-action="delete"]').click();
                         waitsFor(function () {
                             return $('.io-ox-dialog-popup').length === 1;
-                        });
+                        }, 'open popup', ox.testTimeout);
                     });
     
                     this.after(function () {//close popup
@@ -289,37 +208,37 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions'], function (detailVie
                 });
 
                 it('delete should call api', function () {
-                    var baton = ext.Baton({data: options.testData});
+                    var baton = ext.Baton({data: testData.testData});
                     node = detailView.draw(baton);
                     waitsFor(function () {
                         return node.find('[data-action="delete"]').length === 1;
-                    });
+                    }, 'draw link', ox.testTimeout);
                     runs(function () {
                         node.find('[data-action="delete"]').click();
                         waitsFor(function () {
                             return $('.io-ox-dialog-popup').length === 1;
-                        });
+                        }, 'open popup', ox.testTimeout);
                         runs(function () {
                             $('[data-action="deleteTask"]').click();
                             waitsFor(function () {
                                 return apiCallUpdate;
-                            });
+                            }, 'call api delete', ox.testTimeout);
                         });
                     });
                 });
             });
             it('move should open a popup', function () {
                 //there is a missing api call for the foldertree. not important for this test
-                var baton = ext.Baton({data: options.testData});
+                var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
                 waitsFor(function () {
                     return node.find('[data-action="move"]').length === 1;
-                });
+                }, 'draw link', ox.testTimeout);
                 runs(function () {
                     node.find('[data-action="move"]').click();
                     waitsFor(function () {
                         return $('.io-ox-dialog-popup').length === 1;
-                    });
+                    }, 'open popup', ox.testTimeout);
                 });
 
                 this.after(function () {//close popup
