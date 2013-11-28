@@ -33,13 +33,26 @@ define.async('io.ox/core/tk/html-editor',
         self.replaceWith(p.append(self.contents()));
     }
 
+    // just to test if class attribute contains "emoji"
+    var regEmoji = /emoji/,
+        // check for http:, mailto:, or tel:
+        regProtocal = /^\w+:/;
+
     function paste_preprocess(pl, o) {
         //console.debug('pre', o.content);
         o.content = o.content
             // remove comments
             .replace(/<!--(.*?)-->/g, '')
+            // remove class attribute - except for emojis
+            .replace(/\sclass="[^"]+"/g, function (all) {
+                return regEmoji.test(all) ? all : '';
+            })
             // remove custom attributes
-            .replace(/ data-[^=]+="[^"]*"/g, '')
+            .replace(/ data-[^=]+="[^"]*"/ig, '')
+            // remove relative links
+            .replace(/(<a[^<]+)href="([^"]+)"/g, function (all, prefix, href) {
+                return regProtocal.test(href) ? all : prefix;
+            })
             // remove &nbsp;
             .replace(/&nbsp;/ig, ' ')
             // fix missing white-space before/after links
@@ -554,7 +567,8 @@ define.async('io.ox/core/tk/html-editor',
                 var content = ed.getContent({ format: 'raw' });
                 // clean up
                 content = content
-                    .replace(/\s?data-mce-bogus="1"/g, '') // remove bogus attribute
+                    // remove custom attributes (incl. bogus attribute)
+                    .replace(/\sdata-[^=]+="[^"]*"/g, '')
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                     .replace(/(<p>(<br>)?<\/p>)+$/, '');
                 // convert emojies

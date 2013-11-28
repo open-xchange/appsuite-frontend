@@ -1,0 +1,37 @@
+<article>
+<header class="cluster-header">
+
+<h1>
+        <span class="dh1 head5">Firefox lernt SPDY</span>
+</h1>
+
+<p>
+Firefox-Entwickler Patrick McManus hat Mozillas Browser um Unterstützung für Googles Protokoll SPDY erweitert. <a href="http://www.golem.de/specials/spdy/" target="_blank" class="linkabstract">SPDY</a> ist als potenzieller Nachfolger von HTTP und HTTPS konzipiert und soll für mehr Sicherheit und schnelleres Surfen sorgen.
+</p>
+</header>
+
+<!-- BANNER -->
+
+<!-- begin ad tag (tile=4) -->
+<div id="iqadtile4gol">
+<div class="iqadcenter">
+<div class="text1 iqadmarker" id="label4iqadtile4gol">Anzeige</div>
+<noscript>&lt;a href="http://ad.de.doubleclick.net/jump/golem/artikel;kw=golem,iqdrelgol,inet,oss,apps,tsilkcalb,browser,firefox,spdy,technologie,desktopapplikationen,internet,opensource,nodejs,ruby,silk,webserver,server;doc=artikel;sz=300x250;tile=4;ord=1323072187?" target="_blank" &gt;&lt;img src="http://ad.de.doubleclick.net/ad/golem/artikel;kw=golem,iqdrelgol,inet,oss,apps,tsilkcalb,browser,firefox,spdy,technologie,desktopapplikationen,internet,opensource,nodejs,ruby,silk,webserver,server;doc=artikel;sz=300x250;tile=4;ord=1323072187?" style="border:0;" alt="" /&gt;&lt;/a&gt;</noscript>
+</div>
+</div>
+<!-- end ad tag (tile=4) -->
+
+
+<div class="formatted">
+<!--content-->
+<p>Bereits Ende September 2011 veröffentlichte Patrick McManus die ersten Patches, um Firefox um Unterstützung von SPDY zu erweitern. Mittlerweile hat er SPDY in den Zweig "mozilla-inbound" <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=528288#c173" target="_blank" class="linkartikeltext">integriert</a>. Um SPDY zu nutzen, muss das Protokoll allerdings in der Einstellung network.http.spdy.enabled unter about:config aktiviert werden.</p>
+<p>Kommt es zu keinen größeren Problemen, könnte Firefox 11 am 13. März 2012 mit SDPY-Unterstützung erscheinen.</p>
+<p>Google hat SPDY als Nachfolger für HTTP entwickelt: Das Protokoll setzt auf TCP auf, so dass keine Änderungen an der Netzwerkstruktur notwendig sind. Allerdings ermöglicht es SPDY, mehrere HTTP-Requests gleichzeitig in einer einzigen TCP-Session abzuwickeln und es soll die Bandbreite gegenüber dem heute genutzten HTTP durch Eliminierung von überflüssigen Headern und Komprimierung reduzieren. Zudem soll das Protokoll einfach zu implementieren und weniger komplex als HTTP sein, ausgestattet mit einfach zu parsenden Nachrichtenformaten.</p>
+<p>Als Basis für SPDY kommt SSL zum Einsatz. So kann sichergestellt werden, dass die Kommunikation via SPDY nicht durch bestehende Proxys unterbunden wird. Zugleich sorgt dies für eine sichere Kommunikation.</p>
+<p>Laut Google beschleunigt SPDY den Zugriff auf Webseiten deutlich, je nach Bandbreite und Art der Verbindung um mehr als 60 Prozent. Dabei sieht SPDY auch eine Push-Funktion vor, über die Server Daten an Clients senden können, noch bevor diese die Ressource angefragt haben.</p>
+<p>Google selbst hat SPDY bereits in Chrome integriert und das Protokoll seit Chrome 11 standardmäßig aktiviert. So verwendet Googles Browser bei Zugriffen auf Googles Server mittlerweile meist SPDY. Außerhalb von Google hat sich SPDY bislang aber kaum verbreitet, was vor allem an der mangelnden Implementierung des Protokolls liegt.</p>
+<p>Immerhin gibt es ein <a href="http://code.google.com/p/mod-spdy/" target="_blank" class="linkartikeltext">Apache-Modul</a>, das den Webserver mit einer rudimentären SPDY-Unterstützung versieht. Zudem gibt es <a href="http://www.chromium.org/spdy" target="_blank" class="linkartikeltext">Implementierungen für Python, Java, Ruby und Node.js</a>. Amazon nutzt SPDY in seinem neuen Browser Silk zur Kommunikation mit den Silk-Servern, die einen Teil der Renderarbeit übernehmen.</p>
+<!--/content-->
+</div>
+
+<div id="rl_afcbeco1"></div>                </article>

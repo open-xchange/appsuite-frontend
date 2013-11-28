@@ -25,8 +25,7 @@ define('io.ox/mail/write/test',
 
     'use strict';
 
-    var base = ox.base + '/apps/io.ox/mail/write/test',
-        TIMEOUT = ox.testTimeout;
+    var TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {
@@ -38,10 +37,6 @@ define('io.ox/mail/write/test',
             f.value = true;
         };
         return f;
-    }
-
-    function trim(str) {
-        return $.trim((str + '').replace(/[\r\n]+/g, ''));
     }
 
     /*
@@ -231,108 +226,6 @@ define('io.ox/mail/write/test',
                         check2.yep();
                         j.expect(ed.getContent())
                             .toEqual('<p>Paragraph &lt;#1&gt;<br>Line #2</p><p>Headline</p><p>Paragraph #2</p>');
-                    });
-                });
-
-                j.it('closes compose dialog', function () {
-                    app.dirty(false).quit();
-                    j.expect(app.getEditor).toBeUndefined();
-                    app = ed = null;
-                });
-            });
-        }
-    });
-
-
-    /*
-     * Suite: Paste HTML content
-     */
-    ext.point('test/suite').extend({
-        id: 'mail-paste',
-        index: 300,
-        test: function (j) {
-
-            j.describe('Paste HTML contents', function () {
-
-                var app = null, ed = null;
-
-                j.it('opens compose dialog', function () {
-
-                    var loaded = new Done();
-                    j.waitsFor(loaded, 'compose dialog', TIMEOUT);
-
-                    writer.getApp().launch().done(function () {
-                        app = this;
-                        app.compose().done(function () {
-                            app.setFormat('html').done(function () {
-                                ed = app.getEditor();
-                                loaded.yep();
-                                j.expect(ed).toBeDefined();
-                                j.expect(ed.getMode()).toEqual('html');
-                            });
-                        });
-                    });
-                });
-
-                j.it('inserts simple example', function () {
-                    j.runs(function () {
-                        // basic test
-                        ed.clear();
-                        ed.paste('<p>Hello World</p>');
-                        j.expect(ed.getContent())
-                            .toEqual('<p>Hello World</p>');
-                    });
-                });
-
-                j.it('removes text color', function () {
-                    j.runs(function () {
-                        // remove color
-                        ed.clear();
-                        ed.paste('<p style="color: red">Hello World</p>');
-                        j.expect(ed.getContent())
-                            .toEqual('<p>Hello World</p>');
-                    });
-                });
-
-                j.it('does not mess up paragraphs and line-breaks', function () {
-                    // mixed p/br
-                    ed.clear();
-                    ed.paste('<p>Hello<br />World</p><p>one empty line, then this one</p>');
-                    j.expect(ed.getContent())
-                        .toEqual('<p>Hello<br>World</p><p>one empty line, then this one</p>');
-                });
-
-                j.it('handles complex HTML right #1', function () {
-                    // complex test cases
-                    var loaded = new Done();
-                    j.waitsFor(loaded, 'external test data', TIMEOUT);
-                    $.when(
-                        $.get(base + '/test_1a.html'),
-                        $.get(base + '/test_1b.html')
-                    )
-                    .done(function (a, b) {
-                        loaded.yep();
-                        ed.clear();
-                        ed.paste(a[0]);
-                        j.expect(ed.getContent())
-                            .toEqual(trim(b[0]));
-                    });
-                });
-
-                j.it('handles complex HTML right #2', function () {
-                    // complex test cases
-                    var loaded = new Done();
-                    j.waitsFor(loaded, 'external test data', TIMEOUT);
-                    $.when(
-                        $.get(base + '/test_2a.html'),
-                        $.get(base + '/test_2b.html')
-                    )
-                    .done(function (a, b) {
-                        loaded.yep();
-                        ed.clear();
-                        ed.paste(a[0]);
-                        j.expect(ed.getContent())
-                            .toEqual(trim(b[0]));
                     });
                 });
 
