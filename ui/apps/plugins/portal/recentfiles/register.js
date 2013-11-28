@@ -59,6 +59,29 @@ define('plugins/portal/recentfiles/register',
                 });
             },
 
+            summary: function (baton) {
+
+                if (this.find('.summary').length) return;
+
+                var message = '',
+                    count = baton.data.length;
+
+                if (count === 0) {
+                    message = gt('No files have been changed recently');
+                } else if (count === 1) {
+                    message = gt('1 file has been changed recently');
+                } else {
+                    message = gt('%1$d files has been changed recently', count);
+                }
+
+                this.addClass('with-summary show-summary').append(
+                    $('<div class="summary">').text(message)
+                )
+                .on('tap', 'h2', function (e) {
+                    $(e.delegateTarget).toggleClass('show-summary');
+                });
+            },
+
             preview: function (baton) {
 
                 var content = $('<ul class="content recentfiles list-unstyled">').appendTo(this),

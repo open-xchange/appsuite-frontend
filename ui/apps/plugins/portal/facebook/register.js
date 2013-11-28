@@ -78,6 +78,7 @@ define('plugins/portal/facebook/register',
             content.append(
                 $('<li class="paragraph">').text(gt('No wall posts yet.')));
         } else {
+            wall = wall.slice(0, _.device('smartphone') ? 1 : 10);
             _(wall).each(function (post) {
                 var message = _.ellipsis(post.message || post.description || post.attachment.caption || '', {max: 150});
                 content.append(
