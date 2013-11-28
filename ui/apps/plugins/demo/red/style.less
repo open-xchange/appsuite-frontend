@@ -13,6 +13,20 @@
 
 @red: #DB2A3F;
 
+#io-ox-topbar {
+    .vertical-gradient(@red, darken(@red, 10%));
+    .launcher a.notifications-icon .badge.empty {
+        color: white;
+        background-color: darken(@red, 20%);
+    }
+    .launcher>a:hover {
+        background-color: darken(@red, 10%);
+    }
+    .launcher-dropdown>a:focus, .launcher>a:focus {
+        background-color: darken(@red, 20%);
+    }
+}
+
 .io-ox-portal {
     .greeting-phrase { font-family: Arial; color: @red; font-weight: 400; }
     .signin { display: none }
