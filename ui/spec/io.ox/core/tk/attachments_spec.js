@@ -35,7 +35,7 @@ define(['io.ox/core/extensions', 'io.ox/core/tk/attachments', 'io.ox/core/notifi
                 baton
             );
             return function () {
-                this.result = baton.fileList.checkQuota(file);
+                return baton.fileList.checkQuota(file);
             };
         };
 
@@ -44,7 +44,7 @@ define(['io.ox/core/extensions', 'io.ox/core/tk/attachments', 'io.ox/core/notifi
         });
 
         afterEach(function () {
-            expect(this.def).toResolve();
+            expect(this.def).toResolveWith('done');
         });
 
         describe('Adding to a file to infostore', function () {
@@ -57,197 +57,132 @@ define(['io.ox/core/extensions', 'io.ox/core/tk/attachments', 'io.ox/core/notifi
             });
 
             it('exceeding infostore quota', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'infostoreMaxUploadSize': 2000,
                     'infostoreQuota': 1999,
                     'infostoreUsage': 1000
                 })
                 .then(createList(this.baton, this.file))
-                .then(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.have.property('reason');
                     expect(result.reason).toBe('quota');
                     chai.expect(result.error).to.be.a('string');
-                });
 
+                    return 'done';
+                });
             });
 
             it('exceeding infostore maximum upload size limit', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'infostoreMaxUploadSize': 999,
                     'infostoreQuota': 2000,
                     'infostoreUsage': 1000
                 })
                 .then(createList(this.baton, this.file))
-                .then(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.have.property('reason');
                     expect(result.reason).toBe('filesize');
                     chai.expect(result.error).to.be.a('string');
-                });
 
+                    return 'done';
+                });
             });
 
             it('having the same size as available infostore quota limit', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'infostoreMaxUploadSize': 1000,
                     'infostoreQuota': 2000,
                     'infostoreUsage': 1000
                 })
                 .then(createList(this.baton, this.file))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('having the smaller size as available infostore quota limit', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'infostoreMaxUploadSize': 1001,
                     'infostoreQuota': 2001,
                     'infostoreUsage': 1000
                 })
                 .then(createList(this.baton, this.file))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('infostore quota limit is 0', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'infostoreMaxUploadSize': 1000,
                     'infostoreQuota': 0,
                     'infostoreUsage': 1000
                 })
                 .then(createList(this.baton, this.file))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('infostore quota limit is -1', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'infostoreMaxUploadSize': 1000,
                     'infostoreQuota': -1,
                     'infostoreUsage': 1000
                 })
                 .then(createList(this.baton, this.file))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('infostore max upload size is 0', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'infostoreMaxUploadSize': 0,
                     'infostoreQuota': 0,
                     'infostoreUsage': 1000
                 })
                 .then(createList(this.baton, this.file))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('infostore max upload size is -1', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'infostoreMaxUploadSize': -1,
                     'infostoreQuota': -1,
                     'infostoreUsage': 1000
                 })
                 .then(createList(this.baton, this.file))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
+
+                    return 'done';
                 });
             });
         });
@@ -262,196 +197,132 @@ define(['io.ox/core/extensions', 'io.ox/core/tk/attachments', 'io.ox/core/notifi
             });
 
             it('exceeding attachment quota', function () {
-                var result;
                 this.def = setUploadLimit({
                     'attachmentMaxUploadSize': 1000,
                     'attachmentQuota': 999,
                     'attachmentQuotaPerFile': 1000
                 })
                 .then(createList(this.baton, this.file, true))
-                .then(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.have.property('reason');
                     expect(result.reason).toBe('quota');
                     chai.expect(result.error).to.be.a('string');
-                });
 
+                    return 'done';
+                });
             });
 
             it('exceeding attachment maximum upload size limit', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'attachmentMaxUploadSize': 999,
                     'attachmentQuota': 1000,
                     'attachmentQuotaPerFile': 1000
                 })
                 .then(createList(this.baton, this.file, true))
-                .then(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.have.property('reason');
                     expect(result.reason).toBe('filesize');
                     chai.expect(result.error).to.be.a('string');
-                });
 
+                    return 'done';
+                });
             });
 
             it('having the same size as available attachment quota limit', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'attachmentMaxUploadSize': 1000,
                     'attachmentQuota': 1000,
                     'attachmentQuotaPerFile': 1000
                 })
                 .then(createList(this.baton, this.file, true))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('having the smaller size as available attachment quota limit', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'attachmentMaxUploadSize': 1001,
                     'attachmentQuota': 1001,
                     'attachmentQuotaPerFile': 1001
                 })
                 .then(createList(this.baton, this.file, true))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('attachment quota limit is 0', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'attachmentMaxUploadSize': 1000,
                     'attachmentQuota': 0,
                     'attachmentQuotaPerFile': 0
                 })
                 .then(createList(this.baton, this.file, true))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('attachment quota limit is -1', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'attachmentMaxUploadSize': 1000,
                     'attachmentQuota': -1,
                     'attachmentQuotaPerFile': -1
                 })
                 .then(createList(this.baton, this.file, true))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('attachment max upload size is 0', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'attachmentMaxUploadSize': 0,
                     'attachmentQuota': 1000,
                     'attachmentQuotaPerFile': 1000
                 })
                 .then(createList(this.baton, this.file, true))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
-                });
 
+                    return 'done';
+                });
             });
 
             it('attachment max upload size is -1', function () {
-                var result;
-
                 this.def = setUploadLimit({
                     'attachmentMaxUploadSize': -1,
                     'attachmentQuota': 1000,
                     'attachmentQuotaPerFile': 1000
                 })
                 .then(createList(this.baton, this.file, true))
-                .done(function () {
-                    result = this.result;
-                });
-
-                waitsFor(function () {
-                    return this.def.state() === 'resolved';
-                }, 'createList does not resolve', 1000);
-                runs(function () {
+                .then(function (result) {
                     chai.expect(result).to.have.property('added');
                     chai.expect(result).to.not.have.property('reason');
                     chai.expect(result).to.not.have.property('error');
+
+                    return 'done';
                 });
             });
         });
