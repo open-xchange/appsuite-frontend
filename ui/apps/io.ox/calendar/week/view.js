@@ -826,7 +826,7 @@ define('io.ox/calendar/week/view',
                 ),
                 $.txt(' '),
                 $('<span class="cw">').text(
-                    //#. %$1d = Calendar week
+                    //#. %1$d = Calendar week
                     gt('CW %1$d', this.startDate.format('w'))
                 )
             );

@@ -991,7 +991,7 @@ $(window).load(function () {
     );
 
     // reload if files have change; need this during development
-    if (Modernizr.applicationcache && _.browser.chrome && ox.debug && $('html').attr('manifest')) {
+    if (Modernizr.applicationcache && ox.debug && _.device('chrome || ios') && $('html').attr('manifest')) {
 
         (function () {
 

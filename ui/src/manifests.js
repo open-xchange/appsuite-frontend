@@ -1,16 +1,8 @@
 define(function () {
     return [
         {
-            requires: "contacts",
-            path: "io.ox/contacts/edit/main",
-            category: "Basic",
-            refreshable: true
-        },
-        {
-            namespace: ['io.ox/settings/main'],
-            path: 'io.ox/mail/mailfilter/settings/register',
-            requires: 'mailfilter',
-            device: '!small'
+            namespace: 'io.ox/portal/main',
+            path: 'plugins/demo/red/register'
         },
         // {
         //     namespace: ['io.ox/settings/main'],

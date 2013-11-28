@@ -70,9 +70,9 @@ define('plugins/portal/calendar/register',
             });
         },
 
-        action: function () {
-            ox.launch('io.ox/calendar/main', { perspective: 'list' });
-        },
+        // action: function () {
+        //     ox.launch('io.ox/calendar/main', { perspective: 'list' });
+        // },
 
         load: function (baton) {
 
@@ -83,6 +83,36 @@ define('plugins/portal/calendar/register',
                     baton.data = data;
                 });
             });
+        },
+
+        summary: function (baton) {
+
+            var obj, start, timespan;
+
+            if (this.find('.summary').length) return;
+
+            this.addClass('with-summary show-summary');
+
+            if (baton.data.length === 0) {
+                this.append(
+                    $('<p>').text(gt('You don\'t have any appointments in the near future.'))
+                );
+            } else {
+                obj = _(baton.data).first();
+                start = new date.Local(obj.start_date);
+                timespan = util.getSmartDate(obj, true);
+                if (!obj.full_time) timespan += ' ' + start.format(date.TIME);
+                this.append(
+                    $('<p>').append(
+                        $('<span class="normal accent">').text(_.noI18n(timespan)), $.txt(gt.noI18n('\u00A0')),
+                        $('<span class="bold">').text(_.noI18n(obj.title || '')), $.txt(gt.noI18n('\u00A0')),
+                        $('<span class="gray">').text(_.noI18n(obj.location || ''))
+                    )
+                )
+                .on('tap', 'h2', function (e) {
+                    $(e.delegateTarget).toggleClass('show-summary');
+                });
+            }
         },
 
         preview: function (baton) {

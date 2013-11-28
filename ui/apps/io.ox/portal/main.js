@@ -18,11 +18,12 @@ define('io.ox/portal/main',
      'io.ox/core/date',
      'io.ox/core/tk/dialogs',
      'io.ox/portal/widgets',
+     'io.ox/portal/util',
      'io.ox/portal/settings/pane',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.less'
-    ], function (ext, userAPI, date, dialogs, widgets, settingsPane, gt, settings) {
+    ], function (ext, userAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
 
     'use strict';
 
@@ -45,13 +46,6 @@ define('io.ox/portal/main',
                 this.getGrid().selection.set({ id: 'io.ox/portal' });
             });
         });
-    }
-
-    function setColor(node, model) {
-        var color = node.attr('data-color');
-        node.removeClass('widget-color-' + color);
-        color = model.get('color') || 'black';
-        node.addClass('widget-color-' + color).attr('data-color', color);
     }
 
     // portal header
@@ -110,41 +104,62 @@ define('io.ox/portal/main',
     });
 
     // widget scaffold
+
     ext.point('io.ox/portal/widget-scaffold').extend({
+        id: 'attributes',
+        index: 100,
         draw: function (baton) {
-
-            this
-                .attr({
-                    'data-widget-cid': baton.model.cid,
-                    'data-widget-id': baton.model.get('id'),
-                    'data-widget-type': baton.model.get('type')
-                })
-                .addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''))
-                .append(
-                    // border decoration
-                    $('<div>')
-                        .addClass('decoration pending')
-                        .append(
-                            $('<h2>').append(
-                                // add remove icon
-                                baton.model.get('protectedWidget') ? [] :
-                                    $('<a class="disable-widget"><i class="icon-remove"/></a>')
-                                    .attr({
-                                        href: '#',
-                                        role: 'button',
-                                        'title': gt('Disable widget'),
-                                        'aria-label': gt('Disable widget'),
-                                        tabindex: 1
-                                    }),
-                                // title span
-                                $('<span class="title">').text('\u00A0')
-                            )
-                        )
-                );
-
-            setColor(this, baton.model);
+            this.attr({
+                'data-widget-cid': baton.model.cid,
+                'data-widget-id': baton.model.get('id'),
+                'data-widget-type': baton.model.get('type')
+            });
         }
     });
+
+    ext.point('io.ox/portal/widget-scaffold').extend({
+        id: 'classes',
+        index: 200,
+        draw: function (baton) {
+            this.addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''));
+        }
+    });
+
+    ext.point('io.ox/portal/widget-scaffold').extend({
+        id: 'default',
+        index: 300,
+        draw: function (baton) {
+            this.append(
+                // border decoration
+                $('<div class="decoration pending">').append(
+                    $('<h2>').append(
+                        // add remove icon
+                        baton.model.get('protectedWidget') ? [] :
+                            $('<a class="disable-widget"><i class="icon-remove"/></a>')
+                            .attr({
+                                href: '#',
+                                role: 'button',
+                                'title': gt('Disable widget'),
+                                'aria-label': gt('Disable widget'),
+                                tabindex: 1
+                            }),
+                        // title span
+                        $('<span class="title">').text('\u00A0')
+                    )
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/portal/widget-scaffold').extend({
+        id: 'color',
+        index: 400,
+        draw: function (baton) {
+            util.setColor(this, baton.model.get('color'));
+        }
+    });
+
+
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/portal', title: 'Portal' }),
@@ -186,7 +201,7 @@ define('io.ox/portal/main',
                     app.getWidgetNode(model).hide();
                 }
             } else if ('color' in model.changed) {
-                setColor(app.getWidgetNode(model), model);
+                util.setColor(app.getWidgetNode(model), model.get('color'));
             } else if (this.wasElementDeleted(model)) {
                 // element was removed, no need to refresh it.
                 return;
@@ -214,8 +229,6 @@ define('io.ox/portal/main',
             haystack = this.models;
         return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
     };
-
-
 
     app.getWidgetCollection = function () {
         return collection;
@@ -310,6 +323,7 @@ define('io.ox/portal/main',
             decoration = node.find('.decoration');
         return $.when.apply($, defs).done(function () {
                 node.find('.content').remove();
+                point.invoke('summary', node, baton);
                 point.invoke('preview', node, baton);
                 node.removeClass('error-occurred');
                 decoration.removeClass('pending error-occurred');

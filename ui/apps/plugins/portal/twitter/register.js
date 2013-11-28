@@ -213,8 +213,9 @@ define('plugins/portal/twitter/register',
             });
 
         } else {
+            var list = baton.data.slice(0, _.device('smartphone') ? 1 : 10);
             content.addClass('pointer');
-            _(baton.data).each(function (tweet) {
+            _(list).each(function (tweet) {
                 var message = String(tweet.text).replace(/((#|@)[\wäöüß]+)/ig, '<span class="accent">$1</span>');
                 content.append(
                     $('<li class="paragraph">').append(
@@ -267,9 +268,9 @@ define('plugins/portal/twitter/register',
             });
         },
 
-        action: function () {
-            window.open('https://twitter.com/', 'twitter');
-        },
+        // action: function () {
+        //     window.open('https://twitter.com/', 'twitter');
+        // },
 
         isEnabled: function () {
             return keychain.isEnabled('twitter');

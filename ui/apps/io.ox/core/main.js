@@ -889,8 +889,9 @@ define('io.ox/core/main',
         var getAutoLaunchDetails = function (str) {
             var pair = (str || '').split(/:/), app = pair[0], method = pair[1] || '';
             return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
-        },
-        mobileAutoLaunchArray = function () {
+        };
+
+        var mobileAutoLaunchArray = function () {
             var autoStart = _([].concat(settings.get('autoStartMobile', 'io.ox/portal'))).filter(function (o) {
                 return !_.isUndefined(o) && !_.isNull(o);
             });
