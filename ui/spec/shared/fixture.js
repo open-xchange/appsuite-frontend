@@ -23,6 +23,9 @@ define('fixture', {
                 }
             );
         }
+        if (name.substr(-4, 4) === '.txt') {
+            return $.get('/base/spec/fixtures/' + name).then(load, load.error);
+        }
         return require(['/base/spec/fixtures/' + name], load, load.error);
     }
 });
