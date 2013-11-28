@@ -342,6 +342,96 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
             });
         });
 
+        describe('can resolve group ids to user arrays', function () {
+            var userList = {
+                "timestamp": 1385422043857,
+                "data": [
+                    [1, 6, "Max Muster1", "Max", "Muster1", "Founder", 1, "maxmuster1@open-xchange.com", null, 0],
+                    [2, 6, "Max Muster2", "Max", "Muster1", "", 2, "maxmuster2@open-xchange.com", null, 1],
+                    [3, 6, "Max Muster3", "Max", "Muster1", null, 3, "maxmuster3@open-xchange.com", null, 2],
+                    [4, 6, "Max Muster4", "Max", "Muster1", "CEO", 4, "maxmuster4@open-xchange.com", null, 3]
+                ]
+            };
+
+            beforeEach(function () {
+                this.server = ox.fakeServer.create();
+                this.server.autoRespond = true;
+                this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(userList));
+                });
+                this.server.respondWith('GET', /api\/group\?action=get/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                        '{"timestamp":1383694139525,"data":{"id":1337,"display_name":"dream-team","members":[1,2,3],"last_modified_utc":1383694139525,"name":"dream-team"}}'
+                    );
+                });
+            });
+
+            afterEach(function () {
+                this.server.restore();
+            });
+
+            it('for test group', function () {
+                this.expect(util.resolveGroupMembers([1337], [4])).toResolveWith(function (result) {
+                    var expectedResult = [{
+                        "id": 1,
+                        "folder_id": 6,
+                        "display_name": "Max Muster1",
+                        "first_name": "Max",
+                        "last_name": "Muster1",
+                        "title": "Founder",
+                        "internal_userid": 1,
+                        "email1": "maxmuster1@open-xchange.com",
+                        "image1_url": null,
+                        "contact_id": 0,
+                        "mail": "maxmuster1@open-xchange.com",
+                        "mail_field": 1
+                    }, {
+                        "id": 2,
+                        "folder_id": 6,
+                        "display_name": "Max Muster2",
+                        "first_name": "Max",
+                        "last_name": "Muster1",
+                        "title": "",
+                        "internal_userid": 2,
+                        "email1": "maxmuster2@open-xchange.com",
+                        "image1_url": null,
+                        "contact_id": 1,
+                        "mail": "maxmuster2@open-xchange.com",
+                        "mail_field": 1
+                    }, {
+                        "id": 3,
+                        "folder_id": 6,
+                        "display_name": "Max Muster3",
+                        "first_name": "Max",
+                        "last_name": "Muster1",
+                        "title": null,
+                        "internal_userid": 3,
+                        "email1": "maxmuster3@open-xchange.com",
+                        "image1_url": null,
+                        "contact_id": 2,
+                        "mail": "maxmuster3@open-xchange.com",
+                        "mail_field": 1
+                    }, {
+                        "id": 4,
+                        "folder_id": 6,
+                        "display_name": "Max Muster4",
+                        "first_name": "Max",
+                        "last_name": "Muster1",
+                        "title": "CEO",
+                        "internal_userid": 4,
+                        "email1": "maxmuster4@open-xchange.com",
+                        "image1_url": null,
+                        "contact_id": 3,
+                        "mail": "maxmuster4@open-xchange.com",
+                        "mail_field": 1
+                    }];
+                    expect(result).toEqual(expectedResult);
+                    return true;
+                });
+            });
+
+        });
+
     });
 
 });
