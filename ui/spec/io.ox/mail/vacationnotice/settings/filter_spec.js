@@ -11,7 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define(['io.ox/mail/vacationnotice/settings/filter', 'gettext!io.ox/mail'], function (filter, gt) {
+define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
     'use strict';
 
@@ -29,7 +29,25 @@ define(['io.ox/mail/vacationnotice/settings/filter', 'gettext!io.ox/mail'], func
                 'addresses': ['tester@open-xchange.com']
             }],
             'rulename': 'Abwesenheitsnotiz',
-            'active': false
+            'active': true
+        }]
+    },
+
+    resultWithFlagTwoMails = { timestamp: 1378223251586,
+        'data': [{
+            'position': 1,
+            'id': 1,
+            'flags': ['vacation'],
+            'test': {'id': 'true'},
+            'actioncmds': [{
+                'id': 'vacation',
+                'text': 'text',
+                'days': '7',
+                'subject': 'subject',
+                'addresses': ['tester@open-xchange.com', 'tester2@open-xchange.com']
+            }],
+            'rulename': 'Abwesenheitsnotiz',
+            'active': true
         }]
     },
     
@@ -42,11 +60,11 @@ define(['io.ox/mail/vacationnotice/settings/filter', 'gettext!io.ox/mail'], func
     },
 
     multiValues = {
-        aliases: _.object(['tester@open-xchange.com'], ['tester@open-xchange.com']),
+        aliases: _.object(['tester@open-xchange.com', 'tester2@open-xchange.com'], ['tester@open-xchange.com', 'tester2@open-xchange.com']),
         days: createDaysObject(1, 31)
     };
 
-    describe('Vacationnotice', function () {
+    describe('Vacationnotice with one active mail', function () {
 
         beforeEach(function () {
             this.server = ox.fakeServer.create();
@@ -63,13 +81,48 @@ define(['io.ox/mail/vacationnotice/settings/filter', 'gettext!io.ox/mail'], func
         });
 
         it('should draw the form', function () {
+            
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
             expect(this.node.find('input[name="subject"]').length).toBe(1);
             expect(this.node.find('textarea[name="text"]').length).toBe(1);
             expect(this.node.find('select').length).toBe(1);
             expect(this.node.find('option').length).toBe(31);
-            expect(this.node.find('input[type="checkbox"]').length).toBe(1);
+            expect(this.node.find('input[type="checkbox"]').length).toBe(2);
+
+        });
+
+        it('should check only one alias', function () {
+            
+            filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
+            this.server.respond();
+            expect(this.node.find('input[type="checkbox"]:checked').length).toBe(1);
+
+        });
+
+    });
+
+    describe('Vacationnotice with two active mails', function () {
+
+        beforeEach(function () {
+            this.server = ox.fakeServer.create();
+            this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=vacation/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlagTwoMails));
+            });
+            $('body', document).append(this.node = $('<div id="vacationnoticetestNode">'));
+
+        });
+
+        afterEach(function () {
+            $('#vacationnoticetestNode', document).remove();
+            this.server.restore();
+        });
+
+        it('should check two aliases', function () {
+            
+            filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
+            this.server.respond();
+            expect(this.node.find('input[type="checkbox"]:checked').length).toBe(2);
 
         });
 
