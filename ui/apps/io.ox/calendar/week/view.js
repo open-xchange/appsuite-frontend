@@ -677,6 +677,9 @@ define('io.ox/calendar/week/view',
                 this.weekCon.append(day);
             }
 
+            var nextStr = this.columns === 1 ? gt('Next Day') : gt('Next Week'),
+                prevStr = this.columns === 1 ? gt('Previous Day') : gt('Previous Week');
+
             // create toolbar, view space and dayLabel
             this.$el.empty().append(
                 $('<div class="toolbar">').append(
@@ -688,8 +691,8 @@ define('io.ox/calendar/week/view',
                                         href: '#',
                                         tabindex: 1,
                                         role: 'button',
-                                        title: gt('previous week'),
-                                        'aria-label': gt('Previous Week')
+                                        title: prevStr,
+                                        'aria-label': prevStr
                                     })
                                     .addClass('control prev')
                                     .append($('<i>').addClass('icon-chevron-left'))
@@ -704,8 +707,8 @@ define('io.ox/calendar/week/view',
                                         href: '#',
                                         tabindex: 1,
                                         role: 'button',
-                                        title: gt('next week'),
-                                        'aria-label': gt('Next Week')
+                                        title: nextStr,
+                                        'aria-label': nextStr
                                     })
                                     .addClass('control next')
                                     .append($('<i>').addClass('icon-chevron-right'))
