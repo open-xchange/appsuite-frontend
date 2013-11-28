@@ -14,7 +14,9 @@ define(['io.ox/files/util'], function (util) {
 
     describe('Utilities for files:', function () {
         var container = $('<div>'),
-            options = {container: container};
+            options = {
+                container: container
+            };
 
         afterEach(function () {
             container.empty();
@@ -37,24 +39,24 @@ define(['io.ox/files/util'], function (util) {
                 //do not show confirmation dialog
                 describe('should resolve', function () {
                     it('if file extensions does not change', function () {
-                    expect(util.confirmDialog('nameOne.txt', 'nameTwo.txt')).toResolve();
-                    expect(util.confirmDialog('nameOne', 'nameTwo')).toResolve();
-                    expect(container.children().length).toBeFalsy();
+                        expect(util.confirmDialog('nameOne.txt', 'nameTwo.txt')).toResolve();
+                        expect(util.confirmDialog('nameOne', 'nameTwo')).toResolve();
+                        expect(container.children().length).toBeFalsy();
                     });
                     it('if filename on server is not set yet', function () {
-                    expect(util.confirmDialog('nameOne.txt')).toResolve();
-                    expect(container.children().length).toBeFalsy();
+                        expect(util.confirmDialog('nameOne.txt')).toResolve();
+                        expect(container.children().length).toBeFalsy();
                     });
                 });
                 //show confirmation dialog
                 describe('should stay pending', function () {
                     it('if file extension is removed', function () {
-                    expect(util.confirmDialog('removeExtension', 'removeExtension.md', options)).toStayPending();
-                    expect(container.children().length).toBeTruthy();
+                        expect(util.confirmDialog('removeExtension', 'removeExtension.md', options)).toStayPending();
+                        expect(container.children().length).toBeTruthy();
                     });
                     it('if file extension changes', function () {
-                    expect(util.confirmDialog('changeExtension.txt', 'changeExtension.md', options)).toStayPending();
-                    expect(container.children().length).toBeTruthy();
+                        expect(util.confirmDialog('changeExtension.txt', 'changeExtension.md', options)).toStayPending();
+                        expect(container.children().length).toBeTruthy();
                     });
                 });
             });
