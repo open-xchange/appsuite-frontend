@@ -323,7 +323,10 @@ define('io.ox/portal/main',
             decoration = node.find('.decoration');
         return $.when.apply($, defs).done(function () {
                 node.find('.content').remove();
-                point.invoke('summary', node, baton);
+                // draw summary only on small devices, i.e. smartphones
+                if (_.device('smartphone')) {
+                    point.invoke('summary', node, baton);
+                }
                 point.invoke('preview', node, baton);
                 node.removeClass('error-occurred');
                 decoration.removeClass('pending error-occurred');
