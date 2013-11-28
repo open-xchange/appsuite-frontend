@@ -7859,7 +7859,7 @@ msgstr "Entfolgen"
 #. twitter: already following this person
 #: apps/plugins/portal/twitter/util.js:382
 msgid "Following"
-msgstr "Folgen"
+msgstr "Folge ich"
 
 #: apps/plugins/portal/twitter/util.js:442
 msgid "Are you sure you want to delete this Tweet?"
