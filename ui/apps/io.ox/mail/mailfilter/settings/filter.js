@@ -353,7 +353,7 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                 mailFilter = new MailfilterEdit();
                 $node.append(mailFilter.render().$el);
-
+                return collection;
             });
 
         }
