@@ -28,7 +28,6 @@ define(['io.ox/calendar/main',
     describe('calendar app and the corresponding listview ', function () {
 
         beforeEach(function () {
-            this.server.autoRespond = true;
             this.server.respondWith('GET', /api\/calendar\?action=all/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.getList));
             });
@@ -155,9 +154,6 @@ define(['io.ox/calendar/main',
                 this.nodes = this.app.getWindow().nodes;
                 this.g.selection.selectFirst();
 
-                this.server = ox.fakeServer.create();
-                this.server.autoRespond = true;
-
                 this.server.respondWith('GET', /api\/calendar\?action=get.+id=1337/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.get1337));
                 });
@@ -169,10 +165,6 @@ define(['io.ox/calendar/main',
                 this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.userGet));
                 });
-            });
-
-            afterEach(function () {
-                this.server.restore();
             });
 
             it(' and should show an appointment in detail view if something is selected in list', function () {

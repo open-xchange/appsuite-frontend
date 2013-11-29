@@ -354,8 +354,6 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
             };
 
             beforeEach(function () {
-                this.server = ox.fakeServer.create();
-                this.server.autoRespond = true;
                 this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(userList));
                 });
@@ -364,10 +362,6 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                         '{"timestamp":1383694139525,"data":{"id":1337,"display_name":"dream-team","members":[1,2,3],"last_modified_utc":1383694139525,"name":"dream-team"}}'
                     );
                 });
-            });
-
-            afterEach(function () {
-                this.server.restore();
             });
 
             it('for test group', function () {
