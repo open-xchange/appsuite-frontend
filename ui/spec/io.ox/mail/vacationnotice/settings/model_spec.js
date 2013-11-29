@@ -51,6 +51,25 @@ define(['io.ox/mail/vacationnotice/settings/model'], function (model) {
 
         });
 
+        it('should prepare the data for two active mails', function () {
+            dataViaModel['tester2@open-xchange.com'] = true;
+            dataPrepared.actioncmds[0].addresses = ['tester@open-xchange.com', 'tester2@open-xchange.com'];
+
+            dataPrepared.should.be.deep.equal(model.protectedMethods.providePreparedData(dataViaModel));
+
+        });
+
+        it('should prepare the data for no active mail', function () {
+            dataViaModel['tester2@open-xchange.com'] = false;
+            dataViaModel['tester@open-xchange.com'] = false;
+
+            dataPrepared.actioncmds[0].addresses = ['tester@open-xchange.com'];
+            dataPrepared.active = false;
+
+            dataPrepared.should.be.deep.equal(model.protectedMethods.providePreparedData(dataViaModel));
+
+        });
+
     });
 
 });
