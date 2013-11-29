@@ -22,8 +22,8 @@ define('io.ox/backbone/mini-views/abstract', [], function () {
     var AbstractView = Backbone.View.extend({
 
         initialize: function (options) {
-            // register for 'dispose' event
-            this.$el.on('dispose', $.proxy(this.dispose, this));
+            // register for 'dispose' event (using inline function to make this testable via spyOn)
+            this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
             // make all views accessible via DOM; gets garbage-collected on remove
             this.$el.data('view', this);
             // has model and a name?
