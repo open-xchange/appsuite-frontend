@@ -31,6 +31,7 @@ define(['io.ox/calendar/main',
             this.server.respondWith('GET', /api\/calendar\?action=all/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.getList));
             });
+
             this.server.respondWith('GET', /api\/calendar\?action=get.+id=1337/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(fixture.get1337));
             });

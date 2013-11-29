@@ -42,6 +42,7 @@
         browserLC = {};
 
     function detectBrowser (nav) {
+        var error = false;
         try {
             // browser detection - adopted from prototype.js
             ua = nav.userAgent;
@@ -98,8 +99,9 @@
             };
 
         } catch (e) {
-            console.warn('Error while detecting browser, using fallback');
+            error = true;
 
+            console.warn('Error while detecting browser, using fallback');
             var browsers = "IE Opera WebKit Safari PhantomJS Karma Chrome Firefox ChromeiOS UIWebView Blackberry WindowsPhone iOS MacOS Android Windows".split(' ');
             // set to unknown browser
             _.browser = {
@@ -109,6 +111,12 @@
             _(browsers).each(function (b) {
                 _.browser[b] = undefined;
             });
+        } finally {
+            // second fallback if all detecions were falsy
+            if (!error && _.some(_.browser, function (v) {return !!v})) {
+                console.warn('Error while detecting browser, using fallback');
+                _.browser.unknown = true;
+            }
         }
 
         _(_.browser).each(function (value, key) {

@@ -25,7 +25,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(isObject).toBe(true);
         });
 
-        _(userAgents).each(function (a, browser) {
+        _(userAgents.valid).each(function (a, browser) {
             _(userAgents[browser]).each(function (b, version) {
                 it('should detect ' + browser + ' ' + version, function () {
                     _.device.loadUA(userAgents[browser][version]);
@@ -34,6 +34,17 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
                 });
             });
         });
+
+        _(userAgents.invalid).each(function (a, number) {
+            it('should use the fallback "unknown" if an unknown or broken user agent occurs', function () {
+                var spy = sinon.spy(console, 'warn');
+                _.device.loadUA(userAgents.invalid[number]);
+                expect(spy).toHaveBeenCalledWithMatch('Error while detecting browser, using fallback');
+                expect(_.browser.unknown).toBe(true);
+                spy.restore();
+            });
+        });
+
     });
 });
 
