@@ -12,7 +12,10 @@
  */
 define(['io.ox/tasks/edit/util',
         'io.ox/core/extensions',
-        'io.ox/tasks/edit/view-template'], function (util, ext, template) {
+        'io.ox/tasks/model',
+        'io.ox/core/tk/dialogs',
+        'fixture!io.ox/tasks/defaultTestData.json',
+        'io.ox/tasks/edit/view-template'], function (util, ext, model, dialogs, testData, template) {
 
     var extensionPoints = ext.point('io.ox/tasks/edit/view').list();
 
@@ -109,6 +112,158 @@ define(['io.ox/tasks/edit/util',
 
                 expect(progress.progress).toTrigger('change');
                 $(progress.wrapper.children()[1]).click();//update inputfield
+            });
+        });
+        describe('buildExtensionRow', function () {
+            it('should build fluid grid row', function () {
+                var node = $('<div>'),
+                    baton = ext.Baton({model: model.factory.create(testData.testData)}),
+                    rows = {},
+                    fluidRow;
+
+                util.splitExtensionsByRow(extensionPoints, rows, true);
+                fluidRow = util.buildExtensionRow(node, rows[1], baton);
+
+                expect(fluidRow.is('div')).toBeTruthy();
+                expect(fluidRow.hasClass('row-fluid')).toBeTruthy();
+                expect(fluidRow.hasClass('task-edit-row')).toBeTruthy();
+                expect(fluidRow.children().length).toEqual(1);
+                this.after(function () {
+                    node.remove();
+                });
+            });
+        });
+        describe('buildRow', function () {
+            it('should build fluid grid row', function () {
+                var parent = $('<div>'),
+                    nodes = [$('<div>'), $('<span>'), $('<input type="text">'), $('<label>')],
+                    widths = [1,2,6,3],
+                    row;
+
+                util.buildRow(parent, nodes, widths, false);
+                row = $(parent.children()[0]);
+
+                expect(row.is('div')).toBeTruthy();
+                expect(row.hasClass('row-fluid')).toBeTruthy();
+                expect(row.hasClass('task-edit-row')).toBeTruthy();
+                expect(row.children().length).toEqual(4);
+                this.after(function () {
+                    parent.remove();
+                });
+            });
+            it('should wrap items', function () {
+                var parent = $('<div>'),
+                    nodes = [$('<div>'), $('<span>'), $('<input type="text">'), $('<label>')],
+                    widths = [1,2,6,3],
+                    row;
+
+                util.buildRow(parent, nodes, widths, false);
+                row = $(parent.children()[0]);
+
+                expect(row.children().length).toEqual(4);
+                expect($(row.children()[0]).is('div')).toBeTruthy();
+                expect($(row.children()[1]).is('div')).toBeTruthy();
+                expect($(row.children()[2]).is('div')).toBeTruthy();
+                expect($(row.children()[3]).is('div')).toBeTruthy();
+                this.after(function () {
+                    parent.remove();
+                });
+            });
+            it('should set correct widths and offsets', function () {
+                var parent = $('<div>'),
+                    nodes = [$('<div>'), $('<span>'), $('<input type="text">'), $('<label>')],
+                    widths = [1 ,2, 6, [1, 2]],
+                    row;
+
+                util.buildRow(parent, nodes, widths, false);
+                row = $(parent.children()[0]);
+
+                expect(row.children().length).toEqual(4);
+                expect($(row.children()[0]).hasClass('span1')).toBeTruthy();
+                expect($(row.children()[1]).hasClass('span2')).toBeTruthy();
+                expect($(row.children()[2]).hasClass('span6')).toBeTruthy();
+                expect($(row.children()[3]).hasClass('span1')).toBeTruthy();
+                expect($(row.children()[3]).hasClass('offset2')).toBeTruthy();
+
+                this.after(function () {
+                    parent.remove();
+                });
+            });
+            it('should fill grid cells is parameter is set', function () {
+                var parent = $('<div>'),
+                    nodes = [$('<div>'), $('<span>'), $('<input type="text">'), $('<label>')],
+                    widths = [1 ,2, 6, [1, 2]],
+                    row;
+
+                util.buildRow(parent, nodes, widths, true);
+                row = $(parent.children()[0]);
+
+                expect(row.children().length).toEqual(4);
+                expect(nodes[0].hasClass('span12')).toBeTruthy();
+                expect(nodes[1].hasClass('span12')).toBeTruthy();
+                expect(nodes[2].hasClass('span12')).toBeTruthy();
+                expect(nodes[3].hasClass('span12')).toBeFalsy();//labels don't have span12
+
+                this.after(function () {
+                    parent.remove();
+                });
+            });
+        });
+        describe('buildConfirmationPopup', function () {
+            it('should work with arrays and models', function () {
+                var testModel = model.factory.create(testData.testData),
+                    popupWrapper;
+
+                //model
+                popupWrapper = util.buildConfirmationPopup(testModel, dialogs, false);
+                expect(popupWrapper.popup).toBeDefined();
+                expect(popupWrapper.message).toBeDefined();
+                
+                popupWrapper.popup.close();
+                
+                //Array
+                popupWrapper = util.buildConfirmationPopup(testData.testData, dialogs, true);
+                expect(popupWrapper.popup).toBeDefined();
+                expect(popupWrapper.message).toBeDefined();
+
+                this.after(function () {
+                    popupWrapper.popup.close();
+                });
+            });
+            it('should display data', function () {
+                var testModel = model.factory.create(testData.testData),
+                    body,
+                    popupWrapper;
+
+                popupWrapper = util.buildConfirmationPopup(testModel, dialogs, false);
+                body = popupWrapper.popup.getBody();
+
+                expect(body.find('h4').text()).toEqual('Test Termin');
+                expect(body.find('h4').next().text()).toEqual('Ich bin Detailreich');
+
+                this.after(function () {
+                    popupWrapper.popup.close();
+                });
+            });
+            it('should contain controls', function () {
+                var testModel = model.factory.create(testData.testData),
+                    body,
+                    footer,
+                    popupWrapper;
+
+                popupWrapper = util.buildConfirmationPopup(testModel, dialogs, false);
+                message = popupWrapper.message;
+                body = popupWrapper.popup.getBody();
+                footer = popupWrapper.popup.getFooter();
+
+                expect(body.find('select').length).toEqual(1);//select
+                expect(body.find('select').children().length).toEqual(3);//options(tentative, confirn, decline)
+                expect(body.find('input').length).toEqual(1);//confirmation message
+                expect(footer.find('button').length).toEqual(2);//cancel and ok button
+
+                this.after(function () {
+                    popupWrapper.popup.close();
+                });
             });
         });
     });

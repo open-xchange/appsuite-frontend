@@ -216,6 +216,9 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                             }, 'call api delete', ox.testTimeout);
                         });
                     });
+                    this.after(function () {//close popup
+                        $('.io-ox-dialog-popup [data-action="cancel"]').click();
+                    });
                 });
             });
             it('move should open a popup', function () {
