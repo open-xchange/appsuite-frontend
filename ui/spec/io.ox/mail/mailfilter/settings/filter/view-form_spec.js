@@ -72,30 +72,30 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         it('should fill the dropdowns with all available conditions and actions', function () {
             // conditions
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') +')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').length).toBe(1);
 
             // actions
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') +')').length).toBe(1);
-            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') +')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').length).toBe(1);
+            expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').length).toBe(1);
             
         });
 
         it('should draw the Sender/From condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
@@ -114,7 +114,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Any recipient condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
@@ -133,7 +133,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Subject condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
@@ -152,7 +152,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Mailing list condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
@@ -171,7 +171,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the To condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
@@ -190,7 +190,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the CC condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
@@ -209,7 +209,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Header condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
@@ -230,7 +230,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Envelope condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
@@ -249,7 +249,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Size (bytes) condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
@@ -266,7 +266,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Keep action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
 
@@ -278,7 +278,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Discard action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li.filter-settings-view').hasClass('warning')).toBe(true);
@@ -291,7 +291,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Redirect to action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-action"]').length).toBe(1);
@@ -304,7 +304,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Move to folder action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li a.folderselect').length).toBe(1);
@@ -318,7 +318,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Reject with reason action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-action"]').length).toBe(1);
@@ -331,7 +331,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Mark mail as action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li a.dropdown-toggle').length).toBe(1);
@@ -346,7 +346,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Tag mail with action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-action"]').length).toBe(1);
@@ -359,7 +359,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should draw the Flag mail with action', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li div.flag-dropdown').length).toBe(1);
@@ -391,7 +391,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the Sender/From condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
@@ -403,7 +403,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the Any recipient condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
@@ -415,7 +415,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the Subject condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('subject').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
@@ -427,7 +427,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the Mailing list condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('Listname').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
@@ -439,7 +439,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the To condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('to value').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
@@ -451,7 +451,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the CC condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('CC value').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
@@ -463,7 +463,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the Header condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('header value').trigger('change');
             $popup.find('input[data-action="change-text-test-second"]').val('name value').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
@@ -476,7 +476,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the Header condition and the result should be like CC condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('header value').trigger('change');
             $popup.find('input[data-action="change-text-test-second"]').val('Cc').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
@@ -489,7 +489,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the Envelope condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('envelope value').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
@@ -501,7 +501,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         });
 
         it('should save the Size (bytes) condition', function () {
-            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') +')').click();
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('10').trigger('change');
             $popup.find('li li a[data-value="over"]').click();
 
@@ -511,7 +511,118 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
             model.get('test').should.be.deep.equal({comparison: 'over', id: 'size', size: '10'});
 
         });
-        
+
+        it('should save the Keep action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')').click();
+
+            $popup.find('[data-action="save"]').click();
+            this.server.respond();
+            model = collection.findWhere({ id: 1 });
+            model.get('actioncmds').should.be.deep.equal([{id: 'keep'}]);
+
+        });
+
+        it('should save the Discard action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')').click();
+
+            $popup.find('[data-action="save"]').click();
+            this.server.respond();
+            model = collection.findWhere({ id: 1 });
+            model.get('actioncmds').should.be.deep.equal([{id: 'discard'}]);
+
+        });
+
+        it('should save the Redirect to action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')').click();
+            $popup.find('input[data-action="change-text-action"]').val('tester@open-xchange.com').trigger('change');
+
+            $popup.find('[data-action="save"]').click();
+            this.server.respond();
+            model = collection.findWhere({ id: 1 });
+            model.get('actioncmds').should.be.deep.equal([{id: 'redirect', to: 'tester@open-xchange.com'}]);
+
+        });
+
+        // it('should save the Move to folder action', function () {
+        //     $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') +')').click();
+        //     $popup.find('input[data-action="change-text-action"]').val('tester@open-xchange.com').trigger('change');
+
+        //     $popup.find('[data-action="save"]').click();
+        //     this.server.respond();
+        //     model = collection.findWhere({ id: 1 });
+        //     console.log(model.get('actioncmds'))
+        //     model.get('actioncmds').should.be.deep.equal([{id: 'redirect', to: 'tester@open-xchange.com'}]);
+
+        // });
+
+        it('should save the Reject with reason action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')').click();
+            $popup.find('input[data-action="change-text-action"]').val('reason').trigger('change');
+
+            $popup.find('[data-action="save"]').click();
+            this.server.respond();
+            model = collection.findWhere({ id: 1 });
+            model.get('actioncmds').should.be.deep.equal([{id: 'reject', text: 'reason'}]);
+
+        });
+
+        it('should save the Mark mail as action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')').click();
+            $popup.find('a:contains(' + gt('deleted') + ')').click();
+
+            $popup.find('[data-action="save"]').click();
+            this.server.respond();
+            model = collection.findWhere({ id: 1 });
+            model.get('actioncmds').should.be.deep.equal([{flags: ['\\deleted'], id: 'addflags'}]);
+
+        });
+
+        it('should save the Tag mail with action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').click();
+            $popup.find('input[data-action="change-text-action"]').val('tag').trigger('change');
+
+            $popup.find('[data-action="save"]').click();
+            this.server.respond();
+            model = collection.findWhere({ id: 1 });
+            model.get('actioncmds').should.be.deep.equal([{flags: ['$tag'], id: 'addflags'}]);
+
+        });
+
+        it('should save the Flag mail with action', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').click();
+            $popup.find('a[data-action="change-color"] span.flag-example.flag_1').click();
+
+            $popup.find('[data-action="save"]').click();
+            this.server.respond();
+            model = collection.findWhere({ id: 1 });
+            model.get('actioncmds').should.be.deep.equal([{flags: ['$cl_1'], id: 'addflags'}]);
+
+        });
+
+        it('should create a rule with some conditions and actions', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
+            $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
+            $popup.find('li li a[data-value="matches"]').click();
+
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
+            $popup.find('li[data-test-id="1"] input[data-action="change-text-test"]').val('10').trigger('change');
+            $popup.find('li[data-test-id="1"] li a[data-value="over"]').click();
+
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').click();
+            $popup.find('input[data-action="change-text-action"]').val('tag').trigger('change');
+
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').click();
+            $popup.find('li[data-action-id="1"] a[data-action="change-color"] span.flag-example.flag_1').click();
+
+            $popup.find('[data-action="save"]').click();
+            this.server.respond();
+            model = collection.findWhere({ id: 1 });
+
+            model.get('actioncmds').should.be.deep.equal([{flags: ['$tag'], id: 'addflags'}, {flags: ['$cl_1'], id: 'addflags'}]);
+            model.get('test').should.be.deep.equal({id: 'allof', tests: [{comparison: 'matches', headers: ['From'], id: 'header', values: ['sender']}, {comparison: 'over', id: 'size', size: '10'}]});
+
+        });
+
     });
 
 });
