@@ -41,6 +41,9 @@ define('io.ox/files/fluid/perspective',
         topBar = $('<div class="window-content-top">'), // used on desktop
         topActions = $('<div class="inline-actions-ms">').appendTo(topBar);
 
+    //init
+    filesContainer = breadcrumb = inlineRight = inline = wrapper = $('');
+
     // *** helper functions ***
 
     function drawGenericIcon(name) {
