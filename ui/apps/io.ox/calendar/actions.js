@@ -419,6 +419,14 @@ define('io.ox/calendar/actions',
                                 contactSettings.set('folderpopup/last', id).save();
                             }
                         });
+
+                    //updates tree in case you create a new target folder during move action
+                    folderAPI.on('create', function (e, data) {
+                        tree.repaint().done(function () {
+                            tree.select(data.id);
+                        });
+                    });
+
                     dialog.show(function () {
                         tree.paint().done(function () {
                             tree.select(id).done(function () {

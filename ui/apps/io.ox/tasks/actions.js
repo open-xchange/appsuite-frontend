@@ -200,7 +200,14 @@ define('io.ox/tasks/actions',
                             tabindex: 0
                         }),
                         id = String(task.folder || task.folder_id);
-                    //go
+
+                    //updates tree in case you create a new target folder during move action
+                    folderAPI.on('create', function (e, data) {
+                        tree.repaint().done(function () {
+                            tree.select(data.id);
+                        });
+                    });
+
                     popup.show(function () {
                         tree.paint().done(function () {
                             tree.select(id).done(function () {
