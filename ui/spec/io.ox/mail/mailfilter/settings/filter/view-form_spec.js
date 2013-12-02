@@ -19,7 +19,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         resultAfterSave = { data: 1},
         model;
 
-    describe('Mailfilter filter without rules', function () {
+    describe('Mailfilter detailview', function () {
 
         var $container = $('<div id="testNode">'),
             addButton,
@@ -36,11 +36,16 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultAfterSave));
             });
 
-            def = filters.editMailfilter($container.empty()).done(function (filtercollection) {
-                collection = filtercollection;
-            });
+            def = filters.editMailfilter($container.empty());
             waitsFor(function () {
-                return def.state() === 'resolved';
+
+                if (def.state() === 'resolved') {
+                    def.done(function (filtercollection) {
+                        collection = filtercollection;
+                    });
+                    return true;
+                }
+                
             }, 'setup mailfilter edit view', ox.testTimeout);
             runs(function () {
                 addButton = $container.find('.btn-primary[data-action="add"]');
@@ -94,7 +99,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
             
         });
 
-        it('should draw the Sender/From condition', function () {
+        it('should draw the "Sender/From" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -113,7 +118,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Any recipient condition', function () {
+        it('should draw the "Any recipient" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -132,7 +137,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Subject condition', function () {
+        it('should draw the "Subject" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -151,7 +156,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Mailing list condition', function () {
+        it('should draw the "Mailing list" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -170,7 +175,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the To condition', function () {
+        it('should draw the "To" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -189,7 +194,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the CC condition', function () {
+        it('should draw the "CC" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -208,7 +213,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Header condition', function () {
+        it('should draw the "Header" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -229,7 +234,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Envelope condition', function () {
+        it('should draw the "Envelope" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -248,7 +253,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Size (bytes) condition', function () {
+        it('should draw the "Size (bytes)" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -265,7 +270,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Keep action', function () {
+        it('should draw the "Keep" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -277,7 +282,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Discard action', function () {
+        it('should draw the "Discard" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -290,7 +295,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Redirect to action', function () {
+        it('should draw the "Redirect to" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -303,7 +308,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Move to folder action', function () {
+        it('should draw the "Move to folder" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Move to folder') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -317,7 +322,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Reject with reason action', function () {
+        it('should draw the "Reject with reason" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -330,7 +335,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Mark mail as action', function () {
+        it('should draw the "Mark mail as" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -345,7 +350,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Tag mail with action', function () {
+        it('should draw the "Tag mail with" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -358,7 +363,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw the Flag mail with action', function () {
+        it('should draw the "Flag mail" with action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').click();
 
             expect($popup.find('li.filter-settings-view').length).toBe(1);
@@ -374,172 +379,286 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         it('should save a empty rule', function () {
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.attributes.should.have.a.property('active');
+                model.attributes.active.should.be.equal(true);
+                model.attributes.should.have.a.property('test');
+                model.attributes.test.should.be.deep.equal({ 'id': 'true' });
+                model.attributes.should.have.a.property('actioncmds');
+                model.attributes.actioncmds.should.be.a('array');
+                model.attributes.actioncmds.should.be.empty;
+                model.attributes.should.have.a.property('flags');
+                model.attributes.flags.should.be.a('array');
+                model.attributes.flags.should.be.empty;
+                model.attributes.should.have.a.property('rulename');
+            });
             
-            model.attributes.should.have.a.property('active');
-            model.attributes.active.should.be.equal(true);
-            model.attributes.should.have.a.property('test');
-            model.attributes.test.should.be.deep.equal({ 'id': 'true' });
-            model.attributes.should.have.a.property('actioncmds');
-            model.attributes.actioncmds.should.be.a('array');
-            model.attributes.actioncmds.should.be.empty;
-            model.attributes.should.have.a.property('flags');
-            model.attributes.flags.should.be.a('array');
-            model.attributes.flags.should.be.empty;
-            model.attributes.should.have.a.property('rulename');
         });
 
-        it('should save the Sender/From condition', function () {
+        it('should save the "Sender/From" condition', function () {
+
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['From'], id: 'header', values: ['sender']});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['From'], id: 'header', values: ['sender']});
+            });
+            
 
         });
 
-        it('should save the Any recipient condition', function () {
+        it('should save the "Any recipient" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Any recipient') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['To', 'Cc'], id: 'header', values: ['sender']});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['To', 'Cc'], id: 'header', values: ['sender']});
+            });
 
         });
 
-        it('should save the Subject condition', function () {
+        it('should save the "Subject" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Subject') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('subject').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['Subject'], id: 'header', values: ['subject']});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['Subject'], id: 'header', values: ['subject']});
+            });
 
         });
 
-        it('should save the Mailing list condition', function () {
+        it('should save the "Mailing list" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mailing list') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('Listname').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'], id: 'header', values: ['Listname']});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'], id: 'header', values: ['Listname']});
+            });
 
         });
 
-        it('should save the To condition', function () {
+        it('should save the "To" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('To') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('to value').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['To'], id: 'header', values: ['to value']});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['To'], id: 'header', values: ['to value']});
+            });
 
         });
 
-        it('should save the CC condition', function () {
+        it('should save the "CC" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('CC') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('CC value').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['Cc'], id: 'header', values: ['CC value']});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['Cc'], id: 'header', values: ['CC value']});
+            });
 
         });
 
-        it('should save the Header condition', function () {
+        it('should save the "Header" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('header value').trigger('change');
             $popup.find('input[data-action="change-text-test-second"]').val('name value').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['name value'], id: 'header', values: ['header value']});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['name value'], id: 'header', values: ['header value']});
+            });
 
         });
 
-        it('should save the Header condition and the result should be like CC condition', function () {
+        it('should save the "Header" with header Cc', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Header') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('header value').trigger('change');
             $popup.find('input[data-action="change-text-test-second"]').val('Cc').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['Cc'], id: 'header', values: ['header value']});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['Cc'], id: 'header', values: ['header value']});
+            });
 
         });
 
-        it('should save the Envelope condition', function () {
+        it('should save the "Envelope" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Envelope') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('envelope value').trigger('change');
             $popup.find('li li a[data-value="matches"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['To'], id: 'envelope', values: ['envelope value']});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['To'], id: 'envelope', values: ['envelope value']});
+            });
 
         });
 
-        it('should save the Size (bytes) condition', function () {
+        it('should save the "Size (bytes)"" condition', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
             $popup.find('input[data-action="change-text-test"]').val('10').trigger('change');
             $popup.find('li li a[data-value="over"]').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('test').should.be.deep.equal({comparison: 'over', id: 'size', size: '10'});
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('test').should.be.deep.equal({comparison: 'over', id: 'size', size: '10'});
+            });
 
         });
 
-        it('should save the Keep action', function () {
+        it('should save the "Keep" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Keep') + ')').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('actioncmds').should.be.deep.equal([{id: 'keep'}]);
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('actioncmds').should.be.deep.equal([{id: 'keep'}]);
+            });
 
         });
 
-        it('should save the Discard action', function () {
+        it('should save the "Discard" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Discard') + ')').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('actioncmds').should.be.deep.equal([{id: 'discard'}]);
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('actioncmds').should.be.deep.equal([{id: 'discard'}]);
+            });
 
         });
 
-        it('should save the Redirect to action', function () {
+        it('should save the "Redirect to" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Redirect to') + ')').click();
             $popup.find('input[data-action="change-text-action"]').val('tester@open-xchange.com').trigger('change');
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('actioncmds').should.be.deep.equal([{id: 'redirect', to: 'tester@open-xchange.com'}]);
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('actioncmds').should.be.deep.equal([{id: 'redirect', to: 'tester@open-xchange.com'}]);
+            });
 
         });
 
@@ -548,54 +667,93 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         //     $popup.find('input[data-action="change-text-action"]').val('tester@open-xchange.com').trigger('change');
 
         //     $popup.find('[data-action="save"]').click();
-        //     this.server.respond();
-        //     model = collection.findWhere({ id: 1 });
-        //     console.log(model.get('actioncmds'))
-        //     model.get('actioncmds').should.be.deep.equal([{id: 'redirect', to: 'tester@open-xchange.com'}]);
+
+        //     waitsFor(function () {
+        //         if (collection.length === 1) {
+        //             model = collection.findWhere({ id: 1 });
+        //             return true;
+        //         }
+        //     }, 'added to collection', ox.testTimeout);
+
+        //     runs(function () {
+        //         model.get('actioncmds').should.be.deep.equal([{id: 'redirect', to: 'tester@open-xchange.com'}]);
+        //     });
 
         // });
 
-        it('should save the Reject with reason action', function () {
+        it('should save the "Reject with reason" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Reject with reason') + ')').click();
             $popup.find('input[data-action="change-text-action"]').val('reason').trigger('change');
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('actioncmds').should.be.deep.equal([{id: 'reject', text: 'reason'}]);
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('actioncmds').should.be.deep.equal([{id: 'reject', text: 'reason'}]);
+            });
 
         });
 
-        it('should save the Mark mail as action', function () {
+        it('should save the "Mark mail as" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')').click();
             $popup.find('a:contains(' + gt('deleted') + ')').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('actioncmds').should.be.deep.equal([{flags: ['\\deleted'], id: 'addflags'}]);
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('actioncmds').should.be.deep.equal([{flags: ['\\deleted'], id: 'addflags'}]);
+            });
 
         });
 
-        it('should save the Tag mail with action', function () {
+        it('should save the "Tag mail with" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').click();
             $popup.find('input[data-action="change-text-action"]').val('tag').trigger('change');
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('actioncmds').should.be.deep.equal([{flags: ['$tag'], id: 'addflags'}]);
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('actioncmds').should.be.deep.equal([{flags: ['$tag'], id: 'addflags'}]);
+            });
 
         });
 
-        it('should save the Flag mail with action', function () {
+        it('should save the "Flag mail with" action', function () {
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').click();
             $popup.find('a[data-action="change-color"] span.flag-example.flag_1').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
-            model.get('actioncmds').should.be.deep.equal([{flags: ['$cl_1'], id: 'addflags'}]);
+
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
+
+            runs(function () {
+                model.get('actioncmds').should.be.deep.equal([{flags: ['$cl_1'], id: 'addflags'}]);
+            });
 
         });
 
@@ -615,12 +773,35 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
             $popup.find('li[data-action-id="1"] a[data-action="change-color"] span.flag-example.flag_1').click();
 
             $popup.find('[data-action="save"]').click();
-            this.server.respond();
-            model = collection.findWhere({ id: 1 });
 
-            model.get('actioncmds').should.be.deep.equal([{flags: ['$tag'], id: 'addflags'}, {flags: ['$cl_1'], id: 'addflags'}]);
-            model.get('test').should.be.deep.equal({id: 'allof', tests: [{comparison: 'matches', headers: ['From'], id: 'header', values: ['sender']}, {comparison: 'over', id: 'size', size: '10'}]});
+            waitsFor(function () {
+                if (collection.length === 1) {
+                    model = collection.findWhere({ id: 1 });
+                    return true;
+                }
+            }, 'added to collection', ox.testTimeout);
 
+            runs(function () {
+                model.get('actioncmds').should.be.deep.equal([{flags: ['$tag'], id: 'addflags'}, {flags: ['$cl_1'], id: 'addflags'}]);
+                model.get('test').should.be.deep.equal({id: 'allof', tests: [{comparison: 'matches', headers: ['From'], id: 'header', values: ['sender']}, {comparison: 'over', id: 'size', size: '10'}]});
+            });
+
+        });
+
+        it('should draw the "Apply rule if ..." dropdown', function () {
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Sender/From') + ')').click();
+            $popup.find('input[data-action="change-text-test"]').val('sender').trigger('change');
+            $popup.find('li li a[data-value="matches"]').click();
+
+            expect($popup.find('a[data-value="allof"]').length).toBe(0);
+            expect($popup.find('a[data-value="anyof"]').length).toBe(0);
+            
+            $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
+            $popup.find('li[data-test-id="1"] input[data-action="change-text-test"]').val('10').trigger('change');
+            $popup.find('li[data-test-id="1"] li a[data-value="over"]').click();
+
+            expect($popup.find('a[data-value="allof"]').length).toBe(1);
+            expect($popup.find('a[data-value="anyof"]').length).toBe(1);
         });
 
     });
