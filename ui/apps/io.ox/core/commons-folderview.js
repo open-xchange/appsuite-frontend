@@ -696,10 +696,13 @@ define('io.ox/core/commons-folderview',
                             tree.repaint().done(function () {
                                 tree.idle();
                                 if (newId !== id) tree.select(newId);
+                                else tree.selection.trigger('change', sel || []);
                             });
                         } else {
                             if (!id && !newId && sel.length === 0) {
                                 tree.select(config.get('folder.' + options.type) + '');
+                            } else {
+                                tree.selection.trigger('change', sel || []);
                             }
                             tree.repaint();
                         }
