@@ -16,6 +16,7 @@ define('io.ox/core/tk/attachments',
      'io.ox/core/api/attachment',
      'io.ox/core/strings',
      'io.ox/core/tk/attachmentsUtil',
+     'io.ox/core/capabilities',
      'io.ox/preview/main',
      'io.ox/core/tk/dialogs',
      'gettext!io.ox/core/tk/attachments',
@@ -24,7 +25,7 @@ define('io.ox/core/tk/attachments',
      'io.ox/core/notifications',
      'less!io.ox/core/tk/attachments.less',
 
-    ], function (ext, attachmentAPI, strings, util, pre, dialogs, gt, links, settings, notifications) {
+    ], function (ext, attachmentAPI, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
 
     'use strict';
 
@@ -592,7 +593,7 @@ define('io.ox/core/tk/attachments',
                             $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
                                 .text(gt('Upload file')).hide() : ''
                         ),
-                        ((options.drive && _.device('!smartphone')) ? $('<button type="button" class="btn" data-action="addinternal">').text(gt('Files')) : '')
+                        ((options.drive && _.device('!smartphone') && capabilities.has('infostore')) ? $('<button type="button" class="btn" data-action="addinternal">').text(gt('Files')) : '')
                     ).on('keypress', function (e) {
                         if (e.which === 13) {
                             node.find('input[name="file"]').trigger('click');

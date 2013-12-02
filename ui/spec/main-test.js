@@ -221,6 +221,7 @@ if (sinon) {
              * @param  {string|array} ids of modules used in current test suite
              * @param  {object|array} vars used references in current test suiet
              */
+            //TODO: add param for disabling; use some default set of caps for list param if not defined
             caps: function (list, ids, vars) {
                 var done = false;
                 ids = [].concat(ids);
