@@ -15,7 +15,7 @@
 .window-content-top {
     display: none;
     position: absolute;
-    top: 0px;
+    top: 0;
     z-index: 10;
     width: 100%;
 
@@ -25,7 +25,7 @@
         height: 100%;
         padding: 5px 10px;
         background-color: white;
-        .box-shadow(0px 0px 30px 0px #ccc);
+        .box-shadow(0 0 30px 0 #ccc);
 
         .io-ox-inline-links {
             margin: 16px 0 10px 43px;
@@ -184,7 +184,7 @@
                 }
 
                 .preview-cover {
-                    .box-shadow(0 0px 0px 1px rgba(0, 0, 0, 0.102) inset);
+                    .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.102) inset);
                     margin-left: 40px;
                     margin-top: 2px;
                     float: left;
@@ -400,7 +400,7 @@
                     float:left;
                     display: inline;
                     text-align: center;
-                    .box-shadow(0 0px 0px 1px rgba(0, 0, 0, 0.102) inset);
+                    .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.102) inset);
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
@@ -673,7 +673,7 @@ ul.breadcrumb li.prefix {
 .width-less-than-480 {
     #window-content-top {
         #inline-actions-ms {
-            margin: 0px 30px 0px 30px;
+            margin: 0 30px 0 30px;
             .summary {
                 font-size: 12pt;
             }
@@ -688,7 +688,7 @@ ul.breadcrumb li.prefix {
         }
         .files-scrollable-pane {
             //reduce padding, margin, right (27px)
-            padding: 0px;
+            padding: 0;
             .inline-actions {
                 margin: 12px 0 12px 12px;
                 a {

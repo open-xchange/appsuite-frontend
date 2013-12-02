@@ -14,7 +14,7 @@
 define('plugins/demo/red/register',
     ['io.ox/core/extensions',
      'io.ox/portal/util',
-     'less!plugins/demo/red/style.less'
+     'less!plugins/demo/red/style'
     ], function (ext, util) {
 
     'use strict';

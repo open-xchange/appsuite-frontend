@@ -97,17 +97,17 @@ define('plugins/portal/userSettings/register',
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('Your current password')),
-                    oldPass = $('<input type="password" class="form-control input-lg current-password">'),
+                    oldPass = $('<input type="password" class="form-control current-password">'),
                     $('<label>').text(gt('New password')),
-                    newPass = $('<input type="password" class="form-control input-lg new-password">').on('keyup', updateStrength),
+                    newPass = $('<input type="password" class="form-control new-password">').on('keyup', updateStrength),
                     $('<label>').text(gt('Repeat new password')),
-                    newPass2 = $('<input type="password" class="form-control input-lg repeat-new-password">'),
+                    newPass2 = $('<input type="password" class="form-control repeat-new-password">'),
                     strengthLabel = $('<label class="password-strength-label">').hide(),//hide till new pw is inserted
                     strengthBarWrapper = $('<div class="progress">').append(
                         strengthBar = $('<div class="bar password-strength-bar">')).hide(),//hide till new pw is inserted
                     passwordHintContainer = $('<div class=password-hint-container>').hide(),
                     $('<div class="alert alert-info">')
-                    .css('margin', '14px 0px')
+                    .css('margin', '14px 0')
                     .text(
                         gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
                     )

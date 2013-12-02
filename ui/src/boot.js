@@ -904,7 +904,7 @@ $(window).load(function () {
             .always(function () {
 
                 // autologout message
-                if (_.url.hash("autologout")) {
+                if (_.url.hash('autologout')) {
                     feedback('info', function () {
                         return $.txt(gt('You have been automatically signed out'));
                     });

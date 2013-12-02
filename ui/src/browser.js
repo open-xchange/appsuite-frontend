@@ -110,7 +110,7 @@
         })(document);
     }
 
-    function detectBrowser (nav) {
+    function detectBrowser(nav) {
         var error = false;
         try {
             // browser detection - adopted from prototype.js
@@ -124,7 +124,7 @@
             Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1);
             WindowsPhone = ua.indexOf('Windows Phone') > -1;
             Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined;
-            iOS = (ua.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined;
+            iOS = (ua.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g, '.') : undefined;
             standalone = ('standalone' in nav) && nav.standalone;
             uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
             chromeIOS = ua.indexOf('CriOS/') > -1;
@@ -158,7 +158,7 @@
                 /** OS **/
                 Blackberry: Blackberry ?
                     ua.split('Version/')[1].split(' ')[0] : undefined,
-                WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1 )) ? true : undefined, // no version here yet
+                WindowsPhone: (WindowsPhone && (ua.indexOf('IEMobile/10.0') > -1)) ? true : undefined, // no version here yet
                 iOS: iOS,
                 MacOS: MacOS,
                 Android : Android,

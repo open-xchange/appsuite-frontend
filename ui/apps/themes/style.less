@@ -265,7 +265,7 @@ label { font-weight:normal; }
     #io-ox-topbar .launcher {
         //font-size: @topbar-font-size + 1;
         //line-height: 35px;
-        //padding: 0px 12px 0px 12px;
+        //padding: 0 12px 0 12px;
     }
 
     #io-ox-screens {
@@ -305,7 +305,7 @@ label { font-weight:normal; }
         }
 
         & > a.closelink {
-            padding: 13px 0px 13px 0px;;
+            padding: 13px 0 13px 0;
         }
 
         & > a.closelink:focus {
@@ -402,7 +402,7 @@ label { font-weight:normal; }
 
         &.closable i.fa-times {
             padding: 13px 16px;
-            margin: 0px;
+            margin: 0;
         }
 
         &.closable i.fa-times:hover {
@@ -922,10 +922,10 @@ label { font-weight:normal; }
     border-right: 1px solid @window-head-border-color;
 
     position: absolute;
-    top: 0px;
+    top: 0;
     width: @window-head-width;
-    bottom: 0px;
-    left: 0px;
+    bottom: 0;
+    left: 0;
     z-index: 20;
 
     .user-select(none);
@@ -1069,7 +1069,7 @@ label { font-weight:normal; }
     font-weight: 300;
     font-size: 22px;
     line-height: 30px;
-    text-shadow: 0px 0px 2px #000;
+    text-shadow: 0 0 2px #000;
     .ellipsis();
     /* override h1 */
     display: block;
@@ -1154,9 +1154,9 @@ a.button {
 
 .window-body {
     position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
+    top: 0;
+    right: 0;
+    bottom: 0;
     left: @window-head-width;
     white-space: normal;
     z-index: 1;
@@ -1714,7 +1714,7 @@ input[type=search] {
 
     &:focus {
         outline: none;
-        .box-shadow(0px 5px 25px -5px darken(@link-color, 20%));
+        .box-shadow(0 5px 25px -5px darken(@link-color, 20%));
     }
 }
 
@@ -2077,7 +2077,7 @@ input.nice-input {
 
 .boxshadow input.nice-input:focus {
     border-color: transparent;
-    .box-shadow(0px 0px 5px 1px @accent-1);
+    .box-shadow(0 0 5px 1px @accent-1);
 }
 
 /* auto complete */
@@ -3080,7 +3080,7 @@ input.flat-input {
     .ios {
         #io-ox-core {
              transition: -webkit-filter 100ms ease-in;
-             -webkit-filter: blur(0px);
+             -webkit-filter: blur(0);
 
             &.menu-blur {
                 -webkit-filter: blur(5px);

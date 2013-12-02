@@ -303,31 +303,23 @@
             );
 
             function load(module, modulename) {
-                //$.ajax({ url: [ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), dataType: 'text' })
-                //.done(function (concatenatedText) {
-                //    runCode([ox.apiRoot, '/apps/load/', ox.base, ',', module].join(''), concatenatedText);
-                 $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), dataType: 'text' })
-                 .done(function (concatenatedText) {
-                        runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
-                        context.completeLoad(modulename);
-                        // Chop up the concatenated modules and put them into file cache
-                        _(concatenatedText.split("/*:oxsep:*/")).each(function (moduleText) {
-                            (function () {
-                                var name = null;
-                                var match = moduleText.match(/define(\.async)?\(([^,]+),/);
-                                if (match) {
-                                    name = match[2].substr(1, match[2].length -2);
-                                }
-                                if (name) {
-                                    // cache file?
-                                    if (badSource(moduleText)) {
-                                        if (_.url.hash('debug-filecache')) console.warn('FileCache: NOT Caching ' + name);
-                                        return;
-                                    }
-                                    if (_.url.hash('debug-filecache')) console.log('FileCache: Caching ' + name);
-                                    fileCache.cache(name, moduleText);
-                                } else if (_.url.hash('debug-filecache')) {
-                                    console.log('FileCache: Could not determine name for ' + moduleText);
+                $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), dataType: 'text' })
+                    .done(function (concatenatedText) {
+                    runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
+                    context.completeLoad(modulename);
+                    // Chop up the concatenated modules and put them into file cache
+                    _(concatenatedText.split('/*:oxsep:*/')).each(function (moduleText) {
+                        (function () {
+                            var name = null;
+                            var match = moduleText.match(/define(\.async)?\(([^,]+),/);
+                            if (match) {
+                                name = match[2].substr(1, match[2].length - 2);
+                            }
+                            if (name) {
+                                // cache file?
+                                if (badSource(moduleText)) {
+                                    if (_.url.hash('debug-filecache')) console.warn('FileCache: NOT Caching ' + name);
+                                    return;
                                 }
                                 if (_.url.hash('debug-filecache')) console.log('FileCache: Caching ' + name);
                                 fileCache.cache(name, moduleText);

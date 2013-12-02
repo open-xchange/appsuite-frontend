@@ -29,13 +29,13 @@ module.exports = function (grunt) {
                 files: 'apps/**/manifest.json',
                 tasks: ['manifests']
             },
-            lesslint: {
-                files: ['apps/themes/style.less'],
-                tasks: ['newer:recess:main']
-            },
             karma: {
                 files: ['spec/**/*_spec.js', 'build/core'],
                 tasks: ['newer:concat:specs', 'karma:unit:run']
+            },
+            less: {
+                files: 'apps/**/*.less',
+                tasks: ['less']
             },
             all: {
                 files: ['<%= jshint.all.src %>'],
@@ -57,12 +57,6 @@ module.exports = function (grunt) {
         jsonlint: {
             manifests: {
                 src: ['apps/**/*.json']
-            }
-        },
-        recess: {
-            main: {
-                options: grunt.file.readJSON('.recessrc'),
-                src: ['apps/themes/style.less']
             }
         },
         copy: {
@@ -172,9 +166,7 @@ module.exports = function (grunt) {
                     },
                     {
                         src: [
-                            'lib/bootstrap/less/bootstrap.less',
-                            'lib/bootstrap-datepicker/less/datepicker3.less',
-                            'lib/font-awesome/less/font-awesome.less',
+                            'apps/themes/libs.less',
                             'apps/themes/default/style.less'
                         ],
                         expand: true,
@@ -242,6 +234,7 @@ module.exports = function (grunt) {
                              'lib/doT.js',
                              'lib/textarea-helper.js',
                              'src/util.js',
+                             'src/browser.js',
                              'src/plugins.js',
                              'src/jquery.plugins.js',
                              'apps/io.ox/core/gettext.js',
@@ -394,7 +387,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-jsonlint');
-    grunt.loadNpmTasks('grunt-recess');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-newer');

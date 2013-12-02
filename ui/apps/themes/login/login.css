@@ -94,10 +94,10 @@ body.down #io-ox-login-container .alert.alert-info {
 
 #background-loader {
     position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 65000;
     -webkit-transform: translateZ(0); /* activate GPU acceleration */
 }
@@ -123,9 +123,9 @@ body.down #io-ox-login-container .alert.alert-info {
     left: 50%;
     width: 800px;
     margin-left: -400px;
-    -webkit-box-shadow: 0px 0px 70px 5px #000;
-    -moz-box-shadow: 0px 0px 70px 5px #000;
-    box-shadow: 0px 0px 70px 5px #000;
+    -webkit-box-shadow: 0 0 70px 5px #000;
+    -moz-box-shadow: 0 0 70px 5px #000;
+    box-shadow: 0 0 70px 5px #000;
 }
 
 #io-ox-login-screen .no-margin { margin: 0; }
@@ -149,7 +149,7 @@ body.down #io-ox-login-container .alert.alert-info {
 .wallpaper {
     background: #34749c; /* Old browsers */
     background: -moz-radial-gradient(center, ellipse cover, #34749c 0%, #2a6085 41%, #1d3f59 100%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#34749c), color-stop(41%,#2a6085), color-stop(100%,#1d3f59)); /* Chrome,Safari4+ */
+    background: -webkit-gradient(radial, center center, 0, center center, 100%, color-stop(0%,#34749c), color-stop(41%,#2a6085), color-stop(100%,#1d3f59)); /* Chrome,Safari4+ */
     background: -webkit-radial-gradient(center, ellipse cover, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* Chrome10+,Safari5.1+ */
     background: -o-radial-gradient(center, ellipse cover, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* Opera 12+ */
     background: -ms-radial-gradient(center, ellipse cover, #34749c 0%,#2a6085 41%,#1d3f59 100%); /* IE10+ */
@@ -222,7 +222,7 @@ body.down #io-ox-login-container .alert.alert-info {
 }
 
 #io-ox-login-header-label {
-    text-shadow: 0px 1px 3px #1E405A;
+    text-shadow: 0 1px 3px #1E405A;
 }
 
 #io-ox-login-form-container {
