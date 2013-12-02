@@ -45,13 +45,13 @@
         }
     },
     "invalid": {
-        "1": {
-            "userAgent": "Mozilla/5.0 (iPhone; U; CPU iPhone OS 5_1_1 like Mac OS X; en) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/9B206 Safari/7534.48.3"
-        },
-        "2": {
+        "dolfin": {
             "userAgent": "Mozilla/5.0 (SCH-F859/F859DG12;U;NUCLEUS/2.1;Profile/MIDP-2.1 Configuration/CLDC-1.1;480*800;CTC/2.0) Dolfin/2.0"
         },
-        "3": {
+        "crios": {
+            "userAgent": "Mozilla/5.0 (iPhone; U; CPU iPhone OS 5_1_1 like Mac OS X; en) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/9B206 Safari/7534.48.3"
+        },
+        "custom": {
             "userAgent": "Internet 1.0/ Internetexplodierer 10.23.2 Yeah! Wurstbrot"
         }
     }
