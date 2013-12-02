@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: Thu Dec 06 2012 11:15:04 GMT+0100 (CET)\n"
-"PO-Revision-Date: 2013-11-13 21:39+0100\n"
+"PO-Revision-Date: 2013-11-24 20:28+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com >\n"
 "Language-Team: Dutch <kde-i18n-doc@kde.org>\n"
 "Language: nl\n"
@@ -3412,7 +3412,7 @@ msgstr "Server voor uitgaande e-mail (SMTP)"
 
 #: apps/io.ox/mail/accounts/view-form.js:47
 msgid "Use username and password"
-msgstr "Gebruik aanmeldingsnaam en wachtwoord"
+msgstr "Gebruik gebruikersnaam en wachtwoord"
 
 #: apps/io.ox/mail/accounts/view-form.js:50
 msgid "Folder settings"
@@ -3448,7 +3448,7 @@ msgstr "Account bijgewerkt"
 
 #: apps/io.ox/mail/accounts/view-form.js:225
 msgid "Username must not be empty."
-msgstr "Aanmeldingsnaam mag niet leeg zijn."
+msgstr "Gebruikersnaam mag niet leeg zijn."
 
 #. %1$s the missing request parameter
 #: apps/io.ox/mail/accounts/view-form.js:230
@@ -4411,7 +4411,7 @@ msgid ""
 "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
 "data-widget=\"options\">weekly</a>."
 msgstr ""
-"De afspraak wordt <a href=\"#\" data-attribute=\"recurrenceType\" data-"
+"De afspraak wordt a <href=\"#\" data-attribute=\"recurrenceType\" data-"
 "widget=\"options\">wekelijks</a> herhaald."
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:253
