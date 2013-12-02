@@ -197,16 +197,10 @@ define('io.ox/tasks/actions',
                     popup.getBody().css({ height: '250px' });
                     var tree = new views.FolderList(popup.getBody(), {
                             type: 'tasks',
-                            tabindex: 0
+                            tabindex: 0,
+                            dialogmode: true
                         }),
                         id = String(task.folder || task.folder_id);
-
-                    //updates tree in case you create a new target folder during move action
-                    folderAPI.on('create', function (e, data) {
-                        tree.repaint().done(function () {
-                            tree.select(data.id);
-                        });
-                    });
 
                     popup.show(function () {
                         tree.paint().done(function () {
