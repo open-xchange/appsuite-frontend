@@ -42,7 +42,7 @@ define('io.ox/files/fluid/perspective',
         topActions = $('<div class="inline-actions-ms">').appendTo(topBar);
 
     //init
-    filesContainer = breadcrumb = inlineRight = inline = wrapper = $('');
+    filesContainer = inlineRight = inline = wrapper = $('');
 
     // *** helper functions ***
 
