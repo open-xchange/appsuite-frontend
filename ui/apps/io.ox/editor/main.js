@@ -184,7 +184,7 @@ define('io.ox/editor/main',
             if ('id' in options) {
                 app.load({ folder_id: options.folder, id: options.id });
             } else if (_.url.hash('id')) {
-                app.load({ folder_id: _.url.hash('folder'), id: _.url.hash('id') });
+                app.load({ folder_id: _.url.hash('folder'), id: _.url.hash('id').split('.').pop() });
             } else {
                 app.create();
             }
@@ -207,47 +207,63 @@ define('io.ox/editor/main',
         };
 
         app.save = function () {
+            var fixFolder = function () {
+                //switch to default folder on missing grants (or special folders)
+                return folderAPI.get({ folder: model.get('folder_id') })
+                        .then(function (data) {
+                            var required = (model.has('id') && !folderAPI.can('write', data)) ||
+                                           (!model.has('id') && !folderAPI.can('create', data)) ||
+                                           _.contains(['14', '15'], data.id);
+                            if (required) {
+                                //update mode and notify user
+                                model.set('folder_id', folderAPI.getDefaultFolder('infostore'));
+                                notifications.yell('info', gt('This file will be written in your default folder to allow editing'));
+                            }
+                        });
+            };
+
             require(['io.ox/files/util'], function (util) {
                 var blob, data;
-                return util.confirmDialog(app.view.getFilename(), app.view.data.saved.filename)
-                    .then(function () {
-                        // generate blob
-                        view.updateModel();
-                        data = model.toJSON();
-                        blob = new window.Blob([data.content], { type: 'text/plain' });
-                        delete data.content;
-                        view.busy();
-
-                        // create or update?
-                        if (model.has('id')) {
-                            // update
-                            return api.uploadNewVersion({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
-                                .done(function () {
-                                    previous = model.toJSON();
-                                })
-                                .always(function () { view.idle(); })
-                                .fail(notifications.yell)
-                                .fail(function (error) {
-                                    // file no longer exists
-                                    if (error.code === 'IFO-0300') model.unset('id');
-                                });
-                        } else {
-                            // create
-                            return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
-                                .done(function (data) {
+                return fixFolder().then(
+                            util.confirmDialog(app.view.getFilename(), app.view.data.saved.filename)
+                                .then(function () {
+                                    // generate blob
+                                    view.updateModel();
+                                    data = model.toJSON();
+                                    blob = new window.Blob([data.content], { type: 'text/plain' });
                                     delete data.content;
-                                    app.setState({ folder: data.folder_id, id: data.folder_id + '.' + data.id });
-                                    model.set(data);
-                                    previous = model.toJSON();
-                                    view.idle();
-                                    api.trigger('refresh.all');
+                                    view.busy();
+                                    // create or update?
+                                    if (model.has('id')) {
+                                        // update
+                                        return api.uploadNewVersion({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
+                                            .done(function () {
+                                                previous = model.toJSON();
+                                            })
+                                            .always(function () { view.idle(); })
+                                            .fail(notifications.yell)
+                                            .fail(function (error) {
+                                                // file no longer exists
+                                                if (error.code === 'IFO-0300') model.unset('id');
+                                            });
+                                    } else {
+                                        // create
+                                        return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
+                                            .done(function (data) {
+                                                delete data.content;
+                                                app.setState({ folder: data.folder_id, id: data.folder_id + '.' + data.id });
+                                                model.set(data);
+                                                previous = model.toJSON();
+                                                view.idle();
+                                                api.trigger('refresh.all');
+                                            })
+                                            .always(function () { view.idle(); })
+                                            .fail(notifications.yell);
+                                    }
+                                }, function () {
+                                    view.idle.apply(app.view);
                                 })
-                                .always(function () { view.idle(); })
-                                .fail(notifications.yell);
-                        }
-                    }, function () {
-                        view.idle.apply(app.view);
-                    });
+                        );
             });
         };
 

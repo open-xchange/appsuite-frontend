@@ -35,7 +35,9 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/upload', {
         requires: function (e) {
             return e.baton.app.folder.getData().then(function (data) {
-                return folderAPI.can('create', data);
+                //hide for virtual folders (other files root, public files root)
+                var virtual = _.contains(['14', '15'], data.id);
+                return folderAPI.can('create', data) && !virtual;
             });
         },
         action: function (baton) {
