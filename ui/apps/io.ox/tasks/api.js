@@ -13,7 +13,7 @@
 define('io.ox/tasks/api',
         ['io.ox/core/http',
          'io.ox/core/api/factory',
-         'io.ox/core/api/folder'], function (http, apiFactory, folderApi) {
+         'io.ox/core/api/folder', 'io.ox/tasks/util'], function (http, apiFactory, folderApi, util) {
 
     'use strict';
 
@@ -321,6 +321,7 @@ define('io.ox/tasks/api',
             return api.caches.all.get(cacheKey).then(function (cachevalue) {
                 if (cachevalue) {//only add if the key is there
                     cachevalue = cachevalue.concat(cacheObj);
+                    cachevalue = util.sortTasks(cachevalue);
                     return api.caches.all.add(cacheKey, cachevalue);
                 } else {//just leave it to the next all request, no need to do it here
                     return $.when();
