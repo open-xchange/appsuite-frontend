@@ -41,7 +41,6 @@
         browserLC = {};
 
     function detectBrowser (nav) {
-        debugger;
         var error = false;
         try {
             // browser detection - adopted from prototype.js
