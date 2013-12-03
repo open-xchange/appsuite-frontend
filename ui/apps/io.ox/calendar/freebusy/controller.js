@@ -126,7 +126,6 @@ define('io.ox/calendar/freebusy/controller',
             };
 
             this.getParticipants = function () {
-                console.log('extern!');
                 return this.participants.map(function (model) {
                     var tempParticipant = { id: model.get('id'), type: model.get('type') };
                     if (model.get('type') === 5) { // External participants need more data for an appointment
