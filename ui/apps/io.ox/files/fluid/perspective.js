@@ -252,7 +252,7 @@ define('io.ox/files/fluid/perspective',
                     // clear top-bar
                     topActions.empty();
 
-                    if (_.device('smartphone')) {
+                    if (_.device('smartphone') && baton.options.mode === 'list') {
                         // use custom multiselect toolbar
                         toggleToolbar(selected, self);
                     } else {
