@@ -1,0 +1,23 @@
+[
+    "autologin",
+    "caldav",
+    "calendar",
+    "carddav",
+    "collect_email_addresses",
+    "contacts",
+    "document_preview",
+    "drive",
+    "filestore",
+    "infostore",
+    "linkedin",
+    "multiple_mail_accounts",
+    "oauth",
+    "pim",
+    "portal",
+    "publication",
+    "subscription",
+    "tasks",
+    "text",
+    "webdav",
+    "webmail"
+]
