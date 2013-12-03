@@ -24,7 +24,11 @@ define('io.ox/calendar/freebusy/main',
 
         var app, win;
 
-        app = ox.ui.createApp({ name: NAME, title: 'Scheduling' });
+        app = ox.ui.createApp({
+            name: NAME,
+            title: 'Scheduling',
+            closable: true
+        });
 
         // launcher
         app.setLauncher(function (options) {
