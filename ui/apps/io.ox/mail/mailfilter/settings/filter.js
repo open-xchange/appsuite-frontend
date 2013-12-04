@@ -125,7 +125,7 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                         function getEditableState() {
                             if (flagArray) {
-                                return flagArray[0] !== 'vacation' && flagArray[0] !== 'autoforward' ? 'editable' : 'fixed';
+                                return _.contains(['vacation', 'autoforward', 'spam'], flagArray[0]) ? 'fixed' : 'editable';
                             } else {
                                 return 'editable';
                             }
