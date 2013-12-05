@@ -134,7 +134,7 @@ define('io.ox/editor/main',
                     $('<div class="header">').append(
                         // title
 
-                        $('<input type="text" class="title" tabindex="1">')
+                        $('<input type="text" class="title" tabindex="1" maxlength="350">')
                         .attr('placeholder', gt('Enter document title here')),
 
                         // save & close buttons
