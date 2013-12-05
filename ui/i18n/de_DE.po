@@ -3828,7 +3828,7 @@ msgstr "Sie haben den Termin vorläufig bestätigt"
 #: apps/io.ox/calendar/invitations/register.js:66
 #: apps/io.ox/calendar/invitations/register.js:71
 msgid "You have declined the appointment"
-msgstr "Sie haben den Termine abgelehnt"
+msgstr "Sie haben den Termin abgelehnt"
 
 #: apps/io.ox/calendar/invitations/register.js:340
 msgid "There is already %1$d appointment in this timeframe."
