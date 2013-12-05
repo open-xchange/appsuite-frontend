@@ -17,6 +17,7 @@ define('capabilities',
 
         var init = function (base) {
             var data = base.slice(0),
+                args = {},
                 process = function (list, action) {
                     if (action === 'add') {
                         data = _.unique(
@@ -27,12 +28,21 @@ define('capabilities',
                             return _.where(list, cap).length === 0
                         })
                     }
+                    //set
+                    ox.testUtils.modules.caps(data, args.ids, args.vars);
                     return data;
-                }
+                };
 
             return {
+                init: function (ids, vars) {
+                    args = {
+                        ids: ids,
+                        vars: vars
+                    }
+                    return this;
+                },
                 reset: function () {
-                    return this.data = da.slice(0);
+                    return data = base.slice(0);
                 },
                 enable: function (list) {
                     return process([].concat(list), 'add');
@@ -50,6 +60,6 @@ define('capabilities',
         return {
             common: init(common),
             premium: init(premium),
-            pim: init(pimdata)
+            pim: init(pim)
         }
 });

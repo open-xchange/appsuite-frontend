@@ -165,10 +165,8 @@ if (sinon) {
                 if (capabilities.has.restore)
                     capabilities.has.restore();
                 //create stub
-                has = sinon.stub(capabilities, 'has');
-                //apply faked response
-                _.each(list, function (key) {
-                    has.withArgs(key).returns(true);
+                has = sinon.stub(capabilities, 'has', function (arg) {
+                    return list.length && _.contains(list, arg);
                 });
                 //reload modules
                 self.reload();
@@ -217,7 +215,7 @@ if (sinon) {
 
             /**
              * used as beforeEach function to set capabilities during runtime
-             * @param  {string|array} list of caps to enable
+             * @param  {string|array} list of enabled caps
              * @param  {string|array} ids of modules used in current test suite
              * @param  {object|array} vars used references in current test suiet
              */
