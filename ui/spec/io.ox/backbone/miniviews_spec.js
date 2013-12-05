@@ -184,9 +184,10 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
         describe('DateView', function () {
 
             beforeEach(function () {
-                this.date = new Date();
+                this.date = date.DateView.utc(2012, 1, 5);
                 this.model = new Backbone.Model({ test: this.date.getTime() });
                 this.view = new date.DateView({ name: 'test', model: this.model });
+                this.view.render();
             });
 
             afterEach(function () {
@@ -196,25 +197,69 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
             });
 
             it('is a <div> tag with three <select> contols', function () {
-                this.view.render();
                 expect(this.view.$el.prop('tagName')).toBe('DIV');
                 expect(this.view.$el.children().length).toBe(3);
                 expect(this.view.$el.children('select').length).toBe(3);
             });
 
+            it('contains 0001 as fallback year', function () {
+                expect(this.view.$el.find('.year').children().first().attr('value')).toBe('0001');
+            });
+
+            it('contains an empty option for month', function () {
+                expect(this.view.$el.find('.month').children().eq(0).attr('value')).toBe('');
+            });
+
+            it('lists month as one-digit numbers starting with 0', function () {
+                expect(this.view.$el.find('.month').children().eq(1).attr('value')).toBe('0');
+            });
+
+            it('contains an empty option for dates', function () {
+                expect(this.view.$el.find('.date').children().eq(0).attr('value')).toBe('');
+            });
+
+            it('lists dates as one-digit numbers starting with 1', function () {
+                expect(this.view.$el.find('.date').children().eq(1).attr('value')).toBe('1');
+            });
+
             it('reflects model state', function () {
-                this.view.render();
                 expect(this.view.$el.find('.date').val()).toBe(String(this.date.getUTCDate()));
                 expect(this.view.$el.find('.month').val()).toBe(String(this.date.getUTCMonth()));
                 expect(this.view.$el.find('.year').val()).toBe(String(this.date.getUTCFullYear()));
             });
 
             it('updates the model', function () {
-                this.view.render();
                 this.view.$el.find('.year').val('1978').trigger('change');
                 this.view.$el.find('.month').val('0').trigger('change');
                 this.view.$el.find('.date').val('29').trigger('change');
                 expect(this.model.get('test')).toBe(Date.UTC(1978, 0, 29));
+            });
+
+            it('handles non-existent days correctly', function () {
+                // start end of January
+                this.model.set('test', date.DateView.utc(2013, 0, 31).getTime());
+                expect(this.view.value()).toBe('2013-01-31');
+                // jump to February
+                this.view.$el.find('.month').val('1').trigger('change');
+                expect(this.view.value()).toBe('2013-02-28');
+                expect(this.model.get('test')).toBe(1362009600000);
+            });
+
+            it('updates the model (without a year)', function () {
+                this.view.$el.find('.year').val('0001').trigger('change');
+                this.view.$el.find('.month').val('0').trigger('change');
+                this.view.$el.find('.date').val('29').trigger('change');
+                expect(this.model.get('test')).toBe(-62133177600000); // 0001-01-29
+            });
+
+            it('handles non-existent days correctly (without a year)', function () {
+                // start end of January
+                this.model.set('test', date.DateView.utc(1, 0, 31).getTime());
+                expect(this.view.value()).toBe('0001-01-31');
+                // jump to February
+                this.view.$el.find('.month').val('1').trigger('change');
+                expect(this.view.value()).toBe('0001-02-28');
+                expect(this.model.get('test')).toBe(-62130585600000); // 0001-02-28Error while detecting browser, using fallback
             });
         });
     });

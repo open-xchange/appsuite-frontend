@@ -1039,7 +1039,7 @@ define('io.ox/core/tk/folderviews',
             return $.when();
         };
 
-        api.on('delete', function () {
+        api.on('delete create', function () {
             self.repaint();
         });
     }

@@ -251,6 +251,7 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
 
                 if (baton.id !== 'private') return;
+                if (baton.options.dialogmode) return;
 
                 this.append($('<div>').append(
                     $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
@@ -270,6 +271,7 @@ define('io.ox/core/commons-folderview',
                 // the section would be hidden
                 if (baton.id !== 'private') return;
                 if (!capabilities.has('edit_public_folders')) return;
+                if (baton.options.dialogmode) return;
 
                 var node = $('<div>');
                 this.append(node);

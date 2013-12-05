@@ -161,8 +161,10 @@ define('io.ox/contacts/actions',
                                 },
                                 select: function (id) {
                                     settings.set('folderpopup/last', id).save();
-                                }
+                                },
+                                dialogmode: true
                             });
+
                         dialog.show(function () {
                             tree.paint().done(function () {
                                 tree.select(id).done(function () {

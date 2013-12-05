@@ -417,8 +417,10 @@ define('io.ox/calendar/actions',
                             },
                             select: function (id) {
                                 contactSettings.set('folderpopup/last', id).save();
-                            }
+                            },
+                            dialogmode: true
                         });
+
                     dialog.show(function () {
                         tree.paint().done(function () {
                             tree.select(id).done(function () {

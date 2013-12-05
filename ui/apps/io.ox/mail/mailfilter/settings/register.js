@@ -20,11 +20,11 @@ define('io.ox/mail/mailfilter/settings/register',
     'use strict';
 
     ext.point('io.ox/settings/pane').extend({
-        id: 'mailfilter',
+        id: 'io.ox/mailfilter',
         title: gt('Mail Filter'),
         ref: 'io.ox/mailfilter',
         loadSettingPane: false,
-        index: 425
+        index: 500
     });
 
     ext.point('io.ox/mailfilter/settings/detail').extend({

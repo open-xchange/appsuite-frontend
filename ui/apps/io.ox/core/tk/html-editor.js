@@ -462,6 +462,15 @@ define.async('io.ox/core/tk/html-editor',
                         $('#' + ed.id + '_tbl').removeClass('focused');
                     });
                 // done!
+
+                //suppress firefox dnd inline image support
+                var iframe = textarea.parent().find('iframe'),
+                    html = $(iframe[0].contentDocument).find('html');
+                html.on('dragover drop', function (e) {
+                    if (_.browser.Firefox && _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'))
+                        e.preventDefault();
+                });
+
                 def.resolve();
             },
 

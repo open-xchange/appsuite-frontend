@@ -197,10 +197,11 @@ define('io.ox/tasks/actions',
                     popup.getBody().css({ height: '250px' });
                     var tree = new views.FolderList(popup.getBody(), {
                             type: 'tasks',
-                            tabindex: 0
+                            tabindex: 0,
+                            dialogmode: true
                         }),
                         id = String(task.folder || task.folder_id);
-                    //go
+
                     popup.show(function () {
                         tree.paint().done(function () {
                             tree.select(id).done(function () {

@@ -42,7 +42,7 @@ define('io.ox/files/fluid/perspective',
         topActions = $('<div class="inline-actions-ms">').appendTo(topBar);
 
     //init
-    filesContainer = breadcrumb = inlineRight = inline = wrapper = $('');
+    filesContainer = inlineRight = inline = wrapper = $('');
 
     // *** helper functions ***
 
@@ -252,7 +252,7 @@ define('io.ox/files/fluid/perspective',
                     // clear top-bar
                     topActions.empty();
 
-                    if (_.device('smartphone')) {
+                    if (_.device('smartphone') && baton.options.mode === 'list') {
                         // use custom multiselect toolbar
                         toggleToolbar(selected, self);
                     } else {

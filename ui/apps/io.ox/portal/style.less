@@ -274,106 +274,6 @@
 
     .line { line-height: @line-height; }
 
-    .portal-feed {
-
-        h1 {
-            font-family: @lightFontFamily;
-            font-size: 24px;
-            font-weight: 300;
-            text-align: left;
-            margin: 0 0 26px 0;
-        }
-
-        h2 {
-            font-size: 18px;
-            line-height: 22px;
-            margin: 26px 0 13px 0;
-            clear: both;
-        }
-
-        .photo {
-            width: 100%;
-            height: 300px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: top left;
-            margin-bottom: 13px;
-        }
-
-        .post-url {
-            margin: 0 0 13px 0;
-            clear: both;
-        }
-
-        .rss-url {
-            text-align: right;
-            margin: 0 0 13px 0;
-            clear: both;
-        }
-
-        .text {
-            margin-bottom: 26px;
-
-            img[hspace] {
-                &[align="left"] { margin: 0 1em 0 0; }
-                &[align="right"] { margin: 0 0 0 1em; }
-            }
-        }
-
-        .text-delimiter {
-            color: @linkColor;
-            width: 2em;
-            display: inline-block;
-            text-align: center;
-        }
-
-        caption {
-            font-size: 12px;
-            text-align: left;
-            color: #888;
-            display: block;
-        }
-
-        &.tumblr {
-            h2 { margin: 26px 0 4px 0 }
-            .post {
-                margin-bottom: 26px;
-                img { display: block; }
-                blockquote {
-                    em {
-                        display: block;
-                        &:before {
-                            content: '-- ';
-                        };
-                    }
-                    margin-bottom: 5px;
-                }
-            }
-
-            .post-bar {
-                font-size: 90%;
-                color: gray;
-                font-weight: 300;
-                text-align: right;
-
-                a {
-                    color: gray;
-                    margin-left: 8px;
-                    &:hover {
-                        color: #0088cc;
-                    }
-                }
-                a, i {
-                    text-decoration: none;
-                    &.icon-tag {
-                        margin-right: 4px;
-                    }
-                }
-                .post-date { float: left; }
-
-            }
-        }
-    }
     .content a.solution { cursor: pointer; }
 
     .widget.with-summary {
@@ -381,6 +281,107 @@
         .content { display: block; }
         &.show-summary .summary { display: block; }
         &.show-summary .content { display: none; }
+    }
+}
+
+.portal-feed {
+
+    h1 {
+        font-family: @lightFontFamily;
+        font-size: 24px;
+        font-weight: 300;
+        text-align: left;
+        margin: 0 0 26px 0;
+    }
+
+    h2 {
+        font-size: 18px;
+        line-height: 22px;
+        margin: 26px 0 13px 0;
+        clear: both;
+    }
+
+    .photo {
+        width: 100%;
+        height: 300px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: top left;
+        margin-bottom: 13px;
+    }
+
+    .post-url {
+        margin: 0 0 13px 0;
+        clear: both;
+    }
+
+    .rss-url {
+        text-align: right;
+        margin: 0 0 13px 0;
+        clear: both;
+    }
+
+    .text {
+        margin-bottom: 26px;
+
+        img[hspace] {
+            &[align="left"] { margin: 0 1em 0 0; }
+            &[align="right"] { margin: 0 0 0 1em; }
+        }
+    }
+
+    .text-delimiter {
+        color: @linkColor;
+        width: 2em;
+        display: inline-block;
+        text-align: center;
+    }
+
+    caption {
+        font-size: 12px;
+        text-align: left;
+        color: #888;
+        display: block;
+    }
+
+    &.tumblr {
+        h2 { margin: 26px 0 4px 0 }
+        .post {
+            margin-bottom: 26px;
+            img { display: block; }
+            blockquote {
+                em {
+                    display: block;
+                    &:before {
+                        content: '-- ';
+                    };
+                }
+                margin-bottom: 5px;
+            }
+        }
+
+        .post-bar {
+            font-size: 90%;
+            color: gray;
+            font-weight: 300;
+            text-align: right;
+
+            a {
+                color: gray;
+                margin-left: 8px;
+                &:hover {
+                    color: #0088cc;
+                }
+            }
+            a, i {
+                text-decoration: none;
+                &.icon-tag {
+                    margin-right: 4px;
+                }
+            }
+            .post-date { float: left; }
+
+        }
     }
 }
 

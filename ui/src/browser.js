@@ -38,7 +38,6 @@
         standalone,
         uiwebview,
         chromeIOS,
-        unknown,
         browserLC = {};
 
     function detectBrowser (nav) {
@@ -46,7 +45,7 @@
         try {
             // browser detection - adopted from prototype.js
             ua = nav.userAgent;
-            isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]";
+            isOpera = Object.prototype.toString.call(window.opera) === '[object Opera]';
             webkit = ua.indexOf('AppleWebKit/') > -1;
             chrome = ua.indexOf('Chrome/') > -1;
             phantom = ua.indexOf('PhantomJS/') > -1;
@@ -56,14 +55,14 @@
             WindowsPhone = ua.indexOf('Windows Phone') > -1;
             Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined;
             iOS = (ua.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g,'.') : undefined;
-            standalone = ("standalone" in nav) && nav.standalone;
+            standalone = ('standalone' in nav) && nav.standalone;
             uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
             chromeIOS = ua.indexOf('CriOS/') > -1;
 
             // add namespaces, just sugar
             _.browser = {
                 /** is IE? */
-                IE: nav.appName === "Microsoft Internet Explorer" ?
+                IE: nav.appName === 'Microsoft Internet Explorer' ?
                     Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
                         !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined
                     ),
@@ -78,8 +77,6 @@
                 /** PhantomJS (needed for headless spec runner) */
                 PhantomJS: webkit && phantom ?
                     ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
-                /* Karma runner */
-                Karma: !!ox.testUtils,
                 /** Chrome */
                 Chrome: webkit && chrome ?
                     ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
@@ -99,10 +96,12 @@
             };
 
         } catch (e) {
+
             error = true;
 
             console.warn('Error while detecting browser, using fallback');
-            var browsers = "IE Opera WebKit Safari PhantomJS Karma Chrome Firefox ChromeiOS UIWebView Blackberry WindowsPhone iOS MacOS Android Windows".split(' ');
+
+            var browsers = 'IE Opera WebKit Safari PhantomJS Karma Chrome Firefox ChromeiOS UIWebView Blackberry WindowsPhone iOS MacOS Android Windows'.split(' ');
             // set to unknown browser
             _.browser = {
                 unknown: true
@@ -113,9 +112,9 @@
             });
         } finally {
             // second fallback if all detecions were falsy
-            if (!error && _.some(_.browser, function (v) {return !!v})) {
+            if (!error && !_.some(_.browser, function (v) {return !!v})) {
                 console.warn('Error while detecting browser, using fallback');
-                _.browser.unknown = true;
+               _.browser.unknown = true;
             }
         }
 
@@ -131,6 +130,9 @@
             key = key.toLowerCase();
             _.browser[key] = browserLC[key] = value;
         });
+
+        // fixes for testrunner
+        _.browser.karma = !!ox.testUtils;
     }
 
     detectBrowser(navigator);

@@ -41,7 +41,7 @@ define('io.ox/mail/vacationnotice/settings/register',
         title: gt('Vacation Notice'),
         ref: 'io.ox/vacation',
         loadSettingPane: false,
-        index: 400,
+        index: 300,
         lazySaveSettings: true
     });
 
