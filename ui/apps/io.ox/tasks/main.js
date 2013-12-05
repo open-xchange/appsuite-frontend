@@ -141,6 +141,16 @@ define('io.ox/tasks/main',
         commons.wireGridAndAPI(grid, api);
         commons.wireGridAndSearch(grid, win, api);
 
+        var notify = function (response) {
+            //show 'In order to accomplish the search, x or more characters are required.'
+            if (response && response.code && response.code === 'TSK-0051') {
+                require(['io.ox/core/notifications'], function (notifications) {
+                    notifications.yell('error', response.error);
+                });
+            }
+            return this;
+        };
+
         //custom requests
         var allRequest = function () {
                 var datacopy,
@@ -203,7 +213,7 @@ define('io.ox/tasks/main',
                         });
                     }
                     return datacopy;
-                });
+                }, notify);
             };
 
         grid.setAllRequest(allRequest);

@@ -502,6 +502,14 @@ define('io.ox/mail/main',
             });
         });
 
+        var notify = function (response) {
+            //show 'In order to accomplish the search, x or more characters are required.'
+            if (response && response.code && response.code === 'MSG-0068') {
+                notifications.yell('error', response.error);
+            }
+            return this;
+        };
+
         grid.setAllRequest('search', function () {
             var options = win.search.getOptions(),
                 unread = grid.prop('unread');
@@ -511,7 +519,7 @@ define('io.ox/mail/main',
             options.order = grid.prop('order');
             return api.search(win.search.query, options).then(function (data) {
                 return unread ? filterUnread(data) : data;
-            });
+            }, notify);
         });
 
         grid.setListRequest(function (ids) {
