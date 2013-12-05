@@ -1517,6 +1517,10 @@ define('io.ox/core/desktop',
 
                     new links.Action(opt.name + '/actions/search', {
                         action:  function (baton) {
+                            //hide open sidepopup
+                            var $sidepopup = $(baton.window.nodes.body).find('.io-ox-sidepopup');
+                            if ($sidepopup.is(':visible'))
+                                $sidepopup.trigger('remove');
                             baton.window.search.toggle();
                         }
                     });

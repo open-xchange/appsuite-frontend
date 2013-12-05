@@ -618,7 +618,7 @@ define('io.ox/core/tk/dialogs',
                 $(document).off('keydown', closeByEscapeKey);
                 self.nodes.closest.prop('sidepopup', previousProp);
                 self.nodes.click.off('click', closeByClick);
-                popup.off('view:remove', closeByEvent);
+                popup.off('view:remove remove', closeByEvent);
                 self.lastTrigger = previousProp = null;
                 // use time to avoid flicker
                 timer = setTimeout(function () {
@@ -733,7 +733,7 @@ define('io.ox/core/tk/dialogs',
 
                 // add handlers to close popup
                 self.nodes.click.on('click', closeByClick);
-                popup.on('view:remove', closeByEvent);
+                popup.on('view:remove remove', closeByEvent);
                 $(document).on('keydown', closeByEscapeKey);
 
 

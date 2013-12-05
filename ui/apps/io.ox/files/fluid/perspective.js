@@ -365,6 +365,7 @@ define('io.ox/files/fluid/perspective',
         draw: function (baton) {
             this.append(
                 filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
+                                 .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
             );
         }
     });
@@ -921,7 +922,9 @@ define('io.ox/files/fluid/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search cancel-search', function () {
+            win.on('search cancel-search', function (e) {
+                //only reload when search was executed
+                if (e.type === 'cancel-search' && !filesContainer.hasClass('searchresult')) return;
                 breadcrumb = undefined;
                 allIds = [];
                 drawFirst();
