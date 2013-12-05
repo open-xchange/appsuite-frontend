@@ -283,8 +283,7 @@ define('io.ox/core/tk/autocomplete',
                     case 9:  // tab
                         e.preventDefault();
                         if (!e.shiftKey) { // ignore back-tab
-                            update();
-                            $(this).trigger('selected', scrollpane.children().eq(Math.max(0, index)).data());
+                            val = $.trim($(this).val(''));
                             close();
                         }
                         break;
