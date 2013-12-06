@@ -997,7 +997,7 @@ define('io.ox/core/api/folder',
 
         title = String(title || '').trim();
 
-        var split = title.split(/[ _-]+/),
+        var split = title.split(/[ _-]+(?![^ _-])/),
             delimiters = title.split(/[^ _-]+/),
             length = title.length;
 
