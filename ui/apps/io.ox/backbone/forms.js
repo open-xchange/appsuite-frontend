@@ -693,6 +693,10 @@ define('io.ox/backbone/forms',
                         value -= date.DAY;
                     }
                 }
+                if (options.utc) {
+                    value = date.Local.utc(value);
+                }
+
                 var mydate = parseInt(value, 10);
                 if (_.isNull(mydate)) {
                     return value;
@@ -733,7 +737,7 @@ define('io.ox/backbone/forms',
 
             _dateStrToDate: function (value, attribute, model) {
                 var myValue = parseInt(model.get(attribute), 10),
-                    formatStr;
+                    formatStr = date.DATE;
 
                 if (value === '' && !options.required) {
                     return null;
@@ -743,11 +747,11 @@ define('io.ox/backbone/forms',
                     myValue = new date.Local().setHours(0, 0, 0, 0).getTime();
                 }
 
+                // change format string for mobiscroll
                 if (options.display === 'DATETIME' && _.device('small') && !model.get('full_time')) {
                     formatStr = date.getFormat(date.DATE) + ' ' + date.getFormat(date.TIME);
-                } else {
-                    formatStr = date.DATE;
                 }
+
                 var parsedDate = date.Local.parse(value, formatStr);
 
                 if (_.isNull(parsedDate)) {
@@ -759,12 +763,12 @@ define('io.ox/backbone/forms',
                     return attribute === 'end_date' ? parsedDate.local + date.DAY : parsedDate.local;
                 }
 
-                if (options.display !== 'DATETIME' || !_.device('small') || model.get('full_time')) {
-                    parsedDate = new date.Local(myValue).setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate());
+                if (options.utc) {
+                    return parsedDate.local;
                 }
 
-                if (options.utc) {
-                    return date.Local.localTime(parsedDate.getTime());
+                if (options.display !== 'DATETIME' || !_.device('small') || model.get('full_time')) {
+                    parsedDate = new date.Local(myValue).setYear(parsedDate.getYear(), parsedDate.getMonth(), parsedDate.getDate());
                 }
 
                 return parsedDate.getTime();

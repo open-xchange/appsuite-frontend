@@ -25,7 +25,7 @@ define('io.ox/tasks/edit/view-template',
      'io.ox/tasks/api',
      'io.ox/core/extensions',
      'io.ox/tasks/util'
-    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, reminderUtil) {
+    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil) {
 
     'use strict';
 
@@ -160,13 +160,12 @@ define('io.ox/tasks/edit/view-template',
             this.append($('<div class="span5 collapsed">').append(
                     $('<label>').text(gt('Remind me')).addClass('task-edit-label').attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('span12')
                     .append($('<option>')
-                    .text(''), reminderUtil.buildDropdownMenu())
+                    .text(''), taskUtil.buildDropdownMenu())
                     .on('change', function () {
                         if (selector.prop('selectedIndex') === 0) {
-                            baton.model.set('alarm', null, {validate: true});
+                            baton.model.set('alarm', null, { validate: true });
                         } else {
-                            var dates = reminderUtil.computePopupTime(selector.val());
-                            baton.model.set('alarm', dates.alarmDate.getTime(), {validate: true});
+                            baton.model.set('alarm', taskUtil.computePopupTime(selector.val()).alarmDate, { validate: true });
                         }
                     })
                 )
@@ -778,6 +777,7 @@ define('io.ox/tasks/edit/view-template',
         attribute: 'start_date',
         required: false,
         label: gt('Starts on'),
+        utc: true,
         clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '4'
@@ -793,6 +793,7 @@ define('io.ox/tasks/edit/view-template',
         attribute: 'end_date',
         required: false,
         label: gt('Due date'),
+        utc: true,
         clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '4'

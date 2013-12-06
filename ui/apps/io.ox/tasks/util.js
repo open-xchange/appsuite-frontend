@@ -11,19 +11,14 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define('io.ox/tasks/util',
-    ['gettext!io.ox/tasks',
+    ['io.ox/core/date',
      'settings!io.ox/tasks',
-     'io.ox/core/date'
-    ], function (gt, settings, date) {
+     'gettext!io.ox/tasks'
+    ], function (date, settings, gt) {
 
     'use strict';
 
-    var lookupArray = [60000 * 5,           //five minutes
-                       60000 * 15,          //fifteen minutes
-                       60000 * 30,          //thirty minutes
-                       60000 * 60],         //one hour]
-
-        lookupDaytimeStrings = [gt('this morning'),
+    var lookupDaytimeStrings = [gt('this morning'),
                                 gt('by noon'),
                                 gt('this afternoon'),
                                 gt('tonight'),
@@ -38,83 +33,74 @@ define('io.ox/tasks/util',
                                 gt('next Saturday')];
 
     var util = {
-            computePopupTime: function (value) {
-                var endDate = new date.Local(),
-                    weekDay = endDate.getDay(),
-                    alarmDate = new date.Local();
+            computePopupTime: function (value, smartEndDate) {
+                smartEndDate = smartEndDate || false;
+                var alarmDate = new date.Local(),
+                    endDate;
 
                 switch (value) {
-                case '5':
-                    alarmDate.setTime(alarmDate.getTime() + lookupArray[0]);
+                case '5': // in 5 minutes
+                    alarmDate.add(date.MINUTE * 5);
                     break;
-                case '15':
-                    alarmDate.setTime(alarmDate.getTime() + lookupArray[1]);
+                case '15': // in 15 minutes
+                    alarmDate.add(date.MINUTE * 15);
                     break;
-                case '30':
-                    alarmDate.setTime(alarmDate.getTime() + lookupArray[2]);
+                case '30': // in 30 minutes
+                    alarmDate.add(date.MINUTE * 30);
                     break;
-                case '60':
-                    alarmDate.setTime(alarmDate.getTime() + lookupArray[3]);
+                case '60': // in 60 minutes
+                    alarmDate.add(date.HOUR);
                     break;
                 default:
-                    prepareTime(alarmDate);
+                    alarmDate.setMinutes(0, 0, 0);
                     switch (value) {
-                    case 'd0':
+                    case 'd0': // this morning
                         alarmDate.setHours(6);
                         break;
-                    case 'd1':
+                    case 'd1': // by noon
                         alarmDate.setHours(12);
                         break;
-                    case 'd2':
+                    case 'd2': // this afternoon
                         alarmDate.setHours(15);
                         break;
-                    case 'd3':
+                    case 'd3': // tonight
                         alarmDate.setHours(18);
                         break;
-                    case 'd4':
+                    case 'd4': // late in the evening
                         alarmDate.setHours(22);
                         break;
                     default:
                         alarmDate.setHours(6);
                         switch (value) {
-                        case 't':
-                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24);
+                        case 't': // tomorrow
+                            alarmDate.add(date.DAY);
                             break;
-                        case 'ww':
-                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * 7);
+                        case 'ww': // next week
+                            alarmDate.add(date.WEEK);
                             break;
-                        case 'w0':
-                            var day = alarmDate.getDay() % 7;
-                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                        case 'w0': // next Sunday
+                            alarmDate.add(date.DAY * (7 - alarmDate.getDay()));
                             break;
-                        case 'w1':
-                            var day = (((alarmDate.getDay() - 1) % 7) + 7) % 7;//workaround: javascript modulo operator to stupid to handle negative numbers
-                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                        case 'w1': // next Monday
+                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 6) % 7)));
                             break;
-                        case 'w2':
-                            var day = (((alarmDate.getDay() - 2) % 7) + 7) % 7;
-                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                        case 'w2': // next Tuesday
+                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 5) % 7)));
                             break;
-                        case 'w3':
-                            var day = (((alarmDate.getDay() - 3) % 7) + 7) % 7;
-                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                        case 'w3': // next Wednesday
+                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 4) % 7)));
                             break;
-                        case 'w4':
-                            var day = (((alarmDate.getDay() - 4) % 7) + 7) % 7;
-                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                        case 'w4': // next Thursday
+                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 3) % 7)));
                             break;
-                        case 'w5':
-                            var day = (((alarmDate.getDay() - 5) % 7) + 7) % 7;
-                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                        case 'w5': // next Friday
+                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 2) % 7)));
                             break;
-                        case 'w6':
-                            var day = (((alarmDate.getDay() - 6) % 7) + 7) % 7;
-                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                        case 'w6': // next Saturday
+                            alarmDate.add(date.DAY * (7 - ((alarmDate.getDay() + 1) % 7)));
                             break;
                         default:
                             //cannot identify selector...set time now
-                            //maybe errormessage
-                            alarmDate = new Date();
                             break;
                         }
                         break;
@@ -122,35 +108,35 @@ define('io.ox/tasks/util',
                     break;
                 }
 
-                prepareTime(endDate);
-                if (weekDay < 1 || weekDay > 4) {
-                    weekDay = (((endDate.getDay() - 1) % 7) + 7) % 7;
-                    endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - weekDay));
-                } else {
-                    weekDay = (((endDate.getDay() - 5) % 7) + 7) % 7;
-                    endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - weekDay));
+                // set endDate
+                endDate = new date.Local(alarmDate.getTime());
+
+                if (smartEndDate) {
+                    var weekDay = endDate.getDay(); // 0 for Sunday to 6 for Saturday
+                    if (weekDay < 1 || weekDay > 5) { // if weekend, shift to next Monday
+                        endDate.add(date.DAY * (7 - ((endDate.getDay() + 6) % 7)));
+                    } else { // next Friday
+                        endDate.add(date.DAY * (7 - ((endDate.getDay() + 2) % 7)));
+                    }
                 }
 
-                if (alarmDate.getTime() > endDate.getTime()) {//endDate should not be before alarmDate
-                    endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7);
+                // endDate should not be before alarmDate
+                if (alarmDate.getTime() > endDate.getTime()) {
+                    endDate.add(date.WEEK);
                 }
-                //end Date does not have a time
-                endDate.setHours(0);
-                var result = {
-                        endDate: endDate,
-                        alarmDate: alarmDate
-                    };
-                return result;
+
+                // end Date does not have a time
+                endDate.setHours(0, 0, 0, 0);
+
+                return {
+                    endDate: endDate.local, // UTC
+                    alarmDate: alarmDate.getTime() // Localtime
+                };
             },
 
             //builds dropdownmenu nodes, if o.bootstrapDropdown is set listnodes are created else option nodes
             buildDropdownMenu: function (o) {
-                if (!o) {
-                    o = {};
-                }
-                if (!o.time) {
-                    o.time = new date.Local();
-                }
+                o = o || {};
                 //get the values
                 var options = this.buildOptionArray(o),
                     result = [];
@@ -171,23 +157,19 @@ define('io.ox/tasks/util',
 
             //returns the same as buildDropdownMenu but returns an array of value string pairs
             buildOptionArray: function (o) {
-                if (!o) {
-                    o = {};
-                }
-                if (!o.time) {
-                    o.time = new date.Local();
-                }
+                o = o || {};
                 var result = [],
-                    i;
+                    now = new date.Local(),
+                    i = now.getHours();
+
                 if (!o.daysOnly) {
-                    result = [[5, gt('in 5 minutes')],
-                              [15, gt('in 15 minutes')],
-                              [30, gt('in 30 minutes')],
-                              [60, gt('in one hour')]];
-    
-                    // variable daytimes
-                    i = o.time.getHours();
-    
+                    result = [
+                        [5, gt('in 5 minutes')],
+                        [15, gt('in 15 minutes')],
+                        [30, gt('in 30 minutes')],
+                        [60, gt('in one hour')]
+                    ];
+
                     if (i < 6) {
                         i = 0;
                     } else if (i < 12) {
@@ -199,42 +181,27 @@ define('io.ox/tasks/util',
                     } else if (i < 22) {
                         i = 4;
                     }
-    
+
                     while (i < lookupDaytimeStrings.length) {
                         result.push(['d' + i, lookupDaytimeStrings[i]]);
                         i++;
                     }
                 }
 
-                //weekdays
-                var circleIncomplete = true,
-                    startday = o.time.getDay();
+                result.push(['t', gt('tomorrow')]); // tomorrow
 
-                i = (o.time.getDay() + 2) % 7;
-
-                result.push(['t', gt('tomorrow')]);
-
-                while (circleIncomplete) {
+                for (i = (now.getDay() + 2) % 7;i !== now.getDay(); i = ++i % 7) {
                     result.push(['w' + i, lookupWeekdayStrings[i]]);
-                    if (i < 6) {
-                        i++;
-                    } else {
-                        i = 0;
-                    }
-
-                    if (i === startday) {
-                        result.push(['ww', gt('in one week')]);
-                        circleIncomplete = false;
-                    }
                 }
+
+                result.push(['ww', gt('in one week')]);
 
                 return result;
             },
 
             //change status number to status text. format enddate to presentable string
             //if detail is set, alarm and startdate get converted too and status text is set for more states than overdue and success
-            interpretTask: function (task, detail)
-            {
+            interpretTask: function (task, detail) {
                 task = _.copy(task, true);
                 if (task.status === 3) {
                     task.status = gt('Done');
@@ -242,8 +209,7 @@ define('io.ox/tasks/util',
 
                 } else {
 
-                    var now = new Date();
-                    if (task.end_date !== undefined && task.end_date !== null && now.getTime() > task.end_date) {//no state for task over time, so manual check is needed
+                    if (task.end_date !== undefined && task.end_date !== null && _.now() > task.end_date) {//no state for task over time, so manual check is needed
                         task.status = gt('Overdue');
                         task.badge = 'badge badge-important';
                     } else if (detail && task.status) {
@@ -271,21 +237,20 @@ define('io.ox/tasks/util',
                     }
                 }
 
-
-
                 if (task.title === undefined || task.title === null) {
                     task.title = '\u2014';
                 }
 
                 if (task.end_date !== undefined && task.end_date !== null) {
-                    task.end_date = new date.Local(task.end_date).format(date.DATE);
+                    // convert UTC timestamp to local time
+                    task.end_date = new date.Local(date.Local.utc(task.end_date)).format(date.DATE);
                 } else {
                     task.end_date = '';
                 }
 
                 if (detail) {
                     if (task.start_date !== undefined && task.start_date !== null) {
-                        task.start_date = new date.Local(task.start_date).format(date.DATE);
+                        task.start_date = new date.Local(date.Local.utc(task.start_date)).format(date.DATE);
                     } else {
                         task.start_date = '';
                     }
@@ -370,14 +335,6 @@ define('io.ox/tasks/util',
                 }
             }
         };
-
-    var prepareTime = function (time) {
-        time.setMilliseconds(0);
-        time.setSeconds(0);
-        time.setMinutes(0);
-
-        return time;
-    };
 
     return util;
 });

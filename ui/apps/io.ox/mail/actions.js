@@ -862,13 +862,14 @@ define('io.ox/mail/actions',
                     if (action === 'create') {
 
                         //Calculate the right time
-                        var dates = tasksUtil.computePopupTime(dateSelector.val());
+                        var dates = tasksUtil.computePopupTime(dateSelector.val(), true);
 
-                        taskAPI.create({title: titleInput.val(),
+                        taskAPI.create({
+                            title: titleInput.val(),
                             folder_id: coreConfig.get('folder/tasks'),
-                            end_date: dates.endDate.getTime(),
-                            start_date: dates.endDate.getTime(),
-                            alarm: dates.alarmDate.getTime(),
+                            end_date: dates.endDate,
+                            start_date: dates.endDate,
+                            alarm: dates.alarmDate,
                             note: noteInput.val(),
                             status: 1,
                             recurrence_type: 0,

@@ -504,23 +504,19 @@ define('io.ox/tasks/actions',
                     $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
                         util.buildDropdownMenu({bootstrapDropdown: true, daysOnly: true})
                     )
-                    .on('click', 'li>a:not([data-action="close-menu"])', {task: data}, function (e) {
+                    .on('click', 'li>a:not([data-action="close-menu"])', { task: data }, function (e) {
                         e.preventDefault();
                         var finderId = $(e.target).val();
                         ox.load(['io.ox/tasks/api']).done(function (api) {
-                            var endDate = util.computePopupTime(finderId).alarmDate, modifications;
-                            //remove Time
-                            endDate.setHours(0);
-                            endDate.setMinutes(0);
-                            endDate.setSeconds(0);
-                            endDate.setMilliseconds(0);
-
-                            modifications = {end_date: endDate.getTime(),
-                                             id: e.data.task.id,
-                                             folder_id: e.data.task.folder_id || e.data.task.folder};
+                            var endDate = util.computePopupTime(finderId).endDate,
+                                modifications = {
+                                    end_date: endDate,
+                                    id: e.data.task.id,
+                                    folder_id: e.data.task.folder_id || e.data.task.folder
+                                };
 
                             //check if startDate is still valid with new endDate, if not, show dialog
-                            if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
+                            if (e.data.task.start_date && e.data.task.start_date > endDate) {
                                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                                     var popup = new dialogs.ModalDialog()
                                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})

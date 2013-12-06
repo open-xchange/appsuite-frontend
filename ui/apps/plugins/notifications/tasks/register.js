@@ -287,15 +287,11 @@ define('plugins/notifications/tasks/register',
 
         remindAgain: function (e) {
             e.stopPropagation();
-            var endDate,
-                dates,
-                model = this.model,
+            var model = this.model,
                 time = ($(e.target).data('value') || $(e.target).val()).toString(),
                 key = [model.get('folder_id') + '.' + model.get('id')];
             if (time !== '0') {//0 means 'pick a time here' was selected. Do nothing.
-                dates = util.computePopupTime(time);
-                endDate = dates.alarmDate;
-                reminderAPI.remindMeAgain(endDate.getTime(), model.get('reminder').id).pipe(function () {
+                reminderAPI.remindMeAgain(util.computePopupTime(time).alarmDate, model.get('reminder').id).then(function () {
                     return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
                 }).done(function () {
                     api.trigger('update:' + _.ecid(key[0]));//update detailview
@@ -607,7 +603,7 @@ define('plugins/notifications/tasks/register',
 
         className: 'notifications',
         id: 'io-ox-notifications-confirmation-tasks',
-        
+
         events: {
             'keydown [data-action="clear"]': 'clearItems',
             'click [data-action="clear"]': 'clearItems'
@@ -636,7 +632,7 @@ define('plugins/notifications/tasks/register',
             this.collection.reset();
         }
     });
-    
+
     var hiddenInvitationItems = {};//object to store hidden items (clear button uses this)
 
     ext.point('io.ox/core/notifications/register').extend({
