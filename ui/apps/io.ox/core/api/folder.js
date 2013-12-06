@@ -996,10 +996,16 @@ define('io.ox/core/api/folder',
     api.getFolderTitle = function (title, max) {
 
         title = String(title || '').trim();
-
-        var split = title.split(/[ _-]+(?![^ _-])/),
+        
+        var leadingDelimiter = /[_-]/.test(title[0]) ? title[0] : false,
+            split = title.split(/[ _-]+/),
             delimiters = title.split(/[^ _-]+/),
             length = title.length;
+
+        if (leadingDelimiter) {
+            split[1] = leadingDelimiter + split[1];
+            split.splice(0, 1);
+        }
 
         while (length > max && split.length > 2) {
             var index = Math.floor(split.length / 2);
