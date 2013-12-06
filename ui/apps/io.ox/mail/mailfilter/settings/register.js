@@ -29,14 +29,14 @@ define('io.ox/mail/mailfilter/settings/register',
 
     ext.point('io.ox/mailfilter/settings/detail').extend({
         index: 100,
-        draw: function () {
+        draw: function (baton) {
             var $node = this,
                 $container = $('<div>').addClass('io-ox-mailfilter-settings');
 
             $node.append($container);
 
             ox.load(['io.ox/mail/mailfilter/settings/filter']).done(function (filters) {
-                filters.editMailfilter($container).fail(function (error) {
+                filters.editMailfilter($container, baton).fail(function (error) {
                     var msg;
                     if (error.code === 'MAIL_FILTER-0015') {
                         msg = gt('Unable to load mail filter settings.');
