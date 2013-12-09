@@ -415,7 +415,8 @@ define('io.ox/core/permissions/permissions',
                             distributionlists: false,
                             groups: true,
                             resources: false,
-                            users: true
+                            users: true,
+                            split: false
                         });
                         //add recipents to baton-data-node; used to filter sugestions list in view
                         autocomplete.on('update', function () {
