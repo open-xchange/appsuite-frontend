@@ -576,7 +576,7 @@ define('io.ox/mail/actions',
                             return;
                         }
 
-                        var contact = data[0], folder = config.get('folder/contacts');
+                        var contact = data[0], folder = config.get('folder.contacts');
 
                         if (contact.mark_as_distributionlist) {
                             // edit distribution list
