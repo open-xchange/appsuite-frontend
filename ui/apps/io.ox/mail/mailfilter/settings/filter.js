@@ -150,7 +150,7 @@ define('io.ox/mail/mailfilter/settings/filter',
 
     return {
         editMailfilter: function ($node, baton) {
-            grid = baton.grid;
+            grid = (baton || {}).grid;
 
             var createExtpointForSelectedFilter = function (node, args) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args);

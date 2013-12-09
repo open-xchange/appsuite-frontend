@@ -94,8 +94,9 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
                 expect(this.node.find('li a.drag-handle').length).toBe(3);
                 expect(this.node.find('li .list-title').length).toBe(3);
                 expect(this.node.find('li [data-action="edit"]').length).toBe(2);
-                expect(this.node.find('li [data-action="toggle"]').length).toBe(2);
-                expect(this.node.find('li [data-action="delete"]').length).toBe(2);
+                expect(this.node.find('li [data-action="edit-vacation"]').length).toBe(1);
+                expect(this.node.find('li [data-action="toggle"]').length).toBe(3);
+                expect(this.node.find('li [data-action="delete"]').length).toBe(3);
 
                 this.node.remove();
             });
