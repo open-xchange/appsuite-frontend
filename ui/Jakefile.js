@@ -263,7 +263,7 @@ utils.topLevelTask('default', ['buildApp'], function() {
     utils.summary('default')();
 });
 
-utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "unsupported.html", "print.html", "favicon.ico"]));
+utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "unsupported.html", "print.html"]));
 utils.copy(utils.list("src/"));
 
 //html
@@ -378,6 +378,11 @@ if (path.existsSync('help')) {
     });
     utils.copy(['help/help.css']);
 }
+
+// standard ox set of default icons for mobile devices
+utils.copy(utils.list("apps/themes/icons", "*"), {to: utils.dest("apps/themes/icons") });
+// rewrite conditions for default icons
+utils.copy(utils.list("apps/themes/icons/custom", ".htaccess"), {to: utils.dest("apps/themes/icons/custom") });
 
 // postinst utilities
 

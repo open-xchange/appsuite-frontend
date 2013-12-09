@@ -1,0 +1,4 @@
+Place your custom icons in this directory. Filenames have to be the same as in the "default" folder.
+If a file is not found in the "custom" directory, the corresponding file from the default folder will be taken as fallback.
+
+See .htaccess under "themes" for details.

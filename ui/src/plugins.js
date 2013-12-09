@@ -396,18 +396,7 @@
             theme = name;
             var path = ox.base + '/apps/themes/' + name + '/',
             icons = {
-                favicon: 'favicon.ico',
-                icon57: 'icon57.png',
-                icon72: 'icon72.png',
-                icon76: 'icon76.png',
-                icon114: 'icon114.png',
-                icon120: 'icon120.png',
-                icon144: 'icon144.png',
-                icon152: 'icon152.png',
-                splash460: 'splashscreen_460.jpg',
-                splash920: 'splashscreen_920.jpg',
-                splash1096: 'splashscreen_1096.jpg',
-                win8Icon: 'icon144_win.png'
+                favicon: 'favicon.ico'
             };
             for (var i in icons) {
                 var t = $('head #' + i).attr({ href: path + icons[i] })
