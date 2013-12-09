@@ -545,35 +545,37 @@ define('io.ox/mail/write/view-main',
                     buttonicon: 'icon-paper-clip'
                 }),
                 $input = $inputWrap.find('input[type="file"]'),
-                    changeHandler = function (e) {
-                        //register rightside node
-                        e.preventDefault();
-                        if (_.browser.IE !== 9) {
-                            var list = [];
-                            //fileList to array of files
-                            _($input[0].files).each(function (file) {
-                                list.push(_.extend(file, {group: 'file'}));
-                            });
-                            self.baton.fileList.add(list);
-                            $input.trigger('reset.fileupload');
-                        } else {
-                            //IE
-                            if ($input.val()) {
-                                var file = {
-                                    name: $input.val().match(/[^\/\\]+$/).toString(),
-                                    group: 'input',
-                                    hiddenField: $input
-                                };
-                                self.baton.fileList.add(file);
-                                //hide input field with file
-                                $input.addClass('add-attachment').hide();
-                                //create new input field
-                                $input = $('<input>', { type: 'file', name: 'file' })
-                                        .on('change', changeHandler)
-                                        .appendTo($input.parent());
-                            }
+                changeHandler = function (e) {
+                    // update input reference (esp. for IE10)
+                    $input = $inputWrap.find('input[type="file"]');
+                    //register rightside node
+                    e.preventDefault();
+                    if (_.browser.IE !== 9) {
+                        var list = [];
+                        //fileList to array of files
+                        _($input[0].files).each(function (file) {
+                            list.push(_.extend(file, {group: 'file'}));
+                        });
+                        self.baton.fileList.add(list);
+                        $input.trigger('reset.fileupload');
+                    } else {
+                        //IE
+                        if ($input.val()) {
+                            var file = {
+                                name: $input.val().match(/[^\/\\]+$/).toString(),
+                                group: 'input',
+                                hiddenField: $input
+                            };
+                            self.baton.fileList.add(file);
+                            //hide input field with file
+                            $input.addClass('add-attachment').hide();
+                            //create new input field
+                            $input = $('<input>', { type: 'file', name: 'file' })
+                                    .on('change', changeHandler)
+                                    .appendTo($input.parent());
                         }
-                    };
+                    }
+                };
             $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
