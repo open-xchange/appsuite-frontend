@@ -49,8 +49,7 @@ define.async('io.ox/realtime/rt',
     var TIMEOUT = 2 * 60 * 1000;
     var INFINITY = TIMEOUT / 5000;
     var offlineCountdown;
-    var purgingCountdown = 10;
-
+    
     var mode = 'lazy';
     var intervals = {
         lazy: 10000, // When traffic is low, don't ask for data as often
@@ -125,15 +124,10 @@ define.async('io.ox/realtime/rt',
         if (api.debug) {
             console.log('Drain buffer');
         }
-        purging = true;
-        if (api.debug) {
-            console.log('Starting purge, so setting purging to true');
-        }
         if (transmitting) {
             if (api.debug) {
                 console.log('Transmitting so skipping purge');
             }
-            purging = false;
             if (api.debug) {
                 console.log('Aborting purge, transmission in progress so setting purging to false');
             }
@@ -141,19 +135,10 @@ define.async('io.ox/realtime/rt',
             return;
         }
         if (!enroled) {
-            if (api.debug) {
-                console.log('Not enrolled, so skipping purge, setting purging to false');
-            }
-
-            purging = false;
             return;
         }
 
         if (_.isEmpty(queue.stanzas) && _.isEmpty(ackBuffer)) {
-            if (api.debug) {
-                console.log('No stanzas enqueued, so skipping purge, setting purging to false');
-            }
-            purging = false;
             return;
         }
         // Send queue.stanzas
@@ -174,6 +159,11 @@ define.async('io.ox/realtime/rt',
             console.log('->', stanzas);
         }
 
+        purging = true;
+        if (api.debug) {
+            console.log('Starting purge, so setting purging to true');
+        }
+
         transmitting = true;
         http.PUT({
             module: 'rt',
@@ -190,7 +180,6 @@ define.async('io.ox/realtime/rt',
             if (api.debug) {
                 console.log('Purged stanzas, so setting purging to false');
             }
-
             handleResponse(resp);
             if (!_.isEmpty(queue.stanzas) || !_.isEmpty(ackBuffer)) {
                 purge();
@@ -204,10 +193,6 @@ define.async('io.ox/realtime/rt',
 
             handleError(resp);
             if (!_.isEmpty(queue.stanzas) || !_.isEmpty(ackBuffer)) {
-                purging = true;
-                if (api.debug) {
-                    console.log('Still have stanzas to send, so purging again (purging = true)');
-                }
                 purge();
             }
         });
@@ -216,19 +201,7 @@ define.async('io.ox/realtime/rt',
 
     actions.purge = function () {
         if (!purging && !_.isEmpty(queue.stanzas)) {
-            purgingCountdown = 10;
             purge();
-        }
-        if (purging) {
-            purgingCountdown--;
-            if (purgingCountdown === 0) {
-                purging = false;
-                purgingCountdown = 10;
-                if (api.debug) {
-                    console.log('10 seconds of detected, setting purging to false to get back to normal');
-                }
-
-            }
         }
     };
 
@@ -236,14 +209,14 @@ define.async('io.ox/realtime/rt',
     actions.poll = function () {
         var lastFetchInterval = _.now() - lastCheck;
         var interval = _.now() - lastDelivery;
-        if (lastFetchInterval >= intervals[mode] && !purging) {
+        if (lastFetchInterval >= intervals[mode] && !purging && !transmitting) {
             lastCheck = _.now();
             if (api.debug) {
                 console.log('Polling');
             }
-            purging = true;
+            transmitting = true;
             if (api.debug) {
-                console.log('Polling, so setting purging to true');
+                console.log('Polling, so setting transmitting to true');
             }
 
             http.GET({
@@ -522,9 +495,9 @@ define.async('io.ox/realtime/rt',
     }
 
     function handleError(error) {
-        purging = false;
+        transmitting = false;
         if (api.debug) {
-            console.log('handleError: setting purging to false');
+            console.log('handleError: setting transmitting to false');
         }
 
         if (error.code === 'RT_STANZA-1006' || error.code === 'RT_STANZA-0006' || error.code === 1006 || error.code === 6) {
@@ -543,9 +516,9 @@ define.async('io.ox/realtime/rt',
     }
 
     function handleResponse(resp) {
-        purging = false;
+        transmitting = false;
         if (api.debug) {
-            console.log('handleResponse: setting purging to false');
+            console.log('handleResponse: setting transmitting to false');
         }
         damage.reset();
 
@@ -663,9 +636,9 @@ define.async('io.ox/realtime/rt',
         }
         options.seq = seq;
         seq++;
-        purging = true;
+        transmitting = true;
         if (api.debug) {
-            console.log('Transmitting query, so setting purging to true');
+            console.log('Transmitting query, so setting transmitting to true');
         }
 
         return http.PUT({
@@ -677,9 +650,9 @@ define.async('io.ox/realtime/rt',
             timeout: TIMEOUT,
             data: options
         }).pipe(function (resp) {
-            purging = false;
+            transmitting = false;
             if (api.debug) {
-                console.log('Query completed, setting purging to false');
+                console.log('Query completed, setting transmitting to false');
             }
             var stanzas = resp.stanzas;
             resp.stanzas = [];
