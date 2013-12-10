@@ -259,7 +259,7 @@ define('io.ox/files/fluid/perspective',
 
                         if (selected.length > 1) {
                             // draw inline links
-                            commons.multiSelection('io.ox/files', dummy, selected, api, {test: selected.length}, {forcelimit: true});
+                            commons.multiSelection('io.ox/files', dummy, selected, api, undefined, {forcelimit: true});
                             // append to bar
                             topActions.append(dummy.find('.io-ox-inline-links'));
                             // fade in or yet visible?
