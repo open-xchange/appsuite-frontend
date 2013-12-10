@@ -15,21 +15,18 @@
 define('io.ox/contacts/edit/view-form',
     ['io.ox/contacts/model',
      'io.ox/backbone/views',
-     'io.ox/backbone/forms',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/contacts/widgets/pictureUpload',
-     'io.ox/core/tk/attachments',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
-     'gettext!io.ox/contacts',
      'io.ox/core/capabilities',
      'io.ox/core/extensions',
-     'io.ox/core/date',
      'io.ox/backbone/mini-views',
      'io.ox/backbone/mini-views/attachments',
+     'gettext!io.ox/contacts',
      'less!io.ox/contacts/edit/style.less'
-    ], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, attachmentViews) {
+    ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt) {
 
     'use strict';
 
