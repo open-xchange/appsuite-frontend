@@ -622,7 +622,7 @@ define('io.ox/mail/actions',
 
                 // download plain EML?
                 if (!_.isObject(first.parent)) {
-                    return download.mails(data);
+                    return data.length === 1 ? download.mail(first) : download.mails(data);
                 }
 
                 if (first.msgref && _.isObject(first.parent)) {
