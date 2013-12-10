@@ -1123,64 +1123,70 @@ define('io.ox/mail/write/main',
                 }
 
                 // send!
-                mailAPI.send(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
+                mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
+                .always(function (result) {
+
                     if (result.error && !result.warnings) {
                         win.idle().show();
-                        // TODO: check if backend just says "A severe error occurred"
-                        notifications.yell(result);
-                        unblockReuse(mail.data.sendtype);
-                    } else {
-                        if (result.warnings) {
-                            //warnings
-                            notifications.yell('warning', result.warnings.error);
-                        }
-
-                        // we no longer yell on success - that's expected result
-
-                        // update base mail
-                        var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
-                            isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
-                            sep = mailAPI.separator,
-                            base, folder, id, msgrefs, ids;
-                        if (isReply || isForward) {
-                            //single vs. multiple
-                            if (mail.data.msgref) {
-                                msgrefs = [ mail.data.msgref ];
-                            } else {
-                                msgrefs = _.chain(mail.data.attachments)
-                                    .filter(function (attachment) {
-                                        return attachment.content_type === 'message/rfc822';
-                                    })
-                                    .map(function (attachment) { return attachment.msgref; })
-                                    .value();
-                            }
-                            //prepare
-                            ids = _.map(msgrefs, function (obj) {
-                                base = _(obj.split(sep));
-                                folder = base.initial().join(sep);
-                                id = base.last();
-                                return { folder_id: folder, id: id };
-                            });
-                            // update cache
-                            mailAPI.getList(ids).pipe(function (data) {
-                                // update answered/forwarded flag
-                                if (isReply || isForward) {
-                                    var len = data.length;
-                                    for (var i = 0; i < len; i++) {
-                                        if (isReply) data[i].flags |= 1;
-                                        if (isForward) data[i].flags |= 256;
-                                    }
-                                }
-                                $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data))
-                                .done(function () {
-                                    mailAPI.trigger('refresh.list');
-                                });
-                            });
-                        }
-                        app.dirty(false);
-                        app.quit();
-                        unblockReuse(mail.data.sendtype);
+                        notifications.yell(result); // TODO: check if backend just says "A severe error occurred"
+                        return;
                     }
+
+                    if (result.warnings) {
+                        notifications.yell('warning', result.warnings.error);
+                    } else {
+                        // success - some want to be notified, other's not
+                        if (settings.get('features/notifyOnSent', false)) {
+                            notifications.yell('success', gt('The email has been sent'));
+                        }
+                    }
+
+                    // update base mail
+                    var isReply = mail.data.sendtype === mailAPI.SENDTYPE.REPLY,
+                        isForward = mail.data.sendtype === mailAPI.SENDTYPE.FORWARD,
+                        sep = mailAPI.separator,
+                        base, folder, id, msgrefs, ids;
+
+                    if (isReply || isForward) {
+                        //single vs. multiple
+                        if (mail.data.msgref) {
+                            msgrefs = [ mail.data.msgref ];
+                        } else {
+                            msgrefs = _.chain(mail.data.attachments)
+                                .filter(function (attachment) {
+                                    return attachment.content_type === 'message/rfc822';
+                                })
+                                .map(function (attachment) { return attachment.msgref; })
+                                .value();
+                        }
+                        //prepare
+                        ids = _.map(msgrefs, function (obj) {
+                            base = _(obj.split(sep));
+                            folder = base.initial().join(sep);
+                            id = base.last();
+                            return { folder_id: folder, id: id };
+                        });
+                        // update cache
+                        mailAPI.getList(ids).pipe(function (data) {
+                            // update answered/forwarded flag
+                            if (isReply || isForward) {
+                                var len = data.length;
+                                for (var i = 0; i < len; i++) {
+                                    if (isReply) data[i].flags |= 1;
+                                    if (isForward) data[i].flags |= 256;
+                                }
+                            }
+                            $.when(mailAPI.caches.list.merge(data), mailAPI.caches.get.merge(data))
+                            .done(function () {
+                                mailAPI.trigger('refresh.list');
+                            });
+                        });
+                    }
+                    app.dirty(false);
+                    app.quit();
+                })
+                .always(function (result) {
+                    unblockReuse(mail.data.sendtype);
                     def.resolve(result);
                 });
             }
