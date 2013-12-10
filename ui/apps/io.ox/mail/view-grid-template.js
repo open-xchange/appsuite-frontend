@@ -21,6 +21,9 @@ define('io.ox/mail/view-grid-template',
 
     'use strict';
 
+    var colorLabelIconEmpty = 'icon-bookmark-empty',
+        colorLabelIcon = 'icon-bookmark';
+
     var that = {
 
         // main grid template
@@ -45,7 +48,7 @@ define('io.ox/mail/view-grid-template',
                             $.txt(' '),
                             threadSizeIcon = $('<i class="icon-caret-right">')
                         ),
-                        flag = $('<div class="flag">').text(_.noI18n('\u00A0')),
+                        flag = $('<i class="flag ' + colorLabelIconEmpty + '">'),
                         attachment = $('<i class="icon-paper-clip">'),
                         priority = $('<span class="priority">'),
                         $('<div class="subject">').append(
@@ -97,7 +100,8 @@ define('io.ox/mail/view-grid-template',
                 fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 var color = api.tracker.getColorLabel(data);
-                fields.flag.get(0).className = 'flag flag_' + (color || 0);
+                //var color = 'threadSize' in data ? api.tracker.getThreadColorLabel(data) : api.tracker.getColorLabel(data);
+                fields.flag.get(0).className = that.getLabelClass(color);
                 if (fields.account) {
                     fields.account.text(util.getAccountName(data));
                 }
@@ -153,6 +157,11 @@ define('io.ox/mail/view-grid-template',
                     });
                 });
             }
+        },
+
+        getLabelClass: function (color) {
+            color = color || 0;
+            return 'flag flag_' + color + ' ' + (color === 0 ? colorLabelIconEmpty : colorLabelIcon);
         },
 
         // simple grid-based list for portal & halo

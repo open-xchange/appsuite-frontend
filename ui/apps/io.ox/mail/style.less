@@ -24,11 +24,14 @@
 
 .vgrid-cell.mail .flag,
 .mail-detail .flag-dropdown {
-    padding: 0 0.5em 0 0.5em;
+    padding: 0;
     margin-left: 1em;
-    border-radius: 5px;
     float: right;
     .box-sizing(border-box);
+}
+
+.vgrid-cell.mail .flag {
+    font-size: 18px;
 }
 
 .vgrid-cell.mail .flag.flag_0 {
@@ -223,7 +226,11 @@
 .vgrid-cell .thread-summary-subject { }
 
 .vgrid-cell .thread-summary-left { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vgrid-cell .thread-summary-right { float: right; }
+.vgrid-cell .thread-summary-right {
+    float: right;
+    .flag { display: inline-block; margin-right: 10px; }
+    .flag.icon-bookmark-empty { color: #aaa }
+}
 
 /* Detail view */
 
@@ -374,25 +381,32 @@
     }
 
     .flag-dropdown {
-        width: 30px;
+
         height: 24px;
         margin: 14px 0 0 1em;
-        border: 1px solid rgba(0, 0, 0, 0.2);
         cursor: pointer;
-        float:right;
-    }
+        float: right;
 
-    .flag-dropdown ul {
-        font: 14px/20 @normalFontFamily;
-        /* right: -22px; */
-        right: 165px;
-        left: auto;
-        top: 125%;
-        width: 200px;
-    }
+        ul {
+            font: 14px/20 @normalFontFamily;
+            right: -20px;
+            left: auto;
+            top: 120%;
+            width: 200px;
+        }
 
-    .flag-dropdown a {
-        line-height: 24px;
+        a {
+            line-height: 24px;
+            text-decoration: none;
+        }
+
+        .flag-dropdown-icon.flag_0 {
+            color: #ddd;
+        }
+
+        .flag-dropdown-icon.flag_0:hover {
+            color: #aaa;
+        }
     }
 
     .flag-example {
@@ -601,16 +615,27 @@
 }
 
 /* flag colors */
-.flag_1  { background-color: @red; } /* red */
-.flag_7  { background-color: @orange; } /* orange */
-.flag_10 { background-color: @yellow; } /* yellow */
-.flag_6  { background-color: @greenLight; } /* light green */
-.flag_3  { background-color: @green; } /* green */
-.flag_9  { background-color: @blueLight; } /* light blue */
-.flag_2  { background-color: @blue; } /* blue */
-.flag_5  { background-color: @purple; } /* purple (former brown) */
-.flag_8  { background-color: @pink; } /* pink */
-.flag_4  { background-color: @grayLight; } /* dark gray */
+.flag_1  { color: @red; } /* red */
+.flag_7  { color: @orange; } /* orange */
+.flag_10 { color: @yellow; } /* yellow */
+.flag_6  { color: @greenLight; } /* light green */
+.flag_3  { color: @green; } /* green */
+.flag_9  { color: @blueLight; } /* light blue */
+.flag_2  { color: @blue; } /* blue */
+.flag_5  { color: @purple; } /* purple (former brown) */
+.flag_8  { color: @pink; } /* pink */
+.flag_4  { color: @grayLight; } /* dark gray */
+
+.flag_bg_1  { background-color: @red; } /* red */
+.flag_bg_7  { background-color: @orange; } /* orange */
+.flag_bg_10 { background-color: @yellow; } /* yellow */
+.flag_bg_6  { background-color: @greenLight; } /* light green */
+.flag_bg_3  { background-color: @green; } /* green */
+.flag_bg_9  { background-color: @blueLight; } /* light blue */
+.flag_bg_2  { background-color: @blue; } /* blue */
+.flag_bg_5  { background-color: @purple; } /* purple (former brown) */
+.flag_bg_8  { background-color: @pink; } /* pink */
+.flag_bg_4  { background-color: @grayLight; } /* dark gray */
 
 /* attachment preview */
 
@@ -682,6 +707,18 @@ h4.mail-attachment-preview {
         z-index: 12006;
     }
 
+    div.dropdown {
+        position: static;
+        &.open {
+            position: static;
+        }
+        .dropdown-menu {
+            top:auto;
+            left:auto;
+            right:auto;
+        }
+    }
+
     div.dropdown ul.dropdown-menu {
         z-index:auto; // reset bootstraps z-index
     }
@@ -695,13 +732,18 @@ h4.mail-attachment-preview {
     div.attachment-list {
         position: relative;
         z-index: 11002;
+        ul.dropdown-menu {
+            position: absolute;
+            z-index: 11003;
+        }
     }
     div.flag-dropdown {
-        position: static;
+        position: relative;
         z-index: 12004; // to be above attachment dropdowns
         ul.dropdown-menu {
-            position: relative;
+            position: absolute;
             z-index: 12005;
+            right: 0;
         }
     }
 }
