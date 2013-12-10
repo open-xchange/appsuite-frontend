@@ -1274,6 +1274,70 @@ a.button {
 }
 
 /* List View */
+.list-view-control {
+
+    .toolbar {
+
+        position: absolute;
+        display: none;
+        right: 0;
+        left: 0;
+        height: 40px - 1;
+        line-height: 40px - 1;
+        padding: 0 14px;
+        background-color: #fff;
+        z-index: 2;
+
+        a {
+            i { color: black; display: inline-block; }
+            text-decoration: none;
+        }
+
+        &.top {
+            top: 0;
+            border-bottom: 1px solid mix(@textColor, @background, 200%/15);
+        }
+
+        &.bottom {
+            bottom: 0;
+            border-top: 1px solid mix(@textColor, @background, 200%/15);
+        }
+
+        .grid-info {
+            text-align: center;
+            margin: 0 30px;
+            .ellipsis;
+            .folder-count {
+                font-size: 13px;
+                color: #888;
+            }
+        }
+
+        .grid-options.dropdown {
+            position: absolute;
+            right: 13px;
+            top: 0px;
+        }
+    }
+
+    .toolbar.top { display: none; }
+    .toolbar.bottom { display: none; }
+
+    &.toolbar-top-visible {
+        .toolbar.top { display: block; }
+        .list-view { top: 40px; }
+    }
+
+    &.toolbar-bottom-visible {
+        .toolbar.bottom { display: block; }
+        .list-view { bottom: 40px; }
+    }
+
+    .list-view {
+        height: auto;
+    }
+}
+
 .list-view {
 
     height: 100%;

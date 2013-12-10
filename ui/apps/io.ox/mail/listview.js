@@ -18,8 +18,9 @@ define('io.ox/mail/listview',
      'io.ox/core/api/account',
      'io.ox/core/tk/list',
      'io.ox/core/date',
+     'io.ox/mail/sort-options',
      'gettext!io.ox/core'
-    ], function (ext, util, api, account, ListView, date, gt) {
+    ], function (ext, util, api, account, ListView, date, sortoptions, gt) {
 
     'use strict';
 
@@ -338,9 +339,5 @@ define('io.ox/mail/listview',
         }
     });
 
-    return {
-        getInstance: function () {
-            return new MailListView();
-        }
-    };
+    return MailListView;
 });

@@ -15,6 +15,13 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
 
     'use strict';
 
+    // jasmin helper
+    function Done() {
+        var f = function () { return !!f.value; };
+        f.yep = function () { f.value = true; };
+        return f;
+    }
+
     describe('The ListView', function () {
 
         beforeEach(function () {
@@ -368,12 +375,6 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 this.collection.reset(_.range(N).map(createItem));
                 // set fixed height and overflow
                 this.list.$el.css({ height: '500px', overflow: 'auto' });
-
-                var self = this;
-                this.list.load = function () {
-                    self.bazinga = true;
-                    return _.wait(1000);
-                };
             });
 
             it('should contain correct number of items', function () {
@@ -389,17 +390,17 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
             });
 
             it('should load new data on scroll', function () {
-
+                // add paginate function
+                var list = this.list;
+                list.paginate = function () { return _.wait(200); };
                 // trigger scroll
-                this.list.$el.scrollTop(2000);
-
-                waitsFor(function () {
-                    return this.bazinga === true;
-                }, 'no data was loaded', 1000);
-
-                runs(function () {
-                    expect(this.list.getBusyIndicator().length).toBe(1);
-                });
+                list.$el.scrollTop(2000);
+                var done = new Done();
+                waitsFor(done);
+                setTimeout(function () {
+                    done.yep();
+                    expect(list.getBusyIndicator().length).toBe(1);
+                }, 100);
             });
         });
 

@@ -25,6 +25,7 @@ define('io.ox/mail/view-detail',
      'gettext!io.ox/mail',
      'io.ox/core/api/folder',
      'io.ox/core/emoji/util',
+     'io.ox/core/capabilities',
      'io.ox/mail/actions',
      'less!io.ox/mail/style'
     ], function (content, ext, links, util, api, http, coreUtil, account, settings, gt, folder, emoji) {

@@ -1,0 +1,52 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensions'], function (list, ext) {
+
+    'use strict';
+
+    var ListViewControl = Backbone.View.extend({
+
+        className: 'abs list-view-control',
+
+        initialize: function (options) {
+            this.listView = options.listView;
+            this.id = options.id || 'default';
+        },
+
+        render: function () {
+
+            var top = $('<nav class="toolbar top">'),
+                topPoint = ext.point(this.id + '/list-view/toolbar/top'),
+                bottom = $('<nav class="toolbar bottom">'),
+                bottomPoint = ext.point(this.id + '/list-view/toolbar/bottom');
+
+            if (topPoint.list().length) {
+                this.$el.addClass('toolbar-top-visible');
+                topPoint.invoke('draw', top);
+            }
+
+            if (bottomPoint.list().length) {
+                this.$el.addClass('toolbar-bottom-visible');
+                bottomPoint.invoke('draw', bottom);
+            }
+
+            console.log('ListViewControl.render', this.listView);
+            this.$el.append(top, this.listView.render().$el.addClass('abs'), bottom);
+
+            return this;
+        }
+    });
+
+    return ListViewControl;
+});

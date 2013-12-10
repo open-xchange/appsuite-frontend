@@ -29,6 +29,8 @@ define('io.ox/core/tk/list',
         40: 'cursor:down'
     };
 
+    var NOOP = function () { return $.when(); };
+
     var ListView = Backbone.View.extend({
 
         tagName: 'ul',
@@ -81,7 +83,7 @@ define('io.ox/core/tk/list',
             // really refresh?
             if (tail > 0) return;
             // load more
-            (this.busy().load() || $.when()).then(
+            (this.busy().paginate() || $.when()).then(
                 // success
                 function checkIfComplete() {
                     // if collection hasn't grown we assume that it's complete
@@ -96,19 +98,24 @@ define('io.ox/core/tk/list',
 
         // called when the view model changes (not collection models)
         onModelChange: function () {
-            this.collection.reset();
+            this.empty();
             this.busy();
-            (this.reload() || $.when()).always(this.idle);
+            (this.load() || $.when()).always(this.idle);
+        },
+
+        empty: function () {
+            this.idle();
+            this.toggleComplete(false);
+            this.$el.empty();
+            this.selection.reset();
+            this.$el.scrollTop(0);
         },
 
         onReset: function () {
-            this.idle();
-            this.toggleComplete(false);
-            this.$el.empty().append(
+            this.empty();
+            this.$el.append(
                 this.collection.map(this.renderListItem, this)
             );
-            this.selection.reset();
-            this.$el.scrollTop(0);
         },
 
         onAdd: function (model) {
@@ -203,13 +210,32 @@ define('io.ox/core/tk/list',
             return this.$el.children('.list-item');
         },
 
-        load: function () {
-            return $.when();
+        connect: function (facade) {
+
+            this.collection = facade.getDefaultCollection();
+            this.facade = facade;
+
+            this.load = function () {
+                // load data
+                return facade.load(this.model.toJSON())
+                .done(function (collection) {
+                    this.setCollection(collection);
+                    this.onReset();
+                }.bind(this));
+            };
+
+            this.paginate = function () {
+                return facade.paginate(this.model.toJSON());
+            };
+
+            this.reload = function () {
+                return facade.reload(this.model.toJSON());
+            };
         },
 
-        reload: function () {
-            return $.when();
-        },
+        load: NOOP,
+        paginate: NOOP,
+        reload: NOOP,
 
         // generate composite keys (might differ from _.cid)
         stringify: function (data) {
