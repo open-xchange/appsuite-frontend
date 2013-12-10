@@ -403,7 +403,7 @@ define('io.ox/mail/detail/content',
                 baton.source = $.trim(baton.source);
                 baton.isHTML = regHTML.test(baton.type);
                 baton.isText = !baton.isHTML;
-                baton.isLarge = baton.source.length > 1024 * 100; // > 100 KB
+                baton.isLarge = baton.source.length > 1024 * 32; // > 32 KB
 
                 // process source
                 ext.point('io.ox/mail/detail/source').invoke('process', $(), baton);
