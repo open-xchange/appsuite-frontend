@@ -927,23 +927,28 @@ define('io.ox/mail/write/main',
             data.msgref = data.folder_id + '/' + data.id;
 
             function getMail(data) {
-                if (data.content_type !== 'text/html' &&
+                if (data.content_type === 'text/html' && messageFormat === 'text') {
+                    if (settings.get('allowHtmlMessages', true) === true) {
+                        // we are editing a message with html format, keep it
+                        data.format = 'html';
+                        view.form.find('input[name=format][value=text]').prop('checked', false);
+                        view.form.find('input[name=format][value=html]').prop('checked', true);
+                        return $.Deferred().resolve(data);
+                    } else {
+                        // convert to plain text
+                        var options = _.extend({ view: 'text', edit: '1' }, mailAPI.reduce(data));
+                        return mailAPI.get(options, false);
+                    }
+                }
+                else if (data.content_type !== 'text/html' &&
                     messageFormat === 'text' &&
                     settings.get('allowHtmlMessages', true) === true
                 ) {
                     // for plain-text editing we need a fresh mail if allowHtmlMessages is turned on
                     var options = _.extend({ view: 'text', edit: '1' }, mailAPI.reduce(data));
-                    return mailAPI.get(options);
-                } else if (data.content_type === 'text/html' &&
-                           messageFormat === 'text' &&
-                           settings.get('allowHtmlMessages', true) === true
-                ) {
-                    // we are editing a message with html format, keep it
-                    data.format = 'html';
-                    view.form.find('input[name=format][value=text]').prop('checked', false);
-                    view.form.find('input[name=format][value=html]').prop('checked', true);
-                    return $.Deferred().resolve(data);
-                } else {
+                    return mailAPI.get(options, false);
+                }
+                else {
                     return $.Deferred().resolve(data);
                 }
             }
