@@ -526,11 +526,12 @@ define('io.ox/contacts/api',
     api.pictureHalo = function (/* [node], options */) {
 
         var args = _(arguments).toArray(), node, options, params, fallback, url, img;
+        // use copy of data object because of delete-statements
         if (args.length === 1) {
-            options = args[0];
+            options = _.clone(args[0]);
         } else {
             node = args[0];
-            options = args[1];
+            options = _.clone(args[1]);
         }
 
         // duck checks
@@ -577,6 +578,8 @@ define('io.ox/contacts/api',
             height: options.height,
             scaleType: options.scaleType
         });
+        // remove options
+        options = null;
 
         // remove empty values
         for (var k in params) {
