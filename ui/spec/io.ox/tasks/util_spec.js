@@ -80,44 +80,52 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
                 expect(result).toContain([5, gt('in 5 minutes')]);
             });
 
-            xit('should not contain past daytimes', function () {//temporarily disabled because refactored util class does not work with this
+            it('should not contain past daytimes', function () {
                 var myDate = new date.Local(),
-                    result;
+                    result,
+                    stub;
                 myDate.setHours(7);
-                result = util.buildOptionArray({time: myDate});
+                //super special UI time hack
+                stub = sinon.stub(date, "Local");
+                stub.returns(myDate);
+
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['d0', gt('this morning')]);
                 myDate.setHours(13);
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['d1', gt('by noon')]);
                 myDate.setHours(16);
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['d2', gt('this afternoon')]);
                 myDate.setHours(19);
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['d3', gt('tonight')]);
                 myDate.setHours(23);
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['d4', gt('late in the evening')]);
+
+                this.after(function () {stub = null});
             });
 
-            xit('should set weekdays correctly', function () {//temporarily disabled because refactored util class does not work with this
-                var myDate = new date.Local(),
+            it('should set weekdays correctly', function () {
+                var myDate = new date.Local(),//stub is still working in this test
                     result;
+
                 //today and tomorrow are special and should not be included in standard next ...day
                 myDate.setDate(myDate.getDate() - myDate.getDay());//sunday
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['w0', gt('next Sunday')]);
                 expect(result).not.toContain(['w1', gt('next Monday')]);
                 myDate.setDate(myDate.getDate() + 1);//monday
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['w1', gt('next Monday')]);
                 expect(result).not.toContain(['w2', gt('next Tuesday')]);
                 myDate.setDate(myDate.getDate() + 1);//tuesday
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['w2', gt('next Tuesday')]);
                 expect(result).not.toContain(['w3', gt('next Wednesday')]);
                 myDate.setDate(myDate.getDate() + 1);//wednesday
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['w3', gt('next Wednesday')]);
                 expect(result).not.toContain(['w4', gt('next Thursday')]);
                 myDate.setDate(myDate.getDate() + 1);//thursday
@@ -125,13 +133,15 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
                 expect(result).not.toContain(['w4', gt('next Thursday')]);
                 expect(result).not.toContain(['w4', gt('next Friday')]);
                 myDate.setDate(myDate.getDate() + 1);//friday
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['w4', gt('next Friday')]);
                 expect(result).not.toContain(['w4', gt('next Saturday')]);
                 myDate.setDate(myDate.getDate() + 1);//saturday
-                result = util.buildOptionArray({time: myDate});
+                result = util.buildOptionArray();
                 expect(result).not.toContain(['w4', gt('next Saturday')]);
                 expect(result).not.toContain(['w0', gt('next Sunday')]);
+
+                this.after(function () {stub = null});
             });
         });
 
