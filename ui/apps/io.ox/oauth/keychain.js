@@ -198,14 +198,12 @@ define.async('io.ox/oauth/keychain',
             })
             .done(function (interaction) {
                 window['callback_' + callbackName] = function (response) {
-                    if (response === true) {
-                        var accountCache = cache[service.id].accounts[account.id];
-                        delete window['callback_' + callbackName];
-                        popupWindow.close();
-                        self.trigger('update', accountCache);
-                        ox.trigger('refresh-portal');
-                        def.resolve(accountCache);
-                    }
+                    cache[service.id].accounts[response.data.id] = response.data;
+                    delete window['callback_' + callbackName];
+                    popupWindow.close();
+                    self.trigger('update', response.data);
+                    ox.trigger('refresh-portal');
+                    def.resolve(response.data);
                 };
                 popupWindow.location = interaction.authUrl;
             })
