@@ -31,16 +31,10 @@ define(['io.ox/core/desktop'], function (desktop) {
                     expect(this.window.search.getQuery()).toBe('foo');
                 });
 
-                it('should not trim trailing whitespace when option set to false', function () {
+                it('should not trim trailing whitespace', function () {
                     this.window.search.open();
                     this.window.search.setQuery('foo ');
                     expect(this.window.search.getQuery({trim: false})).toBe('foo ');
-                });
-
-                it('should trim trailing whitespace by default', function () {
-                    this.window.search.open();
-                    this.window.search.setQuery('foo ');
-                    expect(this.window.search.getQuery()).toBe('foo');
                 });
             });
         });

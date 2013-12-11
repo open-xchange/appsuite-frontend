@@ -1255,12 +1255,8 @@ define('io.ox/core/desktop',
                         return tmp;
                     },
 
-                    getQuery: function (options) {
-                        var value = self.nodes.searchField.val();
-                        if (_.extend({trim: true}, options).trim === true) {
-                            value = $.trim(value);
-                        }
-                        return value;
+                    getQuery: function () {
+                        return self.nodes.searchField.val();
                     },
 
                     setQuery: function (query) {
