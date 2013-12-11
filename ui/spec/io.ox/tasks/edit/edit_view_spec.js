@@ -25,7 +25,7 @@ define(['io.ox/tasks/edit/main',
                     //launch app
                     app = edit.getApp();
                     app.launch({ folderid: 555123456 });
-        
+
                     view = app.view,
                     node = view.$el,
                     model = view.model;
