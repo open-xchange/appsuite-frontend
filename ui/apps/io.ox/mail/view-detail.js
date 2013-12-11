@@ -1005,6 +1005,42 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    function sendDeliveryReceipt(e) {
+        e.preventDefault();
+        api.ack({ folder: e.data.folder_id, id: e.data.id, from: e.data.disp_notification_to });
+        $(this).attr('class', 'alert alert-success')
+            .text(gt('A delivery receipt has been sent'))
+            .delay(5000).fadeOut();
+    }
+
+    ext.point('io.ox/mail/detail/header').extend({
+        index: 196,
+        id: 'delivery-receipt',
+        draw: function (baton) {
+
+            // has proper attribute?
+            if (!baton.data.disp_notification_to) return;
+            // is unread?
+            if (!util.isUnseen(baton.data)) return;
+            // user does not ignore this feature?
+            if (!settings.get('sendDispositionNotification', false)) return;
+            // is not in drafts folder?
+            if (account.is('drafts', baton.data.folder_id)) return;
+
+            this.append(
+                $('<div class="alert alert-info cursor-pointer">')
+                .append(
+                     $('<a href="#">').text(gt('Send a delivery receipt')),
+                     $('<i>').append(
+                         $.txt(_.noI18n(' \u2013 ')), // long dash
+                         $.txt(gt('The sender wants to get a notification when you have read this email'))
+                     )
+                 )
+                .on('click', baton.data, sendDeliveryReceipt)
+            );
+        }
+    });
+
     if (_.device('smartphone')) {
         ext.point('io.ox/mail/detail');
         ext.point('io.ox/mail/detail').disable('inline-links');

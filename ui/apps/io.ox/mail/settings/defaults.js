@@ -21,6 +21,7 @@ define('io.ox/mail/settings/defaults', [], function () {
         'contactCollectOnMailAccess': false,
         'useFixedWidthFont': false,
         'appendVcard': false,
+        'sendDispositionNotification': false,
         'appendMailTextOnReply': true,
         'forwardMessageAs': 'Inline',
         'messageFormat': 'html',

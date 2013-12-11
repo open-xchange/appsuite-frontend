@@ -1602,6 +1602,16 @@ define('io.ox/mail/api',
             });
     };
 
+    // send delivery receipt
+    // data must include "from", "folder", and "id"
+    api.ack = function (data) {
+        return http.PUT({
+            module: 'mail',
+            params: { action: 'receipt_ack' },
+            data: data
+        });
+    };
+
     // change API's default options if allowHtmlMessages changes
     settings.on('change:allowHtmlMessages', function (e, value) {
         api.options.requests.get.view = value ? 'noimg' : 'text';

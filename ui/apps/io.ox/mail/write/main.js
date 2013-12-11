@@ -1050,6 +1050,7 @@ define('io.ox/mail/write/main',
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
+                disp_notification_to: !!data.disp_notification_to,
                 attachments: [attachments],
                 nested_msgs: []
             };

@@ -789,7 +789,11 @@ define('io.ox/mail/write/view-main',
                 // Attach vCard
                 $('<div>').addClass('section-item')
                 .css({ paddingTop: '1em', paddingBottom: '1em' })
-                .append(createCheckbox('vcard', gt('Attach my vCard')))
+                .append(createCheckbox('vcard', gt('Attach my vCard'))),
+                // Attach vCard
+                $('<div>').addClass('section-item')
+                .css({ paddingTop: '1em', paddingBottom: '1em' })
+                .append(createCheckbox('disp_notification_to', gt('Delivery Receipt')))
             );
 
             if (!Modernizr.touch) {
