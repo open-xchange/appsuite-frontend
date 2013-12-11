@@ -1966,8 +1966,10 @@ $(document)
           break
 
         case 40: // down arrow
-          e.preventDefault()
-          this.next()
+          if (!e.shiftKey) { // this is to avoid registering keyCode '(' as arrow down
+              e.preventDefault()
+              this.next()
+          }
           break
       }
 
