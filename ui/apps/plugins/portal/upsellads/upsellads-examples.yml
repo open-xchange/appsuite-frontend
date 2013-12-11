@@ -47,14 +47,14 @@ plugins/upsell//ads:
           text: <p>Group Calendars lets you take control of your life and give it order.</p><p>For business or your personal life this calendar is lets you plan the weeks ahead. Share calendars with others and confirm everyone's availability before arranging dates.</p>"
         slide2:
           type: text-top
-          image: ""
+          image: 'https://appsuite-dev.open-xchange.com/publications/files/1/upsell-images/149660/current?secret=bc9c99a0123f5e4733a64f3b34368ab2'
           text: "<p>Today everyone has more than one device with different information on each.</p><p>Mobile Sync lets you synchronise all your information between all your devices regardless of type and easily.</p>"
         slide3:
           type: text-only
           text: "<p>Today everyone has more than one device: Business phone, personal phone, tablet or laptop. The problem is your data is spread between them!</p><p>Mobile Sync lets you seamlessly synchronise all your information (contacts, calendar appointments, emails etc.) between all your devices regardless of type.</p><p>This is not just convenient, but if your device gets damaged of lost, it is a breeze to restore everything without any hassle.</p>"
         slide4:
           type: image-only
-          image: "https://appsuite-dev.open-xchange.com/publications/files/1/upsell-images/149627/current?secret=bc9c99a0123f5e4733a64f3b34368ab2&width=2560&height=801&scaleType=contain"
+          image: "https://appsuite-dev.open-xchange.com/publications/files/1/upsell-images/149627/current?secret=bc9c99a0123f5e4733a64f3b34368ab2"
         slide5:
           type: text-only
           text: "<p>Keeping track of your appointments is one thing, but organising your life is something else. The Group Calendar lets you take control of your life and give it order.</p><p>This calendar is lets you plan the days and weeks ahead. Share calendars with others and confirm everyone's availability before you even arrange a meeting.</p>"
