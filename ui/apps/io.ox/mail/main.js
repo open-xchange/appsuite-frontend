@@ -39,7 +39,7 @@ define('io.ox/mail/main',
             e.preventDefault();
             var option = $(this).attr('data-option'),
                 grid = e.data.grid;
-            if (/^(603|607|610|102|thread|from-to)$/.test(option)) {
+            if (/^(603|607|608|610|102|thread|from-to)$/.test(option)) {
                 grid.prop('sort', option).refresh();
                 // sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
                 //grid.updateSettings('sort', option);
@@ -290,6 +290,7 @@ define('io.ox/mail/main',
                 buildOption('from-to', gt('From')),
                 buildOption(102, gt('Label')),
                 buildOption(607, gt('Subject')),
+                buildOption(608, gt('Size')),
                 $('<li class="divider">'),
                 buildOption('asc', gt('Ascending')),
                 buildOption('desc', gt('Descending')),

@@ -600,7 +600,7 @@ define('io.ox/core/tk/vgrid',
                     node = row.node[0];
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
                     // update fields
-                    row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {});
+                    row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {}, self);
                     node.style.top = shift + (offset + i) * itemHeight + 'px';
                     tmp[i] = row.node;
                 }

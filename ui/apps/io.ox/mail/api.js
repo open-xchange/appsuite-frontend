@@ -264,7 +264,7 @@ define('io.ox/mail/api',
             },
             list: {
                 action: 'list',
-                columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
                 extendColumns: 'io.ox/mail/api/list'
             },
             get: {

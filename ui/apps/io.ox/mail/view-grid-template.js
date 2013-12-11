@@ -17,9 +17,10 @@ define('io.ox/mail/view-grid-template',
      'io.ox/core/tk/vgrid',
      'io.ox/core/api/account',
      'io.ox/core/emoji/util',
+     'io.ox/core/strings',
      'gettext!io.ox/core/mail',
      'less!io.ox/mail/style.less'
-    ], function (util, api, VGrid, account, emoji, gt) {
+    ], function (util, api, VGrid, account, emoji, strings, gt) {
 
     'use strict';
 
@@ -85,7 +86,7 @@ define('io.ox/mail/view-grid-template',
                     account: account
                 };
             },
-            set: function (data, fields, index) {
+            set: function (data, fields, index, prev, grid) {
                 fields.priority.empty().append(util.getPriority(data));
                 var subject = _.escape($.trim(data.subject)),
                     fromlist = data.from || [['', '']],
@@ -111,7 +112,12 @@ define('io.ox/mail/view-grid-template',
                 fields.from.empty().append(
                     util.getFrom(data, (data.threadSize || 1) === 1 && account.is('sent|drafts', data.folder_id) ? 'to' : 'from')
                 );
-                fields.date.text(_.noI18n(util.getTime(data.received_date)));
+                fields.date.text(_.noI18n(
+                    // sort by size?
+                    grid.prop('sort') === '608' ?
+                        strings.fileSize(data.size, 1) :
+                        util.getTime(data.received_date)
+                ));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 var color = api.tracker.getColorLabel(data);
                 //var color = 'threadSize' in data ? api.tracker.getThreadColorLabel(data) : api.tracker.getColorLabel(data);
