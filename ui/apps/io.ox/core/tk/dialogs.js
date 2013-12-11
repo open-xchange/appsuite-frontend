@@ -648,7 +648,7 @@ define('io.ox/core/tk/dialogs',
                     }
                     pane.empty();
 
-                    if (!options.focus) {
+                    if (options.focus) {
                         lastFocus = lastFocus.closest(':visible');
                         lastFocus.focus();
                     }
