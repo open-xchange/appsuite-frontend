@@ -14,30 +14,30 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
 ], function (util, gt, date) {
     describe('tasks utility', function () {
         var options = {
-                testData: {
-                    'status': 2,
-                    'title': undefined
+            testData: {
+                'status': 2,
+                'title': undefined
+            },
+            testDataArray: [
+                {
+                    'status': 3,
+                    'title': 'Top Test'
+                }, {
+                    'end_date': 1895104800000,
+                    'status': 1,
+                    'title': 'Blabla'
                 },
-                testDataArray: [
-                    {
-                        'status': 3,
-                        'title': 'Top Test'
-                    }, {
-                        'end_date': 1895104800000,
-                        'status': 1,
-                        'title': 'Blabla'
-                    },
-                    {
-                        'end_date': 1895104800000,
-                        'status': 1,
-                        'title': 'Abc'
-                    }, {
-                        'status': 1,
-                        'title': 'Test Title',
-                        'end_date': 1384999200000
-                    }
-                    ]
-            };
+                {
+                    'end_date': 1895104800000,
+                    'status': 1,
+                    'title': 'Abc'
+                }, {
+                    'status': 1,
+                    'title': 'Test Title',
+                    'end_date': 1384999200000
+                }
+            ]
+        };
         describe('interpreting a task', function () {
 
             it('should work on a copy', function () {
@@ -179,14 +179,14 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
 
             it('should sort overdue tasks to first position', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[0]).toEqual({'status': 1, 'title': 'Test Title','end_date': 1384999200000 });
+                expect(result[0]).toEqual({'status': 1, 'title': 'Test Title', 'end_date': 1384999200000 });
             });
 
             it('should sort done tasks to last position', function () {
                 var result = util.sortTasks(options.testDataArray);
                 expect(result[3]).toEqual({'status': 3, 'title': 'Top Test'});
             });
-            
+
             it('should sort same dates alphabetically', function () {
                 var result = util.sortTasks(options.testDataArray);
                 expect(result[1]).toEqual({'end_date': 1895104800000, 'status': 1, 'title': 'Abc'});

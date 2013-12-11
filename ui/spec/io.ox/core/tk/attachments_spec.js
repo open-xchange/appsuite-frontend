@@ -22,30 +22,30 @@ define(['io.ox/core/extensions',
 
         describe('FileUploadWidget:', function () {
             describe('when capability "infostore" is disabled', function () {
-                beforeEach(function() {
+                beforeEach(function () {
                     ox.testUtils.modules.caps('', 'io.ox/core/tk/attachments', attachments);
                 });
-                it('and ox.drive is enabled "Files" button should be hidden' , function () {
+                it('and ox.drive is enabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: true});
                     expect(node.find('[data-action="addinternal"]').length).toBeFalsy();
-                })
-                it('and ox.drive is disabled "Files" button should be hidden' , function () {
+                });
+                it('and ox.drive is disabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: false});
                     expect(node.find('[data-action="addinternal"]').length).toBeFalsy();
-                })
+                });
             });
             describe('when capability "infostore" is enabled', function () {
-                beforeEach(function() {
+                beforeEach(function () {
                     ox.testUtils.modules.caps('infostore', 'io.ox/core/tk/attachments', attachments);
                 });
-                it('and ox.drive is enabled "Files" button should be shown' , function () {
+                it('and ox.drive is enabled "Files" button should be shown', function () {
                     var node = attachments.fileUploadWidget({drive: true});
                     expect(node.find('[data-action="addinternal"]').length).toBeTruthy();
-                })
-                it('and ox.drive is disabled "Files" button should be hidden' , function () {
+                });
+                it('and ox.drive is disabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: false});
                     expect(node.find('[data-action="addinternal"]').length).toBeFalsy();
-                })
+                });
             });
         });
 
@@ -57,7 +57,7 @@ define(['io.ox/core/extensions',
                 });
             },
             createList = function (baton, file, mail) {
-                if (mail) baton.app = {app: { attributes: { name:'io.ox/mail/write' }}};
+                if (mail) baton.app = {app: { attributes: { name: 'io.ox/mail/write' }}};
 
                 new attachments.EditableFileList({
                         id: 'attachment_list',
@@ -126,9 +126,7 @@ define(['io.ox/core/extensions',
 
                         return 'done';
                     });
-                })
-
-
+                });
             });
 
             describe('check quota while', function () {

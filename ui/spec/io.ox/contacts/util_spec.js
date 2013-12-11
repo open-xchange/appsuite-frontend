@@ -11,12 +11,12 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define(["io.ox/contacts/util"], function (util) {
+define(['io.ox/contacts/util'], function (util) {
 
-    "use strict";
+    'use strict';
 
     var testPerson = {
-        image1_url: "/ajax/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489",
+        image1_url: '/ajax/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489',
         first_name: 'Georg',
         last_name: 'Tester',
         display_name: 'Dr. Tester, Georg',
@@ -29,18 +29,21 @@ define(["io.ox/contacts/util"], function (util) {
         city_business: 'city_business',
         city_home: 'city_home'
     },
-        testPersonWOPic = {
+    testPersonWOPic = {
         first_name: 'Georg',
         last_name: 'Tester',
-    },
-        testDistList = {
+    };
+    /*
+    testDistList = {
         mark_as_distributionlist: true
     },
-        testPersonHttps = {
-        image1_url: "https://www.test.de/ajax/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489",
-    };
 
-    describe("Contact util", function () {
+    testPersonHttps = {
+        image1_url: 'https://www.test.de/ajax/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489',
+    };
+    */
+
+    describe('Contact util', function () {
 
         it('should return a prepared full contact name for sorting purpose', function () {
             expect(util.getSortName(testPerson)).toEqual('tester, georg');

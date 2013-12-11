@@ -120,7 +120,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                 });*/
                 this.after(function () {//remove node
                     var editnode = $.find('.task-edit-wrapper');
-                    if(editnode.length === 1) {
+                    if (editnode.length === 1) {
                         $(editnode[0]).remove();
                     }
                 });
@@ -192,7 +192,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                             return $('.io-ox-dialog-popup').length === 1;
                         }, 'open popup', ox.testTimeout);
                     });
-    
+
                     this.after(function () {//close popup
                         $('.io-ox-dialog-popup [data-action="cancel"]').click();
                     });

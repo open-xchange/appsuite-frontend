@@ -22,7 +22,8 @@ define(['io.ox/core/api/mailfilter',
 //         sharedExamplesFor(api);
 
         var listResult = {
-                'data': [{
+            'data': [
+                {
                     'position': 0,
                     'id': 0,
                     'flags': ['vacation'],
@@ -47,40 +48,40 @@ define(['io.ox/core/api/mailfilter',
                         'values': ['test@test.open-xchange.com'],
                         'comparison': 'contains'
                     },
-                    'actioncmds': [{
+                    'actioncmds': [
+                        {
                             'to': 'test2@test.open-xchange.com',
                             'id': 'redirect'
-                        }, {
-                            'id': 'keep'
-                        }
+                        },
+                        { 'id': 'keep' }
                     ],
                     'rulename': 'autoforward',
                     'active': false
-                }]
-            };
-
+                }
+            ]
+        };
 
         beforeEach(function () {
             this.server.autoRespond = false;
 
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
-                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify(listResult));
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(listResult));
             });
 
             this.server.respondWith('PUT', /api\/mailfilter\?action=delete/, function (xhr) {
-                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"data":null}');
             });
 
             this.server.respondWith('PUT', /api\/mailfilter\?action=new/, function (xhr) {
-                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":1}');
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"data":1}');
             });
 
             this.server.respondWith('PUT', /api\/mailfilter\?action=update/, function (xhr) {
-                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"data":null}');
             });
 
             this.server.respondWith('PUT', /api\/mailfilter\?action=reorder/, function (xhr) {
-                xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data":null}');
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"data":null}');
             });
         });
 

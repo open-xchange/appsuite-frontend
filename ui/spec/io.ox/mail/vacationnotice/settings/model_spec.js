@@ -14,8 +14,8 @@
 define(['io.ox/mail/vacationnotice/settings/model'], function (model) {
 
     'use strict';
-        
-    var dataViaModel = { 
+
+    var dataViaModel = {
         'activateTimeFrame': false,
         'addresses': ['tester@open-xchange.com'],
         'dateFrom': 1385655152016,

@@ -15,7 +15,8 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
     'use strict';
 
-    var resultWithFlag = { timestamp: 1378223251586,
+    var resultWithFlag = {
+        timestamp: 1378223251586,
         'data': [{
             'position': 1,
             'id': 1,
@@ -33,7 +34,8 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         }]
     },
 
-    resultWithFlagTwoMails = { timestamp: 1378223251586,
+    resultWithFlagTwoMails = {
+        timestamp: 1378223251586,
         'data': [{
             'position': 1,
             'id': 1,
@@ -50,7 +52,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             'active': true
         }]
     },
-    
+
     createDaysObject = function (from, to) {
         var objectOfValues = {};
         for (var i = from; i <= to; i += 1) {
@@ -80,7 +82,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         });
 
         it('should draw the form', function () {
-            
+
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
             expect(this.node.find('input[name="subject"]').length).toBe(1);
@@ -92,7 +94,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         });
 
         it('should check only one alias', function () {
-            
+
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
             expect(this.node.find('input[type="checkbox"]:checked').length).toBe(1);
@@ -117,7 +119,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         });
 
         it('should check two aliases', function () {
-            
+
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
             expect(this.node.find('input[type="checkbox"]:checked').length).toBe(2);

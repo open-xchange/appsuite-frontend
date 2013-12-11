@@ -17,9 +17,8 @@ define(['io.ox/files/main',
 
 
     describe('files app', function () {
-        var app,
-            loadapp = $.Deferred(),
-            suite = {}
+        var loadapp = $.Deferred(),
+            suite = {},
             //init app only once
             setup = _.once(
                 function () {
@@ -34,13 +33,13 @@ define(['io.ox/files/main',
                                 //load data
                                 perspective.selection.on('update', function () {
                                     loadapp.resolve();
-                                })
+                                });
                             });
                     });
                 }
             );
         //store data
-        suite.data = _.uniq(all.data, function (item, key, a) {
+        suite.data = _.uniq(all.data, function (item) {
                 return item[0];
             });
 
@@ -78,7 +77,7 @@ define(['io.ox/files/main',
             });
             it('that filters duplicates', function () {
                 //hint: fake servers all response contains a dublette
-                var triggered;
+                //var triggered;
 
                 //check inital handling
                 expect(suite.pers.baton.allIds.length).toBe(suite.data.length);

@@ -84,7 +84,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                         );
                         return { name: name };
                     },
-                    set: function (data, fields, index) {
+                    set: function (data, fields) {
                         fields.name.text(data.name);
                     }
                 });
@@ -172,7 +172,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                         );
                         return { name: name };
                     },
-                    set: function (data, fields, index) {
+                    set: function (data, fields) {
                         fields.name.text(data.name);
                     }
                 });
@@ -202,8 +202,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                         var testDataNode = this.node.find('.testData'),
                             checkboxes = testDataNode.find('input:visible'),
                             vgrid = this.vgrid,
-                            selection = this.vgrid.selection,
-                            testData = this.testData;
+                            selection = this.vgrid.selection;
 
                         selection.clear();
                         checkboxes.each(function (index, checkbox) {
@@ -233,7 +232,6 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                             checkboxes = testDataNode.find('input:visible'),
                             vgrid = this.vgrid,
                             selection = this.vgrid.selection,
-                            testData = this.testData,
                             selectAll = vgrid.getToolbar().find('input', 'label.select-all');
 
                         selection.clear();

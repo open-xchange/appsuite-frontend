@@ -16,12 +16,10 @@
 define(['io.ox/core/extensions',
        'io.ox/core/cache'], function (ext, cache) {
 
-    "use strict";
+    'use strict';
 
     // test objects
-    var TIMEOUT = ox.testTimeout,
-        testKey = 'testkey',
-        testValue = 'ABC';
+    var TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {
@@ -38,7 +36,7 @@ define(['io.ox/core/extensions',
     /*
      * Suite: Cache Test
      */
-    describe("Caching with ObjectCache", function () {
+    describe('Caching with ObjectCache', function () {
 
         var testStorage = new cache.ObjectCache('TEST_ObjectCache');
 
@@ -49,7 +47,6 @@ define(['io.ox/core/extensions',
         var newerTimeStamp = currentTimeStamp + 1000;
 
         var testKey = 'A.ABC';
-        var testKeyRegex = 'Simple';
         var testData1 = {'folder_id': 'A', 'id': 'ABC', 'TEST': '1'};
         var testData2 = {'folder_id': 'A', 'id': 'ABC', 'TEST': '2'};
         var testData3 = {'folder_id': 'A', 'id': 'ABC', 'TEST': '3'};
@@ -373,7 +370,7 @@ define(['io.ox/core/extensions',
             waitsFor(loaded, 'Could not get key', TIMEOUT);
 
             testStorage.add(testData1).pipe(function () {
-                return testStorage.merge(testData2).pipe(function (test) {
+                return testStorage.merge(testData2).pipe(function () {
                     return testStorage.get(testData1);
                 });
             }).done(function (value) {
@@ -392,8 +389,8 @@ define(['io.ox/core/extensions',
 
             $.when(
                 // add objects (with id … values are strings)
-                c.add({id: "100"}),
-                c.add({id: "102"})
+                c.add({id: '100'}),
+                c.add({id: '102'})
             ).then(function () {
                 return c.size().done(function (r) {
                     expect(r).toBe(2);

@@ -222,8 +222,8 @@ function (date, ext) {
             });
 
             it('Date with different years', function () {
-                    var result = this.d.formatInterval(new D(2013, 4, 16, 12, 34), date.DATE);
-                    expect(result).toEqual('16. Mai 2012 - 16. Mai 2013');
+                var result = this.d.formatInterval(new D(2013, 4, 16, 12, 34), date.DATE);
+                expect(result).toEqual('16. Mai 2012 - 16. Mai 2013');
             });
 
             it('Time with different timezones', function () {

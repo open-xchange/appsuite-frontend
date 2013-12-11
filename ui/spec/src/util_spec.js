@@ -172,7 +172,7 @@ define([], function () {
         });
 
         describe('_.formatError', function () {
-            e = {
+            var e = {
                 error: 'processing of "%1$s" "%2$s" "%3$s" fails',
                 error_params: ['gvr', 'art', 'stk'],
                 code: 1,

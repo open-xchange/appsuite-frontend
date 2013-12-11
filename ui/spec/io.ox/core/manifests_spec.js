@@ -39,7 +39,7 @@ define(['io.ox/core/manifests'], function (manifests) {
                 });
 
                 it('should return a list of plugins for a given extension point name', function () {
-                    manifests.manager.pluginPoints['testPoint'] = [{
+                    manifests.manager.pluginPoints.testPoint = [{
                         path: 'path/to/plugin2'
                     }, {
                         path: 'path/to/plugin1'
@@ -47,7 +47,7 @@ define(['io.ox/core/manifests'], function (manifests) {
 
                     expect(manifests.manager.pluginsFor('testPoint')).toEqual(['path/to/plugin2', 'path/to/plugin1']);
 
-                    delete manifests.manager.pluginPoints['testPoint'];
+                    delete manifests.manager.pluginPoints.testPoint;
                 });
             });
         });

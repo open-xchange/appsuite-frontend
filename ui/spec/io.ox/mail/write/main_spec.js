@@ -43,8 +43,8 @@ define(['io.ox/mail/write/main',
                     },
                     setupFakeServer = function (server) {
                         server.respondWith('PUT', /api\/mail\?action=new/, function (xhr) {
-                            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                                JSON.stringify({"data": "default0/Inbox/Sent Items/42"})
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                                JSON.stringify({'data': 'default0/Inbox/Sent Items/42'})
                             );
                         });
                     };
@@ -56,8 +56,8 @@ define(['io.ox/mail/write/main',
                         attachments: [
                             {/* content, we don’t care */},
                             {
-                               disp: 'attachment',
-                               size: 123412
+                                disp: 'attachment',
+                                size: 123412
                             }
                         ]
                     };

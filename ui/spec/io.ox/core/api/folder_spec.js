@@ -29,14 +29,14 @@ define(['shared/examples/for/api',
                     '21' : '2'
                 };
 
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                 JSON.stringify({timestamp: 1378223251586, data: {id: sendObject.id, folder_id: parentFolderIDs[sendObject.id]}})
             );
         });
 
         //sends a list of subfolders
         server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                 JSON.stringify({
                     timestamp: 1368791630910,
                     data: [
@@ -50,25 +50,28 @@ define(['shared/examples/for/api',
 
         //sends a path from a folder
         server.respondWith('GET', /api\/folders\?action=path/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                JSON.stringify({"timestamp": 9223372036854775807,
-                    "data": [
-                        ["3", 0, 0, 0, 0, 0, "2", null, "Subfolder", "infostore", 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, "Name"],
-                        ["2", 0, 0, 0, 0, 0, "1", null, "Folder", "infostore", 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, "Name"],
-                        ["1", 0, 0, 0, 0, 0, "0", null, "Root", "infostore", 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, "Name"]]})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                JSON.stringify({
+                    'timestamp': 9223372036854775807,
+                    'data': [
+                        ['3', 0, 0, 0, 0, 0, '2', null, 'Subfolder', 'infostore', 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, 'Name'],
+                        ['2', 0, 0, 0, 0, 0, '1', null, 'Folder', 'infostore', 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, 'Name'],
+                        ['1', 0, 0, 0, 0, 0, '0', null, 'Root', 'infostore', 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, 'Name']
+                    ]
+                })
             );
         });
 
         //sends the created folder
         server.respondWith('PUT', /api\/folders\?action=(new|delete)/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                 JSON.stringify({timestamp: 1378223251586, data: '21'})
             );
         });
 
         //responds with empty message to allVisible calls
         server.respondWith(/api\/folders\?action=allVisible/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                 JSON.stringify({timestamp: 1378223251586, data: []})
             );
         });
@@ -307,7 +310,7 @@ define(['shared/examples/for/api',
         describe('hidden objects', function () {
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
-                    xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                                 JSON.stringify({
                                     timestamp: 1368791630910,
                                     data: [

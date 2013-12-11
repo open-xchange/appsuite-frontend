@@ -197,7 +197,6 @@ define(['io.ox/files/api',
                 //TODO
             });
             describe('to construct concrete api urls', function () {
-                var mode, options = {};
                 it('to view a file', function () {
                     var resp = api.getUrl(locked, 'view'),
                         exp = '/api/files/my-test-file.txt?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&delivery=view';

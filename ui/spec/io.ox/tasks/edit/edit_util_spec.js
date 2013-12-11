@@ -137,7 +137,7 @@ define(['io.ox/tasks/edit/util',
             it('should build fluid grid row', function () {
                 var parent = $('<div>'),
                     nodes = [$('<div>'), $('<span>'), $('<input type="text">'), $('<label>')],
-                    widths = [1,2,6,3],
+                    widths = [1, 2, 6, 3],
                     row;
 
                 util.buildRow(parent, nodes, widths, false);
@@ -154,7 +154,7 @@ define(['io.ox/tasks/edit/util',
             it('should wrap items', function () {
                 var parent = $('<div>'),
                     nodes = [$('<div>'), $('<span>'), $('<input type="text">'), $('<label>')],
-                    widths = [1,2,6,3],
+                    widths = [1, 2, 6, 3],
                     row;
 
                 util.buildRow(parent, nodes, widths, false);
@@ -172,7 +172,7 @@ define(['io.ox/tasks/edit/util',
             it('should set correct widths and offsets', function () {
                 var parent = $('<div>'),
                     nodes = [$('<div>'), $('<span>'), $('<input type="text">'), $('<label>')],
-                    widths = [1 ,2, 6, [1, 2]],
+                    widths = [1, 2, 6, [1, 2]],
                     row;
 
                 util.buildRow(parent, nodes, widths, false);
@@ -192,7 +192,7 @@ define(['io.ox/tasks/edit/util',
             it('should fill grid cells is parameter is set', function () {
                 var parent = $('<div>'),
                     nodes = [$('<div>'), $('<span>'), $('<input type="text">'), $('<label>')],
-                    widths = [1 ,2, 6, [1, 2]],
+                    widths = [1, 2, 6, [1, 2]],
                     row;
 
                 util.buildRow(parent, nodes, widths, true);
@@ -218,9 +218,9 @@ define(['io.ox/tasks/edit/util',
                 popupWrapper = util.buildConfirmationPopup(testModel, dialogs, false);
                 expect(popupWrapper.popup).toBeDefined();
                 expect(popupWrapper.message).toBeDefined();
-                
+
                 popupWrapper.popup.close();
-                
+
                 //Array
                 popupWrapper = util.buildConfirmationPopup(testData.testData, dialogs, true);
                 expect(popupWrapper.popup).toBeDefined();
@@ -252,7 +252,7 @@ define(['io.ox/tasks/edit/util',
                     popupWrapper;
 
                 popupWrapper = util.buildConfirmationPopup(testModel, dialogs, false);
-                message = popupWrapper.message;
+                var message = popupWrapper.message;
                 body = popupWrapper.popup.getBody();
                 footer = popupWrapper.popup.getFooter();
 

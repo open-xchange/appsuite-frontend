@@ -56,7 +56,7 @@ define(['io.ox/files/fluid/view-detail',
                 expect(node.is(':empty')).toBeTruthy;
             });
             it('stores name of opening app', function () {
-                var node = view.draw(baton, app);
+                view.draw(baton, app);
                 expect(baton.openedBy).toEqual('testapp');
                 delete baton.openedBy;
             });
@@ -64,7 +64,7 @@ define(['io.ox/files/fluid/view-detail',
         describe('creates a DOM structure', function () {
             beforeEach(function () {
                 this.node = view.draw(baton);
-            })
+            });
             describe('with a container that', function () {
                 it('has class file-details', function () {
                     expect(this.node.hasClass('file-details')).toBeTruthy;

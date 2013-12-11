@@ -272,7 +272,7 @@ define(
             mailAPI.get({ folder: 'default0/INBOX/Sent', id: '1337' }).done(function (sent) {
                 done.yep();
                 expect(sent.subject).toBe('Test: Hello World');
-                expect(sent.to).toEqual([['Otto Xentner',"otto.xentner@open-xchange.com"]]);
+                expect(sent.to).toEqual([['Otto Xentner', 'otto.xentner@open-xchange.com']]);
                 expect(sent.cc).toEqual([]);
                 expect(sent.bcc).toEqual([]);
                 expect(sent.priority).toBe(3);
