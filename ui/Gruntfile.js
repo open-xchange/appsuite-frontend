@@ -31,11 +31,15 @@ module.exports = function (grunt) {
             },
             karma: {
                 files: ['spec/**/*_spec.js', 'build/core'],
-                tasks: ['newer:concat:specs', 'karma:unit:run']
+                tasks: ['newer:jshint:specs', 'newer:concat:specs', 'karma:unit:run']
             },
             less: {
                 files: 'apps/**/*.less',
                 tasks: ['less']
+            },
+            bootjs: {
+                files: ['<%= jshint.bootjs.src %>'],
+                tasks: ['concat:bootjs', 'uglify:bootjs']
             },
             all: {
                 files: ['<%= jshint.all.src %>'],
@@ -46,12 +50,18 @@ module.exports = function (grunt) {
         clean: ['build/', 'node_modules/grunt-newer/.cache'],
         local: local,
         jshint: {
+            options: {
+                jshintrc: true,
+                ignores: ['apps/io.ox/core/date.js', 'spec/io.ox/core/date_spec.js'] // date.js has some funky include stuff we have to figure out
+            },
+            bootjs: {
+                src: ['src/*.js']
+            },
+            specs: {
+                src: ['spec/**/*_spec.js']
+            },
             all: {
-                src: ['Gruntfile.js', 'apps/**/*.js', 'src/*.js'],
-                options: {
-                    jshintrc: '.jshintrc',
-                    ignores: ['apps/io.ox/core/date.js'] // date.js has some funky include stuff we have to figure out
-                }
+                src: ['Gruntfile.js', 'apps/**/*.js']
             }
         },
         jsonlint: {
