@@ -430,7 +430,7 @@ define('io.ox/core/api/folder',
         remove: function (options) {
 
             require(['io.ox/core/config'], function (config) {
-                var folderInConfig = config.get('modules.mail.contactCollectFolder');
+                var folderInConfig = config.get('modules.mail.contactCollectFolder') || '';
 
                 if (folderInConfig.toString() === options.folder) {
                     notifications.yell('success', gt('The settings for collecting contacts in this folder will become disabled when you enter the application the next time.'));
