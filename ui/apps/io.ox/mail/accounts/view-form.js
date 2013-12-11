@@ -12,17 +12,16 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/accounts/view-form',
+define.async('io.ox/mail/accounts/view-form',
     ['io.ox/core/tk/view',
      'io.ox/core/notifications',
      'io.ox/core/api/account',
      'text!io.ox/mail/accounts/account_detail.html',
      'settings!io.ox/mail',
      'gettext!io.ox/settings/settings'
-    ], function (View, notifications, AccountAPI, tmpl, settings, gt) {
+    ], function (View, notifications, accountAPI, tmpl, settings, gt) {
 
     'use strict';
-
 
     var staticStrings =  {
             TITLE_ACCOUNT_SETTINGS: gt('Account settings'),
@@ -79,8 +78,10 @@ define('io.ox/mail/accounts/view-form',
 
             data.name = data.personal = data.primary_address;
 
-            return AccountAPI.validate(data);
+            return accountAPI.validate(data);
         },
+
+        defaultDisplayName = '',
 
         AccountDetailView = Backbone.View.extend({
             tagName: 'div',
@@ -93,9 +94,17 @@ define('io.ox/mail/accounts/view-form',
                 //check if login and mailaddress are synced
                 this.inSync = false;
 
-                oldModel = _.copy(this.model.attributes, true);
+                // use mail display name?
+                var personal = this.model.get('personal');
+                if (!personal) {
+                    this.model.set('personal', defaultDisplayName);
+                } else if (personal === ' ') {
+                    this.model.set('personal', '');
+                }
 
-                Backbone.Validation.bind(this, {selector: 'data-property', forceUpdate: true});//forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
+                oldModel = _.copy(this.model.attributes, true);
+                // forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
+                Backbone.Validation.bind(this, { selector: 'data-property', forceUpdate: true });
             },
             render: function () {
                 var self = this,
@@ -208,31 +217,41 @@ define('io.ox/mail/accounts/view-form',
                         // dialog is already gone, tell the user that something is happening
                         notifications.yell('busy', gt('Updating account data. This might take a few seconds.'));
                     }
-                    self.model.save()
-                    .done(function (data) {
-                        self.dialog.close();
-                        if (self.collection) {
-                            self.collection.add([data]);
+
+                    // revert default display name
+                    var personal = self.model.get('personal');
+                    if (personal === defaultDisplayName) {
+                        self.model.set('personal', null, { silent: true }); // empty!
+                    } else if ($.trim(personal) === '') {
+                        self.model.set('personal', ' ', { silent: true }); // yep, one space!
+                    }
+
+                    self.model.save().then(
+                        function success(data) {
+                            self.dialog.close();
+                            if (self.collection) {
+                                self.collection.add([data]);
+                            }
+                            if (self.model.isNew()) {
+                                self.succes();
+                            } else {
+                                notifications.yell('success', gt('Account updated'));
+                            }
+                        },
+                        function fail(data) {
+                            if (data.code === 'ACC-0004' && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
+                                notifications.yell('error', gt('Username must not be empty.'));
+                            } else if (data.code === 'SVL-0002') {
+                                notifications.yell('error',
+                                   //#. %1$s the missing request parameter
+                                   //#, c-format
+                                   gt('Please enter the following data: %1$s', _.noI18n(data.error_params[0])));
+                            } else {
+                                notifications.yell('error', _.noI18n(data.error));
+                            }
+                            self.dialog.idle();
                         }
-                        if (self.model.isNew()) {
-                            self.succes();
-                        } else {
-                            notifications.yell('success', gt('Account updated'));
-                        }
-                    })
-                    .fail(function (data) {
-                        if (data.code === 'ACC-0004' && data.error_params[0].substring(8, 13) === 'login') {//string comparison is ugly, maybe backend has a translated version of this
-                            notifications.yell('error', gt('Username must not be empty.'));
-                        } else if (data.code === 'SVL-0002') {
-                            notifications.yell('error',
-                               //#. %1$s the missing request parameter
-                               //#, c-format
-                               gt('Please enter the following data: %1$s', _.noI18n(data.error_params[0])));
-                        } else {
-                            notifications.yell('error', _.noI18n(data.error));
-                        }
-                        self.dialog.idle();
-                    });
+                    );
                 }
 
                 if (needToValidate(list, differences)) {
@@ -298,6 +317,8 @@ define('io.ox/mail/accounts/view-form',
             }
         });
 
-
-    return AccountDetailView;
+    return accountAPI.getDefaultDisplayName().then(function (name) {
+        defaultDisplayName = name;
+        return AccountDetailView;
+    });
 });
