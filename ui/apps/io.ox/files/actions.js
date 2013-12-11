@@ -1204,7 +1204,7 @@ define('io.ox/files/actions',
         ref: 'io.ox/files/actions/layout-list',
         icon: 'icon-align-justify',
         title: gt('List'),
-        cssClasses: 'io-ox-action-link btn'
+        cssClasses: 'io-ox-action-link btn layout'
     }));
 
     ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
@@ -1214,7 +1214,7 @@ define('io.ox/files/actions',
         ref: 'io.ox/files/actions/layout-icon',
         icon: 'icon-th',
         title: gt('Icons'),
-        cssClasses: 'io-ox-action-link btn'
+        cssClasses: 'io-ox-action-link btn layout'
     }));
 
     ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
@@ -1224,7 +1224,7 @@ define('io.ox/files/actions',
         ref: 'io.ox/files/actions/layout-tile',
         title: gt('Tile'),
         icon: 'icon-th-large',
-        cssClasses: 'io-ox-action-link btn'
+        cssClasses: 'io-ox-action-link btn layout'
     }));
 
 

@@ -39,7 +39,8 @@ define('io.ox/core/tk/dialogs',
                 maximize: false,
                 top: '50%',
                 container: $('body'),
-                tabTrap: true
+                tabTrap: true,
+                focus: true
             }, options),
 
             nodes = {
@@ -647,8 +648,10 @@ define('io.ox/core/tk/dialogs',
                     }
                     pane.empty();
 
-                    lastFocus = lastFocus.closest(':visible');
-                    lastFocus.focus();
+                    if (!options.focus) {
+                        lastFocus = lastFocus.closest(':visible');
+                        lastFocus.focus();
+                    }
 
                     self.trigger('close');
                 }, 100);

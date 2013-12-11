@@ -34,7 +34,7 @@ define('io.ox/files/fluid/perspective',
 
     var dropZone,
         loadFilesDef = $.Deferred(),
-        dialog = new dialogs.SidePopup({ tabTrap: true }),
+        dialog = new dialogs.SidePopup({ focus: false }),
         //nodes
         filesContainer, breadcrumb, inlineRight, inline, wrapper,
         scrollpane = $('<div class="files-scrollable-pane" role="section">'),
@@ -153,17 +153,6 @@ define('io.ox/files/fluid/perspective',
             mode = 'list';
         }
         return mode;
-    }
-
-    function focus(prevent) {
-        var y = wrapper.scrollTop();
-        if (!!prevent) {
-            //in some cases IE flickers without this hack
-            filesContainer.addClass('fixed').focus().removeClass('fixed');
-        } else {
-            filesContainer.focus();
-        }
-        wrapper.scrollTop(y);
     }
 
     function preview(e, cid) {
@@ -363,9 +352,44 @@ define('io.ox/files/fluid/perspective',
         id: 'icons',
         index: 200,
         draw: function (baton) {
+            var focus = function (prevent) {
+                var y = wrapper.scrollTop();
+                if (!!prevent) {
+                    //in some cases IE flickers without this hack
+                    filesContainer.addClass('fixed').focus().removeClass('fixed');
+                } else {
+                    filesContainer.focus();
+                }
+                wrapper.scrollTop(y);
+            },
+            isFolderHidden = function () {
+                    return !baton.app.folderViewIsVisible();
+                };
             this.append(
                 filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
-                                 .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
+                                    .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
+                                    .on('click', function () {
+                                        //force focus on container click
+                                        focus();
+                                    })
+                                    .on('data:loaded refresh:finished', function () {
+                                        //inital load and refresh
+                                        if (isFolderHidden()) {
+                                            focus();
+                                        }
+                                    })
+                                    .on('perspective:shown', function () {
+                                        //folder tree select vs. layout change action
+                                        if (isFolderHidden() || $(document.activeElement).is('a.btn.layout')) {
+                                            focus();
+                                        }
+                                    })
+                                    .on('dialog:closed', function () {
+                                        //sidepanel close button vs. folder change (that triggers dialog close)
+                                        if (!$(document.activeElement).hasClass('folder')) {
+                                            focus(true);
+                                        }
+                                    })
             );
         }
     });
@@ -572,8 +596,8 @@ define('io.ox/files/fluid/perspective',
                 //clear selection on mobile
                 if (_.device('smartphone'))
                     this.selection.clear();
-                if (!app.folderViewIsVisible())
-                    focus();
+                //handle focus
+                filesContainer.trigger('perspective:shown');
             }
         },
 
@@ -699,7 +723,8 @@ define('io.ox/files/fluid/perspective',
                     dropZoneInit(app);
                     app.currentFile = tmp;
                 }
-                focus(true);
+                //focus handling
+                filesContainer.trigger('dialog:closed');
             });
 
             drawFile = function (file) {
@@ -832,9 +857,8 @@ define('io.ox/files/fluid/perspective',
                         self.selection
                                 .init(allIds)
                                 .trigger('update', 'inital');
-
-                        if (!app.folderViewIsVisible())
-                            focus();
+                        //focus handling
+                        filesContainer.trigger('data:loaded');
                     },
                     function fail(response) {
                         if (response) {
@@ -1078,8 +1102,8 @@ define('io.ox/files/fluid/perspective',
                         self.selection
                                 .init(allIds)
                                 .trigger('update');
-                        if (!app.folderViewIsVisible())
-                            focus();
+                        //focus handling
+                        filesContainer.trigger('refresh:finished');
                         hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = node = null;
                     });
                 }
