@@ -93,6 +93,24 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             '$cl_10': '10'
         },
 
+        adjustRulePosition = function (models, flags) {
+            var position,
+                indicator = false;
+            _(models).each(function (model) {
+
+                if (_.isEqual(model.attributes.flags, flags)) {
+                    position = model.attributes.position;
+                    indicator = true;
+                }
+
+                if (indicator === true) {
+                    model.attributes.position = model.attributes.position + 1;
+                }
+            });
+
+            return position;
+        },
+
         checkForMultipleTests = function (el) {
             return $(el).find('[data-test-id]');
         },
@@ -180,7 +198,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
             onSave: function () {
-                var self = this;
+                var self = this,
+                    rulePosition;
+
+                if (!this.model.has('position')) {
+                    rulePosition = adjustRulePosition(self.options.listView.collection.models, ['vacation']);
+                    this.model.set('position', rulePosition);
+                }
+               
                 this.model.save().then(function (id) {
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id)) {

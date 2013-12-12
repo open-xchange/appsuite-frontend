@@ -27,6 +27,13 @@ define('io.ox/mail/mailfilter/settings/filter',
         collection,
         grid;
 
+    function updatePositionInCollection(collection, positionArray) {
+        _.each(positionArray, function (key, val) {
+            collection.get(key).set('position', val);
+        });
+        collection.sort();
+    }
+
     function renderDetailView(evt, data) {
         var myView,
             header = data.id === undefined ? gt('Create new rule') : gt('Edit rule'),
@@ -159,6 +166,10 @@ define('io.ox/mail/mailfilter/settings/filter',
             return api.getRules().then(function (data) {
 
                 collection = factory.createCollection(data);
+                collection.comparator = function (model) {
+                    return model.get('position');
+                };
+
                 var AccountSelectView = Backbone.View.extend({
 
                     tagName: 'li',
@@ -230,8 +241,21 @@ define('io.ox/mail/mailfilter/settings/filter',
                              //yell on reject
                             settingsUtil.yellOnReject(
                                 api.deleteRule(id).done(function () {
+                                    var arrayOfFilters,
+                                        data;
                                     self.model.collection.remove(id);
                                     $node.find('.controls [data-action="add"]').focus();
+
+                                    arrayOfFilters = $node.find('li[data-id]');
+                                    data = _.map(arrayOfFilters, function (single) {
+                                        return parseInt($(single).attr('data-id'), 10);
+                                    });
+                                     //yell on reject
+                                    settingsUtil.yellOnReject(
+                                        api.reorder(data)
+                                    );
+                                    updatePositionInCollection(collection, data);
+
                                 })
                             );
                         }
@@ -285,6 +309,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                             settingsUtil.yellOnReject(
                                 api.reorder(data)
                             );
+                            updatePositionInCollection(collection, data);
                         }
 
                         switch (e.which) {
@@ -377,6 +402,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                                 settingsUtil.yellOnReject(
                                     api.reorder(data)
                                 );
+                                updatePositionInCollection(collection, data);
                             }
                         });
                     }
