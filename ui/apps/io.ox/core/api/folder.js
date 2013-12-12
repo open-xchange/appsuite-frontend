@@ -612,7 +612,7 @@ define('io.ox/core/api/folder',
                     })
                     .done(function (id) {
                         // get fresh folder data (use maybe changed id)
-                        api.get({ folder: id}, false).done(function () {
+                        api.get({ folder: id, cache: false}).done(function (data) {
                             // trigger event
                             api.trigger('update', opt.folder, id, data);
                         });
