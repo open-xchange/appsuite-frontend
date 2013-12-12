@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
