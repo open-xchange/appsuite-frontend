@@ -633,13 +633,7 @@ define('io.ox/core/api/folder',
         },
 
         move: function (sourceId, targetId) {
-            return this.update({ folder: sourceId, changes: { folder_id: targetId } }).pipe(function (id) {
-                return api.get({ folder: id, cache: false }).done(function (data) {
-                    // trigger event
-                    api.trigger('update', sourceId, data.id, data);
-                    return data;
-                });
-            });
+            return this.update({ folder: sourceId, changes: { folder_id: targetId } });
         },
 
         Bitmask: (function () {
