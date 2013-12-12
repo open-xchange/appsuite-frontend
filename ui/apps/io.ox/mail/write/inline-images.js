@@ -42,7 +42,7 @@ define('io.ox/mail/write/inline-images',
             }
         },
         getInsertedImageUrl: function (data) {
-            var url = ox.abs + ox.apiRoot + '/file',
+            var url = ox.apiRoot + '/file',
             url_params = $.param({
                 id: data.data[0],
                 session: ox.session,
@@ -84,7 +84,7 @@ define('io.ox/mail/write/inline-images',
     return {
         show: function () {
 
-            var dialog = new dialogs.ModalDialog(),
+            var dialog = new dialogs.ModalDialog({async: true}),
                 iframe = $(document).find('iframe'),
                 tinymce_input_src = $(iframe[1].contentDocument).find('input#src'),
                 baton =  new ext.Baton({$: {}}),
@@ -103,6 +103,7 @@ define('io.ox/mail/write/inline-images',
                 this.getPopup().addClass('inline-images').parent().css('z-index', 999999); // Get high!;
             });
             dialog.on('insert', function () {
+
                 var file = baton.$.file_upload.find('input[type=file]'),
                     popup = this,
                     failHandler = function (data) {
@@ -111,12 +112,12 @@ define('io.ox/mail/write/inline-images',
                         }
                         popup.idle();
                     };
-
+                popup.busy();
                 if (file.val() === '') {
                     notifications.yell('error', gt('Please select a file to insert'));
                     popup.idle();
                     return;
-                } else if (!(/\.(jp?g|png|gif)$/i).test(file.val())) {
+                } else if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
                     notifications.yell('error', gt('Please select a valid image File to insert'));
                     popup.idle();
                     return;
@@ -128,6 +129,7 @@ define('io.ox/mail/write/inline-images',
                         tinymce_input_src
                             .val(api.getInsertedImageUrl(data))
                             .trigger('change');
+                        popup.close();
                     }).fail(failHandler);
                 }
             })
