@@ -520,6 +520,7 @@ define('io.ox/core/main',
                 quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
                     .append($('<i class="icon-remove">'))
                     .on('click', function (e) {
+                        e.preventDefault();
                         e.stopImmediatePropagation();
                         model.getWindow().app.quit();
                     })
