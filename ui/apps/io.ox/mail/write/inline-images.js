@@ -44,9 +44,9 @@ define('io.ox/mail/write/inline-images',
         getInsertedImageUrl: function (data) {
             var url = ox.apiRoot + '/file',
             url_params = $.param({
+                action: 'get',
                 id: data.data[0],
-                session: ox.session,
-                action: 'get'
+                session: ox.session
             });
             return url + '?' + url_params;
         }
