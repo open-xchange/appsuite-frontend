@@ -13,6 +13,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+.ios {
+    .io-ox-portal {
+        .header {
+            /* no touch scrolling in header, breaks dropdowns */
+            -webkit-overflow-scrolling: initial;
+        }
+    }
+}
 .io-ox-portal {
 
     @spacing: 13px;
