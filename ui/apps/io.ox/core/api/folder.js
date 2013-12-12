@@ -996,7 +996,7 @@ define('io.ox/core/api/folder',
     api.getFolderTitle = function (title, max) {
 
         title = String(title || '').trim();
-        
+
         var leadingDelimiter = /[_-]/.test(title[0]) ? title[0] : false,
             split = title.split(/[ _-]+/),
             delimiters = title.split(/[^ _-]+/),
@@ -1199,6 +1199,27 @@ define('io.ox/core/api/folder',
         subFolderCache: subFolderCache,
         visibleCache: visibleCache
     };
+
+    // check a list of object if they originate from more than one folder
+    // if so remove items from "sent" folder
+    // useful for delete/move actions and threads
+    api.ignoreSentItems = (function () {
+
+        function fromSameFolder(list) {
+            return _(list).chain().pluck('folder_id').uniq().value().length <= 1;
+        }
+
+        function isNotSentFolder(obj) {
+            return !account.is('sent', obj.folder_id);
+        }
+
+        return function (list) {
+            // all from same folder?
+            if (fromSameFolder(list)) return list;
+            // else: exclude sent items
+            return _(list).filter(isNotSentFolder);
+        };
+    }());
 
     api.clearCaches = function () {
         return $.when(

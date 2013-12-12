@@ -184,25 +184,6 @@ define('io.ox/mail/view-detail',
                 }));
             }
 
-            function scrubThreadDelete(deleteAction) {
-
-                if (!deleteAction) return;
-
-                var modifiedBaton, sentFolder, inboxMails;
-
-                modifiedBaton = deleteAction.data('baton');
-                if (!modifiedBaton || !modifiedBaton.data) {
-                    if (ox.debug) console.warn('No baton found. Not supposed to happen.');
-                    return;
-                }
-                sentFolder = settings.get('folder.sent');
-                inboxMails = _(modifiedBaton.data).filter(function (elem) {
-                    return elem.folder_id !== sentFolder;
-                });
-                modifiedBaton.data = inboxMails;
-                deleteAction.data('baton', modifiedBaton);
-            }
-
             function drawThread(node, baton, options, mails) {
 
                 var i, obj, frag = document.createDocumentFragment(),
@@ -214,7 +195,10 @@ define('io.ox/mail/view-detail',
 
                     // draw inline links for whole thread
                     if (list.length > 1) {
+                        //
                         inline = $('<div class="thread-inline-actions">');
+                        // add special marker
+                        baton.isThread = true;
                         ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
                         inline.find('.dropdown > a').addClass('btn'); // was: btn-primary
                         if (_.device('!smartphone')) {
@@ -223,8 +207,6 @@ define('io.ox/mail/view-detail',
                             node.parent().parent().find('.rightside-inline-actions').empty().append(inline);
                             node.parent().attr('aria-label', gt('Mail Thread Details'));
                         }
-                        // replace delete action with one excluding the sent folder
-                        scrubThreadDelete(inline.find('[data-action=delete]'));
                     }
 
                     // loop over thread - use fragment to be fast for tons of mails

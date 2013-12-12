@@ -64,6 +64,9 @@ define('io.ox/mail/actions',
         id: 'delete',
         requires: 'toplevel some delete',
         multiple: function (list) {
+
+            list = folderAPI.ignoreSentItems(list);
+
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
@@ -229,7 +232,10 @@ define('io.ox/mail/actions',
             id: type,
             requires: 'toplevel some',
             multiple: function (list, baton) {
+
                 var vGrid = baton.grid || ('app' in baton && baton.app.getGrid());
+
+                list = folderAPI.ignoreSentItems(list);
 
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
