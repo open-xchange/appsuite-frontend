@@ -120,8 +120,8 @@ define('io.ox/mail/mailfilter/settings/filter',
                 texttoggle = model.get('active') ? gt('Disable') : gt('Enable');
 
             $(this).append(
-                $('<button class="btn btn-link">').addClass('action').text(gt('Edit')).attr({
-                    type: 'button',
+                $('<a>').addClass('action').text(gt('Edit')).attr({
+                    href: '#',
                     role: 'button',
                     'data-action': flag === 'vacation' ? 'edit-vacation' : 'edit',
                     tabindex: 1,
@@ -134,7 +134,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                     tabindex: 1,
                     'aria-label': title + ', ' + (texttoggle)
                 }),
-                $('<a>').addClass('close').append($('<i/>').addClass('fa fa-trash-o')).attr({
+                $('<a>').addClass('close').append($('<i/>').addClass('icon-trash')).attr({
                     href: '#',
                     role: 'button',
                     'data-action': 'delete',
@@ -198,11 +198,11 @@ define('io.ox/mail/mailfilter/settings/filter',
                                     tabindex: 1,
                                     'aria-label': title + ', ' + gt('Use cursor keys to change the item position')
                                 }),
-                                titleNode = $('<span>').addClass('widget-title pull-left').append(title),
-                                $('<div class="widget-controls">').append(function () {
+                                $('<div>').addClass('pull-right').append(function () {
                                     var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (flag || 'common'));
                                     point.invoke('draw', $(this), self.model);
-                                })
+                                }),
+                                title = $('<span>').addClass('list-title').append(title)
                             );
 
                         self.model.on('change:rulename', function (el, val) {
