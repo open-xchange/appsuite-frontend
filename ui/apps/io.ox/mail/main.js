@@ -806,8 +806,8 @@ define('io.ox/mail/main',
                 start: function () {
                     win.busy();
                 },
-                progress: function (file) {
-                    return api.importEML({ file: file, folder: app.folder.get() })
+                progress: function (item) {
+                    return api.importEML({ file: item.file, folder: item.options.folder })
                         .done(function (data) {
                             var first = _(data.data || []).first() || {};
                             if ('Error' in first) {

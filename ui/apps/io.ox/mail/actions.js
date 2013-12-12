@@ -1166,7 +1166,7 @@ define('io.ox/mail/actions',
         index: 10,
         label: gt('Drop here to import this mail'),
         action: function (file, app) {
-            app.queues.importEML.offer(file);
+            app.queues.importEML.offer(file, { folder: app.folder.get() });
         }
     });
 

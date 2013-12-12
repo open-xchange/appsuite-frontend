@@ -893,13 +893,16 @@ define('io.ox/files/fluid/perspective',
                 start: function () {
                     win.busy(0);
                 },
-                progress: function (file, position, files) {
-                    var pct = position / files.length;
-                    win.busy(pct, 0);
-                    return api.uploadFile({ file: file, folder: app.folder.get() })
+                progress: function (item, position, files) {
+                    // set initial progress
+                    win.busy(position / files.length, 0);
+                    return api.uploadFile(
+                        _.extend({ file: item.file }, item.options)
+                    )
                     .progress(function (e) {
+                        // update progress
                         var sub = e.loaded / e.total;
-                        win.busy(pct + sub / files.length, sub);
+                        win.busy((position + sub) / files.length, sub);
                     })
                     .fail(function (e) {
                         if (e && e.data && e.data.custom) {
@@ -917,11 +920,11 @@ define('io.ox/files/fluid/perspective',
                 start: function () {
                     win.busy(0);
                 },
-                progress: function (file, position, files) {
+                progress: function (item, position, files) {
                     var pct = position / files.length;
                     win.busy(pct, 0);
                     return api.uploadNewVersion({
-                            file: file,
+                            file: item.file,
                             id: app.currentFile.id,
                             folder: app.currentFile.folder_id,
                             timestamp: _.now()
