@@ -981,8 +981,7 @@ define('io.ox/files/fluid/perspective',
                             duplicates = {},
                             indexPrev,
                             indexPrevPosition,
-                            indexNextPosition,
-                            node;
+                            indexNextPosition;
 
                         //filter duplicates
                         ids = _.uniq(ids, function (file) {
@@ -1044,23 +1043,20 @@ define('io.ox/files/fluid/perspective',
                             baton.allIds = allIds = ids;
                             ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
 
-                            //use clone
-                            node = scrollpane.clone(true).attr('origin', 'clone');
-
                             _(changed).each(function (cid) {
                                 var data = hash[cid],
                                     prev = indexPrevPosition(newIds, cid),
-                                    outdated = node.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
+                                    outdated = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
                                     anchor;
 
                                 outdated.remove();
 
                                 if (indexPrev(newIds, cid)) {
-                                    anchor = node.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                    anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
                                     if (anchor.length) {
                                         anchor.first().after(drawFile(data));
                                     } else {
-                                        node.find('.files-container').prepend(drawFile(data));
+                                        scrollpane.find('.files-container').prepend(drawFile(data));
                                     }
                                 } else {
                                     end = end - outdated.length;
@@ -1068,13 +1064,13 @@ define('io.ox/files/fluid/perspective',
                             });
 
                             _(deleted).each(function (cid) {
-                                var nodes = node.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                                var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
                                 end = end - nodes.remove().length;
                             });
 
                             _(duplicates).each(function (value, cid) {
                                 //remove all nodes for given cid except the first one
-                                var nodes = node.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                                var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
                                 end = end - nodes.slice(1).remove().length;
                             });
 
@@ -1084,17 +1080,15 @@ define('io.ox/files/fluid/perspective',
                                     anchor;
 
                                 if (indexPrev(newIds, cid)) {
-                                    anchor = node.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                    anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
                                     if (anchor.length) {
                                         anchor.first().after(drawFile(data));
                                     } else {
-                                        node.find('.files-container').prepend(drawFile(data));
+                                        scrollpane.find('.files-container').prepend(drawFile(data));
                                     }
                                     end = end + 1;
                                 }
                             });
-                            scrollpane.replaceWith(node);
-                            scrollpane = node;
 
                             recalculateLayout();
                         }
@@ -1104,7 +1098,7 @@ define('io.ox/files/fluid/perspective',
                                 .trigger('update');
                         //focus handling
                         filesContainer.trigger('refresh:finished');
-                        hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = node = null;
+                        hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = null;
                     });
                 }
             });
