@@ -16,10 +16,11 @@ define('io.ox/mail/detail/content',
      'io.ox/core/util',
      'io.ox/core/emoji/util',
      'io.ox/core/extensions',
+     'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail',
      'io.ox/mail/detail/links'
-    ], function (api, coreUtil, emoji, ext, settings, gt) {
+    ], function (api, coreUtil, emoji, ext, capabilities, settings, gt) {
 
     'use strict';
 
@@ -75,7 +76,7 @@ define('io.ox/mail/detail/content',
         var regex = /(&quot)?([:;]-?[(|)D])\W/g;
 
         return function (text) {
-            if (settings.get('displayEmoticons')) {
+            if (settings.get('displayEmoticons') && capabilities.has('emoji')) {
                 text = text.replace(regex, function (all, quot, match) {
                     // if we hit &quot;-) we just return
                     if (quot) return all;

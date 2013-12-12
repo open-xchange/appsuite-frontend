@@ -148,8 +148,13 @@ define('io.ox/mail/settings/pane',
             this.append(holder.append(
                 mailViewSettings.render().el)
             );
+
             if (Modernizr.touch) { // See Bug 24802
                 holder.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
+            }
+
+            if (!capabilities.has('emoji')) { // see Bug 25537
+                holder.find('[data-property="displayEmoticons"]').parent().hide();
             }
         },
 
