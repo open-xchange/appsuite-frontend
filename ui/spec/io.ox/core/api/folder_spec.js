@@ -13,9 +13,11 @@
 define(['shared/examples/for/api',
        'io.ox/core/api/folder',
        'io.ox/core/http',
-       'io.ox/core/extensions'
-], function (sharedExamplesFor, api, http, ext) {
-    var setupFakeServer = function (server) {
+       'io.ox/core/extensions',
+       'io.ox/core/notifications'
+], function (sharedExamplesFor, api, http, ext, notifications) {
+    var fakeFolders = {},
+        setupFakeServer = function (server) {
         //sends a default folder for get calls
         server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
             var sendObject = JSON.parse('{"' + decodeURI(xhr.url)
@@ -27,10 +29,14 @@ define(['shared/examples/for/api',
                     '4' : '2',
                     '5' : '2',
                     '21' : '2'
-                };
+                },
+                data = _.extend({
+                    id: sendObject.id,
+                    folder_id: parentFolderIDs[sendObject.id]
+                }, fakeFolders[sendObject.id] || {});
 
             xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: {id: sendObject.id, folder_id: parentFolderIDs[sendObject.id]}})
+                JSON.stringify({timestamp: 1378223251586, data: data})
             );
         });
 
@@ -324,6 +330,7 @@ define(['shared/examples/for/api',
                     );
                 });
             });
+
             describe('with "show hidden files" option enabled', function () {
                 it('should show folders starting with a dot', function () {
                     var def = require([
@@ -349,6 +356,94 @@ define(['shared/examples/for/api',
             });
 
             describe('with "show hidden files" option disabled (default)', function () {
+
+                describe('when naming folders with filtered names', function () {
+                    beforeEach(function () {
+                        this.server.responses = _(this.server.responses).reject(function (response) {
+                            return 'api/folders?action=get'.search(response.url) === 0;
+                        });
+                        setupFakeServer(this.server);
+                        fakeFolders['31337'] = {
+                            id: '31337',
+                            folder_id: '13',
+                            title: 'secret'
+                        };
+                    });
+
+                    afterEach(function () {
+                        this.server.restore();
+                    });
+
+                    it('should trigger "warn:hidden" event during create', function () {
+                        fakeFolders['21'] = {
+                            id: '21',
+                            folder_id: '13',
+                            title: '.secret'
+                        };
+                        expect(api).toTrigger('warn:hidden');
+                        var def = require([
+                                'settings!io.ox/core',
+                                'settings!io.ox/files'
+                            ]).then(function (settings, fileSettings) {
+                                settings.set('folder/blacklist');
+                                fileSettings.set('showHidden');
+                                return api.clearCaches();
+                            }).then(function () {
+                                debugger;
+                                return api.create({
+                                    folder: '13',
+                                    title: '.secret'
+                                });
+                            }).then(function () {
+                                return 'finished';
+                            });
+
+                        expect(def).toResolveWith('finished');
+                    });
+
+                    it('should trigger "warn:hidden" event during update', function () {
+                        this.server.respondWith('PUT', /api\/folders\?action=update/, function (xhr) {
+                            var idPos = xhr.url.indexOf('&id='),
+                                id = xhr.url.slice(idPos + 4, xhr.url.indexOf('&', idPos + 1)),
+                                oldData = fakeFolders[id];
+
+                            fakeFolders[id] = _.extend(oldData, JSON.parse(xhr.requestBody));
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                                JSON.stringify({'timestamp': 1386862269412, 'data': id})
+                            );
+                        });
+                        expect(api).toTrigger('warn:hidden');
+                        var def = require([
+                        'settings!io.ox/core',
+                        'settings!io.ox/files'
+                        ]).then(function (settings, fileSettings) {
+                            settings.set('folder/blacklist');
+                            fileSettings.set('showHidden');
+                            return api.clearCaches();
+                        }).then(function () {
+                            return api.update({
+                                folder: '31337',
+                                changes: {
+                                    title: '.secret'
+                                }
+                            });
+                        }).then(function () {
+                            return 'finished';
+                        });
+
+                        expect(def).toResolveWith('finished');
+                    });
+
+                    it('should warn the user that files will be hidden', function () {
+                        var spy = sinon.spy(notifications, 'yell');
+
+                        api.trigger('warn:hidden', {title: '.secret'});
+                        //expect to contain the folder name in the message
+                        expect(spy).toHaveBeenCalledWithMatch('info', /\.secret/);
+                        spy.restore();
+                    });
+                });
+
                 it('should hide folders starting with a dot', function () {
                     var def = require([
                             'settings!io.ox/core',

@@ -537,6 +537,9 @@ define('io.ox/core/api/folder',
                         // return proper data
                         var data = getRequest;
                         if (!options.silent) {
+                            if (!visible(data)) {
+                                api.trigger('warn:hidden', data);
+                            }
                             api.trigger('create', data);
                         }
                         return data;
@@ -613,6 +616,9 @@ define('io.ox/core/api/folder',
                     .done(function (id) {
                         // get fresh folder data (use maybe changed id)
                         api.get({ folder: id, cache: false}).done(function (data) {
+                            if (!visible(data)) {
+                                api.trigger('warn:hidden', data);
+                            }
                             // trigger event
                             api.trigger('update', opt.folder, id, data);
                         });
@@ -1197,6 +1203,10 @@ define('io.ox/core/api/folder',
 
     ox.on('refresh^', function () {
         api.sync();
+    });
+
+    api.on('warn:hidden', function (e, folder) {
+        notifications.yell('info', gt.format('Folder with name "%s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title));
     });
 
     // publish caches
