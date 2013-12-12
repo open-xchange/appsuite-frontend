@@ -408,7 +408,7 @@ define.async('io.ox/core/tk/html-editor',
             ',|,emoji,|,bullist,numlist,outdent,indent' +
             ',|,justifyleft,justifycenter,justifyright';
         advanced = 'formatselect,fontselect,fontsizeselect' +
-            ',|,forecolor,backcolor';
+            ',|,forecolor,backcolor,image';
         toolbar2 = '';
         toolbar3 = '';
 
@@ -435,7 +435,7 @@ define.async('io.ox/core/tk/html-editor',
 
             gecko_spellcheck: true,
             language: lookupTinyMCELanguage(),
-            plugins: 'autolink,paste,emoji',
+            plugins: 'autolink,paste,inlinepopups,emoji',
             relative_urls: false,
             remove_script_host: false,
             object_resizing: 0,
@@ -445,7 +445,11 @@ define.async('io.ox/core/tk/html-editor',
 
             // need this to work in karma/phantomjs
             content_element: textarea.get(0),
-
+            file_browser_callback : function () {
+                require(['io.ox/mail/write/inline-images'], function (inlineimages) {
+                    inlineimages.show();
+                });
+            },
             init_instance_callback: function () {
                 // get internal editor reference
                 ed = textarea.tinymce();
@@ -470,6 +474,8 @@ define.async('io.ox/core/tk/html-editor',
                     if (_.browser.Firefox && _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'))
                         e.preventDefault();
                 });
+
+
 
                 def.resolve();
             },
