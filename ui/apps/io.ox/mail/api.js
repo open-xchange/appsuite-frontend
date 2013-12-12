@@ -1140,7 +1140,7 @@ define('io.ox/mail/api',
                     accountAPI.getFoldersByType('sent'),
                     accountAPI.getFoldersByType('drafts')
                 );
-                $.when.apply(
+                $.when.apply($,
                     _(folders).map(function (id) {
                         return api.caches.all.grepRemove(id + DELIM);
                     })
