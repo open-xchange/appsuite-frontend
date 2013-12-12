@@ -380,7 +380,7 @@ define('io.ox/core/tk/vgrid',
 
                     // draw link
                     this.append(
-                        $('<div>').addClass('grid-info').append(
+                        $('<div class="grid-info">').append(
                             link = $('<a href="#">').on('click', fnShowAll)
                         )
                     );
@@ -686,6 +686,7 @@ define('io.ox/core/tk/vgrid',
             scrollpane.find('.io-ox-center').remove().end();
             if (list.length === 0 && loaded) {
                 detachPool();
+                self.selection.trigger('change', []);
                 scrollpane.append(
                     $.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty'))
                 );

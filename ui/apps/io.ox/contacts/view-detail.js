@@ -409,12 +409,14 @@ define("io.ox/contacts/view-detail",
         id: 'phone',
         draw: function (baton) {
             var r = 0, data = baton.data;
-            r += addPhone(gt("Phone (business)"), data.telephone_business1, this);
-            r += addPhone(gt("Phone (business)"), data.telephone_business2, this);
-            r += addPhone(gt("Phone (private)"), data.telephone_home1, this);
-            r += addPhone(gt("Phone (private)"), data.telephone_home2, this);
-            r += addPhone(gt("Mobile"), data.cellular_telephone1, this);
-            r += addPhone(gt("Mobile"), data.cellular_telephone2, this);
+            r += addPhone(gt("Cell phone"), data.cellular_telephone1, this);
+            r += addPhone(gt("Cell phone alt"), data.cellular_telephone2, this);
+            r += addPhone(gt("Phone"), data.telephone_business1, this);
+            r += addPhone(gt("Phone alt"), data.telephone_business2, this);
+            r += addPhone(gt("Phone (Home)"), data.telephone_home1, this);
+            r += addPhone(gt("Phone (Home alt)"), data.telephone_home2, this);
+            r += addPhone(gt("Phone (other)"), data.telephone_other, this);
+            r += addPhone(gt("Fax"), data.fax_business, this);
             if (r > 0) {
                 addField("", "\u00A0", this);
             }

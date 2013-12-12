@@ -327,10 +327,6 @@ define('io.ox/core/api/folder',
                                     // add to folder cache
                                     folderCache.add(obj.id, obj, timestamp);
                                     return obj;
-                                },
-                                sorter = function (a, b) {
-                                    return a.id === defaultFolder ? -1 :
-                                        (a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1);
                                 };
                             for (id in data) {
                                 folders = _.chain(data[id])
@@ -341,11 +337,6 @@ define('io.ox/core/api/folder',
                                     .value();
                                 // empty?
                                 if (folders.length > 0) {
-                                    // sort by title, default folder always first
-                                    // (skip shared folder due to special order)
-                                    if (id !== 'shared') {
-                                        folders.sort(sorter);
-                                    }
                                     tmp[id] = folders;
                                 }
                             }

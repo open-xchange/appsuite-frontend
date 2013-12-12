@@ -66,6 +66,13 @@ define("io.ox/mail/write/view-main",
         ref: POINT + '/actions/discard'
     }));
 
+    //options
+    ext.point(POINT + '/options').extend({
+        multiple: true
+    });
+
+    var options = ext.point(POINT + '/options').options();
+
     var contactPictureOptions = { width: 42, height: 42, scaleType: 'contain' };
 
     var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true, msisdn: true });
@@ -168,7 +175,7 @@ define("io.ox/mail/write/view-main",
 
             return function () {
 
-                var inputOptions = Modernizr.file && 'FormData' in window ?
+                var inputOptions = Modernizr.file && 'FormData' in window && options.multiple ?
                     { type: 'file', name: 'file_' + (this.fileCount++), multiple: 'multiple', tabindex: '2' } :
                     { type: 'file', name: 'file_' + (this.fileCount++), tabindex: '2' };
 

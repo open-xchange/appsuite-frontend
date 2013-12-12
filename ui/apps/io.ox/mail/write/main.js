@@ -45,7 +45,12 @@ define('io.ox/mail/write/main',
     // actions (define outside of multi-instance app)
     ext.point(ACTIONS + '/draft').extend({
         action: function (baton) {
-            baton.app.saveDraft();
+            var self = this;
+            self.busy();
+            baton.app.saveDraft()
+                .done(function () {
+                    self.idle();
+                });
         }
     });
 
@@ -1132,14 +1137,21 @@ define('io.ox/mail/write/main',
                 var base = _(result.data.split(mailAPI.separator)),
                     id = base.last(),
                     folder = base.without(id).join(mailAPI.separator);
-                mailAPI.get({ folder_id: folder, id: id }).then(function (draftMail) {
-                    var format = draftMail.content_type === 'text/plain' ? 'text' : 'html';
+                return mailAPI.get({ folder_id: folder, id: id, edit: '1' });
+            })
+            .then(function (draftMail) {
+                //using draftMail.attachments[0].content_type instead of draftMail.content_type because if there are attachments this becomes multipart/mixed and you cannot get the right type
+                var format = draftMail.attachments[0].content_type === 'text/plain' ? 'text' : 'html',
+                    def = $.Deferred();
 
-                    view.form.find('.section-item.file').remove();
-                    $(_.initial(view.form.find(':input[name][type=file]'))).remove();
-                    draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
-                    app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format});
-                });
+                view.form.find('.section-item.file').remove();
+                $(_.initial(view.form.find(':input[name][type=file]'))).remove();
+                draftMail.sendtype = mailAPI.SENDTYPE.EDIT_DRAFT;
+                app.setMail({ data: draftMail, mode: mail.mode, initial: false, replaceBody: 'no', format: format})
+                    .then(function () {
+                        def.resolve(draftMail);
+                    });
+                return def;
             });
         };
 

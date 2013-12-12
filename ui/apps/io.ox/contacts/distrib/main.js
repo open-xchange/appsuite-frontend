@@ -42,11 +42,12 @@ define('io.ox/contacts/distrib/main',
 
         app.create = function (folderId, initdata) {
 
-            initialDistlist = {
-                folder_id: folderId,
-                mark_as_distributionlist: true,
-                last_name: ''
-            };
+            initialDistlist = _.extend({
+                    mark_as_distributionlist: true,
+                    last_name: ''
+                },
+                data || {}, { folder_id: folderId }
+            );
 
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
