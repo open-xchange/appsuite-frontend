@@ -769,7 +769,7 @@ define('io.ox/core/main',
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">').append(
                             $('<i class="icon-cog icon-white launcher-icon" aria-hidden="true">')
                         ),
-                        ul = $('<ul class="dropdown-menu" role="menu">')
+                        ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu pull-right" role="menu">')
                     )
                 );
                 if (!Modernizr.touch) {
