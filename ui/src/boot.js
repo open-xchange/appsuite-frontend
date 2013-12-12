@@ -569,7 +569,7 @@ $(window).load(function () {
 
         function gotoSignin(hash) {
             var ref = (location.hash || '').replace(/^#/, ''),
-                path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
+                path = String(ox.serverConfig.loginLocation || ox.loginLocation),
                 glue = path.indexOf('#') > -1 ? '&' : '#';
             path = path.replace("[hostname]", window.location.hostname);
             hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');

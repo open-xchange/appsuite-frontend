@@ -26,6 +26,7 @@ window.ox = {
     context_id: 0,
     debug: true,
     language: 'de_DE',
+    loginLocation: 'signin',
     logoutLocation: 'signin',
     online: true,
     revision: '1',
