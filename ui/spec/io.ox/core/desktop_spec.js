@@ -45,7 +45,10 @@ define(['io.ox/core/desktop'], function (desktop) {
                     name: 'io.ox/testApp'
                 });
 
-                ox.manifests.apps['io.ox/testApp/main'] = {};
+                ox.manifests.apps['io.ox/testApp/main'] = {
+                    path: 'spec/io.ox/testApp',
+                    category: 'tests'
+                };
             });
 
             afterEach(function () {
