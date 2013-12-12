@@ -998,6 +998,7 @@ define('io.ox/core/api/folder',
         title = String(title || '').trim();
 
         var leadingDelimiter = /[_-]/.test(title[0]) ? title[0] : false,
+            endingDelimiter = /[_-]/.test(title[title.length - 1]) ? title[title.length - 1] : false,
             split = title.split(/[ _-]+/),
             delimiters = title.split(/[^ _-]+/),
             length = title.length;
@@ -1005,6 +1006,11 @@ define('io.ox/core/api/folder',
         if (leadingDelimiter) {
             split[1] = leadingDelimiter + split[1];
             split.splice(0, 1);
+        }
+
+        if (endingDelimiter) {
+            split[split.length - 1] = endingDelimiter + split[split.length - 1];
+            split.splice(split.length - 1, 1);
         }
 
         while (length > max && split.length > 2) {

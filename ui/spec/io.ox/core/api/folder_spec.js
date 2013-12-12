@@ -298,6 +298,10 @@ define(['shared/examples/for/api',
             it('from "_this is a test title" to "_this is\u2026test title"', function () {
                 expect(api.getFolderTitle('_this is a test title', 19)).toBe('_this is\u2026test title');
             });
+
+            it('from "this is a test title_" to "this is\u2026test title_"', function () {
+                expect(api.getFolderTitle('this is a test title_', 19)).toBe('this is\u2026test title_');
+            });
         });
 
         describe('hidden objects', function () {
