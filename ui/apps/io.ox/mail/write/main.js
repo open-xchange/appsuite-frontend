@@ -1050,14 +1050,13 @@ define('io.ox/mail/write/main',
                 subject: data.subject + '',
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
-                disp_notification_to: !!data.disp_notification_to,
                 attachments: [attachments],
                 nested_msgs: []
             };
+            // add disp_notification_to?
+            if (data.disp_notification_to) mail.disp_notification_to = true;
             // add msgref?
-            if (data.msgref) {
-                mail.msgref = data.msgref;
-            }
+            if (data.msgref) mail.msgref = data.msgref;
             // sendtype
             mail.sendtype = data.sendtype || mailAPI.SENDTYPE.NORMAL;
 
