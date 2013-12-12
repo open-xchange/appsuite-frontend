@@ -8,6 +8,8 @@ io.ox/portal//widgets/protected:
     props:
       ad: "openexchangeAdvertisement"
 
+plugins/upsell//driveAd: "<div class='upsell-drive-ad' style='width: 300px'><img src='https://appsuite-dev.open-xchange.com/publications/files/1/upsell-images/150937/current?secret=bc9c99a0123f5e4733a64f3b34368ab2' alt='' style='display:inline-block;' /><span style='float:right; padding-top: 5px;'>Don't run out of space, <br/>upgrade your quota now!</span></div>"
+
 plugins/upsell//bubbles:
   skipFirstLogin: true
   repeatInMilliseconds: 900000
