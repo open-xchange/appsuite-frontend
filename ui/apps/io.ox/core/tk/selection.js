@@ -747,20 +747,15 @@ define('io.ox/core/tk/selection',
 
         this.selectRange = function (a, b) {
 
-            var tmp, i, item;
+            var i, item, reverse;
 
             if (bHasIndex) {
                 // get indexes
                 a = getIndex(a);
                 b = getIndex(b);
-                // swap?
-                if (a > b) {
-                    tmp = a;
-                    a = b;
-                    b = tmp;
-                }
-                // loop
-                for (i = a; i <= b; i++) {
+                reverse = a > b;
+                // loop while keeping direction (see Bug 29047)
+                for (i = a; reverse ? i >= b : i <= b; reverse ? i-- : i++) {
                     // get id
                     item = observedItems[i];
                     // select first & last one via "normal" select
