@@ -82,18 +82,37 @@ define('io.ox/core/api/folder',
                     }
                 })
                 .then(function (data) {
-                    // add to cache
-                    return cache.add(data.id, data);
-                }, function (error) {
-                    if (error.categories === 'PERMISSION_DENIED') {
-                        if (!opt.suppressYell)
-                            notifications.yell(error);
-                    } else {
-                        if (ox.debug) {
-                            console.error('folder.get', id, error);
+                    // update subfolder cache
+                    return subFolderCache.get(data.folder_id).then(function (list) {
+                        if (list === null) return data;
+                        // loop over list and replace with fresh data
+                        for (var i = 0, $i = list.length; i < $i; i++) {
+                            if (list[i].id === data.id) {
+                                list[i] = data;
+                                break;
+                            }
+                        }
+                        return subFolderCache.add(data.folder_id, list).then(function () {
+                            return data;
+                        });
+                    });
+                })
+                .then(
+                    function (data) {
+                        // add to cache
+                        return cache.add(data.id, data);
+                    },
+                    function (error) {
+                        if (error.categories === 'PERMISSION_DENIED') {
+                            if (!opt.suppressYell)
+                                notifications.yell(error);
+                        } else {
+                            if (ox.debug) {
+                                console.error('folder.get', id, error);
+                            }
                         }
                     }
-                });
+                );
             };
 
             return opt.cache === false ? getter() : cache.get(id, getter);
