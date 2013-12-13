@@ -689,6 +689,9 @@ define('io.ox/mail/write/main',
             //config settings
             mail.data.vcard = mail.data.vcard || settings.get('appendVcard');
 
+            // Allow extensions to have a go at the data
+            ext.point('io.ox/mail/write/initializers/before').invoke('modify', app, new ext.Baton({mail: mail, app: this}));
+
             // call setters
             var data = mail.data;
 
@@ -733,7 +736,7 @@ define('io.ox/mail/write/main',
                 if (mail.replaceBody !== 'no') {
                     app[mail.initial ? 'setBody' : 'setRawBody'](content);
                 }
-
+                ext.point('io.ox/mail/write/initializers/after').invoke('modify', app, new ext.Baton({mail: mail, app: app}));
                 // remember this state for dirty check
                 previous = app.getMail();
             });
