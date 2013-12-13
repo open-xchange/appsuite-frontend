@@ -137,7 +137,7 @@ define('io.ox/core/tk/dialogs',
                     close();
                 }
 
-                (e.originalEvent || e).processed = true;
+                e.processed = true;
             },
 
             fnKey = function (e) {
