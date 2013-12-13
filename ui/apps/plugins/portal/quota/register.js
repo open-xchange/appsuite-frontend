@@ -120,7 +120,7 @@ define('plugins/portal/quota/register',
             )
         );
 
-        if (quota.quota < 0) {
+        if (quota.quota <= 0) {
             label.text(gt('unlimited'));
             bar.remove();
         } else {
