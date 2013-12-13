@@ -92,23 +92,18 @@ define('io.ox/tasks/edit/view',
             }
 
             // Toggle disabled state of save button
-            function fnToggleSave(isDirty) {
+            function fnToggleSave(value) {
                 var node = self.$el.find('.btn[data-action="save"]');
                 if (_.device('smartphone')) node = self.$el.parent().parent().find('.btn[data-action="save"]');
-                if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
+                self.model.set('title', value);
+                node.prop('disabled', value === '');
             }
             //delegate some events
             self.$el.delegate('#task-edit-title', 'keyup blur', function () {
-                var newTitle = _.noI18n($(this).val());
-                if (!newTitle) {
-                    if (self.model.get('id')) {
-                        newTitle = gt('Edit task');
-                    } else {
-                        newTitle = gt('Create task');
-                    }
-                }
-                fnToggleSave($(this).val());
-                app.setTitle(newTitle);
+                var value = $(this).val();
+                var title = value ? value : (self.model.get('id') ? gt('Edit task') : gt('Create task'));
+                app.setTitle(title);
+                fnToggleSave(value);
             });
             return this.$el;
         }
