@@ -389,7 +389,6 @@ define(['shared/examples/for/api',
                                 fileSettings.set('showHidden');
                                 return api.clearCaches();
                             }).then(function () {
-                                debugger;
                                 return api.create({
                                     folder: '13',
                                     title: '.secret'
