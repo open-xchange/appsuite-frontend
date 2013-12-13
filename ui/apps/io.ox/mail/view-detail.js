@@ -350,7 +350,7 @@ define('io.ox/mail/view-detail',
                 for (var i = 1; i < nodes.length && $(nodes[i]).position().top <= top; i++) {
                     currentMail = $(nodes[i]);
                 }
-                currentMailOffset = top - currentMail.position().top;
+                currentMailOffset = top - (currentMail.position() ? currentMail.position().top : 0);
                 node.find('.mail-detail.io-ox-busy,.mail-detail-decorator').detach();
                 for (var i = 0; i < data.length; i++) {//draw new thread
                     if (nodeTable[_.ecid(data[i])]) {
@@ -365,7 +365,7 @@ define('io.ox/mail/view-detail',
                 nodes = node.find('.mail-detail');
                 scrollpane.off('scroll').on('scroll', { nodes: nodes, node: node }, _.debounce(autoResolve, 100));//update event parameters
                 //scroll to old position
-                scrollpane.scrollTop(currentMail.position().top + currentMailOffset);
+                scrollpane.scrollTop((currentMail.position() ? currentMail.position().top : 0) + currentMailOffset);
             };
         }())
     };

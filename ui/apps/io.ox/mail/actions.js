@@ -247,6 +247,7 @@ define('io.ox/mail/actions',
                                     notifications.yell('error', resp);
                                 } else {
                                     notifications.yell('success', list.length > 1 ? success.multi : success.single);
+                                    api.refresh();
                                 }
                                 folderAPI.reload(target, list);
                                 if (type === 'move' && vGrid) vGrid.idle();
