@@ -145,7 +145,7 @@ define('io.ox/tasks/view-detail',
             }
             var temp;
             _(fields).each(function (label, key) {
-                if (task[key] !== undefined && task[key] !== null) {//0 is valid
+                if (task[key] !== undefined && task[key] !== null && task[key] !== '') {//0 is valid
                     $details.append(temp = $('<div class="detail-item">').append($('<label class="detail-label">').text(label)));
                     if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
                         temp.append($('<div class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
