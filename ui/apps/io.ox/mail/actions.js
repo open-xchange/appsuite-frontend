@@ -42,7 +42,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/unselect', {
         requires: function (e) {
-            return e.collection.has('toplevel', 'multiple');
+            return e.collection.has('toplevel', 'multiple') && !e.baton.isThread;
         },
         multiple: function (list, baton) {
             if (baton.grid) baton.grid.selection.clear();
