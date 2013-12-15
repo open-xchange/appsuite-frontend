@@ -114,7 +114,7 @@ define('io.ox/mail/view-grid-template',
                 );
                 fields.date.text(_.noI18n(
                     // sort by size?
-                    grid.prop('sort') === '608' ?
+                    grid && grid.prop('sort') === '608' ?
                         strings.fileSize(data.size, 1) :
                         util.getTime(data.received_date)
                 ));
