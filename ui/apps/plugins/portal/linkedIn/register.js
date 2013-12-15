@@ -299,7 +299,7 @@ define('plugins/portal/linkedIn/register',
                     params: { action: 'updates' }
                 })
                 .done(function (activities) {
-                    if (activities.values && activities.values !== 0) {
+                    if (_.isArray(activities.values) && activities.values.length > 0) {
                         node.append(
                             $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
                         );
@@ -328,13 +328,16 @@ define('plugins/portal/linkedIn/register',
                     });
                 });
 
-                node.append(
-                    $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
-                );
+                if (_.isArray(baton.data) && baton.data.length > 0) {
 
-                _(baton.data).each(function (activity) {
-                    ext.point('portal/linkedIn/updates/renderer').invoke('draw', node, activity);
-                });
+                    node.append(
+                        $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
+                    );
+
+                    _(baton.data).each(function (activity) {
+                        ext.point('portal/linkedIn/updates/renderer').invoke('draw', node, activity);
+                    });
+                }
 
                 this.append(node);
             }
