@@ -13,8 +13,9 @@
 
 define('io.ox/core/session',
     ['io.ox/core/http',
-     'io.ox/core/manifests'
-    ], function (http, manifests) {
+     'io.ox/core/manifests',
+     'io.ox/core/extensions'
+    ], function (http, manifests, ext) {
 
     'use strict';
 
@@ -138,22 +139,24 @@ define('io.ox/core/session',
                                 }
                             });
                         }
+                        var params = {
+                            action: 'login',
+                            name: username,
+                            password: password,
+                            // current browser language; required for proper error messages
+                            language: language || 'en_US',
+                            client: that.client(),
+                            version: that.version(),
+                            timeout: TIMEOUTS.LOGIN,
+                            multiple: JSON.stringify(multiple)
+                        };
+                        ext.point('io.ox/core/login').invoke('addParams', params);
                         http.POST({
                             module: 'login',
                             appendColumns: false,
                             appendSession: false,
                             processResponse: false,
-                            params: {
-                                action: 'login',
-                                name: username,
-                                password: password,
-                                // current browser language; required for proper error messages
-                                language: language || 'en_US',
-                                client: that.client(),
-                                version: that.version(),
-                                timeout: TIMEOUTS.LOGIN,
-                                multiple: JSON.stringify(multiple)
-                            }
+                            params: params
                         })
                         .done(function (data) {
                             // store session
