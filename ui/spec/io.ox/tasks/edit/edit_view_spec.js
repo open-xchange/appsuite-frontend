@@ -13,7 +13,8 @@
 
 define(['io.ox/tasks/edit/main',
         'io.ox/core/date',
-        'gettext!io.ox/tasks/edit'], function (edit, date, gt) {
+        'gettext!io.ox/tasks/edit',
+        'spec/shared/capabilities'], function (edit, date, gt, caputil) {
 
     var app,
         view ,
@@ -29,13 +30,13 @@ define(['io.ox/tasks/edit/main',
                     node = view.$el,
                     model = view.model;
                 }
-            );
-    
+            ),
+        capabilities = caputil.preset('common').init('io.ox/tasks/edit/main', edit);
+
     describe('', function () {//outer wrapper (needed because the app must not be started before the capabilities are set)
         beforeEach(function () {
             //set capabilities
-            ox.testUtils.modules.caps(['delegate_tasks', 'infostore'], 'io.ox/tasks/edit/main', edit);
-            
+            capabilities.enable(['delegate_tasks', 'infostore']);
         });
         describe('', function () {//inner wrapper (start app one time before the tests run)
                 beforeEach(function () {

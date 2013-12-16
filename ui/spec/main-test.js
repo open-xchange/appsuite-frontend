@@ -76,7 +76,7 @@ if (sinon) {
         'use strict';
 
         var modules = {}, usedby = {}, tree = {},
-            traverse, update, getConsumers, self, setCaps, latest = '';
+            traverse, update, getConsumers, self;
 
         /**
          * remember loaded modules/dependencies
@@ -149,30 +149,6 @@ if (sinon) {
             return Object.keys(hash);
         };
 
-        /**
-         * set capabilites during runtime / reload affected modules
-         * @param  {array|string} list of caps to enable
-         */
-        setCaps = function (list) {
-            var capabilities, has;
-            list = [].concat(list);
-
-            //caps changed?
-            if (latest !== list) {
-                latest = list;
-                //init
-                capabilities = requirejs('io.ox/core/capabilities');
-                if (capabilities.has.restore)
-                    capabilities.has.restore();
-                //create stub
-                has = sinon.stub(capabilities, 'has', function (arg) {
-                    return list.length && _.contains(list, arg);
-                });
-                //reload modules
-                self.reload();
-            }
-        };
-
         self = {
             /**
              * list consumers
@@ -183,7 +159,6 @@ if (sinon) {
                 traverse(id);
                 return deep ? getConsumers(id) : usedby[id];
             },
-
             /**
              * list consumer tree
              * @param  {string} module id
@@ -192,13 +167,12 @@ if (sinon) {
                 traverse(id);
                 return tree[id];
             },
-
             /**
-             * reload modules consuming capabilities module
+             * reload modules consuming specified module
              */
             reload: function (id) {
-                id = id || 'io.ox/core/capabilities';
-                var consumers;
+                var def = $.Deferred(),
+                    consumers;
                 //build dependency tree
                 traverse(id);
                 //get affected consumers
@@ -208,37 +182,16 @@ if (sinon) {
                     requirejs.undef(id);
                 });
                 //define again
-                _.each(consumers, function (id) {
-                    requirejs([id]);
-                });
-            },
-
-            /**
-             * used as beforeEach function to set capabilities during runtime
-             * @param  {string|array} list of enabled caps
-             * @param  {string|array} ids of modules used in current test suite
-             * @param  {object|array} vars used references in current test suiet
-             */
-            //TODO: add param for disabling; use some default set of caps for list param if not defined
-            caps: function (list, ids, vars) {
-                var done = false;
-                ids = [].concat(ids);
-                vars = [].concat(vars);
-
-                runs(function () {
-                    setCaps(list);
-                    //overwrite used references
-                    require(ids, function () {
-                        for (var i = 0; i < vars.length; i++) {
-                            $.extend(vars[i], arguments[i] || {});
-                        }
-                        done = true;
+                requirejs(consumers, function () {
+                    var args = arguments,
+                        data = {};
+                    //return fresh ones
+                    _.each(consumers, function (id, index) {
+                        data[id] = args[index];
                     });
+                    def.resolve(data);
                 });
-
-                waitsFor(function () {
-                    return done;
-                });
+                return def;
             }
         };
         return self;

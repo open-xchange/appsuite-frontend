@@ -12,8 +12,11 @@
  */
 define(['io.ox/mail/write/main',
         'io.ox/core/notifications',
-        'settings!io.ox/mail'
-        ], function (main, notifications, settings) {
+        'settings!io.ox/mail',
+        'spec/shared/capabilities'
+        ], function (main, notifications, settings, caputil) {
+
+    var capabilities = caputil.preset('common').init('io.ox/mail/write/main', main);
 
     describe('mail write app', function () {
         beforeEach(function () {
@@ -62,7 +65,7 @@ define(['io.ox/mail/write/main',
                         ]
                     };
 
-                    ox.testUtils.modules.caps('auto_publish_attachments', 'io.ox/mail/write/main', main);
+                    capabilities.enable('auto_publish_attachments');
 
                     if (notifications.yell.restore)
                         notifications.yell.restore();

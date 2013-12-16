@@ -13,17 +13,19 @@
 
 define(['io.ox/core/extensions',
         'io.ox/core/tk/attachments',
-        'io.ox/core/capabilities',
-        'io.ox/core/notifications'], function (ext, attachments, capabilities, notifications) {
+        'io.ox/core/notifications',
+        'spec/shared/capabilities'], function (ext, attachments, notifications, caputil) {
 
     'use strict';
+
+    var capabilities = caputil.preset('common').init('io.ox/core/tk/attachments', attachments);
 
     describe('Attachments Util has a', function () {
 
         describe('FileUploadWidget:', function () {
             describe('when capability "infostore" is disabled', function () {
                 beforeEach(function () {
-                    ox.testUtils.modules.caps('', 'io.ox/core/tk/attachments', attachments);
+                    capabilities.disable('infostore');
                 });
                 it('and ox.drive is enabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: true});
@@ -36,7 +38,7 @@ define(['io.ox/core/extensions',
             });
             describe('when capability "infostore" is enabled', function () {
                 beforeEach(function () {
-                    ox.testUtils.modules.caps('infostore', 'io.ox/core/tk/attachments', attachments);
+                    capabilities.enable('infostore');
                 });
                 it('and ox.drive is enabled "Files" button should be shown', function () {
                     var node = attachments.fileUploadWidget({drive: true});

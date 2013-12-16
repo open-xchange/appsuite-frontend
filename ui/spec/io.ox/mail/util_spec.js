@@ -12,26 +12,26 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(['io.ox/mail/util',
-        'io.ox/core/capabilities'], function (util, capabilities) {
+        'spec/shared/capabilities'], function (util, caputil) {
+
+    'use strict';
+
+    var capabilities = caputil.preset('common').init('io.ox/mail/util', util);
 
     describe('Utilities for mail:', function () {
         describe('has some capability depending msisdn methods that', function () {
-
-            describe('work with enabled capability and', function () {
-                beforeEach(function () {
-                    ox.testUtils.modules.caps('', 'io.ox/core/util', util);
+            beforeEach(function () {
+                var def;
+                runs(function () {
+                    def = capabilities.reset();
                 });
-
-                it('should correctly identify channel "email" or "phone"', function () {
-                    expect(util.getChannel('017012345678')).toEqual('email');
-                    expect(util.getChannel('+17012345678')).toEqual('email');
-                    expect(util.getChannel('(01701) 23456-78')).toEqual('email');
+                waitsFor(function () {
+                    return def.state() === 'resolved';
                 });
             });
-
             describe('work with disabled capability and', function () {
                 beforeEach(function () {
-                    ox.testUtils.modules.caps('msisdn', 'io.ox/mail/util', util);
+                    capabilities.enable('msisdn');
                 });
 
                 it('should correctly identify channel "email" or "phone"', function () {
@@ -72,6 +72,17 @@ define(['io.ox/mail/util',
                     };
                     expect(util.removeChannelSuffix(mail))
                         .toEqual({from: [], to: [['017012345678', '017012345678']]});
+                });
+            });
+            describe('work with enabled capability and', function () {
+                beforeEach(function () {
+                    capabilities.disable('msisdn');
+                });
+
+                it('should correctly identify channel "email" or "phone"', function () {
+                    expect(util.getChannel('017012345678')).toEqual('email');
+                    expect(util.getChannel('+17012345678')).toEqual('email');
+                    expect(util.getChannel('(01701) 23456-78')).toEqual('email');
                 });
             });
         });
