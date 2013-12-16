@@ -1219,7 +1219,9 @@ define('io.ox/core/api/folder',
     });
 
     api.on('warn:hidden', function (e, folder) {
-        notifications.yell('info', gt.format('Folder with name "%s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title));
+        notifications.yell('info',
+           //#. %1$s is the filename
+           gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title));
     });
 
     // publish caches
