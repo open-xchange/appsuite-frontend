@@ -1101,6 +1101,8 @@ define('io.ox/mail/write/view-main',
             this.addRecipients(id, list);
             // don't refocus on blur
             if (e.type !== 'blur') node.val('').focus();
+            //clear the input field
+            node.val('');
         } else if ($.trim(node.val()) !== '') {
             // not accepted but has content
             node.prop('disabled', true)
