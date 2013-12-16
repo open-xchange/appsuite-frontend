@@ -43,8 +43,8 @@ define('io.ox/core/settings',
         var key, parts = getParts(path), tmp = source || {};
         while (parts.length) {
             key = parts.shift();
+            if (!_.isObject(tmp) || !(key in tmp)) return defaultValue;
             tmp = tmp[key];
-            if (tmp === undefined) { return defaultValue; }
         }
         return clone(tmp);
     };
