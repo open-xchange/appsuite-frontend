@@ -332,7 +332,7 @@ define('io.ox/core/pubsub/subscriptions',
             var fullNode = $('<div>').addClass('alert alert-info').append(
                 $('<b>').addClass('privacy-label').text(gt('Approximate Duration for Subscriptions')),
                         $('<div>').addClass('privacy-text').text(
-                            gt('Updating subscribed data takes time. Importing 100 contacts from Xing, for example, takes up to 5 minutes. Please have some patience.')));
+                            gt('Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience.')));
             var link = $('<div>').addClass('control-group').append($('<a href="#">').addClass('controls').text(gt('Approximate Duration for Subscriptions')).on('click', function (e) {
                     e.preventDefault();
                     link.replaceWith(fullNode);
