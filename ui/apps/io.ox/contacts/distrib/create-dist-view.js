@@ -229,7 +229,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                     // contact picture
                     api.pictureHalo(
                         $('<div class="contact-image">'),
-                        $.extend(_.copy(o), { width: 48, height: 48, scaleType: 'cover', userid: o.id })
+                        $.extend(o, { width: 48, height: 48, scaleType: 'cover'})
                     ),
                     // name
                     $('<div class="person-name">').text(o.display_name),
