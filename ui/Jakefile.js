@@ -382,7 +382,7 @@ if (path.existsSync('help')) {
 // standard ox set of default icons for mobile devices
 utils.copy(utils.list("apps/themes/icons", "*"), {to: utils.dest("apps/themes/icons") });
 // rewrite conditions for default icons
-utils.copy(utils.list("apps/themes/icons/custom", ".htaccess"), {to: utils.dest("apps/themes/icons/custom") });
+utils.copy(utils.list("apps/themes", ".htaccess"), {to: utils.dest("apps/themes") });
 
 // postinst utilities
 
