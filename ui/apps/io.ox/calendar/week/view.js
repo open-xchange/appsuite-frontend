@@ -50,7 +50,8 @@ define('io.ox/calendar/week/view',
         folderData:     {},     // current folder object
         restoreCache:   null,   // object, which contains data for save and restore functions
         extPoint:       null,   // appointment extension
-        dayLabelRef:    null,
+        dayLabelRef:    null,	// used to manage redraw on daychange
+        startLabelRef:  null,	// used to manage redraw on weekchange
 
         // startup options
         options:        {
@@ -776,16 +777,18 @@ define('io.ox/calendar/week/view',
         renderDayLabel: function () {
 
             var days = [],
+                today = new date.Local().setHours(0, 0, 0, 0),
                 tmpDate = new date.Local(this.startDate.getTime());
 
             // something new?
-            if (this.startDate.getTime() === this.dayLabelRef) return;
+            if (this.startDate.getTime() === this.startLabelRef && today.getTime() === this.dayLabelRef) return;
 
             if (this.options.todayClass) {
                 $('.week-view-container').find('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
             }
 
-            this.dayLabelRef = this.startDate.getTime();
+            this.dayLabelRef = today.getTime();
+            this.startLabelRef = this.startDate.getTime();
 
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
