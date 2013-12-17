@@ -41,7 +41,7 @@ define('io.ox/files/mediasupport', function () {
         supportedExtensionsArray: function (mediatype) {
             if (!mediatype) return [];
             var str = this.supportedExtensions(mediatype);
-            if (!str.length) return [];
+            if (!str || !str.length) return [];
             if (str.indexOf('|') >= 0) {
                 return str.split('|');
             } else if (str) {
@@ -52,7 +52,7 @@ define('io.ox/files/mediasupport', function () {
 
             if (!this.hasSupport(mediatype)) return '';
 
-            var support;
+            var support = '';
             _.each(_.browser, function (v, b) {
                 if (v && media[mediatype][b]) {
                     support = media[mediatype][b];
