@@ -96,17 +96,27 @@ define('io.ox/core/commons',
             return function (id, node, selection, api, grid) {
                 var buttons = $('.window-toolbar .toolbar-button'),
                     toolbar = $('.window-toolbar'),
-                    container = $('<div id="multi-select-toolbar">');
-                if (selection.length > 0) {
-
-                    buttons.hide();
-                    $('#multi-select-toolbar').remove();
-                    toolbar.append(container.append(draw(id, selection, grid)));
+                    toolbarID = 'multi-select-toolbar',
+                    container;
+                if ($('#' + toolbarID).length > 0) {
+                    // reuse old toolbar
+                    container = $('#' + toolbarID);
                 } else {
-                    // selection empty
-                    $('#multi-select-toolbar').remove();
-                    buttons.show();
+                    // or creaet a new one
+                    container = $('<div>', {id: toolbarID});
                 }
+                _.defer(function () {
+                    if (selection.length > 0) {
+                        // update selection in toolbar
+                        buttons.hide();
+                        $('#' + toolbarID).remove();
+                        toolbar.append(container.append(draw(id, selection, grid)));
+                    } else {
+                        // selection empty
+                        $('#' + toolbarID).remove();
+                        buttons.show();
+                    }
+                }, 300);
             };
         }()),
 
