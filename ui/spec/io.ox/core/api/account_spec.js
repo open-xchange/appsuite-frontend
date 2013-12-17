@@ -108,22 +108,20 @@ define(['shared/examples/for/api',
             var done = new Done();
             waitsFor(done, 'set data');
 
-            api.cache.clear().done(function () {
-                // check that we get no account
-                api.cache.keys().done(function (keys) {
+            api.cache.clear()
+                .then(api.cache.keys)
+                .then(function (keys) {
                     expect(keys.length).toBe(0);
                     // now add custom data
-                    $.when(
+                    return $.when(
                         api.cache.add(account0)
-                    )
-                    .done(function () {
-                        api.all().done(function (accounts) {
-                            done.yep();
-                            expect(accounts.length).toBe(1);
-                        });
-                    });
+                    );
+                })
+                .then(api.all)
+                .done(function (accounts) {
+                    done.yep();
+                    expect(accounts.length).toBe(1);
                 });
-            });
         });
 
         it('returns proper account data', function () {
@@ -376,14 +374,23 @@ define(['shared/examples/for/api',
 
         it('resets account data', function () {
 
-            var done = new Done();
+            var done = new Done(), self = this;
             waitsFor(done, 'reset data');
 
-            api.cache.clear().done(function () {
-                api.all().done(function (accounts) {
-                    done.yep();
-                    expect(accounts.length).toBe(1);
+            api.cache.clear()
+            .then(function () {
+                return require(['settings!io.ox/mail']).then(function (settings) {
+                    self.after(function () {
+                        settings.set('defaultSendAddress');
+                    });
                 });
+            })
+            .then(function () {
+                return api.all()
+            })
+            .done(function (accounts) {
+                done.yep();
+                expect(accounts.length).toBe(1);
             });
         });
     });
