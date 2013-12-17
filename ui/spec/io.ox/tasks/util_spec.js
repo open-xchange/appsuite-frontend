@@ -104,7 +104,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
                 result = util.buildOptionArray();
                 expect(result).not.toContain(['d4', gt('late in the evening')]);
 
-                this.after(function () {stub = null});
+                this.after(function () {stub = null;});
             });
 
             it('should set weekdays correctly', function () {
@@ -141,7 +141,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
                 expect(result).not.toContain(['w4', gt('next Saturday')]);
                 expect(result).not.toContain(['w0', gt('next Sunday')]);
 
-                this.after(function () {stub = null});
+                this.after(function () {stub = null;});
             });
         });
 

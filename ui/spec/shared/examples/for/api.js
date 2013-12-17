@@ -29,7 +29,7 @@ define('shared/examples/for/api', [], function () {
                 });
 
                 it('should return a deferred object for getAll', function () {
-                    expect(api.getAll(options.args['getAll'] || {})).toBeDeferred();
+                    expect(api.getAll(options.args.getAll || {})).toBeDeferred();
                 });
 
                 it('should define a getList method', function () {
@@ -68,7 +68,7 @@ define('shared/examples/for/api', [], function () {
                     });
 
                     it('should trigger refresh:all after create', function () {
-                        var data = options.testData['create'] || {};
+                        var data = options.testData.create || {};
 
                         expect(api).toTrigger('refresh:all');
                         api.create(data);
@@ -76,7 +76,7 @@ define('shared/examples/for/api', [], function () {
                     });
 
                     it('should trigger refresh:list after create', function () {
-                        var data = options.testData['create'] || {};
+                        var data = options.testData.create || {};
 
                         expect(api).toTrigger('refresh:list');
 

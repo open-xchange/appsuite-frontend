@@ -107,7 +107,7 @@ define(['io.ox/core/extensions',
                     var self = this;
 
                     this.def = this.setup.then(getList(this.baton))
-                    .then(function (result) {
+                    .then(function () {
                         self.baton.fileList.clear();
                         var result = self.baton.fileList.get();
                         chai.expect(result).to.be.an('array');
@@ -121,7 +121,7 @@ define(['io.ox/core/extensions',
                     var self = this;
 
                     this.def = this.setup.then(getList(this.baton))
-                    .then(function (result) {
+                    .then(function () {
                         var result = self.baton.fileList.get();
                         chai.expect(result).to.be.an('array');
                         chai.expect(result).to.contain(self.file);
