@@ -380,7 +380,6 @@ define(['shared/examples/for/api',
                             folder_id: '13',
                             title: '.secret'
                         };
-                        expect(api).toTrigger('warn:hidden');
                         var def = require([
                                 'settings!io.ox/core',
                                 'settings!io.ox/files'
@@ -389,6 +388,7 @@ define(['shared/examples/for/api',
                                 fileSettings.set('showHidden');
                                 return api.clearCaches();
                             }).then(function () {
+                                expect(api).toTrigger('warn:hidden');
                                 return api.create({
                                     folder: '13',
                                     title: '.secret'
@@ -411,7 +411,6 @@ define(['shared/examples/for/api',
                                 JSON.stringify({'timestamp': 1386862269412, 'data': id})
                             );
                         });
-                        expect(api).toTrigger('warn:hidden');
                         var def = require([
                         'settings!io.ox/core',
                         'settings!io.ox/files'
@@ -420,6 +419,7 @@ define(['shared/examples/for/api',
                             fileSettings.set('showHidden');
                             return api.clearCaches();
                         }).then(function () {
+                            expect(api).toTrigger('warn:hidden');
                             return api.update({
                                 folder: '31337',
                                 changes: {
