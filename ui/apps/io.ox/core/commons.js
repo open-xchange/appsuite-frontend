@@ -128,16 +128,18 @@ define('io.ox/core/commons',
                     // or creaet a new one
                     container = $('<div>', {id: toolbarID});
                 }
-                if (selection.length > 0) {
-                    // update selection in toolbar
-                    buttons.hide();
-                    $('#' + toolbarID).remove();
-                    toolbar.append(container.append(draw(id, selection, grid)));
-                } else {
-                    // selection empty
-                    $('#' + toolbarID).remove();
-                    buttons.show();
-                }
+                _.defer(function () {
+                    if (selection.length > 0) {
+                        // update selection in toolbar
+                        buttons.hide();
+                        $('#' + toolbarID).remove();
+                        toolbar.append(container.append(draw(id, selection, grid)));
+                    } else {
+                        // selection empty
+                        $('#' + toolbarID).remove();
+                        buttons.show();
+                    }
+                }, 100);
             };
         }()),
 

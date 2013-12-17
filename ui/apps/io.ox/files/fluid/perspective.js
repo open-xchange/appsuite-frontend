@@ -201,16 +201,17 @@ define('io.ox/files/fluid/perspective',
             // or creaet a new one
             container = $('<div>', {id: toolbarID});
         }
-        if (selected.length > 0) {
-
-            buttons.hide();
-            $('#multi-select-toolbar').remove();
-            toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
-        } else {
-            // selection empty
-            $('#multi-select-toolbar').remove();
-            buttons.show();
-        }
+        _.defer(function () {
+            if (selected.length > 0) {
+                buttons.hide();
+                $('#multi-select-toolbar').remove();
+                toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
+            } else {
+                // selection empty
+                $('#multi-select-toolbar').remove();
+                buttons.show();
+            }
+        });
     }
     // END mobile multiselect helpers
 
