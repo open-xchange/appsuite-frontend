@@ -197,6 +197,13 @@ define('io.ox/mail/view-detail',
                     if (list.length > 1) {
                         //
                         inline = $('<div class="thread-inline-actions">');
+
+                        inline.on('redraw', function () {
+                            inline.empty();
+                            ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
+                            inline.find('.dropdown > a').addClass('btn');
+                        });
+
                         // add special marker
                         baton.isThread = true;
                         ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
@@ -244,13 +251,6 @@ define('io.ox/mail/view-detail',
                     console.error('mail.drawThread', e.message, e);
                     fail(node.empty(), baton);
                 }
-
-                inline.on('redraw', function () {
-                    inline.empty();
-                    ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
-                    inline.find('.dropdown > a').addClass('btn');
-
-                });
             }
 
             return function (baton) {
