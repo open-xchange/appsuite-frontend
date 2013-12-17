@@ -722,6 +722,12 @@ define('io.ox/mail/view-detail',
                         ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
                         inline.find('.dropdown > a').addClass('btn'); // was: btn-primary
                         frag.appendChild(inline.get(0));
+                        inline.on('redraw', function () {
+                            inline.empty();
+                            ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
+                            inline.find('.dropdown > a').addClass('btn');
+
+                        });
 
                         //replace delete action with one excluding the sent folder
                         scrubThreadDelete($(inline).find('[data-action=delete]'));
@@ -756,6 +762,7 @@ define('io.ox/mail/view-detail',
                     console.error('mail.drawThread', e.message, e);
                     fail(node.empty(), baton);
                 }
+
             }
 
             return function (baton) {
