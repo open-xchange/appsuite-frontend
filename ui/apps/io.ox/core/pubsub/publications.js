@@ -46,7 +46,8 @@ define('io.ox/core/pubsub/publications',
                 _(data).each(function (obj) {
                     if (obj.module === module)   {
                         target = obj.id;
-                        _(obj.formDescription).each(function (description) {//fill targetObj
+                        _(obj.formDescription).each(function (description) {
+                            //fill targetObj
                             targetObj[description.name] = description.defaultValue || '';
                         });
                     }
@@ -125,7 +126,14 @@ define('io.ox/core/pubsub/publications',
             //Body
             popup.getBody().addClass('form-horizontal publication-dialog max-height-250');
 
-            var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
+            var baton = ext.Baton({
+                view: self,
+                model: self.model,
+                data: self.model.attributes,
+                templates: [],
+                popup: popup,
+                target: self.model.attributes[self.model.attributes.target]
+            });
 
             popup.on('publish', function () {
 
@@ -187,9 +195,11 @@ define('io.ox/core/pubsub/publications',
                     folderAPI.get({ folder: baton.model.get('entity').folder }).then(
                         function success(data) {
                             var target = baton.model.get('target'),
-                                description = baton.model.get(target),
-                                name = description.siteName || data.title;
-                            popup.getBody().find('.siteName-value').val(name);
+                                description = baton.model.get(target);
+                            if (!description.siteName) {
+                                description.siteName = data.title;
+                            }
+                            popup.getBody().find('.siteName-value').val(description.siteName);
                             show();
                         },
                         function fail() {
