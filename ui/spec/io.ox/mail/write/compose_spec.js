@@ -14,9 +14,10 @@
 define(
     ['io.ox/mail/write/main',
      'io.ox/mail/api',
+     'settings!io.ox/mail',
      'io.ox/core/api/account',
      'fixture!io.ox/mail/write/email.json',
-     'fixture!io.ox/mail/write/accounts.json'], function (writer, mailAPI, accountAPI, fixtureEmail, fixtureAccounts) {
+     'fixture!io.ox/mail/write/accounts.json'], function (writer, mailAPI, settings, accountAPI, fixtureEmail, fixtureAccounts) {
 
     'use strict';
 
@@ -28,6 +29,10 @@ define(
     }
 
     describe('Mail compose dialog', function () {
+
+        beforeEach(function () {
+            settings.set('messageFormat', 'html');
+        });
 
         var app = null, ed = null, form = $();
 
