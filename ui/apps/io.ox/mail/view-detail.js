@@ -244,6 +244,13 @@ define('io.ox/mail/view-detail',
                     console.error('mail.drawThread', e.message, e);
                     fail(node.empty(), baton);
                 }
+
+                inline.on('redraw', function () {
+                    inline.empty();
+                    ext.point('io.ox/mail/thread').invoke('draw', inline, baton);
+                    inline.find('.dropdown > a').addClass('btn');
+
+                });
             }
 
             return function (baton) {
