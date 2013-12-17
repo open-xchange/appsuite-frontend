@@ -12,8 +12,7 @@
  */
 define(['plugins/portal/quota/register',
         'io.ox/core/extensions',
-        'spec/shared/capabilities',
-        'gettext!plugins/portal'], function (quotaPlugin, ext, caputil) {
+        'spec/shared/capabilities'], function (quotaPlugin, ext, caputil) {
     
     var capabilities = caputil.preset('common').init('plugins/portal/quota/register', quotaPlugin);
 
