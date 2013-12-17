@@ -59,9 +59,11 @@ define('io.ox/mail/view-grid-template',
                         attachment = $('<i class="icon-paper-clip">'),
                         priority = $('<span class="priority">'),
                         $('<div class="subject">').append(
-                            unread = $('<i class="icon-unread icon-circle">'),
-                            answered = $('<i class="icon-answered icon-reply">'),
-                            forwarded = $('<i class="icon-forwarded icon-mail-forward">'),
+                            $('<span>').append(
+                                unread = $('<i class="icon-unread icon-circle">'),
+                                answered = $('<i class="icon-answered icon-reply">'),
+                                forwarded = $('<i class="icon-forwarded icon-mail-forward">')
+                            ),
                             subject = $('<span class="drag-title">')
                         )
                     )
