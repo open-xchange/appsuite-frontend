@@ -78,7 +78,7 @@ define(['shared/examples/for/api',
             meta: null,
             name: 'Email',
             password: null,
-            personal: 'O. Xentner', // just last_name
+            personal: 'Otto Xentner', // just last_name
             pop3_delete_write_through: false,
             pop3_expunge_on_quit: false,
             pop3_path: 'INBOX/EMail',
@@ -178,7 +178,7 @@ define(['shared/examples/for/api',
             require(['settings!io.ox/mail']).then(function (settings) {
 
                 // overwrite settings. white-space
-                settings.detach().set('defaultSendAddress', ' otto.xentner@open-xchange.com ');
+                settings.set('defaultSendAddress', ' otto.xentner@open-xchange.com ');
 
                 api.getPrimaryAddress(0).done(function (address) {
                     expect(address).toEqual(['Otto Xentner', 'otto.xentner@open-xchange.com']);
