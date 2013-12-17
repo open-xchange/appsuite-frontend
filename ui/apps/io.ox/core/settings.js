@@ -112,7 +112,11 @@ define('io.ox/core/settings',
             } else {
                 resolve(path, function (tmp, key) {
                     var previous = tmp[key];
-                    tmp[key] = value;
+                    if (value === undefined) {
+                        delete tmp[key];
+                    } else {
+                        tmp[key] = value;
+                    }
                     self.trigger('change:' + path, value).trigger('change', path, value, previous);
                 }, true);
             }
