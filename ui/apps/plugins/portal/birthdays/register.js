@@ -42,11 +42,11 @@ define('plugins/portal/birthdays/register',
 
     ext.point('io.ox/portal/widget/birthdays').extend({
 
-        title: gt('Next birthdays'),
+        title: gt('Birthdays'),
 
         load: function (baton) {
             var aDay = 24 * 60 * 60 * 1000,
-                start = _.now() - aDay, // yes, one could try to calculate 00:00Z this day, but hey...
+                start = new date.UTC().setHours(0, 0, 0, 0).getTime() - aDay,
                 end = start + WEEKS * aDay * 7;
             return api.birthdays({ start: start, end: end, right_hand_limit: 25 }).done(function (data) {
                 baton.data = data;
@@ -55,7 +55,7 @@ define('plugins/portal/birthdays/register',
 
         preview: function (baton) {
 
-            var $list = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to complete list of next birthdays.') + '">'),
+            var $list = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' +  gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
                 hash = {},
                 contacts = baton.data,
                 numOfItems = _.device('small') ? 5 : 15;
@@ -73,19 +73,28 @@ define('plugins/portal/birthdays/register',
             } else {
                 $list.addClass('pointer');
                 _(contacts.slice(0, numOfItems)).each(function (contact) {
-                    var birthday = new date.UTC(contact.birthday),
+                    var birthday = new date.UTC(contact.birthday).setHours(0, 0, 0, 0),//just to be sure hours are the same
+                        birthdayText = '',
+                        today = new date.UTC().setHours(0, 0, 0, 0).setYear(birthday.getYear()),//it's not really today, its today in the year of the birthday
                         name = util.getFullName(contact);
-                    if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
-                        birthday = birthday.format(date.DATE_NOYEAR);
+
+                    if (birthday.getTime() === today.getTime()) {//today
+                        birthdayText = gt('Today');
+                    } else if (birthday.getTime() === today.getTime() + date.DAY) {//tomorrow
+                        birthdayText = gt('Tomorrow');
+                    } else if (birthday.getTime() === today.getTime() - date.DAY) {//yesterday
+                        birthdayText = gt('Yesterday');
+                    } else if (birthday.getYear() === 1) {//Year 0 is special for birthdays without year (backend changes this to 1...)
+                        birthdayText = birthday.format(date.DATE_NOYEAR);
                     } else {
-                        birthday = birthday.format(date.DATE);
+                        birthdayText = birthday.format(date.DATE);
                     }
 
                     if (!isDuplicate(name, hash)) {
                         $list.append(
                             $('<li class="line">').append(
                                 $('<span class="bold">').text(name), $.txt(' '),
-                                $('<span class="accent">').text(_.noI18n(birthday))
+                                $('<span class="accent">').text(_.noI18n(birthdayText))
                             )
                         );
                         markDuplicate(name, hash);
@@ -101,7 +110,7 @@ define('plugins/portal/birthdays/register',
             var hash = {}, $list;
 
             $list = $('<div class="io-ox-portal-birthdays">').append(
-                $('<h1>').text(gt('Next birthdays'))
+                $('<h1>').text(gt('Birthdays'))
             );
 
             if (baton.data.length === 0) {
@@ -139,7 +148,7 @@ define('plugins/portal/birthdays/register',
                         // get human readable delta
                         days = birthday.getDate() - now.getDate();
                         delta = (next - now) / date.DAY;
-                        delta = days === 0 && delta <= 1 ? gt('Today') : days === 1 && delta <= 2 ? gt('Tomorrow') : gt('In %1$d days', Math.ceil(delta));
+                        delta = days === 0 && delta <= 1 ? gt('Today') : days === 1 && delta <= 2 ? gt('Tomorrow') : days === -1 && delta >= 364 ? gt('Yesterday') : gt('In %1$d days', Math.ceil(delta));
 
                         $list.append(
                             $('<div class="birthday" tabindex="1">').data('contact', contact).append(
@@ -175,7 +184,7 @@ define('plugins/portal/birthdays/register',
     });
 
     ext.point('io.ox/portal/widget/birthdays/settings').extend({
-        title: gt('Next birthdays'),
+        title: gt('Birthdays'),
         type: 'birthdays',
         editable: false,
         unique: true
