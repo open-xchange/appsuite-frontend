@@ -264,7 +264,7 @@ define('io.ox/core/main',
 
         var count = 0,
             timer = null,
-            useSpinner = _.device('webkit || firefox'),
+            useSpinner = _.device('webkit || firefox || ie > 9'),
             duration = useSpinner ? 500 : 1500,
             refreshIcon = null;
 
