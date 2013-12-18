@@ -202,7 +202,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                                     var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (flag || 'common'));
                                     point.invoke('draw', $(this), self.model);
                                 }),
-                                title = $('<span>').addClass('list-title').append(title)
+                                title = $('<span>').addClass('list-title').text(title)
                             );
 
                         self.model.on('change:rulename', function (el, val) {
