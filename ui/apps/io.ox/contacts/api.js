@@ -758,9 +758,9 @@ define('io.ox/contacts/api',
 
         var now = _.now(),
             params = _.extend({
+            action: 'birthdays',
             start: now,
             end: now + 604800000, // now + WEEK
-            action: 'birthdays',
             columns: '1,20,500,501,502,503,504,505,511',
             timezone: 'UTC'
         }, options || {});
