@@ -914,7 +914,7 @@ define('io.ox/core/tk/selection',
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
             .on('click', '.selectable', clickHandler)
-            .on('touchstart', '.selectable', touchstartHandler);
+            .on('tap', '.selectable', touchstartHandler);
 
         /*
         * DND
