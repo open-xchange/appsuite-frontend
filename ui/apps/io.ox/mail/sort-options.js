@@ -173,7 +173,6 @@ define('io.ox/mail/sort-options',
         id: 'dropdown',
         index: 1000,
         draw: function () {
-            console.log('Yhiaa');
             this.append(
                 $('<div class="grid-options dropdown">')
                 .append(
@@ -181,7 +180,7 @@ define('io.ox/mail/sort-options',
                     .attr('aria-label', gt('Sort options'))
                     .append(
                         $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
-                        $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
+                        $.txt(gt('View'))
                     )
                     .dropdown(),
                     $('<ul class="dropdown-menu" role="menu">')

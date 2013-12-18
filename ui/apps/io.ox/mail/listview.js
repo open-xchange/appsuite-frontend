@@ -19,10 +19,25 @@ define('io.ox/mail/listview',
      'io.ox/core/tk/list',
      'io.ox/core/date',
      'io.ox/mail/sort-options',
+     'io.ox/contacts/api',
      'gettext!io.ox/core'
-    ], function (ext, util, api, account, ListView, date, sortoptions, gt) {
+    ], function (ext, util, api, account, ListView, date, sortoptions, contactsAPI, gt) {
 
     'use strict';
+
+    ext.point('io.ox/mail/listview/item').extend({
+        id: 'picture',
+        before: 'row1',
+        draw: function (baton) {
+            var from = baton.data.from;
+            this.append(
+                contactsAPI.pictureHalo(
+                    $('<div class="contact-picture">'),
+                    { email: from && from[0] && from[0][1], width: 32, height: 32, scaleType: 'cover' }
+                )
+            );
+        }
+    });
 
     ext.point('io.ox/mail/listview/item').extend({
         id: 'row1',
@@ -77,7 +92,7 @@ define('io.ox/mail/listview',
         draw: function (baton) {
             var data = baton.data,
                 unread = util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data));
-            this.parent().toggleClass('unread', unread);
+            this.closest('.list-item').toggleClass('unread', unread);
         }
     });
 

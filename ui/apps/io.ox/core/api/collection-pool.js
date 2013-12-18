@@ -11,23 +11,9 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/api/collection-pool', [], function () {
+define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (backbone) {
 
     'use strict';
-
-    // basic model with custom cid
-    var Model = Backbone.Model.extend({
-        constructor: function () {
-            Backbone.Model.apply(this, arguments);
-            this.cid = _.cid(this.attributes);
-        }
-    });
-
-    // collection using custom models
-    var Collection = Backbone.Collection.extend({
-        comparator: 'index',
-        model: Model
-    });
 
     var collections = {};
 
@@ -69,7 +55,7 @@ define('io.ox/core/api/collection-pool', [], function () {
             }
 
             // register new collection
-            entry = collections[module][cid] = { access: _.now(), collection: new Collection() };
+            entry = collections[module][cid] = { access: _.now(), collection: new backbone.Collection() };
 
             // propagate changes in all collections
             return entry.collection.on({
@@ -82,7 +68,7 @@ define('io.ox/core/api/collection-pool', [], function () {
     _.extend(Pool.prototype, {
 
         getDefault: function () {
-            return new Collection();
+            return new backbone.Collection();
         }
     });
 

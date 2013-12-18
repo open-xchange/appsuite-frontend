@@ -11,13 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/api/collection-facade', ['io.ox/core/api/collection-pool', 'io.ox/core/http'], function (Pool, http) {
+define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'io.ox/core/http'], function (Pool, http) {
 
     'use strict';
 
-    function process(deferred, context, collection, method) {
-        return deferred
-            .done(context.addIndex.bind(context, method === 'add' ? collection.length : 0))
+    function process(params, collection, method) {
+
+        return this.fetch(params)
+            .done(this.addIndex.bind(this, method === 'add' ? collection.length : 0, params))
             .then(function (data) {
                 return collection[method](data);
             });
@@ -29,7 +30,7 @@ define('io.ox/core/api/collection-facade', ['io.ox/core/api/collection-pool', 'i
         return hash;
     }
 
-    function CollectionFacade(options) {
+    function CollectionLoader(options) {
 
         _.extend(this, {
             columns: '1,20',
@@ -50,7 +51,7 @@ define('io.ox/core/api/collection-facade', ['io.ox/core/api/collection-pool', 'i
         return key + '=' + this[key];
     }
 
-    _.extend(CollectionFacade.prototype, {
+    _.extend(CollectionLoader.prototype, {
 
         LIMIT: 30,
 
@@ -71,17 +72,25 @@ define('io.ox/core/api/collection-facade', ['io.ox/core/api/collection-pool', 'i
             return this.pool.get(cid);
         },
 
-        each: function (/* obj, index, offset */) {
+        before: function (/* offset, params, data */) {
         },
 
-        addIndex: function (offset, data) {
+        each: function (/* obj, index, offset, params */) {
+        },
+
+        after: function (/* offset, params, data */) {
+        },
+
+        addIndex: function (offset, params, data) {
+            this.before(offset, params, data);
             _(data).each(function (obj, index) {
                 obj.index = offset + index;
-                this.each(obj, index, offset);
+                this.each(obj, index, offset, params);
             }, this);
+            this.after(offset, params, data);
         },
 
-        httpGet: function (params) {
+        fetch: function (params) {
             return http.GET({ module: this.module, params: params });
         },
 
@@ -100,7 +109,7 @@ define('io.ox/core/api/collection-facade', ['io.ox/core/api/collection-pool', 'i
                 return $.Deferred().resolve(this.collection);
             }
 
-            return process(this.httpGet(params), this, this.collection.reset(), 'reset');
+            return process.call(this, params, this.collection.reset(), 'reset');
         },
 
         paginate: function (params) {
@@ -109,7 +118,7 @@ define('io.ox/core/api/collection-facade', ['io.ox/core/api/collection-pool', 'i
             params = this.getQueryParams(_.extend({ offset: offset }, params));
             params.limit = offset + ',' + (offset + this.LIMIT);
 
-            return process(this.httpGet(params), this, this.collection, 'add');
+            return process.call(this, params, this.collection, 'add');
         },
 
         reload: function (params) {
@@ -117,9 +126,9 @@ define('io.ox/core/api/collection-facade', ['io.ox/core/api/collection-pool', 'i
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
             params.limit = '0,' + this.collection.length;
 
-            return process(this.httpGet(params), this, this.collection, 'set');
+            return process.call(this, params, this.collection, 'set');
         }
     });
 
-    return CollectionFacade;
+    return CollectionLoader;
 });

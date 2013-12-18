@@ -41,7 +41,6 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
                 bottomPoint.invoke('draw', bottom);
             }
 
-            console.log('ListViewControl.render', this.listView);
             this.$el.append(top, this.listView.render().$el.addClass('abs'), bottom);
 
             return this;

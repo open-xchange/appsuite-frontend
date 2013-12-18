@@ -15,6 +15,13 @@
 
 .list-view.mail {
 
+    .contact-picture {
+        float: left;
+        margin: 0px 14px 0 0;
+        .picture(40px, 40px);
+        display: none;
+    }
+
     .from {
         .ellipsis();
         span.person {
@@ -131,7 +138,7 @@
 
     .thread-item {
 
-        padding: 5px @list-view-padding 5px (@list-view-padding * 2.5);
+        padding: 5px @list-view-padding 5px (@list-view-padding + 30px);
 
         .from span.person {
             font-weight: normal;
@@ -147,6 +154,90 @@
 
     .thread-item:first-child { padding-top: 7px; }
     .thread-item:last-child { padding-bottom: 7px; }
+}
+
+.thread-view-control {
+    background-color: #eee;
+}
+
+.detail-view-container {
+
+    @height: 60px;
+
+    .thread-view-navigation {
+
+        display: none;
+        background-color: white;
+        width: 100%;
+        height: @height;
+        line-height: @height;
+        position: absolute;
+        top: 0px;
+        z-index: 2;
+        .box-shadow(0 0 15px rgba(0, 0, 0, 0.20));
+
+        a { outline: 0; }
+        a:hover { text-decoration: none; }
+        a.disabled { color: #aaa; cursor: default; }
+
+        .overview {
+            display: table-cell;
+            width: 40%;
+            padding-left: 20px;
+            i { margin-right: 14px; }
+        }
+
+        .position {
+            display: table-cell;
+            text-align: center;
+            width: 20%;
+        }
+
+        .prev-next {
+            display: table-cell;
+            text-align: right;
+            width: 40%;
+            padding-right: 20px;
+            i { margin-left: 14px; }
+        }
+
+        [class^="icon-"] {
+            color: inherit;
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 20px;
+        }
+    }
+
+    .detail-view {
+        top: 0;
+        overflow: auto;
+        z-index: 1;
+    }
+
+    &.navigation-visible {
+        .thread-view-navigation { display: table; }
+        .detail-view { top: @height; }
+    }
+}
+
+.list-view.mail.thread-view {
+
+    list-style-type: none;
+    padding: 0;
+    margin: 20px;
+    overflow: visible;
+
+    .list-item {
+        background-color: white;
+        clear: both;
+        padding: 10px 14px 11px 14px;
+        margin-bottom: 1px;
+    }
+
+    .contact-picture {
+        display: inline-block;
+    }
 }
 
 /* VGrid elements */
@@ -441,7 +532,7 @@
     .mail-detail-decorator {
 
         position: relative;
-        padding: 20px 20px 0 20px;
+        padding: 20px;
         display: table;
         width: 100%;
 

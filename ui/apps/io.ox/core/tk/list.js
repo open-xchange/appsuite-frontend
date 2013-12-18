@@ -210,14 +210,14 @@ define('io.ox/core/tk/list',
             return this.$el.children('.list-item');
         },
 
-        connect: function (facade) {
+        connect: function (loader) {
 
-            this.collection = facade.getDefaultCollection();
-            this.facade = facade;
+            this.collection = loader.getDefaultCollection();
+            this.loader = loader;
 
             this.load = function () {
                 // load data
-                return facade.load(this.model.toJSON())
+                return loader.load(this.model.toJSON())
                 .done(function (collection) {
                     this.setCollection(collection);
                     this.onReset();
@@ -225,11 +225,11 @@ define('io.ox/core/tk/list',
             };
 
             this.paginate = function () {
-                return facade.paginate(this.model.toJSON());
+                return loader.paginate(this.model.toJSON());
             };
 
             this.reload = function () {
-                return facade.reload(this.model.toJSON());
+                return loader.reload(this.model.toJSON());
             };
         },
 
@@ -238,7 +238,7 @@ define('io.ox/core/tk/list',
         reload: NOOP,
 
         // generate composite keys (might differ from _.cid)
-        stringify: function (data) {
+        cid: function (data) {
             return _.cid(data);
         },
 
@@ -257,7 +257,7 @@ define('io.ox/core/tk/list',
                 data = model.toJSON(),
                 baton = ext.Baton({ data: data, model: model });
             // add cid and full data
-            li.attr('data-cid', this.stringify(data));
+            li.attr('data-cid', this.cid(data));
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
