@@ -367,7 +367,8 @@ define('io.ox/mail/write/view-main',
                 if (hash[recipient.email] === undefined && hash[mailUtil.cleanupPhone(recipient.phone)] === undefined) {
                     //draw recipient
                     var node = $('<div>'), value;
-                    ext.point(POINT + '/contactItem').invoke('draw', node, ext.Baton({ id: id, data: recipient }));
+                    ext.point(POINT + '/contactItem').invoke('draw', node,
+                        ext.Baton({ id: id, data: recipient, app: this.app }));
                     // add to proper section (to, CC, ...)
                     this.sections[id + 'List'].append(node);
                     // if list itself contains doublets
