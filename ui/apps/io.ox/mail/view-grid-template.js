@@ -97,7 +97,11 @@ define('io.ox/mail/view-grid-template',
                 if (subject !== '') {
                     a11yLabel += ', ' + subject;
                     fields.subject.removeClass('empty').empty().html(
-                        emoji.processEmoji(subject)
+                        emoji.processEmoji(subject, function (text, lib) {
+                            if (!lib.loaded) return;
+
+                            fields.subject.html(text);
+                        })
                     );
                 } else {
                     fields.subject.addClass('empty').text(gt('No subject'));

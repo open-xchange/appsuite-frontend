@@ -187,7 +187,10 @@ define('io.ox/mail/detail/content',
         index: 300,
         process: function (baton) {
             if (!baton.isHTML || baton.isLarge) return;
-            baton.source = emoji.processEmoji(baton.source);
+            baton.processedEmoji = false;
+            baton.source = emoji.processEmoji(baton.source, function (text, lib) {
+                baton.processedEmoji = !lib.loaded;
+            });
         }
     });
 
@@ -421,6 +424,12 @@ define('io.ox/mail/detail/content',
                     // plain TEXT
                     content = $('<div class="content plain-text noI18n">');
                     content.html(beautifyText(baton.source));
+                    emoji.processEmoji(baton.source, function (text, lib) {
+                        baton.processedEmoji = !lib.loaded;
+                        if (baton.processedEmoji) return;
+
+                        content.html(beautifyText(text));
+                    });
                 }
 
                 // process content
@@ -430,7 +439,7 @@ define('io.ox/mail/detail/content',
                 console.error('mail.getContent', e.message, e, data);
             }
 
-            return { content: content, isLarge: baton.isLarge, type: baton.type };
+            return { content: content, isLarge: baton.isLarge, type: baton.type, processedEmoji: baton.processedEmoji };
         }
     };
 });

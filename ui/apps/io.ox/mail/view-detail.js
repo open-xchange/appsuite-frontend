@@ -582,10 +582,15 @@ define('io.ox/mail/view-detail',
 
             // soft-break long words (like long URLs)
             var subject = $.trim(baton.data.subject),
-                html = emoji.processEmoji(coreUtil.breakableHTML(subject));
+                self = this,
+                html = emoji.processEmoji(coreUtil.breakableHTML(subject), function (text, lib) {
+                    if (!lib.loaded) return;
+
+                    self.find('.subject > span.subject-data').html(text);
+                });
 
             // process emoji
-            subject = subject ? $('<span>').html(html) : '';
+            subject = subject ? $('<span class="subject-data">').html(html) : '';
 
             this.append(
                 $('<div class="mail-detail-clear-left">'),
@@ -1135,6 +1140,12 @@ define('io.ox/mail/view-detail',
         draw: function (baton) {
             var article, data = baton.data, content = that.getContent(data, baton.options);
 
+            if (content.processedEmoji === false) {
+                content.content.addClass('unprocessedEmoji');
+                emoji.processEmoji(content.content.html(), function (text) {
+                    article.find('.unprocessedEmoji').removeClass('unprocessedEmoji').html(text);
+                });
+            }
             this.append(
                 article = $('<article>').attr({
                     'data-cid': data.folder_id + '.' + data.id,
