@@ -581,14 +581,14 @@ define.async('io.ox/core/tk/html-editor',
             get = function () {
                 // get raw content
                 var content = ed.getContent({ format: 'raw' });
+                // convert emojies
+                content = emoji.imageTagsToUnified(content);
                 // clean up
                 content = content
                     // remove custom attributes (incl. bogus attribute)
                     .replace(/\sdata-[^=]+="[^"]*"/g, '')
                     .replace(/<(\w+)[ ]?\/>/g, '<$1>')
                     .replace(/(<p>(<br>)?<\/p>)+$/, '');
-                // convert emojies
-                content = emoji.imageTagsToUnified(content);
                 // remove trailing white-space
                 return trimOut(content);
             };

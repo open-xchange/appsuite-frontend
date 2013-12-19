@@ -1020,8 +1020,6 @@ define('io.ox/mail/write/main',
                 attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : '')
                 };
-                //don’t send emoji images, but unicode characters
-                attachments.content = emoji.imageTagsToUnified(attachments.content);
             } else {
                 attachments = {
                     content: (app.getEditor() ? app.getEditor().getContent() : ''),
