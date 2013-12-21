@@ -411,9 +411,16 @@ define(['shared/examples/for/api',
                                 JSON.stringify({'timestamp': 1386862269412, 'data': id})
                             );
                         });
-                        var def = require([
-                        'settings!io.ox/core',
-                        'settings!io.ox/files'
+                        var triggered,
+                            def;
+
+                        //warn:hidden is triggered independently, so we need to wait for it
+                        api.on('warn:hidden', function () {
+                            triggered = true;
+                        });
+                        def = require([
+                            'settings!io.ox/core',
+                            'settings!io.ox/files'
                         ]).then(function (settings, fileSettings) {
                             settings.set('folder/blacklist');
                             fileSettings.set('showHidden');
@@ -430,6 +437,9 @@ define(['shared/examples/for/api',
                             return 'finished';
                         });
 
+                        waitsFor(function () {
+                            return triggered === true;
+                        }, 'folder API to trigger warn:hidden', ox.testTimeout);
                         expect(def).toResolveWith('finished');
                     });
 
