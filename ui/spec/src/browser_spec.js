@@ -41,7 +41,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
 
         _(userAgents.invalid).each(function (a, number) {
             it('should use the fallback "unknown" if an unknown or broken user agent occurs', function () {
-                var spy = sinon.spy(console, 'warn');
+                var spy = sinon.stub(console, 'warn', function () {});
                 _.device.loadUA(userAgents.invalid[number]);
 
                 expect(spy).toHaveBeenCalledWithMatch('Error while detecting browser, using fallback');
