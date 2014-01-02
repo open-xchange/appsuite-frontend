@@ -114,8 +114,8 @@ define('plugins/portal/quota/register',
 
         el.append(
             $('<li class="paragraph">').append(
-                $('<span>').text(quota.i18nName),
                 label,
+                $('<span>').text(quota.i18nName),
                 bar
             )
         );
