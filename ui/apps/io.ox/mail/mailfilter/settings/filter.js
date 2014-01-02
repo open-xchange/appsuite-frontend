@@ -173,7 +173,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                                         })
                                     );
                                 }),
-                                title = $('<span>').addClass('list-title').append(title)
+                                title = $('<span>').addClass('list-title').text(title)
                             );
 
                         self.model.on('change:rulename', function (el, val) {
