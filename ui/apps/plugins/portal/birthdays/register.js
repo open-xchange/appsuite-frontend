@@ -30,14 +30,16 @@ define('plugins/portal/birthdays/register',
         return String(name).toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
     }
 
-    function markDuplicate(name, hash) {
-        name = unifySpelling(name);
-        hash[name] = true;
+    function cid(name, birthday) {
+        return unifySpelling(name) + ':' + birthday.format('YYYYMMDD');
     }
 
-    function isDuplicate(name, hash) {
-        name = unifySpelling(name);
-        return name in hash;
+    function markDuplicate(name, birthday, hash) {
+        hash[cid(name, birthday)] = true;
+    }
+
+    function isDuplicate(name, birthday, hash) {
+        return cid(name, birthday) in hash;
     }
 
     ext.point('io.ox/portal/widget/birthdays').extend({
@@ -90,14 +92,14 @@ define('plugins/portal/birthdays/register',
                         birthdayText = birthday.format(date.DATE);
                     }
 
-                    if (!isDuplicate(name, hash)) {
+                    if (!isDuplicate(name, birthday, hash)) {
                         $list.append(
                             $('<li class="line">').append(
                                 $('<span class="bold">').text(name), $.txt(' '),
                                 $('<span class="accent">').text(_.noI18n(birthdayText))
                             )
                         );
-                        markDuplicate(name, hash);
+                        markDuplicate(name, birthday, hash);
                     }
                 });
             }
@@ -131,15 +133,15 @@ define('plugins/portal/birthdays/register',
                 }
                 // loop
                 _(baton.data).each(function (contact) {
-                    var utc = date.Local.utc(contact.birthday), birthday, next, now, days, delta,
+                    var utc = date.Local.utc(contact.birthday), next, now, days, delta,
+                        birthday = new date.Local(utc),
                         // we use fullname here to avoid haveing duplicates like "Jon Doe" and "Doe, Jon"
                         name = util.getFullName(contact);
 
-                    if (!isDuplicate(name, hash)) {
+                    if (!isDuplicate(name, birthday, hash)) {
 
                         // get delta
                         now = new date.Local();
-                        birthday = new date.Local(utc);
                         next = new date.Local(now.getYear(), birthday.getMonth(), birthday.getDate());
                         //add 23h 59min and 59s, so it refers to the end of the day
                         next.add(date.DAY - 1);
@@ -163,7 +165,7 @@ define('plugins/portal/birthdays/register',
                                 )
                             )
                         );
-                        markDuplicate(name, hash);
+                        markDuplicate(name, birthday, hash);
                     }
                 });
                 // init sidepopup
