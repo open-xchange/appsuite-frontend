@@ -41,14 +41,6 @@ define('io.ox/mail/accounts/model',
                     fn: _.noI18n('isMailAddress')
                 }
             ],
-            mail_server: {
-                required: true,
-                msg: gt('This field has to be filled')
-            },
-            mail_port: {
-                required: true,
-                msg: gt('This field has to be filled')
-            },
             login: function (value) {
                 //for setups without any explicit login name for primary account
                 if (this.attributes.id !== 0 && $.trim(value) === '')
@@ -60,12 +52,28 @@ define('io.ox/mail/accounts/model',
                     return gt('This field has to be filled');
                 }
             },
+            mail_server: {
+                required: function () {
+                    return !this.isHidden();
+                },
+                msg: gt('This field has to be filled')
+            },
+            mail_port: {
+                required: function () {
+                    return !this.isHidden();
+                },
+                msg: gt('This field has to be filled')
+            },
             transport_server: {
-                required: true,
+                required: function () {
+                    return !this.isHidden();
+                },
                 msg: gt('This field has to be filled')
             },
             transport_port: {
-                required: true,
+                required: function () {
+                    return !this.isHidden();
+                },
                 msg: gt('This field has to be filled')
             },
             // pop3 credentials
@@ -82,6 +90,12 @@ define('io.ox/mail/accounts/model',
                 msg: gt('This field has to be filled')
             }
         },
+
+        isHidden: function () {
+            //convention with backend
+            return this.attributes.id === 0 && !this.attributes.mail_server;
+        },
+
         isMailAddress: function (newMailaddress) {
             // var regEmail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(newMailaddress);
 
