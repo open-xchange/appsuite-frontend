@@ -58,8 +58,9 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
             filter.editAutoForward(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
             expect(this.node.find('input[name="forwardmail"]').length).toBe(1);
+            expect(this.node.find('input[name="forwardmail"]').val()).toBe('tester@open-xchange.com');
             expect(this.node.find('input[type="checkbox"]').length).toBe(1);
-
+            expect(this.node.find('input[type="checkbox"]').prop('checked')).toBe(false);
         });
 
     });
