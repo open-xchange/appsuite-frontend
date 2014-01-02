@@ -109,12 +109,14 @@ define('io.ox/core/import/import',
 
     ext.point('io.ox/core/import/ignore_uuids').extend({
         id: 'default',
-        draw: function () {
+        draw: function (baton) {
             this.append(
+                //show option only for ical imports
+                _.contains(['calendar', 'tasks'], baton.module) ?
                 $('<label class="checkbox">').append(
                     $('<input type="checkbox" tabindex="1" name="ignore_uuids">'),
                     gt('Ignore existing events. Helpful to import public holiday calendars, for example.')
-                )
+                ) : $()
             );
         }
     });
