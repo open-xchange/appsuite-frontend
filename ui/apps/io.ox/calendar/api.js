@@ -18,8 +18,9 @@ define('io.ox/calendar/api',
      'settings!io.ox/core',
      'io.ox/core/notifications',
      'io.ox/core/date',
-     'io.ox/core/api/factory'
-    ], function (http, Events, coreConfig, notifications, date, factory) {
+     'io.ox/core/api/factory',
+     'io.ox/core/capabilities'
+    ], function (http, Events, coreConfig, notifications, date, factory, capabilities) {
 
     'use strict';
 
@@ -293,7 +294,7 @@ define('io.ox/calendar/api',
             var key = (o.folder || o.folder_id) + '.' + o.id + '.' + (o.recurrence_position || 0);
             delete get_cache[key];
             return api.get(o)
-                .pipe(function (data) {
+                .then(function (data) {
                     api.trigger('update', data);
                     //to make the detailview remove the busy animation
                     api.removeFromUploadList(_.ecid(data));
@@ -480,7 +481,7 @@ define('io.ox/calendar/api',
             timestamp: 0,
             recurrence_master: true
         })
-        .pipe(function (list) {
+        .then(function (list) {
             // sort by start_date & look for unconfirmed appointments
             // exclude appointments that already ended
             var invites = _.chain(list)
@@ -527,7 +528,7 @@ define('io.ox/calendar/api',
         });
         // resume & trigger refresh
         return http.resume()
-            .pipe(function (result) {
+            .then(function (result) {
 
                 var def = $.Deferred();
 
@@ -637,7 +638,7 @@ define('io.ox/calendar/api',
             appendColumns: false,
             'continue': true
         })
-        .pipe(function (response) {
+        .then(function (response) {
             return _(result).map(function (obj) {
                 if (_.isString(obj)) {
                     // use fresh server data
@@ -688,14 +689,17 @@ define('io.ox/calendar/api',
      * @return {promise}
      */
     api.refresh = function () {
-        api.getInvites().done(function () {
-            // clear caches
-            all_cache = {};
-            get_cache = {};
-            participant_cache = {};
-            // trigger local refresh
-            api.trigger('refresh.all');
-        });
+        // check capabilities
+        if (capabilities.has('calendar')) {
+            api.getInvites().done(function () {
+                // clear caches
+                all_cache = {};
+                get_cache = {};
+                participant_cache = {};
+                // trigger local refresh
+                api.trigger('refresh.all');
+            });
+        }
     };
 
     ox.on('refresh^', function () {
