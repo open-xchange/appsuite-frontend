@@ -859,6 +859,11 @@ define('io.ox/mail/write/main',
                                 if (_.device('smartphone')) {
                                     // trigger keyup to resize the textarea
                                     view.textarea.trigger('keyup');
+                                    // Keyboard can not be triggered on Mobile Safari
+                                    // needs user action
+                                    if (_.device('ios')) {
+                                        view.textarea.trigger('blur');
+                                    }
                                 }
                             });
                         })
