@@ -21,10 +21,7 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
             'id': 1,
             'flags': ['autoforward'],
             'test': {
-                'headers': ['To'],
-                'id': 'header',
-                'values': ['tester@open-xchange.com'],
-                'comparison': 'contains'
+                'id': 'true'
             },
             'actioncmds': [{
                 'to': 'tester@open-xchange.com',
