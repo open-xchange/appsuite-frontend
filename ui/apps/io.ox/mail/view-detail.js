@@ -1143,7 +1143,7 @@ define('io.ox/mail/view-detail',
             if (content.processedEmoji === false) {
                 content.content.addClass('unprocessedEmoji');
                 emoji.processEmoji(content.content.html(), function (text) {
-                    article.find('.unprocessedEmoji').removeClass('unprocessedEmoji').html(text);
+                    $(article || $()).find('.unprocessedEmoji').removeClass('unprocessedEmoji').html(text);
                 });
             }
             this.append(
