@@ -126,7 +126,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                 texttoggle = model.get('active') ? gt('Disable') : gt('Enable');
 
             $(this).append(
-                $('<button class="btn btn-link">').addClass('action').text(gt('Edit')).attr({
+                $('<a>').addClass('action').text(gt('Edit')).attr({
                     type: 'button',
                     role: 'button',
                     'data-action': flag === 'vacation' ? 'edit-vacation' : 'edit',
@@ -140,7 +140,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                     tabindex: 1,
                     'aria-label': title + ', ' + (texttoggle)
                 }),
-                $('<a>').addClass('close').append($('<i/>').addClass('fa fa-trash-o')).attr({
+                $('<a>').append($('<i/>').addClass('fa fa-trash-o')).attr({
                     href: '#',
                     role: 'button',
                     'data-action': 'delete',
@@ -217,12 +217,11 @@ define('io.ox/mail/mailfilter/settings/filter',
                                     tabindex: 1,
                                     'aria-label': title + ', ' + gt('Use cursor keys to change the item position')
                                 }),
-                                titleNode = $('<span>').addClass('widget-title pull-left').append(title),
+                                titleNode = $('<span>').addClass('widget-title pull-left').text(title),
                                 $('<div class="widget-controls">').append(function () {
                                     var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
                                     point.invoke('draw', $(this), self.model);
-                                }),
-                                title = $('<span>').addClass('list-title').text(title)
+                                })
                             );
 
                         self.model.on('change:rulename', function (el, val) {

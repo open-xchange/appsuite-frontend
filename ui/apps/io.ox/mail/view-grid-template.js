@@ -19,7 +19,7 @@ define('io.ox/mail/view-grid-template',
      'io.ox/core/emoji/util',
      'io.ox/core/strings',
      'gettext!io.ox/core/mail',
-     'less!io.ox/mail/style.less'
+     'less!io.ox/mail/style'
     ], function (util, api, VGrid, account, emoji, strings, gt) {
 
     'use strict';

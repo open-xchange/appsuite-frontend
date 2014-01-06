@@ -25,7 +25,7 @@ define('io.ox/contacts/edit/view-form',
      'io.ox/backbone/mini-views',
      'io.ox/backbone/mini-views/attachments',
      'gettext!io.ox/contacts',
-     'less!io.ox/contacts/edit/style.less'
+     'less!io.ox/contacts/edit/style'
     ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt) {
 
     'use strict';
