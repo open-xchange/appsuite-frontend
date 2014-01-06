@@ -139,18 +139,18 @@ define('io.ox/core/commons-folderview',
                     }
 
                     setTimeout(function () {
-                        var offset, top, left, menu, height, maxHeight;
+                        var top, left, menu, height, maxHeight;
                         // show first to get proper dimensions
                         dropdown.find('.dropdown-toggle').dropdown('toggle');
                         current.addClass('dropdown-opened');
                         // exceeds window?
                         if (e.type !== 'contextmenu') {
-                            offset = current.offset();
-                            top = offset.top - 4;
-                            left = offset.left + current.parent().width();
+                            top = current[0].offsetTop - 4;
+                            left = current[0].offsetLeft + current[0].offsetWidth;
                         } else {
-                            top = e.pageY - 15;
-                            left = e.pageX + 15;
+                            console.log(e);
+                            top = e.pageY - 58;
+                            left = e.pageX - 40;
                         }
                         menu = dropdown.find('.dropdown-menu');
                         height = menu.outerHeight();
