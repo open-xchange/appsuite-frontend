@@ -929,6 +929,14 @@ $(window).load(function () {
                                 .add($('<div>').text(gt('Please update your browser.')));
                         });
 
+                    } else if (_.browser.unknown) {
+                        // warning about all unknown browser-platform combinations, might be chrome on iOS
+                        feedback('info', function () {
+                            return $('<b>').text(gt('Your browser not supported!'))
+                                .add($.txt(_.noI18n('\xa0')))
+                                //#. Should tell the user that his combination of browser and operating system is not supported
+                                .add($('<div>').text(gt('This browser is not supported on your current platform.')));
+                        });
                     } else {
                         // general warning about browser
                         feedback('info', function () {
