@@ -420,9 +420,13 @@ define('io.ox/files/fluid/perspective',
                             .addClass('img-polaroid lazy')
                             .one({
                                 load: function () {
-                                    iconImage.remove();
+                                    //console.log('1');
+                                    //list/tile view
                                     iconBackground.remove();
                                     previewBackground.css('backgroundImage', 'url(' + url + ')');
+                                    //icon view
+                                    iconImage.remove();
+                                    $(this).fadeIn().removeClass('lazy');
                                 },
                                 error: iconError
                             })
@@ -784,10 +788,8 @@ define('io.ox/files/fluid/perspective',
                         redraw(allIds.slice(start, end));
                     }
                 });
-                $('img.img-polaroid').imageloader({
-                    callback: function (elm) {
-                        $(elm).fadeIn().removeClass('lazy');
-                    },
+                //requesting data-src and setting to src after load finised (icon view only)
+                $('img.img-polaroid.lazy').imageloader({
                     timeout: 60000
                 });
 
