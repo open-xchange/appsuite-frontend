@@ -29,10 +29,7 @@ define('io.ox/mail/autoforward/settings/model',
                     'rulename': 'autoforward',
 
                     'test': {
-                        'id': 'header',
-                        'comparison': 'contains',
-                        'values': [attributes.userMainEmail],
-                        'headers': ['To']
+                        'id': 'true'
                     },
                     'actioncmds': [
                         {

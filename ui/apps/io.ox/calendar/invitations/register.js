@@ -202,8 +202,12 @@ define('io.ox/calendar/invitations/register',
                             })
                             .then(
                                 function done() {
-                                    notifications.yell('success', success[action]);
-                                    rerender(baton);
+                                    // api refresh
+                                    require(['io.ox/calendar/api']).then(function (api) {
+                                        api.refresh();
+                                        notifications.yell('success', success[action]);
+                                        rerender(baton);
+                                    });
                                 },
                                 function fail(e) {
                                     notifications.yell(e);

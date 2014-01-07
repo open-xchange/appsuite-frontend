@@ -750,7 +750,7 @@ define('io.ox/core/tk/vgrid',
                 // non-existing items that cannot be resolved in selections
                 ids = _(ids).map(deserialize);
                 var selectionChanged = !self.selection.equals(ids), cid, index;
-                if (selectionChanged) {
+                if (selectionChanged && !self.selection.getMobileSelectMode()) {
                     // set
                     self.selection.set(ids);
                 }

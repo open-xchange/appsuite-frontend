@@ -84,9 +84,14 @@ define('io.ox/participants/views',
         },
 
         setCustomImage: function () {
+            var data = this.model.toJSON();
+            //fix to work with picture halo (model uses email address as id)
+            if (data.type === 5)
+                delete data.id;
+
             api.pictureHalo(
                 this.nodes.$img,
-                $.extend(this.model.toJSON(), { width: 54, height: 54, scaleType: 'cover' })
+                $.extend(data, { width: 54, height: 54, scaleType: 'cover' })
             );
         },
 

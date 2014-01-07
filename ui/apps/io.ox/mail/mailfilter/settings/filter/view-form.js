@@ -665,7 +665,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     return currentPosition;
                 }
 
-                if (currentState === 'checked') {
+                if (currentState === true) {
                     arrayOfActions.splice(getCurrentPosition(arrayOfActions), 1);
 
                 } else {

@@ -569,7 +569,7 @@ define('io.ox/contacts/api',
         // empty extend trick to restrict to non-undefined values
         params = $.extend({}, {
             // identifier
-            email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase(),
+            email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase() || options.email1 && String(options.email1).toLowerCase(),
             folder: options.folder_id || options.folder,
             id: options.contact_id || options.id,
             internal_userid: options.internal_userid || options.userid || options.user_id,

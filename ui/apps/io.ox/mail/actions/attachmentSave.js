@@ -32,12 +32,23 @@ define('io.ox/mail/actions/attachmentSave',
         api.saveAttachments(list, target).then(
             // success
             function success(response) {
-                if (response.error) {
-                    notifications.yell('error', response);
+
+                function yell(res) {
+                    if (res.error) {
+                        notifications.yell(res.error);
+                    } else {
+                        notifications.yell('success',
+                            gt.ngettext('Attachment has been saved', 'Attachments have been saved', list.length)
+                        );
+                    }
+                }
+
+                if (_.isArray(response)) {
+                    _.each(response, function (fileResponse) {
+                        yell(fileResponse);
+                    });
                 } else {
-                    notifications.yell('success',
-                        gt.ngettext('Attachment has been saved', 'Attachments have been saved', list.length)
-                    );
+                    yell(response);
                 }
                 folderAPI.reload(target, list);
             },

@@ -108,14 +108,13 @@ define.async('io.ox/mail/accounts/view-form',
             },
             render: function () {
                 var self = this,
-                    //convention with backend
-                    hidePrimaryAccountDetails = _.isNull(self.model.attributes.mail_server);
+                    hideAccountDetails = self.model.isHidden();
                 self.$el.empty().append(self.template({
                     strings: staticStrings,
                     optionsServer: optionsServerType,
                     optionsRefreshRate: optionsRefreshRatePop,
                     settings: {
-                        hideAccountDetails: self.model.attributes.id === 0 && hidePrimaryAccountDetails
+                        hideAccountDetails: hideAccountDetails
                     }
                 }));
                 var pop3nodes = self.$el.find('.control-group.pop3');
