@@ -1608,8 +1608,8 @@ define('io.ox/mail/api',
 
         return accountAPI.getPrimaryAddressFromFolder(data.folder).then(function (addressArray) {
 
-            var address = addressArray[0],
-                name = addressArray[1],
+            var name = addressArray[0],
+                address = addressArray[1],
                 from = !name ? address : '"' + name + '" <' + address + '>';
 
             return http.PUT({
