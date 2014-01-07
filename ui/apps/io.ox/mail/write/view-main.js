@@ -711,12 +711,10 @@ define('io.ox/mail/write/view-main',
                         signatureNode.append(
                             _(signatures.concat(dummySignature))
                             .inject(function (memo, o, index) {
-                                var preview = (o.content || '')
-                                    // remove subsequent white-space
-                                    .replace(/\s\s+/g, ' ')
-                                    // remove ASCII art
-                                    .replace(/([\-=+*°._!?\/\^]{4,})/g, '');
-                                preview = _.ellipsis(preview, {max: 150});
+                                var preview = _.ellipsis(
+                                                mailUtil.signatures.preview(o.content),
+                                                {max: 150}
+                                            );
                                 return memo.add(
                                     $('<div class="section-item pointer">')
                                     .addClass(index >= signatures.length ? 'signature-remove' : '')
