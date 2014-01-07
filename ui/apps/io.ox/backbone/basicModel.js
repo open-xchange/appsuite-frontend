@@ -95,6 +95,7 @@ define('io.ox/backbone/basicModel',
 
                 self.attributeValidity = validAttributes;
                 self.trigger('invalid', errors, self);
+                self.errors = errors;
                 self._valid = false;
             } else {
                 if (!self._valid) {

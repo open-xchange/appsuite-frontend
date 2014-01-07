@@ -168,13 +168,17 @@ define('io.ox/core/pubsub/publications',
                 .fail(function (error) {
                     popup.idle();
                     if (!self.model.valid) {
-                        if (!error.model) {//backend Error
+                        if (!error.model) { //backend Error
                             if (error.code === 'PUB-0006') {
                                 popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
                             }
-                        } else {//validation gone wrong
+                        } else { //validation gone wrong
                             //must be namefield empty because other fields are correctly filled by default
-                            popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Publications must have a name'));
+                            var errMsg = gt('Publications must have a name');
+                            error.model.errors.each(function (msg) {
+                                errMsg = msg.join(' ');
+                            });
+                            popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(errMsg);
                         }
                     }
                 });
