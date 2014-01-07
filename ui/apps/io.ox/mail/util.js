@@ -340,6 +340,10 @@ define('io.ox/mail/util',
             return (quote === false ? name : '"' + name + '"') + ' <' + address + '>';
         },
 
+        getSubject: function (data) {
+            return data.subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
+        },
+
         getPriority: function (data) {
             // normal?
             if (data && data.priority === 3) return $();

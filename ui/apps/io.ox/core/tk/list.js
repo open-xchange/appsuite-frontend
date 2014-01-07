@@ -237,10 +237,10 @@ define('io.ox/core/tk/list',
         paginate: NOOP,
         reload: NOOP,
 
-        // generate composite keys (might differ from _.cid)
-        cid: function (data) {
-            return _.cid(data);
-        },
+        // // generate composite keys (might differ from _.cid)
+        // cid: function (data) {
+        //     return _.cid(data);
+        // },
 
         render: function () {
             this.$el.attr({
@@ -254,10 +254,9 @@ define('io.ox/core/tk/list',
 
         renderListItem: function (model) {
             var li = this.scaffold.clone(),
-                data = model.toJSON(),
-                baton = ext.Baton({ data: data, model: model });
+                baton = ext.Baton({ data: model.toJSON(), model: model });
             // add cid and full data
-            li.attr('data-cid', this.cid(data));
+            li.attr('data-cid', model.cid);
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;

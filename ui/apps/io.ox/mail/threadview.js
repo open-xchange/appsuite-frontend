@@ -16,11 +16,49 @@ define('io.ox/mail/threadview',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/mail/view-detail',
+     'io.ox/mail/inplace-reply',
      'io.ox/core/api/backbone',
      'gettext!io.ox/mail',
-     'io.ox/mail/listview'], function (ext, api, util, detail, backbone, gt) {
+     'io.ox/mail/listview'], function (ext, api, util, detail, InplaceReply, backbone, gt) {
 
     'use strict';
+
+    ext.point('io.ox/mail/thread-view').extend({
+        id: 'thread-view-list',
+        index: 100,
+        draw: function () {
+            this.$el.append(
+                $('<div class="thread-view-list abs">').append(
+                    $('<header>'),
+                    this.$ul = $('<ul class="thread-view list-view mail">')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/thread-view').extend({
+        id: 'detail-view',
+        index: 200,
+        draw: function () {
+            this.$el.append(
+                $('<div class="detail-view-container abs">').append(
+                    $('<nav class="thread-view-navigation">').append(
+                        $('<div class="overview">').append(
+                            $('<a href="#" class="show-overview" tabindex="1">').append(
+                                $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Overview'))
+                            )
+                        ),
+                        $('<div class="position">'),
+                        $('<div class="prev-next">').append(
+                            $('<a href="#" class="next-mail" tabindex="1">').append('<i class="icon-chevron-up">'),
+                            $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="icon-chevron-down">')
+                        )
+                    ),
+                    $('<div class="detail-view abs" tabindex="1">')
+                )
+            );
+        }
+    });
 
     var ThreadView = Backbone.View.extend({
 
@@ -36,18 +74,27 @@ define('io.ox/mail/threadview',
         },
 
         empty: function () {
-            this.$ul.empty().scrollTop(0).show();
+            this.$ul.empty().scrollTop(0);
+            this.$el.find('.thread-view-list').show();
+            this.$el.find('.thread-view-list header').hide();
             this.$el.find('.detail-view-container').hide();
             this.$el.find('.detail-view').empty();
         },
 
         toggleDetailView: function (state) {
             this.$el.find('.detail-view-container').toggle(state);
-            this.$ul.toggle(!state);
+            this.$el.find('.thread-view-list').toggle(!state);
         },
 
         showOverview: function () {
             this.toggleDetailView(false);
+        },
+
+        updateHeader: function () {
+            this.$el.find('.thread-view-list header').empty().show().append(
+                $('<div class="subject">').text(util.getSubject(this.collection.at(0).toJSON())),
+                $('<div class="summary">').text(gt('%1$d messages in this conversation', this.collection.length))
+            );
         },
 
         updatePosition: function (cid) {
@@ -74,10 +121,13 @@ define('io.ox/mail/threadview',
             this.updatePosition(cid);
 
             this.toggleDetailView(true);
-            $detail.empty().busy();
+            $detail.empty().scrollTop(0).busy();
             api.get(_.cid(cid)).done(function (data) {
                 $detail.idle();
-                $detail.append(detail.draw(data));
+                var inplace = new InplaceReply({ cid: cid }).render().$el,
+                    message = detail.draw(data);
+                $detail.append(inplace, message);
+                $detail.scrollTop(message.position().top);
             });
         },
 
@@ -85,6 +135,7 @@ define('io.ox/mail/threadview',
 
             this.empty();
             this.index = 0;
+            this.updateHeader();
             // draw detail view?
             if (this.collection.length === 1) this.showMail(this.collection.at(0).cid);
             // draw thread list
@@ -172,33 +223,15 @@ define('io.ox/mail/threadview',
         },
 
         render: function () {
-            this.$el.append(
-                 this.$ul = $('<ul class="thread-view list-view mail abs">'),
-                 $('<div class="detail-view-container abs">').append(
-                    $('<nav class="thread-view-navigation">').append(
-                        $('<div class="overview">').append(
-                            $('<a href="#" class="show-overview" tabindex="1">').append(
-                                $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Overview'))
-                            )
-                        ),
-                        $('<div class="position">'),
-                        $('<div class="prev-next">').append(
-                            $('<a href="#" class="next-mail" tabindex="1">').append('<i class="icon-chevron-up">'),
-                            $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="icon-chevron-down">')
-                        )
-                    ),
-                    $('<div class="detail-view abs" tabindex="1">')
-                )
-            );
+            ext.point('io.ox/mail/thread-view').invoke('draw', this);
             return this;
         },
 
         renderListItem: function (model) {
             var li = this.scaffold.clone(),
-                data = model.toJSON(),
-                baton = new ext.Baton({ data: data });
+                baton = new ext.Baton({ data: model.toJSON() });
             // add cid and full data
-            li.attr('data-cid', _.cid(data));
+            li.attr('data-cid', model.cid);
             ext.point('io.ox/mail/listview/item').invoke('draw', li, baton);
             return li;
         },
