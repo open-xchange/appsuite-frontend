@@ -43,7 +43,7 @@ define('io.ox/core/settings/downloads/pane',
                         ),
                         $('<p>').text(
                             gt('The updater provides a simple installation wizard. Follow the instructions to install the application. ' +
-                            'The updater will inform you of any updates for the Connector for Microsoft Outlook, OX Notifier and OX Drive. ' +
+                            'The updater will inform you of any updates for the Connector for Microsoft Outlook, Notifier and Drive. ' +
                             'You can download the updates from within the updater.')
                         )
                     )
