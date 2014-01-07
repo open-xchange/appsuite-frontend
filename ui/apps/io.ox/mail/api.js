@@ -342,7 +342,7 @@ define('io.ox/mail/api',
                 // inject view (text/html/noimg). need this to generate proper cache keys.
                 data.view = options.view;
                 // a mail should be always marked as seen on fetch
-                if (!options.unseen) data.flags = data.flags | 32;
+                data.flags = data.flags | 32;
                 // was unseen?
                 if (data.unseen) folderAPI.decUnread(data);
                 return data;
@@ -1603,12 +1603,20 @@ define('io.ox/mail/api',
     };
 
     // send delivery receipt
-    // data must include "from", "folder", and "id"
+    // data must include "folder" and "id"
     api.ack = function (data) {
-        return http.PUT({
-            module: 'mail',
-            params: { action: 'receipt_ack' },
-            data: data
+
+        return accountAPI.getPrimaryAddressFromFolder(data.folder).then(function (addressArray) {
+
+            var address = addressArray[0],
+                name = addressArray[1],
+                from = !name ? address : '"' + name + '" <' + address + '>';
+
+            return http.PUT({
+                module: 'mail',
+                params: { action: 'receipt_ack' },
+                data: _.extend({ from: from }, data)
+            });
         });
     };
 
