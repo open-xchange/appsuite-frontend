@@ -14,17 +14,8 @@
 
 (function () {
 
-    // supported browsers
-    _.browserSupport = {
-        'Chrome'    : 20,
-        'Safari'    : 6,
-        'Firefox'   : 10,
-        'IE'        : 9,
-        'Android'   : 4.1,
-        'iOS'       : 6.0
-    };
-
-    var ua,
+    var us = {},
+        ua,
         isOpera,
         webkit,
         chrome,
@@ -38,7 +29,86 @@
         standalone,
         uiwebview,
         chromeIOS,
-        browserLC = {};
+        browserLC = {},
+        slice = Array.prototype.slice;
+
+    // supported browsers
+    us.browserSupport = {
+        'Chrome'    : 20,
+        'Safari'    : 6,
+        'Firefox'   : 10,
+        'IE'        : 9,
+        'Android'   : 4.1,
+        'iOS'       : 6.0
+    };
+
+    // helpers
+    function allFalsy(d) {
+        var allfalse = true;
+        for (var i in d) {
+            if (!!d[i]) {
+                allfalse = false;
+            }
+        }
+        return allfalse;
+    }
+
+    function extend() {
+        var source = slice.call(arguments, 1);
+        for (var i = 0; i < source.length; i++) {
+            for (var prop in source) {
+                obj[prop] = source[prop];
+            }
+        }
+        return obj;
+    }
+    /*
+     * matchMedia() polyfill - test whether a CSS media type or media query applies
+     * primary author: Scott Jehl
+     * Copyright (c) 2010 Filament Group, Inc
+     * MIT license
+     * adapted by Paul Irish to use the matchMedia API
+     * http://dev.w3.org/csswg/cssom-view/#dom-window-matchmedia
+     * which webkit now supports: http://trac.webkit.org/changeset/72552
+     *
+     * Doesn't implement media.type as there's no way for crossbrowser property
+     * getters. instead of media.type == 'tv' just use media.matchMedium('tv')
+     */
+    if (!(window.matchMedia)) {
+
+        window.matchMedia = (function (doc, undefined) {
+
+            var cache = {},
+                docElem = doc.documentElement,
+                fakeBody = doc.createElement('body'),
+                testDiv = doc.createElement('div');
+
+            testDiv.setAttribute('id', 'ejs-qtest');
+            fakeBody.appendChild(testDiv);
+
+            return function (q) {
+                if (cache[q] === undefined) {
+                    var styleBlock = doc.createElement('style'),
+                        cssrule = '@media ' + q + ' { #ejs-qtest { position: absolute; } }';
+                    //must set type for IE!
+                    styleBlock.type = 'text/css';
+                        if (styleBlock.styleSheet) {
+                            styleBlock.styleSheet.cssText = cssrule;
+                        }
+                        else {
+                            styleBlock.appendChild(doc.createTextNode(cssrule));
+                        }
+                    docElem.insertBefore(fakeBody, docElem.firstChild);
+                    docElem.insertBefore(styleBlock, docElem.firstChild);
+                    cache[q] = ((window.getComputedStyle ? window.getComputedStyle(testDiv,null) : testDiv.currentStyle)['position'] == 'absolute');
+                    docElem.removeChild(fakeBody);
+                    docElem.removeChild(styleBlock);
+                }
+                return cache[q];
+            };
+
+        })(document);
+    }
 
     function detectBrowser (nav) {
         var error = false;
@@ -60,7 +130,7 @@
             chromeIOS = ua.indexOf('CriOS/') > -1;
 
             // add namespaces, just sugar
-            _.browser = {
+            us.browser = {
                 /** is IE? */
                 IE: nav.appName === 'Microsoft Internet Explorer' ?
                     Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
@@ -96,45 +166,46 @@
             };
 
         } catch (e) {
-
             error = true;
-
-            console.warn('Error while detecting browser, using fallback');
-
+            console.warn('Could not detect browser, using fallback');
             var browsers = 'IE Opera WebKit Safari PhantomJS Karma Chrome Firefox ChromeiOS UIWebView Blackberry WindowsPhone iOS MacOS Android Windows'.split(' ');
             // set to unknown browser
-            _.browser = {
+            us.browser = {
                 unknown: true
             };
-            // reset all browsers
-            _(browsers).each(function (b) {
-                _.browser[b] = undefined;
-            });
+            // reset all other browsers
+            for (var i = 0; i < browsers.length; i ++) {
+                us.browser[browsers[i]] = undefined;
+            }
         } finally {
             // second fallback if all detecions were falsy
-            if (!error && !_.some(_.browser, function (v) {return !!v})) {
-                console.warn('Error while detecting browser, using fallback');
-               _.browser.unknown = true;
+            if (!error && allFalsy(us.browser)) {
+                console.warn('Could not detect browser, using fallback');
+                us.browser.unknown = true;
             }
         }
-
-        _(_.browser).each(function (value, key) {
+        if (error) return;
+        for (var key in us.browser) {
+            var value = us.browser[key];
             // ensure version is a number, not a string
             // Only major versions will be kept
             // '7.2.3' will be 7.2
             // '6.0.1' will be 6
-            if (_.isString(value)) {
+            if (typeof(value) === 'string') {
                 value = value === '' ? true : parseFloat(value, 10);
-                _.browser[key] = value;
+                us.browser[key] = value;
             }
             key = key.toLowerCase();
-            _.browser[key] = browserLC[key] = value;
-        });
+            us.browser[key] = browserLC[key] = value;
 
+        }
         // fixes for testrunner
-        _.browser.karma = !!ox.testUtils;
+        if (window.ox !== undefined) {
+            us.browser.karma = !!window.ox.testUtils;
+        }
     }
 
+    // first detection
     detectBrowser(navigator);
 
     // do media queries here
@@ -149,26 +220,27 @@
     };
 
     var display = {};
+
     function queryScreen() {
-        _(queries).each(function (query, key) {
-            display[key] = Modernizr.mq(query);
-        });
-    };
+        for (var q in queries) {
+             display[q] = matchMedia(queries[q]).matches;
+        }
+    }
 
     queryScreen();
 
-    var mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);
+    var mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);
     // define devices as combination of screensize and OS
     display.smartphone = display.small && mobileOS;
     display.tablet = display.medium && mobileOS; // maybe to fuzzy...
     display.desktop = !mobileOS;
-    _.displayInfo = display;
+    us.displayInfo = display;
     // extend underscore utilities
-    _.mixin({
+    var underscoreExtends = {
 
         // make this public so that it can be patched by UI plugins
         hasNativeEmoji: function () {
-            var support = _.browser.ios > 5 || _.browser.Android > 4.1 || (_.browser.MacOS && _.browser.Safari);
+            var support = us.browser.ios > 5 || us.browser.Android > 4.1 || (us.browser.MacOS && us.browser.Safari);
             return support;
         },
 
@@ -188,12 +260,12 @@
         recheckDevice: function () {
             queryScreen();
 
-            mobileOS = !!(_.browser.ios || _.browser.android || _.browser.blackberry || _.browser.windowsphone);
+            mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);
             // define devices as combination of screensize and OS
             display.smartphone = display.small && mobileOS;
             display.tablet = display.medium && mobileOS; // maybe to fuzzy...
             display.desktop = !mobileOS;
-            _.displayInfo = display;
+            us.displayInfo = display;
         },
 
         // combination of browser & display
@@ -202,9 +274,9 @@
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
-            misc.touch = Modernizr.touch;
+            misc.touch = (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch);
             misc.standalone = standalone;
-            misc.emoji = _.hasNativeEmoji();
+            misc.emoji = underscoreExtends.hasNativeEmoji();
             // no arguments?s
             if (arguments.length === 0) {
                 return _.extend({}, browserLC, display, misc);
@@ -226,12 +298,32 @@
                 return false;
             }
         }
-    });
-    _.device.loadUA = function (nav) {
+    };
+    underscoreExtends.device.loadUA = function (nav) {
         detectBrowser(nav);
-        _.recheckDevice();
+        underscoreExtends.recheckDevice();
+        _.browser = us.browser;
     };
 
-    $(window).on('resize.recheckDevice', _.recheckDevice);
+    // check for supported browser
+    function isBrowserSupported() {
+        var supp = false;
+        for (var b in us.browserSupport) {
+            if (us.browser[b] >= us.browserSupport[b]) {
+                supp = true;
+            }
+        }
+        return supp;
+    }
+    // global function
+    window.isBrowserSupported = isBrowserSupported;
 
+    // check if appsuite is present, otherwise use global scope
+    if (window.ox !== undefined) {
+        window._.extend(_, us);
+        window._.mixin(underscoreExtends);
+        $(window).on('resize.recheckDevice', _.recheckDevice);
+    } else {
+        window.browser = us;
+    }
 }());
