@@ -342,7 +342,7 @@ define('io.ox/mail/api',
                 // inject view (text/html/noimg). need this to generate proper cache keys.
                 data.view = options.view;
                 // a mail should be always marked as seen on fetch
-                data.flags = data.flags | 32;
+                if (!options.unseen) data.flags = data.flags | 32;
                 // was unseen?
                 if (data.unseen) folderAPI.decUnread(data);
                 return data;
