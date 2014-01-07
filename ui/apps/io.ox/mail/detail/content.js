@@ -221,7 +221,7 @@ define('io.ox/mail/detail/content',
         process: function (baton) {
             if (!baton.isHTML) return;
             // remove stupid tags
-            this.find('meta base').remove();
+            this.find('meta, base').remove();
         }
     });
 
@@ -427,13 +427,12 @@ define('io.ox/mail/detail/content',
                     emoji.processEmoji(baton.source, function (text, lib) {
                         baton.processedEmoji = !lib.loaded;
                         if (baton.processedEmoji) return;
-
                         content.html(beautifyText(text));
                     });
                 }
 
-                // process content
-                ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
+                // process content unless too large
+                if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
 
             } catch (e) {
                 console.error('mail.getContent', e.message, e, data);
