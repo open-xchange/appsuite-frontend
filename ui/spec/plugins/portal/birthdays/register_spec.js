@@ -29,13 +29,13 @@ define(['plugins/portal/birthdays/register',
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData) + '}');
                 });
                 this.node = $('<div>');
-                var baton  = ext.Baton(),
-                    def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, baton);
+                this.baton  = ext.Baton(),
+                    def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, this.baton);
                 waitsFor(function () {
                     return def._wrapped[0].state() === 'resolved';
                 });
                 runs(function () {
-                    def = ext.point('io.ox/portal/widget/birthdays').invoke('preview', this.node, baton);
+                    def = ext.point('io.ox/portal/widget/birthdays').invoke('preview', this.node, this.baton);
                 });
                 waitsFor(function () {//wait till its actually drawn
                     return this.node.children().length === 1;
@@ -61,9 +61,13 @@ define(['plugins/portal/birthdays/register',
                 expect($(this.node.find('.accent')[2]).text()).toEqual('Morgen');
             });
             describe('have', function () {
-                it('sidepopup', function () {
+                it('a sidepopup', function () {
+                    ext.point('io.ox/portal/widget/birthdays').invoke('draw', this.node, this.baton);
+                    waitsFor(function () {
+                        return this.node.find('.io-ox-portal-birthdays').length === 1;
+                    }, 'open popup', ox.testTimeout);
                 });
-            })
+            });
         });
         describe('should', function () {
             beforeEach(function () {
