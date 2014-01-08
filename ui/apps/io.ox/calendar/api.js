@@ -238,7 +238,8 @@ define('io.ox/calendar/api',
                         timestamp: o.timestamp || _.now(),
                         timezone: 'UTC'
                     },
-                    data: o
+                    data: o,
+                    appendColumns: false
                 })
                 .then(function (obj) {
                     if (!_.isUndefined(obj.conflicts)) {
@@ -317,7 +318,8 @@ define('io.ox/calendar/api',
                     action: 'new',
                     timezone: 'UTC'
                 },
-                data: o
+                data: o,
+                appendColumns: false
             })
             .then(function (obj) {
                 if (!_.isUndefined(obj.conflicts)) {
@@ -367,7 +369,8 @@ define('io.ox/calendar/api',
                         action: 'delete',
                         timestamp: _.then()
                     },
-                    data: obj
+                    data: obj,
+                    appendColumns: false
                 })
                 .done(function () {
                     all_cache = {};
@@ -419,7 +422,8 @@ define('io.ox/calendar/api',
                     timestamp: _.now(),
                     timezone: 'UTC'
                 },
-                data: o.data
+                data: o.data,
+                appendColumns: false
             })
             .then(function (resp, timestamp) {
                 if (alarm === -1) return;
