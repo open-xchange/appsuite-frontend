@@ -9,33 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: apps/io.ox/core/settings/downloads/pane.js:38
-#: apps/plugins/portal/updater/register.js:23
-#: apps/plugins/portal/updater/register.js:45
-msgid "Updater"
-msgstr ""
-
-#: apps/io.ox/core/settings/downloads/pane.js:42
-msgid "Download install file (for Windows)"
-msgstr ""
-
-#: apps/io.ox/core/settings/downloads/pane.js:45
-#: apps/plugins/portal/updater/register.js:32
-msgid "The updater provides a simple installation wizard. Follow the instructions to install the application. The updater will inform you of any updates for the Connector for Microsoft Outlook, Notifier and Drive. You can download the updates from within the updater."
-msgstr ""
-
-#: apps/io.ox/core/settings/downloads/pane.js:64
-#: apps/io.ox/core/settings/downloads/pane.js:72
-msgid "Downloads"
-msgstr ""
-
-#: apps/io.ox/contacts/actions.js:817 apps/io.ox/core/tk/attachments.js:442
-#: apps/io.ox/files/actions.js:833 apps/io.ox/files/actions.js:971
-#: apps/io.ox/mail/actions.js:1131 apps/io.ox/mail/actions.js:1133
-#: apps/io.ox/tasks/actions.js:605 apps/plugins/portal/updater/register.js:37
-msgid "Download"
-msgstr ""
-
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js:76
 msgid "Furigana for last name"
@@ -1506,6 +1479,13 @@ msgstr ""
 #: apps/io.ox/mail/actions.js:1124 apps/io.ox/mail/actions.js:1126
 #: apps/io.ox/tasks/actions.js:598
 msgid "Open in browser"
+msgstr ""
+
+#: apps/io.ox/contacts/actions.js:817 apps/io.ox/core/tk/attachments.js:442
+#: apps/io.ox/files/actions.js:833 apps/io.ox/files/actions.js:971
+#: apps/io.ox/mail/actions.js:1131 apps/io.ox/mail/actions.js:1133
+#: apps/io.ox/tasks/actions.js:605 apps/plugins/portal/updater/register.js:37
+msgid "Download"
 msgstr ""
 
 #: apps/io.ox/contacts/actions.js:824 apps/io.ox/core/tk/attachments.js:449
@@ -4799,6 +4779,26 @@ msgstr ""
 #: apps/io.ox/core/about/about.js:32
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:115
 msgid "Server version"
+msgstr ""
+
+#: apps/io.ox/core/settings/downloads/pane.js:38
+#: apps/plugins/portal/updater/register.js:23
+#: apps/plugins/portal/updater/register.js:45
+msgid "Updater"
+msgstr ""
+
+#: apps/io.ox/core/settings/downloads/pane.js:42
+msgid "Download install file (for Windows)"
+msgstr ""
+
+#: apps/io.ox/core/settings/downloads/pane.js:45
+#: apps/plugins/portal/updater/register.js:32
+msgid "The updater provides a simple installation wizard. Follow the instructions to install the application. The updater will inform you of any updates for the Connector for Microsoft Outlook, Notifier and Drive. You can download the updates from within the updater."
+msgstr ""
+
+#: apps/io.ox/core/settings/downloads/pane.js:64
+#: apps/io.ox/core/settings/downloads/pane.js:72
+msgid "Downloads"
 msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:26
