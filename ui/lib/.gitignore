@@ -47,3 +47,5 @@ Backbone.ModelBinder/lib
 
 backbone-validation/tests
 backbone-validation/lib
+
+bigscreen/test

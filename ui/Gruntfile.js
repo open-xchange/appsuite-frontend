@@ -249,7 +249,7 @@ module.exports = function (grunt) {
                              'lib/require.js',
                              'lib/require-fix.js',
                              'lib/modernizr.js',
-                             'lib/bigscreen.js',
+                             'lib/bigscreen/bigscreen.js',
                              'lib/placeholder.min.js',
                              'lib/doT.js',
                              'lib/textarea-helper.js',

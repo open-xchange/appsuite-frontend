@@ -21,6 +21,7 @@
     "backbone": "~1.0.0",
     "Backbone.ModelBinder": "~1.0.5",
     "backbone-validation": "~0.9.1",
-    "Chart.js": "*"
+    "Chart.js": "*",
+    "bigscreen": "~2.0.3"
   }
 }
