@@ -205,7 +205,7 @@ define('io.ox/portal/settings/pane',
 
         var node = $(this),
             list = node.closest('.widget-list'),
-            items = list.children(),
+            items = list.children('.draggable'),
             current = node.parent(),
             index = items.index(current),
             id = current.attr('data-widget-id');
@@ -219,14 +219,14 @@ define('io.ox/portal/settings/pane',
         case 38:
             if (index > 0) { // up
                 e.preventDefault();
-                current.insertBefore(current.prev());
+                current.insertBefore(current.prevAll('.draggable:first'));
                 cont();
             }
             break;
         case 40:
             if (index < items.length) { // down
                 e.preventDefault();
-                current.insertAfter(current.next());
+                current.insertAfter(current.nextAll('.draggable:first'));
                 cont();
             }
             break;
@@ -244,11 +244,14 @@ define('io.ox/portal/settings/pane',
                 point = ext.point(baton.view.point),
                 title = widgets.getTitle(data, point.prop('title'));
             this
-                .addClass('draggable')
+                .addClass(data.protectedWidget && data.protectedWidget === true ? ' protected' : ' draggable')
                 .attr('title', gt('Drag to reorder widget'))
                 .append(
-                    $('<a href="#" class="drag-handle">')
+                    data.protectedWidget && data.protectedWidget === true ? $() :
+                    $('<a>')
+                    .addClass('drag-handle')
                     .attr({
+                        href: '#',
                         'aria-label': title + ', ' + gt('Use cursor keys to change the item position'),
                         role: 'button',
                         tabindex: 1
@@ -374,6 +377,8 @@ define('io.ox/portal/settings/pane',
                 containment: this,
                 delay: 150,
                 handle: '.drag-handle',
+                cancel: 'li.protected',
+                items: '> li.draggable',
                 start: function (e, ui) {
                     ui.item.attr('aria-grabbed', 'true');
                 },
