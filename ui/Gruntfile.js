@@ -87,6 +87,17 @@ module.exports = function (grunt) {
                         filter: 'isFile'
                     }
                 ]
+            },
+            thirdparty: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['Chart.js/Chart.min.js'],
+                        cwd: 'lib/',
+                        dest: 'build/apps/3rd.party/',
+                        filter: 'isFile'
+                    }
+                ]
             }
         },
         assemble: {
@@ -230,6 +241,7 @@ module.exports = function (grunt) {
                              'lib/jquery.mobile.touch.min.js',
                              'lib/underscore/underscore.js', // load this before require.js to keep global object
                              'build/ox.js',
+                             //add backbone and dot.js may be a AMD-variant would be better
                              'lib/backbone/backbone.js',
                              'lib/Backbone.ModelBinder/Backbone.ModelBinder.js',
                              'lib/Backbone.ModelBinder/Backbone.CollectionBinder.js',
@@ -239,12 +251,6 @@ module.exports = function (grunt) {
                              'lib/modernizr.js',
                              'lib/bigscreen.js',
                              'lib/placeholder.min.js',
-                             //add backbone and dot.js may be a AMD-variant would be better
-                             //'lib/backbone.js',
-                             //'lib/backbone.modelbinder.js',
-                             //'lib/backbone.collectionbinder.js',
-                             //'lib/backbone.validation.js',
-                             //'lib/backbone.custom.js',
                              'lib/doT.js',
                              'lib/textarea-helper.js',
                              'src/util.js',

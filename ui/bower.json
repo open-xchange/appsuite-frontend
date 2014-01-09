@@ -20,6 +20,7 @@
     "open-sans-fontface": "~1.0.3",
     "backbone": "~1.0.0",
     "Backbone.ModelBinder": "~1.0.5",
-    "backbone-validation": "~0.9.1"
+    "backbone-validation": "~0.9.1",
+    "Chart.js": "*"
   }
 }

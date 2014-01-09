@@ -3,6 +3,8 @@
 */examples
 */docs
 */.*.yml
+*/samples
+*/site
 
 mediaelement/demo
 mediaelement/media
