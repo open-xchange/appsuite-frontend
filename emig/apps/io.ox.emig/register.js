@@ -11,7 +11,7 @@ define('io.ox.emig/register', [
     void http;
     
     var href = settings.get('moreInfo');
-    if (href && typeof href == 'object') {
+    if (href && typeof href === 'object') {
         href = href[ox.language] || href.de_DE;
     }
     
@@ -74,7 +74,7 @@ define('io.ox.emig/register', [
         }
         
         function resetStatus(status) {
-            if (status == state.senderStatus) return;
+            if (status === state.senderStatus) return;
             state.senderStatus = status;
             view.leftside.find('.io-ox-emig').each(function (i, badge) {
                 setStatus(badge, win.app);
