@@ -2,6 +2,6 @@
 <psf version="2.0">
 <provider id="org.eclipse.egit.core.GitProvider">
 <project reference="1.0,https://git.open-xchange.com/git/wd/web,release-7.4.2,ui"/>
-<project reference="1.0,https://git.open-xchange.com/git/custom/emig,release-7.4.2,emig"/>
+<project reference="1.0,https://git.open-xchange.com/git/wd/web,release-7.4.2,emig"/>
 </provider>
 </psf>
