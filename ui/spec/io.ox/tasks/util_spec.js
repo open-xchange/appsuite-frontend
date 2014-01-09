@@ -86,7 +86,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
 
                 myDate.setHours(7);
                 //super special UI time hack
-                stub = sinon.stub(date, "Local");
+                stub = sinon.stub(date, 'Local');
                 stub.returns(myDate);
 
                 result = util.buildOptionArray();

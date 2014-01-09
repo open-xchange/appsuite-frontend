@@ -386,7 +386,7 @@ define(['shared/examples/for/api',
                 });
             })
             .then(function () {
-                return api.all()
+                return api.all();
             })
             .done(function (accounts) {
                 done.yep();

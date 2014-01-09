@@ -17,7 +17,7 @@ define(['io.ox/tasks/edit/main',
         'spec/shared/capabilities'], function (edit, date, gt, caputil) {
 
     var app,
-        view ,
+        view,
         node,
         model,
         setup = _.once(
@@ -39,9 +39,9 @@ define(['io.ox/tasks/edit/main',
             capabilities.enable(['delegate_tasks', 'infostore']);
         });
         describe('', function () {//inner wrapper (start app one time before the tests run)
-                beforeEach(function () {
-                    setup();
-                });
+            beforeEach(function () {
+                setup();
+            });
             describe('task edit view', function () {
                 describe('should contain', function () {
                     it('a headline', function () {
@@ -212,7 +212,7 @@ define(['io.ox/tasks/edit/main',
                         expect(model.get('priority')).toEqual('3');
                         this.after(function () {//remove node because this is the last test
                             var editnode = $.find('.task-edit-wrapper');
-                            if(editnode.length === 1) {
+                            if (editnode.length === 1) {
                                 $(editnode[0]).remove();
                             }
                         });

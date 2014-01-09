@@ -13,19 +13,19 @@
 define(['plugins/portal/quota/register',
         'io.ox/core/extensions',
         'spec/shared/capabilities'], function (quotaPlugin, ext, caputil) {
-    
+
     var capabilities = caputil.preset('common').init('plugins/portal/quota/register', quotaPlugin);
 
     describe('portal Quota plugin', function () {
         beforeEach(function () {
             capabilities.reset();
         });
-        
+
         describe('should', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                            '[{ "timestamp":1368791630910,"data": {"quota":1200, "countquota":50, "use":1200, "countuse":5}},' + 
+                            '[{ "timestamp":1368791630910,"data": {"quota":1200, "countquota":50, "use":1200, "countuse":5}},' +
                              '{ "timestamp":1368791630910,"data": {"quota":' + 100 * 1024 * 1024 + ', "use":' + 91 * 1024 * 1024 + '} }]');
                 });
                 this.node = $('<div>');
@@ -60,13 +60,12 @@ define(['plugins/portal/quota/register',
                 expect(this.node.find('.plugins-portal-quota-mailcountbar').children().first().hasClass('bar-danger')).toBeFalsy();
                 expect(this.node.find('.plugins-portal-quota-mailcountbar').children().first().css('width')).toEqual('10%');
             });
-            
         });
         describe('should', function () {
             beforeEach(function () {
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                            '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' + 
+                            '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' +
                              '{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '} }]');
                 });
                 this.node = $('<div>');
@@ -79,7 +78,7 @@ define(['plugins/portal/quota/register',
             it('show correct unlimited values', function () {
                 expect(this.node.find('li.paragraph').length).toEqual(3);
                 expect(this.node.find('.progress').length).toEqual(0);
-                
+
                 expect(this.node.find('.quota-memory-mail').text()).toEqual('unbegrenzt');
                 expect(this.node.find('.quota-memory-file').text()).toEqual('unbegrenzt');
                 expect(this.node.find('.quota-mailcount').text()).toEqual('unbegrenzt');
@@ -90,7 +89,7 @@ define(['plugins/portal/quota/register',
                 capabilities.disable('infostore');
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                            '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' + 
+                            '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}},' +
                              '{ "timestamp":1368791630910,"data": {"quota":-1024, "use":' + -91 * 1024 * 1024 + '} }]');
                 });
                 this.node = $('<div>');

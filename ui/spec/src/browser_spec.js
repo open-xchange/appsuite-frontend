@@ -38,8 +38,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(support).toBe(true);
         });
 
-         it('should add a global funciton "isBrowserSupported" which returns a bool', function () {
-
+        it('should add a global funciton "isBrowserSupported" which returns a bool', function () {
             var browser = _.isFunction(window.isBrowserSupported);
             expect(browser).toBe(true);
             var bool = _.isBoolean(window.isBrowserSupported());

@@ -28,8 +28,8 @@ define(['plugins/portal/tasks/register',
                             '{ "timestamp":1368791630910,"data": {"id": 13371, "folder_id": 555123456, "title": "Pommes kaufen"}}');
                 });
                 this.node = $('<div>');
-                this.baton  = ext.Baton(),
-                    def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
+                this.baton  = ext.Baton();
+                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
                 waitsFor(function () {
                     return def._wrapped[0].state() === 'resolved';
                 });
@@ -63,8 +63,8 @@ define(['plugins/portal/tasks/register',
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData.testSearchEdge) + '}');
                 });
                 this.node = $('<div>');
-                this.baton  = ext.Baton(),
-                    def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
+                this.baton  = ext.Baton();
+                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
                 waitsFor(function () {
                     return def._wrapped[0].state() === 'resolved';
                 });
@@ -99,8 +99,8 @@ define(['plugins/portal/tasks/register',
                             '{ "timestamp":1368791630910,"data": []}');
                 });
                 this.node = $('<div>');
-                this.baton  = ext.Baton(),
-                    def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
+                this.baton  = ext.Baton();
+                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
                 waitsFor(function () {
                     return def._wrapped[0].state() === 'resolved';
                 });

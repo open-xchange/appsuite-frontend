@@ -29,8 +29,8 @@ define(['plugins/portal/birthdays/register',
                             '{ "timestamp":1368791630910,"data": ' + JSON.stringify(testData) + '}');
                 });
                 this.node = $('<div>');
-                this.baton  = ext.Baton(),
-                    def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, this.baton);
+                this.baton  = ext.Baton();
+                var def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, this.baton);
                 waitsFor(function () {
                     return def._wrapped[0].state() === 'resolved';
                 });
@@ -76,8 +76,8 @@ define(['plugins/portal/birthdays/register',
                             '{ "timestamp":1368791630910,"data": []}');
                 });
                 this.node = $('<div>');
-                var baton  = ext.Baton(),
-                def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, baton);
+                var baton  = ext.Baton();
+                var def = ext.point('io.ox/portal/widget/birthdays').invoke('load', this.node, baton);
                 waitsFor(function () {
                     return def._wrapped[0].state() === 'resolved';
                 });
