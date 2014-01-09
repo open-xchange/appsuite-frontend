@@ -220,7 +220,7 @@ define('io.ox/settings/accounts/settings/pane',
                 var AccountsView = Backbone.View.extend({
 
                     initialize: function () {
-                        _.bindAll(this);
+                        _.bindAll(this, 'render', 'onAdd');
                         this.collection = collection;
 
                         this.collection.bind('add', this.render);

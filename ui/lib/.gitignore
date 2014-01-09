@@ -1,3 +1,9 @@
+*/Rakefile
+*/CNAME
+*/examples
+*/docs
+*/.*.yml
+
 mediaelement/demo
 mediaelement/media
 mediaelement/src
@@ -7,22 +13,16 @@ mediaelement/build/jquery.js
 mediaelement/build/*.md
 mediaelement/build/DO*
 
-underscore/docs
 underscore/test
-underscore/Rakefile
-underscore/CNAME
 underscore/*.html
 underscore/*.ico
-underscore/.*.yml
 
-bootstrap-datepicker/docs
 bootstrap-datepicker/tests
 bootstrap-datepicker/build
 
 font-awesome/css
 font-awesome/scss
 font-awesome/src
-font-awesome/*.yml
 font-awesome/*.md
 font-awesome/Gem*
 
@@ -35,3 +35,13 @@ open-sans-fontface/font/I*
 open-sans-fontface/font/LightItalic
 open-sans-fontface/font/R*
 open-sans-fontface/font/S*
+
+backbone/test
+backbone/index*
+
+Backbone.ModelBinder/spec
+Backbone.ModelBinder/sandbox
+Backbone.ModelBinder/lib
+
+backbone-validation/tests
+backbone-validation/lib

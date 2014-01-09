@@ -11,12 +11,15 @@
   ],
   "dependencies": {
     "jquery": "~2.0.3",
-    "underscore": "~1.4.3",
+    "underscore": "~1.5.2",
     "mediaelement": "~2.13.1",
     "bootstrap": "~3.0.3",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#bs3",
     "bootstrap-typeahead": "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git",
     "font-awesome": "~4.0.3",
-    "open-sans-fontface": "~1.0.3"
+    "open-sans-fontface": "~1.0.3",
+    "backbone": "~1.0.0",
+    "Backbone.ModelBinder": "~1.0.5",
+    "backbone-validation": "~0.9.1"
   }
 }
