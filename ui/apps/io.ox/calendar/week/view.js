@@ -70,22 +70,20 @@ define('io.ox/calendar/week/view',
 
             // define view events
             var events = {
-                'click .control.next,.control.prev,.control.today': 'onControlView'
+                'click .control.next,.control.prev,.control.today': 'onControlView',
+                'click .appointment': 'onClickAppointment',
+                'click .weekday': 'onCreateAppointment'
             };
 
             if (_.device('touch')) {
                 _.extend(events, {
                     'taphold .week-container>.day,.fulltime>.day': 'onCreateAppointment',
-                    'tap .appointment': 'onClickAppointment',
                     'swipeleft .timeslot' : 'onControlView',
-                    'swiperight .timeslot' : 'onControlView',
-                    'tap .weekday': 'onCreateAppointment'
+                    'swiperight .timeslot' : 'onControlView'
                 });
             } else {
                 _.extend(events, {
-                    'dblclick .week-container>.day,.fulltime>.day': 'onCreateAppointment',
-                    'click .weekday': 'onCreateAppointment',
-                    'click .appointment': 'onClickAppointment'
+                    'dblclick .week-container>.day,.fulltime>.day': 'onCreateAppointment'
                 });
                 if (_.device('desktop')) {
                     _.extend(events, {
@@ -1036,6 +1034,9 @@ define('io.ox/calendar/week/view',
                 }
                 self.$('.week-container ' + day, self.$el).append(apps);
             });
+
+            // disable d'n'd on small devices
+            if (_.device('touch')) return;
 
             // init drag and resize widget on appointments
             var colWidth = $('.day:first', this.$el).outerWidth(),
