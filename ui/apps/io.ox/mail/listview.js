@@ -115,8 +115,22 @@ define('io.ox/mail/listview',
     });
 
     ext.point('io.ox/mail/listview/item/row2').extend({
-        id: 'thread-size',
+        id: 'flag',
         index: 100,
+        draw: function (baton) {
+
+            var color = baton.data.color_label || 0;
+            if (color === 0) return;
+
+            this.append(
+                $('<i class="flag flag_' + color + ' icon-bookmark" aria-hidden="true">')
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/row2').extend({
+        id: 'thread-size',
+        index: 200,
         draw: function (baton) {
 
             var data = baton.data;
@@ -128,20 +142,6 @@ define('io.ox/mail/listview',
                     // $.txt(' '),
                     // $('<i class="icon-caret-right">')
                 )
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/listview/item/row2').extend({
-        id: 'flag',
-        index: 200,
-        draw: function (baton) {
-
-            var color = baton.data.color_label || 0;
-            if (color === 0) return;
-
-            this.append(
-                $('<i class="flag flag_' + color + ' icon-bookmark" aria-hidden="true">')
             );
         }
     });

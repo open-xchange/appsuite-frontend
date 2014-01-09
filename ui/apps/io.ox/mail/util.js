@@ -294,6 +294,9 @@ define('io.ox/mail/util',
                 email = String(pair[1] || '').toLowerCase(),
                 display_name = util.unescapeDisplayName(name);
 
+            // fix order ("last name, firstname" becomes "first name last name")
+            display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
+
             return display_name || email;
         },
 
