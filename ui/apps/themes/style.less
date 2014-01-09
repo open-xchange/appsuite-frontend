@@ -1365,13 +1365,14 @@ a.button {
         width: @list-view-padding + 30;
 
         .icon-checkmark {
-            color: #ccc;
+            color: fade(@linkColor, 50%);
             position: absolute;
             left: 18px;
-            top: 50%;
+            top: 12px;
             font-size: 18px;
-            margin-top: -10px;
-            &:before { content: "\f10c"; }
+            &:before { content: "\f096"; }
+            // \f10c: icon-circle-blank
+            // \f096: icon-check-empty
         }
     }
 
@@ -1385,7 +1386,9 @@ a.button {
     .list-item.selected {
         .icon-checkmark {
             color: #08c;
-            &:before { content: "\f05d"; }
+            &:before { content: "\f046"; }
+            // \f05d: icon-ok-circle
+            // \f046: icon-check
         }
     }
 

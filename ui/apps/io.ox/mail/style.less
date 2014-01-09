@@ -190,6 +190,7 @@ textarea.inplace-editor {
     resize: vertical;
     border-radius: 0;
     border: 1px solid white;
+    .box-shadow(none);
     .box-sizing(border-box);
     &:focus {
         border-color: #66AFE9;
@@ -284,20 +285,6 @@ textarea.inplace-editor {
     }
 
     .contact-picture {
-        display: inline-block;
-    }
-}
-
-// show contact picture on large devices
-
-@media (max-width: 1280px) {
-    .list-view.mail .contact-picture {
-        display: none;
-    }
-}
-
-@media (min-width: 1280px) {
-    .list-view.mail .contact-picture {
         display: inline-block;
     }
 }
@@ -597,6 +584,7 @@ textarea.inplace-editor {
         padding: 20px;
         display: table;
         width: 100%;
+        min-height: 100%; // to make sure the quick-reply field can scroll out of viewport
 
         .mail-detail {
             background-color: white;
@@ -610,9 +598,19 @@ textarea.inplace-editor {
 
 .mail-detail {
 
+    position: relative;
     overflow-y: visible;
     clear: both;
     width: 100%;
+
+    @picture-padding: 100px;
+    @header-padding: 20px;
+
+    .io-ox-inline-links {
+        position: relative;
+        left: -@picture-padding + @header-padding; // move left to compensate padding-left: 100px;
+        margin-right: -@picture-padding + @header-padding; // add missing width
+    }
 
     .io-ox-inline-links:first-child {
         margin: 0 0 20px 0;
@@ -683,7 +681,7 @@ textarea.inplace-editor {
 
     .subject, .thread-size {
         font-size: 16pt;
-        margin: 13px 0;
+        margin: 7px 0;
     }
 
     .from .person-link.person-sender {
@@ -721,7 +719,7 @@ textarea.inplace-editor {
     .flag-dropdown {
 
         height: 24px;
-        margin: 14px 0 0 1em;
+        margin: 5px 0 0 1em;
         cursor: pointer;
         float: right;
 
@@ -770,8 +768,8 @@ textarea.inplace-editor {
     }
 
     .contact-picture {
-        float: right;
-        margin: 0 0 5px 26px;
+        position: absolute;
+        left: 20px;
         .picture();
     }
 
@@ -859,7 +857,8 @@ textarea.inplace-editor {
 
     header {
         font-weight: 300;
-        padding: 20px;
+        padding: @header-padding;
+        padding-left: @picture-padding;
     }
 
     header + hr {
