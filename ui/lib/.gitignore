@@ -49,3 +49,5 @@ backbone-validation/tests
 backbone-validation/lib
 
 bigscreen/test
+
+jquery-placeholder/*.html
