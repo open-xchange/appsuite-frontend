@@ -91,17 +91,7 @@ $(window).load(function () {
 
     }
 
-    // check for supported browser
-    function isBrowserSupported() {
-        var supp = false;
-        _.each(_.browserSupport, function(value, key) {
-            if (_.browser[key] >= value) {
-                supp =  true;
-            }
-        });
-        return supp;
-    }
-    window.isBrowserSupported = isBrowserSupported;
+
 
     // continuation
     cont = function () {

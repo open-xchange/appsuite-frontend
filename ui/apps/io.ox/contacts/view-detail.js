@@ -14,7 +14,6 @@
 
 define('io.ox/contacts/view-detail',
     ['io.ox/core/extensions',
-     'gettext!io.ox/contacts',
      'io.ox/contacts/util',
      'io.ox/contacts/api',
      'io.ox/contacts/actions',
@@ -22,8 +21,10 @@ define('io.ox/contacts/view-detail',
      'io.ox/core/api/folder',
      'io.ox/core/extPatterns/links',
      'io.ox/core/date',
+     'gettext!io.ox/contacts',
+     'settings!io.ox/contacts',
      'less!io.ox/contacts/style.less'
-    ], function (ext, gt, util, api, actions, model, folderAPI, links, date) {
+    ], function (ext, util, api, actions, model, folderAPI, links, date, gt, settings) {
 
     'use strict';
 
@@ -645,44 +646,48 @@ define('io.ox/contacts/view-detail',
         id: 'qr',
         draw: function (baton) {
             var data = baton.data;
-            if (Modernizr.canvas && !data.mark_as_distributionlist) {
-                var node = $('<div>').addClass('block'),
-                    show = function (e) {
-                        e.preventDefault();
-                        node.empty().busy();
-                        require(['io.ox/contacts/view-qrcode'], function (qr) {
-                            var vc = qr.getVCard(data);
-                            node.append(
-                                $('<span>').addClass('qrcode').append(
-                                    $('<i class="icon-qrcode">'), $.txt(' '),
-                                    $('<a>', { href: '#' })
-                                    .text(gt('Hide QR code'))
-                                    .on('click', hide)
-                                )
-                            );
-                            node.idle().qrcode(vc);
-                            vc = qr = null;
-                        });
-                    },
-                    hide = function (e) {
-                        e.preventDefault();
-                        node.empty();
+
+            // disabled?
+            if (!settings.get('features/qrcode', true)) return;
+            // not supported
+            if (!Modernizr.canvas || data.mark_as_distributionlist) return;
+
+            var node = $('<div>').addClass('block'),
+                show = function (e) {
+                    e.preventDefault();
+                    node.empty().busy();
+                    require(['io.ox/contacts/view-qrcode'], function (qr) {
+                        var vc = qr.getVCard(data);
                         node.append(
-                            $('<i class="icon-qrcode">'), $.txt(' '),
-                            showLink
+                            $('<span>').addClass('qrcode').append(
+                                $('<i class="icon-qrcode">'), $.txt(' '),
+                                $('<a>', { href: '#' })
+                                .text(gt('Hide QR code'))
+                                .on('click', hide)
+                            )
                         );
-                    },
-                    showLink = $('<a>', { href: '#' }).text(gt('Show QR code')).on('click', show);
+                        node.idle().qrcode(vc);
+                        vc = qr = null;
+                    });
+                },
+                hide = function (e) {
+                    e.preventDefault();
+                    node.empty();
+                    node.append(
+                        $('<i class="icon-qrcode">'), $.txt(' '),
+                        showLink
+                    );
+                },
+                showLink = $('<a>', { href: '#' }).text(gt('Show QR code')).on('click', show);
 
-                this.append(
-                    node
-                 );
+            this.append(
+                node
+             );
 
-                node.append(
-                    $('<i class="icon-qrcode">'), $.txt(' '),
-                    showLink
-                );
-            }
+            node.append(
+                $('<i class="icon-qrcode">'), $.txt(' '),
+                showLink
+            );
         }
     });
 

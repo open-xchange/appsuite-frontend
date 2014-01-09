@@ -842,7 +842,7 @@ define('io.ox/files/fluid/perspective',
 
                         // add element to provoke scrolling
                         filesContainer.append(
-                            $('<div class="scroll-spacer">').css({ height: '20px', clear: 'both' })
+                            $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
                         );
 
                         displayedRows = layout.iconRows;

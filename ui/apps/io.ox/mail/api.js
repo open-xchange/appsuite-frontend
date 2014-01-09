@@ -1603,12 +1603,20 @@ define('io.ox/mail/api',
     };
 
     // send delivery receipt
-    // data must include "from", "folder", and "id"
+    // data must include "folder" and "id"
     api.ack = function (data) {
-        return http.PUT({
-            module: 'mail',
-            params: { action: 'receipt_ack' },
-            data: data
+
+        return accountAPI.getPrimaryAddressFromFolder(data.folder).then(function (addressArray) {
+
+            var name = addressArray[0],
+                address = addressArray[1],
+                from = !name ? address : '"' + name + '" <' + address + '>';
+
+            return http.PUT({
+                module: 'mail',
+                params: { action: 'receipt_ack' },
+                data: _.extend({ from: from }, data)
+            });
         });
     };
 

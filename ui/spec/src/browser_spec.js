@@ -29,6 +29,23 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(isObject).toBe(true);
         });
 
+        it('should extend underscore with some helper functions and objects', function () {
+            var device = _.isObject(_.device);
+            var browser = _.isObject(_.browser);
+            var support = _.isObject(_.browserSupport);
+            expect(device).toBe(true);
+            expect(browser).toBe(true);
+            expect(support).toBe(true);
+        });
+
+         it('should add a global funciton "isBrowserSupported" which returns a bool', function () {
+
+            var browser = _.isFunction(window.isBrowserSupported);
+            expect(browser).toBe(true);
+            var bool = _.isBoolean(window.isBrowserSupported());
+            expect(bool).toBe(true);
+        });
+
         _(userAgents.valid).each(function (a, browser) {
             _(userAgents[browser]).each(function (b, version) {
                 it('should detect ' + browser + ' ' + version, function () {
@@ -43,8 +60,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             it('should use the fallback "unknown" if an unknown or broken user agent occurs', function () {
                 var spy = sinon.stub(console, 'warn', function () {});
                 _.device.loadUA(userAgents.invalid[number]);
-
-                expect(spy).toHaveBeenCalledWithMatch('Error while detecting browser, using fallback');
+                expect(spy).toHaveBeenCalledWithMatch('Could not detect browser, using fallback');
                 expect(_.browser.unknown).toBe(true);
                 spy.restore();
             });

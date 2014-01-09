@@ -532,7 +532,7 @@ define('io.ox/tasks/api',
         }
 
         function filter(task) {
-            return task.participants.length === 0 || delegatedToMe(task.participants);
+            return !task.participants || task.participants.length === 0 || delegatedToMe(task.participants);
         }
 
         return function () {

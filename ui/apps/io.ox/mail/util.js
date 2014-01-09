@@ -459,6 +459,24 @@ define('io.ox/mail/util',
             return mailArray._wrapped[0];
         },
 
+        signatures: (function () {
+            var ensure = function (text) {
+                return String(text || '');
+            };
+
+            return {
+                preview: function (text) {
+                    return ensure(text)
+                            //remove subsequent white-space
+                            .replace(/\s\s+/g, ' ')
+                            //remove ASCII art
+                            .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
+                            //remove html tags
+                            .replace(/(<([^>]+)>)/ig, '');
+                }
+            };
+        })(),
+
         getAttachments: (function () {
 
             var isWinmailDATPart = function (obj) {

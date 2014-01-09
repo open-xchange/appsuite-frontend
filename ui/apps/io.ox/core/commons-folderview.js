@@ -793,14 +793,16 @@ define('io.ox/core/commons-folderview',
         fnHideSml = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
-            $('.window-container-center').removeClass('animate-moveright').addClass('animate-moveleft');
+            var nodes = app.getWindow().nodes;
+            $('.window-container-center', nodes.outer).removeClass('animate-moveright').addClass('animate-moveleft');
             baton.$.spacer.hide();
             app.trigger('folderview:close');
         };
 
         fnShowSml = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
-            $('.window-container-center').removeClass('animate-moveleft').addClass('animate-moveright');
+            var nodes = app.getWindow().nodes;
+            $('.window-container-center', nodes.outer).removeClass('animate-moveleft').addClass('animate-moveright');
             baton.$.spacer.show();
             app.trigger('folderview:open');
             return $.when();
