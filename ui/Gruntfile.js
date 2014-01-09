@@ -96,6 +96,13 @@ module.exports = function (grunt) {
                         cwd: 'lib/',
                         dest: 'build/apps/3rd.party/',
                         filter: 'isFile'
+                    },
+                    {
+                        expand: true,
+                        src: ['*.{js,png,svg,swf,gif,css,xap}', '!{jquery,*.min}.js'],
+                        cwd: 'lib/mediaelement/build/',
+                        dest: 'build/apps/3rd.party/mediaelement/',
+                        filter: 'isFile'
                     }
                 ]
             }
