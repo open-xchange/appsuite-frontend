@@ -51,6 +51,7 @@ define('io.ox/mail/write/main',
             self.busy();
             baton.app.saveDraft()
                 .done(function () {
+                    autoSavedMail = false;
                     self.idle();
                 });
         }
@@ -1116,10 +1117,6 @@ define('io.ox/mail/write/main',
                 win.busy();
                 // close window now (!= quit / might be reopened)
                 win.preQuit();
-                //look if mail was autosaved, if so delete the draft on send
-                if (autoSavedMail) {
-                    mail.data.deleteDraft = true;
-                }
 
                 if (attachmentsExceedQouta(mail)) {
                     notifications.yell({
@@ -1247,8 +1244,10 @@ define('io.ox/mail/write/main',
 
             prepareMailForSending(mail);
 
-            // send!
-            mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+            if (mail.data.sendtype !== '4') {
+                // send!
+                mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+            }
 
             if (_(mail.data.flags).isUndefined()) {
                 mail.data.flags = mailAPI.FLAGS.DRAFT;
@@ -1316,6 +1315,17 @@ define('io.ox/mail/write/main',
 
             var def = $.Deferred();
 
+            function splitMsgref(msgref) {
+                var splitArray = msgref.split('/'),
+                    id = _.last(splitArray),
+                    path = _.first(splitArray, _.indexOf(splitArray, id)).join('/');
+
+                return {
+                    id: id,
+                    folder: path
+                };
+            }
+
             var clean = function () {
                 // mark as not dirty
                 app.dirty(false);
@@ -1339,11 +1349,18 @@ define('io.ox/mail/write/main',
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
+
+                                if (autoSavedMail) {
+                                    var mail = app.getMail();
+                                    mailAPI.remove([splitMsgref(mail.data.msgref)]);
+                                }
+
                                 clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
                                 def.resolve();
                             } else if (action === 'savedraft') {
                                 app.saveDraft().done(function () {
                                     clean();
+                                    autoSavedMail = false;
                                     def.resolve();
                                 }).fail(function (e) {
                                     def.reject(e);
@@ -1354,6 +1371,12 @@ define('io.ox/mail/write/main',
                         });
                 });
             } else {
+
+                if (autoSavedMail) {
+                    var mail = app.getMail();
+                    mailAPI.remove([splitMsgref(mail.data.msgref)]);
+                }
+                
                 clean();
                 def.resolve();
             }
