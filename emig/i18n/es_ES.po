@@ -1,0 +1,23 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: apps/io.ox.emig/register.js:85
+msgid "Secure communication"
+msgstr "Comunicación segura"
+
+#: apps/io.ox.emig/register.js:95
+msgid "Guaranteed security in sending and storing your message. "
+msgstr "La transferencia y almacenamiento seguros de su mensaje están garantizados. "
+
+#: apps/io.ox.emig/register.js:97 apps/io.ox.emig/register.js:106
+msgid "More information"
+msgstr "Más información"
+
+#. %1$s is the name of the group (E‑Mail made in Germany).
+#: apps/io.ox.emig/register.js:103
+msgid "E-mails to this e-mail address are sent via the system group %1$s network. "
+msgstr "El envío a esta dirección de correo electrónico se realiza a través de la red de la asociación %1$s. "

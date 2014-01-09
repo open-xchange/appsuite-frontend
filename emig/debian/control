@@ -1,0 +1,19 @@
+Source: open-xchange-appsuite-emig
+Section: non-free/web
+Priority: optional
+Maintainer: Viktor Pracht <viktor.pracht@open-xchange.com>
+Build-Depends: debhelper (>= 8.0.0), open-xchange-appsuite-dev
+Standards-Version: 3.9.2
+
+Package: open-xchange-appsuite-emig
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-manifest
+Description: Email made in Germany for OX App Suite
+
+## Uncomment for multiple packages
+#Package: open-xchange-appsuite-emig-static
+#Architecture: all
+#Depends: ${misc:Depends}, open-xchange-appsuite
+#Description: Email made in Germany for OX App Suite
+# .
+# This package contains the static files for the theme.
