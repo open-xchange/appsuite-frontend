@@ -274,7 +274,7 @@ define('io.ox/calendar/invitations/register',
     function renderAnnotation($node, annotation, analysis, baton) {
         $node.append(
             $('<div class="annotation">').append(
-                $('<div class="message alert">').append(annotation.message),
+                $('<div class="message well">').append(annotation.message),
                 renderAppointment(annotation.appointment, baton)
             )
         );
@@ -351,10 +351,8 @@ define('io.ox/calendar/invitations/register',
                     e.preventDefault();
                     require(['io.ox/calendar/conflicts/conflictList'], function (conflictList) {
                         $node.find('.alert').remove();
-                        $node.append(
-                            $('<div>').css({marginTop: '2em', marginBottom: '2em'}).append(
-                                conflictList.drawList(change.conflicts)
-                            )
+                        $node.css('padding', '20px').append(
+                            conflictList.drawList(change.conflicts)
                         );
                     });
                 })

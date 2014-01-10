@@ -404,10 +404,12 @@ define('io.ox/mail/view-detail',
     });
 
     ext.point('io.ox/mail/detail').extend({
-        id: 'ruler',
+        id: 'notifications',
         after: 'header',
-        draw: function () {
-            this.append('<hr>');
+        draw: function (baton) {
+            var section = $('<section class="notifications">');
+            ext.point('io.ox/mail/detail/notifications').invoke('draw', section, baton);
+            this.append(section);
         }
     });
 
@@ -977,24 +979,23 @@ define('io.ox/mail/view-detail',
     }
 
     // TODO: remove click handler out of inner closure
-    ext.point('io.ox/mail/detail/header').extend({
-        index: 195,
+    ext.point('io.ox/mail/detail/notifications').extend({
+        index: 100,
         id: 'externalresources-warning',
         draw: function (baton) {
             var data = baton.data;
-            if (data.modified === 1) {
-                this.append(
-                    $('<div class="alert alert-info cursor-pointer">')
-                    .append(
-                         $('<a>').text(gt('Show images')),
-                         $('<i>').append(
-                             $.txt(_.noI18n(' \u2013 ')),
-                             $.txt(gt('External images have been blocked to protect you against potential spam!'))
-                         )
+            if (data.modified !== 1) return;
+            this.append(
+                $('<div class="alert alert-info cursor-pointer">')
+                .append(
+                     $('<a>').text(gt('Show images')),
+                     $('<i>').append(
+                         $.txt(_.noI18n(' \u2013 ')),
+                         $.txt(gt('External images have been blocked to protect you against potential spam!'))
                      )
-                    .on('click', { node: this, data: api.reduce(data) }, replaceWithUnmodified)
-                );
-            }
+                 )
+                .on('click', { node: this, data: api.reduce(data) }, replaceWithUnmodified)
+            );
         }
     });
 

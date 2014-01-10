@@ -864,11 +864,22 @@ textarea.inplace-editor {
         padding-left: @picture-padding;
     }
 
-    header + hr {
-        height: 0;
+    .notifications {
+        &:empty {
+            border-top: 1px solid #ccc;
+        }
+    }
+
+    .alert, .well {
         margin: 0;
-        border-top-color: #ccc;
-        border-bottom: 0px none;
+        border: 0px none;
+        padding: 10px 20px;
+        .border-radius(0px);
+        .box-shadow(none);
+    }
+
+    .well {
+        padding: 20px;
     }
 
     article {
