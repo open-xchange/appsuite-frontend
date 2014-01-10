@@ -89,6 +89,11 @@ define('io.ox/mail/mailfilter/settings/filter',
 
         myView.dialog.show();
         myView.$el.find('input[name="rulename"]').focus();
+        
+        if (data.id === undefined) {
+            myView.$el.find('input[name="rulename"]').trigger('select');
+        }
+       
         myView.collection = collection;
 
         myView.dialog.on('save', function () {
