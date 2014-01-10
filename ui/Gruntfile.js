@@ -168,23 +168,7 @@ module.exports = function (grunt) {
         },
         less: {
             default: {
-                options: {
-                    compress: true,
-                    ieCompat: false,
-                    paths: ['apps/themes', 'lib'],
-                    imports: {
-                        reference: [
-                            'bootstrap/less/variables.less',
-                            'font-awesome/less/variables.less',
-                            'bootstrap/less/mixins.less'
-                        ],
-                        less: [
-                            'definitions.less',
-                            'default/definitions.less',
-                            'mixins.less'
-                        ]
-                    }
-                },
+                options: { lessrc: '.lessrc' },
                 files: [
                     {
                         src: ['apps/themes/style.less'],
