@@ -420,7 +420,6 @@ define('io.ox/files/fluid/perspective',
                             .addClass('img-polaroid lazy')
                             .one({
                                 load: function () {
-                                    //console.log('1');
                                     //list/tile view
                                     iconBackground.remove();
                                     previewBackground.css('backgroundImage', 'url(' + url + ')');

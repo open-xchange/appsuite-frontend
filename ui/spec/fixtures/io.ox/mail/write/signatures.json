@@ -1,0 +1,128 @@
+{
+    "current": {
+        "timestamp": 1381419300867,
+        "data": 
+            [
+                {
+                    "displayname": "EMPTY STRING",
+                    "content": "",
+                    "shared": false,
+                    "id": "333",
+                    "module": "io.ox/mail",
+                    "createdby": 395,
+                    "type": "signature",
+                    "props": {
+                        "Message-ID": "<1107857077.404.1389171824428.open-xchange@appsuite-dev-gw2>",
+                        "MIME-Version": "1.0",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2701_2010031979.1389090431122\""
+                    },
+                    "misc": {
+                        "insertion": "below"
+                    }
+                },
+                {
+                    "displayname": "SINGLELINE, TEXT (SURROUNDING WHITESPACE)",
+                    "content": "   Mustache banh mi Pinterest jean shorts Bushwick meggings, xxx flannel stumptown   ",
+                    "shared": false,
+                    "id": "294",
+                    "module": "io.ox/mail",
+                    "createdby": 395,
+                    "type": "signature",
+                    "props": {
+                        "Message-ID": "<1835196266.400.1389171824418.open-xchange@appsuite-dev-gw2>",
+                        "MIME-Version": "1.0",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2584_2061538729.1389088837272\""
+                    },
+                    "misc": {
+                        "insertion": "below"
+                    }
+                },
+                {
+                    "displayname": "MULTILINE, TEXT (SUBSEQUENT/SURROUNDING WHITESPACE)",
+                    "content": "  Aliqua tote bag incididunt organic      ↵Trust fund bespoke xxx aliqua,↵↵↵viral leggings xxxx forage actually Helvetica",
+                    "shared": false,
+                    "id": "293",
+                    "module": "io.ox/mail",
+                    "createdby": 395,
+                    "type": "signature",
+                    "props": {
+                        "Message-ID": "<1835196266.400.1389171824418.open-xchange@appsuite-dev-gw2>",
+                        "MIME-Version": "1.0",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2584_2061538729.1389088837272\""
+                    },
+                    "misc": {
+                        "insertion": "below"
+                    }
+                },
+                {
+                    "displayname": "SINGLELINE, TEXT (SUBSEQUENT WHITESPACE)",
+                    "content": "xxx M Y  N A M E  I S  S O L T A N xxx",
+                    "shared": false,
+                    "id": "326",
+                    "module": "io.ox/mail",
+                    "createdby": 395,
+                    "type": "signature",
+                    "props": {
+                        "Message-ID": "<1370605155.401.1389171824421.open-xchange@appsuite-dev-gw2>",
+                        "MIME-Version": "1.0",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2578_436462297.1389088829009\""
+                    },
+                    "misc": {
+                        "insertion": "below"
+                    }
+                },
+                {
+                    "displayname": "MULTILINE, TEXT (SUBSEQUENT WHITESPACE, ASCII SEPARATOR)",
+                    "content": "asdfsdklfjsl       ↵asdajfkl↵sdfkjsldfk↵sdfkjsdlfk↵↵↵sdfsd        dsdfsdfs",
+                    "shared": false,
+                    "id": "328",
+                    "module": "io.ox/mail",
+                    "createdby": 395,
+                    "type": "signature",
+                    "props": {
+                        "Message-ID": "<1087317205.402.1389171824423.open-xchange@appsuite-dev-gw2>",
+                        "MIME-Version": "1.0",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2591_909801564.1389088848768\""
+                    },
+                    "misc": {
+                        "insertion": "below"
+                    }
+                },
+                {
+                    "displayname": "SINGLELINE, HTML (SUBSEQUENT WHITESPACE)",
+                    "content": " <h1> xxx M Y  N A M E  I S  Z O L T A N xxx </h1> ",
+                    "shared": false,
+                    "id": "329",
+                    "module": "io.ox/mail",
+                    "createdby": 395,
+                    "type": "signature",
+                    "props": {
+                        "Message-ID": "<334383945.403.1389171824426.open-xchange@appsuite-dev-gw2>",
+                        "MIME-Version": "1.0",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2599_1895394905.1389088861989\""
+                    },
+                    "misc": {
+                        "insertion": "below"
+                    }
+                },
+                {
+                    "displayname": "MULTILINE, HTML (SUBSEQUENT WHITESPACE)",
+                    "content": " <br>↵↵<h1>xxx M Y  N A M E  I S  S O L T A N xxx</h1>",
+                    "shared": false,
+                    "id": "330",
+                    "module": "io.ox/mail",
+                    "createdby": 395,
+                    "type": "signature",
+                    "props": {
+                        "Message-ID": "<1107857077.404.1389171824428.open-xchange@appsuite-dev-gw2>",
+                        "MIME-Version": "1.0",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2701_2010031979.1389090431122\""
+                    },
+                    "misc": {
+                        "insertion": "below"
+                    }
+                }
+            ]
+        
+    }
+}

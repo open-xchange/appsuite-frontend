@@ -225,22 +225,25 @@ define('io.ox/mail/write/main',
 
         view.signatures = _.device('smartphone') ? [{ id: 0, content: app.getMobileSignature() }] : [];
 
-        function trimSignature(text) {
-            // remove white-space and evil \r
-            return $.trim(text).replace(/\r\n/g, '\n');
-        }
-
         app.getSignatures = function () {
             return view.signatures;
         };
 
         app.isSignature = function (text) {
+            var isHTML = !!this.getEditor().find;
+            return mailUtil.signatures.is(text, this.getSignatures(), isHTML);
+        };
 
-            var signatures = _(this.getSignatures()).map(function (signature) {
-                return String(signature.content || '').replace(/(\r\n|\n|\r)/gm, '');
-            });
-
-            return _(signatures).indexOf(text) > - 1;
+        /**
+         * @param  {string} text (signature content)
+         * @return {string} html string
+         */
+        var getParagraph = function (text) {
+            //use div for html cause innerHTML for p tags with nested tags fail
+            var node = (/(<([^>]+)>)/ig).test(text) ? $('<div>') : $('<p>');
+            node.addClass('io-ox-signature')
+                .append(app.getEditor().ln2br(text));
+            return $('<div>').append(node).html();
         };
 
         app.setSignature = function (e) {
@@ -253,7 +256,7 @@ define('io.ox/mail/write/main',
             // remove current signature from editor
             if (isHTML) {
                 ed.find('.io-ox-signature').each(function () {
-                    var node = $(this), text = node.text();
+                    var node = $(this), text = node.html();
                     if (app.isSignature(text)) {
                         // remove entire node
                         node.remove();
@@ -272,14 +275,15 @@ define('io.ox/mail/write/main',
             // add signature?
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
-                text = trimSignature(signature.content);
+                text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
                 if (isHTML) {
+                    text = getParagraph(text);
                     if (signature.misc && signature.misc.insertion === 'below') {
-                        ed.appendContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                        ed.appendContent(text);
                         ed.scrollTop('bottom');
                     } else {
-                        ed.prependContent('<p class="io-ox-signature">' + ed.ln2br(text) + '</p>');
+                        ed.prependContent(text);
                         ed.scrollTop('top');
                     }
                 } else {

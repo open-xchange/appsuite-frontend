@@ -125,7 +125,7 @@ define('io.ox/core/tk/text-editor', function () {
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
             // exists?
-            if ((pos = content.indexOf(str)) > -1) {
+            if ((pos = content.indexOf(str.trim())) > -1) {
                 // replace content
                 top = this.scrollTop();
                 this.setContent(content.substr(0, pos) + (rep || '') + content.substr(pos + str.length));

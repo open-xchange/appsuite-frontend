@@ -712,7 +712,7 @@ define('io.ox/mail/write/view-main',
                             _(signatures.concat(dummySignature))
                             .inject(function (memo, o, index) {
                                 var preview = _.ellipsis(
-                                                mailUtil.signatures.preview(o.content),
+                                                mailUtil.signatures.cleanPreview(o.content),
                                                 {max: 150}
                                             );
                                 return memo.add(
