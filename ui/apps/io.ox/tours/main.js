@@ -36,11 +36,14 @@ define('io.ox/tours/main',
                 m.getApp().launch().done(function () {
                     var that = this;
                     if (name === 'io.ox/calendar/edit/main') {
+                        $(that).one('finishedCreating', yielded);//calendar needs some time to set up the view
                         that.create({});
                     } else if (name === 'io.ox/mail/write/main') {
                         that.compose({ subject: '[Guided tours] Example e-mail'});
+                        yielded();
+                    } else {
+                        yielded();
                     }
-                    yielded();
                 });
             });
         },
@@ -163,25 +166,31 @@ define('io.ox/tours/main',
             {
                 title: gt('Reading the details'),
                 placement: 'bottom',
-                target: $('.widget .item:visible')[0],
+                target: function () { return $('.widget .item:visible')[0]; },
                 content: gt('To read the details, click on an entry in a tile.')
             },
             {
                 title: gt('Launching an app'),
                 placement: 'bottom',
-                target: $('.widget .title:visible')[0],
+                target: function () { return $('.widget .title:visible')[0]; },
                 content: gt('To launch an app, click on a tile\'s headline.')
             },
             {
                 title: gt('Drag and drop'),
                 placement: 'right',
-                target: $('.widget:visible')[0],
+                target: function () {
+                    if (_.device('desktop')) {//skip this step on tablets (no target does the trick)
+                        return $('.widget:visible')[0];
+                    } else {
+                        return null;
+                    }
+                },
                 content: gt('To change the layout, drag a tile\'s background to another position and drop it there.')
             },
             {
                 title: gt('Closing a tile'),
                 placement: 'bottom',
-                target: $('.widget .disable-widget .icon-remove:visible')[0],
+                target: function () { return $('.widget .disable-widget .icon-remove:visible')[0]; },
                 content: gt('If you no longer want to display a tile, click the cross on the upper right side.'),
                 xOffset: -10,
                 arrowOffset: 1
@@ -189,7 +198,7 @@ define('io.ox/tours/main',
             {
                 title: gt('Customizing'),
                 placement: 'left',
-                target: $('.header [data-action="customize"]')[0],
+                target: function () { return $('.header [data-action="customize"]')[0]; },
                 content: gt('To display a tile again or to display further information sources, click on Customize this page.'),
                 yOffset: -10,
                 arrowOffset: 1
@@ -250,7 +259,8 @@ define('io.ox/tours/main',
                 title: gt('Entering the E-Mail text'),
                 placement: 'top',
                 target: function () { return $('.editor-outer-container:visible')[0]; },
-                content: gt('Enter the E-Mail text below the subject. If the text format was set to HTMl in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar.'),
+                content: (_.device('desktop') ? gt('Enter the E-Mail text below the subject. If the text format was set to HTMl in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar.')
+                    :gt('Enter the E-Mail text below the subject.')),
                 yOffset: 110,
                 arrowOffset: 'center'
             },
@@ -296,7 +306,7 @@ define('io.ox/tours/main',
             },
             {
                 title: gt('Halo view'),
-                placement: 'right',
+                placement: (_.device('desktop') ? 'right': 'bottom'),
                 target: function () { return $('.person-link.person-from:visible')[0]; },
                 content: gt('To receive information about the sender or other recipients, open the Halo view by clicking on a name.'),
                 arrowOffset: 1,
@@ -369,19 +379,22 @@ define('io.ox/tours/main',
                 title: gt('Creating a new appointment'),
                 placement: 'right',
                 target: function () {
-                    if ($('.launcher[data-app-name="io.ox/calendar/edit"]').length === 0) {
-                        switchToApp('io.ox/calendar/edit/main', function () {
-                            switchToApp('io.ox/calendar/main', function () {});
-                        });
-                    }
                     return $('[data-ref="io.ox/calendar/links/toolbar/default"]')[0];
                 },
                 content: gt('To create a new appointment, click the New appointment icon at the top.'),
                 multipage: true,
                 onNext: function () {
-                    $('.launcher[data-app-name="io.ox/calendar/edit"]').first().click();
-                    window.hopscotch.nextStep();
-                    window.hopscotch.prevStep();
+                    if (
+                        $('.launcher[data-app-name="io.ox/calendar/edit"]').length === 0) {
+                        switchToApp('io.ox/calendar/edit/main', function () {
+                            window.hopscotch.nextStep();
+                            window.hopscotch.prevStep();
+                        });
+                    } else {
+                        $('.launcher[data-app-name="io.ox/calendar/edit"]').first().click();
+                        window.hopscotch.nextStep();
+                        window.hopscotch.prevStep();
+                    }
                 }
             },
             {
@@ -405,19 +418,34 @@ define('io.ox/tours/main',
             {
                 title: gt('Inviting other participants'),
                 placement: 'top',
-                target: function () { return $('.add-participant:visible')[0]; },
+                target: function () {
+                    if (!_.device('desktop')) {//tablets need scrolling here
+                        $('.add-participant:visible')[0].scrollIntoView(true);
+                    }
+                    return $('.add-participant:visible')[0];
+                },
                 content: gt('To invite other participants, enter their names in the field below Participants. To avoid appointment conflicts, click on Find a free time at the upper right side.')
             },
             {
                 title: gt('Adding attachments'),
                 placement: 'top',
-                target: function () { return $('[data-extension-id="attachments_legend"]:visible')[0]; },
+                target: function () {
+                    if (!_.device('desktop')) {//tablets need scrolling here
+                        $('[data-extension-id="attachments_legend"]:visible')[0].scrollIntoView(true);
+                    }
+                    return $('[data-extension-id="attachments_legend"]:visible')[0];
+                },
                 content: gt('Further down you can add attachments to the appointment.')
             },
             {
                 title: gt('Creating the appointment'),
                 placement: 'left',
-                target: function () { return $('[data-action="save"]:visible')[0]; },
+                target: function () {
+                    if (!_.device('desktop')) {//tablets need scrolling here
+                        $('[data-action="save"]:visible')[0].scrollIntoView(true);
+                    }
+                    return $('[data-action="save"]:visible')[0];
+                },
                 content: gt('To create the appointment, click on Create at the upper right side.'),
                 multipage: true,
                 onNext: function () {
@@ -514,7 +542,7 @@ define('io.ox/tours/main',
             {
                 title: gt('The Icons view'),
                 placement: 'bottom',
-                target: function () { return $('.files-wrapper .files-scrollable-pane')[0]; },
+                target: function () { return $('.file-cell')[0]; },//no scrollable pane here. when there are too much files the bubble is pushed out of the visible area
                 content: gt('In the Icons view you can see the files of the selected folder in the display area.')
             },
             {
@@ -597,19 +625,31 @@ define('io.ox/tours/main',
             {
                 title: gt('Tracking the editing status'),
                 placement: 'top',
-                target: function () { return $('[for="task-edit-status-select"]:visible')[0]; },
+                target: function () {
+                    if (!_.device('desktop')) {//tablets need scrolling here
+                        $('[for="task-edit-status-select"]:visible')[0].scrollIntoView(true);
+                    }
+                    return $('[for="task-edit-status-select"]:visible')[0];
+                },
                 content: gt('To track the editing status, enter the current progress.')
             },
             {
                 title: gt('Inviting other participants'),
                 placement: 'top',
-                target: function () { return $('.add-participant.task-participant-input-field:visible')[0]; },
+                target: function () {
+                    if (!_.device('desktop')) {//tablets need scrolling here
+                        $('.add-participant.task-participant-input-field:visible')[0].scrollIntoView(true);
+                    }
+                    return $('.add-participant.task-participant-input-field:visible')[0];
+                },
                 content: gt('To invite other participants, enter their names in the field below Participants. You can add documents as attachment to the task.'),
-                onShow: function () { $('.tab-link[tabindex="0"]:visible').click(); }
+                onShow: function () {
+                    $('.tab-link[tabindex="0"]:visible').click();
+                }
             },
             {
                 title: gt('Entering billing information'),
-                placement: 'top',
+                placement: (_.device('desktop') ? 'top': 'left'),
                 target: function () { return $('.task-edit-row [tabindex="2"]:visible')[0]; },
                 content: gt('In the Details section at the bottom right side you can enter billing information.'),
                 onShow: function () { $('.tab-link[tabindex="2"]:visible').click(); }
@@ -617,7 +657,12 @@ define('io.ox/tours/main',
             {
                 title: gt('Creating the task'),
                 placement: 'left',
-                target: function () { return $('.btn.task-edit-save:visible')[0]; },
+                target: function () {
+                    if (!_.device('desktop')) {//tablets need scrolling here
+                        $('.btn.task-edit-save:visible')[0].scrollIntoView(true);
+                    }
+                    return $('.btn.task-edit-save:visible')[0];
+                },
                 content: gt('To create the task, click on Create on the upper right side.'),
                 multipage: true,
                 onNext: function () {
@@ -625,6 +670,9 @@ define('io.ox/tours/main',
                         window.hopscotch.nextStep();
                         window.hopscotch.prevStep();
                     });
+                },
+                onShow: function () {
+                    $('.tab-link[tabindex="0"]:visible').click();
                 }
             },
             {
@@ -716,7 +764,7 @@ define('io.ox/tours/main',
             var node = this,
                 link = $('<li>', {'class': 'io-ox-specificHelp'}).appendTo(node);
 
-            if (_.device('mobileOS') || _.device('touch')) {
+            if (_.device('small')) {//tablets are fine just disable phones
                 return;
             }
 
@@ -748,7 +796,7 @@ define('io.ox/tours/main',
             var node = this,
                 tourLink = $('<li>', {'class': 'io-ox-specificHelp'}).appendTo(node);
 
-            if (_.device('mobileOS') || _.device('touch')) {
+            if (_.device('small')) {
                 tourLink.remove();
                 return;
             }

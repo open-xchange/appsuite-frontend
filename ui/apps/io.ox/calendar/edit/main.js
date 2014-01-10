@@ -242,6 +242,7 @@ define('io.ox/calendar/edit/main',
 
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
+                        $(app).trigger('finishedCreating');//used by guided tours so they can show the next step when everything is ready
                     });
                 }
 
