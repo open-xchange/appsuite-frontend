@@ -556,7 +556,7 @@ define('io.ox/mail/view-detail',
             var data = baton.data, color = api.tracker.getColorLabel(data);
 
             this.append(
-                $('<div class="dropdown flag-dropdown clear-title flag">').append(
+                $('<div class="dropdown flag-dropdown flag">').append(
                     // box
                     $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" tabindex="1">').append(
                         $('<i class="flag-dropdown-icon">')
@@ -601,9 +601,8 @@ define('io.ox/mail/view-detail',
             subject = subject ? $('<span class="subject-data">').html(html) : '';
 
             this.append(
-                $('<div class="mail-detail-clear-left">'),
                 $('<div>')
-                .addClass('subject' + (_.device('!smartphone') ? ' clear-title' : '') + (subject === '' ? ' empty' : ''))
+                .addClass('subject' + (subject === '' ? ' empty' : ''))
                 .append(
                     // unread
                     $('<i class="fa icon-unread fa-circle">'),
@@ -673,15 +672,7 @@ define('io.ox/mail/view-detail',
                 );
             }
             if (show) {
-                if (_.device('smartphone')) {
-                    container.find('.io-ox-label').prepend(
-                        $('<div>').addClass('mail-detail-clear-left')
-                    );
-                }
-                this.append(
-                    $('<div>').addClass('mail-detail-clear-left'),
-                    container
-                );
+                this.append(container);
                 if (_.device('!smartphone')) {
                     if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
                         var dd = $('<div class="recipient-actions">');

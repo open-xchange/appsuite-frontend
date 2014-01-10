@@ -254,8 +254,9 @@ define('io.ox/mail/util',
                 }
 
                 if (i < $i - 1) {
-                    tmp.append($('<span>').addClass('delimiter')
-                        .append($.txt(_.noI18n('\u00A0\u00A0\u2022\u00A0 ')))); // '&nbsp;&nbsp;&bull;&nbsp; '
+                    tmp.append(
+                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2014 '))) // '&nbsp;&mdash; '
+                    );
                 }
             }
             return tmp.contents();

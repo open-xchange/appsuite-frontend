@@ -603,7 +603,7 @@ textarea.inplace-editor {
     clear: both;
     width: 100%;
 
-    @picture-width: 64px;
+    @picture-width: 48px;
     @header-padding: 20px;
     @picture-padding: @picture-width + 2 * @header-padding;
 
@@ -680,9 +680,11 @@ textarea.inplace-editor {
         display: block;
     }
 
-    .subject, .thread-size {
-        font-size: 16pt;
-        margin: 7px 0;
+    .subject {
+        font-family: @lightFontFamily;
+        font-weight: 300;
+        font-size: 20px;
+        margin: 10px 0;
     }
 
     .from .person-link.person-sender {
@@ -719,8 +721,8 @@ textarea.inplace-editor {
 
     .flag-dropdown {
 
-        height: 24px;
-        margin: 5px 0 0 1em;
+        font-size: 24px;
+        margin: 7px 0 0 14px;
         cursor: pointer;
         float: right;
 
@@ -771,7 +773,7 @@ textarea.inplace-editor {
     .contact-picture {
         position: absolute;
         left: 20px;
-        .picture();
+        .picture(@picture-width, @picture-width);
     }
 
     .io-ox-label {
@@ -1168,7 +1170,7 @@ h4.mail-attachment-preview {
             display: block;
             word-break: break-all;
         }
-        div.dropdown.flag-dropdown.clear-title.flag { margin: 0; }
+        div.dropdown.flag-dropdown.flag { margin: 0; }
 
         .recipient-actions { display: block; margin-bottom: 5px; }
 

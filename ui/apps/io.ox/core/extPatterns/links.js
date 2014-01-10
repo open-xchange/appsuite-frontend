@@ -39,22 +39,35 @@ define('io.ox/core/extPatterns/links',
                 actions.invoke(ref, this, baton, e);
             },
             drawDefault = function () {
-                return $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
+                var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
+                        'role': 'menuitem',
+                        'title': self.label || '',
                         'data-section': self.section || 'default',
                         'data-prio': self.prio || 'lo',
                         'data-ref': self.ref,
-                        'data-prio-mobile': self.prioMobile || 'none',
-                        'role': 'menuitem',
-                        'title': self.label || ''
-                    })
-                    .append(
-                        // icons are prefered over labels
-                        (self.icon && $('<i>').addClass(self.icon)) ||
-                        (self.label && $.txt(self.label || '')) ||
-                        $()
-                    );
+                        'data-prio-mobile': self.prioMobile || 'none'
+                    });
+                // icons are prefered over labels
+                a.append(
+                    (self.icon && $('<i>').addClass(self.icon)) ||
+                    (self.label && $.txt(self.label)) ||
+                    $()
+                );
+                // has icon?
+                if (self.icon) a.addClass('no-underline');
+                // use tooltip?
+                if (self.icon && self.label) {
+                    a.attr({
+                        'data-toggle': 'tooltip',
+                        'data-placement': 'bottom',
+                        'data-animation': 'false',
+                        'data-container': 'body'
+                    });
+                    a.tooltip();
+                }
+                return a;
             };
 
         this.draw = this.draw || function (baton) {
@@ -525,8 +538,13 @@ define('io.ox/core/extPatterns/links',
                                 'title': links[0].label || '',
                                 'aria-label': links[0].label || '',
                                 'role': 'menuitem',
-                                'tabindex': 1
+                                'tabindex': 1,
+                                // add tooltip
+                                'data-animation': 'false',
+                                'data-placement': 'right',
+                                'data-container': 'body'
                             })
+                            .tooltip()
                             .on('click', { baton: baton, extension: links[0] }, actionClick);
                         } else {
                             a.addClass('disabled').on('click', preventDefault);
