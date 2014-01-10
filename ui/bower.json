@@ -23,6 +23,7 @@
     "backbone-validation": "~0.9.1",
     "Chart.js": "*",
     "bigscreen": "~2.0.3",
-    "jquery-placeholder": "~2.0.7"
+    "jquery-placeholder": "~2.0.7",
+    "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git"
   }
 }

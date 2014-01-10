@@ -92,7 +92,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        src: ['Chart.js/Chart.min.js'],
+                        src: ['Chart.js/Chart.min.js', 'jquery-imageloader/jquery.imageloader.js'],
                         cwd: 'lib/',
                         dest: 'build/apps/3rd.party/',
                         filter: 'isFile'

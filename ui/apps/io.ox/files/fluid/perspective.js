@@ -27,7 +27,7 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/capabilities',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
-     'apps/io.ox/core/tk/jquery.imageloader.js'
+     'apps/3rd.party/jquery-imageloader/jquery.imageloader.js'
      ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, folderAPI, gt, Caps, Selection, notifications) {
 
     'use strict';
