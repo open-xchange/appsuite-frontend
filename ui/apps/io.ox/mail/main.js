@@ -603,6 +603,11 @@ define('io.ox/mail/main',
                 });
             });
 
+            // redraw labels on refresh.list
+            api.on('refresh.list', function () {
+                if (_(openThreads).size() > 0) grid.repaintLabels();
+            });
+
             isInOpenThreadSummary = function (obj) {
                 var cid = _.cid(obj),
                     index = grid.selection.getIndex(cid) + 1;

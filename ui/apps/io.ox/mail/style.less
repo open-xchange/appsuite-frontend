@@ -189,11 +189,6 @@
     cursor: pointer;
 }
 
-.vgrid-cell .thread-summary-item.unread,
-.vgrid-cell .thread-summary-item.unread .date {
-    font-weight: bold;
-}
-
 .vgrid-cell .thread-summary-item.selected,
 .vgrid-cell .thread-summary-item.selected:hover {
     background-color: #08c;
@@ -219,11 +214,15 @@
     padding-right: 0.75em;
 }
 
-.vgrid-cell .thread-summary-from { font-weight: bold; }
-.vgrid-cell .thread-summary-subject { }
+.vgrid-cell .thread-summary-subject { font-weight: 300; color: #555; }
 
 .vgrid-cell .thread-summary-left { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vgrid-cell .thread-summary-right { float: right; }
+
+.vgrid-cell .thread-summary-item.unread {
+    .thread-summary-right.date,
+    .thread-summary-from { font-weight: bold; }
+}
 
 /* Detail view */
 
