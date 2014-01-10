@@ -26,7 +26,7 @@ define(['io.ox/settings/util'], function (util) {
                 var expect = chai.expect,
                     e = {
                         error: 'test error message',
-                        error_params: ['test error param']
+                        error_params: []
                     }, def, text;
 
                 // reset deferred
@@ -49,53 +49,6 @@ define(['io.ox/settings/util'], function (util) {
                     def.reject(e);
                     text = $('.io-ox-alert-error').find('.message').find('div').text();
                     expect(text).not.to.equal('unknown');
-                });
-
-                describe('with the submitted main error message', function () {
-
-                    afterEach(function () {
-                        text = $('.io-ox-alert-error').find('.message').find('div').text();
-                        expect(text).to.equal(e.error);
-                    });
-
-                    it('if error_params is undefined', function () {
-                        var e = {
-                                error: 'test error message',
-                                error_params: []
-                            };
-                        def.reject(e);
-                        util.yellOnReject(def);
-                    });
-
-                    it('if options is disabled', function () {
-                        var e = {
-                                error: 'test error message',
-                                error_params: ['test error param']
-                            };
-                        def.reject(e);
-                        util.yellOnReject(def, {details: false});
-                    });
-                });
-
-                describe('with a detailed error message', function () {
-
-                    afterEach(function () {
-                        def.reject(e);
-                        text = $('.io-ox-alert-error').find('.message').find('div').text();
-                        expect(text).to.equal(e.error_params[0]);
-                    });
-
-                    it('if options is enabled', function () {
-                        util.yellOnReject(def, {details: true});
-                    });
-
-                    it('if options is undefined', function () {
-                        util.yellOnReject(def, {details: undefined});
-                    });
-
-                    it('if options is unset', function () {
-                        util.yellOnReject(def, {});
-                    });
                 });
             });
         });
