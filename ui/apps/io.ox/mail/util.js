@@ -467,7 +467,7 @@ define('io.ox/mail/util',
                         //remove white-space and evil \r
                         .replace(/(\r\n|\n|\r)/g, '\n')
                         //remove subsequent white-space
-                        .replace(/\s\s+/g, ' ') //01
+                        .replace(/\s\s+/g, ' ')
                         .trim();
                 },
                 add = function (text, isHTML) {
@@ -479,10 +479,11 @@ define('io.ox/mail/util',
                 },
                 preview = function (text) {
                     return general(text)
-                                //remove ASCII art (intended to remove separators like '________')
-                                .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
-                                //remove htmltags
-                                .replace(htmltags, '');
+                            //remove ASCII art (intended to remove separators like '________')
+                            .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
+                            //remove htmltags
+                            .replace(htmltags, '')
+                            .trim();
                 };
             return {
                 cleanAdd: function (text, isHTML) {
