@@ -171,15 +171,17 @@ module.exports = function (grunt) {
                 options: {
                     compress: true,
                     ieCompat: false,
-                    paths: 'apps',
+                    paths: ['apps/themes', 'lib'],
                     imports: {
+                        reference: [
+                            'bootstrap/less/variables.less',
+                            'font-awesome/less/variables.less',
+                            'bootstrap/less/mixins.less'
+                        ],
                         less: [
-                            'lib/bootstrap/less/variables.less',
-                            'lib/font-awesome/less/variables.less',
-                            'themes/definitions.less',
-                            'themes/default/definitions.less',
-                            'lib/bootstrap/less/mixins.less',
-                            'themes/mixins.less'
+                            'definitions.less',
+                            'default/definitions.less',
+                            'mixins.less'
                         ]
                     }
                 },
@@ -187,9 +189,7 @@ module.exports = function (grunt) {
                     {
                         src: ['apps/themes/style.less'],
                         expand: true,
-                        rename: function (dest) {
-                            return dest;
-                        },
+                        rename: function (dest) { return dest; },
                         dest: 'build/apps/themes/default/common.css'
                     },
                     {
@@ -198,17 +198,13 @@ module.exports = function (grunt) {
                             'apps/themes/default/style.less'
                         ],
                         expand: true,
-                        rename: function (dest) {
-                            return dest;
-                        },
+                        rename: function (dest) { return dest; },
                         dest: 'build/apps/themes/default/style.css'
                     },
                     {
                         src: ['lib/bootstrap/less/bootstrap.less'],
                         expand: true,
-                        rename: function (dest) {
-                            return dest;
-                        },
+                        rename: function (dest) { return dest; },
                         dest: 'build/apps/io.ox/core/bootstrap/css/bootstrap.min.css'
                     },
                     {
