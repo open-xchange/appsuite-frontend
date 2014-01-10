@@ -27,7 +27,8 @@ define('io.ox/core/tk/autocomplete',
     $.fn.autocomplete = function (o) {
 
         o = $.extend({
-            minLength: settings.get('search/minimumQueryLength', 3),
+            // use Math.max here to make sure we don't get a zero (strange behavior then & look-up is too expensive)
+            minLength: Math.max(1, settings.get('search/minimumQueryLength', 3)),
             maxResults: 25,
             delay: 100,
             collection: null,

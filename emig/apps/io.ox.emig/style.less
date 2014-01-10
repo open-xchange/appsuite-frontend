@@ -1,0 +1,42 @@
+.io-ox-mail-write .section-item .io-ox-emig {
+    position: relative;
+    overflow: visible;
+    float: right;
+    font-size: 1.5em;
+    cursor: pointer;
+    
+    &.none { display: none; }
+    &.wait { display: none; }
+    
+    &.member { color: #7c7c7c; }
+    &.secure { color: #6bb324; }
+}
+
+.io-ox-emig-title {
+    text-align: center;
+    font-weight: bold;
+}
+
+.io-ox-emig-popup {
+/*    width: 21em;
+    line-height: 1.2;*/
+    
+    &.member {
+        &>p, &>a {
+            padding-left: 80px;
+        }
+        
+        &>p {
+            background: url(images/logo.png) 10px 0 no-repeat;
+/*            margin: 0.5em 0;*/
+        }
+    }
+    
+    &.secure {
+        &>p {
+            padding-top: 50px;
+            background: url(images/logo2.png) top no-repeat;
+/*            margin: 1em 0 0.5em;*/
+        }
+    }
+}

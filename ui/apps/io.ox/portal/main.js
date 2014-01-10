@@ -121,7 +121,8 @@ define('io.ox/portal/main',
         id: 'classes',
         index: 200,
         draw: function (baton) {
-            this.addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''));
+            this.addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''))
+                .addClass(baton.model.get('protectedWidget') || false ? ' protected' : ' draggable');
         }
     });
 
@@ -533,6 +534,8 @@ define('io.ox/portal/main',
             if (!Modernizr.touch) {
                 require(['apps/io.ox/core/tk/jquery-ui.min.js']).done(function () {
                     appBaton.$.widgets.sortable({
+                        itmes: '> li.draggable',
+                        cancel: 'li.protected',
                         containment: win.nodes.main,
                         scroll: true,
                         delay: 150,

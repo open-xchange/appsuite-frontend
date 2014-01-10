@@ -17,7 +17,8 @@ define(
      'settings!io.ox/mail',
      'io.ox/core/api/account',
      'fixture!io.ox/mail/write/email.json',
-     'fixture!io.ox/mail/write/accounts.json'], function (writer, mailAPI, settings, accountAPI, fixtureEmail, fixtureAccounts) {
+     'fixture!io.ox/mail/write/accounts.json', 
+     'fixture!io.ox/mail/write/signatures.json'], function (writer, mailAPI, settings, accountAPI, fixtureEmail, fixtureAccounts, fixtureSignatures) {
 
     'use strict';
 
@@ -32,6 +33,9 @@ define(
 
         beforeEach(function () {
             settings.set('messageFormat', 'html');
+            this.server.respondWith('GET', /api\/snippet\?action=all/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureSignatures.current));
+            });
         });
 
         var app = null, ed = null, form = $();
@@ -285,6 +289,133 @@ define(
             });
         });
 
+        describe('supports signatures', function () {
+            var data = fixtureSignatures.current.data;
+            function getCurrentSignature () {
+                return app.getMail().signature;
+            };
+            function setCurrentSignature (index) {
+                return app.setSignature({data: {index: index}});
+            };
+            function getCurrentContent () {
+                return app.getEditor().getContent();
+            };
+            function setMode (format) {
+                var available = new Done();
+                waitsFor(available, format + ' editor');
+                if (app.getEditor().getMode() === format) {
+                    available.yep();
+                } else {
+                    app.setFormat(format).done(function () {
+                        available.yep();
+                    });
+                }
+            }
+            function occurrences () {
+                //number of occurrences of signature class name (only relevant for html)
+                return (getCurrentContent().match(/io-ox-signature/g) || [])
+                        .length;
+            }
+            function reset () {
+                //reset by using 'empty string' signature
+                setCurrentSignature(0);
+                app.getEditor().setContent('');
+            }
+
+            function addIndependentTests (format) {
+                beforeEach(function () {
+                    reset();
+                });
+                it('signatures are accessible', function () {
+                    expect(app.getSignatures().length).not.toEqual(0);
+                });
+                it('a signature can be added', function () {
+                    setCurrentSignature(6);
+                    expect(getCurrentSignature().length > 0).toBeTruthy();
+                });
+                it('a signature can be replaced', function () {
+                    var before;
+                    //set signature 1 (long)
+                    setCurrentSignature(1);
+                    before = getCurrentSignature();
+                    //set signature 2 (short)
+                    setCurrentSignature(2);
+                    expect(before).not.toEqual(getCurrentSignature());
+                });
+                it('an unmodified signature will be replaced', function () {
+                    var before;
+                    _.each(data, function (value, index) {
+                        reset();
+                        setCurrentSignature(index);
+                        before = getCurrentContent();
+                        setCurrentSignature(index);
+                        expect(before.length).toEqual(getCurrentContent().length);
+                    });
+                });
+                it('an modified signature is keept', function () {
+                    var before;
+                    //set signature 2 and change a substring
+                    setCurrentSignature(2);
+                    app.getEditor()
+                       .setContent(getCurrentContent().replace('xxx', 'yyy'));
+                    before = getCurrentContent();
+                    //set signature again
+                    setCurrentSignature(2);
+                    //check content length and number of nodes with signature class
+                    expect(getCurrentContent().length).toBeGreaterThan(before.length);
+                    expect(occurrences()).toBeLessThan(2);
+                });
+                describe('a signature is normalized', function () {
+                    it('by removing trailing and subsequent white-space', function () {
+                        _.each(data, function (value, index) {
+                            reset();
+                            setCurrentSignature(index);
+                            expect(/\s\s+/g.test(getCurrentSignature())).toBeFalsy();
+                        });
+                    });
+                    it('by removing linebreaks', function () {
+                        _.each(data, function (value, index) {
+                            reset();
+                            setCurrentSignature(index);
+                            expect(/(\r)/g.test(getCurrentSignature())).toBeFalsy();
+                        });
+                    });
+                });
+            }
+
+            describe('in html mode:', function () {
+                beforeEach(function () {
+                    setMode('html');
+                });
+
+                //independent test with same expection for both modes
+                addIndependentTests('html');
+
+                describe('a signature is normalized', function () {
+                    it('by keeping html tags when html editor is used', function () {
+                        app.setSignature({data: {index: 5}});
+                        expect(/(<([^>]+)>)/ig.test(getCurrentSignature())).toBeTruthy();
+                    });
+                });
+            });
+            
+            describe('in text mode:', function () {
+                beforeEach(function () {
+                    setMode('text');
+                });
+
+                //independent test with same expection for both modes
+                addIndependentTests('text');
+
+                describe('a signature is normalized', function () {
+                    it('by removing html tags when text editor is used', function () {
+                        app.setSignature({data: {index: 5}});
+                        expect(/(<([^>]+)>)/ig.test(getCurrentSignature())).toBeFalsy();
+                    });
+                });
+            });
+        });
+        
         it('closes compose dialog', function () {
             // mark app as clean so no save as draft question will pop up
             app.dirty(false).quit();

@@ -460,19 +460,55 @@ define('io.ox/mail/util',
         },
 
         signatures: (function () {
-            var ensure = function (text) {
-                return String(text || '');
-            };
-
+            var htmltags = /(<([^>]+)>)/ig,
+                nothing = /.^/,
+                general = function (text) {
+                    return String(text || '')
+                        //remove white-space and evil \r
+                        .replace(/(\r\n|\n|\r)/g, '\n')
+                        //remove subsequent white-space
+                        .replace(/\s\s+/g, ' ') //01
+                        .trim();
+                },
+                add = function (text, isHTML) {
+                    return general(text)
+                        //remove white-space and evil \r
+                        .replace(/(\r\n|\n|\r)/g, '\n')
+                        //remove html tags (for plaintext emails)
+                        .replace(isHTML ? nothing : htmltags, '');
+                },
+                preview = function (text) {
+                    return general(text)
+                                //remove ASCII art (intended to remove separators like '________')
+                                .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
+                                //remove htmltags
+                                .replace(htmltags, '');
+                };
             return {
-                preview: function (text) {
-                    return ensure(text)
-                            //remove subsequent white-space
-                            .replace(/\s\s+/g, ' ')
-                            //remove ASCII art
-                            .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
-                            //remove html tags
-                            .replace(/(<([^>]+)>)/ig, '');
+                cleanAdd: function (text, isHTML) {
+                    return add(text, !!isHTML);
+                },
+                cleanPreview: function (text) {
+                    return preview(text);
+                },
+                is: function (text, list, isHTML) {
+                    var clean,
+                        signatures = _(list).map(function (signature) {
+                            //consider changes applied by appsuite
+                            clean = add(signature.content, !!isHTML);
+                            //consider changes applied by tiny
+                            if (clean === '')
+                                return '<br>';
+                            else {
+                                return clean
+                                        //replace surrounding whitspaces
+                                        .replace(/>\s+/g, '>')
+                                        .replace(/\s+</g, '<')
+                                        //set breaks
+                                        .replace(/(\r\n|\n|\r)/g, '<br>');
+                            }
+                        });
+                    return _(signatures).indexOf(text) > - 1;
                 }
             };
         })(),

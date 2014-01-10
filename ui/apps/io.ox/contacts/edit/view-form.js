@@ -450,21 +450,26 @@ define('io.ox/contacts/edit/view-form',
 
         function propagateAttachmentChange(model, id) {
 
-            var folder_id = model.get('folder_id'), id = model.get('id') || id;
+            var folder_id = model.get('folder_id'), id = model.get('id') || id,
+                upload = api.uploadInProgress(_.ecid(model.attributes));
 
-            return api.get({ id: id, folder: folder_id }, false)
+            return api.get({ id: id, folder: folder_id }, !upload)
                 .then(function (data) {
-                    return $.when(
-                        api.caches.get.add(data),
-                        api.caches.all.grepRemove(folder_id + api.DELIM),
-                        api.caches.list.remove({ id: id, folder: folder_id }),
-                        api.clearFetchCache()
-                    )
-                    .done(function () {
-                        // to make the detailview remove the busy animation:
-                        api.removeFromUploadList(_.ecid(data));
-                        api.trigger('refresh.list');
-                    });
+                    if (upload) {//don't delete caches if there is no upload
+                        return $.when(
+                            api.caches.get.add(data),
+                            api.caches.all.grepRemove(folder_id + api.DELIM),
+                            api.caches.list.remove({ id: id, folder: folder_id }),
+                            api.clearFetchCache()
+                        )
+                        .done(function () {
+                            // to make the detailview remove the busy animation:
+                            api.removeFromUploadList(_.ecid(data));
+                            api.trigger('refresh.list');
+                        });
+                    } else {
+                        return $.when();
+                    }
                 });
         }
 

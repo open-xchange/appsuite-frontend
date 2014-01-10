@@ -242,6 +242,7 @@ define('io.ox/calendar/api',
                     appendColumns: false
                 })
                 .then(function (obj) {
+                    // check for conflicts
                     if (!_.isUndefined(obj.conflicts)) {
                         return $.Deferred().reject(obj);
                     }
@@ -252,13 +253,15 @@ define('io.ox/calendar/api',
                         id: obj.id || o.id,
                         folder: folder_id
                     };
-                    all_cache = {};
 
-                    if (o.recurrence_position !== null && obj.id === o.id) {
+                    if (o.recurrence_position && o.recurrence_position !== null && obj.id === o.id) {
                         getObj.recurrence_position = o.recurrence_position;
                     }
 
+                    // clear caches
+                    all_cache = {};
                     delete get_cache[key];
+
                     return api.get(getObj)
                         .then(function (data) {
                             if (attachmentHandlingNeeded) {
@@ -291,10 +294,15 @@ define('io.ox/calendar/api',
          * @return {deferred}
          */
         attachmentCallback: function (o) {
-            all_cache = {};
-            var key = (o.folder || o.folder_id) + '.' + o.id + '.' + (o.recurrence_position || 0);
-            delete get_cache[key];
-            return api.get(o)
+            var doCallback = api.uploadInProgress(_.ecid(o));
+
+            // clear caches
+            if (doCallback) {
+                all_cache = {};
+                delete get_cache[_.ecid(o)];
+            }
+
+            return api.get(o, !doCallback)
                 .then(function (data) {
                     api.trigger('update', data);
                     //to make the detailview remove the busy animation
@@ -334,7 +342,7 @@ define('io.ox/calendar/api',
                 };
                 all_cache = {};
 
-                if (o.recurrence_position !== null) {
+                if (o.recurrence_position && o.recurrence_position !== null) {
                     getObj.recurrence_position = o.recurrence_position;
                 }
 

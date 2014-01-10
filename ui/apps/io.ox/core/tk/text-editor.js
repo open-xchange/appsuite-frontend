@@ -125,7 +125,7 @@ define('io.ox/core/tk/text-editor', function () {
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
             // exists?
-            if ((pos = content.indexOf(str)) > -1) {
+            if ((pos = content.indexOf(str.trim())) > -1) {
                 // replace content
                 top = this.scrollTop();
                 this.setContent(content.substr(0, pos) + (rep || '') + content.substr(pos + str.length));
@@ -140,12 +140,15 @@ define('io.ox/core/tk/text-editor', function () {
             // trick to force document reflow
             var alt = false;
             return _.debounce(function () {
+                //textarea might be destroyed already
+                if (!textarea)
+                    return;
                 var w = Math.max(10, textarea.outerWidth() - 12 - 750);
-                textarea.css('paddingRight', w + 'px');
-                textarea.parents('.window-content').find('.editor-print-margin')
-                    .css('right', Math.max(0, w - 10) + 'px').show();
+                textarea.css('paddingRight', w + 'px')
+                        .parents('.window-content').find('.editor-print-margin')
+                        .css('right', Math.max(0, w - 10) + 'px').show()
                 // force reflow
-                textarea.css('display', (alt = !alt) ? 'block' : '');
+                        .css('display', (alt = !alt) ? 'block' : '');
             }, 100);
         }());
 
