@@ -983,8 +983,9 @@ define('io.ox/core/main',
         });
 
         function fail(type) {
-            return function () {
-                console.error('core: Failed to load:', type, baton);
+            return function (e) {
+                var message = (e && e.message) || '';
+                console.error('core: Failed to load:', type, message, e, baton);
             };
         }
 

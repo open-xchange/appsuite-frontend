@@ -654,7 +654,7 @@
             };
         }()),
 
-        // escape cid - usefull for evant handlers
+        // escape cid - usefull for event handlers
         ecid: function (o) {
             var cid = typeof o === 'string' ? o : _.cid(o);
             return encodeURIComponent(cid).replace(/\./g, ':');

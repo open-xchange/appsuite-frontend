@@ -20,9 +20,10 @@ define('io.ox/mail/api',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
      'io.ox/mail/util',
+     'io.ox/core/api/collection-pool',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, settings, gt) {
+    ], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, Pool, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -245,6 +246,9 @@ define('io.ox/mail/api',
         colorLabelSort = function (a, b) {
             return colorLabelResort[b.color_label] - colorLabelResort[a.color_label];
         };
+
+    // model pool
+    var pool = new Pool('mail');
 
     // generate basic API
     var api = apiFactory({
@@ -564,6 +568,7 @@ define('io.ox/mail/api',
     };
 
     var update = function (list, data, apiAction) {
+
         var move = false,
             modfolder = data.folder_id || data.folder;
 
@@ -775,6 +780,18 @@ define('io.ox/mail/api',
         list = [].concat(list);
         label = String(label); // Bugfix: #24730
 
+        _(list).each(function (obj) {
+            pool.propagate('change', {
+                id: obj.id,
+                folder_id: obj.folder_id,
+                color_label: label
+            });
+            obj.color_label = label;
+            tracker.setColorLabel(obj);
+            api.trigger('update:' + _.ecid(obj), obj);
+            api.events.trigger('update:' + _.cid(obj), obj);
+        });
+
         return tracker.update(list, function (obj) {
                 obj.color_label = label;
                 tracker.setColorLabel(obj);
@@ -788,6 +805,9 @@ define('io.ox/mail/api',
             });
     };
 
+    // backbonish event handling
+    _.extend(api.events, Backbone.Events);
+
     /**
      * marks list of mails unread
      * @param {array} list
@@ -796,6 +816,17 @@ define('io.ox/mail/api',
      */
     api.markUnread = function (list) {
         list = [].concat(list);
+
+        _(list).each(function (obj) {
+            tracker.setUnseen(obj, { silent: true });
+            obj.flags = obj.flags & ~32;
+            pool.propagate('change', {
+                id: obj.id,
+                folder_id: obj.folder_id,
+                flags: obj.flags
+            });
+            api.trigger('update:' + _.ecid(obj), obj);
+        });
 
         return $.when(
             // local update
@@ -822,7 +853,19 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.markRead = function (list) {
+
         list = [].concat(list);
+
+        _(list).each(function (obj) {
+            tracker.setSeen(obj, { silent: true });
+            obj.flags = obj.flags | 32;
+            pool.propagate('change', {
+                id: obj.id,
+                folder_id: obj.folder_id,
+                flags: obj.flags
+            });
+            api.trigger('update:' + _.ecid(obj), obj);
+        });
 
         return $.when(
             // local update

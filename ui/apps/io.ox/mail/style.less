@@ -610,11 +610,7 @@ textarea.inplace-editor {
     .io-ox-inline-links {
         position: relative;
         left: -@picture-padding + @header-padding; // move left to compensate padding-left: 100px;
-        margin-right: -@picture-padding + @header-padding; // add missing width
-    }
-
-    .io-ox-inline-links:first-child {
-        margin: 0 0 20px 0;
+        margin: 0 -@picture-padding + @header-padding 20px 0; // add missing width
     }
 
     &.io-ox-busy {

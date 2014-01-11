@@ -15,39 +15,45 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
     'use strict';
 
-    var collections = {};
+    var collections = {}, skip = false;
 
     function propagateRemove(module, model) {
+        if (skip) return;
         _(collections[module]).each(function (entry) {
             var target = entry.collection.get(model.cid);
             if (target) {
-                entry.collection.remove(target, { silent: true });
+                skip = true;
+                entry.collection.remove(target);
             }
         });
+        skip = false;
     }
 
     function propagateChange(module, model) {
+        if (skip) return;
         _(collections[module]).each(function (entry) {
             var target = entry.collection.get(model.cid), data;
             if (target) {
+                skip = true;
                 data = model.toJSON();
                 delete data.index;
-                target.set(data, { silent: true });
+                target.set(data);
             }
         });
+        skip = false;
     }
 
     function Pool(module) {
 
-        collections[module] = {};
+        var hash = collections[module] || (collections[module] = {});
 
         this.getCollections = function () {
-            return collections[module];
+            return hash;
         };
 
         this.get = function (cid) {
 
-            var entry = collections[module][cid];
+            var entry = hash[cid];
 
             if (entry) {
                 entry.access = _.now();
@@ -55,13 +61,17 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             }
 
             // register new collection
-            entry = collections[module][cid] = { access: _.now(), collection: new backbone.Collection() };
+            hash[cid] = { access: _.now(), collection: new backbone.Collection() };
 
             // propagate changes in all collections
-            return entry.collection.on({
+            return hash[cid].collection.on({
                 'remove': propagateRemove.bind(this, module),
                 'change': propagateChange.bind(this, module)
             });
+        };
+
+        this.getModule = function () {
+            return module;
         };
     }
 
@@ -69,6 +79,23 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         getDefault: function () {
             return new backbone.Collection();
+        },
+
+        propagate: function (type, data) {
+            if (type === 'change') {
+                propagateChange.call(this, this.getModule(), new backbone.Model(data));
+            }
+        },
+
+        getDetailModel: function (data) {
+
+            var cid = _.cid(data), collection = this.get('detail'), model;
+
+            if ((model = collection.get(cid))) return model;
+
+            model = new backbone.Model(data);
+            collection.add(model);
+            return model;
         }
     });
 

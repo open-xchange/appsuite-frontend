@@ -26,9 +26,10 @@ define('io.ox/mail/view-detail',
      'io.ox/core/api/folder',
      'io.ox/core/emoji/util',
      'io.ox/core/capabilities',
+     'io.ox/core/api/collection-pool',
      'io.ox/mail/actions',
      'less!io.ox/mail/style'
-    ], function (content, ext, links, util, api, http, coreUtil, account, settings, gt, folder, emoji) {
+    ], function (content, ext, links, util, api, http, coreUtil, account, settings, gt, folder, emoji, capabilities, Pool) {
 
     'use strict';
 
@@ -59,81 +60,124 @@ define('io.ox/mail/view-detail',
             return node;
         },
 
-        draw: function (baton) {
+        draw: (function () {
 
-            if (!baton) return $('<div>');
+            var pool = new Pool('mail');
 
-            // ensure baton
-            baton = ext.Baton.ensure(baton);
+            var DetailView = Backbone.View.extend({
 
-            var data = baton.data,
-                copy = _.extend({}, data),
-                node = $('<section class="mail-detail">'),
-                container = $.createViewContainer(data, api)
-                    .addClass('mail-detail-decorator')
-                    .on('redraw', function (e, fresh) {
-                        // mails can only change color_label and flags
-                        var current = {
-                            color_label: parseInt(container.find('.flag-dropdown-icon').attr('data-color'), 10) || 0,
-                            unseen: node.hasClass('unread')
-                        };
-                        // flags changed?
-                        if (current.unseen !== util.isUnseen(fresh)) {
-                            // update class
-                            node.toggleClass('unread', util.isUnseen(fresh));
-                            // udpate inline links
-                            ext.point('io.ox/mail/detail').get('inline-links', function (extension) {
-                                var div = $('<div>'), baton = ext.Baton({ data: _.extend(copy, fresh) });
-                                extension.draw.call(div, baton);
-                                node.find('ul.io-ox-inline-links:first').replaceWith(div.children());
-                            });
-                        }
-                        if (current.color_label !== fresh.color_label) {
-                            setLabel(node, fresh.color_label);
-                        }
-                        // update copy
-                        _.extend(copy, fresh);
-                    });
+                className: 'mail-detail-decorator',
 
-            if (baton.options.tabindex) {
-                // we add f6-target just here; first mail in thread
-                node.addClass('f6-target').attr({
-                    tabindex: baton.options.tabindex,
-                    role: 'document',
-                    'aria-label': baton.data.subject
-                });
-            }
+                onChangeColor: function () {
+                    setLabel(this.$el.find('.flag-dropdown'), this.model.get('color_label'));
+                },
 
-            try {
+                onChangeFlags: function () {
+                    // update unread state
+                    this.$el.children('.mail-detail').toggleClass('unread', util.isUnseen(this.model.toJSON()));
+                    // update inline links
+                    ext.point('io.ox/mail/detail/header').get('inline-links', this.updateInlineLinks.bind(this));
+                },
 
-                // fix z-index in threads?
-                if (data.threadSize > 1) {
-                    container.css('zIndex', data.threadSize - data.threadPosition);
+                updateInlineLinks: function (extension) {
+                    var node = $('<div>'), baton = ext.Baton({ data: this.model.toJSON() });
+                    extension.draw.call(node, baton);
+                    this.$el.find('ul.io-ox-inline-links').replaceWith(node.children());
+                    // fix staying tooltips; yep, global selector
+                    $('.tooltip:visible').remove();
+                },
+
+                initialize: function (options) {
+                    this.baton = options.baton;
+                    this.model = pool.getDetailModel(this.baton.data);
+                    this.cid = _.cid(options.baton.data);
+                    this.listenTo(this.model, 'change:color_label', this.onChangeColor);
+                    this.listenTo(this.model, 'change:flags', this.onChangeFlags);
+                },
+
+                render: function () {
+                    this.$el.attr('data-cid', this.cid);
+                    return this;
                 }
+            });
 
-                // threaded & send by myself (and not in sent folder)?
-                if (data.threadSize > 1 && util.byMyself(data) && baton.app && !account.is('sent', baton.app.folder.get())) {
-                    node.addClass('by-myself');
-                }
+            return function (baton) {
 
-                // make sure this mail is seen
-                if (api.tracker.isUnseen(baton.data) && !util.isAttachment(baton.data)) {
-                    api.markRead(baton.data).done(function () {
-                        //update detailview because if update was faster than cache the inline links have wrong data
-                        api.trigger('update:' + _.ecid(baton.data), baton.data);
+                // ensure baton
+                if (!baton) return $('<div>');
+                baton = ext.Baton.ensure(baton);
+
+                var view = new DetailView({ baton: baton }).render(),
+                    node = $('<section class="mail-detail">'),
+                    data = baton.data;
+
+                if (baton.options.tabindex) {
+                    // we add f6-target just here; first mail in thread
+                    node.addClass('f6-target').attr({
+                        tabindex: baton.options.tabindex,
+                        role: 'document',
+                        'aria-label': baton.data.subject
                     });
                 }
 
-                ext.point('io.ox/mail/detail').invoke('draw', node, baton);
+                try {
 
-            } catch (e) {
-                console.error('mail.draw', e.message, e, baton);
-            }
+                    // fix z-index in threads?
+                    if (data.threadSize > 1) {
+                        view.$el.css('zIndex', data.threadSize - data.threadPosition);
+                    }
 
-            container.append(node);
+                    // threaded & send by myself (and not in sent folder)?
+                    if (data.threadSize > 1 && util.byMyself(data) && baton.app && !account.is('sent', baton.app.folder.get())) {
+                        node.addClass('by-myself');
+                    }
 
-            return container;
-        },
+                    // make sure this mail is seen
+                    if (api.tracker.isUnseen(baton.data) && !util.isAttachment(baton.data)) {
+                        api.markRead(baton.data);
+                    }
+
+                    ext.point('io.ox/mail/detail').invoke('draw', node, baton);
+
+                } catch (e) {
+                    console.error('mail.draw', e.message, e, baton);
+                }
+
+                view.$el.append(node);
+
+                return view.$el;
+            };
+
+        }()),
+
+        // var data = baton.data,
+        //     copy = _.extend({}, data),
+
+        //     container = $.createViewContainer(data, api)
+        //         .addClass('mail-detail-decorator')
+        //         .on('redraw', function (e, fresh) {
+        //             // mails can only change color_label and flags
+        //             var current = {
+        //                 color_label: parseInt(container.find('.flag-dropdown-icon').attr('data-color'), 10) || 0,
+        //                 unseen: node.hasClass('unread')
+        //             };
+        //             // flags changed?
+        //             if (current.unseen !== util.isUnseen(fresh)) {
+        //                 // update class
+        //                 node.toggleClass('unread', util.isUnseen(fresh));
+        //                 // udpate inline links
+        //                 ext.point('io.ox/mail/detail').get('inline-links', function (extension) {
+        //                     var div = $('<div>'), baton = ext.Baton({ data: _.extend(copy, fresh) });
+        //                     extension.draw.call(div, baton);
+        //                     node.find('ul.io-ox-inline-links').replaceWith(div);
+        //                 });
+        //             }
+        //             if (current.color_label !== fresh.color_label) {
+        //                 setLabel(node, fresh.color_label);
+        //             }
+        //             // update copy
+        //             _.extend(copy, fresh);
+        //         });
 
         autoResolveThreads: (function () {
 
@@ -520,10 +564,9 @@ define('io.ox/mail/view-detail',
             color = e.data.color,
             node = $(this).closest('.flag-dropdown');
 
-        setLabel(node, color);
+        //setLabel(node, color);
         node.find('.dropdown-toggle').focus();
-
-        return api.changeColor(data, color);
+        api.changeColor(data, color);
     }
 
     // show within multi-selection
