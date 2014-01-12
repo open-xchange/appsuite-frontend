@@ -679,8 +679,9 @@ textarea.inplace-editor {
     .subject {
         font-family: @lightFontFamily;
         font-weight: 300;
-        font-size: 20px;
-        margin: 10px 0;
+        font-size: 18px;
+        line-height: 21px;
+        margin: 7px 0;
     }
 
     .from .person-link.person-sender {
@@ -717,7 +718,7 @@ textarea.inplace-editor {
 
     .flag-dropdown {
 
-        font-size: 24px;
+        font-size: 22px;
         margin: 7px 0 0 14px;
         cursor: pointer;
         float: right;
@@ -937,6 +938,14 @@ textarea.inplace-editor {
         &.fixed-width-font, &.fixed-width-font.plain-text {
             font-family: monospace;
         }
+
+        @base: 14px;
+        h1 { font-size: 2.00 * @base; }
+        h2 { font-size: 1.50 * @base; }
+        h3 { font-size: 1.17 * @base; }
+        h4 { font-size: 1.00 * @base; }
+        h5 { font-size: 0.83 * @base; }
+        h6 { font-size: 0.67 * @base; }
 
         // fix long links
         a {

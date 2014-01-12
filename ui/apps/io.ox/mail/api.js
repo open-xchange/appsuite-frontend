@@ -784,7 +784,7 @@ define('io.ox/mail/api',
             pool.propagate('change', {
                 id: obj.id,
                 folder_id: obj.folder_id,
-                color_label: label
+                color_label: parseInt(label, 10) || 0
             });
             obj.color_label = label;
             tracker.setColorLabel(obj);

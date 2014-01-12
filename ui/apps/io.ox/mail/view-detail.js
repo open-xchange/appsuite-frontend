@@ -564,7 +564,6 @@ define('io.ox/mail/view-detail',
             color = e.data.color,
             node = $(this).closest('.flag-dropdown');
 
-        //setLabel(node, color);
         node.find('.dropdown-toggle').focus();
         api.changeColor(data, color);
     }
