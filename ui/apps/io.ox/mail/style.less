@@ -176,6 +176,10 @@
             font-size: 14px;
         }
     }
+    footer {
+        font-size: 13px;
+        padding: 0 20px 20px 20px;
+    }
 }
 
 .inplace-reply {
@@ -206,14 +210,14 @@ textarea.inplace-editor {
     .thread-view-navigation {
 
         display: none;
-        background-color: white;
+        background-color: inherit;
         width: 100%;
         height: @height;
         line-height: @height;
         position: absolute;
         top: 0px;
         z-index: 2;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #ccc;
 
         a { outline: 0; }
         a:hover { text-decoration: none; }
@@ -227,6 +231,7 @@ textarea.inplace-editor {
         }
 
         .position {
+            color: #888;
             display: table-cell;
             text-align: center;
             width: 20%;

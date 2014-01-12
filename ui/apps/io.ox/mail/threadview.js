@@ -30,7 +30,13 @@ define('io.ox/mail/threadview',
             this.$el.append(
                 $('<div class="thread-view-list abs">').append(
                     $('<header>'),
-                    this.$ul = $('<ul class="thread-view list-view mail">')
+                    this.$ul = $('<ul class="thread-view list-view mail">'),
+                    $('<footer>').append(
+                        $('<label class="checkbox">').append(
+                            $('<input type="checkbox" name="auto-select">'),
+                            $.txt('Automatically select oldest unread message or most recent message')
+                        )
+                    )
                 )
             );
         }
@@ -71,12 +77,14 @@ define('io.ox/mail/threadview',
             'click .overview a': 'onOverview',
             'click .previous-mail': 'onPrevious',
             'click .next-mail': 'onNext',
+            'keydown': 'onKeydown'
         },
 
         empty: function () {
             this.$ul.empty().scrollTop(0);
             this.$el.find('.thread-view-list').show();
             this.$el.find('.thread-view-list header').hide();
+            this.$el.find('.thread-view-list footer').hide();
             this.$el.find('.detail-view-container').hide();
             this.$el.find('.detail-view').empty();
         },
@@ -95,6 +103,10 @@ define('io.ox/mail/threadview',
                 $('<div class="subject">').text(util.getSubject(this.collection.at(0).toJSON())),
                 $('<div class="summary">').text(gt('%1$d messages in this conversation', this.collection.length))
             );
+        },
+
+        updateFooter: function () {
+            this.$el.find('.thread-view-list footer').show();
         },
 
         updatePosition: function (cid) {
@@ -131,13 +143,23 @@ define('io.ox/mail/threadview',
             });
         },
 
+        autoSelectMail: function () {
+            for (var i = this.collection.length - 1, model; model = this.collection.at(i); i--) {
+                // most recent or first unseen?
+                if (i === 0 || util.isUnseen(model.toJSON())) { this.showMail(model.cid); break; }
+            }
+        },
+
         onReset: function () {
 
             this.empty();
             this.index = 0;
             this.updateHeader();
+            this.updateFooter();
+
             // draw detail view?
-            if (this.collection.length === 1) this.showMail(this.collection.at(0).cid);
+            if (this.collection.length === 1 || this.$el.find('[name="auto-select"]').prop('checked')) this.autoSelectMail();
+
             // draw thread list
             this.$ul.append(
                 this.collection.map(this.renderListItem, this)
@@ -199,6 +221,13 @@ define('io.ox/mail/threadview',
         onClick: function (e) {
             var cid = $(e.currentTarget).attr('data-cid');
             this.showMail(cid);
+        },
+
+        onKeydown: function (e) {
+            // cursor down?
+            if (e.which === 40 && e.shiftKey) return this.onPrevious(e);
+            // cursor up?
+            if (e.which === 38 && e.shiftKey) return this.onNext(e);
         },
 
         initialize: function (options) {
