@@ -592,6 +592,12 @@ define('io.ox/mail/main',
                 openThreads = tmpl.openThreads = {};
             });
 
+            grid.on('change:prop:sort', function () {
+                _(openThreads).chain().keys().each(function (id) {
+                    close(id, openThreads[id]);
+                });
+            });
+
             // close if deleted
             api.on('beforedelete', function (e, ids) {
                 var hash = {};
