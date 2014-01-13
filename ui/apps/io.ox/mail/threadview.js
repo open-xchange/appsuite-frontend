@@ -224,10 +224,18 @@ define('io.ox/mail/threadview',
         },
 
         onKeydown: function (e) {
-            // cursor down?
-            if (e.which === 40 && e.shiftKey) return this.onPrevious(e);
-            // cursor up?
-            if (e.which === 38 && e.shiftKey) return this.onNext(e);
+            if (!e.shiftKey) return;
+            switch (e.which) {
+            case 37: // cursor left
+                this.showOverview(e);
+                break;
+            case 38: // cursor up
+                this.onNext(e);
+                break;
+            case 40: // cursor down
+                this.onPrevious(e);
+                break;
+            }
         },
 
         initialize: function (options) {
