@@ -52,6 +52,19 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             'active': true
         }]
     },
+    model,
+    expextedModel = {
+        id: 1,
+        text: 'text',
+        days: '7',
+        subject: 'subject',
+        addresses: ['tester@open-xchange.com', 'tester2@open-xchange.com'],
+        internal_id: 'vacation',
+        activateTimeFrame: false,
+        primaryMail: 'tester@open-xchange.com',
+        'tester@open-xchange.com': true,
+        'tester2@open-xchange.com': true
+    },
 
     createDaysObject = function (from, to) {
         var objectOfValues = {};
@@ -125,6 +138,23 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             expect(this.node.find('input[type="checkbox"]:checked').length).toBe(2);
 
         });
+
+        it('should create the filtermodel', function () {
+            filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com').done(function (filtermodel) {
+                model = filtermodel;
+            });
+            this.server.respond();
+
+            model.get('id').should.be.equal(expextedModel['id']);
+            model.get('text').should.be.equal(expextedModel['text']);
+            model.get('subject').should.be.equal(expextedModel['subject']);
+            model.get('addresses').should.be.deep.equal(expextedModel['addresses']);
+            model.get('internal_id').should.be.equal(expextedModel['internal_id']);
+            model.get('activateTimeFrame').should.be.equal(expextedModel['activateTimeFrame']);
+            model.get('primaryMail').should.be.equal(expextedModel['primaryMail']);
+            model.get('tester@open-xchange.com').should.be.equal(expextedModel['tester@open-xchange.com']);
+            model.get('tester2@open-xchange.com').should.be.equal(expextedModel['tester2@open-xchange.com']);
+        })
 
     });
 
