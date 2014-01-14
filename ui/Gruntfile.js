@@ -182,7 +182,9 @@ module.exports = function (grunt) {
                     },
                     {
                         src: [
-                            'apps/themes/libs.less',
+                            'bower_components/bootstrap/less/bootstrap.less',
+                            'bower_components/bootstrap-datepicker/less/datepicker3.less',
+                            'bower_components/font-awesome/less/font-awesome.less',
                             'apps/themes/default/style.less'
                         ],
                         expand: true,
@@ -190,7 +192,7 @@ module.exports = function (grunt) {
                         dest: 'build/apps/themes/default/style.css'
                     },
                     {
-                        src: ['lib/bootstrap/less/bootstrap.less'],
+                        src: ['bower_components/bootstrap/less/bootstrap.less'],
                         expand: true,
                         rename: function (dest) { return dest; },
                         dest: 'build/apps/io.ox/core/bootstrap/css/bootstrap.min.css'

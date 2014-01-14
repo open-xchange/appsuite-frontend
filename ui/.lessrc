@@ -6,7 +6,7 @@
     "strictMath": false,
     "strictUnits": false,
     "relativeUrls": false,
-    "paths": ["apps/themes", "bower_components/bootstrap/less", "bower_components/font-awesome/less/"],
+    "paths": ["apps/themes", "bower_components/bootstrap/less", "bower_components/font-awesome/less"],
     "imports": {
         "reference": [
             "variables.less",
@@ -14,8 +14,7 @@
         ],
         "less": [
             "definitions.less",
-            "default/definitions.less",
-            "mixins.less"
+            "default/definitions.less"
         ]
     }
 }
