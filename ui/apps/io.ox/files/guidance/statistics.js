@@ -8,7 +8,7 @@ define('io.ox/files/guidance/statistics',
      'io.ox/files/api',
      'gettext!io.ox/files',
      'io.ox/core/capabilities',
-     'apps/3rd.party/Chart.js/Chart.min.js'
+     'apps/3rd.party/Chart.js/Chart.js'
     ], function (strings, folderAPI, api, gt, capabilities) {
 
     'use strict';

@@ -1,5 +1,6 @@
 {
   "name": "OX App Suite",
+  "version": "7.6",
   "private": true,
   "ignore": [
     "**/.*",
@@ -24,6 +25,9 @@
     "Chart.js": "*",
     "bigscreen": "~2.0.3",
     "jquery-placeholder": "~2.0.7",
-    "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git"
+    "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git",
+    "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
+    "doT": "~1.0.1",
+    "requirejs": "~2.1.10"
   }
 }

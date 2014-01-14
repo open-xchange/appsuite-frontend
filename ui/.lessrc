@@ -6,12 +6,11 @@
     "strictMath": false,
     "strictUnits": false,
     "relativeUrls": false,
-    "paths": ["apps/themes", "lib"],
+    "paths": ["apps/themes", "bower_components/bootstrap/less", "bower_components/font-awesome/less/"],
     "imports": {
         "reference": [
-            "bootstrap/less/variables.less",
-            "font-awesome/less/variables.less",
-            "bootstrap/less/mixins.less"
+            "variables.less",
+            "mixins.less"
         ],
         "less": [
             "definitions.less",

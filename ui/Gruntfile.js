@@ -20,6 +20,10 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        bower: {
+            options: { copy: false },
+            install: {}
+        },
         watch: {
             options: {
                 interrupt: true,
@@ -75,14 +79,14 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: ['*', '!*.otf'],
-                        cwd: 'lib/font-awesome/fonts/',
+                        cwd: 'bower_components/font-awesome/fonts/',
                         dest: 'build/apps/fonts/',
                         filter: 'isFile'
                     },
                     {
                         expand: true,
                         src: ['*', '!*.otf'],
-                        cwd: 'lib/open-sans-fontface/font/Light/',
+                        cwd: 'bower_components/open-sans-fontface/fonts/Light/',
                         dest: 'build/apps/fonts/',
                         filter: 'isFile'
                     }
@@ -92,15 +96,15 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        src: ['Chart.js/Chart.min.js', 'jquery-imageloader/jquery.imageloader.js'],
-                        cwd: 'lib/',
+                        src: ['Chart.js/Chart.js', 'jquery-imageloader/jquery.imageloader.js'],
+                        cwd: 'bower_components/',
                         dest: 'build/apps/3rd.party/',
                         filter: 'isFile'
                     },
                     {
                         expand: true,
                         src: ['*.{js,png,svg,swf,gif,css,xap}', '!{jquery,*.min}.js'],
-                        cwd: 'lib/mediaelement/build/',
+                        cwd: 'bower_components/mediaelement/build/',
                         dest: 'build/apps/3rd.party/mediaelement/',
                         filter: 'isFile'
                     }
@@ -204,52 +208,52 @@ module.exports = function (grunt) {
         modernizr: {
 
             // [REQUIRED] Path to the build you're using for development.
-            "devFile" : "node_modules/grunt-modernizr/lib/modernizr-dev.js",
+            devFile : 'node_modules/grunt-modernizr/lib/modernizr-dev.js',
 
             // [REQUIRED] Path to save out the built file.
-            "outputFile" : "lib/modernizr.js",
+            outputFile : 'lib/modernizr.js',
 
             // Based on default settings on http://modernizr.com/download/
-            "extra" : {
-                "shiv" : true,
-                "printshiv" : false,
-                "load" : true,
-                "mq" : false,
-                "cssclasses" : true
+            extra : {
+                shiv : true,
+                printshiv : false,
+                load : true,
+                mq : false,
+                cssclasses : true
             },
 
             // Based on default settings on http://modernizr.com/download/
-            "extensibility" : {
-                "addtest" : false,
-                "prefixed" : false,
-                "teststyles" : false,
-                "testprops" : false,
-                "testallprops" : false,
-                "hasevents" : false,
-                "prefixes" : false,
-                "domprefixes" : false
+            extensibility : {
+                addtest : false,
+                prefixed : true,
+                teststyles : false,
+                testprops : false,
+                testallprops : false,
+                hasevents : false,
+                prefixes : false,
+                domprefixes : false
             },
 
             // By default, source is uglified before saving
-            "uglify" : true,
+            uglify : true,
 
             // Define any tests you want to implicitly include.
-            "tests" : [],
+            tests : [],
 
             // By default, this task will crawl your project for references to Modernizr tests.
             // Set to false to disable.
-            "parseFiles" : true,
+            parseFiles : true,
 
             // When parseFiles = true, this task will crawl all *.js, *.css, *.scss files, except files that are in node_modules/.
-            // You can override this by defining a "files" array below.
-            "files" : ['apps/**/*.js', 'apps/**/*.less'],
+            // You can override this by defining a files array below.
+            files : ['apps/**/*.js', 'src/*.js', 'apps/**/*.less'],
 
             // When parseFiles = true, matchCommunityTests = true will attempt to
             // match user-contributed tests.
-            "matchCommunityTests" : false,
+            matchCommunityTests : false,
 
             // Have custom Modernizr tests? Add paths to their location here.
-            "customTests" : []
+            customTests : []
         },
         concat: {
             static: {
@@ -274,22 +278,22 @@ module.exports = function (grunt) {
                 },
                 files: [
                     {
-                        src: ['lib/jquery/jquery.js',
+                        src: ['bower_components/jquery/jquery.js',
                              'lib/jquery.mobile.touch.min.js',
-                             'lib/underscore/underscore.js', // load this before require.js to keep global object
+                             'bower_components/underscore/underscore.js', // load this before require.js to keep global object
                              'build/ox.js',
                              //add backbone and dot.js may be a AMD-variant would be better
-                             'lib/backbone/backbone.js',
-                             'lib/Backbone.ModelBinder/Backbone.ModelBinder.js',
-                             'lib/Backbone.ModelBinder/Backbone.CollectionBinder.js',
-                             'lib/backbone-validation/dist/backbone-validation.js',
-                             'lib/require.js',
+                             'bower_components/backbone/backbone.js',
+                             'bower_components/Backbone.ModelBinder/Backbone.ModelBinder.js',
+                             'bower_components/Backbone.ModelBinder/Backbone.CollectionBinder.js',
+                             'bower_components/backbone-validation/dist/backbone-validation.js',
+                             'bower_components/requirejs/require.js',
                              'lib/require-fix.js',
                              'lib/modernizr.js',
-                             'lib/bigscreen/bigscreen.js',
-                             'lib/jquery-placeholder/jquery.placeholder.js',
-                             'lib/doT.js',
-                             'lib/textarea-helper.js',
+                             'bower_components/bigscreen/bigscreen.js',
+                             'bower_components/jquery-placeholder/jquery.placeholder.js',
+                             'bower_components/doT/doT.js',
+                             'bower_components/textarea-helper/textarea-helper.js',
                              'src/util.js',
                              'src/browser.js',
                              'src/plugins.js',
@@ -297,21 +301,21 @@ module.exports = function (grunt) {
                              'apps/io.ox/core/gettext.js',
                              'src/boot.js',
                              // add bootstrap JavaScript
-                             'lib/bootstrap/js/transition.js',
-                             'lib/bootstrap/js/alert.js',
-                             'lib/bootstrap/js/button.js',
-                             'lib/bootstrap/js/carousel.js',
-                             'lib/bootstrap/js/collapse.js',
+                             'bower_components/bootstrap/js/transition.js',
+                             'bower_components/bootstrap/js/alert.js',
+                             'bower_components/bootstrap/js/button.js',
+                             'bower_components/bootstrap/js/carousel.js',
+                             'bower_components/bootstrap/js/collapse.js',
                              'lib/bootstrap-custom-dropdown/custom-dropdown.js',
-                             'lib/bootstrap/js/modal.js',
-                             'lib/bootstrap/js/tooltip.js',
-                             'lib/bootstrap/js/popover.js',
-                             'lib/bootstrap/js/scrollspy.js',
-                             'lib/bootstrap/js/tab.js',
-                             'lib/bootstrap/js/affix.js',
+                             'bower_components/bootstrap/js/modal.js',
+                             'bower_components/bootstrap/js/tooltip.js',
+                             'bower_components/bootstrap/js/popover.js',
+                             'bower_components/bootstrap/js/scrollspy.js',
+                             'bower_components/bootstrap/js/tab.js',
+                             'bower_components/bootstrap/js/affix.js',
                              // add bootstrap plugins
-                             'lib/bootstrap-typeahead/bootstrap3-typeahead.js',
-                             'lib/bootstrap-datepicker/js/bootstrap-datepicker.js',
+                             'bower_components/bootstrap-typeahead/bootstrap3-typeahead.js',
+                             'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
                              'lib/bootstrap-combobox.js'
                         ],
                         dest: 'build/src/boot.js'
@@ -447,8 +451,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-newer');
-    grunt.loadNpmTasks("grunt-modernizr");
+    grunt.loadNpmTasks('grunt-modernizr');
     grunt.loadNpmTasks('grunt-devtools');
+    grunt.loadNpmTasks('grunt-bower-task');
 
     grunt.registerTask('manifests', ['newer:jsonlint:manifests', 'concat:manifests']);
     grunt.registerTask('lint', ['newer:jshint:all']);

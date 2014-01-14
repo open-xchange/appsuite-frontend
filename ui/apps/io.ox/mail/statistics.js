@@ -15,7 +15,7 @@ define('io.ox/mail/statistics',
     ['io.ox/mail/api',
      'io.ox/core/api/account',
      'gettext!io.ox/mail',
-     'apps/3rd.party/Chart.js/Chart.min.js'
+     'apps/3rd.party/Chart.js/Chart.js'
     ], function (api, accountAPI, gt) {
 
     'use strict';
