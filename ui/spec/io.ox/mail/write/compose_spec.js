@@ -383,6 +383,25 @@ define(
                 });
             }
 
+            it('signature previews are clean', function () {
+                var previews = $(document)
+                                .find('[data-section="signatures"]')
+                                .find('.signature-preview'),
+                    value;
+                //process
+                _.each(previews, function (node) {
+                    value = $(node).html();
+                    //do not contain html tags
+                    expect(/(<([^>]+)>)/ig.test(value)).toBeFalsy();
+                    //remove ASCII art (intended to remove separators like '________')
+                    expect(/([\-=+*°._!?\/\^]{4,})/g.test(value)).toBeFalsy();
+                    //remove subsequent white-space
+                    expect(/\s\s+/g.test(value)).toBeFalsy();
+                    //is trimmed (but a whitespace is added manually later: 5adae2b772e9d9fcc1110997dc30f1f71a4daeb6)
+                    expect(value).toEqual(' ' + value.trim());
+                })
+            });
+
             describe('in html mode:', function () {
                 beforeEach(function () {
                     setMode('html');

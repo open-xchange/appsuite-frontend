@@ -36,12 +36,12 @@ define('io.ox/mail/settings/defaults', [], function () {
         'defaultSignature': false,
         'mobileSignature': undefined,
         'mobileSignatureType': 'none', // one of 'none', 'custom'
-        'threadView': 'inbox',
+        'threadView': 'off',
         //for persistent sort
         'sort': 'thread',
         'order': 'desc',
         'unread': false
-        
+
     };
 
     return settingsDefaults;

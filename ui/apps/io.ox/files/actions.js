@@ -171,9 +171,7 @@ define('io.ox/files/actions',
             // loop over list, get full file object and trigger downloads
             require(['io.ox/core/download'], function (download) {
                 _(list).each(function (o) {
-                    api.get(o).done(function (file) {
-                        download.file(file);
-                    });
+                    download.file(o);
                 });
             });
         }

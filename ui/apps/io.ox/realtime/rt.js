@@ -121,14 +121,14 @@ define.async('io.ox/realtime/rt',
 
     // Keep sending stanzas until buffer is empty
     function purge() {
-        if (api.debug) {
+        if (api.trace) {
             console.log('Drain buffer');
         }
         if (transmitting) {
-            if (api.debug) {
+            if (api.trace) {
                 console.log('Transmitting so skipping purge');
             }
-            if (api.debug) {
+            if (api.trace) {
                 console.log('Aborting purge, transmission in progress so setting purging to false');
             }
 
@@ -142,7 +142,7 @@ define.async('io.ox/realtime/rt',
             return;
         }
         // Send queue.stanzas
-        if (api.debug) {
+        if (api.trace) {
             console.log('SENDING', queue.stanzas);
         }
         var stanzas = queue.stanzas;
@@ -155,12 +155,12 @@ define.async('io.ox/realtime/rt',
             });
             ackBuffer = {};
         }
-        if (api.debug) {
+        if (api.trace) {
             console.log('->', stanzas);
         }
 
         purging = true;
-        if (api.debug) {
+        if (api.trace) {
             console.log('Starting purge, so setting purging to true');
         }
 
@@ -177,7 +177,7 @@ define.async('io.ox/realtime/rt',
         }).done(function (resp) {
             transmitting = false;
             purging = false;
-            if (api.debug) {
+            if (api.trace) {
                 console.log('Purged stanzas, so setting purging to false');
             }
             handleResponse(resp);
@@ -211,13 +211,7 @@ define.async('io.ox/realtime/rt',
         var interval = _.now() - lastDelivery;
         if (lastFetchInterval >= intervals[mode] && !purging && !transmitting) {
             lastCheck = _.now();
-            if (api.debug) {
-                console.log('Polling');
-            }
             transmitting = true;
-            if (api.debug) {
-                console.log('Polling, so setting transmitting to true');
-            }
 
             http.GET({
                 module: 'rt',

@@ -34,16 +34,36 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
             'active': false
         }]
     },
-    multiValues = {};
+    filtermodel = {
+        id: 1,
+        active: false,
+        forwardmail: 'tester@open-xchange.com',
+        userMainEmail: 'tester@open-xchange.com'
+    },
+    multiValues = {},
+    model;
     
-    describe('Vacationnotice', function () {
+    describe('autoforward', function () {
 
         beforeEach(function () {
-            this.server.autoRespond = false;
+            var def;
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=autoforward/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlag));
             });
             $('body', document).append(this.node = $('<div id="autoforwardtestNode">'));
+
+            def = filter.editAutoForward(this.node, multiValues, 'tester@open-xchange.com');
+
+            waitsFor(function () {
+
+                if (def.state() === 'resolved') {
+                    def.done(function (filtermodel) {
+                        model = filtermodel;
+                    });
+                    return true;
+                }
+                
+            }, 'setup mailfilter edit view', ox.testTimeout);
 
         });
 
@@ -52,12 +72,24 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
         });
 
         it('should draw the form', function () {
-            filter.editAutoForward(this.node, multiValues, 'tester@open-xchange.com');
-            this.server.respond();
             expect(this.node.find('input[name="forwardmail"]').length).toBe(1);
             expect(this.node.find('input[name="forwardmail"]').val()).toBe('tester@open-xchange.com');
             expect(this.node.find('input[type="checkbox"]').length).toBe(1);
             expect(this.node.find('input[type="checkbox"]').prop('checked')).toBe(false);
+        });
+
+        it('should create the filtermodel', function () {
+            model.attributes.should.be.deep.equal(filtermodel);
+        });
+
+        it('should set a new forwardmail', function () {
+            this.node.find('input[name="forwardmail"]').val('tester1@open-xchange.com').change();
+            model.get('forwardmail').should.be.equal('tester1@open-xchange.com');
+        });
+
+        it('should set the rule to active', function () {
+            this.node.find('input[type="checkbox"]').click();
+            model.get('active').should.be.equal(true); 
         });
 
     });
