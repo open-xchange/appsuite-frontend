@@ -535,7 +535,7 @@ define('io.ox/calendar/invitations/register',
 
     function drawDetails(baton, api, settings) {
 
-        var defaultReminder = settings.get('defaultReminder', 15),
+        var defaultReminder = parseInt(settings.get('defaultReminder', 15), 10),
             reminderSelect = $(),
             data = baton.appointment || baton.task,
             status = util.getConfirmationStatus(data),
@@ -590,8 +590,19 @@ define('io.ox/calendar/invitations/register',
                     if (!accepted) {
                         var reminder = parseInt(reminderSelect.find('select').val(), 10);
                         if (reminder !== defaultReminder) {
-                            data.alarm = reminder;
-                            api.update(data);
+                            //don't use whole data object here, because it overwrites the confirmations with it's users attribute
+                            var tempdata = {
+                                    id: data.id,
+                                    folder_id: data.folder_id,
+                                    alarm: reminder
+                                };
+                            if (data.recurrence_position) {
+                                tempdata.recurrence_position = data.recurrence_position;
+                            }
+                            if (baton.task) {//tasks use absolute timestamps
+                                tempdata.alarm = _.utc() + tempdata.alarm;
+                            }
+                            api.update(tempdata);
                         }
                     }
                     var dep = data.type === 'appointment' ? 'settings!io.ox/calendar' : 'settings!io.ox/tasks';
