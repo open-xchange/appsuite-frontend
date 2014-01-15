@@ -709,13 +709,30 @@ define('io.ox/tasks/edit/view-template',
         className: 'div',
         index: 2500,
         module: 4,
-        finishedCallback: function (model, id) {
+        finishedCallback: function (model, id, errors) {
             var obj = {};
             obj.id = model.attributes.id || id;
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
-            api.removeFromCache(_.cid(obj)).done(function () {
-                api.removeFromUploadList(_.ecid(obj));
+            //show errors
+            _(errors).each(function (error) {
+                notifications.yell('error', error.error);
             });
+            if (api.uploadInProgress(_.ecid(obj))) {//no need to remove cachevalues if there was no upload
+                
+                //make sure cache values are valid
+                api.get(obj, false).done(function (data) {
+                    $.when(
+                        api.caches.get.add(data),
+                        api.caches.list.merge(data).done(function (ok) {
+                            if (ok) {
+                                api.trigger('refresh.list');
+                            }
+                        })
+                    ).done(function () {
+                        api.removeFromUploadList(_.ecid(obj));
+                    });
+                });
+            }
         }
     }), {
         tab: 'attachments_tab',

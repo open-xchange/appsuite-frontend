@@ -147,6 +147,7 @@ define('io.ox/core/tk/attachments',
 
             save: function (id, folderId) {
                 var self = this,
+                    errors = [],//errors are saved and send to callback
                     allDone = 0, // 0 ready 1 delete 2 add 3 delete and add
                     apiOptions = {
                         module: this.module,
@@ -163,9 +164,12 @@ define('io.ox/core/tk/attachments',
                 if (this.attachmentsToDelete.length) {
                     attachmentAPI.remove(apiOptions, _(this.attachmentsToDelete).pluck('id')).fail(function (resp) {
                         self.model.trigger('backendError', resp);
+                        errors.push(resp);
+                        allDone--;
+                        if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                     }).done(function () {
                         allDone--;
-                        if (allDone <= 0) { self.finishedCallback(self.model, id); }
+                        if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                     });
                 }
 
@@ -173,22 +177,28 @@ define('io.ox/core/tk/attachments',
                     if (oldMode) {
                         attachmentAPI.createOldWay(apiOptions, self.baton.parentView.$el.find('#attachmentsForm')[0]).fail(function (resp) {
                             self.model.trigger('backendError', resp);
+                            errors.push(resp);
+                            allDone -= 2;
+                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                         }).done(function () {
                             allDone -= 2;
-                            if (allDone <= 0) { self.finishedCallback(self.model, id); }
+                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                         });
                     } else {
                         attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
                             self.model.trigger('backendError', resp);
+                            errors.push(resp);
+                            allDone -= 2;
+                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                         }).done(function () {
                             allDone -= 2;
-                            if (allDone <= 0) { self.finishedCallback(self.model, id); }
+                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                         });
                     }
                 }
 
                 if (allDone <= 0) {
-                    self.finishedCallback(self.model, id);
+                    self.finishedCallback(self.model, id, errors);
                 }
 
                 this.attachmentsToAdd = [];
