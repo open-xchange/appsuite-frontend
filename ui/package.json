@@ -37,6 +37,8 @@
     "underscore": "~1.5.2",
     "grunt-bower-task": "~0.3.4",
     "require-grunt-configs": "~0.4.0",
-    "load-grunt-tasks": "~0.2.1"
+    "load-grunt-tasks": "~0.2.1",
+    "grunt-parallelize": "~1.0.0",
+    "time-grunt": "~0.2.8"
   }
 }

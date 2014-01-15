@@ -15,6 +15,9 @@
 
 module.exports = function (grunt) {
 
+    // displays the execution time of grunt tasks
+    if (grunt.option('benchmark')) require('time-grunt')(grunt);
+
     // load installed npm tasks
     require('load-grunt-tasks')(grunt, { pattern: ['grunt-*', 'assemble*'] });
 
@@ -23,7 +26,7 @@ module.exports = function (grunt) {
 
     // custom tasks
     grunt.registerTask('manifests', ['newer:jsonlint:manifests', 'concat:manifests']);
-    grunt.registerTask('lint', ['newer:jshint:all']);
+    grunt.registerTask('lint', ['newer:parallelize:jshint:all']);
     grunt.registerTask('force_update', ['assemble:base', 'assemble:appcache']);
     grunt.registerTask('bootjs', ['newer:assemble:ox', 'newer:concat:bootjs']);
 
