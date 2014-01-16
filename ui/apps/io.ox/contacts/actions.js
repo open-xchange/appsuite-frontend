@@ -258,7 +258,7 @@ define('io.ox/contacts/actions',
 
     /**
      * check for containing contacts
-     * @param  {object|array} 
+     * @param  {object|array}
      * @return {deferred} returns boolean
      */
     function hasContacts(data) {

@@ -18,7 +18,7 @@ define('io.ox/calendar/api',
      'io.ox/core/event',
      'io.ox/core/config',
      'io.ox/core/notifications',
-     'io.ox/core/capabilities'
+     'io.ox/core/capabilities',
      'io.ox/core/api/factory'], function (http, Events, config, notifications, factory, capabilities) {
 
     'use strict';
