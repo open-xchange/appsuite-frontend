@@ -868,6 +868,12 @@ $(window).load(function () {
                 // cannot change type with jQuery's attr()
                 $('#io-ox-login-username')[0].type = 'text';
             }
+            
+            //show errors saved inlocalstorage
+            if (localStorage.getItem('errormsg')) {
+                feedback('error', $.txt(localStorage.getItem('errormsg')));
+                localStorage.removeItem('errormsg');//remove errormessages from localstorage
+            }
 
             debug('boot.js: Load "signin" plugins & set default language');
 
