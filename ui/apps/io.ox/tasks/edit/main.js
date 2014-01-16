@@ -125,6 +125,11 @@ define('io.ox/tasks/edit/main',
                 if (taskView) {
                     taskView.$el.find('.title-field').focus();
                 }
+                if (taskModel.get('id')) {//set url parameters
+                    self.setState({ folder: taskModel.attributes.folder_id, id: taskModel.attributes.id });
+                } else {
+                    self.setState({ folder: taskModel.attributes.folder_id, id: null});
+                }
             });
 
             win.on('hide', function () {

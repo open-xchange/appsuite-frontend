@@ -332,7 +332,7 @@ define('io.ox/core/desktop',
 
         setState: function (obj) {
             for (var id in obj) {
-                _.url.hash(id, String(obj[id]));
+                _.url.hash(id, ((obj[id] !== null) ? String(obj[id]) : null));
             }
         },
 

@@ -184,7 +184,7 @@ define('io.ox/editor/main',
             if ('id' in options) {
                 app.load({ folder_id: options.folder, id: options.id });
             } else if (_.url.hash('id')) {
-                app.load({ folder_id: _.url.hash('folder'), id: _.url.hash('id').split('.').pop() });
+                app.load({ folder_id: _.url.hash('folder'), id: _.url.hash('id') });
             } else {
                 app.create();
             }
@@ -200,8 +200,10 @@ define('io.ox/editor/main',
                 content: ''
             });
             _.extend(previous, { filename: 'unnamed.txt', title: 'unnamed.txt' });
+            win.on('show', function () {
+                app.setState({ folder: opt.folder, id: null });
+            });
             win.show(function () {
-                app.setState({ folder: opt.folder });
                 view.focus();
             });
         };
@@ -251,7 +253,7 @@ define('io.ox/editor/main',
                                         return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
                                             .done(function (data) {
                                                 delete data.content;
-                                                app.setState({ folder: data.folder_id, id: data.folder_id + '.' + data.id });
+                                                app.setState({ folder: data.folder_id, id: data.id });
                                                 model.set(data);
                                                 previous = model.toJSON();
                                                 view.idle();
@@ -269,6 +271,9 @@ define('io.ox/editor/main',
 
         app.load = function (o) {
             var def = $.Deferred();
+            win.on('show', function () {
+                app.setState({ folder: o.folder_id, id: o.id });
+            });
             win.show(function () {
                 // load file
                 win.busy();
@@ -278,7 +283,7 @@ define('io.ox/editor/main',
                 )
                 .done(function (data, text) {
                     win.idle();
-                    app.setState({ folder: o.folder_id, id: o.folder_id + '.' + o.id });
+                    app.setState({ folder: o.folder_id, id: o.id });
                     model.set(previous = $.extend(data, { content: text[0] }));
                     view.focus();
                     def.resolve();
