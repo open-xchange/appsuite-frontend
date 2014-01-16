@@ -3,6 +3,7 @@
 /ox.pot
 /debian/files
 /debian/*/
+!/debian/source/
 /debian/*.debhelper.log
 /debian/*.substvars
 /local.conf
