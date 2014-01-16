@@ -137,6 +137,7 @@ define('io.ox/calendar/view-detail',
             isPerson = hash[key] || obj.folder_id,
             personClass = isPerson ? 'person' : '',
             display_name, name, node, name_lc,
+            comment = conf.comment || conf.message || '',
             mail_lc = String(obj.mail || obj.mailaddress || '').toLowerCase();
         // external participant?
         if (obj.type === 5) {
@@ -158,7 +159,7 @@ define('io.ox/calendar/view-detail',
             .append($('<span>').addClass('status ' + statusClass).html(' ' + confirm))
             .data(_.extend(obj, { display_name: display_name, email1: mail_lc }));
         // has confirmation comment?
-        if (conf.comment !== '') {
+        if (comment !== '') {
             node.append($('<span>').addClass('comment').text(gt.noI18n(conf.comment)));
         }
         return node;
