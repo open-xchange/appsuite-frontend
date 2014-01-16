@@ -827,13 +827,14 @@ define('io.ox/mail/api',
             });
         }
 
-        return updateCache(list).done(function () {
-            api.trigger('refresh.list');
+        return $.when(
+            updateCache(list),
             update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
                 reloadFolders(list);
+                api.trigger('refresh.list');
                 api.trigger('update:set-seen', list);//used by notification area
-            });
-        });
+            })
+        );
     };
 
     /**
