@@ -405,6 +405,9 @@ define('io.ox/mail/util',
         hasOtherRecipients: function (data) {
             var list = [].concat(data.to, data.cc, data.bcc);
             return 0 < _(list).reduce(function (memo, arr) {
+                if (!arr) {
+                    return memo;
+                }
                 var email = String(arr[1] || '').toLowerCase();
                 return memo + (email && !(email in addresses) ? 1 : 0);
             }, 0);
