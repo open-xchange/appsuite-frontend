@@ -97,7 +97,7 @@ define('io.ox/mail/guidance/main',
             index: INDEX += 100,
             draw: function () {
 
-                var helpDir = 'help/' + ox.language + '/',
+                var helpDir = 'help/l10n/' + ox.language + '/',
                     topics = [
                         [gt.pgettext('help', 'The E-Mail Components'), 'ox.appsuite.user.sect.email.gui.html'],
                         [gt.pgettext('help', 'Managing E-Mail messages'), 'ox.appsuite.user.sect.email.manage.html'],

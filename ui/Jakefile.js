@@ -369,14 +369,13 @@ utils.copy(utils.list("lib", "charts.js"), {to: utils.dest("apps/io.ox/core/tk/"
 
 if (path.existsSync('help')) {
     var helpDir = process.env.helpDir || utils.builddir;
-    _.each(fs.readdirSync('help'), function (Lang) {
-        if (!fs.statSync(path.join('help', Lang)).isDirectory()) return;
+    _.each(fs.readdirSync('help/l10n'), function (Lang) {
         var lang = Lang.toLowerCase().replace(/_/g, '-');
-        utils.copy(utils.list(path.join('help', Lang + '/')), {
+        utils.copy(utils.list(path.join('help/l10n', Lang + '/')), {
             to: helpDir.replace(/@lang@/g, lang)
         });
     });
-    utils.copy(['help/help.css']);
+    utils.copy(utils.list(['help/help.css', 'help/images/']));
 }
 
 // standard ox set of default icons for mobile devices
@@ -781,12 +780,8 @@ task("dist", [distDest], function () {
     }
     function addL10n(spec) {
         spec = replaceL10n(spec, 'l10n', i18n.languages());
-        function isDir(Lang) {
-            return fs.statSync(path.join('help', Lang)).isDirectory();
-        }
         if (path.existsSync('help')) {
-            spec = replaceL10n(spec, 'help',
-                               _.filter(fs.readdirSync('help'), isDir));
+            spec = replaceL10n(spec, 'help', fs.readdirSync('help/l10n'));
         }
         return spec;
     }
