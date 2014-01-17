@@ -2198,36 +2198,6 @@ input.nice-input {
                 margin: 0;
             }
         }
-    }
-
-    // more space for fat fingers
-    .touch & .folder {
-        line-height: 34px;
-    }
-
-
-    .subfolders.io-ox-busy {
-        min-height: 70px;
-    }
-
-    .folder-arrow {
-
-        display: inline-block;
-        width: 50px;
-        text-align: center;
-        color: #aaa;
-
-        &:hover {
-            text-decoration: none;
-        }
-
-        i {
-            display: block; width: 50px;
-        }
-
-    }
-
-    .folder {
 
         .folder-label {
 
@@ -2243,7 +2213,7 @@ input.nice-input {
             .short-title { display: none; }
         }
 
-        &.selected .folder-label {
+        &.selected>.folder-label {
             .long-title { display: none; }
             .short-title { display: inline; }
         }
@@ -2282,6 +2252,34 @@ input.nice-input {
                 display: inline-block;
             }
         }
+
+    }
+
+    // more space for fat fingers
+    .touch & .folder {
+        line-height: 34px;
+    }
+
+
+    .subfolders.io-ox-busy {
+        min-height: 70px;
+    }
+
+    .folder-arrow {
+
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        color: #aaa;
+
+        &:hover {
+            text-decoration: none;
+        }
+
+        i {
+            display: block; width: 50px;
+        }
+
     }
 
     .folder-counter-badge, .folder-options-badge {
