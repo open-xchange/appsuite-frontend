@@ -270,7 +270,6 @@ define(['io.ox/core/extensions',
 
                     it('when exceeding attachment quota', function () {
                         this.def = setUploadLimit({
-                            'attachmentMaxUploadSize': 1000,
                             'attachmentQuota': 999,
                             'attachmentQuotaPerFile': 1000
                         })
@@ -285,26 +284,8 @@ define(['io.ox/core/extensions',
                         });
                     });
 
-                    it('when exceeding attachment maximum upload size limit', function () {
-                        this.def = setUploadLimit({
-                            'attachmentMaxUploadSize': 999,
-                            'attachmentQuota': 1000,
-                            'attachmentQuotaPerFile': 1000
-                        })
-                        .then(createList(this.baton, this.file, true))
-                        .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.have.property('reason');
-                            expect(result.reason).toBe('filesize');
-                            chai.expect(result.error).to.be.a('string');
-
-                            return 'done';
-                        });
-                    });
-
                     it('when having the same size as available attachment quota limit', function () {
                         this.def = setUploadLimit({
-                            'attachmentMaxUploadSize': 1000,
                             'attachmentQuota': 1000,
                             'attachmentQuotaPerFile': 1000
                         })
@@ -320,7 +301,6 @@ define(['io.ox/core/extensions',
 
                     it('when having the smaller size as available attachment quota limit', function () {
                         this.def = setUploadLimit({
-                            'attachmentMaxUploadSize': 1001,
                             'attachmentQuota': 1001,
                             'attachmentQuotaPerFile': 1001
                         })
@@ -336,7 +316,6 @@ define(['io.ox/core/extensions',
 
                     it('when attachment quota limit is 0', function () {
                         this.def = setUploadLimit({
-                            'attachmentMaxUploadSize': 1000,
                             'attachmentQuota': 0,
                             'attachmentQuotaPerFile': 0
                         })
@@ -352,7 +331,6 @@ define(['io.ox/core/extensions',
 
                     it('when attachment quota limit is -1', function () {
                         this.def = setUploadLimit({
-                            'attachmentMaxUploadSize': 1000,
                             'attachmentQuota': -1,
                             'attachmentQuotaPerFile': -1
                         })
@@ -365,38 +343,7 @@ define(['io.ox/core/extensions',
                             return 'done';
                         });
                     });
-
-                    it('when attachment max upload size is 0', function () {
-                        this.def = setUploadLimit({
-                            'attachmentMaxUploadSize': 0,
-                            'attachmentQuota': 1000,
-                            'attachmentQuotaPerFile': 1000
-                        })
-                        .then(createList(this.baton, this.file, true))
-                        .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
-
-                            return 'done';
-                        });
-                    });
-
-                    it('when attachment max upload size is -1', function () {
-                        this.def = setUploadLimit({
-                            'attachmentMaxUploadSize': -1,
-                            'attachmentQuota': 1000,
-                            'attachmentQuotaPerFile': 1000
-                        })
-                        .then(createList(this.baton, this.file, true))
-                        .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
-
-                            return 'done';
-                        });
-                    });
+                    
                 });
             });
         });

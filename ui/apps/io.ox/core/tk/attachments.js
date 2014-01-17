@@ -31,6 +31,7 @@ define('io.ox/core/tk/attachments',
 
     var oldMode = _.browser.IE < 10;
 
+    // EditableAttachmentList is only used by tasks and calendar
     function EditableAttachmentList(options) {
         var counter = 0;
 
@@ -211,7 +212,7 @@ define('io.ox/core/tk/attachments',
     }
 
     /**
-     * gui widget collecting files user wants to upload
+     * gui widget collecting files user wants to upload // Only used by mail and files
      * @param {object} options
      * @param {object} baton
      */
@@ -310,16 +311,18 @@ define('io.ox/core/tk/attachments',
                     autoPublish = require('io.ox/core/capabilities').has('auto_publish_attachments'),
                     result = { added: [] };
 
+                /*
                 function getQuota(a, b) {
                     // 0 and -1 means that this is disabled
                     return (a >= 0 && b >= 0 && Math.min(a, b)) || (a >= 0 && a) || b || 0;
                 }
+                */
 
                 if (!list.length) return;
 
                 //check
                 if (isMail) {
-                    maxFileSize = autoPublish ? -1 : getQuota(properties.attachmentMaxUploadSize, properties.attachmentQuotaPerFile);
+                    maxFileSize = autoPublish ? -1 : properties.attachmentQuotaPerFile;
                     quota = autoPublish ? -1 : properties.attachmentQuota;
                     usage = 0;
                 } else {
