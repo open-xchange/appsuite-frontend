@@ -248,8 +248,10 @@ define('io.ox/files/fluid/perspective',
                     } else {
 
                         if (selected.length > 1) {
+                            // workaround for mediaplayer
+                            var dummyGrid =  { getApp: function () { return baton.app; } };
                             // draw inline links
-                            commons.multiSelection('io.ox/files', dummy, selected, api, undefined, {forcelimit: true});
+                            commons.multiSelection('io.ox/files', dummy, selected, api, dummyGrid, {forcelimit: true});
                             // append to bar
                             topActions.append(dummy.find('.io-ox-inline-links'));
                             // fade in or yet visible?
