@@ -369,6 +369,8 @@ define('io.ox/calendar/api',
             // pause http layer
             http.pause();
 
+            api.trigger('beforedelete', o);
+
             _(o).each(function (obj) {
                 keys.push((obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.recurrence_position || 0));
                 return http.PUT({
