@@ -70,4 +70,4 @@ RewriteRule ^$ core [L]
 
 # online help fallback
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule help/([a-z_A-Z]+)(.+) help/en_US$2 [L]
+RewriteRule help/l10n/([a-z_A-Z]+)(.+) help/en_US$2 [L]

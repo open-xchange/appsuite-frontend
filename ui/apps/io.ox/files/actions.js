@@ -87,7 +87,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/audioplayer', {
         requires: function (e) {
-            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio', true);
+            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -102,7 +102,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
-            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'video', true);
+            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'video');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -1084,25 +1084,50 @@ define('io.ox/files/actions',
         });
     }
 
-    function checkMedia(e, type, fromSelection) {
+    function checkMedia(e, type) {
         if (!e.collection.has('multiple') && !settings.get(type + 'Enabled')) {
             return false;
         }
+
         if (_.isUndefined(e.baton.allIds)) {
             e.baton.allIds = e.baton.data;
         }
-        if (fromSelection) {
-            return api.getList(e.baton.allIds).then(function (data) {
-                e.baton.allIds = data;
-                return _(data).reduce(function (memo, obj) {
-                    return memo || !!(obj && api.checkMediaFile(type, obj.filename));
-                }, false);
+
+        var incompleteHash = {},
+            incompleteItems = [];
+
+        _(e.baton.allIds).each(function (item, index) {
+            if (!item.filename) {
+                // collect all incomplete items by folder ID
+                incompleteHash[item.folder_id] = (incompleteHash[item.folder_id] || []).concat(item);
+                // all incomplete items
+                incompleteItems.push(item);
+                delete e.baton.allIds[index];
+            }
+        });
+
+        var folder = Object.keys(incompleteHash),
+            def = $.Deferred();
+
+        if (folder.length === 1) {
+            // get only this folder from cache
+            def = api.getAll({ folder: folder[0] });
+        } else if (folder.length > 1) {
+            // multiple folder -> use getList to update allIDs
+            def = api.getList(incompleteItems).then(function (data) {
+                return e.baton.allIds.concat(data);
             });
         } else {
-            return _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || api.checkMediaFile(type, obj.filename);
-            }, false);
+            // nothing to do
+            def.resolve(e.baton.allIds);
         }
+
+        return def.then(function (data) {
+            e.baton.allIds = data;
+            return _(data).reduce(function (memo, obj) {
+                return memo || !!(obj && api.checkMediaFile(type, obj.filename));
+            }, false);
+        });
     }
 
     new Action('io.ox/files/icons/audioplayer', {

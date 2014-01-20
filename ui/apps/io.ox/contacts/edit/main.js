@@ -156,6 +156,13 @@ define('io.ox/contacts/edit/main',
                                 }
                             });
                         }
+                        win.on('show', function () {
+                            if (contact.get('id')) {//set url parameters
+                                app.setState({ folder: contact.get('folder_id'), id: contact.get('id') });
+                            } else {
+                                app.setState({ folder: contact.get('folder_id'), id: null});
+                            }
+                        });
                         if (_.device('small')) {
                             ext.point('io.ox/contacts/edit/bottomToolbar').invoke('draw', app, new ext.Baton(contact));
                         }

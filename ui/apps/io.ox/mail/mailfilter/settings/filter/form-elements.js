@@ -35,7 +35,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
         },
 
         drawFolderSelect: function () {
-            return $('<a href="#" tabindex="1">').addClass('folderselect').text('Select folder');
+            return $('<a href="#" tabindex="1">').addClass('folderselect').text(gt('Select folder'));
         },
 
         drawDeleteButton: function (type) {

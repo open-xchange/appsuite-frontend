@@ -660,7 +660,7 @@ define('io.ox/core/main',
             id: 'app-specific-help',
             index: 200,
             draw: function () { //replaced by module
-                var helpDir = 'help/' + ox.language + '/',
+                var helpDir = 'help/l10n/' + ox.language + '/',
                     node = this,
                     startingPoints = {
                     'io.ox/contacts': 'ox.appsuite.user.chap.contacts.html',

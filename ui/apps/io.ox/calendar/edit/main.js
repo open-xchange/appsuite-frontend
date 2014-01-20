@@ -193,6 +193,14 @@ define('io.ox/calendar/edit/main',
                             });
                         }
 
+                        win.on('show', function () {
+                            if (self.model.get('id')) {//set url parameters
+                                self.setState({ folder: self.model.attributes.folder_id, id: self.model.attributes.id });
+                            } else {
+                                self.setState({ folder: self.model.attributes.folder_id, id: null});
+                            }
+                        });
+
                         if (opt.mode === 'edit') {
 
                             if (opt.action === 'appointment') {

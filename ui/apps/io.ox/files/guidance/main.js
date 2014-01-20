@@ -85,7 +85,7 @@ define('io.ox/files/guidance/main',
             index: INDEX += 100,
             draw: function () {
 
-                var helpDir = 'help/' + ox.language + '/',
+                var helpDir = 'help/l10n/' + ox.language + '/',
                     topics = [
                         [gt.pgettext('help', 'The Drive App'), 'ox.appsuite.user.sect.files.gui.html'],
                         [gt.pgettext('help', 'Creating Files'), 'ox.appsuite.user.sect.files.add.html'],

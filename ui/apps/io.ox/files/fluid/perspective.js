@@ -248,8 +248,10 @@ define('io.ox/files/fluid/perspective',
                     } else {
 
                         if (selected.length > 1) {
+                            // workaround for mediaplayer
+                            var dummyGrid =  { getApp: function () { return baton.app; } };
                             // draw inline links
-                            commons.multiSelection('io.ox/files', dummy, selected, api, undefined, {forcelimit: true});
+                            commons.multiSelection('io.ox/files', dummy, selected, api, dummyGrid, {forcelimit: true});
                             // append to bar
                             topActions.append(dummy.find('.io-ox-inline-links'));
                             // fade in or yet visible?
@@ -448,7 +450,7 @@ define('io.ox/files/fluid/perspective',
                     $('<div class="details">').append(
                         //title
                         $('<div class="text title drag-title">').append(
-                            $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 55))).append(
+                            $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 90))).append(
                                     (api.tracker.isLocked(file) ? $('<i class="icon-lock">') : '')
                                 )
                         ),
@@ -656,13 +658,13 @@ define('io.ox/files/fluid/perspective',
 
             //set media query styles also if container width changes
             adjustWidth = function () {
-                var width = wrapper.width(),
-                    container = self.main;
-
                 if (!wrapper.is(':visible')) {
                     //do not change anything if wrapper is not visible.
                     return;
                 }
+
+                var width = wrapper.width(),
+                    container = self.main;
 
                 if (width > 768)
                     container.removeClass('width-less-than-768 width-less-than-480');

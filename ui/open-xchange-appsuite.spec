@@ -144,7 +144,7 @@ if [ -x %{update} ]; then %{update}; fi
 %doc readme.txt
 %dir %{docroot}
 %{docroot}
-%exclude %{docroot}/help/*_*
+%exclude %{docroot}/help/l10n
 %dir /opt/open-xchange
 %dir /opt/open-xchange/sbin
 /opt/open-xchange/sbin/touch-appsuite
@@ -162,8 +162,8 @@ if [ -x %{update} ]; then %{update}; fi
 ## help ##
 #%files help-## lang ##
 #%defattr(-,root,root)
-#%dir %{docroot}/help
-#%{docroot}/help/## Lang ##
+#%dir %{docroot}/help/l10n
+#%{docroot}/help/l10n/## Lang ##
 ## end ##
 
 ## l10n ##

@@ -448,10 +448,19 @@ define('io.ox/contacts/edit/view-form',
             );
         }
 
-        function propagateAttachmentChange(model, id) {
+        function propagateAttachmentChange(model, id, errors) {
 
             var folder_id = model.get('folder_id'), id = model.get('id') || id,
                 upload = api.uploadInProgress(_.ecid(model.attributes));
+            
+            //if there are errors show them
+            if (errors.length > 0) {
+                require(['io.ox/core/notifications'], function (notifications) {
+                    _(errors).each(function (error) {
+                        notifications.yell('error', error.error);
+                    });
+                });
+            }
 
             return api.get({ id: id, folder: folder_id }, !upload)
                 .then(function (data) {

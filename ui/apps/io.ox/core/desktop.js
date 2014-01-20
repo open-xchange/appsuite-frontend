@@ -332,7 +332,7 @@ define('io.ox/core/desktop',
 
         setState: function (obj) {
             for (var id in obj) {
-                _.url.hash(id, String(obj[id]));
+                _.url.hash(id, ((obj[id] !== null) ? String(obj[id]) : null));
             }
         },
 
@@ -398,7 +398,7 @@ define('io.ox/core/desktop',
                     self.destroy();
                 }
                 // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
-                if (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0]) {
+                if (self.getWindow().state.visible && (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0])) {
                     //we are still in the app to close so we can clear the URL
                     _.url.hash({ app: null, folder: null, perspective: null, id: null });
                 }

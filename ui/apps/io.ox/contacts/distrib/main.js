@@ -80,6 +80,13 @@ define('io.ox/contacts/distrib/main',
                 win.idle();
                 app.quit();
             });
+            win.on('show', function () {
+                if (model.get('id')) {//set url parameters
+                    app.setState({ folder: model.get('folder_id'), id: model.get('id') });
+                } else {
+                    app.setState({ folder: model.get('folder_id'), id: null});
+                }
+            });
 
             // go!
             container.append(view.render().$el);
@@ -113,6 +120,13 @@ define('io.ox/contacts/distrib/main',
                     considerSaved = true;
                     win.idle();
                     app.quit();
+                });
+                win.on('show', function () {
+                    if (model.get('id')) {//set url parameters
+                        app.setState({ folder: model.get('folder_id'), id: model.get('id') });
+                    } else {
+                        app.setState({ folder: model.get('folder_id'), id: null});
+                    }
                 });
 
                 // go!

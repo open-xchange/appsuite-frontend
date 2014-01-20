@@ -1,0 +1,485 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>13.1.1.1. インポートされる iCal オブジェクト</title>
+<link rel="stylesheet" type="text/css" href="../help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="OX App Suite">
+<link rel="up" href="ox.appsuite.user.sect.datainterchange.import.ical.html" title="13.1.1. iCal フォーマットのアポイントや仕事のインポート">
+<link rel="prev" href="ox.appsuite.user.sect.datainterchange.import.ical.html" title="13.1.1. iCal フォーマットのアポイントや仕事のインポート">
+<link rel="next" href="ox.appsuite.user.sect.datainterchange.import.ical.properties.html" title="13.1.1.2. サポートされない iCal オブジェクト プロパティ">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
+<link rel="stylesheet" type="text/css" href="../../apps/io.ox/core/bootstrap/css/bootstrap.min.css"​/> 
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><ul class="nav">
+<a class="brand"></a><li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.datainterchange.import.ical.html">戻る</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.datainterchange.import.ical.properties.html">次へ</a></li>
+</ul></div></div></div>
+<div class="oxhelp-content">
+  <div class="sect3">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="ox.appsuite.user.sect.datainterchange.import.ical.objects"></a>13.1.1.1. インポートされる iCal オブジェクト</h4></div></div></div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.import.ical.rfc"></a><p>すべての iCal オブジェクトは、<a class="ulink" href="http://tools.ietf.org/html/rfc2445" target="_top">RFC2445</a> のドキュメントを参照してください。</p>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.import.ical.objects"></a><p>インポートされる iCal オブジェクトとインポートされない iCal オブジェクトを次の表に示します。「アポイント」の列と「仕事」の列に表示されている情報には次の意味があります。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>「X」は、対象のオブジェクトがインポートされることを意味します。オブジェクトの値は RFC2445 に従って設定されます。</p></li>
+<li class="listitem"><p>「255」のような数字も、対象のオブジェクトがインポートされることを意味します。数字は、インポートの最大文字数を表します。</p></li>
+<li class="listitem"><p>「無制限」も、対象のオブジェクトがインポートされることを意味します。この場合、インポートされる文字数に制限はありません。</p></li>
+<li class="listitem"><p>「-」は、対象のオブジェクトがインポートされないことを意味します。</p></li>
+</ul></div>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.import.ical.objects"></a><p>
+          </p>
+<div class="informaltable">
+<a name="ox.appsuite.user.tab.import.ical"></a><table style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; ">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th style="border-bottom: 0.5pt solid ; ">Category</th>
+<th style="border-bottom: 0.5pt solid ; ">iCal object</th>
+<th style="border-bottom: 0.5pt solid ; ">Appointments</th>
+<th style="border-bottom: 0.5pt solid ; ">Tasks</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="">Calendar Properties</td>
+<td style="">CALSCALE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">METHOD</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">PRODID</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VERSION</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style="">Calendar Components</td>
+<td style="">VALARM</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VEVENT</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VFREEBUSY</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VJOURNAL</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VTIMEZONE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VTODO</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style="">Component Properties</td>
+<td style="">ATTACH</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">ATTENDEE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">CATEGORIES</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">CLASS</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">COMMENT</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">COMPLETED</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">CONTACT</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">CREATED</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DESCRIPTION</td>
+<td style="" align="center">Unlimited</td>
+<td style="" align="center">Unlimited</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DTEND</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DTSTAMP</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DTSTART</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DUE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DURATION</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">EXDATE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">EXRULE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">FREEBUSY</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">GEO</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">LAST-MODIFIED</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">LOCATION</td>
+<td style="" align="center">255</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">ORGANIZER</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">PERCENT-COMPLETE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">PRIORITY</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RDATE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RECURRENCE-ID</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RELATED-TO</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">REPEAT</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">REQUEST-STATUS</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RESOURCES</td>
+<td style="" align="center">X</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RRULE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">SEQUENCE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">STATUS</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">SUMMARY</td>
+<td style="" align="center">255</td>
+<td style="" align="center">255</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TRANSP</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TRIGGER</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZID</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZNAME</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZOFFSETFROM</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZOFFSETTO</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZURL</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">UID</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">URL</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style="">Property Parameters</td>
+<td style="">CUTYPE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DELEGATED-FROM</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DELEGATED-TO</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DIR</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">ENCODING</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">FMTTYPE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">FBTYPE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">LANGUAGE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">MEMBER</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">PARTSTAT</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RANGE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RELATED</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RELTYPE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">ROLE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RSVP</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">SENT-BY</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZID</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VALUE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+        </p>
+</div>
+</div>
+</body>
+</html>

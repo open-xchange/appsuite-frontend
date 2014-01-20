@@ -368,9 +368,10 @@ define('io.ox/core/settings',
                         var settings = new Settings(name, data.tree, data.meta);
                         load(settings);
                     },
-                    function preloadFail() {
+                    function preloadFail(e) {
                         // hard fail
                         alert('Severe error: Failed to load important user settings. Please check your connection and retry.');
+                        localStorage.setItem('errormsg', e.error);//message to display on loginpage
                         location.href = 'signin#autologin=false';
                     }
                 );
@@ -380,7 +381,7 @@ define('io.ox/core/settings',
                     function loadSuccess() {
                         load(settings);
                     },
-                    function loadFaul() {
+                    function loadFail() {
                         try {
                             load.error({});
                         } catch (e) {

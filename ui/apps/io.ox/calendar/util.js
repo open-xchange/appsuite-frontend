@@ -553,7 +553,7 @@ define('io.ox/calendar/util',
                 _(data.confirmations).each(function (obj) {
                     hash[obj.mail] = {
                         status: obj.status || 0,
-                        comment: obj.confirmmessage || ''
+                        comment: obj.message || obj.confirmmessage || ''
                     };
                 });
             }
