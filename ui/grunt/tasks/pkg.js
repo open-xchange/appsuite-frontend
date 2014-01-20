@@ -8,12 +8,12 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
+ * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
 'use strict';
 
-module.exports = {
-    jshint: {
-        all: 4
-    }
+module.exports = function(grunt) {
+
+    grunt.config('pkg',  grunt.file.readJSON('package.json'));
 };

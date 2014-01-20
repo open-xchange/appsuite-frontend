@@ -13,18 +13,14 @@
 
 'use strict';
 
-module.exports = {
-    options: {
-        jshintrc: true,
-        ignores: ['apps/io.ox/core/date.js', 'spec/io.ox/core/date_spec.js'] // date.js has some funky include stuff we have to figure out
-    },
-    bootjs: {
-        src: ['src/*.js']
-    },
-    specs: {
-        src: ['spec/**/*_spec.js']
-    },
-    all: {
-        src: ['Gruntfile.js', 'grunt/conf/*.js', 'apps/**/*.js']
-    }
+module.exports = function(grunt) {
+
+    grunt.config('bower', {
+
+        options: { copy: false },
+        install: {}
+
+    });
+
+    grunt.loadNpmTasks('grunt-bower-task');
 };

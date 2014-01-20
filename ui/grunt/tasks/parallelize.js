@@ -8,11 +8,19 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
- * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
 'use strict';
 
-var grunt = require('grunt');
+module.exports = function(grunt) {
 
-module.exports = grunt.file.readJSON('package.json');
+    grunt.config('parallelize', {
+
+        jshint: {
+            all: 4
+        }
+
+    });
+
+    grunt.loadNpmTasks('grunt-parallelize');
+};

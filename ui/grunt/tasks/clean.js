@@ -13,6 +13,9 @@
 
 'use strict';
 
-var grunt = require('grunt');
+module.exports = function(grunt) {
 
-module.exports = grunt.template.date(new Date(), 'yyyymmdd.hhMMss');
+    grunt.config('clean', ['build/', 'node_modules/grunt-newer/.cache']);
+
+    grunt.loadNpmTasks('grunt-contrib-clean');
+};

@@ -13,19 +13,7 @@
 
 'use strict';
 
-module.exports = {
-    options: {
-        configFile: 'karma.conf.js',
-        builddir: 'build/'
-    },
-    unit: {
-        background: true,
-        autoWatch: false
-    },
-    //continuous integration mode: run tests once in PhantomJS browser.
-    continuous: {
-        singleRun: true,
-        browsers: ['PhantomJS'],
-        reporters: ['junit']
-    }
+module.exports = function(grunt) {
+
+    grunt.config('local', grunt.file.exists('local.conf.json') ? grunt.file.readJSON('local.conf.json') : {});
 };

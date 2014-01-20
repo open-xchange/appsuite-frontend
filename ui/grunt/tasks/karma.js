@@ -13,22 +13,26 @@
 
 'use strict';
 
-module.exports = {
-    oxpot: {
+module.exports = function(grunt) {
+
+    grunt.config('karma', {
+
         options: {
-            headers: {
-                'Project-Id-Version': 'Open-Xchange 7',
-                'PO-Revision-Date': 'DATE',
-                'Last-Translator': 'NAME <EMAIL>',
-                'Language-Team': 'NAME <EMAIL>',
-                'MIME-Version': '1.0',
-                'Content-Type': 'text/plain; charset=UTF-8',
-                'Content-Transfer-Encoding': '8bit',
-                'Plural-Forms': 'nplurals=INTEGER; plural=EXPRESSION;'
-            }
+            configFile: 'karma.conf.js',
+            builddir: 'build/'
         },
-        files: {
-            'i18n/ox.pot': ['apps/**/*.js'],
+        unit: {
+            background: true,
+            autoWatch: false
         },
-    }
+        //continuous integration mode: run tests once in PhantomJS browser.
+        continuous: {
+            singleRun: true,
+            browsers: ['PhantomJS'],
+            reporters: ['junit']
+        }
+
+    });
+
+    grunt.loadNpmTasks('grunt-karma');
 };

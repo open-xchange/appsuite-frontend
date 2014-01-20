@@ -18,11 +18,8 @@ module.exports = function (grunt) {
     // displays the execution time of grunt tasks
     if (grunt.option('benchmark')) require('time-grunt')(grunt);
 
-    // load installed npm tasks
-    require('load-grunt-tasks')(grunt, { pattern: ['grunt-*', 'assemble*'] });
-
-    // load all configuration files
-    grunt.initConfig(require('require-grunt-configs')(grunt, 'grunt/conf'));
+    // load installed grunt tasks from specified folder
+    grunt.loadTasks('grunt/tasks');
 
     // custom tasks
     grunt.registerTask('manifests', ['newer:jsonlint:manifests', 'concat:manifests']);

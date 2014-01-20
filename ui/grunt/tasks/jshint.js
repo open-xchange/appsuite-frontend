@@ -13,10 +13,25 @@
 
 'use strict';
 
-module.exports = {
-    this: {
+module.exports = function(grunt) {
+
+    grunt.config('jshint', {
+
         options: {
-            npmInstall: true,
+            jshintrc: true,
+            ignores: ['apps/io.ox/core/date.js', 'spec/io.ox/core/date_spec.js'] // date.js has some funky include stuff we have to figure out
         },
-    },
+        bootjs: {
+            src: ['src/*.js']
+        },
+        specs: {
+            src: ['spec/**/*_spec.js']
+        },
+        all: {
+            src: ['Gruntfile.js', 'grunt/conf/*.js', 'apps/**/*.js']
+        }
+
+    });
+
+    grunt.loadNpmTasks('grunt-contrib-jshint');
 };

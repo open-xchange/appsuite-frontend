@@ -13,4 +13,17 @@
 
 'use strict';
 
-module.exports = ['build/', 'node_modules/grunt-newer/.cache'];
+module.exports = function(grunt) {
+
+    grunt.config('checkDependencies', {
+
+        this: {
+            options: {
+                npmInstall: true
+            }
+        }
+
+    });
+
+    grunt.loadNpmTasks('grunt-check-dependencies');
+};

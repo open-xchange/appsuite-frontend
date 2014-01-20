@@ -8,19 +8,11 @@
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
- * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
 'use strict';
 
-module.exports = {
-    i18n: {
-        options: {
-            template: 'src/i18n_module.js.tpl'
-        },
-        files: [{
-            src: ['i18n/*.po'],
-            dest: 'build/src/apps/'
-        }]
-    }
+module.exports = function(grunt) {
+
+    grunt.loadNpmTasks('grunt-newer');
 };

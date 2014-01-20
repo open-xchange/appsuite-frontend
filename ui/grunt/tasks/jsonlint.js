@@ -13,6 +13,15 @@
 
 'use strict';
 
-var grunt = require('grunt');
+module.exports = function(grunt) {
 
-module.exports = grunt.file.exists('local.conf.json') ? grunt.file.readJSON('local.conf.json') : {};
+    grunt.config('jsonlint', {
+
+        manifests: {
+            src: ['apps/**/*.json']
+        }
+
+    });
+
+    grunt.loadNpmTasks('grunt-jsonlint');
+};
