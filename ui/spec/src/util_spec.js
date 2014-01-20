@@ -78,6 +78,7 @@ define([], function () {
                 _.isSet();
                 _.lfo();
                 _.makeExtendable();
+                _.mythrottle();
                 _.noI18n();
                 _.noI18n.fix();
                 _.noI18n.text();
@@ -257,6 +258,45 @@ define([], function () {
 
         describe('_.wait', function () {
             //TODO
+        });
+
+        describe('_.mythrottle', function () {
+            var finished,
+                //now = new Date(),
+                counter = 0,
+                counterrepaint = 0,
+                debounced = _.mythrottle(function () {
+                                    //console.warn((new Date() - now), 'repaint: debounced at ', counter);
+                                    counterrepaint = counterrepaint + 1;
+                                }, 100, {leading: true, trailing: true}),
+                repaint = function () {
+                    //counter = counter + 1;
+                    //console.warn((new Date() - now), 'repaint', counter);
+                    debounced();
+                }
+
+            //call debouncedn function every 50 ms
+            repaint();
+            var interval = setInterval(repaint, 5);
+
+            //cancel interal
+            setTimeout(function () {
+                 clearInterval(interval);
+            }, 130);
+
+            //wait
+            setTimeout(function () {
+                finished = true;
+            }, 300);
+
+            waitsFor(function () {
+                return finished;
+            }, 'no data in grid');
+            runs(function () {
+                // console.log('counter: ', counter);
+                // console.log('called: ', counterrepaint);
+                expect(counterrepaint).to.be.equal(3);
+            });
         });
 
         describe('_.makeExtendable', function () {

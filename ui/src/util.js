@@ -549,6 +549,44 @@
             return def;
         },
 
+        /*
+         * first and last call within wait will call original function
+         * hint: throttle of lo-dash can be used alternatively
+         * @param  {function} func
+         * @param  {nunber} wait
+         * @return {function} debonced version of func
+         */
+        mythrottle: function (func, wait) {
+            var context, args, result,
+                timeout = null,
+                previous = 0,
+                later = function () {
+                    previous = new Date();
+                    timeout = null;
+                    result = func.apply(context, args);
+                };
+
+            return function () {
+                var now = new Date(),
+                    remaining;
+                //set closures
+                context = this;
+                args = arguments;
+                //clear old ones
+                clearTimeout(timeout);
+                timeout = null;
+                //immediate vs delayed
+                remaining = wait - (now - previous);
+                if (remaining <= 0) {
+                    previous = now;
+                    result = func.apply(context, args);
+                } else {
+                    timeout = setTimeout(later, remaining);
+                }
+                return result;
+            };
+        },
+
         makeExtendable: (function () {
             return function (parent) {
                 if (_.isObject(parent)) {

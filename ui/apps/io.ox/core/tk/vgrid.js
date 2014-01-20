@@ -1028,7 +1028,7 @@ define('io.ox/core/tk/vgrid',
             return initLabels();
         };
 
-        this.repaint = _.debounce(function () {
+        this.repaint = _.mythrottle(function () {
             var offset = currentOffset || 0;
             currentOffset = null;
             // reset loader
@@ -1037,7 +1037,7 @@ define('io.ox/core/tk/vgrid',
             // don't remove debouce cause repaint is likely wired with APIs' refresh.list
             // which may be called many times in a row
             paint(offset);
-        }, 100, true);
+        }, 100);
 
         this.clear = function () {
             return apply([], true);
