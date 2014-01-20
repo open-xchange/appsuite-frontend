@@ -18,7 +18,7 @@ define('io.ox.emig/register', [
     ext.point('io.ox/mail/write/contactItem').extend({
         id: 'emig',
         draw: function (baton) {
-            var badge = $('<div class="io-ox-emig wait"><i class="icon-check-sign"></i></div>')
+            var badge = $('<div class="io-ox-emig wait"></div>')
                 .attr('data-address', baton.data.email);
             this.prepend(badge);
             setStatus(badge.get(0), baton.app);
@@ -46,10 +46,8 @@ define('io.ox.emig/register', [
         
         $(document.body).on('click', closePopups);
         function closePopups(e) {
-            console.log('click');
             view.leftside.find('.io-ox-emig').each(function () {
                 if (this === e.currentTarget || !$(this).data('popover')) return;
-                console.log('each', this);
                 $(this).popover('hide');
             });
         }
@@ -109,6 +107,7 @@ define('io.ox.emig/register', [
     function getPopup() {
         if ($(this).hasClass('secure')) {
             return $('<div class="io-ox-emig-popup secure">').append(
+                $('<div>').text(_.noI18n('E‑Mail made in Germany')),
                 $('<span>').text(gt('Guaranteed security in sending and storing your message. ')),
                 href ? $('<a target="_blank"></a>').attr('href', href)
                             .text(gt('More information'))

@@ -1,15 +1,22 @@
 .io-ox-mail-write .section-item .io-ox-emig {
-    position: relative;
-    overflow: visible;
     float: right;
-    font-size: 1.5em;
     cursor: pointer;
     
+    width: 13px;
+    height: 28px;
+   
     &.none { display: none; }
     &.wait { display: none; }
     
-    &.member { color: #7c7c7c; }
-    &.secure { color: #6bb324; }
+    &.member {
+        background-image: url(images/member.png);
+        &:hover { background-image: url(images/member-hover.png); }
+    }
+    
+    &.secure {
+        background-image: url(images/secure.png);
+        &:hover { background-image: url(images/secure-hover.png); }
+    }
 }
 
 .io-ox-emig-title {
@@ -18,25 +25,29 @@
 }
 
 .io-ox-emig-popup {
-/*    width: 21em;
-    line-height: 1.2;*/
+    font-size: 12px;
+    line-height: 1.2;
+    
+    a { white-space: nowrap; }
     
     &.member {
-        &>p, &>a {
-            padding-left: 80px;
-        }
+        padding-left: 80px;
+        background: url(images/logo.png) 10px 0 no-repeat;
         
-        &>p {
-            background: url(images/logo.png) 10px 0 no-repeat;
-/*            margin: 0.5em 0;*/
-        }
     }
     
     &.secure {
-        &>p {
-            padding-top: 50px;
-            background: url(images/logo2.png) top no-repeat;
-/*            margin: 1em 0 0.5em;*/
+        &>div {
+            position: relative;
+            margin: 0 auto;
+            background: url(images/logo.png) left no-repeat;
+            min-height: 46px;
+            padding-left: 70px;
+            width: 5em;
+            font-weight: bold;
+        }
+        &>span {
+            margin-top: 1em;
         }
     }
 }
