@@ -40,6 +40,7 @@
     "load-grunt-tasks": "~0.2.1",
     "grunt-parallelize": "~1.0.0",
     "time-grunt": "~0.2.8",
-    "grunt-require-gettext": "Open-Xchange-Frontend/grunt-require-gettext"
+    "grunt-require-gettext": "Open-Xchange-Frontend/grunt-require-gettext",
+    "grunt-check-dependencies": "~0.3.0"
   }
 }
