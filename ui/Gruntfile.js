@@ -22,7 +22,7 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt, { pattern: ['grunt-*', 'assemble*'] });
 
     // load all configuration files
-    grunt.initConfig(require('require-grunt-configs')(grunt));
+    grunt.initConfig(require('require-grunt-configs')(grunt, 'grunt/conf'));
 
     // custom tasks
     grunt.registerTask('manifests', ['newer:jsonlint:manifests', 'concat:manifests']);
