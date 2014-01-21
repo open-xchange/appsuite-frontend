@@ -19,7 +19,7 @@ module.exports = function(grunt) {
 
         i18n: {
             options: {
-                template: 'src/i18n_module.js.tpl'
+                template: 'grunt/templates/i18n_module.js.tpl'
             },
             files: [{
                 src: ['i18n/*.po'],
