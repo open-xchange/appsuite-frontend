@@ -235,7 +235,7 @@ define('io.ox/calendar/api',
                         action: 'update',
                         id: o.id,
                         folder: folder_id,
-                        timestamp: o.timestamp || _.now(),
+                        timestamp: o.timestamp || _.then(),
                         timezone: 'UTC'
                     },
                     data: o,
