@@ -134,6 +134,8 @@ define('io.ox/mail/view-grid-template',
                     var length = list.length, subset = list.slice(1);
                     // update selection
                     if (!grid.selection.contains(subset)) {
+                        // get current index
+                        index = grid.selection.getIndex(prev) + 1;
                         grid.selection.insertAt(subset, index);
                     }
                     // draw labels
