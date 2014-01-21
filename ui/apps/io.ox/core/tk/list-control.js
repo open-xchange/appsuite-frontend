@@ -22,6 +22,7 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
         initialize: function (options) {
             this.listView = options.listView;
             this.id = options.id || 'default';
+            this.options = options;
         },
 
         render: function () {
@@ -29,16 +30,17 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
             var top = $('<nav class="toolbar top">'),
                 topPoint = ext.point(this.id + '/list-view/toolbar/top'),
                 bottom = $('<nav class="toolbar bottom">'),
-                bottomPoint = ext.point(this.id + '/list-view/toolbar/bottom');
+                bottomPoint = ext.point(this.id + '/list-view/toolbar/bottom'),
+                baton = new ext.Baton({ view: this, app: this.options.app });
 
             if (topPoint.list().length) {
                 this.$el.addClass('toolbar-top-visible');
-                topPoint.invoke('draw', top);
+                topPoint.invoke('draw', top, baton);
             }
 
             if (bottomPoint.list().length) {
                 this.$el.addClass('toolbar-bottom-visible');
-                bottomPoint.invoke('draw', bottom);
+                bottomPoint.invoke('draw', bottom, baton);
             }
 
             this.$el.append(top, this.listView.render().$el.addClass('abs'), bottom);

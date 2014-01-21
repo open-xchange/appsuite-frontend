@@ -154,7 +154,7 @@ define('io.ox/core/tk/list',
         onChange: function (model) {
             var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
                 data = model.toJSON(),
-                baton = ext.Baton({ data: data, model: model });
+                baton = ext.Baton({ data: data, model: model, app: this.app });
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1).empty(), baton);
         },
@@ -162,6 +162,7 @@ define('io.ox/core/tk/list',
         initialize: function (options) {
 
             this.ref = this.ref || options.ref;
+            this.app = options.app;
             this.selection = new Selection(this);
             this.model = new Backbone.Model();
             this.isBusy = false;
@@ -252,9 +253,21 @@ define('io.ox/core/tk/list',
             return this;
         },
 
+        redraw: function () {
+            var point = ext.point(this.ref + '/item'),
+                collection = this.collection,
+                app = this.app;
+            this.getItems().each(function (index) {
+                if (index >= collection.length) return;
+                var model = collection.at(index),
+                    baton = ext.Baton({ data: model.toJSON(), model: model, app: app });
+                point.invoke('draw', $(this).children().eq(1).empty(), baton);
+            });
+        },
+
         renderListItem: function (model) {
             var li = this.scaffold.clone(),
-                baton = ext.Baton({ data: model.toJSON(), model: model });
+                baton = ext.Baton({ data: model.toJSON(), model: model, app: this.app });
             // add cid and full data
             li.attr('data-cid', model.cid);
             // draw via extensions

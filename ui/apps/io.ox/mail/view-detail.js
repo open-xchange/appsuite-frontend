@@ -668,6 +668,12 @@ define('io.ox/mail/view-detail',
         }).draw.call(node, data);
     };
 
+    var showAllRecipients = function (e) {
+        e.preventDefault();
+        $(this).find('.show-all-recipients').remove();
+        $(this).children().show();
+    };
+
     ext.point('io.ox/mail/detail/header').extend({
         index: 150,
         id: 'tocopy',
@@ -681,6 +687,8 @@ define('io.ox/mail/view-detail',
                 showBCC = data.bcc && data.bcc.length > 0,
                 show = showTO || showCC || showBCC,
                 container = $('<div>').addClass('to-cc list');
+
+            if (!show) return;
 
             if (showTO) {
                 container.append(
@@ -715,16 +723,24 @@ define('io.ox/mail/view-detail',
                     $.txt(_.noI18n(' \u00A0 '))
                 );
             }
-            if (show) {
-                this.append(container);
-                if (_.device('!smartphone')) {
-                    if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
-                        var dd = $('<div class="recipient-actions">');
-                        drawAllDropDown(dd, $('<i class="fa fa-group">'), data);
-                        dd.appendTo(container);
-                    }
-                }
 
+            this.append(container);
+
+            if (_.device('!smartphone')) {
+                if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
+                    var dd = $('<div class="recipient-actions">');
+                    drawAllDropDown(dd, $('<i class="fa fa-group">'), data);
+                    dd.appendTo(container);
+                }
+            }
+
+            var items = container.find('.person-link');
+            if (items.length > 3) {
+                container.children().slice(4).hide();
+                container.append(
+                    $('<a href="#" class="show-all-recipients">').text(gt('and %1$d others', items.length - 2))
+                );
+                container.on('click', showAllRecipients);
             }
         }
     });

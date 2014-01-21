@@ -150,6 +150,24 @@ define('io.ox/mail/threadview',
             }
         },
 
+        filter: function (data) {
+            return !util.isDeleted(data);
+        },
+
+        reset: function (list) {
+            var filtered = _(list)
+                    .chain()
+                    .filter(this.filter)
+                    .map(function (obj) { return new backbone.Model(obj); })
+                    .value(),
+                a = _(filtered).pluck('cid').sort(),
+                b = _(this.collection.models).pluck('cid').sort();
+            // avoid unnecessary repaints
+            if (_.isEqual(a, b)) return;
+            // reset collection
+            this.collection.reset(filtered);
+        },
+
         onReset: function () {
 
             this.empty();
@@ -162,7 +180,7 @@ define('io.ox/mail/threadview',
 
             // draw thread list
             this.$ul.append(
-                this.collection.map(this.renderListItem, this)
+                this.collection.chain().filter(this.filter).map(this.renderListItem, this).value()
             );
         },
 
@@ -266,7 +284,7 @@ define('io.ox/mail/threadview',
 
         renderListItem: function (model) {
             var li = this.scaffold.clone(),
-                baton = new ext.Baton({ data: model.toJSON() });
+                baton = new ext.Baton({ data: model.toJSON(), app: this.app });
             // add cid and full data
             li.attr('data-cid', model.cid);
             ext.point('io.ox/mail/listview/item').invoke('draw', li, baton);

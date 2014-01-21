@@ -11,6 +11,65 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/* preview panes */
+
+.preview-right {
+    .leftside { width: 330px; }
+    .rightside { left: 330px; }
+}
+
+.preview-bottom {
+    .leftside { left: 0; right: 0; bottom: auto; width: auto; height: 40%; border-bottom: 1px solid #ccc; }
+    .rightside { left: 0; right: 0; top: 40%; }
+    .thread-view.list-view.mail { margin: 20px 0; }
+}
+
+.preview-none {
+    .leftside { top: 0; left: 0; right: 0; bottom: 0; width: auto; z-index: 1; }
+    .rightside { top: 0; right: 0; bottom: 0; left: 0; width: auto; display: none; z-index: 2; }
+    .thread-view.list-view.mail { margin: 20px 0; }
+    // show preview
+    .rightside.preview-visible { display: block; }
+}
+
+.list-item.small {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+}
+
+.list-item.small .list-item-checkmark .icon-checkmark {
+    top: 8px;
+}
+
+.list-item.small .list-item-content,
+.thread-view .list-item.small {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    .box-sizing(border-box);
+}
+
+.list-item-column {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0;
+    .box-sizing(border-box);
+    &.column-1 { width: 30px; text-align: center; }
+    &.column-2 { width: 30px; text-align: center; }
+    &.column-3 { width: 30%; }
+    &.column-4 { width: 60%; }
+    &.column-5 { width: 100px; text-align: right; }
+}
+
+.list-view.mail .list-item.small .priority { float: none; }
+.list-view.mail .list-item.small .from span.person { font-weight: normal; }
+
+.preview-bottom .mail-detail-pane .mail-detail-decorator { padding: 0; }
+.preview-bottom .inplace-reply { margin: 14px; }
+
+.list-view.mail.thread-view .list-item.small { padding: 7px 14px 7px 48px; }
+
 /* ListView */
 
 .list-view.mail {
@@ -76,22 +135,9 @@
     }
 
     .priority {
-        font-weight: bold;
         float: right;
-        .high {
-            color: @mailPriority;
-        }
-        .low {
-            i:first-child { color: #888; }
-            color: #ccc;
-        }
-    }
-
-    &.visible-selection .list-item.selected .priority {
-        .low {
-            i:first-child { opacity: 1; }
-            i { opacity: 0.5; }
-        }
+        .high { color: @mailPriority; }
+        .low { color: @mailPriorityLow; }
     }
 
     .list-item.unread {
@@ -212,8 +258,8 @@ textarea.inplace-editor {
         display: none;
         background-color: inherit;
         width: 100%;
-        height: @height;
-        line-height: @height;
+        height: @height - 1;
+        line-height: @height - 1;
         position: absolute;
         top: 0px;
         z-index: 2;
@@ -322,24 +368,10 @@ textarea.inplace-editor {
 }
 
 .vgrid-cell.mail {
-
     .priority {
-        font-weight: bold;
         float: right;
-        .high {
-            color: @mail-priority;
-        }
-        .low {
-            i:first-child { color: #888; }
-            color: #ccc;
-        }
-    }
-
-    &.selected .priority {
-        .low {
-            i:first-child { opacity: 1; }
-            i { opacity: 0.5; }
-        }
+        .high { color: @mail-priority; }
+        .low { color: @mail-priority-low; }
     }
 }
 

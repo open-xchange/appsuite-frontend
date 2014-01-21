@@ -1301,6 +1301,12 @@ a.button {
         &.bottom {
             bottom: 0;
             border-top: 1px solid mix(@textColor, @background, 200%/15);
+            .dropdown-menu {
+                top: auto;
+                bottom: 100%;
+                right: 0;
+                left: auto;
+            }
         }
 
         .grid-info {
@@ -1317,6 +1323,11 @@ a.button {
             position: absolute;
             right: 13px;
             top: 0px;
+            .dropdown-menu {
+                right: -7px;
+                left: auto;
+                top: 90%;
+            }
         }
     }
 
@@ -1335,6 +1346,7 @@ a.button {
 
     .list-view {
         height: auto;
+        z-index: 1;
     }
 }
 

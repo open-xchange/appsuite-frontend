@@ -169,13 +169,27 @@ define('io.ox/mail/sort-options',
     //     );
     // }
 
-    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
+    function drawOptions() {
+        this.append(
+            $('<li class="dropdown-header">Preview pane</li>'),
+            $('<li><a href="#" data-option="right">Right</a></li>'),
+            $('<li><a href="#" data-option="bottom">Bottom</a></li>'),
+            $('<li><a href="#" data-option="none">None</a></li>')
+        );
+    }
+
+    function applyOption(e) {
+        e.preventDefault();
+        var option = $(this).attr('data-option'), baton = e.data.baton;
+        baton.app.props.set('preview', option);
+    }
+
+    ext.point('io.ox/mail/list-view/toolbar/top').extend({
         id: 'dropdown',
         index: 1000,
-        draw: function () {
+        draw: function (baton) {
             this.append(
-                $('<div class="grid-options dropdown">')
-                .append(
+                $('<div class="grid-options dropdown">').append(
                     $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">')
                     .attr('aria-label', gt('Sort options'))
                     .append(
@@ -184,9 +198,11 @@ define('io.ox/mail/sort-options',
                     )
                     .dropdown(),
                     $('<ul class="dropdown-menu" role="menu">')
-                    //.on('click', 'a', { grid: grid }, hToolbarOptions)
                 )
             );
+
+            drawOptions.call(this.find('.dropdown-menu'));
+            this.find('.dropdown-menu').on('click', 'a', { baton: baton }, applyOption);
         }
     });
 

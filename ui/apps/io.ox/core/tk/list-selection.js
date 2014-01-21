@@ -33,8 +33,8 @@ define('io.ox/core/tk/list-selection', [], function () {
                 var node = $(this).find('[tabindex="1"]').first();
                 if (node.length) node.focus();
             })
-            .on('keydown', function (e) {
-                if (e.target === this) self.onKeydown(e);
+            .on(Modernizr.touch ? 'tap' : 'click', SELECTABLE, function (e) {
+                self.triggerAction(e);
             });
 
         if (Modernizr.touch) {
@@ -107,13 +107,19 @@ define('io.ox/core/tk/list-selection', [], function () {
             }
         },
 
-        triggerChange: _.debounce(function () {
+        triggerAction: function (e) {
+            var cid = $(e.currentTarget).attr('data-cid');
+            console.log('triggerAction', cid, e.currentTarget);
+            this.view.trigger('selection:action', [cid]);
+        },
+
+        triggerChange: function () {
             var list = this.get(), events = 'selection:change ';
             if (list.length === 0) events += 'selection:empty';
             else if (list.length === 1) events += 'selection:one';
             else if (list.length > 1) events += 'selection:multiple';
             this.view.trigger(events, list);
-        }, 100),
+        },
 
         clear: function (items) {
             items = items || this.getItems();
@@ -183,6 +189,8 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         onKeydown: function (e) {
+
+            if (e.which === 13) return this.triggerAction(e);
 
             if (e.which !== 40 && e.which !== 38) return;
 

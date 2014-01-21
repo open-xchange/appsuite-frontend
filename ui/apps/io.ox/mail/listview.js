@@ -25,10 +25,9 @@ define('io.ox/mail/listview',
 
     'use strict';
 
-    ext.point('io.ox/mail/listview/item').extend({
-        id: 'picture',
-        before: 'row1',
-        draw: function (baton) {
+    var extensions = {
+
+        picture: function (baton) {
             var from = baton.data.from;
             this.append(
                 contactsAPI.pictureHalo(
@@ -36,31 +35,9 @@ define('io.ox/mail/listview',
                     { email: from && from[0] && from[0][1], width: 32, height: 32, scaleType: 'cover' }
                 )
             );
-        }
-    });
+        },
 
-    ext.point('io.ox/mail/listview/item').extend({
-        id: 'row1',
-        index: 100,
-        draw: function (baton) {
-
-            var data = baton.data;
-
-            // ignore deleted mails
-            data.threadSize = _(data.thread).reduce(function (sum, data) {
-                return sum + (util.isDeleted(data) ? 0 : 1);
-            }, 0);
-
-            var row = $('<div class="list-item-row">');
-            ext.point('io.ox/mail/listview/item/row1').invoke('draw', row, baton);
-            this.append(row);
-        }
-    });
-
-    ext.point('io.ox/mail/listview/item/row1').extend({
-        id: 'date',
-        index: 100,
-        draw: function (baton) {
+        date: function (baton) {
             var data = baton.data, t = data.received_date, d;
             if (!_.isNumber(t)) return;
             d = new date.Local(t);
@@ -69,13 +46,9 @@ define('io.ox/mail/listview',
                 .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
                 .text(_.noI18n(util.getTime(t)))
             );
-        }
-    });
+        },
 
-    ext.point('io.ox/mail/listview/item/row1').extend({
-        id: 'from',
-        index: 200,
-        draw: function (baton) {
+        from: function (baton) {
             var data = baton.data,
                 field = data.threadSize === 1 && account.is('sent|drafts', data.folder_id) ? 'to' : 'from';
             this.append(
@@ -83,41 +56,19 @@ define('io.ox/mail/listview',
                     util.getFrom(data, field)
                 )
             );
-        }
-    });
+        },
 
-    ext.point('io.ox/mail/listview/item').extend({
-        id: 'unread',
-        index: 110,
-        draw: function (baton) {
+        unreadClass: function (baton) {
             var data = baton.data,
                 unread = util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data));
             this.closest('.list-item').toggleClass('unread', unread);
-        }
-    });
+        },
 
-    ext.point('io.ox/mail/listview/item').extend({
-        id: 'deleted',
-        index: 120,
-        draw: function (baton) {
+        deleted: function (baton) {
             this.parent().toggleClass('deleted', util.isDeleted(baton.data));
-        }
-    });
+        },
 
-    ext.point('io.ox/mail/listview/item').extend({
-        id: 'row2',
-        index: 200,
-        draw: function (baton) {
-            var row = $('<div class="list-item-row">');
-            ext.point('io.ox/mail/listview/item/row2').invoke('draw', row, baton);
-            this.append(row);
-        }
-    });
-
-    ext.point('io.ox/mail/listview/item/row2').extend({
-        id: 'flag',
-        index: 100,
-        draw: function (baton) {
+        flag: function (baton) {
 
             var color = baton.data.color_label || 0;
             if (color === 0) return;
@@ -125,13 +76,9 @@ define('io.ox/mail/listview',
             this.append(
                 $('<i class="flag flag_' + color + ' icon-bookmark" aria-hidden="true">')
             );
-        }
-    });
+        },
 
-    ext.point('io.ox/mail/listview/item/row2').extend({
-        id: 'thread-size',
-        index: 200,
-        draw: function (baton) {
+        threadSize: function (baton) {
 
             var data = baton.data;
             if (data.threadSize <= 1) return;
@@ -143,54 +90,251 @@ define('io.ox/mail/listview',
                     // $('<i class="icon-caret-right">')
                 )
             );
-        }
-    });
+        },
 
-    ext.point('io.ox/mail/listview/item/row2').extend({
-        id: 'paper-clip',
-        index: 300,
-        draw: function (baton) {
+        paperClip: function (baton) {
             if (!baton.data.attachment) return;
             this.append(
                 $('<i class="icon-paper-clip" aria-hidden="true">')
             );
-        }
-    });
+        },
 
-    ext.point('io.ox/mail/listview/item/row2').extend({
-        id: 'priority',
-        index: 400,
-        draw: function (baton) {
+        priority: function (baton) {
             this.append(
                 $('<span class="priority" aria-hidden="true">').append(
                     util.getPriority(baton.data)
                 )
             );
-        }
-    });
+        },
 
-    ext.point('io.ox/mail/listview/item/row2').extend({
-        id: 'subject',
-        index: 1000,
-        draw: function (baton) {
+        unread: function (baton) {
+            var data = baton.data,
+                isUnread = util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data));
+            if (isUnread) this.append('<i class="icon-unread icon-circle" aria-hidden="true">');
+        },
 
+        answered: function (baton) {
             var data = baton.data,
                 thread = api.tracker.getThread(data) || data,
-                isUnread = util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data)),
-                isAnswered = util.isAnswered(thread, data),
-                isForwarded = util.isForwarded(thread, data),
+                isAnswered = util.isAnswered(thread, data);
+            if (isAnswered) this.append('<i class="icon-answered icon-reply" aria-hidden="true">');
+        },
+
+        forwarded: function (baton) {
+            var data = baton.data,
+                thread = api.tracker.getThread(data) || data,
+                isForwarded = util.isForwarded(thread, data);
+            if (isForwarded) this.append('<i class="icon-forwarded icon-mail-forward" aria-hidden="true">');
+        },
+
+        subject: function (baton) {
+
+            var data = baton.data,
                 subject = $.trim(data.subject || '') || gt('No subject');
 
             if (data.threadSize > 1) subject = subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
 
             this.append(
                 $('<div class="subject">').append(
-                    isUnread ? $('<i class="icon-unread icon-circle" aria-hidden="true">') : [],
-                    isAnswered ? $('<i class="icon-answered icon-reply" aria-hidden="true">') : [],
-                    isForwarded ? $('<i class="icon-forwarded icon-mail-forward" aria-hidden="true">') : [],
+                    $('<span class="flags">'),
                     $('<span class="drag-title">').text(subject)
                 )
             );
+        }
+    };
+
+    ext.point('io.ox/mail/listview/item').extend({
+        id: 'default',
+        draw: function (baton) {
+
+            var data = baton.data;
+
+            // ignore deleted mails
+            data.threadSize = _(data.thread).reduce(function (sum, data) {
+                return sum + (util.isDeleted(data) ? 0 : 1);
+            }, 0);
+
+            var preview = baton.app.props.get('preview'),
+                isSmall = preview === 'bottom' || preview === 'none';
+
+            this.closest('.list-item').toggleClass('small', isSmall);
+            ext.point('io.ox/mail/listview/item/' + (isSmall ? 'small' : 'default')).invoke('draw', this, baton);
+        }
+    });
+
+    /* small */
+
+    ext.point('io.ox/mail/listview/item/small').extend({
+        id: 'col1',
+        index: 100,
+        draw: function (baton) {
+            var column = $('<div class="list-item-column column-1">');
+            extensions.answered.call(column, baton);
+            this.append(column);
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/small').extend({
+        id: 'col2',
+        index: 200,
+        draw: function (baton) {
+            var column = $('<div class="list-item-column column-2">');
+            extensions.priority.call(column, baton);
+            this.append(column);
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/small').extend({
+        id: 'col3',
+        index: 300,
+        draw: function (baton) {
+            var column = $('<div class="list-item-column column-3">');
+            ext.point('io.ox/mail/listview/item/small/col3').invoke('draw', column, baton);
+            this.append(column);
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/small/col3').extend({
+        id: 'from',
+        index: 100,
+        draw: extensions.from
+    });
+
+    ext.point('io.ox/mail/listview/item/small').extend({
+        id: 'col4',
+        index: 400,
+        draw: function (baton) {
+            var column = $('<div class="list-item-column column-4">');
+            ext.point('io.ox/mail/listview/item/small/col4').invoke('draw', column, baton);
+            this.append(column);
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/small/col4').extend({
+        id: 'flag',
+        index: 100,
+        draw: extensions.flag
+    });
+
+    ext.point('io.ox/mail/listview/item/small/col4').extend({
+        id: 'thread-size',
+        index: 200,
+        draw: extensions.threadSize
+    });
+
+    ext.point('io.ox/mail/listview/item/small/col4').extend({
+        id: 'paper-clip',
+        index: 300,
+        draw: extensions.paperClip
+    });
+
+    ext.point('io.ox/mail/listview/item/small/col4').extend({
+        id: 'subject',
+        index: 1000,
+        draw: extensions.subject
+    });
+
+    ext.point('io.ox/mail/listview/item/small').extend({
+        id: 'col5',
+        index: 500,
+        draw: function (baton) {
+            var column = $('<div class="list-item-column column-5">');
+            ext.point('io.ox/mail/listview/item/small/col5').invoke('draw', column, baton);
+            this.append(column);
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/small/col5').extend({
+        id: 'date',
+        index: 100,
+        draw: extensions.date
+    });
+
+    /* default */
+
+    ext.point('io.ox/mail/listview/item/default').extend({
+        id: 'picture',
+        before: 'row1',
+        draw: extensions.picture
+    });
+
+    ext.point('io.ox/mail/listview/item/default').extend({
+        id: 'row1',
+        index: 100,
+        draw: function (baton) {
+            var row = $('<div class="list-item-row">');
+            ext.point('io.ox/mail/listview/item/default/row1').invoke('draw', row, baton);
+            this.append(row);
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/default/row1').extend({
+        id: 'date',
+        index: 100,
+        draw: extensions.date
+    });
+
+    ext.point('io.ox/mail/listview/item/default/row1').extend({
+        id: 'from',
+        index: 200,
+        draw: extensions.from
+    });
+
+    ext.point('io.ox/mail/listview/item/default').extend({
+        id: 'unread',
+        index: 110,
+        draw: extensions.unreadClass
+    });
+
+    ext.point('io.ox/mail/listview/item/default').extend({
+        id: 'deleted',
+        index: 120,
+        draw: extensions.deleted
+    });
+
+    ext.point('io.ox/mail/listview/item/default').extend({
+        id: 'row2',
+        index: 200,
+        draw: function (baton) {
+            var row = $('<div class="list-item-row">');
+            ext.point('io.ox/mail/listview/item/default/row2').invoke('draw', row, baton);
+            this.append(row);
+        }
+    });
+
+    ext.point('io.ox/mail/listview/item/default/row2').extend({
+        id: 'flag',
+        index: 100,
+        draw: extensions.flag
+    });
+
+    ext.point('io.ox/mail/listview/item/default/row2').extend({
+        id: 'thread-size',
+        index: 200,
+        draw: extensions.threadSize
+    });
+
+    ext.point('io.ox/mail/listview/item/default/row2').extend({
+        id: 'paper-clip',
+        index: 300,
+        draw: extensions.paperClip
+    });
+
+    ext.point('io.ox/mail/listview/item/default/row2').extend({
+        id: 'priority',
+        index: 400,
+        draw: extensions.priority
+    });
+
+    ext.point('io.ox/mail/listview/item/default/row2').extend({
+        id: 'subject',
+        index: 1000,
+        draw: function (baton) {
+            extensions.subject.call(this, baton);
+            var node = this.find('.flags');
+            extensions.unread.call(node, baton);
+            extensions.answered.call(node, baton);
+            extensions.forwarded.call(node, baton);
         }
     });
 
