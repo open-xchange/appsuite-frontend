@@ -14,75 +14,93 @@
 define('io.ox/tasks/settings/pane',
     ['settings!io.ox/tasks',
      'io.ox/tasks/settings/model',
-     'dot!io.ox/tasks/settings/form.html',
      'io.ox/core/extensions',
      'gettext!io.ox/tasks'
-    ], function (settings, tasksSettingsModel, tmpl, ext, gt) {
+    ], function (settings, tasksSettingsModel, ext, gt) {
 
     'use strict';
 
-    var tasksSettings =  settings.createModel(tasksSettingsModel),
-        staticStrings =  {
-        TITLE_TASKS: gt.pgettext('app', 'Tasks'),
-        TITLE_NOTIFICATIONS_FOR_TASKS: gt('Email notification for task'),
-        NOTIFICATIONS_FOR_NEWCHANGEDDELETED: gt('Email notification for New, Changed, Deleted?'),
-        TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('Email notification for Accept/Declined'),
-        NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('Email notification for task creator?'),
-        NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('Email notification for task participant?')
-    },
-        optionsYes = {label: gt('Yes'), value: true},
-        optionsNo = {label: gt('No'), value: false},
+    var model =  settings.createModel(tasksSettingsModel),
+        POINT = 'io.ox/tasks/settings/detail';
 
-        tasksViewSettings;
-
-    var TasksSettingsView = Backbone.View.extend({
-        tagName: 'div',
-        _modelBinder: undefined,
-        initialize: function () {
-            // create template
-            this._modelBinder = new Backbone.ModelBinder();
-
-        },
-        render: function () {
-            var self = this,
-                needBoolParser = [
-                    'notifyAcceptedDeclinedAsCreator',
-                    'notifyAcceptedDeclinedAsParticipant',
-                    'notifyNewModifiedDeleted'
-                ],
-                boolParser = function (direction, value) {
-                    return direction === 'ModelToView' ? value + '' : value === 'true';
-                };
-            self.$el.empty().append(tmpl.render('io.ox/tasks/settings', {
-                strings: staticStrings,
-                optionsYesAnswers: optionsYes,
-                optionsNoAnswers: optionsNo
-            }));
-            var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            _(needBoolParser).each(function (prop) {
-                defaultBindings[prop].converter = boolParser;
-            });
-            self._modelBinder.bind(self.model, self.el, defaultBindings);
-
-            return self;
-
-        }
+    model.on('change', function (model) {
+        model.saveAndYell();
     });
 
-    ext.point('io.ox/tasks/settings/detail').extend({
-        index: 200,
+    ext.point(POINT).extend({
+        index: 100,
         id: 'taskssettings',
         draw: function () {
 
-            tasksViewSettings = new TasksSettingsView({model: tasksSettings});
-            var holder = $('<div>').css('max-width', '800px');
-            this.append(holder.append(
-                    tasksViewSettings.render().el)
-            );
-        },
+            var self = this,
+                pane = $('<div class="io-ox-tasks-settings">'),
+                holder = $('<div>').css('max-width', '800px');
+            self.append(pane.append(holder));
+            ext.point(POINT + '/pane').invoke('draw', holder);
+        }
 
-        save: function () {
-            tasksViewSettings.model.saveAndYell();
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 100,
+        id: 'header',
+        draw: function () {
+            this.append(
+                $('<h1>').text(gt.pgettext('app', 'Tasks'))
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 200,
+        id: 'notifications',
+        draw: function () {
+            var preferences = [{label: gt('Yes'), value: true}, {label: gt('No'), value: false}],
+                preferenceNewChangedDeleted = settings.get('notifyNewModifiedDeleted', 'true'),
+                preferenceAcceptDeclinedCreator = settings.get('notifyAcceptedDeclinedAsCreator', 'true'),
+                preferenceAcceptDeclinedParticipant = settings.get('notifyAcceptedDeclinedAsParticipant', 'true'),
+
+                buildInputRadio = function (list, selected, name) {
+                    return _.map(list, function (option) {
+                        var o = $('<input type="radio" name="' + name + '">').val(option.value)
+                        .on('click', function () {
+                            model.set(name, boolParser(this.value));
+                        });
+                        if (selected === option.value) o.prop('checked', true);
+                        return $('<label class="radio">').text(option.label).append(o);
+                    });
+                },
+
+                boolParser = function (value) {
+                    return value === 'true' ? true : false;
+                };
+
+            this.append(
+               $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for task')),
+               $('<div>').addClass('form-horizontal').append(
+                    $('<div>').addClass('control-group expertmode').append(
+                        $('<label>').addClass('control-label').text(gt('Email notification for New, Changed, Deleted?')),
+                        $('<div>').addClass('controls').append(
+                            buildInputRadio(preferences, preferenceNewChangedDeleted, 'notifyNewModifiedDeleted')
+                        )
+                    )
+                ),
+               $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for Accept/Declined')),
+               $('<div>').addClass('form-horizontal').append(
+                    $('<div>').addClass('control-group expertmode').append(
+                        $('<label>').addClass('control-label').text(gt('Email notification for task creator?')),
+                        $('<div>').addClass('controls').append(
+                            buildInputRadio(preferences, preferenceAcceptDeclinedCreator, 'notifyAcceptedDeclinedAsCreator')
+                        )
+                    ),
+                    $('<div>').addClass('control-group expertmode').append(
+                        $('<label>').addClass('control-label').text(gt('Email notification for task participant?')),
+                        $('<div>').addClass('controls').append(
+                            buildInputRadio(preferences, preferenceAcceptDeclinedParticipant, 'notifyAcceptedDeclinedAsParticipant')
+                        )
+                    )
+                )
+            );
         }
     });
 
