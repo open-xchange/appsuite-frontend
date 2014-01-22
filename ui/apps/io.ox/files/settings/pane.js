@@ -24,14 +24,8 @@ define('io.ox/files/settings/pane',
     var filesSettings =  settings.createModel(filesSettingsModel),
         staticStrings =  {
             TITLE_FILES: gt.pgettext('app', 'Drive'),
-            DEFAULT_VIEW: gt('Default view'),
             SHOW_HIDDEN: gt('Show hidden files and folders')
         },
-        optionsView = [
-            {label: gt('List'), value: 'fluid:list'},
-            {label: gt('Icons'), value: 'fluid:icon'},
-            {label: gt('Tiles'), value: 'fluid:tile'}
-        ],
         filesViewSettings;
 
     var FilesSettingsView = Backbone.View.extend({
@@ -51,8 +45,7 @@ define('io.ox/files/settings/pane',
         render: function () {
             var self = this;
             self.$el.empty().append(tmpl.render('io.ox/files/settings', {
-                strings: staticStrings,
-                optionsViewDefault: optionsView
+                strings: staticStrings
             }));
 
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');

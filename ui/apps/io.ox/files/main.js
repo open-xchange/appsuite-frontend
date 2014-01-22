@@ -66,6 +66,13 @@ define('io.ox/files/main',
         // fix missing default folder
         options.folder = options.folder || folderAPI.getDefaultFolder('infostore') || 9;
 
+        //use last manually choosen perspective (mode) as default
+        win.on('change:perspective', function (e, name, long) {
+                if (settings.get('view') !== long) {
+                    settings.set('view', long).save();
+                }
+            });
+
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .pipe(commons.showWindow(win))
