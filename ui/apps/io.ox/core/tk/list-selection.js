@@ -34,7 +34,7 @@ define('io.ox/core/tk/list-selection', [], function () {
                 if (node.length) node.focus();
             })
             .on(Modernizr.touch ? 'tap' : 'click', SELECTABLE, function (e) {
-                self.triggerAction(e);
+                if (!self.isMultiple(e)) self.triggerAction(e);
             });
 
         if (Modernizr.touch) {

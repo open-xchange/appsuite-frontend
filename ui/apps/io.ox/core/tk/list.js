@@ -55,11 +55,13 @@ define('io.ox/core/tk/list',
         },
 
         onItemFocus: function () {
-            this.$el.removeAttr('tabindex').addClass('has-focus');
+            this.$el.removeAttr('tabindex');
+            if (this.ignoreFocus !== true) this.$el.addClass('has-focus');
         },
 
         onItemBlur: function () {
-            this.$el.attr('tabindex', 1).removeClass('has-focus');
+            this.$el.attr('tabindex', 1);
+            if (this.ignoreFocus !== true) this.$el.removeClass('has-focus');
         },
 
         onItemKeydown: function (e) {
@@ -167,6 +169,10 @@ define('io.ox/core/tk/list',
             this.model = new Backbone.Model();
             this.isBusy = false;
             this.complete = false;
+            this.ignoreFocus = !!options.ignoreFocus;
+
+            // permenent visual focus
+            if (this.ignoreFocus) this.$el.addClass('has-focus');
 
             // don't know why but listenTo doesn't work here
             this.model.on('change', this.onModelChange, this);
