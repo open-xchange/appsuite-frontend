@@ -109,7 +109,6 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         triggerAction: function (e) {
             var cid = $(e.currentTarget).attr('data-cid');
-            console.log('triggerAction', cid, e.currentTarget);
             this.view.trigger('selection:action', [cid]);
         },
 

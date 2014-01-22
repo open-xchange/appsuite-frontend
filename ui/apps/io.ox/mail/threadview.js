@@ -28,7 +28,19 @@ define('io.ox/mail/threadview',
         index: 100,
         draw: function () {
             this.$el.append(
-                $('<div class="thread-view-list abs">').append(
+                $('<nav class="back-navigation">').append(
+                    $('<div class="button">').append(
+                        $('<a href="#" class="back" tabindex="1">').append(
+                            $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
+                        )
+                    ),
+                    $('<div class="position">'),
+                    $('<div class="prev-next">').append(
+                        $('<a href="#" class="next-mail" tabindex="1">').append('<i class="icon-chevron-up">'),
+                        $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="icon-chevron-down">')
+                    )
+                ),
+                $('<div class="thread-view-list abs">').hide().append(
                     $('<header>'),
                     this.$ul = $('<ul class="thread-view list-view mail">'),
                     $('<footer>').append(
@@ -47,9 +59,9 @@ define('io.ox/mail/threadview',
         index: 200,
         draw: function () {
             this.$el.append(
-                $('<div class="detail-view-container abs">').append(
+                $('<div class="detail-view-container abs">').hide().append(
                     $('<nav class="thread-view-navigation">').append(
-                        $('<div class="overview">').append(
+                        $('<div class="button">').append(
                             $('<a href="#" class="show-overview" tabindex="1">').append(
                                 $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Overview'))
                             )
@@ -74,17 +86,16 @@ define('io.ox/mail/threadview',
 
         events: {
             'click .list-item': 'onClick',
-            'click .overview a': 'onOverview',
-            'click .previous-mail': 'onPrevious',
-            'click .next-mail': 'onNext',
+            'click .button a.back': 'onBack',
+            'click .button a.show-overview': 'onOverview',
+            'click .thread-view-navigation .previous-mail': 'onPrevious',
+            'click .thread-view-navigation .next-mail': 'onNext',
             'keydown': 'onKeydown'
         },
 
         empty: function () {
             this.$ul.empty().scrollTop(0);
-            this.$el.find('.thread-view-list').show();
-            this.$el.find('.thread-view-list header').hide();
-            this.$el.find('.thread-view-list footer').hide();
+            this.$el.find('.thread-view-list').hide();
             this.$el.find('.detail-view-container').hide();
             this.$el.find('.detail-view').empty();
         },
@@ -92,6 +103,7 @@ define('io.ox/mail/threadview',
         toggleDetailView: function (state) {
             this.$el.find('.detail-view-container').toggle(state);
             this.$el.find('.thread-view-list').toggle(!state);
+            this.updateNavigation();
         },
 
         showOverview: function () {
@@ -99,14 +111,14 @@ define('io.ox/mail/threadview',
         },
 
         updateHeader: function () {
-            this.$el.find('.thread-view-list header').empty().show().append(
+            this.$el.find('.thread-view-list header').empty().append(
                 $('<div class="subject">').text(util.getSubject(this.collection.at(0).toJSON())),
                 $('<div class="summary">').text(gt('%1$d messages in this conversation', this.collection.length))
             );
         },
 
         updateFooter: function () {
-            this.$el.find('.thread-view-list footer').show();
+            //this.$el.find('.thread-view-list footer').show();
         },
 
         updatePosition: function (cid) {
@@ -122,17 +134,31 @@ define('io.ox/mail/threadview',
             this.$el.find('.next-mail').toggleClass('disabled', this.index === 0);
         },
 
+        updateNavigation: function () {
+
+            var multiple = this.collection.length > 1,
+                inDetailView = this.$el.find('.detail-view-container:visible').length,
+                inListMode = this.app.props.get('preview') === 'none',
+                $el = this.$el;
+
+            function update(back, thread) {
+                $el.toggleClass('back-navigation-visible', back);
+                $el.toggleClass('thread-view-navigation-visible', thread);
+            }
+
+            // show thread navigation?
+            if (multiple && inDetailView) update(false, true);
+                else if (inListMode) update(true, false);
+                else update(false, false);
+        },
+
         showMail: function (cid) {
 
             var $detail = this.$el.find('.detail-view');
 
-            // show navigation?
-            $detail.parent().toggleClass('navigation-visible', this.collection.length > 1);
-
-            // update position
+            this.toggleDetailView(true);
             this.updatePosition(cid);
 
-            this.toggleDetailView(true);
             $detail.empty().scrollTop(0).busy();
             api.get(_.cid(cid)).done(function (data) {
                 $detail.idle();
@@ -162,6 +188,8 @@ define('io.ox/mail/threadview',
                     .value(),
                 a = _(filtered).pluck('cid').sort(),
                 b = _(this.collection.models).pluck('cid').sort();
+            // need to check navigation even if nothing changed
+            this.updateNavigation();
             // avoid unnecessary repaints
             if (_.isEqual(a, b)) return;
             // reset collection
@@ -174,6 +202,10 @@ define('io.ox/mail/threadview',
             this.index = 0;
             this.updateHeader();
             this.updateFooter();
+
+            if (this.collection.length > 0) this.$el.find('.thread-view-list').show();
+
+            this.updateNavigation();
 
             // draw detail view?
             if (this.collection.length === 1 || this.$el.find('[name="auto-select"]').prop('checked')) this.autoSelectMail();
@@ -217,6 +249,11 @@ define('io.ox/mail/threadview',
             // var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
             //     data = model.toJSON();
             // // DRAW!
+        },
+
+        onBack: function (e) {
+            e.preventDefault();
+            this.$el.closest('.preview-visible').removeClass('preview-visible');
         },
 
         onPrevious: function (e) {
@@ -267,6 +304,8 @@ define('io.ox/mail/threadview',
                 remove: this.onRemove,
                 reset: this.onReset
             });
+
+            this.listenTo(this.app.props, 'change:preview', this.updateNavigation);
 
             this.$ul = $();
             this.$detail = $();

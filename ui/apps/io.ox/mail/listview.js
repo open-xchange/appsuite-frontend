@@ -165,6 +165,12 @@ define('io.ox/mail/listview',
     /* small */
 
     ext.point('io.ox/mail/listview/item/small').extend({
+        id: 'unread',
+        index: 110,
+        draw: extensions.unreadClass
+    });
+
+    ext.point('io.ox/mail/listview/item/small').extend({
         id: 'col1',
         index: 100,
         draw: function (baton) {

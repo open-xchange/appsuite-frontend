@@ -57,9 +57,13 @@
     .box-sizing(border-box);
     &.column-1 { width: 30px; text-align: center; }
     &.column-2 { width: 30px; text-align: center; }
-    &.column-3 { width: 30%; }
-    &.column-4 { width: 60%; }
+    &.column-3 { width: 35%; }
+    &.column-4 { width: 55%; }
     &.column-5 { width: 100px; text-align: right; }
+}
+
+.list-view.mail .list-item.small.unread {
+    .from span.person, .subject, .date { font-weight: bold }
 }
 
 .list-view.mail .list-item.small .priority { float: none; }
@@ -249,10 +253,11 @@ textarea.inplace-editor {
     }
 }
 
-.detail-view-container {
+.thread-view-control {
 
     @height: 40px;
 
+    .back-navigation,
     .thread-view-navigation {
 
         display: none;
@@ -264,12 +269,13 @@ textarea.inplace-editor {
         top: 0px;
         z-index: 2;
         border-bottom: 1px solid #ccc;
+        background-color: white;
 
         a { outline: 0; }
         a:hover { text-decoration: none; }
         a.disabled { color: #aaa; cursor: default; }
 
-        .overview {
+        .button {
             display: table-cell;
             width: 40%;
             padding-left: 20px;
@@ -306,7 +312,12 @@ textarea.inplace-editor {
         z-index: 1;
     }
 
-    &.navigation-visible {
+    &.back-navigation-visible {
+        .back-navigation { display: table; }
+        .detail-view, .thread-view-list { top: @height; }
+    }
+
+    &.thread-view-navigation-visible {
         .thread-view-navigation { display: table; }
         .detail-view { top: @height; }
     }
