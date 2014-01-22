@@ -779,7 +779,7 @@ task("dist", [distDest], function () {
             });
     }
     function addL10n(spec) {
-        spec = replaceL10n(spec, 'l10n', i18n.languages());
+        spec = replaceL10n(spec, 'l10n', i18n.languages(true));
         if (path.existsSync('help')) {
             spec = replaceL10n(spec, 'help', fs.readdirSync('help/l10n'));
         }
@@ -805,7 +805,7 @@ task("dist", [distDest], function () {
             var languageNames = _.extend(
                 JSON.parse(fs.readFileSync('i18n/languagenames.json', 'utf8')),
                 JSON.parse(fs.readFileSync('i18n/overrides.json', 'utf8')));
-            _.each(i18n.languages(), function (Lang) {
+            _.each(i18n.languages(true), function (Lang) {
                 if (!(Lang in languageNames)) fail('Unknown language: ' + Lang);
                 var lang = Lang.toLowerCase().replace(/_/g, '-');
                 fs.writeFileSync(path.join(dest, 'i18n',
