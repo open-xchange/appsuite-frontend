@@ -131,24 +131,17 @@ function addMessage(filename, node, method, getSrc) {
     return pro.MAP.skip;
 }
 
-/**
- * Returns the list of available languages
- * @param packaged Whether only packaged languages should be returned.
- * A langauge can be excluded from packaging by specifying "X-Package: no" in
- * the header of its PO file.
- */
 exports.languages = function (packaged) {
     if (!exports.languages.value) {
-        exports.languages.value = _.map(utils.list("i18n/*.po"), function (s) {
-            return s.replace(/^i18n[\\\/](.*)\.po$/, "$1");
-        });
-        exports.languages.packaged = _.filter(exports.languages.value,
-            function (s) {
+        exports.languages.value = _.chain(utils.list("i18n/*.po"))
+            .filter(function (s) {
                 return !/^\s*"X-Package: (?:off|no|false|0)(?:\\n)?"\s*$/im
-                    .test(fs.readFileSync('i18n/' + s + '.po'));
-            });
+                    .test(fs.readFileSync(s));
+            }).map(function (s) {
+                return s.replace(/^i18n[\\\/](.*)\.po$/, "$1");
+            }).value();
     }
-    return packaged ? exports.languages.packaged : exports.languages.value;
+    return exports.languages.value;
 };
 
 function poFiles() {
