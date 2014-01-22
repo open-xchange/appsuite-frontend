@@ -235,7 +235,7 @@ define('io.ox/calendar/api',
                         action: 'update',
                         id: o.id,
                         folder: folder_id,
-                        timestamp: o.timestamp || _.now(),
+                        timestamp: o.timestamp || _.then(),
                         timezone: 'UTC'
                     },
                     data: o,
@@ -368,6 +368,8 @@ define('io.ox/calendar/api',
 
             // pause http layer
             http.pause();
+
+            api.trigger('beforedelete', o);
 
             _(o).each(function (obj) {
                 keys.push((obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.recurrence_position || 0));

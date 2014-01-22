@@ -145,6 +145,7 @@ if [ -x %{update} ]; then %{update}; fi
 %dir %{docroot}
 %{docroot}
 %exclude %{docroot}/help/l10n
+%config(noreplace) %{docroot}/apps/themes/.htaccess
 %dir /opt/open-xchange
 %dir /opt/open-xchange/sbin
 /opt/open-xchange/sbin/touch-appsuite
