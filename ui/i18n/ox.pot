@@ -1764,6 +1764,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/calendar/actions.js:274 apps/io.ox/calendar/actions.js:606
 #: apps/io.ox/calendar/invitations/register.js:35
@@ -4373,6 +4374,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: last week or last Monday
@@ -4382,6 +4384,7 @@ msgstr ""
 msgid "last"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
@@ -4395,6 +4398,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: second week or second Monday
@@ -4406,6 +4410,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: third week or third Monday
@@ -4415,6 +4420,7 @@ msgstr ""
 msgid "third"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
@@ -5074,6 +5080,7 @@ msgstr ""
 msgid "4 weeks"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. %1$d = Calendar week
