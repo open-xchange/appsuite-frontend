@@ -439,7 +439,7 @@ define.async('io.ox/core/tk/html-editor',
             relative_urls: false,
             remove_script_host: false,
             object_resizing: 0,
-            script_url: ox.base + '/apps/moxiecode/tiny_mce/tiny_mce.js',
+            script_url: ox.base + '/apps/3rd.party/tiny_mce/tiny_mce.js',
             skin: 'ox',
             theme: 'advanced',
 
@@ -804,7 +804,7 @@ define.async('io.ox/core/tk/html-editor',
     }
 
     // $.getScript adds cache busting query
-    return $.ajax({ url: ox.base + '/apps/moxiecode/tiny_mce/jquery.tinymce.js', cache: true, dataType: 'script' }).then(function () {
+    return $.ajax({ url: ox.base + '/apps/3rd.party/tiny_mce/jquery.tinymce.js', cache: true, dataType: 'script' }).then(function () {
         // publish editor class
         return Editor;
     });

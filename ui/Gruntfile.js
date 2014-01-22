@@ -18,6 +18,11 @@ module.exports = function (grunt) {
     // displays the execution time of grunt tasks
     if (grunt.option('benchmark')) require('time-grunt')(grunt);
 
+    // make grunt config extendable
+    grunt.config.extend = function (k, v) {
+        grunt.config(k, require('underscore').extend(grunt.config(k), v));
+    };
+
     // load installed grunt tasks from specified folder
     grunt.loadTasks('grunt/tasks');
 
@@ -26,6 +31,7 @@ module.exports = function (grunt) {
     grunt.registerTask('lint', ['newer:parallelize:jshint:all']);
     grunt.registerTask('force_update', ['assemble:base', 'assemble:appcache']);
     grunt.registerTask('bootjs', ['newer:assemble:ox', 'newer:concat:bootjs']);
+    grunt.registerTask('tinymce_update', ['curl:tinymceMain', 'curl:tinymceLanguagePack', 'unzip:tinymceMain', 'unzip:tinymceLanguagePack', 'copy:tinymce']);
 
     // testing stuff
     grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
