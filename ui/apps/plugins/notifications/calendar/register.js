@@ -268,13 +268,15 @@ define('plugins/notifications/calendar/register',
                 setTimeout(function () {
                     //get updated data
                     calAPI.get(reminder.get('caldata')).done(function (calObj) {
-                        self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
-                        //fill in new data
-                        reminder.set('caldata', calObj);
-                        reminder.set('title', calObj.title);
-                        reminder.set('location', calObj.location);
-                        reminder.set('time', util.getTimeInterval(calObj));
-                        self.collection.add(reminder);
+                        if (!calObj.alarm) {//alarmtime was removed in the meantime, so no reminder to add
+                            self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
+                            //fill in new data
+                            reminder.set('caldata', calObj);
+                            reminder.set('title', calObj.title);
+                            reminder.set('location', calObj.location);
+                            reminder.set('time', util.getTimeInterval(calObj));
+                            self.collection.add(reminder);
+                        }
                     });
 
                 }, min * 60000);
@@ -391,6 +393,7 @@ define('plugins/notifications/calendar/register',
             }
 
             reminderAPI
+                .on('remove:reminder', removeReminders)
                 .on('add:calendar:reminder', function (e, reminder) {
 
                     var counter = reminder.length,
