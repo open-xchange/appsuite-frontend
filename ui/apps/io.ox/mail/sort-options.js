@@ -206,6 +206,33 @@ define('io.ox/mail/sort-options',
         }
     });
 
+    function toggleSelection(e) {
+        e.preventDefault();
+        var i = $(this).find('i'),
+            selection = e.data.baton.app.listView.selection;
+        if (i.hasClass('icon-check')) {
+            i.attr('class', 'icon-check-empty');
+            selection.selectNone();
+        } else {
+            i.attr('class', 'icon-check');
+            selection.selectAll();
+        }
+    }
+
+    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+        id: 'select-all',
+        index: 100,
+        draw: function (baton) {
+            this.append(
+                $('<a href="#" class="select-all">').append(
+                    $('<i class="icon-check-empty">'),
+                    $.txt('Tout sélectionner')
+                )
+                .on('click', { baton: baton }, toggleSelection)
+            );
+        }
+    });
+
     //     // grid.on('change:prop', drawGridOptions);
     //     // settings.on('change', handleSettingsChange);
     //     // drawGridOptions(undefined, 'inital');

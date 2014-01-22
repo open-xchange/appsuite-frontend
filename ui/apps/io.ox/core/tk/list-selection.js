@@ -187,6 +187,18 @@ define('io.ox/core/tk/list-selection', [], function () {
             }
         },
 
+        selectAll: function () {
+            var items = this.getItems();
+            this.check(items.slice(0, items.length));
+            items.eq(0).attr('tabindex', '1').focus();
+            this.triggerChange();
+        },
+
+        selectNone: function () {
+            this.clear();
+            this.triggerChange();
+        },
+
         onKeydown: function (e) {
 
             if (e.which === 13) return this.triggerAction(e);
