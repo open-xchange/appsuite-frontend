@@ -201,7 +201,7 @@ define('plugins/notifications/tasks/register',
                         if (reset) {
                             items.push(tmp);
                         } else {
-                            notifications.collection.push(tmp, {silent: true});
+                            notifications.collection.push(tmp, {merge: true, silent: true});//update data but don't throw events until we are finished(causes many redraws)
                         }
                     }
                 });
@@ -654,6 +654,13 @@ define('plugins/notifications/tasks/register',
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);
                 });
+            }).on('mark:task:to-be-confirmed', function (e, ids) {
+                _(ids).each(function (id) {
+                    if (!hiddenInvitationItems[_.ecid(id)]) {
+                        notifications.collection.push(new Backbone.Model(id), {silent: true});
+                    }
+                });
+                notifications.collection.trigger('add');
             }).on('delete', function (e, ids) {
                 _(ids).each(function (id) {
                     notifications.collection.remove(notifications.collection._byId[id.id]);

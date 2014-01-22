@@ -29,85 +29,46 @@ define('io.ox/tasks/api',
         /**
          * notificate
          * @private
-         * @param  {array} ids (objects with id and folder_id)
+         * @param  {object} currentvalues (object with current task data from backend(after update/create))
          * @param  {object} modifications
+         * qparam  {boolean} create (if this was called after a create action, default = false)
          * @fires  api#mark:task:confirmed (ids)
          * @fires  api#mark:overdue (ids)
          * @fires  api#unmark:overdue (ids)
          * @return {undefined}
          */
-        checkForNotifications = function (ids, modifications) {
-            //TODO: existance to folder_id not reliable indicating that it's a
-            //      move operation (change due date for example)
-            if (modifications.folder_id && modifications.folder_id !== ids[0].folder_id) {//move operation! Every notifications needs to be reseted or they will link to unavailable tasks
+        checkForNotifications = function (currentValues, modifications, create) {
+            if (modifications.folder_id && modifications.folder_id !== currentValues.folder_id) {//check move
                 api.getTasks();
                 require(['io.ox/core/api/reminder'], function (reminderAPI) {
                     reminderAPI.getReminders();
                 });
-                return;
-            }
-
-            var addArray = [],
-                removeArray = [];
-            if (modifications.status) {//status parameter can be string or integer. Force it to be an integer
-                modifications.status = parseInt(modifications.status, 10);
-            }
-
-            if (modifications.participants) {
-                var myId = ox.user_id,
-                    triggered = false;
-                _(modifications.participants).each(function (obj) { //user is added to a task
-                    if (obj.id === myId) {
-                        triggered = true;
-                        api.getTasks();
-                    }
-                });
-                //get all data if not already triggered
-                if (!triggered) {
-                    api.get(ids[0]).done(function (data) {//only occurs if only one task is given
-                        if (data.participants.length > 0) {//all participants are removed
-                            api.trigger('mark:task:confirmed', ids); //unmark:confirmation
-                        } else {
-                            _(data.participants).each(function (obj) {
-                                if (obj.id === myId) { //user is in participants so there must already be a notification
-                                    triggered = true;
-                                }
-                            });
-                            if (!triggered) { //user is not in participants anymore
-                                api.trigger('mark:task:confirmed', ids); //unmark:confirmation
-                            }
-                        }
+            } else {
+                if ((modifications.alarm !== undefined) || (create && modifications.alarm)) {//check alarm
+                    require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                        reminderAPI.getReminders();
                     });
                 }
-            }
-
-            if (modifications.alarm || modifications.alarm === null) {//reminders need updates because alarm changed is set or unset
-                require(['io.ox/core/api/reminder'], function (reminderAPI) {
-                    reminderAPI.getReminders();
-                });
-            }
-            //check overdue
-            if (modifications.status === 3 || modifications.end_date === null) {
-                api.trigger('unmark:overdue', ids);
-            } else if (modifications.status || modifications.end_date) {
-                //current values are needed for further checks
-                api.getList(ids, false).done(function (list) {
-                    _(list).each(function (task) {
-                        if (task.status !== 3 && task.end_date) {
-                            if (task.end_date < _.now()) {
-                                addArray.push(task);
-                            } else {
-                                removeArray.push(task);
-                            }
+                if (modifications.participants) {//check participants
+                    var myId = ox.user_id,
+                        triggered = false;
+                    _(modifications.participants).each(function (obj) { //user is added to a task
+                        if (obj.id === myId) {
+                            triggered = true;
+                            api.trigger('mark:task:to-be-confirmed', [currentValues]);
                         }
                     });
-                    if (addArray.length > 0) {
-                        api.trigger('mark:overdue', addArray);
+                    if  (!triggered) {//user is not in the current participants
+                        api.trigger('mark:task:confirmed', [currentValues]);
                     }
-                    if (removeArray.length > 0) {
-                        api.trigger('unmark:overdue', removeArray);
+                }
+                if (modifications.status || (modifications.end_date !== undefined)) {//check overdue
+                    if (currentValues.status !== 3 && currentValues.end_date < _.utc()) {
+                        api.trigger('mark:overdue', [currentValues]);
+                    } else {
+                        api.trigger('unmark:overdue', [currentValues]);
                     }
-                });
+                }
             }
         },
 
@@ -308,8 +269,11 @@ define('io.ox/tasks/api',
         if (task.alarm === null) {//task.alarm must not be null on creation, it's only used to delete an alarm on update actions
             delete task.alarm;    //leaving it in would throw a backend error
         }
-
-        if (task.status === 3 || task.status === '3') {
+        
+        if (task.status) {//make sure we have an integer here
+            task.status = parseInt(task.status, 10);
+        }
+        if (task.status === 3) {
             task.date_completed = task.date_completed || _.now();//make sure we have date_completed
         } else {
             delete task.date_completed;//remove invalid date_completed
@@ -327,6 +291,7 @@ define('io.ox/tasks/api',
                                 sort: api.options.requests.all.sort,
                                 order: api.options.requests.all.order});
             cacheObj.id = obj.id;
+            //all cache
             return api.caches.all.get(cacheKey).then(function (cachevalue) {
                 if (cachevalue) {//only add if the key is there
                     cachevalue = cachevalue.concat(cacheObj);
@@ -337,10 +302,20 @@ define('io.ox/tasks/api',
                 }
             });
         }).then(function () {
+            // add to cache
+            return $.when(
+                api.caches.get.add(task),
+                api.caches.list.merge(task).done(function (ok) {
+                    if (ok) {
+                        api.trigger('refresh.list');
+                    }
+                })
+           );
+        }).then(function () {
             if (attachmentHandlingNeeded) {
                 api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
-            checkForNotifications([{id: response.id, folder_id: task.folder_id}], task);
+            checkForNotifications(task, task, true);
             api.trigger('create', task);
             return response;
         });
@@ -383,7 +358,10 @@ define('io.ox/tasks/api',
             useFolder = api.getDefaultFolder();
         }
 
-        if (task.status === 3 || task.status === '3') {
+        if (task.status) {//make sure we have an integer here
+            task.status = parseInt(task.status, 10);
+        }
+        if (task.status === 3) {
             task.date_completed = task.date_completed || _.now();// make sure we have date_completed
         } else if (task.status !== 3 && task.status !== '3') {
             task.date_completed = null;
@@ -401,13 +379,19 @@ define('io.ox/tasks/api',
             data: task,
             appendColumns: false
         }).pipe(function () {
+            if (task.folder_id && task.folder_id !== useFolder) {//move operation
+                useFolder = task.folder_id; //make sure we get the item in it's new location
+            }
             // update cache
-            return $.when(api.removeFromCache(key), updateAllCache([task], useFolder, task));
-        }).pipe(function () {
+            return $.when(
+                    api.removeFromCache(key)
+                        .then(function () {return api.get({id: task.id, folder_id: useFolder}); }),//api.get updates list and get caches
+                        updateAllCache([task], useFolder, task));
+        }).pipe(function (data) {
             //return object with id and folder id needed to save the attachments correctly
             obj = {folder_id: useFolder, id: task.id};
             //notification check
-            checkForNotifications([obj], task);
+            checkForNotifications(data, task, true);
             if (attachmentHandlingNeeded) {
                 api.addToUploadList(_.ecid(task));//to make the detailview show the busy animation
             }
@@ -422,7 +406,7 @@ define('io.ox/tasks/api',
     };
 
     /**
-     * update list of taks used by done/undone and move actions when used with multiple selection
+     * update list of tasks used by done/undone and move actions when used with multiple selection
      * @param  {array}    list of task objects (id, folder_id)
      * @param  {object}   modifications
      * @fires  api#refresh.all
@@ -457,9 +441,12 @@ define('io.ox/tasks/api',
             // update cache
             return $.when(api.removeFromCache(keys), updateAllCache(list, modifications.folder_id || list[0].folder_id, modifications));
         }).done(function () {
-            //notification check
-            checkForNotifications(list, modifications);
-            //trigger refresh, for vGrid etc
+            //update notifications
+            //no exact checks here because multiple may contain a very large number of items
+            api.getTasks();
+            require(['io.ox/core/api/reminder'], function (reminderAPI) {
+                reminderAPI.getReminders();
+            });
             api.trigger('refresh.all');
             refreshPortal();
         });
@@ -480,6 +467,8 @@ define('io.ox/tasks/api',
 
             if (!task.length) {
                 return api.update(task, newFolder);
+            } else if (task.length === 1) {
+                return api.update(task[0], newFolder);
             } else {
                 return api.updateMultiple(task, {folder_id: newFolder});
             }
