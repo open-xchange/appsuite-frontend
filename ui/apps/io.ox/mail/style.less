@@ -13,6 +13,39 @@
 
 /* preview panes */
 
+.classic-toolbar-visible {
+    .window-content { top: 40px; }
+}
+
+.classic-toolbar {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 39px;
+    background-color: #eee;
+    border-bottom: 1px solid #ccc;
+    margin: 0;
+    padding: 0;
+    li {
+        list-style: none;
+        display: inline-block;
+        padding: 0;
+        a {
+            display: inline-block;
+            line-height: 21px;
+            padding: 9px 14px;
+            border-right: 1px solid white;
+            color: #333;
+            &:hover {
+                text-decoration: none;
+            }
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+}
+
 .preview-right {
     .leftside { width: 330px; }
     .rightside { left: 330px; }
@@ -73,6 +106,10 @@
 .preview-bottom .inplace-reply { margin: 14px; }
 
 .list-view.mail.thread-view .list-item.small { padding: 7px 14px 7px 48px; }
+
+.io-ox-mail-window .foldertree-sidepanel {
+    left: 0;
+}
 
 /* ListView */
 
