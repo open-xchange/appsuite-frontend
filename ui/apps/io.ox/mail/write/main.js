@@ -51,7 +51,6 @@ define('io.ox/mail/write/main',
             self.busy();
             baton.app.saveDraft()
                 .done(function () {
-                    autoSavedMail = false;
                     self.idle();
                 });
         }
@@ -66,10 +65,9 @@ define('io.ox/mail/write/main',
     var UUID = 1,
         blocked = {},
         timerScale = {
-        minute: 60000, //60s
-        minutes: 60000
-    },
-        autoSavedMail = false;
+            minute: 60000, //60s
+            minutes: 60000
+        };
 
     function stopAutoSave(app) {
         if (app.autosave) {
@@ -100,7 +98,6 @@ define('io.ox/mail/write/main',
             // only auto-save if something changed (see Bug #26927)
             if (app.dirty()) {
                 app.saveDraft();
-                autoSavedMail = true;
             } else {
                 delay();
             }
@@ -1248,8 +1245,7 @@ define('io.ox/mail/write/main',
 
             prepareMailForSending(mail);
 
-            if (mail.data.sendtype !== '4') {
-                // send!
+            if (mail.data.sendtype !== mailAPI.SENDTYPE.EDIT_DRAFT) {
                 mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
             }
 
@@ -1319,17 +1315,6 @@ define('io.ox/mail/write/main',
 
             var def = $.Deferred();
 
-            function splitMsgref(msgref) {
-                var splitArray = msgref.split('/'),
-                    id = _.last(splitArray),
-                    path = _.first(splitArray, _.indexOf(splitArray, id)).join('/');
-
-                return {
-                    id: id,
-                    folder: path
-                };
-            }
-
             var clean = function () {
                 // mark as not dirty
                 app.dirty(false);
@@ -1353,18 +1338,11 @@ define('io.ox/mail/write/main',
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-
-                                if (autoSavedMail) {
-                                    var mail = app.getMail();
-                                    mailAPI.remove([splitMsgref(mail.data.msgref)]);
-                                }
-
                                 clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
                                 def.resolve();
                             } else if (action === 'savedraft') {
                                 app.saveDraft().done(function () {
                                     clean();
-                                    autoSavedMail = false;
                                     def.resolve();
                                 }).fail(function (e) {
                                     def.reject(e);
@@ -1375,12 +1353,6 @@ define('io.ox/mail/write/main',
                         });
                 });
             } else {
-
-                if (autoSavedMail) {
-                    var mail = app.getMail();
-                    mailAPI.remove([splitMsgref(mail.data.msgref)]);
-                }
-                
                 clean();
                 def.resolve();
             }
