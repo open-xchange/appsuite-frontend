@@ -646,10 +646,10 @@ define('io.ox/calendar/week/view',
             renderTimeline();
             setInterval(renderTimeline, 60000);
 
-            // mattes: guess we don't need this any more
-            // if (!Modernizr.touch) {
-            //     this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
-            // }
+            // mattes: guess we don't need this any more in week and work week view
+            if (!Modernizr.touch && this.columns === 1) {
+                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
+            }
 
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px'});
 
