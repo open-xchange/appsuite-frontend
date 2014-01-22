@@ -19,7 +19,7 @@ define('io.ox/portal/settings/pane',
      'io.ox/portal/widgets',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
-     'apps/io.ox/core/tk/jquery-ui.min.js',
+     'apps/3rd.party/jquery-ui.min.js',
      'less!io.ox/portal/style'
     ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings) {
 

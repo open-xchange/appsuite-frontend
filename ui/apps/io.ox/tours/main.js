@@ -17,7 +17,7 @@ define('io.ox/tours/main',
      'io.ox/core/notifications',
      'io.ox/core/extPatterns/stage',
      'gettext!io.ox/tours',
-     'css!hopscotch/hopscotch.css'
+     'css!3rd.party/hopscotch/hopscotch.css'
     ], function (ext, notifications, Stage, gt) {
 
     'use strict';
@@ -838,7 +838,7 @@ define('io.ox/tours/main',
         },
 
         runTour: function (tourname) {
-            require(['apps/hopscotch/hopscotch-0.1.js']).done(function () {
+            require(['apps/3rd.party/hopscotch/hopscotch-0.1.js']).done(function () {
                 var tour = tours()[tourname],
                     hs = window.hopscotch;
 

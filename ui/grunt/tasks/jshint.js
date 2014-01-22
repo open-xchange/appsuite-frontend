@@ -13,7 +13,7 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     grunt.config('jshint', {
 
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
             src: ['spec/**/*_spec.js']
         },
         all: {
-            src: ['Gruntfile.js', 'grunt/conf/*.js', 'apps/**/*.js']
+            src: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js']
         }
 
     });

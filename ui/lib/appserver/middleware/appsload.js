@@ -59,7 +59,7 @@ function create(options) {
         var files = [], remoteCounter = 0;
         for (var i in list) {
             var m = /^(?:\/(text|raw);)?([\w\/+-]+(?:\.[\w\/+-]+)*)$/.exec(list[i]),
-                isTZ = m[2].slice(0, tzModule.length) === tzModule;
+                isTZ = m && m[2].slice(0, tzModule.length) === tzModule;
             if (!m) {
                 files.push(invalid(list[i]));
                 continue;

@@ -13,7 +13,7 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     grunt.config('local', grunt.file.exists('local.conf.json') ? grunt.file.readJSON('local.conf.json') : {});
 };

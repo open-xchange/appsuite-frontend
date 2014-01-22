@@ -32,7 +32,7 @@ define('io.ox/files/mediaplayer',
      'io.ox/files/actions',
      'less!io.ox/files/mediaplayer',
      'css!3rd.party/mediaelement/mediaelementplayer.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'
+     'apps/3rd.party/jquery-ui.min.js'
     ], function (commons, gt, api) {
 
     'use strict';

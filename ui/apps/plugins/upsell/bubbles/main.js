@@ -54,7 +54,7 @@ define('plugins/upsell/bubbles/main',
     };
 
     showBubble = function () {
-        require(['apps/hopscotch/hopscotch-0.1.js', 'css!hopscotch/hopscotch.css']).done(function () {
+        require(['apps/3rd.party/hopscotch/hopscotch-0.1.js', 'css!3rd.party/hopscotch/hopscotch.css']).done(function () {
             var calloutMgr = window.hopscotch.getCalloutManager(),
                 currentApp = ox.ui.App.getCurrentApp(),
                 currentType = currentApp.attributes.name;

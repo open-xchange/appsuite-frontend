@@ -13,7 +13,7 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     grunt.config('modernizr', {
         // [REQUIRED] Path to the build you're using for development.

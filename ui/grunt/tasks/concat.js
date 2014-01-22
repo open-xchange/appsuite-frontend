@@ -13,7 +13,7 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     grunt.config('concat', {
 
@@ -93,6 +93,14 @@ module.exports = function(grunt) {
                 }
             ]
         },
+        mobiscroll: {
+            files: [
+                {
+                    src: ['lib/mobiscroll/js/mobiscroll.core.js', 'lib/mobiscroll/js/mobiscroll.datetime.js', 'lib/mobiscroll/js/mobiscroll.ios7.js'],
+                    dest: 'build/apps/3rd.party/mobiscroll/mobiscroll.js'
+                }
+            ]
+        },
         manifests: {
             options: {
                 banner: '[',
@@ -122,16 +130,6 @@ module.exports = function(grunt) {
                 {
                     src: ['apps/**/manifest.json'],
                     dest: 'build/manifests/<%= pkg.name %>.json',
-                }
-            ]
-        },
-        libs: {
-            files: [
-                {
-                    src: ['hopscotch/*'],
-                    cwd: 'lib',
-                    expand: true,
-                    dest: 'build/apps/'
                 }
             ]
         },

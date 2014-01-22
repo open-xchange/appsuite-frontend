@@ -1,5 +1,3 @@
-// NOJSHINT
-
 //---------------------------------------------------------------------
 // QRCode for JavaScript
 //
@@ -16,7 +14,7 @@
 //
 //---------------------------------------------------------------------
 
-define("io.ox/contacts/view-qrcode", function () {
+define("3rd.party/view-qrcode", function () {
 
     function QR8bitByte(data) {
         this.mode = QRMode.MODE_8BIT_BYTE;

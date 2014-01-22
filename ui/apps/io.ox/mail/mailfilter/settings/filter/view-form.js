@@ -19,7 +19,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
      'io.ox/backbone/views',
      'io.ox/mail/mailfilter/settings/filter/form-elements',
      'io.ox/mail/mailfilter/settings/filter/defaults',
-     'apps/io.ox/core/tk/jquery-ui.min.js'
+     'apps/3rd.party/jquery-ui.min.js'
     ], function (notifications, gt, ext, forms, views, elements, DEFAULTS) {
 
     'use strict';
@@ -203,7 +203,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     rulePosition = adjustRulePosition(self.options.listView.collection.models, ['vacation']);
                     this.model.set('position', rulePosition);
                 }
-               
+
                 this.model.save().then(function (id) {
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id)) {

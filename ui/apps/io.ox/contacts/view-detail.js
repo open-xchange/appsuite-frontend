@@ -655,7 +655,7 @@ define('io.ox/contacts/view-detail',
                 show = function (e) {
                     e.preventDefault();
                     node.empty().busy();
-                    require(['io.ox/contacts/view-qrcode'], function (qr) {
+                    require(['3rd.party/view-qrcode'], function (qr) {
                         var vc = qr.getVCard(data);
                         node.append(
                             $('<span class="qrcode">').append(

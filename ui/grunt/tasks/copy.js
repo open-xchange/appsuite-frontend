@@ -13,7 +13,7 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     grunt.config('copy', {
 
@@ -43,6 +43,12 @@ module.exports = function(grunt) {
                     cwd: 'bower_components/',
                     dest: 'build/apps/3rd.party/',
                     filter: 'isFile'
+                },
+                {
+                    expand: true,
+                    src: ['jquery-ui.min.js', 'view-qrcode.js', 'hopscotch/*', 'mobiscroll/css/*'],
+                    cwd: 'lib/',
+                    dest: 'build/apps/3rd.party/'
                 },
                 {
                     expand: true,
