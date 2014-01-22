@@ -23,7 +23,7 @@ module.exports = function (grunt) {
             },
             files: [{
                 src: ['i18n/*.po'],
-                dest: 'build/src/apps/'
+                dest: 'build/src/apps/i18n/'
             }]
         }
 
@@ -49,6 +49,47 @@ module.exports = function (grunt) {
             },
         }
 
+    });
+
+    grunt.registerMultiTask('migrate_po', 'Migrate the po files to new version', function () {
+        var done = this.async();
+        var PO = require('pofile');
+        var files = this.files;
+        var dest = this.files[0].dest;
+        var last = files[0].src.length;
+
+        PO.load('i18n/ox.pot', function (err, oxPot) {
+            var modulesHash = oxPot.items.reduce(function (acc, item) {
+                acc[item.msgid] = item.references.filter(function (ref) {
+                    return ref.indexOf('module:') === 0;
+                });
+                return acc;
+            }, {});
+            files[0].src.forEach(function (srcFile, index) {
+                PO.load(srcFile, function (err, po) {
+                    po.items.forEach(function (item) {
+                        (modulesHash[item.msgid] || []).forEach(function (module) {
+                            item.references.push(module);
+                        });
+                    });
+
+                    grunt.file.write(dest + srcFile, po.toString());
+
+                    if (index === last) {
+                        done(true);
+                    }
+                });
+            });
+        });
+    });
+
+    grunt.config('migrate_po', {
+        i18n: {
+            files: [{
+                src: 'i18n/*.po',
+                dest: 'tmp/migrate_po/'
+            }]
+        }
     });
 
     grunt.loadNpmTasks('grunt-require-gettext');
