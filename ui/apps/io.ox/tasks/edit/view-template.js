@@ -59,6 +59,13 @@ define('io.ox/tasks/edit/view-template',
                             if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
                                 baton.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                             }
+                            //accept any formating
+                            if (baton.model.get('actual_costs')) {
+                                baton.model.set('actual_costs', ('' + baton.model.get('actual_costs')).replace(/,/g, '.'));
+                            }
+                            if (baton.model.get('target_costs')) {
+                                baton.model.set('target_costs', ('' + baton.model.get('target_costs')).replace(/,/g, '.'));
+                            }
 
                             baton.model.save().done(function () {
                                 app.markClean();

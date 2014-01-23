@@ -29,12 +29,20 @@ define('io.ox/backbone/validation',
         text: function () {
             return true;
         },
+        anyFloat: function (val) {//numbers with . or , as a separator are valid 1.23 or 1,23 for example
+            val = ('' + val).replace(/,/g, '.');
+            var isValid = (emptycheck(val)) || //empty value is valid (if not, add the mandatory flag)
+            (!isNaN(parseFloat(val, 10)) &&  //check if its a number
+            (parseFloat(val, 10).toString().length === val.toString().length));//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
+            return isValid ||
+              gt('Please enter a valid number');
+        },
         number: function (val) {
             var isValid = (emptycheck(val)) || //empty value is valid (if not, add the mandatory flag)
                           (!isNaN(parseFloat(val, 10)) &&  //check if its a number
                           (parseFloat(val, 10).toString().length === val.toString().length));//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
             return isValid ||
-                'Please enter a valid number';
+                gt('Please enter a valid number');
         },
         array: function (val) {
             return _.isArray(val) ||

@@ -88,8 +88,8 @@ define('io.ox/tasks/model',
         priority: {format: 'number'},
         percent_completed: {format: 'number'},
         number_of_attachments: {format: 'number'},
-        actual_costs: {format: 'number'},
-        target_costs: {format: 'number'},
+        actual_costs: {format: 'anyFloat'},//floats with , or . as separator
+        target_costs: {format: 'anyFloat'},//floats with , or . as separator
         actual_duration: {format: 'number'},
         target_duration: {format: 'number'},
         private_flag: { format: 'boolean'}
