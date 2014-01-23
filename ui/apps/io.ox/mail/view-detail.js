@@ -609,6 +609,7 @@ define('io.ox/mail/view-detail',
                     .addClass('mail-detail-decorator')
                     .on('redraw', function (e, tmp) {
                         copyThreadData(tmp, data);
+                        container.off('redraw');
                         container.replaceWith(self.draw(tmp));
                     });
 
