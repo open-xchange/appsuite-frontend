@@ -56,17 +56,14 @@ define('io.ox/tasks/settings/pane',
         id: 'notifications',
         draw: function () {
             var preferences = [{label: gt('Yes'), value: true}, {label: gt('No'), value: false}],
-                preferenceNewChangedDeleted = settings.get('notifyNewModifiedDeleted', 'true'),
-                preferenceAcceptDeclinedCreator = settings.get('notifyAcceptedDeclinedAsCreator', 'true'),
-                preferenceAcceptDeclinedParticipant = settings.get('notifyAcceptedDeclinedAsParticipant', 'true'),
 
-                buildInputRadio = function (list, selected, name) {
+                buildInputRadio = function (list, name) {
                     return _.map(list, function (option) {
                         var o = $('<input type="radio" name="' + name + '">').val(option.value)
-                        .on('click', function () {
+                        .on('change', function () {
                             model.set(name, boolParser(this.value));
                         });
-                        if (selected === option.value) o.prop('checked', true);
+                        if (model.get(name) === option.value) o.prop('checked', true);
                         return $('<label class="radio">').text(option.label).append(o);
                     });
                 },
@@ -81,7 +78,7 @@ define('io.ox/tasks/settings/pane',
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').addClass('control-label').text(gt('Email notification for New, Changed, Deleted?')),
                         $('<div>').addClass('controls').append(
-                            buildInputRadio(preferences, preferenceNewChangedDeleted, 'notifyNewModifiedDeleted')
+                            buildInputRadio(preferences, 'notifyNewModifiedDeleted')
                         )
                     )
                 ),
@@ -90,13 +87,13 @@ define('io.ox/tasks/settings/pane',
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').addClass('control-label').text(gt('Email notification for task creator?')),
                         $('<div>').addClass('controls').append(
-                            buildInputRadio(preferences, preferenceAcceptDeclinedCreator, 'notifyAcceptedDeclinedAsCreator')
+                            buildInputRadio(preferences, 'notifyAcceptedDeclinedAsCreator')
                         )
                     ),
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').addClass('control-label').text(gt('Email notification for task participant?')),
                         $('<div>').addClass('controls').append(
-                            buildInputRadio(preferences, preferenceAcceptDeclinedParticipant, 'notifyAcceptedDeclinedAsParticipant')
+                            buildInputRadio(preferences, 'notifyAcceptedDeclinedAsParticipant')
                         )
                     )
                 )
