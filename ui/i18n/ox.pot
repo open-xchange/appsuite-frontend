@@ -9,6 +9,185 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#: apps/io.ox/core/commons.js:52
+msgid "<b>%1$d</b> elements selected"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:165
+msgid "Selection Details"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:186
+msgid "No elements selected"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:359
+msgid "Searched in all folders"
+msgstr ""
+
+#. Searched in: <folder name>
+#: apps/io.ox/core/commons.js:365
+msgid "Searched in"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:649
+msgid "Items"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:656
+msgid "Back"
+msgstr ""
+
+#: apps/io.ox/core/commons.js:791 apps/io.ox/core/tk/autocomplete.js:237
+msgid "Retry"
+msgstr ""
+
+#: apps/io.ox/core/main.js:168 apps/io.ox/files/settings/pane.js:26
+#: apps/io.ox/launchpad/main.js:35
+msgctxt "app"
+msgid "Drive"
+msgstr ""
+
+#: apps/io.ox/files/settings/pane.js:27
+msgid "Show hidden files and folders"
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:847 apps/io.ox/calendar/week/view.js:112
+msgid "Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key."
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:786 apps/io.ox/calendar/month/perspective.js:425
+#: apps/io.ox/calendar/util.js:155 apps/io.ox/calendar/util.js:192
+#: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:702
+#: apps/plugins/portal/birthdays/register.js:84
+#: apps/plugins/portal/birthdays/register.js:153
+msgid "Today"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js:651
+msgid "Doubleclick in this row for whole day appointment"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js:679
+msgid "Next Day"
+msgstr ""
+
+#: apps/io.ox/calendar/util.js:161 apps/io.ox/calendar/week/view.js:679
+msgid "Next Week"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js:680
+msgid "Previous Day"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js:680
+msgid "Previous Week"
+msgstr ""
+
+#: apps/io.ox/calendar/week/view.js:799 apps/io.ox/calendar/week/view.js:803
+msgid "Click for whole day appointment"
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. %1$d = Calendar week
+#: apps/io.ox/calendar/month/view.js:133 apps/io.ox/calendar/week/view.js:831
+msgid "CW %1$d"
+msgstr ""
+
+#. add confirmation status behind appointment title
+#. %1$s = apppintment title
+#, c-format
+#: apps/io.ox/calendar/month/view.js:367 apps/io.ox/calendar/week/view.js:1681
+msgid "%1$s (Tentative)"
+msgstr ""
+
+#: apps/plugins/notifications/tasks/register.js:35
+msgid "Overdue Tasks"
+msgstr ""
+
+#: apps/plugins/notifications/tasks/register.js:37
+msgid "Press to hide all notifications for overdue tasks."
+msgstr ""
+
+#: apps/io.ox/core/tk/reminder-util.js:75
+#: apps/plugins/notifications/tasks/register.js:49
+#: apps/plugins/notifications/tasks/register.js:461
+msgid "end date "
+msgstr ""
+
+#: apps/plugins/notifications/tasks/register.js:54
+msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
+msgstr ""
+
+#: apps/io.ox/core/wizard/registry.js:50 apps/io.ox/tasks/actions.js:128
+#: apps/io.ox/tasks/actions.js:474 apps/io.ox/tasks/edit/view-template.js:224
+#: apps/io.ox/tasks/print.js:31 apps/io.ox/tasks/util.js:207
+#: apps/plugins/notifications/tasks/register.js:69
+msgid "Done"
+msgstr ""
+
+#: apps/plugins/notifications/tasks/register.js:245
+msgid "Task reminders"
+msgstr ""
+
+#: apps/plugins/notifications/tasks/register.js:248
+msgid "Press to hide all task reminders."
+msgstr ""
+
+#: apps/plugins/notifications/tasks/register.js:444
+msgid "Task invitations"
+msgstr ""
+
+#: apps/plugins/notifications/tasks/register.js:447
+msgid "Press to hide all task invitations."
+msgstr ""
+
+#: apps/plugins/notifications/tasks/register.js:466
+msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
+msgstr ""
+
+#: apps/plugins/notifications/tasks/register.js:479
+msgid "Accept/Decline"
+msgstr ""
+
+#: apps/plugins/notifications/calendar/register.js:89
+#: apps/plugins/notifications/calendar/register.js:90
+#: apps/plugins/notifications/tasks/register.js:481
+#: apps/plugins/notifications/tasks/register.js:482
+msgid "Accept invitation"
+msgstr ""
+
+#: apps/plugins/notifications/calendar/register.js:32
+msgid "Appointment invitations"
+msgstr ""
+
+#: apps/plugins/notifications/calendar/register.js:35
+msgid "Press to hide all appointment invitations."
+msgstr ""
+
+#: apps/plugins/notifications/calendar/register.js:47
+msgid "Appointment reminders"
+msgstr ""
+
+#: apps/plugins/notifications/calendar/register.js:50
+msgid "Press to hide all appointment reminders."
+msgstr ""
+
+#: apps/plugins/notifications/calendar/register.js:73
+msgid "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
+msgstr ""
+
+#: apps/plugins/notifications/calendar/register.js:87
+msgid "Accept / Decline"
+msgstr ""
+
+#: apps/plugins/notifications/calendar/register.js:104
+msgctxt "in"
+msgid "in %d minute"
+msgid_plural "in %d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
 #: apps/io.ox/calendar/edit/template.js:77
 #: apps/io.ox/contacts/distrib/create-dist-view.js:41
 #: apps/io.ox/contacts/edit/view-form.js:175
@@ -1433,13 +1612,6 @@ msgstr ""
 msgid "You don't have any subscriptions yet"
 msgstr ""
 
-#: apps/io.ox/core/wizard/registry.js:50 apps/io.ox/tasks/actions.js:128
-#: apps/io.ox/tasks/actions.js:474 apps/io.ox/tasks/edit/view-template.js:224
-#: apps/io.ox/tasks/print.js:31 apps/io.ox/tasks/util.js:207
-#: apps/plugins/notifications/tasks/register.js:69
-msgid "Done"
-msgstr ""
-
 #: apps/io.ox/core/wizard/registry.js:53
 msgid "Previous"
 msgstr ""
@@ -1716,12 +1888,6 @@ msgstr ""
 msgid "Remind me again "
 msgstr ""
 
-#: apps/io.ox/core/tk/reminder-util.js:75
-#: apps/plugins/notifications/tasks/register.js:49
-#: apps/plugins/notifications/tasks/register.js:461
-msgid "end date "
-msgstr ""
-
 #: apps/io.ox/core/tk/reminder-util.js:78
 msgid "status "
 msgstr ""
@@ -1834,10 +2000,6 @@ msgstr ""
 
 #: apps/io.ox/core/tk/autocomplete.js:234 apps/io.ox/core/tk/vgrid.js:836
 msgid "Could not load this list"
-msgstr ""
-
-#: apps/io.ox/core/commons.js:783 apps/io.ox/core/tk/autocomplete.js:237
-msgid "Retry"
 msgstr ""
 
 #: apps/io.ox/core/tk/attachments.js:342 apps/io.ox/core/tk/upload.js:249
@@ -2007,12 +2169,6 @@ msgctxt "app"
 msgid "Tasks"
 msgstr ""
 
-#: apps/io.ox/core/main.js:168 apps/io.ox/files/settings/pane.js:26
-#: apps/io.ox/launchpad/main.js:35
-msgctxt "app"
-msgid "Drive"
-msgstr ""
-
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
 msgid "Conversations"
@@ -2068,35 +2224,6 @@ msgstr ""
 
 #: apps/io.ox/core/main.js:1096
 msgid "Continue"
-msgstr ""
-
-#: apps/io.ox/core/commons.js:52
-msgid "<b>%1$d</b> elements selected"
-msgstr ""
-
-#: apps/io.ox/core/commons.js:165
-msgid "Selection Details"
-msgstr ""
-
-#: apps/io.ox/core/commons.js:186
-msgid "No elements selected"
-msgstr ""
-
-#: apps/io.ox/core/commons.js:351
-msgid "Searched in all folders"
-msgstr ""
-
-#. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:357
-msgid "Searched in"
-msgstr ""
-
-#: apps/io.ox/core/commons.js:641
-msgid "Items"
-msgstr ""
-
-#: apps/io.ox/core/commons.js:648
-msgid "Back"
 msgstr ""
 
 #. Reminder (objective case): in X weeks
@@ -3160,18 +3287,6 @@ msgstr ""
 msgid "Show more"
 msgstr ""
 
-#: apps/io.ox/backbone/forms.js:786 apps/io.ox/calendar/month/perspective.js:425
-#: apps/io.ox/calendar/util.js:155 apps/io.ox/calendar/util.js:192
-#: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:702
-#: apps/plugins/portal/birthdays/register.js:84
-#: apps/plugins/portal/birthdays/register.js:153
-msgid "Today"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:847 apps/io.ox/calendar/week/view.js:112
-msgid "Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key."
-msgstr ""
-
 #: apps/io.ox/backbone/forms.js:865
 msgid "clear"
 msgstr ""
@@ -4050,29 +4165,6 @@ msgstr ""
 msgid "Top 10 file types"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:34 apps/io.ox/files/settings/pane.js:27
-msgid "Default view"
-msgstr ""
-
-#: apps/io.ox/files/settings/pane.js:28
-msgid "Show hidden files and folders"
-msgstr ""
-
-#: apps/io.ox/calendar/actions.js:529 apps/io.ox/calendar/settings/pane.js:70
-#: apps/io.ox/files/actions.js:756 apps/io.ox/files/actions.js:1229
-#: apps/io.ox/files/settings/pane.js:31
-msgid "List"
-msgstr ""
-
-#: apps/io.ox/files/actions.js:763 apps/io.ox/files/actions.js:1239
-#: apps/io.ox/files/settings/pane.js:32
-msgid "Icons"
-msgstr ""
-
-#: apps/io.ox/files/settings/pane.js:33
-msgid "Tiles"
-msgstr ""
-
 #: apps/io.ox/files/views/create.js:29
 msgid "You can drag and drop files from your computer to upload either a new file or another version of a file."
 msgstr ""
@@ -4231,6 +4323,17 @@ msgstr ""
 
 #: apps/io.ox/files/actions.js:749
 msgid "Change View"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js:529 apps/io.ox/calendar/settings/pane.js:70
+#: apps/io.ox/files/actions.js:756 apps/io.ox/files/actions.js:1229
+#: apps/io.ox/files/settings/pane.js:31
+msgid "List"
+msgstr ""
+
+#: apps/io.ox/files/actions.js:763 apps/io.ox/files/actions.js:1239
+#: apps/io.ox/files/settings/pane.js:32
+msgid "Icons"
 msgstr ""
 
 #: apps/io.ox/files/actions.js:770 apps/io.ox/files/actions.js:1248
@@ -4462,10 +4565,6 @@ msgstr ""
 #: apps/plugins/portal/birthdays/register.js:86
 #: apps/plugins/portal/birthdays/register.js:153
 msgid "Tomorrow"
-msgstr ""
-
-#: apps/io.ox/calendar/util.js:161 apps/io.ox/calendar/week/view.js:679
-msgid "Next Week"
 msgstr ""
 
 #: apps/io.ox/calendar/settings/pane.js:78 apps/io.ox/calendar/util.js:256
@@ -4960,6 +5059,10 @@ msgstr ""
 msgid "Default calendar view"
 msgstr ""
 
+#: apps/io.ox/calendar/settings/pane.js:34 apps/io.ox/files/settings/pane.js:27
+msgid "Default view"
+msgstr ""
+
 #: apps/io.ox/calendar/settings/pane.js:35
 msgid "Time range for the calender view"
 msgstr ""
@@ -5080,21 +5183,6 @@ msgstr ""
 msgid "4 weeks"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. %1$d = Calendar week
-#: apps/io.ox/calendar/month/view.js:133 apps/io.ox/calendar/week/view.js:831
-msgid "CW %1$d"
-msgstr ""
-
-#. add confirmation status behind appointment title
-#. %1$s = apppintment title
-#, c-format
-#: apps/io.ox/calendar/month/view.js:367 apps/io.ox/calendar/week/view.js:1681
-msgid "%1$s (Tentative)"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/main.js:158
 #: apps/io.ox/calendar/month/perspective.js:116
 #: apps/io.ox/calendar/week/perspective.js:93
@@ -5125,22 +5213,6 @@ msgstr ""
 
 #: apps/io.ox/calendar/week/perspective.js:279
 msgid "Week View"
-msgstr ""
-
-#: apps/io.ox/calendar/week/view.js:679
-msgid "Next Day"
-msgstr ""
-
-#: apps/io.ox/calendar/week/view.js:680
-msgid "Previous Day"
-msgstr ""
-
-#: apps/io.ox/calendar/week/view.js:680
-msgid "Previous Week"
-msgstr ""
-
-#: apps/io.ox/calendar/week/view.js:799 apps/io.ox/calendar/week/view.js:803
-msgid "Click for whole day appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/view-detail.js:285
@@ -7160,80 +7232,6 @@ msgstr ""
 #: apps/plugins/halo/mail/register.js:79
 msgid "Cannot find any messages you sent to this contact."
 msgstr ""
-
-#: apps/plugins/notifications/tasks/register.js:35
-msgid "Overdue Tasks"
-msgstr ""
-
-#: apps/plugins/notifications/tasks/register.js:37
-msgid "Press to hide all notifications for overdue tasks."
-msgstr ""
-
-#: apps/plugins/notifications/tasks/register.js:54
-msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
-msgstr ""
-
-#: apps/plugins/notifications/tasks/register.js:245
-msgid "Task reminders"
-msgstr ""
-
-#: apps/plugins/notifications/tasks/register.js:248
-msgid "Press to hide all task reminders."
-msgstr ""
-
-#: apps/plugins/notifications/tasks/register.js:444
-msgid "Task invitations"
-msgstr ""
-
-#: apps/plugins/notifications/tasks/register.js:447
-msgid "Press to hide all task invitations."
-msgstr ""
-
-#: apps/plugins/notifications/tasks/register.js:466
-msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
-msgstr ""
-
-#: apps/plugins/notifications/tasks/register.js:479
-msgid "Accept/Decline"
-msgstr ""
-
-#: apps/plugins/notifications/calendar/register.js:89
-#: apps/plugins/notifications/calendar/register.js:90
-#: apps/plugins/notifications/tasks/register.js:481
-#: apps/plugins/notifications/tasks/register.js:482
-msgid "Accept invitation"
-msgstr ""
-
-#: apps/plugins/notifications/calendar/register.js:32
-msgid "Appointment invitations"
-msgstr ""
-
-#: apps/plugins/notifications/calendar/register.js:35
-msgid "Press to hide all appointment invitations."
-msgstr ""
-
-#: apps/plugins/notifications/calendar/register.js:47
-msgid "Appointment reminders"
-msgstr ""
-
-#: apps/plugins/notifications/calendar/register.js:50
-msgid "Press to hide all appointment reminders."
-msgstr ""
-
-#: apps/plugins/notifications/calendar/register.js:73
-msgid "Appointment invitation. %1$s %2$s %3$s %4$s %5$s. Press [enter] to open"
-msgstr ""
-
-#: apps/plugins/notifications/calendar/register.js:87
-msgid "Accept / Decline"
-msgstr ""
-
-#: apps/plugins/notifications/calendar/register.js:104
-msgctxt "in"
-msgid "in %d minute"
-msgid_plural "in %d minutes"
-msgstr[0] ""
-msgstr[1] ""
 
 #: apps/plugins/notifications/mail/register.js:29
 msgid "New Mails"
