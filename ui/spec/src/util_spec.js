@@ -272,7 +272,7 @@ define([], function () {
                     //counter = counter + 1;
                     //console.warn((new Date() - now), 'repaint', counter);
                     debounced();
-                }
+                };
 
             //call debouncedn function every 50 ms
             repaint();
@@ -280,7 +280,7 @@ define([], function () {
 
             //cancel interal
             setTimeout(function () {
-                 clearInterval(interval);
+                clearInterval(interval);
             }, 130);
 
             //wait

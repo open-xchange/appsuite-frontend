@@ -291,16 +291,16 @@ define(
 
         describe('supports signatures', function () {
             var data = fixtureSignatures.current.data;
-            function getCurrentSignature () {
+            function getCurrentSignature() {
                 return app.getMail().signature;
-            };
-            function setCurrentSignature (index) {
+            }
+            function setCurrentSignature(index) {
                 return app.setSignature({data: {index: index}});
-            };
-            function getCurrentContent () {
+            }
+            function getCurrentContent() {
                 return app.getEditor().getContent();
-            };
-            function setMode (format) {
+            }
+            function setMode(format) {
                 var available = new Done();
                 waitsFor(available, format + ' editor');
                 if (app.getEditor().getMode() === format) {
@@ -311,18 +311,18 @@ define(
                     });
                 }
             }
-            function occurrences () {
+            function occurrences() {
                 //number of occurrences of signature class name (only relevant for html)
                 return (getCurrentContent().match(/io-ox-signature/g) || [])
                         .length;
             }
-            function reset () {
+            function reset() {
                 //reset by using 'empty string' signature
                 setCurrentSignature(0);
                 app.getEditor().setContent('');
             }
 
-            function addIndependentTests (format) {
+            function addIndependentTests(format) {
                 beforeEach(function () {
                     reset();
                 });
@@ -399,7 +399,7 @@ define(
                     expect(/\s\s+/g.test(value)).toBeFalsy();
                     //is trimmed (but a whitespace is added manually later: 5adae2b772e9d9fcc1110997dc30f1f71a4daeb6)
                     expect(value).toEqual(' ' + value.trim());
-                })
+                });
             });
 
             describe('in html mode:', function () {

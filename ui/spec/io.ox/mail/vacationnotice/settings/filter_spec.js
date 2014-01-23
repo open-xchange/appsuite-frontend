@@ -145,16 +145,16 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
             });
             this.server.respond();
 
-            model.get('id').should.be.equal(expextedModel['id']);
-            model.get('text').should.be.equal(expextedModel['text']);
-            model.get('subject').should.be.equal(expextedModel['subject']);
-            model.get('addresses').should.be.deep.equal(expextedModel['addresses']);
-            model.get('internal_id').should.be.equal(expextedModel['internal_id']);
-            model.get('activateTimeFrame').should.be.equal(expextedModel['activateTimeFrame']);
-            model.get('primaryMail').should.be.equal(expextedModel['primaryMail']);
+            model.get('id').should.be.equal(expextedModel.id);
+            model.get('text').should.be.equal(expextedModel.text);
+            model.get('subject').should.be.equal(expextedModel.subject);
+            model.get('addresses').should.be.deep.equal(expextedModel.addresses);
+            model.get('internal_id').should.be.equal(expextedModel.internal_id);
+            model.get('activateTimeFrame').should.be.equal(expextedModel.activateTimeFrame);
+            model.get('primaryMail').should.be.equal(expextedModel.primaryMail);
             model.get('tester@open-xchange.com').should.be.equal(expextedModel['tester@open-xchange.com']);
             model.get('tester2@open-xchange.com').should.be.equal(expextedModel['tester2@open-xchange.com']);
-        })
+        });
 
     });
 

@@ -34,15 +34,14 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
             'active': false
         }]
     },
-    filtermodel = {
-        id: 1,
+    filtermodel = { id: 1,
         active: false,
         forwardmail: 'tester@open-xchange.com',
         userMainEmail: 'tester@open-xchange.com'
     },
     multiValues = {},
     model;
-    
+
     describe('autoforward', function () {
 
         beforeEach(function () {
@@ -62,7 +61,7 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
                     });
                     return true;
                 }
-                
+
             }, 'setup mailfilter edit view', ox.testTimeout);
 
         });
@@ -89,7 +88,7 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
 
         it('should set the rule to active', function () {
             this.node.find('input[type="checkbox"]').click();
-            model.get('active').should.be.equal(true); 
+            model.get('active').should.be.equal(true);
         });
 
     });
