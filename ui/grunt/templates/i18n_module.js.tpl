@@ -1,10 +1,10 @@
 define("<%= module %>.<%= language %>", ["io.ox/core/gettext"], function (g) {
-    g("<%= module %>", {
+    return g("<%= module %>", {
       "nplurals": <%= nplurals %>,
       "plural": "<%= plural %>",
       "dictionary": {
       <% for (var msgid in dictionary) { %>
-          "<%= msgid %>": "<%= dictionary[msgid] %>",
+          <%= JSON.stringify(msgid) %>: <%= JSON.stringify(dictionary[msgid]) %>,
       <% } %>
       }
     });
