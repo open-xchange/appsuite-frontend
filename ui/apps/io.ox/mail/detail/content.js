@@ -153,9 +153,23 @@ define('io.ox/mail/detail/content',
         e.preventDefault();
         var node = $(this),
             email = node.attr('href').substr(7), // cut off leading "mailto:"
-            text = node.text();
+            text = node.text(),
+            tmp,
+            params,
+            data;
+
+        //check for additional parameters
+        tmp = email.split(/\?/, 2);
+        params = _.deserialize(tmp[1]);
+        email = tmp[0];
+        // save data
+        data = {
+            to: [[text, email]],
+            subject: params.subject,
+            attachments: [{ content: params.body || '' }]
+        };
         ox.launch('io.ox/mail/write/main').done(function () {
-            this.compose({ to: [[text, email]] });
+            this.compose(data);
         });
     };
 
@@ -338,8 +352,16 @@ define('io.ox/mail/detail/content',
             // for support for very large mails we do the following stuff manually,
             // otherwise jQuery explodes with "Maximum call stack size exceeded"
             _(this.get(0).getElementsByTagName('A')).each(function (node) {
-                $(node).attr('target', '_blank')
-                    .filter('[href^="mailto:"]').on('click', mailTo);
+                var link = $(node).attr('target', '_blank')
+                    .filter('[href^="mailto:"]').on('click', mailTo),
+                    text = link.text();
+
+                //trim text if it contains mailto:...
+                if (text.search(/^mailto:/) > -1) {
+                    text = text.substring(7);//cut of mailto
+                    text = text.split(/\?/, 2)[0];//cut of additional parameters
+                    link.text(text);
+                }
             });
         }
     });
