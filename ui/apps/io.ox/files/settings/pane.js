@@ -67,16 +67,16 @@ define('io.ox/files/settings/pane',
                     preferencesView = settings.get('view', 'fluid:list'),
                     preferencesShowHidden = settings.get('showHidden'),
 
-                    buildOptionsSelect = function (list, selected, name) {
-                        var select = $('<select>').addClass('input-xlarge').on('change', function () {
+                    buildOptionsSelect = function (list, selected, name, id) {
+                        var select = $('<select>').attr({ id: id }).addClass('input-xlarge').on('change', function () {
                             model.set(name, this.value);
                         });
-                        return _.map(list, function (option) {
-                            var o = $('<option>').attr({ value: option.value}).text(option.label)
-                            ;
-                            if (selected === option.value) o.prop('checked', true);
+                        _.map(list, function (option) {
+                            var o = $('<option>').attr({ value: option.value}).text(option.label);
                             return select.append(o);
                         });
+                        select.val(selected);
+                        return select;
                     },
 
                     buildCheckbox = function (selected, name) {
@@ -101,7 +101,7 @@ define('io.ox/files/settings/pane',
                         $('<label>').attr({'for': 'default_view'}).addClass('control-label').text(gt('Default view')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('select').append(
-                                buildOptionsSelect(optionsView, preferencesView, 'view')
+                                buildOptionsSelect(optionsView, preferencesView, 'view', 'default_view')
                             )
                         )
                     )
