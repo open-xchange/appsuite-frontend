@@ -33,8 +33,8 @@ define('io.ox/backbone/forms',
             init: function () {
                 var self = this;
 
-                function showBackendError(error) {
-                    if (!self.isRelevant(error)) {
+                function showBackendError(error, xhr) {
+                    if (!self.isRelevant(error, xhr)) {
                         return;
                     }
                     var alert = $.alert(self.errorTitle, self.formatError(error));

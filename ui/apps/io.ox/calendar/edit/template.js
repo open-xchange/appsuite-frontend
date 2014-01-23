@@ -82,7 +82,7 @@ define('io.ox/calendar/edit/template',
                     }
                     baton.model.save().done(function () {
                         baton.app.onSave();
-                    });
+                    }).fail(notifications.yell);
                 })
             );
 
@@ -113,9 +113,9 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.ErrorAlert({
         index: 100,
         id: 'error',
-        isRelevant: function (response) {
+        isRelevant: function (response, xhr) {
             // don't handle conflicts as error
-            if (response.conflicts) {
+            if (response.conflicts || xhr.status === 404) {
                 return false;
             }
             return true;

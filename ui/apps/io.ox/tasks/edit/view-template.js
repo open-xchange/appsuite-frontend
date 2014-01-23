@@ -66,7 +66,7 @@ define('io.ox/tasks/edit/view-template',
                             }).fail(function (response) {
                                 setTimeout(function () {
                                     app.getWindow().idle();
-                                    notifications.yell('error', response.error);
+                                    notifications.yell(response);
                                 }, 300);
                             });
 

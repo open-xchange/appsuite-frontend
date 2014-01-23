@@ -167,7 +167,7 @@ define('io.ox/calendar/edit/main',
                                                 self.model.set('ignore_conflicts', true, { validate: true });
                                                 self.model.save().done(function () {
                                                     self.onSave();
-                                                });
+                                                }).fail(notifications.yell);
                                             }
                                         });
                                 });

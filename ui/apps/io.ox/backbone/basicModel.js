@@ -139,9 +139,12 @@ define('io.ox/backbone/basicModel',
                         self.trigger(action, response);
                         self.trigger('sync', response);
                     })
-                    .fail(function (response) {
+                    .fail(function (response, xhr) {
+                        if (xhr.status === 404) {
+                            response.error = gt('Server unreachable');
+                        }
                         callbacks.error(model, response);
-                        self.trigger('backendError', response);
+                        self.trigger('backendError', response, xhr);
                         self.trigger(action + ':fail', response);
                         self.trigger('sync:fail', response);
                     }).always(function () {

@@ -747,7 +747,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             });
 
             // TODO: remove backend fix
-            ajax.pipe(function (response) {
+            ajax.then(function (response) {
                     if (fixPost) {
                         // Extract the JSON text
                         var matches = /\((\{.*?\})\)/.exec(response);
@@ -1088,7 +1088,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
          */
         fixList: function (ids, deferred) {
 
-            return deferred.pipe(function (data) {
+            return deferred.then(function (data) {
                 // simplify
                 ids = that.simplify(ids);
                 // build hash (uses folder_id!)
