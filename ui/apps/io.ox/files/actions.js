@@ -560,12 +560,9 @@ define('io.ox/files/actions',
             },
             multiple: function (list, baton) {
 
-                var vGrid = baton.grid || (baton.app && baton.app.getGrid());
-
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/api/folder'], function (dialogs, views, folderAPI) {
 
                     function commit(target) {
-                        if (type === 'move' && vGrid) vGrid.busy();
                         api[type](list, target).then(
                             function (errors) {
                                 if (errors.length > 0) {
@@ -574,7 +571,6 @@ define('io.ox/files/actions',
                                     notifications.yell('success', success);
                                 }
                                 folderAPI.reload(target, list);
-                                if (type === 'move' && vGrid) vGrid.idle();
                             },
                             notifications.yell
                         );
