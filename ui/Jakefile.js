@@ -677,7 +677,7 @@ task('init-packaging', ['clean'], function() {
         {
             key: 'copyright',
             prompt: 'Copyright line',
-            def: '2013 Open-Xchange, Inc'
+            def: '2014 Open-Xchange, Inc'
         },
         {
             key: 'licenseName',
