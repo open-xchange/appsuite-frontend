@@ -20,11 +20,10 @@ module.exports = function (grunt) {
         options: {
             prefixes: ['build/', 'build/apps'],
             manifests: ['build/manifests/']
-        },
-        app: {}
+        }
     });
 
-    grunt.registerMultiTask('serve', 'Use the appserver to serve your apps', function () {
+    grunt.registerTask('serve', 'Use the appserver to serve your apps', function () {
         var done = this.async();
         var server = require('../../lib/appserver/server.js');
         var _ = require('underscore');
