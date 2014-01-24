@@ -22,7 +22,7 @@
 require({
     // inject version
     baseUrl: ox.base + "/apps",
-    waitSeconds: 15 //_.browser.IE ? 20 : 10
+    waitSeconds: document.cookie.indexOf("selenium=true") != -1 ? 60 : 15 //_.browser.IE ? 20 : 10
 });
 
 // jQuery AMD fix
