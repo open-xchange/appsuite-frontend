@@ -1,0 +1,19 @@
+Source: open-xchange-appsuite-spamexperts
+Section: non-free/web
+Priority: optional
+Maintainer: Viktor Pracht <viktor.pracht@open-xchange.com>
+Build-Depends: debhelper (>= 8.0.0), open-xchange-appsuite-dev
+Standards-Version: 3.9.2
+
+Package: open-xchange-appsuite-spamexperts
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-manifest
+Description: Configuration UI for SpamExperts
+
+## Uncomment for multiple packages
+#Package: open-xchange-appsuite-spamexperts-static
+#Architecture: all
+#Depends: ${misc:Depends}, open-xchange-appsuite
+#Description: Configuration UI for SpamExperts
+# .
+# This package contains the static files for the theme.
