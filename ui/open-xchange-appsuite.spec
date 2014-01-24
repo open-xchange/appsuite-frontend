@@ -153,6 +153,7 @@ if [ -x %{update} ]; then %{update}; fi
 %files manifest -f tmp/files
 %defattr(-,root,root)
 %dir /opt/open-xchange
+%exclude /opt/open-xchange/appsuite/apps/io.ox/tours
 
 %files dev
 %defattr(-,root,root)

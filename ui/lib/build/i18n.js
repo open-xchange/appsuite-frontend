@@ -131,11 +131,15 @@ function addMessage(filename, node, method, getSrc) {
     return pro.MAP.skip;
 }
 
-exports.languages = function () {
+exports.languages = function (packaged) {
     if (!exports.languages.value) {
-        exports.languages.value = _.map(utils.list("i18n/*.po"), function(s) {
-            return s.replace(/^i18n[\\\/](.*)\.po$/, "$1");
-        });
+        exports.languages.value = _.chain(utils.list("i18n/*.po"))
+            .filter(function (s) {
+                return !/^\s*"X-Package: (?:off|no|false|0)(?:\\n)?"\s*$/im
+                    .test(fs.readFileSync(s));
+            }).map(function (s) {
+                return s.replace(/^i18n[\\\/](.*)\.po$/, "$1");
+            }).value();
     }
     return exports.languages.value;
 };
