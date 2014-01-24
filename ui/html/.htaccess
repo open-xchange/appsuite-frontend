@@ -15,6 +15,8 @@ SetEnvIf Request_URI "\.(jsz|cssz|xmlz)$" no-gzip
 
 # excluded PNGs
 AddType image/png .xpng
+# correct type for ico files
+AddType image/x-icon .ico
 
 ExpiresActive On
 ExpiresDefault "access plus 6 months"
