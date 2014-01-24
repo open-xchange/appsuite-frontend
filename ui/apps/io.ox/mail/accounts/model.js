@@ -16,8 +16,9 @@ define('io.ox/mail/accounts/model',
      'io.ox/keychain/model',
      'io.ox/core/api/account',
      'io.ox/core/api/folder',
+     'io.ox/backbone/validation',
      'gettext!io.ox/mail/accounts/settings'
-    ], function (ext, keychainModel, AccountAPI, folderAPI, gt) {
+    ], function (ext, keychainModel, AccountAPI, folderAPI, validation, gt) {
 
     'use strict';
 
@@ -58,24 +59,38 @@ define('io.ox/mail/accounts/model',
                 },
                 msg: gt('This field has to be filled')
             },
-            mail_port: {
+            mail_port: [{
                 required: function () {
                     return !this.isHidden();
                 },
                 msg: gt('This field has to be filled')
-            },
+            }, { fn: function (val) {
+                var temp = validation.formats.number(val);
+                if (temp === true) {
+                    return false; //strangely if the validation returns true here, it is marked as invalid...
+                } else {
+                    return temp;
+                }
+            }}],
             transport_server: {
                 required: function () {
                     return !this.isHidden();
                 },
                 msg: gt('This field has to be filled')
             },
-            transport_port: {
+            transport_port: [{
                 required: function () {
                     return !this.isHidden();
                 },
                 msg: gt('This field has to be filled')
-            },
+            }, { fn: function (val) {
+                var temp = validation.formats.number(val);
+                if (temp === true) {
+                    return false; //strangely if the validation returns true here, it is marked as invalid...
+                } else {
+                    return temp;
+                }
+            }}],
             // pop3 credentials
             transport_password: {
                 required: function (a, prop, attributes) {
