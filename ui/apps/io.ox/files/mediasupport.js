@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/files/mediasupport', function () {
+define('io.ox/files/mediasupport', ['settings!io.ox/files'], function (settings) {
 
     'use strict';
 
@@ -32,9 +32,13 @@ define('io.ox/files/mediasupport', function () {
 
     var browserSupportsMedia = {
         hasSupport: function (mediatype) {
-            // Early exit if mediatype is not supported
-            // Disable Audio for Android, see Bug #29438
-            if (mediatype === 'audio' && _.device('android')) return false;
+            if (mediatype === 'audio') {
+                if (!settings.get('audioEnabled')) return false;
+                // Early exit if mediatype is not supported
+                // Disable Audio for Android, see Bug #29438
+                if (_.device('android')) return false;
+            }
+            if (mediatype === 'video' && !settings.get('videoEnabled')) return false;
             if (!Modernizr[mediatype]) return false;
             return true;
         },
