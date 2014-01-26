@@ -59,47 +59,21 @@ define('io.ox/files/settings/pane',
             id: 'common',
             draw: function () {
 
-                var optionsView = [
-                    {label: gt('List'), value: 'fluid:list'},
-                    {label: gt('Icons'), value: 'fluid:icon'},
-                    {label: gt('Tiles'), value: 'fluid:tile'}
-                ],
+                var buildCheckbox = function (name) {
+                    var checkbox = $('<input type="checkbox">')
+                    .on('change', function () {
+                        model.set(name, checkbox.prop('checked'));
+                    }).addClass('input-xlarge');
+                    checkbox.prop('checked', model.get(name));
+                    return checkbox;
 
-                    buildOptionsSelect = function (list, name, id) {
-                        var select = $('<select>').attr({ id: id }).addClass('input-xlarge').on('change', function () {
-                            model.set(name, this.value);
-                        });
-                        _.map(list, function (option) {
-                            var o = $('<option>').attr({ value: option.value}).text(option.label);
-                            return select.append(o);
-                        });
-                        select.val(model.get(name));
-                        return select;
-                    },
-
-                    buildCheckbox = function (name) {
-                        var checkbox = $('<input type="checkbox">')
-                        .on('change', function () {
-                            model.set(name, checkbox.prop('checked'));
-                        }).addClass('input-xlarge');
-                        checkbox.prop('checked', model.get(name));
-                        return checkbox;
-
-                    };
+                };
 
                 this.append(
                     $('<div>').addClass('control-group').append(
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('checkbox').text(gt('Show hidden files and folders')).append(
                                 buildCheckbox('showHidden')
-                            )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({'for': 'default_view'}).addClass('control-label').text(gt('Default view')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('select').append(
-                                buildOptionsSelect(optionsView, 'view', 'default_view')
                             )
                         )
                     )
