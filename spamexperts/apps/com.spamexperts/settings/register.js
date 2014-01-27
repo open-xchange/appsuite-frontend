@@ -22,9 +22,10 @@ define('com.spamexperts/settings/register', [
                     version: 7
                 }
             }).done(function (data) {
-                $('<iframe>')
-                    .attr('src', data.panel_web_ui_url + data.panel_session)
-                    .appendTo(self);
+                $('<iframe>', {
+                    src: data.panel_web_ui_url + data.panel_session,
+                    frameborder: 0                    
+                }).css({ width: '100%', minHeight: '90%' }).appendTo(self);
             });
         }
     });
