@@ -24,7 +24,7 @@ define('com.spamexperts/settings/register', [
             }).done(function (data) {
                 $('<iframe>', {
                     src: data.panel_web_ui_url + data.panel_session,
-                    frameborder: 0                    
+                    frameborder: 0
                 }).css({ width: '100%', minHeight: '90%' }).appendTo(self);
             });
         }
