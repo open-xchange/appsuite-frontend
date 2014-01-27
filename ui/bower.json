@@ -13,7 +13,7 @@
   "dependencies": {
     "jquery": "~2.1.0",
     "underscore": "~1.5.2",
-    "mediaelement": "~2.13.1",
+    "mediaelement": "~2.13.2",
     "bootstrap": "~3.0.3",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#bs3",
     "bootstrap-typeahead": "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git",
