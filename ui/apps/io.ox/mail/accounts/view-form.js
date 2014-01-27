@@ -16,47 +16,30 @@ define.async('io.ox/mail/accounts/view-form',
     ['io.ox/core/tk/view',
      'io.ox/core/notifications',
      'io.ox/core/api/account',
-     'text!io.ox/mail/accounts/account_detail.html',
      'settings!io.ox/mail',
-     'gettext!io.ox/settings/settings'
-    ], function (View, notifications, accountAPI, tmpl, settings, gt) {
+     'gettext!io.ox/settings/settings',
+     'io.ox/core/extensions'
+    ], function (View, notifications, accountAPI, settings, gt, ext) {
 
     'use strict';
 
-    var staticStrings =  {
-            TITLE_ACCOUNT_SETTINGS: gt('Account settings'),
-            ACCOUNT_NAME: gt('Account name'),
-            PERSONAL: gt('Your name'),
-            EMAIL_ADDRESS: gt('Email address'),
-            UNIFIED_MAIL: gt('Use unified mail for this account'),
-            SERVER_SETTINGS: gt('Server settings'),
-            SERVER_TYPE: gt('Server type'),
-            SERVER_SSL: gt('Use SSL connection'),
-            SERVER_NAME: gt('Server name'),
-            SERVER_PORT: gt('Server port'),
-            LOGIN: gt('Username'),
-            PASSWORD: gt('Password'),
-            POP_3_REFRESH: gt('Refresh rate in minutes:'),
-            EXPUNGE_MESSAGES: gt('Remove copy from server after retrieving a message'),
-            DELETING_ON_LOCAL: gt('Deleting messages on local storage also deletes them on server'),
-            TITLE_SERVER_OUT: gt('Outgoing server settings (SMTP)'),
-            SERVER_OUT_SSL: gt('Use SSL connection'),
-            SERVER_OUT_NAME: gt('Server name'),
-            SERVER_OUT_PORT: gt('Server port'),
-            LOGIN_AND_PASS: gt('Use username and password'),
-            LOGIN_OUT: gt('Username'),
-            PASSWORD_OUT: gt('Password'),
-            TITLE_FOLDER_SETTINGS: gt('Folder settings'),
-            FOLDER_SENT: gt('Sent folder'),
-            FOLDER_TRASH: gt('Trash folder'),
-            FOLDER_DRAFTS: gt('Drafts folder'),
-            FOLDER_SPAM: gt('Spam folder'),
-            SPAN_SELECT_FOLDER: gt('Select')
-        },
+    var POINT = 'io.ox/settings/accounts/mail/settings/detail',
+        model,
 
-        optionsServerType = _(['imap', 'pop3']).map(gt.noI18n),
+        optionsServerType = [
+            { label: gt.noI18n('imap'), value: 'imap'},
+            { label: gt.noI18n('pop3'), value: 'pop3'}
+        ],
 
-        optionsRefreshRatePop = _([3, 5, 10, 15, 30, 60, 360]).map(gt.noI18n),
+        optionsRefreshRatePop = [
+            { label: gt.noI18n('3'), value: '3'},
+            { label: gt.noI18n('5'), value: '5'},
+            { label: gt.noI18n('10'), value: '10'},
+            { label: gt.noI18n('15'), value: '15'},
+            { label: gt.noI18n('30'), value: '30'},
+            { label: gt.noI18n('60'), value: '60'},
+            { label: gt.noI18n('360'), value: '360'}
+        ],
 
         //conditional defaults
         defaults = {
@@ -81,15 +64,41 @@ define.async('io.ox/mail/accounts/view-form',
             return accountAPI.validate(data);
         },
 
+        buildInputText = function (name) {
+            var input = $('<input type="text">').attr({ 'id': name, 'tabindex': 1, 'data-property': name })
+            .on('change', function () {
+                model.set(name, input.val());
+            });
+            input.val(model.get(name));
+            return input;
+        },
+
+        buildCheckbox = function (name) {
+            var checkbox = $('<input>').attr({  'data-property': name, 'type': 'checkbox', 'tabindex': 1 })
+            .on('change', function () {
+                model.set(name, checkbox.prop('checked'));
+            }).addClass('input-xlarge');
+            checkbox.prop('checked', model.get(name));
+            return checkbox;
+        },
+
+        buildOptionsSelect = function (list, name, id) {
+            var select = $('<select>').attr({ 'id': id, 'tabindex': 1 }).on('change', function () {
+                model.set(name, this.value);
+            });
+            _.map(list, function (option) {
+                var o = $('<option>').attr({ value: option.value}).text(option.label);
+                return select.append(o);
+            });
+            select.val(model.get(name));
+            return select;
+        },
+
         defaultDisplayName = '',
 
         AccountDetailView = Backbone.View.extend({
             tagName: 'div',
-            _modelBinder: undefined,
             initialize: function () {
-                // create template
-                this.template = doT.template(tmpl);
-                this._modelBinder = new Backbone.ModelBinder();
 
                 //check if login and mailaddress are synced
                 this.inSync = false;
@@ -107,20 +116,18 @@ define.async('io.ox/mail/accounts/view-form',
                 Backbone.Validation.bind(this, { selector: 'data-property', forceUpdate: true });
             },
             render: function () {
-                var self = this,
-                    hideAccountDetails = self.model.isHidden();
-                self.$el.empty().append(self.template({
-                    strings: staticStrings,
-                    optionsServer: optionsServerType,
-                    optionsRefreshRate: optionsRefreshRatePop,
-                    settings: {
-                        hideAccountDetails: hideAccountDetails
-                    }
-                }));
+                var self = this;                    // hideAccountDetails = self.model.isHidden();
+                model = self.model;
+                self.$el.empty().append(
+                    $('<div>').addClass('settings-detail-pane').append(
+                        $('<div>').addClass('io-ox-account-settings')
+                    )
+                );
+
+                ext.point(POINT + '/pane').invoke('draw', self.$el.find('.io-ox-account-settings'));
+
                 var pop3nodes = self.$el.find('.control-group.pop3');
 
-                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                self._modelBinder.bind(self.model, self.el, defaultBindings);
                 //check if pop3 refresh rate needs to be displayed
                 if (self.model.get('mail_protocol') !== 'pop3') {
                     pop3nodes.hide();
@@ -305,6 +312,7 @@ define.async('io.ox/mail/accounts/view-form',
                             if (action === 'select') {
                                 var target = _(tree.selection.get()).first();
                                 self.model.set(property, target, {validate: true});
+                                self.$el.find('input[data-property="' + property + '"]').val(target);
                             }
                             tree.destroy().done(function () {
                                 tree = dialog = null;
@@ -315,6 +323,221 @@ define.async('io.ox/mail/accounts/view-form',
                 }
             }
         });
+
+    ext.point(POINT + '/pane').extend({
+        index: 100,
+        id: 'header',
+        draw: function () {
+
+            var formBlocks = [],
+
+                serverSettingsInTitle = $('<legend>').addClass('sectiontitle').text(gt('Server settings')),
+                serverSettingsInBlock = $('<div>').addClass('form-horizontal').append(
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for': 'mail_protocol' }).addClass('control-label').text(gt('Server type')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('select').append(
+                                buildOptionsSelect(optionsServerType, 'mail_protocol', 'mail_protocol')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').addClass('control-label'),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('checkbox').text(gt('Use SSL connection')).append(
+                                buildCheckbox('mail_secure')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for': 'mail_server' }).addClass('control-label').text(gt('Server name')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('mail_server')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for': 'mail_port' }).addClass('control-label').text(gt('Server port')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('mail_port')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for': 'login' }).addClass('control-label').text(gt('Username')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('login')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for': 'password' }).addClass('control-label').text(gt('Password')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('password')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group pop3').append(
+                        $('<label>').attr({ 'for': 'pop3_refresh_rate' }).text(gt('Refresh rate in minutes:')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('select').append(
+                                buildOptionsSelect(optionsRefreshRatePop, 'pop3_refresh_rate', 'pop3_refresh_rate')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group pop3').append(
+                        $('<label>').addClass('control-label'),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('checkbox').text(gt('Remove copy from server after retrieving a message')).append(
+                                buildCheckbox('pop3_expunge_on_quit')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group pop3').append(
+                        $('<label>').addClass('control-label'),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('checkbox').text(gt('Deleting messages on local storage also deletes them on server')).append(
+                                buildCheckbox('pop3_delete_write_through')
+                            )
+                        )
+                    )
+                ),
+
+                serverSettingsOutTitle = $('<legend>').addClass('sectiontitle').text(gt('Outgoing server settings (SMTP)')),
+
+                serverSettingsOutBlock = $('<div>').addClass('form-horizontal').append(
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').addClass('control-label'),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('checkbox').text(gt('Use SSL connection')).append(
+                                buildCheckbox('transport_secure')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label').text(gt('Server port')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('transport_server')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label').text(gt('Server name')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('transport_port')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').addClass('control-label'),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('checkbox').text(gt('Use username and password')).append(
+                                buildCheckbox('mail-common-selectfirst')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for':  'transport_login'}).addClass('control-label').text(gt('Username')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('transport_login')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for':  'transport_password'}).addClass('control-label').text(gt('Password')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('transport_password')
+                            )
+                        )
+                    )
+                ),
+                serverSettingsFolderTitle = $('<legend>').addClass('sectiontitle').text(gt('Folder settings')),
+                serverSettingsFolderBlock = $('<div>').addClass('form-horizontal').append(
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for':  'sent_fullname'}).addClass('control-label').text(gt('Sent folder')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('sent_fullname').attr({ 'disabled': 'disabled' }),
+                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
+                            )
+                        ),
+                        $('<label>').attr({ 'for':  'trash_fullname'}).addClass('control-label').text(gt('Trash folder')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('trash_fullname').attr({ 'disabled': 'disabled' }),
+                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
+                            )
+                        ),
+                        $('<label>').attr({ 'for':  'drafts_fullname'}).addClass('control-label').text(gt('Drafts folder')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('drafts_fullname').attr({ 'disabled': 'disabled' }),
+                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
+                            )
+                        ),
+                        $('<label>').attr({ 'for':  'spam_fullname'}).addClass('control-label').text(gt('Spam folder')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('spam_fullname').attr({ 'disabled': 'disabled' }),
+                                $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
+                            )
+                        )
+                    )
+                );
+
+            if (!model.isHidden()) {
+                formBlocks.push(serverSettingsInTitle, serverSettingsInBlock, serverSettingsOutTitle, serverSettingsOutBlock, serverSettingsFolderTitle, serverSettingsFolderBlock);
+            }
+
+            this.append(
+                $('<legend>').addClass('sectiontitle').text(gt('Account settings')),
+                $('<div>').addClass('form-horizontal').append(
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for': 'name'}).addClass('control-label').text(gt('Account name')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('name')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for': 'personal'}).addClass('control-label').text(gt('Your name')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('personal')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<label>').attr({ 'for': 'primary_address'}).addClass('control-label').text(gt('Email address')),
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('text').append(
+                                buildInputText('primary_address')
+                            )
+                        )
+                    ),
+                    $('<div>').addClass('control-group').append(
+                        $('<div>').addClass('controls').append(
+                            $('<label>').addClass('checkbox').text(gt('Use unified mail for this account')).append(
+                                buildCheckbox('unified_inbox_enabled')
+                            )
+                        )
+                    ),
+                    formBlocks
+
+                )
+                
+            );
+        }
+    });
 
     return accountAPI.getDefaultDisplayName().then(function (name) {
         defaultDisplayName = name;
