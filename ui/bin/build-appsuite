@@ -1,9 +1,13 @@
 #!/bin/sh
 
 export BASEDIR="$(dirname "$(dirname "$(readlink "$0" || echo "$0")")")"
+export NPMBINDIR="$(npm -g bin)"
 
-which grunt >/dev/null || (echo "grunt binary not found in path. Consider installing it with 'npm install -g grunt-cli'" && exit 1)
-
-[ -f local.conf ] && . ./local.conf
-
-grunt "$@"
+if [ -f $NPMBINDIR/grunt ];
+then
+    [ -f local.conf ] && . ./local.conf
+    $NPMBINDIR/grunt "$@"
+else
+    echo "grunt binary not found in path. Consider installing it with 'npm install -g grunt-cli'"
+    exit 1
+fi
