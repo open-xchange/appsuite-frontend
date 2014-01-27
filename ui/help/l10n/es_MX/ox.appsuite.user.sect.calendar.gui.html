@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>7.1. Los componentes de Calendario</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="Capítulo 7. Calendario">
 <link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="Capítulo 7. Calendario">
@@ -23,8 +23,8 @@
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.calendar.gui"></a>7.1. Los componentes de <span class="phrase"> <span class="guilabel"><strong>Calendario</strong></span> </span> </h2></div></div></div>
-<a class="indexterm" name="idm140395071721648"></a><div class="reference">
+<a name="ox.appsuite.user.sect.calendar.gui"></a>7.1. Los componentes de <span class="phrase"> <span class="guilabel"><strong>Calendario</strong></span> </span>  </h2></div></div></div>
+<a class="indexterm" name="idm140038612767120"></a><div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.hint"></a><p>Se puede encontrar una introducción al uso de la interfaz en <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. El interfaz de usuario">El interfaz de usuario</a>.</p>
 </div>
 <div class="reference">
@@ -69,6 +69,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>El rango de tiempo seleccionado se muestra en la esquina superior izquierda de la hoja del calendario.</p></li>
 <li class="listitem"><p>En las vistas de calendario <span class="guilabel"><strong>Día</strong></span>, <span class="guilabel"><strong>Semana laboral</strong></span> y <span class="guilabel"><strong>Semana</strong></span>, la semana del calendario actual se muestra junto a la fecha.</p></li>
+<li class="listitem"><p>Si presiona en una fecha se abrirá un mini calendario que le ayudará a seleccionar otra fecha.</p></li>
 <li class="listitem"><p>La barra de navegación que hay encima de la hoja del calendario permite seleccionar un rango de tiempo.</p></li>
 <li class="listitem"><p>En las vistas  <span class="guilabel"><strong>Día</strong></span>, <span class="guilabel"><strong>Semana laboral</strong></span> y <span class="guilabel"><strong>Semana</strong></span> se muestra un área para <a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">crear</a> citas de días completos en la parte superior de la hoja del calendario.</p></li>
 <li class="listitem"><p>En las vistas <span class="guilabel"><strong>Día</strong></span>, <span class="guilabel"><strong>Semana laboral</strong></span> y <span class="guilabel"><strong>Semana</strong></span>, la hora actual se mostrará resaltada con una línea roja en la hoja de calendario.</p></li>
@@ -82,7 +83,7 @@
 <a name="ox.appsuite.user.reference.calendar.gui.sidebarlist"></a><p><b>Barra lateral en la vista <span class="guilabel"><strong>Lista</strong></span> </b>Muestra una lista de citas de la carpeta seleccionada. Se muestran la fecha, la hora, la zona horaria, el icono de cita privada, el asunto y la localización. Las siguientes funciones están disponibles: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Si se presiona en una cita, los datos se muestran en el <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.contentlist" title="Área de visualización en la vista Lista">área de visualización</a>.</p></li>
-<li class="listitem"><p>Si se presiona en un encabezado, se muestra la primera cita de dicho intervalo de tiempo.</p></li>
+<li class="listitem"><p>Si se pulsa en un encabezado, se muestra la primera cita de dicho intervalo de tiempo.</p></li>
 <li class="listitem"><p>Si se presiona en el icono <span class="guibutton"><strong>Seleccionar</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.edit"></a><img src="../../images/appsuite_user_icon_edit.png"></span> situado debajo la lista, se mostrará una casilla de verificación junto a cada cita. Puede seleccionar varias citas para  <a class="link" href="ox.appsuite.user.sect.calendar.manage.multiple.html#ox.appsuite.user.concept.calendar.multiple">editarlas de una vez</a>.</p></li>
 <li class="listitem"><p>El texto que hay debajo de la lista contiene el nombre de la carpeta seleccionada. El número se corresponde con la cantidad de objetos que hay en la carpeta seleccionada.</p></li>
 <li class="listitem"><p>Si presiona el icono <span class="guibutton"><strong>Ordenar</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span> situado bajo la lista, se abre un menú que le ayudará a ordenar sus citas. Con la casilla de verificación <span class="guibutton"><strong>Mostrar todo</strong></span> puede definir si sólo desea ver la cita actualmente seleccionada o todas las citas de sus calendarios privados. </p></li>
@@ -93,7 +94,10 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.contentlist"></a><p><b>Área de visualización en la vista <span class="guilabel"><strong>Lista</strong></span> </b>Muestra los datos de la cita y las funciones disponibles: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Botones: <a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit"> <span class="guibutton"><strong>Editar</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus"> <span class="guibutton"><strong>Cambiar estado</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"> <span class="guibutton"><strong>Mover</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print"> <span class="guibutton"><strong>Imprimir</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.delete.html#ox.appsuite.user.concept.calendar.delete"> <span class="guibutton"><strong>Borrar</strong></span> </a> </p></li>
+<li class="listitem">
+<p>Botones: <a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit"> <span class="guibutton"><strong>Editar</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus"> <span class="guibutton"><strong>Cambiar estado</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"> <span class="guibutton"><strong>Mover</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print"> <span class="guibutton"><strong>Imprimir</strong></span> </a>, <a class="link" href="ox.appsuite.user.sect.calendar.manage.delete.html#ox.appsuite.user.concept.calendar.delete"> <span class="guibutton"><strong>Borrar</strong></span> </a> </p>
+<p><span class="phrase"><strong>Nota: </strong></span> Dependiendo de la configuración del servidor, podrían prevalecer las siguientes limitaciones: Algunos botones de citas en sus calendarios privados sólo se muestran si usted tiene los permisos correspondientes para ejecutar la función. Si usted es un participante, no puede cambiar o eliminar la cita. Si usted es el organizador, no puede cambiar su estado.</p>
+</li>
 <li class="listitem"><p>Fecha, el tipo de repetición (para citas periódicas), hora y zona horaria</p></li>
 <li class="listitem"><p>Asunto</p></li>
 <li class="listitem"><p>Ubicación de la cita, si fue indicada</p></li>
@@ -113,6 +117,7 @@
 <li class="listitem">
 <p>Detalles</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>el organizador de la cita</p></li>
 <li class="listitem"><p>disponibilidad</p></li>
 <li class="listitem"><p>qué carpeta</p></li>
 <li class="listitem"><p>quién creó la cita y cuándo</p></li>
