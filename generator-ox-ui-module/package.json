@@ -1,0 +1,39 @@
+{
+  "name": "generator-ox-ui-module",
+  "version": "0.0.0",
+  "description": "An ox ui module generator for Yeoman",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "homepage": "https://www.open-xchange.com",
+  "author": {
+    "name": "Julian Bäume",
+    "email": "julian.baeume@open-xchange.com"
+  },
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Open-Xchange-Frontend/generator-ox-ui-module.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "yeoman-generator": "~0.14.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.14.0"
+  },
+  "peerDependencies": {
+    "yo": ">=1.0.0"
+  },
+  "engines": {
+    "node": ">=0.8.0",
+    "npm": ">=1.2.10"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
+}
