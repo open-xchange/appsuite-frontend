@@ -43,5 +43,8 @@
     "underscore": "~1.5.2",
     "grunt-zip": "~0.10.2",
     "grunt-curl": "~1.2.1"
+  },
+  "engines": {
+    "node": ">=0.10"
   }
 }
