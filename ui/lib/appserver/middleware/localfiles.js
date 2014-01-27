@@ -55,7 +55,7 @@
                 return (path.existsSync(filename) && fs.statSync(filename).isFile());
             })[0];
             if (!filename) {
-                if (verbose.local) console.log('localfile not found: ', pathname);
+                if (verbose.local || verbose['local:error']) console.log('localfile not found: ', pathname);
                 return next();
             }
 
