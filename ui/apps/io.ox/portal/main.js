@@ -534,7 +534,7 @@ define('io.ox/portal/main',
             if (!Modernizr.touch) {
                 require(['apps/io.ox/core/tk/jquery-ui.min.js']).done(function () {
                     appBaton.$.widgets.sortable({
-                        itmes: '> li.draggable',
+                        items: '> li.draggable',
                         cancel: 'li.protected',
                         containment: win.nodes.main,
                         scroll: true,
