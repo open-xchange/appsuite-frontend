@@ -36,6 +36,8 @@ module.exports = function (grunt) {
     // testing stuff
     grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
 
+    // build the ui (aka what jenkins does)
+    grunt.registerTask('build', ['jshint:all', 'copy', 'assemble', 'concat', 'less', 'compile_po', 'uglify']);
     // default task
     grunt.registerTask('default', ['checkDependencies', 'lint', 'newer:copy', 'newer:assemble', 'newer:concat', 'newer:less', 'newer:compile_po', 'force_update', 'newer:uglify']);
 };
