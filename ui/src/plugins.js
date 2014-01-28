@@ -497,94 +497,9 @@
     });
 }());
 
-/*
- * dot.js template loader
- */
 (function () {
 
     'use strict';
-
-    var defaultTemplateSettings = {
-        evaluate:    /\{\{([\s\S]+?)\}\}/g,
-        interpolate: /\{\{=([\s\S]+?)\}\}/g,
-        encode:      /\{\{!([\s\S]+?)\}\}/g,
-        use:         /\{\{#([\s\S]+?)\}\}/g,
-        define:      /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
-        conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
-        iterate:     /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
-        varname: 'it',
-        strip: true,
-        append: true,
-        selfcontained: false
-    };
-
-    /*
-     * Inner Template Abstraction - offers: render(id, [data, [node]])
-     */
-    function Template(ext) {
-
-        var parts = {},
-            plain = {},
-            createDraw = function (id, extensionId, tmpl) {
-                return function (context) {
-                    var node = $(tmpl(context.data || context)).appendTo(this);
-                    ext.point(id + '/' + extensionId).invoke('draw', node, context);
-                };
-            };
-
-        // parts might be plain HTML or contain extensions
-        this.addPart = function (id, html) {
-            // look for extensions
-            var fragment = $(html).filter(function () { return this.nodeType === 1; }),
-                extensions = fragment.filter('extension');
-            if (extensions.length > 0) {
-                // create extensions
-                extensions.each(function (index) {
-                    var node = $(this), html = node.html(), extensionId = node.attr('id') || 'default';
-                    ext.point(id).extend({
-                        id: extensionId,
-                        index: (index + 1) * 100,
-                        draw: createDraw(id, extensionId, doT.template(html, defaultTemplateSettings))
-                    });
-                });
-            } else {
-                // just plain template
-                plain[id] = true;
-                parts[id] = doT.template(html, defaultTemplateSettings);
-            }
-        };
-
-        // render part
-        this.render = function (id, data, node) {
-            data = data !== undefined ? data : {};
-            if (plain[id]) {
-                return id in parts ? $(parts[id](data)) : $();
-            } else {
-                node = node || $('<div>');
-                ext.point(id).invoke('draw', node, data);
-                return node;
-            }
-        };
-    }
-
-    define('dot', {
-        load: function (name, parentRequire, loaded) {
-            parentRequire(['text!' + name, 'io.ox/core/extensions'], function (html, ext) {
-                // get template fragment - just elements, no comments, no text nodes
-                var fragment = $(html).filter(function () { return this.nodeType === 1; }),
-                    parts = fragment.filter('part'),
-                    tmpl = new Template(ext);
-
-                // just consider parts
-                parts.each(function () {
-                    var node = $(this), html = node.html(), id = node.attr('id') || 'default';
-                    tmpl.addPart(id, html);
-                });
-                // done
-                loaded(tmpl);
-            });
-        }
-    });
 
     define('withPluginsFor', {
         load: function (name, parentRequire, loaded) {

@@ -53,7 +53,6 @@ module.exports = function (grunt) {
                          'lib/modernizr.js',
                          'bower_components/bigscreen/bigscreen.js',
                          'bower_components/jquery-placeholder/jquery.placeholder.js',
-                         'bower_components/doT/doT.js',
                          'bower_components/textarea-helper/textarea-helper.js',
                          'src/util.js',
                          'src/browser.js',
