@@ -3,7 +3,6 @@ var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 
-
 var OxUiModuleGenerator = module.exports = function OxUiModuleGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
 
@@ -23,28 +22,30 @@ OxUiModuleGenerator.prototype.askFor = function askFor() {
   console.log(this.yeoman);
 
   var prompts = [{
-    type: 'confirm',
-    name: 'someOption',
-    message: 'Would you like to enable this option?',
-    default: true
+    name: 'moduleName',
+    message: 'What to you want the name of your module to be?',
+    default: this.appname
   }];
 
   this.prompt(prompts, function (props) {
-    this.someOption = props.someOption;
+    this.moduleName = props.moduleName;
 
     cb();
   }.bind(this));
 };
 
 OxUiModuleGenerator.prototype.app = function app() {
-  this.mkdir('app');
-  this.mkdir('app/templates');
+  this.mkdir('apps');
+  this.mkdir('grunt');
+  this.mkdir('grunt/config');
 
-  this.copy('_package.json', 'package.json');
-  this.copy('_bower.json', 'bower.json');
+  this.template('_package.json', 'package.json');
+  this.template('_bower.json', 'bower.json');
+  this.template('_Gruntfile.js', 'Gruntfile.js');
+
+  this.copy('grunt/clean.js', 'grunt/config/clean.js');
 };
 
 OxUiModuleGenerator.prototype.projectfiles = function projectfiles() {
-  this.copy('editorconfig', '.editorconfig');
   this.copy('jshintrc', '.jshintrc');
 };
