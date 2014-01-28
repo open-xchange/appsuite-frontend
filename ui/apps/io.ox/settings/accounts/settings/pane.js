@@ -134,7 +134,7 @@ define('io.ox/settings/accounts/settings/pane',
                 'click [data-action="delete"]': 'onDelete'
             },
 
-            initialize: function(){
+            initialize: function () {
                 this.model.on('change', this.render, this);
             },
 
