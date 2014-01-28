@@ -9,6 +9,134 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#: apps/io.ox/portal/main.js:35
+msgid "Good morning, %s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:37
+msgid "Good evening, %s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:39
+msgid "Hello %s"
+msgstr ""
+
+#. Portal. Logged in as user
+#: apps/io.ox/portal/main.js:65
+msgid "Signed in as %1$s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:85
+msgid "Customize this page"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:143 apps/io.ox/portal/main.js:144
+#: apps/io.ox/portal/main.js:386
+msgid "Disable widget"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:300 apps/plugins/portal/facebook/register.js:268
+#: apps/plugins/portal/twitter/register.js:385
+msgid "Click here to add your account"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:346
+msgid "An error occurred."
+msgstr ""
+
+#: apps/io.ox/portal/main.js:349
+msgid "Click to try again."
+msgstr ""
+
+#: apps/io.ox/portal/main.js:458
+msgid "Portal Widgets"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:488 apps/io.ox/portal/settings/widgetview.js:110
+msgid "Delete widget"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:489 apps/io.ox/portal/settings/widgetview.js:111
+msgid "Do you really want to delete this widget?"
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. Really delete portal widget - in contrast to "just disable"
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. Really delete portal widget - in contrast to "just disable"
+#: apps/io.ox/calendar/actions.js:274 apps/io.ox/calendar/actions.js:606
+#: apps/io.ox/calendar/invitations/register.js:35
+#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:760
+#: apps/io.ox/contacts/main.js:107 apps/io.ox/core/commons-folderview.js:391
+#: apps/io.ox/core/tk/folderviews.js:591 apps/io.ox/files/actions.js:326
+#: apps/io.ox/files/actions.js:682 apps/io.ox/files/actions.js:835
+#: apps/io.ox/mail/actions.js:86 apps/io.ox/mail/actions.js:109
+#: apps/io.ox/mail/actions.js:986 apps/io.ox/mail/main.js:136
+#: apps/io.ox/mail/settings/signatures/register.js:276
+#: apps/io.ox/portal/main.js:492 apps/io.ox/portal/settings/widgetview.js:114
+#: apps/io.ox/settings/accounts/settings/pane.js:60
+#: apps/io.ox/settings/accounts/settings/pane.js:62
+#: apps/io.ox/settings/accounts/settings/pane.js:70
+#: apps/io.ox/settings/accounts/settings/pane.js:71
+#: apps/io.ox/tasks/actions.js:59 apps/io.ox/tasks/actions.js:466
+#: apps/io.ox/tasks/main.js:101 apps/plugins/portal/twitter/util.js:318
+#: apps/plugins/portal/twitter/util.js:451
+msgid "Delete"
+msgstr ""
+
+#: apps/io.ox/calendar/acceptdeny.js:89 apps/io.ox/calendar/actions.js:153
+#: apps/io.ox/calendar/actions.js:263 apps/io.ox/calendar/actions.js:275
+#: apps/io.ox/calendar/actions.js:407 apps/io.ox/calendar/edit/main.js:51
+#: apps/io.ox/calendar/edit/main.js:160
+#: apps/io.ox/calendar/month/perspective.js:117
+#: apps/io.ox/calendar/week/perspective.js:94
+#: apps/io.ox/calendar/week/perspective.js:137 apps/io.ox/contacts/actions.js:54
+#: apps/io.ox/contacts/actions.js:151 apps/io.ox/contacts/distrib/main.js:184
+#: apps/io.ox/contacts/edit/main.js:249
+#: apps/io.ox/core/commons-folderview.js:572 apps/io.ox/core/desktop.js:1600
+#: apps/io.ox/core/export/export.js:104 apps/io.ox/core/folder/add.js:95
+#: apps/io.ox/core/folder/imap-subscription.js:59
+#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:406
+#: apps/io.ox/core/permissions/permissions.js:357
+#: apps/io.ox/core/permissions/permissions.js:398 apps/io.ox/core/print.js:116
+#: apps/io.ox/core/pubsub/publications.js:119
+#: apps/io.ox/core/pubsub/subscriptions.js:58 apps/io.ox/core/relogin.js:56
+#: apps/io.ox/core/tk/attachments.js:608 apps/io.ox/core/tk/folderviews.js:592
+#: apps/io.ox/core/tk/folderviews.js:654 apps/io.ox/core/tk/mobiscroll.js:35
+#: apps/io.ox/core/upsell.js:36 apps/io.ox/editor/main.js:314
+#: apps/io.ox/files/actions.js:327 apps/io.ox/files/actions.js:485
+#: apps/io.ox/files/actions.js:540 apps/io.ox/files/actions.js:585
+#: apps/io.ox/files/actions.js:683 apps/io.ox/files/views/create.js:117
+#: apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/mail/accounts/settings.js:43
+#: apps/io.ox/mail/accounts/settings.js:259
+#: apps/io.ox/mail/accounts/view-form.js:289 apps/io.ox/mail/actions.js:87
+#: apps/io.ox/mail/actions.js:110 apps/io.ox/mail/actions.js:268
+#: apps/io.ox/mail/actions.js:837 apps/io.ox/mail/actions/attachmentSave.js:67
+#: apps/io.ox/mail/folderview-extensions.js:132
+#: apps/io.ox/mail/mailfilter/settings/filter.js:88
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
+#: apps/io.ox/mail/write/inline-images.js:80 apps/io.ox/mail/write/main.js:1337
+#: apps/io.ox/mail/write/view-main.js:623 apps/io.ox/oauth/settings.js:82
+#: apps/io.ox/portal/main.js:494 apps/io.ox/portal/settings/widgetview.js:116
+#: apps/io.ox/settings/accounts/settings/pane.js:164
+#: apps/io.ox/tasks/actions.js:60 apps/io.ox/tasks/actions.js:196
+#: apps/io.ox/tasks/actions.js:522 apps/io.ox/tasks/edit/main.js:161
+#: apps/io.ox/tasks/edit/util.js:123 apps/plugins/portal/flickr/register.js:227
+#: apps/plugins/portal/rss/register.js:150
+#: apps/plugins/portal/tumblr/register.js:247
+#: apps/plugins/portal/twitter/util.js:123
+#: apps/plugins/portal/twitter/util.js:452
+#: apps/plugins/portal/userSettings/register.js:88
+msgid "Cancel"
+msgstr ""
+
+#. Just disable portal widget - in contrast to delete
+#: apps/io.ox/portal/main.js:498 apps/io.ox/portal/settings/widgetview.js:120
+msgid "Just disable widget"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/template.js:77
 #: apps/io.ox/contacts/distrib/create-dist-view.js:41
 #: apps/io.ox/contacts/edit/view-form.js:175
@@ -77,53 +205,6 @@ msgstr ""
 #: apps/io.ox/tasks/edit/view-template.js:82
 #: apps/plugins/portal/userSettings/register.js:42
 msgid "Discard"
-msgstr ""
-
-#: apps/io.ox/calendar/acceptdeny.js:89 apps/io.ox/calendar/actions.js:153
-#: apps/io.ox/calendar/actions.js:263 apps/io.ox/calendar/actions.js:275
-#: apps/io.ox/calendar/actions.js:407 apps/io.ox/calendar/edit/main.js:51
-#: apps/io.ox/calendar/edit/main.js:160
-#: apps/io.ox/calendar/month/perspective.js:117
-#: apps/io.ox/calendar/week/perspective.js:94
-#: apps/io.ox/calendar/week/perspective.js:137 apps/io.ox/contacts/actions.js:54
-#: apps/io.ox/contacts/actions.js:151 apps/io.ox/contacts/distrib/main.js:184
-#: apps/io.ox/contacts/edit/main.js:249
-#: apps/io.ox/core/commons-folderview.js:572 apps/io.ox/core/desktop.js:1600
-#: apps/io.ox/core/export/export.js:104 apps/io.ox/core/folder/add.js:95
-#: apps/io.ox/core/folder/imap-subscription.js:59
-#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:406
-#: apps/io.ox/core/permissions/permissions.js:357
-#: apps/io.ox/core/permissions/permissions.js:398 apps/io.ox/core/print.js:116
-#: apps/io.ox/core/pubsub/publications.js:119
-#: apps/io.ox/core/pubsub/subscriptions.js:58 apps/io.ox/core/relogin.js:56
-#: apps/io.ox/core/tk/attachments.js:608 apps/io.ox/core/tk/folderviews.js:592
-#: apps/io.ox/core/tk/folderviews.js:654 apps/io.ox/core/tk/mobiscroll.js:35
-#: apps/io.ox/core/upsell.js:36 apps/io.ox/editor/main.js:314
-#: apps/io.ox/files/actions.js:327 apps/io.ox/files/actions.js:485
-#: apps/io.ox/files/actions.js:540 apps/io.ox/files/actions.js:585
-#: apps/io.ox/files/actions.js:683 apps/io.ox/files/views/create.js:117
-#: apps/io.ox/keychain/secretRecoveryDialog.js:39
-#: apps/io.ox/mail/accounts/settings.js:43
-#: apps/io.ox/mail/accounts/settings.js:259
-#: apps/io.ox/mail/accounts/view-form.js:289 apps/io.ox/mail/actions.js:87
-#: apps/io.ox/mail/actions.js:110 apps/io.ox/mail/actions.js:268
-#: apps/io.ox/mail/actions.js:837 apps/io.ox/mail/actions/attachmentSave.js:67
-#: apps/io.ox/mail/folderview-extensions.js:132
-#: apps/io.ox/mail/mailfilter/settings/filter.js:88
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: apps/io.ox/mail/write/inline-images.js:80 apps/io.ox/mail/write/main.js:1337
-#: apps/io.ox/mail/write/view-main.js:623 apps/io.ox/oauth/settings.js:82
-#: apps/io.ox/portal/main.js:494 apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/settings/accounts/settings/pane.js:164
-#: apps/io.ox/tasks/actions.js:60 apps/io.ox/tasks/actions.js:196
-#: apps/io.ox/tasks/actions.js:522 apps/io.ox/tasks/edit/main.js:161
-#: apps/io.ox/tasks/edit/util.js:123 apps/plugins/portal/flickr/register.js:227
-#: apps/plugins/portal/rss/register.js:150
-#: apps/plugins/portal/tumblr/register.js:247
-#: apps/plugins/portal/twitter/util.js:123
-#: apps/plugins/portal/twitter/util.js:452
-#: apps/plugins/portal/userSettings/register.js:88
-msgid "Cancel"
 msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:107 apps/io.ox/core/main.js:676
@@ -1762,30 +1843,6 @@ msgstr ""
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. Really delete portal widget - in contrast to "just disable"
-#: apps/io.ox/calendar/actions.js:274 apps/io.ox/calendar/actions.js:606
-#: apps/io.ox/calendar/invitations/register.js:35
-#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:760
-#: apps/io.ox/contacts/main.js:107 apps/io.ox/core/commons-folderview.js:391
-#: apps/io.ox/core/tk/folderviews.js:591 apps/io.ox/files/actions.js:326
-#: apps/io.ox/files/actions.js:682 apps/io.ox/files/actions.js:835
-#: apps/io.ox/mail/actions.js:86 apps/io.ox/mail/actions.js:109
-#: apps/io.ox/mail/actions.js:986 apps/io.ox/mail/main.js:136
-#: apps/io.ox/mail/settings/signatures/register.js:276
-#: apps/io.ox/portal/main.js:492 apps/io.ox/portal/settings/widgetview.js:114
-#: apps/io.ox/settings/accounts/settings/pane.js:60
-#: apps/io.ox/settings/accounts/settings/pane.js:62
-#: apps/io.ox/settings/accounts/settings/pane.js:70
-#: apps/io.ox/settings/accounts/settings/pane.js:71
-#: apps/io.ox/tasks/actions.js:59 apps/io.ox/tasks/actions.js:466
-#: apps/io.ox/tasks/main.js:101 apps/plugins/portal/twitter/util.js:318
-#: apps/plugins/portal/twitter/util.js:451
-msgid "Delete"
-msgstr ""
-
 #: apps/io.ox/core/tk/folderviews.js:632
 msgid "This is a standard folder, which can't be renamed."
 msgstr ""
@@ -3007,62 +3064,6 @@ msgstr ""
 
 #: apps/io.ox/portal/widgets.js:389
 msgid "Could not save settings."
-msgstr ""
-
-#: apps/io.ox/portal/main.js:35
-msgid "Good morning, %s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:37
-msgid "Good evening, %s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:39
-msgid "Hello %s"
-msgstr ""
-
-#. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:65
-msgid "Signed in as %1$s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:85
-msgid "Customize this page"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:143 apps/io.ox/portal/main.js:144
-#: apps/io.ox/portal/main.js:386
-msgid "Disable widget"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:300 apps/plugins/portal/facebook/register.js:268
-#: apps/plugins/portal/twitter/register.js:385
-msgid "Click here to add your account"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:346
-msgid "An error occurred."
-msgstr ""
-
-#: apps/io.ox/portal/main.js:349
-msgid "Click to try again."
-msgstr ""
-
-#: apps/io.ox/portal/main.js:458
-msgid "Portal Widgets"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:488 apps/io.ox/portal/settings/widgetview.js:110
-msgid "Delete widget"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:489 apps/io.ox/portal/settings/widgetview.js:111
-msgid "Do you really want to delete this widget?"
-msgstr ""
-
-#. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:498 apps/io.ox/portal/settings/widgetview.js:120
-msgid "Just disable widget"
 msgstr ""
 
 #: apps/io.ox/portal/settings/pane.js:63
