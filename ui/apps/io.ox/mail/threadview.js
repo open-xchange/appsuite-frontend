@@ -181,25 +181,28 @@ define('io.ox/mail/threadview',
         },
 
         reset: function (list) {
-            var filtered = _(list)
-                    .chain()
-                    .filter(this.filter)
-                    .map(function (obj) { return new backbone.Model(obj); })
-                    .value(),
-                a = _(filtered).pluck('cid').sort(),
+            // only filter conversations / single deleted messages are problematic otherwise
+            if (list.length > 1) list = _(list).filter(this.filter);
+            // get models
+            list = _(list).map(function (obj) { return new backbone.Model(obj); });
+            // prepare to compare current state with new collection
+            var a = _(list).pluck('cid').sort(),
                 b = _(this.collection.models).pluck('cid').sort();
             // need to check navigation even if nothing changed
             this.updateNavigation();
             // avoid unnecessary repaints
             if (_.isEqual(a, b)) return;
             // reset collection
-            this.collection.reset(filtered);
+            this.collection.reset(list);
         },
 
         onReset: function () {
 
             this.empty();
             this.index = 0;
+
+            if (this.collection.length === 0) return;
+
             this.updateHeader();
             this.updateFooter();
 
