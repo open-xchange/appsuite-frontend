@@ -18,7 +18,8 @@ define('io.ox/calendar/api',
      'io.ox/core/event',
      'io.ox/core/config',
      'io.ox/core/notifications',
-     'io.ox/core/api/factory'], function (http, Events, config, notifications, factory) {
+     'io.ox/core/capabilities',
+     'io.ox/core/api/factory'], function (http, Events, config, notifications, capabilities, factory) {
 
     'use strict';
 
@@ -423,7 +424,7 @@ define('io.ox/calendar/api',
             timestamp: 0,
             recurrence_master: true
         })
-        .pipe(function (list) {
+        .then(function (list) {
             // sort by start_date & look for unconfirmed appointments
             // exclude appointments that already ended
             var invites = _.chain(list)
@@ -470,7 +471,7 @@ define('io.ox/calendar/api',
         });
         // resume & trigger refresh
         return http.resume()
-            .pipe(function (result) {
+            .then(function (result) {
 
                 var def = $.Deferred();
 
@@ -579,7 +580,7 @@ define('io.ox/calendar/api',
             appendColumns: false,
             'continue': true
         })
-        .pipe(function (response) {
+        .then(function (response) {
             return _(result).map(function (obj) {
                 if (_.isString(obj)) {
                     // use fresh server data
@@ -630,14 +631,17 @@ define('io.ox/calendar/api',
      * @return {promise}
      */
     api.refresh = function () {
-        api.getInvites().done(function () {
-            // clear caches
-            all_cache = {};
-            get_cache = {};
-            participant_cache = {};
-            // trigger local refresh
-            api.trigger('refresh.all');
-        });
+        // check capabilities
+        if (capabilities.has('calendar')) {
+            api.getInvites().done(function () {
+                // clear caches
+                all_cache = {};
+                get_cache = {};
+                participant_cache = {};
+                // trigger local refresh
+                api.trigger('refresh.all');
+            });
+        }
     };
 
     ox.on('refresh^', function () {

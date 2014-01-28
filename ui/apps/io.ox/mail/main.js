@@ -596,6 +596,7 @@ define('io.ox/mail/main',
                 _(openThreads).chain().keys().each(function (id) {
                     close(id, openThreads[id]);
                 });
+                api.tracker.clear();
             });
 
             // close if deleted

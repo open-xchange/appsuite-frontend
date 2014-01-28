@@ -49,9 +49,11 @@ define('io.ox/mail/view-grid-template',
                         attachment = $('<i class="icon-paper-clip">'),
                         priority = $('<span class="priority">'),
                         $('<div class="subject">').append(
-                            unread = $('<i class="icon-unread icon-circle">'),
-                            answered = $('<i class="icon-circle-arrow-left">'),
-                            forwarded = $('<i class="icon-circle-arrow-right">'),
+                            $('<span>').append(
+                                unread = $('<i class="icon-unread icon-circle">'),
+                                answered = $('<i class="icon-circle-arrow-left">'),
+                                forwarded = $('<i class="icon-circle-arrow-right">')
+                            ),
                             subject = $('<span class="drag-title">')
                         )
                     )
@@ -132,6 +134,8 @@ define('io.ox/mail/view-grid-template',
                     var length = list.length, subset = list.slice(1);
                     // update selection
                     if (!grid.selection.contains(subset)) {
+                        // get current index
+                        index = grid.selection.getIndex(prev) + 1;
                         grid.selection.insertAt(subset, index);
                     }
                     // draw labels

@@ -358,7 +358,17 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markUnread(list);
+            if ($(this).prop('disabled') !== true) {
+                $(this).prop('disabled', true);//prevent user from hammering the inline link
+                var self = this;
+                api.markUnread(list).done(function (trackerResponse, updateResponse) {
+                    $('.thread-inline-actions').trigger('redraw');
+                    $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                    $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
+                }).fail(function () {
+                    $(self).prop('disabled', false);//enable clicking again
+                });
+            }
         }
     });
 
@@ -374,7 +384,17 @@ define('io.ox/mail/actions',
             });
         },
         multiple: function (list) {
-            api.markRead(list);
+            if ($(this).prop('disabled') !== true) {
+                $(this).prop('disabled', true);//prevent user from hammering the inline link
+                var self = this;
+                api.markRead(list).done(function (trackerResponse, updateResponse) {
+                    $('.thread-inline-actions').trigger('redraw');
+                    $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                    $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
+                }).fail(function () {
+                    $(self).prop('disabled', false);//enable clicking again
+                });
+            }
         }
     });
 

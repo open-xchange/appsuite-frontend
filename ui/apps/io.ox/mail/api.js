@@ -827,13 +827,14 @@ define('io.ox/mail/api',
             });
         }
 
-        return updateCache(list).done(function () {
-            api.trigger('refresh.list');
+        return $.when(
+            updateCache(list),
             update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
                 reloadFolders(list);
+                api.trigger('refresh.list');
                 api.trigger('update:set-seen', list);//used by notification area
-            });
-        });
+            })
+        );
     };
 
     /**
@@ -1140,7 +1141,7 @@ define('io.ox/mail/api',
                     accountAPI.getFoldersByType('sent'),
                     accountAPI.getFoldersByType('drafts')
                 );
-                $.when.apply(
+                $.when.apply($,
                     _(folders).map(function (id) {
                         return api.caches.all.grepRemove(id + DELIM);
                     })

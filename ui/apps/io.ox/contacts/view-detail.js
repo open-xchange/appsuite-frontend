@@ -123,7 +123,7 @@ define("io.ox/contacts/view-detail",
                 //#. %5$s is the country
                 gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', f);
             var a = $("<a>", {
-                    href: "http://www.google.de/maps?q=" +
+                    href: "http://www.google.com/maps?q=" +
                           encodeURIComponent(text.replace('/\n/g', ', ')),
                     target: "_blank"
                 }).addClass("nolink");
