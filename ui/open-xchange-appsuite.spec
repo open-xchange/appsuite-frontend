@@ -50,11 +50,19 @@ Requires:       nodejs >= 0.6.0
 %description    dev
 SDK for the OX App Suite HTML5 client
 
+%package        help-common
+Group:          Applications/Productivity
+Summary:        Language-independent files of online help for OX App Suite
+
+%description    help-common
+Language-independent files of online help for OX App Suite
+
 ## help ##
 #%package       help-## lang ##
 #Group:         Applications/Productivity
 #Summary:       Online help for OX App Suite (## Lang ##)
 #Provides:      open-xchange-appsuite-help
+#Requires:      open-xchange-appsuite-help-common
 #
 #%description   help-## lang ##
 #Online help for OX App Suite (## Lang ##)
@@ -160,6 +168,11 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange-appsuite-dev
 /opt/open-xchange-appsuite-dev
 %attr(644,root,root) /opt/open-xchange-appsuite-dev/lib/sax-js/examples/switch-bench.js
+
+%files help-common
+%defattr(-,root,root)
+%dir %{docroot}/help
+%{docroot}/help
 
 ## help ##
 #%files help-## lang ##
