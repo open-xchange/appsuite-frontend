@@ -213,6 +213,19 @@ define('io.ox/mail/detail/content',
         }
     });
 
+    var setLinkTarget = function (match) {
+        //replace or add link target to '_blank'
+        return (/target/).test(match) ? match.replace(/(target="[^"]*")/i, 'target="_blank"') : match.replace('>', ' target="_blank">');
+    };
+
+    ext.point('io.ox/mail/detail/source').extend({
+        id: 'link-target',
+        index: 500,
+        process: function (baton) {
+            baton.source = baton.source.replace(/(<a(.*)href="https?:\/\/[^"]+">)/g, setLinkTarget);
+        }
+    });
+
     // content
 
     ext.point('io.ox/mail/detail/content').extend({
@@ -338,8 +351,7 @@ define('io.ox/mail/detail/content',
             // for support for very large mails we do the following stuff manually,
             // otherwise jQuery explodes with "Maximum call stack size exceeded"
             _(this.get(0).getElementsByTagName('A')).each(function (node) {
-                $(node).attr('target', '_blank')
-                    .filter('[href^="mailto:"]').on('click', mailTo);
+                $(node).filter('[href^="mailto:"]').on('click', mailTo);
             });
         }
     });
