@@ -380,8 +380,8 @@ define('io.ox/mail/api',
         NORMAL:  '0',
         REPLY:   '1',
         FORWARD: '2',
-        DRAFT:   '3',
-        EDIT_DRAFT: '4'
+        EDIT_DRAFT: '3',
+        DRAFT:   '4'
     };
 
     api.FLAGS = {
