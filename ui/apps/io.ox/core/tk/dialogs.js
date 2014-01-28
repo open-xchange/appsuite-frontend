@@ -71,6 +71,10 @@ define('io.ox/core/tk/dialogs',
             },
 
             close = function () {
+                if (!self) {
+                    //already closed
+                    return;
+                }
 
                 // disable scrollblocker - Bug 29011
                 o.container.removeClass('blockscroll');
