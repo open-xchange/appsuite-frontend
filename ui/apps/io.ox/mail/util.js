@@ -464,26 +464,24 @@ define('io.ox/mail/util',
                 nothing = /.^/,
                 general = function (text) {
                     return String(text || '')
-                        //remove white-space and evil \r
+                        //replace white-space and evil \r
                         .replace(/(\r\n|\n|\r)/g, '\n')
-                        //remove subsequent white-space
-                        .replace(/\s\s+/g, ' ')
+                        //replace subsequent white-space (except linebreaks)
+                        .replace(/[\t\f\v ][\t\f\v ]+/g, ' ')
                         .trim();
                 },
                 add = function (text, isHTML) {
                     return general(text)
-                        //remove white-space and evil \r
-                        .replace(/(\r\n|\n|\r)/g, '\n')
                         //remove html tags (for plaintext emails)
                         .replace(isHTML ? nothing : htmltags, '');
                 },
                 preview = function (text) {
                     return general(text)
-                            //remove ASCII art (intended to remove separators like '________')
-                            .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
-                            //remove htmltags
-                            .replace(htmltags, '')
-                            .trim();
+                        //remove ASCII art (intended to remove separators like '________')
+                        .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
+                        //remove htmltags
+                        .replace(htmltags, '')
+                        .trim();
                 };
             return {
                 cleanAdd: function (text, isHTML) {
@@ -502,9 +500,9 @@ define('io.ox/mail/util',
                                 return '<br>';
                             else {
                                 return clean
-                                        //replace surrounding whitspaces
-                                        .replace(/>\s+/g, '>')
-                                        .replace(/\s+</g, '<')
+                                        //replace surrounding white-space (except linebreaks)
+                                        .replace(/>[\t\f\v ]+/g, '>')
+                                        .replace(/[\t\f\v ]+</g, '<')
                                         //set breaks
                                         .replace(/(\r\n|\n|\r)/g, '<br>');
                             }
