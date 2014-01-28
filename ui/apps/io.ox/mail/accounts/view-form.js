@@ -239,7 +239,7 @@ define.async('io.ox/mail/accounts/view-form',
                                 self.collection.add([data]);
                             }
                             if (self.model.isNew()) {
-                                self.succes();
+                                self.success();
                             } else {
                                 notifications.yell('success', gt('Account updated'));
                             }
@@ -534,7 +534,7 @@ define.async('io.ox/mail/accounts/view-form',
                     formBlocks
 
                 )
-                
+
             );
         }
     });
