@@ -18,9 +18,10 @@ define('io.ox/portal/settings/pane',
      'io.ox/core/upsell',
      'io.ox/portal/widgets',
      'gettext!io.ox/portal',
+     'settings!io.ox/portal',
      'apps/io.ox/core/tk/jquery-ui.min.js',
      'less!io.ox/portal/style.less'
-    ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt) {
+    ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings) {
 
     'use strict';
 
@@ -408,5 +409,33 @@ define('io.ox/portal/settings/pane',
         }
     });
 
+    ext.point(POINT + '/pane').extend({
+        index: 500,
+        id: 'summaryView',
+        draw: function () {
+
+            var buildCheckbox = function () {
+                var checkbox = $('<input type="checkbox">')
+                .on('change', function () {
+                    settings.set('mobile/summaryView', checkbox.prop('checked')).save();
+                }).addClass('input-xlarge');
+                checkbox.prop('checked', settings.get('mobile/summaryView'));
+                return checkbox;
+
+            };
+            this.append(
+                $('<h4>').text(gt('Mobile device settings:'))
+            );
+            this.append(
+                $('<div>').addClass('control-group').append(
+                    $('<div>').addClass('controls').append(
+                        $('<label>').addClass('checkbox').text(gt('Only show widget summary on mobile devices')).append(
+                            buildCheckbox('showHidden')
+                        )
+                    )
+                )
+            );
+        }
+    });
     return {};
 });

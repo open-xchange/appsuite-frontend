@@ -18,6 +18,9 @@ define('io.ox/portal/settings/defaults', function () {
     var settingsDefaults = {
         widgets: {
             user: {}
+        },
+        mobile: {
+            summaryView: false
         }
     };
 

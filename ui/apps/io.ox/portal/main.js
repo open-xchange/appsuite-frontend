@@ -325,7 +325,7 @@ define('io.ox/portal/main',
         return $.when.apply($, defs).done(function () {
                 node.find('.content').remove();
                 // draw summary only on small devices, i.e. smartphones
-                if (_.device('smartphone')) {
+                if (_.device('smartphone') && settings.get('mobile/summaryView')) {
                     point.invoke('summary', node, baton);
                 }
                 point.invoke('preview', node, baton);
