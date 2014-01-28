@@ -6,8 +6,8 @@ module.exports = function (grunt) {
         apps: {
             options: {
                 sourceMap: function (path) { return path.replace(/^build\//, 'build/maps/').replace(/\.js$/, '.js.map'); },
-                sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
-                sourceMappingURL: function (path) { return '/appsuite/' + grunt.config.get('assemble.options.base') + path.replace(/^build\//, '/maps/').replace(/\.js$/, '.js.map'); },
+                sourceMapRoot: '/appsuite/<%= base %>',
+                sourceMappingURL: function (path) { return '/appsuite/' + grunt.config.get('base') + path.replace(/^build\//, '/maps/').replace(/\.js$/, '.js.map'); },
                 sourceMapPrefix: 1
             },
             files: [{

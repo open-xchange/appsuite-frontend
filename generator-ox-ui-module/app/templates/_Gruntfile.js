@@ -18,5 +18,5 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
 
     // default task
-    grunt.registerTask('default', ['lint', 'newer:copy', 'newer:concat', 'newer:less', 'newer:compile_po', 'newer:uglify']);
+    grunt.registerTask('default', ['lint', 'newer:concat', 'newer:less', 'newer:compile_po', 'newer:uglify']);
 };
