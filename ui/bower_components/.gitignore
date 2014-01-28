@@ -35,9 +35,6 @@
 
 backbone/index*
 
-Backbone.ModelBinder/sandbox
-Backbone.ModelBinder/lib
-
 backbone-validation/lib
 backbone-validation/src
 
@@ -47,9 +44,6 @@ bootstrap/dist
 bootstrap-datepicker/build
 bootstrap-datepicker/css
 bootstrap-datepicker/less/datepicker.less
-
-doT/*
-!doT/doT.js
 
 font-awesome/*
 !font-awesome/less

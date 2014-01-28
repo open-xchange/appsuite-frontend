@@ -45,8 +45,6 @@ module.exports = function (grunt) {
                          'build/ox.js',
                          //add backbone and dot.js may be a AMD-variant would be better
                          'bower_components/backbone/backbone.js',
-                         'bower_components/Backbone.ModelBinder/Backbone.ModelBinder.js',
-                         'bower_components/Backbone.ModelBinder/Backbone.CollectionBinder.js',
                          'bower_components/backbone-validation/dist/backbone-validation.js',
                          'bower_components/requirejs/require.js',
                          'lib/require-fix.js',

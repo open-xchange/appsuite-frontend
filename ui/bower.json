@@ -20,7 +20,6 @@
     "font-awesome": "~4.0.3",
     "open-sans-fontface": "~1.0.3",
     "backbone": "~1.0.0",
-    "Backbone.ModelBinder": "~1.0.5",
     "backbone-validation": "~0.9.1",
     "Chart.js": "*",
     "bigscreen": "~2.0.3",
