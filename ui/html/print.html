@@ -1,162 +1,146 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title></title>
-<link rel="stylesheet" href="apps/themes/login/print.css">
-</head>
-<body onload="setTimeout(function () { window.print(); }, 500)">
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="apps/themes/login/print.css">
+    </head>
+    <body onload="setTimeout(function () { window.print(); }, 500)">
+        <script type="text/template" class="mail-html">
+        <% _.each(data, function(element) { %>
+            <section class="item mail">
+                <header>
+                    <b class="date pull-left"><%= element.from %></b>
+                    <span class="date pull-right"><%= element.date %></span>
+                    <div class="clear"></div>
+                    <h1><%= element.subject %></h1>
+                    <div class="to-and-cc">
+                        <label><%= i18n.to %></label> <%= element.to %>&nbsp;&nbsp;
+                        <% if (element.cc !== '') { %><label><%= i18n.copy %></label> <%= element.cc %><% } %>
+                    </div>
+                </header>
+                <pre class="content"><%= element.content %></pre>
+            </section>
+        <% }); %>
+        </script>
 
+        <script type="text/template" class="mail-text">
+        <% _.each(data, function(element) { %>
+            <section class="item">
+                <header>
+                    <b class="date pull-left"><%= element.from %></b>
+                    <span class="date pull-right"><%= element.date %></span>
+                    <div class="clear"></div>
+                    <h1><%= element.subject %></h1>
+                    <div class="to-and-cc">
+                        <label><%= i18n.to %></label> <%= element.to %>&nbsp;&nbsp;
+                        <% if (element.cc !== '') { %><label><%= i18n.copy %></label> <%= element.cc %><% } %>
+                    </div>
+                </header>
+                <pre class="content"><%= element.content %></pre>
+            </section>
+        <% }); %>
+        </script>
 
-<script type="text/template" class="mail-html">
-{{~it.data :element}}
-<section class="item mail">
-    <header>
-        <b class="date pull-left">{{! element.from }}</b>
-        <span class="date pull-right">{{! element.date }}</span>
-        <div class="clear"></div>
-        <h1>{{! element.subject}}</h1>
-        <div class="to-and-cc">
-            <label>{{! it.i18n.to }}</label> {{! element.to }}&nbsp;&nbsp;
-            {{? element.cc !== '' }}<label>{{! it.i18n.copy }}</label> {{! element.cc }}{{?}}
-        </div>
-    </header>
-    <pre class="content">{{= element.content }}</pre>
-</section>
-{{~}}
-</script>
+        <script type="text/template" class="phonelist">
+        <% if (filtered > 0) { %>
+            <div class="note"><%= i18n.filtered(filtered) %>. <i><%= i18n.notPrinted %>.</i></div>
+        <% } %>
+            <div class="phonelist">
+                <h1><%= i18n.phonelist %></h1>
+                <table border="0">
+                    <thead>
+                        <tr>
+                            <th><%= i18n.name %></th>
+                            <th><%= i18n.phone %></th>
+                            <th><%= i18n.cellphone %></th>
+                        </tr>
+                    </thead>
+                <% _.each(data, function(element) { %>
+                    <tbody class="no-break">
+                        <% if (length >= 30 && element.thumbIndex(element.original.last_name)) { %>
+                        <tr>
+                            <td colspan="3" class="thumb-index"><%= element.thumbIndex.get() %></td>
+                        </tr>
+                        <% } %>
+                        <tr>
+                            <td><b><%= element.name %></b><br><%= element.where %></td>
+                            <td><%= element.phone1 || '-' %><br><%= element.phone2 %></td>
+                            <td><%= element.cellphone1 || '-' %><br><%= element.cellphone2 %></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="spacer">&nbsp;</td>
+                        </tr>
+                    </tbody>
+                <% }); %>
+                </table>
+            </div>
+        </script>
 
-<script type="text/template" class="mail-text">
-{{~it.data :element}}
-<section class="item">
-    <header>
-        <b class="date pull-left">{{! element.from }}</b>
-        <span class="date pull-right">{{! element.date }}</span>
-        <div class="clear"></div>
-        <h1>{{! element.subject}}</h1>
-        <div class="to-and-cc">
-            <label>{{! it.i18n.to }}</label> {{! element.to }}&nbsp;&nbsp;
-            {{? element.cc !== '' }}<label>{{! it.i18n.copy }}</label> {{! element.cc }}{{?}}
-        </div>
-    </header>
-    <pre class="content">{{= element.content }}</pre>
-</section>
-{{~}}
-</script>
+        <script type="text/template" class="appointment">
+        <% _.each(data, function(element) { %>
+            <section class="item">
+                <header>
+                    <span class="date pull-left"><%= element.date %></span>
+                    <span class="time pull-right"><%= element.time %></span>
+                    <div class="clear"></div>
+                    <h1><%= element.subject %></h1>
+                    <p class="location"><%= element.location %></p>
+                </header>
+                <% if (element.content !== '') { %><pre class="content"><%= element.content %></pre><% } %>
+                <p class="participants top-border">
+                <% if (element.hasAccepted) { %>
+                    <label><%= i18n.accepted %>:</label> <span class="accepted"><%= element.strings.accepted %></span>&nbsp;&nbsp;
+                <% } %>
+                <% if (element.hasTentative) { %>
+                    <label><%= i18n.tentative %>:</label> <span class="tentative"><%= element.strings.tentative %></span>&nbsp;&nbsp;
+                <% } %>
+                <% if (element.hasUnconfirmed) { %>
+                    <label><%= i18n.unconfirmed %>:</label> <span class="unconfirmed"><%= element.strings.unconfirmed %></span>&nbsp;&nbsp;
+                <% } %>
+                <% if (element.hasDeclined) { %>
+                    <label><%= i18n.declined %>:</label> <span class="declined"><%= element.strings.declined %></span>
+                <% } %>
+                </p>
+            </section>
+        <% }); %>
+        </script>
 
-
-<script type="text/template" class="phonelist">
-{{? it.filtered > 0 }}
-    <div class="note">{{! it.i18n.filtered(it.filtered) }}. <i>{{! it.i18n.notPrinted }}.</i></div>
-    {{?}}
-    <div class="phonelist">
-        <h1>{{! it.i18n.phonelist }}</h1>
-        <table border="0">
-        <thead>
-            <tr>
-                <th>{{! it.i18n.name }}</th>
-                <th>{{! it.i18n.phone }}</th>
-                <th>{{! it.i18n.cellphone }}</th>
-            </tr>
-        </thead>
-        {{~it.data :element}}
-        <tbody class="no-break">
-            {{? it.length >= 30 && element.thumbIndex(element.original.last_name) }}
-            <tr>
-                <td colspan="3" class="thumb-index">{{! element.thumbIndex.get() }}</td>
-            </tr>
-            {{?}}
-            <tr>
-                <td><b>{{! element.name }}</b><br>{{! element.where }}</td>
-                <td>{{! element.phone1 || '-' }}<br>{{! element.phone2 }}</td>
-                <td>{{! element.cellphone1 || '-' }}<br>{{! element.cellphone2 }}</td>
-            </tr>
-            <tr>
-                <td colspan="3" class="spacer">&nbsp;</td>
-            </tr>
-        </tbody>
-        {{~}}
-        </table>
-    </div>
-</script>
-
-
-<script type="text/template" class="appointment">
-{{~it.data :element}}
-<section class="item">
-    <header>
-        <span class="date pull-left">{{! element.date }}</span>
-        <span class="time pull-right">{{! element.time }}</span>
-        <div class="clear"></div>
-        <h1>{{! element.subject}}</h1>
-        <p class="location">{{! element.location }}</p>
-    </header>
-    {{? element.content !== '' }}<pre class="content">{{! element.content }}</pre>{{?}}
-    <p class="participants top-border">
-    {{? element.hasAccepted }}
-        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= element.strings.accepted }}</span>&nbsp;&nbsp;
-    {{?}}
-    {{? element.hasTentative }}
-        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= element.strings.tentative }}</span>&nbsp;&nbsp;
-    {{?}}
-    {{? element.hasUnconfirmed }}
-        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= element.strings.unconfirmed }}</span>&nbsp;&nbsp;
-    {{?}}
-    {{? element.hasDeclined }}
-        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= element.strings.declined }}</span>
-    {{?}}
-    </p>
-</section>
-{{~}}
-</script>
-
-
-<script type="text/template" class="task">
-{{~it.data :element}}
-<section class="item">
-    <header>
-        {{? element.start }}<span class="date pull-left"><label>{{! it.i18n.start }}:</label> {{! element.start }}</span>{{?}}
-        {{? element.due }}<span class="time pull-right"><label>{{! it.i18n.due }}:</label> {{! element.due }}</span>{{?}}
-        <div class="clear"></div>
-        <h1>{{! element.subject}}</h1>
-        <p class="state">{{= element.state }}</p>
-        {{? element.content !== '' }}<pre class="content">{{! element.content }}</pre>{{?}}
-    </header>
-    <div class="details">
-        {{? element.recurrence}}<div class="recurrence"><label>{{! it.i18n.recurrence }} </label>{{! element.recurrence }}</div>{{?}}
-        {{? element.alarm}}<div class="alarm-date"><label>{{! it.i18n.alarm }}: </label>{{! element.alarm }}</div>{{?}}
-        {{? element.priority}}<div class="priority"><label>{{! it.i18n.priority }}: </label>{{! element.priority }}</div>{{?}}
-        {{? element.target_duration}}<div class="target_duration"><label>{{! it.i18n.target_duration }}: </label>{{! element.target_duration }}</div>{{?}}
-        {{? element.actual_duration}}<div class="actual_duration"><label>{{! it.i18n.actual_duration }}: </label>{{! element.actual_duration }}</div>{{?}}
-        {{? element.target_duration}}<div class="target_costs"><label>{{! it.i18n.target_costs }}: </label>{{! element.target_costs }}{{? element.currency }} {{! element.currency }}{{?}}</div>{{?}}
-        {{? element.target_duration}}<div class="actual_costs"><label>{{! it.i18n.actual_costs }}: </label>{{! element.actual_costs }}{{? element.currency }} {{! element.currency }}{{?}}</div>{{?}}
-        {{? element.trip_meter}}<div class="trip_meter"><label>{{! it.i18n.trip_meter }}: </label>{{! element.trip_meter }}</div>{{?}}
-        {{? element.billing_information}}<div class="billing_information"><label>{{! it.i18n.billing_information }}: </label>{{! element.billing_information }}</div>{{?}}
-        {{? element.companies}}<div class="companies"><label>{{! it.i18n.companies }}: </label>{{! element.companies }}</div>{{?}}
-        {{? element.date_completed}}<div class="date:completed"><label>{{! it.i18n.date_completed }}: </label>{{! element.date_completed }}</div>{{?}}
-    <div>
-    {{? element.numParticipants > 0 }}
-    <p class="participants top-border">
-    {{? element.hasAccepted }}
-        <label>{{! it.i18n.accepted }}:</label> <span class="accepted">{{= element.strings.accepted }}</span>&nbsp;&nbsp;
-    {{?}}
-    {{? element.hasTentative }}
-        <label>{{! it.i18n.tentative }}:</label> <span class="tentative">{{= element.strings.tentative }}</span>&nbsp;&nbsp;
-    {{?}}
-    {{? element.hasUnconfirmed }}
-        <label>{{! it.i18n.unconfirmed }}:</label> <span class="unconfirmed">{{= element.strings.unconfirmed }}</span>&nbsp;&nbsp;
-    {{?}}
-    {{? element.hasDeclined }}
-        <label>{{! it.i18n.declined }}:</label> <span class="declined">{{= element.strings.declined }}</span>
-    {{?}}
-    </p>
-    {{?}}
-</section>
-{{~}}
-</script>
-
-
-<!-- the only magic we need here; asks UI to use the upper template -->
-<script>(window.opener || window.parent)[location.search.substr(1)](document);</script>
-
-</body>
+        <script type="text/template" class="task">
+        <% _.each(data, function(element) { %>
+            <section class="item">
+                <header>
+                    <% if (element.start) { %><span class="date pull-left"><label><%= i18n.start %>:</label> <%= element.start %></span><% } %>
+                    <% if (element.due) { %><span class="time pull-right"><label><%= i18n.due %>:</label> <%= element.due %></span><% } %>
+                    <div class="clear"></div>
+                    <h1><%= element.subject %></h1>
+                    <p class="state"><%= element.state %></p>
+                    <% if (element.content !== '') { %><pre class="content"><%= element.content %></pre><% } %>
+                </header>
+                <div class="details">
+                    <% if (element.recurrence) { %><div class="recurrence"><label><%= i18n.recurrence %> </label><%= element.recurrence %></div><% } %>
+                    <% if (element.alarm) { %><div class="alarm-date"><label><%= i18n.alarm %>: </label><%= element.alarm %></div><% } %>
+                    <% if (element.priority) { %><div class="priority"><label><%= i18n.priority %>: </label><%= element.priority %></div><% } %>
+                    <% if (element.target_duration) { %><div class="target_duration"><label><%= i18n.target_duration %>: </label><%= element.target_duration %></div><% } %>
+                    <% if (element.actual_duration) { %><div class="actual_duration"><label><%= i18n.actual_duration %>: </label><%= element.actual_duration %></div><% } %>
+                    <% if (element.target_duration) { %><div class="target_costs"><label><%= i18n.target_costs %>: </label><%= element.target_costs %><% if (element.currency) { %><%= element.currency %><% } %></div><% } %>
+                    <% if (element.target_duration) { %><div class="actual_costs"><label><%= i18n.actual_costs %>: </label><%= element.actual_costs %><% if (element.currency) { %><%= element.currency %><% } %></div><% } %>
+                    <% if (element.trip_meter) { %><div class="trip_meter"><label><%= i18n.trip_meter %>: </label><%= element.trip_meter %></div><% } %>
+                    <% if (element.billing_information) { %><div class="billing_information"><label><%= i18n.billing_information %>: </label><%= element.billing_information %></div><% } %>
+                    <% if (element.companies) { %><div class="companies"><label><%= i18n.companies %>: </label><%= element.companies %></div><% } %>
+                    <% if (element.date_completed) { %><div class="date:completed"><label><%= i18n.date_completed %>: </label><%= element.date_completed %></div><% } %>
+                </div>
+                <% if (element.numParticipants > 0) { %>
+                <p class="participants top-border">
+                    <% if (element.hasAccepted) { %><label><%= i18n.accepted %>:</label> <span class="accepted"><%= element.strings.accepted %></span>&nbsp;&nbsp;<% } %>
+                    <% if (element.hasTentative) { %><label><%= i18n.tentative %>:</label> <span class="tentative"><%= element.strings.tentative %></span>&nbsp;&nbsp;<% } %>
+                    <% if (element.hasUnconfirmed) { %><label><%= i18n.unconfirmed %>:</label> <span class="unconfirmed"><%= element.strings.unconfirmed %></span>&nbsp;&nbsp;<% } %>
+                    <% if (element.hasDeclined) { %><label><%= i18n.declined %>:</label> <span class="declined"><%= element.strings.declined %></span><% } %>
+                </p>
+                <% } %>
+            </section>
+        <% }); %>
+        </script>
+        <!-- the only magic we need here; asks UI to use the upper template -->
+        <script>(window.opener || window.parent)[location.search.substr(1)](document);</script>
+    </body>
 </html>
