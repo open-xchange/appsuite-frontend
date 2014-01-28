@@ -40,7 +40,6 @@ OxUiModuleGenerator.prototype.app = function app() {
   this.mkdir('grunt/config');
 
   this.template('_package.json', 'package.json');
-  this.template('_bower.json', 'bower.json');
   this.template('_Gruntfile.js', 'Gruntfile.js');
 
   this.copy('grunt/clean.js', 'grunt/config/clean.js');
