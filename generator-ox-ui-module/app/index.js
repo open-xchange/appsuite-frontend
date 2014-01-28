@@ -44,6 +44,7 @@ OxUiModuleGenerator.prototype.app = function app() {
   this.template('_Gruntfile.js', 'Gruntfile.js');
 
   this.copy('grunt/clean.js', 'grunt/config/clean.js');
+  this.copy('gitignore', '.gitignore');
 };
 
 OxUiModuleGenerator.prototype.projectfiles = function projectfiles() {

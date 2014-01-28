@@ -1,0 +1,10 @@
+.DS_Store
+*.sublime-*
+*~
+*.swp
+*.kate-swp
+/build
+/tmp
+/node_modules
+local.conf*
+npm-debug.log
