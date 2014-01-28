@@ -73,7 +73,6 @@ define('io.ox/core/pubsub/publications',
     },
     PublicationView = Backbone.View.extend({
         tagName: 'div',
-        _modelBinder: undefined,
         editMode: undefined,
         infostoreItem: false,
         initialize: function () {
@@ -86,8 +85,6 @@ define('io.ox/core/pubsub/publications',
             if (this.model.attributes.entityModule === 'infostore/object') {
                 this.infostoreItem = true;
             }
-
-            this._modelBinder = new Backbone.ModelBinder();
         },
 
         finish: function (url) {

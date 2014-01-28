@@ -46,10 +46,6 @@ define('io.ox/core/pubsub/subscriptions',
 
     SubscriptionView = Backbone.View.extend({
         tagName: 'div',
-        _modelBinder: undefined,
-        initialize: function () {
-            this._modelBinder = new Backbone.ModelBinder();
-        },
         render: function (app) {
             var self = this,
 

@@ -134,18 +134,14 @@ define('io.ox/settings/accounts/settings/pane',
                 'click [data-action="delete"]': 'onDelete'
             },
 
-            _modelBinder: undefined,
-
-            initialize: function () {
-                this._modelBinder = new Backbone.ModelBinder();
+            initialize: function(){
+                this.model.on('change', this.render, this);
             },
 
             render: function () {
                 var self = this;
                 self.$el.empty().append(drawItem(self.model));
-
-                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-                self._modelBinder.bind(self.model, self.el, defaultBindings);
+                self.$el.find('[data-property="displayName"]').text(self.model.attributes.displayName);
 
                 return self;
             },

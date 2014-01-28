@@ -133,8 +133,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         AccountDetailView = Backbone.View.extend({
             tagName: 'div',
             className: 'io-ox-mailfilter-edit',
-            _modelBinder: undefined,
-            initialize: function () {},
             render: function () {
 
                 var baton = ext.Baton({ model: this.model, view: this });
