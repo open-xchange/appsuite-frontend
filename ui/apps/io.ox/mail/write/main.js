@@ -243,9 +243,8 @@ define('io.ox/mail/write/main',
             return $('<div>').append(node).html();
         };
 
-        app.setSignature = function (e) {
-
-            var index = e.data.index,
+        app.setSignature = function (obj) {
+            var index = obj.data.index,
                 signature, text,
                 ed = this.getEditor(),
                 isHTML = !!ed.find;
@@ -465,45 +464,22 @@ define('io.ox/mail/write/main',
         }
 
         app.setBody = function (str) {
-            // get default signature
-            var dsID = _.device('smartphone') ?
+            var content = trimContent(str), dsID, ds;
+            //get default signature
+            dsID = _.device('smartphone') ?
                 (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) :
                 settings.get('defaultSignature');
-            var ds = _(view.signatures)
-                    .find(function (o) { return o.id === dsID; }),
-                content = trimContent(str);
-
-            // set signature?
+            ds = _.find(view.signatures, function (o, i) {
+                    o.index = i;
+                    return o.id === dsID;
+                });
+            //apply
             if (ds) {
-
-                var ln2br = function (str) {
-                    return String(str || '').replace(/\r/g, '')
-                      .replace(new RegExp('\\n', 'g'), '<br>'); // '\n' is for IE
-                };
-
-                if (_.isString(ds.misc)) { ds.misc = JSON.parse(ds.misc); }
-
-                var signature = ds ? $.trim(ds.content) : '',
-                pos = ds ? ds.misc && ds.misc.insertion || 'below' : 'below';
-                // remember as current signature
-                currentSignature = signature;
-                // yep
-                if (editorMode === 'html') {
-                    // prepare signature for html
-                    signature = '<p class="io-ox-signature">' + ln2br(signature) + '</p>';
-                    // text/html
-                    content = '<p></p>' + (pos === 'above' ? signature + content : content + signature);
-                } else {
-                    // text/plain
-                    content = pos === 'above' ?
-                        '\n\n' + signature + (content !== '' ? '\n\n' + content : '') :
-                        '\n\n' + (content !== '' ? content + '\n\n' : '') + signature;
-                }
+                app.setSignature(({ data: ds}));
             } else {
-                // no signature
                 content = content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '';
+                app.getEditor().setContent(content);
             }
-            app.getEditor().setContent(content);
         };
 
         app.getRecipients = function (id) {
