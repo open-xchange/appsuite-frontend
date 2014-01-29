@@ -882,7 +882,7 @@ define('io.ox/mail/view-detail',
                             );
                         }
                         // cut off long lists?
-                        if (i > 3 && length > 5) {
+                        if (i > 1 && length > 3) {
                             dd.hide();
                         }
                     } catch (e) {
@@ -890,10 +890,10 @@ define('io.ox/mail/view-detail',
                     }
                 });
                 // add "[n] more ..."
-                if (_.device('!smartphone') && length > 5) {
+                if (_.device('!smartphone') && length > 3) {
                     outer.append(
                         //#. 'more' like in 'x more attachments' / 'weitere' in German
-                        $('<a href="#" class="n-more">').text((length - 4) + ' ' + gt('more') + ' ...').click(showAllAttachments)
+                        $('<a href="#" class="n-more">').text((length - 2) + ' ' + gt('more') + ' ...').click(showAllAttachments)
                     );
                 }
                 // how 'all' drop down?
