@@ -89,7 +89,7 @@ define('io.ox/mail/settings/signatures/register',
         }
 
         function validateField(field, target) {
-            if (field.val() === '') {
+            if ($.trim(field.val()) === '') {//trim here because backend does not allow names containing only spaces
                 field.addClass('error');
                 target.text(gt('Please enter a valid name'));
             } else {
