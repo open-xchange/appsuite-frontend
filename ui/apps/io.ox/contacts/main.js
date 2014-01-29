@@ -410,9 +410,7 @@ define('io.ox/contacts/main',
             .done(commons.showWindow(win, grid));
     });
 
-
     return {
         getApp: app.getInstance
     };
 });
-

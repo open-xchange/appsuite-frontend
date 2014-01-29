@@ -359,8 +359,7 @@ define('io.ox/contacts/edit/view-form',
                 if (ref === 'io.ox/core/user') {
                     //invoked by sidepopup (portal); uses event of hidden sidebar-close button
                     $('.io-ox-sidepopup').find('[data-action="close"]').trigger('click');
-                }
-                else {
+                } else {
                     var button;
                     if (_.device('small')) {
                         // really not so nice...
@@ -452,7 +451,7 @@ define('io.ox/contacts/edit/view-form',
 
             var folder_id = model.get('folder_id'), id = model.get('id') || id,
                 upload = api.uploadInProgress(_.ecid(model.attributes));
-            
+
             //if there are errors show them
             if (errors.length > 0) {
                 require(['io.ox/core/notifications'], function (notifications) {

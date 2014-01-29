@@ -337,7 +337,6 @@ define('io.ox/core/main',
 
     }());
 
-
     (function () {
 
         var CHECKINTERVAL = 10,     // check only in this interval to optimize script performance
@@ -479,7 +478,6 @@ define('io.ox/core/main',
     //
     // Connection metrics
     //
-
 
     function launch() {
 
@@ -685,7 +683,6 @@ define('io.ox/core/main',
                 );
             }
         });
-
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'divider-before-fullscreen',

@@ -118,7 +118,6 @@ define('io.ox/contacts/actions',
         }
     });
 
-
     function moveAndCopy(type, label, success, requires) {
 
         new Action('io.ox/contacts/actions/' + type, {
@@ -280,7 +279,7 @@ define('io.ox/contacts/actions',
 
     /**
      * check for containing contacts
-     * @param  {object|array} 
+     * @param  {object|array}
      * @return {deferred} returns boolean
      */
     function hasContacts(data) {
@@ -352,10 +351,6 @@ define('io.ox/contacts/actions',
 
                     });
                 });
-
-
-
-
             });
         }
     });
@@ -630,7 +625,6 @@ define('io.ox/contacts/actions',
             });
         }
     });
-
 
     // Mobile multi select extension points
     // action send mail to contact

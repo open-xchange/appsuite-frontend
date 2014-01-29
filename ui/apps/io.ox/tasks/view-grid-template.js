@@ -18,7 +18,6 @@ define('io.ox/tasks/view-grid-template',
 
     'use strict';
 
-
     //grid-based list for portal
     var gridTemplate = {
          // main grid template

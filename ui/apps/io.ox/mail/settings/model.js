@@ -39,5 +39,3 @@ define('io.ox/mail/settings/model', ['settings!io.ox/mail'], function (settings)
 
 
 
-
-

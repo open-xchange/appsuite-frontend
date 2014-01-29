@@ -244,7 +244,6 @@ define('io.ox/calendar/list/perspective',
             }
         });
 
-
         /**
          * returns the all request for the vgrid
          * @param  {Object} dates   contains a start end end date

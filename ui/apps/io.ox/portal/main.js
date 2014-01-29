@@ -161,7 +161,6 @@ define('io.ox/portal/main',
     });
 
 
-
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/portal', title: 'Portal' }),
         win,

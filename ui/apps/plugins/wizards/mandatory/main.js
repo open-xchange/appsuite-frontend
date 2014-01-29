@@ -163,7 +163,6 @@ define('plugins/wizards/mandatory/main', [
                     }
                 }
 
-
                 baton.availableTimeZones = sorted;
                 baton.model = settings;
                 baton.libraries = {

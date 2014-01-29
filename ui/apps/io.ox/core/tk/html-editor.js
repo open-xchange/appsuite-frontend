@@ -146,7 +146,7 @@ define.async('io.ox/core/tk/html-editor',
             self.removeAttr('title target');
             // fix references
             if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
-                match = (self.text() + '').match(/^\[(\d+)\]$/);
+                match = (String(self.text())).match(/^\[(\d+)\]$/);
                 self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
             }
         }
@@ -476,7 +476,6 @@ define.async('io.ox/core/tk/html-editor',
                 });
 
 
-
                 def.resolve();
             },
 
@@ -563,7 +562,7 @@ define.async('io.ox/core/tk/html-editor',
             },
 
             set = function (str) {
-                ed.setContent(emoji.processEmoji(str) + '');
+                ed.setContent(String(emoji.processEmoji(str)));
             },
 
             clear = function () {

@@ -1,8 +1,8 @@
 define('plugins/portal/twitter/util',
     ['plugins/portal/twitter/network',
-    'gettext!plugins/portal',
-    'io.ox/core/notifications',
-    'io.ox/core/date'
+     'gettext!plugins/portal',
+     'io.ox/core/notifications',
+     'io.ox/core/date'
     ], function (network, gt, notifications, date) {
 
     'use strict';
@@ -524,7 +524,6 @@ define('plugins/portal/twitter/util',
                     }
                 }),
             success = options !== undefined ? options.success : undefined;
-
 
         replyBoxContainer.append(
             textArea,

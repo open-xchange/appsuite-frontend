@@ -69,7 +69,6 @@ define('io.ox/core/tk/config-sentence', ['io.ox/core/tk/keys'], function (KeyLis
                 }).val(self[attribute]);
                 var keys = new KeyListener($numberInput);
 
-
                 var $content = $('<span>' + originalContent + '</span>');
                 $content.find('.number-control').empty().append(
                     $numberInput

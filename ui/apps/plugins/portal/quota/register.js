@@ -43,7 +43,6 @@ define('plugins/portal/quota/register',
             i18nName: gt('Mail quota')
         });
 
-
         fields.push({
             quota: quota.mail.countquota,
             usage: quota.mail.countuse,

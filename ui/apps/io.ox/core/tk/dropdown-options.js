@@ -50,7 +50,6 @@ define('io.ox/core/tk/dropdown-options',
                 load();
                 save();
 
-
                 //add nodes
                 $anchor.after($container);
                 $container.append($anchor);
@@ -73,7 +72,6 @@ define('io.ox/core/tk/dropdown-options',
 
                 return self;
             },
-
 
             /**
              * load last used options (or default)

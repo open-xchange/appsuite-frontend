@@ -314,7 +314,6 @@ define('io.ox/files/fluid/view-detail',
                                 )
                             );
 
-
                     var baton = ext.Baton({ data: version, openedBy: openedBy});
                     baton.isCurrent = version.id === baton.data.current_version;
                     ext.point(POINT + '/version').invoke('draw', $entryRow, baton);
@@ -332,7 +331,6 @@ define('io.ox/files/fluid/view-detail',
                         )
                     )
                 );
-
 
                 // Then let's fetch all versions and update the table accordingly
                 if (!allVersions) {

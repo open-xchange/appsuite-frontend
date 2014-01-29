@@ -156,7 +156,6 @@ define('io.ox/backbone/forms',
 
         this.modelEvents = {};
 
-
         if (options.rare) {
             this.modelEvents['change:' + options.attribute] = 'handleRareModelChange updateElement';
         } else {
@@ -983,7 +982,6 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
-
     var forms = {
         ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
@@ -1001,4 +999,3 @@ define('io.ox/backbone/forms',
 
     return forms;
 });
-

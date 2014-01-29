@@ -61,7 +61,6 @@ plugins/upsell//ads:
           type: text-only
           text: "<p>Keeping track of your appointments is one thing, but organising your life is something else. The Group Calendar lets you take control of your life and give it order.</p><p>This calendar is lets you plan the days and weeks ahead. Share calendars with others and confirm everyone's availability before you even arrange a meeting.</p>"
 
-
 plugins/upsell//shop:
   priceFormat: '$%sUSD'
   target: 'http://localhost/order-confirmation?cartContents=OXUPSELLCART&context=OXUPSELLCONTEXT&user=OXUPSELLUSER'

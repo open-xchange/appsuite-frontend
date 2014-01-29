@@ -53,7 +53,6 @@ define('io.ox/mail/vacationnotice/settings/model',
             preparedData.active = false;
         }
 
-
         var testForTimeframe = {
                 'id': 'allof',
                 'tests': []
@@ -138,7 +137,6 @@ define('io.ox/mail/vacationnotice/settings/model',
         dateUntil: gt('End'),
         activateTimeFrame: gt('Send vacation notice during this time only')
     };
-
 
     return {
         api: api,

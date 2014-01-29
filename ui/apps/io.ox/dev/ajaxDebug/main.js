@@ -82,7 +82,6 @@ define('io.ox/dev/ajaxDebug/main',
             .css({ padding: '20px 40px 20px 40px' })
             .appendTo(win.nodes.main);
 
-
         viewer = new callViews.CallView(right, callHandler);
 
         // Grid

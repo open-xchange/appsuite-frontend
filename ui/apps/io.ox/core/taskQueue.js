@@ -36,7 +36,6 @@ define('io.ox/core/taskQueue', function () {
 
         this.state = 'initial';
 
-
         this.start = function (runNext) {
             if (this.state === 'invalidated') {
                 return;
@@ -149,7 +148,6 @@ define('io.ox/core/taskQueue', function () {
             return _(tasks);
         };
     }
-
 
     return {
         Task: Task,

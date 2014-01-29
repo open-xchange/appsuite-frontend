@@ -498,11 +498,11 @@ define('io.ox/contacts/api',
                 if (data.length) {
                     // favor contacts with an image
                     data.sort(function (a, b) {
-                        return !!b.image1_url ? +1 : -1;
+                        return !!b.image1_url ? + 1 : -1;
                     });
                     // favor contacts in global address book
                     data.sort(function (a, b) {
-                        return b.folder_id === '6' ? +1 : -1;
+                        return b.folder_id === '6' ? + 1 : -1;
                     });
                     // just use the first one
                     data = data[0];
@@ -536,12 +536,15 @@ define('io.ox/contacts/api',
 
         // duck checks
         if (api.looksLikeResource(options)) {
+
             url = ox.base + '/apps/themes/default/dummypicture_resource.png';
-        }
-        else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+
+        } else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+
             url = ox.base + '/apps/themes/default/dummypicture_group.png';
-        }
-        else if (_.isString(options.image1_url) && options.image1_url !== '') {
+
+        } else if (_.isString(options.image1_url) && options.image1_url !== '') {
+
             params = $.param($.extend({}, {
                 // scale
                 width: options.width,
@@ -549,6 +552,7 @@ define('io.ox/contacts/api',
                 scaleType: options.scaleType
             }));
             url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
+
         }
 
         // already done?
@@ -653,11 +657,12 @@ define('io.ox/contacts/api',
             if (_.isString(data)) return set(data);
 
             if (data) {
-                if (!_.isEmpty(data))
+                if (!_.isEmpty(data)) {
                     set(util[options.stringify](data));
-                else
+                } else {
                     //fallback
                     set(display_name);
+                }
                 clear();
             }
         };
@@ -666,14 +671,14 @@ define('io.ox/contacts/api',
         if (data && data.full_name) {
             cont(data.full_name);
             clear();
-        }
+
         // looks like a full object?
-        else if (data && (data.last_name || data.first_name)) {
+        } else if (data && (data.last_name || data.first_name)) {
             cont(data);
             clear();
-        }
+
         // load data
-        else {
+        } else {
             api.getByEmailadress(data.email).done(cont).fail(clear);
         }
 

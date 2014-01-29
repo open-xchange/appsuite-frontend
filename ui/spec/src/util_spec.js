@@ -12,7 +12,6 @@
  */
 define([], function () {
 
-
     describe('Global Utilities:', function () {
         var expect = chai.expect;
 

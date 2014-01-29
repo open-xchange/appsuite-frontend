@@ -404,7 +404,6 @@ define('io.ox/core/cache',
         this.merge = function (data, timestamp) {
             var key, changed = false, self = this;
 
-
             if (_.isArray(data)) {
                 timestamp = timestamp !== undefined ? timestamp : _.now();
                 var i = 0, $i = data.length;

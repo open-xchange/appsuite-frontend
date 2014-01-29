@@ -342,7 +342,6 @@ define('io.ox/core/permissions/permissions',
                         isFolderAdmin = false;
                     }
 
-
                     var options = {top: 60, width: 800, center: false, maximize: true};
                     if (_.device('!desktop')) {
                         options = {top: '40px', center: false};

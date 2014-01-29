@@ -40,7 +40,7 @@ define('io.ox/calendar/settings/pane',
             for (var i = 0; i < 24; i++) {
                 array.push({
                     label : new date.Local(0, 0, 0, i, 0, 0, 0).format(date.TIME),
-                    value : i + ''
+                    value : String(i)
                 });
             }
             return array;

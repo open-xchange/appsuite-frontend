@@ -73,7 +73,6 @@ define('io.ox/linkedIn/view-detail',
 
     // Detail renderers
 
-
     // Past Engagements
     rendererPoint.extend({
         id: 'linkein/details/renderer/experience',

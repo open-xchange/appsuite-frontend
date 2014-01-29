@@ -31,7 +31,6 @@ define('io.ox/contacts/distrib/create-dist-view',
             tagName: 'div'
         });
 
-
     point.extend({
         id: 'title-controls',
         index: 100,
@@ -59,7 +58,6 @@ define('io.ox/contacts/distrib/create-dist-view',
             );
         }
     });
-
 
     point.extend(new forms.ControlGroup({
         id: 'displayname',
@@ -157,10 +155,11 @@ define('io.ox/contacts/distrib/create-dist-view',
                 if (matchingEmail || matchingPlaceholder) {
                     // custom error message
                     var message;
-                    if (matchingEmail)
+                    if (matchingEmail) {
                         message = gt('The email address ' + newMember.mail + ' is already in the list');
-                    else if (matchingPlaceholder)
+                    } else if (matchingPlaceholder) {
                         message = gt('The person ' + newMember.display_name + ' is already in the list');
+                    }
 
                     notifications.yell('info', message);
 

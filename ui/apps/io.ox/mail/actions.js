@@ -1173,7 +1173,6 @@ define('io.ox/mail/actions',
         }
     });
 
-
     // Mobile multi select extension points
     // action markunread
     ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({

@@ -552,7 +552,6 @@ define('io.ox/mail/main',
             grid.prop('unread', !grid.prop('unread'));
         });
 
-
         // custom all request
 
         /*

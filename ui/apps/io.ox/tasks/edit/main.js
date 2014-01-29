@@ -219,7 +219,6 @@ define('io.ox/tasks/edit/main',
 
         getApp: createApp,
 
-
         reuse: function (type, data) {
             if (type === 'edit') {
                 return ox.ui.App.reuse('io.ox/tasks:edit.' + _.cid(data));

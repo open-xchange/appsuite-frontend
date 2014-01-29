@@ -647,7 +647,6 @@ define('io.ox/mail/write/main',
             view.form.find('input[name=sendtype]').val(type || mailAPI.SENDTYPE.NORMAL);
         };
 
-
         /**
          * store headers data in form
          * @param {object} header key/value pairs
@@ -1055,7 +1054,7 @@ define('io.ox/mail/write/main',
                 bcc: parse(data.bcc),
                 headers: headers,
                 reply_to: mailUtil.formatSender(replyTo),
-                subject: data.subject + '',
+                subject: String(data.subject),
                 priority: parseInt(data.priority, 10) || 3,
                 vcard: parseInt(data.vcard, 10) || 0,
                 attachments: [attachments],
@@ -1228,7 +1227,6 @@ define('io.ox/mail/write/main',
                     });
                 }
 
-
             } else {
                 cont();
             }
@@ -1388,5 +1386,4 @@ define('io.ox/mail/write/main',
     };
 
 });
-
 

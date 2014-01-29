@@ -59,7 +59,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         var id = options.id;
         delete options.id;
 
-
         // A few overridable default implementations
         options.initialize = options.initialize || function () {
             var self = this;
@@ -236,9 +235,8 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
             return Backbone.View.extend(options);
         };
-
-
     }
+
     function AttributeView(options) {
         _.extend(this, {
 
@@ -257,7 +255,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     if (lastAttribute) {
                         self.$el.append($.txt(self.separator(lastAttribute)));
                     }
-
 
                     if (self.model.isSet(attribute)) {
                         self.$el.append($.txt(_.noI18n(value)));

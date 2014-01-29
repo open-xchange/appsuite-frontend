@@ -203,7 +203,6 @@ define('io.ox/core/tk/dialogs',
             nodes[part] = nodes.popup.find('.modal-' + part);
         });
 
-
         if (o.addclass) {
             nodes.popup.addClass(o.addclass);
         }
@@ -742,7 +741,6 @@ define('io.ox/core/tk/dialogs',
                 self.nodes.click.on('click', closeByClick);
                 popup.on('view:remove remove', closeByEvent);
                 $(document).on('keydown', closeByEscapeKey);
-
 
                 // decide for proper side
                 var docWidth = $('body').width(), mode,

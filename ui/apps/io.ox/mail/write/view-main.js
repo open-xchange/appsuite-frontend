@@ -327,7 +327,6 @@ define('io.ox/mail/write/view-main',
                 .addClass('recipient-list').hide();
         },
 
-
        /**
         * appends recipient nodes
         *
@@ -522,7 +521,6 @@ define('io.ox/mail/write/view-main',
                 .append(this.createField('cc')
                         .find('input').attr('placeholder', gt.format('%1$s ...', gt('in copy'))).placeholder().end()
                     );
-
 
             // BCC
             this.addLink('bcc', gt('Blind copy (BCC) to'));
@@ -856,7 +854,6 @@ define('io.ox/mail/write/view-main',
                         parentScrollpane = self.form.parent(),
                         paddingTop, paddingBottom, paddingHeight;
 
-
                     if (clientHeight < scrollHeight) {
                         paddingTop = parseFloat(input.css('padding-top'));
                         paddingBottom = parseFloat(input.css('padding-bottom'));
@@ -884,7 +881,6 @@ define('io.ox/mail/write/view-main',
                             'offsetTop': $(this).offset().top
                         });
                     });
-
 
                 if (_.device('!smartphone')) {
                     // standard textarea for desktops
@@ -937,7 +933,6 @@ define('io.ox/mail/write/view-main',
                     return self.textarea;
                 }
             }
-
 
             this.rightside.append(
                 // buttons

@@ -20,7 +20,6 @@ define('io.ox/mail/autoforward/settings/filter',
 
     'use strict';
 
-
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/autoforward/model', api);
 
     return {

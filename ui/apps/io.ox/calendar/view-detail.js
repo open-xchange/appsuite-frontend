@@ -165,8 +165,6 @@ define('io.ox/calendar/view-detail',
         return node;
     }
 
-
-
     ext.point('io.ox/calendar/detail').extend({
         index: 600,
         id: 'participants',
@@ -305,7 +303,6 @@ define('io.ox/calendar/view-detail',
             this.append(participants);
         }
     });
-
 
     ext.point('io.ox/calendar/detail').extend({
         index: 700,
@@ -487,7 +484,6 @@ define('io.ox/calendar/view-detail',
             } catch (e) {
                 console.error('io.ox/calendar/view-detail:draw()', e);
             }
-
         }
     };
 });

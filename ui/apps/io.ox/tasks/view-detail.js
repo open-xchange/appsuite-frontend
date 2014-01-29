@@ -210,7 +210,6 @@ define('io.ox/tasks/view-detail',
                         intParticipants = [],
                         extParticipants = [];
 
-
                     //divide participants into internal and external users
 
                     _(task.participants).each(function (participant) {

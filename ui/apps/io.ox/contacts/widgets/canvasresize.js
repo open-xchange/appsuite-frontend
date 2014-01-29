@@ -204,10 +204,11 @@ define('io.ox/contacts/widgets/canvasresize',
                     for (var i in prop) {
                         if (target === prop[i])
                             continue;
-                        if (deep && typeof prop[i] === 'object' && target[i])
+                        if (deep && typeof prop[i] === 'object' && target[i]) {
                             methods.extend(target[i], prop[i]);
-                        else if (prop[i] !== undefined)
+                        } else if (prop[i] !== undefined) {
                             target[i] = prop[i];
+                        }
                     }
             return target;
         }
@@ -313,10 +314,11 @@ define('io.ox/contacts/widgets/canvasresize',
     };
 
     return function (file, options) {
-        if (typeof file === 'string')
+        if (typeof file === 'string') {
             return methods[file](options);
-        else
+        } else {
             new Plugin(file, options);
+        }
     };
 
 });

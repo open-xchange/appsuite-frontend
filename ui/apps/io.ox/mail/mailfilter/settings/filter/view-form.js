@@ -430,7 +430,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             }
 
 
-
         });
 
     ext.point(POINT + '/view').extend({
@@ -619,7 +618,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         attribute: 'rulename'
     }));
 
-
     ext.point(POINT + '/view').extend({
         index: 100,
         id: 'appliesto',
@@ -698,7 +696,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             if (!target.find('[type="checkbox"]').length) {
                 target.append(elements.drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
             }
-
 
         }
     });

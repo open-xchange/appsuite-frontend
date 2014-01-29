@@ -308,7 +308,6 @@ define('io.ox/core/api/factory',
                     .done(o.done.get || $.noop);
             },
 
-
             /**
              * remove elements from list
              * @param  {array} list

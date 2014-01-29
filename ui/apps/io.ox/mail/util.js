@@ -89,7 +89,6 @@ define('io.ox/mail/util',
         });
     });
 
-
     that = {
 
         /**
@@ -391,10 +390,10 @@ define('io.ox/mail/util',
             if (d.getDate() === now.getDate()) {
                 if (delta < HOUR) {
                     n = Math.ceil(delta / MINUTE);
-                    return '' + format(ngettext('%d minute ago', '%d minutes ago', n), n); /*i18n*/
+                    return String(format(ngettext('%d minute ago', '%d minutes ago', n), n)); /*i18n*/
                 } else {
                     n = Math.ceil(delta / HOUR);
-                    return '' + format(ngettext('%d hour ago', '%d hours ago', n), n); /*i18n*/
+                    return String(format(ngettext('%d hour ago', '%d hours ago', n), n)); /*i18n*/
                 }
             } else if (d.getDate() === now.getDate() - 1) {
                 // yesterday

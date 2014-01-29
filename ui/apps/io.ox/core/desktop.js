@@ -1710,7 +1710,6 @@ define('io.ox/core/desktop',
         adaptiveLoader.listen(app.get('name'));
     });
 
-
     return {};
 
 });

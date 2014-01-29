@@ -290,7 +290,6 @@ define('io.ox/core/pubsub/subscriptions',
     });
 
 
-
     ext.point(POINT + '/dialog').extend({
         id: 'targetfolder',
         index: 200,

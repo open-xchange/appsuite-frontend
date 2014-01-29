@@ -35,6 +35,5 @@ define('io.ox/oauth/proxy', ['io.ox/core/http'], function (http) {
         }
     };
 
-
     return that;
 });

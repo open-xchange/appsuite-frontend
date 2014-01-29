@@ -49,7 +49,7 @@ define.async('io.ox/realtime/rt',
     var TIMEOUT = 2 * 60 * 1000;
     var INFINITY = TIMEOUT / 5000;
     var offlineCountdown;
-    
+
     var mode = 'lazy';
     var intervals = {
         lazy: 10000, // When traffic is low, don't ask for data as often
@@ -86,7 +86,6 @@ define.async('io.ox/realtime/rt',
         stanzas: []
     };
 
-
     var lastDelivery = _.now();
     var lastCheck = _.now();
     var ticks = 0;
@@ -117,7 +116,6 @@ define.async('io.ox/realtime/rt',
     function stop() {
         running = false;
     }
-
 
     // Keep sending stanzas until buffer is empty
     function purge() {
@@ -262,7 +260,6 @@ define.async('io.ox/realtime/rt',
     };
 
     Event.extend(api);
-
 
     function matches(json, namespace, element) {
         return json.namespace === namespace && json.element === element;
@@ -540,7 +537,6 @@ define.async('io.ox/realtime/rt',
 
         return result;
     }
-
 
     function enrol() {
         if (!running) {

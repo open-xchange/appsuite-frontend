@@ -70,11 +70,9 @@ define('io.ox/contacts/util',
 
                 if (preference === 'firstname lastname') {
                     format = title ? '%3$s %1$s %2$s' : '%1$s %2$s';
-                }
-                else if (preference === 'lastname, firstname') {
+                } else if (preference === 'lastname, firstname') {
                     format = title ? '%3$s %2$s, %1$s' : '%2$s, %1$s';
-                }
-                else {
+                } else {
                     // auto/fallback
                     format = title ?
                         //#. Name with title

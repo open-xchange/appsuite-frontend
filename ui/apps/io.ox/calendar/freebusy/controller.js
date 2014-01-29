@@ -100,7 +100,6 @@ define('io.ox/calendar/freebusy/controller',
                 } else {
                     this.updateAppointment(data);
                 }
-
             };
 
             this.postprocess = function () {
@@ -453,9 +452,9 @@ define('io.ox/calendar/freebusy/controller',
                 if (data.error) {
                     data = fallback;
                     options.folder = fallback.id;
-                }
+
                 // show warning in case of missing 'create' right
-                else if (!folderAPI.can('create', data)) {
+                } else if (!folderAPI.can('create', data)) {
                     templates.informAboutfallback(data);
                     data = fallback;
                     options.folder = fallback.id;

@@ -143,7 +143,6 @@ define('io.ox/core/api/snippets',
         }).done(fnTrigger('refresh.all'));
     };
 
-
     return api;
 
 });

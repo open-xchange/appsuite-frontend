@@ -36,7 +36,6 @@ define('plugins/portal/twitter/register',
 
     util.setup({$tweets: $tweets, tweetCache: tweetCache});
 
-
     var setOffline = function (options) {
         if (options !== undefined && options.offline !== undefined && options.offline !== offline) {
             offline = options.offline;

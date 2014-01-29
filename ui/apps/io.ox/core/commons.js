@@ -638,7 +638,6 @@ define('io.ox/core/commons',
                 }, 100);
             };
 
-
             return function (parent, app) {
                 var sides = {};
                 parent.addClass('vsplit').append(

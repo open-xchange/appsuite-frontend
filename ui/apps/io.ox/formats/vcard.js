@@ -155,7 +155,6 @@ define('io.ox/formats/vcard', function () {
         output += contact.title ?  '<div class="title">' + contact.title.typeless + '</div>' : '';
         output += contact.role ?  '<div class="role">' + contact.role.typeless + '</div>' : '';
 
-
         //url (multitype)
         for (type in contact.url) {
             for (i in contact.url[type]) {

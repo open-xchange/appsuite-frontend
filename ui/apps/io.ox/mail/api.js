@@ -699,7 +699,6 @@ define('io.ox/mail/api',
         api.trigger('refresh.list');
     });
 
-
     /**
      * cleaning up
      * @param  {string]} folder_id
@@ -1266,7 +1265,7 @@ define('io.ox/mail/api',
     function handleSendXHR2(data, files) {
 
         var form = new FormData();
-        
+
         // add mail data
         form.append('json_0', JSON.stringify(data));
         // add files
@@ -1285,7 +1284,7 @@ define('io.ox/mail/api',
     }
 
     function handleSendTheGoodOldWay(data, form) {
-        
+
         return http.FORM({
             module: 'mail',
             action: 'new',

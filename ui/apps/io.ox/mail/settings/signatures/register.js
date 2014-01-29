@@ -169,7 +169,6 @@ define('io.ox/mail/settings/signatures/register',
             var $container;
             var $entirePopup = $pane.closest('.io-ox-sidepopup');
 
-
             function busy() {
                 dialogs.busy($entirePopup);
             }

@@ -447,7 +447,6 @@ define('io.ox/core/commons-folderview',
             }
         });
 
-
         function setFolderPermissions(e) {
             e.preventDefault();
             var app = e.data.app,
@@ -923,7 +922,7 @@ define('io.ox/core/commons-folderview',
                             });
                         } else {
                             if (!id && !newId && sel.length === 0) {
-                                tree.select(coreConfig.get('folder/' + options.type) + '');
+                                String(tree.select(coreConfig.get('folder/' + options.type)));
                             }
                             tree.repaint();
                         }

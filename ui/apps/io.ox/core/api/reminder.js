@@ -81,7 +81,6 @@ define('io.ox/core/api/reminder',
             }
         };
 
-
     var api = {
         /**
         * delete reminder
@@ -207,7 +206,6 @@ define('io.ox/core/api/reminder',
     ox.on('refresh^', function () {
         api.refresh();
     });
-
 
     return api;
 

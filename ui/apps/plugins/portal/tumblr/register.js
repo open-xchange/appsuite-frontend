@@ -44,7 +44,7 @@ define('plugins/portal/tumblr/register',
             function initFeed() {
                 var url = baton.model.get('props').url;
                 baton.feed = new Feed({
-                    url: '' + apiUrl.join(url) + '&jsonp='
+                    url: String(apiUrl.join(url) + '&jsonp=')
                 });
             }
 
@@ -73,7 +73,6 @@ define('plugins/portal/tumblr/register',
             if (title) {
                 this.find('h2 span.title').text(_.noI18n(title));
             }
-
 
             if (firstPost && _.isArray(firstPost.photos) && firstPost.photos.length && (sizes = firstPost.photos[0].alt_sizes)) {
                 // add photo

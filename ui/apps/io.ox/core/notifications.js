@@ -370,7 +370,6 @@ define('io.ox/core/notifications',
         // type = info | warning | error | success
         yell: (function () {
 
-
             //$('#io-ox-core').prepend($('<div id="io-ox-notifications-popups">'));
 
             var validType = /^(busy|error|info|success|warning)$/,

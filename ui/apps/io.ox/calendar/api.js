@@ -402,7 +402,6 @@ define('io.ox/calendar/api',
             });
         },
 
-
         /**
          * change confirmation status
          * @param  {object} o (properties: id, folder, data)

@@ -177,7 +177,6 @@ define('io.ox/core/tk/forms', ['io.ox/core/date'], function (date) {
             return f.node;
         },
 
-
         createTextArea: function (options) {
             var f = new Field(options, 'text');
             f.create('<textarea>', textChange);
@@ -394,7 +393,6 @@ define('io.ox/core/tk/forms', ['io.ox/core/date'], function (date) {
         createButton: function (options) {
             return $('<button type="button">').addClass(options.btnclass).text(options.label);
         }
-
 
     };
 

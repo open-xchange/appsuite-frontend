@@ -410,7 +410,6 @@ define('io.ox/files/actions',
         }
     });
 
-
     new Action('io.ox/files/actions/rename', {
         requires: function (e) {
             return e.collection.has('one') && isUnLocked(e) && (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
@@ -550,7 +549,6 @@ define('io.ox/files/actions',
             });
         }
     });
-
 
     function moveAndCopy(type, label, success) {
         new Action('io.ox/files/actions/' + type, {
@@ -1194,7 +1192,6 @@ define('io.ox/files/actions',
         ref: 'io.ox/files/icons/slideshow-fullscreen'
     }));
 
-
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
         index: 500,
         id: 'mediaplayer-audio',
@@ -1245,6 +1242,5 @@ define('io.ox/files/actions',
         icon: 'icon-th-large',
         cssClasses: 'io-ox-action-link btn layout'
     }));
-
 
 });

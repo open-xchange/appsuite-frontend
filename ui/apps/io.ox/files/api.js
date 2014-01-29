@@ -26,7 +26,6 @@ define('io.ox/files/api',
 
     'use strict';
 
-
     var tracker = (function () {
 
         var fileLocks = {},

@@ -144,9 +144,7 @@ define('io.ox/preview/officePreview/main',
 
                 $shownContent.addClass(documentTypeClasses(file));
 
-
                 $shownContent.addClass('io-ox-office-preview-content').css({position: 'relative', left: centerOffset, right: centerOffset});
-
 
                 app.index = pageNumber;
 

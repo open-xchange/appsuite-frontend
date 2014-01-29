@@ -443,7 +443,6 @@ define('io.ox/calendar/edit/template',
         rowClass: 'collapsed'
     });
 
-
     point.extend(new attachments.EditableAttachmentList({
         id: 'attachment_list',
         registerAs: 'attachmentList',

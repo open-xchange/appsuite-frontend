@@ -32,7 +32,7 @@ define('io.ox/dev/theme-maker/main',
 
     function update(e) {
         var obj = {};
-        obj[e.data.id + ''] = $(this).val();
+        obj[String(e.data.id)] = $(this).val();
         themes.alter(obj);
         out.val(themes.getDefinitions());
     }
@@ -42,7 +42,7 @@ define('io.ox/dev/theme-maker/main',
             fontSize: '16px',
             padding: '4px 13px 4px 13px',
             color: '#000'
-        }).text(title + '');
+        }).text(String(title));
     }
 
     function createPicker(title, id) {
@@ -57,7 +57,7 @@ define('io.ox/dev/theme-maker/main',
                     lineHeight: '1.5em',
                     fontWeight: 'bold',
                     color: 'black'
-                }).text(title + '')
+                }).text(String(title))
             )
             .append($('<br>'))
             .append(

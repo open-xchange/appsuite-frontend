@@ -154,7 +154,6 @@ define('io.ox/help/center',
         $('#io-ox-help-off').detach();
     };
 
-
     return center;
 
 });

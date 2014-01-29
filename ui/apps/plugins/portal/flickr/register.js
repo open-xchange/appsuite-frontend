@@ -52,7 +52,7 @@ define('plugins/portal/flickr/register',
                 var props = baton.model.get('props'), url;
 
                 if (props.method) {
-                    url = '' + (apiUrl[props.method] || '') + encodeURIComponent(props.query) + '&jsoncallback=';
+                    url = String((apiUrl[props.method] || '')) + encodeURIComponent(props.query) + '&jsoncallback=';
                     baton.feed = new Feed({ url: url });
                     baton.feed.process = function (data) {
                         return data && data.stat === 'ok' ? data.photos : { error: gt('Could not load data') };

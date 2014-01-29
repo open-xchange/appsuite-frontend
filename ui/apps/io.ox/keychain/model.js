@@ -19,7 +19,6 @@ define('io.ox/keychain/model', ['io.ox/core/extensions'], function (ext) {
         model: Account
     });
 
-
     function wrap(thing) {
         if (arguments.length > 1) {
             return _(arguments).map(wrap);

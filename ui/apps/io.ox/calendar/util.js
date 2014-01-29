@@ -453,7 +453,6 @@ define('io.ox/calendar/util',
                         gt('Every %1$d weeks on all days', interval);
                 }
 
-
                 // special case: weekly on work days
                 if (days === 62) {
                     return interval === 1 ?

@@ -74,7 +74,6 @@ define('io.ox/calendar/invitations/register',
 
     var priority = ['update', 'ignore', 'accept', 'tentative', 'decline', 'declinecounter', 'accept_and_replace', 'accept_and_ignore_conflicts', 'accept_party_crasher', 'create', 'delete'];
 
-
     function discoverIMipAttachment(baton) {
         return _(baton.data.attachments).find(function (attachment) {
             var match = attachment.content_type.match(regex);

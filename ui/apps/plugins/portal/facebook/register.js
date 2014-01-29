@@ -139,7 +139,7 @@ define('plugins/portal/facebook/register',
         },
 
         requiresSetUp: function () {
-            return keychain.isEnabled('facebook') && ! keychain.hasStandardAccount('facebook');
+            return keychain.isEnabled('facebook') && !keychain.hasStandardAccount('facebook');
         },
 
         performSetUp: function (baton) {
@@ -212,7 +212,7 @@ define('plugins/portal/facebook/register',
 
                 ext.point('io.ox/plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
-                    if (renderer.accepts(post) && ! foundHandler) {
+                    if (renderer.accepts(post) && !foundHandler) {
                         //console.log(profile.name, ' Renderer: ', renderer.id, post); //this is too useful to delete it, just uncomment it
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
@@ -272,7 +272,6 @@ define('plugins/portal/facebook/register',
             );
         }
     });
-
 
     /* index >= 128 for all plugins with a clearly defined purpose (meaning: I exactly know what I'm doing) */
     ext.point('io.ox/plugins/portal/facebook/renderer').extend({
@@ -451,7 +450,6 @@ define('plugins/portal/facebook/register',
             }
         }
     });
-
 
     ext.point('io.ox/plugins/portal/facebook/renderer').extend({
         id: 'app-story',

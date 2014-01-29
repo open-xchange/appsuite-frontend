@@ -70,7 +70,6 @@ define('io.ox/mail/autoforward/settings/view-form',
             }
         }));
 
-
         return VacationEditView;
     }
 

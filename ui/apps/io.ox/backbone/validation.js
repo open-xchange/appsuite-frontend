@@ -30,7 +30,7 @@ define('io.ox/backbone/validation',
             return true;
         },
         anyFloat: function (val) {//numbers with . or , as a separator are valid 1.23 or 1,23 for example
-            val = ('' + val).replace(/,/g, '.');
+            val = String(val).replace(/,/g, '.');
             var isValid = (emptycheck(val)) || //empty value is valid (if not, add the mandatory flag)
             (!isNaN(parseFloat(val, 10)) &&  //check if its a number
             (parseFloat(val, 10).toString().length === val.toString().length));//check if parseFloat did not cut the value (1ad2 would be made to 1 without error)
@@ -105,7 +105,6 @@ define('io.ox/backbone/validation',
         validationFor: function (modelNamespace, validationDefinitions) {
             var validationNamespace = modelNamespace + (/\/$/.test(modelNamespace) ? 'validation' : '/validation');
 
-
             // We'll register validation extensions according to the validationDefinitions
             _(validationDefinitions).each(function (definition, attribute) {
                 ext.point(validationNamespace + '/' + attribute).extend({
@@ -149,7 +148,6 @@ define('io.ox/backbone/validation',
                     });
                 }
             });
-
         },
         formats: formats
     };

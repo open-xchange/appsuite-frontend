@@ -46,7 +46,6 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         };
         */
 
-
     // never leak
     $(window).on('unload', function () {
         _(registry).each(function (ext) {

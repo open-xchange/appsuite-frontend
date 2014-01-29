@@ -295,7 +295,7 @@ define('io.ox/calendar/week/view',
          */
         onHover: function (e) {
             if (!this.lasso && (e.relatedTarget && $(e.relatedTarget).hasClass('timeslot'))) {
-                var cid = _.cid($(e.currentTarget).data('cid') + ''),
+                var cid = _.cid(String($(e.currentTarget).data('cid'))),
                     el = $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]', this.$el);
                 switch (e.type) {
                 case 'mouseenter':
@@ -367,7 +367,7 @@ define('io.ox/calendar/week/view',
             var cT = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = _.cid(cT.data('cid') + '');
+                    obj = _.cid(String(cT.data('cid')));
                 if (!cT.hasClass('current')) {
                     $('.appointment', self.$el)
                         .removeClass('current opac')
@@ -1681,7 +1681,6 @@ define('io.ox/calendar/week/view',
                         gt('%1$s\u00A0(Tentative)');
                 }
             }
-
 
             this
                 .attr({ tabindex: 1 })

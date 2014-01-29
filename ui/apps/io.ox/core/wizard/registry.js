@@ -64,7 +64,6 @@ define('io.ox/core/wizard/registry',
         }
 
 
-
         function isNextEnabled() {
             return getBaton().buttons.nextEnabled;
         }
@@ -79,7 +78,6 @@ define('io.ox/core/wizard/registry',
             self.dialog.idle();
             self.updateButtonState();
         }
-
 
         function getBaton(index) {
             if (_.isUndefined(index)) {
@@ -364,7 +362,6 @@ define('io.ox/core/wizard/registry',
         this.goToPage = goToPage;
 
     }
-
 
     return {
         getWizard: function (options) {

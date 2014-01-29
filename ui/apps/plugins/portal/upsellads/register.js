@@ -79,13 +79,11 @@ define('plugins/portal/upsellads/register',
 
         } else {
             console.error('Do not know type "' + type + '"', fromAd, toTarget);
-
         }
     };
 
     nextAd = function (content, ad, slides) {
         currPos = (currPos + 1) % slides.length;
-
 
         /* show next ad */
         content.empty();

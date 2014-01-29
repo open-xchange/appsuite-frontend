@@ -44,7 +44,6 @@ define('io.ox/contacts/widgets/cityControlGroup',
 
                 this.observeModel('change:' + options.zipAttribute, updateZip);
 
-
                 updateZip();
 
                 return this.nodes.bothElements = $('<span>').append(this.nodes.zipElement, $.txt(' '), this.nodes.element);
@@ -58,11 +57,9 @@ define('io.ox/contacts/widgets/cityControlGroup',
                 this.nodes.zipElement.val(this.model.get(this.zipAttribute));
             }
 
-
         }, options));
 
     }
-
 
     return CityControlGroup;
 });

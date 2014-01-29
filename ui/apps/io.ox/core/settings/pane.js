@@ -155,7 +155,6 @@ define('io.ox/core/settings/pane',
             availableThemes['default'] = gt('Default Theme');
         }
 
-
         if (!_(availableThemes).isEmpty() && settings.isConfigurable('theme')) {
             point.extend(new forms.SelectControlGroup({
                 id: 'theme',
@@ -177,7 +176,6 @@ define('io.ox/core/settings/pane',
             options[10 * MINUTES] = gt('10 minutes');
             options[15 * MINUTES] = gt('15 minutes');
             options[30 * MINUTES] = gt('30 minutes');
-
 
             point.extend(new forms.SelectControlGroup({
                 id: 'refreshInterval',
@@ -251,7 +249,6 @@ define('io.ox/core/settings/pane',
                 ox.autoLogout.restart();
             }
         }));
-
 
     }());
 

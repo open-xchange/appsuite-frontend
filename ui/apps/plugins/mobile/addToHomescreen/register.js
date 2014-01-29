@@ -212,7 +212,6 @@ define('plugins/mobile/addToHomescreen/register',
         }
     });
 
-
     function manualShow(override) {
         if (!isIDevice || balloon) return;
 

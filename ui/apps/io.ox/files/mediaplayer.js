@@ -54,7 +54,6 @@ define('io.ox/files/mediaplayer',
         player: $('<div class="mediaplayer_player">'),
         playlist: $('<ul class="mediaplayer_playlist">'),
 
-
         config: {
             list: [],
             videoSupport: false

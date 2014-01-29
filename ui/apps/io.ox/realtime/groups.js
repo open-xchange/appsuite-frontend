@@ -176,5 +176,4 @@ define('io.ox/realtime/groups',
         }
     };
 
-
 });

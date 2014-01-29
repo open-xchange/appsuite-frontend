@@ -61,10 +61,10 @@ define('io.ox/tasks/edit/view-template',
                             }
                             //accept any formating
                             if (baton.model.get('actual_costs')) {
-                                baton.model.set('actual_costs', ('' + baton.model.get('actual_costs')).replace(/,/g, '.'));
+                                baton.model.set('actual_costs', (String(baton.model.get('actual_costs'))).replace(/,/g, '.'));
                             }
                             if (baton.model.get('target_costs')) {
-                                baton.model.set('target_costs', ('' + baton.model.get('target_costs')).replace(/,/g, '.'));
+                                baton.model.set('target_costs', (String(baton.model.get('target_costs'))).replace(/,/g, '.'));
                             }
 
                             baton.model.save().done(function () {
@@ -725,7 +725,7 @@ define('io.ox/tasks/edit/view-template',
                 notifications.yell('error', error.error);
             });
             if (api.uploadInProgress(_.ecid(obj))) {//no need to remove cachevalues if there was no upload
-                
+
                 //make sure cache values are valid
                 api.get(obj, false).done(function (data) {
                     $.when(

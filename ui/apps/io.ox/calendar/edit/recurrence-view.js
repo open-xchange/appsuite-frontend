@@ -822,7 +822,7 @@ define('io.ox/calendar/edit/recurrence-view',
                     .css({cursor: 'pointer'});
             },
             endingChanged: function (sentence) {
-                switch (sentence.ending + '') {
+                switch (String(sentence.ending)) {
                 case '1':
                     this.endsChoice = this.ends.never;
                     break;
@@ -904,7 +904,7 @@ define('io.ox/calendar/edit/recurrence-view',
                         }
 
                         // Update the current choice only if it was similar to the previously chosen date
-                        if (!_.isUndefined(sentence.days) && ! (sentence.days & previousAttributes.dayBits)) {
+                        if (!_.isUndefined(sentence.days) && !(sentence.days & previousAttributes.dayBits)) {
                             return false;
                         }
                         if (!_.isUndefined(sentence.day) &&  (sentence.day !== previousAttributes.dayBits)) {
@@ -925,7 +925,7 @@ define('io.ox/calendar/edit/recurrence-view',
 
                 // Weekly
                 if (canUpdate(this.sentences.weekly)) {
-                    if (! (this.sentences.weekly.days & dayBits)) {
+                    if (!(this.sentences.weekly.days & dayBits)) {
                         this.sentences.weekly.set('days', dayBits);
                     }
                 }

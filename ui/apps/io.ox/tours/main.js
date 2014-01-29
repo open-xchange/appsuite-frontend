@@ -60,7 +60,6 @@ define('io.ox/tours/main',
             return tours;
         };
 
-
     /* Tour: intro. The special one that does not belong to an app */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/intro',
@@ -148,7 +147,6 @@ define('io.ox/tours/main',
         }
     });
 
-
     /* Tour: portal */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/portal',
@@ -205,7 +203,6 @@ define('io.ox/tours/main',
             }]
         }
     });
-
 
     /* Tour: e-mail */
     ext.point('io.ox/tours/extensions').extend({
@@ -330,7 +327,6 @@ define('io.ox/tours/main',
         }
     });
 
-
     /* Tour: contacts / address book */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/contacts',
@@ -366,7 +362,6 @@ define('io.ox/tours/main',
             }]
         }
     });
-
 
     /* Tour: calendar / appointments */
     ext.point('io.ox/tours/extensions').extend({
@@ -491,7 +486,6 @@ define('io.ox/tours/main',
         }
     });
 
-
     /* Tour: Files / Infostore */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/files',
@@ -565,7 +559,6 @@ define('io.ox/tours/main',
             }]
         }
     });
-
 
     /* Tour: Tasks */
     ext.point('io.ox/tours/extensions').extend({
@@ -692,7 +685,6 @@ define('io.ox/tours/main',
         }
     });
 
-
     /* Tour: Settings */
     ext.point('io.ox/tours/extensions').extend({
         id: 'default/io.ox/settings',
@@ -733,7 +725,6 @@ define('io.ox/tours/main',
         }
     });
 
-
     /* New stage: Starts a tour upon login (unless it was already seen in that particular version) */
     new Stage('io.ox/core/stages', {
         id: 'tours',
@@ -754,7 +745,6 @@ define('io.ox/tours/main',
             return $.when();
         }
     });
-
 
     /* Link: Intro tour in settings toolbar */
     ext.point('io.ox/core/topbar/right/dropdown').extend({

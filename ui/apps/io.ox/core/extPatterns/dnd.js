@@ -52,7 +52,7 @@ define('io.ox/core/extPatterns/dnd',
             }
 
             point.each(function (ext) {
-                if (ext.isEnabled && ! ext.isEnabled.apply(ext, args)) {
+                if (ext.isEnabled && !ext.isEnabled.apply(ext, args)) {
                     return;
                 }
 
@@ -62,7 +62,6 @@ define('io.ox/core/extPatterns/dnd',
                     extension: ext
                 });
             });
-
 
             dropZone = upload.dnd.createDropZone({
                 type: 'multiple',
@@ -97,7 +96,6 @@ define('io.ox/core/extPatterns/dnd',
             included = false;
         };
     };
-
 
     return {
         UploadZone: UploadZone

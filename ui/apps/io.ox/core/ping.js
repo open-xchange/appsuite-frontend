@@ -61,7 +61,6 @@ define('io.ox/core/ping',
         intervalHandle = setInterval(ping, interval * 200);
     }
 
-
     http.on('unreachable', hecticPing);
     http.on('reachable', normalPing);
 

@@ -113,7 +113,6 @@ define('io.ox/preview/main',
         }
     }));
 
-
     // register audio typed renderer
     if (mediasupport.hasSupport('audio')) {
         Renderer.point.extend(new Engine({

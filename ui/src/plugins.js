@@ -126,7 +126,6 @@
                 });
             };
 
-
         })();
     } /*else if (Modernizr.localstorage && !_.device("desktop")) {
         (function () {

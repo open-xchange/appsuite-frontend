@@ -36,11 +36,9 @@ define.async('io.ox/oauth/keychain',
 
     generateId.id = 1;
 
-
     function simplifyId(id) {
         return id.substring(id.lastIndexOf('.') + 1);
     }
-
 
     // Extension
     function OAuthKeychainAPI(service) {
@@ -77,7 +75,6 @@ define.async('io.ox/oauth/keychain',
             }
             return name;
         }
-
 
         this.getAll = function () {
             return _(cache[service.id].accounts).chain().map(function (account) { return account; }).sortBy(function (account) {return account.id; }).map(outgoing).value();
@@ -216,7 +213,6 @@ define.async('io.ox/oauth/keychain',
             return def;
         };
     }
-
 
 
     // Fetch services & accounts

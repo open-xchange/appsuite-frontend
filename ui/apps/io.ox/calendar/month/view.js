@@ -60,7 +60,7 @@ define('io.ox/calendar/month/view',
                 cT = $('[data-cid="' + cid + '"]', this.pane);
             if (cT.hasClass('appointment') && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = _.cid(cid + '');
+                    obj = _.cid(String(cid));
 
                 if (!cT.hasClass('current')) {
                     self.trigger('showAppointment', e, obj);
@@ -102,13 +102,13 @@ define('io.ox/calendar/month/view',
 
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            var cid = _.cid($(e.currentTarget).data('cid') + '');
+            var cid = _.cid(String($(e.currentTarget).data('cid')));
             $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').addClass('hover');
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            var cid = _.cid($(e.currentTarget).data('cid') + '');
+            var cid = _.cid(String($(e.currentTarget).data('cid')));
             $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').removeClass('hover');
         },
 
@@ -210,7 +210,6 @@ define('io.ox/calendar/month/view',
 
             // loop over all appointments
             this.collection.each(function (model) {
-
 
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, myself) !== 2 || settings.get('showDeclinedAppointments', false)) {

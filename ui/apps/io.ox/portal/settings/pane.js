@@ -201,7 +201,6 @@ define('io.ox/portal/settings/pane',
         }
     });
 
-
     function dragViaKeyboard(e) {
 
         var node = $(this),

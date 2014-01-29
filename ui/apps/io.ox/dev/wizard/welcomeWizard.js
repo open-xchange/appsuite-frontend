@@ -128,7 +128,6 @@ define('io.ox/dev/wizard/welcomeWizard',
             // And it is called as soon as the page is the 'next' or 'previous' page of the active page, so you can start loading
             // even before the page shows up. Return a deferred to let the wizard framework know when you're done.
 
-
             // We will fetch the user data for our example.
             var def = $.Deferred();
 
@@ -296,7 +295,6 @@ define('io.ox/dev/wizard/welcomeWizard',
                 return def;
             }
         });
-
 
     });
 

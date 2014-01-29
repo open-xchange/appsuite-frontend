@@ -190,7 +190,6 @@ define('io.ox/settings/accounts/settings/pane',
             }
         });
 
-
     /**
      * Extension point for account settings detail view
      *
@@ -203,7 +202,6 @@ define('io.ox/settings/accounts/settings/pane',
      * button.
      *
      */
-
 
 
     ext.point('io.ox/settings/accounts/settings/detail').extend({

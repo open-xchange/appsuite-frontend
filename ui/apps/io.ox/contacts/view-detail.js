@@ -156,8 +156,7 @@ define('io.ox/contacts/view-detail',
 
             if (api.uploadInProgress(_.ecid(baton.data))) {
                 this.find('.attachments-container').show();
-            }
-            else if (baton.data.number_of_attachments > 0) {
+            } else if (baton.data.number_of_attachments > 0) {
                 ext.point('io.ox/contacts/detail/attachments').invoke('draw', this.find('.attachments-container'), baton.data);
             }
         }

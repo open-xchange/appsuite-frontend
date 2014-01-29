@@ -43,7 +43,6 @@
     }
  })
 
-
  **/
 
 define('io.ox/keychain/api',
@@ -80,7 +79,6 @@ define('io.ox/keychain/api',
     initExtensions();
 
     ext.point('io.ox/keychain/api').on('extended', initExtensions);
-
 
     function invokeExtension(accountType, method) {
         var extension = api.submodules[accountType];

@@ -182,7 +182,6 @@ define('io.ox/core/settings/errorlog/settings/pane',
                 return data;
             }
 
-
             var data = transform(http.statistics.data()),
                 ping = transform(http.statistics.ping());
 

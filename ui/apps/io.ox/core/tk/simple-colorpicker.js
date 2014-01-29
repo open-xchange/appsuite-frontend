@@ -38,7 +38,7 @@ define('io.ox/core/tk/simple-colorpicker', function () {
         var node, self, preview;
 
         function set(e) {
-            var color = e.data.color + '';
+            var color = String(e.data.color);
             e.preventDefault();
             preview.css('backgroundColor', color).insertAfter(self);
             self.val(color).trigger('change');

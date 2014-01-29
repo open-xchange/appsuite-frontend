@@ -441,7 +441,6 @@ define('io.ox/core/api/account',
         });
     };
 
-
     /**
      * get mail account
      * @param  {string} id

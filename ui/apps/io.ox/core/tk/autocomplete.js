@@ -81,7 +81,7 @@ define('io.ox/core/tk/autocomplete',
             update = function () {
                 // get data from current item and update input field
                 var data = scrollpane.children().eq(Math.max(0, index)).data();
-                lastValue = data !== undefined ? o.stringify(data) + '' : lastValue;
+                lastValue = data !== undefined ? String(o.stringify(data)) : lastValue;
                 self.val(lastValue);
 
                 // if two related Fields are needed
@@ -114,7 +114,6 @@ define('io.ox/core/tk/autocomplete',
                     select(0, false);
                 }
             },
-
 
             fnBlur = function () {
                     setTimeout(close, 200);
@@ -342,7 +341,6 @@ define('io.ox/core/tk/autocomplete',
                     close();
                 }
             }, o.delay);
-
 
        /**
         * get the selected item

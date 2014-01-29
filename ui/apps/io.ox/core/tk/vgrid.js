@@ -954,7 +954,6 @@ define('io.ox/core/tk/vgrid',
                 setIndex(all.length - 1);
             });
 
-
         // public methods
 
         this.setApp = function (app) {
