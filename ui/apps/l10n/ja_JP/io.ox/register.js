@@ -175,11 +175,11 @@ define('l10n/ja_JP/io.ox/register',
 
             // compute length of unchanged prefix in p
             var p = 0, l = v.length, ll = lv.length;
-            for (; p < l && p < ll && v.charAt(p) === lv.charAt(p); p++) {};
+            for (; p < l && p < ll && v.charAt(p) === lv.charAt(p); p++) {}
 
             // compute length of unchanged suffix in s
             var s = 0, a = l, b = ll;
-            for (; a > p && b > p && v.charAt(--a) === lv.charAt(--b); s++) {};
+            for (; a > p && b > p && v.charAt(--a) === lv.charAt(--b); s++) {}
 
             if (p + s === ll) { // if inserting (i. e. typing)
                 if (p < lp || s < ls) { // if outside of the previous word
