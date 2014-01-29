@@ -2,7 +2,7 @@
   "name": "open-xchange-appsuite",
   "version": "7.6.0",
   "revision": "1",
-  "repository":  {
+  "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
@@ -46,7 +46,8 @@
     "time-grunt": "~0.2.8",
     "underscore": "~1.5.2",
     "grunt-zip": "~0.10.2",
-    "grunt-curl": "~1.2.1"
+    "grunt-curl": "~1.2.1",
+    "grunt-jscs-checker": "~0.3.2"
   },
   "engines": {
     "node": ">=0.10"
