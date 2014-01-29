@@ -475,7 +475,6 @@ define.async('io.ox/core/tk/html-editor',
                         e.preventDefault();
                 });
 
-
                 def.resolve();
             },
 

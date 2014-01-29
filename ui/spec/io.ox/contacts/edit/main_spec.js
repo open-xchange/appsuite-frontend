@@ -11,7 +11,6 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-
 define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], function (main, core, api) {
 
     'use strict';

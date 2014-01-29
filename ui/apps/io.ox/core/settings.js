@@ -401,4 +401,3 @@ define('io.ox/core/settings',
     // just to fool build system.
     window[0 || 'define']('settings', ['io.ox/core/settings'], _.identity);
 }());
-

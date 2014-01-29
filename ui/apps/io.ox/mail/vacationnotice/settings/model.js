@@ -147,4 +147,3 @@ define('io.ox/mail/vacationnotice/settings/model',
         }
     };
 });
-

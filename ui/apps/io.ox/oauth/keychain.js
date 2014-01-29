@@ -214,7 +214,6 @@ define.async('io.ox/oauth/keychain',
         };
     }
 
-
     // Fetch services & accounts
     $.when(
         http.GET({

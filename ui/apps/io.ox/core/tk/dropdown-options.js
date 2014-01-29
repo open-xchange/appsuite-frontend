@@ -222,4 +222,3 @@ define('io.ox/core/tk/dropdown-options',
         return init();
     };
 });
-

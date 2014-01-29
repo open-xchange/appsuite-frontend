@@ -231,7 +231,7 @@ define('io.ox/files/carousel',
                 if (!this.config.attachmentMode) {
                     item.append(
                         $('<img>', { alt: '', src: this.urlFor(file) })
-                            .on('error', this.imgError) /* error doesn't seem to bubble */,
+                            .on('error', this.imgError), /* error doesn't seem to bubble */
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
                             file.folder_id ? folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false }) : $()
@@ -240,7 +240,7 @@ define('io.ox/files/carousel',
                 } else {
                     item.append(
                         $('<img>', { alt: '', src: file.url })
-                            .on('error', this.imgError) /* error doesn't seem to bubble */,
+                            .on('error', this.imgError), /* error doesn't seem to bubble */
                         $('<div class="carousel-caption">').append($('<h4>').text(gt.noI18n(file.filename)))
                     );
                 }

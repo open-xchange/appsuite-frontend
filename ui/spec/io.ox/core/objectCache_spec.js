@@ -40,8 +40,6 @@ define(['io.ox/core/extensions',
 
         var testStorage = new cache.ObjectCache('TEST_ObjectCache');
 
-
-
         var currentTimeStamp = (new Date()).getTime();
         var olderTimeStamp = currentTimeStamp - 1000;
         var newerTimeStamp = currentTimeStamp + 1000;
@@ -51,11 +49,9 @@ define(['io.ox/core/extensions',
         var testData2 = {'folder_id': 'A', 'id': 'ABC', 'TEST': '2'};
         var testData3 = {'folder_id': 'A', 'id': 'ABC', 'TEST': '3'};
 
-
         var testDataA = {'folder_id': 'A', 'id': 'ABD', 'TEST': '1'};
         var testDataB = {'folder_id': 'A', 'id': 'ABE', 'TEST': '1'};
         var testDataC = {'folder_id': 'A', 'id': 'ABF', 'TEST': '1'};
-
 
         it('clearing cache', function () {
             var loaded = new Done();
@@ -71,7 +67,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('getting not existing key', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -84,7 +79,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('adding data ', function () {
             var loaded = new Done();
@@ -99,7 +93,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('adding old data ', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -112,7 +105,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('getting data to test for old data replacement', function () {
             var loaded = new Done();
@@ -127,7 +119,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('adding new data ', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -140,7 +131,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('getting data to test for new data replacement', function () {
             var loaded = new Done();
@@ -155,7 +145,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('adding array of new data ', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -168,7 +157,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('checking for key existence', function () {
             var loaded = new Done();
@@ -183,7 +171,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('checking for key existence on nonexisting key', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -196,7 +183,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('checking for array of key existence', function () {
             var loaded = new Done();
@@ -211,7 +197,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('checking for object existence', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -224,7 +209,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('checking for array of object existence', function () {
             var loaded = new Done();
@@ -239,7 +223,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('checking for array of mixed object/key existence', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -252,7 +235,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('checking for array of mixed object/key existence with nonexistent key', function () {
             var loaded = new Done();
@@ -267,7 +249,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('checking cachesize before removing', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -280,7 +261,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('removing by single key', function () {
             var loaded = new Done();
@@ -295,7 +275,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('checking cachesize after removing', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -308,7 +287,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('removing by object', function () {
             var loaded = new Done();
@@ -336,7 +314,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('removing by array of keys', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -350,7 +327,6 @@ define(['io.ox/core/extensions',
             });
         });
 
-
         it('checking cachesize after removing', function () {
             var loaded = new Done();
             waitsFor(loaded, 'Could not get key', TIMEOUT);
@@ -363,7 +339,6 @@ define(['io.ox/core/extensions',
                 expect(e).not.toBeDefined();
             });
         });
-
 
         it('merging objects', function () {
             var loaded = new Done();

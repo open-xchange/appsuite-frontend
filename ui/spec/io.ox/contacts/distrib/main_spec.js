@@ -11,11 +11,9 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-
 define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api'], function (main, api) {
 
     'use strict';
-
 
     var testObjects = {
             user1: {

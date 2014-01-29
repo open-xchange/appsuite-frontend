@@ -29,7 +29,7 @@ define(
     }
 
     function trim(str) {
-        return $.trim((str + '').replace(/[\r\n]+/g, ''));
+        return $.trim((String(str)).replace(/[\r\n]+/g, ''));
     }
 
     describe('Paste HTML contents', function () {

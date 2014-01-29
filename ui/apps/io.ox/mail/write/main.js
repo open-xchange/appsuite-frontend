@@ -1362,4 +1362,3 @@ define('io.ox/mail/write/main',
     };
 
 });
-

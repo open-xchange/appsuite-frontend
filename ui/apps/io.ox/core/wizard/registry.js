@@ -63,7 +63,6 @@ define('io.ox/core/wizard/registry',
             );
         }
 
-
         function isNextEnabled() {
             return getBaton().buttons.nextEnabled;
         }

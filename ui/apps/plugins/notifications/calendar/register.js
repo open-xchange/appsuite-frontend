@@ -331,7 +331,7 @@ define('plugins/notifications/calendar/register',
 
         className: 'notifications-rem',
         id: 'io-ox-notifications-calendar-reminder',
-        
+
         events: {
             'keydown [data-action="clear"]': 'clearItems',
             'click [data-action="clear"]': 'clearItems'
@@ -368,7 +368,7 @@ define('plugins/notifications/calendar/register',
             this.collection.reset();
         }
     });
-    
+
     var hiddenCalInvitationItems = {},
         hiddenCalReminderItems = {};
 
@@ -415,7 +415,7 @@ define('plugins/notifications/calendar/register',
                                 recurrence_position: remObj.recurrence_position
                             };
                             calAPI.get(obj).done(function (data) {
-    
+
                                 var inObj = {
                                     cid: _.cid(remObj),
                                     title: data.title,
@@ -425,25 +425,25 @@ define('plugins/notifications/calendar/register',
                                     remdata: remObj,
                                     caldata: data
                                 };
-    
+
                                 // ignore appointments that are over
                                 var isOver = data.end_date < now;
-    
+
                                 if (!isOver) {
                                     _(ReminderNotifications.collection.models).each(function (reminderModel) {//remove outdated versions of the model
                                         if (reminderModel.get('cid') === inObj.cid) {
                                             ReminderNotifications.collection.remove(reminderModel);
                                         }
                                     });
-    
+
                                     // do not add user suppressed ('remind me later') reminders
                                     if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
                                         ReminderNotifications.collection.add(new Backbone.Model(inObj));
                                     }
                                 }
-    
+
                                 counter--;
-    
+
                                 if (counter === 0) {
                                     //all data processed. Update Collection
                                     ReminderNotifications.collection.trigger('add');
@@ -464,7 +464,7 @@ define('plugins/notifications/calendar/register',
             reminderAPI.getReminders();
         }
     });
-    
+
     ext.point('io.ox/core/notifications/register').extend({
         id: 'appointmentInvitations',
         index: 300,
@@ -532,4 +532,3 @@ define('plugins/notifications/calendar/register',
 
     return true;
 });
-

@@ -269,7 +269,7 @@ define('io.ox/tasks/api',
         if (task.alarm === null) {//task.alarm must not be null on creation, it's only used to delete an alarm on update actions
             delete task.alarm;    //leaving it in would throw a backend error
         }
-        
+
         if (task.status) {//make sure we have an integer here
             task.status = parseInt(task.status, 10);
         }

@@ -10,8 +10,8 @@
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
-define(['io.ox/files/carousel'], function (slideshow) {
 
+define(['io.ox/files/carousel'], function (slideshow) {
 
     describe('Slideshow for files:', function () {
 

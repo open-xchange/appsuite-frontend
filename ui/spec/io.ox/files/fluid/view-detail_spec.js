@@ -10,13 +10,13 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
+
 define(['io.ox/files/fluid/view-detail',
     'io.ox/files/api',
     'io.ox/core/extensions',
     'fixture!io.ox/files/file.json',
     'fixture!io.ox/files/file-versions.json'
     ], function (view, api, ext, file, fileversions) {
-
 
     describe('files detail view', function () {
         var baton = ext.Baton.ensure({
@@ -202,6 +202,7 @@ define(['io.ox/files/fluid/view-detail',
                     });
                 });
             });
+
             describe('that contain a table with information about versions', function () {
                 beforeEach(function () {
                     if (api.caches.versions.get.restore)

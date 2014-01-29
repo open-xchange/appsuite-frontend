@@ -257,7 +257,7 @@ define('io.ox/tours/main',
                 placement: 'top',
                 target: function () { return $('.editor-outer-container:visible')[0]; },
                 content: (_.device('desktop') ? gt('Enter the E-Mail text below the subject. If the text format was set to HTMl in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar.')
-                    :gt('Enter the E-Mail text below the subject.')),
+                    : gt('Enter the E-Mail text below the subject.')),
                 yOffset: 110,
                 arrowOffset: 'center'
             },

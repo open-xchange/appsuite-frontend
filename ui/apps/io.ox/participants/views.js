@@ -243,4 +243,3 @@ define('io.ox/participants/views',
         UserContainer: UserContainer
     };
 });
-

@@ -203,7 +203,6 @@ define('io.ox/settings/accounts/settings/pane',
      *
      */
 
-
     ext.point('io.ox/settings/accounts/settings/detail').extend({
         index: 300,
         id: 'accountssettings',
@@ -301,4 +300,3 @@ define('io.ox/settings/accounts/settings/pane',
     return {};
 
 });
-

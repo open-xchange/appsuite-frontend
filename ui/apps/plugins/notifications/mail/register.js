@@ -115,7 +115,7 @@ define('plugins/notifications/mail/register',
                         baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
                         ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
                     }
-                    
+
                 });
             } else {
                 view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix

@@ -115,7 +115,6 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 expect(util.getDateInterval({ start_date: start, end_date: start + date.WEEK})).toEqual('So., 11.11.2012 – So., 18.11.2012');
             });
 
-
         });
 
         describe('can convert two time values to an interval string', function () {

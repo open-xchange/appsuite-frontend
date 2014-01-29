@@ -97,4 +97,3 @@ define('io.ox/mail/autoforward/settings/model',
         }
     };
 });
-

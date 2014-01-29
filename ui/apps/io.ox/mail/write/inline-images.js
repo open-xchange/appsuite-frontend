@@ -89,7 +89,7 @@ define('io.ox/mail/write/inline-images',
                 tinymce_input_src = $(iframe[1].contentDocument).find('input#src'),
                 baton =  new ext.Baton({$: {}}),
                 form;
-            
+
             dialog.build(function () {
                 form = $('<form>', { 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' });
                 this.getContentNode().append(form);

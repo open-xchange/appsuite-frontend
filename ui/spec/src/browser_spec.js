@@ -67,4 +67,3 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
 
     });
 });
-

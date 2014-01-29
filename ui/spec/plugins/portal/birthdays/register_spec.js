@@ -21,7 +21,7 @@ define(['plugins/portal/birthdays/register',
     testData[2].birthday = new date.UTC().getTime() + date.DAY;//tomorrow
 
     describe('portal Birthday plugin', function () {
-        
+
         describe('should', function () {
             beforeEach(function () {
                 this.server.respondWith('GET', /api\/contacts\?action=birthdays/, function (xhr) {

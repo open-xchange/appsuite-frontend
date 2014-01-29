@@ -559,4 +559,3 @@ define('io.ox/core/extPatterns/links',
         ActionGroup: ActionGroup
     };
 });
-

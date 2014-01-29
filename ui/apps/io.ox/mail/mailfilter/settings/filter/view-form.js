@@ -429,7 +429,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 this.$el.find('[data-action-id="' + actionID + '"] .dropdown-toggle').focus();
             }
 
-
         });
 
     ext.point(POINT + '/view').extend({

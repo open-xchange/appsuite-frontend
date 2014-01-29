@@ -71,8 +71,6 @@ define('io.ox/wizards/upsell', [
     priceFormat = shop.priceFormat ? shop.priceFormat : priceFormat;
     products = getProducts(shop);
 
-
-
     point.extend({
         id: 'upsell-selection',
         index: 100,
@@ -173,7 +171,6 @@ define('io.ox/wizards/upsell', [
         }
     });
 
-
     point.extend({
         id: 'upsell-confirmation',
         index: 200,
@@ -227,7 +224,6 @@ define('io.ox/wizards/upsell', [
         }
     });
 
-
     point.extend({
         id: 'upsell-acknowledgement',
         index: 300,
@@ -260,7 +256,6 @@ define('io.ox/wizards/upsell', [
             $('.wizard-prev').hide();
         }
     });
-
 
     return {
         getInstance: function () {

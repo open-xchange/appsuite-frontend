@@ -45,7 +45,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
                     });
                     return true;
                 }
-                
+
             }, 'setup mailfilter edit view', ox.testTimeout);
             runs(function () {
                 addButton = $container.find('.btn-primary[data-action="add"]');
@@ -96,7 +96,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Mark mail as') + ')').length).toBe(1);
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Tag mail with') + ')').length).toBe(1);
             expect($popup.find('a[data-action="change-value-extern"]:contains(' + gt('Flag mail with') + ')').length).toBe(1);
-            
+
         });
 
         it('should draw the "Sender/From" condition', function () {
@@ -219,7 +219,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
             expect($popup.find('li.filter-settings-view').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test"]').length).toBe(1);
             expect($popup.find('li input[data-action="change-text-test-second"]').length).toBe(1);
-            
+
             expect($popup.find('li a.dropdown-toggle').length).toBe(1);
 
             expect($popup.find('li li a[data-value="contains"]').length).toBe(1);
@@ -400,7 +400,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
                 model.attributes.flags.should.be.empty;
                 model.attributes.should.have.a.property('rulename');
             });
-            
+
         });
 
         it('should save the "Sender/From" condition', function () {
@@ -421,7 +421,6 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
             runs(function () {
                 model.get('test').should.be.deep.equal({comparison: 'matches', headers: ['From'], id: 'header', values: ['sender']});
             });
-            
 
         });
 
@@ -795,7 +794,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
             expect($popup.find('a[data-value="allof"]').length).toBe(0);
             expect($popup.find('a[data-value="anyof"]').length).toBe(0);
-            
+
             $popup.find('a[data-action="change-value-extern"]:contains(' + gt('Size (bytes)') + ')').click();
             $popup.find('li[data-test-id="1"] input[data-action="change-text-test"]').val('10').trigger('change');
             $popup.find('li[data-test-id="1"] li a[data-value="over"]').click();
