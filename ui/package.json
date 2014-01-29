@@ -2,6 +2,10 @@
   "name": "open-xchange-appsuite",
   "version": "7.6.0",
   "revision": "1",
+  "repository":  {
+    "type": "git",
+    "url": "https://code.open-xchange.com/git/wd/frontend/web"
+  },
   "devDependencies": {
     "assemble": "~0.4.7",
     "assemble-less": "~0.7.0",
