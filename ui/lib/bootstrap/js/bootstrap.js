@@ -2016,7 +2016,7 @@ $(document)
 
   , blur: function (e) {
       var that = this
-      setTimeout(function () { that.hide() }, 150)
+      //setTimeout(function () { that.hide() }, 150) //bug fix 30796
     }
 
   , click: function (e) {
