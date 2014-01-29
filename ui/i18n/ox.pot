@@ -9,134 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: apps/io.ox/portal/main.js:35
-msgid "Good morning, %s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:37
-msgid "Good evening, %s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:39
-msgid "Hello %s"
-msgstr ""
-
-#. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:65
-msgid "Signed in as %1$s"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:85
-msgid "Customize this page"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:143 apps/io.ox/portal/main.js:144
-#: apps/io.ox/portal/main.js:386
-msgid "Disable widget"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:300 apps/plugins/portal/facebook/register.js:268
-#: apps/plugins/portal/twitter/register.js:385
-msgid "Click here to add your account"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:346
-msgid "An error occurred."
-msgstr ""
-
-#: apps/io.ox/portal/main.js:349
-msgid "Click to try again."
-msgstr ""
-
-#: apps/io.ox/portal/main.js:458
-msgid "Portal Widgets"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:488 apps/io.ox/portal/settings/widgetview.js:110
-msgid "Delete widget"
-msgstr ""
-
-#: apps/io.ox/portal/main.js:489 apps/io.ox/portal/settings/widgetview.js:111
-msgid "Do you really want to delete this widget?"
-msgstr ""
-
-#. #-#-#-#-#-#-#-#-#-#
-#. Really delete portal widget - in contrast to "just disable"
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. Really delete portal widget - in contrast to "just disable"
-#: apps/io.ox/calendar/actions.js:274 apps/io.ox/calendar/actions.js:606
-#: apps/io.ox/calendar/invitations/register.js:35
-#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:760
-#: apps/io.ox/contacts/main.js:107 apps/io.ox/core/commons-folderview.js:391
-#: apps/io.ox/core/tk/folderviews.js:591 apps/io.ox/files/actions.js:326
-#: apps/io.ox/files/actions.js:682 apps/io.ox/files/actions.js:835
-#: apps/io.ox/mail/actions.js:86 apps/io.ox/mail/actions.js:109
-#: apps/io.ox/mail/actions.js:986 apps/io.ox/mail/main.js:136
-#: apps/io.ox/mail/settings/signatures/register.js:276
-#: apps/io.ox/portal/main.js:492 apps/io.ox/portal/settings/widgetview.js:114
-#: apps/io.ox/settings/accounts/settings/pane.js:60
-#: apps/io.ox/settings/accounts/settings/pane.js:62
-#: apps/io.ox/settings/accounts/settings/pane.js:70
-#: apps/io.ox/settings/accounts/settings/pane.js:71
-#: apps/io.ox/tasks/actions.js:59 apps/io.ox/tasks/actions.js:466
-#: apps/io.ox/tasks/main.js:101 apps/plugins/portal/twitter/util.js:318
-#: apps/plugins/portal/twitter/util.js:451
-msgid "Delete"
-msgstr ""
-
-#: apps/io.ox/calendar/acceptdeny.js:89 apps/io.ox/calendar/actions.js:153
-#: apps/io.ox/calendar/actions.js:263 apps/io.ox/calendar/actions.js:275
-#: apps/io.ox/calendar/actions.js:407 apps/io.ox/calendar/edit/main.js:51
-#: apps/io.ox/calendar/edit/main.js:160
-#: apps/io.ox/calendar/month/perspective.js:117
-#: apps/io.ox/calendar/week/perspective.js:94
-#: apps/io.ox/calendar/week/perspective.js:137 apps/io.ox/contacts/actions.js:54
-#: apps/io.ox/contacts/actions.js:151 apps/io.ox/contacts/distrib/main.js:184
-#: apps/io.ox/contacts/edit/main.js:249
-#: apps/io.ox/core/commons-folderview.js:572 apps/io.ox/core/desktop.js:1600
-#: apps/io.ox/core/export/export.js:104 apps/io.ox/core/folder/add.js:95
-#: apps/io.ox/core/folder/imap-subscription.js:59
-#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:406
-#: apps/io.ox/core/permissions/permissions.js:357
-#: apps/io.ox/core/permissions/permissions.js:398 apps/io.ox/core/print.js:116
-#: apps/io.ox/core/pubsub/publications.js:119
-#: apps/io.ox/core/pubsub/subscriptions.js:58 apps/io.ox/core/relogin.js:56
-#: apps/io.ox/core/tk/attachments.js:608 apps/io.ox/core/tk/folderviews.js:592
-#: apps/io.ox/core/tk/folderviews.js:654 apps/io.ox/core/tk/mobiscroll.js:35
-#: apps/io.ox/core/upsell.js:36 apps/io.ox/editor/main.js:314
-#: apps/io.ox/files/actions.js:327 apps/io.ox/files/actions.js:485
-#: apps/io.ox/files/actions.js:540 apps/io.ox/files/actions.js:585
-#: apps/io.ox/files/actions.js:683 apps/io.ox/files/views/create.js:117
-#: apps/io.ox/keychain/secretRecoveryDialog.js:39
-#: apps/io.ox/mail/accounts/settings.js:43
-#: apps/io.ox/mail/accounts/settings.js:259
-#: apps/io.ox/mail/accounts/view-form.js:289 apps/io.ox/mail/actions.js:87
-#: apps/io.ox/mail/actions.js:110 apps/io.ox/mail/actions.js:268
-#: apps/io.ox/mail/actions.js:837 apps/io.ox/mail/actions/attachmentSave.js:67
-#: apps/io.ox/mail/folderview-extensions.js:132
-#: apps/io.ox/mail/mailfilter/settings/filter.js:88
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: apps/io.ox/mail/write/inline-images.js:80 apps/io.ox/mail/write/main.js:1337
-#: apps/io.ox/mail/write/view-main.js:623 apps/io.ox/oauth/settings.js:82
-#: apps/io.ox/portal/main.js:494 apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/settings/accounts/settings/pane.js:164
-#: apps/io.ox/tasks/actions.js:60 apps/io.ox/tasks/actions.js:196
-#: apps/io.ox/tasks/actions.js:522 apps/io.ox/tasks/edit/main.js:161
-#: apps/io.ox/tasks/edit/util.js:123 apps/plugins/portal/flickr/register.js:227
-#: apps/plugins/portal/rss/register.js:150
-#: apps/plugins/portal/tumblr/register.js:247
-#: apps/plugins/portal/twitter/util.js:123
-#: apps/plugins/portal/twitter/util.js:452
-#: apps/plugins/portal/userSettings/register.js:88
-msgid "Cancel"
-msgstr ""
-
-#. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:498 apps/io.ox/portal/settings/widgetview.js:120
-msgid "Just disable widget"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/template.js:77
 #: apps/io.ox/contacts/distrib/create-dist-view.js:41
 #: apps/io.ox/contacts/edit/view-form.js:175
@@ -144,7 +16,7 @@ msgstr ""
 #: apps/io.ox/core/folder/imap-subscription.js:58
 #: apps/io.ox/core/permissions/permissions.js:356
 #: apps/io.ox/core/permissions/permissions.js:398
-#: apps/io.ox/core/tk/dialogs.js:534 apps/io.ox/editor/main.js:127
+#: apps/io.ox/core/tk/dialogs.js:538 apps/io.ox/editor/main.js:127
 #: apps/io.ox/editor/main.js:143 apps/io.ox/files/actions.js:539
 #: apps/io.ox/files/views/create.js:116 apps/io.ox/mail/accounts/settings.js:42
 #: apps/io.ox/mail/actions/attachmentSave.js:66
@@ -166,7 +38,7 @@ msgstr ""
 
 #: apps/io.ox/core/about/about.js:66 apps/io.ox/core/commons-folderview.js:529
 #: apps/io.ox/core/permissions/permissions.js:455
-#: apps/io.ox/core/pubsub/publications.js:110 apps/io.ox/core/tk/dialogs.js:534
+#: apps/io.ox/core/pubsub/publications.js:107 apps/io.ox/core/tk/dialogs.js:538
 #: apps/io.ox/core/wizard/registry.js:60 apps/io.ox/editor/main.js:144
 #: apps/io.ox/files/actions.js:287 apps/io.ox/files/carousel.js:45
 #: apps/io.ox/files/mediaplayer.js:289 apps/io.ox/mail/accounts/settings.js:309
@@ -205,6 +77,53 @@ msgstr ""
 #: apps/io.ox/tasks/edit/view-template.js:82
 #: apps/plugins/portal/userSettings/register.js:42
 msgid "Discard"
+msgstr ""
+
+#: apps/io.ox/calendar/acceptdeny.js:89 apps/io.ox/calendar/actions.js:153
+#: apps/io.ox/calendar/actions.js:263 apps/io.ox/calendar/actions.js:275
+#: apps/io.ox/calendar/actions.js:407 apps/io.ox/calendar/edit/main.js:51
+#: apps/io.ox/calendar/edit/main.js:160
+#: apps/io.ox/calendar/month/perspective.js:117
+#: apps/io.ox/calendar/week/perspective.js:94
+#: apps/io.ox/calendar/week/perspective.js:137 apps/io.ox/contacts/actions.js:54
+#: apps/io.ox/contacts/actions.js:151 apps/io.ox/contacts/distrib/main.js:184
+#: apps/io.ox/contacts/edit/main.js:249
+#: apps/io.ox/core/commons-folderview.js:572 apps/io.ox/core/desktop.js:1600
+#: apps/io.ox/core/export/export.js:104 apps/io.ox/core/folder/add.js:95
+#: apps/io.ox/core/folder/imap-subscription.js:59
+#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:406
+#: apps/io.ox/core/permissions/permissions.js:357
+#: apps/io.ox/core/permissions/permissions.js:398 apps/io.ox/core/print.js:116
+#: apps/io.ox/core/pubsub/publications.js:116
+#: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
+#: apps/io.ox/core/tk/attachments.js:608 apps/io.ox/core/tk/folderviews.js:592
+#: apps/io.ox/core/tk/folderviews.js:654 apps/io.ox/core/tk/mobiscroll.js:35
+#: apps/io.ox/core/upsell.js:36 apps/io.ox/editor/main.js:314
+#: apps/io.ox/files/actions.js:327 apps/io.ox/files/actions.js:485
+#: apps/io.ox/files/actions.js:540 apps/io.ox/files/actions.js:585
+#: apps/io.ox/files/actions.js:683 apps/io.ox/files/views/create.js:117
+#: apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/mail/accounts/settings.js:43
+#: apps/io.ox/mail/accounts/settings.js:259
+#: apps/io.ox/mail/accounts/view-form.js:296 apps/io.ox/mail/actions.js:87
+#: apps/io.ox/mail/actions.js:110 apps/io.ox/mail/actions.js:268
+#: apps/io.ox/mail/actions.js:837 apps/io.ox/mail/actions/attachmentSave.js:67
+#: apps/io.ox/mail/folderview-extensions.js:132
+#: apps/io.ox/mail/mailfilter/settings/filter.js:88
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:386
+#: apps/io.ox/mail/write/inline-images.js:80 apps/io.ox/mail/write/main.js:1337
+#: apps/io.ox/mail/write/view-main.js:623 apps/io.ox/oauth/settings.js:82
+#: apps/io.ox/portal/main.js:494 apps/io.ox/portal/settings/widgetview.js:116
+#: apps/io.ox/settings/accounts/settings/pane.js:160
+#: apps/io.ox/tasks/actions.js:60 apps/io.ox/tasks/actions.js:196
+#: apps/io.ox/tasks/actions.js:522 apps/io.ox/tasks/edit/main.js:161
+#: apps/io.ox/tasks/edit/util.js:123 apps/plugins/portal/flickr/register.js:227
+#: apps/plugins/portal/rss/register.js:150
+#: apps/plugins/portal/tumblr/register.js:247
+#: apps/plugins/portal/twitter/util.js:123
+#: apps/plugins/portal/twitter/util.js:452
+#: apps/plugins/portal/userSettings/register.js:88
+msgid "Cancel"
 msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:107 apps/io.ox/core/main.js:676
@@ -877,7 +796,7 @@ msgid "No notifications"
 msgstr ""
 
 #: apps/io.ox/core/notifications.js:455 apps/io.ox/core/print.js:198
-#: apps/io.ox/core/pubsub/subscriptions.js:114
+#: apps/io.ox/core/pubsub/subscriptions.js:110
 msgid "Error"
 msgstr ""
 
@@ -964,20 +883,20 @@ msgstr ""
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? NO
 #: apps/io.ox/calendar/month/perspective.js:137
-#: apps/io.ox/calendar/settings/pane.js:101
+#: apps/io.ox/calendar/settings/pane.js:49
 #: apps/io.ox/calendar/week/perspective.js:130
 #: apps/io.ox/core/permissions/permissions.js:167
-#: apps/io.ox/tasks/settings/pane.js:34
+#: apps/io.ox/tasks/settings/pane.js:58
 msgid "No"
 msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js:136
-#: apps/io.ox/calendar/settings/pane.js:100
+#: apps/io.ox/calendar/settings/pane.js:49
 #: apps/io.ox/calendar/week/perspective.js:129
 #: apps/io.ox/core/permissions/permissions.js:169 apps/io.ox/files/util.js:56
-#: apps/io.ox/tasks/settings/pane.js:33
+#: apps/io.ox/tasks/settings/pane.js:58
 msgid "Yes"
 msgstr ""
 
@@ -1019,8 +938,8 @@ msgid "Please sign in again to continue"
 msgstr ""
 
 #: apps/io.ox/core/login-i18n.js:24 apps/io.ox/core/relogin.js:51
-#: apps/io.ox/mail/accounts/view-form.js:38
-#: apps/io.ox/mail/accounts/view-form.js:48
+#: apps/io.ox/mail/accounts/view-form.js:377
+#: apps/io.ox/mail/accounts/view-form.js:454
 msgid "Password"
 msgstr ""
 
@@ -1081,7 +1000,7 @@ msgstr ""
 msgid "Downloads"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:162 apps/io.ox/core/settings/pane.js:64
+#: apps/io.ox/calendar/settings/pane.js:111 apps/io.ox/core/settings/pane.js:64
 msgid "The setting has been saved and will become active when you enter the application the next time."
 msgstr ""
 
@@ -1111,21 +1030,21 @@ msgid "Theme"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:176 apps/io.ox/core/settings/pane.js:238
-#: apps/io.ox/mail/settings/pane.js:69
+#: apps/io.ox/mail/settings/pane.js:57
 msgid "5 minutes"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:177 apps/io.ox/core/settings/pane.js:239
-#: apps/io.ox/mail/settings/pane.js:70
+#: apps/io.ox/mail/settings/pane.js:58
 msgid "10 minutes"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:80 apps/io.ox/core/settings/pane.js:178
+#: apps/io.ox/calendar/settings/pane.js:54 apps/io.ox/core/settings/pane.js:178
 #: apps/io.ox/core/settings/pane.js:240
 msgid "15 minutes"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:81 apps/io.ox/core/settings/pane.js:179
+#: apps/io.ox/calendar/settings/pane.js:55 apps/io.ox/core/settings/pane.js:179
 #: apps/io.ox/core/settings/pane.js:241
 msgid "30 minutes"
 msgstr ""
@@ -1263,59 +1182,59 @@ msgstr ""
 msgid "No lost requests"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:57
-#: apps/io.ox/core/pubsub/subscriptions.js:60 apps/io.ox/mail/view-detail.js:898
+#: apps/io.ox/core/pubsub/subscriptions.js:53
+#: apps/io.ox/core/pubsub/subscriptions.js:56 apps/io.ox/mail/view-detail.js:898
 msgid "Subscribe"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:71
+#: apps/io.ox/core/pubsub/subscriptions.js:67
 msgid "Checking credentials... This may take a few seconds."
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:80
+#: apps/io.ox/core/pubsub/subscriptions.js:76
 msgid "Subscription successfully created."
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:87
-#: apps/io.ox/core/pubsub/subscriptions.js:110
+#: apps/io.ox/core/pubsub/subscriptions.js:83
+#: apps/io.ox/core/pubsub/subscriptions.js:106
 msgid "Error:"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:115
+#: apps/io.ox/core/pubsub/subscriptions.js:111
 msgid "The subscription could not be created."
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:511 apps/io.ox/core/pubsub/subscriptions.js:162
+#: apps/io.ox/core/api/folder.js:511 apps/io.ox/core/pubsub/subscriptions.js:158
 msgid "New Folder"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:231
+#: apps/io.ox/core/pubsub/subscriptions.js:227
 msgid "Add new account"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:244
+#: apps/io.ox/core/pubsub/subscriptions.js:240
 #: apps/io.ox/mail/view-detail.js:698
 msgid "Account"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:269
+#: apps/io.ox/core/pubsub/subscriptions.js:265
 msgid "Source"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:306
+#: apps/io.ox/core/pubsub/subscriptions.js:302
 msgid "Add new folder for this subscription"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:323
+#: apps/io.ox/core/pubsub/subscriptions.js:319
 msgid "Note: This subscription will replace the calendar content with the external content. Therefore you must create a new folder for this subscription."
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:333
-#: apps/io.ox/core/pubsub/subscriptions.js:336
+#: apps/io.ox/core/pubsub/subscriptions.js:329
+#: apps/io.ox/core/pubsub/subscriptions.js:332
 msgid "Approximate Duration for Subscriptions"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/subscriptions.js:335
+#: apps/io.ox/core/pubsub/subscriptions.js:331
 msgid "Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience."
 msgstr ""
 
@@ -1336,86 +1255,86 @@ msgid "You have to enter a username and password to subscribe."
 msgstr ""
 
 #. %1$s is the publication link http://...
-#: apps/io.ox/core/pubsub/publications.js:100
+#: apps/io.ox/core/pubsub/publications.js:97
 msgid "The folder is available at %1$s"
 msgstr ""
 
 #. %1$s is the publication link http://...
-#: apps/io.ox/core/pubsub/publications.js:102
+#: apps/io.ox/core/pubsub/publications.js:99
 msgid "The file is available at %1$s"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:118
+#: apps/io.ox/core/pubsub/publications.js:115
 msgid "Share"
 msgstr ""
 
 #: apps/io.ox/core/commons-folderview.js:307
-#: apps/io.ox/core/pubsub/publications.js:122 apps/io.ox/files/actions.js:1176
+#: apps/io.ox/core/pubsub/publications.js:119 apps/io.ox/files/actions.js:1176
 msgid "Share this folder"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:124 apps/io.ox/files/actions.js:845
+#: apps/io.ox/core/pubsub/publications.js:121 apps/io.ox/files/actions.js:845
 msgid "Share this file"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:173
+#: apps/io.ox/core/pubsub/publications.js:170
 msgid "Name already taken"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:177
-#: apps/io.ox/core/pubsub/publications.js:239
+#: apps/io.ox/core/pubsub/publications.js:174
+#: apps/io.ox/core/pubsub/publications.js:236
 msgid "Publications must have a name"
 msgstr ""
 
 #: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:424
-#: apps/io.ox/core/pubsub/publications.js:234
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:482
+#: apps/io.ox/core/pubsub/publications.js:231
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:480
 msgid "Name"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:273
+#: apps/io.ox/core/pubsub/publications.js:270
 msgid "Template"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:281
+#: apps/io.ox/core/pubsub/publications.js:278
 msgid "No matching templates on this Server"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:306
+#: apps/io.ox/core/pubsub/publications.js:303
 msgid "Add cipher code"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:350
-#: apps/io.ox/core/pubsub/publications.js:351
+#: apps/io.ox/core/pubsub/publications.js:347
+#: apps/io.ox/core/pubsub/publications.js:348
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:354
+#: apps/io.ox/core/pubsub/publications.js:351
 msgid "Publication"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:385
-#: apps/io.ox/core/pubsub/publications.js:396
+#: apps/io.ox/core/pubsub/publications.js:382
+#: apps/io.ox/core/pubsub/publications.js:393
 msgid "Share link by email"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:420
+#: apps/io.ox/core/pubsub/publications.js:417
 msgid "Attention"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:422
+#: apps/io.ox/core/pubsub/publications.js:419
 msgid "The shared data will be accessible to everyone on the Internet. Please consider, which data you want to share."
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:424
+#: apps/io.ox/core/pubsub/publications.js:421
 msgid "Privacy Notice"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:426
+#: apps/io.ox/core/pubsub/publications.js:423
 msgid "When using this feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). Especially when sharing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person's consent. Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection."
 msgstr ""
 
-#: apps/io.ox/core/pubsub/publications.js:431
+#: apps/io.ox/core/pubsub/publications.js:428
 msgid "Show legal information"
 msgstr ""
 
@@ -1460,7 +1379,7 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js:128
 #: apps/io.ox/mail/mailfilter/settings/filter.js:133
 #: apps/io.ox/mail/settings/signatures/register.js:273
-#: apps/io.ox/portal/settings/pane.js:313 apps/io.ox/portal/settings/pane.js:315
+#: apps/io.ox/portal/settings/pane.js:314 apps/io.ox/portal/settings/pane.js:316
 #: apps/io.ox/settings/accounts/settings/pane.js:45
 #: apps/io.ox/settings/accounts/settings/pane.js:49
 #: apps/io.ox/settings/accounts/settings/pane.js:51
@@ -1471,14 +1390,14 @@ msgstr ""
 #: apps/io.ox/core/pubsub/settings/pane.js:215
 #: apps/io.ox/mail/mailfilter/settings/filter.js:125
 #: apps/io.ox/mail/mailfilter/settings/filter.js:236
-#: apps/io.ox/portal/settings/pane.js:332
+#: apps/io.ox/portal/settings/pane.js:333
 msgid "Disable"
 msgstr ""
 
 #: apps/io.ox/core/pubsub/settings/pane.js:215
 #: apps/io.ox/mail/mailfilter/settings/filter.js:125
 #: apps/io.ox/mail/mailfilter/settings/filter.js:236
-#: apps/io.ox/portal/settings/pane.js:336
+#: apps/io.ox/portal/settings/pane.js:337
 msgid "Enable"
 msgstr ""
 
@@ -1698,7 +1617,7 @@ msgstr ""
 
 #: apps/io.ox/core/extPatterns/links.js:311
 #: apps/io.ox/core/extPatterns/links.js:322
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:590
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:588
 msgid "Actions"
 msgstr ""
 
@@ -1769,7 +1688,7 @@ msgstr ""
 msgid "Subscribe IMAP folders"
 msgstr ""
 
-#: apps/io.ox/core/tk/dialogs.js:727
+#: apps/io.ox/core/tk/dialogs.js:731
 msgid "Close all"
 msgstr ""
 
@@ -1841,6 +1760,29 @@ msgstr ""
 
 #: apps/io.ox/core/tk/folderviews.js:590
 msgid "Do you really want to delete folder \"%s\"?"
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. Really delete portal widget - in contrast to "just disable"
+#: apps/io.ox/calendar/actions.js:274 apps/io.ox/calendar/actions.js:606
+#: apps/io.ox/calendar/invitations/register.js:35
+#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:760
+#: apps/io.ox/contacts/main.js:107 apps/io.ox/core/commons-folderview.js:391
+#: apps/io.ox/core/tk/folderviews.js:591 apps/io.ox/files/actions.js:326
+#: apps/io.ox/files/actions.js:682 apps/io.ox/files/actions.js:835
+#: apps/io.ox/mail/actions.js:86 apps/io.ox/mail/actions.js:109
+#: apps/io.ox/mail/actions.js:986 apps/io.ox/mail/main.js:136
+#: apps/io.ox/mail/settings/signatures/register.js:276
+#: apps/io.ox/portal/main.js:492 apps/io.ox/portal/settings/widgetview.js:114
+#: apps/io.ox/settings/accounts/settings/pane.js:60
+#: apps/io.ox/settings/accounts/settings/pane.js:62
+#: apps/io.ox/settings/accounts/settings/pane.js:70
+#: apps/io.ox/settings/accounts/settings/pane.js:71
+#: apps/io.ox/tasks/actions.js:59 apps/io.ox/tasks/actions.js:466
+#: apps/io.ox/tasks/main.js:101 apps/plugins/portal/twitter/util.js:318
+#: apps/plugins/portal/twitter/util.js:451
+msgid "Delete"
 msgstr ""
 
 #: apps/io.ox/core/tk/folderviews.js:632
@@ -2037,7 +1979,7 @@ msgid "Portal"
 msgstr ""
 
 #: apps/io.ox/core/main.js:163 apps/io.ox/launchpad/main.js:30
-#: apps/io.ox/mail/settings/pane.js:33
+#: apps/io.ox/mail/settings/pane.js:204
 msgctxt "app"
 msgid "Mail"
 msgstr ""
@@ -2047,7 +1989,7 @@ msgctxt "app"
 msgid "Address Book"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:28 apps/io.ox/core/main.js:165
+#: apps/io.ox/calendar/settings/pane.js:134 apps/io.ox/core/main.js:165
 #: apps/io.ox/launchpad/main.js:32
 msgctxt "app"
 msgid "Calendar"
@@ -2059,12 +2001,12 @@ msgid "Scheduling"
 msgstr ""
 
 #: apps/io.ox/core/main.js:167 apps/io.ox/launchpad/main.js:34
-#: apps/io.ox/tasks/settings/pane.js:26
+#: apps/io.ox/tasks/settings/pane.js:49
 msgctxt "app"
 msgid "Tasks"
 msgstr ""
 
-#: apps/io.ox/core/main.js:168 apps/io.ox/files/settings/pane.js:26
+#: apps/io.ox/core/main.js:168 apps/io.ox/files/settings/pane.js:52
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
@@ -2115,15 +2057,15 @@ msgstr ""
 msgid "Your Applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1089
+#: apps/io.ox/core/main.js:1090
 msgid "Restore applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1091
+#: apps/io.ox/core/main.js:1092
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
-#: apps/io.ox/core/main.js:1096
+#: apps/io.ox/core/main.js:1097
 msgid "Continue"
 msgstr ""
 
@@ -2931,23 +2873,23 @@ msgstr ""
 msgid "Could not load attachments for this task."
 msgstr ""
 
-#: apps/io.ox/tasks/settings/pane.js:27
+#: apps/io.ox/tasks/settings/pane.js:76
 msgid "Email notification for task"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:41 apps/io.ox/tasks/settings/pane.js:28
+#: apps/io.ox/calendar/settings/pane.js:225 apps/io.ox/tasks/settings/pane.js:79
 msgid "Email notification for New, Changed, Deleted?"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:42 apps/io.ox/tasks/settings/pane.js:29
+#: apps/io.ox/calendar/settings/pane.js:231 apps/io.ox/tasks/settings/pane.js:85
 msgid "Email notification for Accept/Declined"
 msgstr ""
 
-#: apps/io.ox/tasks/settings/pane.js:30
+#: apps/io.ox/tasks/settings/pane.js:88
 msgid "Email notification for task creator?"
 msgstr ""
 
-#: apps/io.ox/tasks/settings/pane.js:31
+#: apps/io.ox/tasks/settings/pane.js:94
 msgid "Email notification for task participant?"
 msgstr ""
 
@@ -3066,79 +3008,143 @@ msgstr ""
 msgid "Could not save settings."
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:63
+#: apps/io.ox/portal/main.js:35
+msgid "Good morning, %s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:37
+msgid "Good evening, %s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:39
+msgid "Hello %s"
+msgstr ""
+
+#. Portal. Logged in as user
+#: apps/io.ox/portal/main.js:65
+msgid "Signed in as %1$s"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:85
+msgid "Customize this page"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:143 apps/io.ox/portal/main.js:144
+#: apps/io.ox/portal/main.js:386
+msgid "Disable widget"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:300 apps/plugins/portal/facebook/register.js:268
+#: apps/plugins/portal/twitter/register.js:385
+msgid "Click here to add your account"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:346
+msgid "An error occurred."
+msgstr ""
+
+#: apps/io.ox/portal/main.js:349
+msgid "Click to try again."
+msgstr ""
+
+#: apps/io.ox/portal/main.js:458
+msgid "Portal Widgets"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:488 apps/io.ox/portal/settings/widgetview.js:110
+msgid "Delete widget"
+msgstr ""
+
+#: apps/io.ox/portal/main.js:489 apps/io.ox/portal/settings/widgetview.js:111
+msgid "Do you really want to delete this widget?"
+msgstr ""
+
+#. Just disable portal widget - in contrast to delete
+#: apps/io.ox/portal/main.js:498 apps/io.ox/portal/settings/widgetview.js:120
+msgid "Just disable widget"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js:64
 msgid "Portal settings"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:95
+#: apps/io.ox/portal/settings/pane.js:96
 msgid "Add widget"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:152
+#: apps/io.ox/portal/settings/pane.js:153
 msgid "Black"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
-#: apps/io.ox/mail/view-detail.js:484 apps/io.ox/portal/settings/pane.js:153
+#: apps/io.ox/mail/view-detail.js:484 apps/io.ox/portal/settings/pane.js:154
 msgid "Gray"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
-#: apps/io.ox/mail/view-detail.js:481 apps/io.ox/portal/settings/pane.js:154
+#: apps/io.ox/mail/view-detail.js:481 apps/io.ox/portal/settings/pane.js:155
 msgid "Red"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:72
-#: apps/io.ox/mail/view-detail.js:487 apps/io.ox/portal/settings/pane.js:155
+#: apps/io.ox/mail/view-detail.js:487 apps/io.ox/portal/settings/pane.js:156
 msgid "Orange"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:74
-#: apps/io.ox/mail/view-detail.js:486 apps/io.ox/portal/settings/pane.js:156
+#: apps/io.ox/mail/view-detail.js:486 apps/io.ox/portal/settings/pane.js:157
 msgid "Light green"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:75
-#: apps/io.ox/mail/view-detail.js:483 apps/io.ox/portal/settings/pane.js:157
+#: apps/io.ox/mail/view-detail.js:483 apps/io.ox/portal/settings/pane.js:158
 msgid "Green"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:76
-#: apps/io.ox/mail/view-detail.js:489 apps/io.ox/portal/settings/pane.js:158
+#: apps/io.ox/mail/view-detail.js:489 apps/io.ox/portal/settings/pane.js:159
 msgid "Light blue"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
-#: apps/io.ox/mail/view-detail.js:482 apps/io.ox/portal/settings/pane.js:159
+#: apps/io.ox/mail/view-detail.js:482 apps/io.ox/portal/settings/pane.js:160
 msgid "Blue"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:78
-#: apps/io.ox/mail/view-detail.js:485 apps/io.ox/portal/settings/pane.js:160
+#: apps/io.ox/mail/view-detail.js:485 apps/io.ox/portal/settings/pane.js:161
 msgid "Purple"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
-#: apps/io.ox/mail/view-detail.js:488 apps/io.ox/portal/settings/pane.js:161
+#: apps/io.ox/mail/view-detail.js:488 apps/io.ox/portal/settings/pane.js:162
 msgid "Pink"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:173 apps/io.ox/portal/settings/pane.js:175
+#: apps/io.ox/portal/settings/pane.js:174 apps/io.ox/portal/settings/pane.js:176
 msgid "Color"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:248
+#: apps/io.ox/portal/settings/pane.js:249
 msgid "Drag to reorder widget"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:204
-#: apps/io.ox/portal/settings/pane.js:255
+#: apps/io.ox/portal/settings/pane.js:256
 msgid "Use cursor keys to change the item position"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:147
-#: apps/io.ox/portal/settings/pane.js:347
+#: apps/io.ox/portal/settings/pane.js:348
 msgid "remove"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js:427
+msgid "Mobile device settings:"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js:432
+msgid "Only show widget summary on mobile devices"
 msgstr ""
 
 #: apps/io.ox/backbone/basicModel.js:129
@@ -3215,15 +3221,11 @@ msgid "Year"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/date.js:24 apps/io.ox/calendar/actions.js:522
-#: apps/io.ox/calendar/settings/pane.js:69
-#: apps/io.ox/calendar/settings/pane.js:74
 msgid "Month"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/date.js:25 apps/io.ox/calendar/actions.js:501
 #: apps/io.ox/calendar/freebusy/templates.js:75
-#: apps/io.ox/calendar/settings/pane.js:66
-#: apps/io.ox/calendar/settings/pane.js:72
 msgid "Day"
 msgstr ""
 
@@ -4055,7 +4057,7 @@ msgstr ""
 msgid "Top 10 file types"
 msgstr ""
 
-#: apps/io.ox/files/settings/pane.js:27
+#: apps/io.ox/files/settings/pane.js:75
 msgid "Show hidden files and folders"
 msgstr ""
 
@@ -4219,8 +4221,8 @@ msgstr ""
 msgid "Change View"
 msgstr ""
 
-#: apps/io.ox/calendar/actions.js:529 apps/io.ox/calendar/settings/pane.js:70
-#: apps/io.ox/files/actions.js:752 apps/io.ox/files/actions.js:1225
+#: apps/io.ox/calendar/actions.js:529 apps/io.ox/files/actions.js:752
+#: apps/io.ox/files/actions.js:1225
 msgid "List"
 msgstr ""
 
@@ -4324,11 +4326,11 @@ msgstr ""
 msgid "Mail and Social Accounts"
 msgstr ""
 
-#: apps/io.ox/settings/accounts/settings/pane.js:162
+#: apps/io.ox/settings/accounts/settings/pane.js:158
 msgid "Do you really want to delete this account?"
 msgstr ""
 
-#: apps/io.ox/settings/accounts/settings/pane.js:163
+#: apps/io.ox/settings/accounts/settings/pane.js:159
 msgid "Delete account"
 msgstr ""
 
@@ -4369,7 +4371,6 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
 #. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: last week or last Monday
@@ -4379,7 +4380,6 @@ msgstr ""
 msgid "last"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
@@ -4393,7 +4393,6 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
 #. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: second week or second Monday
@@ -4405,7 +4404,6 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. #-#-#-#-#-#-#-#-#-#
 #. as in: third week or third Monday
@@ -4415,7 +4413,6 @@ msgstr ""
 msgid "third"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
@@ -4463,7 +4460,7 @@ msgstr ""
 msgid "Next Week"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:78 apps/io.ox/calendar/util.js:256
+#: apps/io.ox/calendar/settings/pane.js:52 apps/io.ox/calendar/util.js:256
 msgid "No reminder"
 msgstr ""
 
@@ -4838,21 +4835,17 @@ msgid_plural "Appointments have been copied"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/calendar/actions.js:484 apps/io.ox/calendar/settings/pane.js:38
+#: apps/io.ox/calendar/actions.js:484 apps/io.ox/calendar/settings/pane.js:196
 msgid "New appointment"
 msgstr ""
 
 #: apps/io.ox/calendar/actions.js:508
 #: apps/io.ox/calendar/freebusy/templates.js:76
-#: apps/io.ox/calendar/settings/pane.js:67
-#: apps/io.ox/calendar/settings/pane.js:73
 msgid "Workweek"
 msgstr ""
 
 #: apps/io.ox/calendar/actions.js:515
 #: apps/io.ox/calendar/freebusy/templates.js:77
-#: apps/io.ox/calendar/settings/pane.js:68
-#: apps/io.ox/calendar/settings/pane.js:75
 msgid "Week"
 msgstr ""
 
@@ -4935,151 +4928,130 @@ msgstr ""
 msgid "Conflicts:"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:29
-msgid "Time"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:30
-msgid "Time scale in minutes"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:31
-msgid "Start of working time"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:32
-msgid "End of working time"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:33
-msgid "Default calendar view"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:34
-msgid "Default view"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:35
-msgid "Time range for the calender view"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:36
-msgid "Time range for the team view"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:37
-msgid "Time range for the list view"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:39
-msgid "Default reminder"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:40
-msgid "Email notification for appointment"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:43
-msgid "Email notification for appointment creator?"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:44
-msgid "Email notification for appointment participant?"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:45
-msgid "Show declined appointments"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:46
-msgid "Automatically delete a notification mail after it has been accepted or declined?"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:47
-msgid "Incoming Notification Mails"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:48
-msgid "Mark all day appointments as free"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:76
-msgid "Custom"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:79
+#: apps/io.ox/calendar/settings/pane.js:53
 msgid "0 minutes"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:82
+#: apps/io.ox/calendar/settings/pane.js:56
 msgid "45 minutes"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:83
+#: apps/io.ox/calendar/settings/pane.js:57
 msgid "1 hour"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:84
+#: apps/io.ox/calendar/settings/pane.js:58
 msgid "2 hour"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:85
+#: apps/io.ox/calendar/settings/pane.js:59
 msgid "4 hour"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:86
+#: apps/io.ox/calendar/settings/pane.js:60
 msgid "6 hour"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:87
+#: apps/io.ox/calendar/settings/pane.js:61
 msgid "8 hour"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:88
+#: apps/io.ox/calendar/settings/pane.js:62
 msgid "12 hour"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:89
+#: apps/io.ox/calendar/settings/pane.js:63
 msgid "1 day"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:90
+#: apps/io.ox/calendar/settings/pane.js:64
 msgid "2 days"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:91
+#: apps/io.ox/calendar/settings/pane.js:65
 msgid "3 days"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:92
+#: apps/io.ox/calendar/settings/pane.js:66
 msgid "4 days"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:93
+#: apps/io.ox/calendar/settings/pane.js:67
 msgid "5 days"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:94
+#: apps/io.ox/calendar/settings/pane.js:68
 msgid "6 days"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:95
+#: apps/io.ox/calendar/settings/pane.js:69
 msgid "1 week"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:96
+#: apps/io.ox/calendar/settings/pane.js:70
 msgid "2 weeks"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:97
+#: apps/io.ox/calendar/settings/pane.js:71
 msgid "3 weeks"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js:98
+#: apps/io.ox/calendar/settings/pane.js:72
 msgid "4 weeks"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
+#: apps/io.ox/calendar/settings/pane.js:144
+msgid "Time"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:146
+msgid "Time scale in minutes"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:154
+msgid "Start of working time"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:162
+msgid "End of working time"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:178
+msgid "Default calendar view"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:181
+msgid "Show declined appointments"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:198
+msgid "Default reminder"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:207
+msgid "Mark all day appointments as free"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:222
+msgid "Email notification for appointment"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:234
+msgid "Email notification for appointment creator?"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:242
+msgid "Email notification for appointment participant?"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:248
+msgid "Incoming Notification Mails"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:251
+msgid "Automatically delete a notification mail after it has been accepted or declined?"
+msgstr ""
+
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. %1$d = Calendar week
@@ -5423,7 +5395,7 @@ msgstr ""
 msgid "Repeat"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:39 apps/io.ox/mail/write/main.js:197
+#: apps/io.ox/mail/settings/pane.js:250 apps/io.ox/mail/write/main.js:197
 msgid "Compose"
 msgstr ""
 
@@ -5598,7 +5570,7 @@ msgstr ""
 msgid "Text"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:47 apps/io.ox/mail/write/view-main.js:804
+#: apps/io.ox/mail/settings/pane.js:48 apps/io.ox/mail/write/view-main.js:804
 msgid "HTML"
 msgstr ""
 
@@ -5803,9 +5775,9 @@ msgstr ""
 msgid "There is no rule defined"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:285
+#: apps/io.ox/mail/accounts/view-form.js:292
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:38
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:384
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:382
 msgid "Select folder"
 msgstr ""
 
@@ -5906,32 +5878,32 @@ msgstr ""
 msgid "This rule applies to all messages. Please add a condition to restrict this rule to specific messages."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:359
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:357
 msgid "The character \" \" is not allowed."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:589
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:587
 msgid "Conditions"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:599
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:597
 msgid "Add condition"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:605
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:603
 msgid "Add action"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:619
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:617
 msgid "Rule name"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:638
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:642
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:636
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:640
 msgid "Apply rule if all conditions are met"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:638
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:636
 msgid "Apply rule if any condition is met."
 msgstr ""
 
@@ -5939,119 +5911,122 @@ msgstr ""
 msgid "Couldn't load your mail filters."
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:27
-msgid "Account settings"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:28
-msgid "Account name"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:29
-#: apps/plugins/wizards/mandatory/main.js:43
-msgid "Your name"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:30
-msgid "Email address"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:31
-msgid "Use unified mail for this account"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:32
-msgid "Server settings"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:33
-msgid "Server type"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:34
-#: apps/io.ox/mail/accounts/view-form.js:43
-msgid "Use SSL connection"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:35
-#: apps/io.ox/mail/accounts/view-form.js:44
-msgid "Server name"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:36
-#: apps/io.ox/mail/accounts/view-form.js:45
-msgid "Server port"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:37
-#: apps/io.ox/mail/accounts/view-form.js:47
-msgid "Username"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:39
-msgid "Refresh rate in minutes:"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:40
-msgid "Remove copy from server after retrieving a message"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:41
-msgid "Deleting messages on local storage also deletes them on server"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:42
-msgid "Outgoing server settings (SMTP)"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:46
-msgid "Use username and password"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:49
-msgid "Folder settings"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:50
-msgid "Sent folder"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:51
-msgid "Trash folder"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:52
-msgid "Drafts folder"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:53
-msgid "Spam folder"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:54
-msgid "Select"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:217
+#: apps/io.ox/mail/accounts/view-form.js:224
 msgid "Updating account data. This might take a few seconds."
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:237
+#: apps/io.ox/mail/accounts/view-form.js:244
 msgid "Account updated"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:242
+#: apps/io.ox/mail/accounts/view-form.js:249
 msgid "Username must not be empty."
 msgstr ""
 
 #. %1$s the missing request parameter
 #, c-format
-#: apps/io.ox/mail/accounts/view-form.js:247
+#: apps/io.ox/mail/accounts/view-form.js:254
 msgid "Please enter the following data: %1$s"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:264
+#: apps/io.ox/mail/accounts/view-form.js:271
 msgid "This account cannot be validated"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:334
+msgid "Server settings"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:337
+msgid "Server type"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:347
+#: apps/io.ox/mail/accounts/view-form.js:416
+msgid "Use SSL connection"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:353
+#: apps/io.ox/mail/accounts/view-form.js:430
+msgid "Server name"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:361
+#: apps/io.ox/mail/accounts/view-form.js:422
+msgid "Server port"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:369
+#: apps/io.ox/mail/accounts/view-form.js:446
+msgid "Username"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:385
+msgid "Refresh rate in minutes:"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:395
+msgid "Remove copy from server after retrieving a message"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:403
+msgid "Deleting messages on local storage also deletes them on server"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:410
+msgid "Outgoing server settings (SMTP)"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:440
+msgid "Use username and password"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:462
+msgid "Folder settings"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:465
+msgid "Sent folder"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:469
+#: apps/io.ox/mail/accounts/view-form.js:476
+#: apps/io.ox/mail/accounts/view-form.js:483
+#: apps/io.ox/mail/accounts/view-form.js:490
+msgid "Select"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:472
+msgid "Trash folder"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:479
+msgid "Drafts folder"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:486
+msgid "Spam folder"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:501
+msgid "Account settings"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:504
+msgid "Account name"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:512
+#: apps/plugins/wizards/mandatory/main.js:43
+msgid "Your name"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:520
+msgid "Email address"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:529
+msgid "Use unified mail for this account"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/model.js:35
@@ -6246,135 +6221,135 @@ msgctxt "help"
 msgid "E-Mail Settings"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:34
-msgid "Common"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:35
-msgid "Permanently remove deleted emails"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:36
-msgid "Automatically collect contacts in the folder \"Collected addresses\" while sending"
-msgstr ""
-
 #: apps/io.ox/mail/settings/pane.js:37
-msgid "Automatically collect contacts in the folder \"Collected addresses\" while reading"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:38
-msgid "Use fixed-width font for text mails"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:40
-msgid "Append vCard"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:41
-msgid "Ask for delivery receipt"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:42
-msgid "Insert the original email text to a reply"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:43
-msgid "Forward emails as"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:44
-msgid "Inline"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:45
-msgid "Attachment"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:46
-msgid "Format emails as"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:48
-msgid "Plain text"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:49
-msgid "HTML and plain text"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:50
-msgid "Line wrap when sending text mails after "
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:51
-msgid " characters"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:52
-msgid "Default sender address"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:53
-msgid "Auto-save email drafts"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:54
-msgid "Display"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:55
-msgid "Allow html formatted emails"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:56
-msgid "Allow pre-loading of externally linked images"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:57
-msgid "Display emoticons as graphics in text emails"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:58
-msgid "Color quoted lines"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:60
-msgid "Thread view"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:61
 msgid "Enabled for inbox only"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:62
+#: apps/io.ox/mail/settings/pane.js:38
 msgid "Enabled for all mail folders"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:63
+#: apps/io.ox/mail/settings/pane.js:39
 msgid "Disabled"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:66
+#: apps/io.ox/mail/settings/pane.js:43
+msgid "Inline"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:44
+msgid "Attachment"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:49
+msgid "Plain text"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:50
+msgid "HTML and plain text"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:54
 msgid "disabled"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:67
+#: apps/io.ox/mail/settings/pane.js:55
 msgid "1 minute"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:68
+#: apps/io.ox/mail/settings/pane.js:56
 msgid "3 minutes"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:168
+#: apps/io.ox/mail/settings/pane.js:188
 msgid "Could not save settings"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:189
+#: apps/io.ox/mail/settings/pane.js:214
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while sending"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:217
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while reading"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:226
+msgid "Common"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:229
+msgid "Permanently remove deleted emails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:233
+msgid "Use fixed-width font for text mails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:252
+msgid "Append vCard"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:255
+msgid "Insert the original email text to a reply"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:263
+msgid "Thread view"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:271
+msgid "Forward emails as"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:278
+msgid "Format emails as"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:286
+msgid "Line wrap when sending text mails after "
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:288
+msgid " characters"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:292
+msgid "Default sender address"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:300
+msgid "Auto-save email drafts"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:317
+msgid "Display"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:320
+msgid "Allow html formatted emails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:325
+msgid "Allow pre-loading of externally linked images"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:330
+msgid "Display emoticons as graphics in text emails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:335
+msgid "Color quoted lines"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:340
+msgid "Ask for delivery receipt"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:359
 msgid "IMAP folder subscription"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:191
+#: apps/io.ox/mail/settings/pane.js:361
 msgid "Change subscription"
 msgstr ""
 
