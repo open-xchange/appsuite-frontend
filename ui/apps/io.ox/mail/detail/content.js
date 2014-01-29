@@ -227,7 +227,7 @@ define('io.ox/mail/detail/content',
         }
     });
 
-    var setLinkTarget = function (match) {
+    var setLinkTarget = function (match /*, link*/) {
         //replace or add link target to '_blank'
         return (/target/).test(match) ? match.replace(/(target="[^"]*")/i, 'target="_blank"') : match.replace('>', ' target="_blank">');
     };
@@ -236,7 +236,7 @@ define('io.ox/mail/detail/content',
         id: 'link-target',
         index: 500,
         process: function (baton) {
-            baton.source = baton.source.replace(/(<a(.*)href="https?:\/\/[^"]+">)/g, setLinkTarget);
+            baton.source = baton.source.replace(/<a[^>]*href=(?:\"|\')(https?:\/\/[^>]+)(?:\"|\')[^>]*>/g, setLinkTarget);
         }
     });
 
