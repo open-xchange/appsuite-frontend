@@ -112,6 +112,7 @@ define('io.ox/files/fluid/perspective',
         if (!app.getWindow().search.active || app.getWindow().search.query === '') {//empty search query shows folder again
             api.getAll({ folder: app.folder.get() }, false).done(def.resolve).fail(def.reject);
         } else {
+            _.url.hash('id', null);//remove selection to prevent errors (file might not be in our search results)
             api.search(app.getWindow().search.query).done(def.resolve).fail(def.reject);
         }
         return def;
@@ -198,7 +199,7 @@ define('io.ox/files/fluid/perspective',
             // reuse old toolbar
             container = $('#' + toolbarID);
         } else {
-            // or creaet a new one
+            // or create a new one
             container = $('<div>', {id: toolbarID});
         }
         _.defer(function () {
@@ -316,7 +317,8 @@ define('io.ox/files/fluid/perspective',
                         }
 
                         //deep link handling
-                        if (state === 'inital' && list.length === 1) {
+                        //deactivate for search or every item is loaded at once(may cause huge server load)
+                        if (state === 'inital' && list.length === 1 && !baton.app.attributes.window.search.active) {
                             cid = _.cid(this.get()[0]);
                             node = filesContainer.find('[data-obj-id="' + cid + '"]');
                             //node not drawn yet?
