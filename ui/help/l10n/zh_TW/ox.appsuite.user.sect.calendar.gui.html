@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>7.1. 行事曆 元件</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="">
 <link rel="up" href="ox.appsuite.user.chap.calendar.html" title="章 7. 行事曆">
 <link rel="prev" href="ox.appsuite.user.chap.calendar.html" title="章 7. 行事曆">
@@ -27,9 +27,8 @@
         <span class="guilabel"><strong>行事曆</strong></span>
       </span>
       
-      
        元件</h2></div></div></div>
-<a class="indexterm" name="idm139658122156448"></a><div class="reference">
+<a class="indexterm" name="idm139645259582576"></a><div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.hint"></a><p>關於使用者介面的簡介可在 <a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. 使用者介面">使用者介面</a> 找到。</p>
 </div>
 <div class="reference">
@@ -73,7 +72,10 @@
 <a name="ox.appsuite.user.reference.calendar.gui.contentcalendar"></a><p><b>設置日曆顯示的時間範圍：<span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>工作周</strong></span>、<span class="guilabel"><strong>周</strong></span>、<span class="guilabel"><strong>月</strong></span> </b>為選擇的時間範圍顯示行事曆視圖。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>選擇的時間範圍將顯示於行事曆表的左上角。</p></li>
-<li class="listitem"><p>在 <span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>工作週</strong></span>、<span class="guilabel"><strong>週</strong></span> 視圖中，目前的日曆週將顯示在日期旁邊。</p></li>
+<li class="listitem">
+<p>在 <span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>工作週</strong></span>、<span class="guilabel"><strong>週</strong></span> 視圖中，目前的日曆週將顯示在日期旁邊。</p>
+<p>點選日期時，將顯示迷你行事曆幫助您選擇日期。</p>
+</li>
 <li class="listitem"><p>行事曆表上方的導覽列讓您可選擇時間範圍。</p></li>
 <li class="listitem"><p>在 <span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>工作周</strong></span>和<span class="guilabel"><strong>週</strong></span>視圖中，<a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.concept.calendar.new">建立</a>全天約會的區域顯示在時間格的頂部。</p></li>
 <li class="listitem"><p>在 <span class="guilabel"><strong>日</strong></span>、<span class="guilabel"><strong>工作週</strong></span>、<span class="guilabel"><strong>週</strong></span> 視圖中，行事曆中目前的時間將以紅線強調。</p></li>
@@ -89,7 +91,7 @@
 <li class="listitem"><p>點選約會時，資料將顯示於 <a class="link" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.contentlist" title="清單 視圖中的顯示區域">顯示區域</a>。</p></li>
 <li class="listitem"><p>點選檔頭，將顯示時間範圍中的第一筆約會。</p></li>
 <li class="listitem"><p>點選清單下方的 <span class="guibutton"><strong>選擇</strong></span> 圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.edit"></a><img src="../../images/appsuite_user_icon_edit.png"></span>，選取盒將顯示在每個約會的旁邊。您可以選擇多個約會 <a class="link" href="ox.appsuite.user.sect.calendar.manage.multiple.html#ox.appsuite.user.concept.calendar.multiple">一次編輯</a>。</p></li>
-<li class="listitem"><p>清單下方的文字包含了所選擇資料夾的名稱。 數字符合所選資料夾中的物件數量。</p></li>
+<li class="listitem"><p>清單下方的文字包含了所選擇資料夾的名稱。數字符合所選資料夾中的物件數量。</p></li>
 <li class="listitem"><p>點選清單下方的<span class="guibutton"><strong>排序</strong></span> 圖示 <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.gui.sort"></a><img src="../../images/appsuite_user_icon_sort.png"></span> 時，讓您可以排序約會的選單將會開啟。透過 <span class="guibutton"><strong>顯示全部</strong></span> 選取盒，您可以設定是否只要顯示目前行事曆中的約會，或是所有您私人行事曆中的約會。</p></li>
 </ul></div>
 <p>
@@ -98,8 +100,11 @@
 <div class="reference">
 <a name="ox.appsuite.user.reference.calendar.gui.contentlist"></a><p><b><span class="guilabel"><strong>清單</strong></span> 視圖中的顯示區域 </b>顯示約會資料與可用功能:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>按鈕: <a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit"> <span class="guibutton"><strong>編輯</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus"> <span class="guibutton"><strong>修改狀態</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"> <span class="guibutton"><strong>移動</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print"> <span class="guibutton"><strong>列印</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.delete.html#ox.appsuite.user.concept.calendar.delete"> <span class="guibutton"><strong>刪除</strong></span> </a>。
-            </p></li>
+<li class="listitem">
+<p>按鈕: <a class="link" href="ox.appsuite.user.sect.calendar.manage.edit.html#ox.appsuite.user.concept.calendar.edit"> <span class="guibutton"><strong>編輯</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus"> <span class="guibutton"><strong>修改狀態</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.move.html#ox.appsuite.user.concept.calendar.move"> <span class="guibutton"><strong>移動</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.print.html#ox.appsuite.user.concept.calendar.print"> <span class="guibutton"><strong>列印</strong></span> </a>、<a class="link" href="ox.appsuite.user.sect.calendar.manage.delete.html#ox.appsuite.user.concept.calendar.delete"> <span class="guibutton"><strong>刪除</strong></span> </a>。
+            </p>
+<p><span class="phrase"><strong>註: </strong></span> 視伺服器組態而定，可能會有下列限制: 若您有執行功能的權限只會在您擁有可執行私人行事曆中的約會的某些按鈕的權限時才會出現。若您是參與者，您無法變更或刪除約會。若您是主辦者，您無法變更您的狀態。</p>
+</li>
 <li class="listitem"><p>日期、針對重複發生約會顯示重複發生類型、時間、時區</p></li>
 <li class="listitem"><p>主題</p></li>
 <li class="listitem"><p>約會位置，若輸入</p></li>
@@ -119,6 +124,7 @@
 <li class="listitem">
 <p>詳情</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>約會的主辦者</p></li>
 <li class="listitem"><p>可用性</p></li>
 <li class="listitem"><p>哪個資料夾</p></li>
 <li class="listitem"><p>誰在何時建立了約會</p></li>
