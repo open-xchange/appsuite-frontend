@@ -109,7 +109,7 @@ define('io.ox/files/fluid/perspective',
 
     function loadFiles(app) {
         var def = $.Deferred();
-        if (!app.getWindow().search.active) {
+        if (!app.getWindow().search.active || app.getWindow().search.query === '') {//empty search query shows folder again
             api.getAll({ folder: app.folder.get() }, false).done(def.resolve).fail(def.reject);
         } else {
             api.search(app.getWindow().search.query).done(def.resolve).fail(def.reject);
@@ -953,7 +953,7 @@ define('io.ox/files/fluid/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search cancel-search', function (e) {
+            win.on('search cancel-search search:clear', function (e) {
                 //only reload when search was executed
                 if (e.type === 'cancel-search' && !filesContainer.hasClass('searchresult')) return;
                 breadcrumb = undefined;
