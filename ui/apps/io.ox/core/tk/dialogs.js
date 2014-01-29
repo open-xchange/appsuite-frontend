@@ -158,12 +158,10 @@ define('io.ox/core/tk/dialogs',
                     break;
 
                 case 13: // Enter
-                    if (!isBusy && o.enter && $(e.target).is('input:text, input:password')) {
-                        if (!_.isFunction(o.enter)) {
-                            invoke(o.enter);
-                        } else {
-                            return o.enter.call(self);
-                        }
+                    if (!isBusy && $(e.target).is('input:text, input:password')) {
+                        if (!o.enter) return false;
+                        if (_.isFunction(o.enter)) return o.enter.call(self);
+                        invoke(o.enter);
                         return false;
                     }
                     break;

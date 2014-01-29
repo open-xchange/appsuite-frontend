@@ -34,6 +34,8 @@ override_dh_auto_install:
 	cp -r conf/* "$(SETTINGS)"
 	mkdir -p "debian/open-xchange-guidedtours/opt/open-xchange/appsuite/manifests"
 	mv $(BACKEND)/manifests/open-xchange-guidedtours.json debian/open-xchange-guidedtours/opt/open-xchange/appsuite/manifests/
+	mkdir -p debian/open-xchange-appsuite-help-common/var/www/appsuite/
+	mv $(FRONTEND)/help debian/open-xchange-appsuite-help-common/var/www/appsuite/
 
 override_dh_auto_clean:
 	sh bin/build-appsuite clean skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
