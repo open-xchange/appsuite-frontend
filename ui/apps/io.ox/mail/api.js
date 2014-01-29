@@ -1424,7 +1424,8 @@ define('io.ox/mail/api',
             }
         } else {
             // inject filename for more convenient file downloads
-            url += (data.filename ? '/' + encodeURIComponent(data.filename.replace(/[\\:\/]/g, '_')) : '') + '?' +
+            var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined;
+            url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +
                 $.param({
                     action: 'attachment',
                     folder: (data.parent || data.mail).folder_id,
