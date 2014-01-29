@@ -12,7 +12,7 @@ export BASEDIR="$(dirname "$(dirname "$(readlink "$0" || echo "$0")")")"
 if command -v $NODEJS > /dev/null; then
     export NPMBINDIR="$($(dirname $NODEJS)/npm -g bin)"
 else
-    echo "node binary not found in path. You need to install node and have it in your path."
+    echo "node binary '$NODEJS' not found in path. You need to install node and have it in your path. '$PATH'"
     exit 1
 fi
 
@@ -20,6 +20,6 @@ if [ -f $NPMBINDIR/grunt ];
 then
     $NPMBINDIR/grunt "$@"
 else
-    echo "grunt binary not found in path. Consider installing it with 'npm install -g grunt-cli'"
+    echo "grunt binary '$NPMBINDIR/grunt' not found in path. Consider installing it with 'npm install -g grunt-cli'"
     exit 1
 fi
