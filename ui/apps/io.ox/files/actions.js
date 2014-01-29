@@ -1089,40 +1089,47 @@ define('io.ox/files/actions',
             return false;
         }
 
+        var list = _.copy(e.baton.allIds, true),
+            incompleteHash = {},
+            incompleteItems = [],
+            def = $.Deferred(),
+            index, folder;
+
         if (_.isUndefined(e.baton.allIds)) {
             e.baton.allIds = e.baton.data;
         }
 
-        var incompleteHash = {},
-            incompleteItems = [];
-
-        _(e.baton.allIds).each(function (item, index) {
-            if (!item.filename) {
-                // collect all incomplete items by folder ID
+        //identify incomplete items
+        _(list).each(function (item) {
+            if (_.isUndefined(item.filename)) {
+                // collect all incomplete items grouped by folder ID
                 incompleteHash[item.folder_id] = (incompleteHash[item.folder_id] || []).concat(item);
                 // all incomplete items
                 incompleteItems.push(item);
-                delete e.baton.allIds[index];
+                index = list.indexOf(item);
+                if (index !== -1) {
+                    list.splice(index, 1);
+                }
             }
         });
 
-        var folder = Object.keys(incompleteHash),
-            def = $.Deferred();
-
+        //complement data from server/cache
+        folder = Object.keys(incompleteHash);
         if (folder.length === 1) {
-            // get only this folder from cache
+            // get only this folder
             def = api.getAll({ folder: folder[0] });
         } else if (folder.length > 1) {
-            // multiple folder -> use getList to update allIDs
+            // multiple folder -> use getList
             def = api.getList(incompleteItems).then(function (data) {
-                return e.baton.allIds.concat(data);
+                return list.concat(data);
             });
         } else {
             // nothing to do
-            def.resolve(e.baton.allIds);
+            def.resolve(list);
         }
 
         return def.then(function (data) {
+            //update baton
             e.baton.allIds = data;
             return _(data).reduce(function (memo, obj) {
                 return memo || !!(obj && api.checkMediaFile(type, obj.filename));
