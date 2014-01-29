@@ -424,7 +424,7 @@ define('io.ox/portal/settings/pane',
 
             };
             this.append(
-                $('<h4>').text(gt('Mobile device settings:'))
+                $('<legend>').text(gt('Mobile device settings:'))
             );
             this.append(
                 $('<div>').addClass('control-group').append(
