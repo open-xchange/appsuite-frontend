@@ -1928,8 +1928,7 @@ $(document)
 
   , listen: function () {
       this.$element
-        //.on('blur',     $.proxy(this.blur, this))  //bug fix 30796
-        .on('mouseup',     $.proxy(this.blur, this)) //bug fix 30796
+        .on('blur',     $.proxy(this.blur, this))
         .on('keypress', $.proxy(this.keypress, this))
         .on('keyup',    $.proxy(this.keyup, this))
 
@@ -2017,7 +2016,7 @@ $(document)
 
   , blur: function (e) {
       var that = this
-      setTimeout(function () { that.hide() }, 150)
+      //setTimeout(function () { that.hide() }, 150) //bug fix 30796
     }
 
   , click: function (e) {
