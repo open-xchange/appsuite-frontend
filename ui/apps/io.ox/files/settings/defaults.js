@@ -19,7 +19,8 @@ define('io.ox/files/settings/defaults', function () {
             view: 'fluid:icon',
             videoEnabled: true,
             audioEnabled: true,
-            rootFolderId: 9
+            rootFolderId: 9,
+            showHidden: false
         };
 
     return settingsDefaults;
