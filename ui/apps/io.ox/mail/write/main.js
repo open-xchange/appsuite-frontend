@@ -475,6 +475,7 @@ define('io.ox/mail/write/main',
                 });
             //apply
             if (ds) {
+                app.getEditor().setContent(content);
                 app.setSignature(({ data: ds}));
             } else {
                 content = content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '';
