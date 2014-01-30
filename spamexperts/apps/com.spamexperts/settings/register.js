@@ -1,12 +1,13 @@
 define('com.spamexperts/settings/register', [
     'io.ox/core/extensions',
-    'io.ox/core/http'
-], function (ext, http) {
+    'io.ox/core/http',
+    'settings!com.spamexperts'
+], function (ext, http, settings) {
     'use strict';
 
     ext.point('io.ox/settings/pane').extend({
         id: 'com.spamexperts',
-        title: _.noI18n('SpamExperts'),
+        title: _.noI18n(settings.get('name')),
         ref: 'com.spamexperts',
         loadSettingPane: false,
         after: 'io.ox/mail'

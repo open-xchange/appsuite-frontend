@@ -1,44 +1,36 @@
 define('com.spamexperts/register', [
     'io.ox/core/extensions',
-    'io.ox/core/capabilities'
+    'io.ox/core/upsell',
+    'gettext!com.spamexperts/translations',
+    'settings!com.spamexperts'
 ],
-function (ext, cap) {
+function (ext, upsell, gt, settings) {
     'use strict';
 
-    if (cap.has('com.spamexperts')) {
-        ext.point('io.ox/mail/folderview/sidepanel/links').extend({
-            id: 'com.spamexperts',
-            index: 500,
-            draw: function () {
-                if (_.device('!smartphone')) {
-                    this.append($('<div>').append(
-                        $('<a href="#" data-action="com.smapexperts" tabindex="1" role="button">')
-                        .text(_.noI18n('SpamExperts'))
+    if (!upsell.visible('com.spamexperts')) return;
+
+    ext.point('io.ox/mail/folderview/sidepanel/links').extend({
+        id: 'com.spamexperts',
+        index: 500,
+        draw: function () {
+            if (_.device('!smartphone')) {
+                this.append($('<div>').append(
+                    $('<a href="#" data-action="com.spamexperts" tabindex="1" role="button">')
+                        .text(
+                            //#. %1$s is the name of the configuration panel
+                            gt('%1$s access', _.noI18n(settings.get('name'))))
                         .on('click', goToSettings)
-                    ));
-                }
+                ));
             }
-        });
-    }
+        }
+    });
 
     function goToSettings(e) {
         e.preventDefault();
-        if (cap.has('com.spamexperts')) {
+        if (upsell.has('com.spamexperts')) {
             ox.launch('io.ox/settings/main', { id: 'com.spamexperts' });
         } else {
-            ox.trigger('upsell:requires-upgrade', {
-                missing: 'com.spamexperts'
-            });
+            upsell.trigger({ missing: 'com.spamexperts' });
         }
     }
-/*
-    if (cap.has('com.spamexperts')) {
-        ext.point('io.ox/settings/pane').extend({
-            title: _.noI18n('SpamExperts'),
-            index: 1000,
-            id: 'com.spamexperts',
-            draw: _.inspect
-        });
-    }
-*/
 });
