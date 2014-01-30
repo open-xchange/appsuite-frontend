@@ -5,6 +5,10 @@
 *.kate-swp
 /build
 /tmp
+/debian/files
+/debian/*/
+/debian/*.debhelper.log
+/debian/*.substvars
 /node_modules
 local.conf*
 npm-debug.log
