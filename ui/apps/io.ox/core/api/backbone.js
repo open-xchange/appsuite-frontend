@@ -17,6 +17,7 @@ define('io.ox/core/api/backbone', [], function () {
 
     // basic model with custom cid
     var Model = Backbone.Model.extend({
+        idAttribute: 'cid',
         constructor: function () {
             Backbone.Model.apply(this, arguments);
             this.cid = _.cid(this.attributes);
