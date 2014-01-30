@@ -1,0 +1,30 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
+             $(filter nostrip,$(DEB_BUILD_OPTIONS))))
+	FLAGS += debug=1
+endif
+
+BACKEND := debian/<%= _.slugify(packageName) %>/opt/open-xchange/appsuite
+FRONTEND := debian/<%= _.slugify(packageName) %>-static/var/www/appsuite
+
+override_dh_auto_install:
+	sh /opt/open-xchange-appsuite-dev/bin/build-appsuite app skipLess=1 \
+	    builddir=$(BACKEND) $(FLAGS) --trace
+## Uncomment for multiple packages
+#	for i in $$(find $(BACKEND) -type f                                \
+#	            ! -regex '.*\.\(js\|css\|less\|json\)' -printf '%P '); \
+#	do                                                                 \
+#	    mkdir -p "$(FRONTEND)/$$(dirname $$i)";                        \
+#	    cp "$(BACKEND)/$$i" "$(FRONTEND)/$$i";                         \
+#	done
+
+override_dh_auto_clean:
+	sh /opt/open-xchange-appsuite-dev/bin/build-appsuite clean skipLess=1 \
+	    builddir=$(BACKEND) $(FLAGS) --trace
+
+%:
+	dh $@

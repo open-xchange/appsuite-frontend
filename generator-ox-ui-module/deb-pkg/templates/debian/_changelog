@@ -1,0 +1,5 @@
+<%= _.slugify(packageName) %> (<%= version %>-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- <%= maintainer %>  <%= (new Date()).toString() %>
