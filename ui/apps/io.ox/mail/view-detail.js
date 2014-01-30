@@ -723,7 +723,7 @@ define('io.ox/mail/view-detail',
             url,
             filename;
         // add instant preview
-        if (regImage.test(contentType)) {
+        if (regImage.test(contentType) && data.size > 0) {
             dd.find('a').on('click', data, function (e) {
                 var node = $(this), data = e.data, p = node.parent(), url, src, used;
                 if (p.hasClass('open') && p.find('.instant-preview').length === 0) {
