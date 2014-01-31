@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="OX App Suite package builder" basedir=".">
+    
+    <import file="build.xml"/>
+    
+    <property name="buildAppSuite" value="build-appsuite"/>
+    
+    <target name="debianSource" depends="readVersion" description="Uses the Node.js build system to create package sources.">
+        <fail message="Please define packageName." unless="packageName"/>
+        <property name="tmpDirAbsolute" location="${tmpDir}"/>
+        <echo file="${tmpDir}/${actualPackageName}-${version}/build.script"
+            message="dpkg-buildpackage -us -uc -rfakeroot $DSC_BUILD_JOBS"/>
+        <exec executable="${buildAppSuite}" dir="${checkoutDir}/${packageName}" failonerror="true">
+            <arg value="dist"/>
+            <arg value="forceDeb=true"/>
+            <arg value="destDir=${tmpDirAbsolute}"/>
+            <arg value="--trace"/>
+        </exec>
+    </target>
+    
+</project>
