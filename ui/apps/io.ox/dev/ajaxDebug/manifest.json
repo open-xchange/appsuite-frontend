@@ -1,8 +1,0 @@
-{
-    "title": "Ajax Debugger",
-    "company": "CompuGlobalHyperMegaNet",
-    "icon": "default.png",
-    "category": "Dev",
-    "settings": false,
-    "requires": "dev"
-}

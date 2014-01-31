@@ -1,8 +1,0 @@
-{
-    "title": "Theme Maker",
-    "company": "Mattes Inc.",
-    "icon": "default.png",
-    "category": "Dev",
-    "settings": false,
-    "requires": "dev"
-}
