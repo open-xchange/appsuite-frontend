@@ -12,14 +12,15 @@
  */
 
 define('io.ox/mail/threadview',
-    ['io.ox/core/extensions',
+    ['io.ox/mail/common-extensions',
+     'io.ox/core/extensions',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/mail/view-detail',
      'io.ox/mail/inplace-reply',
      'io.ox/core/api/backbone',
      'gettext!io.ox/mail',
-     'io.ox/mail/listview'], function (ext, api, util, detail, InplaceReply, backbone, gt) {
+     'io.ox/mail/listview'], function (extensions, ext, api, util, detail, InplaceReply, backbone, gt) {
 
     'use strict';
 
@@ -78,6 +79,77 @@ define('io.ox/mail/threadview',
         }
     });
 
+    function toggle(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        var node = $(this),
+            container = node.closest('li'),
+            cid = container.data('cid'),
+            content = container.find('.content');
+
+        if (content.hasClass('hidden') && content.hasClass('unloaded')) {
+            api.get(_.cid(cid)).done(function () {
+                content.removeClass('unloaded').text('Hallo Welt!');
+            });
+        }
+
+        content.toggleClass('hidden');
+    }
+
+    ext.point('io.ox/mail/detail-view').extend({
+        id: 'header',
+        index: 100,
+        draw: function (baton) {
+
+            var header = $('<header>');
+            ext.point('io.ox/mail/detail-view/header').invoke('draw', header, baton);
+            header.on(Modernizr.touch ? 'touchstart' : 'mousedown', toggle);
+            this.append(header);
+        }
+    });
+
+    ext.point('io.ox/mail/detail-view/header').extend({
+        id: 'picture',
+        index: 100,
+        draw: extensions.picture
+    });
+
+    ext.point('io.ox/mail/detail-view/header').extend({
+        id: 'date',
+        index: 200,
+        draw: extensions.date
+    });
+
+    ext.point('io.ox/mail/detail-view/header').extend({
+        id: 'from',
+        index: 300,
+        draw: extensions.from
+    });
+
+    ext.point('io.ox/mail/detail-view/header').extend({
+        id: 'recipients',
+        index: 400,
+        draw: extensions.recipients
+    });
+
+    ext.point('io.ox/mail/detail-view').extend({
+        id: 'attachments',
+        index: 200,
+        draw: function () {
+            this.append('<section class="attachments">Attachments</section>');
+        }
+    });
+
+    ext.point('io.ox/mail/detail-view').extend({
+        id: 'content',
+        index: 300,
+        draw: function () {
+            this.append('<section class="content hidden unloaded">Content</section>');
+        }
+    });
+
     var ThreadView = Backbone.View.extend({
 
         tagName: 'div',
@@ -85,7 +157,7 @@ define('io.ox/mail/threadview',
         scaffold: $('<li class="list-item">'),
 
         events: {
-            'click .list-item': 'onClick',
+            //'click .list-item': 'onClick',
             'click .button a.back': 'onBack',
             'click .button a.show-overview': 'onOverview',
             'click .thread-view-navigation .previous-mail': 'onPrevious',
@@ -329,7 +401,7 @@ define('io.ox/mail/threadview',
                 baton = new ext.Baton({ data: model.toJSON(), app: this.app });
             // add cid and full data
             li.attr('data-cid', model.cid);
-            ext.point('io.ox/mail/listview/item').invoke('draw', li, baton);
+            ext.point('io.ox/mail/detail-view').invoke('draw', li, baton);
             return li;
         },
     });

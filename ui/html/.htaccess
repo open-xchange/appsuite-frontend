@@ -74,3 +74,4 @@ RewriteRule ^$ core [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !help/l10n/en_US
 RewriteRule help/l10n/([a-z_A-Z]+)(.+) help/l10n/en_US$2 [L]
+
