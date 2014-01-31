@@ -162,6 +162,7 @@ if [ -x %{update} ]; then %{update}; fi
 %defattr(-,root,root)
 %dir /opt/open-xchange
 %exclude /opt/open-xchange/appsuite/apps/io.ox/tours
+%exclude /opt/open-xchange/appsuite/manifests/open-xchange-guidedtours.json
 
 %files dev
 %defattr(-,root,root)
@@ -194,6 +195,7 @@ if [ -x %{update} ]; then %{update}; fi
 %defattr(-,root,root)
 %dir /opt/open-xchange/appsuite/apps/io.ox/tours
 /opt/open-xchange/appsuite/apps/io.ox/tours
+/opt/open-xchange/appsuite/manifests/open-xchange-guidedtours.json
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/settings
 /opt/open-xchange/etc/settings/guidedtours.properties
