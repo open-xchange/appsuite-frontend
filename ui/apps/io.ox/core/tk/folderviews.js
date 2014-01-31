@@ -936,17 +936,29 @@ define('io.ox/core/tk/folderviews',
         }
     });
 
-    var sections = { 'private': gt('Private'), 'public': gt('Public'), 'shared': gt('Shared') };
+    var sections = { 'private': gt('Private'), 'public': gt('Public'), 'shared': gt('Shared'), 'hidden': gt('Hidden folders') };
 
     ext.point('io.ox/foldertree/section').extend({
         index: 100,
         id: 'headline',
         draw: function (baton) {
-            if (!baton.showHeadlines) return;
-            // headline if more than one section contains elements
-            this.append(
-                $('<div class="section-title">').text(sections[baton.id])
-            );
+            // headline if more than one section contains elements and this section contains elements
+            if (!baton.showHeadlines || !baton.data[baton.id] || baton.data[baton.id].length === 0) return;
+            if (baton.id !== 'hidden') {//hidden is a special section that has a dropdown link instead of a headline
+                this.append(
+                    $('<div class="section-title">').text(sections[baton.id])
+                );
+            } else {
+                var container = $('<div class="hidden-folders-container">').hide(),
+                    arrow = $('<i class="hidden-folders-icon icon-chevron-down">');
+                this.append($('<a class="hidden-folders-link" href="#">').text(sections[baton.id])
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        container.toggle();
+                        arrow.toggleClass('icon-chevron-up icon-chevron-down');
+                        baton.selection.updateIndex();//hidden items are not in the selection, so it must be updated
+                    }).append(arrow), container);
+            }
         }
     });
 
@@ -956,8 +968,32 @@ define('io.ox/core/tk/folderviews',
         draw: function (baton) {
             // loop over folders
             _(baton.data[baton.id]).each(function (data) {
-                ext.point('io.ox/foldertree/section/folder').invoke('draw', this, baton.clone({ data: data }));
+                ext.point('io.ox/foldertree/section/folder').invoke('draw', (baton.id === 'hidden' ? this.find('.hidden-folders-container'): this), baton.clone({ data: data }));
             }, this);
+            if (baton.id === 'hidden' && baton.data[baton.id] && baton.data[baton.id].length > 1) {//add show all
+                ext.point('io.ox/foldertree/section/hidden').invoke('draw', this.find('.hidden-folders-container'), baton);
+            }
+        }
+    });
+
+    ext.point('io.ox/foldertree/section/hidden').extend({
+        index: 100,
+        id: 'show-all-link',
+        draw: function (baton) {
+            this.append($('<a class="hidden-folders-link" href="#">').text(gt('Show all folders'))
+                    .on('click', function showAll(e) {
+                e.preventDefault();
+
+                var appSettings = baton.app.settings;
+                //clear blacklist
+                appSettings.set('folderview/blacklist', {});
+                appSettings.save();
+                //repaint tree
+                baton.app.folderView.repaint();
+                //dropdown menu needs a redraw too
+                var ul = $($.find('.foldertree-sidepanel .context-dropdown ul')[0]);
+                ext.point(baton.app.getName() + '/folderview/sidepanel/context-menu').invoke('draw', ul.empty(), baton);
+            }));
         }
     });
 
@@ -1004,6 +1040,25 @@ define('io.ox/core/tk/folderviews',
                     showHeadlines = Object.keys(data).length > 1;
                 // idle
                 self.idle();
+                //apply blacklist to hide folders
+                var hidden = [],
+                    items,
+                    blacklist = opt.app.settings.get('folderview/blacklist', {}),
+                    blacklistCheck = function (folder) {
+                        var check = blacklist[folder.id];
+                        if (check) {
+                            hidden.push(folder);
+                        }
+                        return !check;
+                    };
+
+                for (items in data) {
+                    data[items] = _(data[items]).filter(blacklistCheck);
+                }
+                if (hidden.length > 0) {
+                    data.hidden = hidden;
+                }
+
                 // loop over sections
                 for (id in sections) {
                     if (data[id]) {

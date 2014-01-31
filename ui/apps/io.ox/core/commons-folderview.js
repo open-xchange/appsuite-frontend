@@ -296,7 +296,7 @@ define('io.ox/core/commons-folderview',
 
         ext.point(POINT + '/sidepanel/context-menu').extend({
             id: 'publications',
-            index: 100,
+            index: 150,
             draw: function (baton) {
 
                 if (!capabilities.has('publication') || !api.can('publish', baton.data)) return;
@@ -384,8 +384,9 @@ define('io.ox/core/commons-folderview',
             index: 500,
             draw: function (baton) {
                 if (api.can('deleteFolder', baton.data)) {
+                    var divider = (baton.options.type !== 'mail' && this.find('a[data-action="hide"]').length === 0);//not in mail and no hideshow action
                     this.append(
-                        (baton.options.type === 'mail' ? '' : $('<li class="divider" role="presentation" aria-hidden="true">')),
+                        (divider ? $('<li class="divider" role="presentation" aria-hidden="true">'): ''),
                         $('<li>').append(
                             $('<a href="#" tabindex="1" data-action="delete" role="menuitem">')
                             .text(gt('Delete'))
@@ -630,6 +631,54 @@ define('io.ox/core/commons-folderview',
                 }
             }
         });
+
+        function hideShowFolder(e) {//move folder to hidden folders section or removes it from there
+            e.preventDefault();
+
+            var baton = e.data.baton,
+                data = baton.data,
+                appSettings = e.data.appSettings,
+                blacklist = appSettings.get('folderview/blacklist', {});
+            
+            //update blacklist
+            if (e.data.hide) {
+                blacklist[data.id] = true;
+            } else {
+                delete blacklist[data.id];
+            }
+            appSettings.set('folderview/blacklist', blacklist);
+            appSettings.save();
+            //repaint tree
+            baton.tree.repaint();
+            //dropdown menu needs a redraw too
+            var ul = baton.$.sidepanel.find('.context-dropdown ul');
+            ext.point(POINT + '/sidepanel/context-menu').invoke('draw', ul.empty(), baton);
+        }
+
+        ext.point(POINT + '/sidepanel/context-menu').extend({
+            id: 'hideAndShow',
+            index: 450,
+            draw: function (baton) {
+                if (baton.options.view === 'FolderList' &&
+                    !_.device('smartphone') &&
+                    baton.data.id &&//if data is empty we have nothing to do here
+                    !baton.data.standard_folder) {
+
+                    var appSettings = baton.app.settings,
+                    hide = !appSettings.get('folderview/blacklist', {})[baton.data.id];//apps have their own blacklists for hidden folders
+                    this.append(
+                        $('<li class="divider" role="presentation" aria-hidden="true">'),
+                        $('<li>').append(
+                            $('<a href="#" tabindex="1" data-action="hide" role="menuitem">')
+                            .text(hide ? gt('Hide'): gt('Show'))
+                            .on('click', { baton: baton, appSettings: appSettings, hide: hide}, hideShowFolder)
+                        )
+                    );
+                    
+                }
+                
+            }
+        });
     }
 
     /**
@@ -679,7 +728,7 @@ define('io.ox/core/commons-folderview',
                         // close tree
                         fnHideSml();
                     }
-                    // debugger;
+
                     if (data.module === options.type) {
                         if (id !== current) return;
                         changeFolderOff();
