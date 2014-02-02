@@ -9,42 +9,84 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: apps/io.ox/core/tk/folderviews.js:117
-msgid "Couldn't load subfolders."
+#: apps/io.ox/calendar/edit/template.js:77
+#: apps/io.ox/contacts/distrib/create-dist-view.js:40
+#: apps/io.ox/contacts/distrib/create-dist-view.js:41
+#: apps/io.ox/contacts/edit/view-form.js:175
+#: apps/io.ox/contacts/settings/pane.js:91
+#: apps/io.ox/core/folder/imap-subscription.js:58
+#: apps/io.ox/core/permissions/permissions.js:355
+#: apps/io.ox/core/permissions/permissions.js:356
+#: apps/io.ox/core/permissions/permissions.js:397
+#: apps/io.ox/core/permissions/permissions.js:398
+#: apps/io.ox/core/tk/dialogs.js:535 apps/io.ox/core/tk/dialogs.js:538
+#: apps/io.ox/editor/main.js:127 apps/io.ox/editor/main.js:143
+#: apps/io.ox/files/actions.js:538 apps/io.ox/files/actions.js:539
+#: apps/io.ox/files/views/create.js:116 apps/io.ox/mail/accounts/settings.js:42
+#: apps/io.ox/mail/actions/attachmentSave.js:66
+#: apps/io.ox/mail/mailfilter/settings/filter.js:87
+#: apps/io.ox/mail/settings/signatures/register.js:109
+#: apps/io.ox/mail/write/view-main.js:58 apps/io.ox/oauth/settings.js:80
+#: apps/io.ox/tasks/edit/view-template.js:46
+#: apps/io.ox/tasks/edit/view-template.js:89
+#: apps/plugins/portal/flickr/register.js:226
+#: apps/plugins/portal/rss/register.js:149
+#: apps/plugins/portal/tumblr/register.js:245
+#: apps/plugins/portal/tumblr/register.js:246
+#: apps/plugins/portal/userSettings/register.js:41
+msgid "Save"
 msgstr ""
 
-#: apps/io.ox/core/tk/folderviews.js:477
-msgid "Folder view"
+#: apps/io.ox/editor/main.js:138
+msgid "Enter document title here"
 msgstr ""
 
-#: apps/io.ox/core/tk/folderviews.js:590
-msgid "Do you really want to delete folder \"%s\"?"
+#: apps/io.ox/core/about/about.js:66 apps/io.ox/core/commons-folderview.js:528
+#: apps/io.ox/core/commons-folderview.js:529
+#: apps/io.ox/core/permissions/permissions.js:454
+#: apps/io.ox/core/permissions/permissions.js:455
+#: apps/io.ox/core/pubsub/publications.js:107 apps/io.ox/core/tk/dialogs.js:535
+#: apps/io.ox/core/tk/dialogs.js:538 apps/io.ox/core/wizard/registry.js:60
+#: apps/io.ox/editor/main.js:144 apps/io.ox/files/actions.js:287
+#: apps/io.ox/files/carousel.js:45 apps/io.ox/files/mediaplayer.js:288
+#: apps/io.ox/files/mediaplayer.js:289 apps/io.ox/mail/accounts/settings.js:309
+#: apps/io.ox/mail/accounts/settings.js:331 apps/io.ox/mail/actions.js:192
+#: apps/plugins/upsell/simple-wizard/register.js:91
+msgid "Close"
 msgstr ""
 
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. #-#-#-#-#-#-#-#-#-#
-#. Really delete portal widget - in contrast to "just disable"
-#: apps/io.ox/calendar/actions.js:273 apps/io.ox/calendar/actions.js:604
-#: apps/io.ox/calendar/invitations/register.js:35
-#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:754
-#: apps/io.ox/contacts/main.js:107 apps/io.ox/core/commons-folderview.js:391
-#: apps/io.ox/core/commons-folderview.js:392
-#: apps/io.ox/core/tk/folderviews.js:591 apps/io.ox/files/actions.js:326
-#: apps/io.ox/files/actions.js:680 apps/io.ox/files/actions.js:833
-#: apps/io.ox/mail/actions.js:86 apps/io.ox/mail/actions.js:109
-#: apps/io.ox/mail/actions.js:986 apps/io.ox/mail/main.js:136
-#: apps/io.ox/mail/settings/signatures/register.js:275
-#: apps/io.ox/portal/main.js:490 apps/io.ox/portal/main.js:492
-#: apps/io.ox/portal/settings/widgetview.js:114
-#: apps/io.ox/settings/accounts/settings/pane.js:60
-#: apps/io.ox/settings/accounts/settings/pane.js:62
-#: apps/io.ox/settings/accounts/settings/pane.js:70
-#: apps/io.ox/settings/accounts/settings/pane.js:71
-#: apps/io.ox/tasks/actions.js:59 apps/io.ox/tasks/actions.js:466
-#: apps/io.ox/tasks/main.js:101 apps/plugins/portal/twitter/util.js:318
-#: apps/plugins/portal/twitter/util.js:451
-msgid "Delete"
+#: apps/io.ox/editor/main.js:151
+msgid "You can quick-save your changes via Ctrl+Enter."
+msgstr ""
+
+#: apps/io.ox/editor/main.js:173
+msgid "Editor"
+msgstr ""
+
+#: apps/io.ox/editor/main.js:222
+msgid "This file will be written in your default folder to allow editing"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/main.js:49 apps/io.ox/contacts/distrib/main.js:182
+#: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:312
+#: apps/io.ox/tasks/edit/main.js:159
+msgid "Do you really want to discard your changes?"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:97
+#: apps/io.ox/contacts/distrib/create-dist-view.js:54
+#: apps/io.ox/contacts/distrib/create-dist-view.js:55
+#: apps/io.ox/contacts/distrib/main.js:183 apps/io.ox/contacts/edit/main.js:248
+#: apps/io.ox/contacts/edit/view-form.js:185
+#: apps/io.ox/contacts/settings/pane.js:92 apps/io.ox/editor/main.js:313
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
+#: apps/io.ox/mail/settings/signatures/register.js:110
+#: apps/io.ox/mail/write/inplace/inplace.js:114
+#: apps/io.ox/mail/write/main.js:1309 apps/io.ox/mail/write/main.js:1335
+#: apps/io.ox/mail/write/view-main.js:67
+#: apps/io.ox/tasks/edit/view-template.js:82
+#: apps/plugins/portal/userSettings/register.js:42
+msgid "Discard"
 msgstr ""
 
 #: apps/io.ox/calendar/acceptdeny.js:89 apps/io.ox/calendar/actions.js:153
@@ -101,229 +143,6 @@ msgstr ""
 #: apps/plugins/portal/twitter/util.js:452
 #: apps/plugins/portal/userSettings/register.js:88
 msgid "Cancel"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:632
-msgid "This is a standard folder, which can't be renamed."
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:640
-msgid "Rename folder"
-msgstr ""
-
-#: apps/io.ox/core/folder/add.js:90 apps/io.ox/core/tk/folderviews.js:647
-msgid "Folder name"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:369
-#: apps/io.ox/core/tk/folderviews.js:653 apps/io.ox/files/actions.js:476
-#: apps/io.ox/files/actions.js:483 apps/io.ox/files/actions.js:887
-msgid "Rename"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:843
-msgid "Folder-specific actions"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:894
-msgid "This folder has publications and/or subscriptions"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:917
-msgid "You share this folder with other users"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/template.js:289
-#: apps/io.ox/calendar/list/view-grid-template.js:72
-#: apps/io.ox/calendar/view-grid-template.js:74
-#: apps/io.ox/contacts/view-detail.js:143 apps/io.ox/core/tk/folderviews.js:939
-#: apps/io.ox/tasks/edit/view-template.js:317
-msgid "Private"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:939
-msgid "Public"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:939
-msgid "Shared"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:939
-msgid "Hidden folders"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:983
-msgid "Show all folders"
-msgstr ""
-
-#: apps/io.ox/core/tk/folderviews.js:1081
-msgid "Couldn't load folders."
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:58
-msgid "Folders"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:220 apps/io.ox/core/folder/add.js:83
-#: apps/io.ox/core/folder/add.js:101 apps/io.ox/core/pubsub/util.js:107
-msgid "New folder"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:238 apps/io.ox/core/folder/add.js:83
-msgid "New subfolder"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:258 apps/io.ox/core/folder/add.js:81
-msgid "New private folder"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:283 apps/io.ox/core/folder/add.js:82
-msgid "New public folder"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:307
-#: apps/io.ox/core/pubsub/publications.js:119 apps/io.ox/files/actions.js:1181
-msgid "Share this folder"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:331
-msgid "New subscription"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:417
-#: apps/io.ox/core/export/export.js:103
-msgid "Export"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:442
-#: apps/io.ox/core/import/import.js:128
-msgid "Import"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:469
-msgid "Permissions"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:486
-#: apps/io.ox/core/commons-folderview.js:549
-msgid "Properties"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:500
-msgid "Folder type"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:515
-msgid "CalDAV URL"
-msgstr ""
-
-#: apps/io.ox/core/about/about.js:66 apps/io.ox/core/commons-folderview.js:528
-#: apps/io.ox/core/commons-folderview.js:529
-#: apps/io.ox/core/permissions/permissions.js:454
-#: apps/io.ox/core/permissions/permissions.js:455
-#: apps/io.ox/core/pubsub/publications.js:107 apps/io.ox/core/tk/dialogs.js:535
-#: apps/io.ox/core/tk/dialogs.js:538 apps/io.ox/core/wizard/registry.js:60
-#: apps/io.ox/editor/main.js:144 apps/io.ox/files/actions.js:287
-#: apps/io.ox/files/carousel.js:45 apps/io.ox/files/mediaplayer.js:288
-#: apps/io.ox/files/mediaplayer.js:289 apps/io.ox/mail/accounts/settings.js:309
-#: apps/io.ox/mail/accounts/settings.js:331 apps/io.ox/mail/actions.js:192
-#: apps/plugins/upsell/simple-wizard/register.js:91
-msgid "Close"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:566
-msgid "Move folder"
-msgstr ""
-
-#: apps/io.ox/calendar/actions.js:404 apps/io.ox/calendar/actions.js:452
-#: apps/io.ox/calendar/actions.js:588 apps/io.ox/contacts/actions.js:191
-#: apps/io.ox/contacts/actions.js:768 apps/io.ox/core/commons-folderview.js:626
-#: apps/io.ox/core/commons-folderview.js:627 apps/io.ox/files/actions.js:627
-#: apps/io.ox/files/actions.js:903 apps/io.ox/mail/actions.js:307
-#: apps/io.ox/mail/actions.js:1040 apps/io.ox/tasks/actions.js:194
-#: apps/io.ox/tasks/actions.js:195 apps/io.ox/tasks/actions.js:560
-msgid "Move"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:673
-#: apps/io.ox/mail/write/view-main.js:130
-msgid "Hide"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:673
-msgid "Show"
-msgstr ""
-
-#: apps/io.ox/core/commons-folderview.js:1040
-#: apps/io.ox/core/commons-folderview.js:1067
-msgid "Toggle folder"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/template.js:77
-#: apps/io.ox/contacts/distrib/create-dist-view.js:40
-#: apps/io.ox/contacts/distrib/create-dist-view.js:41
-#: apps/io.ox/contacts/edit/view-form.js:175
-#: apps/io.ox/contacts/settings/pane.js:91
-#: apps/io.ox/core/folder/imap-subscription.js:58
-#: apps/io.ox/core/permissions/permissions.js:355
-#: apps/io.ox/core/permissions/permissions.js:356
-#: apps/io.ox/core/permissions/permissions.js:397
-#: apps/io.ox/core/permissions/permissions.js:398
-#: apps/io.ox/core/tk/dialogs.js:535 apps/io.ox/core/tk/dialogs.js:538
-#: apps/io.ox/editor/main.js:127 apps/io.ox/editor/main.js:143
-#: apps/io.ox/files/actions.js:538 apps/io.ox/files/actions.js:539
-#: apps/io.ox/files/views/create.js:116 apps/io.ox/mail/accounts/settings.js:42
-#: apps/io.ox/mail/actions/attachmentSave.js:66
-#: apps/io.ox/mail/mailfilter/settings/filter.js:87
-#: apps/io.ox/mail/settings/signatures/register.js:109
-#: apps/io.ox/mail/write/view-main.js:58 apps/io.ox/oauth/settings.js:80
-#: apps/io.ox/tasks/edit/view-template.js:46
-#: apps/io.ox/tasks/edit/view-template.js:89
-#: apps/plugins/portal/flickr/register.js:226
-#: apps/plugins/portal/rss/register.js:149
-#: apps/plugins/portal/tumblr/register.js:245
-#: apps/plugins/portal/tumblr/register.js:246
-#: apps/plugins/portal/userSettings/register.js:41
-msgid "Save"
-msgstr ""
-
-#: apps/io.ox/editor/main.js:138
-msgid "Enter document title here"
-msgstr ""
-
-#: apps/io.ox/editor/main.js:151
-msgid "You can quick-save your changes via Ctrl+Enter."
-msgstr ""
-
-#: apps/io.ox/editor/main.js:173
-msgid "Editor"
-msgstr ""
-
-#: apps/io.ox/editor/main.js:222
-msgid "This file will be written in your default folder to allow editing"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/main.js:49 apps/io.ox/contacts/distrib/main.js:182
-#: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:312
-#: apps/io.ox/tasks/edit/main.js:159
-msgid "Do you really want to discard your changes?"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:97
-#: apps/io.ox/contacts/distrib/create-dist-view.js:54
-#: apps/io.ox/contacts/distrib/create-dist-view.js:55
-#: apps/io.ox/contacts/distrib/main.js:183 apps/io.ox/contacts/edit/main.js:248
-#: apps/io.ox/contacts/edit/view-form.js:185
-#: apps/io.ox/contacts/settings/pane.js:92 apps/io.ox/editor/main.js:313
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
-#: apps/io.ox/mail/settings/signatures/register.js:110
-#: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1309 apps/io.ox/mail/write/main.js:1335
-#: apps/io.ox/mail/write/view-main.js:67
-#: apps/io.ox/tasks/edit/view-template.js:82
-#: apps/plugins/portal/userSettings/register.js:42
-msgid "Discard"
 msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:107 apps/io.ox/core/main.js:674
@@ -1176,6 +995,11 @@ msgstr ""
 msgid "Include distribution lists"
 msgstr ""
 
+#: apps/io.ox/core/commons-folderview.js:417
+#: apps/io.ox/core/export/export.js:103
+msgid "Export"
+msgstr ""
+
 #: apps/io.ox/core/settings/downloads/pane.js:38
 #: apps/plugins/portal/updater/register.js:23
 #: apps/plugins/portal/updater/register.js:45
@@ -1467,6 +1291,11 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
+#: apps/io.ox/core/commons-folderview.js:307
+#: apps/io.ox/core/pubsub/publications.js:119 apps/io.ox/files/actions.js:1181
+msgid "Share this folder"
+msgstr ""
+
 #: apps/io.ox/core/pubsub/publications.js:121 apps/io.ox/files/actions.js:843
 msgid "Share this file"
 msgstr ""
@@ -1531,6 +1360,11 @@ msgstr ""
 
 #: apps/io.ox/core/pubsub/publications.js:428
 msgid "Show legal information"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:220 apps/io.ox/core/folder/add.js:83
+#: apps/io.ox/core/folder/add.js:101 apps/io.ox/core/pubsub/util.js:107
+msgid "New folder"
 msgstr ""
 
 #: apps/io.ox/core/pubsub/settings/register.js:26
@@ -1702,6 +1536,11 @@ msgstr ""
 msgid "Ignore existing events. Helpful to import public holiday calendars, for example."
 msgstr ""
 
+#: apps/io.ox/core/commons-folderview.js:442
+#: apps/io.ox/core/import/import.js:128
+msgid "Import"
+msgstr ""
+
 #: apps/io.ox/core/import/import.js:149
 msgid "Import into"
 msgstr ""
@@ -1849,6 +1688,22 @@ msgstr ""
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
 
+#: apps/io.ox/core/commons-folderview.js:258 apps/io.ox/core/folder/add.js:81
+msgid "New private folder"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:283 apps/io.ox/core/folder/add.js:82
+msgid "New public folder"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:238 apps/io.ox/core/folder/add.js:83
+msgid "New subfolder"
+msgstr ""
+
+#: apps/io.ox/core/folder/add.js:90 apps/io.ox/core/tk/folderviews.js:647
+msgid "Folder name"
+msgstr ""
+
 #: apps/io.ox/core/folder/add.js:94
 msgid "Add folder"
 msgstr ""
@@ -1918,6 +1773,98 @@ msgid "1 item"
 msgid_plural "%1$d items"
 msgstr[0] ""
 msgstr[1] ""
+
+#: apps/io.ox/core/tk/folderviews.js:117
+msgid "Couldn't load subfolders."
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:477
+msgid "Folder view"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:590
+msgid "Do you really want to delete folder \"%s\"?"
+msgstr ""
+
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
+#. Really delete portal widget - in contrast to "just disable"
+#: apps/io.ox/calendar/actions.js:273 apps/io.ox/calendar/actions.js:604
+#: apps/io.ox/calendar/invitations/register.js:35
+#: apps/io.ox/contacts/actions.js:53 apps/io.ox/contacts/actions.js:754
+#: apps/io.ox/contacts/main.js:107 apps/io.ox/core/commons-folderview.js:391
+#: apps/io.ox/core/commons-folderview.js:392
+#: apps/io.ox/core/tk/folderviews.js:591 apps/io.ox/files/actions.js:326
+#: apps/io.ox/files/actions.js:680 apps/io.ox/files/actions.js:833
+#: apps/io.ox/mail/actions.js:86 apps/io.ox/mail/actions.js:109
+#: apps/io.ox/mail/actions.js:986 apps/io.ox/mail/main.js:136
+#: apps/io.ox/mail/settings/signatures/register.js:275
+#: apps/io.ox/portal/main.js:490 apps/io.ox/portal/main.js:492
+#: apps/io.ox/portal/settings/widgetview.js:114
+#: apps/io.ox/settings/accounts/settings/pane.js:60
+#: apps/io.ox/settings/accounts/settings/pane.js:62
+#: apps/io.ox/settings/accounts/settings/pane.js:70
+#: apps/io.ox/settings/accounts/settings/pane.js:71
+#: apps/io.ox/tasks/actions.js:59 apps/io.ox/tasks/actions.js:466
+#: apps/io.ox/tasks/main.js:101 apps/plugins/portal/twitter/util.js:318
+#: apps/plugins/portal/twitter/util.js:451
+msgid "Delete"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:632
+msgid "This is a standard folder, which can't be renamed."
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:640
+msgid "Rename folder"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:369
+#: apps/io.ox/core/tk/folderviews.js:653 apps/io.ox/files/actions.js:476
+#: apps/io.ox/files/actions.js:483 apps/io.ox/files/actions.js:887
+msgid "Rename"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:843
+msgid "Folder-specific actions"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:894
+msgid "This folder has publications and/or subscriptions"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:917
+msgid "You share this folder with other users"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/template.js:289
+#: apps/io.ox/calendar/list/view-grid-template.js:72
+#: apps/io.ox/calendar/view-grid-template.js:74
+#: apps/io.ox/contacts/view-detail.js:143 apps/io.ox/core/tk/folderviews.js:939
+#: apps/io.ox/tasks/edit/view-template.js:317
+msgid "Private"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:939
+msgid "Public"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:939
+msgid "Shared"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:939
+msgid "Hidden folders"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:983
+msgid "Show all folders"
+msgstr ""
+
+#: apps/io.ox/core/tk/folderviews.js:1081
+msgid "Couldn't load folders."
+msgstr ""
 
 #: apps/io.ox/core/tk/autocomplete.js:233 apps/io.ox/core/tk/vgrid.js:836
 msgid "Could not load this list"
@@ -2363,6 +2310,59 @@ msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
 msgstr[0] ""
 msgstr[1] ""
+
+#: apps/io.ox/core/commons-folderview.js:58
+msgid "Folders"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:331
+msgid "New subscription"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:469
+msgid "Permissions"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:486
+#: apps/io.ox/core/commons-folderview.js:549
+msgid "Properties"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:500
+msgid "Folder type"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:515
+msgid "CalDAV URL"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:566
+msgid "Move folder"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js:404 apps/io.ox/calendar/actions.js:452
+#: apps/io.ox/calendar/actions.js:588 apps/io.ox/contacts/actions.js:191
+#: apps/io.ox/contacts/actions.js:768 apps/io.ox/core/commons-folderview.js:626
+#: apps/io.ox/core/commons-folderview.js:627 apps/io.ox/files/actions.js:627
+#: apps/io.ox/files/actions.js:903 apps/io.ox/mail/actions.js:307
+#: apps/io.ox/mail/actions.js:1040 apps/io.ox/tasks/actions.js:194
+#: apps/io.ox/tasks/actions.js:195 apps/io.ox/tasks/actions.js:560
+msgid "Move"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:673
+#: apps/io.ox/mail/write/view-main.js:130
+msgid "Hide"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:673
+msgid "Show"
+msgstr ""
+
+#: apps/io.ox/core/commons-folderview.js:1040
+#: apps/io.ox/core/commons-folderview.js:1067
+msgid "Toggle folder"
+msgstr ""
 
 #. Emoji collection. Unified/standard icons. "Standard" might work for other languages.
 #: apps/io.ox/emoji/categories.js:39
