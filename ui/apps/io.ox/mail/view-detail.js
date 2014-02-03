@@ -678,7 +678,6 @@ define('io.ox/mail/view-detail',
                     if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
                         var dd = $('<div class="recipient-actions">');
                         drawAllDropDown(dd, $('<i class="fa fa-group">'), data);
-                        dd.find('.dropdown').addClass('pull-right');
                         dd.appendTo(container);
                     }
                 }
