@@ -23,6 +23,9 @@ module.exports = function (grunt) {
         grunt.config(k, require('underscore').extend(grunt.config(k), v));
     };
 
+    grunt.config('pkg', grunt.file.readJSON('package.json'));
+    grunt.config('local', grunt.file.exists('grunt/local.conf.json') ? grunt.file.readJSON('grunt/local.conf.json') : {});
+
     // load installed grunt tasks from specified folder
     grunt.loadTasks('grunt/tasks');
 
