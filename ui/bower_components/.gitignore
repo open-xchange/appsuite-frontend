@@ -41,6 +41,7 @@ backbone-validation/src
 bigscreen/src
 
 bootstrap/dist
+bootstrap/fonts
 bootstrap-datepicker/build
 bootstrap-datepicker/css
 bootstrap-datepicker/less/datepicker.less
