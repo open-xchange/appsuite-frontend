@@ -419,7 +419,7 @@ define.async('io.ox/mail/accounts/view-form',
                         )
                     ),
                     $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label').text(gt('Server port')),
+                        $('<label>').attr({ 'for':  'transport_server'}).addClass('control-label').text(gt('Server name')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
                                 buildInputText('transport_server')
@@ -427,7 +427,7 @@ define.async('io.ox/mail/accounts/view-form',
                         )
                     ),
                     $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label').text(gt('Server name')),
+                        $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label').text(gt('Server port')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
                                 buildInputText('transport_port')
