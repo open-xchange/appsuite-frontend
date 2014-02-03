@@ -463,8 +463,17 @@ define('io.ox/mail/write/main',
             return str.replace(/[\s\uFEFF\xA0]+$/, '');
         }
 
+        var addBlankLine = function (content, signature) {
+            var blankline = editorMode === 'html' ? '<p></p>' : '',
+                pos = signature ? signature.misc && signature.misc.insertion || 'below' : 'below';
+            //avoid extra blank lines for 'below' default signatures (take a look at prependConent for details)
+            if (!(content === '' && pos === 'below' && editorMode === 'text'))
+                app.getEditor().prependContent(blankline);
+        };
+
         app.setBody = function (str) {
-            var content = trimContent(str), dsID, ds;
+            var content = trimContent(str),
+                dsID, ds;
             //get default signature
             dsID = _.device('smartphone') ?
                 (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) :
@@ -473,14 +482,15 @@ define('io.ox/mail/write/main',
                     o.index = i;
                     return o.id === dsID;
                 });
-            //apply
+            //set content
+            app.getEditor().setContent(content);
+            //fix misc property and set signature
             if (ds) {
-                app.getEditor().setContent(content);
+                ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 app.setSignature(({ data: ds}));
-            } else {
-                content = content !== '' ? (editorMode === 'html' ? '<p></p>' : '\n\n') + content : '';
-                app.getEditor().setContent(content);
             }
+            //get position
+            addBlankLine(content, ds);
         };
 
         app.getRecipients = function (id) {
