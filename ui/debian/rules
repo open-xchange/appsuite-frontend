@@ -38,7 +38,7 @@ override_dh_auto_install:
 	mkdir -p debian/open-xchange-appsuite-help-common/var/www/appsuite/
 	mv $(FRONTEND)/help debian/open-xchange-appsuite-help-common/var/www/appsuite/
 	mkdir -p debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
-	mv $(FRONTEND)/help debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
+	mv $(FRONTEND)/help-drive debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
 
 override_dh_auto_clean:
 	sh bin/build-appsuite clean skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
