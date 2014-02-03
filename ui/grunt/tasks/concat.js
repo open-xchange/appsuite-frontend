@@ -72,6 +72,7 @@ module.exports = function (grunt) {
                          'bower_components/bootstrap/js/tab.js',
                          'bower_components/bootstrap/js/affix.js',
                          // add bootstrap plugins
+                         'bower_components/bootstrap-accessibility-plugin/plugins/js/bootstrap-accessibility.js',
                          'bower_components/bootstrap-typeahead/bootstrap3-typeahead.js',
                          'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
                          'lib/bootstrap-combobox.js'

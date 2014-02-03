@@ -61,3 +61,7 @@ open-sans-fontface/fonts/*
 
 requirejs/*
 !requirejs/require.js
+
+bootstrap-accessibility-plugin/*
+!bootstrap-accessibility-plugin/plugins
+bootstrap-accessibility-plugin/plugins/js/*.min.js
