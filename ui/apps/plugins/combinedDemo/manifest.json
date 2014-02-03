@@ -1,0 +1,5 @@
+{
+	"namespace": "core",
+	"path": "plugins/combinedDemo/main",
+	"require": "upsell"
+}

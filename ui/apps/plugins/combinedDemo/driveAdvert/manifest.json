@@ -1,0 +1,10 @@
+{
+    "namespace": "io.ox/core/main",
+    "title": "Upsell drive advertisement",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "settings": false,
+    "index": 100,
+    "path": "plugins/combinedDemo/driveAdvert/main",
+    "requires": "upsell"
+}
