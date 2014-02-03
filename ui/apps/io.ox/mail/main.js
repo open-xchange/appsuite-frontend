@@ -907,10 +907,7 @@ define('io.ox/mail/main',
                 defaults: data,
                 settings: settings
             });
-
         }
-
-        initSearch();
 
         app.on('folder:change', function () {
             initSearch();
