@@ -72,7 +72,7 @@ Language-independent files of online help for OX App Suite
 Group:          Applications/Productivity
 Summary:        Language-independent files of online help for OX Drive
 
-%description    help-common
+%description    help-drive-common
 Language-independent files of online help for OX Drive
 
 ## help-drive ##
