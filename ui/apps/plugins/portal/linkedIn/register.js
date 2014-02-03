@@ -86,9 +86,7 @@ define('plugins/portal/linkedIn/register',
         draw: function (activity) {
             var deferred = new $.Deferred();
 
-            if (activity.updateType !== 'CONN') {
-                return deferred.resolve();
-            }
+            if (activity.updateType !== 'CONN') return deferred.resolve();
 
             var $updateEntry = $('<div class="io-ox-portal-linkedin-updates-entry">'),
                 $detailEntry = $('<div class="io-ox-portal-linkedin-updates-details">').hide();
@@ -125,7 +123,7 @@ define('plugins/portal/linkedIn/register',
             // Check presence of all variables
             if (activity.updateContent.person) {
                 $newEntry.append(
-                    $('<span>').text(gtWithNode(gt('%1$s is a new contact'), [displayNameLink(activity.updateContent.person)]))
+                    gtWithNode(gt('%1$s is a new contact'), [displayNameLink(activity.updateContent.person)])
                 );
             }
 
@@ -263,6 +261,7 @@ define('plugins/portal/linkedIn/register',
         },
 
         draw: function (baton) {
+
             var node = $('<div class="portal-feed linkedin-content">');
 
             if (capabilities.has('linkedinPlus')) {
