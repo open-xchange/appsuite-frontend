@@ -232,8 +232,8 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/etc/settings/guidedtours.properties
 
 %changelog
-* Thu Nov 10 2011 viktor.pracht@open-xchange.com
-  - Initial release
 * Thu Jan 03 2014 tobias.prinz@open-xchange.com
   - drive manual added
+* Thu Nov 10 2011 viktor.pracht@open-xchange.com
+  - Initial release
 
