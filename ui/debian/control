@@ -38,6 +38,14 @@ Description: Language-independent files of online help for OX App Suite
 #Description: Online help for OX App Suite (## Lang ##)
 ## end ##
 
+# help drive
+Package: open-xchange-appsuite-help-drive-## lang ##
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (## Lang ##)
+
+
 ## l10n ##
 #Package: open-xchange-appsuite-l10n-## lang ##
 #Architecture: all

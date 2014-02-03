@@ -182,6 +182,13 @@ if [ -x %{update} ]; then %{update}; fi
 #%{docroot}/help/l10n/## Lang ##
 ## end ##
 
+# help drive ##
+%files help-## lang ##
+%defattr(-,root,root)
+%dir %{docroot}/help-drive/l10n
+%{docroot}/help/l10n/## Lang ##
+
+
 ## l10n ##
 #%files l10n-## lang ## -f tmp/files-## lang ##
 #%defattr(-,root,root)
@@ -203,3 +210,6 @@ if [ -x %{update} ]; then %{update}; fi
 %changelog
 * Thu Nov 10 2011 viktor.pracht@open-xchange.com
   - Initial release
+* Thu Jan 03 2014 tobias.prinz@open-xchange.com
+  - drive manual added
+
