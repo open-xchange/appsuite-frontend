@@ -68,6 +68,25 @@ Language-independent files of online help for OX App Suite
 #Online help for OX App Suite (## Lang ##)
 ## end ##
 
+%package        help-drive-common
+Group:          Applications/Productivity
+Summary:        Language-independent files of online help for OX Drive
+
+%description    help-common
+Language-independent files of online help for OX Drive
+
+## help-drive ##
+#%package       help-drive-## lang ##
+#Group:         Applications/Productivity
+#Summary:       Online help for OX Drive (## Lang ##)
+#Provides:      open-xchange-appsuite-help-drive
+#Requires:      open-xchange-appsuite-help-drive-common
+#
+#%description   help-drive-## lang ##
+#Online help for OX Drive (## Lang ##)
+## end ##
+
+
 ## l10n ##
 #%package       l10n-## lang ##
 #Group:         Applications/Productivity
@@ -182,12 +201,17 @@ if [ -x %{update} ]; then %{update}; fi
 #%{docroot}/help/l10n/## Lang ##
 ## end ##
 
-# help drive ##
-%files help-## lang ##
+%files help-drive-common
 %defattr(-,root,root)
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help/l10n/## Lang ##
+%dir %{docroot}/help-drive
+%{docroot}/help-drive
 
+## help-drive ##
+#%files help-drive-## lang ##
+#%defattr(-,root,root)
+#%dir %{docroot}/help-drive/l10n
+#%{docroot}/help-drive/l10n/## Lang ##
+## end ##
 
 ## l10n ##
 #%files l10n-## lang ## -f tmp/files-## lang ##

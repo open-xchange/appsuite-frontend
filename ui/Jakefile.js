@@ -378,6 +378,19 @@ if (path.existsSync('help')) {
     utils.copy(utils.list(['help/help.css', 'help/images/']));
 }
 
+//online drive help
+
+if (path.existsSync('help-drive')) {
+    var helpDir = process.env.helpDriveDir || utils.builddir;
+    _.each(fs.readdirSync('help-drive/l10n'), function (Lang) {
+        var lang = Lang.toLowerCase().replace(/_/g, '-');
+        utils.copy(utils.list(path.join('help-drive/l10n', Lang + '/')), {
+            to: helpDir.replace(/@lang@/g, lang)
+        });
+    });
+    utils.copy(utils.list(['help-drive/help.css', 'help-drive/images/']));
+}
+
 // standard ox set of default icons for mobile devices
 utils.copy(utils.list("apps/themes/icons", "*"), {to: utils.dest("apps/themes/icons") });
 // rewrite conditions for default icons
@@ -782,6 +795,9 @@ task("dist", [distDest], function () {
         spec = replaceL10n(spec, 'l10n', i18n.languages());
         if (path.existsSync('help')) {
             spec = replaceL10n(spec, 'help', fs.readdirSync('help/l10n'));
+        }
+        if (path.existsSync('help-drive')) {
+            spec = replaceL10n(spec, 'help-drive', fs.readdirSync('help-drive/l10n'));
         }
         return spec;
     }

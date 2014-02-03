@@ -16,6 +16,7 @@ override_dh_auto_install:
 	sh bin/build-appsuite skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
 	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
 	    helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
+	    helpDriveDir=debian/open-xchange-appsuite-help-drive-@lang@/var/www/appsuite \
 	    $(FLAGS) --trace
 	for i in i18n/*.properties; do \
 	    j=$${i#i18n/}; pkgname=$${j%.properties}; \
@@ -36,6 +37,8 @@ override_dh_auto_install:
 	mv $(BACKEND)/manifests/open-xchange-guidedtours.json debian/open-xchange-guidedtours/opt/open-xchange/appsuite/manifests/
 	mkdir -p debian/open-xchange-appsuite-help-common/var/www/appsuite/
 	mv $(FRONTEND)/help debian/open-xchange-appsuite-help-common/var/www/appsuite/
+	mkdir -p debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
+	mv $(FRONTEND)/help debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
 
 override_dh_auto_clean:
 	sh bin/build-appsuite clean skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
