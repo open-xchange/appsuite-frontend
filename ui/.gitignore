@@ -1,4 +1,5 @@
 /build
+/dist
 /tmp
 /ox.pot
 /debian/files
