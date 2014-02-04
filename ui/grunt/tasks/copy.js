@@ -35,6 +35,17 @@ module.exports = function (grunt) {
                 }
             ]
         },
+        images: {
+            files: [
+                {
+                    expand: true,
+                    src: ['**/*.{png,gif,ico}'],
+                    cwd: 'apps/themes/',
+                    dest: 'build/apps/themes/',
+                    filter: 'isFile'
+                }
+            ]
+        },
         thirdparty: {
             files: [
                 {
