@@ -129,10 +129,8 @@ define('io.ox/mail/common-extensions',
 
         subject: function (baton) {
 
-            var data = baton.data,
-                subject = $.trim(data.subject || '') || gt('No subject');
-
-            if (data.threadSize > 1) subject = subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
+            var keepFirstPrefix = baton.data.threadSize === 1,
+                subject = util.getSubject(baton.data, keepFirstPrefix);
 
             this.append(
                 $('<div class="subject">').append(
@@ -144,14 +142,14 @@ define('io.ox/mail/common-extensions',
 
         recipients: (function () {
 
-            var drawAllDropDown = function (node, label, data) {
-                // use extension pattern
-                new links.DropdownLinks({
-                    label: label,
-                    classes: 'all-link',
-                    ref: 'io.ox/mail/all/actions'
-                }).draw.call(node, data);
-            };
+            // var drawAllDropDown = function (node, label, data) {
+            //     // use extension pattern
+            //     new links.DropdownLinks({
+            //         label: label,
+            //         classes: 'all-link',
+            //         ref: 'io.ox/mail/all/actions'
+            //     }).draw.call(node, data);
+            // };
 
             var showAllRecipients = function (e) {
                 e.preventDefault();
@@ -208,13 +206,13 @@ define('io.ox/mail/common-extensions',
 
                 this.append(container);
 
-                if (_.device('!smartphone')) {
-                    if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
-                        var dd = $('<div class="recipient-actions">');
-                        drawAllDropDown(dd, $('<i class="icon-group">'), data);
-                        dd.appendTo(container);
-                    }
-                }
+                // if (_.device('!smartphone')) {
+                //     if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
+                //         var dd = $('<div class="recipient-actions">');
+                //         drawAllDropDown(dd, $('<i class="icon-group">'), data);
+                //         dd.appendTo(container);
+                //     }
+                // }
 
                 var items = container.find('.person-link');
                 if (items.length > 3) {
@@ -224,6 +222,132 @@ define('io.ox/mail/common-extensions',
                     );
                     container.on('click', showAllRecipients);
                 }
+            };
+        }()),
+
+        attachments: (function () {
+
+            var regImage = /^image\/(jpe?g|png|gif|bmp)$/i;
+
+            var getContentType = function (type) {
+                // might be: image/jpeg; name=Foto.JPG", so ...
+                var split = (type || 'unknown').split(/;/);
+                return split[0];
+            };
+
+            var drawAttachmentDropDown = function (node, label, data) {
+                // use extension pattern
+                var dd = new links.DropdownLinks({
+                        label: label,
+                        classes: 'attachment-link',
+                        ref: 'io.ox/mail/attachment/links'
+                    }).draw.call(node, ext.Baton({ data: data })),
+                    contentType = getContentType(data.content_type),
+                    url,
+                    filename;
+                // add instant preview
+                if (regImage.test(contentType) && data.size > 0) {
+                    dd.find('a').on('click', data, function (e) {
+                        var node = $(this), data = e.data, p = node.parent(), url, src, used;
+                        if (p.hasClass('open') && p.find('.instant-preview').length === 0) {
+                            url = api.getUrl(data, 'view');
+                            src = url + '&scaleType=contain&width=190&height=190'; // 190 + 2 * 15 pad = 220 max-width
+                            //default vs. phone custom-dropdown
+                            used = $.extend({menu: p.find('ul')}, p.data() || { addlink: true });
+                            //append instant-preview if not done yet
+                            if (used.menu.find('.instant-preview').length !== 1) {
+                                var $li =  $('<li>').busy().append(
+                                        (used.addlink ? $('<a>', { href: url, target: '_blank' }) : $('<span>'))
+                                        .append(
+                                            $('<img>', { src: src, alt: '' }).addClass('instant-preview').load(function () {
+                                                $li.idle();
+                                            })
+                                        )
+                                    );
+                                used.menu.append($li);
+                            }
+                        }
+                    });
+                }
+                // make draggable (drag-out)
+                if (_.isArray(data)) {
+                    url = api.getUrl(data, 'zip');
+                    filename = (data.subject || 'mail') + '.zip'; // yep, array prop
+                } else {
+                    url = api.getUrl(data, 'download');
+                    filename = String(data.filename || '');
+                }
+                dd.find('a')
+                    .attr({
+                        title: data.title,
+                        draggable: true,
+                        'data-downloadurl': contentType + ':' + filename.replace(/:/g, '') + ':' + ox.abs + url
+                    })
+                    .on('dragstart', function (e) {
+                        $(this).css({ display: 'inline-block' });
+                        e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
+                    });
+                return dd;
+            };
+
+            function showAllAttachments() {
+                $(this).closest('.attachment-list').children().css('display', 'inline-block');
+                $(this).remove();
+            }
+
+            return function (baton) {
+
+                var attachments = util.getAttachments(baton.data),
+                    length = attachments.length,
+                    list;
+
+                console.log('attachments', attachments, baton.data);
+
+                if (length === 0) return;
+
+                list = $('<div class="attachment-list">').append(
+                    $('<span class="io-ox-label">').append(
+                        $.txt(gt.npgettext('plural', 'Attachment', 'Attachments', length)),
+                        $.txt('\u00A0\u00A0')
+                    )
+                );
+
+                _(attachments).each(function (a, i) {
+                    try {
+                        var label = (a.filename || ('Attachment #' + i))
+                            // lower case file extensions for better readability
+                            .replace(/\.(\w+)$/, function (match) {
+                                return match.toLowerCase();
+                            });
+                        // draw
+                        var dd = drawAttachmentDropDown(list, _.noI18n(label), a);
+                        dd.find('a').addClass('attachment-link').prepend(
+                            $('<i class="icon-paper-clip">'),
+                            $.txt('\u00A0')
+                        );
+                        // cut off long lists?
+                        if (i > 1 && length > 3) dd.hide();
+
+                    } catch (e) {
+                        console.error('mail.drawAttachment', e.message);
+                    }
+                });
+
+                // add "[n] more ..."
+                if (length > 3) {
+                    list.append(
+                        //#. 'more' like in 'x more attachments' / 'weitere' in German
+                        $('<a href="#" class="n-more">').text((length - 2) + ' ' + gt('more') + ' ...').click(showAllAttachments)
+                    );
+                }
+
+                // how 'all' drop down?
+                if (length > 1) {
+                    attachments.subject = baton.data.subject;
+                    drawAttachmentDropDown(list, gt('All attachments'), attachments).find('a').removeClass('attachment-link');
+                }
+
+                this.append(list);
             };
         }())
     };

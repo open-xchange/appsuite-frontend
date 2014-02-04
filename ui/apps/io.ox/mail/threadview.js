@@ -107,8 +107,14 @@ define('io.ox/mail/threadview',
         draw: extensions.recipients
     });
 
-    ext.point('io.ox/mail/detail-view').extend({
+    ext.point('io.ox/mail/detail-view/header').extend({
         id: 'attachments',
+        index: 500,
+        draw: extensions.attachments
+    });
+
+    ext.point('io.ox/mail/detail-view').extend({
+        id: 'attachment-preview',
         index: 200,
         draw: function () {
             this.append('<section class="attachments">');

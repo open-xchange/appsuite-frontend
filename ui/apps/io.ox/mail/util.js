@@ -344,8 +344,18 @@ define('io.ox/mail/util',
             return (quote === false ? name : '"' + name + '"') + ' <' + address + '>';
         },
 
-        getSubject: function (data) {
-            return data.subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
+        // remove typical "Re: Re: Fwd: Re sequences".
+        // keepFirstPrefix <bool> allows to keep the most recent one.
+        // that mode is useful in list view to indicate that it's not the original email.
+        getSubject: function (data, keepFirstPrefix) {
+
+            var subject = $.trim(_.isString(data) ? data : data.subject);
+
+            if (subject === '') return gt('No subject');
+
+            return keepFirstPrefix ?
+                subject.replace(/^((re|fwd|aw|wg):\s?)((re|fwd|aw|wg):\s?)*/i, '$1') :
+                subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
         },
 
         getPriority: function (data) {
