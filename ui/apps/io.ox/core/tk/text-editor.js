@@ -1,17 +1,17 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
- * Mail: info@open-xchange.com
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/text-editor', [], function () {
+define('io.ox/core/tk/text-editor', function () {
 
     'use strict';
 
@@ -125,7 +125,7 @@ define('io.ox/core/tk/text-editor', [], function () {
         this.replaceParagraph = function (str, rep) {
             var content = this.getContent(), pos, top;
             // exists?
-            if ((pos = content.indexOf(str)) > -1) {
+            if ((pos = content.indexOf(str.trim())) > -1) {
                 // replace content
                 top = this.scrollTop();
                 this.setContent(content.substr(0, pos) + (rep || '') + content.substr(pos + str.length));
@@ -140,17 +140,20 @@ define('io.ox/core/tk/text-editor', [], function () {
             // trick to force document reflow
             var alt = false;
             return _.debounce(function () {
+                //textarea might be destroyed already
+                if (!textarea)
+                    return;
                 var w = Math.max(10, textarea.outerWidth() - 12 - 750);
-                textarea.css('paddingRight', w + 'px');
-                textarea.parents('.window-content').find('.editor-print-margin')
-                    .css('right', Math.max(0, w - 10) + 'px').show();
+                textarea.css('paddingRight', w + 'px')
+                        .parents('.window-content').find('.editor-print-margin')
+                        .css('right', Math.max(0, w - 10) + 'px').show()
                 // force reflow
-                textarea.css('display', (alt = !alt) ? 'block' : '');
+                        .css('display', (alt = !alt) ? 'block' : '');
             }, 100);
         }());
 
         this.handleShow = function () {
-            textarea.removeAttr('disabled').idle().show()
+            textarea.prop('disabled', false).idle().show()
                 .next().hide();
             resizeEditorMargin();
             $(window).on('resize', resizeEditorMargin);
@@ -159,6 +162,10 @@ define('io.ox/core/tk/text-editor', [], function () {
 
         this.handleHide = function () {
             $(window).off('resize', resizeEditorMargin);
+        };
+
+        this.getContainer = function () {
+            return textarea;
         };
 
         this.destroy = function () {
