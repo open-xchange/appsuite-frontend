@@ -430,7 +430,7 @@ define("io.ox/mail/write/view-main",
 
             this.editor
                 .val(insert(caret, content, icon.unicode))
-                .attr('caretPosition', caret + 2);
+                .attr('caretPosition', caret + icon.unicode.length);
 
             /* disabled emoji input on subject at the moment */
 
