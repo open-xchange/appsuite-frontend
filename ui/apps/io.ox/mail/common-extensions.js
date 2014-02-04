@@ -27,11 +27,12 @@ define('io.ox/mail/common-extensions',
     var extensions = {
 
         picture: function (baton) {
-            var from = baton.data.from;
+            var from = baton.data.from,
+                size = _.device('retina') ? 80 : 40;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture">'),
-                    { email: from && from[0] && from[0][1], width: 32, height: 32, scaleType: 'cover' }
+                    { email: from && from[0] && from[0][1], width: size, height: size, scaleType: 'cover' }
                 )
             );
         },

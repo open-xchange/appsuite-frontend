@@ -206,6 +206,19 @@
     }
 }
 
+.mail-detail section.content {
+    margin: 0;
+    padding: 10px 20px 20px 20px;
+    background-color: #fff;
+    display: none;
+    min-height: 100px;
+    .box-sizing(border-box);
+}
+
+.mail-detail.content-visible section.content {
+    display: table; // for proper overflow behavior
+}
+
 /* ListView */
 
 .list-view.mail {
@@ -344,23 +357,20 @@
 
 .thread-view-list {
     overflow: auto;
-    & > header {
+    padding: 20px;
+    & > h1 {
         font-weight: 300;
         font-size: 20px;
         line-height: 24px;
-        color: #888;
-        padding: 20px 20px 0 20px;
+        padding: 20px;
         margin: 0;
-        .subject, .summary {
-            .ellipsis();
-        }
+        border-bottom: 1px solid #ccc;
+        background-color: white;
         .summary {
-            font-size: 14px;
+            color: #888;
+            font-size: 13px;
+            line-height: 16px;
         }
-    }
-    & > footer {
-        font-size: 13px;
-        padding: 0 20px 20px 20px;
     }
 }
 
@@ -459,20 +469,19 @@ textarea.inplace-editor {
 
     list-style-type: none;
     padding: 0;
-    margin: 20px;
     overflow: visible;
     height: auto;
 
     .list-item {
         background-color: white;
         clear: both;
-        padding: 10px 14px 11px 14px;
+        padding: 0px;
         border-bottom: 1px solid #ccc;
     }
 
-    .list-item:hover {
-        background-color: #ddd;
-    }
+    // .list-item:hover {
+    //     background-color: #ddd;
+    // }
 
     .list-item:last-child {
         border-bottom: 0px none;
@@ -784,9 +793,9 @@ textarea.inplace-editor {
     clear: both;
     width: 100%;
 
-    @picture-width: 48px;
+    @picture-width: 40px;
     @header-padding: 20px;
-    @picture-padding: @picture-width + 2 * @header-padding;
+    @picture-padding: @picture-width + @header-padding + 14;
 
     .io-ox-inline-links {
         position: relative;
@@ -1038,7 +1047,7 @@ textarea.inplace-editor {
 
     header {
         font-weight: 300;
-        padding: @header-padding;
+        padding: 20px @header-padding;
         padding-left: @picture-padding;
     }
 
@@ -1104,7 +1113,7 @@ textarea.inplace-editor {
         }
 
         /* TODO: remove / temp. fix for sanitized HTML */
-        padding: 0 !important;
+        padding: 0;
         & > div > [class$="-content"] { padding: 0; }
 
         &.plain-text {
@@ -1162,7 +1171,19 @@ textarea.inplace-editor {
             border: 0 none; line-height: normal; border-collapse: initial;
         }
 
-        li { line-height: 16px; margin-bottom: 0.7em; }
+        ul {
+            padding: 0;
+            margin: 10px 0 10px 25px;
+        }
+
+        ul { list-style-type: disc; }
+        ul ul { list-style-type: circle; }
+        ul ul ul { list-style-type: square; }
+
+        li {
+            line-height: 1.33333em;
+            margin-bottom: 0.5em;
+        }
 
         pre {
             word-break: keep-all; // for firefox

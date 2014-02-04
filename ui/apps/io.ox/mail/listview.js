@@ -18,7 +18,8 @@ define('io.ox/mail/listview',
      'io.ox/mail/api',
      'io.ox/core/api/account',
      'io.ox/core/tk/list',
-     'io.ox/core/date'
+     'io.ox/core/date',
+     'io.ox/mail/sort-options'
     ], function (extensions, ext, util, api, account, ListView, date) {
 
     'use strict';

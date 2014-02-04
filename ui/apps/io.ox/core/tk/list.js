@@ -118,6 +118,11 @@ define('io.ox/core/tk/list',
             this.$el.append(
                 this.collection.map(this.renderListItem, this)
             );
+            console.log('list > onReset');
+            if (this.firstReset) {
+                this.trigger('first-reset', this.collection);
+                this.firstReset = false;
+            }
         },
 
         onAdd: function (model) {
@@ -170,6 +175,7 @@ define('io.ox/core/tk/list',
             this.isBusy = false;
             this.complete = false;
             this.ignoreFocus = !!options.ignoreFocus;
+            this.firstReset = true;
 
             // permenent visual focus
             if (this.ignoreFocus) this.$el.addClass('has-focus');

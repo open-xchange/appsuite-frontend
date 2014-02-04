@@ -42,14 +42,8 @@ define('io.ox/mail/threadview',
                     )
                 ),
                 $('<div class="thread-view-list abs">').hide().append(
-                    $('<header>'),
-                    this.$ul = $('<ul class="thread-view list-view mail">'),
-                    $('<footer>').append(
-                        $('<label class="checkbox">').append(
-                            $('<input type="checkbox" name="auto-select">'),
-                            $.txt('Automatically select oldest unread message or most recent message')
-                        )
-                    )
+                    $('<h1>'),
+                    this.$ul = $('<ul class="thread-view list-view mail">')
                 )
             );
         }
@@ -79,33 +73,12 @@ define('io.ox/mail/threadview',
         }
     });
 
-    function toggle(e) {
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        var node = $(this),
-            container = node.closest('li'),
-            cid = container.data('cid'),
-            content = container.find('.content');
-
-        if (content.hasClass('hidden') && content.hasClass('unloaded')) {
-            api.get(_.cid(cid)).done(function () {
-                content.removeClass('unloaded').text('Hallo Welt!');
-            });
-        }
-
-        content.toggleClass('hidden');
-    }
-
     ext.point('io.ox/mail/detail-view').extend({
         id: 'header',
         index: 100,
         draw: function (baton) {
-
-            var header = $('<header>');
+            var header = $('<header class="detail-view-header">');
             ext.point('io.ox/mail/detail-view/header').invoke('draw', header, baton);
-            header.on(Modernizr.touch ? 'touchstart' : 'mousedown', toggle);
             this.append(header);
         }
     });
@@ -138,7 +111,7 @@ define('io.ox/mail/threadview',
         id: 'attachments',
         index: 200,
         draw: function () {
-            this.append('<section class="attachments">Attachments</section>');
+            this.append('<section class="attachments">');
         }
     });
 
@@ -146,7 +119,7 @@ define('io.ox/mail/threadview',
         id: 'content',
         index: 300,
         draw: function () {
-            this.append('<section class="content hidden unloaded">Content</section>');
+            this.append($('<section class="content user-select-text" data-loaded="false">'));
         }
     });
 
@@ -154,10 +127,11 @@ define('io.ox/mail/threadview',
 
         tagName: 'div',
         className: 'thread-view-control abs',
-        scaffold: $('<li class="list-item">'),
+        scaffold: $('<li class="list-item mail-detail">'),
 
         events: {
             //'click .list-item': 'onClick',
+            'click .detail-view-header': 'onToggle',
             'click .button a.back': 'onBack',
             'click .button a.show-overview': 'onOverview',
             'click .thread-view-navigation .previous-mail': 'onPrevious',
@@ -183,14 +157,14 @@ define('io.ox/mail/threadview',
         },
 
         updateHeader: function () {
-            this.$el.find('.thread-view-list header').empty().append(
-                $('<div class="subject">').text(util.getSubject(this.collection.at(0).toJSON())),
-                $('<div class="summary">').text(gt('%1$d messages in this conversation', this.collection.length))
+            var subject = util.getSubject(this.collection.at(0).toJSON());
+            this.$el.find('.thread-view-list > h1').empty().append(
+                // subject
+                $('<div class="subject">').text(subject),
+                // summary
+                this.collection.length > 1 ?
+                    $('<div class="summary">').text(gt('%1$d messages in this conversation', this.collection.length)) : []
             );
-        },
-
-        updateFooter: function () {
-            //this.$el.find('.thread-view-list footer').show();
         },
 
         updatePosition: function (cid) {
@@ -224,21 +198,30 @@ define('io.ox/mail/threadview',
                 else update(false, false);
         },
 
+        toggleMail: function (cid, state) {
+
+            var $li = this.$ul.children('[data-cid="' + cid + '"]'),
+                $content = $li.find('.content').first();
+
+            if (state === undefined) $li.toggleClass('content-visible'); else $li.toggleClass('content-visible', state);
+
+            if ($content.attr('data-loaded') === 'false' && $li.hasClass('content-visible')) {
+                $content.attr('data-loaded', true);
+                api.get(_.cid(cid)).then(
+                    function success(data) {
+                        data = detail.getContent(data);
+                        $content.empty().idle().append(data.content);
+                    },
+                    function fail() {
+                        $content.attr('data-loaded', false);
+                        $li.removeClass('content-visible');
+                    }
+                );
+            }
+        },
+
         showMail: function (cid) {
-
-            var $detail = this.$el.find('.detail-view');
-
-            this.toggleDetailView(true);
-            this.updatePosition(cid);
-
-            $detail.empty().scrollTop(0).busy();
-            api.get(_.cid(cid)).done(function (data) {
-                $detail.idle();
-                var inplace = new InplaceReply({ cid: cid }).render().$el,
-                    message = detail.draw(data);
-                $detail.append(inplace, message);
-                $detail.scrollTop(message.position().top);
-            });
+            this.toggleMail(cid, true);
         },
 
         autoSelectMail: function () {
@@ -276,19 +259,17 @@ define('io.ox/mail/threadview',
             if (this.collection.length === 0) return;
 
             this.updateHeader();
-            this.updateFooter();
 
             if (this.collection.length > 0) this.$el.find('.thread-view-list').show();
 
             this.updateNavigation();
 
-            // draw detail view?
-            if (this.collection.length === 1 || this.$el.find('[name="auto-select"]').prop('checked')) this.autoSelectMail();
-
             // draw thread list
             this.$ul.append(
                 this.collection.chain().filter(this.filter).map(this.renderListItem, this).value()
             );
+
+            this.autoSelectMail();
         },
 
         onAdd: function (model) {
@@ -324,6 +305,15 @@ define('io.ox/mail/threadview',
             // var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
             //     data = model.toJSON();
             // // DRAW!
+        },
+
+        onToggle: function (e) {
+
+            // ignore click on/inside <a> tags
+            if ($(e.target).closest('a').length) return;
+
+            var cid = $(e.currentTarget).closest('li').data('cid');
+            this.toggleMail(cid);
         },
 
         onBack: function (e) {
