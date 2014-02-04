@@ -9,6 +9,365 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#: apps/io.ox/mail/settings/pane.js:250 apps/io.ox/mail/write/main.js:197
+msgid "Compose"
+msgstr ""
+
+#. %s is the product name
+#: apps/io.ox/mail/write/main.js:218
+msgid "Sent from %s via mobile"
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:338
+msgid "Drop the file anywhere to add attachment"
+msgstr ""
+
+#: apps/io.ox/mail/actions.js:919 apps/io.ox/mail/write/main.js:636
+#: apps/io.ox/mail/write/main.js:637
+msgid "Compose new mail"
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:638
+msgid "Reply all"
+msgstr ""
+
+#: apps/io.ox/mail/actions.js:952 apps/io.ox/mail/write/main.js:638
+#: apps/io.ox/mail/write/main.js:639 apps/plugins/portal/twitter/util.js:230
+#: apps/plugins/portal/twitter/util.js:234
+msgid "Reply"
+msgstr ""
+
+#: apps/io.ox/mail/actions.js:969 apps/io.ox/mail/write/main.js:639
+#: apps/io.ox/mail/write/main.js:640
+msgid "Forward"
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:728
+msgid "Mail"
+msgstr ""
+
+#: apps/io.ox/mail/view-detail.js:603 apps/io.ox/mail/view-grid-template.js:107
+#: apps/io.ox/mail/write/main.js:727 apps/io.ox/mail/write/main.js:728
+#: apps/io.ox/mail/write/main.js:752
+#: apps/plugins/notifications/mail/register.js:60
+msgid "No subject"
+msgstr ""
+
+#: apps/io.ox/calendar/week/perspective.js:66
+#: apps/io.ox/calendar/week/perspective.js:198 apps/io.ox/mail/write/main.js:956
+msgid "An error occurred. Please try again."
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:1101
+msgid "One or more attached files exceed the size limit per email. Therefore, the files are not sent as attachments but kept on the server. The email you have sent just contains links to download these files."
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:1125
+msgid "The email has been sent"
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:1183
+msgid "Mail has no recipient."
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:1190
+msgid "Mail has empty subject. Send it anyway?"
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:1191
+msgid "Yes, send without subject"
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:1192
+msgid "Add subject"
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:1246
+msgid "Mail saved as draft"
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:1309
+msgid "Do you really want to discard this mail?"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:97
+#: apps/io.ox/contacts/distrib/create-dist-view.js:54
+#: apps/io.ox/contacts/distrib/create-dist-view.js:55
+#: apps/io.ox/contacts/distrib/main.js:183 apps/io.ox/contacts/edit/main.js:248
+#: apps/io.ox/contacts/edit/view-form.js:185
+#: apps/io.ox/contacts/settings/pane.js:92 apps/io.ox/editor/main.js:313
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
+#: apps/io.ox/mail/settings/signatures/register.js:110
+#: apps/io.ox/mail/write/inplace/inplace.js:114
+#: apps/io.ox/mail/write/main.js:1309 apps/io.ox/mail/write/main.js:1310
+#: apps/io.ox/mail/write/main.js:1335 apps/io.ox/mail/write/view-main.js:67
+#: apps/io.ox/tasks/edit/view-template.js:82
+#: apps/plugins/portal/userSettings/register.js:42
+msgid "Discard"
+msgstr ""
+
+#: apps/io.ox/mail/write/main.js:1311
+msgid "Save as draft"
+msgstr ""
+
+#: apps/io.ox/calendar/acceptdeny.js:89 apps/io.ox/calendar/actions.js:153
+#: apps/io.ox/calendar/actions.js:262 apps/io.ox/calendar/actions.js:263
+#: apps/io.ox/calendar/actions.js:274 apps/io.ox/calendar/actions.js:275
+#: apps/io.ox/calendar/actions.js:405 apps/io.ox/calendar/actions.js:407
+#: apps/io.ox/calendar/edit/main.js:51 apps/io.ox/calendar/edit/main.js:160
+#: apps/io.ox/calendar/month/perspective.js:117
+#: apps/io.ox/calendar/week/perspective.js:94
+#: apps/io.ox/calendar/week/perspective.js:137 apps/io.ox/contacts/actions.js:54
+#: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/actions.js:151
+#: apps/io.ox/contacts/distrib/main.js:184 apps/io.ox/contacts/edit/main.js:249
+#: apps/io.ox/core/commons-folderview.js:571
+#: apps/io.ox/core/commons-folderview.js:572 apps/io.ox/core/desktop.js:1600
+#: apps/io.ox/core/export/export.js:104 apps/io.ox/core/folder/add.js:95
+#: apps/io.ox/core/folder/imap-subscription.js:59
+#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:405
+#: apps/io.ox/core/main.js:406 apps/io.ox/core/permissions/permissions.js:356
+#: apps/io.ox/core/permissions/permissions.js:357
+#: apps/io.ox/core/permissions/permissions.js:397
+#: apps/io.ox/core/permissions/permissions.js:398 apps/io.ox/core/print.js:116
+#: apps/io.ox/core/pubsub/publications.js:116
+#: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
+#: apps/io.ox/core/tk/attachments.js:608 apps/io.ox/core/tk/folderviews.js:592
+#: apps/io.ox/core/tk/folderviews.js:654 apps/io.ox/core/tk/mobiscroll.js:35
+#: apps/io.ox/core/upsell.js:36 apps/io.ox/editor/main.js:314
+#: apps/io.ox/files/actions.js:327 apps/io.ox/files/actions.js:484
+#: apps/io.ox/files/actions.js:485 apps/io.ox/files/actions.js:539
+#: apps/io.ox/files/actions.js:540 apps/io.ox/files/actions.js:583
+#: apps/io.ox/files/actions.js:585 apps/io.ox/files/actions.js:681
+#: apps/io.ox/files/actions.js:683 apps/io.ox/files/views/create.js:117
+#: apps/io.ox/keychain/secretRecoveryDialog.js:39
+#: apps/io.ox/mail/accounts/settings.js:43
+#: apps/io.ox/mail/accounts/settings.js:259
+#: apps/io.ox/mail/accounts/view-form.js:296 apps/io.ox/mail/actions.js:87
+#: apps/io.ox/mail/actions.js:110 apps/io.ox/mail/actions.js:268
+#: apps/io.ox/mail/actions.js:837 apps/io.ox/mail/actions/attachmentSave.js:67
+#: apps/io.ox/mail/folderview-extensions.js:132
+#: apps/io.ox/mail/mailfilter/settings/filter.js:88
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:386
+#: apps/io.ox/mail/write/inline-images.js:80 apps/io.ox/mail/write/main.js:1311
+#: apps/io.ox/mail/write/main.js:1312 apps/io.ox/mail/write/main.js:1337
+#: apps/io.ox/mail/write/view-main.js:621 apps/io.ox/mail/write/view-main.js:623
+#: apps/io.ox/oauth/settings.js:82 apps/io.ox/portal/main.js:492
+#: apps/io.ox/portal/main.js:494 apps/io.ox/portal/settings/widgetview.js:116
+#: apps/io.ox/settings/accounts/settings/pane.js:160
+#: apps/io.ox/tasks/actions.js:60 apps/io.ox/tasks/actions.js:196
+#: apps/io.ox/tasks/actions.js:522 apps/io.ox/tasks/edit/main.js:161
+#: apps/io.ox/tasks/edit/util.js:123 apps/plugins/portal/flickr/register.js:227
+#: apps/plugins/portal/rss/register.js:150
+#: apps/plugins/portal/tumblr/register.js:246
+#: apps/plugins/portal/tumblr/register.js:247
+#: apps/plugins/portal/twitter/util.js:123
+#: apps/plugins/portal/twitter/util.js:452
+#: apps/plugins/portal/userSettings/register.js:88
+msgid "Cancel"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:224
+msgid "Updating account data. This might take a few seconds."
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:244
+msgid "Account updated"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:249
+msgid "Username must not be empty."
+msgstr ""
+
+#. %1$s the missing request parameter
+#, c-format
+#: apps/io.ox/mail/accounts/view-form.js:254
+msgid "Please enter the following data: %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:271
+msgid "This account cannot be validated"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:292
+#: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:38
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:382
+msgid "Select folder"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:334
+msgid "Server settings"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:337
+msgid "Server type"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:347
+#: apps/io.ox/mail/accounts/view-form.js:416
+msgid "Use SSL connection"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:353
+#: apps/io.ox/mail/accounts/view-form.js:422
+msgid "Server name"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:361
+#: apps/io.ox/mail/accounts/view-form.js:430
+msgid "Server port"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:369
+#: apps/io.ox/mail/accounts/view-form.js:446
+msgid "Username"
+msgstr ""
+
+#: apps/io.ox/core/login-i18n.js:24 apps/io.ox/core/relogin.js:51
+#: apps/io.ox/mail/accounts/view-form.js:377
+#: apps/io.ox/mail/accounts/view-form.js:454
+msgid "Password"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:385
+msgid "Refresh rate in minutes:"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:395
+msgid "Remove copy from server after retrieving a message"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:403
+msgid "Deleting messages on local storage also deletes them on server"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:410
+msgid "Outgoing server settings (SMTP)"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:440
+msgid "Use username and password"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:462
+msgid "Folder settings"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:465
+msgid "Sent folder"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:469
+#: apps/io.ox/mail/accounts/view-form.js:476
+#: apps/io.ox/mail/accounts/view-form.js:483
+#: apps/io.ox/mail/accounts/view-form.js:490
+msgid "Select"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:472
+msgid "Trash folder"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:479
+msgid "Drafts folder"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:486
+msgid "Spam folder"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:501
+msgid "Account settings"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:504
+msgid "Account name"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:512
+#: apps/plugins/wizards/mandatory/main.js:43
+msgid "Your name"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:520
+msgid "Email address"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/view-form.js:529
+msgid "Use unified mail for this account"
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:100
+msgid "%1$s is now connected with %2$s"
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:126
+msgid "%1$s is a new contact"
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:138
+msgid "LinkedIn reported an error:"
+msgstr ""
+
+#: apps/plugins/portal/facebook/register.js:98
+#: apps/plugins/portal/linkedIn/register.js:144
+#: apps/plugins/portal/linkedIn/register.js:146
+#: apps/plugins/portal/twitter/register.js:233
+msgid "Click to authorize your account again"
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:146
+#: apps/plugins/portal/linkedIn/register.js:148
+#: apps/plugins/portal/twitter/register.js:235
+msgid "You have reauthorized this %s account."
+msgstr ""
+
+#: apps/plugins/portal/facebook/register.js:102
+#: apps/plugins/portal/linkedIn/register.js:148
+#: apps/plugins/portal/linkedIn/register.js:150
+#: apps/plugins/portal/twitter/register.js:237
+msgid "Something went wrong reauthorizing the %s account."
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:155
+msgid "Sorry, we cannot help you here. Your provider needs to obtain a key from LinkedIn with the permission to do read messages."
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:212
+msgid "Press [enter] to jump to the linkedin stream."
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:231
+msgid "You have no new messages"
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:255
+msgid "There were not activities in your network"
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:269
+msgid "LinkedIn Network Updates"
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:274
+msgid "Your messages"
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:295
+#: apps/plugins/portal/linkedIn/register.js:325
+msgid "Recent activities"
+msgstr ""
+
+#: apps/plugins/portal/facebook/register.js:251
+#: apps/plugins/portal/linkedIn/register.js:342
+#: apps/plugins/portal/linkedIn/register.js:343
+#: apps/plugins/portal/twitter/register.js:368
+msgid "Add your account"
+msgstr ""
+
+#: apps/plugins/portal/linkedIn/register.js:349
+msgid "LinkedIn"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/template.js:77
 #: apps/io.ox/contacts/distrib/create-dist-view.js:40
 #: apps/io.ox/contacts/distrib/create-dist-view.js:41
@@ -71,78 +430,6 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:312
 #: apps/io.ox/tasks/edit/main.js:159
 msgid "Do you really want to discard your changes?"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:97
-#: apps/io.ox/contacts/distrib/create-dist-view.js:54
-#: apps/io.ox/contacts/distrib/create-dist-view.js:55
-#: apps/io.ox/contacts/distrib/main.js:183 apps/io.ox/contacts/edit/main.js:248
-#: apps/io.ox/contacts/edit/view-form.js:185
-#: apps/io.ox/contacts/settings/pane.js:92 apps/io.ox/editor/main.js:313
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
-#: apps/io.ox/mail/settings/signatures/register.js:110
-#: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1309 apps/io.ox/mail/write/main.js:1335
-#: apps/io.ox/mail/write/view-main.js:67
-#: apps/io.ox/tasks/edit/view-template.js:82
-#: apps/plugins/portal/userSettings/register.js:42
-msgid "Discard"
-msgstr ""
-
-#: apps/io.ox/calendar/acceptdeny.js:89 apps/io.ox/calendar/actions.js:153
-#: apps/io.ox/calendar/actions.js:262 apps/io.ox/calendar/actions.js:263
-#: apps/io.ox/calendar/actions.js:274 apps/io.ox/calendar/actions.js:275
-#: apps/io.ox/calendar/actions.js:405 apps/io.ox/calendar/actions.js:407
-#: apps/io.ox/calendar/edit/main.js:51 apps/io.ox/calendar/edit/main.js:160
-#: apps/io.ox/calendar/month/perspective.js:117
-#: apps/io.ox/calendar/week/perspective.js:94
-#: apps/io.ox/calendar/week/perspective.js:137 apps/io.ox/contacts/actions.js:54
-#: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/actions.js:151
-#: apps/io.ox/contacts/distrib/main.js:184 apps/io.ox/contacts/edit/main.js:249
-#: apps/io.ox/core/commons-folderview.js:571
-#: apps/io.ox/core/commons-folderview.js:572 apps/io.ox/core/desktop.js:1600
-#: apps/io.ox/core/export/export.js:104 apps/io.ox/core/folder/add.js:95
-#: apps/io.ox/core/folder/imap-subscription.js:59
-#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:405
-#: apps/io.ox/core/main.js:406 apps/io.ox/core/permissions/permissions.js:356
-#: apps/io.ox/core/permissions/permissions.js:357
-#: apps/io.ox/core/permissions/permissions.js:397
-#: apps/io.ox/core/permissions/permissions.js:398 apps/io.ox/core/print.js:116
-#: apps/io.ox/core/pubsub/publications.js:116
-#: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
-#: apps/io.ox/core/tk/attachments.js:608 apps/io.ox/core/tk/folderviews.js:592
-#: apps/io.ox/core/tk/folderviews.js:654 apps/io.ox/core/tk/mobiscroll.js:35
-#: apps/io.ox/core/upsell.js:36 apps/io.ox/editor/main.js:314
-#: apps/io.ox/files/actions.js:327 apps/io.ox/files/actions.js:484
-#: apps/io.ox/files/actions.js:485 apps/io.ox/files/actions.js:539
-#: apps/io.ox/files/actions.js:540 apps/io.ox/files/actions.js:583
-#: apps/io.ox/files/actions.js:585 apps/io.ox/files/actions.js:681
-#: apps/io.ox/files/actions.js:683 apps/io.ox/files/views/create.js:117
-#: apps/io.ox/keychain/secretRecoveryDialog.js:39
-#: apps/io.ox/mail/accounts/settings.js:43
-#: apps/io.ox/mail/accounts/settings.js:259
-#: apps/io.ox/mail/accounts/view-form.js:296 apps/io.ox/mail/actions.js:87
-#: apps/io.ox/mail/actions.js:110 apps/io.ox/mail/actions.js:268
-#: apps/io.ox/mail/actions.js:837 apps/io.ox/mail/actions/attachmentSave.js:67
-#: apps/io.ox/mail/folderview-extensions.js:132
-#: apps/io.ox/mail/mailfilter/settings/filter.js:88
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:386
-#: apps/io.ox/mail/write/inline-images.js:80 apps/io.ox/mail/write/main.js:1311
-#: apps/io.ox/mail/write/main.js:1337 apps/io.ox/mail/write/view-main.js:621
-#: apps/io.ox/mail/write/view-main.js:623 apps/io.ox/oauth/settings.js:82
-#: apps/io.ox/portal/main.js:492 apps/io.ox/portal/main.js:494
-#: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/settings/accounts/settings/pane.js:160
-#: apps/io.ox/tasks/actions.js:60 apps/io.ox/tasks/actions.js:196
-#: apps/io.ox/tasks/actions.js:522 apps/io.ox/tasks/edit/main.js:161
-#: apps/io.ox/tasks/edit/util.js:123 apps/plugins/portal/flickr/register.js:227
-#: apps/plugins/portal/rss/register.js:150
-#: apps/plugins/portal/tumblr/register.js:246
-#: apps/plugins/portal/tumblr/register.js:247
-#: apps/plugins/portal/twitter/util.js:123
-#: apps/plugins/portal/twitter/util.js:452
-#: apps/plugins/portal/userSettings/register.js:88
-msgid "Cancel"
 msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:107 apps/io.ox/core/main.js:674
@@ -955,12 +1242,6 @@ msgstr ""
 
 #: apps/io.ox/core/main.js:859 apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
-msgstr ""
-
-#: apps/io.ox/core/login-i18n.js:24 apps/io.ox/core/relogin.js:51
-#: apps/io.ox/mail/accounts/view-form.js:377
-#: apps/io.ox/mail/accounts/view-form.js:454
-msgid "Password"
 msgstr ""
 
 #: apps/io.ox/core/login-i18n.js:25 apps/io.ox/core/relogin.js:55
@@ -5143,11 +5424,6 @@ msgstr ""
 msgid "Month View"
 msgstr ""
 
-#: apps/io.ox/calendar/week/perspective.js:66
-#: apps/io.ox/calendar/week/perspective.js:198 apps/io.ox/mail/write/main.js:955
-msgid "An error occurred. Please try again."
-msgstr ""
-
 #: apps/io.ox/calendar/week/perspective.js:268
 msgid "Day View"
 msgstr ""
@@ -5458,83 +5734,6 @@ msgstr ""
 msgid "Repeat"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js:250 apps/io.ox/mail/write/main.js:197
-msgid "Compose"
-msgstr ""
-
-#. %s is the product name
-#: apps/io.ox/mail/write/main.js:218
-msgid "Sent from %s via mobile"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:338
-msgid "Drop the file anywhere to add attachment"
-msgstr ""
-
-#: apps/io.ox/mail/actions.js:919 apps/io.ox/mail/write/main.js:636
-msgid "Compose new mail"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:637
-msgid "Reply all"
-msgstr ""
-
-#: apps/io.ox/mail/actions.js:952 apps/io.ox/mail/write/main.js:638
-#: apps/plugins/portal/twitter/util.js:230
-#: apps/plugins/portal/twitter/util.js:234
-msgid "Reply"
-msgstr ""
-
-#: apps/io.ox/mail/actions.js:969 apps/io.ox/mail/write/main.js:639
-msgid "Forward"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:727
-msgid "Mail"
-msgstr ""
-
-#: apps/io.ox/mail/view-detail.js:603 apps/io.ox/mail/view-grid-template.js:107
-#: apps/io.ox/mail/write/main.js:727 apps/io.ox/mail/write/main.js:752
-#: apps/plugins/notifications/mail/register.js:60
-msgid "No subject"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:1100
-msgid "One or more attached files exceed the size limit per email. Therefore, the files are not sent as attachments but kept on the server. The email you have sent just contains links to download these files."
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:1124
-msgid "The email has been sent"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:1182
-msgid "Mail has no recipient."
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:1189
-msgid "Mail has empty subject. Send it anyway?"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:1190
-msgid "Yes, send without subject"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:1191
-msgid "Add subject"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:1245
-msgid "Mail saved as draft"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:1308
-msgid "Do you really want to discard this mail?"
-msgstr ""
-
-#: apps/io.ox/mail/write/main.js:1310
-msgid "Save as draft"
-msgstr ""
-
 #: apps/io.ox/mail/write/inplace/inplace.js:115
 #: apps/io.ox/mail/write/view-main.js:49
 msgid "Send"
@@ -5835,12 +6034,6 @@ msgstr ""
 msgid "There is no rule defined"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:292
-#: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:38
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:382
-msgid "Select folder"
-msgstr ""
-
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:132
 msgid "Process subsequent rules"
 msgstr ""
@@ -5969,124 +6162,6 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:45
 msgid "Couldn't load your mail filters."
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:224
-msgid "Updating account data. This might take a few seconds."
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:244
-msgid "Account updated"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:249
-msgid "Username must not be empty."
-msgstr ""
-
-#. %1$s the missing request parameter
-#, c-format
-#: apps/io.ox/mail/accounts/view-form.js:254
-msgid "Please enter the following data: %1$s"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:271
-msgid "This account cannot be validated"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:334
-msgid "Server settings"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:337
-msgid "Server type"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:347
-#: apps/io.ox/mail/accounts/view-form.js:416
-msgid "Use SSL connection"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:353
-#: apps/io.ox/mail/accounts/view-form.js:430
-msgid "Server name"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:361
-#: apps/io.ox/mail/accounts/view-form.js:422
-msgid "Server port"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:369
-#: apps/io.ox/mail/accounts/view-form.js:446
-msgid "Username"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:385
-msgid "Refresh rate in minutes:"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:395
-msgid "Remove copy from server after retrieving a message"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:403
-msgid "Deleting messages on local storage also deletes them on server"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:410
-msgid "Outgoing server settings (SMTP)"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:440
-msgid "Use username and password"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:462
-msgid "Folder settings"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:465
-msgid "Sent folder"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:469
-#: apps/io.ox/mail/accounts/view-form.js:476
-#: apps/io.ox/mail/accounts/view-form.js:483
-#: apps/io.ox/mail/accounts/view-form.js:490
-msgid "Select"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:472
-msgid "Trash folder"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:479
-msgid "Drafts folder"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:486
-msgid "Spam folder"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:501
-msgid "Account settings"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:504
-msgid "Account name"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:512
-#: apps/plugins/wizards/mandatory/main.js:43
-msgid "Your name"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:520
-msgid "Email address"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js:529
-msgid "Use unified mail for this account"
 msgstr ""
 
 #: apps/io.ox/mail/accounts/model.js:35
@@ -6788,18 +6863,6 @@ msgstr ""
 msgid "No wall posts yet."
 msgstr ""
 
-#: apps/plugins/portal/facebook/register.js:98
-#: apps/plugins/portal/linkedIn/register.js:146
-#: apps/plugins/portal/twitter/register.js:233
-msgid "Click to authorize your account again"
-msgstr ""
-
-#: apps/plugins/portal/facebook/register.js:102
-#: apps/plugins/portal/linkedIn/register.js:150
-#: apps/plugins/portal/twitter/register.js:237
-msgid "Something went wrong reauthorizing the %s account."
-msgstr ""
-
 #: apps/plugins/portal/facebook/register.js:107
 msgid "Facebook reported an error:"
 msgstr ""
@@ -6812,12 +6875,6 @@ msgstr ""
 
 #: apps/plugins/portal/facebook/register.js:156
 msgid "Press [enter] to jump to the facebook stream."
-msgstr ""
-
-#: apps/plugins/portal/facebook/register.js:251
-#: apps/plugins/portal/linkedIn/register.js:343
-#: apps/plugins/portal/twitter/register.js:368
-msgid "Add your account"
 msgstr ""
 
 #: apps/plugins/portal/facebook/register.js:389
@@ -6898,56 +6955,6 @@ msgstr ""
 #: apps/plugins/portal/calendar/register.js:60
 #: apps/plugins/portal/calendar/register.js:88
 msgid "You don't have any appointments in the near future."
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:102
-msgid "%1$s is now connected with %2$s"
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:128
-msgid "%1$s is a new contact"
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:140
-msgid "LinkedIn reported an error:"
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:148
-#: apps/plugins/portal/twitter/register.js:235
-msgid "You have reauthorized this %s account."
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:157
-msgid "Sorry, we cannot help you here. Your provider needs to obtain a key from LinkedIn with the permission to do read messages."
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:214
-msgid "Press [enter] to jump to the linkedin stream."
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:233
-msgid "You have no new messages"
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:257
-msgid "There were not activities in your network"
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:270
-msgid "LinkedIn Network Updates"
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:275
-msgid "Your messages"
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:296
-#: apps/plugins/portal/linkedIn/register.js:326
-msgid "Recent activities"
-msgstr ""
-
-#: apps/plugins/portal/linkedIn/register.js:350
-msgid "LinkedIn"
 msgstr ""
 
 #: apps/plugins/portal/quota/register.js:36
