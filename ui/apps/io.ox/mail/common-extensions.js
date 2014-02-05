@@ -301,8 +301,6 @@ define('io.ox/mail/common-extensions',
                     length = attachments.length,
                     list;
 
-                console.log('attachments', attachments, baton.data);
-
                 if (length === 0) return;
 
                 list = $('<div class="attachment-list">').append(

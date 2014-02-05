@@ -244,6 +244,20 @@ define('io.ox/mail/detail/content',
         }
     });
 
+    ext.point('io.ox/mail/detail/source').extend({
+        id: 'white-space',
+        index: 600,
+        process: function (baton) {
+            baton.source = baton.source
+                // remove leading white-space
+                .replace(/^<div[^>]+>(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>)+/g, '')
+                // remove closing <html> tag
+                .replace(/\s*<\/html>\s*$/g, '')
+                // remove tailing white-space
+                .replace(/(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>)+<\/div>$/g, '');
+        }
+    });
+
     // content
 
     ext.point('io.ox/mail/detail/content').extend({
