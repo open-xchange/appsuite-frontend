@@ -61,7 +61,7 @@ define('io.ox/mail/accounts/settings',
             }
         });
 
-        myView.succes = successDialog;
+        myView.success = successDialog;
         myView.collection = collection;
         return myView.node;
     }
