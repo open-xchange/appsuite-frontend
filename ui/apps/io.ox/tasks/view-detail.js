@@ -51,7 +51,6 @@ define('io.ox/tasks/view-detail',
 
             if (task.end_date) {
                 infoPanel.append(
-                        $('<br>'),
                         $('<div>').addClass('end-date').text(
                             //#. %1$s due date of a task
                             //#, c-format
@@ -62,7 +61,6 @@ define('io.ox/tasks/view-detail',
 
             if (task.alarm && !_.device('small')) {//alarm makes no sense if reminders are disabled
                 infoPanel.append(
-                        $('<br>'),
                         $('<div>').addClass('alarm-date').text(
                             //#. %1$s reminder date of a task
                             //#, c-format
@@ -72,7 +70,6 @@ define('io.ox/tasks/view-detail',
             }
             if (task.percent_completed && task.percent_completed !== 0) {
                 infoPanel.append(
-                        $('<br>'),
                         $('<div>').addClass('task-progress').text(
                             //#. %1$s how much of a task is completed in percent, values from 0-100
                             //#, c-format
@@ -81,16 +78,9 @@ define('io.ox/tasks/view-detail',
                     );
             }
             infoPanel.append(
-                $('<br>'),
                 // status
                 $('<div>').text(task.status).addClass('status ' +  task.badge)
             );
-
-            //check to see if there is a leading <br> and remove it
-            var firstBr = infoPanel.find('br:first');
-            if (firstBr.is(infoPanel.find('*:first'))) {
-                firstBr.remove();
-            }
 
             node.append(
                 header.append(

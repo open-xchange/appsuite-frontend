@@ -91,9 +91,13 @@
         display: inline;
     }
 
-    .info-panel, .status, .end-date, .alarm-date, .task-progress { float: right; }
-
-    br { line-height: 21px; } // to correct strange behavior of priority
+    .info-panel { 
+        float: right;
+    }
+    .status, .end-date, .alarm-date, .task-progress {
+    	float: right;
+    	clear: both;
+    }
 
     .attachments {
         font-family: @lightFontFamily;
