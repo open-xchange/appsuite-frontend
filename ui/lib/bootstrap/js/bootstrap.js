@@ -1793,11 +1793,16 @@ $(document)
     this.$menu = $(this.options.menu)
     this.shown = false
     this.listen()
+    this.hadMouse = false
   }
 
   Typeahead.prototype = {
 
     constructor: Typeahead
+
+  , mouseUpDown: function(e) {
+      this.hadMouse = true;
+    }
 
   , select: function () {
       var val = this.$menu.find('.active').attr('data-value')
@@ -1939,6 +1944,7 @@ $(document)
       this.$menu
         .on('click', $.proxy(this.click, this))
         .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
+        .on('mouseup mousedown', 'li', $.proxy(this.mouseUpDown, this))
     }
 
   , eventSupported: function(eventName) {
@@ -2016,7 +2022,9 @@ $(document)
 
   , blur: function (e) {
       var that = this
-      setTimeout(function () { that.hide() }, 150)
+      var timing = this.hadMouse ? 20000 : 150;
+      this.hadMouse = false;
+      setTimeout(function () { that.hide() }, timing)
     }
 
   , click: function (e) {
