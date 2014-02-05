@@ -17,7 +17,7 @@ define(
      'settings!io.ox/mail',
      'io.ox/core/api/account',
      'fixture!io.ox/mail/write/email.json',
-     'fixture!io.ox/mail/write/accounts.json', 
+     'fixture!io.ox/mail/write/accounts.json',
      'fixture!io.ox/mail/write/signatures.json'], function (writer, mailAPI, settings, accountAPI, fixtureEmail, fixtureAccounts, fixtureSignatures) {
 
     'use strict';
@@ -410,6 +410,52 @@ define(
                 //independent test with same expection for both modes
                 addIndependentTests('html');
 
+                describe('leading blank lines are added', function () {
+                    function countLeadingBlanks() {
+                        var lines = ($(app.getEditor().getContent(), 'p')).toArray(),
+                            count = 0;
+                        lines.every(function (node) {
+                            var empty = $(node).html() === '<br>';
+                            if (empty)
+                                count++;
+                            return empty;
+                        });
+                        return count;
+                    }
+
+                    afterEach(function () {
+                        settings.set('defaultSignature', undefined);
+                    });
+                    it('for inline quoted replies/forwards', function () {
+                        //above
+                        settings.set('defaultSignature', "326");
+                        app.setBody('this is quoted text');
+                        expect(countLeadingBlanks()).toEqual(1);
+                        //below
+                        settings.set('defaultSignature', "294");
+                        app.setBody('this is quoted text');
+                        expect(countLeadingBlanks()).toEqual(1);
+                        //none
+                        settings.set('defaultSignature', undefined);
+                        app.setBody('this is quoted text');
+                        expect(countLeadingBlanks()).toEqual(1);
+                    });
+                   it('for mails from scratch', function () {
+                        //above: scratch
+                        settings.set('defaultSignature', "326");
+                        app.setBody('');
+                        expect(countLeadingBlanks()).toEqual(1);
+                        //below: scratch
+                        settings.set('defaultSignature', "294");
+                        app.setBody('');
+                        expect(countLeadingBlanks()).toEqual(1);
+                        //none: scratch
+                        settings.set('defaultSignature', undefined);
+                        app.setBody('');
+                        expect(countLeadingBlanks()).toEqual(0);
+                    });
+                });
+
                 describe('a signature is normalized', function () {
                     it('by keeping html tags when html editor is used', function () {
                         app.setSignature({data: {index: 5}});
@@ -417,7 +463,7 @@ define(
                     });
                 });
             });
-            
+
             describe('in text mode:', function () {
                 beforeEach(function () {
                     setMode('text');
@@ -425,6 +471,53 @@ define(
 
                 //independent test with same expection for both modes
                 addIndependentTests('text');
+
+                describe('leading blank lines are added', function () {
+                    function countLeadingBlanks() {
+                        var textarea = $($('.editor-inner-container').find('textarea')),
+                            lines = ($.original.val.call(textarea)).split('\n'),
+                            count = 0;
+                        lines.every(function (line) {
+                            var empty = line.trim() === '';
+                            if (empty)
+                                count++;
+                            return empty;
+                        });
+                        return count;
+                    }
+
+                    afterEach(function () {
+                        settings.set('defaultSignature', undefined);
+                    });
+                    it('for inline quoted replies/forwards', function () {
+                        //above
+                        settings.set('defaultSignature', "326");
+                        app.setBody('this is quoted text');
+                        expect(countLeadingBlanks()).toEqual(2);
+                        //below
+                        settings.set('defaultSignature', "294");
+                        app.setBody('this is quoted text');
+                        expect(countLeadingBlanks()).toEqual(2);
+                        //none
+                        settings.set('defaultSignature', undefined);
+                        app.setBody('this is quoted text');
+                        expect(countLeadingBlanks()).toEqual(2);
+                    });
+                   it('for mails from scratch', function () {
+                        //above: scratch
+                        settings.set('defaultSignature', "326");
+                        app.setBody('');
+                        expect(countLeadingBlanks()).toEqual(2);
+                        //below: scratch
+                        settings.set('defaultSignature', "294");
+                        app.setBody('');
+                        expect(countLeadingBlanks()).toEqual(2);
+                        //none: scratch
+                        settings.set('defaultSignature', undefined);
+                        app.setBody('');
+                        expect(countLeadingBlanks()).toEqual(1);
+                    });
+                });
 
                 describe('a signature is normalized', function () {
                     it('by removing html tags when text editor is used', function () {
@@ -434,7 +527,7 @@ define(
                 });
             });
         });
-        
+
         it('closes compose dialog', function () {
             // mark app as clean so no save as draft question will pop up
             app.dirty(false).quit();

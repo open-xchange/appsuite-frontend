@@ -1,7 +1,7 @@
 {
     "current": {
         "timestamp": 1381419300867,
-        "data": 
+        "data":
             [
                 {
                     "displayname": "EMPTY STRING",
@@ -68,7 +68,7 @@
                         "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2578_436462297.1389088829009\""
                     },
                     "misc": {
-                        "insertion": "below"
+                        "insertion": "above"
                     }
                 },
                 {
@@ -123,6 +123,6 @@
                     }
                 }
             ]
-        
+
     }
 }
