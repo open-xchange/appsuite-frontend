@@ -661,19 +661,20 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
                 if (baton.options.view === 'FolderList' &&
                     !_.device('smartphone') &&
-                    baton.data.id &&//if data is empty we have nothing to do here
-                    !baton.data.standard_folder) {
+                    baton.data.id) {//if data is empty we have nothing to do here
 
                     var appSettings = baton.app.settings,
                     hide = !appSettings.get('folderview/blacklist', {})[baton.data.id];//apps have their own blacklists for hidden folders
-                    this.append(
-                        $('<li class="divider" role="presentation" aria-hidden="true">'),
-                        $('<li>').append(
-                            $('<a href="#" tabindex="1" data-action="hide" role="menuitem">')
-                            .text(hide ? gt('Hide'): gt('Show'))
-                            .on('click', { baton: baton, appSettings: appSettings, hide: hide}, hideShowFolder)
-                        )
-                    );
+                    if (!api.is('private', baton.data) || !hide) {//always show unhide function (we don't want to loose folders here) but hide only when it's not a private folder
+                        this.append(
+                            $('<li class="divider" role="presentation" aria-hidden="true">'),
+                            $('<li>').append(
+                                $('<a href="#" tabindex="1" data-action="hide" role="menuitem">')
+                                .text(hide ? gt('Hide'): gt('Show'))
+                                .on('click', { baton: baton, appSettings: appSettings, hide: hide}, hideShowFolder)
+                            )
+                        );
+                    }
                     
                 }
                 

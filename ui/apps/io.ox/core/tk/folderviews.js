@@ -944,14 +944,14 @@ define('io.ox/core/tk/folderviews',
         draw: function (baton) {
             // headline if more than one section contains elements and this section contains elements
             if (!baton.showHeadlines || !baton.data[baton.id] || baton.data[baton.id].length === 0) return;
-            if (baton.id !== 'hidden') {//hidden is a special section that has a dropdown link instead of a headline
+            if (baton.id !== 'hidden') {//hidden is a special section that has a dropdown link instead of a normal headline
                 this.append(
                     $('<div class="section-title">').text(sections[baton.id])
                 );
             } else {
                 var container = $('<div class="hidden-folders-container">').hide(),
                     arrow = $('<i class="hidden-folders-icon icon-chevron-down">');
-                this.append($('<a class="hidden-folders-link" href="#">').text(sections[baton.id])
+                this.append($('<div class="section-title hidden-folders-link">').text(sections[baton.id])
                     .on('click', function (e) {
                         e.preventDefault();
                         container.toggle();
@@ -970,30 +970,6 @@ define('io.ox/core/tk/folderviews',
             _(baton.data[baton.id]).each(function (data) {
                 ext.point('io.ox/foldertree/section/folder').invoke('draw', (baton.id === 'hidden' ? this.find('.hidden-folders-container'): this), baton.clone({ data: data }));
             }, this);
-            if (baton.id === 'hidden' && baton.data[baton.id] && baton.data[baton.id].length > 1) {//add show all
-                ext.point('io.ox/foldertree/section/hidden').invoke('draw', this.find('.hidden-folders-container'), baton);
-            }
-        }
-    });
-
-    ext.point('io.ox/foldertree/section/hidden').extend({
-        index: 100,
-        id: 'show-all-link',
-        draw: function (baton) {
-            this.append($('<a class="hidden-folders-link" href="#">').text(gt('Show all folders'))
-                    .on('click', function showAll(e) {
-                e.preventDefault();
-
-                var appSettings = baton.app.settings;
-                //clear blacklist
-                appSettings.set('folderview/blacklist', {});
-                appSettings.save();
-                //repaint tree
-                baton.app.folderView.repaint();
-                //dropdown menu needs a redraw too
-                var ul = $($.find('.foldertree-sidepanel .context-dropdown ul')[0]);
-                ext.point(baton.app.getName() + '/folderview/sidepanel/context-menu').invoke('draw', ul.empty(), baton);
-            }));
         }
     });
 
@@ -1052,8 +1028,10 @@ define('io.ox/core/tk/folderviews',
                         return !check;
                     };
 
-                for (items in data) {
-                    data[items] = _(data[items]).filter(blacklistCheck);
+                for (items in sections) {//not id in data here, too keep the same order
+                    if (items !== 'hidden' && data[items]) {//exclude hidden and sections that are not present
+                        data[items] = _(data[items]).filter(blacklistCheck);
+                    }
                 }
                 if (hidden.length > 0) {
                     data.hidden = hidden;
