@@ -139,11 +139,11 @@ define('io.ox/mail/listview',
 
     /* default */
 
-    ext.point('io.ox/mail/listview/item/default').extend({
-        id: 'picture',
-        before: 'row1',
-        draw: extensions.picture
-    });
+    // ext.point('io.ox/mail/listview/item/default').extend({
+    //     id: 'picture',
+    //     before: 'row1',
+    //     draw: extensions.picture
+    // });
 
     ext.point('io.ox/mail/listview/item/default').extend({
         id: 'row1',

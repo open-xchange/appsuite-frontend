@@ -261,18 +261,8 @@ define('io.ox/mail/detail/content',
     // content
 
     ext.point('io.ox/mail/detail/content').extend({
-        id: 'remove',
-        index: 100,
-        process: function (baton) {
-            if (!baton.isHTML) return;
-            // remove stupid tags
-            this.find('meta, base').remove();
-        }
-    });
-
-    ext.point('io.ox/mail/detail/content').extend({
         id: 'pseudo-blockquotes',
-        index: 200,
+        index: 100,
         process: function (baton) {
             if (!baton.isHTML) return;
             // transform outlook's pseudo blockquotes
@@ -284,7 +274,7 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'blockquotes',
-        index: 300,
+        index: 200,
         process: function (baton) {
             if (!baton.isHTML) return;
             this.find('blockquote')
@@ -297,7 +287,7 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'images',
-        index: 400,
+        index: 300,
         process: function (baton) {
             if (!baton.isHTML) return;
             // images with attribute width/height
@@ -313,7 +303,7 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'tables',
-        index: 500,
+        index: 400,
         process: function (baton) {
             if (!baton.isHTML) return;
             // tables with bgcolor attribute
@@ -335,7 +325,7 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'nested',
-        index: 600,
+        index: 500,
         process: function (baton) {
             if (!baton.isHTML) return;
             // nested message?
@@ -358,7 +348,7 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'fixed-width',
-        index: 700,
+        index: 600,
         process: function (baton) {
             if (baton.isText && settings.get('useFixedWidthFont', false)) this.addClass('fixed-width-font');
         }
@@ -366,7 +356,7 @@ define('io.ox/mail/detail/content',
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'color-quotes',
-        index: 800,
+        index: 700,
         process: function () {
             if (settings.get('isColorQuoted', true)) this.addClass('colorQuoted');
         }
@@ -480,7 +470,7 @@ define('io.ox/mail/detail/content',
                     content.innerHTML = baton.source;
                     content = $(content);
                     // last line of defense
-                    content.find('script').remove();
+                    content.find('script, base, meta').remove();
                 } else {
                     // plain TEXT
                     content = $('<div class="content plain-text noI18n">');
