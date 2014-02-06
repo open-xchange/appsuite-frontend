@@ -14,6 +14,16 @@
 'use strict';
 
 module.exports = function (grunt) {
+    function isPackagedLanguage(file) {
+        //filter all languages that should not be packaged
+        //those will have something like ""X-Package: no\n"" in their header
+        var content = grunt.file.read(file),
+        included = !/^\s*"X-Package: (?:off|no|false|0)(?:\\n)?"\s*$/im.test(content);
+        if (!included) {
+            grunt.verbose.writeln('Filtered file: ', file);
+        }
+        return included;
+    }
 
     grunt.config.extend('copy', {
         dist: {
@@ -39,18 +49,49 @@ module.exports = function (grunt) {
                 {
                     src: ['i18n/**/*.po'],
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
-                    filter: function (f) {
-                        //filter all languages that should not be packaged
-                        //those will have something like ""X-Package: no\n"" in their header
-                        var content = grunt.file.read(f),
-                            included = !/^\s*"X-Package: (?:off|no|false|0)(?:\\n)?"\s*$/im.test(content);
-                        if (!included) {
-                            grunt.verbose.writeln('Filtered file: ', f);
-                        }
-                        return included;
-                    }
+                    filter: isPackagedLanguage
                 }
             ]
+        }
+    });
+
+    grunt.registerMultiTask('create_i18n_properties', 'Create properties files for i18n configuration', function () {
+        this.files.forEach(function (file) {
+            var lang = file.src[0].match(/([a-zA-Z_]*).po$/)[1],
+                _ = require('underscore'),
+                languageNames = _.extend(
+                    grunt.file.readJSON('i18n/languagenames.json'),
+                    grunt.file.readJSON('i18n/overrides.json')
+                ),
+                content;
+
+            content = 'io.ox/appsuite/languages/';
+            content += lang + '=';
+            content += languageNames[lang].replace(/[^\x21-\x7e]/g, function (c) {
+                if (c === ' ') return '\\ ';
+                var hex = c.charCodeAt(0).toString(16);
+                return '\\u0000'.slice(0, -hex.length) + hex;
+            });
+
+            grunt.file.write(file.dest, content);
+        });
+    });
+
+    grunt.config('create_i18n_properties', {
+        all: {
+            files: [{
+                expand: true,
+                src: ['i18n/**/*.po'],
+                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>',
+                filter: isPackagedLanguage,
+                flatten: true,
+                rename: function (dest, src) {
+                    var path = require('path');
+                    var lang = src.toLowerCase().replace(/_/g, '-');
+                    lang = lang.replace(/\.po$/, '');
+                    return path.join(dest, 'i18n', '<%= pkg.name %>-l10n-' + lang + '.properties');
+                }
+            }]
         }
     });
 
