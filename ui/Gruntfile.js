@@ -42,7 +42,7 @@ module.exports = function (grunt) {
     // create a package ready version of the ui (aka what jenkins does)
     grunt.registerTask('dist', ['copy:dist']);
     // default task
-    grunt.registerTask('default', ['checkDependencies', 'lint', 'newer:copy', 'newer:assemble', 'newer:concat', 'newer:less', 'newer:compile_po', 'force_update', 'newer:uglify']);
+    grunt.registerTask('default', ['checkDependencies', 'lint', 'copy_build', 'newer:assemble', 'newer:concat', 'newer:less', 'newer:compile_po', 'force_update', 'newer:uglify']);
 
     //please document supported options here
     grunt.task.registerTask('options', 'list supported options', function () {

@@ -73,5 +73,7 @@ module.exports = function (grunt) {
 
     });
 
+    grunt.registerTask('copy_build', ['newer:copy:fonts', 'newer:copy:images', 'newer:copy:thirdparty']);
+
     grunt.loadNpmTasks('grunt-contrib-copy');
 };
