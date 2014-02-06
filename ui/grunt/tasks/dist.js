@@ -25,7 +25,19 @@ module.exports = function (grunt) {
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
                 },
                 {
-                    src: ['i18n/**/*'],
+                    src: ['help/**/*', 'help-drive/**/*', 'bower_components/**/*', 'bin/touch-appsuite', 'readme.txt', '.htaccess', 'apps/themes/.htaccess'],
+                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
+                },
+                {
+                    src: ['debian/**/*', '*.spec'],
+                    dest: 'dist/package/'
+                }
+            ]
+        },
+        dist_i18n: {
+            files: [
+                {
+                    src: ['i18n/**/*.po'],
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
                     filter: function (f) {
                         //filter all languages that should not be packaged
@@ -37,14 +49,6 @@ module.exports = function (grunt) {
                         }
                         return included;
                     }
-                },
-                {
-                    src: ['help/**/*', 'help-drive/**/*', 'bower_components/**/*', 'bin/touch-appsuite', 'readme.txt', '.htaccess', 'apps/themes/.htaccess'],
-                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
-                },
-                {
-                    src: ['debian/**/*', '*.spec'],
-                    dest: 'dist/package/'
                 }
             ]
         }
