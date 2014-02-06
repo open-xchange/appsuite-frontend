@@ -972,7 +972,12 @@ define('io.ox/files/fluid/perspective',
                 var cid = _.cid(obj),
                     icon = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
                 if (icon.length) {
-                    icon.replaceWith(drawFile(obj));
+                    icon.replaceWith(
+                        // draw file ...
+                        drawFile(obj)
+                        // ... and reset lazy loader
+                        .find('img.img-polaroid.lazy').imageloader({ timeout: 60000 }).end()
+                    );
                 }
             });
 

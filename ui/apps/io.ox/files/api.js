@@ -752,16 +752,24 @@ define('io.ox/files/api',
     api.getUrl = function (file, mode, options) {
         options = $.extend({scaletype: 'contain'}, options || {});
         var url = ox.apiRoot + '/files',
+            // basic URL
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
                 (file.version !== undefined && options.version !== false ? '&version=' + file.version : ''),
+            // file name
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : ''),
+            // scaling options
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
                 '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '',
+            // avoid having identical URLs across contexts (rather edge case)
             userContext = '&' + $.param({
                 context: [String(ox.user_id), '_', String(ox.context_id)].join()
-            });
+            }),
+            // inject cache buster based on last_modified; needed for "revisionless save"
+            // the content might change without creating a new version (which would be part of the URL)
+            buster = file.last_modified ? '&' + file.last_modified : '';
 
-        query += userContext;
+        query += userContext + buster;
+
         switch (mode) {
         case 'open':
         case 'view':

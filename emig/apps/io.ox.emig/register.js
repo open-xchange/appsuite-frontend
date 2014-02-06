@@ -53,7 +53,9 @@ define('io.ox.emig/register', [
         }
         
         var state = win.app['io.ox.emig'] = { senderStatus: false };
-        checkSender();
+        ext.point('io.ox/mail/write/initializers/after').extend({
+            modify: checkSender
+        });
         view.leftside.find('.sender-dropdown').on('change', checkSender);
         
         function checkSender() {
