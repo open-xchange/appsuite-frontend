@@ -137,6 +137,7 @@ define('io.ox/mail/view-detail',
                         api.markRead(baton.data);
                     }
 
+                    baton.view = view;
                     ext.point('io.ox/mail/detail').invoke('draw', node, baton);
 
                 } catch (e) {

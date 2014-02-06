@@ -110,22 +110,31 @@ define('io.ox/mail/threadview',
     ext.point('io.ox/mail/detail-view/header').extend({
         id: 'attachments',
         index: 500,
-        draw: extensions.attachments
-    });
-
-    ext.point('io.ox/mail/detail-view').extend({
-        id: 'attachment-preview',
-        index: 200,
         draw: function () {
-            this.append('<section class="attachments">');
+            this.append($('<div class="attachment-list">').hide());
         }
     });
 
     ext.point('io.ox/mail/detail-view').extend({
-        id: 'content',
+        id: 'body',
         index: 300,
         draw: function () {
-            this.append($('<section class="content user-select-text" data-loaded="false">'));
+            this.append($('<section class="body user-select-text" data-loaded="false">'));
+        }
+    });
+
+    ext.point('io.ox/mail/detail-view/body').extend({
+        id: 'attachments',
+        index: 100,
+        draw: extensions.attachments
+    });
+
+    ext.point('io.ox/mail/detail-view/body').extend({
+        id: 'content',
+        index: 200,
+        draw: function (baton) {
+            var data = detail.getContent(baton.data);
+            this.idle().append(data.content);
         }
     });
 
@@ -207,20 +216,20 @@ define('io.ox/mail/threadview',
         toggleMail: function (cid, state) {
 
             var $li = this.$ul.children('[data-cid="' + cid + '"]'),
-                $content = $li.find('.content').first();
+                $body = $li.find('.body').first();
 
-            if (state === undefined) $li.toggleClass('content-visible'); else $li.toggleClass('content-visible', state);
+            if (state === undefined) $li.toggleClass('body-visible'); else $li.toggleClass('body-visible', state);
 
-            if ($content.attr('data-loaded') === 'false' && $li.hasClass('content-visible')) {
-                $content.attr('data-loaded', true);
+            if ($body.attr('data-loaded') === 'false' && $li.hasClass('body-visible')) {
+                $body.attr('data-loaded', true);
                 api.get(_.cid(cid)).then(
                     function success(data) {
-                        data = detail.getContent(data);
-                        $content.empty().idle().append(data.content);
+                        var baton = ext.Baton({ data: data });
+                        ext.point('io.ox/mail/detail-view/body').invoke('draw', $body, baton);
                     },
                     function fail() {
-                        $content.attr('data-loaded', false);
-                        $li.removeClass('content-visible');
+                        $body.attr('data-loaded', false);
+                        $li.removeClass('body-visible');
                     }
                 );
             }

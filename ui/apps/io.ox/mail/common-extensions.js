@@ -95,7 +95,7 @@ define('io.ox/mail/common-extensions',
         paperClip: function (baton) {
             if (!baton.data.attachment) return;
             this.append(
-                $('<i class="icon-paper-clip" aria-hidden="true">')
+                $('<i class="icon-paper-clip has-attachments" aria-hidden="true">')
             );
         },
 
@@ -290,6 +290,14 @@ define('io.ox/mail/common-extensions',
                 return dd;
             };
 
+            function drawInlineLinks(node, data) {
+                var extension = new links.InlineLinks({
+                    ref: 'io.ox/mail/attachment/links'
+                });
+                console.log('drawInlineLinks', data, extension);
+                return extension.draw.call(node, ext.Baton({ data: data }));
+            }
+
             function showAllAttachments() {
                 $(this).closest('.attachment-list').children().css('display', 'inline-block');
                 $(this).remove();
@@ -303,12 +311,7 @@ define('io.ox/mail/common-extensions',
 
                 if (length === 0) return;
 
-                list = $('<div class="attachment-list">').append(
-                    $('<span class="io-ox-label">').append(
-                        $.txt(gt.npgettext('plural', 'Attachment', 'Attachments', length)),
-                        $.txt('\u00A0\u00A0')
-                    )
-                );
+                list = $('<div class="attachment-list">');
 
                 _(attachments).each(function (a, i) {
                     try {
@@ -342,7 +345,7 @@ define('io.ox/mail/common-extensions',
                 // how 'all' drop down?
                 if (length > 1) {
                     attachments.subject = baton.data.subject;
-                    drawAttachmentDropDown(list, gt('All attachments'), attachments).find('a').removeClass('attachment-link');
+                    drawInlineLinks(list, attachments); //.find('a').removeClass('attachment-link');
                 }
 
                 this.append(list);
