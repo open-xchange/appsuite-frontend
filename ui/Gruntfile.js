@@ -20,7 +20,7 @@ module.exports = function (grunt) {
 
     // make grunt config extendable
     grunt.config.extend = function (k, v) {
-        grunt.config(k, require('underscore').extend(grunt.config(k), v));
+        grunt.config(k, require('underscore').extend({}, grunt.config(k), v));
     };
 
     grunt.config('pkg', grunt.file.readJSON('package.json'));
