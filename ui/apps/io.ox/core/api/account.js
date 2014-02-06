@@ -532,11 +532,11 @@ define('io.ox/core/api/account',
         })
         //make it always successful but either true or false, if false we give the warnings back
         .then(
-            function success() {
-                return $.Deferred().resolve(true);
+            function success(response) {
+                return $.Deferred().resolve(response.data);
             },
             function fail(response) {
-                return $.Deferred().resolve(false, response);
+                return $.Deferred().resolve(response.data, response);
             }
         );
     };
