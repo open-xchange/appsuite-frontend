@@ -283,13 +283,13 @@ define('io.ox/settings/main',
                 return require([settingsPath], function () {
                     right.empty().idle(); // again, since require makes this async
                     ext.point(extPointPart).invoke('draw', right, baton);
-                    updateExpertMode();
+                    // updateExpertMode();
                 });
             } else {
                 return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
                     right.empty().idle(); // again, since require makes this async
                     ext.point(extPointPart).invoke('draw', right, baton);
-                    updateExpertMode();
+                    // updateExpertMode();
                 });
             }
         };

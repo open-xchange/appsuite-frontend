@@ -21,8 +21,9 @@ define('io.ox/mail/settings/pane',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
      'gettext!io.ox/mail',
-     'io.ox/core/api/account'
-    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, ext, notifications, gt, api) {
+     'io.ox/core/api/account',
+     'io.ox/backbone/mini-views'
+    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, ext, notifications, gt, api, mini) {
 
     'use strict';
 
@@ -56,49 +57,7 @@ define('io.ox/mail/settings/pane',
             { label: gt('3 minutes'), value: '3_minutes' },
             { label: gt('5 minutes'), value: '5_minutes' },
             { label: gt('10 minutes'), value: '10_minutes'}
-        ],
-
-        buildCheckbox = function (name) {
-            var checkbox = $('<input>').attr({  'data-property': name, 'type': 'checkbox' })
-            .on('change', function () {
-                mailSettings.set(name, checkbox.prop('checked'));
-            }).addClass('input-xlarge');
-            checkbox.prop('checked', mailSettings.get(name));
-            return checkbox;
-
-        },
-
-        buildInputRadio = function (list, name) {
-            return _.map(list, function (option) {
-                var o = $('<input type="radio" name="' + name + '">').val(option.value)
-                .on('click', function () {
-                    mailSettings.set(name, this.value);
-                });
-                if (mailSettings.get(name) === option.value) o.prop('checked', true);
-                return $('<label class="radio">').text(option.label).append(o);
-            });
-        },
-
-        buildInputText = function (name) {
-            var input = $('<input type="text">')
-            .on('change', function () {
-                mailSettings.set(name, input.val());
-            }).addClass('span1');
-            input.val(mailSettings.get(name));
-            return input;
-        },
-
-        buildOptionsSelect = function (list, name, id) {
-            var select = $('<select>').attr({ id: id }).addClass('input-xlarge').on('change', function () {
-                mailSettings.set(name, this.value);
-            });
-            _.map(list, function (option) {
-                var o = $('<option>').attr({ value: option.value}).text(option.label);
-                return select.append(o);
-            });
-            select.val(mailSettings.get(name));
-            return select;
-        };
+        ];
 
     var MailSettingsView = Backbone.View.extend({
         tagName: 'div',
@@ -174,7 +133,7 @@ define('io.ox/mail/settings/pane',
             }
 
             if (!capabilities.has('emoji')) { // see Bug 25537
-                holder.find('[data-property="displayEmoticons"]').parent().hide();
+                holder.find('[name="displayEmoticons"]').parent().hide();
             }
         },
 
@@ -212,10 +171,10 @@ define('io.ox/mail/settings/pane',
         draw: function () {
             var arrayOfElements =  [],
                 contactCollectOnMailTransport = $('<label>').addClass('checkbox expertmode').text(gt('Automatically collect contacts in the folder "Collected addresses" while sending')).append(
-                    buildCheckbox('contactCollectOnMailTransport')
+                    new mini.CheckboxView({ name: 'contactCollectOnMailTransport', model: mailSettings}).render().$el
                 ),
                 contactCollectOnMailAccess = $('<label>').addClass('checkbox expertmode').text(gt('Automatically collect contacts in the folder "Collected addresses" while reading')).append(
-                    buildCheckbox('contactCollectOnMailAccess')
+                    new mini.CheckboxView({ name: 'contactCollectOnMailAccess', model: mailSettings}).render().$el
                 );
 
             if (caps.contactCollect) {
@@ -227,11 +186,11 @@ define('io.ox/mail/settings/pane',
                 $('<div>').addClass('control-group').append(
                     $('<div>').addClass('controls').append(
                         $('<label>').addClass('checkbox expertmode').text(gt('Permanently remove deleted emails')).append(
-                            buildCheckbox('removeDeletedPermanently')
+                            new mini.CheckboxView({ name: 'removeDeletedPermanently', model: mailSettings}).render().$el
                         ),
                         arrayOfElements,
                         $('<label>').addClass('checkbox expertmode').text(gt('Use fixed-width font for text mails')).append(
-                            buildCheckbox('useFixedWidthFont')
+                            new mini.CheckboxView({ name: 'useFixedWidthFont', model: mailSettings}).render().$el
                         )
                     )
                 )
@@ -250,10 +209,10 @@ define('io.ox/mail/settings/pane',
                         $('<label>').addClass('control-label').text(gt('Compose')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('checkbox').text(gt('Append vCard')).append(
-                                buildCheckbox('appendVcard')
+                                new mini.CheckboxView({ name: 'appendVcard', model: mailSettings}).render().$el
                             ),
                             $('<label>').addClass('checkbox').text(gt('Insert the original email text to a reply')).append(
-                                buildCheckbox('appendMailTextOnReply')
+                                new mini.CheckboxView({ name: 'appendMailTextOnReply', model: mailSettings}).render().$el
                             )
                         )
                     ),
@@ -261,30 +220,24 @@ define('io.ox/mail/settings/pane',
                         $('<div>').addClass('settings sectiondelimiter'),
                         $('<div>').addClass('control-group').append(
                             $('<label>').addClass('control-label').text(gt('Thread view')),
-                            $('<div>').addClass('controls').append(
-                                buildInputRadio(optionsThreadview, 'threadView')
-                            )
+                            new mini.RadioView({ list: optionsThreadview, name: 'threadView', model: mailSettings}).render().$el
                         )
                     ),
                     $('<div>').addClass('settings sectiondelimiter expertmode'),
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').addClass('control-label').text(gt('Forward emails as')),
-                        $('<div>').addClass('controls').append(
-                            buildInputRadio(optionsForwardEmailAs, 'forwardMessageAs')
-                        )
+                        new mini.RadioView({ list: optionsForwardEmailAs, name: 'forwardMessageAs', model: mailSettings}).render().$el
                     ),
                     $('<div>').addClass('settings sectiondelimiter'),
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').addClass('control-label').text(gt('Format emails as')),
-                        $('<div>').addClass('controls').append(
-                            buildInputRadio(optionsFormatAs, 'messageFormat')
-                        )
+                        new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: mailSettings}).render().$el
                     ),
                     $('<div>').addClass('settings sectiondelimiter'),
                     $('<div>').addClass('control-group form-inline expertmode').append(
                         $('<div>').addClass('controls').append(
                             $('<span>').addClass('text').text(gt('Line wrap when sending text mails after ')),
-                            buildInputText('lineWrapAfter'),
+                            new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'span1' }).render().$el,
                             $('<span>').addClass('text').text(gt(' characters'))
                         )
                     ),
@@ -292,7 +245,7 @@ define('io.ox/mail/settings/pane',
                         $('<label>').attr({ 'for': 'defaultSendAddress' }).addClass('control-label').text(gt('Default sender address')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('select').append(
-                                buildOptionsSelect(optionsAllAccounts, 'defaultSendAddress', 'defaultSendAddress')
+                                new mini.SelectView({ list: optionsAllAccounts, name: 'defaultSendAddress', model: mailSettings}).render().$el
                             )
                         )
                     ),
@@ -300,7 +253,7 @@ define('io.ox/mail/settings/pane',
                         $('<label>').attr({ 'for': 'autoSaveDraftsAfter' }).addClass('control-label').text(gt('Auto-save email drafts')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('select').append(
-                                buildOptionsSelect(optionsAutoSave, 'autoSaveDraftsAfter', 'autoSaveDraftsAfter')
+                                new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: mailSettings}).render().$el
                             )
                         )
                     )
@@ -318,27 +271,27 @@ define('io.ox/mail/settings/pane',
                 $('<div>').addClass('control-group expertmode').append(
                     $('<div>').addClass('controls').append(
                         $('<label>').addClass('checkbox').text(gt('Allow html formatted emails')).append(
-                            buildCheckbox('allowHtmlMessages')
+                            new mini.CheckboxView({ name: 'allowHtmlMessages', model: mailSettings}).render().$el
                         )
                     ),
                     $('<div>').addClass('controls').append(
                         $('<label>').addClass('checkbox').text(gt('Allow pre-loading of externally linked images')).append(
-                            buildCheckbox('allowHtmlImages')
+                            new mini.CheckboxView({ name: 'allowHtmlImages', model: mailSettings}).render().$el
                         )
                     ),
                     $('<div>').addClass('controls').append(
                         $('<label>').addClass('checkbox').text(gt('Display emoticons as graphics in text emails')).append(
-                            buildCheckbox('displayEmoticons')
+                            new mini.CheckboxView({ name: 'displayEmoticons', model: mailSettings}).render().$el
                         )
                     ),
                     $('<div>').addClass('controls').append(
                         $('<label>').addClass('checkbox').text(gt('Color quoted lines')).append(
-                            buildCheckbox('isColorQuoted')
+                            new mini.CheckboxView({ name: 'isColorQuoted', model: mailSettings}).render().$el
                         )
                     ),
                     $('<div>').addClass('controls').append(
                         $('<label>').addClass('checkbox').text(gt('Ask for delivery receipt')).append(
-                            buildCheckbox('sendDispositionNotification')
+                            new mini.CheckboxView({ name: 'sendDispositionNotification', model: mailSettings}).render().$el
                         )
                     )
                 )
