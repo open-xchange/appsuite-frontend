@@ -15,6 +15,9 @@
 
 module.exports = function (grunt) {
 
+    //enable/disable removing of debugger statements
+    var keep = !!grunt.option('keep');
+
     grunt.config('uglify', {
 
         bootjs: {
@@ -22,7 +25,10 @@ module.exports = function (grunt) {
                 sourceMap: 'build/maps/boot.js.map',
                 sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
                 sourceMappingURL: '/appsuite/<%= assemble.options.base %>/maps/boot.js.map',
-                sourceMapPrefix: 1
+                sourceMapPrefix: 1,
+                compress: {
+                    drop_debugger: !keep
+                }
             },
             files: {
                 'build/boot.js': ['build/src/boot.js']
@@ -34,7 +40,10 @@ module.exports = function (grunt) {
                 sourceMap: function (path) { return path.replace(/^build\//, 'build/maps/').replace(/\.js$/, '.js.map'); },
                 sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
                 sourceMappingURL: function (path) { return '/appsuite/' + grunt.config.get('assemble.options.base') + path.replace(/^build\//, '/maps/').replace(/\.js$/, '.js.map'); },
-                sourceMapPrefix: 1
+                sourceMapPrefix: 1,
+                compress: {
+                    drop_debugger: !keep
+                }
             },
             files: [{
                 src: 'apps/**/*.js',
