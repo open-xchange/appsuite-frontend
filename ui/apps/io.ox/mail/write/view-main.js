@@ -803,7 +803,7 @@ define("io.ox/mail/write/view-main",
                     .attr({ name: 'content', tabindex: '4', disabled: 'disabled', caretPosition: '0' })
                     .addClass('text-editor')
                     .addClass(settings.get('useFixedWidthFont') ? 'monospace' : '')
-                    .on('keyup click', function (e) {
+                    .on('keyup click touchend', function () {
                         /* disabled emoji input for subject */
                         //$(this).attr('emojiFocus', 'true');
                         //self.subject.attr('emojiFocus', 'false');
