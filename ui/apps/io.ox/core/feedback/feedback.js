@@ -86,7 +86,7 @@ define('io.ox/core/feedback/feedback',
                 note = $('<textarea id="feedback-note" class="feedback-note" rows="5">');
             
             popup.getBody().append($('<div class="feedback-welcome-text">')
-                    .text(settings.get('feeback/welcomeMessage', gt('Welcome. Please provide your feedback about this product'))),
+                    .text(gt('Welcome. Please provide your feedback about this product')),
                     stars.node,
                     $('<label for="feedback-note">').text(gt('Comments and suggestions')),
                     note);
@@ -95,10 +95,18 @@ define('io.ox/core/feedback/feedback',
                 if (action === 'send') {
                     sendFeedback({rating: stars.getValue(), message: note.val()})
                     .done(function () {
-                        notifications.yell('success', settings.get('feeback/thankYouMessage', gt('Thank you for your feedback')));
+                        notifications.yell('success', gt('Thank you for your feedback'));
                     });
                 }
             });
+        },
+        drawButton: function () {
+            var position = settings.get('feedback/position', 'right'),
+                feedbackButton = $('<div class="feedback-button">').text('Feedback')
+                .addClass(position + 'side-button')
+                .on('click', this.show);
+
+            $('#io-ox-core').append(feedbackButton);
         }
     };
 });

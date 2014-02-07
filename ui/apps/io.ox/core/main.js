@@ -879,6 +879,14 @@ define('io.ox/core/main',
             }
         });
 
+        ext.point('io.ox/core/feedback').extend({
+            draw: function () {
+                require(['io.ox/core/feedback/feedback'], function (feedback) {
+                    feedback.drawButton();
+                });
+            }
+        });
+
         // add some senseless characters to avoid unwanted scrolling
         if (location.hash === '') {
             location.hash = '#!';
@@ -1196,6 +1204,8 @@ define('io.ox/core/main',
                         $('#io-ox-screens').css('top', '0px');
                         topbar.hide();
                     }
+                    //draw fedbackButton
+                    ext.point('io.ox/core/feedback').invoke('draw');
 
                     debug('core: Stage "load" > autoLaunch ...');
 
