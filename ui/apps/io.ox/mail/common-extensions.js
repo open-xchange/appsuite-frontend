@@ -371,6 +371,98 @@ define('io.ox/mail/common-extensions',
                     $ul = null;
                 });
             };
+        }()),
+
+        flagPicker: (function () {
+
+            var colorNames = {
+                NONE:       gt('None'),
+                RED:        gt('Red'),
+                BLUE:       gt('Blue'),
+                GREEN:      gt('Green'),
+                GRAY:       gt('Gray'),
+                PURPLE:     gt('Purple'),
+                LIGHTGREEN: gt('Light green'),
+                ORANGE:     gt('Orange'),
+                PINK:       gt('Pink'),
+                LIGHTBLUE:  gt('Light blue'),
+                YELLOW:     gt('Yellow')
+            };
+
+            var colorLabelIconEmpty = 'icon-bookmark-empty',
+                colorLabelIcon = 'icon-bookmark';
+
+            function changeLabel(e) {
+
+                e.preventDefault();
+
+                var data = e.data.data,
+                    color = e.data.color,
+                    node = $(this).closest('.flag-picker');
+
+                node.find('.dropdown-toggle').focus();
+                api.changeColor(data, color);
+            }
+
+            function updateLabel(model) {
+
+                // // set proper icon class
+                var color = model.get('color_label') || 0;
+                var className = 'flag-dropdown-icon ';
+                className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
+                className += ' flag_' + color;
+                this.$el.find('.flag-dropdown-icon').attr({ 'class': className, 'data-color': color });
+            }
+
+            return function (baton) {
+
+                var data = baton.data, color = baton.data.color_label;
+
+                this.append(
+                    $('<div class="dropdown flag-picker">').append(
+                        // box
+                        $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" tabindex="1">').append(
+                            $('<i class="flag-dropdown-icon">')
+                                .attr('data-color', color)
+                                .addClass(color === 0 ? colorLabelIconEmpty : colorLabelIcon)
+                                .addClass('flag_' + color)
+                        ),
+                        // drop down
+                        $('<ul class="dropdown-menu" role="menu">').append(
+                            _(api.COLORS).map(function (index, color) {
+                                return $('<li>').append(
+                                    $('<a href="#" tabindex="1" role="menuitem">').append(
+                                        index > 0 ? $('<span class="flag-example">').addClass('flag_bg_' + index) : $(),
+                                        $.txt(colorNames[color])
+                                    )
+                                    .on('click', { data: data, color: index }, changeLabel)
+                                    .addClass(color === index ? 'active-label' : undefined)
+                                );
+                            })
+                        )
+                    )
+                );
+
+                // listen for change event
+                baton.view.listenTo(baton.model, 'change:color_label', updateLabel);
+            };
+        }()),
+
+        unreadToggle: (function () {
+
+            function toggle(e) {
+                e.preventDefault();
+                var view = e.data.view, data = view.model.toJSON();
+                // toggle 'unseen' bit
+                if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
+            }
+
+            return function (baton) {
+                this.append(
+                    $('<a href="#" class="unread-toggle"><i class="icon-circle"/></a>')
+                    .on('click', { view: baton.view }, toggle)
+                );
+            };
         }())
     };
 

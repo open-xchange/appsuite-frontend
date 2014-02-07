@@ -69,7 +69,7 @@ define('io.ox/mail/view-detail',
                 className: 'mail-detail-decorator',
 
                 onChangeColor: function () {
-                    setLabel(this.$el.find('.flag-dropdown'), this.model.get('color_label'));
+                    setLabel(this.$el.find('.flag-picker'), this.model.get('color_label'));
                 },
 
                 onChangeFlags: function () {

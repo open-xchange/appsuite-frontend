@@ -13,6 +13,8 @@
 
 /* preview panes */
 
+@unread-toggle-width: 40px;
+
 .classic-toolbar-visible {
     .window-content { top: 0; }
 }
@@ -242,6 +244,7 @@
     .subject {
 
         font-weight: 300;
+        line-height: 20px; // need that to avoid flicker base on icon height
         .ellipsis();
 
         i {
@@ -261,7 +264,7 @@
     }
 
     .icon-paper-clip.has-attachments {
-        font-size: 18px;
+        font-size: 20px;
         width: 18px;
         height: 18px;
         margin-left: 7px;
@@ -348,8 +351,8 @@
     }
 
     .attachments {
-        padding: 0 20px 19px 74px;
-        //border-top: 1px solid #eee;
+        padding: 19px 20px 19px 20px;
+        border-top: 1px solid #eee;
         border-bottom: 1px solid #eee;
     }
 
@@ -388,6 +391,45 @@
             background-size: cover;
             display: inline-block;
         }
+    }
+
+    .flag-picker {
+        float: right;
+        display: inline-block;
+        margin-left: 7px;
+        position: relative;
+        z-index: 12004;
+        .dropdown-toggle {
+            font-size: 20px;
+            &:hover { text-decoration: none; }
+        }
+        .flag-dropdown-icon.flag_0 {
+            color: #ccc;
+        }
+        .dropdown-menu {
+            right: 0px;
+            font: 14px/20 @normalFontFamily;
+            right: -20px;
+            left: auto;
+            top: 120%;
+            width: 200px;
+            a { line-height: 24px; }
+        }
+    }
+
+    .unread-toggle {
+        position: absolute;
+        left: 60px;
+        width: @unread-toggle-width;
+        height: 40px;
+        text-align: center;
+        //background-color: yellow;
+        color: #ddd;
+        &:hover { text-decoration: none; color: #aaa; }
+    }
+
+    & .unread .unread-toggle {
+        color: #08c;
     }
 }
 
@@ -843,7 +885,7 @@ textarea.inplace-editor {
 
     @picture-width: 40px;
     @header-padding: 20px;
-    @picture-padding: @picture-width + @header-padding + 14;
+    @picture-padding: @picture-width + @header-padding;
 
     // .io-ox-inline-links {
     //     position: relative;
@@ -1086,7 +1128,7 @@ textarea.inplace-editor {
     header {
         font-weight: 300;
         padding: 20px @header-padding;
-        padding-left: @picture-padding;
+        padding-left: @picture-padding + @unread-toggle-width;
     }
 
     .notifications {

@@ -789,7 +789,6 @@ define('io.ox/mail/api',
             obj.color_label = label;
             tracker.setColorLabel(obj);
             api.trigger('update:' + _.ecid(obj), obj);
-            api.events.trigger('update:' + _.cid(obj), obj);
         });
 
         return tracker.update(list, function (obj) {
@@ -804,9 +803,6 @@ define('io.ox/mail/api',
                 api.trigger('refresh.list');
             });
     };
-
-    // backbonish event handling
-    _.extend(api.events, Backbone.Events);
 
     /**
      * marks list of mails unread
