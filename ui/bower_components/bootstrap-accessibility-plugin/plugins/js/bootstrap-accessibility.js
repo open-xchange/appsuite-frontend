@@ -1,7 +1,7 @@
 /* ========================================================================
 * Extends Bootstrap v3.0.0 
 
-* Copyright (c) <2013> eBay Software Foundation
+* Copyright (c) <2014> eBay Software Foundation
 
 * All rights reserved.
 
@@ -22,7 +22,8 @@
   // ===============================
 
     $('.alert').attr('role', 'alert')
-
+    $('.close').removeAttr('aria-hidden').wrapInner('<span aria-hidden="true"></span>').append('<span class="sr-only">Close</span>')
+    
   // TOOLTIP Extension
   // ===============================
 
@@ -93,7 +94,6 @@
     })
 
     //Adding Space Key Behaviour, opens on spacebar
-    // var drpKeyDown = $.fn.dropdown.Constructor.prototype.keydown
     $.fn.dropdown.Constructor.prototype.keydown = function (e) {
       var $tar 
         , $par
@@ -106,7 +106,6 @@
         e.preventDefault() && e.stopPropagation()
         firstItem = $('[role=menuitem]:visible', $par)[0]
         try{ firstItem.focus()} catch(ex) {}
-      // drpKeyDown.apply(this, arguments)
     }
 
     $(document)
@@ -116,8 +115,9 @@
 
       .on('focusout.dropdown.data-api', '.dropdown-menu', function(e){
         var $this = $(this)
+                    , that = this
         setTimeout(function() {
-         if(!$(document.activeElement).is($this.find("a"))){
+         if(!$.contains(that, document.activeElement)){
           $this.parent().removeClass('open')
           $this.parent().find('[data-toggle=dropdown]').attr('aria-expanded','false')
          }
@@ -257,6 +257,8 @@
               $curPanel.attr({ 'aria-hidden' : 'true','tabIndex' : '-1' })
             }            
         })      
+      }else{
+        collToggle.apply(this, arguments)
       }
     }
 
