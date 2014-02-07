@@ -741,6 +741,24 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'feedback',
+            index: 500,
+            draw: function () {
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" data-action="feedback" role="menuitem" tabindex="1">').text(gt('Give feedback'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        require(['io.ox/core/feedback/feedback'], function (feedback) {
+                            feedback.show();
+                        });
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'logout',
             index: 1000,
             draw: function () {
