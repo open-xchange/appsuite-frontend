@@ -260,14 +260,14 @@ body.down #io-ox-login-container .alert.alert-info {
 .io-ox-busy:before {
     position: absolute;
     top: 50%;
-    margin-top: -10px;
+    margin: -10px 0 0 -10px;
     width: 100%;
     text-align: center;
     /* icon-refresh */
     font-size: 20px;
     font-family: 'FontAwesome';
     content: '\f021';
-    color: #aaa;
+    color: #ccc;
     /* icon-spin */
     -moz-animation: spin 1.5s infinite linear;
     -o-animation: spin 1.5s infinite linear;

@@ -250,11 +250,11 @@ define('io.ox/mail/detail/content',
         process: function (baton) {
             baton.source = baton.source
                 // remove leading white-space
-                .replace(/^<div[^>]+>(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>)+/g, '')
+                .replace(/^<div[^>]+>(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+/g, '')
                 // remove closing <html> tag
                 .replace(/\s*<\/html>\s*$/g, '')
                 // remove tailing white-space
-                .replace(/(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>)+<\/div>$/g, '');
+                .replace(/(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+<\/div>$/g, '');
         }
     });
 

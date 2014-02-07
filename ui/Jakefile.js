@@ -329,7 +329,7 @@ utils.copy(utils.list("lib/mobiscroll", ["css/*"]),
 
 // jQuery Imageloader
 
-utils.copy(utils.list("lib", ["jquery.imageloader.js"]),
+utils.copy(utils.list("lib", ["jquery.imageloader.js", "jquery.lazyload.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
 
 // Mediaelement.js

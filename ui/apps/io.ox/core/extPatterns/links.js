@@ -424,7 +424,11 @@ define('io.ox/core/extPatterns/links',
                 node.find('ul.dropdown-menu').addClass(node.position().left < 100 ? '' : 'dropdown-right');
             });
         }
-        drawLinks(options, new Collection(baton.data), node, baton, args, true);
+
+        // defer drawing of drop-down options since they're not visible immediately
+        setTimeout(function () {
+            drawLinks(options, new Collection(baton.data), node, baton, args, true);
+        }, 100);
 
         $toggle.dropdown();
 

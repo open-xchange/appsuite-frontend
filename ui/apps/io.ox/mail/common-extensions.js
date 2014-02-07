@@ -14,13 +14,15 @@
 define('io.ox/mail/common-extensions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
+     'io.ox/core/extPatterns/actions',
      'io.ox/mail/util',
      'io.ox/mail/api',
      'io.ox/core/api/account',
      'io.ox/core/date',
      'io.ox/contacts/api',
-     'gettext!io.ox/mail'
-    ], function (ext, links, util, api, account, date, contactsAPI, gt) {
+     'gettext!io.ox/mail',
+     'apps/io.ox/core/tk/jquery.lazyload.js'
+    ], function (ext, links, actions, util, api, account, date, contactsAPI, gt) {
 
     'use strict';
 
@@ -225,9 +227,7 @@ define('io.ox/mail/common-extensions',
             };
         }()),
 
-        attachments: (function () {
-
-            var regImage = /^image\/(jpe?g|png|gif|bmp)$/i;
+        attachmentList: (function () {
 
             var getContentType = function (type) {
                 // might be: image/jpeg; name=Foto.JPG", so ...
@@ -245,30 +245,6 @@ define('io.ox/mail/common-extensions',
                     contentType = getContentType(data.content_type),
                     url,
                     filename;
-                // add instant preview
-                if (regImage.test(contentType) && data.size > 0) {
-                    dd.find('a').on('click', data, function (e) {
-                        var node = $(this), data = e.data, p = node.parent(), url, src, used;
-                        if (p.hasClass('open') && p.find('.instant-preview').length === 0) {
-                            url = api.getUrl(data, 'view');
-                            src = url + '&scaleType=contain&width=190&height=190'; // 190 + 2 * 15 pad = 220 max-width
-                            //default vs. phone custom-dropdown
-                            used = $.extend({menu: p.find('ul')}, p.data() || { addlink: true });
-                            //append instant-preview if not done yet
-                            if (used.menu.find('.instant-preview').length !== 1) {
-                                var $li =  $('<li>').busy().append(
-                                        (used.addlink ? $('<a>', { href: url, target: '_blank' }) : $('<span>'))
-                                        .append(
-                                            $('<img>', { src: src, alt: '' }).addClass('instant-preview').load(function () {
-                                                $li.idle();
-                                            })
-                                        )
-                                    );
-                                used.menu.append($li);
-                            }
-                        }
-                    });
-                }
                 // make draggable (drag-out)
                 if (_.isArray(data)) {
                     url = api.getUrl(data, 'zip');
@@ -294,7 +270,6 @@ define('io.ox/mail/common-extensions',
                 var extension = new links.InlineLinks({
                     ref: 'io.ox/mail/attachment/links'
                 });
-                console.log('drawInlineLinks', data, extension);
                 return extension.draw.call(node, ext.Baton({ data: data }));
             }
 
@@ -305,11 +280,11 @@ define('io.ox/mail/common-extensions',
 
             return function (baton) {
 
-                var attachments = util.getAttachments(baton.data),
+                var attachments = baton.attachments,
                     length = attachments.length,
                     list;
 
-                if (length === 0) return;
+                if (!length) return;
 
                 list = $('<div class="attachment-list">');
 
@@ -322,7 +297,7 @@ define('io.ox/mail/common-extensions',
                             });
                         // draw
                         var dd = drawAttachmentDropDown(list, _.noI18n(label), a);
-                        dd.find('a').addClass('attachment-link').prepend(
+                        dd.find('a').first().addClass('attachment-link').prepend(
                             $('<i class="icon-paper-clip">'),
                             $.txt('\u00A0')
                         );
@@ -337,18 +312,64 @@ define('io.ox/mail/common-extensions',
                 // add "[n] more ..."
                 if (length > 3) {
                     list.append(
-                        //#. 'more' like in 'x more attachments' / 'weitere' in German
-                        $('<a href="#" class="n-more">').text((length - 2) + ' ' + gt('more') + ' ...').click(showAllAttachments)
+                        $('<a href="#" class="n-more">').text(
+                            gt('and %1$d others ...', length - 2)
+                        )
+                        .click(showAllAttachments)
                     );
                 }
 
-                // how 'all' drop down?
-                if (length > 1) {
-                    attachments.subject = baton.data.subject;
-                    drawInlineLinks(list, attachments); //.find('a').removeClass('attachment-link');
-                }
+                // show actions for 'all' attachments
+                attachments.subject = baton.data.subject;
+                list.append('<br>');
+                drawInlineLinks(list, attachments);
 
                 this.append(list);
+            };
+        }()),
+
+        attachmentPreview: (function () {
+
+            var regSupportsPreview = /\.(gif|bmp|tiff|jpe?g|gmp|png|pdf|docx?|xlsx?|pptx?)$/i,
+                regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
+
+            return function (baton) {
+
+                var attachments = baton.attachments,
+                    list = _(attachments).filter(function (attachment) {
+                        return attachment.disp === 'attachment' && regSupportsPreview.test(attachment.filename);
+                    }),
+                    $ul;
+
+                if (!list.length) return;
+
+                this.append(
+                    $ul = $('<ul class="attachment-preview" role="presention" aria-hidden="true">').append(
+                        _(list).map(function (attachment) {
+                            // consider retina displays
+                            var size = _.device('retina') ? 300 : 150,
+                                // get URL of preview image
+                                url = api.getUrl(attachment, 'view') + '&scaleType=cover&width=' + size + '&height=' + size;
+                            // non-image files need special format parameter
+                            if (!regIsImage.test(attachment.filename)) url += '&format=preview_image&session=' + ox.session;
+                            // create list item
+                            return $('<li class="lazy">').attr('data-original', url).data(attachment);
+                        })
+                    )
+                );
+
+                $ul.on('click', 'li', function () {
+                    var baton = ext.Baton({ data: [$(this).data()] });
+                    actions.invoke('io.ox/mail/actions/slideshow-attachment', null, baton);
+                });
+
+                _.defer(function () {
+                    $ul.find('li.lazy').lazyload({
+                        container: $ul,
+                        effect : 'fadeIn'
+                    });
+                    $ul = null;
+                });
             };
         }())
     };

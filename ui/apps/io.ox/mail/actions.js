@@ -459,7 +459,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/open-attachment', {
         id: 'open',
-        requires: 'some',
+        requires: 'one',
         multiple: function (list) {
             _(list).each(function (data) {
                 var url = api.getUrl(data, 'view');

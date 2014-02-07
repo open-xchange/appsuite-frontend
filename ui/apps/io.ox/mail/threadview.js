@@ -83,55 +83,64 @@ define('io.ox/mail/threadview',
         }
     });
 
+    var INDEX_header = 0;
+
     ext.point('io.ox/mail/detail-view/header').extend({
         id: 'picture',
-        index: 100,
+        index: INDEX_header += 100,
         draw: extensions.picture
     });
 
     ext.point('io.ox/mail/detail-view/header').extend({
         id: 'date',
-        index: 200,
+        index: INDEX_header += 100,
         draw: extensions.date
     });
 
     ext.point('io.ox/mail/detail-view/header').extend({
         id: 'from',
-        index: 300,
+        index: INDEX_header += 100,
         draw: extensions.from
     });
 
     ext.point('io.ox/mail/detail-view/header').extend({
-        id: 'recipients',
-        index: 400,
-        draw: extensions.recipients
+        id: 'paper-clip',
+        index: INDEX_header += 100,
+        draw: extensions.paperClip
     });
 
     ext.point('io.ox/mail/detail-view/header').extend({
-        id: 'attachments',
-        index: 500,
-        draw: function () {
-            this.append($('<div class="attachment-list">').hide());
-        }
+        id: 'recipients',
+        index: INDEX_header += 100,
+        draw: extensions.recipients
     });
 
     ext.point('io.ox/mail/detail-view').extend({
         id: 'body',
         index: 300,
         draw: function () {
-            this.append($('<section class="body user-select-text" data-loaded="false">'));
+            this.append(
+                $('<section class="attachments">'),
+                $('<section class="body user-select-text">')
+            );
         }
     });
 
-    ext.point('io.ox/mail/detail-view/body').extend({
-        id: 'attachments',
+    ext.point('io.ox/mail/detail-view/attachments').extend({
+        id: 'attachment-list',
         index: 100,
-        draw: extensions.attachments
+        draw: extensions.attachmentList
+    });
+
+    ext.point('io.ox/mail/detail-view/attachments').extend({
+        id: 'attachment-preview',
+        index: 200,
+        draw: extensions.attachmentPreview
     });
 
     ext.point('io.ox/mail/detail-view/body').extend({
         id: 'content',
-        index: 200,
+        index: 1000,
         draw: function (baton) {
             var data = detail.getContent(baton.data);
             this.idle().append(data.content);
@@ -215,21 +224,23 @@ define('io.ox/mail/threadview',
 
         toggleMail: function (cid, state) {
 
-            var $li = this.$ul.children('[data-cid="' + cid + '"]'),
-                $body = $li.find('.body').first();
+            var $li = this.$ul.children('[data-cid="' + cid + '"]');
 
-            if (state === undefined) $li.toggleClass('body-visible'); else $li.toggleClass('body-visible', state);
+            if (state === undefined) $li.toggleClass('expanded'); else $li.toggleClass('expanded', state);
 
-            if ($body.attr('data-loaded') === 'false' && $li.hasClass('body-visible')) {
-                $body.attr('data-loaded', true);
+            if ($li.attr('data-loaded') === 'false' && $li.hasClass('expanded')) {
+                $li.attr('data-loaded', true);
+                var body = $li.find('section.body').busy(),
+                    attachments = $li.find('section.attachments');
+                // load detailed email data
                 api.get(_.cid(cid)).then(
                     function success(data) {
-                        var baton = ext.Baton({ data: data });
-                        ext.point('io.ox/mail/detail-view/body').invoke('draw', $body, baton);
+                        var baton = ext.Baton({ data: data, attachments: util.getAttachments(data) });
+                        ext.point('io.ox/mail/detail-view/attachments').invoke('draw', attachments, baton);
+                        ext.point('io.ox/mail/detail-view/body').invoke('draw', body.idle(), baton);
                     },
                     function fail() {
-                        $body.attr('data-loaded', false);
-                        $li.removeClass('body-visible');
+                        $li.attr('data-loaded', false).removeClass('expanded');
                     }
                 );
             }
@@ -405,7 +416,7 @@ define('io.ox/mail/threadview',
             var li = this.scaffold.clone(),
                 baton = new ext.Baton({ data: model.toJSON(), app: this.app });
             // add cid and full data
-            li.attr('data-cid', model.cid);
+            li.attr({ 'data-cid': model.cid, 'data-loaded': 'false' });
             ext.point('io.ox/mail/detail-view').invoke('draw', li, baton);
             return li;
         },
