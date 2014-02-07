@@ -18,8 +18,9 @@ define.async('io.ox/mail/accounts/view-form',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
      'gettext!io.ox/settings/settings',
-     'io.ox/core/extensions'
-    ], function (View, notifications, accountAPI, settings, gt, ext) {
+     'io.ox/core/extensions',
+     'io.ox/backbone/mini-views'
+    ], function (View, notifications, accountAPI, settings, gt, ext, mini) {
 
     'use strict';
 
@@ -64,36 +65,6 @@ define.async('io.ox/mail/accounts/view-form',
             return accountAPI.validate(data);
         },
 
-        buildInputText = function (name) {
-            var input = $('<input type="text">').attr({ 'id': name, 'tabindex': 1, 'data-property': name })
-            .on('change', function () {
-                model.set(name, input.val());
-            });
-            input.val(model.get(name));
-            return input;
-        },
-
-        buildCheckbox = function (name) {
-            var checkbox = $('<input>').attr({  'data-property': name, 'type': 'checkbox', 'tabindex': 1 })
-            .on('change', function () {
-                model.set(name, checkbox.prop('checked'));
-            }).addClass('input-xlarge');
-            checkbox.prop('checked', model.get(name));
-            return checkbox;
-        },
-
-        buildOptionsSelect = function (list, name, id) {
-            var select = $('<select>').attr({ 'id': id, 'tabindex': 1 }).on('change', function () {
-                model.set(name, this.value);
-            });
-            _.map(list, function (option) {
-                var o = $('<option>').attr({ value: option.value}).text(option.label);
-                return select.append(o);
-            });
-            select.val(model.get(name));
-            return select;
-        },
-
         defaultDisplayName = '',
 
         AccountDetailView = Backbone.View.extend({
@@ -113,7 +84,7 @@ define.async('io.ox/mail/accounts/view-form',
 
                 oldModel = _.copy(this.model.attributes, true);
                 // forceUpdate needed otherwise model is always valid even if inputfields contain wrong values
-                Backbone.Validation.bind(this, { selector: 'data-property', forceUpdate: true });
+                Backbone.Validation.bind(this, { selector: 'name', forceUpdate: true });
             },
             render: function () {
                 var self = this;                    // hideAccountDetails = self.model.isHidden();
@@ -177,7 +148,7 @@ define.async('io.ox/mail/accounts/view-form',
                         }
                     });
                 } else {//primary account does not allow editing besides display name and unified mail
-                    self.$el.find('input, select').not('#personal, [data-property="unified_inbox_enabled"]').prop('disabled', true);
+                    self.$el.find('input, select').not('#personal, [name="unified_inbox_enabled"]').prop('disabled', true);
                     self.$el.find('button.btn.folderselect').hide();
                 }
                 //disable folderselect if no account is defined
@@ -285,7 +256,7 @@ define.async('io.ox/mail/accounts/view-form',
                 self.dialog.getPopup().hide();
 
                 if (self.model.get('id') !== 0) {
-                    var property = $(e.currentTarget).prev().attr('data-property'),
+                    var property = $(e.currentTarget).prev().attr('name'),
                         id = self.model.get(property);
                     require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
@@ -312,7 +283,7 @@ define.async('io.ox/mail/accounts/view-form',
                             if (action === 'select') {
                                 var target = _(tree.selection.get()).first();
                                 self.model.set(property, target, {validate: true});
-                                self.$el.find('input[data-property="' + property + '"]').val(target);
+                                self.$el.find('input[name="' + property + '"]').val(target);
                             }
                             tree.destroy().done(function () {
                                 tree = dialog = null;
@@ -337,7 +308,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for': 'mail_protocol' }).addClass('control-label').text(gt('Server type')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('select').append(
-                                buildOptionsSelect(optionsServerType, 'mail_protocol', 'mail_protocol')
+                                new mini.SelectView({ list: optionsServerType, name: 'mail_protocol', model: model}).render().$el
                             )
                         )
                     ),
@@ -345,7 +316,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').addClass('control-label'),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('checkbox').text(gt('Use SSL connection')).append(
-                                buildCheckbox('mail_secure')
+                                new mini.CheckboxView({ name: 'mail_secure', model: model}).render().$el
                             )
                         )
                     ),
@@ -353,7 +324,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for': 'mail_server' }).addClass('control-label').text(gt('Server name')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('mail_server')
+                                new mini.InputView({ name: 'mail_server', model: model }).render().$el
                             )
                         )
                     ),
@@ -361,7 +332,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for': 'mail_port' }).addClass('control-label').text(gt('Server port')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('mail_port')
+                                new mini.InputView({ name: 'mail_port', model: model }).render().$el
                             )
                         )
                     ),
@@ -369,7 +340,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for': 'login' }).addClass('control-label').text(gt('Username')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('login')
+                                new mini.InputView({ name: 'login', model: model }).render().$el
                             )
                         )
                     ),
@@ -377,7 +348,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for': 'password' }).addClass('control-label').text(gt('Password')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('password')
+                                new mini.InputView({ name: 'password', model: model }).render().$el
                             )
                         )
                     ),
@@ -385,7 +356,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for': 'pop3_refresh_rate' }).text(gt('Refresh rate in minutes:')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('select').append(
-                                buildOptionsSelect(optionsRefreshRatePop, 'pop3_refresh_rate', 'pop3_refresh_rate')
+                                new mini.SelectView({ list: optionsRefreshRatePop, name: 'pop3_refresh_rate', model: model}).render().$el
                             )
                         )
                     ),
@@ -393,7 +364,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').addClass('control-label'),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('checkbox').text(gt('Remove copy from server after retrieving a message')).append(
-                                buildCheckbox('pop3_expunge_on_quit')
+                                new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model}).render().$el
                             )
                         )
                     ),
@@ -401,7 +372,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').addClass('control-label'),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('checkbox').text(gt('Deleting messages on local storage also deletes them on server')).append(
-                                buildCheckbox('pop3_delete_write_through')
+                                new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model}).render().$el
                             )
                         )
                     )
@@ -414,7 +385,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').addClass('control-label'),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('checkbox').text(gt('Use SSL connection')).append(
-                                buildCheckbox('transport_secure')
+                                new mini.CheckboxView({ name: 'transport_secure', model: model}).render().$el
                             )
                         )
                     ),
@@ -422,7 +393,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for':  'transport_server'}).addClass('control-label').text(gt('Server name')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('transport_server')
+                                new mini.InputView({ name: 'transport_server', model: model }).render().$el
                             )
                         )
                     ),
@@ -430,7 +401,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label').text(gt('Server port')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('transport_port')
+                                new mini.InputView({ name: 'transport_port', model: model }).render().$el
                             )
                         )
                     ),
@@ -438,7 +409,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').addClass('control-label'),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('checkbox').text(gt('Use username and password')).append(
-                                buildCheckbox('mail-common-selectfirst')
+                                new mini.CheckboxView({ name: 'mail-common-selectfirst', model: model }).render().$el
                             )
                         )
                     ),
@@ -446,7 +417,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for':  'transport_login'}).addClass('control-label').text(gt('Username')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('transport_login')
+                                new mini.InputView({ name: 'transport_login', model: model }).render().$el
                             )
                         )
                     ),
@@ -454,7 +425,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for':  'transport_password'}).addClass('control-label').text(gt('Password')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('transport_password')
+                                new mini.InputView({ name: 'transport_password', model: model }).render().$el
                             )
                         )
                     )
@@ -465,28 +436,28 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for':  'sent_fullname'}).addClass('control-label').text(gt('Sent folder')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('sent_fullname').attr({ 'disabled': 'disabled' }),
+                                new mini.InputView({ name: 'sent_fullname', model: model }).render().$el.attr({ 'disabled': 'disabled' }),
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
                             )
                         ),
                         $('<label>').attr({ 'for':  'trash_fullname'}).addClass('control-label').text(gt('Trash folder')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('trash_fullname').attr({ 'disabled': 'disabled' }),
+                                new mini.InputView({ name: 'trash_fullname', model: model }).render().$el.attr({ 'disabled': 'disabled' }),
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
                             )
                         ),
                         $('<label>').attr({ 'for':  'drafts_fullname'}).addClass('control-label').text(gt('Drafts folder')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('drafts_fullname').attr({ 'disabled': 'disabled' }),
+                                new mini.InputView({ name: 'drafts_fullname', model: model }).render().$el.attr({ 'disabled': 'disabled' }),
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
                             )
                         ),
                         $('<label>').attr({ 'for':  'spam_fullname'}).addClass('control-label').text(gt('Spam folder')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('spam_fullname').attr({ 'disabled': 'disabled' }),
+                                new mini.InputView({ name: 'spam_fullname', model: model }).render().$el.attr({ 'disabled': 'disabled' }),
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
                             )
                         )
@@ -504,7 +475,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for': 'name'}).addClass('control-label').text(gt('Account name')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('name')
+                                new mini.InputView({ name: 'name', model: model }).render().$el
                             )
                         )
                     ),
@@ -512,7 +483,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for': 'personal'}).addClass('control-label').text(gt('Your name')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('personal')
+                                new mini.InputView({ name: 'personal', model: model }).render().$el
                             )
                         )
                     ),
@@ -520,19 +491,18 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<label>').attr({ 'for': 'primary_address'}).addClass('control-label').text(gt('Email address')),
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('text').append(
-                                buildInputText('primary_address')
+                                new mini.InputView({ name: 'primary_address', model: model }).render().$el
                             )
                         )
                     ),
                     $('<div>').addClass('control-group').append(
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('checkbox').text(gt('Use unified mail for this account')).append(
-                                buildCheckbox('unified_inbox_enabled')
+                                new mini.CheckboxView({ name: 'unified_inbox_enabled', model: model }).render().$el
                             )
                         )
                     ),
                     formBlocks
-
                 )
 
             );

@@ -52,29 +52,29 @@
 
         it('should draw the form', function () {
             $popup.find('.io-ox-account-settings').length.should.be.equal(1);
-            $popup.find('input[data-property="name"]').length.should.be.equal(1);
-            $popup.find('input[data-property="personal"]').length.should.be.equal(1);
-            $popup.find('input[data-property="primary_address"]').length.should.be.equal(1);
-            $popup.find('input[data-property="unified_inbox_enabled"]').length.should.be.equal(1);
+            $popup.find('input[name="name"]').length.should.be.equal(1);
+            $popup.find('input[name="personal"]').length.should.be.equal(1);
+            $popup.find('input[name="primary_address"]').length.should.be.equal(1);
+            $popup.find('input[name="unified_inbox_enabled"]').length.should.be.equal(1);
 
             $popup.find('select[id="mail_protocol"]').length.should.be.equal(1);
-            $popup.find('input[data-property="mail_secure"]').length.should.be.equal(1);
-            $popup.find('input[data-property="mail_server"]').length.should.be.equal(1);
-            $popup.find('input[data-property="mail_port"]').length.should.be.equal(1);
-            $popup.find('input[data-property="login"]').length.should.be.equal(1);
-            $popup.find('input[data-property="password"]').length.should.be.equal(1);
+            $popup.find('input[name="mail_secure"]').length.should.be.equal(1);
+            $popup.find('input[name="mail_server"]').length.should.be.equal(1);
+            $popup.find('input[name="mail_port"]').length.should.be.equal(1);
+            $popup.find('input[name="login"]').length.should.be.equal(1);
+            $popup.find('input[name="password"]').length.should.be.equal(1);
 
-            $popup.find('input[data-property="transport_secure"]').length.should.be.equal(1);
-            $popup.find('input[data-property="transport_server"]').length.should.be.equal(1);
-            $popup.find('input[data-property="transport_port"]').length.should.be.equal(1);
-            $popup.find('input[data-property="mail-common-selectfirst"]').length.should.be.equal(1);
-            $popup.find('input[data-property="transport_login"]').length.should.be.equal(1);
-            $popup.find('input[data-property="transport_password"]').length.should.be.equal(1);
+            $popup.find('input[name="transport_secure"]').length.should.be.equal(1);
+            $popup.find('input[name="transport_server"]').length.should.be.equal(1);
+            $popup.find('input[name="transport_port"]').length.should.be.equal(1);
+            $popup.find('input[name="mail-common-selectfirst"]').length.should.be.equal(1);
+            $popup.find('input[name="transport_login"]').length.should.be.equal(1);
+            $popup.find('input[name="transport_password"]').length.should.be.equal(1);
 
-            $popup.find('input[data-property="sent_fullname"]').length.should.be.equal(1);
-            $popup.find('input[data-property="trash_fullname"]').length.should.be.equal(1);
-            $popup.find('input[data-property="drafts_fullname"]').length.should.be.equal(1);
-            $popup.find('input[data-property="spam_fullname"]').length.should.be.equal(1);
+            $popup.find('input[name="sent_fullname"]').length.should.be.equal(1);
+            $popup.find('input[name="trash_fullname"]').length.should.be.equal(1);
+            $popup.find('input[name="drafts_fullname"]').length.should.be.equal(1);
+            $popup.find('input[name="spam_fullname"]').length.should.be.equal(1);
 
         });
 
