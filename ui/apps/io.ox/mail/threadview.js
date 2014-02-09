@@ -168,16 +168,20 @@ define('io.ox/mail/threadview',
                     }
                 );
             }
+            return $li;
         },
 
         showMail: function (cid) {
-            this.toggleMail(cid, true);
+            return this.toggleMail(cid, true);
         },
 
         autoSelectMail: function () {
             for (var i = this.collection.length - 1, model; model = this.collection.at(i); i--) {
                 // most recent or first unseen?
-                if (i === 0 || util.isUnseen(model.toJSON())) { this.showMail(model.cid); break; }
+                if (i === 0 || util.isUnseen(model.toJSON())) {
+                    this.showMail(model.cid);
+                    break;
+                }
             }
         },
 

@@ -20,11 +20,23 @@ define('io.ox/mail/common-extensions',
      'io.ox/core/api/account',
      'io.ox/core/date',
      'io.ox/contacts/api',
+     'io.ox/core/api/collection-pool',
      'gettext!io.ox/mail',
      'apps/io.ox/core/tk/jquery.lazyload.js'
-    ], function (ext, links, actions, util, api, account, date, contactsAPI, gt) {
+    ], function (ext, links, actions, util, api, account, date, contactsAPI, Pool, gt) {
 
     'use strict';
+
+    function partiallyUnseen(data) {
+        // look for a thread collection
+        var cid = _.cid(data), thread = Pool.getThread(cid);
+        // no thread? then just check current object
+        if (thread.length <= 1) return util.isUnseen(data);
+        // otherwise check collection
+        return thread.reduce(function (memo, obj) {
+            return memo || util.isUnseen(obj);
+        }, false);
+    }
 
     var extensions = {
 
@@ -62,7 +74,7 @@ define('io.ox/mail/common-extensions',
 
         unreadClass: function (baton) {
             var data = baton.data,
-                unread = util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data));
+                unread = partiallyUnseen(data);
             this.closest('.list-item').toggleClass('unread', unread);
         },
 
@@ -110,8 +122,7 @@ define('io.ox/mail/common-extensions',
         },
 
         unread: function (baton) {
-            var data = baton.data,
-                isUnread = util.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data));
+            var isUnread = partiallyUnseen(baton.data);
             if (isUnread) this.append('<i class="icon-unread icon-circle" aria-hidden="true">');
         },
 

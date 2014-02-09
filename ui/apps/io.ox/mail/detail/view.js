@@ -23,12 +23,6 @@ define('io.ox/mail/detail/view',
     'use strict';
 
     ext.point('io.ox/mail/detail-view').extend({
-        id: 'unread-class',
-        index: 100,
-        draw: extensions.unreadClass
-    });
-
-    ext.point('io.ox/mail/detail-view').extend({
         id: 'header',
         index: 200,
         draw: function (baton) {
@@ -134,6 +128,7 @@ define('io.ox/mail/detail/view',
 
         render: function () {
             this.$el.attr({ 'data-cid': this.cid, 'data-loaded': 'false' });
+            this.$el.data({ view: this, model: this.model });
             ext.point('io.ox/mail/detail-view').invoke(
                 'draw', this.$el, ext.Baton({ data: this.model.toJSON(), model: this.model, view: this })
             );

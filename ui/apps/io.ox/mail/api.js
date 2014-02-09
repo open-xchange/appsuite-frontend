@@ -821,6 +821,9 @@ define('io.ox/mail/api',
                 folder_id: obj.folder_id,
                 flags: obj.flags
             });
+            if (obj.thread_cid) {
+                pool.propagate('change', _.extend({ timestamp: _.now() }, _.cid(obj.thread_cid)));
+            }
             api.trigger('update:' + _.ecid(obj), obj);
         });
 
@@ -855,11 +858,15 @@ define('io.ox/mail/api',
         _(list).each(function (obj) {
             tracker.setSeen(obj, { silent: true });
             obj.flags = obj.flags | 32;
+
             pool.propagate('change', {
                 id: obj.id,
                 folder_id: obj.folder_id,
                 flags: obj.flags
             });
+            if (obj.thread_cid) {
+                pool.propagate('change', _.extend({ timestamp: _.now() }, _.cid(obj.thread_cid)));
+            }
             api.trigger('update:' + _.ecid(obj), obj);
         });
 

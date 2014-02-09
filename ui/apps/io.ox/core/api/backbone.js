@@ -21,6 +21,9 @@ define('io.ox/core/api/backbone', [], function () {
         constructor: function () {
             Backbone.Model.apply(this, arguments);
             this.cid = _.cid(this.attributes);
+        },
+        toString: function () {
+            return 'Model(' + this.cid + ')'; // just helps debugging
         }
     });
 
