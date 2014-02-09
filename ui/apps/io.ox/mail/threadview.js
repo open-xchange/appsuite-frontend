@@ -42,7 +42,7 @@ define('io.ox/mail/threadview',
                 ),
                 $('<div class="thread-view-list abs">').hide().append(
                     $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view mail">')
+                    this.$ul = $('<ul class="thread-view list-view mail f6-target" role="listbox">')
                 )
             );
         }
@@ -78,8 +78,6 @@ define('io.ox/mail/threadview',
         className: 'thread-view-control abs',
 
         events: {
-            //'click .list-item': 'onClick',
-            'click .detail-view-header': 'onToggle',
             'click .button a.back': 'onBack',
             'click .button a.show-overview': 'onOverview',
             'click .thread-view-navigation .previous-mail': 'onPrevious',
@@ -147,32 +145,13 @@ define('io.ox/mail/threadview',
         },
 
         toggleMail: function (cid, state) {
-
-            var $li = this.$ul.children('[data-cid="' + cid + '"]');
-
-            if (state === undefined) $li.toggleClass('expanded'); else $li.toggleClass('expanded', state);
-
-            if ($li.attr('data-loaded') === 'false' && $li.hasClass('expanded')) {
-                $li.attr('data-loaded', true);
-                var body = $li.find('section.body').busy(),
-                    attachments = $li.find('section.attachments');
-                // load detailed email data
-                api.get(_.cid(cid)).then(
-                    function success(data) {
-                        var baton = ext.Baton({ data: data, attachments: util.getAttachments(data) });
-                        ext.point('io.ox/mail/detail-view/attachments').invoke('draw', attachments, baton);
-                        ext.point('io.ox/mail/detail-view/body').invoke('draw', body.idle(), baton);
-                    },
-                    function fail() {
-                        $li.attr('data-loaded', false).removeClass('expanded');
-                    }
-                );
-            }
-            return $li;
+            var $li = this.$ul.children('[data-cid="' + cid + '"]'),
+                view = $li.data('view');
+            if (view) view.toggle(state);
         },
 
         showMail: function (cid) {
-            return this.toggleMail(cid, true);
+            this.toggleMail(cid, true);
         },
 
         autoSelectMail: function () {
@@ -259,15 +238,6 @@ define('io.ox/mail/threadview',
             // var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
             //     data = model.toJSON();
             // // DRAW!
-        },
-
-        onToggle: function (e) {
-
-            // ignore click on/inside <a> tags
-            if ($(e.target).closest('a').length) return;
-
-            var cid = $(e.currentTarget).closest('li').data('cid');
-            this.toggleMail(cid);
         },
 
         onBack: function (e) {

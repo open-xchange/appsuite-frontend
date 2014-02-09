@@ -17,10 +17,19 @@ define('io.ox/mail/detail/view',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/api/collection-pool',
-     'io.ox/mail/detail/content'
-    ], function (extensions, ext, api, util, Pool, content) {
+     'io.ox/mail/detail/content',
+     'gettext!io.ox/mail'
+    ], function (extensions, ext, api, util, Pool, content, gt) {
 
     'use strict';
+
+    ext.point('io.ox/mail/detail-view').extend({
+        id: 'focus-indicator',
+        index: 100,
+        draw: function () {
+            this.append('<div class="focus-indicator">');
+        }
+    });
 
     ext.point('io.ox/mail/detail-view').extend({
         id: 'header',
@@ -115,9 +124,53 @@ define('io.ox/mail/detail/view',
         tagName: 'li',
         className: 'list-item mail-detail',
 
+        events: {
+            'keydown': 'onToggle',
+            'click .detail-view-header': 'onToggle'
+        },
+
         onChangeFlags: function () {
             // update unread state
             this.$el.toggleClass('unread', util.isUnseen(this.model.get('flags')));
+        },
+
+        onToggle: function (e) {
+
+            if (e.type === 'keydown' && e.which !== 13) return;
+
+            // ignore click on/inside <a> tags
+            if ($(e.target).closest('a').length) return;
+
+            var cid = $(e.currentTarget).closest('li').data('cid');
+            this.toggle(cid);
+        },
+
+        toggle: function (state) {
+
+            var $li = this.$el, body, attachments;
+
+            if (state === undefined) $li.toggleClass('expanded'); else $li.toggleClass('expanded', state);
+
+            if ($li.attr('data-loaded') === 'false' && $li.hasClass('expanded')) {
+                $li.attr('data-loaded', true);
+                body = $li.find('section.body').busy();
+                attachments = $li.find('section.attachments');
+                // load detailed email data
+                api.get(_.cid(this.cid)).then(
+                    function success(data) {
+                        var baton = ext.Baton({ data: data, attachments: util.getAttachments(data) });
+                        ext.point('io.ox/mail/detail-view/attachments').invoke('draw', attachments, baton);
+                        ext.point('io.ox/mail/detail-view/body').invoke('draw', body.idle(), baton);
+                    },
+                    function fail() {
+                        $li.attr('data-loaded', false).removeClass('expanded');
+                    }
+                );
+            }
+        },
+
+        show: function () {
+            this.toggle(true);
         },
 
         initialize: function (options) {
@@ -127,11 +180,27 @@ define('io.ox/mail/detail/view',
         },
 
         render: function () {
-            this.$el.attr({ 'data-cid': this.cid, 'data-loaded': 'false' });
+
+            var data = this.model.toJSON(),
+                baton = ext.Baton({ data: data, model: this.model, view: this }),
+                subject = util.getSubject(data),
+                title = util.hasFrom(data) ?
+                    //#. %1$s: Mail sender
+                    //#. %2$s: Mail subject
+                    gt('Email from %1$s: %2$s', util.getDisplayName(data.from[0]), subject) : subject;
+
+            this.$el.attr({
+                'aria-label': title,
+                'data-cid': this.cid,
+                'data-loaded': 'false',
+                'role': 'listitem',
+                'tabindex': '1'
+            });
+
             this.$el.data({ view: this, model: this.model });
-            ext.point('io.ox/mail/detail-view').invoke(
-                'draw', this.$el, ext.Baton({ data: this.model.toJSON(), model: this.model, view: this })
-            );
+
+            ext.point('io.ox/mail/detail-view').invoke('draw', this.$el, baton);
+
             return this;
         }
     });

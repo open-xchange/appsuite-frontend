@@ -201,6 +201,7 @@
         width: 100%;
         min-height: 100px;
         cursor: default;
+        outline: 0;
         .box-sizing(border-box);
     }
     section.attachments {
@@ -881,14 +882,25 @@ textarea.inplace-editor {
     width: 100%;
 
     @picture-width: 40px;
-    @header-padding: 20px;
+    @header-padding: 19px;
     @picture-padding: @picture-width + @header-padding;
 
-    // .io-ox-inline-links {
-    //     position: relative;
-    //     left: -@picture-padding + @header-padding; // move left to compensate padding-left: 100px;
-    //     margin: 0 -@picture-padding + @header-padding 20px 0; // add missing width
-    // }
+    .focus-indicator {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 0;
+        width: 0;
+        display: none;
+        border: 0px solid #FFF;
+        border-width: 14px 14px 0 0;
+        border-top-color: @linkColor;
+    }
+
+    &.list-item:focus {
+        outline: 0;
+        .focus-indicator { display: block; }
+    }
 
     &.io-ox-busy {
         min-height: 200px;
@@ -1122,7 +1134,7 @@ textarea.inplace-editor {
         font-weight: bold;
     }
 
-    header {
+    .detail-view-header {
         font-weight: 300;
         padding: 20px @header-padding;
         padding-left: @picture-padding + @unread-toggle-width;
