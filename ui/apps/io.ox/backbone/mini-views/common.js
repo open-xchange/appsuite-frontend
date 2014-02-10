@@ -96,7 +96,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
 
     var RadioView = AbstractView.extend({
         tagName: 'div',
-        className: 'controls',
+        className: 'control-group',
         events: { 'change': 'onChange' },
         onChange: function () {
             this.model.set(this.name, this.$el.find('[name="' + this.name + '"]:checked').val());

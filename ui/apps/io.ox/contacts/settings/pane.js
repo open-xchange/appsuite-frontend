@@ -15,18 +15,41 @@ define('io.ox/contacts/settings/pane',
     ['settings!io.ox/contacts',
      'io.ox/contacts/settings/model',
      'io.ox/core/extensions',
-     'gettext!io.ox/contacts'
-    ], function (settings, contactsSettingsModel, ext, gt) {
+     'gettext!io.ox/contacts',
+     'io.ox/backbone/mini-views',
+     'io.ox/core/notifications',
+    ], function (settings, contactsSettingsModel, ext, gt, mini, notifications) {
 
     'use strict';
 
-    var POINT = 'io.ox/contacts/settings/detail', pane;
+    var POINT = 'io.ox/contacts/settings/detail', pane,
+        contactsModel =  settings.createModel(contactsSettingsModel),
+        reloadMe = [];
+
+
+    contactsModel.on('change', function (e, path) {
+        contactsModel.saveAndYell().then(
+            function success() {
+                var showNotice = _(reloadMe).any(function (attr) {
+                    return attr === path;
+                });
+                if (showNotice) {
+                    notifications.yell(
+                        'success',
+                        gt('The setting has been saved and will become active when you enter the application the next time.')
+                    );
+                }
+            }
+        );
+    });
 
     ext.point(POINT).extend({
+        index: 100,
+        id: 'contactssettings',
         draw: function () {
-            var self = this;
+            var holder = $('<div>').css('max-width', '800px');
             pane = $('<div class="io-ox-contacts-settings">');
-            self.append(pane);
+            this.append(holder.append(pane));
             ext.point(POINT + '/pane').invoke('draw', pane);
         }
     });
@@ -45,28 +68,16 @@ define('io.ox/contacts/settings/pane',
         index: 200,
         id: 'displaynames',
         draw: function () {
-            var preferences = {
-                    'auto': gt('Language-specific default'),
-                    'firstname lastname': gt('First name Last name'),
-                    'lastname, firstname': gt('Last name, First name')
-                },
-                preference = settings.get('fullNameFormat', 'auto'),
-                buildInputRadio = function (list, selected) {
-                    return _.pairs(list).map(function (option) {
-                        var o = $('<input type="radio" name="fullNameFormat">').val(option[0]);
-                        if (selected === option[0]) o.prop('checked', true);
-                        return $('<label class="radio">').text(option[1]).append(o);
-                    });
-                };
+            var preferences = [
+                { label: gt('Language-specific default'), value: 'auto' },
+                { label: gt('First name Last name'), value: 'firstname lastname'},
+                { label: gt('Last name, First name'), value: 'lastname, firstname'}
 
+            ];
             this.append(
-                $('<div class="control-group">').append(
-                    $('<label for="displayformat" class="control-label">').text(gt('Display of names')),
-                    $('<div class="controls">').append(
-                        buildInputRadio(preferences, preference)
-                    ).on('click', 'input', function () {
-                        settings.set('fullNameFormat', this.value).save();
-                    })
+                $('<fieldset>').append(
+                    $('<legend>').text(gt('Display of names')),
+                    new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: contactsModel}).render().$el
                 )
             );
         }
