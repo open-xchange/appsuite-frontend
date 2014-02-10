@@ -39,7 +39,8 @@ define('io.ox/files/fluid/perspective',
         filesContainer, breadcrumb, inlineRight, inline, wrapper,
         scrollpane = $('<div class="files-scrollable-pane" role="section">'),
         topBar = $('<div class="window-content-top">'), // used on desktop
-        topActions = $('<div class="inline-actions-ms">').appendTo(topBar);
+        topActions = $('<div class="inline-actions-ms">').appendTo(topBar),
+        regexp = {};
 
     //init
     filesContainer = inlineRight = inline = wrapper = $('');
@@ -91,13 +92,33 @@ define('io.ox/files/fluid/perspective',
     }
 
     function previewMode(file) {
-        if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
+        var image = '(gif|png|jpe?g|bmp|tiff)',
+            audio = '(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)',
+            office = '(xls|xlb|xlt|ppt|pps|doc|dot|xlsx|xltx|pptx|ppsx|potx|docx|dotx|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|pdf|rtf)',
+            application = '(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf)',
+            text = '(rtf|plain)';
+
+        //check file extension or mimetype (when type is defined)
+        function is(list, type) {
+            var key = (type || '') + '.' + list;
+            if (regexp[key]) {
+                //use cached
+                return regexp[key].test(type ? file.file_mimetype : file.filename);
+            } else if (type) {
+                //e.g. /^image\/.*(gif|png|jpe?g|bmp|tiff).*$/i
+                return (regexp[key] = new RegExp('^' + type + '\\/.*' + list + '.*$', 'i')).test(file.file_mimetype);
+            } else {
+                //e.g. /^.*\.(gif|png|jpe?g|bmp|tiff)$/i
+                return (regexp[key] = new RegExp('^.*\\.' + list + '$', 'i')).test(file.filename);
+            }
+        }
+
+        //identify mode
+        if (is(image, 'image') || is(image)) {
             return 'thumbnail';
-        } else if ((/^audio\/(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)$/i).test(file.file_mimetype)) {
+        } else if (is(audio, 'audio') || is(audio)) {
             return 'cover';
-        } else if (Caps.has('document_preview') &&
-                (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i).test(file.file_mimetype) ||
-                (/^text\/.*(rtf|plain).*$/i).test(file.file_mimetype)) {
+        } else if (Caps.has('document_preview') && (is(application, 'application') || is(text, 'text') || is(office))) {
             return 'preview';
         }
         return false;
