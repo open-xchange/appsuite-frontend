@@ -408,6 +408,7 @@ $(window).load(function () {
         changeLanguage = function (id) {
             // if the user sets a language on the login page, it will be used for the rest of the session, too
             gettext.setLanguage(id).done(function () {
+                $('html').attr('lang', id.split('_')[0]);
                 gettext.enable();
                 // get all nodes
                 $('[data-i18n]').each(function () {
