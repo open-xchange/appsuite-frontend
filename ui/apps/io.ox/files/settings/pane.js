@@ -15,8 +15,9 @@ define('io.ox/files/settings/pane',
     ['settings!io.ox/files',
      'io.ox/files/settings/model',
      'io.ox/core/extensions',
-     'gettext!io.ox/files'
-    ], function (settings, filesSettingsModel, ext, gt) {
+     'gettext!io.ox/files',
+     'io.ox/backbone/mini-views'
+    ], function (settings, filesSettingsModel, ext, gt, mini) {
 
     'use strict';
 
@@ -59,21 +60,11 @@ define('io.ox/files/settings/pane',
             id: 'common',
             draw: function () {
 
-                var buildCheckbox = function (name) {
-                    var checkbox = $('<input type="checkbox">')
-                    .on('change', function () {
-                        model.set(name, checkbox.prop('checked'));
-                    }).addClass('input-xlarge');
-                    checkbox.prop('checked', model.get(name));
-                    return checkbox;
-
-                };
-
                 this.append(
                     $('<div>').addClass('control-group').append(
                         $('<div>').addClass('controls').append(
                             $('<label>').addClass('checkbox').text(gt('Show hidden files and folders')).append(
-                                buildCheckbox('showHidden')
+                                new mini.CheckboxView({ name: 'showHidden', model: model}).render().$el
                             )
                         )
                     )

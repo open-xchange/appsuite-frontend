@@ -33,13 +33,13 @@
             this.node.find('h1').text().should.be.equal(gt.pgettext('app', 'Tasks'));
 
             this.node.find('input[name="notifyNewModifiedDeleted"]').length.should.be.equal(1);
-            this.node.find('input[name="notifyNewModifiedDeleted"]').prev().text(gt('Email notification for New, Changed, Deleted?'));
+            this.node.find('input[name="notifyNewModifiedDeleted"]').parent().text().should.be.equal(gt('Email notification for New, Changed, Deleted?'));
 
             this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').length.should.be.equal(1);
-            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').prev().text(gt('Email notification for task creator?'));
+            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').parent().text().should.be.equal(gt('Email notification for task creator?'));
 
             this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').length.should.be.equal(1);
-            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').prev().text(gt('Email notification for task participant?'));
+            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').parent().text().should.be.equal(gt('Email notification for task participant?'));
 
         });
 

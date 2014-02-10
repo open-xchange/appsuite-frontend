@@ -39,16 +39,16 @@
             this.node.find('input[name="contactCollectOnMailTransport"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while sending'));
             
             this.node.find('input[name="contactCollectOnMailAccess"]').length.should.be.equal(1);
-            this.node.find('input[name="contactCollectOnMailAccess"]').parent().text(gt('Automatically collect contacts in the folder "Collected addresses" while reading'));
+            this.node.find('input[name="contactCollectOnMailAccess"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while reading'));
 
             this.node.find('input[name="useFixedWidthFont"]').length.should.be.equal(1);
-            this.node.find('input[name="useFixedWidthFont"]').parent().text(gt('Use fixed-width font for text mails'));
+            this.node.find('input[name="useFixedWidthFont"]').parent().text().should.be.equal(gt('Use fixed-width font for text mails'));
 
             this.node.find('input[name="appendVcard"]').length.should.be.equal(1);
-            this.node.find('input[name="appendVcard"]').parent().text(gt('Append vCard'));
+            this.node.find('input[name="appendVcard"]').parent().text().should.be.equal(gt('Append vCard'));
             
             this.node.find('input[name="appendMailTextOnReply"]').length.should.be.equal(1);
-            this.node.find('input[name="appendMailTextOnReply"]').parent().text(gt('Insert the original email text to a reply'));
+            this.node.find('input[name="appendMailTextOnReply"]').parent().text().should.be.equal(gt('Insert the original email text to a reply'));
             
             // this.node.find('input[name="threadView"]').length.should.be.equal(3); // depends on caps.contactCollect
 
@@ -57,9 +57,9 @@
             this.node.find('input[name="forwardMessageAs"]').last().parent().text().should.be.equal(gt('Attachment'));
 
             this.node.find('input[name="messageFormat"]').length.should.be.equal(3);
-            this.node.find('input[name="messageFormat"]:eq(1)').parent().text(gt('HTML'));
-            this.node.find('input[name="messageFormat"]:eq(2)').parent().text(gt('Plain text'));
-            this.node.find('input[name="messageFormat"]:eq(3)').parent().text(gt('HTML and plain text'));
+            this.node.find('input[name="messageFormat"]:eq(0)').parent().text().should.be.equal(gt('HTML'));
+            this.node.find('input[name="messageFormat"]:eq(1)').parent().text().should.be.equal(gt('Plain text'));
+            this.node.find('input[name="messageFormat"]:eq(2)').parent().text().should.be.equal(gt('HTML and plain text'));
 
             this.node.find('input[type="text"]').length.should.be.equal(1);
             this.node.find('input[type="text"]').prev().text().should.be.equal(gt('Line wrap when sending text mails after '));
@@ -71,17 +71,17 @@
             this.node.find('select[id="autoSaveDraftsAfter"]').children().length.should.be.equal(5);
 
             this.node.find('input[name="allowHtmlMessages"]').length.should.be.equal(1);
-            this.node.find('input[name="allowHtmlMessages"]').parent().text(gt('Allow html formatted emails'));
+            this.node.find('input[name="allowHtmlMessages"]').parent().text().should.be.equal(gt('Allow html formatted emails'));
 
             this.node.find('input[name="allowHtmlImages"]').length.should.be.equal(1);
-            this.node.find('input[name="allowHtmlImages"]').parent().text(gt('Allow pre-loading of externally linked images'));
+            this.node.find('input[name="allowHtmlImages"]').parent().text().should.be.equal(gt('Allow pre-loading of externally linked images'));
 
             // emoticons depends on capabilities.has('emoji')
             this.node.find('input[name="isColorQuoted"]').length.should.be.equal(1);
-            this.node.find('input[name="isColorQuoted"]').parent().text(gt('Color quoted lines'));
+            this.node.find('input[name="isColorQuoted"]').parent().text().should.be.equal(gt('Color quoted lines'));
 
             this.node.find('input[name="sendDispositionNotification"]').length.should.be.equal(1);
-            this.node.find('input[name="sendDispositionNotification"]').parent().text(gt('Ask for delivery receipt'));
+            this.node.find('input[name="sendDispositionNotification"]').parent().text().should.be.equal(gt('Ask for delivery receipt'));
 
         });
 
