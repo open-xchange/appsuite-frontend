@@ -96,17 +96,27 @@ define('io.ox/core/commons',
             return function (id, node, selection, api, grid) {
                 var buttons = $('.window-toolbar .toolbar-button'),
                     toolbar = $('.window-toolbar'),
-                    container = $('<div id="multi-select-toolbar">');
-                if (selection.length > 0) {
-
-                    buttons.hide();
-                    $('#multi-select-toolbar').remove();
-                    toolbar.append(container.append(draw(id, selection, grid)));
+                    toolbarID = 'multi-select-toolbar',
+                    container;
+                if ($('#' + toolbarID).length > 0) {
+                    // reuse old toolbar
+                    container = $('#' + toolbarID);
                 } else {
-                    // selection empty
-                    $('#multi-select-toolbar').remove();
-                    buttons.show();
+                    // or creaet a new one
+                    container = $('<div>', {id: toolbarID});
                 }
+                _.defer(function () {
+                    if (selection.length > 0) {
+                        // update selection in toolbar
+                        buttons.hide();
+                        $('#' + toolbarID).remove();
+                        toolbar.append(container.append(draw(id, selection, grid)));
+                    } else {
+                        // selection empty
+                        $('#' + toolbarID).remove();
+                        buttons.show();
+                    }
+                }, 300);
             };
         }()),
 
@@ -140,10 +150,13 @@ define('io.ox/core/commons',
                                 )
                             )
                         );
-                        if (_.device('small')) {//don't stay in empty detail view
+                        if (_.device('small')) {
+                            //don't stay in empty detail view
                             var vsplit = node.closest('.vsplit');
-                            if (!vsplit.hasClass('vsplit-reverse')) {//only click if in detail view to prevent infinite loop
-                                vsplit.find('.rightside-navbar a').trigger('click');//trigger back button
+                            //only click if in detail view to prevent infinite loop
+                            if (!vsplit.hasClass('vsplit-reverse')) {
+                                //trigger back button
+                                vsplit.find('.rightside-navbar a>i').last().trigger('click');
                             }
                         }
                     }
@@ -186,9 +199,17 @@ define('io.ox/core/commons',
                 grid.selection.removeFromIndex(ids);
 
                 var list = grid.selection.get(), index;
-                if (list.length === 1 && !_.device('small')) {//don't jump to next item on mobile devices (jump back to grid view to be consistent)
-                    index = grid.selection.getIndex(list[0]);
-                    grid.selection.clear(true).selectIndex(index + 1);
+                if (list.length > 0) {
+                    if (_.device('small')) {
+                        //preparation to return to vgrid
+                        grid.selection.clear(true);
+                    } else {
+                        index = grid.selection.getIndex(list[0]);
+                        grid.selection.clear(true).selectIndex(index + 1);
+                        if (grid.getIds().length === list.length) {
+                            grid.selection.trigger('change', []);
+                        }
+                    }
                 }
             });
         },
