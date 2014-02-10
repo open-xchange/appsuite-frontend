@@ -32,35 +32,35 @@
             this.node.find('h1').length.should.be.equal(1);
             this.node.find('h1').text().should.be.equal(gt.pgettext('app', 'Calendar'));
 
-            this.node.find('select[id="interval_in_minutes"]').length.should.be.equal(1);
-            this.node.find('select[id="working_time_start"]').length.should.be.equal(1);
-            this.node.find('select[id="working_time_end"]').length.should.be.equal(1);
+            this.node.find('select[id="interval"]').length.should.be.equal(1);
+            this.node.find('select[id="interval"]').children().length.should.be.equal(6);
 
-            this.node.find('input[name="showDeclinedAppointments"]').length.should.be.equal(2),
-            this.node.find('input[name="showDeclinedAppointments"]').first().parent().text().should.be.equal(gt('Yes'));
-            this.node.find('input[name="showDeclinedAppointments"]').last().parent().text().should.be.equal(gt('No'));
+            this.node.find('select[id="startTime"]').length.should.be.equal(1);
+            this.node.find('select[id="startTime"]').children().length.should.be.equal(24);
 
-            this.node.find('select[id="time_for_reminder"]').length.should.be.equal(1);
+            this.node.find('select[id="endTime"]').length.should.be.equal(1);
+            this.node.find('select[id="endTime"]').children().length.should.be.equal(24);
 
-            this.node.find('input[name="markFulltimeAppointmentsAsFree"]').length.should.be.equal(2),
-            this.node.find('input[name="markFulltimeAppointmentsAsFree"]').first().parent().text().should.be.equal(gt('Yes'));
-            this.node.find('input[name="markFulltimeAppointmentsAsFree"]').last().parent().text().should.be.equal(gt('No'));
+            this.node.find('input[name="showDeclinedAppointments"]').length.should.be.equal(1);
+            this.node.find('input[name="showDeclinedAppointments"]').prev().text(gt('Show declined appointments'));
 
-            this.node.find('input[name="notifyNewModifiedDeleted"]').length.should.be.equal(2),
-            this.node.find('input[name="notifyNewModifiedDeleted"]').first().parent().text().should.be.equal(gt('Yes'));
-            this.node.find('input[name="notifyNewModifiedDeleted"]').last().parent().text().should.be.equal(gt('No'));
-            
-            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').length.should.be.equal(2),
-            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').first().parent().text().should.be.equal(gt('Yes'));
-            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').last().parent().text().should.be.equal(gt('No'));
+            this.node.find('select[id="defaultReminder"]').length.should.be.equal(1);
+            this.node.find('select[id="defaultReminder"]').children().length.should.be.equal(21);
 
-            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').length.should.be.equal(2),
-            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').first().parent().text().should.be.equal(gt('Yes'));
-            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').last().parent().text().should.be.equal(gt('No'));
+            this.node.find('input[name="markFulltimeAppointmentsAsFree"]').length.should.be.equal(1);
+            this.node.find('input[name="markFulltimeAppointmentsAsFree"]').prev().text(gt('Mark all day appointments as free'));
 
-            this.node.find('input[name="deleteInvitationMailAfterAction"]').length.should.be.equal(2),
-            this.node.find('input[name="deleteInvitationMailAfterAction"]').first().parent().text().should.be.equal(gt('Yes'));
-            this.node.find('input[name="deleteInvitationMailAfterAction"]').last().parent().text().should.be.equal(gt('No'));
+            this.node.find('input[name="notifyNewModifiedDeleted"]').length.should.be.equal(1);
+            this.node.find('input[name="notifyNewModifiedDeleted"]').prev().text(gt('Email notification for New, Changed, Deleted?'));
+
+            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').length.should.be.equal(1);
+            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').prev().text(gt('Email notification for appointment creator?'));
+
+            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').length.should.be.equal(1);
+            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').prev().text(gt('Email notification for appointment participant?'));
+
+            this.node.find('input[name="deleteInvitationMailAfterAction"]').length.should.be.equal(1);
+            this.node.find('input[name="deleteInvitationMailAfterAction"]').prev().text(gt('Automatically delete a notification mail after it has been accepted or declined?'));
             
         });
 
