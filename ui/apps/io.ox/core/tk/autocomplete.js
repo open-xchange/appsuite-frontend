@@ -142,7 +142,7 @@ define('io.ox/core/tk/autocomplete',
 
                         var parent = self.closest(o.parentSelector).offsetParent(),
                             parentOffset = parent.offset(),
-                            myTop = off.top + h - parentOffset.top, // + parent.scrollTop(),
+                            myTop = off.top + h - parentOffset.top + parent.scrollTop(),
                             myLeft = off.left - parentOffset.left;
 
                         popup.removeClass('top-placement bottom-placement');
