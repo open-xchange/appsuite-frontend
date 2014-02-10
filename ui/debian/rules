@@ -10,41 +10,46 @@ endif
 
 BACKEND := debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite
 FRONTEND := debian/open-xchange-appsuite/var/www/appsuite
-SETTINGS := debian/open-xchange-guidedtours/opt/open-xchange/etc
 
 override_dh_auto_install:
-	sh bin/build-appsuite skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
-	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
-	    helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
-	    helpDriveDir=debian/open-xchange-appsuite-help-drive-@lang@/var/www/appsuite \
-	    $(FLAGS) --trace
+	mkdir -p $(FRONTEND)
+	mkdir -p $(BACKEND)
+	cp -r apps $(FRONTEND)
+	cp -r manifests $(FRONTEND)
+	cp *.* $(FRONTEND)
+	cp .htaccess $(FRONTEND)
+	cp -r help $(FRONTEND)
+	cp -r help-drive $(FRONTEND)
 	for i in i18n/*.properties; do \
 	    j=$${i#i18n/}; pkgname=$${j%.properties}; \
 	    mkdir -p debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
 	    cp $$i debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
 	done
+	for i in help/l10n/*; do \
+	    lang=$${i#help/l10n/}; \
+	    pkgname=open-xchange-appsuite-help-`echo $$lang | awk '{print tolower($$0)}' | sed "s/_/-/"`; \
+	    mkdir -p "debian/$$pkgname/var/www/appsuite/help/"; \
+	    mv "$(FRONTEND)/help/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help/"; \
+	done
+	for i in help-drive/l10n/*; do \
+	    lang=$${i#help-drive/l10n/}; \
+	    pkgname=open-xchange-appsuite-help-drive-`echo $$lang | awk '{print tolower($$0)}' | sed "s/_/-/"`; \
+	    mkdir -p "debian/$$pkgname/var/www/appsuite/help-drive/"; \
+	    mv "$(FRONTEND)/help-drive/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help-drive/"; \
+	done
 	cp -r $(FRONTEND)/apps $(BACKEND)/
-	mv $(FRONTEND)/share $(BACKEND)/
 	mkdir -p debian/open-xchange-appsuite/opt/open-xchange/sbin
 	sed -e "s:## cd ##:cd /var/www/appsuite:" bin/touch-appsuite > \
 	    debian/open-xchange-appsuite/opt/open-xchange/sbin/touch-appsuite
 	chmod +x debian/open-xchange-appsuite/opt/open-xchange/sbin/touch-appsuite
-	mkdir -p debian/open-xchange-guidedtours/opt/open-xchange/appsuite/apps/io.ox
-	mv $(BACKEND)/apps/io.ox/tours debian/open-xchange-guidedtours/opt/open-xchange/appsuite/apps/io.ox/
-	mkdir -p "$(SETTINGS)"
-	cp -r conf/* "$(SETTINGS)"
-	mkdir -p "debian/open-xchange-guidedtours/opt/open-xchange/appsuite/manifests"
-	mv $(BACKEND)/manifests/open-xchange-guidedtours.json debian/open-xchange-guidedtours/opt/open-xchange/appsuite/manifests/
 	mkdir -p debian/open-xchange-appsuite-help-common/var/www/appsuite/
 	mv $(FRONTEND)/help debian/open-xchange-appsuite-help-common/var/www/appsuite/
 	mkdir -p debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
 	mv $(FRONTEND)/help-drive debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
 
 override_dh_auto_clean:
-	sh bin/build-appsuite clean skipLess=1 builddir=$(FRONTEND) manifestDir=$(BACKEND) \
-	    l10nDir=debian/open-xchange-appsuite-l10n-@lang@/opt/open-xchange/appsuite \
-        helpDir=debian/open-xchange-appsuite-help-@lang@/var/www/appsuite \
-	    $(FLAGS) --trace
+	rm -rf $(FRONTEND) $(BACKEND) debian/open-xchange-appsuite-l10n-*/opt/open-xchange/appsuite \
+	debian/open-xchange-appsuite-help-*/var/www/appsuite
 
 %:
 	dh $@
