@@ -15,8 +15,9 @@ define('io.ox/tasks/settings/pane',
     ['settings!io.ox/tasks',
      'io.ox/tasks/settings/model',
      'io.ox/core/extensions',
-     'gettext!io.ox/tasks'
-    ], function (settings, tasksSettingsModel, ext, gt) {
+     'gettext!io.ox/tasks',
+     'io.ox/backbone/mini-views'
+    ], function (settings, tasksSettingsModel, ext, gt, mini) {
 
     'use strict';
 
@@ -55,45 +56,29 @@ define('io.ox/tasks/settings/pane',
         index: 200,
         id: 'notifications',
         draw: function () {
-            var preferences = [{label: gt('Yes'), value: true}, {label: gt('No'), value: false}],
-
-                buildInputRadio = function (list, name) {
-                    return _.map(list, function (option) {
-                        var o = $('<input type="radio" name="' + name + '">').val(option.value)
-                        .on('change', function () {
-                            model.set(name, boolParser(this.value));
-                        });
-                        if (model.get(name) === option.value) o.prop('checked', true);
-                        return $('<label class="radio">').text(option.label).append(o);
-                    });
-                },
-
-                boolParser = function (value) {
-                    return value === 'true' ? true : false;
-                };
 
             this.append(
                $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for task')),
-               $('<div>').addClass('form-horizontal').append(
-                    $('<div>').addClass('control-group expertmode').append(
-                        $('<label>').addClass('control-label').text(gt('Email notification for New, Changed, Deleted?')),
-                        $('<div>').addClass('controls').append(
-                            buildInputRadio(preferences, 'notifyNewModifiedDeleted')
+                $('<div>').addClass('control-group expertmode').append(
+                    $('<div>').addClass('controls').append(
+                        $('<label>').addClass('checkbox').text(gt('Email notification for New, Changed, Deleted?')).append(
+                            new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: model}).render().$el
                         )
                     )
                 ),
                $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for Accept/Declined')),
-               $('<div>').addClass('form-horizontal').append(
-                    $('<div>').addClass('control-group expertmode').append(
-                        $('<label>').addClass('control-label').text(gt('Email notification for task creator?')),
-                        $('<div>').addClass('controls').append(
-                            buildInputRadio(preferences, 'notifyAcceptedDeclinedAsCreator')
+                $('<div>').addClass('control-group expertmode').append(
+                    $('<div>').addClass('controls').append(
+                        $('<label>').addClass('checkbox').text(gt('Email notification for task creator?')).append(
+                            new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: model}).render().$el
                         )
-                    ),
-                    $('<div>').addClass('control-group expertmode').append(
-                        $('<label>').addClass('control-label').text(gt('Email notification for task participant?')),
-                        $('<div>').addClass('controls').append(
-                            buildInputRadio(preferences, 'notifyAcceptedDeclinedAsParticipant')
+                    )
+                ),
+                $('<div>').addClass('control-group expertmode').append(
+                    
+                    $('<div>').addClass('controls').append(
+                        $('<label>').addClass('checkbox').text(gt('Email notification for task participant?')).append(
+                            new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: model}).render().$el
                         )
                     )
                 )

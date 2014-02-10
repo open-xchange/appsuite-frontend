@@ -32,17 +32,14 @@
             this.node.find('h1').length.should.be.equal(1);
             this.node.find('h1').text().should.be.equal(gt.pgettext('app', 'Tasks'));
 
-            this.node.find('input[name="notifyNewModifiedDeleted"]').length.should.be.equal(2);
-            this.node.find('input[name="notifyNewModifiedDeleted"]').first().parent().text().should.be.equal(gt('Yes'));
-            this.node.find('input[name="notifyNewModifiedDeleted"]').last().parent().text().should.be.equal(gt('No'));
+            this.node.find('input[name="notifyNewModifiedDeleted"]').length.should.be.equal(1);
+            this.node.find('input[name="notifyNewModifiedDeleted"]').prev().text(gt('Email notification for New, Changed, Deleted?'));
 
-            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').length.should.be.equal(2);
-            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').first().parent().text().should.be.equal(gt('Yes'));
-            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').last().parent().text().should.be.equal(gt('No'));
+            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').length.should.be.equal(1);
+            this.node.find('input[name="notifyAcceptedDeclinedAsCreator"]').prev().text(gt('Email notification for task creator?'));
 
-            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').length.should.be.equal(2);
-            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').first().parent().text().should.be.equal(gt('Yes'));
-            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').last().parent().text().should.be.equal(gt('No'));
+            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').length.should.be.equal(1);
+            this.node.find('input[name="notifyAcceptedDeclinedAsParticipant"]').prev().text(gt('Email notification for task participant?'));
 
         });
 
