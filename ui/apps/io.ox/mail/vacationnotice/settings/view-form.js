@@ -50,7 +50,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
             index: 150,
             fluid: true,
             label: model.fields.subject,
-            control: '<input type="text" class="span12" name="subject" tabindex="1">',
+            control: '<input type="text" id="subject" class="span12" name="subject" tabindex="1">',
             attribute: 'subject'
         }));
 
@@ -59,7 +59,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
             index: 200,
             fluid: true,
             label: model.fields.text,
-            control: '<textarea rows="12" class="span12" name="text" tabindex="1">',
+            control: '<textarea rows="12" id="text" class="span12" name="text" tabindex="1">',
             attribute: 'text'
         }));
 
@@ -71,7 +71,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
             selectOptions: multiValues.days
         }));
 
-        point.extend(new forms.ControlGroup({
+        point.extend(new forms.SectionLegend({
             id: ref + '/edit/view/addresses',
             fluid: true,
             index: 300,

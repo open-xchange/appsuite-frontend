@@ -92,7 +92,7 @@ define('io.ox/backbone/forms',
         };
 
         this.buildLabel = function () {
-            return this.nodes.label || (this.nodes.label = $('<label class="control-label">').text(this.label));
+            return this.nodes.label || (this.nodes.label = $('<label class="control-label" for="' + this.attribute + '">').text(this.label));
         };
 
         this.buildElement = function () {
