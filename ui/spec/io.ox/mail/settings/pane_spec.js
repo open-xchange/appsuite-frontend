@@ -62,7 +62,7 @@
             this.node.find('input[name="messageFormat"]:eq(2)').parent().text().should.be.equal(gt('HTML and plain text'));
 
             this.node.find('input[type="text"]').length.should.be.equal(1);
-            this.node.find('input[type="text"]').prev().text().should.be.equal(gt('Line wrap when sending text mails after '));
+            this.node.find('input[type="text"]').parent().prev().text().should.be.equal(gt('Line wrap when sending text mails after '));
             this.node.find('input[type="text"]').next().text().should.be.equal(gt(' characters'));
 
             this.node.find('select[id="defaultSendAddress"]').length.should.be.equal(1);
