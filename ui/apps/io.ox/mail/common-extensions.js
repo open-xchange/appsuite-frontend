@@ -358,7 +358,7 @@ define('io.ox/mail/common-extensions',
                     $ul = $('<ul class="attachment-preview" role="presention" aria-hidden="true">').append(
                         _(list).map(function (attachment) {
                             // consider retina displays
-                            var size = _.device('retina') ? 300 : 150,
+                            var size = _.device('retina') ? 240 : 120,
                                 // get URL of preview image
                                 url = api.getUrl(attachment, 'view') + '&scaleType=cover&width=' + size + '&height=' + size;
                             // non-image files need special format parameter
