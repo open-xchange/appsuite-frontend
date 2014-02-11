@@ -442,7 +442,7 @@ define('io.ox/portal/widgets',
     collection
         .reset(api.getSettingsSorted())
         .on('change', _.debounce(function () {
-            api.save();
+            settings.set('widgets/user', api.toJSON()).set('settings' + widgetSet, api.extraSettingsToJSON()).saveAndYell();
             // don’t handle positive case here, since this is called quite often
         }, 100))
         .on('remove', function (model) {
