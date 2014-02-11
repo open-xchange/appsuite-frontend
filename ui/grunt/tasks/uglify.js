@@ -15,8 +15,26 @@
 
 module.exports = function (grunt) {
 
-    //enable/disable removing of debugger statements
-    var keep = !!grunt.option('keep');
+    var keep = !!grunt.option('keep'),
+        uncompressed = !!grunt.option('uncompressed'),
+        options = {
+            //default
+            compressed: {
+                sourceMap: function (path) { return path.replace(/^build\//, 'build/maps/').replace(/\.js$/, '.js.map'); },
+                sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
+                sourceMappingURL: function (path) { return '/appsuite/' + grunt.config.get('assemble.options.base') + path.replace(/^build\//, '/maps/').replace(/\.js$/, '.js.map'); },
+                sourceMapPrefix: 1,
+                compress: {
+                    drop_debugger: !keep
+                }
+            },
+            //via '--uncompressed'
+            uncompressed: {
+                beautify: false,
+                compress: false,
+                mangle: false
+            }
+        };
 
     grunt.config('uglify', {
 
@@ -36,15 +54,7 @@ module.exports = function (grunt) {
         },
 
         apps: {
-            options: {
-                sourceMap: function (path) { return path.replace(/^build\//, 'build/maps/').replace(/\.js$/, '.js.map'); },
-                sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
-                sourceMappingURL: function (path) { return '/appsuite/' + grunt.config.get('assemble.options.base') + path.replace(/^build\//, '/maps/').replace(/\.js$/, '.js.map'); },
-                sourceMapPrefix: 1,
-                compress: {
-                    drop_debugger: !keep
-                }
-            },
+            options: uncompressed ? options.uncompressed : options.compressed,
             files: [{
                 src: 'apps/**/*.js',
                 cwd: 'build/src/',

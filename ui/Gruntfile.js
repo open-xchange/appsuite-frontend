@@ -51,5 +51,6 @@ module.exports = function (grunt) {
         grunt.log.writeln('       --benchmark  displays the execution time of grunt tasks');
         grunt.log.writeln('           --debug  show debug information of the assemble task');
         grunt.log.writeln('            --keep  keep debug statements');
+        grunt.log.writeln('    --uncompressed  uglify compress/mangle/beautify is disabled');
     });
 };
