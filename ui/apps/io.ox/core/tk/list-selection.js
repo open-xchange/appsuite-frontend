@@ -199,6 +199,26 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.triggerChange();
         },
 
+        move: function (step) {
+            var index = this.lastIndex + step, items;
+            if (index < 0) return;
+            items = this.getItems();
+            if (index >= items.length) return;
+            this.resetCheckmark(items);
+            this.resetTabIndex(items);
+            this.select(index, items);
+            this.triggerChange();
+            this.view.trigger('selection:action', this.get());
+        },
+
+        previous: function () {
+            this.move(-1);
+        },
+
+        next: function () {
+            this.move(+1);
+        },
+
         onKeydown: function (e) {
 
             if (e.which === 13) return this.triggerAction(e);

@@ -311,6 +311,28 @@ define('io.ox/core/tk/list',
             this.removeBusyIndicator();
             this.isBusy = false;
             return this;
+        },
+
+        getPosition: function () {
+            return this.selection.lastIndex;
+        },
+
+        hasNext: function () {
+            var index = this.getPosition() + 1;
+            return index < this.collection.length || !this.complete;
+        },
+
+        next: function () {
+            if (this.hasNext()) this.selection.next(); else if (!this.complete) this.$el.scrollTop(999999);
+        },
+
+        hasPrevious: function () {
+            var index = this.getPosition() - 1;
+            return index >= 0;
+        },
+
+        previous: function () {
+            if (this.hasPrevious()) this.selection.previous(); else this.$el.scrollTop(0);
         }
     });
 

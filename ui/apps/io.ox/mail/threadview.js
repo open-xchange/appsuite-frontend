@@ -24,7 +24,7 @@ define('io.ox/mail/threadview',
     'use strict';
 
     ext.point('io.ox/mail/thread-view').extend({
-        id: 'thread-view-list',
+        id: 'navigation',
         index: 100,
         draw: function () {
             this.$el.append(
@@ -36,37 +36,22 @@ define('io.ox/mail/threadview',
                     ),
                     $('<div class="position">'),
                     $('<div class="prev-next">').append(
-                        $('<a href="#" class="next-mail" tabindex="1">').append('<i class="icon-chevron-up">'),
-                        $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="icon-chevron-down">')
+                        $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="icon-chevron-up">'),
+                        $('<a href="#" class="next-mail" tabindex="1">').append('<i class="icon-chevron-down">')
                     )
-                ),
-                $('<div class="thread-view-list abs">').hide().append(
-                    $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view mail f6-target" role="listbox">')
                 )
             );
         }
     });
 
     ext.point('io.ox/mail/thread-view').extend({
-        id: 'detail-view',
+        id: 'thread-view-list',
         index: 200,
         draw: function () {
             this.$el.append(
-                $('<div class="detail-view-container abs">').hide().append(
-                    $('<nav class="thread-view-navigation">').append(
-                        $('<div class="button">').append(
-                            $('<a href="#" class="show-overview" tabindex="1">').append(
-                                $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Overview'))
-                            )
-                        ),
-                        $('<div class="position">'),
-                        $('<div class="prev-next">').append(
-                            $('<a href="#" class="next-mail" tabindex="1">').append('<i class="icon-chevron-up">'),
-                            $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="icon-chevron-down">')
-                        )
-                    ),
-                    $('<div class="detail-view abs" tabindex="1">')
+                $('<div class="thread-view-list abs">').append(
+                    $('<h1>'),
+                    this.$ul = $('<ul class="thread-view list-view mail f6-target" role="listbox">')
                 )
             );
         }
@@ -79,27 +64,14 @@ define('io.ox/mail/threadview',
 
         events: {
             'click .button a.back': 'onBack',
-            'click .button a.show-overview': 'onOverview',
-            'click .thread-view-navigation .previous-mail': 'onPrevious',
-            'click .thread-view-navigation .next-mail': 'onNext',
+            'click .back-navigation .previous-mail': 'onPrevious',
+            'click .back-navigation .next-mail': 'onNext',
             'keydown': 'onKeydown'
         },
 
         empty: function () {
-            this.$ul.empty().scrollTop(0);
-            this.$el.find('.thread-view-list').hide();
-            this.$el.find('.detail-view-container').hide();
-            this.$el.find('.detail-view').empty();
-        },
-
-        toggleDetailView: function (state) {
-            this.$el.find('.detail-view-container').toggle(state);
-            this.$el.find('.thread-view-list').toggle(!state);
-            this.updateNavigation();
-        },
-
-        showOverview: function () {
-            this.toggleDetailView(false);
+            this.$ul.empty();
+            this.$el.scrollTop(0);
         },
 
         updateHeader: function () {
@@ -113,35 +85,14 @@ define('io.ox/mail/threadview',
             );
         },
 
-        updatePosition: function (cid) {
-            var model = this.collection.get(cid),
-                length = this.collection.length;
-            this.index = this.collection.indexOf(model);
-            // update text
-            this.$el.find('.position').text(
-                gt('%1$d of %2$d', length - this.index, length)
-            );
-            // update controls
-            this.$el.find('.previous-mail').toggleClass('disabled', this.index + 1 === length);
-            this.$el.find('.next-mail').toggleClass('disabled', this.index === 0);
-        },
-
         updateNavigation: function () {
-
-            var multiple = this.collection.length > 1,
-                inDetailView = this.$el.find('.detail-view-container:visible').length,
-                inListMode = this.app.props.get('preview') === 'none',
-                $el = this.$el;
-
-            function update(back, thread) {
-                $el.toggleClass('back-navigation-visible', back);
-                $el.toggleClass('thread-view-navigation-visible', thread);
+            var inListMode = this.app.props.get('preview') === 'none';
+            this.$el.toggleClass('back-navigation-visible', inListMode);
+            if (inListMode) {
+                this.$el.find('.position').text(this.listView.getPosition() + 1);
+                this.$el.find('.previous-mail').toggleClass('disabled', !this.listView.hasPrevious());
+                this.$el.find('.next-mail').toggleClass('disabled', !this.listView.hasNext());
             }
-
-            // show thread navigation?
-            if (multiple && inDetailView) update(false, true);
-                else if (inListMode) update(true, false);
-                else update(false, false);
         },
 
         toggleMail: function (cid, state) {
@@ -192,9 +143,6 @@ define('io.ox/mail/threadview',
             if (this.collection.length === 0) return;
 
             this.updateHeader();
-
-            if (this.collection.length > 0) this.$el.find('.thread-view-list').show();
-
             this.updateNavigation();
 
             // draw thread list
@@ -247,19 +195,12 @@ define('io.ox/mail/threadview',
 
         onPrevious: function (e) {
             e.preventDefault();
-            var model = this.collection.at(this.index + 1);
-            if (model) this.showMail(model.cid);
+            this.listView.previous();
         },
 
         onNext: function (e) {
             e.preventDefault();
-            var model = this.collection.at(this.index - 1);
-            if (model) this.showMail(model.cid);
-        },
-
-        onOverview: function (e) {
-            e.preventDefault();
-            this.showOverview();
+            this.listView.next();
         },
 
         onClick: function (e) {
@@ -270,9 +211,6 @@ define('io.ox/mail/threadview',
         onKeydown: function (e) {
             if (!e.shiftKey) return;
             switch (e.which) {
-            case 37: // cursor left
-                this.showOverview(e);
-                break;
             case 38: // cursor up
                 this.onNext(e);
                 break;
@@ -286,6 +224,7 @@ define('io.ox/mail/threadview',
 
             this.collection = new backbone.Collection();
             this.app = options.app;
+            this.listView = options.listView;
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
