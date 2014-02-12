@@ -218,7 +218,7 @@ define('io.ox/core/desktop',
 
                     getData: function () {
 
-                        if (folder === null) return $.Deferred.resolve({});
+                        if (folder === null) return $.Deferred().resolve({});
 
                         return require(['io.ox/core/api/folder']).pipe(function (api) {
                             return api.get({ folder: folder });
@@ -332,7 +332,7 @@ define('io.ox/core/desktop',
 
         setState: function (obj) {
             for (var id in obj) {
-                _.url.hash(id, String(obj[id]));
+                _.url.hash(id, ((obj[id] !== null) ? String(obj[id]) : null));
             }
         },
 
@@ -344,14 +344,15 @@ define('io.ox/core/desktop',
 
             var deferred = $.when(),
                 self = this,
-                isDisabled = ox.manifests.isDisabled(this.getName() + '/main');
+                name = this.getName(),
+                isDisabled = ox.manifests.isDisabled(name + '/main');
 
             // update hash
-            if (this.get('name') !== _.url.hash('app')) {
+            if (name !== _.url.hash('app')) {
                 _.url.hash({ folder: null, perspective: null, id: null });
             }
-            if (this.has('name')) {
-                _.url.hash('app', this.get('name'));
+            if (name) {
+                _.url.hash('app', name);
             }
 
             if (this.get('state') === 'ready') {
@@ -359,19 +360,24 @@ define('io.ox/core/desktop',
                 if (isDisabled) {
                     deferred = $.Deferred().reject();
                 } else {
-                    deferred = this.get('launch').call(this, options || {}) || $.when();
+                    options = options || {};
+                    if (name) {
+                        ext.point(name + '/main').invoke('launch', this, options);
+                    }
+                    deferred = this.get('launch').call(this, options) || $.when();
                 }
-                deferred
-                .done(function () {
-                    ox.ui.apps.add(self);
-                    self.set('state', 'running');
-                    self.trigger('launch', self);
-                })
-                .fail(function () {
-                    ox.launch(
-                        require('settings!io.ox/core').get('autoStart')
-                    );
-                });
+                deferred.then(
+                    function success() {
+                        ox.ui.apps.add(self);
+                        self.set('state', 'running');
+                        self.trigger('launch', self);
+                    },
+                    function fail() {
+                        ox.launch(
+                            require('settings!io.ox/core').get('autoStart')
+                        );
+                    }
+                );
             } else if (this.has('window')) {
                 // toggle app window
                 this.get('window').show();
@@ -392,7 +398,7 @@ define('io.ox/core/desktop',
                     self.destroy();
                 }
                 // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
-                if (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0]) {
+                if (self.getWindow().state.visible && (!_.url.hash('app') || self.getName() === _.url.hash('app').split(':', 1)[0])) {
                     //we are still in the app to close so we can clear the URL
                     _.url.hash({ app: null, folder: null, perspective: null, id: null });
                 }
@@ -924,7 +930,11 @@ define('io.ox/core/desktop',
                 ext.point(name + '/window-toolbar').extend({
                     id: 'default',
                     draw: function () {
-                        return $('<div class="window-toolbar">');
+                        return $('<div class="window-toolbar">')
+                            .attr({
+                                'role': 'navigation',
+                                'aria-label': gt('Application Toolbar')
+                            });
                     }
                 });
 
@@ -1246,7 +1256,7 @@ define('io.ox/core/desktop',
                     },
 
                     getQuery: function () {
-                        return $.trim(self.nodes.searchField.val());
+                        return self.nodes.searchField.val();
                     },
 
                     setQuery: function (query) {
@@ -1287,6 +1297,10 @@ define('io.ox/core/desktop',
 
                 this.addPerspective = function (pers) {
                     var id = pers.name, node;
+                    // remove default main node if empty
+                    if (this.nodes.main && this.nodes.main.not(':empty')) {
+                        this.nodes.main.remove();
+                    }
                     if (this.nodes[id] === undefined) {
                         this.nodes.body.append(
                             node = $('<div class="abs window-content">').hide()
@@ -1447,7 +1461,11 @@ define('io.ox/core/desktop',
                     }
                 };
 
-                $('<form class="form-search form-inline">').append(
+                $('<form class="form-search form-inline" role="search">')
+                .attr({
+                    'aria-label': gt('Search for items')
+                })
+                .append(
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).addClass('search-query-container').append(
                             // search field
@@ -1499,6 +1517,10 @@ define('io.ox/core/desktop',
 
                     new links.Action(opt.name + '/actions/search', {
                         action:  function (baton) {
+                            //hide open sidepopup
+                            var $sidepopup = $(baton.window.nodes.body).find('.io-ox-sidepopup');
+                            if ($sidepopup.is(':visible'))
+                                $sidepopup.trigger('remove');
                             baton.window.search.toggle();
                         }
                     });

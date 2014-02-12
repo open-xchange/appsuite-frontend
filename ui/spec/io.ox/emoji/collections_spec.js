@@ -14,7 +14,7 @@ define([
     'io.ox/emoji/main',
     'settings!io.ox/mail/emoji'
 ], function (emoji, settings) {
-    "use strict";
+    'use strict';
 
     //FIXME: reload emoji module once reloading is possible
     //run some initialisation code (run during module loading) again,

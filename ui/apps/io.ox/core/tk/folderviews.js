@@ -521,7 +521,18 @@ define('io.ox/core/tk/folderviews',
                     self.selection.updateIndex();
                     self.trigger('repaint');
                     if (self.activeElement) {
+                        var folderview = self.activeElement.parents('.foldertree-container'),
+                            node, vertical, position;
+                        //identify usage: folder view or dialog
+                        node = (folderview.length ? folderview : self.activeElement.parents('.io-ox-foldertree')) || $();
+                        //set data to restore state
+                        vertical = node.scrollTop();
+                        position = node.css('position');
+                        //in some cases IE flickers without this hack
+                        node.css('position', 'fixed');
                         self.activeElement.focus();
+                        node.css('position', position)
+                            .scrollTop(vertical);
                     }
                     p.running = self.activeElement = null;
                 });
@@ -623,7 +634,6 @@ define('io.ox/core/tk/folderviews',
                     }
                     new dialogs.ModalDialog({
                         async: true,
-                        easyOut: true,
                         width: 400
                     })
                     .header(
@@ -1040,7 +1050,7 @@ define('io.ox/core/tk/folderviews',
             return $.when();
         };
 
-        api.on('delete', function () {
+        api.on('delete create', function () {
             self.repaint();
         });
     }

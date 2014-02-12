@@ -175,6 +175,19 @@ define('io.ox/portal/widgets',
                 .value();
         },
 
+        getSettingsSorted: function () {
+            return _(api.getSettings())
+                .chain()
+                .sortBy(function (obj) {
+                    return obj.index;
+                })
+                .map(function (obj) {
+                    delete obj.candidate;
+                    return obj;
+                })
+                .value();
+        },
+
         loadAllPlugins: function () {
             return require(api.getAvailablePlugins());
         },
@@ -348,28 +361,35 @@ define('io.ox/portal/widgets',
          * @return - a deffered object with the save request
          */
         save: function (widgetList) {
+            var self = this;
 
-            var obj = _.extend({}, widgets), old_state = obj, self = this;
+            // update current data first
+            settings.load().then(function () {
+                // update collection
+                api.getSettingsSorted();
 
-            // update all indexes
-            widgetList.children().each(function (index) {
-                var node = $(this), id = node.attr('data-widget-id');
-                if (id in obj) {
-                    obj[id].index = index + 1;
-                }
+                var obj = _.extend({}, widgets),
+                    old_state = obj;
+                // update all indexes
+                widgetList.children().each(function (index) {
+                    var node = $(this), id = node.attr('data-widget-id');
+                    if (id in obj) {
+                        obj[id].index = index + 1;
+                    }
+                });
+                self.update(obj);
+                collection.trigger('sort');
+                return settings.set('widgets/user', self.toJSON()).set('settings' + widgetSet, self.extraSettingsToJSON()).save().fail(
+                    // don't say anything if successful
+                    function () {
+                        // reset old state
+                        self.update(old_state);
+                        collection.trigger('sort');
+                        widgetList.sortable('cancel');
+                        notifications.yell('error', gt('Could not save settings.'));
+                    }
+                );
             });
-            this.update(obj);
-            collection.trigger('sort');
-            return settings.set('widgets/user', this.toJSON()).set('settings' + widgetSet, this.extraSettingsToJSON()).save().fail(
-                // don't say anything if successful
-                function () {
-                    // reset old state
-                    self.update(old_state);
-                    collection.trigger('sort');
-                    widgetList.sortable('cancel');
-                    notifications.yell('error', gt('Could not save settings.'));
-                }
-            );
         },
 
         requires: function (type) {
@@ -404,19 +424,7 @@ define('io.ox/portal/widgets',
     };
 
     collection
-        .reset(
-            // fix "candidate=true" bug (maybe just a development issue)
-            _(api.getSettings())
-                .chain()
-                .sortBy(function (obj) {
-                    return obj.index;
-                })
-                .map(function (obj) {
-                    delete obj.candidate;
-                    return obj;
-                })
-                .value()
-        )
+        .reset(api.getSettingsSorted())
         .on('change', _.debounce(function () {
             settings.set('widgets/user', api.toJSON()).set('settings' + widgetSet, api.extraSettingsToJSON()).saveAndYell();
             // don’t handle positive case here, since this is called quite often

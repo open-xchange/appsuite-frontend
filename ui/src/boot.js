@@ -91,17 +91,7 @@ $(window).load(function () {
 
     }
 
-    // check for supported browser
-    function isBrowserSupported() {
-        var supp = false;
-        _.each(_.browserSupport, function(value, key) {
-            if (_.browser[key] >= value) {
-                supp =  true;
-            }
-        });
-        return supp;
-    }
-    window.isBrowserSupported = isBrowserSupported;
+
 
     // continuation
     cont = function () {
@@ -569,7 +559,7 @@ $(window).load(function () {
 
         function gotoSignin(hash) {
             var ref = (location.hash || '').replace(/^#/, ''),
-                path = String(ox.serverConfig.logoutLocation || ox.logoutLocation),
+                path = String(ox.serverConfig.loginLocation || ox.loginLocation),
                 glue = path.indexOf('#') > -1 ? '&' : '#';
             path = path.replace("[hostname]", window.location.hostname);
             hash = (hash || '') + (ref ? '&ref=' + enc(ref) : '');
@@ -609,6 +599,7 @@ $(window).load(function () {
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login';
                             } else {
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                                $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                             }
 
                             themes.set(ox.serverConfig.signinTheme || 'login');
@@ -737,6 +728,7 @@ $(window).load(function () {
                                 // apply session data (again) & page title
                                 session.set(data);
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
+                                $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                                 debug('boot.js: autoLogin > loginSuccess > loadCoreFiles ...');
                                 return loadCoreFiles();
                             })
@@ -846,6 +838,14 @@ $(window).load(function () {
             // hide checkbox?
             if (!capabilities.has("autologin")) {
                 $('#io-ox-login-store').remove();
+            } else {
+                // check/uncheck?
+                var box = $('#io-ox-login-store-box'), cookie = _.getCookie('staySignedIn');
+                if (cookie !== undefined) box.prop('checked', cookie === 'true');
+                else if ('staySignedIn' in sc) box.prop('checked', !!sc.staySignedIn);
+                box.on('change', function () {
+                    _.setCookie('staySignedIn', $(this).prop('checked'));
+                });
             }
 
             // hide forgot password?
@@ -868,6 +868,12 @@ $(window).load(function () {
                 // cannot change type with jQuery's attr()
                 $('#io-ox-login-username')[0].type = 'text';
             }
+            
+            //show errors saved inlocalstorage
+            if (localStorage.getItem('errormsg')) {
+                feedback('error', $.txt(localStorage.getItem('errormsg')));
+                localStorage.removeItem('errormsg');//remove errormessages from localstorage
+            }
 
             debug('boot.js: Load "signin" plugins & set default language');
 
@@ -884,7 +890,9 @@ $(window).load(function () {
 
                 // autologout message
                 if (_.url.hash("autologout")) {
-                    feedback('info', $.txt(gt('You have been automatically signed out')));
+                    feedback('info', function () {
+                        return $.txt(gt('You have been automatically signed out'));
+                    });
                 }
 
                 debug('boot.js: Check browser support');
@@ -917,6 +925,14 @@ $(window).load(function () {
                                 .add($('<div>').text(gt('Please update your browser.')));
                         });
 
+                    } else if (_.browser.unknown) {
+                        // warning about all unknown browser-platform combinations, might be chrome on iOS
+                        feedback('info', function () {
+                            return $('<b>').text(gt('Your browser is not supported!'))
+                                .add($.txt(_.noI18n('\xa0')))
+                                //#. Should tell the user that his combination of browser and operating system is not supported
+                                .add($('<div>').text(gt('This browser is not supported on your current platform.')));
+                        });
                     } else {
                         // general warning about browser
                         feedback('info', function () {
@@ -979,7 +995,7 @@ $(window).load(function () {
     );
 
     // reload if files have change; need this during development
-    if (Modernizr.applicationcache && _.browser.chrome && ox.debug && $('html').attr('manifest')) {
+    if (Modernizr.applicationcache && ox.debug && _.device('chrome || ios') && $('html').attr('manifest')) {
 
         (function () {
 

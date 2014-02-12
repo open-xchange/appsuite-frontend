@@ -12,51 +12,34 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(['io.ox/mail/util',
-        'io.ox/core/capabilities'], function (util, capabilities) {
+        'spec/shared/capabilities'], function (util, caputil) {
+
+    'use strict';
+
+    var capabilities = caputil.preset('common').init('io.ox/mail/util', util);
 
     describe('Utilities for mail:', function () {
-        //guarantee same number of arguments for wrapper functions
-        describe('has some msisdn methods and', function () {
-
+        describe('has some capability depending msisdn methods that', function () {
             beforeEach(function () {
-                cap = sinon.stub(capabilities, 'has');
-                cap.withArgs('msisdn').returns(true);
+                var def;
+                runs(function () {
+                    def = capabilities.reset();
+                });
+                waitsFor(function () {
+                    return def.state() === 'resolved';
+                });
             });
+            describe('work with disabled capability and', function () {
+                beforeEach(function () {
+                    capabilities.enable('msisdn');
+                });
 
-            afterEach(function () {
-                capabilities.has.restore();
-            });
-
-            it('should correctly identify channel "email" or "phone"', function () {
-
-                //without considering activated capability
-                expect(util.getChannel(util.getChannelSuffixes().msisdn)).toEqual('phone');
-                expect(util.getChannel('017012345678' + util.getChannelSuffixes().msisdn)).toEqual('phone');
-                expect(util.getChannel('horst.matuschek@' + util.getChannelSuffixes().msisdn)).toEqual('phone');
-
-                expect(util.getChannel('017012345678', false)).toEqual('phone');
-                expect(util.getChannel('+17012345678', false)).toEqual('phone');
-                expect(util.getChannel('(01701) 23456-78', false)).toEqual('phone');
-                expect(util.getChannel('office (01701) 23456-78', false)).toEqual('email');
-
-                if (capabilities.has('msisdn')) {
+                it('should correctly identify channel "email" or "phone"', function () {
                     expect(util.getChannel('017012345678')).toEqual('phone');
                     expect(util.getChannel('+17012345678')).toEqual('phone');
                     expect(util.getChannel('(01701) 23456-78')).toEqual('phone');
-                } else {
-                    expect(util.getChannel('017012345678')).toEqual('email');
-                    expect(util.getChannel('+17012345678')).toEqual('email');
-                    expect(util.getChannel('(01701) 23456-78')).toEqual('email');
-                }
-            });
-            it('should correctly remove inalid chars from phone numbers', function () {
-                expect(util.cleanupPhone('+17012345678')).toEqual('+17012345678');
-                expect(util.cleanupPhone('(01701) 23456-78')).toEqual('017012345678');
-                expect(util.cleanupPhone('01701/2345678')).toEqual('017012345678');
-            });
-            //FIXME: capability in utils is stored on lib load
-            xit('should correctly remove "' + util.getChannelSuffixes().msisdn +  '" typesuffix from data', function () {
-                if (capabilities.has('msisdn')) {
+                });
+                it('should correctly remove "' + util.getChannelSuffixes().msisdn +  '" typesuffix from data', function () {
                     var suffix = util.getChannelSuffixes().msisdn,
                         mail = {
                             from: [
@@ -79,11 +62,8 @@ define(['io.ox/mail/util',
                                 ['017012345678', '017012345678']
                             ]
                         });
-                }
-            });
-            //FIXME: capability in utils is stored on lib load
-            xit('should handle empty from fields', function () {
-                if (capabilities.has('msisdn')) {
+                });
+                it('should handle empty from fields', function () {
                     var mail = {
                         from: [],
                         to: [
@@ -92,7 +72,38 @@ define(['io.ox/mail/util',
                     };
                     expect(util.removeChannelSuffix(mail))
                         .toEqual({from: [], to: [['017012345678', '017012345678']]});
-                }
+                });
+            });
+            describe('work with enabled capability and', function () {
+                beforeEach(function () {
+                    capabilities.disable('msisdn');
+                });
+
+                it('should correctly identify channel "email" or "phone"', function () {
+                    expect(util.getChannel('017012345678')).toEqual('email');
+                    expect(util.getChannel('+17012345678')).toEqual('email');
+                    expect(util.getChannel('(01701) 23456-78')).toEqual('email');
+                });
+            });
+        });
+
+        describe('has some capability independent msisdn methods and', function () {
+            it('should correctly identify channel "email" or "phone"', function () {
+
+                //without considering activated capability
+                expect(util.getChannel(util.getChannelSuffixes().msisdn)).toEqual('phone');
+                expect(util.getChannel('017012345678' + util.getChannelSuffixes().msisdn)).toEqual('phone');
+                expect(util.getChannel('horst.matuschek@' + util.getChannelSuffixes().msisdn)).toEqual('phone');
+
+                expect(util.getChannel('017012345678', false)).toEqual('phone');
+                expect(util.getChannel('+17012345678', false)).toEqual('phone');
+                expect(util.getChannel('(01701) 23456-78', false)).toEqual('phone');
+                expect(util.getChannel('office (01701) 23456-78', false)).toEqual('email');
+            });
+            it('should correctly remove inalid chars from phone numbers', function () {
+                expect(util.cleanupPhone('+17012345678')).toEqual('+17012345678');
+                expect(util.cleanupPhone('(01701) 23456-78')).toEqual('017012345678');
+                expect(util.cleanupPhone('01701/2345678')).toEqual('017012345678');
             });
         });
 

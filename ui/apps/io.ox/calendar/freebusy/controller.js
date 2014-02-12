@@ -88,6 +88,7 @@ define('io.ox/calendar/freebusy/controller',
             };
 
             this.onCreate = function (e, data) {
+                console.log('huhu onCreate', data);
                 data = {
                     start_date: data.start_date,
                     end_date: data.end_date,
@@ -127,10 +128,10 @@ define('io.ox/calendar/freebusy/controller',
             this.getParticipants = function () {
                 return this.participants.map(function (model) {
                     var tempParticipant = { id: model.get('id'), type: model.get('type') };
-                    if (model.get('type') === 5) {//External participants need more data for an appointment
+                    if (model.get('type') === 5) { // External participants need more data for an appointment
                         tempParticipant.id = tempParticipant.mail = model.getEmail();
                         tempParticipant.display_name = model.getDisplayName();
-                        tempParticipant.image1_url = model.getImage();
+                        tempParticipant.image1_url = model.get('image1_url');
                     }
                     return tempParticipant;
                 });
@@ -186,7 +187,7 @@ define('io.ox/calendar/freebusy/controller',
                 self.getCalendarView().$el.find('.appointment').removeClass('opac current');
             }
 
-            this.sidePopup = new dialogs.SidePopup().on('close', unmarkAppointments);
+            this.sidePopup = new dialogs.SidePopup({ tabTrap: true }).on('close', unmarkAppointments);
 
             function openSidePopup(e, data) {
                 self.sidePopup.show(e, function (popup) {

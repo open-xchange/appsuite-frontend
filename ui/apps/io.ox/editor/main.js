@@ -134,7 +134,7 @@ define('io.ox/editor/main',
                     $('<div class="header">').append(
                         // title
 
-                        $('<input type="text" class="title" tabindex="1">')
+                        $('<input type="text" class="title" tabindex="1" maxlength="350">')
                         .attr('placeholder', gt('Enter document title here')),
 
                         // save & close buttons
@@ -200,59 +200,80 @@ define('io.ox/editor/main',
                 content: ''
             });
             _.extend(previous, { filename: 'unnamed.txt', title: 'unnamed.txt' });
+            win.on('show', function () {
+                app.setState({ folder: opt.folder, id: null });
+            });
             win.show(function () {
-                app.setState({ folder: opt.folder });
                 view.focus();
             });
         };
 
         app.save = function () {
+            var fixFolder = function () {
+                //switch to default folder on missing grants (or special folders)
+                return folderAPI.get({ folder: model.get('folder_id') })
+                        .then(function (data) {
+                            var required = (model.has('id') && !folderAPI.can('write', data)) ||
+                                           (!model.has('id') && !folderAPI.can('create', data)) ||
+                                           _.contains(['14', '15'], data.id);
+                            if (required) {
+                                //update mode and notify user
+                                model.set('folder_id', folderAPI.getDefaultFolder('infostore'));
+                                notifications.yell('info', gt('This file will be written in your default folder to allow editing'));
+                            }
+                        });
+            };
+
             require(['io.ox/files/util'], function (util) {
                 var blob, data;
-                return util.confirmDialog(app.view.getFilename(), app.view.data.saved.filename)
-                    .then(function () {
-                        // generate blob
-                        view.updateModel();
-                        data = model.toJSON();
-                        blob = new window.Blob([data.content], { type: 'text/plain' });
-                        delete data.content;
-                        view.busy();
-
-                        // create or update?
-                        if (model.has('id')) {
-                            // update
-                            return api.uploadNewVersion({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
-                                .done(function () {
-                                    previous = model.toJSON();
-                                })
-                                .always(function () { view.idle(); })
-                                .fail(notifications.yell)
-                                .fail(function (error) {
-                                    // file no longer exists
-                                    if (error.code === 'IFO-0300') model.unset('id');
-                                });
-                        } else {
-                            // create
-                            return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
-                                .done(function (data) {
+                return fixFolder().then(
+                            util.confirmDialog(app.view.getFilename(), app.view.data.saved.filename)
+                                .then(function () {
+                                    // generate blob
+                                    view.updateModel();
+                                    data = model.toJSON();
+                                    blob = new window.Blob([data.content], { type: 'text/plain' });
                                     delete data.content;
-                                    app.setState({ folder: data.folder_id, id: data.id });
-                                    model.set(data);
-                                    previous = model.toJSON();
-                                    view.idle();
-                                    api.trigger('refresh.all');
+                                    view.busy();
+                                    // create or update?
+                                    if (model.has('id')) {
+                                        // update
+                                        return api.uploadNewVersion({ id: data.id, folder: data.folder_id, file: blob, filename: data.filename })
+                                            .done(function () {
+                                                previous = model.toJSON();
+                                            })
+                                            .always(function () { view.idle(); })
+                                            .fail(notifications.yell)
+                                            .fail(function (error) {
+                                                // file no longer exists
+                                                if (error.code === 'IFO-0300') model.unset('id');
+                                            });
+                                    } else {
+                                        // create
+                                        return api.uploadFile({ folder: data.folder_id, file: blob, filename: data.filename })
+                                            .done(function (data) {
+                                                delete data.content;
+                                                app.setState({ folder: data.folder_id, id: data.id });
+                                                model.set(data);
+                                                previous = model.toJSON();
+                                                view.idle();
+                                                api.trigger('refresh.all');
+                                            })
+                                            .always(function () { view.idle(); })
+                                            .fail(notifications.yell);
+                                    }
+                                }, function () {
+                                    view.idle.apply(app.view);
                                 })
-                                .always(function () { view.idle(); })
-                                .fail(notifications.yell);
-                        }
-                    }, function () {
-                        view.idle.apply(app.view);
-                    });
+                        );
             });
         };
 
         app.load = function (o) {
             var def = $.Deferred();
+            win.on('show', function () {
+                app.setState({ folder: o.folder_id, id: o.id });
+            });
             win.show(function () {
                 // load file
                 win.busy();

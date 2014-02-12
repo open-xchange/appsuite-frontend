@@ -38,7 +38,9 @@ define('io.ox/core/tk/dialogs',
                 async: false,
                 maximize: false,
                 top: '50%',
-                container: $('body')
+                container: $('body'),
+                tabTrap: true,
+                focus: true
             }, options),
 
             nodes = {
@@ -59,7 +61,8 @@ define('io.ox/core/tk/dialogs',
                 // we have to consider that two popups might be open
                 // so we cannot just refocus the current popup
                 var insidePopup = $(e.target).closest('.io-ox-dialog-popup').length > 0;
-                if (!insidePopup) {
+                var sidePopups = $(e.target).closest('.io-ox-sidepopup').length > 0;
+                if (!insidePopup && !sidePopups) {
                     if (nodes.popup.is(':visible')) {
                         e.stopPropagation();
                         nodes.popup.focus();
@@ -134,7 +137,7 @@ define('io.ox/core/tk/dialogs',
                     close();
                 }
 
-                (e.originalEvent || e).processed = true;
+                e.processed = true;
             },
 
             fnKey = function (e) {
@@ -151,12 +154,10 @@ define('io.ox/core/tk/dialogs',
                     break;
 
                 case 13: // Enter
-                    if (!isBusy && o.enter && $(e.target).is('input:text, input:password')) {
-                        if (!_.isFunction(o.enter)) {
-                            invoke(o.enter);
-                        } else {
-                            return o.enter.call(self);
-                        }
+                    if (!isBusy && $(e.target).is('input:text, input:password')) {
+                        if (!o.enter) return false;
+                        if (_.isFunction(o.enter)) return o.enter.call(self);
+                        invoke(o.enter);
                         return false;
                     }
                     break;
@@ -506,7 +507,8 @@ define('io.ox/core/tk/dialogs',
         options = _.extend({
             modal: false,
             arrow: true,
-            closely: false // closely positon to click/touch location
+            closely: false, // closely positon to click/touch location
+            tabTrap: true
         }, options || {});
 
         var processEvent,
@@ -519,13 +521,14 @@ define('io.ox/core/tk/dialogs',
             closeByEvent, //for example: The view within this SidePopup closes itself
             previousProp,
             timer = null,
+            lastFocus = $(),
 
             overlay,
 
             pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs" tabindex="1">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<a class="btn-sidepopup" data-action="close" tabindex="1">')
+                    $('<a class="btn-sidepopup" data-action="close" role="button" tabindex="1">')
                         .text(options.saveOnClose ? gt('Save') : gt('Close'))
                 ),
 
@@ -539,9 +542,30 @@ define('io.ox/core/tk/dialogs',
 
             target = null,
 
-            self = this;
+            self = this,
 
-        pane = pane.scrollable();
+            fnKey = function (e) {
+                var items, focus, index;
+                if (e.which === 9 && options.tabTrap) {
+
+                    items = $(this).find('[tabindex][disabled!="disabled"]:visible');
+                    if (items.length) {
+                        e.preventDefault();
+                        focus = $(document.activeElement);
+                        index = (items.index(focus) >= 0) ? items.index(focus) : 0;
+                        index += (e.shiftKey) ? -1 : 1;
+
+                        if (index >= items.length) {
+                            index = 0;
+                        } else if (index < 0) {
+                            index = items.length - 1;
+                        }
+                        items.eq(index).focus();
+                    }
+                }
+            },
+
+            pane = pane.scrollable();
 
         // add event hub
         Events.extend(this);
@@ -593,7 +617,7 @@ define('io.ox/core/tk/dialogs',
                 $(document).off('keydown', closeByEscapeKey);
                 self.nodes.closest.prop('sidepopup', previousProp);
                 self.nodes.click.off('click', closeByClick);
-                popup.off('view:remove', closeByEvent);
+                popup.off('view:remove remove', closeByEvent);
                 self.lastTrigger = previousProp = null;
                 // use time to avoid flicker
                 timer = setTimeout(function () {
@@ -621,6 +645,12 @@ define('io.ox/core/tk/dialogs',
                         popup.detach();
                     }
                     pane.empty();
+
+                    if (options.focus) {
+                        lastFocus = lastFocus.closest(':visible');
+                        lastFocus.focus();
+                    }
+
                     self.trigger('close');
                 }, 100);
             }
@@ -631,6 +661,8 @@ define('io.ox/core/tk/dialogs',
         };
 
         popup.on('close', close);
+
+        popup.on('keydown', fnKey);
 
         closer.find('.btn-sidepopup')
             .on('click', function (e) {
@@ -649,6 +681,9 @@ define('io.ox/core/tk/dialogs',
         open = function (e, handler) {
             // get proper elements
             var my = $(this), zIndex, sidepopup;
+
+            lastFocus = $(document.activeElement);
+
             self.nodes = {
                 closest: target || my.parents('.io-ox-sidepopup-pane, .window-content, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),
                 click: my.parents('.io-ox-sidepopup-pane, .window-body, .window-container-center, .io-ox-dialog-popup, .notifications-overlay').first(),
@@ -687,14 +722,19 @@ define('io.ox/core/tk/dialogs',
                 if (self.nodes.closest.is('.io-ox-sidepopup-pane')) {
                     closer.find('.close-all').remove();
                     closer.prepend(
-                        $('<a class="btn-sidepopup close-all" data-action="close-all">').text(gt('Close all'))
+                        $('<a class="btn-sidepopup close-all" role="button" tabindex="1" data-action="close-all">').text(gt('Close all'))
                         .on('click', { target: self.nodes.target }, closeAll)
+                        .on('keypress', { target: self.nodes.target }, function (e) {
+                            if (e.which === 13) {
+                                closeAll(e);
+                            }
+                        })
                     );
                 }
 
                 // add handlers to close popup
                 self.nodes.click.on('click', closeByClick);
-                popup.on('view:remove', closeByEvent);
+                popup.on('view:remove remove', closeByEvent);
                 $(document).on('keydown', closeByEscapeKey);
 
 
@@ -761,6 +801,13 @@ define('io.ox/core/tk/dialogs',
                     open.call(this, e, handler);
                 }
             });
+
+            $(node).on('keypress', selector, function (e) {
+                if (e.which === 13 && (e.originalEvent || e).processed !== true) {
+                    open.call(this, e, handler);
+                }
+            });
+
             return this;
         };
 

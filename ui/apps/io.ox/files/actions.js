@@ -35,7 +35,9 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/upload', {
         requires: function (e) {
             return e.baton.app.folder.getData().then(function (data) {
-                return folderAPI.can('create', data);
+                //hide for virtual folders (other files root, public files root)
+                var virtual = _.contains(['14', '15'], data.id);
+                return folderAPI.can('create', data) && !virtual;
             });
         },
         action: function (baton) {
@@ -85,7 +87,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/audioplayer', {
         requires: function (e) {
-            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio', true);
+            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -100,7 +102,7 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
-            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'video', true);
+            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'video');
         },
         action: function (baton) {
             baton.app = baton.grid.getApp();
@@ -169,9 +171,7 @@ define('io.ox/files/actions',
             // loop over list, get full file object and trigger downloads
             require(['io.ox/core/download'], function (download) {
                 _(list).each(function (o) {
-                    api.get(o).done(function (file) {
-                        download.file(file);
-                    });
+                    download.file(o);
                 });
             });
         }
@@ -259,7 +259,7 @@ define('io.ox/files/actions',
 
                 // create dialog
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ width: 500, 'tabTrap': true })
+                    new dialogs.ModalDialog({ width: 500 })
                         .build(function () {
                             // header
                             this.header($('<h4>').text('Direct link'));
@@ -321,10 +321,10 @@ define('io.ox/files/actions',
             );
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({'tabTrap': true})
+                new dialogs.ModalDialog()
                     .text(question)
                     .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
-                    .addButton('cancel', gt('Cancel'),  'cancel', {'tabIndex': '1'})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
@@ -472,7 +472,7 @@ define('io.ox/files/actions',
                         );
                 }
 
-                new dialogs.ModalDialog({ enter: 'rename', async: true, 'tabTrap': true })
+                new dialogs.ModalDialog({ enter: 'rename', async: true })
                     .header(
                         $('<h4>').text(gt('Rename'))
                     )
@@ -502,7 +502,7 @@ define('io.ox/files/actions',
         action: function (baton) {
             require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/keys'], function (dialogs, KeyListener) {
                 var keys = new KeyListener($input),
-                    dialog = new dialogs.ModalDialog({'tabTrap': true}),
+                    dialog = new dialogs.ModalDialog(),
                     $input = $('<textarea rows="10" tabindex="1"></textarea>')
                             .css({width: '507px'})
                             .val(baton.data.description),
@@ -583,7 +583,7 @@ define('io.ox/files/actions',
                     if (baton.target) {
                         commit(baton.target);
                     } else {
-                        var dialog = new dialogs.ModalDialog({'tabTrap': true})
+                        var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
                             .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
                             .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
@@ -681,7 +681,7 @@ define('io.ox/files/actions',
                         _.isArray(data) ? data.length : 1
                 );
                 // ask
-                new dialogs.ModalDialog({'tabTrap': true})
+                new dialogs.ModalDialog()
                     .text(question)
                     .addPrimaryButton('delete', gt('Delete'), 'delete', {'tabIndex': '1'})
                     .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
@@ -992,7 +992,7 @@ define('io.ox/files/actions',
         index: 10,
         label: gt('Drop here to upload a <b class="dndignore">new file</b>'),
         multiple: function (files, app) {
-            app.queues.create.offer(files);
+            app.queues.create.offer(files, { folder: app.folder.get() });
         }
     });
 
@@ -1014,7 +1014,7 @@ define('io.ox/files/actions',
             }
         },
         action: function (file, app) {
-            app.queues.update.offer(file);
+            app.queues.update.offer(file, { folder: app.folder.get() });
         }
     });
 
@@ -1084,25 +1084,57 @@ define('io.ox/files/actions',
         });
     }
 
-    function checkMedia(e, type, fromSelection) {
+    function checkMedia(e, type) {
         if (!e.collection.has('multiple') && !settings.get(type + 'Enabled')) {
             return false;
         }
+
+        var list = _.copy(e.baton.allIds, true),
+            incompleteHash = {},
+            incompleteItems = [],
+            def = $.Deferred(),
+            index, folder;
+
         if (_.isUndefined(e.baton.allIds)) {
             e.baton.allIds = e.baton.data;
         }
-        if (fromSelection) {
-            return api.getList(e.baton.allIds).then(function (data) {
-                e.baton.allIds = data;
-                return _(data).reduce(function (memo, obj) {
-                    return memo || !!(obj && api.checkMediaFile(type, obj.filename));
-                }, false);
+
+        //identify incomplete items
+        _(list).each(function (item) {
+            if (_.isUndefined(item.filename)) {
+                // collect all incomplete items grouped by folder ID
+                incompleteHash[item.folder_id] = (incompleteHash[item.folder_id] || []).concat(item);
+                // all incomplete items
+                incompleteItems.push(item);
+                index = list.indexOf(item);
+                if (index !== -1) {
+                    list.splice(index, 1);
+                }
+            }
+        });
+
+        //complement data from server/cache
+        folder = Object.keys(incompleteHash);
+        if (folder.length === 1) {
+            // get only this folder
+            def = api.getAll({ folder: folder[0] });
+        } else if (folder.length > 1) {
+            // multiple folder -> use getList
+            def = api.getList(incompleteItems).then(function (data) {
+                return list.concat(data);
             });
         } else {
-            return _(e.baton.allIds).reduce(function (memo, obj) {
-                return memo || api.checkMediaFile(type, obj.filename);
-            }, false);
+            // nothing to do
+            def.resolve(list);
         }
+
+        return def.then(function (data) {
+            //update baton
+            e.baton.allIds = data;
+            return _(data).reduce(function (memo, obj) {
+                return memo || !!(obj && api.checkMediaFile(type, obj.filename));
+            }, false);
+        });
     }
 
     new Action('io.ox/files/icons/audioplayer', {
@@ -1201,7 +1233,8 @@ define('io.ox/files/actions',
         id: 'layout-list',
         ref: 'io.ox/files/actions/layout-list',
         icon: 'icon-align-justify',
-        cssClasses: 'io-ox-action-link btn'
+        title: gt('List'),
+        cssClasses: 'io-ox-action-link btn layout'
     }));
 
     ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
@@ -1210,7 +1243,8 @@ define('io.ox/files/actions',
         id: 'layout-icon',
         ref: 'io.ox/files/actions/layout-icon',
         icon: 'icon-th',
-        cssClasses: 'io-ox-action-link btn'
+        title: gt('Icons'),
+        cssClasses: 'io-ox-action-link btn layout'
     }));
 
     ext.point('io.ox/files/icons/inline-right').extend(new links.Link({
@@ -1218,8 +1252,9 @@ define('io.ox/files/actions',
         prio: 'hi',
         id: 'layout-tile',
         ref: 'io.ox/files/actions/layout-tile',
+        title: gt('Tile'),
         icon: 'icon-th-large',
-        cssClasses: 'io-ox-action-link btn'
+        cssClasses: 'io-ox-action-link btn layout'
     }));
 
 

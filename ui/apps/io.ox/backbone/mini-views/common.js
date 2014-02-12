@@ -91,6 +91,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     });
 
     return {
+        AbstractView: AbstractView,
         InputView: InputView,
         TextView: TextView,
         CheckboxView: CheckboxView

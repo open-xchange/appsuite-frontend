@@ -25,35 +25,34 @@ define('io.ox/files/util',
          * @param  {string} serverFilename  filename
          * @return {promise} resolves if user confirms or dialogie needen
          */
-        confirmDialog: function (formFilename, serverFilename) {
+        confirmDialog: function (formFilename, serverFilename, options) {
+            var opt = options || {};
                     //be robust
-                    serverFilename = serverFilename || '';
+            serverFilename = String(serverFilename || '');
+            formFilename = String(formFilename || '');
+            var def = $.Deferred(),
+                extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) :  '',
+                extForm = _.last(formFilename.split('.')),
+                $hint = $('<div class="row-fluid muted inset">').append(
+                            $('<small style="padding-top: 8px">').text(
+                                gt('Please note, changing or removing the file extension will cause problems when viewing or editing.')
+                            )
+                        ),
+                message;
 
-                    var def = $.Deferred(),
-                        name = formFilename || '',
-                        extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) :  '',
-                        extForm = _.last(name.split('.')),
-                        $hint = $('<div class="row-fluid muted inset">').append(
-                                    $('<small style="padding-top: 8px">').text(
-                                        gt('Please note, changing or removing the file extension will cause problems when viewing or editing.')
-                                    )
-                                ),
-                        message;
-
-                    //set message
-                    if (name !== '' && name.split('.').length === 1) {
-                        //file extension ext missing
-                        message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extServer);
-                    } else if (extServer !== extForm && extServer !== '') {
-                        //ext changed
-                        message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s" ?', extServer, extForm);
-                    }
-                    //confirmation needed
-                    if (message) {
-                        new dialogs.ModalDialog({'tabTrap': true})
+            //set message
+            if (formFilename !== '' && formFilename.split('.').length === 1 && extServer !== '') {
+            //file extension ext removed
+                message = gt('Do you really want to remove the extension ".%1$s" from your filename?', extServer);
+            } else if (extServer !== extForm && extServer !== '') {
+                //ext changed
+                message = gt('Do you really want to change the file extension from  ".%1$s" to ".%2$s" ?', extServer, extForm);
+            }
+            //confirmation needed
+            if (message) {
+                new dialogs.ModalDialog(opt)
                             .header($('<h4>').text(gt('Confirmation')))
-                            .append(message)
-                            .append($hint)
+                            .append(message, $hint)
                             .addPrimaryButton('rename', gt('Yes'), 'rename', {'tabIndex': '1'})
                             .addButton('change', gt('Adjust'), 'change', {'tabIndex': '1'})
                             .show()
@@ -63,13 +62,13 @@ define('io.ox/files/util',
                                 else
                                     def.reject();
                             });
-                    } else if (name === '') {
-                        //usually prevented from ui
-                        def.reject();
-                    } else {
-                        def.resolve();
-                    }
-                    return def.promise();
-                }
+            } else if (formFilename === '') {
+                //usually prevented from ui
+                def.reject();
+            } else {
+                def.resolve();
+            }
+            return def.promise();
+        }
     };
 });

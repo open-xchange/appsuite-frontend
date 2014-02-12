@@ -24,6 +24,8 @@
             line-height: @calendarToolbarHeight - @calendarToolbarTopPadding;
             font-family: @lightFontFamily;
             font-size: 20px;
+            color: #333;
+
             .cw {
                 font-size: 14px;
                 color: #888;
@@ -99,7 +101,7 @@
 
         .toolbar {
 
-            height: @calendarToolbarHeight + 15;
+            height: @calendarToolbarHeight - 7px;
             padding-top: 0;
 
             .info {
@@ -236,7 +238,9 @@
     }
 }
 
-/* Grid */
+/* Grid , only used in conflicts. Listview styles are located under
+   list/style.less
+*/
 .vgrid-cell {
 
     &.calendar {
@@ -604,11 +608,10 @@
 /* Timezone popups */
 .popover {
 
-    width: auto;
-    min-width: 236px;
-
     &.timezones {
 
+        width: auto;
+        min-width: 236px;
         width: 280px;
 
         .popover-content .list {

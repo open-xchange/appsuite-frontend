@@ -16,12 +16,10 @@
 define(['io.ox/core/extensions',
        'io.ox/core/cache'], function (ext, cache) {
 
-    "use strict";
+    'use strict';
 
     // test objects
-    var TIMEOUT = ox.testTimeout,
-        testKey = 'testkey',
-        testValue = 'ABC';
+    var TIMEOUT = ox.testTimeout;
 
     // helpers
     function Done() {
@@ -38,7 +36,7 @@ define(['io.ox/core/extensions',
     /*
      * Suite: Cache Test
      */
-    describe("Caching with SimpleCache", function () {
+    describe('Caching with SimpleCache', function () {
 
         var testStorage = new cache.SimpleCache('TEST_SimpleCache');
 

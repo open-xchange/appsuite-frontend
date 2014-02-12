@@ -24,9 +24,6 @@ define('io.ox/calendar/model',
 
     'use strict';
 
-    var defStart = new date.Local();
-    defStart.setHours(defStart.getHours() + 1, 0, 0, 0);
-
     var RECURRENCE_FIELDS = 'recurrence_type interval days day_in_month month until occurrences'.split(' ');
 
     var factory = new ModelFactory({
@@ -44,16 +41,21 @@ define('io.ox/calendar/model',
         },
         model: {
             defaults: {
-                start_date: defStart.getTime(),
-                end_date: defStart.getTime() + date.HOUR,
                 recurrence_type: 0,
-                notification: true
+                notification: true,
+                shown_as: 1
             },
             init: function () {
+                var self = this,
+                    defStart = new date.Local().setMinutes(0, 0, 0).add(date.HOUR);
 
-                var self = this;
+                // set default time
+                self.attributes = _.extend({
+                    start_date: defStart.getTime(),
+                    end_date: defStart.getTime() + date.HOUR
+                }, self.attributes);
 
-                this.on('create:fail update:fail', function (response) {
+                self.on('create:fail update:fail', function (response) {
                     if (response.conflicts) {
                         self.trigger('conflicts', response.conflicts);
                     }
@@ -305,8 +307,8 @@ define('io.ox/calendar/model',
 
                     // if cache dates are unuseable
                     if (_end - _start === api.DAY) {
-                        _start = defStart.getTime();
-                        _end = defStart.getTime() + date.HOUR;
+                        _start = new date.Local().setMinutes(0, 0, 0).add(date.HOUR).getTime();
+                        _end = _start + date.HOUR;
                     }
 
                     _start = new date.Local(_start);

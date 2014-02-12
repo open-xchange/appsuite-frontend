@@ -30,12 +30,23 @@ define('io.ox/calendar/main',
         win,
         lastPerspective = settings.get('viewView', 'week:workweek');
 
-    // corrupt data fix
-    if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
-
-
-    // force listview on small devices
-    lastPerspective = _.device('small') ? 'list': lastPerspective;
+    if (_.device('smartphone')) {
+        // map different views here
+        switch (lastPerspective) {
+        case 'week:workweek':
+            lastPerspective = 'month';
+            break;
+        case 'week:week':
+            lastPerspective = 'month';
+            break;
+        case 'calendar':
+            lastPerspective = 'month';
+            break;
+        }
+    } else {
+        // corrupt data fix
+        if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
+    }
 
     // launcher
     app.setLauncher(function (options) {
@@ -67,6 +78,7 @@ define('io.ox/calendar/main',
                 if (baton.id !== 'private') return;
                 if (!baton.data || !baton.options) return;
                 if (baton.options.type !== 'calendar') return;
+                if (baton.options.dialogmode) return;
 
                 // hide "show all" checkbox when only one calendar is available
                 var count =

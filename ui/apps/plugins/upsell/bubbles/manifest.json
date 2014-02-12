@@ -1,3 +1,11 @@
 {
-    "namespace": "core"
+    "namespace": "io.ox/core/main",
+    "title": "Upsell bubbles",
+    "company": "Open-Xchange",
+    "icon": "/images/icon.png",
+    "category": "Dev",
+    "settings": false,
+    "index": 100,
+    "path": "plugins/upsell/bubbles/main",
+    "requires": "upsell"
 }

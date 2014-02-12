@@ -13,30 +13,36 @@
 define(['shared/examples/for/api',
        'io.ox/core/api/folder',
        'io.ox/core/http',
-       'io.ox/core/extensions'
-], function (sharedExamplesFor, api, http, ext) {
-    var setupFakeServer = function (server) {
+       'io.ox/core/extensions',
+       'io.ox/core/notifications'
+], function (sharedExamplesFor, api, http, ext, notifications) {
+    var fakeFolders = {},
+        setupFakeServer = function (server) {
         //sends a default folder for get calls
         server.respondWith('GET', /api\/folders\?action=get/, function (xhr) {
             var sendObject = JSON.parse('{"' + decodeURI(xhr.url)
                 .replace('/api/folders?', '')
                 .replace(/"/g, '\\"').replace(/&/g, '","')
-                .replace(/=/g,'":"') + '"}'),
+                .replace(/=/g, '":"') + '"}'),
                 parentFolderIDs = {'2': '1',
                     '3' : '2',
                     '4' : '2',
                     '5' : '2',
                     '21' : '2'
-                };
+                },
+                data = _.extend({
+                    id: sendObject.id,
+                    folder_id: parentFolderIDs[sendObject.id]
+                }, fakeFolders[sendObject.id] || {});
 
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                JSON.stringify({timestamp:1378223251586, data: {id: sendObject.id, folder_id: parentFolderIDs[sendObject.id]}})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                JSON.stringify({timestamp: 1378223251586, data: data})
             );
         });
 
         //sends a list of subfolders
         server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                 JSON.stringify({
                     timestamp: 1368791630910,
                     data: [
@@ -50,26 +56,29 @@ define(['shared/examples/for/api',
 
         //sends a path from a folder
         server.respondWith('GET', /api\/folders\?action=path/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                JSON.stringify({"timestamp":9223372036854775807,
-                    "data":[
-                        ["3",0,0,0,0,0,"2",null,"Subfolder","infostore",2,true,0,null,null,true,2,null,null,null,null,true,true,8,null,false,false,"Name"],
-                        ["2",0,0,0,0,0,"1",null,"Folder","infostore",2,true,0,null,null,true,2,null,null,null,null,true,true,8,null,false,false,"Name"],
-                        ["1",0,0,0,0,0,"0",null,"Root","infostore",2,true,0,null,null,true,2,null,null,null,null,true,true,8,null,false,false,"Name"]]})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                JSON.stringify({
+                    'timestamp': 9223372036854775807,
+                    'data': [
+                        ['3', 0, 0, 0, 0, 0, '2', null, 'Subfolder', 'infostore', 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, 'Name'],
+                        ['2', 0, 0, 0, 0, 0, '1', null, 'Folder', 'infostore', 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, 'Name'],
+                        ['1', 0, 0, 0, 0, 0, '0', null, 'Root', 'infostore', 2, true, 0, null, null, true, 2, null, null, null, null, true, true, 8, null, false, false, 'Name']
+                    ]
+                })
             );
         });
 
         //sends the created folder
         server.respondWith('PUT', /api\/folders\?action=(new|delete)/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                JSON.stringify({timestamp:1378223251586, data: '21'})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                JSON.stringify({timestamp: 1378223251586, data: '21'})
             );
         });
 
         //responds with empty message to allVisible calls
         server.respondWith(/api\/folders\?action=allVisible/, function (xhr) {
-            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                JSON.stringify({timestamp:1378223251586, data: []})
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                JSON.stringify({timestamp: 1378223251586, data: []})
             );
         });
     };
@@ -110,21 +119,15 @@ define(['shared/examples/for/api',
                 }, 'cache clear takes too long', 1000);
                 runs(function () {
                     //make fake server only respond on demand
-                    this.server = ox.fakeServer.create();
-
+                    this.server.autoRespond = false;
                     setupFakeServer(this.server);
                 });
             });
 
-            afterEach(function () {
-                //make fake server respond automatically
-                this.server.restore();
-            });
-
-            it('should return a folder with correct id', function() {
+            it('should return a folder with correct id', function () {
                 var result = api.get({folder: '2', cache: false});
 
-                result.done(function(data) {
+                result.done(function (data) {
                     expect(data.id).toBe('2');
                 });
 
@@ -300,29 +303,34 @@ define(['shared/examples/for/api',
             it('from "this is a test title" to "this is\u2026test title"', function () {
                 expect(api.getFolderTitle('this is a test title', 19)).toBe('this is\u2026test title');
             });
+
+            it('from "_this is a test title" to "_this is\u2026test title"', function () {
+                expect(api.getFolderTitle('_this is a test title', 19)).toBe('_this is\u2026test title');
+            });
+
+            it('from "this is a test title_" to "this is\u2026test title_"', function () {
+                expect(api.getFolderTitle('this is a test title_', 19)).toBe('this is\u2026test title_');
+            });
         });
 
         describe('hidden objects', function () {
             beforeEach(function () {
-                this.server = ox.fakeServer.create();
-                this.server.autoRespond = true;
                 this.server.respondWith('GET', /api\/folders\?action=list/, function (xhr) {
-                    xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                                 JSON.stringify({
                                     timestamp: 1368791630910,
                                     data: [
                                         {id: '3', folder_id: 'hidden/test', title: '.drive'},
                                         {id: '4', folder_id: 'hidden/test', title: 'visible'},
                                         {id: '5', folder_id: 'hidden/test', title: '.hidden'},
-                                        {id: '6', folder_id: 'hidden/test', title: 'customHidden'}
+                                        {id: '6', folder_id: 'hidden/test', title: 'customHidden'},
+                                        {id: '0815', folder_id: 'hidden/test', title: 'for general files specs'}
                                     ]
                                 })
                     );
                 });
             });
-            afterEach(function () {
-                this.server.restore();
-            });
+
             describe('with "show hidden files" option enabled', function () {
                 it('should show folders starting with a dot', function () {
                     var def = require([
@@ -347,7 +355,104 @@ define(['shared/examples/for/api',
                 });
             });
 
-            describe('with "show hidden files" option disabled (default)', function() {
+            describe('with "show hidden files" option disabled (default)', function () {
+
+                describe('when naming folders with filtered names', function () {
+                    beforeEach(function () {
+                        this.server.responses = _(this.server.responses).reject(function (response) {
+                            return 'api/folders?action=get'.search(response.url) === 0;
+                        });
+                        setupFakeServer(this.server);
+                        fakeFolders['31337'] = {
+                            id: '31337',
+                            folder_id: '13',
+                            title: 'secret'
+                        };
+                    });
+
+                    afterEach(function () {
+                        this.server.restore();
+                    });
+
+                    it('should trigger "warn:hidden" event during create', function () {
+                        fakeFolders['21'] = {
+                            id: '21',
+                            folder_id: '13',
+                            title: '.secret'
+                        };
+                        var def = require([
+                                'settings!io.ox/core',
+                                'settings!io.ox/files'
+                            ]).then(function (settings, fileSettings) {
+                                settings.set('folder/blacklist');
+                                fileSettings.set('showHidden');
+                                return api.clearCaches();
+                            }).then(function () {
+                                expect(api).toTrigger('warn:hidden');
+                                return api.create({
+                                    folder: '13',
+                                    title: '.secret'
+                                });
+                            }).then(function () {
+                                return 'finished';
+                            });
+
+                        expect(def).toResolveWith('finished');
+                    });
+
+                    it('should trigger "warn:hidden" event during update', function () {
+                        this.server.respondWith('PUT', /api\/folders\?action=update/, function (xhr) {
+                            var idPos = xhr.url.indexOf('&id='),
+                                id = xhr.url.slice(idPos + 4, xhr.url.indexOf('&', idPos + 1)),
+                                oldData = fakeFolders[id];
+
+                            fakeFolders[id] = _.extend(oldData, JSON.parse(xhr.requestBody));
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                                JSON.stringify({'timestamp': 1386862269412, 'data': id})
+                            );
+                        });
+                        var triggered,
+                            def;
+
+                        //warn:hidden is triggered independently, so we need to wait for it
+                        api.on('warn:hidden', function () {
+                            triggered = true;
+                        });
+                        def = require([
+                            'settings!io.ox/core',
+                            'settings!io.ox/files'
+                        ]).then(function (settings, fileSettings) {
+                            settings.set('folder/blacklist');
+                            fileSettings.set('showHidden');
+                            return api.clearCaches();
+                        }).then(function () {
+                            expect(api).toTrigger('warn:hidden');
+                            return api.update({
+                                folder: '31337',
+                                changes: {
+                                    title: '.secret'
+                                }
+                            });
+                        }).then(function () {
+                            return 'finished';
+                        });
+
+                        waitsFor(function () {
+                            return triggered === true;
+                        }, 'folder API to trigger warn:hidden', ox.testTimeout);
+                        expect(def).toResolveWith('finished');
+                    });
+
+                    it('should warn the user that files will be hidden', function () {
+                        var spy = sinon.spy(notifications, 'yell');
+
+                        api.trigger('warn:hidden', {title: '.secret'});
+                        //expect to contain the folder name in the message
+                        expect(spy).toHaveBeenCalledWithMatch('info', /\.secret/);
+                        spy.restore();
+                    });
+                });
+
                 it('should hide folders starting with a dot', function () {
                     var def = require([
                             'settings!io.ox/core',

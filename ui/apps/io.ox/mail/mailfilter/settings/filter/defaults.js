@@ -18,37 +18,37 @@ define('io.ox/mail/mailfilter/settings/filter/defaults', function () {
     return {
             tests: {
                 'From': {
-                    'comparison': 'matches',
+                    'comparison': 'contains',
                     'headers': ['From'],
                     'id': 'header',
                     'values': ['']
                 },
                 'any': {
-                    'comparison': 'matches',
+                    'comparison': 'contains',
                     'headers': ['To', 'Cc'],
                     'id': 'header',
                     'values': ['']
                 },
                 'Subject': {
-                    'comparison': 'matches',
+                    'comparison': 'contains',
                     'headers': ['Subject'],
                     'id': 'header',
                     'values': ['']
                 },
                 'mailingList': {
-                    'comparison': 'matches',
+                    'comparison': 'contains',
                     'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'],
                     'id': 'header',
                     'values': ['']
                 },
                 'To': {
-                    'comparison': 'matches',
+                    'comparison': 'contains',
                     'headers': ['To'],
                     'id': 'header',
                     'values': ['']
                 },
                 'Cc': {
-                    'comparison': 'matches',
+                    'comparison': 'contains',
                     'headers': ['Cc'],
                     'id': 'header',
                     'values': ['']

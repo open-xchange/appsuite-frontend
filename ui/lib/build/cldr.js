@@ -5,7 +5,7 @@ var util = require("util");
 var i18n = require("./i18n");
 var utils = require("./fileutils");
 var xml2js = require("../xml2js/lib/xml2js");
-var _ = require("../underscore");
+var _ = require("../underscore/underscore");
 
 var languageNames = {};
 
@@ -185,7 +185,7 @@ function processLanguage(lang) {
         ["lib/build/cldr.js", "tmp/cldr/supplemental/supplementalData.json"],
         function () {
             var ldml = loadLanguage(lang), supp = supplementalData();
-            
+
             // extract the display name of the locale
             var ldn = 'localeDisplayNames/', name;
             for (var L = lang; L; L = L.replace(/(?:^|_)[A-Za-z0-9]+$/, '')) {
@@ -217,7 +217,7 @@ function processLanguage(lang) {
                     languageNames[lang] = name;
                 }
             }
-            
+
             // extract locale data
             var gregorian = "dates/calendars/calendar[@type='gregorian']/";
             var weekDays = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5,
@@ -452,7 +452,7 @@ var loadLanguage = _.memoize(function (lang) {
  * selector (..).
  * @param path {string} The XPath string
  * @param parents {[function(xml)]} Optional array with parent matchers for
- * the parent selector. 
+ * the parent selector.
  * @returns An array with a matcher function for each XPath element in path.
  */
 function xpath(path, parents) {

@@ -14,7 +14,7 @@
 define('io.ox/calendar/list/perspective',
     ['io.ox/calendar/api',
      'io.ox/core/tk/vgrid',
-     'io.ox/calendar/view-grid-template',
+     'io.ox/calendar/list/view-grid-template',
      'io.ox/calendar/view-detail',
      'io.ox/core/commons',
      'io.ox/core/extensions',
@@ -27,7 +27,8 @@ define('io.ox/calendar/list/perspective',
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('list');
+    var perspective = new ox.ui.Perspective('list'),
+        start, end;
 
     perspective.refresh = function () {
         this.updateGridOptions();
@@ -40,7 +41,13 @@ define('io.ox/calendar/list/perspective',
             self = this,
             vsplit = commons.vsplit(this.main, app),
             left = vsplit.left.addClass('border-right'),
-            right = vsplit.right.addClass('default-content-padding calendar-detail-pane').attr('tabindex', 1).scrollable(),
+            right = vsplit.right.addClass('default-content-padding calendar-detail-pane')
+            .attr({
+                'tabindex': 1,
+                'role': 'complementary',
+                'aria-label': gt('Appointment Details')
+            })
+            .scrollable(),
             gridOptions = {
                 settings: settings,
                 showToggle: _.device('smartphone') ? false: true
@@ -49,17 +56,25 @@ define('io.ox/calendar/list/perspective',
             findRecurrence = false,
             optDropdown = null,
             months = 1; // how many months do we display
-
-        this.grid = grid;
+        this.main.addClass('list-view');
 
         // show "load more" link
         gridOptions.tail = function () {
-            return $('<div class="vgrid-cell tail">').append(
-                $('<a href="#" tabindex="-1">').text(gt('More'))
+
+            // no tail for search
+            if (this.getMode() === 'search') return $();
+
+            var link = $('<div class="vgrid-cell tail">').append(
+                //#. Label for a button which shows more upcoming
+                //#. appointments in a listview by extending the search
+                //#. by one month in the future
+                $('<a href="#" tabindex="1">').text(gt('Expand timeframe by one month'))
             );
+            return link;
         };
 
         grid = new VGrid(left, gridOptions);
+        this.grid = grid;
 
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
             findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
@@ -107,6 +122,12 @@ define('io.ox/calendar/list/perspective',
         grid.on('change:mode', function (e, cur) {
             if (optDropdown && cur) {
                 optDropdown[cur === 'search' ? 'hide' : 'show']();
+            }
+            if (cur === 'search') {
+                $(grid.getContainer()).addClass('search-view');
+            } else {
+                $(grid.getContainer()).removeClass('search-view');
+
             }
         });
 
@@ -230,6 +251,15 @@ define('io.ox/calendar/list/perspective',
          * @return {function}       the all request function for the vgrid
          */
         var generateAllRequest = function (dates) {
+            //var timeframe = util.getDateInterval({start_date: dates.start, end_date: dates.end});
+            var endDate = new date.Local(dates.end).format(date.DATE);
+            grid.setEmptyMessage(function (mode) {
+                if (mode === 'search') {
+                    return gt.format('No appointments found for "%s"', win.search.query);
+                } else {
+                    return gt.format('No appointments found until %s', endDate);
+                }
+            });
             return function () {
                 var prop = grid.prop(),
                     start = dates.start,
@@ -285,8 +315,8 @@ define('io.ox/calendar/list/perspective',
         // based on the months variable which will be increased each time
         // this gets called
         var getIncreasedTimeFrame = function () {
-            var start = new date.Local().setHours(0, 0, 0, 0);
-            var end = new date.Local(start).setMonth(start.getMonth() + months);
+            start = new date.Local().setHours(0, 0, 0, 0);
+            end = new date.Local(start).setMonth(start.getMonth() + months);
             // increase for next run
             months++;
             return {start: start, end: end};
@@ -343,8 +373,7 @@ define('io.ox/calendar/list/perspective',
      * triggered by desktop.js
      */
     perspective.afterShow = function () {
-        this.updateGridOptions();
-        this.grid.refresh(true);
+        this.refresh();
     };
 
     return perspective;

@@ -12,14 +12,14 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define(["io.ox/core/tk/model"], function (Model) {
+define(['io.ox/core/tk/model'], function (Model) {
 
     'use strict';
 
     var data = {
         firstName: 'Matthias',
-       familyName: '',
-       city: 'Dortmund'
+        familyName: '',
+        city: 'Dortmund'
     },
     schema = new Model.Schema({
         familyName: { mandatory: true },

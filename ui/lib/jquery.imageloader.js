@@ -70,7 +70,7 @@ var onLoadImage = function (ev, elm, img, isError) {
   // console.log('onLoadImage: ', ev.namespace);
   var parent = ev.currentTarget;
   var defaults = $(parent).data(ev.namespace);
-  if (!defaults.isLoading) {
+  if (!defaults || !defaults.isLoading) {
     // console.log('onLoadImage: is not loading but still called?');
     return;
   }

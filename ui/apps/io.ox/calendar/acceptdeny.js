@@ -77,7 +77,7 @@ define('io.ox/calendar/acceptdeny',
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment')),
                                 $('<div class="controls">').css({'margin-right': '10px'}).append(
                                     $('<input type="text" data-property="comment">')
-                                        .attr({ id: inputid })
+                                        .attr({ id: inputid, tabindex: '1'})
                                         .css({ width: '100%' })
                                         .val(message)
                                 )
@@ -86,10 +86,10 @@ define('io.ox/calendar/acceptdeny',
                         )
                     );
                 })
-                .addAlternativeButton('cancel', gt('Cancel'))
-                .addDangerButton('declined', gt('Decline'))
-                .addWarningButton('tentative', gt('Tentative'))
-                .addSuccessButton('accepted', gt('Accept'))
+                .addAlternativeButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                .addDangerButton('declined', gt('Decline'), 'declined', {tabIndex: '1'})
+                .addWarningButton('tentative', gt('Tentative'), 'tentative', {tabIndex: '1'})
+                .addSuccessButton('accepted', gt('Accept'), 'accepted', {tabIndex: '1'})
                 .show(function () {
                     $(this).find('[data-property="comment"]').focus();
                 })

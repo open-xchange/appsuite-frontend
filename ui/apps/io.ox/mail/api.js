@@ -264,7 +264,7 @@ define('io.ox/mail/api',
             },
             list: {
                 action: 'list',
-                columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
                 extendColumns: 'io.ox/mail/api/list'
             },
             get: {
@@ -380,8 +380,8 @@ define('io.ox/mail/api',
         NORMAL:  '0',
         REPLY:   '1',
         FORWARD: '2',
-        DRAFT:   '3',
-        EDIT_DRAFT: '4'
+        EDIT_DRAFT: '3',
+        DRAFT:   '4'
     };
 
     api.FLAGS = {
@@ -417,7 +417,6 @@ define('io.ox/mail/api',
     var cacheControl = {},
         getAll = api.getAll,
         getList = api.getList,
-        get = api.get,
         remove = api.remove,
         search = api.search;
 
@@ -449,23 +448,6 @@ define('io.ox/mail/api',
         return getList.call(this, ids, useCache, options).then(function (data) {
             _.each(data, util.removeChannelSuffix);
             return data;
-        });
-    };
-
-    /**
-     * pipes get() to remove typesuffix from sender
-     * @param  {object} options
-     * @param  {boolan} useCache (default is true)
-     * @fires api#refresh.list
-     * @return {deferred} (resolve returns response)
-     */
-    api.get = function (options, useCache) {
-        //TOOD: use this until backend removes channel suffix
-        return get.call(this, options, useCache).then(function (mail) {
-            if (_.isObject(mail)) {
-                util.removeChannelSuffix(mail);
-            }
-            return mail;
         });
     };
 
@@ -1243,7 +1225,7 @@ define('io.ox/mail/api',
                         accountAPI.getFoldersByType('sent'),
                         accountAPI.getFoldersByType('drafts')
                     );
-                    $.when.apply(
+                    $.when.apply($,
                         _(folders).map(function (id) {
                             return api.caches.all.grepRemove(id + DELIM);
                         })
@@ -1283,14 +1265,8 @@ define('io.ox/mail/api',
 
     function handleSendXHR2(data, files) {
 
-        var form = new FormData(),
-            deleteDraftOnTransport;
-        if (data.deleteDraft || settings.get('features/alwaysDeleteDraft', false)) {//don't send temporary flag
-            deleteDraftOnTransport = true;
-            delete data.deleteDraft;
-        } else if (settings.get('features/alwaysDeleteDraft', false)) {
-            deleteDraftOnTransport = data.sendtype === api.SENDTYPE.EDIT_DRAFT;
-        }
+        var form = new FormData();
+        
         // add mail data
         form.append('json_0', JSON.stringify(data));
         // add files
@@ -1302,7 +1278,6 @@ define('io.ox/mail/api',
             module: 'mail',
             params: {
                 action: 'new',
-                deleteDraftOnTransport: deleteDraftOnTransport
             },
             data: form,
             dataType: 'text'
@@ -1310,9 +1285,7 @@ define('io.ox/mail/api',
     }
 
     function handleSendTheGoodOldWay(data, form) {
-        if (data.deleteDraft) {//don't send temporary flag
-            delete data.deleteDraft;
-        }
+        
         return http.FORM({
             module: 'mail',
             action: 'new',
@@ -1618,6 +1591,24 @@ define('io.ox/mail/api',
                     return data;
                 });
             });
+    };
+
+    // send delivery receipt
+    // data must include "folder" and "id"
+    api.ack = function (data) {
+
+        return accountAPI.getPrimaryAddressFromFolder(data.folder).then(function (addressArray) {
+
+            var name = addressArray[0],
+                address = addressArray[1],
+                from = !name ? address : '"' + name + '" <' + address + '>';
+
+            return http.PUT({
+                module: 'mail',
+                params: { action: 'receipt_ack' },
+                data: _.extend({ from: from }, data)
+            });
+        });
     };
 
     // change API's default options if allowHtmlMessages changes

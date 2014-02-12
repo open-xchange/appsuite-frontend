@@ -22,6 +22,12 @@ if (jasmine) {
 
                 this.actual.on(eventName, spy);
                 return true;
+            },
+            toHaveFocus: function () {
+                var actual = this.actual;
+                if (this.actual instanceof jQuery) actual = this.actual.get(0);
+                if (actual === document.activeElement) return true;
+                return false;
             }
         });
     });

@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2013
- * Mail: info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  */
@@ -42,7 +41,6 @@ define('io.ox/core/pubsub/subscriptions',
     },
 
     isDestructiveSubscription = function (baton) {
-        console.log(baton, baton.data.entityModule, baton.data.entityModule === 'calendar');
         return baton.data.entityModule === 'calendar';
     },
 
@@ -133,7 +131,8 @@ define('io.ox/core/pubsub/subscriptions',
                 popup.on('subscribe', function () {
 
                     popup.busy();
-                    var invalid;
+                    var module = self.model.get('entityModule'),
+                        invalid, folder;
 
                     _.each(popup.getBody().find('input'), function (input) {
                         if (!$(input).val()) {
@@ -147,12 +146,16 @@ define('io.ox/core/pubsub/subscriptions',
 
                     if (invalid) { return; }
 
+                    // add new folders under module's default folder!
+                    folder = require('settings!io.ox/core').get('folder/' + module);
+
+                    //...but drive uses current selected folder instead
+                    if (module === 'infostore')
+                        folder = app.folder.get() || folder;
                     if (baton.newFolder) {
 
                         var service = findId(baton.services, baton.model.get('source'));
 
-                        // add new folders under module's default folder!
-                        var folder = require('settings!io.ox/core').get('folder/' + self.model.get('entityModule'));
                         folderAPI.create({
                             folder: folder,
                             data: {
@@ -166,6 +169,7 @@ define('io.ox/core/pubsub/subscriptions',
                             saveModel(true);
                         });
                     } else {
+                        self.model.attributes.folder = folder;
                         saveModel();
                     }
 
@@ -328,7 +332,7 @@ define('io.ox/core/pubsub/subscriptions',
             var fullNode = $('<div>').addClass('alert alert-info').append(
                 $('<b>').addClass('privacy-label').text(gt('Approximate Duration for Subscriptions')),
                         $('<div>').addClass('privacy-text').text(
-                            gt('Updating subscribed data takes time. Importing 100 contacts from Xing, for example, takes up to 5 minutes. Please have some patience.')));
+                            gt('Updating subscribed data takes time. Importing 100 contacts for example, may take up to 5 minutes. Please have some patience.')));
             var link = $('<div>').addClass('control-group').append($('<a href="#">').addClass('controls').text(gt('Approximate Duration for Subscriptions')).on('click', function (e) {
                     e.preventDefault();
                     link.replaceWith(fullNode);

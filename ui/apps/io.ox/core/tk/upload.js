@@ -225,17 +225,23 @@ define('io.ox/core/tk/upload',
             });
         };
 
-        this.offer = function (file) {
+        this.offer = function (file, options) {
+
             var fileTitle, proceed = true, self = this;
 
-            files.push.apply(files, [].concat(file)); // handles both arrays and single objects properly
+            // add to queue - handles both arrays and single objects properly
+            _([].concat(file)).each(function (file) {
+                files.push({ file: file, options: options || {} });
+            });
+
             require(['settings!io.ox/core', 'io.ox/core/strings'], function (settings, strings) {
                 var properties = settings.get('properties');
                 if (properties && delegate.type !== 'importEML') {
                     var total = 0,
                         maxSize = properties.infostoreMaxUploadSize,
                         quota = properties.infostoreQuota;
-                    _.each(files, function (f) {
+                    _.each(files, function (item) {
+                        var f = item.file;
                         fileTitle = f.name;
                         total += f.size;
                         if (maxSize > 0 && f.size > maxSize) {

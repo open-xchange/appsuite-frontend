@@ -24,12 +24,11 @@ define('io.ox/core/main',
      'io.ox/core/upsell',
      'io.ox/core/capabilities',
      'io.ox/core/ping',
-     'io.ox/tours/main',
      'settings!io.ox/core',
      'gettext!io.ox/core',
      'io.ox/core/relogin',
      'io.ox/core/bootstrap/basics'
-    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, tours, settings, gt) {
+    ], function (desktop, session, http, appAPI, ext, Stage, date, notifications, commons, upsell, capabilities, ping, settings, gt) {
 
     'use strict';
 
@@ -94,10 +93,25 @@ define('io.ox/core/main',
         });
     };
 
+    // listen for logout event
+    ext.point('io.ox/core/logout').extend({
+        id: 'saveSettings',
+        logout: function () {
+            // force save requests for all pending settings
+            var pending = settings.getAllPendingSettings(),
+                defs = [];
+            if (!_.isEmpty(pending)) {
+                _(pending).each(function (setting) {
+                    defs.push(setting.save(undefined, { force: true }));
+                });
+            }
+            return $.when(defs);
+        }
+    });
+
     //
     // handle online/offline mode
     //
-
     function showIndicator(text) {
         $('#io-ox-offline').text(text).stop().show().animate({ bottom: '0px' }, 200);
     }
@@ -134,6 +148,10 @@ define('io.ox/core/main',
         launchers = $('.launchers', topbar),
         launcherDropdown = $('.launcher-dropdown ul', topbar);
 
+    topbar.attr({
+        'aria-label': gt('Applications')
+    });
+
     $('a.dropdown-toggle', topbar).attr({
         'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.'),
         'role': 'button',
@@ -147,7 +165,7 @@ define('io.ox/core/main',
     gt.pgettext('app', 'Calendar');
     gt.pgettext('app', 'Scheduling');
     gt.pgettext('app', 'Tasks');
-    gt.pgettext('app', 'Files');
+    gt.pgettext('app', 'Drive');
     gt.pgettext('app', 'Conversations');
 
     var tabManager = _.debounce(function () {
@@ -246,7 +264,7 @@ define('io.ox/core/main',
 
         var count = 0,
             timer = null,
-            useSpinner = _.device('webkit || firefox'),
+            useSpinner = _.device('webkit || firefox || ie > 9'),
             duration = useSpinner ? 500 : 1500,
             refreshIcon = null;
 
@@ -502,6 +520,7 @@ define('io.ox/core/main',
                 quitApp = $('<a href="#" class="closelink" tabindex="1" role="button" aria-label="' + ariaBasicLabel + '">')
                     .append($('<i class="icon-remove">'))
                     .on('click', function (e) {
+                        e.preventDefault();
                         e.stopImmediatePropagation();
                         model.getWindow().app.quit();
                     })
@@ -599,12 +618,10 @@ define('io.ox/core/main',
                 // we don't need this right from the start,
                 // so let's delay this for responsiveness
                 if (ox.online) {
-                    //setTimeout(function () {
                     _.defer(function () {
                         self.prepend(notifications.attach(addLauncher));
                         tabManager();
                     });
-                    //}, 5000);
                 }
             }
         });
@@ -643,7 +660,7 @@ define('io.ox/core/main',
             id: 'app-specific-help',
             index: 200,
             draw: function () { //replaced by module
-                var helpDir = 'help/' + ox.language + '/',
+                var helpDir = 'help/l10n/' + ox.language + '/',
                     node = this,
                     startingPoints = {
                     'io.ox/contacts': 'ox.appsuite.user.chap.contacts.html',
@@ -669,53 +686,6 @@ define('io.ox/core/main',
             }
         });
 
-        ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'intro-tour',
-            index: 280,
-            draw: function () { //replaced by module
-                var node = this;
-                if (_.device('mobileOS') || _.device('touch')) {
-                    return;
-                }
-                node.append(
-                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(
-                            //#. Tour name; general introduction
-                            gt('Getting started')
-                        )
-                        .on('click', function (e) {
-                            tours.runTour('io.ox/intro');
-                            e.preventDefault();
-                        })
-                    )
-                );
-            }
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'app-specific-tour',
-            index: 281,
-            draw: function () { //replaced by module
-                var node = this;
-                if (_.device('mobileOS') || _.device('touch')) {
-                    return;
-                }
-                node.append(
-                    $('<li>', {'class': 'io-ox-specificHelp'}).append(
-                        $('<a target="_blank" href="" role="menuitem" tabindex="1">').text(
-                            //#. app-specific
-                            gt('Guided tour for this app')
-                        )
-                        .on('click', function (e) {
-                            var currentApp = ox.ui.App.getCurrentApp(),
-                                currentType = currentApp.attributes.name;
-                            tours.runTour(currentType);
-                            e.preventDefault();
-                        })
-                    )
-                );
-            }
-        });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'divider-before-fullscreen',
@@ -800,7 +770,7 @@ define('io.ox/core/main',
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">').append(
                             $('<i class="icon-cog icon-white launcher-icon" aria-hidden="true">')
                         ),
-                        ul = $('<ul class="dropdown-menu" role="menu">')
+                        ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu pull-right" role="menu">')
                     )
                 );
                 if (!Modernizr.touch) {
@@ -920,8 +890,9 @@ define('io.ox/core/main',
         var getAutoLaunchDetails = function (str) {
             var pair = (str || '').split(/:/), app = pair[0], method = pair[1] || '';
             return { app: (/\/main$/).test(app) ? app : app + '/main', method: method };
-        },
-        mobileAutoLaunchArray = function () {
+        };
+
+        var mobileAutoLaunchArray = function () {
             var autoStart = _([].concat(settings.get('autoStartMobile', 'io.ox/portal'))).filter(function (o) {
                 return !_.isUndefined(o) && !_.isNull(o);
             });
@@ -1014,8 +985,8 @@ define('io.ox/core/main',
             };
         }
 
-        requirejs.onError = function () {
-            console.error('requirejs', arguments);
+        requirejs.onError = function (e) {
+            console.error('requirejs', e.message, arguments);
         };
 
         // start loading stuff

@@ -13,6 +13,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+.ios {
+    .io-ox-portal {
+        .header {
+            /* no touch scrolling in header, breaks dropdowns */
+            -webkit-overflow-scrolling: initial;
+        }
+    }
+}
 .io-ox-portal {
 
     @spacing: 13px;
@@ -161,6 +169,11 @@
             .bold { font-weight: bold; }
             .italic { font-style: italic; }
             .gray { color: rgba(0, 0, 0, 0.5); }
+            &:focus { background-color: rgba(0, 0, 0, 0.10); outline: none; }
+        }
+
+        ul.content {
+            margin-left: 0px;
         }
     }
 
@@ -177,6 +190,7 @@
         margin-bottom: 13px;
         cursor: pointer;
         &:hover { text-decoration: underline; color: white; }
+        &:focus { text-decoration: underline; color: white; outline: none; }
     }
 
     h2 {
@@ -190,7 +204,7 @@
         z-index: 2;
         cursor: move;
         .transition(color 0.3s linear);
-        .ellipsis;
+        .ellipsis();
 
         .disable-widget {
             float: right;
@@ -241,9 +255,8 @@
             margin: 0;
             height: 30px;
             padding: 13px;
-            color: #111;
-            text-shadow: 0 0 5px #fff;
-            background-color: rgba(255, 255, 255, 0.50);
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.30);
             border-top: 1px solid rgba(0, 0, 0, 0.50);
         }
     }
@@ -264,111 +277,120 @@
     .item {
         cursor: pointer;
         &:hover { text-decoration: underline; }
+        &:focus { background-color: rgba(0, 0, 0, 0.10); outline: none; }
     }
 
     .line { line-height: @line-height; }
 
-    .portal-feed {
+    .content a.solution { cursor: pointer; }
 
-        h1 {
-            font-family: @lightFontFamily;
-            font-size: 24px;
-            font-weight: 300;
-            text-align: left;
-            margin: 0 0 26px 0;
-        }
+    .widget.with-summary {
+        .summary { display: none; }
+        .content { display: block; }
+        &.show-summary .summary { display: block; }
+        &.show-summary .content { display: none; }
+    }
+}
 
-        h2 {
-            font-size: 18px;
-            line-height: 22px;
-            margin: 26px 0 13px 0;
-            clear: both;
-        }
+.portal-feed {
 
-        .photo {
-            width: 100%;
-            height: 300px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: top left;
-            margin-bottom: 13px;
-        }
+    h1 {
+        font-family: @lightFontFamily;
+        font-size: 24px;
+        font-weight: 300;
+        text-align: left;
+        margin: 0 0 26px 0;
+    }
 
-        .post-url {
-            margin: 0 0 13px 0;
-            clear: both;
-        }
+    h2 {
+        font-size: 18px;
+        line-height: 22px;
+        margin: 26px 0 13px 0;
+        clear: both;
+    }
 
-        .rss-url {
-            text-align: right;
-            margin: 0 0 13px 0;
-            clear: both;
-        }
+    .photo {
+        width: 100%;
+        height: 300px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: top left;
+        margin-bottom: 13px;
+    }
 
-        .text {
-            margin-bottom: 26px;
+    .post-url {
+        margin: 0 0 13px 0;
+        clear: both;
+    }
 
-            img[hspace] {
-                &[align="left"] { margin: 0 1em 0 0; }
-                &[align="right"] { margin: 0 0 0 1em; }
-            }
-        }
+    .rss-url {
+        text-align: right;
+        margin: 0 0 13px 0;
+        clear: both;
+    }
 
-        .text-delimiter {
-            color: @linkColor;
-            width: 2em;
-            display: inline-block;
-            text-align: center;
-        }
+    .text {
+        margin-bottom: 26px;
 
-        caption {
-            font-size: 12px;
-            text-align: left;
-            color: #888;
-            display: block;
-        }
-
-        &.tumblr {
-            h2 { margin: 26px 0 4px 0 }
-            .post {
-                margin-bottom: 26px;
-                img { display: block; }
-                blockquote {
-                    em {
-                        display: block;
-                        &:before {
-                            content: '-- ';
-                        };
-                    }
-                    margin-bottom: 5px;
-                }
-            }
-
-            .post-bar {
-                font-size: 90%;
-                color: gray;
-                font-weight: 300;
-                text-align: right;
-
-                a {
-                    color: gray;
-                    margin-left: 8px;
-                    &:hover {
-                        color: #0088cc;
-                    }
-                }
-                a, i {
-                    text-decoration: none;
-                    &.icon-tag {
-                        margin-right: 4px;
-                    }
-                }
-                .post-date { float: left; }
-
-            }
+        img[hspace] {
+            &[align="left"] { margin: 0 1em 0 0; }
+            &[align="right"] { margin: 0 0 0 1em; }
         }
     }
-    .content a.solution { cursor: pointer; }
+
+    .text-delimiter {
+        color: @linkColor;
+        width: 2em;
+        display: inline-block;
+        text-align: center;
+    }
+
+    caption {
+        font-size: 12px;
+        text-align: left;
+        color: #888;
+        display: block;
+    }
+
+    &.tumblr {
+        h2 { margin: 26px 0 4px 0 }
+        .post {
+            margin-bottom: 26px;
+            img { display: block; }
+            blockquote {
+                em {
+                    display: block;
+                    &:before {
+                        content: '-- ';
+                    };
+                }
+                margin-bottom: 5px;
+            }
+        }
+
+        .post-bar {
+            font-size: 90%;
+            color: gray;
+            font-weight: 300;
+            text-align: right;
+
+            a {
+                color: gray;
+                margin-left: 8px;
+                &:hover {
+                    color: #0088cc;
+                }
+            }
+            a, i {
+                text-decoration: none;
+                &.icon-tag {
+                    margin-right: 4px;
+                }
+            }
+            .post-date { float: left; }
+
+        }
+    }
 }
 
 /* RESPONSIVE */
@@ -381,10 +403,15 @@
 
     /* smartphone reduction */
     .io-ox-portal {
-        @spacing: 13px;
 
-        padding-right: @spacing;
+        @spacing: 14px;
+
+        padding: 0;
         overflow: visible;
+
+        .header {
+            margin: 0 @spacing;
+        }
 
         h1.greeting {
             font-family: @normalFontFamily;
@@ -393,19 +420,25 @@
             .greeting-phrase { display: block; }
             .signin { font-size: 12px; color: #aaa; white-space: normal; }
         }
+
         h2 { padding: 0 0 @spacing 0; }
+
         .disable-widget { display: none; }
+
         .widget {
             display: block;
             height: auto;
             width: 100%;
             border-right-width: 0;
             float: none;
-            margin: @spacing 0;
+            margin: 0;
+            padding: @spacing;
+            border-bottom: 1px solid #eee;
             .content { position: static; }
             .decoration {
                 height: auto;
                 background-color: transparent;
+                border: 0px none;
             }
             &.requires-setup { background-color: transparent; }
             &.requires-setup, &.error-occurred {
@@ -421,6 +454,12 @@
         .photo-stream, .photo-stream .content, .preview, .preview .content {
             height: 320px;
         }
+
+        .widget.photo-stream, .widget.preview {
+            padding: 0;
+            border-bottom: 1px solid #555;
+        }
+
         .portal-feed {
             h1 { margin: 0 0 13px 0; }
             .photo { height: 200px; }
@@ -490,7 +529,7 @@
             bottom: 0;
             left: 0;
             width: 45px;
-            cursor: pointer;
+            cursor: move;
 
             i {
                 position: absolute;
@@ -529,7 +568,7 @@
             white-space: nowrap;
             text-align: left;
             max-width: 100%;
-            .ellipsis;
+            .ellipsis();
         }
 
         .action {
@@ -624,7 +663,7 @@
             top: -13px;
             bottom: 13px;
             width: 50px;
-            cursor: pointer;
+            cursor: move;
             float: left;
             height: 46px;
             right: 60px;
@@ -645,4 +684,4 @@
     z-index: 15;
 }
 
-.content-v-shift .window-content.io-ox-portal { padding-top: 45px }
+.content-v-shift .window-content.io-ox-portal { padding-top: 53px }

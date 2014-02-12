@@ -1,0 +1,3 @@
+{
+    "data":{"headers":{},"to":[["Otto Xentner","otto.xentner@open-xchange.com"]],"flags":32,"account_id":0,"color_label":0,"subject":"Test: Hello World","bcc":[],"unread":0,"received_date":1385486256000,"from":[["Otto Xentner","otto.xentner@pivotaltracker.com"]],"attachment":false,"sent_date":1385486251000,"modified":0,"account_name":"E-Mail","size":4561,"id":"1337","folder_id":"default0/INBOX/Sent","priority":3,"attachments":[{"content":"Hello World","id":"1","disp":"inline","content_type":"text/plain","size":11}],"user":["$NotJunk","NotJunk"],"content_type":"text/plain","cc":[]}
+}

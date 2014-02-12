@@ -52,6 +52,7 @@ define('io.ox/calendar/month/view',
             this.weekEnd = options.day + date.WEEK;
             this.folder = options.folder;
             this.pane = options.pane;
+            this.app = options.app;
         },
 
         onClickAppointment: function (e) {
@@ -111,10 +112,20 @@ define('io.ox/calendar/month/view',
             $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').removeClass('hover');
         },
 
+        // handler for mobile month view day-change
+        changeToSelectedDay: function (timestamp) {
+            var d = new date.Local(timestamp);
+            // set refDate for app to selected day and change
+            // perspective afterwards
+            this.app.refDate = d;
+            ox.ui.Perspective.show(this.app, 'week:day');
+        },
+
         render: function () {
             // TODO: fix this workaround
             var list = util.getWeekScaffold(this.weekStart + date.DAY),
                 firstFound = false,
+                self = this,
                 weekinfo = $('<div>')
                     .addClass('week-info')
                     .append(
@@ -126,8 +137,9 @@ define('io.ox/calendar/month/view',
                 if (day.isFirst) {
                     firstFound = true;
                 }
+                var dayCell;
                 this.$el.append(
-                    $('<div>')
+                    dayCell = $('<div>')
                         .css('z-index', list.days.length - i)
                         .addClass('day out' +
                             (day.isFirst ? ' first' : '') +
@@ -154,8 +166,15 @@ define('io.ox/calendar/month/view',
                 }
             }, this);
 
-            this.$el.prepend(weekinfo.addClass(firstFound ? ' bordertop' : ''));
-
+            if (_.device('smartphone')) {
+                // on mobile we switch to the day view after a tap
+                // on a day-cell was performed
+                this.$el.on('tap', '.day', function () {
+                    self.changeToSelectedDay($(this).data('date'));
+                });
+            } else {
+                this.$el.prepend(weekinfo.addClass(firstFound ? ' bordertop' : ''));
+            }
             return this;
         },
 
@@ -177,13 +196,21 @@ define('io.ox/calendar/month/view',
             return el;
         },
 
+        renderAppointmentIndicator: function (node) {
+
+            ext.point('io.ox/calendar/month/view/appointment/mobile')
+                .invoke('draw', node);
+        },
+
         renderAppointments: function () {
-            var self = this;
+            var self = this,
+                tempDate;
             // clear first
-            $('.appointment', this.$el).remove();
+            $('.appointment, .icon-circle', this.$el).remove();
 
             // loop over all appointments
             this.collection.each(function (model) {
+
 
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, myself) !== 2 || settings.get('showDeclinedAppointments', false)) {
@@ -208,22 +235,40 @@ define('io.ox/calendar/month/view',
                         start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
                         end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime();
 
-                    // draw across multiple days
-                    while (maxCount >= 0) {
-                        maxCount--;
-                        this.$('#' + formatDate(startDate) + ' .list').append(this.renderAppointment(model));
-
-                        // inc date
-                        if (start !== end) {
-                            startDate.setDate(startDate.getDate() + 1);
-                            startDate.setHours(0, 0, 0, 0);
-                            start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
+                    if (_.device('smartphone')) {
+                        var cell = this.$('#' + formatDate(startDate) + ' .list');
+                        if (tempDate === undefined) {
+                            // first run, draw
+                            this.renderAppointmentIndicator(cell);
                         } else {
-                            break;
+                            if (!util.onSameDay(startTSUTC, tempDate)) {
+                                // one mark per day is enough
+                                this.renderAppointmentIndicator(cell);
+                            }
+                        }
+                        // remember for next run
+                        tempDate = startTSUTC;
+                    } else {
+                        // draw across multiple days
+                        while (maxCount >= 0) {
+                            maxCount--;
+                            this.$('#' + formatDate(startDate) + ' .list').append(this.renderAppointment(model));
+
+                            // inc date
+                            if (start !== end) {
+                                startDate.setDate(startDate.getDate() + 1);
+                                startDate.setHours(0, 0, 0, 0);
+                                start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
+                            } else {
+                                break;
+                            }
                         }
                     }
                 }
             }, this);
+
+            // exit here if we are on a phone
+            if (_.device('smartphone')) return;
 
             $('.appointment.modify', this.$el).draggable({
                 helper: function () {
@@ -288,7 +333,7 @@ define('io.ox/calendar/month/view',
                 $('<div>').addClass('footer-container').append(
                     $('<div>').addClass('footer').append(function () {
                         _(days).each(function (day) {
-                            tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
+                            tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day.substr(0, 2))));
                         });
                         return tmp;
                     })
@@ -301,7 +346,8 @@ define('io.ox/calendar/month/view',
         id: 'default',
         index: 100,
         draw: function (baton) {
-            var a = baton.model,
+            var self = this,
+                a = baton.model,
                 folder = baton.folder,
                 conf = 1,
                 confString = _.noI18n('%1$s'),
@@ -338,6 +384,20 @@ define('io.ox/calendar/month/view',
                 .attr({
                     'data-extension': 'default'
                 });
+
+            util.isBossyAppointmentHandling({ app: a.attributes, folderData: folder }).then(function (isBossy) {
+                if (!isBossy) {
+                    self.removeClass('modify');
+                }
+            });
+        }
+    });
+
+    ext.point('io.ox/calendar/month/view/appointment/mobile').extend({
+        id: 'default',
+        index: 100,
+        draw: function () {
+            this.append('<i class="icon-circle">');
         }
     });
 

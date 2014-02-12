@@ -39,7 +39,7 @@ define('io.ox/mail/main',
             e.preventDefault();
             var option = $(this).attr('data-option'),
                 grid = e.data.grid;
-            if (/^(603|607|610|102|thread|from-to)$/.test(option)) {
+            if (/^(603|607|608|610|102|thread|from-to)$/.test(option)) {
                 grid.prop('sort', option).refresh();
                 // sort must not react to the prop change event because autotoggle uses this too and would mess up the persistent settings
                 //grid.updateSettings('sort', option);
@@ -98,7 +98,12 @@ define('io.ox/mail/main',
             showSwipeButton = false,
             canDeletePermission;
         left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('mail-detail-pane').scrollable();
+        right = vsplit.right.addClass('mail-detail-pane')
+                .attr({
+                    'role': 'complementary',
+                    'aria-label': gt('Mail Details')
+                })
+                .scrollable();
 
         ext.point('io.ox/mail/vgrid/options').extend({
             max: _.device('smartphone') ? 50: settings.get('threadMax', 500),
@@ -285,6 +290,7 @@ define('io.ox/mail/main',
                 buildOption('from-to', gt('From')),
                 buildOption(102, gt('Label')),
                 buildOption(607, gt('Subject')),
+                buildOption(608, gt('Size')),
                 $('<li class="divider">'),
                 buildOption('asc', gt('Ascending')),
                 buildOption('desc', gt('Descending')),
@@ -497,6 +503,14 @@ define('io.ox/mail/main',
             });
         });
 
+        var notify = function (response) {
+            //show 'In order to accomplish the search, x or more characters are required.'
+            if (response && response.code && response.code === 'MSG-0068') {
+                notifications.yell('error', response.error);
+            }
+            return this;
+        };
+
         grid.setAllRequest('search', function () {
             var options = win.search.getOptions(),
                 unread = grid.prop('unread');
@@ -506,7 +520,7 @@ define('io.ox/mail/main',
             options.order = grid.prop('order');
             return api.search(win.search.query, options).then(function (data) {
                 return unread ? filterUnread(data) : data;
-            });
+            }, notify);
         });
 
         grid.setListRequest(function (ids) {
@@ -792,8 +806,8 @@ define('io.ox/mail/main',
                 start: function () {
                     win.busy();
                 },
-                progress: function (file) {
-                    return api.importEML({ file: file, folder: app.folder.get() })
+                progress: function (item) {
+                    return api.importEML({ file: item.file, folder: item.options.folder })
                         .done(function (data) {
                             var first = _(data.data || []).first() || {};
                             if ('Error' in first) {
@@ -838,7 +852,10 @@ define('io.ox/mail/main',
         });
 
         // search
-        (function () {
+        function initSearch() {
+            var isSentfolder = (app.folder.get() === app.settings.get('defaultFolder/sent')) ? true : false,
+                searchSettingId = isSentfolder ? 'mail.search.sent' : 'mail.search',
+                order = ['from', 'to', 'cc', 'subject', 'text'];
 
             ext.point('io.ox/mail/search/defaults').extend({
                 from: true,
@@ -858,33 +875,48 @@ define('io.ox/mail/main',
             var translations = { from: gt('Sender'), to: gt('Recipient'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
                 checkboxes = ext.point('io.ox/mail/search/checkboxes').options(),
                 defaults = ext.point('io.ox/mail/search/defaults').options(),
-                data = {}, button;
+                data = {}, button, dataSettings;
 
-            //normalise data
-            _(checkboxes).each(function (flag, name) {
-                if (flag === true) {
-                    data[name] = {
-                        name: name,
-                        label: translations[name] || name,
-                        checked: defaults[name] || false
-                    };
-                }
-            });
+            if (settings.get('options/' + searchSettingId) === undefined) {
+                //normalise data
+                _(checkboxes).each(function (flag, name) {
+                    if (flag === true) {
+                        data[name] = {
+                            name: name,
+                            label: translations[name] || name,
+                            checked: defaults[name] || false
+                        };
+                    }
+                });
+            } else {
+                dataSettings = settings.get('options/' + searchSettingId);
+                _(order).each(function (name) {
+                    data[name] = dataSettings[name];
+                    data[name].label = translations[name] || name;
+                });
+            }
 
             //add dropdown button
             button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
                     .append('<i class="icon-gear">');
+            win.nodes.search.find('.dropdown').remove();
             win.nodes.search.find('.search-query-container').after(button);
 
             //add dropdown menue
             dropdownOptions({
-                id: 'mail.search',
+                id: searchSettingId,
                 anchor: button,
                 defaults: data,
                 settings: settings
             });
 
-        }());
+        }
+
+        initSearch();
+
+        app.on('folder:change', function () {
+            initSearch();
+        });
 
         // drag & drop
         win.nodes.outer.on('selection:drop', function (e, baton) {

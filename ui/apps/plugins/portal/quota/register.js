@@ -58,7 +58,7 @@ define('plugins/portal/quota/register',
     },
 
     drawTile = function (quota) {
-        var contentFields = $('<div>').addClass('content no-pointer');
+        var contentFields = $('<ul>').addClass('content no-pointer list-unstyled');
 
         this.append(contentFields);
         _.each(availableQuota(quota), function (q) {
@@ -113,14 +113,14 @@ define('plugins/portal/quota/register',
             bar = $('<div>').addClass('plugins-portal-quota-' + quota.name + 'bar');
 
         el.append(
-            $('<div class="paragraph">').append(
-                $('<span>').text(quota.i18nName),
+            $('<li class="paragraph">').append(
                 label,
+                $('<span>').text(quota.i18nName),
                 bar
             )
         );
 
-        if (quota.quota < 0) {
+        if (quota.quota <= 0) {
             label.text(gt('unlimited'));
             bar.remove();
         } else {

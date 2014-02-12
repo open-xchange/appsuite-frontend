@@ -522,210 +522,87 @@ define('io.ox/contacts/api',
         });
     };
 
-    /**
-    * get contact redced/filtered contact data; manages caching
-    * @param  {string} phone (phonenumber)
-    * @return {deferred} returns exactyl one contact object
-    */
-    //api.getByPhone = function (phone) {
-    // phone = phone || '';
-    // return fetchCache.get(phone).pipe(function (data) {
-    //     if (data !== null) {
-    //         return data;
-    //     } else if (phone === '') {
-    //         return {};
-    //     } else {
-    //         //search in all msisdn supported fields
-    //         var filter = _.map(api.getMapping('msisdn', 'names'), function (column) {
-    //             return [].concat(['=', { 'field': column }, phone ]);
-    //         });
-    //         if (!filter.length) {
-    //             return fetchCache.add(phone, {});
-    //         }
-    //         //server request
-    //         return http.PUT({
-    //             module: 'contacts',
-    //             params: {
-    //                 action: 'advancedSearch',
-    //                 columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
-    //                 timezone: 'UTC'
-    //             },
-    //             sort: 609,
-    //             data: {
-    //                 'filter': [
-    //                     'or'
-    //                 ].concat(filter)
-    //             }
-    //         }).pipe(function (data) {
-    //             //TODO: use smarter server request instead
-    //             if (data.length) {
-    //                 // favor contacts with an image
-    //                 data.sort(function (a, b) {
-    //                     return !!b.image1_url ? +1 : -1;
-    //                 });
-    //                 // favor contacts in global address book
-    //                 data.sort(function (a, b) {
-    //                     return b.folder_id === '6' ? +1 : -1;
-    //                 });
-    //                 // remove host
-    //                 if (data[0].image1_url) {
-    //                     data[0].image1_url = data[0].image1_url
-    //                         .replace(/^https?\:\/\/[^\/]+/i, '')
-    //                         .replace(/^\/ajax/, ox.apiRoot);
-    //                 }
-    //                 // use first contact
-    //                 return fetchCache.add(phone, {
-    //                     image1_url: data[0].image1_url,
-    //                     display_name: data[0].display_name,
-    //                     internal_userid: data[0].internal_userid,
-    //                     email1: data[0].email1
-    //                 });
-    //             } else {
-    //                 // no data found
-    //                 return fetchCache.add(phone, {});
-    //             }
-    //         });
-    //     }
-    // });
-    //};
+    // node is optional. if missing function returns just the URL
+    api.pictureHalo = function (/* [node], options */) {
 
-    /**
-     * TODO: dirty copy/paste hack until I know hat fetchCache is good for
-     * @param  {object} obj
-     * @param  {object} options
-     * @return {string} url
-     */
-    api.getPictureURLSync = function (obj, options) {
-
-        var defaultUrl = ox.base + '/apps/themes/default/dummypicture.png';
-        if (!_.isObject(obj)) { return defaultUrl; }
+        var args = _(arguments).toArray(), node, options, params, fallback, url, img;
+        // use copy of data object because of delete-statements
+        if (args.length === 1) {
+            options = _.clone(args[0]);
+        } else {
+            node = args[0];
+            options = _.clone(args[1]);
+        }
 
         // duck checks
-        if (api.looksLikeResource(obj)) {
-            return ox.base + '/apps/themes/default/dummypicture_resource.png';
-        } else if (api.looksLikeDistributionList(obj)) {
-            return ox.base + '/apps/themes/default/dummypicture_group.png';
-        } else if (obj.image1_url) {
-            return obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options || {});
+        if (api.looksLikeResource(options)) {
+            url = ox.base + '/apps/themes/default/dummypicture_resource.png';
+        }
+        else if (api.looksLikeGroup(options) || api.looksLikeDistributionList(options)) {
+            url = ox.base + '/apps/themes/default/dummypicture_group.png';
+        }
+        else if (_.isString(options.image1_url) && options.image1_url !== '') {
+            params = $.param($.extend({}, {
+                // scale
+                width: options.width,
+                height: options.height,
+                scaleType: options.scaleType
+            }));
+            url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
+        }
+
+        // already done?
+        if (url) return node ? node.css('background-image', 'url(' + url + ')') : url;
+
+        // preference; internal_userid must not be undefined, null, or zero
+        if (options.internal_userid || options.userid || options.user_id) {
+            delete options.contact_id;
+            delete options.folder_id;
+            delete options.folder;
+            delete options.id;
         } else {
-            return defaultUrl;
+            delete options.internal_userid;
+            delete options.userid;
+            delete options.user_id;
         }
-    };
 
-    /**
-    * gets deferred for fetching picture url
-    * @param  {string|object} obj (emailaddress or data object)
-    * @param  {object} options (height, width, scaleType)
-    * @fires  api#fail
-    * @return {deferred}
-    */
-    api.getPictureURL = function (obj, options) {
-        var deferred = $.Deferred(),
-            defaultUrl = ox.base + '/apps/themes/default/dummypicture.png',
-            id,
-            fail = function () {
-                api.trigger('fail');
-                deferred.resolve(defaultUrl);
-            },
-            success = function (data) {
-                //do not set data.image1_url (would also update cached object)
-                var url = data.image1_url ? data.image1_url + '&' + $.param($.extend({}, options)) : defaultUrl;
-                deferred.resolve(url);
-            };
+        // empty extend trick to restrict to non-undefined values
+        params = $.extend({}, {
+            // identifier
+            email: options.email && String(options.email).toLowerCase() || options.mail && String(options.mail).toLowerCase() || options.email1 && String(options.email1).toLowerCase(),
+            folder: options.folder_id || options.folder,
+            id: options.contact_id || options.id,
+            internal_userid: options.internal_userid || options.userid || options.user_id,
+            // scale
+            width: options.width,
+            height: options.height,
+            scaleType: options.scaleType
+        });
+        // remove options
+        options = null;
 
-        // param empty/null
-        if ((typeof obj === 'string' && obj === '') || (typeof obj === 'object' && obj === null)) {
-            return deferred.resolve(defaultUrl);
-        }
-        // normalize
-        if (typeof obj === 'string') {
-            if (/\@/.test(obj))
-                obj = { email: obj };
-            else
-                return deferred.resolve(defaultUrl);
-        }
-        if (!_.isUndefined(obj.image1_url) && !_.isEmpty(obj.image1_url)) {
-            return deferred.resolve(obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param($.extend({}, options)));
-        }
-        if (obj.id || obj.contact_id) {
-            // duck checks
-            if (api.looksLikeResource(obj)) {
-                defaultUrl = ox.base + '/apps/themes/default/dummypicture_resource.png';
-            } else if (api.looksLikeDistributionList(obj)) {
-                defaultUrl = ox.base + '/apps/themes/default/dummypicture_group.png';
+        // remove empty values
+        for (var k in params) {
+            if (params.hasOwnProperty(k) && !params[k]) {
+                delete params[k];
             }
-            // also look for contact_id to support user objects directly
-            var id = obj.contact_id || obj.id,
-                folder = obj.folder_id || obj.folder,
-                key = folder + '|' + id;
-            if (id && folder) { // need both; folder might be null/0 if from halo view
-                fetchCache.get(key).pipe(function (url) {
-                    if (url) {
-                        deferred.resolve(url);
-                    } else {
-                        api.get({ id: id, folder: folder }).then(
-                            function (data) {
-                                var url;
-                                if (data.image1_url) {
-                                    url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param($.extend({}, options));
-                                    fetchCache.add(key, url);
-                                    deferred.resolve(url);
-                                } else {
-                                    fetchCache.add(key, defaultUrl);
-                                    fail();
-                                }
-                            },
-                            fail
-                        );
-                    }
-                });
-            } else {
-                fail();
-            }
-        } else if (obj.email) {
-            api.getByEmailadress(obj.email).done(success).fail(fail);
-        //} else if (obj.phone) {
-        //    api.getByPhone(obj.phone).done(success).fail(fail);
-        } else {
-            fail();
         }
 
-        return deferred;
-    };
+        fallback = ox.base + '/apps/themes/default/dummypicture.png';
+        url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
 
-    /**
-    * get div node with callbacks managing fetching/updating
-    * @param  {string|object} obj (emailaddress)
-    * @param  {object} options (height, with, scaleType)
-    * @return {object} div node with callbacks
-    */
-    api.getPicture = function (obj, options) {
-        var node, set, clear, cont;
-        node = $('<div>');
-        set = function (e) {
-            node.css('backgroundImage', 'url(' + e.data.url + ')');
-            if (/dummypicture\.png$/.test(e.data.url)) {
-                node.addClass('default-picture');
-            }
-            clear();
-        };
-        clear = function () {
-            _.defer(function () { // use defer! otherwise we return null on cache hit
-                node = set = clear = cont = null; // don't leak
-            });
-        };
-        cont = function (url) {
-            // use image instance to make sure that the image exists
-            $(new Image())
-                .on('load', { url: url }, set)
-                .on('error', { url: ox.base + '/apps/themes/default/dummypicture.png' }, set)
-                .prop('src', url);
-        };
-        if (obj && _.isString(obj.image1_url) && obj.image1_url !== '') {
-            cont(obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param($.extend({}, options)));
-        } else {
-            api.getPictureURL(obj, options).done(cont).fail(clear);
-        }
+        // just return URL
+        if (!node) return url;
+
+        // load image and return node
+        img = new Image();
+        $(img).one('load error', function (e) {
+            var fail = img.width === 1 || e.type === 'error';
+            node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
+            node = img = null;
+        });
+        img.src = url;
+
         return node;
     };
 
@@ -881,9 +758,9 @@ define('io.ox/contacts/api',
 
         var now = _.now(),
             params = _.extend({
+            action: 'birthdays',
             start: now,
             end: now + 604800000, // now + WEEK
-            action: 'birthdays',
             columns: '1,20,500,501,502,503,504,505,511',
             timezone: 'UTC'
         }, options || {});
@@ -901,6 +778,15 @@ define('io.ox/contacts/api',
      */
     api.looksLikeResource = function (obj) {
         return 'mailaddress' in obj && 'description' in obj;
+    };
+
+    /**
+     * is ressource (duck check)
+     * @param  {object} obj (contact)
+     * @return {boolean}
+     */
+    api.looksLikeGroup = function (obj) {
+        return 'members' in obj;
     };
 
     /**

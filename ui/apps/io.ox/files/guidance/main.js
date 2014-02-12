@@ -33,7 +33,7 @@ define('io.ox/files/guidance/main',
         folderAPI.get({ folder: folderID }).done(function (folderObj) {
             folder = folderObj;
 
-            var dialog = new dialogs.SidePopup({closely: true });
+            var dialog = new dialogs.SidePopup({closely: true, tabTrap: true });
 
             dialog.show(e, function (popup) {
                 app.folder.getData().done(function (data) {
@@ -85,13 +85,13 @@ define('io.ox/files/guidance/main',
             index: INDEX += 100,
             draw: function () {
 
-                var helpDir = 'help/' + ox.language + '/',
+                var helpDir = 'help/l10n/' + ox.language + '/',
                     topics = [
-                        [gt.pgettext('help', 'The Files Components'), 'ox.appsuite.user.sect.files.gui.html'],
+                        [gt.pgettext('help', 'The Drive App'), 'ox.appsuite.user.sect.files.gui.html'],
                         [gt.pgettext('help', 'Creating Files'), 'ox.appsuite.user.sect.files.add.html'],
                         [gt.pgettext('help', 'Managing Files'), 'ox.appsuite.user.sect.files.manage.html'],
                         [gt.pgettext('help', 'Accessing Files with WebDAV'), 'ox.appsuite.user.sect.files.webdav.html'],
-                        [gt.pgettext('help', 'Files Settings'), 'ox.appsuite.user.sect.files.settings.html']
+                        [gt.pgettext('help', 'Drive Settings'), 'ox.appsuite.user.sect.files.settings.html']
                     ];
 
                 this.append(

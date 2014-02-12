@@ -110,20 +110,12 @@ define('io.ox/contacts/distrib/create-dist-view',
                 // overwrite display_name
                 data.display_name = util.getMailFullName(data);
 
-                var newMember,
-                    mailValue = data.email1 || data.email2 || data.email3 || data.mail,
-                    nameValue = data.display_name;
+                var mailValue = data.email1 || data.email2 || data.email3 || data.mail,
+                    nameValue = data.display_name,
+                    newMember = self.copyContact(self.$el, data.id ? data : nameValue, mailValue);
 
-                if (data.id) {
-                    newMember = self.copyContact(self.$el, data, mailValue);
-                } else {
-                    newMember = self.copyContact(self.$el, nameValue, mailValue);
-                }
-
-                if (newMember) {
-                    if (self.isUnique(newMember)) {
-                        self.model.addMember(newMember);
-                    }
+                if (newMember && self.isUnique(newMember)) {
+                    self.model.addMember(newMember);
                 }
 
             });
@@ -235,11 +227,14 @@ define('io.ox/contacts/distrib/create-dist-view',
                 .attr('data-mail', o.display_name + '_' + o.mail)
                 .append(
                     // contact picture
-                    api.getPicture(o, { scaleType: 'cover', width: 54, height: 54 }).addClass('contact-image'),
+                    api.pictureHalo(
+                        $('<div class="contact-image">'),
+                        $.extend(o, { width: 48, height: 48, scaleType: 'cover'})
+                    ),
                     // name
-                    $('<div class="person-name ellipsis">').text(o.display_name),
+                    $('<div class="person-name">').text(o.display_name),
                     // mail address
-                    $('<div class="person-mail ellipsis">').append(
+                    $('<div class="person-mail">').append(
                         $('<a href="#" class="halo-link" tabindex="1">')
                             .data({ email1: o.mail })
                             .text(o.mail)

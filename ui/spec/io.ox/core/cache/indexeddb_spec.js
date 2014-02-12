@@ -28,14 +28,12 @@ define(['io.ox/core/cache/indexeddb'], function (indexeddb) {
 
         describe('clear method', function () {
             it('should clear all databases', function () {
-                var cache1 = indexeddb.getInstance('appsuite.test.cache1'),
-                    cache2 = indexeddb.getInstance('appsuite.test.cache2'),
-                    cache3 = indexeddb.getInstance('appsuite.test.cache3');
+                var cache1 = indexeddb.getInstance('appsuite.test.cache1');
 
-                var def = cache1.set('testKey', 'testValue').then(function (r) {
+                var def = cache1.set('testKey', 'testValue').then(function () {
                     //wait until key is stored
                     return indexeddb.clear();
-                }).then(function (result) {
+                }).then(function () {
                     return cache1.get('testKey');
                 });
 

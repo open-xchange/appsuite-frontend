@@ -45,24 +45,55 @@ define('plugins/portal/mail/register',
             });
         },
 
-        action: function () {
-            ox.launch('io.ox/mail/main', { folder: api.getDefaultFolder() });
-        },
+        // action: function () {
+        //     ox.launch('io.ox/mail/main', { folder: api.getDefaultFolder() });
+        // },
 
         load: function (baton) {
             var LIMIT = _.device('small') ? 5 : 10;
+            // we fetch more that we want to show because usually a lot is deleted
             return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
                 var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder();
-                return api.getAll({ folder:  folderName, limit: LIMIT }, false).pipe(function (mails) {
-                    return api.getList(mails).done(function (data) {
+                return api.getAll({ folder:  folderName, limit: LIMIT * 5 }, false).pipe(function (mails) {
+                    // ignore deleted mails
+                    mails = _(mails).filter(function (obj) {
+                        return !util.isDeleted(obj);
+                    });
+                    // fetch detailed data for smaller subset
+                    return api.getList(mails.slice(0, LIMIT)).done(function (data) {
                         baton.data = data;
                     });
                 });
             });
         },
 
+        summary: function (baton) {
+
+            if (this.find('.summary').length) return;
+
+            var message = '',
+                unread = _(baton.data).reduce(function (sum, obj) {
+                    return sum + (util.isUnseen(obj) ? 1 : 0);
+                }, 0);
+
+            if (unread === 0) {
+                message = gt('You have no unread messages');
+            } else if (unread === 1) {
+                message = gt('You have 1 unread message');
+            } else {
+                message = gt('You have %1$d unread messages', unread);
+            }
+
+            this.addClass('with-summary show-summary').append(
+                $('<div class="summary">').text(message)
+            )
+            .on('tap', 'h2', function (e) {
+                $(e.delegateTarget).toggleClass('show-summary');
+            });
+        },
+
         preview: function (baton) {
-            var $content = $('<div class="content">');
+            var $content = $('<ul class="content list-unstyled">');
             var updater = function () {
                 require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),
@@ -72,10 +103,8 @@ define('plugins/portal/mail/register',
                     }
                 });
             };
-            // remove deleted mails
-            var list = _(baton.data).filter(function (obj) {
-                return !util.isDeleted(obj);
-            });
+
+            var list = baton.data;
 
             // unregister all old update handlers in this namespace
             _(trackedMails).each(function (ecid) {
@@ -95,7 +124,7 @@ define('plugins/portal/mail/register',
                         api.on('update:' + ecid + '.portalTitle', updater);
 
                         var received = new date.Local(mail.received_date).format(date.DATE);
-                        return $('<div class="item">')
+                        return $('<li class="item" tabindex="1">')
                             .data('item', mail)
                             .append(
                                 (function () {

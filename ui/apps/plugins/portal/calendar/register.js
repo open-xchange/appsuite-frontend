@@ -18,40 +18,10 @@ define('plugins/portal/calendar/register',
      'io.ox/calendar/util',
      'gettext!plugins/portal',
      'settings!io.ox/calendar',
-     'io.ox/core/strings',
      'io.ox/calendar/api'
-    ], function (ext, date, util, gt, settings, strings, api) {
+    ], function (ext, date, util, gt, settings, api) {
 
     'use strict';
-
-    //this should be in our date library. And it could probably be done much nicer, e.g. using two lists
-    // var printTimespan = function (timestamp1, timestamp2) {
-    //     var delta = Math.abs(timestamp1 - timestamp2);
-    //     var past = (timestamp1 - timestamp2) < 0;
-    //     var unit = past ? gt("Started %s milliseconds ago:") : gt("In %s milliseconds:");
-
-    //     if (delta / 1000 > 1) {
-    //         delta = delta / 1000;
-    //         var unit = past ? gt("Started %s seconds ago:") : gt("In %s seconds:");
-    //     }
-    //     if (delta / 60 > 1) {
-    //         delta = delta / 60;
-    //         var unit = past ? gt("Started %s minutes ago:") : gt("In %s minutes:");
-    //     }
-    //     if (delta / 60 > 1) {
-    //         delta = delta / 60;
-    //         var unit = past ? gt("Started %s hours ago:") : gt("In %s hours:");
-    //     }
-    //     if (delta / 24 > 1) {
-    //         delta = delta / 24;
-    //         var unit = past ? gt("Started %s days ago:") : gt("In %s days:");
-    //     }
-    //     if (delta / 7 > 1) {
-    //         delta = delta / 7;
-    //         var unit = past ? gt("Started %s weeks ago:") : gt("In %s weeks:");
-    //     }
-    //     return unit.replace("%s", Math.round(delta));
-    // };
 
     ext.point('io.ox/portal/widget/calendar').extend({
 
@@ -70,26 +40,47 @@ define('plugins/portal/calendar/register',
             });
         },
 
-        action: function () {
-            ox.launch('io.ox/calendar/main', { perspective: 'list' });
-        },
-
         load: function (baton) {
-
-            var numOfItems = _.device('small') ? 5 : 10;
-
             return api.getAll().pipe(function (ids) {
+                var numOfItems = _.device('small') ? 5 : 10;
                 return api.getList(ids.slice(0, numOfItems)).done(function (data) {
                     baton.data = data;
                 });
             });
         },
 
-        preview: function (baton) {
+        summary: function (baton) {
+            if (this.find('.summary').length) return;
 
+            this.addClass('with-summary show-summary');
+
+            var sum = $('<div>').addClass('summary');
+
+            if (baton.data.length === 0) {
+                sum.text(gt('You don\'t have any appointments in the near future.'));
+            } else {
+                var obj = _(baton.data).first(),
+                    start = new date.Local(obj.start_date),
+                    timespan = util.getSmartDate(obj, true);
+                if (!obj.full_time) timespan += ' ' + start.format(date.TIME);
+
+                sum.append(
+                    $('<span class="normal accent">').text(_.noI18n(timespan)), $.txt(gt.noI18n('\u00A0')),
+                    $('<span class="bold">').text(_.noI18n(obj.title || '')), $.txt(gt.noI18n('\u00A0')),
+                    $('<span class="gray">').text(_.noI18n(obj.location || ''))
+                );
+
+                this.on('tap', 'h2', function (e) {
+                    $(e.delegateTarget).toggleClass('show-summary');
+                });
+            }
+
+            this.append(sum);
+        },
+
+        preview: function (baton) {
             var appointments = baton.data,
-                $content = $('<div class="content">'),
-                showDeclined = settings.get('showDeclinedAppointments', false);
+                $content = $('<ul class="content list-unstyled">');
 
             if (appointments.length === 0) {
                 $content.append(
@@ -98,18 +89,16 @@ define('plugins/portal/calendar/register',
                 );
             } else {
                 _(appointments).each(function (nextApp) {
+                    var declined = util.getConfirmationStatus(nextApp) === 2;
+                    if (settings.get('showDeclinedAppointments', false) || !declined) {
+                        var timespan = util.getSmartDate(nextApp, true);
 
-                    var declined = util.getConfirmationStatus(nextApp) === 2,
-                        start = new date.Local(nextApp.start_date),
-                        timespan = util.getSmartDate(nextApp, true);
+                        if (!nextApp.full_time) {
+                            timespan += ' ' + new date.Local(nextApp.start_date).format(date.TIME);
+                        }
 
-                    if (!nextApp.full_time) {
-                        timespan += ' ' + start.format(date.TIME);
-                    }
-
-                    if (showDeclined || !declined) {
                         $content.append(
-                            $('<div class="item">')
+                            $('<li class="item" tabindex="1">')
                             .css('text-decoration', declined ? 'line-through' : 'none')
                             .data('item', nextApp)
                             .append(
@@ -127,7 +116,7 @@ define('plugins/portal/calendar/register',
 
         draw: function (baton) {
             var popup = this.busy();
-            require(['io.ox/calendar/view-detail', 'io.ox/calendar/api'], function (view, api) {
+            require(['io.ox/calendar/view-detail'], function (view) {
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
                     popup.idle().append(view.draw(data));
@@ -137,10 +126,8 @@ define('plugins/portal/calendar/register',
 
         post: function (ext) {
             var self = this;
-            require(['io.ox/calendar/api'], function (api) {
-                api.on('refresh.all', function () {
-                    ext.load().done(_.bind(ext.draw, self));
-                });
+            api.on('refresh.all', function () {
+                ext.load().done(_.bind(ext.draw, self));
             });
         }
     });

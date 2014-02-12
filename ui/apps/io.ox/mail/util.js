@@ -113,6 +113,7 @@ define('io.ox/mail/util',
          */
         getChannel: function (value, check) {
             //default value
+            value = String(value || '');
             check = check || typeof check === 'undefined';
             var type = value.indexOf(that.getChannelSuffixes().msisdn) > -1,
                 //no check OR activated cap
@@ -457,6 +458,59 @@ define('io.ox/mail/util',
             var mailArray = _(settings.get('defaultSendAddress', []));
             return mailArray._wrapped[0];
         },
+
+        signatures: (function () {
+            var htmltags = /(<([^>]+)>)/ig,
+                nothing = /.^/,
+                general = function (text) {
+                    return String(text || '')
+                        //replace white-space and evil \r
+                        .replace(/(\r\n|\n|\r)/g, '\n')
+                        //replace subsequent white-space (except linebreaks)
+                        .replace(/[\t\f\v ][\t\f\v ]+/g, ' ')
+                        .trim();
+                },
+                add = function (text, isHTML) {
+                    return general(text)
+                        //remove html tags (for plaintext emails)
+                        .replace(isHTML ? nothing : htmltags, '');
+                },
+                preview = function (text) {
+                    return general(text)
+                        //remove ASCII art (intended to remove separators like '________')
+                        .replace(/([\-=+*°._!?\/\^]{4,})/g, '')
+                        //remove htmltags
+                        .replace(htmltags, '')
+                        .trim();
+                };
+            return {
+                cleanAdd: function (text, isHTML) {
+                    return add(text, !!isHTML);
+                },
+                cleanPreview: function (text) {
+                    return preview(text);
+                },
+                is: function (text, list, isHTML) {
+                    var clean,
+                        signatures = _(list).map(function (signature) {
+                            //consider changes applied by appsuite
+                            clean = add(signature.content, !!isHTML);
+                            //consider changes applied by tiny
+                            if (clean === '')
+                                return '<br>';
+                            else {
+                                return clean
+                                        //replace surrounding white-space (except linebreaks)
+                                        .replace(/>[\t\f\v ]+/g, '>')
+                                        .replace(/[\t\f\v ]+</g, '<')
+                                        //set breaks
+                                        .replace(/(\r\n|\n|\r)/g, '<br>');
+                            }
+                        });
+                    return _(signatures).indexOf(text) > - 1;
+                }
+            };
+        })(),
 
         getAttachments: (function () {
 

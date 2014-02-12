@@ -93,6 +93,24 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             '$cl_10': '10'
         },
 
+        adjustRulePosition = function (models, flags) {
+            var position,
+                indicator = false;
+            _(models).each(function (model) {
+
+                if (_.isEqual(model.attributes.flags, flags)) {
+                    position = model.attributes.position;
+                    indicator = true;
+                }
+
+                if (indicator === true) {
+                    model.attributes.position = model.attributes.position + 1;
+                }
+            });
+
+            return position;
+        },
+
         checkForMultipleTests = function (el) {
             return $(el).find('[data-test-id]');
         },
@@ -180,7 +198,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
             },
 
             onSave: function () {
-                var self = this;
+                var self = this,
+                    rulePosition;
+
+                if (!this.model.has('position')) {
+                    rulePosition = adjustRulePosition(self.options.listView.collection.models, ['vacation']);
+                    this.model.set('position', rulePosition);
+                }
+               
                 this.model.save().then(function (id) {
                     //first rule gets 0
                     if (!_.isUndefined(id) && !_.isNull(id)) {
@@ -357,7 +382,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                     var label = gt('Select folder'),
-                        dialog = new dialogs.ModalDialog({ easyOut: true, tabTrap: true })
+                        dialog = new dialogs.ModalDialog()
                         .header($('<h4>').text(label))
                         .addPrimaryButton('select', label, 'select', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
@@ -640,7 +665,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                     return currentPosition;
                 }
 
-                if (currentState === 'checked') {
+                if (currentState === true) {
                     arrayOfActions.splice(getCurrentPosition(arrayOfActions), 1);
 
                 } else {

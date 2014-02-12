@@ -43,7 +43,7 @@ define('io.ox/core/commons-folderview',
             type: undefined,
             view: 'ApplicationFolderTree',
             // disable folder popup as it takes to much space for startup on small screens
-            visible: _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), false)
+            visible: _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true)
         });
 
         // draw container
@@ -53,6 +53,10 @@ define('io.ox/core/commons-folderview',
                 this.prepend(
                     // sidepanel
                     baton.$.sidepanel = $('<div class="abs border-right foldertree-sidepanel">')
+                    .attr({
+                        'role': 'navigation',
+                        'aria-label': gt('Folders')
+                    })
                     .append(
                         // container
                         $('<div class="abs foldertree-container">').append(
@@ -247,6 +251,7 @@ define('io.ox/core/commons-folderview',
             draw: function (baton) {
 
                 if (baton.id !== 'private') return;
+                if (baton.options.dialogmode) return;
 
                 this.append($('<div>').append(
                     $('<a href="#" tabindex="1" data-action="add-subfolder" role="menuitem">')
@@ -266,6 +271,7 @@ define('io.ox/core/commons-folderview',
                 // the section would be hidden
                 if (baton.id !== 'private') return;
                 if (!capabilities.has('edit_public_folders')) return;
+                if (baton.options.dialogmode) return;
 
                 var node = $('<div>');
                 this.append(node);
@@ -478,9 +484,7 @@ define('io.ox/core/commons-folderview',
             api.get({ folder: id }).done(function (folder) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     var title = gt('Properties'),
-                    dialog = new dialogs.ModalDialog({
-                        easyOut: true
-                    })
+                    dialog = new dialogs.ModalDialog()
                     .header(
                         api.getBreadcrumb(folder.id, { prefix: title }).css({ margin: '0' })
                     )
@@ -560,7 +564,7 @@ define('io.ox/core/commons-folderview',
             api.get({ folder: id }).done(function (folder) {
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
                     var title = gt('Move folder'),
-                        dialog = new dialogs.ModalDialog({ easyOut: true })
+                        dialog = new dialogs.ModalDialog()
                             .header(
                                 api.getBreadcrumb(folder.id, { prefix: title }).css({ margin: '0' })
                             )
@@ -789,14 +793,16 @@ define('io.ox/core/commons-folderview',
         fnHideSml = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
-            $('.window-container-center').removeClass('animate-moveright').addClass('animate-moveleft');
+            var nodes = app.getWindow().nodes;
+            $('.window-container-center', nodes.outer).removeClass('animate-moveright').addClass('animate-moveleft');
             baton.$.spacer.hide();
             app.trigger('folderview:close');
         };
 
         fnShowSml = function () {
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
-            $('.window-container-center').removeClass('animate-moveleft').addClass('animate-moveright');
+            var nodes = app.getWindow().nodes;
+            $('.window-container-center', nodes.outer).removeClass('animate-moveleft').addClass('animate-moveright');
             baton.$.spacer.show();
             app.trigger('folderview:open');
             return $.when();

@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2013
- * Mail: info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
@@ -127,7 +126,7 @@ define('io.ox/mail/folderview-extensions',
             folderAPI.get({ folder: id }),
             ox.load(['io.ox/core/tk/dialogs'])
         ).done(function (folder, dialogs) {
-            new dialogs.ModalDialog({tabTrap: true})
+            new dialogs.ModalDialog()
                 .text(gt('Do you really want to empty folder "%s"?', folderAPI.getFolderTitle(folder.title, 30)))
                 .addPrimaryButton('delete', gt('Empty folder'), 'delete', {tabIndex: '1'})
                 .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})

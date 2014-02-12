@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var xml2js = require('../xml2js/lib/xml2js');
-var _ = require('../underscore.js');
+var _ = require('../underscore/underscore');
 
 var parentLocales = (function () {
     var reverse = {
@@ -49,7 +49,7 @@ var loadLanguage = _.memoize(function (lang) {
             return n === undefined && parent ? parent.resolve(path) : n;
         },
         list: function (path) {
-            
+
         }
     };
 });

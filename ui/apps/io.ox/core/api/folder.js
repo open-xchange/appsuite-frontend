@@ -82,18 +82,37 @@ define('io.ox/core/api/folder',
                     }
                 })
                 .then(function (data) {
-                    // add to cache
-                    return cache.add(data.id, data);
-                }, function (error) {
-                    if (error.categories === 'PERMISSION_DENIED') {
-                        if (!opt.suppressYell)
-                            notifications.yell(error);
-                    } else {
-                        if (ox.debug) {
-                            console.error('folder.get', id, error);
+                    // update subfolder cache
+                    return subFolderCache.get(data.folder_id).then(function (list) {
+                        if (list === null) return data;
+                        // loop over list and replace with fresh data
+                        for (var i = 0, $i = list.length; i < $i; i++) {
+                            if (list[i].id === data.id) {
+                                list[i] = data;
+                                break;
+                            }
+                        }
+                        return subFolderCache.add(data.folder_id, list).then(function () {
+                            return data;
+                        });
+                    });
+                })
+                .then(
+                    function (data) {
+                        // add to cache
+                        return cache.add(data.id, data);
+                    },
+                    function (error) {
+                        if (error.categories === 'PERMISSION_DENIED') {
+                            if (!opt.suppressYell)
+                                notifications.yell(error);
+                        } else {
+                            if (ox.debug) {
+                                console.error('folder.get', id, error);
+                            }
                         }
                     }
-                });
+                );
             };
 
             return opt.cache === false ? getter() : cache.get(id, getter);
@@ -430,7 +449,7 @@ define('io.ox/core/api/folder',
         remove: function (options) {
 
             require(['io.ox/core/config'], function (config) {
-                var folderInConfig = config.get('modules.mail.contactCollectFolder');
+                var folderInConfig = config.get('modules.mail.contactCollectFolder') || '';
 
                 if (folderInConfig.toString() === options.folder) {
                     notifications.yell('success', gt('The settings for collecting contacts in this folder will become disabled when you enter the application the next time.'));
@@ -537,6 +556,9 @@ define('io.ox/core/api/folder',
                         // return proper data
                         var data = getRequest;
                         if (!options.silent) {
+                            if (!visible(data)) {
+                                api.trigger('warn:hidden', data);
+                            }
                             api.trigger('create', data);
                         }
                         return data;
@@ -612,7 +634,10 @@ define('io.ox/core/api/folder',
                     })
                     .done(function (id) {
                         // get fresh folder data (use maybe changed id)
-                        api.get({ folder: id}, false).done(function () {
+                        api.get({ folder: id, cache: false}).done(function (data) {
+                            if (!visible(data)) {
+                                api.trigger('warn:hidden', data);
+                            }
                             // trigger event
                             api.trigger('update', opt.folder, id, data);
                         });
@@ -627,13 +652,7 @@ define('io.ox/core/api/folder',
         },
 
         move: function (sourceId, targetId) {
-            return this.update({ folder: sourceId, changes: { folder_id: targetId } }).pipe(function (id) {
-                return api.get({ folder: id, cache: false }).done(function (data) {
-                    // trigger event
-                    api.trigger('update', sourceId, data.id, data);
-                    return data;
-                });
-            });
+            return this.update({ folder: sourceId, changes: { folder_id: targetId } });
         },
 
         Bitmask: (function () {
@@ -997,9 +1016,21 @@ define('io.ox/core/api/folder',
 
         title = String(title || '').trim();
 
-        var split = title.split(/[ _-]+/),
+        var leadingDelimiter = /[_-]/.test(title[0]) ? title[0] : false,
+            endingDelimiter = /[_-]/.test(title[title.length - 1]) ? title[title.length - 1] : false,
+            split = title.split(/[ _-]+/),
             delimiters = title.split(/[^ _-]+/),
             length = title.length;
+
+        if (leadingDelimiter) {
+            split[1] = leadingDelimiter + split[1];
+            split.splice(0, 1);
+        }
+
+        if (endingDelimiter) {
+            split[split.length - 1] = endingDelimiter + split[split.length - 1];
+            split.splice(split.length - 1, 1);
+        }
 
         while (length > max && split.length > 2) {
             var index = Math.floor(split.length / 2);
@@ -1187,12 +1218,39 @@ define('io.ox/core/api/folder',
         api.sync();
     });
 
+    api.on('warn:hidden', function (e, folder) {
+        notifications.yell('info',
+           //#. %1$s is the filename
+           gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title));
+    });
+
     // publish caches
     api.caches = {
         folderCache: folderCache,
         subFolderCache: subFolderCache,
         visibleCache: visibleCache
     };
+
+    // check a list of object if they originate from more than one folder
+    // if so remove items from "sent" folder
+    // useful for delete/move actions and threads
+    api.ignoreSentItems = (function () {
+
+        function fromSameFolder(list) {
+            return _(list).chain().pluck('folder_id').uniq().value().length <= 1;
+        }
+
+        function isNotSentFolder(obj) {
+            return !account.is('sent', obj.folder_id);
+        }
+
+        return function (list) {
+            // all from same folder?
+            if (fromSameFolder(list)) return list;
+            // else: exclude sent items
+            return _(list).filter(isNotSentFolder);
+        };
+    }());
 
     api.clearCaches = function () {
         return $.when(

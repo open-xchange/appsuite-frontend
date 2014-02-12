@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2012
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -146,7 +145,7 @@ define('io.ox/tasks/view-detail',
             }
             var temp;
             _(fields).each(function (label, key) {
-                if (task[key]) {
+                if (task[key] !== undefined && task[key] !== null && task[key] !== '') {//0 is valid
                     $details.append(temp = $('<div class="detail-item">').append($('<label class="detail-label">').text(label)));
                     if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
                         temp.append($('<div class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
@@ -161,7 +160,7 @@ define('io.ox/tasks/view-detail',
                 node.append($details);
             }
 
-            if (task.participants.length > 0) {
+            if (task.participants && task.participants.length > 0) {
                 require(['io.ox/core/api/user'], function (userAPI) {
                     var table,
                         states = [
@@ -171,7 +170,7 @@ define('io.ox/tasks/view-detail',
                             [gt('Tentative'), 'yellow']
                         ],
                         lookupParticipant = function (node, table, participant) {
-                            if (participant.id) {//external participants dont have an id but the display name is already given
+                            if (participant.id) {//external participants don't have an id but the display name is already given
                                 userAPI.get({id: participant.id}).done(function (userInformation) {
                                         drawParticipant(table, participant, userInformation.display_name, userInformation);
                                     }).fail(function () {

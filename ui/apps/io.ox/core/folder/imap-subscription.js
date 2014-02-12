@@ -34,13 +34,13 @@ define('io.ox/core/folder/imap-subscription',
 
             var container = $('<div>'),
                 tree = new folderviews.ApplicationFolderTree(container, {
-                type: 'mail',
-                tabindex: 0,
-                rootFolderId: '1',
-                checkbox: true,
-                all: true,
-                storage: storage
-            });
+                    type: 'mail',
+                    tabindex: 0,
+                    rootFolderId: '1',
+                    checkbox: true,
+                    all: true,
+                    storage: storage
+                });
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 var pane = new dialogs.ModalDialog({
@@ -53,7 +53,7 @@ define('io.ox/core/folder/imap-subscription',
                     $('<h4>').text(gt('Subscribe IMAP folders'))
                 )
                 .build(function () {
-                    this.getContentNode().append(container);
+                    this.getContentNode().addClass('max-height-300').append(container);
                 })
                 .addPrimaryButton('save', gt('Save'))
                 .addButton('cancel', gt('Cancel'))

@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/download', ['io.ox/files/api'], function (api) {
+define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api'], function (api, mailAPI) {
 
     'use strict';
 
@@ -69,6 +69,12 @@ define('io.ox/core/download', ['io.ox/files/api'], function (api) {
                 url: ox.apiRoot + '/files?action=zipdocuments&session=' + ox.session,
                 body: JSON.stringify(_.map(list, map)) // this one wants folder_id
             });
+        },
+
+        // download single email as EML
+        mail: function (options) {
+            var url = mailAPI.getUrl(options, 'eml');
+            iframe(url);
         },
 
         // download multiple emails (EML) as zip file

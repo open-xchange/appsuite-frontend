@@ -30,9 +30,12 @@ define('io.ox/calendar/conflicts/conflictList', ['gettext!io.ox/calendar/conflic
                                 // check if private
                                 if (!data.private_flag || ox.user_id === data.created_by) {
                                     require(['io.ox/calendar/view-detail'], function (view) {
-                                        new dialogs.SidePopup({ modal: true }).show(e, function (popup) {
+                                        var sidePopup = new dialogs.SidePopup({ modal: true, tabTrap: true }).show(e, function (popup) {
                                             popup.append(view.draw(data));
                                             data = null;
+                                        });
+                                        sidePopup.on('show', function () {
+                                            this.nodes.target.find('.io-ox-sidepopup').find('[data-action="edit"]').first().focus();
                                         });
                                     });
                                 }

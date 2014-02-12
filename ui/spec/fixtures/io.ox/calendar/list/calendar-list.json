@@ -1,0 +1,230 @@
+{
+    "getList": {
+        "timestamp": 1385041701149,
+        "data": [
+            [
+                1337,
+                21401,
+                false,
+                null,
+                null,
+                1385042400000,
+                "Termin 1",
+                1385046000000,
+                "Confroom 1",
+                false,
+                1,
+                [
+                    {
+                        "id": 249,
+                        "confirmation": 1
+                    }
+                ],
+                "horst.hrubesch@vollenuss.de",
+                249,
+                249,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                [
+                    {
+                        "id": 249,
+                        "type": 1
+                    }
+                ]
+            ],
+            [
+                1338,
+                21401,
+                false,
+                null,
+                null,
+                1385128800000,
+                "Termin 2",
+                1385132400000,
+                "Confroom 2",
+                false,
+                4,
+                [
+                    {
+                        "id": 249,
+                        "confirmation": 1
+                    }
+                ],
+                "horst.hrubesch@vollenuss.de",
+                249,
+                249,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                [
+                    {
+                        "id": 249,
+                        "type": 1
+                    }
+                ]
+            ]
+        ]
+    },
+    "get1337":
+    {
+        "timestamp": 1385641008497,
+        "data": {
+            "uid": "a9f7214b-6f70-4929-a423-67be587e43ec",
+            "users": [
+                {
+                    "id": 249,
+                    "confirmation": 1,
+                    "confirmmessage": "super"
+                },
+                 {
+                    "id": 356,
+                    "confirmation": 1,
+                    "confirmmessage": "immer gerne"
+
+                }
+            ],
+            "confirmations": [],
+            "location": "Confroom",
+            "recurrence_type": 0,
+            "organizerId": 249,
+            "participants": [
+                {
+                    "id": 249,
+                    "type": 1
+                },
+                {
+                    "id": 356,
+                    "type": 1
+                }
+            ],
+            "number_of_attachments": 0,
+            "id": 1337,
+            "creation_date": 1385641008000,
+            "timezone": "Europe/Berlin",
+            "private_flag": false,
+            "last_modified": 1385641008497,
+            "title": "Termin 1",
+            "end_date": 1385647200000,
+            "principalId": 0,
+            "modified_by": 249,
+            "note": "Some Text",
+            "created_by": 249,
+            "color_label": 0,
+            "organizer": "horst.hrubesch@vollenuss.de",
+            "folder_id": 21401,
+            "alarm": 45,
+            "sequence": 0,
+            "last_modified_utc": 1385641008497,
+            "full_time": false,
+            "start_date": 1385643600000,
+            "shown_as": 1
+        }
+    },
+    "userList": {
+        "timestamp": 1385572337516,
+        "data": [
+            [
+                249,
+                6,
+                "Horst Hrubesch",
+                "Horst",
+                "Hrubesch",
+                null,
+                249,
+                "horst.hrubesch@vollenuss.de",
+                null,
+                110961
+            ],
+            [
+                356,
+                6,
+                "Karl Napp",
+                "Karl",
+                "Napp",
+                null,
+                356,
+                "karl.napp@vollenuss.de",
+                null,
+                433144
+            ]
+        ]
+    },
+    "userGet": {
+        "timestamp": 1385572337516,
+        "data": {
+            "uid": "92769897-8f1b-4751-9f12-ffa44f7728c9",
+            "contact_id": 110961,
+            "state_home": "Rheinland Pfalz",
+            "file_as": "Horst Hrubesch",
+            "city_home": "Musterort",
+            "first_name": "Horst",
+            "timezone": "Europe/Berlin",
+            "second_name": "",
+            "modified_by": 249,
+            "street_home": "Musterstraße 15",
+            "cellular_telephone2": "+49 151 123 456",
+            "cellular_telephone1": "+49 151 123 45666",
+            "country_home": "Germany",
+            "groups": [
+                0,
+                1,
+                137,
+                144,
+                146,
+                153,
+                160,
+                206,
+                406
+            ],
+            "created_by": 249,
+            "login_info": "horst.hrubesch",
+            "image1_content_type": "image/jpeg",
+            "postal_code_business": "57462",
+            "number_of_images": 1,
+            "display_name": "Horst Hrubesch",
+            "folder_id": 6,
+            "city_business": "Olpe",
+            "last_modified_utc": 1385572337516,
+            "company": "Open-Xchange GmbH",
+            "last_name": "Quast",
+            "image1_url": "/ajax/image/user/picture?id=249&timestamp=1385572337516",
+            "position": "Kopfballungeheuer",
+            "birthday": 404438400000,
+            "telephone_pager": "",
+            "department": "Kopfball",
+            "locale": "de_DE",
+            "aliases": [
+                "horst.hrubesch@vollenuss.de"
+            ],
+            "creation_date": 1268579668868,
+            "id": 249,
+            "last_modified": 1385572337516,
+            "user_id": 249,
+            "image_last_modified": 1306142163499,
+            "telephone_business1": "+49 2761 75252 15",
+            "telephone_home1": "",
+            "telephone_business2": "8015",
+            "color_label": 0,
+            "useCount": 0,
+            "email1": "horst.hrubesch@vollenuss.de",
+            "email2": "",
+            "sort_name": "HrubeschHorst",
+            "fax_business": "+49 2761 8385 30",
+            "postal_code_home": "51598",
+            "country_business": "Germany",
+            "street_business": "Martinstrasse 41",
+            "telephone_ip": "",
+            "state_business": "Nordrhein-Westfalen",
+            "categories": ""
+        }
+    }
+}

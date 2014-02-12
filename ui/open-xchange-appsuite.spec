@@ -50,15 +50,42 @@ Requires:       nodejs >= 0.6.0
 %description    dev
 SDK for the OX App Suite HTML5 client
 
+%package        help-common
+Group:          Applications/Productivity
+Summary:        Language-independent files of online help for OX App Suite
+
+%description    help-common
+Language-independent files of online help for OX App Suite
+
 ## help ##
 #%package       help-## lang ##
 #Group:         Applications/Productivity
 #Summary:       Online help for OX App Suite (## Lang ##)
 #Provides:      open-xchange-appsuite-help
+#Requires:      open-xchange-appsuite-help-common
 #
 #%description   help-## lang ##
 #Online help for OX App Suite (## Lang ##)
 ## end ##
+
+%package        help-drive-common
+Group:          Applications/Productivity
+Summary:        Language-independent files of online help for OX Drive
+
+%description    help-drive-common
+Language-independent files of online help for OX Drive
+
+## help-drive ##
+#%package       help-drive-## lang ##
+#Group:         Applications/Productivity
+#Summary:       Online help for OX Drive (## Lang ##)
+#Provides:      open-xchange-appsuite-help-drive
+#Requires:      open-xchange-appsuite-help-drive-common
+#
+#%description   help-drive-## lang ##
+#Online help for OX Drive (## Lang ##)
+## end ##
+
 
 ## l10n ##
 #%package       l10n-## lang ##
@@ -71,6 +98,14 @@ SDK for the OX App Suite HTML5 client
 #Translation of the OX App Suite HTML5 client (## Lang ##)
 ## end ##
 
+%package        -n open-xchange-guidedtours
+Group:          Applications/Productivity
+Summary:        The default version of the guided tours for the typical applications
+Requires:       open-xchange-appsuite-manifest
+
+%description    -n open-xchange-guidedtours
+The default version of the guided tours for the typical applications.
+
 %prep
 %setup -q
 
@@ -78,8 +113,9 @@ SDK for the OX App Suite HTML5 client
 
 %install
 APPSUITE=/opt/open-xchange/appsuite/
-sh build.sh skipLess=1 builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
-    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
+sh bin/build-appsuite skipLess=1 builddir="%{buildroot}%{docroot}" \
+    l10nDir=tmp/l10n manifestDir="%{buildroot}$APPSUITE" \
+    version=%{version} revision=%{ox_release}
 cp -r "%{buildroot}%{docroot}/apps" "%{buildroot}$APPSUITE"
 
 mv "%{buildroot}%{docroot}/share" "%{buildroot}$APPSUITE"
@@ -104,33 +140,39 @@ chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 mkdir -p "%{buildroot}/opt/open-xchange-appsuite-dev"
 cp -r bin lib Jakefile.js "%{buildroot}/opt/open-xchange-appsuite-dev/"
 
+mkdir -p "%{buildroot}/opt/open-xchange/etc"
+cp -r conf/* "%{buildroot}/opt/open-xchange/etc/"
+
 %clean
 APPSUITE=/opt/open-xchange/appsuite/
-sh build.sh clean builddir="%{buildroot}%{docroot}" l10nDir=tmp/l10n \
-    manifestDir="%{buildroot}$APPSUITE" version=%{version} revision=%{ox_release}
+sh bin/build-appsuite clean skipLess=1 builddir="%{buildroot}%{docroot}" \
+    l10nDir=tmp/l10n manifestDir="%{buildroot}$APPSUITE" \
+    version=%{version} revision=%{ox_release}
 rm -r "%{buildroot}/opt/open-xchange-appsuite-dev"
+rm -r "%{buildroot}/opt/open-xchange/etc"
 
-%define udpate /opt/open-xchange/appsuite/share/update-themes.sh
+%define update /opt/open-xchange/appsuite/share/update-themes.sh
 
 %post manifest
-if [ $1 -eq 1 -a -x %{udpate} ]; then %{udpate}; fi
+if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
 
 %postun manifest
 if [ $1 -lt 1 ]; then
     rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true
 else
-    if [ -x %{udpate} ]; then %{udpate}; fi
+    if [ -x %{update} ]; then %{update}; fi
 fi
 
 %triggerpostun manifest -- open-xchange-appsuite-manifest < 7.2.0
-if [ -x %{udpate} ]; then %{udpate}; fi
+if [ -x %{update} ]; then %{update}; fi
 
 %files
 %defattr(-,root,root)
 %doc readme.txt
 %dir %{docroot}
 %{docroot}
-%exclude %{docroot}/help/*_*
+%exclude %{docroot}/help/l10n
+%config(noreplace) %{docroot}/apps/themes/.htaccess
 %dir /opt/open-xchange
 %dir /opt/open-xchange/sbin
 /opt/open-xchange/sbin/touch-appsuite
@@ -138,6 +180,8 @@ if [ -x %{udpate} ]; then %{udpate}; fi
 %files manifest -f tmp/files
 %defattr(-,root,root)
 %dir /opt/open-xchange
+%exclude /opt/open-xchange/appsuite/apps/io.ox/tours
+%exclude /opt/open-xchange/appsuite/manifests/open-xchange-guidedtours.json
 
 %files dev
 %defattr(-,root,root)
@@ -145,11 +189,28 @@ if [ -x %{udpate} ]; then %{udpate}; fi
 /opt/open-xchange-appsuite-dev
 %attr(644,root,root) /opt/open-xchange-appsuite-dev/lib/sax-js/examples/switch-bench.js
 
+%files help-common
+%defattr(-,root,root)
+%dir %{docroot}/help
+%{docroot}/help
+
 ## help ##
 #%files help-## lang ##
 #%defattr(-,root,root)
-#%dir %{docroot}/help
-#%{docroot}/help/## Lang ##
+#%dir %{docroot}/help/l10n
+#%{docroot}/help/l10n/## Lang ##
+## end ##
+
+%files help-drive-common
+%defattr(-,root,root)
+%dir %{docroot}/help-drive
+%{docroot}/help-drive
+
+## help-drive ##
+#%files help-drive-## lang ##
+#%defattr(-,root,root)
+#%dir %{docroot}/help-drive/l10n
+#%{docroot}/help-drive/l10n/## Lang ##
 ## end ##
 
 ## l10n ##
@@ -161,6 +222,18 @@ if [ -x %{udpate} ]; then %{udpate}; fi
 #/opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-## lang ##.properties
 ## end ##
 
+%files -n open-xchange-guidedtours
+%defattr(-,root,root)
+%dir /opt/open-xchange/appsuite/apps/io.ox/tours
+/opt/open-xchange/appsuite/apps/io.ox/tours
+/opt/open-xchange/appsuite/manifests/open-xchange-guidedtours.json
+%dir /opt/open-xchange/etc
+%dir /opt/open-xchange/etc/settings
+/opt/open-xchange/etc/settings/guidedtours.properties
+
 %changelog
+* Thu Jan 03 2014 tobias.prinz@open-xchange.com
+  - drive manual added
 * Thu Nov 10 2011 viktor.pracht@open-xchange.com
   - Initial release
+

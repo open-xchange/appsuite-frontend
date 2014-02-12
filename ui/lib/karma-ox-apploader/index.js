@@ -4,7 +4,7 @@ var noop = function () {
 var createCustomFileHandler = function(handlers, builddir) {
     var options = {
         verbose: {local: false, remote: false, proxy: false},
-        prefixes: [builddir + '/apps/']
+        prefixes: [builddir]
     };
     var appsLoad = function (request, response) {
         var f = require('../appserver/middleware/appsload').create(options);
@@ -16,12 +16,12 @@ var createCustomFileHandler = function(handlers, builddir) {
     };
 
     handlers.push({
-        urlRegex: /^\/api\/apps\/load\/,/,
+        urlRegex: /^\/api\/apps\/load\/.*,/,
         handler: appsLoad
     });
 
     handlers.push({
-        urlRegex: /(^\/apps\/)/,
+        urlRegex: /(\/apps\/)/,
         handler: localFiles
     });
 }

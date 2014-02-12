@@ -12,7 +12,7 @@
  */
 
 
-    define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], function (main, core, api) {
+define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], function (main, core, api) {
 
     'use strict';
     var testObject = {
@@ -23,6 +23,7 @@
             folder_id: 1
         },
 
+        /* Note: This is not used, but if it would it should be a fixture
         testObjectLong = {
             first_name: 'Georg',
             last_name: 'Tester',
@@ -112,6 +113,7 @@
             userfield19: 'userfield',
             userfield20: 'userfield'
         },
+        */
 
         response = {
             'timestamp': 1379403021960,
@@ -162,8 +164,6 @@
         var app = null;
 
         beforeEach(function () {
-            this.server = ox.fakeServer.create();
-
             this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
             });
@@ -172,10 +172,6 @@
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(response));
             });
 
-        });
-
-        afterEach(function () {
-            this.server.restore();
         });
 
         it('should provide a getApp function ', function () {
@@ -211,9 +207,9 @@
 
             runs(function () {
                 flag = false;
-                  api.create(testObject).done(function () {
-                      expect(value).toBe(response.data.id);
-                  });
+                api.create(testObject).done(function () {
+                    expect(value).toBe(response.data.id);
+                });
             });
 
         });

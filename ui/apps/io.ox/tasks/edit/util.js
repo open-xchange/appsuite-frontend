@@ -119,8 +119,8 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
         buildConfirmationPopup: function (model, dialogs, isArray) {
             //build popup
             var popup = new dialogs.ModalDialog()
-                .addPrimaryButton('ChangeConfState', gt('Change state'))
-                .addButton('cancel', gt('Cancel')),
+                .addPrimaryButton('ChangeConfState', gt('Change state'), 'ChangeConfState', {tabIndex: '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'}),
                 body = popup.getBody(),
                 title,
                 note,

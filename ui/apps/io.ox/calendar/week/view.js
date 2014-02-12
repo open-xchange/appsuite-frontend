@@ -50,7 +50,8 @@ define('io.ox/calendar/week/view',
         folderData:     {},     // current folder object
         restoreCache:   null,   // object, which contains data for save and restore functions
         extPoint:       null,   // appointment extension
-        dayLabelRef:    null,
+        dayLabelRef:    null,	// used to manage redraw on daychange
+        startLabelRef:  null,	// used to manage redraw on weekchange
 
         // startup options
         options:        {
@@ -62,27 +63,27 @@ define('io.ox/calendar/week/view',
 
         // init values from prespective
         initialize: function (opt) {
+            var self = this;
+
             // init options
             _.extend(this.options, opt);
 
             // define view events
             var events = {
-                'click .control.next,.control.prev,.control.today': 'onControlView'
+                'click .control.next,.control.prev,.control.today': 'onControlView',
+                'click .appointment': 'onClickAppointment',
+                'click .weekday': 'onCreateAppointment'
             };
 
             if (_.device('touch')) {
                 _.extend(events, {
                     'taphold .week-container>.day,.fulltime>.day': 'onCreateAppointment',
-                    'tap .appointment': 'onClickAppointment',
                     'swipeleft .timeslot' : 'onControlView',
-                    'swiperight .timeslot' : 'onControlView',
-                    'tap .weekday': 'onCreateAppointment'
+                    'swiperight .timeslot' : 'onControlView'
                 });
             } else {
                 _.extend(events, {
-                    'dblclick .week-container>.day,.fulltime>.day': 'onCreateAppointment',
-                    'click .weekday': 'onCreateAppointment',
-                    'click .appointment': 'onClickAppointment'
+                    'dblclick .week-container>.day,.fulltime>.day': 'onCreateAppointment'
                 });
                 if (_.device('desktop')) {
                     _.extend(events, {
@@ -104,8 +105,12 @@ define('io.ox/calendar/week/view',
             this.fulltimeNote   = $('<div>').addClass('note');
             this.timeline       = $('<div>').addClass('timeline');
             this.dayLabel       = $('<div>').addClass('footer');
-            this.kwInfo         = $('<div>').addClass('info');
+            this.kwInfo         = _.device('small') ? $('<div>').addClass('info') : $('<a href="#" tabindex="1">').addClass('info');
             this.weekCon        = $('<div>').addClass('week-container');
+
+            this.kwInfo.attr({
+                'aria-label': gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.')
+            });
 
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
@@ -132,6 +137,37 @@ define('io.ox/calendar/week/view',
 
             this.setStartDate(this.refDate);
             this.initSettings();
+
+            //append datepicker
+            if (!_.device('small')) {
+                //just localize the picker, use en as default with current languages
+                $.fn.datepicker.dates.en = {
+                    days: date.locale.days,
+                    daysShort: date.locale.daysShort,
+                    daysMin: date.locale.daysStandalone,
+                    months: date.locale.months,
+                    monthsShort: date.locale.monthsShort,
+                    today: gt('Today')
+                };
+
+                this.kwInfo
+                    .on('changeDate', function (e) {
+                        self.setStartDate(e.date.getTime());
+                        self.trigger('onRefresh');
+                    })
+                    .on('show', function () {
+                        $(this).datepicker('update', new Date(self.startDate.getTime()));
+                    })
+                    .datepicker({
+                        format: date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
+                        parentEl: this.$el,
+                        weekStart: date.locale.weekStart,
+                        autoclose: true,
+                        calendarWeeks: true,
+                        todayHighlight: true,
+                        todayBtn: true
+                    });
+            }
         },
 
         /**
@@ -258,7 +294,7 @@ define('io.ox/calendar/week/view',
          * @param  {MouseEvent} e Hover event (mouseenter, mouseleave)
          */
         onHover: function (e) {
-            if (!this.lasso) {
+            if (!this.lasso && (e.relatedTarget && $(e.relatedTarget).hasClass('timeslot'))) {
                 var cid = _.cid($(e.currentTarget).data('cid') + ''),
                     el = $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]', this.$el);
                 switch (e.type) {
@@ -583,6 +619,7 @@ define('io.ox/calendar/week/view',
          * @return {Backbone.View} this view
          */
         render: function () {
+
             // create timelabels
             var timeLabel = [],
                 self = this;
@@ -639,6 +676,9 @@ define('io.ox/calendar/week/view',
                 this.weekCon.append(day);
             }
 
+            var nextStr = this.columns === 1 ? gt('Next Day') : gt('Next Week'),
+                prevStr = this.columns === 1 ? gt('Previous Day') : gt('Previous Week');
+
             // create toolbar, view space and dayLabel
             this.$el.empty().append(
                 $('<div class="toolbar">').append(
@@ -650,8 +690,8 @@ define('io.ox/calendar/week/view',
                                         href: '#',
                                         tabindex: 1,
                                         role: 'button',
-                                        title: gt('previous week'),
-                                        'aria-label': gt('Previous Week')
+                                        title: prevStr,
+                                        'aria-label': prevStr
                                     })
                                     .addClass('control prev')
                                     .append($('<i>').addClass('icon-chevron-left'))
@@ -666,8 +706,8 @@ define('io.ox/calendar/week/view',
                                         href: '#',
                                         tabindex: 1,
                                         role: 'button',
-                                        title: gt('next week'),
-                                        'aria-label': gt('Next Week')
+                                        title: nextStr,
+                                        'aria-label': nextStr
                                     })
                                     .addClass('control next')
                                     .append($('<i>').addClass('icon-chevron-right'))
@@ -683,6 +723,7 @@ define('io.ox/calendar/week/view',
                     this.pane.empty().append(timeLabel, self.weekCon)
                 )
             );
+
             return this;
         },
 
@@ -732,17 +773,20 @@ define('io.ox/calendar/week/view',
          * show and hide timeline
          */
         renderDayLabel: function () {
+
             var days = [],
+                today = new date.Local().setHours(0, 0, 0, 0),
                 tmpDate = new date.Local(this.startDate.getTime());
 
             // something new?
-            if (this.startDate.getTime() === this.dayLabelRef) return;
+            if (this.startDate.getTime() === this.startLabelRef && today.getTime() === this.dayLabelRef) return;
 
             if (this.options.todayClass) {
-                $('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
+                $('.week-view-container').find('.day.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
             }
 
-            this.dayLabelRef = this.startDate.getTime();
+            this.dayLabelRef = today.getTime();
+            this.startLabelRef = this.startDate.getTime();
 
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
@@ -763,7 +807,7 @@ define('io.ox/calendar/week/view',
                 // mark today
                 if (new date.Local().getDays() === tmpDate.getDays()) {
                     if (this.columns > 1) {
-                        $('.day[date="' + d + '"]', this.pane).addClass(this.options.todayClass);
+                        $('.week-view-container').find('.day[date="' + d + '"]', this.pane).addClass(this.options.todayClass);
                     }
                     day.addClass(this.options.todayClass);
                     this.timeline.show();
@@ -774,7 +818,6 @@ define('io.ox/calendar/week/view',
 
             this.dayLabel.empty().append(days);
 
-            //            new date.Local(this.weekStart + date.DAY).format('w')
             this.kwInfo.empty().append(
                 $.txt(
                     gt.noI18n(this.columns > 1 ?
@@ -784,7 +827,7 @@ define('io.ox/calendar/week/view',
                 ),
                 $.txt(' '),
                 $('<span class="cw">').text(
-                    //#. %$1d = Calendar week
+                    //#. %1$d = Calendar week
                     gt('CW %1$d', this.startDate.format('w'))
                 )
             );
@@ -991,6 +1034,9 @@ define('io.ox/calendar/week/view',
                 }
                 self.$('.week-container ' + day, self.$el).append(apps);
             });
+
+            // disable d'n'd on small devices
+            if (_.device('touch')) return;
 
             // init drag and resize widget on appointments
             var colWidth = $('.day:first', this.$el).outerWidth(),
@@ -1614,7 +1660,8 @@ define('io.ox/calendar/week/view',
         id: 'default',
         index: 100,
         draw: function (baton) {
-            var a = baton.model,
+            var self = this,
+                a = baton.model,
                 folder = baton.folder,
                 conf = 1,
                 confString = _.noI18n('%1$s'),
@@ -1635,6 +1682,7 @@ define('io.ox/calendar/week/view',
                 }
             }
 
+
             this
                 .attr({ tabindex: 1 })
                 .addClass(classes)
@@ -1650,6 +1698,12 @@ define('io.ox/calendar/week/view',
                 .attr({
                     'data-extension': 'default'
                 });
+
+            util.isBossyAppointmentHandling({ app: a.attributes, folderData: folder }).then(function (isBossy) {
+                if (!isBossy) {
+                    self.removeClass('modify');
+                }
+            });
         }
     });
 

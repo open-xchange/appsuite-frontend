@@ -13,27 +13,52 @@
 define(['io.ox/files/util'], function (util) {
 
     describe('Utilities for files:', function () {
+        var container = $('<div>'),
+            options = {
+                container: container
+            };
+
+        afterEach(function () {
+            container.empty();
+        });
 
         describe('confirmDialog function', function () {
             it('should always return a promise', function () {
+                expect(util.confirmDialog()).toBePromise();
                 expect(util.confirmDialog(undefined)).toBePromise();
-                expect(util.confirmDialog('formfilename', 'serverfilename')).toBePromise();
+                expect(util.confirmDialog('')).toBePromise();
+                expect(util.confirmDialog([])).toBePromise();
+                expect(util.confirmDialog({})).toBePromise();
+                expect(util.confirmDialog('formfilename.txt', 'serverfilename.txt', options)).toBePromise();
             });
-            it('returned promise should resolve if no confirmation is needed', function () {
-                expect(util.confirmDialog(undefined)).toReject();
-            });
-            it('returned promise should resolve if no confirmation is needed', function () {
-                expect(util.confirmDialog('nameOne.txt', 'nameTwo.txt')).toResolve();
-            });
-            it('should create a confirm dialog if file extension is removed', function () {
-                $(document.body).empty();
-                expect(util.confirmDialog('removeExtension', 'removeExtension.md')).toStayPending();
-                expect($(document.body).find('.io-ox-dialog-wrapper').length).toEqual(1);
-            });
-            it('should create a confirm dialog if file extension changes', function () {
-                $(document.body).empty();
-                expect(util.confirmDialog('changeExtension.txt', 'changeExtension.md')).toStayPending();
-                expect($(document.body).find('.io-ox-dialog-wrapper').length).toEqual(1);
+            describe('returned promise', function () {
+                it('should reject if filename is undefined', function () {
+                    expect(util.confirmDialog(undefined)).toReject();
+                    expect(container.children().length).toBeFalsy();
+                });
+                //do not show confirmation dialog
+                describe('should resolve', function () {
+                    it('if file extensions does not change', function () {
+                        expect(util.confirmDialog('nameOne.txt', 'nameTwo.txt')).toResolve();
+                        expect(util.confirmDialog('nameOne', 'nameTwo')).toResolve();
+                        expect(container.children().length).toBeFalsy();
+                    });
+                    it('if filename on server is not set yet', function () {
+                        expect(util.confirmDialog('nameOne.txt')).toResolve();
+                        expect(container.children().length).toBeFalsy();
+                    });
+                });
+                //show confirmation dialog
+                describe('should stay pending', function () {
+                    it('if file extension is removed', function () {
+                        expect(util.confirmDialog('removeExtension', 'removeExtension.md', options)).toStayPending();
+                        expect(container.children().length).toBeTruthy();
+                    });
+                    it('if file extension changes', function () {
+                        expect(util.confirmDialog('changeExtension.txt', 'changeExtension.md', options)).toStayPending();
+                        expect(container.children().length).toBeTruthy();
+                    });
+                });
             });
         });
     });

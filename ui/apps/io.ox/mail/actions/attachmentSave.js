@@ -26,18 +26,29 @@ define('io.ox/mail/actions/attachmentSave',
     function commit(list, target) {
 
         notifications.yell('busy',
-            gt.ngettext('Saving attachment in file store', 'Saving attachments in file store', list.length) + ' ...'
+            gt.ngettext('Saving attachment to drive', 'Saving attachments to drive', list.length) + ' ...'
         );
 
         api.saveAttachments(list, target).then(
             // success
             function success(response) {
-                if (response.error) {
-                    notifications.yell('error', response);
+
+                function yell(res) {
+                    if (res.error) {
+                        notifications.yell(res.error);
+                    } else {
+                        notifications.yell('success',
+                            gt.ngettext('Attachment has been saved', 'Attachments have been saved', list.length)
+                        );
+                    }
+                }
+
+                if (_.isArray(response)) {
+                    _.each(response, function (fileResponse) {
+                        yell(fileResponse);
+                    });
                 } else {
-                    notifications.yell('success',
-                        gt.ngettext('Attachment has been saved', 'Attachments have been saved', list.length)
-                    );
+                    yell(response);
                 }
                 folderAPI.reload(target, list);
             },
@@ -50,7 +61,7 @@ define('io.ox/mail/actions/attachmentSave',
 
         multiple: function (list) {
 
-            var dialog = new dialogs.ModalDialog({tabTrap: true})
+            var dialog = new dialogs.ModalDialog()
                 .header($('<h4>').text('Save attachment'))
                 .addPrimaryButton('ok', gt('Save'), 'ok', {tabIndex: '1'})
                 .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});

@@ -16,17 +16,22 @@ define('io.ox/core/tk/attachments',
      'io.ox/core/api/attachment',
      'io.ox/core/strings',
      'io.ox/core/tk/attachmentsUtil',
+     'io.ox/core/capabilities',
      'io.ox/preview/main',
      'io.ox/core/tk/dialogs',
      'gettext!io.ox/core/tk/attachments',
      'io.ox/core/extPatterns/links',
-     'less!io.ox/core/tk/attachments.less'
-    ], function (ext, attachmentAPI, strings, util, pre, dialogs, gt, links) {
+     'settings!io.ox/core',
+     'io.ox/core/notifications',
+     'less!io.ox/core/tk/attachments.less',
+
+    ], function (ext, attachmentAPI, strings, util, capabilities, pre, dialogs, gt, links, settings, notifications) {
 
     'use strict';
 
     var oldMode = _.browser.IE < 10;
 
+    // EditableAttachmentList is only used by tasks and calendar
     function EditableAttachmentList(options) {
         var counter = 0;
 
@@ -143,24 +148,29 @@ define('io.ox/core/tk/attachments',
 
             save: function (id, folderId) {
                 var self = this,
-                    allDone = 0;//0 ready 1 delete 2 add 3 delete and add
-                var apiOptions = {
-                    module: this.module,
-                    id: id || this.model.id,
-                    folder: folderId || this.model.get('folder') || this.model.get('folder_id')
-                };
+                    errors = [],//errors are saved and send to callback
+                    allDone = 0, // 0 ready 1 delete 2 add 3 delete and add
+                    apiOptions = {
+                        module: this.module,
+                        id: id || this.model.id,
+                        folder: folderId || this.model.get('folder') || this.model.get('folder_id')
+                    };
                 if (this.attachmentsToDelete.length) {
                     allDone++;
                 }
                 if (this.attachmentsToAdd.length) {
                     allDone += 2;
                 }
+
                 if (this.attachmentsToDelete.length) {
                     attachmentAPI.remove(apiOptions, _(this.attachmentsToDelete).pluck('id')).fail(function (resp) {
                         self.model.trigger('backendError', resp);
+                        errors.push(resp);
+                        allDone--;
+                        if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                     }).done(function () {
                         allDone--;
-                        if (allDone <= 0) { self.finishedCallback(self.model, id); }
+                        if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                     });
                 }
 
@@ -168,24 +178,33 @@ define('io.ox/core/tk/attachments',
                     if (oldMode) {
                         attachmentAPI.createOldWay(apiOptions, self.baton.parentView.$el.find('#attachmentsForm')[0]).fail(function (resp) {
                             self.model.trigger('backendError', resp);
+                            errors.push(resp);
+                            allDone -= 2;
+                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                         }).done(function () {
                             allDone -= 2;
-                            if (allDone <= 0) { self.finishedCallback(self.model, id); }
+                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                         });
                     } else {
                         attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
                             self.model.trigger('backendError', resp);
+                            errors.push(resp);
+                            allDone -= 2;
+                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                         }).done(function () {
                             allDone -= 2;
-                            if (allDone <= 0) { self.finishedCallback(self.model, id); }
+                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
                         });
                     }
                 }
-                if (allDone <= 0) { self.finishedCallback(self.model, id); }
+
+                if (allDone <= 0) {
+                    self.finishedCallback(self.model, id, errors);
+                }
+
                 this.attachmentsToAdd = [];
                 this.attachmentsToDelete = [];
                 this.attachmentsOnServer = [];
-
                 this.allAttachments = [];
             }
 
@@ -193,7 +212,7 @@ define('io.ox/core/tk/attachments',
     }
 
     /**
-     * gui widget collecting files user wants to upload
+     * gui widget collecting files user wants to upload // Only used by mail and files
      * @param {object} options
      * @param {object} baton
      */
@@ -272,66 +291,78 @@ define('io.ox/core/tk/attachments',
             },
 
             add: function (file) {
-                var proceed = true, self = this,
-                    list = [].concat(file);
-
-
-                if (list.length) {
-                    //check
-                    require(['settings!io.ox/core', 'io.ox/core/notifications'], function (settings, notifications) {
-
-                        var properties = settings.get('properties');
-                        if (baton.app && baton.app.app.attributes.name !== 'io.ox/mail/write') {
-                            proceed = false;
-                        }
-                        if (properties && proceed) {
-                            var total = 0,
-                                maxFileSize = properties.infostoreMaxUploadSize,
-                                quota = properties.infostoreQuota;
-                            _.each(list, function (item) {
-                                var fileTitle = item.filename || item.name || item.subject,
-                                    fileSize = item.file_size || item.size;
-                                if (fileSize) {
-                                    total += fileSize;
-                                    if (maxFileSize > 0 && fileSize > maxFileSize) {
-                                        proceed = false;
-                                        notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize)));
-                                        return;
-                                    }
-                                    if (quota > 0) {
-                                        if (total > quota - properties.infostoreUsage) {
-                                            proceed = false;
-                                            notifications.yell('error', gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota)));
-                                            return;
-                                        }
-                                    }
-                                }
-                                //add
-                                if (proceed) {
-                                    files.push({
-                                        file: (oldMode && item.hiddenField ? item.hiddenField : item),
-                                        name: fileTitle,
-                                        size: fileSize,
-                                        group: item.group || 'unknown',
-                                        cid: counter++
-                                    });
-                                }
-                            });
-                        } else {
-                            _.each(list, function (item) {
-                                files.push({
-                                    file: (oldMode && item.hiddenField ? item.hiddenField : item),
-                                    name: item.filename || item.name || item.subject,
-                                    size: item.file_size || item.size,
-                                    group: item.group || 'unknown',
-                                    cid: counter++
-                                });
-                            });
-                            proceed = true;
-                        }
-                        if (proceed) self.listChanged();
-                    });
+                var result = this.checkQuota(file);
+                if (result && result.error) {
+                    notifications.yell('error', result.error);
                 }
+            },
+
+            checkQuota: function (file) {
+                var self = this,
+                    list = [].concat(file),
+                    properties = settings.get('properties'),
+                    total = 0,
+                    maxFileSize,
+                    quota,
+                    usage,
+                    maxFileSize,
+                    isMail = (baton.app && baton.app.app.attributes.name === 'io.ox/mail/write'),
+                    filesLength = files.length,
+                    autoPublish = require('io.ox/core/capabilities').has('auto_publish_attachments'),
+                    result = { added: [] };
+
+                /*
+                function getQuota(a, b) {
+                    // 0 and -1 means that this is disabled
+                    return (a >= 0 && b >= 0 && Math.min(a, b)) || (a >= 0 && a) || b || 0;
+                }
+                */
+
+                if (!list.length) return;
+
+                //check
+                if (isMail) {
+                    maxFileSize = autoPublish ? -1 : properties.attachmentQuotaPerFile;
+                    quota = autoPublish ? -1 : properties.attachmentQuota;
+                    usage = 0;
+                } else {
+                    maxFileSize = properties.infostoreMaxUploadSize;
+                    quota = properties.infostoreQuota;
+                    usage = properties.infostoreUsage;
+                }
+
+                _.find(list, function (item) {
+
+                    var fileTitle = item.filename || item.name || item.subject,
+                        fileSize = item.file_size || item.size;
+
+                    if (fileSize) {
+                        total += fileSize;
+                        if (maxFileSize > 0 && fileSize > maxFileSize) {
+                            result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', fileTitle, strings.fileSize(maxFileSize));
+                            result.reason = 'filesize';
+                            return true;
+                        }
+                        if (quota > 0 && (total > (quota - usage))) {
+                            result.error = gt('The file "%1$s" cannot be uploaded because it exceeds the quota limit of %2$s', fileTitle, strings.fileSize(quota));
+                            result.reason = 'quota';
+                            return true;
+                        }
+                    }
+
+                    result.added.push({
+                        file: (oldMode && item.hiddenField ? item.hiddenField : item),
+                        name: fileTitle,
+                        size: fileSize,
+                        group: item.group || 'unknown',
+                        cid: counter++
+                    });
+                });
+
+                files = files.concat(result.added);
+                if (filesLength !== files.length) self.listChanged();
+
+                return result;
             },
 
             remove: function (attachment) {
@@ -432,7 +463,7 @@ define('io.ox/core/tk/attachments',
     ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
         id: 'save',
         index: 400,
-        label: gt('Save in file store'),
+        label: gt('Save to drive'),
         ref: 'io.ox/core/tk/attachment/actions/save-attachment'
     }));
 
@@ -579,7 +610,7 @@ define('io.ox/core/tk/attachments',
                             $('<button type="button" class="btn btn-primary" data-action="upload" tabindex="1">')
                                 .text(gt('Upload file')).hide() : ''
                         ),
-                        ((options.drive && _.device('!smartphone')) ? $('<button type="button" class="btn" data-action="addinternal">').text(gt('Files')) : '')
+                        ((options.drive && _.device('!smartphone') && capabilities.has('infostore')) ? $('<button type="button" class="btn" data-action="addinternal">').text(gt('Files')) : '')
                     ).on('keypress', function (e) {
                         if (e.which === 13) {
                             node.find('input[name="file"]').trigger('click');

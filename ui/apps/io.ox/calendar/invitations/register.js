@@ -202,8 +202,12 @@ define('io.ox/calendar/invitations/register',
                             })
                             .then(
                                 function done() {
-                                    notifications.yell('success', success[action]);
-                                    rerender(baton);
+                                    // api refresh
+                                    require(['io.ox/calendar/api']).then(function (api) {
+                                        api.refresh();
+                                        notifications.yell('success', success[action]);
+                                        rerender(baton);
+                                    });
                                 },
                                 function fail(e) {
                                     notifications.yell(e);
@@ -531,7 +535,7 @@ define('io.ox/calendar/invitations/register',
 
     function drawDetails(baton, api, settings) {
 
-        var defaultReminder = settings.get('defaultReminder', 15),
+        var defaultReminder = parseInt(settings.get('defaultReminder', 15), 10),
             reminderSelect = $(),
             data = baton.appointment || baton.task,
             status = util.getConfirmationStatus(data),
@@ -586,8 +590,19 @@ define('io.ox/calendar/invitations/register',
                     if (!accepted) {
                         var reminder = parseInt(reminderSelect.find('select').val(), 10);
                         if (reminder !== defaultReminder) {
-                            data.alarm = reminder;
-                            api.update(data);
+                            //don't use whole data object here, because it overwrites the confirmations with it's users attribute
+                            var tempdata = {
+                                    id: data.id,
+                                    folder_id: data.folder_id,
+                                    alarm: reminder
+                                };
+                            if (data.recurrence_position) {
+                                tempdata.recurrence_position = data.recurrence_position;
+                            }
+                            if (baton.task) {//tasks use absolute timestamps
+                                tempdata.alarm = _.utc() + tempdata.alarm;
+                            }
+                            api.update(tempdata);
                         }
                     }
                     var dep = data.type === 'appointment' ? 'settings!io.ox/calendar' : 'settings!io.ox/tasks';
@@ -635,7 +650,6 @@ define('io.ox/calendar/invitations/register',
                 node;
 
             if (reminder) {
-                baton.hideOriginalMail = true;
                 baton.imip = true;
                 module = baton.data.headers['X-Open-Xchange-Module'];
 
@@ -653,13 +667,22 @@ define('io.ox/calendar/invitations/register',
                             drawScaffold.call(baton.$.well = drawWell(), 'appointment')
                         );
                         baton.appointment = { folder_id: address[1], id: address[0] };
-                        return loadAppointment(baton).then(function (app) {
+
+                        loadAppointment(baton).then(function (app) {
                             node.append(
-                                $('<div class="io-ox-calendar-itip-analysis">').append(
-                                    $('<div class="change">').append(renderAppointment(app))
-                                )
+                                $('<div>').addClass('alert alert-info cursor-pointer').append(
+                                    $('<a href="#" role="button">').text(gt('Show appointment'))
+                                ).on('click', function () {
+                                    node.append(
+                                        $('<div class="io-ox-calendar-itip-analysis">').append(
+                                            $('<div class="change">').append(renderAppointment(app))
+                                        )
+                                    );
+                                    $(this).remove();
+                                })
                             );
                         });
+
                     }
 
                     if (module === 'Tasks') {
@@ -667,14 +690,24 @@ define('io.ox/calendar/invitations/register',
                             drawScaffold.call(baton.$.well = drawWell(), 'task')
                         );
                         baton.task = { folder_id: address[1], id: address[0] };
-                        return loadTask(baton).then(function (task) {
+
+                        loadTask(baton).then(function (task) {
                             node.append(
-                                $('<div class="io-ox-calendar-itip-analysis">').append(
-                                    $('<div class="change">').append(renderTask(task))
-                                )
+                                $('<div>').addClass('alert alert-info cursor-pointer').append(
+                                    $('<a href="#" role="button">').text(gt('Show task'))
+                                ).on('click', function () {
+                                    node.append(
+                                        $('<div class="io-ox-calendar-itip-analysis">').append(
+                                            $('<div class="change">').append(renderTask(task))
+                                        )
+                                    );
+                                    $(this).remove();
+                                })
                             );
                         });
                     }
+
+                    return $.when();
                 }
             }
         }

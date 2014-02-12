@@ -1,0 +1,41 @@
+{
+    "markedPending": {},
+    "testDataCreate": {
+        "status": 3,
+        "priority": 2,
+        "percent_completed": 0,
+        "folder_id": 555123456,
+        "recurrence_type": 0,
+        "private_flag": false,
+        "notification": true,
+        "title": "Test Title"
+    },
+    "testDataUpdate": {
+        "id": 122,
+        "status": 3,
+        "folder_id": 555123456,
+        "title": "Neuer Test Title"
+    },
+    "tempTestData": {
+        "tempAttachmentIndicator": true,
+        "alarm": null,
+        "folder_id": 555123456,
+        "notification": true,
+        "title": "Temp Test Title"
+    },
+    "tempTestDataUpdate": {
+        "status": 1,
+        "id": 122,
+        "tempAttachmentIndicator": true,
+        "folder_id": 555123456,
+        "notification": true,
+        "title": "Temp Test Title"
+    },
+    "testDataConfirm": {
+        "folder_id": 555123456,
+        "id": 122,
+        "data": {
+            "confirmation": 2
+        }
+    }
+}

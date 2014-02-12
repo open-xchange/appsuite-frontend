@@ -1,4 +1,4 @@
-var _ = require('../underscore');
+var _ = require('../underscore/underscore');
 var jsdom = require("../jsdom");
 var fs = require('fs');
 var utils = require("./fileutils");
@@ -27,8 +27,8 @@ var getFiles = function (directory) {
     expectedNumberOfFilesRead = filtered.length;
     return filtered.map( function (shortname) {
         return directory + shortname;
-    })    
-    
+    })
+
 };
 
 /** Prints the text of an extension point for documentation popups */

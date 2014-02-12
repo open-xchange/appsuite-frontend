@@ -40,23 +40,9 @@ define('io.ox/contacts/util',
 
     var that = {
 
-        getImage: function (obj, options) {
-            if (obj.mark_as_distributionlist) {
-                return ox.base + '/apps/themes/default/dummypicture_group.png';
-            } else if (obj.image1_url) {
-                return obj.image1_url
-                    .replace(/^https?\:\/\/[^\/]+/i, '')
-                    .replace(/\/ajax/, ox.apiRoot) + (options ? '&' + $.param(options) : '');
-            } else {
-                return ox.base + '/apps/themes/default/dummypicture.png';
-            }
-
-        },
-
         // variant of getFullName without title, all lowercase
         getSortName: function (obj) {
-            obj = _.extend({}, obj);
-            obj.title = '';
+            obj = _.extend(obj, { title: '' });
             return this.getFullName(obj).toLowerCase();
         },
 

@@ -93,6 +93,14 @@ define('io.ox/contacts/settings/pane',
 
                     var $node = dialog.getContentNode();
 
+                    if (_.device('smartphone')) {
+                        // workaround: will be fixed with upcoming bootstrap 4
+                        dialog.getPopup().width('100%');
+                        $node
+                            .css('padding', 10)
+                            .addClass('max-height-350');
+                    }
+
                     users.editCurrentUser($node).done(function (model) {
                         usermodel = model;
                     }).fail(function () {

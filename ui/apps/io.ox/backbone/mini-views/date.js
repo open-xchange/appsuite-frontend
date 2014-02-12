@@ -61,8 +61,7 @@ define('io.ox/backbone/mini-views/date',
         }
 
         // add empty option - do that after revert
-        empty = $('<option>').text('');
-        if (name === 'year') { empty.val('0001'); }
+        empty = $('<option>', { value: name === 'year' ? '0001' : '' }).text('');
         options.unshift(empty);
 
         // append
@@ -75,24 +74,42 @@ define('io.ox/backbone/mini-views/date',
         events: { 'change select': 'onChange' },
 
         onChange: function () {
-            var year = this.$el.find('.year').val(),
-                month = this.$el.find('.month').val(),
-                day = this.$el.find('.date').val();
-            if (month !== '' && day !== '') {//year doesn't matter, it's always set
-                //check if date is invalid(like feb 30) and prevent month jump
-                var str = year + '-' + _.pad(parseInt(month, 10) + 1, 2) + '-' + _.pad(day, 2),
-                    tempDate = date.UTC.parse(str, 'yyyy-M-d'),
-                    tempMonth = tempDate.getMonth();
-                if (tempMonth.toString() !== month) {
-                    tempDate.setDate(0);//last valid day of previous month
-                    //set dayfield to right day (needs to be done or an invalid date can be selected if model already has the corrected date)
-                    this.$el.find('.date').val(tempDate.getDate());
+
+            var d = this.getDate();
+
+            if (d !== null) {
+                // check if date is invalid (like feb 30) and prevent month jump
+                // phantomjs doesn't handle invalid dates in YYYY-MM-DD so we use MM/DD/YYYY
+                if (this.$el.find('.month').val() !== String(d.getUTCMonth())) {
+                    // jump back to last valid day of previous month
+                    d.setUTCDate(0);
+                    // set date field to right day
+                    // needs to be done or an invalid date can be selected
+                    // if model already has the corrected date
+                    this.$el.find('.date').val(d.getUTCDate());
                 }
-                this.model.set(this.name, tempDate.getTime());
+                this.model.set(this.name, d.getTime());
             } else {
                 this.model.set(this.name, null);
                 this.$el.find('.date').children().prop('disabled', false);//enable all
             }
+        },
+
+        getDate: function () {
+
+            var year = this.$el.find('.year').val(),
+                month = this.$el.find('.month').val(),
+                date = this.$el.find('.date').val();
+
+            // look for month and date; year doesn't matter, it's always set
+            if (month === '' || month === null || date === '' || date === null) return null;
+
+            return DateView.utc(year, month, date);
+        },
+
+        value: function () {
+            var d = this.getDate();
+            return d && _.pad(d.getUTCFullYear(), 4) + '-' + _.pad(d.getUTCMonth() + 1, 2) + '-' + _.pad(d.getUTCDate(), 2);
         },
 
         update: function () {
@@ -100,7 +117,7 @@ define('io.ox/backbone/mini-views/date',
             // change boxes only for valid dates
             if (_.isNumber(value)) {
                 d = new Date(value);
-                year = String(d.getFullYear());
+                year = String(d.getUTCFullYear());
                 if (year !== '1') {
                     // if the year is not our dropdown we add it
                     var yearValues = [];
@@ -114,14 +131,14 @@ define('io.ox/backbone/mini-views/date',
                         );
                     }
                 }
-                this.$el.find('.year').val(year);
-                this.$el.find('.month').val(d.getMonth());
-                this.$el.find('.date').val(d.getDate());
+                this.$el.find('.year').val(_.pad(year, 4));
+                this.$el.find('.month').val(d.getUTCMonth());
+                this.$el.find('.date').val(d.getUTCDate());
                 // disable invalid dayfields
-                d.setDate(1);
-                d.setMonth(d.getMonth() + 1);
-                d.setDate(0);
-                var validDays = d.getDate(),
+                d.setUTCDate(1);
+                d.setUTCMonth(d.getUTCMonth() + 1);
+                d.setUTCDate(0);
+                var validDays = d.getUTCDate(),
                     options = this.$el.find('.date').children().prop('disabled', false);
                 options = options.slice(validDays + 1, options.length);
                 options.prop('disabled', true);
@@ -157,6 +174,13 @@ define('io.ox/backbone/mini-views/date',
             return this;
         }
     });
+
+    DateView.utc = function (year, month, date) {
+        var d = new Date(Date.UTC(year, month, date));
+        // fix: if year if < 100, e.g. 99, it's 1900 + year, so we set the year again
+        d.setUTCFullYear(year);
+        return d;
+    };
 
     return {
         DateView: DateView

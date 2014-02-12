@@ -21,6 +21,7 @@ define('io.ox/mail/settings/defaults', [], function () {
         'contactCollectOnMailAccess': false,
         'useFixedWidthFont': false,
         'appendVcard': false,
+        'sendDispositionNotification': false,
         'appendMailTextOnReply': true,
         'forwardMessageAs': 'Inline',
         'messageFormat': 'html',
@@ -35,15 +36,12 @@ define('io.ox/mail/settings/defaults', [], function () {
         'defaultSignature': false,
         'mobileSignature': undefined,
         'mobileSignatureType': 'none', // one of 'none', 'custom'
-        'threadView': 'inbox',
+        'threadView': 'off',
         //for persistent sort
         'sort': 'thread',
         'order': 'desc',
-        'unread': false,
-        //hidden atm
-        'features': {
-            'alwaysDeleteDraft': true
-        }
+        'unread': false
+
     };
 
     return settingsDefaults;

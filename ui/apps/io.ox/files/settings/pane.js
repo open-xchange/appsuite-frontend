@@ -23,7 +23,7 @@ define('io.ox/files/settings/pane',
 
     var filesSettings =  settings.createModel(filesSettingsModel),
         staticStrings =  {
-            TITLE_FILES: gt.pgettext('app', 'Files'),
+            TITLE_FILES: gt.pgettext('app', 'Drive'),
             DEFAULT_VIEW: gt('Default view'),
             SHOW_HIDDEN: gt('Show hidden files and folders')
         },

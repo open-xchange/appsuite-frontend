@@ -144,7 +144,8 @@ define('io.ox/mail/vacationnotice/settings/model',
         api: api,
         fields: fields,
         protectedMethods: {
-            buildFactory: buildFactory
+            buildFactory: buildFactory,
+            providePreparedData: providePreparedData
         }
     };
 });

@@ -15,6 +15,8 @@ SetEnvIf Request_URI "\.(jsz|cssz|xmlz)$" no-gzip
 
 # excluded PNGs
 AddType image/png .xpng
+# correct type for ico files
+AddType image/x-icon .ico
 
 ExpiresActive On
 ExpiresDefault "access plus 6 months"
@@ -57,6 +59,9 @@ ExpiresByType audio/mp3 "access plus 6 months"
     ExpiresByType text/html "now"
 </FilesMatch>
 
+# Avoid click jacking (https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet)
+Header always append X-Frame-Options SAMEORIGIN
+
 RewriteEngine On
 
 RewriteCond %{HTTP_USER_AGENT} "MSIE [6-8]" [NC]
@@ -67,4 +72,5 @@ RewriteRule ^$ core [L]
 
 # online help fallback
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule help/([a-z_A-Z]+)(.+) help/en_US$2 [L]
+RewriteCond %{REQUEST_URI} !help/l10n/en_US
+RewriteRule help/l10n/([a-z_A-Z]+)(.+) help/l10n/en_US$2 [L]

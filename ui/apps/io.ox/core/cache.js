@@ -38,7 +38,7 @@ define('io.ox/core/cache',
             return $.when.apply($,
                 ext.point('io.ox/core/cache/storage').map(function (storage) {
                     return storage.clear && storage.isUsable() ? storage.clear() : $.when();
-                })
+                }).value()
             );
         }
     };

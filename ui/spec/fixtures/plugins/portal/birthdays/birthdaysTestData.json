@@ -1,0 +1,57 @@
+[
+	{
+		"birthday": 315532800000,
+		"display_name": "Wurst, Hans",
+		"first_name": "Hans",
+		"folder_id": 6,
+		"id": 100,
+		"last_name": "Wurst",
+		"second_name": null,
+		"suffix": null,
+		"title": "Mr."
+	},
+	{
+		"birthday": 315619200000,
+		"display_name": "Schmidt, Hildegard",
+		"first_name": "Hildegard",
+		"folder_id": 6,
+		"id": 101,
+		"last_name": "Schmidt",
+		"second_name": null,
+		"suffix": null,
+		"title": "Mrs."
+	},
+	{
+		"birthday": 315705600000,
+		"display_name": "Theke, Anne",
+		"first_name": "Anne",
+		"folder_id": 6,
+		"id": 102,
+		"last_name": "Theke",
+		"second_name": null,
+		"suffix": null,
+		"title": "Frau"
+	},
+	{
+		"birthday": -327628800000,
+		"display_name": "Lindemann, Erwin",
+		"first_name": "Erwin",
+		"folder_id": 6,
+		"id": 103,
+		"last_name": "Lindemann",
+		"second_name": null,
+		"suffix": null,
+		"title": "Herr"
+	},
+	{
+		"birthday": -62121772800000,
+		"display_name": "Normalverbraucher, Otto",
+		"first_name": "Otto",
+		"folder_id": 6,
+		"id": 104,
+		"last_name": "Normalverbraucher",
+		"second_name": null,
+		"suffix": null,
+		"title": "Dr."
+	}
+]

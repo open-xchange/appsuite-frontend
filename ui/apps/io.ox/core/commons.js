@@ -128,21 +128,23 @@ define('io.ox/core/commons',
                     // or creaet a new one
                     container = $('<div>', {id: toolbarID});
                 }
-                if (selection.length > 0) {
-                    // update selection in toolbar
-                    buttons.hide();
-                    $('#' + toolbarID).remove();
-                    toolbar.append(container.append(draw(id, selection, grid)));
-                } else {
-                    // selection empty
-                    $('#' + toolbarID).remove();
-                    buttons.show();
-                }
+                _.defer(function () {
+                    if (selection.length > 0) {
+                        // update selection in toolbar
+                        buttons.hide();
+                        $('#' + toolbarID).remove();
+                        toolbar.append(container.append(draw(id, selection, grid)));
+                    } else {
+                        // selection empty
+                        $('#' + toolbarID).remove();
+                        buttons.show();
+                    }
+                }, 100);
             };
         }()),
 
         wireGridAndSelectionChange: function (grid, id, draw, node, api) {
-            var last = '';
+            var last = '', label;
             grid.selection.on('change', function (e, selection) {
 
                 var len = selection.length,
@@ -150,6 +152,20 @@ define('io.ox/core/commons',
                     flat = JSON.stringify(_([].concat(selection)).map(function (o) {
                         return { folder_id: String(o.folder_id || o.folder), id: String(o.id), recurrence_position: String(o.recurrence_position || 0) };
                     }));
+
+                function updateLabel() {
+                    var parent = node.parent();
+                    if (len <= 1 && label) {
+                        //reset label
+                        parent.attr('aria-label', label);
+                    } else if (len > 1) {
+                        //remember label
+                        label = label || parent.attr('aria-label');
+                        //overwrite
+                        parent.attr('aria-label', gt('Selection Details'));
+                    }
+                }
+
                 // has anything changed?
                 if (flat !== last) {
                     if (len === 1) {
@@ -171,13 +187,18 @@ define('io.ox/core/commons',
                                 )
                             )
                         );
-                        if (_.device('small')) {//don't stay in empty detail view
+                        if (_.device('small')) {
+                            //don't stay in empty detail view
                             var vsplit = node.closest('.vsplit');
-                            if (!vsplit.hasClass('vsplit-reverse')) {//only click if in detail view to prevent infinite loop
-                                vsplit.find('.rightside-navbar a').trigger('click');//trigger back button
+                            //only click if in detail view to prevent infinite loop
+                            if (!vsplit.hasClass('vsplit-reverse')) {
+                                //trigger back button
+                                vsplit.find('.rightside-navbar a>i').last().trigger('click');
                             }
                         }
                     }
+                    //landmark label
+                    updateLabel();
                     // remember current selection
                     last = flat;
                 }
@@ -216,11 +237,16 @@ define('io.ox/core/commons',
                 grid.selection.removeFromIndex(ids);
 
                 var list = grid.selection.get(), index;
-                if (list.length > 0 && !_.device('small')) {//don't jump to next item on mobile devices (jump back to grid view to be consistent)
-                    index = grid.selection.getIndex(list[0]);
-                    grid.selection.clear(true).selectIndex(index + 1);
-                    if (grid.getIds().length === list.length) {
-                        grid.selection.trigger('change', []);
+                if (list.length > 0) {
+                    if (_.device('small')) {
+                        //preparation to return to vgrid
+                        grid.selection.clear(true);
+                    } else {
+                        index = grid.selection.getIndex(list[0]);
+                        grid.selection.clear(true).selectIndex(index + 1);
+                        if (grid.getIds().length === list.length) {
+                            grid.selection.trigger('change', []);
+                        }
                     }
                 }
             });
@@ -617,7 +643,12 @@ define('io.ox/core/commons',
                 var sides = {};
                 parent.addClass('vsplit').append(
                     // left
-                    sides.left = $('<div class="leftside">').on('select', select),
+                    sides.left = $('<div class="leftside">')
+                    .attr({
+                        'role': 'main',
+                        'aria-label': gt('Items')
+                    })
+                    .on('select', select),
                     // navigation
                     $('<div class="rightside-navbar">').append(
                         $('<div class="rightside-inline-actions">'),

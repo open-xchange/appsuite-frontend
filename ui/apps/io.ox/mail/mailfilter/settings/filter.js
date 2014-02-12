@@ -24,7 +24,15 @@ define('io.ox/mail/mailfilter/settings/filter',
     'use strict';
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
-        collection;
+        collection,
+        grid;
+
+    function updatePositionInCollection(collection, positionArray) {
+        _.each(positionArray, function (key, val) {
+            collection.get(key).set('position', val);
+        });
+        collection.sort();
+    }
 
     function renderDetailView(evt, data) {
         var myView,
@@ -70,8 +78,7 @@ define('io.ox/mail/mailfilter/settings/filter',
             width: 800,
             center: false,
             maximize: true,
-            async: true,
-            tabTrap: true
+            async: true
         }).header($('<h4>').text(header));
 
         myView.dialog.append(
@@ -82,6 +89,11 @@ define('io.ox/mail/mailfilter/settings/filter',
 
         myView.dialog.show();
         myView.$el.find('input[name="rulename"]').focus();
+        
+        if (data.id === undefined) {
+            myView.$el.find('input[name="rulename"]').trigger('select');
+        }
+       
         myView.collection = collection;
 
         myView.dialog.on('save', function () {
@@ -104,17 +116,65 @@ define('io.ox/mail/mailfilter/settings/filter',
         }
     });
 
-    return {
-        editMailfilter: function ($node) {
+    ext.point('io.ox/settings/mailfilter/filter/settings/actions/common').extend({
+        index: 200,
+        id: 'actions',
+        draw: function (model) {
+            var flag = (model.get('flags') || [])[0];
+            var title = model.get('rulename'),
+                texttoggle = model.get('active') ? gt('Disable') : gt('Enable');
 
-            var deferred = $.Deferred(),
-                createExtpointForSelectedFilter = function (node, args) {
+            $(this).append(
+                $('<a>').addClass('action').text(gt('Edit')).attr({
+                    href: '#',
+                    role: 'button',
+                    'data-action': flag === 'vacation' ? 'edit-vacation' : 'edit',
+                    tabindex: 1,
+                    'aria-label': title + ', ' + gt('Edit')
+                }),
+                $('<a>').addClass('action').text(texttoggle).attr({
+                    href: '#',
+                    role: 'button',
+                    'data-action': 'toggle',
+                    tabindex: 1,
+                    'aria-label': title + ', ' + (texttoggle)
+                }),
+                $('<a>').addClass('close').append($('<i/>').addClass('icon-trash')).attr({
+                    href: '#',
+                    role: 'button',
+                    'data-action': 'delete',
+                    tabindex: 1,
+                    'aria-label': title + ', ' + gt('remove')
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/settings/mailfilter/filter/settings/actions/vacation').extend({
+        index: 200,
+        id: 'actions',
+        draw: function (model) {
+            //redirect
+            ext.point('io.ox/settings/mailfilter/filter/settings/actions/common')
+                            .invoke('draw', this, model);
+        }
+    });
+
+    return {
+        editMailfilter: function ($node, baton) {
+            grid = (baton || {}).grid;
+
+            var createExtpointForSelectedFilter = function (node, args) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args);
                 };
 
-            api.getRules().done(function (data) {
+            return api.getRules().then(function (data) {
 
                 collection = factory.createCollection(data);
+                collection.comparator = function (model) {
+                    return model.get('position');
+                };
+
                 var AccountSelectView = Backbone.View.extend({
 
                     tagName: 'li',
@@ -122,15 +182,11 @@ define('io.ox/mail/mailfilter/settings/filter',
                     saveTimeout: 0,
 
                     render: function () {
-                        var flagArray = this.model.get('flags'),
+                        var flag = (this.model.get('flags') || [])[0],
                             self = this;
 
                         function getEditableState() {
-                            if (flagArray) {
-                                return flagArray[0] !== 'vacation' && flagArray[0] !== 'autoforward' ? 'editable' : 'fixed';
-                            } else {
-                                return 'editable';
-                            }
+                            return _.contains(['autoforward', 'spam', 'vacation'], flag) ? 'fixed' : 'editable';
                         }
 
                         var title = self.model.get('rulename');
@@ -148,30 +204,8 @@ define('io.ox/mail/mailfilter/settings/filter',
                                     'aria-label': title + ', ' + gt('Use cursor keys to change the item position')
                                 }),
                                 $('<div>').addClass('pull-right').append(function () {
-                                    if (getEditableState() !== 'editable') return;
-                                    $(this).append(
-                                        $('<a>').addClass('action').text(gt('Edit')).attr({
-                                            href: '#',
-                                            role: 'button',
-                                            'data-action': 'edit',
-                                            tabindex: 1,
-                                            'aria-label': title + ', ' + gt('Edit')
-                                        }),
-                                        $('<a>').addClass('action').text(self.model.get('active') ? gt('Disable') : gt('Enable')).attr({
-                                            href: '#',
-                                            role: 'button',
-                                            'data-action': 'toggle',
-                                            tabindex: 1,
-                                            'aria-label': title + ', ' + (self.model.get('active') ? gt('Disable') : gt('Enable'))
-                                        }),
-                                        $('<a>').addClass('close').append($('<i/>').addClass('icon-trash')).attr({
-                                            href: '#',
-                                            role: 'button',
-                                            'data-action': 'delete',
-                                            tabindex: 1,
-                                            'aria-label': title + ', ' + gt('remove')
-                                        })
-                                    );
+                                    var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (flag || 'common'));
+                                    point.invoke('draw', $(this), self.model);
                                 }),
                                 title = $('<span>').addClass('list-title').text(title)
                             );
@@ -186,6 +220,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                         'click [data-action="toggle"]': 'onToggle',
                         'click [data-action="delete"]': 'onDelete',
                         'click [data-action="edit"]': 'onEdit',
+                        'click [data-action="edit-vacation"]': 'onEditVacation',
                         'keydown .drag-handle': 'dragViaKeyboard'
                     },
 
@@ -211,8 +246,21 @@ define('io.ox/mail/mailfilter/settings/filter',
                              //yell on reject
                             settingsUtil.yellOnReject(
                                 api.deleteRule(id).done(function () {
+                                    var arrayOfFilters,
+                                        data;
                                     self.model.collection.remove(id);
                                     $node.find('.controls [data-action="add"]').focus();
+
+                                    arrayOfFilters = $node.find('li[data-id]');
+                                    data = _.map(arrayOfFilters, function (single) {
+                                        return parseInt($(single).attr('data-id'), 10);
+                                    });
+                                     //yell on reject
+                                    settingsUtil.yellOnReject(
+                                        api.reorder(data)
+                                    );
+                                    updatePositionInCollection(collection, data);
+
                                 })
                             );
                         }
@@ -226,6 +274,17 @@ define('io.ox/mail/mailfilter/settings/filter',
                         e.data.obj = self.model;
                         if (e.data.obj !== undefined) {
                             createExtpointForSelectedFilter(this.$el.parent(), e);
+                        }
+                    },
+
+                    onEditVacation: function (e) {
+                        e.preventDefault();
+                        var elem = _.find(grid.getIds(), function (item) {
+                                return item.id === 'io.ox/vacation';
+                            });
+
+                        if (elem) {
+                            grid.selection.set(elem);
                         }
                     },
 
@@ -255,6 +314,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                             settingsUtil.yellOnReject(
                                 api.reorder(data)
                             );
+                            updatePositionInCollection(collection, data);
                         }
 
                         switch (e.which) {
@@ -347,6 +407,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                                 settingsUtil.yellOnReject(
                                     api.reorder(data)
                                 );
+                                updatePositionInCollection(collection, data);
                             }
                         });
                     }
@@ -355,12 +416,8 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                 mailFilter = new MailfilterEdit();
                 $node.append(mailFilter.render().$el);
-
-            }).fail(function (error) {
-                deferred.reject(error);
+                return collection;
             });
-
-            return deferred;
 
         }
     };

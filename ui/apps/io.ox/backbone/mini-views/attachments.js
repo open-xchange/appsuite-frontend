@@ -148,6 +148,7 @@ define('io.ox/backbone/mini-views/attachments',
 
             var self = this,
                 allDone = 0, // 0 ready 1 delete 2 add 3 delete and add
+                errors = [], //store errormessages
                 apiOptions = {
                 module: this.options.module,
                 id: id || this.model.id,
@@ -156,7 +157,7 @@ define('io.ox/backbone/mini-views/attachments',
 
             function done() {
                 if (self.options.changeCallback) {
-                    self.options.changeCallback(self.model, id);
+                    self.options.changeCallback(self.model, id, errors);
                 }
             }
 
@@ -172,6 +173,9 @@ define('io.ox/backbone/mini-views/attachments',
                     },
                     function fail(e) {
                         self.model.trigger('server:error', e);
+                        allDone--;
+                        errors.push(e);
+                        if (allDone <= 0) done();
                     }
                 );
             }
@@ -185,6 +189,9 @@ define('io.ox/backbone/mini-views/attachments',
                         },
                         function fail(e) {
                             self.model.trigger('server:error', e);
+                            allDone -= 2;
+                            errors.push(e);
+                            if (allDone <= 0) done();
                         }
                     );
                 } else {
@@ -195,6 +202,9 @@ define('io.ox/backbone/mini-views/attachments',
                         },
                         function fail(e) {
                             self.model.trigger('server:error', e);
+                            allDone -= 2;
+                            errors.push(e);
+                            if (allDone <= 0) done();
                         }
                     );
                 }

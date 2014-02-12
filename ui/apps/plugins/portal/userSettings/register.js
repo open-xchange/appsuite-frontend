@@ -20,6 +20,14 @@ define('plugins/portal/userSettings/register',
 
     'use strict';
 
+    function keyClickFilter(e) {
+        if (e.which === 13 || e.type === 'click') {
+            if (_.isFunction(e.data.fn)) {
+                e.data.fn();
+            }
+        }
+    }
+
     function changeUserData() {
 
         require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
@@ -58,16 +66,17 @@ define('plugins/portal/userSettings/register',
 
         require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/notifications'], function (dialogs, http, notifications) {
 
+            var oldPass, newPass, newPass2;
             new dialogs.ModalDialog({ async: true, width: 400 })
             .header($('<h4>').text(gt('Change password')))
             .build(function () {
                 this.getContentNode().append(
                     $('<label>').text(gt('Your current password')),
-                    $('<input type="password" class="input-large current-password">'),
+                    oldPass = $('<input type="password" class="input-large current-password">'),
                     $('<label>').text(gt('New password')),
-                    $('<input type="password" class="input-large new-password">'),
+                    newPass = $('<input type="password" class="input-large new-password">'),
                     $('<label>').text(gt('Repeat new password')),
-                    $('<input type="password" class="input-large repeat-new-password">'),
+                     newPass2 = $('<input type="password" class="input-large repeat-new-password">'),
                     $('<div class="alert alert-block alert-info">')
                     .css('margin', '14px 0px')
                     .text(
@@ -79,31 +88,38 @@ define('plugins/portal/userSettings/register',
             .addButton('cancel', gt('Cancel'))
             .on('change', function (e, data, dialog) {
                 var node = dialog.getContentNode();
-                http.PUT({
-                    module: 'passwordchange',
-                    params: { action: 'update' },
-                    appendColumns: false,
-                    data: {
-                        old_password: node.find('.current-password').val(),
-                        new_password: node.find('.new-password').val(),
-                        new_password2: node.find('.repeat-new-password').val()
-                    }
-                })
-                .done(function () {
-                    node.find('input[type="password"]').val('');
-                    dialog.close();
-                    dialog = null;
-                    main.logout();
-                })
-                .fail(function (error) {
-                    notifications.yell(error);
+                if (newPass.val() === newPass2.val()) {
+                    http.PUT({
+                        module: 'passwordchange',
+                        params: { action: 'update' },
+                        appendColumns: false,
+                        data: {
+                            old_password: oldPass.val(),
+                            new_password: newPass.val(),
+                            new_password2: newPass2.val()
+                        }
+                    })
+                    .done(function () {
+                        node.find('input[type="password"]').val('');
+                        dialog.close();
+                        dialog = null;
+                        main.logout();
+                    })
+                    .fail(function (error) {
+                        notifications.yell(error);
+                        dialog.idle();
+                        oldPass.focus();
+                        dialog = null;
+                    });
+                } else {
+                    notifications.yell('warning', gt('The two newly entered passwords do not match.'));
                     dialog.idle();
-                    node.find('input.current-password').focus();
+                    newPass2.focus();
                     dialog = null;
-                });
+                }
             })
             .show(function () {
-                $(this).find('input.current-password').focus();
+                oldPass.focus();
             });
         });
     }
@@ -117,8 +133,9 @@ define('plugins/portal/userSettings/register',
             this.append(
                 content = $('<div class="content">').append(
                     // user data
-                    $('<div class="action">').text(gt('My contact data'))
-                    .on('click', changeUserData)
+                    $('<div class="action" role="button" tabindex="1">').text(gt('My contact data'))
+                    .on('click keypress', { fn: changeUserData }, keyClickFilter)
+
                 )
             );
             // password
@@ -126,8 +143,8 @@ define('plugins/portal/userSettings/register',
             require(['io.ox/core/capabilities'], function (capabilities) {
                 if (capabilities.has('edit_password')) {
                     content.append(
-                        $('<div class="action">').text(gt('My password'))
-                        .on('click', changePassword)
+                        $('<div class="action" role="button" tabindex="1">').text(gt('My password'))
+                        .on('click keypress', { fn: changePassword}, keyClickFilter)
                     );
                 }
             });

@@ -24,10 +24,12 @@ define('io.ox/core/api/autocomplete',
     'use strict';
 
     function Autocomplete(options) {
-
         var that = this;
 
-        this.options = options || {};
+        this.options = $.extend({
+            split: true
+        }, options);
+
         this.cache = {};
         this.apis = [];
 
@@ -154,7 +156,8 @@ define('io.ox/core/api/autocomplete',
                     });
                 } else {
                     // create separate objects for each email value
-                    self.processContactItem(type, tmp, obj, 'email', ['email1', 'email2', 'email3']);
+                    var fields = self.options.split ? ['email1', 'email2', 'email3'] : ['email1'];
+                    self.processContactItem(type, tmp, obj, 'email', fields);
                     //msisdn support: create separate objects for each phone number
                     if (options.extra && options.extra.length) {
                         //get requested extra columns and process

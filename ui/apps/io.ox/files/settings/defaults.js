@@ -16,7 +16,7 @@ define('io.ox/files/settings/defaults', function () {
     'use strict';
 
     var settingsDefaults = {
-            view: 'icons',
+            view: 'fluid:icon',
             videoEnabled: true,
             audioEnabled: true,
             rootFolderId: 9

@@ -14,7 +14,7 @@
 var fs = require("fs");
 var path = require("path");
 var child_process = require("child_process");
-var _ = require("../underscore");
+var _ = require("../underscore/underscore");
 
 /**
  * Tests for a boolean Jake parameter.

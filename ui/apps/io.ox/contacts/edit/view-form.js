@@ -15,21 +15,18 @@
 define('io.ox/contacts/edit/view-form',
     ['io.ox/contacts/model',
      'io.ox/backbone/views',
-     'io.ox/backbone/forms',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/contacts/widgets/pictureUpload',
-     'io.ox/core/tk/attachments',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
-     'gettext!io.ox/contacts',
      'io.ox/core/capabilities',
      'io.ox/core/extensions',
-     'io.ox/core/date',
      'io.ox/backbone/mini-views',
      'io.ox/backbone/mini-views/attachments',
+     'gettext!io.ox/contacts',
      'less!io.ox/contacts/edit/style.less'
-    ], function (model, views, forms, actions, links, PictureUpload, attachments, api, util, gt, capabilities, ext, date, mini, attachmentViews) {
+    ], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt) {
 
     'use strict';
 
@@ -451,23 +448,37 @@ define('io.ox/contacts/edit/view-form',
             );
         }
 
-        function propagateAttachmentChange(model, id) {
+        function propagateAttachmentChange(model, id, errors) {
 
-            var folder_id = model.get('folder_id'), id = model.get('id') || id;
-
-            return api.get({ id: id, folder: folder_id }, false)
-                .then(function (data) {
-                    return $.when(
-                        api.caches.get.add(data),
-                        api.caches.all.grepRemove(folder_id + api.DELIM),
-                        api.caches.list.remove({ id: id, folder: folder_id }),
-                        api.clearFetchCache()
-                    )
-                    .done(function () {
-                        // to make the detailview remove the busy animation:
-                        api.removeFromUploadList(_.ecid(data));
-                        api.trigger('refresh.list');
+            var folder_id = model.get('folder_id'), id = model.get('id') || id,
+                upload = api.uploadInProgress(_.ecid(model.attributes));
+            
+            //if there are errors show them
+            if (errors.length > 0) {
+                require(['io.ox/core/notifications'], function (notifications) {
+                    _(errors).each(function (error) {
+                        notifications.yell('error', error.error);
                     });
+                });
+            }
+
+            return api.get({ id: id, folder: folder_id }, !upload)
+                .then(function (data) {
+                    if (upload) {//don't delete caches if there is no upload
+                        return $.when(
+                            api.caches.get.add(data),
+                            api.caches.all.grepRemove(folder_id + api.DELIM),
+                            api.caches.list.remove({ id: id, folder: folder_id }),
+                            api.clearFetchCache()
+                        )
+                        .done(function () {
+                            // to make the detailview remove the busy animation:
+                            api.removeFromUploadList(_.ecid(data));
+                            api.trigger('refresh.list');
+                        });
+                    } else {
+                        return $.when();
+                    }
                 });
         }
 

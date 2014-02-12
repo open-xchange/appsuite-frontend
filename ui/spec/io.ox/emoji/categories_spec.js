@@ -14,7 +14,7 @@ define([
     'io.ox/emoji/main',
     'settings!io.ox/mail/emoji'
 ], function (emoji, settings) {
-    "use strict";
+    'use strict';
 
     var pile_unicode = '\ud83d\udca9';
 

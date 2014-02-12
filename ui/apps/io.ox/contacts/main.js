@@ -372,6 +372,14 @@ define('io.ox/contacts/main',
                 .append('<i class="icon-gear">');
         win.nodes.search.find('.search-query-container').after(button);
 
+        //add dropdown menue
+        dropdownOptions({
+            id: 'contacts.search',
+            anchor: button,
+            defaults: data,
+            settings: settings
+        });
+
         commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);

@@ -83,7 +83,7 @@ define('io.ox/mail/write/inplace/inplace',
             this.$el.addClass('inplace-reply').append(
                 $('<h4 class="subject">').text('\u00A0'),
                 $('<p class="recipients">').text('\u00A0'),
-                $('<textarea rows="5" class="editor input-xxlarge">').attr('placeholder', gt('Your answer'))
+                $('<textarea rows="5" class="editor input-xxlarge" tabindex="1">').attr({'placeholder': gt('Your answer'), 'aria-label': gt('Your answer')})
             );
 
             this.renderContent();
@@ -103,7 +103,7 @@ define('io.ox/mail/write/inplace/inplace',
                 async: true,
                 container: options.container || $('body'),
                 easyOut: false,
-                width: 572 // 572 fits input-xxlarge
+                width: 572 // 572 fits input-xxlarge,
             });
 
             // show dialog instantly
@@ -111,8 +111,8 @@ define('io.ox/mail/write/inplace/inplace',
                 view = new InplaceView({ model: model, mail: options.mail, el: dialog.getContentNode() });
 
             dialog.append(view.render().$el)
-                .addAlternativeButton('cancel', gt('Discard'))
-                .addPrimaryButton('send', gt('Send'), 'send', { classes: 'pull-right' })
+                .addAlternativeButton('cancel', gt('Discard'), 'cancel', {tabIndex: '1'})
+                .addPrimaryButton('send', gt('Send'), 'send', { classes: 'pull-right', tabIndex: '1' })
                 .on('send', function () {
                     if (view.onSend()) {
                         dialog.close();

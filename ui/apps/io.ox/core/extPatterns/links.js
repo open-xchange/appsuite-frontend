@@ -49,7 +49,8 @@ define('io.ox/core/extPatterns/links',
                         'role': 'menuitem'
                     })
                     .append(self.label ? $.txt(String(self.label)) : $())
-                    .append(self.icon ? $('<i>').addClass(String(self.icon)) : $());
+                    .append(self.icon ? $('<i>').addClass(String(self.icon)) : $())
+                    .attr('title', options.title || '');
             };
 
         this.draw = this.draw || function (baton) {
@@ -69,7 +70,12 @@ define('io.ox/core/extPatterns/links',
                     .addClass('disabled')
                     .attr({
                         'aria-disabled': true
+                        // may be, tabindex should be set to 0, to 'hide'
+                        // the link during keyboard navigation. Anyway,
+                        // IMHO a menu should be as static as possible to support
+                        // users to 'learn' the navigation
                     })
+                    .removeAttr('href')
                 );
             };
         }

@@ -51,12 +51,14 @@ body.down #io-ox-login-container .alert.alert-info {
 .unselectable {
     -moz-user-select: -moz-none;
     -webkit-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 
 .selectable-text {
     -moz-user-select: text;
     -webkit-user-select: text;
+    -ms-user-select: text;
     user-select: text;
     cursor: default;
 }

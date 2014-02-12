@@ -20,8 +20,8 @@ module.exports = function(config) {
     files: [
         'spec/main-test.js',
         {pattern: 'spec/**/*_spec.js', included: false},
-        {pattern: 'spec/shared/**/*.js'},
-        {pattern: 'apps/**/*.js', included: false}
+        {pattern: 'spec/fixtures/**/*.*', included: false, served: true},
+        {pattern: 'spec/shared/**/*.js'}
     ],
 
 
@@ -49,7 +49,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_WARN,
+    logLevel: config.LOG_ERROR,
 
 
     // enable / disable watching file and executing tests whenever any file changes
@@ -66,6 +66,11 @@ module.exports = function(config) {
     // - IE (only Windows)
     browsers: ['PhantomJS'],
 
+    phantomjsLauncher: {
+        options: {
+            viewportSize: { width: 1024, height: 768 }
+        }
+    },
 
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 60000,

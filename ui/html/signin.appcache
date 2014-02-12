@@ -2,7 +2,6 @@ CACHE MANIFEST
 # build: @ version @
 
 CACHE:
-@base@/favicon.ico
 @base@/boot.js
 @base@/blank.html
 @base@/src/offline.js

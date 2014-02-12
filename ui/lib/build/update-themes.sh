@@ -1,5 +1,7 @@
 #!/bin/sh
 
+umask 022
+
 cd "$(dirname "$0")/.."
 
 rm -rf apps/themes/*/less

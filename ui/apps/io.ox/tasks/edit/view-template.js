@@ -25,7 +25,7 @@ define('io.ox/tasks/edit/view-template',
      'io.ox/tasks/api',
      'io.ox/core/extensions',
      'io.ox/tasks/util'
-    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, reminderUtil) {
+    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil) {
 
     'use strict';
 
@@ -160,14 +160,12 @@ define('io.ox/tasks/edit/view-template',
             this.append($('<div class="span5 collapsed">').append(
                     $('<label>').text(gt('Remind me')).addClass('task-edit-label').attr('for', 'task-edit-reminder-select'), selector = $('<select tabindex="1">').attr('id', 'task-edit-reminder-select').addClass('span12')
                     .append($('<option>')
-                    .text(''), reminderUtil.buildDropdownMenu())
+                    .text(''), taskUtil.buildDropdownMenu())
                     .on('change', function () {
                         if (selector.prop('selectedIndex') === 0) {
-                            baton.model.set('alarm', null, {validate: true});
+                            baton.model.set('alarm', null, { validate: true });
                         } else {
-                            var dates = reminderUtil.computePopupTime(new Date(),
-                                    selector.val());
-                            baton.model.set('alarm', dates.alarmDate.getTime(), {validate: true});
+                            baton.model.set('alarm', taskUtil.computePopupTime(selector.val()).alarmDate, { validate: true });
                         }
                     })
                 )
@@ -711,13 +709,30 @@ define('io.ox/tasks/edit/view-template',
         className: 'div',
         index: 2500,
         module: 4,
-        finishedCallback: function (model, id) {
+        finishedCallback: function (model, id, errors) {
             var obj = {};
             obj.id = model.attributes.id || id;
             obj.folder_id = model.attributes.folder_id || model.attributes.folder;
-            api.removeFromCache(_.cid(obj)).done(function () {
-                api.removeFromUploadList(_.ecid(obj));
+            //show errors
+            _(errors).each(function (error) {
+                notifications.yell('error', error.error);
             });
+            if (api.uploadInProgress(_.ecid(obj))) {//no need to remove cachevalues if there was no upload
+                
+                //make sure cache values are valid
+                api.get(obj, false).done(function (data) {
+                    $.when(
+                        api.caches.get.add(data),
+                        api.caches.list.merge(data).done(function (ok) {
+                            if (ok) {
+                                api.trigger('refresh.list');
+                            }
+                        })
+                    ).done(function () {
+                        api.removeFromUploadList(_.ecid(obj));
+                    });
+                });
+            }
         }
     }), {
         tab: 'attachments_tab',
@@ -778,8 +793,8 @@ define('io.ox/tasks/edit/view-template',
         display: 'DATE',
         attribute: 'start_date',
         required: false,
-        utc: true,
         label: gt('Starts on'),
+        utc: true,
         clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '4'
@@ -794,8 +809,8 @@ define('io.ox/tasks/edit/view-template',
         display: 'DATE',
         attribute: 'end_date',
         required: false,
-        utc: true,
         label: gt('Due date'),
+        utc: true,
         clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
         row: '4'

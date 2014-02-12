@@ -19,7 +19,7 @@ var http = require("http");
 var readline = require('readline');
 var util = require("util");
 var utils = require("./lib/build/fileutils");
-var _ = require("./lib/underscore.js");
+var _ = require("./lib/underscore/underscore");
 var jsp = require("./lib/uglify-js/uglify-js").parser;
 var pro = require("./lib/uglify-js/uglify-js").uglify;
 var ast = require("./lib/build/ast");
@@ -263,7 +263,7 @@ utils.topLevelTask('default', ['buildApp'], function() {
     utils.summary('default')();
 });
 
-utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "unsupported.html", "print.html", "favicon.ico"]));
+utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "unsupported.html", "print.html"]));
 utils.copy(utils.list("src/"));
 
 //html
@@ -292,9 +292,9 @@ _.each(['core', 'signin', 'core.appcache', 'signin.appcache'],
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
      utils.string(';\n'),
-     "lib/jquery.js",
+     "lib/jquery/jquery.js",
      "lib/jquery.mobile.touch.min.js",
-     "lib/underscore.js", // load this before require.js to keep global object
+     "lib/underscore/underscore.js", // load this before require.js to keep global object
      "lib/require.js",
      "lib/require-fix.js",
      "lib/modernizr.js",
@@ -309,6 +309,7 @@ utils.concat("boot.js",
      "lib/doT.js",
      "lib/textarea-helper.js",
      "src/util.js",
+     "src/browser.js",
      "src/plugins.js",
      "src/jquery.plugins.js",
      "apps/io.ox/core/gettext.js",
@@ -339,7 +340,7 @@ utils.copy(utils.list("lib", ["jquery.imageloader.js"]),
 
 // Mediaelement.js
 
-utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
+utils.copy(utils.list("lib/mediaelement/build", "*"), {to: utils.dest("apps/3rd.party/mediaelement") });
 
 // Ace editor
 
@@ -368,15 +369,32 @@ utils.copy(utils.list("lib", "charts.js"), {to: utils.dest("apps/io.ox/core/tk/"
 
 if (path.existsSync('help')) {
     var helpDir = process.env.helpDir || utils.builddir;
-    _.each(fs.readdirSync('help'), function (Lang) {
-        if (!fs.statSync(path.join('help', Lang)).isDirectory()) return;
+    _.each(fs.readdirSync('help/l10n'), function (Lang) {
         var lang = Lang.toLowerCase().replace(/_/g, '-');
-        utils.copy(utils.list(path.join('help', Lang + '/')), {
+        utils.copy(utils.list(path.join('help/l10n', Lang + '/')), {
             to: helpDir.replace(/@lang@/g, lang)
         });
     });
-    utils.copy(['help/help.css']);
+    utils.copy(utils.list(['help/help.css', 'help/images/']));
 }
+
+//online drive help
+
+if (path.existsSync('help-drive')) {
+    var helpDir = process.env.helpDriveDir || utils.builddir;
+    _.each(fs.readdirSync('help-drive/l10n'), function (Lang) {
+        var lang = Lang.toLowerCase().replace(/_/g, '-');
+        utils.copy(utils.list(path.join('help-drive/l10n', Lang + '/')), {
+            to: helpDir.replace(/@lang@/g, lang)
+        });
+    });
+    utils.copy(utils.list(['help-drive/help.css', 'help-drive/images/']));
+}
+
+// standard ox set of default icons for mobile devices
+utils.copy(utils.list("apps/themes/icons", "*"), {to: utils.dest("apps/themes/icons") });
+// rewrite conditions for default icons
+utils.copy(utils.list("apps/themes", ".htaccess"), {to: utils.dest("apps/themes") });
 
 // postinst utilities
 
@@ -386,7 +404,7 @@ utils.copy(utils.list('lib',
      'jake/',
      'less.js/lib/',
      'node_modules/',
-     'underscore.js']),
+     'underscore/underscore.js']),
     { to: utils.dest('share/lib') });
 utils.concat('update-themes.js', utils.list('lib',
     ['less.js/build/require-rhino.js',
@@ -556,7 +574,7 @@ utils.concat("doc/index.html", indexFiles);
 
 utils.copy(utils.list("doc/lib", ["prettify.*", "default.css", "newwin.png"]),
            { to: utils.dest("doc") });
-utils.copyFile("lib/jquery.min.js", utils.dest("doc/jquery.min.js"));
+utils.copyFile("lib/jquery/jquery.min.js", utils.dest("doc/jquery.min.js"));
 utils.topLevelTask();
 
 // update-i18n task
@@ -672,7 +690,7 @@ task('init-packaging', ['clean'], function() {
         {
             key: 'copyright',
             prompt: 'Copyright line',
-            def: '2013 Open-Xchange, Inc'
+            def: '2014 Open-Xchange, Inc'
         },
         {
             key: 'licenseName',
@@ -718,12 +736,12 @@ task('init-packaging', ['clean'], function() {
             // clean up readline
             rl.close();
             process.stdin.destroy();
-            
+
             // read license text
             var text = fs.readFileSync(packagingVariables.license, 'utf8');
             packagingVariables.license = text.replace(/^.*$/gm,
                 function(line) { return /\S/.test(line) ? ' ' + line : ' .'; });
-            
+
             // process templates
             var ff = utils.list(utils.source('lib/build/pkg-template'), '**/*');
             for (var i = 0; i < ff.length; i++) {
@@ -737,7 +755,7 @@ task('init-packaging', ['clean'], function() {
                     return packagingVariables[key];
                 });
             }
-            
+
             complete();
         }
     }
@@ -775,12 +793,11 @@ task("dist", [distDest], function () {
     }
     function addL10n(spec) {
         spec = replaceL10n(spec, 'l10n', i18n.languages());
-        function isDir(Lang) {
-            return fs.statSync(path.join('help', Lang)).isDirectory();
-        }
         if (path.existsSync('help')) {
-            spec = replaceL10n(spec, 'help',
-                               _.filter(fs.readdirSync('help'), isDir));
+            spec = replaceL10n(spec, 'help', fs.readdirSync('help/l10n'));
+        }
+        if (path.existsSync('help-drive')) {
+            spec = replaceL10n(spec, 'help-drive', fs.readdirSync('help-drive/l10n'));
         }
         return spec;
     }

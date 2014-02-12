@@ -45,11 +45,11 @@ define('io.ox/backbone/modelFactory',
 
         },
         changedSinceLoading: function () {
-            var self = this;
-
-            var oldAttributes = this.realm.internal.cachedServerAttributes(this.id) || {};
-            var currentAttributes = this.attributes;
-            var keys = {};
+            var self = this,
+                oldAttributes = this.realm.internal.cachedServerAttributes(this.id) || {},
+                currentAttributes = this.attributes,
+                keys = {},
+                retval = {};
 
             // Collect keys set
             _(oldAttributes).chain().keys().each(function (key) {
@@ -60,13 +60,12 @@ define('io.ox/backbone/modelFactory',
                 keys[key] = 1;
             });
 
-            var retval = {};
 
             _(keys).chain().keys().each(function (key) {
 
-                var o = oldAttributes[key];
-                var c = currentAttributes[key];
-                var different = false;
+                var o = oldAttributes[key],
+                    c = currentAttributes[key],
+                    different = false;
 
                 if (self.touchedAttributes && self.touchedAttributes[key]) {
                     retval[key] = c;
@@ -127,8 +126,8 @@ define('io.ox/backbone/modelFactory',
         };
 
         this.create = function (options) {
-            var loaded = new factory.model(options);
-            var uid = factory.internal.toUniqueIdFromObject(options);
+            var loaded = new factory.model(options),
+                uid = factory.internal.toUniqueIdFromObject(options);
 
             models[uid] = loaded;
             serverAttributes[uid] = JSON.parse(JSON.stringify(loaded.toJSON()));
@@ -136,13 +135,12 @@ define('io.ox/backbone/modelFactory',
         };
 
         this.get = function () {
-            var args = $.makeArray(arguments);
-            var uid = factory.internal.toUniqueIdFromGet.apply(factory, args);
+            var args = $.makeArray(arguments),
+                uid = factory.internal.toUniqueIdFromGet.apply(factory, args),
+                def = $.Deferred();
             if (models[uid]) {
                 return $.Deferred().resolve(models[uid]);
             }
-
-            var def = $.Deferred();
 
             factory.internal.load.apply(factory.internal, args).done(function (data) {
                 data._realm = self;
@@ -165,9 +163,9 @@ define('io.ox/backbone/modelFactory',
         };
 
         this.getList = function () {
-            var def = $.Deferred();
-            var uidIdList = factory.internal.componentizeList.apply(factory.internal, $.makeArray(arguments));
-            var idsToLoad = [];
+            var def = $.Deferred(),
+                uidIdList = factory.internal.componentizeList.apply(factory.internal, $.makeArray(arguments)),
+                idsToLoad = [];
 
             _(uidIdList).each(function (tuple) {
                 if (!models[tuple.uid]) {
@@ -252,9 +250,8 @@ define('io.ox/backbone/modelFactory',
     function ModelFactory(delegate) {
         this.internal = {};
 
-        var self = this;
-
-        var realms = {};
+        var self = this,
+            realms = {};
 
         this.realm = function (name) {
             if (!name) {

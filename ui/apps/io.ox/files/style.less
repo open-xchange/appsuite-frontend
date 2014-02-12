@@ -119,6 +119,10 @@
                         &:hover {
                             background-color: darken(#08c, 10%);
                         }
+                        i.icon-lock {
+                            color: white
+                        }
+                        color: #fff;
                     }
                     &.selected span {
                         color: #fff;
@@ -165,6 +169,8 @@
                 color: black;
                 padding: 2px 0;
 
+                .user-select(none);
+
                 //hidden ones
                 .preview {
                     display: none;
@@ -196,7 +202,7 @@
                     i {
                         color: #ccc;
                         font-size: 32px;
-                        line-height: 1.5em;
+                        line-height: 1.3em;
                     }
                     .icon-film {
                         font-size: 28px;
@@ -229,7 +235,7 @@
 
                 .title {
                     float: left;
-                    width: 300px;
+                    width: 60%;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     i.icon-lock {
@@ -656,7 +662,7 @@ ul.breadcrumb li.prefix {
                     span {
                         line-height: 1.6em;
                         &.not-selectable {
-                            display: block;
+                            display: inline;
                         }
                     }
                     .title {
@@ -723,7 +729,7 @@ ul.breadcrumb li.prefix {
                         color: #000;
                     }
                     span.not-selectable {
-                        display: block;
+                        display: inline;
                     }
                     .modified {
                         width: 100px;

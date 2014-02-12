@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2013
- * Mail: info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
@@ -47,7 +46,8 @@ define('io.ox/core/pubsub/publications',
                 _(data).each(function (obj) {
                     if (obj.module === module)   {
                         target = obj.id;
-                        _(obj.formDescription).each(function (description) {//fill targetObj
+                        _(obj.formDescription).each(function (description) {
+                            //fill targetObj
                             targetObj[description.name] = description.defaultValue || '';
                         });
                     }
@@ -126,7 +126,14 @@ define('io.ox/core/pubsub/publications',
             //Body
             popup.getBody().addClass('form-horizontal publication-dialog max-height-250');
 
-            var baton = ext.Baton({ view: self, model: self.model, data: self.model.attributes, templates: [], popup: popup, target: self.model.attributes[self.model.attributes.target]});
+            var baton = ext.Baton({
+                view: self,
+                model: self.model,
+                data: self.model.attributes,
+                templates: [],
+                popup: popup,
+                target: self.model.attributes[self.model.attributes.target]
+            });
 
             popup.on('publish', function () {
 
@@ -161,13 +168,17 @@ define('io.ox/core/pubsub/publications',
                 .fail(function (error) {
                     popup.idle();
                     if (!self.model.valid) {
-                        if (!error.model) {//backend Error
+                        if (!error.model) { //backend Error
                             if (error.code === 'PUB-0006') {
                                 popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Name already taken'));
                             }
-                        } else {//validation gone wrong
+                        } else { //validation gone wrong
                             //must be namefield empty because other fields are correctly filled by default
-                            popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(gt('Publications must have a name'));
+                            var errMsg = gt('Publications must have a name');
+                            error.model.errors.each(function (msg) {
+                                errMsg = msg.join(' ');
+                            });
+                            popup.getBody().find('.siteName-control').addClass('error').find('.help-inline').text(errMsg);
                         }
                     }
                 });
@@ -189,8 +200,10 @@ define('io.ox/core/pubsub/publications',
                         function success(data) {
                             var target = baton.model.get('target'),
                                 description = baton.model.get(target);
-                            description.siteName = data.title;
-                            popup.getBody().find('.siteName-value').val(data.title);
+                            if (!description.siteName) {
+                                description.siteName = data.title;
+                            }
+                            popup.getBody().find('.siteName-value').val(description.siteName);
                             show();
                         },
                         function fail() {

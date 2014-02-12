@@ -11,12 +11,12 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define(["io.ox/contacts/util"], function (util) {
+define(['io.ox/contacts/util'], function (util) {
 
-    "use strict";
+    'use strict';
 
     var testPerson = {
-        image1_url: "/ajax/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489",
+        image1_url: '/ajax/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489',
         first_name: 'Georg',
         last_name: 'Tester',
         display_name: 'Dr. Tester, Georg',
@@ -29,27 +29,23 @@ define(["io.ox/contacts/util"], function (util) {
         city_business: 'city_business',
         city_home: 'city_home'
     },
-        testPersonWOPic = {
+    testPersonWOPic = {
         first_name: 'Georg',
         last_name: 'Tester',
-    },
-        testDistList = {
+    };
+    /*
+    testDistList = {
         mark_as_distributionlist: true
     },
-        testPersonHttps = {
-        image1_url: "https://www.test.de/ajax/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489",
+
+    testPersonHttps = {
+        image1_url: 'https://www.test.de/ajax/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489',
     };
+    */
 
-    describe("Contact util", function () {
+    describe('Contact util', function () {
 
-        it('should return a proper image path ', function () {
-            expect(util.getImage(testPerson)).toEqual(ox.apiRoot + '/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489');
-            expect(util.getImage(testPersonWOPic)).toEqual(ox.base + '/apps/themes/default/dummypicture.png');
-            expect(util.getImage(testDistList)).toEqual(ox.base + '/apps/themes/default/dummypicture_group.png');
-            expect(util.getImage(testPersonHttps)).toEqual(ox.apiRoot + '/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489');
-        });
-
-        it('should return a prepared full contact name for sorting purpose ', function () {
+        it('should return a prepared full contact name for sorting purpose', function () {
             expect(util.getSortName(testPerson)).toEqual('tester, georg');
             expect(util.getSortName({})).toEqual('');
         });
@@ -92,14 +88,10 @@ define(["io.ox/contacts/util"], function (util) {
             expect(util.getJob(testPerson)).toEqual('position, conpany');
         });
 
-//            nameSort is not used any more
-
         it('should return the mailfield ID of a selected E-Mail', function () {
             expect(util.calcMailField(testPerson, testPerson.email2)).toEqual(2);
             expect(util.calcMailField(testPerson, testPerson.email1)).toEqual(1);
             expect(util.calcMailField(testPerson, testPerson.email3)).toEqual(3);
         });
-
     });
-
 });

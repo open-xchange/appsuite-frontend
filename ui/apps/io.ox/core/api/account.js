@@ -337,8 +337,9 @@ define('io.ox/core/api/account',
             return [getAddressArray(account.personal, account.primary_address)];
         }
 
-        // looks like addresses continas primary address plus aliases
-        var addresses = String(account.addresses || '').split(',').sort();
+        // looks like addresses contains primary address plus aliases
+        var addresses = _(String(account.addresses || '').toLowerCase().split(',')).map($.trim).sort();
+
         // build common array of [display_name, email]
         return _(addresses).map(function (address) {
             return getAddressArray(account.personal, address);
@@ -392,7 +393,7 @@ define('io.ox/core/api/account',
      * get all accounts
      * @return {deferred} returns array of account object
      */
-    api.all = function () {
+    api.all = function (options) {
 
         var getter = function () {
             return http.GET({
@@ -400,24 +401,27 @@ define('io.ox/core/api/account',
                 params: { action: 'all' },
                 appendColumns: true,
                 processResponse: true
+            })
+            .then(function (data) {
+                data = process(data);
+                return accountsAllCache.add(data).then(function () {
+                    return data;
+                });
             });
         };
 
-        return accountsAllCache.keys().pipe(function (keys) {
-            if (keys.length > 0) {
+        options = options || {};
+
+        return accountsAllCache.keys().then(function (keys) {
+            if (options.cache !== false && keys.length > 0) {
                 return accountsAllCache.values();
             } else if (ox.online) {
-                return getter().pipe(function (data) {
-                    data = process(data);
-                    return accountsAllCache.add(data).then(function () {
-                        return data;
-                    });
-                });
+                return getter();
             } else {
                 return [];
             }
         })
-        .pipe(function (list) {
+        .then(function (list) {
 
             idHash = {};
             typeHash = {};
@@ -524,15 +528,16 @@ define('io.ox/core/api/account',
             module: 'account',
             appendColumns: false,
             params: params,
-            data: data
+            data: data,
+            processData: false//needed or http.js does not give the warnings back
         })
-        // always successful but either true or false
+        //make it always successful but either true or false, if false we give the warnings back
         .then(
-            function success(bool) {
-                return $.Deferred().resolve(bool);
+            function success() {
+                return $.Deferred().resolve(true);
             },
-            function fail() {
-                return $.Deferred().resolve(false);
+            function fail(response) {
+                return $.Deferred().resolve(false, response);
             }
         );
     };

@@ -33,13 +33,26 @@ define.async('io.ox/core/tk/html-editor',
         self.replaceWith(p.append(self.contents()));
     }
 
+    // just to test if class attribute contains "emoji"
+    var regEmoji = /emoji/,
+        // check for http:, mailto:, or tel:
+        regProtocal = /^\w+:/;
+
     function paste_preprocess(pl, o) {
         //console.debug('pre', o.content);
         o.content = o.content
             // remove comments
             .replace(/<!--(.*?)-->/g, '')
+            // remove class attribute - except for emojis
+            .replace(/\sclass="[^"]+"/g, function (all) {
+                return regEmoji.test(all) ? all : '';
+            })
             // remove custom attributes
-            .replace(/ data-[^=]+="[^"]*"/g, '')
+            .replace(/ data-[^=]+="[^"]*"/ig, '')
+            // remove relative links
+            .replace(/(<a[^<]+)href="([^"]+)"/g, function (all, prefix, href) {
+                return regProtocal.test(href) ? all : prefix;
+            })
             // remove &nbsp;
             .replace(/&nbsp;/ig, ' ')
             // fix missing white-space before/after links
@@ -395,7 +408,7 @@ define.async('io.ox/core/tk/html-editor',
             ',|,emoji,|,bullist,numlist,outdent,indent' +
             ',|,justifyleft,justifycenter,justifyright';
         advanced = 'formatselect,fontselect,fontsizeselect' +
-            ',|,forecolor,backcolor';
+            ',|,forecolor,backcolor,image';
         toolbar2 = '';
         toolbar3 = '';
 
@@ -417,11 +430,12 @@ define.async('io.ox/core/tk/html-editor',
             toolbar3 = toolbar3.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
         }
 
-        (textarea = $(textarea)).tinymce({
+        textarea = $(textarea);
+        textarea.tinymce({
 
             gecko_spellcheck: true,
             language: lookupTinyMCELanguage(),
-            plugins: 'autolink,paste,emoji',
+            plugins: 'autolink,paste,inlinepopups,emoji',
             relative_urls: false,
             remove_script_host: false,
             object_resizing: 0,
@@ -429,6 +443,13 @@ define.async('io.ox/core/tk/html-editor',
             skin: 'ox',
             theme: 'advanced',
 
+            // need this to work in karma/phantomjs
+            content_element: textarea.get(0),
+            file_browser_callback : function () {
+                require(['io.ox/mail/write/inline-images'], function (inlineimages) {
+                    inlineimages.show();
+                });
+            },
             init_instance_callback: function () {
                 // get internal editor reference
                 ed = textarea.tinymce();
@@ -445,6 +466,17 @@ define.async('io.ox/core/tk/html-editor',
                         $('#' + ed.id + '_tbl').removeClass('focused');
                     });
                 // done!
+
+                //suppress firefox dnd inline image support
+                var iframe = textarea.parent().find('iframe'),
+                    html = $(iframe[0].contentDocument).find('html');
+                html.on('dragover drop', function (e) {
+                    if (_.browser.Firefox && _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'))
+                        e.preventDefault();
+                });
+
+
+
                 def.resolve();
             },
 
@@ -511,6 +543,7 @@ define.async('io.ox/core/tk/html-editor',
         }
 
         var resizeEditor = _.debounce(function () {
+                if (textarea === null) return;
                 var p = textarea.parent(), w = p.width(), h = p.height(),
                     iframeHeight = h - p.find('td.mceToolbar').outerHeight() - 2;
                 p.find('table.mceLayout').css({ width: w + 'px', height: iframeHeight + 'px' });
@@ -548,13 +581,14 @@ define.async('io.ox/core/tk/html-editor',
             get = function () {
                 // get raw content
                 var content = ed.getContent({ format: 'raw' });
-                // clean up
-                content = content
-                    .replace(/\s?data-mce-bogus="1"/g, '') // remove bogus attribute
-                    .replace(/<(\w+)[ ]?\/>/g, '<$1>')
-                    .replace(/(<p>(<br>)?<\/p>)+$/, '');
                 // convert emojies
                 content = emoji.imageTagsToUnified(content);
+                // clean up
+                content = content
+                    // remove custom attributes (incl. bogus attribute)
+                    .replace(/\sdata-[^=]+="[^"]*"/g, '')
+                    .replace(/<(\w+)[ ]?\/>/g, '<$1>')
+                    .replace(/(<p>(<br>)?<\/p>)+$/, '');
                 // remove trailing white-space
                 return trimOut(content);
             };
@@ -753,11 +787,15 @@ define.async('io.ox/core/tk/html-editor',
             $(window).off('resize', resizeEditor);
         };
 
+        this.getContainer = function () {
+            return $('iframe', ed.getContentAreaContainer());
+        };
+
         this.destroy = function () {
             this.handleHide();
             if (ed) {
                 // fix IE9/10 focus bug (see bug 29616); similar: http://bugs.jqueryui.com/ticket/9122
-                $('iframe', ed.getContentAreaContainer()).attr('src', 'blank.html');
+                this.getContainer().attr('src', 'blank.html');
                 $(ed.getWin()).off('focus blur');
             }
             if (textarea.tinymce()) {
@@ -767,9 +805,9 @@ define.async('io.ox/core/tk/html-editor',
         };
     }
 
-    return $.getScript(ox.base + '/apps/moxiecode/tiny_mce/jquery.tinymce.js')
-        .pipe(function () {
-            // publish editor class
-            return Editor;
-        });
+    // $.getScript adds cache busting query
+    return $.ajax({ url: ox.base + '/apps/moxiecode/tiny_mce/jquery.tinymce.js', cache: true, dataType: 'script' }).then(function () {
+        // publish editor class
+        return Editor;
+    });
 });

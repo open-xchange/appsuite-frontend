@@ -1,0 +1,6 @@
+[{
+    "namespace": "io.ox/wizards/firstStart",
+    "requires": "mandatory_wizard",
+    "path": "plugins/wizards/mandatory/main",
+    "category": "wizards"
+}]

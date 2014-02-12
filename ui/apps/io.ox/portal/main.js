@@ -18,11 +18,12 @@ define('io.ox/portal/main',
      'io.ox/core/date',
      'io.ox/core/tk/dialogs',
      'io.ox/portal/widgets',
+     'io.ox/portal/util',
      'io.ox/portal/settings/pane',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.less'
-    ], function (ext, userAPI, date, dialogs, widgets, settingsPane, gt, settings) {
+    ], function (ext, userAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
 
     'use strict';
 
@@ -45,13 +46,6 @@ define('io.ox/portal/main',
                 this.getGrid().selection.set({ id: 'io.ox/portal' });
             });
         });
-    }
-
-    function setColor(node, model) {
-        var color = node.attr('data-color');
-        node.removeClass('widget-color-' + color);
-        color = model.get('color') || 'black';
-        node.addClass('widget-color-' + color).attr('data-color', color);
     }
 
     // portal header
@@ -110,48 +104,70 @@ define('io.ox/portal/main',
     });
 
     // widget scaffold
+
     ext.point('io.ox/portal/widget-scaffold').extend({
+        id: 'attributes',
+        index: 100,
         draw: function (baton) {
-
-            this
-                .attr({
-                    'data-widget-cid': baton.model.cid,
-                    'data-widget-id': baton.model.get('id'),
-                    'data-widget-type': baton.model.get('type')
-                })
-                .addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''))
-                .append(
-                    // border decoration
-                    $('<div>')
-                        .addClass('decoration pending')
-                        .append(
-                            $('<h2>').append(
-                                // add remove icon
-                                baton.model.get('protectedWidget') ? [] :
-                                    $('<a class="disable-widget"><i class="icon-remove"/></a>')
-                                    .attr({
-                                        href: '#',
-                                        role: 'button',
-                                        'title': gt('Disable widget'),
-                                        'aria-label': gt('Disable widget'),
-                                        tabindex: 1
-                                    }),
-                                // title span
-                                $('<span class="title">').text('\u00A0')
-                            )
-                        )
-                );
-
-            setColor(this, baton.model);
+            this.attr({
+                'data-widget-cid': baton.model.cid,
+                'data-widget-id': baton.model.get('id'),
+                'data-widget-type': baton.model.get('type')
+            });
         }
     });
+
+    ext.point('io.ox/portal/widget-scaffold').extend({
+        id: 'classes',
+        index: 200,
+        draw: function (baton) {
+            this.addClass('widget' + (baton.model.get('inverse') ? ' inverse' : ''))
+                .addClass(baton.model.get('protectedWidget') || false ? ' protected' : ' draggable');
+        }
+    });
+
+    ext.point('io.ox/portal/widget-scaffold').extend({
+        id: 'default',
+        index: 300,
+        draw: function (baton) {
+            this.append(
+                // border decoration
+                $('<div class="decoration pending">').append(
+                    $('<h2>').append(
+                        // add remove icon
+                        baton.model.get('protectedWidget') ? [] :
+                            $('<a class="disable-widget"><i class="icon-remove"/></a>')
+                            .attr({
+                                href: '#',
+                                role: 'button',
+                                'title': gt('Disable widget'),
+                                'aria-label': gt('Disable widget'),
+                                tabindex: 1
+                            }),
+                        // title span
+                        $('<span class="title">').text('\u00A0')
+                    )
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/portal/widget-scaffold').extend({
+        id: 'color',
+        index: 400,
+        draw: function (baton) {
+            util.setColor(this, baton.model.get('color'));
+        }
+    });
+
+
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/portal', title: 'Portal' }),
         win,
         scrollPos = window.innerHeight,
         appBaton = ext.Baton({ app: app }),
-        sidepopup = new dialogs.SidePopup(),
+        sidepopup = new dialogs.SidePopup({tabTrap: true}),
         collection = widgets.getCollection();
 
     app.settings = settings;
@@ -166,6 +182,7 @@ define('io.ox/portal/main',
                 model.set('baton', null, {validate: true});
                 model.isDeleted = true;
             }
+            widgets.save(appBaton.$.widgets);
         })
         .on('add', function (model) {
             app.drawScaffold(model, true);
@@ -185,7 +202,7 @@ define('io.ox/portal/main',
                     app.getWidgetNode(model).hide();
                 }
             } else if ('color' in model.changed) {
-                setColor(app.getWidgetNode(model), model);
+                util.setColor(app.getWidgetNode(model), model.get('color'));
             } else if (this.wasElementDeleted(model)) {
                 // element was removed, no need to refresh it.
                 return;
@@ -213,8 +230,6 @@ define('io.ox/portal/main',
             haystack = this.models;
         return !_(haystack).some(function (suspiciousHay) {return suspiciousHay.cid === needle; });
     };
-
-
 
     app.getWidgetCollection = function () {
         return collection;
@@ -282,8 +297,13 @@ define('io.ox/portal/main',
         baton.model.node
             .addClass('requires-setup')
             .append(
-                $('<div class="content">').text(gt('Click here to add your account'))
+                $('<div class="content" tabindex="1" role="button">').text(gt('Click here to add your account'))
                 .on('click', { baton: baton }, setup)
+                .on('keypress', { baton: baton }, function (e) {
+                    if (e.which === 13) {
+                        setup(e);
+                    }
+                })
             );
     };
 
@@ -304,6 +324,10 @@ define('io.ox/portal/main',
             decoration = node.find('.decoration');
         return $.when.apply($, defs).done(function () {
                 node.find('.content').remove();
+                // draw summary only on small devices, i.e. smartphones
+                if (_.device('smartphone')) {
+                    point.invoke('summary', node, baton);
+                }
                 point.invoke('preview', node, baton);
                 node.removeClass('error-occurred');
                 decoration.removeClass('pending error-occurred');
@@ -428,7 +452,11 @@ define('io.ox/portal/main',
             simple: _.device('smartphone')
         }));
 
-        win.nodes.main.addClass('io-ox-portal f6-target').attr('tabindex', '1');
+        win.nodes.main.addClass('io-ox-portal f6-target').attr({
+            'tabindex': '1',
+            'role': 'main',
+            'aria-label': gt('Portal Widgets')
+        });
 
         ext.point('io.ox/portal/sections').invoke('draw', win.nodes.main, appBaton);
 
@@ -461,13 +489,13 @@ define('io.ox/portal/main',
                         .append($('<span>').text(gt('Do you really want to delete this widget?')))
                         .addPrimaryButton('delete',
                             //#. Really delete portal widget - in contrast to "just disable"
-                            gt('Delete')
+                            gt('Delete'), 'delete', {tabIndex: '1'}
                         )
-                        .addButton('cancel', gt('Cancel'));
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                         if (model.get('enabled')) {
                             dialog.addAlternativeButton('disable',
                                 //#. Just disable portal widget - in contrast to delete
-                                gt('Just disable widget')
+                                gt('Just disable widget'), 'disable', {tabIndex: '1'}
                             );
                         }
                         dialog.show().done(function (action) {
@@ -506,6 +534,8 @@ define('io.ox/portal/main',
             if (!Modernizr.touch) {
                 require(['apps/io.ox/core/tk/jquery-ui.min.js']).done(function () {
                     appBaton.$.widgets.sortable({
+                        items: '> li.draggable',
+                        cancel: 'li.protected',
                         containment: win.nodes.main,
                         scroll: true,
                         delay: 150,
@@ -526,7 +556,7 @@ define('io.ox/portal/main',
 
         $(window).on('scrollstop resize', lazyLayout);
     });
-    window.kacke = app;
+
     return {
         getApp: app.getInstance
     };

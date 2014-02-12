@@ -29,10 +29,7 @@ define('io.ox/mail/autoforward/settings/model',
                     'rulename': 'autoforward',
 
                     'test': {
-                        'id': 'header',
-                        'comparison': 'contains',
-                        'values': [attributes.userMainEmail],
-                        'headers': ['To']
+                        'id': 'true'
                     },
                     'actioncmds': [
                         {
@@ -46,7 +43,8 @@ define('io.ox/mail/autoforward/settings/model',
                     'flags': ['autoforward'],
                     'active': attributes.active ? true : false
                 };
-            if (attributes.id) {
+            //first rule gets 0
+            if (!_.isUndefined(attributes.id) && !_.isNull(attributes.id)) {
                 preparedData.id = attributes.id;
             }
 

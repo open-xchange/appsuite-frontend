@@ -38,6 +38,7 @@ define('io.ox/mail/settings/pane',
             USE_FIXED_WIDTH_FONT: gt('Use fixed-width font for text mails'),
             TITLE_COMPOSE: gt('Compose'),
             APPEND_VCARD: gt('Append vCard'),
+            SEND_DISPOSITION_NOTIFICATION: gt('Ask for delivery receipt'),
             INSERT_ORG_TO_REPLY: gt('Insert the original email text to a reply'),
             FORWARD_EMAIL_AS: gt('Forward emails as'),
             INLINE: gt('Inline'),
@@ -147,8 +148,13 @@ define('io.ox/mail/settings/pane',
             this.append(holder.append(
                 mailViewSettings.render().el)
             );
+
             if (Modernizr.touch) { // See Bug 24802
                 holder.find('input[name="messageFormat"]:first').closest('.control-group').hide().prev().hide();
+            }
+
+            if (!capabilities.has('emoji')) { // see Bug 25537
+                holder.find('[data-property="displayEmoticons"]').parent().hide();
             }
         },
 

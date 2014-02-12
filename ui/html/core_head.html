@@ -11,9 +11,10 @@
 
 <!-- Never change status-bar-style! There is an iOS bug that freezes home screen apps once this changes. -->
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link id="favicon" rel="shortcut icon" href="" type="image/x-icon">
+<link id="favicon" rel="shortcut icon" href="v=@ version @/apps/themes/default/favicon.ico" type="image/x-icon">
 
 <!-- iOS home screen icons -->
 <link id="icon57" rel="apple-touch-icon" href="">
@@ -71,6 +72,7 @@ window.ox = {
     context_id: 0,
     debug: @debug@,
     language: 'en_US',
+    loginLocation: 'signin',
     logoutLocation: 'signin',
     online: navigator.onLine !== undefined ? navigator.onLine : true,
     relogin: function () {},

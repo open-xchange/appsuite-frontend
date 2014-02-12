@@ -67,9 +67,15 @@
             position: relative;
             float: left;
 
-            .person-name { font-weight: bold; }
+            .person-name {
+                font-weight: bold;
+                .ellipsis();
+            }
 
-            .person-mail { padding-right: 30px; }
+            .person-mail {
+                padding-right: 30px;
+                .ellipsis();
+            }
 
             .remove {
                 display: block;

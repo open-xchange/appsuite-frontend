@@ -25,7 +25,7 @@ define('io.ox/mail/guidance/main',
         var id = app.get('name'),
             folder = app.folder.get();
 
-        new dialogs.SidePopup({ closely: true }).show(e, function (popup) {
+        new dialogs.SidePopup({ closely: true, tabTrap: true, modal: true }).show(e, function (popup) {
             app.folder.getData().done(function (data) {
                 var baton = new ext.Baton({ id: id, app: app, folder: folder, data: data, options: { type: 'mail' } });
                 ext.point('io.ox/mail/guidance').invoke('draw', popup.addClass('guidance'), baton);
@@ -97,7 +97,7 @@ define('io.ox/mail/guidance/main',
             index: INDEX += 100,
             draw: function () {
 
-                var helpDir = 'help/' + ox.language + '/',
+                var helpDir = 'help/l10n/' + ox.language + '/',
                     topics = [
                         [gt.pgettext('help', 'The E-Mail Components'), 'ox.appsuite.user.sect.email.gui.html'],
                         [gt.pgettext('help', 'Managing E-Mail messages'), 'ox.appsuite.user.sect.email.manage.html'],

@@ -1,0 +1,30 @@
+#
+# This list is used by git-shortlog to fix a few botched name translations
+# in the git archive, either because the author's full name was messed up
+# and/or not always written the same way, making contributions from the
+# same person appearing not to be so.
+#
+
+Antje Faber <antje.faber@open-xchange.com>                          Antje Faber <afaber@dhcp36.oxnbg.int>
+Antje Faber <antje.faber@open-xchange.com>                          Antje Faber <antje@linux-d9zv.site>
+Christoph Kopp <christoph.kopp@open-xchange.com>                    Christoph Kopp <christophkopp@Christophs-MacBook-Pro.local>
+Christoph Kopp <christoph.kopp@open-xchange.com>                    christoph.kopp <christoph.kopp@open-xchange.com>
+Daniel Dickhaus <daniel.dickhaus@open-xchange.com>                  daniel <daniel@Dickhaus.oxoe.int>
+David Bauer <david.bauer@open-xchange.com>                          David Bauer <db@dotcore.net>
+David Bauer <david.bauer@open-xchange.com>                          david.bauer <david.bauer@open-xchange.com>
+Felix Marx <felix.marx@open-xchange.com>                            felix.marx <felix.marx@open-xchange.com>
+Francisco Laguna <francisco.laguna@open-xchange.com>                Francisco Laguna <fla@synapps.de>
+Frank Paczynski <frank.paczynski@open-xchange.com>                  Frank Paczynski <frankpaczynski@dhcp56.oxoe.int>
+Frank Paczynski <frank.paczynski@open-xchange.com>                  Frank Paczynski <“frank.paczynski@open-xchange.com”>
+Harald Petry <harald.petry@open-xchange.com>                        Harald Petry <harald@linux-d9zv.site>
+Harald Petry <harald.petry@open-xchange.com>                        harald.petry <harald.petry@open-xchange.com>
+Ingo Schmidt-Rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>    ingo.schmidt-rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>
+Julian Bäume <julian.baeume@open-xchange.com>                       Julian Bäume <julian@svg4all.de>
+Malte Timmermann <malte.timmermann@open-xchange.com>	            unknown <Malte@mt-e6430.(none)>
+Mario Schröder <mario.schroeder@open-xchange.com>                   Mario Schröder <mario@Marios-MacBook-Pro-2.local>
+Matthias Biggeleben <matthias.biggeleben@open-xchange.com>          biggeleben <matthias.biggeleben@open-xchange.com>
+Oliver Specht <oliver.specht@open-xchange.com>                      Oliver Spcht <oliver.specht@open-xchange.com>
+Stefan Preuss <stefan.preuss@open-xchange.com>			    captain <captain@stefanpreuss-wks.oxoe.int>
+Stefan Preuss <stefan.preuss@open-xchange.com>			    captain <captain@stefan.netline.de>
+Tobias Prinz <tobias.prinz@open-xchange.com>                        tobias.prinz <tobias.prinz@open-xchange.com>
+Viktor Pracht <viktor.pracht@open-xchange.com>                      Viktor Pracht <ViktorPracht@gmx.de>

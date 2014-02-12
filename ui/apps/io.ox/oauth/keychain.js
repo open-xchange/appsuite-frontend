@@ -198,7 +198,9 @@ define.async('io.ox/oauth/keychain',
             })
             .done(function (interaction) {
                 window['callback_' + callbackName] = function (response) {
-                    cache[service.id].accounts[response.data.id] = response.data;
+
+                    cache[service.id].accounts[account.id] = account;
+
                     delete window['callback_' + callbackName];
                     popupWindow.close();
                     self.trigger('update', response.data);

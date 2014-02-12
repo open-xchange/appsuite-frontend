@@ -34,8 +34,8 @@ define('io.ox/core/notifications',
             this.$el.attr(
                     //#. %1$d number of notifications
                     //#, c-format
-                    'aria-label', gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
-                            'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')));
+                    'aria-label', gt.format(gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
+                            'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')), this.model.get('count')));
 
         },
         onToggle: function (open) {
@@ -48,8 +48,8 @@ define('io.ox/core/notifications',
                             role: 'button',
                             //#. %1$d number of notifications
                             //#, c-format
-                            'aria-label': gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
-                                    'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count'))})
+                            'aria-label': gt.format(gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
+                                    'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')), this.model.get('count'))})
                 .append(
                 $('<span class="badge">').append(
                     numberNode = $('<span class="number">'),
@@ -66,7 +66,7 @@ define('io.ox/core/notifications',
                     'aria-relevant': 'all',
                     //#. %1$d number of notifications
                     //#, c-format
-                    'aria-label': gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count'))
+                    'aria-label': gt.format(gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count')), this.model.get('count'))
                 });
             } else {
                 numberNode.attr({role: 'alert',
@@ -75,7 +75,7 @@ define('io.ox/core/notifications',
                     'aria-relevant': 'all',
                     //#. %1$d number of notifications
                     //#, c-format
-                    'aria-label': gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count'))
+                    'aria-label': gt.format(gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count')), this.model.get('count'))
                 });
             }
             this.onChange();
@@ -118,14 +118,16 @@ define('io.ox/core/notifications',
                 //find next possible focus
                 var items = $('#io-ox-notifications .item'),
                     lastFocusItemId = lastFocused.closest('.item').attr('focus-id');
-                for (var i = 0; i < items.length; i++) {
-                    if (lastFocusItemId === $(items[i]).attr('focus-id')) {
-                        if ((i + 1) < items.length) { //prevent index out fo bounds
-                            nextFocus = $(items[i + 1]).attr('focus-id');
+                if (lastFocusItemId !== undefined) {//refocus only when inside of items (clear buttons or inbox link are outside)
+                    for (var i = 0; i < items.length; i++) {
+                        if (lastFocusItemId === $(items[i]).attr('focus-id')) {
+                            if ((i + 1) < items.length) { //prevent index out of bounds
+                                nextFocus = $(items[i + 1]).attr('focus-id');
+                            }
+                            break;
+                        } else {
+                            nextFocus = $(items[i]).attr('focus-id');
                         }
-                        break;
-                    } else {
-                        nextFocus = $(items[i]).attr('focus-id');
                     }
                 }
                 lastFocused = lastFocused.attr('focus-id');
@@ -161,7 +163,7 @@ define('io.ox/core/notifications',
                     if (found.length > 0) {//focus if its there
                         found.focus();
                     } else {//just focus first
-                        $('#io-ox-notifications .item').first().focus();
+                        $('#io-ox-notifications .refocus').first().focus();
                     }
                 }
             }
@@ -308,7 +310,7 @@ define('io.ox/core/notifications',
             var focusBadge =  function (e) {
                 e.preventDefault();//prevent default to not jump to reload button
                 if (e.which === 9) { //tabkey
-                    $('#io-ox-notifications .item').first().focus();
+                    $('#io-ox-notifications .refocus').first().focus();
                 }
             };
 
@@ -392,10 +394,15 @@ define('io.ox/core/notifications',
                     warning: 'icon-exclamation'
                 },
 
-                remove = function () {
+                remove = function (immediately) {
 
                     active = false;
                     clearTimeout(timer);
+
+                    if (immediately) {
+                        $('.io-ox-alert').remove();
+                        return;
+                    }
 
                     $('.io-ox-alert')
                         .trigger('notification:removed')
@@ -431,6 +438,7 @@ define('io.ox/core/notifications',
 
             return function (type, message) {
 
+                if (type === 'destroy') return remove(true);
                 if (type === 'close') return remove();
 
                 var o = {

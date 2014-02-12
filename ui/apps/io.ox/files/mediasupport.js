@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/files/mediasupport', function () {
+define('io.ox/files/mediasupport', ['settings!io.ox/files'], function (settings) {
 
     'use strict';
 
@@ -32,16 +32,20 @@ define('io.ox/files/mediasupport', function () {
 
     var browserSupportsMedia = {
         hasSupport: function (mediatype) {
-            // Early exit if mediatype is not supported
-            // Disable Audio for Android, see Bug #29438
-            if (mediatype === 'audio' && _.device('android')) return false;
+            if (mediatype === 'audio') {
+                if (!settings.get('audioEnabled')) return false;
+                // Early exit if mediatype is not supported
+                // Disable Audio for Android, see Bug #29438
+                if (_.device('android')) return false;
+            }
+            if (mediatype === 'video' && !settings.get('videoEnabled')) return false;
             if (!Modernizr[mediatype]) return false;
             return true;
         },
         supportedExtensionsArray: function (mediatype) {
-            if (!mediatype) return false;
+            if (!mediatype) return [];
             var str = this.supportedExtensions(mediatype);
-            if (!str) return false;
+            if (!str || !str.length) return [];
             if (str.indexOf('|') >= 0) {
                 return str.split('|');
             } else if (str) {
@@ -50,9 +54,9 @@ define('io.ox/files/mediasupport', function () {
         },
         supportedExtensions: function (mediatype) {
 
-            if (!this.hasSupport(mediatype)) return false;
+            if (!this.hasSupport(mediatype)) return '';
 
-            var support;
+            var support = '';
             _.each(_.browser, function (v, b) {
                 if (v && media[mediatype][b]) {
                     support = media[mediatype][b];
@@ -62,6 +66,7 @@ define('io.ox/files/mediasupport', function () {
         },
         checkFile: function (mediatype, filename) {
             if (!this.hasSupport(mediatype)) return false;
+            if (this.supportedExtensions(mediatype) === '') return false;
             var pattern = '\\.(' + this.supportedExtensions(mediatype) + ')';
             return (new RegExp(pattern, 'i')).test(filename);
         }

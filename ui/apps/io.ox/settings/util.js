@@ -20,13 +20,17 @@ define('io.ox/settings/util',
     'use strict';
 
     return {
+
+        destroy: function () {
+            notifications.yell('destroy');
+        },
+
         yellOnReject: function (def, options) {
 
             // be robust
             if (!(def && def.promise && def.done)) return $.when();
 
             var opt = $.extend({
-                    details: true,
                     debug: false
                 }, options || {});
 
@@ -55,11 +59,6 @@ define('io.ox/settings/util',
                     if (obj.code  === 'MAIL_FILTER-0015') {
                         //show custom error message
                         obj.message = gtcore('Unable to load mail filter settings.');
-                    } else if (opt.details && obj.error_params[0]) {
-                        //show detailed error messages
-                        _.each(obj.error_params, function (error) {
-                            obj.message = (obj.message || '') + gt(error) + '\n';
-                        });
                     } else if (obj.erro) {
                         // show main error message
                         obj.message = gt(obj.error);

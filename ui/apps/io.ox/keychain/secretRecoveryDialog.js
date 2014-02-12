@@ -22,7 +22,7 @@ define('io.ox/keychain/secretRecoveryDialog',
 
     return {
         show: function () {
-            new dialogs.ModalDialog({ easyOut: false, async: true, width: 500, enter: 'migrate', tapTrap: true })
+            new dialogs.ModalDialog({ easyOut: false, async: true, width: 500, enter: 'migrate'})
                 .build(function () {
                     this.getHeader().append(
                         $('<h4>').text(gt('Recover passwords'))

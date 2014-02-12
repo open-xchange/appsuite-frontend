@@ -68,7 +68,7 @@ define('io.ox/tasks/edit/main',
 
             //now check if something changed with the attachments
             var attachmentList = taskView.baton.attachmentList;
-            if ((attachmentList.attachmentsToAdd.length > 0) || (attachmentList.attachmentsToDelete.length > 0)) {
+            if (attachmentList && ((attachmentList.attachmentsToAdd.length > 0) || (attachmentList.attachmentsToDelete.length > 0))) {
                 check = true;
             }
             return check;
@@ -125,6 +125,11 @@ define('io.ox/tasks/edit/main',
                 if (taskView) {
                     taskView.$el.find('.title-field').focus();
                 }
+                if (taskModel.get('id')) {//set url parameters
+                    self.setState({ folder: taskModel.attributes.folder_id, id: taskModel.attributes.id });
+                } else {
+                    self.setState({ folder: taskModel.attributes.folder_id, id: null});
+                }
             });
 
             win.on('hide', function () {
@@ -152,8 +157,8 @@ define('io.ox/tasks/edit/main',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
-                        .addPrimaryButton('delete', gt('Discard changes'))
-                        .addButton('cancel', gt('Cancel'))
+                        .addPrimaryButton('delete', gt('Discard changes'), 'delete', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

@@ -14,8 +14,9 @@
 
 define('io.ox/core/api/pubsub',
     ['io.ox/core/http',
-     'io.ox/core/api/factory'
-    ], function (http, apiFactory) {
+     'io.ox/core/api/factory',
+     'io.ox/core/api/folder',
+    ], function (http, apiFactory, folderAPI) {
 
     'use strict';
 
@@ -38,19 +39,6 @@ define('io.ox/core/api/pubsub',
             api.caches.get.grepRemove(keys.sub)
         );
     };
-
-    /**
-     * for test purposes only
-     * @private
-     * @return {deferred}
-     */
-    /* var dumpKeys = function (api) {
-        return $.when(
-            api.caches.all.keys().pipe(function (data) { console.log('all', data); }),
-            api.caches.get.keys().pipe(function (data) { console.log('get', data); })
-        );
-    };
-    */
 
     /**
      * gerneralized API for pubsub
@@ -110,6 +98,10 @@ define('io.ox/core/api/pubsub',
                         });
                     });
             }
+        })
+        .on('delete', function () {
+            //remove cloud icon
+            folderAPI.sync();
         });
     }
 

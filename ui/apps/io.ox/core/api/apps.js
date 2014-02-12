@@ -33,9 +33,7 @@ define('io.ox/core/api/apps',
     _(manifests.manager.apps).each(function (appManifest) {
 
         if (!appManifest.path || !appManifest.category) {
-            if (window.console && console.warn) {
-                console.warn('Ignored app. Missing path/category', appManifest);
-            }
+            if (ox.debug && _.device('!karma')) console.warn('Ignored app. Missing path/category', appManifest);
             return;
         }
 

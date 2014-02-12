@@ -10,7 +10,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/core/commons','io.ox/core/tk/vgrid'], function (commons, VGrid) {
+define(['io.ox/core/commons', 'io.ox/core/tk/vgrid'], function (commons, VGrid) {
 
     var expect = chai.expect;
     describe('core commons:', function () {

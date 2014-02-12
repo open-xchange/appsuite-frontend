@@ -668,6 +668,33 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         // helps joining identical requests
         var requests = {};
 
+        /**
+         * write response to console
+         * @example
+         * ox.extract = {
+         *      enabled: true,
+         *      matcher: [
+         *          { module: 'files', action: 'versions' }
+         *      ]
+         *  };
+         */
+        function extract(obj, resp) {
+            if (ox.extract && ox.extract.enabled) {
+                _.each([].concat(ox.extract.matcher || []), function (target) {
+                    if (obj.module === target.module &&
+                        obj.params.action === target.action) {
+                        //write to console
+                        console.groupCollapsed('extract: (module: "' + target.module + '", action: "' + target.action + '") ' + (obj.params.id || ''));
+                        console.log(JSON.stringify(resp, undefined, 4));
+                        console.groupEnd();
+                        //store in array
+                        ox.extract.output = ox.extract.output || [];
+                        ox.extract.output.unshift(JSON.stringify(resp, undefined, 4));
+                    }
+                });
+            }
+        }
+
         function lowLevelSend(r) {
             // TODO: remove backend fix
             var fixPost = r.o.fixPost && r.xhr.type === 'POST',
@@ -680,16 +707,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 xhr.upload.addEventListener('progress', function (e) {
                     r.def.notify(e);
                 }, false);
-            }
-
-            // simulation: abort request and return url in fail handler
-            if (r.o.simulate) {
-                if (ajaxOptions.beforeSend)
-                    console.error('existing beforeSend method will be overwritten');
-                ajaxOptions.beforeSend = function (jqXHR) {
-                    this.targeturl = this.url;
-                    jqXHR.abort();
-                };
             }
 
             var t0, ajax;
@@ -744,6 +761,10 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     that.trigger('reachable');
                     ox.trigger('connection:up');
 
+                    //write response to console
+                    if (ox.debug)
+                        extract(r.o, response);
+
                     // slow?
                     var took = _.now() - t0;
                     log.took(took);
@@ -772,12 +793,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     r = null;
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
-                    if (r.o.simulate)
-                        r.def.resolve(this.targeturl);
-                    else {
-                        that.trigger('stop fail', r.xhr);
-                        r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'general') }, xhr);
-                    }
+                    that.trigger('stop fail', r.xhr);
+                    r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'general') }, xhr);
                     r = null;
                 });
         }

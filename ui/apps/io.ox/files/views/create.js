@@ -29,10 +29,11 @@ define('io.ox/files/views/create',
             dndInfo = $('<div class="dndinfo alert alert-info">').text(gt('You can drag and drop files from your computer to upload either a new file or another version of a file.')),
 
             show = function (app) {
-                var win = app.getWindow(),
-                    dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window'), 'tabTrap': true }),
+
+                var dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window'), 'tabTrap': true }),
                     $form = $('<form>', { 'class': 'files-create', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
-                    queue, description = '';
+                    description = '';
+
                 dialog.getContentNode().css('height', '300px'); // 400 is quite much
                 ext.point(POINT + '/form').invoke('draw', $form, baton);
                 ext.point(POINT + '/filelist').invoke();
@@ -55,7 +56,7 @@ define('io.ox/files/views/create',
                         files = baton.fileList.get();
                     if (files.length) {
                         description = $form.find('textarea').val();
-                        queue.offer(files);
+                        app.queues.create.offer(files, { description: description, folder: app.folder.get() });
                         baton.fileList.clear();
                         dialog.close();
                     } else {
@@ -103,39 +104,6 @@ define('io.ox/files/views/create',
                         $form.find('input[type="file"]').focus();
                     }
                 }
-
-
-                //upload queue
-                queue = upload.createQueue({
-                    start: function () {
-                        win.busy(0);
-                    },
-                    progress: function (file, position, files) {
-                        var pct = position / files.length;
-                        win.busy(pct, 0);
-                        return api.uploadFile({
-                            file: file,
-                            json: {
-                                folder: app.folder.get(),
-                                description: description
-                            },
-                            folder: app.folder.get()
-                        })
-                        .progress(function (e) {
-                            var sub = e.loaded / e.total;
-                            win.busy(pct + sub / files.length, sub);
-                        })
-                        .fail(function (e) {
-                            if (e && e.data && e.data.custom) {
-                                notifications.yell(e.data.custom.type, e.data.custom.text);
-                            }
-                        });
-                    },
-                    stop: function () {
-                        api.trigger('refresh.all');
-                        win.idle();
-                    }
-                });
 
                 //dialog
                 dialog.header($('<h4>').text(gt('Upload new files')));

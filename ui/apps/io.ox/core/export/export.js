@@ -56,9 +56,9 @@ define('io.ox/core/export/export',
         }
     });
 
-    function toggle(type) {
+    function toggle(format) {
         var note = this.find('.alert'), label = this.find('.include_distribution_lists');
-        if (type === 'csv') {
+        if (format === 'csv') {
             note.hide();
             label.show();
         } else {
@@ -113,7 +113,6 @@ define('io.ox/core/export/export',
         index: 100,
         draw: function (baton) {
             if (baton.module === 'contacts') {
-                baton.format.csv = { getDeferred: function () { return api.getCSV(baton.id, baton.simulate); } };
                 this.append(
                     $('<option value="csv">CSV</option>')
                 );
@@ -129,7 +128,6 @@ define('io.ox/core/export/export',
         index: 200,
         draw: function (baton) {
             if (baton.module === 'contacts') {
-                baton.format.vcard = { getDeferred: function () { return api.getVCARD(baton.id, baton.simulate); } };
                 this.append(
                     $('<option value="vcard">vCard</option>')
                 );
@@ -145,7 +143,6 @@ define('io.ox/core/export/export',
         index: 400,
         draw: function (baton) {
             if (baton.module === 'calendar' || baton.module === 'tasks') {
-                baton.format.ical = { getDeferred: function () { return api.getICAL(baton.id, baton.simulate); } };
                 this.append(
                     $('<option value="ical">iCalendar</option>')
                 );
@@ -155,19 +152,19 @@ define('io.ox/core/export/export',
 
     return {
         show: function (module, id) {
-            var id = String(id),
+            var folder = String(id),
                 dialog = new dialogs.ModalDialog({ width: 500 }),
-                baton = new ext.Baton({id: id, module: module, simulate: true, format: {} });
+                baton = new ext.Baton({module: module, folder: folder});
             // get folder and build dialog
-            folderAPI.get({ folder: id}).done(function () {
+            folderAPI.get({ folder: folder}).done(function () {
                 dialog
                     .build(function () {
                         //header
-                        ext.point('io.ox/core/export/export/title').invoke('draw', this.getHeader(), id, 'Export');
+                        ext.point('io.ox/core/export/export/title').invoke('draw', this.getHeader(), baton);
                         //body
                         ext.point('io.ox/core/export/export/select').invoke('draw', this.getContentNode(), baton);
                         //buttons
-                        ext.point('io.ox/core/export/export/buttons').invoke('draw', this);
+                        ext.point('io.ox/core/export/export/buttons').invoke('draw', this, baton);
                         //apply style
                         this.getPopup().addClass('export-dialog');
                     })
@@ -177,16 +174,13 @@ define('io.ox/core/export/export',
                     })
                     .done(function (action) {
                         if (action === 'export') {
-                            var id = baton.$.select.val() || '',
-                                include = baton.$.include.prop('checked') || false,
-                                def = baton.format[id].getDeferred() || $.when();
-                            def.done(function (data) {
-                                if (data) {
-                                    window.location.href = data + '&export_dlists=' + include + '&content_disposition=attachment';
-                                }
-                            })
-                            .fail(function (obj) {
-                                notifications.yell('error', obj && obj.error || gt('An unknown error occurred'));
+                            var format = baton.$.select.val() || '',
+                                include = (baton.$.include || $()).prop('checked') || false,
+                                options = $.extend({include: include}, baton.options);
+                            require(['io.ox/core/download'], function (download) {
+                                download.url(
+                                        api.getUrl(format, baton.folder, options)
+                                    );
                             });
                         } else {
                             dialog = null;

@@ -18,8 +18,9 @@ define('io.ox/calendar/api',
      'settings!io.ox/core',
      'io.ox/core/notifications',
      'io.ox/core/date',
-     'io.ox/core/api/factory'
-    ], function (http, Events, coreConfig, notifications, date, factory) {
+     'io.ox/core/api/factory',
+     'io.ox/core/capabilities'
+    ], function (http, Events, coreConfig, notifications, date, factory, capabilities) {
 
     'use strict';
 
@@ -234,12 +235,14 @@ define('io.ox/calendar/api',
                         action: 'update',
                         id: o.id,
                         folder: folder_id,
-                        timestamp: o.timestamp || _.now(),
+                        timestamp: o.timestamp || _.then(),
                         timezone: 'UTC'
                     },
-                    data: o
+                    data: o,
+                    appendColumns: false
                 })
                 .then(function (obj) {
+                    // check for conflicts
                     if (!_.isUndefined(obj.conflicts)) {
                         return $.Deferred().reject(obj);
                     }
@@ -250,13 +253,15 @@ define('io.ox/calendar/api',
                         id: obj.id || o.id,
                         folder: folder_id
                     };
-                    all_cache = {};
 
-                    if (o.recurrence_position !== null && obj.id === o.id) {
+                    if (o.recurrence_position && o.recurrence_position !== null && obj.id === o.id) {
                         getObj.recurrence_position = o.recurrence_position;
                     }
 
+                    // clear caches
+                    all_cache = {};
                     delete get_cache[key];
+
                     return api.get(getObj)
                         .then(function (data) {
                             if (attachmentHandlingNeeded) {
@@ -289,11 +294,16 @@ define('io.ox/calendar/api',
          * @return {deferred}
          */
         attachmentCallback: function (o) {
-            all_cache = {};
-            var key = (o.folder || o.folder_id) + '.' + o.id + '.' + (o.recurrence_position || 0);
-            delete get_cache[key];
-            return api.get(o)
-                .pipe(function (data) {
+            var doCallback = api.uploadInProgress(_.ecid(o));
+
+            // clear caches
+            if (doCallback) {
+                all_cache = {};
+                delete get_cache[_.ecid(o)];
+            }
+
+            return api.get(o, !doCallback)
+                .then(function (data) {
                     api.trigger('update', data);
                     //to make the detailview remove the busy animation
                     api.removeFromUploadList(_.ecid(data));
@@ -316,7 +326,8 @@ define('io.ox/calendar/api',
                     action: 'new',
                     timezone: 'UTC'
                 },
-                data: o
+                data: o,
+                appendColumns: false
             })
             .then(function (obj) {
                 if (!_.isUndefined(obj.conflicts)) {
@@ -331,7 +342,7 @@ define('io.ox/calendar/api',
                 };
                 all_cache = {};
 
-                if (o.recurrence_position !== null) {
+                if (o.recurrence_position && o.recurrence_position !== null) {
                     getObj.recurrence_position = o.recurrence_position;
                 }
 
@@ -358,6 +369,8 @@ define('io.ox/calendar/api',
             // pause http layer
             http.pause();
 
+            api.trigger('beforedelete', o);
+
             _(o).each(function (obj) {
                 keys.push((obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.recurrence_position || 0));
                 return http.PUT({
@@ -366,7 +379,8 @@ define('io.ox/calendar/api',
                         action: 'delete',
                         timestamp: _.then()
                     },
-                    data: obj
+                    data: obj,
+                    appendColumns: false
                 })
                 .done(function () {
                     all_cache = {};
@@ -418,7 +432,8 @@ define('io.ox/calendar/api',
                     timestamp: _.now(),
                     timezone: 'UTC'
                 },
-                data: o.data
+                data: o.data,
+                appendColumns: false
             })
             .then(function (resp, timestamp) {
                 if (alarm === -1) return;
@@ -480,7 +495,7 @@ define('io.ox/calendar/api',
             timestamp: 0,
             recurrence_master: true
         })
-        .pipe(function (list) {
+        .then(function (list) {
             // sort by start_date & look for unconfirmed appointments
             // exclude appointments that already ended
             var invites = _.chain(list)
@@ -527,7 +542,7 @@ define('io.ox/calendar/api',
         });
         // resume & trigger refresh
         return http.resume()
-            .pipe(function (result) {
+            .then(function (result) {
 
                 var def = $.Deferred();
 
@@ -637,7 +652,7 @@ define('io.ox/calendar/api',
             appendColumns: false,
             'continue': true
         })
-        .pipe(function (response) {
+        .then(function (response) {
             return _(result).map(function (obj) {
                 if (_.isString(obj)) {
                     // use fresh server data
@@ -688,14 +703,17 @@ define('io.ox/calendar/api',
      * @return {promise}
      */
     api.refresh = function () {
-        api.getInvites().done(function () {
-            // clear caches
-            all_cache = {};
-            get_cache = {};
-            participant_cache = {};
-            // trigger local refresh
-            api.trigger('refresh.all');
-        });
+        // check capabilities
+        if (capabilities.has('calendar')) {
+            api.getInvites().done(function () {
+                // clear caches
+                all_cache = {};
+                get_cache = {};
+                participant_cache = {};
+                // trigger local refresh
+                api.trigger('refresh.all');
+            });
+        }
     };
 
     ox.on('refresh^', function () {

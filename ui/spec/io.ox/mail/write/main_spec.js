@@ -12,8 +12,11 @@
  */
 define(['io.ox/mail/write/main',
         'io.ox/core/notifications',
-        'settings!io.ox/mail'
-        ], function (main, notifications, settings) {
+        'settings!io.ox/mail',
+        'spec/shared/capabilities'
+        ], function (main, notifications, settings, caputil) {
+
+    var capabilities = caputil.preset('common').init('io.ox/mail/write/main', main);
 
     describe('mail write app', function () {
         beforeEach(function () {
@@ -25,10 +28,6 @@ define(['io.ox/mail/write/main',
             waitsFor(function () {
                 return launched.state() === 'resolved';
             });
-            this.server = ox.fakeServer.create();
-        });
-        afterEach(function () {
-            this.server.restore();
         });
 
         describe('provides useful feedback', function () {
@@ -47,8 +46,8 @@ define(['io.ox/mail/write/main',
                     },
                     setupFakeServer = function (server) {
                         server.respondWith('PUT', /api\/mail\?action=new/, function (xhr) {
-                            xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"},
-                                JSON.stringify({"data":"default0/Inbox/Sent Items/42"})
+                            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                                JSON.stringify({'data': 'default0/Inbox/Sent Items/42'})
                             );
                         });
                     };
@@ -60,11 +59,16 @@ define(['io.ox/mail/write/main',
                         attachments: [
                             {/* content, we don’t care */},
                             {
-                               disp: 'attachment',
-                               size: 123412
+                                disp: 'attachment',
+                                size: 123412
                             }
                         ]
                     };
+
+                    capabilities.enable('auto_publish_attachments');
+
+                    if (notifications.yell.restore)
+                        notifications.yell.restore();
                     this.notificationSpy = sinon.spy(notifications, 'yell');
                     setupFakeServer(this.server);
                 });

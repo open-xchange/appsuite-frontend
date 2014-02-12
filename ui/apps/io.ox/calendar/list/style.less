@@ -1,0 +1,138 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Alexander Quast <alexander.quast@open-xchange.com>
+ */
+
+.list-view {
+    .search-view {
+        .vgrid-cell {
+            &.calendar {
+                .date {
+                    display: block;
+                }
+            }
+        }
+    }
+    .vgrid-cell {
+
+        &.calendar {
+
+            height: 55px; /* = 3 rows */
+            padding-top: 7px;
+            padding-bottom: 7px;
+
+            .vgrid-cell-checkbox {
+                padding-top: 9px;
+            }
+            .contentContainer {
+                padding-left: 5px;
+            }
+            .title {
+                font-weight: bold;
+            }
+
+            .private {
+                color: #555;
+                float: right;
+                display: inline-block;
+            }
+
+            .private-flag {
+                color: #AAA;
+                float: left;
+                font-size: 14px;
+                margin-right: 4px;
+                line-height: 20px;
+            }
+
+            .location {
+                color: #888;
+            }
+
+            .shown_as.label-info {
+                width: 1em;
+                height: 1em;
+                border-radius: 4px;
+                float: right;
+                margin-left: 1em;
+            }
+
+            &.declined {
+
+                .title, .location {
+                    text-decoration: line-through;
+                }
+
+            }
+
+            .time {
+                width: 20%;
+                height: 100%;
+                border-right: 3px solid #ccc;
+                color: #555;
+                float: left;
+                text-align: right;
+                display: inline-block;
+                .fragment {
+                    white-space: normal;
+                    text-overflow: clip;
+                    margin-right: 5px;
+                }
+            }
+
+            .date {
+                display: none;
+                color: #555;
+            }
+
+        }
+
+        &.vgrid-label.calendar-label {
+
+            text-align: left;
+            font-weight: 200;
+            font-size: 20px;
+            line-height: 20px;
+            color: @linkColor;
+            padding-top: 32px;
+            padding-bottom: 14px;
+            background-image: none;
+            background-color: #fff;
+            border-top: 0 none;
+            border-bottom: 0 none;
+        }
+
+        .custom_shown_as {
+
+            &.reserved {
+                border-color: @appointmentReserved;
+            }
+
+            &.temporary {
+                border-color: @appointmentTemporary;
+            }
+
+            &.absent {
+                border-color: @appointmentAbsent;
+            } /* red */
+
+            &.free {
+                border-color: @appointmentFree;
+            }
+        }
+        .tail {
+            &.middle {
+
+            }
+
+        }
+    }
+}

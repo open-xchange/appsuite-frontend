@@ -15,11 +15,19 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
 
     'use strict';
 
-    var emoji;
+    var emoji,
+        convert = function (text) {
+            text = emoji.softbankToUnified(text);
+            text = emoji.jisToUnified(text);
+            text = emoji.unifiedToImageTag(text, {
+                forceEmojiIcons: settings.get('forceEmojiIcons', false)
+            });
+            return text;
+        };
 
     return {
 
-        processEmoji: function (text) {
+        processEmoji: function (text, cb) {
 
             var i = 0, asciiOnly = true, exceptions = {
                 '\u00a9': true,
@@ -33,15 +41,16 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
 
             if (asciiOnly) return text;
 
-            if (emoji) {
-                text = emoji.softbankToUnified(text);
-                text = emoji.jisToUnified(text);
-                text = emoji.unifiedToImageTag(text, {
-                    forceEmojiIcons: settings.get('forceEmojiIcons', false)
-                });
+            if (emoji && !cb) {
+                text = convert(text);
+            } else if (emoji && cb) {
+                cb(text = convert(text), {loaded: false});
             } else {
                 require(['io.ox/emoji/main'], function (code) {
                     emoji = code;
+                    if (cb) {
+                        cb(convert(text), {loaded: true});
+                    }
                 });
             }
 

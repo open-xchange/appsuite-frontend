@@ -12,7 +12,7 @@
  */
 
 
-    define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api'], function (main, api) {
+define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api'], function (main, api) {
 
     'use strict';
 
@@ -44,9 +44,9 @@
 
         result = {
             'timestamp': 1379403021960,
-           'data': {
-               'id': 510778
-           }
+            'data': {
+                'id': 510778
+            }
         },
 
         TIMEOUT = ox.testTimeout;
@@ -69,19 +69,13 @@
 
     describe('Distributionlist edit', function () {
 
-        var app = null, appContainer, buttonCreate, createForm, inputName, addButton,
+        var app = null, appContainer, createForm, inputName, addButton,
         saveButton, displayName;
 
         beforeEach(function () {
-            this.server = ox.fakeServer.create();
-
             this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(result));
             });
-        });
-
-        afterEach(function () {
-            this.server.restore();
         });
 
         it('should provide a getApp function ', function () {

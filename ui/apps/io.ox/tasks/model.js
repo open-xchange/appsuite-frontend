@@ -24,6 +24,7 @@ define('io.ox/tasks/model',
     'use strict';
 
     var defaults = {
+            title: '',
             status: 1,
             priority: 2,
             percent_completed: 0,

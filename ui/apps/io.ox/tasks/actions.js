@@ -56,8 +56,8 @@ define('io.ox/tasks/actions',
             ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
                 //build popup
                 var popup = new dialogs.ModalDialog({async: true})
-                    .addPrimaryButton('deleteTask', gt('Delete'))
-                    .addButton('cancel', gt('Cancel'));
+                    .addPrimaryButton('deleteTask', gt('Delete'), 'deleteTask', {tabIndex: '1'})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                 //Header
                 popup.getBody()
                     .append($('<h4>')
@@ -192,15 +192,16 @@ define('io.ox/tasks/actions',
                     //build popup
                     var popup = new dialogs.ModalDialog()
                         .header($('<h4>').text(gt('Move')))
-                        .addPrimaryButton('ok', gt('Move'))
-                        .addButton('cancel', gt('Cancel'));
+                        .addPrimaryButton('ok', gt('Move'), 'ok', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                     popup.getBody().css({ height: '250px' });
                     var tree = new views.FolderList(popup.getBody(), {
                             type: 'tasks',
-                            tabindex: 0
+                            tabindex: 0,
+                            dialogmode: true
                         }),
                         id = String(task.folder || task.folder_id);
-                    //go
+
                     popup.show(function () {
                         tree.paint().done(function () {
                             tree.select(id).done(function () {
@@ -368,7 +369,7 @@ define('io.ox/tasks/actions',
                      'io.ox/preview/main',
                      'io.ox/core/api/attachment']).done(function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
-                new dialogs.SidePopup().show(baton.e, function (popup) {
+                new dialogs.SidePopup({ tabTrap: true }).show(baton.e, function (popup) {
                     _(list).each(function (data) {
                         data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
@@ -501,29 +502,25 @@ define('io.ox/tasks/actions',
                     .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
                     // drop down
                     $('<ul class="dropdown-menu dropdown-right" role="menu">').append(
-                        util.buildDropdownMenu({time: new Date(), bootstrapDropdown: true, daysOnly: true})
+                        util.buildDropdownMenu({bootstrapDropdown: true, daysOnly: true})
                     )
-                    .on('click', 'li>a:not([data-action="close-menu"])', {task: data}, function (e) {
+                    .on('click', 'li>a:not([data-action="close-menu"])', { task: data }, function (e) {
                         e.preventDefault();
                         var finderId = $(e.target).val();
                         ox.load(['io.ox/tasks/api']).done(function (api) {
-                            var endDate = util.computePopupTime(new Date(), finderId).alarmDate, modifications;
-                            //remove Time
-                            endDate.setHours(0);
-                            endDate.setMinutes(0);
-                            endDate.setSeconds(0);
-                            endDate.setMilliseconds(0);
-
-                            modifications = {end_date: endDate.getTime(),
-                                             id: e.data.task.id,
-                                             folder_id: e.data.task.folder_id || e.data.task.folder};
+                            var endDate = util.computePopupTime(finderId).endDate,
+                                modifications = {
+                                    end_date: endDate,
+                                    id: e.data.task.id,
+                                    folder_id: e.data.task.folder_id || e.data.task.folder
+                                };
 
                             //check if startDate is still valid with new endDate, if not, show dialog
-                            if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
+                            if (e.data.task.start_date && e.data.task.start_date > endDate) {
                                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                                     var popup = new dialogs.ModalDialog()
-                                        .addButton('cancel', gt('Cancel'))
-                                        .addPrimaryButton('change', gt('Adjust start date'));
+                                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
+                                        .addPrimaryButton('change', gt('Adjust start date'), 'changechange', {tabIndex: '1'});
                                     //text
                                     popup.getBody().append(
                                         $('<h4>').text(gt('Inconsistent dates')),
@@ -612,7 +609,7 @@ define('io.ox/tasks/actions',
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'save',
         index: 400,
-        label: gt('Save in file store'),
+        label: gt('Save to drive'),
         ref: 'io.ox/tasks/actions/save-attachment'
     }));
 });

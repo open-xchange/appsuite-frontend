@@ -41,7 +41,7 @@ define('plugins/portal/linkedIn/register',
                     .append(viewer.draw(person))
                     .append(busy);
 
-            new dialogs.SidePopup(({ modal: true }))
+            new dialogs.SidePopup(({ modal: true, tabTrap: true}))
                 .show(e, function (popup) {
                     popup.append(node);
                 });
@@ -79,7 +79,7 @@ define('plugins/portal/linkedIn/register',
 
     displayNameLink = function (person) {
         var dname = person.firstName + ' ' + person.lastName;
-        return $('<a href="#" />')
+        return $('<a tabindex="1" href="#" />')
             .text(dname)
             .on('click', person, fnClick);
     };
@@ -90,9 +90,7 @@ define('plugins/portal/linkedIn/register',
         draw: function (activity) {
             var deferred = new $.Deferred();
 
-            if (activity.updateType !== 'CONN') {
-                return deferred.resolve();
-            }
+            if (activity.updateType !== 'CONN') return deferred.resolve();
 
             var $updateEntry = $('<div class="io-ox-portal-linkedin-updates-entry">'),
                 $detailEntry = $('<div class="io-ox-portal-linkedin-updates-details">').hide();
@@ -130,7 +128,7 @@ define('plugins/portal/linkedIn/register',
             // Check presence of all variables
             if (activity.updateContent.person) {
                 $newEntry.append(
-                    $('<span>').text(gtWithNode(gt('%1$s is a new contact'), [displayNameLink(activity.updateContent.person)]))
+                    gtWithNode(gt('%1$s is a new contact'), [displayNameLink(activity.updateContent.person)])
                 );
             }
 
@@ -219,14 +217,14 @@ define('plugins/portal/linkedIn/register',
 
 
         preview: function (baton) {
-            var content = $('<div class="content">');
+            var content = $('<ul class="content list-unstyled" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to the linkedin stream.') + '">');
 
             if (capabilities.has('linkedinPlus')) {
                 if (baton.data && baton.data.length) {
                     content.addClass('pointer');
                     _(baton.data).each(function (message) {
                         content.append(
-                            $('<div class="paragraph">').append(
+                            $('<li class="paragraph">').append(
                                 $('<span class="bold">').text(message.from.person.firstName + ' ' + message.from.person.lastName + ': '),
                                 $('<span class="normal">').text(message.subject), $.txt(' '),
                                 $('<span class="gray">').text(message.body)
@@ -271,6 +269,7 @@ define('plugins/portal/linkedIn/register',
         },
 
         draw: function (baton) {
+
             var node = $('<div class="portal-feed linkedin-content">');
 
             if (capabilities.has('linkedinPlus')) {
@@ -299,7 +298,7 @@ define('plugins/portal/linkedIn/register',
                     params: { action: 'updates' }
                 })
                 .done(function (activities) {
-                    if (activities.values && activities.values !== 0) {
+                    if (_.isArray(activities.values) && activities.values.length > 0) {
                         node.append(
                             $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
                         );
@@ -328,13 +327,16 @@ define('plugins/portal/linkedIn/register',
                     });
                 });
 
-                node.append(
-                    $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
-                );
+                if (_.isArray(baton.data) && baton.data.length > 0) {
 
-                _(baton.data).each(function (activity) {
-                    ext.point('portal/linkedIn/updates/renderer').invoke('draw', node, activity);
-                });
+                    node.append(
+                        $('<h2 class="linkedin-activities-header">').text(gt('Recent activities'))
+                    );
+
+                    _(baton.data).each(function (activity) {
+                        ext.point('portal/linkedIn/updates/renderer').invoke('draw', node, activity);
+                    });
+                }
 
                 this.append(node);
             }

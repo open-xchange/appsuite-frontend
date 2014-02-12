@@ -51,6 +51,7 @@
 .settings-detail-pane {
 
     label, legend { cursor: default; }
+    label.checkbox, label.radio { cursor: pointer; }
 
     .section { max-width: 800px; }
 
@@ -136,7 +137,7 @@
         .error-id { color: #555; }
 
         .url {
-            .ellipsis;
+            .ellipsis();
         }
 
         .stack-trace, .url { clear: both; }

@@ -198,46 +198,6 @@ define('io.ox/core/api/user',
     };
 
     /**
-    * gets deferred.promise for fetching picture url
-    * @param {string} id of a user
-    * @param {object} options height, width, scaleType
-    * @return {promise}
-    */
-    api.getPictureURL = function (id, options) {
-        //get contact object first (userId != contactId)
-        return $.when(api.get({ id: id }), require(['io.ox/contacts/api'])).then(
-            function (data, contactsAPI) {
-                //call contactsAPI to share a picture cache
-                return contactsAPI.getPictureURL(data[0] || data, options);
-            },
-            function () {
-                return ox.base + '/apps/themes/default/dummypicture.png';
-            }
-        );
-    };
-
-    /**
-    * get div node with callbacks managing fetching/updating
-    * @param {string} id of a user
-    * @param {object} options height, with, scaleType
-    * @return {object} div node with callbacks
-    */
-    api.getPicture = function (id, options) {
-        var node = $('<div>'),
-            clear = function () {
-                _.defer(function () { // use defer! otherwise we return null on cache hit
-                    node = clear = null; // don't leak
-                });
-            };
-        api.getPictureURL(id, options)
-            .done(function (url) {
-                node.css('backgroundImage', 'url(' + url + ')');
-            })
-            .always(clear);
-        return node;
-    };
-
-    /**
      * get a contact model of the currently logged in user
      * @return {object} a contact model of the current user
      */

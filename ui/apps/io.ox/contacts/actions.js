@@ -161,8 +161,10 @@ define('io.ox/contacts/actions',
                                 },
                                 select: function (id) {
                                     settings.set('folderpopup/last', id).save();
-                                }
+                                },
+                                dialogmode: true
                             });
+
                         dialog.show(function () {
                             tree.paint().done(function () {
                                 tree.select(id).done(function () {
@@ -276,9 +278,23 @@ define('io.ox/contacts/actions',
         }
     });
 
+    /**
+     * check for containing contacts
+     * @param  {object|array} 
+     * @return {deferred} returns boolean
+     */
+    function hasContacts(data) {
+        return api.getList(data)
+                .pipe(function (list) {
+                    //ignore distribution lists
+                    return (_.where(list, {mark_as_distributionlist: false})).length > 0;
+                });
+    }
+
     new Action('io.ox/contacts/actions/print', {
         requires: function (e) {
-            return e.collection.has('some', 'read') && _.device('!small') && !e.context.mark_as_distributionlist;
+            //apply async check only if sync checks pass
+            return e.collection.has('some', 'read') && _.device('!small') ? hasContacts(e.context) : false;
         },
         multiple: function (list) {
             print.request('io.ox/contacts/print', list);
@@ -551,7 +567,7 @@ define('io.ox/contacts/actions',
                      'io.ox/preview/main',
                      'io.ox/core/api/attachment'], function (dialogs, p, attachmentAPI) {
                 //build Sidepopup
-                new dialogs.SidePopup().show(baton.e, function (popup) {
+                new dialogs.SidePopup({ tabTrap: true }).show(baton.e, function (popup) {
                     _(list).each(function (data) {
                         data.dataURL = attachmentAPI.getUrl(data, 'view');
                         var pre = new p.Preview(data, {
@@ -805,7 +821,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
         id: 'save',
         index: 400,
-        label: gt('Save in file store'),
+        label: gt('Save to drive'),
         ref: 'io.ox/contacts/actions/save-attachment'
     }));
 });

@@ -43,14 +43,14 @@ define('io.ox/core/settings',
         var key, parts = getParts(path), tmp = source || {};
         while (parts.length) {
             key = parts.shift();
+            if (!_.isObject(tmp) || !(key in tmp)) return defaultValue;
             tmp = tmp[key];
-            if (tmp === undefined) { return defaultValue; }
         }
         return clone(tmp);
     };
 
-    // once cache for all
-    var settingsCache;
+    var settingsCache,      // once cache for all
+        pending = {};       // pending requests?
 
     var Settings = function (path, tree, meta) {
 
@@ -112,7 +112,11 @@ define('io.ox/core/settings',
             } else {
                 resolve(path, function (tmp, key) {
                     var previous = tmp[key];
-                    tmp[key] = value;
+                    if (value === undefined) {
+                        delete tmp[key];
+                    } else {
+                        tmp[key] = value;
+                    }
                     self.trigger('change:' + path, value).trigger('change', path, value, previous);
                 }, true);
             }
@@ -221,6 +225,14 @@ define('io.ox/core/settings',
             });
         };
 
+        this.isPending = function () {
+            return !!pending[path];
+        };
+
+        this.getAllPendingSettings = function () {
+            return pending;
+        };
+
         /**
          * Save settings to cache and backend.
          *
@@ -231,20 +243,28 @@ define('io.ox/core/settings',
          *
          */
         this.save = (function () {
+            var request,
+                sendRequest = function (data) {
+                    request = http.PUT({
+                        module: 'jslob',
+                        params: { action: 'set', id: path },
+                        data: data
+                    })
+                    .done(function () {
+                        saved = JSON.parse(JSON.stringify(data));
+                        self.trigger('save');
+                    })
+                    .always(function () {
+                        delete pending[path];
+                    });
+                },
+                save = _.throttle(sendRequest, 5000); // limit to 5 seconds
 
-            var request, save = _.throttle(function (data) {
-                request = http.PUT({
-                    module: 'jslob',
-                    params: { action: 'set', id: path },
-                    data: data
-                })
-                .done(function () {
-                    saved = JSON.parse(JSON.stringify(data));
-                    self.trigger('save');
-                });
-            }, 5000); // limit to 5 seconds
-
-            return function (custom) {
+            return function (custom, options) {
+                //options
+                var opt = $.extend({
+                    force: false
+                }, options);
 
                 if (detached) {
                     console.warn('Not saving detached settings.', path);
@@ -253,8 +273,12 @@ define('io.ox/core/settings',
 
                 var data = { tree: custom || tree, meta: meta };
                 settingsCache.add(path, data);
-                save(data.tree);
-
+                pending[path] = this;
+                if (opt.force) {
+                    sendRequest(data.tree);
+                } else {
+                    save(data.tree);
+                }
                 return request;
             };
         }());
@@ -344,9 +368,10 @@ define('io.ox/core/settings',
                         var settings = new Settings(name, data.tree, data.meta);
                         load(settings);
                     },
-                    function preloadFail() {
+                    function preloadFail(e) {
                         // hard fail
                         alert('Severe error: Failed to load important user settings. Please check your connection and retry.');
+                        localStorage.setItem('errormsg', e.error);//message to display on loginpage
                         location.href = 'signin#autologin=false';
                     }
                 );
@@ -356,7 +381,7 @@ define('io.ox/core/settings',
                     function loadSuccess() {
                         load(settings);
                     },
-                    function loadFaul() {
+                    function loadFail() {
                         try {
                             load.error({});
                         } catch (e) {

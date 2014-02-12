@@ -47,7 +47,12 @@ define('io.ox/calendar/week/perspective',
             api.get(obj).then(
                 function success(data) {
                     self.dialog.show(e, function (popup) {
-                        popup.append(detailView.draw(data));
+                        popup
+                        .append(detailView.draw(data))
+                        .attr({
+                            'role': 'complementary',
+                            'aria-label': gt('Appointment Details')
+                        });
                     });
                     if (self.setNewStart) {//if view should change week to the start of this appointment(used by deeplinks)
                         self.setNewStart = false;//one time only
@@ -85,8 +90,8 @@ define('io.ox/calendar/week/perspective',
                                 container: self.main
                             })
                             .append(conflictView.drawList(con.conflicts).addClass('additional-info'))
-                            .addDangerButton('ignore', gt('Ignore conflicts'))
-                            .addButton('cancel', gt('Cancel'))
+                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                             .show()
                             .done(function (action) {
                                 if (action === 'cancel') {
@@ -121,15 +126,15 @@ define('io.ox/calendar/week/perspective',
                 if (obj.drag_move && obj.drag_move !== 0) {
                     dialog
                         .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                        .addButton('appointment', gt('Yes'))
-                        .addButton('cancel', gt('No'));
+                        .addButton('appointment', gt('Yes'), 'appointment', {tabIndex: '1'})
+                        .addButton('cancel', gt('No'), 'cancel', {tabIndex: '1'});
                 } else {
                     dialog
                         .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
                         //#. Use singular in this context
-                        .addPrimaryButton('series', gt('Series'))
-                        .addButton('appointment', gt('Appointment'))
-                        .addButton('cancel', gt('Cancel'));
+                        .addPrimaryButton('series', gt('Series'), 'series', {tabIndex: '1'})
+                        .addButton('appointment', gt('Appointment'), 'appointment', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
                 }
                 dialog
                     .show()
@@ -257,6 +262,24 @@ define('io.ox/calendar/week/perspective',
                     refDate: this.app.refDate,
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
+                switch (this.view.mode) {
+                case 'day':
+                    this.main.attr({
+                        'aria-label': gt('Day View')
+                    });
+                    break;
+                case 'workweek':
+                    this.main.attr({
+                        'aria-label': gt('Workweek View')
+                    });
+                    break;
+                default:
+                case 'week':
+                    this.main.attr({
+                        'aria-label': gt('Week View')
+                    });
+                    break;
+                }
 
                 // bind listener for view events
                 this.view
@@ -302,14 +325,20 @@ define('io.ox/calendar/week/perspective',
 
             // init perspective
             this.app = app;
-            this.main.addClass('week-view').empty();
+            this.main
+                .addClass('week-view')
+                .empty()
+                .attr({
+                    'role': 'main'
+                });
+
             this.collection = new Backbone.Collection([]);
 
             var refresh = function () { self.refresh(true); },
                 reload = function () { self.refresh(false); };
 
             // create sidepopup object with eventlistener
-            this.dialog = new dialogs.SidePopup()
+            this.dialog = new dialogs.SidePopup({ tabTrap: true })
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');
                 });

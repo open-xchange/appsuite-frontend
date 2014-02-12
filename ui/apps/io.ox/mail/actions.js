@@ -42,7 +42,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/unselect', {
         requires: function (e) {
-            return e.collection.has('toplevel', 'multiple');
+            return e.collection.has('toplevel', 'multiple') && !e.baton.isThread;
         },
         multiple: function (list, baton) {
             if (baton.grid) baton.grid.selection.clear();
@@ -64,6 +64,9 @@ define('io.ox/mail/actions',
         id: 'delete',
         requires: 'toplevel some delete',
         multiple: function (list) {
+
+            list = folderAPI.ignoreSentItems(list);
+
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                 return account.is('trash', o.folder_id);
             });
@@ -76,7 +79,7 @@ define('io.ox/mail/actions',
 
             if (check) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({tabTrap: true})
+                    new dialogs.ModalDialog()
                         .append(
                             $('<div role="document" tabindex="0">').text(question)
                         )
@@ -95,7 +98,7 @@ define('io.ox/mail/actions',
                     // mail quota exceeded?
                     if (e.code === 'MSG-0039') {
                         require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                            new dialogs.ModalDialog({tabTrap: true})
+                            new dialogs.ModalDialog()
                                 .header(
                                     $('<h4>').text(gt('Mail quota exceeded'))
                                 )
@@ -185,7 +188,7 @@ define('io.ox/mail/actions',
         action: function (baton) {
             var getSource = api.getSource(baton.data), textarea;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({ width: 700, tabTrap: true })
+                new dialogs.ModalDialog({ width: 700 })
                     .addPrimaryButton('close', gt('Close'), 'close', {tabIndex: '1'})
                     .header(
                         $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
@@ -229,7 +232,10 @@ define('io.ox/mail/actions',
             id: type,
             requires: 'toplevel some',
             multiple: function (list, baton) {
+
                 var vGrid = baton.grid || ('app' in baton && baton.app.getGrid());
+
+                list = folderAPI.ignoreSentItems(list);
 
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
@@ -241,6 +247,7 @@ define('io.ox/mail/actions',
                                     notifications.yell('error', resp);
                                 } else {
                                     notifications.yell('success', list.length > 1 ? success.multi : success.single);
+                                    api.refresh();
                                 }
                                 folderAPI.reload(target, list);
                                 if (type === 'move' && vGrid) vGrid.idle();
@@ -255,7 +262,7 @@ define('io.ox/mail/actions',
                         }
 
                     } else {
-                        var dialog = new dialogs.ModalDialog({tabTrap: true})
+                        var dialog = new dialogs.ModalDialog()
                             .header($('<h4>').text(label))
                             .addPrimaryButton('ok', label, 'ok', {tabIndex: '1'})
                             .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
@@ -319,11 +326,17 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN;
         },
         multiple: function (list) {
-            var self = this;
-            api.markUnread(list).done(function (trackerResponse, updateResponse) {
-                $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
-                $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
-            });
+            if ($(this).prop('disabled') !== true) {
+                $(this).prop('disabled', true);//prevent user from hammering the inline link
+                var self = this;
+                api.markUnread(list).done(function (trackerResponse, updateResponse) {
+                    $('.thread-inline-actions').trigger('redraw');
+                    $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                    $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
+                }).fail(function () {
+                    $(self).prop('disabled', false);//enable clicking again
+                });
+            }
         }
     });
 
@@ -346,11 +359,17 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === 0;
         },
         multiple: function (list) {
-            var self = this;
-            api.markRead(list).done(function (trackerResponse, updateResponse) {
-                $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
-                $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
-            });
+            if ($(this).prop('disabled') !== true) {
+                $(this).prop('disabled', true);//prevent user from hammering the inline link
+                var self = this;
+                api.markRead(list).done(function (trackerResponse, updateResponse) {
+                    $('.thread-inline-actions').trigger('redraw');
+                    $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
+                    $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
+                }).fail(function () {
+                    $(self).prop('disabled', false);//enable clicking again
+                });
+            }
         }
     });
 
@@ -412,7 +431,7 @@ define('io.ox/mail/actions',
             list[0].id = _.isFunction(adjustFn) ? adjustFn(list[0].id) : list[0].id;
             // open side popup
             require(['io.ox/core/tk/dialogs', 'io.ox/preview/main'], function (dialogs, p) {
-                new dialogs.SidePopup().show(baton.e, function (popup) {
+                new dialogs.SidePopup({ tabTrap: true }).show(baton.e, function (popup) {
                     _(list).each(function (data) {
                         var pre = new p.Preview({
                             data: data,
@@ -612,7 +631,7 @@ define('io.ox/mail/actions',
 
                 // download plain EML?
                 if (!_.isObject(first.parent)) {
-                    return download.mails(data);
+                    return data.length === 1 ? download.mail(first) : download.mails(data);
                 }
 
                 if (first.msgref && _.isObject(first.parent)) {
@@ -813,7 +832,7 @@ define('io.ox/mail/actions',
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {
                 //create popup dialog
-                var popup = new dialogs.ModalDialog({tabTrap: true})
+                var popup = new dialogs.ModalDialog()
                     .addPrimaryButton('create', gt('Create reminder'), 'create', {tabIndex: '1'})
                     .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
 
@@ -843,8 +862,7 @@ define('io.ox/mail/actions',
                 popupBody.append('<div id="remindme">' + gt('Remind me') + '</div>');
                 var dateSelector = $('<select>', {name: 'dateselect', tabindex: '1', 'aria-labeledby': 'remindme'})
                 .appendTo(popupBody);
-                var endDate = new Date();
-                dateSelector.append(tasksUtil.buildDropdownMenu({time: endDate}));
+                dateSelector.append(tasksUtil.buildDropdownMenu());
 
                 //ready for work
                 var def = popup.show();
@@ -853,13 +871,14 @@ define('io.ox/mail/actions',
                     if (action === 'create') {
 
                         //Calculate the right time
-                        var dates = tasksUtil.computePopupTime(endDate, dateSelector.val());
+                        var dates = tasksUtil.computePopupTime(dateSelector.val(), true);
 
-                        taskAPI.create({title: titleInput.val(),
+                        taskAPI.create({
+                            title: titleInput.val(),
                             folder_id: coreConfig.get('folder/tasks'),
-                            end_date: dates.endDate.getTime(),
-                            start_date: dates.endDate.getTime(),
-                            alarm: dates.alarmDate.getTime(),
+                            end_date: dates.endDate,
+                            start_date: dates.endDate,
+                            alarm: dates.alarmDate,
                             note: noteInput.val(),
                             status: 1,
                             recurrence_type: 0,
@@ -1118,7 +1137,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'save',
         index: 500,
-        label: gt('Save in file store'),
+        label: gt('Save to drive'),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 
@@ -1150,7 +1169,7 @@ define('io.ox/mail/actions',
         index: 10,
         label: gt('Drop here to import this mail'),
         action: function (file, app) {
-            app.queues.importEML.offer(file);
+            app.queues.importEML.offer(file, { folder: app.folder.get() });
         }
     });
 

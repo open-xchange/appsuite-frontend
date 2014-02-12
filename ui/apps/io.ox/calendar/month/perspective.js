@@ -38,7 +38,7 @@ define('io.ox/calendar/month/perspective',
         lastWeek: 0,        // timestamp of the last week
         updateLoad: 8,      // amount of weeks to be loaded on scroll events
         initLoad: 2,        // amount of initial called updates
-        scrollOffset: 250,  // offset space to trigger update event on scroll stop
+        scrollOffset: _.device('smartphone') ? 130 : 250,  // offset space to trigger update event on scroll stop
         collections: {},    // all week collections of appointments
         current: null,      // current month as date object
         folder: null,
@@ -57,7 +57,12 @@ define('io.ox/calendar/month/perspective',
             api.get(obj).done(function (data) {
                 self.dialog
                     .show(e, function (popup) {
-                        popup.append(detailView.draw(data));
+                        popup
+                        .append(detailView.draw(data))
+                        .attr({
+                            'role': 'complementary',
+                            'aria-label': gt('Appointment Details')
+                        });
                     });
             });
         },
@@ -108,8 +113,8 @@ define('io.ox/calendar/month/perspective',
                                 container: self.main
                             })
                             .append(conflictView.drawList(con.conflicts))
-                            .addDangerButton('ignore', gt('Ignore conflicts'))
-                            .addButton('cancel', gt('Cancel'))
+                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'})
+                            .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                             .show()
                             .done(function (action) {
                                 if (action === 'cancel') {
@@ -128,8 +133,8 @@ define('io.ox/calendar/month/perspective',
             if (obj.recurrence_type > 0) {
                 new dialogs.ModalDialog()
                     .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                    .addButton('appointment', gt('Yes'))
-                    .addButton('cancel', gt('No'))
+                    .addButton('appointment', gt('Yes'), 'appointment', {tabIndex: '1'})
+                    .addButton('cancel', gt('No'), 'cancel', {tabIndex: '1'})
                     .show()
                     .done(function (action) {
                         if (action === 'appointment') {
@@ -195,7 +200,13 @@ define('io.ox/calendar/month/perspective',
                 // add collection for week
                 self.collections[day] = new Backbone.Collection([]);
                 // new view
-                var view = new View({ collection: self.collections[day], day: day, folder: self.folder, pane: this.pane });
+                var view = new View({
+                    collection: self.collections[day],
+                    day: day,
+                    folder: self.folder,
+                    pane: this.pane,
+                    app: this.app
+                });
                 view.on('showAppointment', self.showAppointment, self)
                     .on('createAppoinment', self.createAppointment, self)
                     .on('openEditAppointment', self.openEditAppointment, self)
@@ -282,6 +293,7 @@ define('io.ox/calendar/month/perspective',
                     nextFirstDay = $('#' + param.date.getYear() + '-' + (param.date.getMonth() + 1) + '-1', self.pane),
                     scrollToDate = function () {
                         // scroll to position
+                        if (firstDay.length === 0) return;
                         if (param.duration === 0) {
                             firstDay.get(0).scrollIntoView();
                             self.isScrolling = false;
@@ -372,6 +384,10 @@ define('io.ox/calendar/month/perspective',
             this.main
                 .addClass('month-view')
                 .empty()
+                .attr({
+                    'role': 'main',
+                    'aria-label': gt('Month View')
+                })
                 .append(this.scaffold = View.drawScaffold());
 
             var refresh = function () {
@@ -496,7 +512,7 @@ define('io.ox/calendar/month/perspective',
             });
 
             // define default sidepopup dialog
-            this.dialog = new dialogs.SidePopup()
+            this.dialog = new dialogs.SidePopup({ tabTrap: true })
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');
                 });

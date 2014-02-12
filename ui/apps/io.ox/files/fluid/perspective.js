@@ -34,12 +34,15 @@ define('io.ox/files/fluid/perspective',
 
     var dropZone,
         loadFilesDef = $.Deferred(),
-        dialog = new dialogs.SidePopup(),
+        dialog = new dialogs.SidePopup({ focus: false }),
         //nodes
         filesContainer, breadcrumb, inlineRight, inline, wrapper,
         scrollpane = $('<div class="files-scrollable-pane" role="section">'),
         topBar = $('<div class="window-content-top">'), // used on desktop
         topActions = $('<div class="inline-actions-ms">').appendTo(topBar);
+
+    //init
+    filesContainer = inlineRight = inline = wrapper = $('');
 
     // *** helper functions ***
 
@@ -152,17 +155,6 @@ define('io.ox/files/fluid/perspective',
         return mode;
     }
 
-    function focus(prevent) {
-        var y = wrapper.scrollTop();
-        if (!!prevent) {
-            //in some cases IE flickers without this hack
-            filesContainer.addClass('fixed').focus().removeClass('fixed');
-        } else {
-            filesContainer.focus();
-        }
-        wrapper.scrollTop(y);
-    }
-
     function preview(e, cid) {
         var app = this.baton.app, el;
         api.get(cid).done(function (file) {
@@ -171,7 +163,12 @@ define('io.ox/files/fluid/perspective',
                 dropZone.update();
             }
             dialog.show(e, function (popup) {
-                popup.append(viewDetail.draw(file, app));
+                popup
+                    .append(viewDetail.draw(file, app))
+                    .attr({
+                        'role': 'complementary',
+                        'aria-label': gt('File Details')
+                    });
                 el = popup.closest('.io-ox-sidepopup');
             });
             _.defer(function () { el.focus(); }); // Focus SidePopup
@@ -204,16 +201,17 @@ define('io.ox/files/fluid/perspective',
             // or creaet a new one
             container = $('<div>', {id: toolbarID});
         }
-        if (selected.length > 0) {
-
-            buttons.hide();
-            $('#multi-select-toolbar').remove();
-            toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
-        } else {
-            // selection empty
-            $('#multi-select-toolbar').remove();
-            buttons.show();
-        }
+        _.defer(function () {
+            if (selected.length > 0) {
+                buttons.hide();
+                $('#multi-select-toolbar').remove();
+                toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
+            } else {
+                // selection empty
+                $('#multi-select-toolbar').remove();
+                buttons.show();
+            }
+        });
     }
     // END mobile multiselect helpers
 
@@ -244,14 +242,16 @@ define('io.ox/files/fluid/perspective',
                     // clear top-bar
                     topActions.empty();
 
-                    if (_.device('smartphone')) {
+                    if (_.device('smartphone') && baton.options.mode === 'list') {
                         // use custom multiselect toolbar
                         toggleToolbar(selected, self);
                     } else {
 
                         if (selected.length > 1) {
+                            // workaround for mediaplayer
+                            var dummyGrid =  { getApp: function () { return baton.app; } };
                             // draw inline links
-                            commons.multiSelection('io.ox/files', dummy, selected, api, {test: selected.length}, {forcelimit: true});
+                            commons.multiSelection('io.ox/files', dummy, selected, api, dummyGrid, {forcelimit: true});
                             // append to bar
                             topActions.append(dummy.find('.io-ox-inline-links'));
                             // fade in or yet visible?
@@ -289,41 +289,46 @@ define('io.ox/files/fluid/perspective',
                     }
                 })
                 .on('update', function (e, state) {
-                    var id = _.url.hash('id'),
-                        list, cid, node;
+                    //careful here, if we are not in the files app (editor is opened or so)
+                    //this messes up a valid selection(wrong or missing id parameters in url) and sets it to the first item
+                    //so only do something if we actually are in the files app
+                    if (_.url.hash('app') === 'io.ox/files') {
+                        var id = _.url.hash('id'),
+                            list, cid, node;
 
-                    //ids to list of objects
-                    list = _.isEmpty(id) ? [] : id.split(/,/);
-                    list = _(list).map(_.cid);
+                        //ids to list of objects
+                        list = _.isEmpty(id) ? [] : id.split(/,/);
+                        list = _(list).map(_.cid);
 
-                    //set selection
-                    if (list.length) {
-                        // select by object (cid)
-                        if (this.contains(list)) {
-                            this.set(list);
+                        //set selection
+                        if (list.length) {
+                            // select by object (cid)
+                            if (this.contains(list)) {
+                                this.set(list);
+                            } else {
+                                _.url.hash('id', null);
+                                this.clear();
+                            }
                         } else {
-                            _.url.hash('id', null);
-                            this.clear();
+                            if (_.device('!smartphone')) {
+                                this.selectFirst();
+                            }
                         }
-                    } else {
-                        if (_.device('!smartphone')) {
-                            this.selectFirst();
-                        }
-                    }
 
-                    //deep link handling
-                    if (state === 'inital' && list.length === 1) {
-                        cid = _.cid(this.get()[0]);
-                        node = filesContainer.find('[data-obj-id="' + cid + '"]');
-                        //node not drawn yet?
-                        if (!node.length) {
-                            //draw gap
-                            pers.redrawGap(baton.allIds, cid);
+                        //deep link handling
+                        if (state === 'inital' && list.length === 1) {
+                            cid = _.cid(this.get()[0]);
                             node = filesContainer.find('[data-obj-id="' + cid + '"]');
-                            wrapper.scrollTop(wrapper.prop('scrollHeight'));
+                            //node not drawn yet?
+                            if (!node.length) {
+                                //draw gap
+                                pers.redrawGap(baton.allIds, cid);
+                                node = filesContainer.find('[data-obj-id="' + cid + '"]');
+                                wrapper.scrollTop(wrapper.prop('scrollHeight'));
+                            }
+                            //trigger click
+                            node.trigger('click', 'automated');
                         }
-                        //trigger click
-                        node.trigger('click', 'automated');
                     }
                 });
         }
@@ -350,8 +355,44 @@ define('io.ox/files/fluid/perspective',
         id: 'icons',
         index: 200,
         draw: function (baton) {
+            var focus = function (prevent) {
+                var y = wrapper.scrollTop();
+                if (!!prevent) {
+                    //in some cases IE flickers without this hack
+                    filesContainer.addClass('fixed').focus().removeClass('fixed');
+                } else {
+                    filesContainer.focus();
+                }
+                wrapper.scrollTop(y);
+            },
+            isFolderHidden = function () {
+                    return !baton.app.folderViewIsVisible();
+                };
             this.append(
-                filesContainer = $('<div class="files-container f6-target view-' + baton.mode + '" tabindex="1">')
+                filesContainer = $('<div class="files-container f6-target view-' + baton.options.mode + '" tabindex="1">')
+                                    .addClass(baton.app.getWindow().search.active ? 'searchresult' : '')
+                                    .on('click', function () {
+                                        //force focus on container click
+                                        focus();
+                                    })
+                                    .on('data:loaded refresh:finished', function () {
+                                        //inital load and refresh
+                                        if (isFolderHidden()) {
+                                            focus();
+                                        }
+                                    })
+                                    .on('perspective:shown', function () {
+                                        //folder tree select vs. layout change action
+                                        if (isFolderHidden() || $(document.activeElement).is('a.btn.layout')) {
+                                            focus();
+                                        }
+                                    })
+                                    .on('dialog:closed', function () {
+                                        //sidepanel close button vs. folder change (that triggers dialog close)
+                                        if (!$(document.activeElement).hasClass('folder')) {
+                                            focus(true);
+                                        }
+                                    })
             );
         }
     });
@@ -381,9 +422,12 @@ define('io.ox/files/fluid/perspective',
                             .addClass('img-polaroid lazy')
                             .one({
                                 load: function () {
-                                    iconImage.remove();
+                                    //list/tile view
                                     iconBackground.remove();
                                     previewBackground.css('backgroundImage', 'url(' + url + ')');
+                                    //icon view
+                                    iconImage.remove();
+                                    $(this).fadeIn().removeClass('lazy');
                                 },
                                 error: iconError
                             })
@@ -406,8 +450,8 @@ define('io.ox/files/fluid/perspective',
                     $('<div class="details">').append(
                         //title
                         $('<div class="text title drag-title">').append(
-                            $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 55))).append(
-                                    (file.locked_until ? $('<i class="icon-lock">') : '')
+                            $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 90))).append(
+                                    (api.tracker.isLocked(file) ? $('<i class="icon-lock">') : '')
                                 )
                         ),
                         //smart last modified
@@ -542,7 +586,7 @@ define('io.ox/files/fluid/perspective',
         afterShow: function (app, opt) {
             var mode = identifyMode(opt), baton = this.baton;
             //mode changed?
-            if (baton.mode !== mode) {
+            if (baton.options.mode !== mode) {
                 //set button group state
                 inlineRight
                     .find('a')
@@ -551,15 +595,15 @@ define('io.ox/files/fluid/perspective',
                     .find('[data-action="layout-' + mode + '"]')
                     .addClass('active');
                 //switch to mode
-                filesContainer.removeClass('view-' + baton.mode)
+                filesContainer.removeClass('view-' + baton.options.mode)
                                      .addClass('view-' + mode);
                 //update baton
-                baton.mode = mode;
+                baton.options.mode = mode;
                 //clear selection on mobile
                 if (_.device('smartphone'))
                     this.selection.clear();
-                if (!app.folderViewIsVisible())
-                    focus();
+                //handle focus
+                filesContainer.trigger('perspective:shown');
             }
         },
 
@@ -584,11 +628,15 @@ define('io.ox/files/fluid/perspective',
                 displayedRows,
                 baton = new ext.Baton({ app: app });
             self.baton = baton;
-            baton.mode = identifyMode(opt);
+            baton.options.mode = identifyMode(opt);
 
             self.main.empty().append(
                                 topBar,
                                 wrapper = $('<div class="files-wrapper">')
+                                            .attr({
+                                                'role': 'main',
+                                                'aria-label': gt('Files View')
+                                            })
                                             .append(
                                                 scrollpane
                                             )
@@ -610,13 +658,13 @@ define('io.ox/files/fluid/perspective',
 
             //set media query styles also if container width changes
             adjustWidth = function () {
-                var width = wrapper.width(),
-                    container = self.main;
-
                 if (!wrapper.is(':visible')) {
                     //do not change anything if wrapper is not visible.
                     return;
                 }
+
+                var width = wrapper.width(),
+                    container = self.main;
 
                 if (width > 768)
                     container.removeClass('width-less-than-768 width-less-than-480');
@@ -646,6 +694,16 @@ define('io.ox/files/fluid/perspective',
                     drawFirst();
                 });
 
+            //retrigger selection to set the id in the url properly when comming back from editor etc. In other apps this is handled by vgrid.
+            win.on('show', function () {
+                self.selection.retriggerUnlessEmpty();
+            });
+            win.on('hide', function () {
+                app.off('show', function () {
+                    self.selection.retriggerUnlessEmpty();
+                });
+            });
+
             //register click handler
             scrollpane.on(_.device('smartphone') ? 'tap' : 'click', '.selectable', function (e, data) {
                 var cid = _.cid($(this).attr('data-obj-id')),
@@ -671,13 +729,14 @@ define('io.ox/files/fluid/perspective',
                     dropZoneInit(app);
                     app.currentFile = tmp;
                 }
-                focus(true);
+                //focus handling
+                filesContainer.trigger('dialog:closed');
             });
 
             drawFile = function (file) {
                 var node = $('<a>');
                 ext.point('io.ox/files/icons/file').invoke(
-                    'draw', node, new ext.Baton({ data: file, options: options })
+                    'draw', node, new ext.Baton({ data: file, options: $.extend(baton.options, options) })
                 );
                 return node;
             };
@@ -730,10 +789,8 @@ define('io.ox/files/fluid/perspective',
                         redraw(allIds.slice(start, end));
                     }
                 });
-                $('img.img-polaroid').imageloader({
-                    callback: function (elm) {
-                        $(elm).fadeIn().removeClass('lazy');
-                    },
+                //requesting data-src and setting to src after load finised (icon view only)
+                $('img.img-polaroid.lazy').imageloader({
                     timeout: 60000
                 });
 
@@ -786,7 +843,7 @@ define('io.ox/files/fluid/perspective',
 
                         // add element to provoke scrolling
                         filesContainer.append(
-                            $('<div class="scroll-spacer">').css({ height: '20px', clear: 'both' })
+                            $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
                         );
 
                         displayedRows = layout.iconRows;
@@ -799,14 +856,13 @@ define('io.ox/files/fluid/perspective',
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
                         ext.point('io.ox/files/icons/actions-right').invoke('draw', inlineRight.empty(), baton);
                         //set button state
-                        inlineRight.find('[data-ref="io.ox/files/actions/layout-' + baton.mode + '"]').addClass('active');
+                        inlineRight.find('[data-ref="io.ox/files/actions/layout-' + baton.options.mode + '"]').addClass('active');
 
                         self.selection
                                 .init(allIds)
                                 .trigger('update', 'inital');
-
-                        if (!app.folderViewIsVisible())
-                            focus();
+                        //focus handling
+                        filesContainer.trigger('data:loaded');
                     },
                     function fail(response) {
                         if (response) {
@@ -841,13 +897,16 @@ define('io.ox/files/fluid/perspective',
                 start: function () {
                     win.busy(0);
                 },
-                progress: function (file, position, files) {
-                    var pct = position / files.length;
-                    win.busy(pct, 0);
-                    return api.uploadFile({ file: file, folder: app.folder.get() })
+                progress: function (item, position, files) {
+                    // set initial progress
+                    win.busy(position / files.length, 0);
+                    return api.uploadFile(
+                        _.extend({ file: item.file }, item.options)
+                    )
                     .progress(function (e) {
+                        // update progress
                         var sub = e.loaded / e.total;
-                        win.busy(pct + sub / files.length, sub);
+                        win.busy((position + sub) / files.length, sub);
                     })
                     .fail(function (e) {
                         if (e && e.data && e.data.custom) {
@@ -865,11 +924,11 @@ define('io.ox/files/fluid/perspective',
                 start: function () {
                     win.busy(0);
                 },
-                progress: function (file, position, files) {
+                progress: function (item, position, files) {
                     var pct = position / files.length;
                     win.busy(pct, 0);
                     return api.uploadNewVersion({
-                            file: file,
+                            file: item.file,
                             id: app.currentFile.id,
                             folder: app.currentFile.folder_id,
                             timestamp: _.now()
@@ -894,7 +953,9 @@ define('io.ox/files/fluid/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search cancel-search', function () {
+            win.on('search cancel-search', function (e) {
+                //only reload when search was executed
+                if (e.type === 'cancel-search' && !filesContainer.hasClass('searchresult')) return;
                 breadcrumb = undefined;
                 allIds = [];
                 drawFirst();
@@ -909,7 +970,12 @@ define('io.ox/files/fluid/perspective',
                 var cid = _.cid(obj),
                     icon = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
                 if (icon.length) {
-                    icon.replaceWith(drawFile(obj));
+                    icon.replaceWith(
+                        // draw file ...
+                        drawFile(obj)
+                        // ... and reset lazy loader
+                        .find('img.img-polaroid.lazy').imageloader({ timeout: 60000 }).end()
+                    );
                 }
             });
 
@@ -984,63 +1050,66 @@ define('io.ox/files/fluid/perspective',
                             }
                         }
 
-                        baton.allIds = allIds = ids;
+                        //something changed?
+                        if (changed.length + deleted.length + added.length + Object.keys(duplicates).length) {
+                            baton.allIds = allIds = ids;
+                            ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
 
-                        ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
+                            _(changed).each(function (cid) {
+                                var data = hash[cid],
+                                    prev = indexPrevPosition(newIds, cid),
+                                    outdated = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
+                                    anchor;
 
-                        _(changed).each(function (cid) {
-                            var data = hash[cid],
-                                prev = indexPrevPosition(newIds, cid),
-                                outdated = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]'),
-                                anchor;
+                                outdated.remove();
 
-                            outdated.remove();
-
-                            if (indexPrev(newIds, cid)) {
-                                anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
-                                if (anchor.length) {
-                                    anchor.first().after(drawFile(data));
+                                if (indexPrev(newIds, cid)) {
+                                    anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                    if (anchor.length) {
+                                        anchor.first().after(drawFile(data));
+                                    } else {
+                                        scrollpane.find('.files-container').prepend(drawFile(data));
+                                    }
                                 } else {
-                                    scrollpane.find('.files-container').prepend(drawFile(data));
+                                    end = end - outdated.length;
                                 }
-                            } else {
-                                end = end - outdated.length;
-                            }
-                        });
+                            });
 
-                        _(deleted).each(function (cid) {
-                            var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
-                            end = end - nodes.remove().length;
-                        });
+                            _(deleted).each(function (cid) {
+                                var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                                end = end - nodes.remove().length;
+                            });
 
-                        _(duplicates).each(function (value, cid) {
-                            //remove all nodes for given cid except the first one
-                            var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
-                            end = end - nodes.slice(1).remove().length;
-                        });
+                            _(duplicates).each(function (value, cid) {
+                                //remove all nodes for given cid except the first one
+                                var nodes = scrollpane.find('.file-cell[data-obj-id="' + cid_find(cid) + '"]');
+                                end = end - nodes.slice(1).remove().length;
+                            });
 
-                        _(added).each(function (cid) {
-                            var data = hash[cid],
-                                prev = indexPrevPosition(newIds, cid),
-                                anchor;
+                            _(added).each(function (cid) {
+                                var data = hash[cid],
+                                    prev = indexPrevPosition(newIds, cid),
+                                    anchor;
 
-                            if (indexPrev(newIds, cid)) {
-                                anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
-                                if (anchor.length) {
-                                    anchor.first().after(drawFile(data));
-                                } else {
-                                    scrollpane.find('.files-container').prepend(drawFile(data));
+                                if (indexPrev(newIds, cid)) {
+                                    anchor = scrollpane.find('.file-cell[data-obj-id="' + cid_find(prev) + '"]');
+                                    if (anchor.length) {
+                                        anchor.first().after(drawFile(data));
+                                    } else {
+                                        scrollpane.find('.files-container').prepend(drawFile(data));
+                                    }
+                                    end = end + 1;
                                 }
-                                end = end + 1;
-                            }
-                        });
-                        recalculateLayout();
+                            });
+
+                            recalculateLayout();
+                        }
 
                         self.selection
                                 .init(allIds)
                                 .trigger('update');
-                        if (!app.folderViewIsVisible())
-                            focus();
+                        //focus handling
+                        filesContainer.trigger('refresh:finished');
                         hash = oldhash = oldIds = newIds = changed = deleted = added = indexPrev = indexPrevPosition = indexNextPosition = null;
                     });
                 }

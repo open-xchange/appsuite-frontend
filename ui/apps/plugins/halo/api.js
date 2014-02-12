@@ -40,9 +40,16 @@ define.async('plugins/halo/api',
         // extensions in point 'io.ox/halo/contact:requestEnhancement' will have a chance to modify the call
         // returns an Object mapping a provider to a deferred that will eventually provide the data
         // "provider" is optional and reduces lookup to this provider name
-        this.investigate = function (contact, provider) {
+        this.investigate = function (obj, provider) {
 
-            var investigationMap = {};
+            var investigationMap = {},
+                contact = _.copy(obj);
+
+            // parse user data to contact format
+            if (contact.id && contact.contact_id && contact.id !== contact.contact_id) {
+                contact.id = contact.contact_id;
+                delete contact.contact_id;
+            }
 
             // Send a request for every active provider
             var providers = provider ? [provider] : providerFilter.filterProviders(activeProviders);

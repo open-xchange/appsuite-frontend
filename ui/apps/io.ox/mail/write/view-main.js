@@ -223,8 +223,8 @@ define('io.ox/mail/write/view-main',
                                 address = data.email || data.phone || '';
                             return name ? '"' + name + '" <' + address + '>' : address;
                         },
-                        draw: function (data, query) {
-                            drawAutoCompleteItem.call(null, this, data, query);
+                        draw: function (data) {
+                            ext.point(POINT + '/autoCompleteItem').invoke('draw', this, ext.Baton({ data: data }));
                         },
                         click: function (e) {
                             copyRecipients.call(self, id, $(this), e);
@@ -306,8 +306,8 @@ define('io.ox/mail/write/view-main',
                             });
                         });
                     },
-                    draw: function (data, query) {
-                        drawAutoCompleteItem(this, data, query);
+                    draw: function (data) {
+                        ext.point(POINT + '/autoCompleteItem').invoke('draw', this, ext.Baton({ data: data }));
                     },
                     reduce: function (data) {
                         data.list = _(data.list).map(function (elem) {
@@ -367,7 +367,8 @@ define('io.ox/mail/write/view-main',
                 if (hash[recipient.email] === undefined && hash[mailUtil.cleanupPhone(recipient.phone)] === undefined) {
                     //draw recipient
                     var node = $('<div>'), value;
-                    drawContact(id, node, recipient);
+                    ext.point(POINT + '/contactItem').invoke('draw', node,
+                        ext.Baton({ id: id, data: recipient, app: this.app }));
                     // add to proper section (to, CC, ...)
                     this.sections[id + 'List'].append(node);
                     // if list itself contains doublets
@@ -545,35 +546,37 @@ define('io.ox/mail/write/view-main',
                     buttonicon: 'icon-paper-clip'
                 }),
                 $input = $inputWrap.find('input[type="file"]'),
-                    changeHandler = function (e) {
-                        //register rightside node
-                        e.preventDefault();
-                        if (_.browser.IE !== 9) {
-                            var list = [];
-                            //fileList to array of files
-                            _($input[0].files).each(function (file) {
-                                list.push(_.extend(file, {group: 'file'}));
-                            });
-                            self.baton.fileList.add(list);
-                            $input.trigger('reset.fileupload');
-                        } else {
-                            //IE
-                            if ($input.val()) {
-                                var file = {
-                                    name: $input.val().match(/[^\/\\]+$/).toString(),
-                                    group: 'input',
-                                    hiddenField: $input
-                                };
-                                self.baton.fileList.add(file);
-                                //hide input field with file
-                                $input.addClass('add-attachment').hide();
-                                //create new input field
-                                $input = $('<input>', { type: 'file', name: 'file' })
-                                        .on('change', changeHandler)
-                                        .appendTo($input.parent());
-                            }
+                changeHandler = function (e) {
+                    // update input reference (esp. for IE10)
+                    $input = $inputWrap.find('input[type="file"]');
+                    //register rightside node
+                    e.preventDefault();
+                    if (_.browser.IE !== 9) {
+                        var list = [];
+                        //fileList to array of files
+                        _($input[0].files).each(function (file) {
+                            list.push(_.extend(file, {group: 'file'}));
+                        });
+                        self.baton.fileList.add(list);
+                        $input.trigger('reset.fileupload');
+                    } else {
+                        //IE
+                        if ($input.val()) {
+                            var file = {
+                                name: $input.val().match(/[^\/\\]+$/).toString(),
+                                group: 'input',
+                                hiddenField: $input
+                            };
+                            self.baton.fileList.add(file);
+                            //hide input field with file
+                            $input.addClass('add-attachment').hide();
+                            //create new input field
+                            $input = $('<input>', { type: 'file', name: 'file' })
+                                    .on('change', changeHandler)
+                                    .appendTo($input.parent());
                         }
-                    };
+                    }
+                };
             $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
@@ -616,8 +619,8 @@ define('io.ox/mail/write/view-main',
                         .build(function () {
                             this.getContentNode().append(container, filesPane);
                         })
-                        .addPrimaryButton('save', gt('Add'))
-                        .addButton('cancel', gt('Cancel'))
+                        .addPrimaryButton('save', gt('Add'), 'save', {tabIndex: '1'})
+                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .show(function () {
                             tree.paint().done(function () {
                                 tree.selection.updateIndex().selectFirst();
@@ -708,12 +711,10 @@ define('io.ox/mail/write/view-main',
                         signatureNode.append(
                             _(signatures.concat(dummySignature))
                             .inject(function (memo, o, index) {
-                                var preview = (o.content || '')
-                                    // remove subsequent white-space
-                                    .replace(/\s\s+/g, ' ')
-                                    // remove ASCII art
-                                    .replace(/([\-=+*°._!?\/\^]{4,})/g, '');
-                                preview = _.ellipsis(preview, {max: 150});
+                                var preview = _.ellipsis(
+                                                mailUtil.signatures.cleanPreview(o.content),
+                                                {max: 150}
+                                            );
                                 return memo.add(
                                     $('<div class="section-item pointer">')
                                     .addClass(index >= signatures.length ? 'signature-remove' : '')
@@ -787,7 +788,11 @@ define('io.ox/mail/write/view-main',
                 // Attach vCard
                 $('<div>').addClass('section-item')
                 .css({ paddingTop: '1em', paddingBottom: '1em' })
-                .append(createCheckbox('vcard', gt('Attach my vCard')))
+                .append(createCheckbox('vcard', gt('Attach my vCard'))),
+                // Attach vCard
+                $('<div>').addClass('section-item')
+                .css({ paddingTop: '1em', paddingBottom: '1em' })
+                .append(createCheckbox('disp_notification_to', gt('Delivery Receipt')))
             );
 
             if (!Modernizr.touch) {
@@ -1095,6 +1100,8 @@ define('io.ox/mail/write/view-main',
             this.addRecipients(id, list);
             // don't refocus on blur
             if (e.type !== 'blur') node.val('').focus();
+            //clear the input field
+            node.val('');
         } else if ($.trim(node.val()) !== '') {
             // not accepted but has content
             node.prop('disabled', true)
@@ -1148,7 +1155,7 @@ define('io.ox/mail/write/view-main',
                 folder_id: elem.folder_id || '',
                 id: elem.id || ''
             };
-            obj.url = contactsUtil.getImage(obj, contactPictureOptions);
+
             return obj;
         });
     }
@@ -1175,71 +1182,142 @@ define('io.ox/mail/write/view-main',
         return mapping[field] || '';
     }
 
-    function drawAutoCompleteItem(node, data) {
-        var url = contactsUtil.getImage(data.data, contactPictureOptions), labelnode = '';
-        //source field label
-        if (getFieldLabel(data.field) !== '')
-            labelnode = ' <span style="color: #888;">(' + getFieldLabel(data.field) + ')</span>';
+    /*
+     * extension point for contact picture
+     */
+    ext.point(POINT +  '/contactPicture').extend({
+        id: 'contactPicture',
+        index: 100,
+        draw: function (baton) {
+            this.append(
+                contactsAPI.pictureHalo(
+                    $('<div class="contact-image">'),
+                    $.extend(baton.data, contactPictureOptions)
+                )
+            );
+        }
+    });
 
-        node.addClass('io-ox-mail-write-contact').append(
-            $('<div class="contact-image">').css('backgroundImage', 'url(' + url + ')'),
-            $('<div class="ellipsis">').text(_.noI18n(data.display_name + '\u00A0')),
-            $('<div class="ellipsis email">').html(_.noI18n(data.email) + _.noI18n(data.phone || '') + labelnode)
-        );
-    }
+    /*
+     * extension point for display name
+     */
+    ext.point(POINT +  '/displayName').extend({
+        id: 'displayName',
+        index: 100,
+        draw: function (baton) {
+            this.append(
+                contactsAPI
+                    .getDisplayName(baton.data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
+                    .addClass('recipient-name')
+            );
+        }
+    });
+
+    // /*
+    //  * extension point for halo link
+    //  */
+    ext.point(POINT +  '/emailAddress').extend({
+        id: 'emailAddress',
+        index: 100,
+        draw: function (baton) {
+            var data = baton.data;
+            if (baton.autocomplete) {
+                this.append(
+                    $('<div class="ellipsis email">').append(
+                        $.txt(baton.data.email + (baton.data.phone || '') + ' '),
+                        getFieldLabel(baton.data.field) !== '' ?
+                            $('<span style="color: #888;">').text('(' + getFieldLabel(baton.data.field) + ')') : []
+                    )
+                );
+            } else {
+                this.append(
+                    $('<div>').append(
+                        data.email ?
+                            $('<a href="#" class="halo-link">')
+                            .data({ email1: data.email })
+                            .text(_.noI18n(String(data.email).toLowerCase())) :
+                            $('<span>').text(_.noI18n(data.phone || ''))
+                    )
+                );
+            }
+        }
+    });
 
     // drawAutoCompleteItem and drawContact
     // are slightly different. it's easier just having two functions.
 
-    function drawContact(id, node, data) {
-        var valid = _(['email', 'phone', 'display_name', 'full_name']).find(function (key) {
-                //just whitespace?
-                return (data[key] || '').trim() !== '';
-            });
-
-        //ignore 'whitespace only' data
-        if (valid) {
-            //add parsed emailadress as display_name (if not set yet9
-            if ($.trim(data.display_name || data.display_name) === '' && !_.isUndefined(data.phone || data.email)) {
-                data = $.extend(data, {
-                    display_name: _.flatten(mailUtil.parseRecipients(data.phone || data.email))[0] || data.display_name || ''
-                });
-            }
-            //draw node
-            node.addClass('io-ox-mail-write-contact section-item').append(
-                // picture
-                contactsAPI.getPicture(data, contactPictureOptions).addClass('contact-image'),
-                // hidden field
-                $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
-                // display name
-                contactsAPI.getDisplayName(data, { halo: false, stringify: 'getMailFullName', tagName: 'div' })
-                    .addClass('recipient-name'),
-                // email address
-                $('<div>').append(
-                    data.email ?
-                        $('<a href="#" class="halo-link">')
-                        .data({ email1: data.email })
-                        .text(_.noI18n(String(data.email).toLowerCase())) :
-                        $('<span>').text(_.noI18n(data.phone || ''))
-                ),
-                // remove
-                $('<a href="#" class="remove">')
-                    .attr('title', gt('Remove from recipient list'))
-                    .append(
-                        $('<i class="icon-trash">')
-                    )
-                    .on('click', { id: id }, function (e) {
-                        e.preventDefault();
-                        var list = $(this).parents().find('.recipient-list');
-                        $(this).parent().remove();
-                        // hide section if empty
-                        if (list.children().length === 0) {
-                            list.hide();
-                        }
-                    })
-            );
+    /*
+     * extension point for autocomplete item
+     */
+    ext.point(POINT +  '/autoCompleteItem').extend({
+        id: 'autoCompleteItem',
+        index: 100,
+        draw: function (baton) {
+            this.addClass('io-ox-mail-write-contact');
+            baton.autocomplete = true;
+            // contact picture
+            ext.point(POINT + '/contactPicture').invoke('draw', this, baton);
+            // display name
+            ext.point(POINT + '/displayName').invoke('draw', this, baton);
+            // email address
+            ext.point(POINT + '/emailAddress').invoke('draw', this, baton);
         }
-    }
+    });
+
+    /*
+     * extension point for contact item
+     */
+    ext.point(POINT +  '/contactItem').extend({
+        id: 'contactItem',
+        index: 100,
+        draw: function (baton) {
+            var data = baton.data,
+                id = baton.id,
+                valid = _(['email', 'phone', 'display_name', 'full_name']).find(function (key) {
+                    //just whitespace?
+                    return (data[key] || '').trim() !== '';
+                });
+
+            //ignore 'whitespace only' data
+            if (valid) {
+                baton.autocomplete = false;
+                //add parsed emailadress as display_name (if not set yet9
+                if ($.trim(data.display_name || data.display_name) === '' && !_.isUndefined(data.phone || data.email)) {
+                    data = $.extend(data, {
+                        display_name: _.flatten(mailUtil.parseRecipients(data.phone || data.email))[0] || data.display_name || ''
+                    });
+                }
+                // picture
+                ext.point(POINT + '/contactPicture').invoke('draw', this, baton);
+                // add hidden input
+                this.addClass('io-ox-mail-write-contact section-item').append(
+                    // hidden field
+                    $('<input>', { type: 'hidden', name: id, value: serialize(data) })
+                );
+                // display name
+                ext.point(POINT + '/displayName').invoke('draw', this, baton);
+                // email address
+                ext.point(POINT + '/emailAddress').invoke('draw', this, baton);
+                this.append(
+                    // remove
+                    $('<a href="#" class="remove">')
+                        .attr('title', gt('Remove from recipient list'))
+                        .append(
+                            $('<i class="icon-trash">')
+                        )
+                        .on('click', { id: id }, function (e) {
+                            e.preventDefault();
+                            var list = $(this).parents().find('.recipient-list');
+                            $(this).parent().remove();
+                            // hide section if empty
+                            if (list.children().length === 0) {
+                                list.hide();
+                            }
+                        })
+                );
+            }
+        }
+    });
 
     // helper
 

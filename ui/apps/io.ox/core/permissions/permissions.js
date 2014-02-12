@@ -191,7 +191,7 @@ define('io.ox/core/permissions/permissions',
             } else {
                 userAPI.get({ id: String(entity) }).done(function (user) {
                     baton.name = contactsUtil.getFullName(user);
-                    baton.picture = contactsAPI.getPictureURLSync(user, { width: 64, height: 64, scaleType: 'cover' });
+                    baton.user = user;
                     ext.point(POINT + '/entity').invoke('draw', self, baton);
                 });
             }
@@ -202,10 +202,12 @@ define('io.ox/core/permissions/permissions',
         index: 100,
         id: 'entityimage',
         draw: function (baton) {
-            if (baton.picture) {
+            if (baton.user) {
                 this.append(
-                    $('<div class="pull-left contact-picture">')
-                    .css('background-image', 'url(' + baton.picture + ')')
+                    contactsAPI.pictureHalo(
+                        $('<div class="pull-left contact-picture">'),
+                        $.extend(baton.user, { width: 64, height: 64, scaleType: 'cover' })
+                    )
                 );
             } else {
                 this.append(
@@ -413,7 +415,8 @@ define('io.ox/core/permissions/permissions',
                             distributionlists: false,
                             groups: true,
                             resources: false,
-                            users: true
+                            users: true,
+                            split: false
                         });
                         //add recipents to baton-data-node; used to filter sugestions list in view
                         autocomplete.on('update', function () {

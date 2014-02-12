@@ -6,8 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2013
- * Mail: info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
@@ -165,21 +164,24 @@ define('io.ox/core/pubsub/model',
     ext.point('io.ox/core/pubsub/publication/validation').extend({
         validate: function (obj, errors) {
             if (!obj.target) {
-                errors.add(gt('Publication must have a target.'));
+                errors.add('target', gt('Publication must have a target.'));
                 return;
             }
             if ((obj[obj.target] || {}).siteName === '') {
-                errors.add(gt('Publication must have a site.'));
+                errors.add('siteName', gt('Publication must have a site.'));
             }
         }
     });
 
     ext.point('io.ox/core/pubsub/subscription/validation').extend({
         validate: function (obj, errors) {
-            var ref = obj[obj.source];
-            if (!ref) { errors.add(gt('Model is incomplete.')); return; }
-            if (ref === {} || (!ref.login || !ref.password) && !ref.account && !ref.url) {
-                errors.add(gt('You have to enter a username and password to subscribe.'));
+            var ref = obj[obj.source], logincheck = false;
+            if (!ref) { errors.add(obj.source, gt('Model is incomplete.')); return; }
+            if (ref.login) {
+                logincheck = (!obj.id && ref.password) || (obj.id && !ref.password);
+            }
+            if (ref === {} || !logincheck && !ref.account && !ref.url) {
+                errors.add(obj.source, gt('You have to enter a username and password to subscribe.'));
                 return;
             }
         }

@@ -166,6 +166,11 @@
     }
 }
 
+@media (min-width: 481px), (min-device-width: 481px) {//don't break mobile dropdowns
+	#topbar-settings-dropdown {//keep settings dropdown inside the window (Bug #30256)
+		right: 20px;
+	}
+}
 
 #io-ox-top-logo-small {
     width: 60px;
@@ -262,7 +267,7 @@
 
     }
 
-    .launcher.closable {
+    .launcher.closable:hover {
         color: @topbarLauncherColor-hover;
         background-color: @topbarLauncherBackgroundHover;
     }
@@ -401,7 +406,7 @@
             }
             a {
                 max-width: 10em;
-                .ellipsis;
+                .ellipsis();
             }
         }
 
@@ -581,6 +586,14 @@
             margin: 0 0 0 13px;
             line-height: 46px;
         }
+        .clear-button {
+        	float: right;
+        	cursor: pointer;
+        	line-height: inherit;
+        	text-align: center;
+        	width: 46px;
+        	margin-right: 13px;
+        }
 
         .notifications { margin-bottom: 13px; }
 
@@ -600,11 +613,11 @@
             .title {
                 pointer-events: none;
                 font-weight: bold;
-                .ellipsis;
+                .ellipsis();
             }
 
             .subject {
-                .ellipsis;
+                .ellipsis();
                 pointer-events: none;
             }
 
@@ -618,7 +631,7 @@
                 line-height: 16px;
                 max-height: 5 * 16px; /* 5 rows */
                 margin-top: 3px;
-                .ellipsis;
+                .ellipsis();
             }
 
             .time {
@@ -998,7 +1011,7 @@
     font-size: 22px;
     line-height: 30px;
     text-shadow: 0px 0px 2px #000;
-    .ellipsis;
+    .ellipsis();
     .box-sizing(border-box);
     /* override h1 */
     display: block;
@@ -1254,7 +1267,7 @@ a.button {
         .grid-info {
             text-align: center;
             margin: 0 30px;
-            .ellipsis;
+            .ellipsis();
             .folder-count {
                 font-size: 13px;
                 color: #888;
@@ -1336,7 +1349,7 @@ a.button {
     background-color: @background; /* resolves hw accel anti-aliasing */
 
     * {
-        .ellipsis;
+        .ellipsis();
     }
 
     &.selectable, &.hover {
@@ -1396,6 +1409,11 @@ a.button {
             line-height: 1.1em;
         }
 
+    }
+
+    .title {
+        //show whitespace to visually match backend sort order
+        white-space: pre;
     }
 
     .vgrid-cell-checkbox {
@@ -2180,36 +2198,6 @@ input.nice-input {
                 margin: 0;
             }
         }
-    }
-
-    // more space for fat fingers
-    .touch & .folder {
-        line-height: 34px;
-    }
-
-
-    .subfolders.io-ox-busy {
-        min-height: 70px;
-    }
-
-    .folder-arrow {
-
-        display: inline-block;
-        width: 50px;
-        text-align: center;
-        color: #aaa;
-
-        &:hover {
-            text-decoration: none;
-        }
-
-        i {
-            display: block; width: 50px;
-        }
-
-    }
-
-    .folder {
 
         .folder-label {
 
@@ -2225,7 +2213,7 @@ input.nice-input {
             .short-title { display: none; }
         }
 
-        &.selected .folder-label {
+        &.selected>.folder-label {
             .long-title { display: none; }
             .short-title { display: inline; }
         }
@@ -2264,6 +2252,34 @@ input.nice-input {
                 display: inline-block;
             }
         }
+
+    }
+
+    // more space for fat fingers
+    .touch & .folder {
+        line-height: 34px;
+    }
+
+
+    .subfolders.io-ox-busy {
+        min-height: 70px;
+    }
+
+    .folder-arrow {
+
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        color: #aaa;
+
+        &:hover {
+            text-decoration: none;
+        }
+
+        i {
+            display: block; width: 50px;
+        }
+
     }
 
     .folder-counter-badge, .folder-options-badge {
@@ -2652,7 +2668,7 @@ a.toolbar-action, .toolbar-action > a {
     color: #333;
     text-shadow: 0 0 5px white;
     font-weight: bold;
-    .ellipsis;
+    .ellipsis();
     .badge { margin-right: 1em; }
 }
 
@@ -2666,7 +2682,7 @@ a.toolbar-action, .toolbar-action > a {
     font-weight: bold;
     cursor: default;
     max-width: 230px;
-    .ellipsis;
+    .ellipsis();
 }
 
 .dropdown-header {
@@ -3105,7 +3121,7 @@ input.flat-input {
             }
         }
         li > a, li > span {
-            .ellipsis;
+            .ellipsis();
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             user-select: none;

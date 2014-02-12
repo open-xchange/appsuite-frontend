@@ -61,7 +61,17 @@ define('io.ox/core/tk/vgrid',
         };
 
         this.getHeight = function () {
-            return isEmpty ? 0 : getHeight(this.getClone().node);
+            if (isEmpty) {
+                return 0;
+            } else {
+                // not sure if template ever contains more than one element
+                if (template[0].getHeight) {
+                    return template[0].getHeight();
+                } else {
+                    return getHeight(this.getClone().node);
+                }
+            }
+
         };
 
         this.getDefaultClassName = function () {
@@ -590,7 +600,7 @@ define('io.ox/core/tk/vgrid',
                     node = row.node[0];
                     node.className = defaultClassName + ' ' + ((offset + i) % 2 ? 'odd' : 'even');
                     // update fields
-                    row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {});
+                    row.update(data[i], offset + i, self.selection.serialize(data[i]), data[i - 1] || {}, self);
                     node.style.top = shift + (offset + i) * itemHeight + 'px';
                     tmp[i] = row.node;
                 }
@@ -740,7 +750,7 @@ define('io.ox/core/tk/vgrid',
                 // non-existing items that cannot be resolved in selections
                 ids = _(ids).map(deserialize);
                 var selectionChanged = !self.selection.equals(ids), cid, index;
-                if (selectionChanged) {
+                if (selectionChanged && !self.selection.getMobileSelectMode()) {
                     // set
                     self.selection.set(ids);
                 }

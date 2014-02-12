@@ -1,0 +1,113 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+@red: #DB2A3F;
+
+#io-ox-topbar {
+
+    .vertical-gradient(@red, darken(@red, 10%));
+
+    .launcher a.notifications-icon .badge.empty {
+        color: white;
+        background-color: darken(@red, 20%);
+    }
+    .launcher>a:hover {
+        background-color: darken(@red, 10%);
+    }
+    .launcher-dropdown>a:focus, .launcher>a:focus {
+        background-color: darken(@red, 20%);
+    }
+}
+
+.io-ox-portal {
+    .greeting-phrase { font-family: Arial; color: @red; font-weight: 400; }
+    .signin { display: none }
+    .widget.widget-color-red h2 { color: #888; font-weight: 500; }
+    .widget.photo-stream.widget-color-red h2 { color: #fff; }
+}
+
+.promotion {
+
+    color: white;
+    margin-top: 14px;
+    padding: 14px;
+    font-size: 14px;
+    min-height: 100px;
+    .vertical-gradient(#894289, #5D2B50);
+
+    h2 {
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .buttons {
+        margin-top: 14px;
+    }
+
+    .btn-default {
+        background-color: #fff;
+        background-image: none;
+    }
+}
+
+.my-thing {
+
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+
+    h2 {
+        font-weight: 500;
+        line-height: 80px;
+        height: 80px;
+        padding: 0;
+        margin: 0;
+    }
+
+    .logo {
+        width: 83px;
+        height: 80px;
+        margin-right: 14px;
+        vertical-align: top;
+    }
+
+    .data-row {
+        font-size: 16px;
+        margin-top: 14px;
+        clear: both;
+        small {
+            font-size: 13px;
+        }
+    }
+
+    .data-bar {
+        clear: both;
+        border: 1px solid #ddd;
+        width: 100%;
+        .box-sizing(border-box);
+    }
+
+    .data-bar-value {
+        height: 28px;
+        width: 50%;
+        background-color: #A8B323;
+    }
+
+    .data-bar-value.red {
+        background-color: @red;
+    }
+}
+
+.my-ad {
+    img { vertical-align: bottom; }
+    border-bottom: 1px solid @red;
+}

@@ -19,13 +19,7 @@ define('shared/examples/for/api', [], function () {
         }, options);
 
         afterEach(function () {
-            this.server.autoRespond = true;
             this.handleExpectedFail(options.markedPending);
-        });
-
-        beforeEach(function () {
-            this.server = ox.fakeServer;
-            this.server.autoRespond = false;
         });
 
         describe('a basic API class', function () {
@@ -35,7 +29,7 @@ define('shared/examples/for/api', [], function () {
                 });
 
                 it('should return a deferred object for getAll', function () {
-                    expect(api.getAll(options.args['getAll'] || {})).toBeDeferred();
+                    expect(api.getAll(options.args.getAll || {})).toBeDeferred();
                 });
 
                 it('should define a getList method', function () {
@@ -67,13 +61,14 @@ define('shared/examples/for/api', [], function () {
                 });
                 xdescribe('with default events', function () {
                     beforeEach(function () {
+                        this.server.autoRespond = false;
                         this.server.respondWith("PUT", /.*action=new&/, function (xhr) {
                             xhr.respond(200, { "Content-Type": "text/javascript;charset=UTF-8"}, '{"data": 1337}');
                         });
                     });
 
                     it('should trigger refresh:all after create', function () {
-                        var data = options.testData['create'] || {};
+                        var data = options.testData.create || {};
 
                         expect(api).toTrigger('refresh:all');
                         api.create(data);
@@ -81,7 +76,7 @@ define('shared/examples/for/api', [], function () {
                     });
 
                     it('should trigger refresh:list after create', function () {
-                        var data = options.testData['create'] || {};
+                        var data = options.testData.create || {};
 
                         expect(api).toTrigger('refresh:list');
 

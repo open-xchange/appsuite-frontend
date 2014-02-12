@@ -27,7 +27,13 @@ define('plugins/notifications/mail/register',
         draw: function (baton) {
             this.append(
                 $('<legend class="section-title">').text(gt('New Mails'))
-                .attr('focusId', 'mail-notification-'),//special attribute to restore focus on redraw
+                    .attr('focusId', 'mail-notification-')//special attribute to restore focus on redraw
+                    .append($('<div>')
+                        .attr({ tabindex: 1,
+                            'aria-label': gt('Press to hide all notifications for new mails.'),
+                            'data-action': 'clear',
+                            'focus-id': 'mail-notification-clear',
+                            role: 'button'}).addClass('clear-button icon-remove refocus')),
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
                     $('<a role="button" href="#" data-action="open-app" tabindex="1" class="refocus" focus-id="mail-notification-open-app">').text(
@@ -70,6 +76,8 @@ define('plugins/notifications/mail/register',
         id: 'io-ox-notifications-mail',
         events: {
             'click [data-action="open-app"]': 'openApp',
+            'keydown [data-action="clear"]': 'clearItems',
+            'click [data-action="clear"]': 'clearItems',
             'click .item': 'openMail',
             'keydown .item': 'openMail',
             'dispose .item': 'removeNotification' //seems to be unused
@@ -175,6 +183,15 @@ define('plugins/notifications/mail/register',
             });
         },
 
+        clearItems: function (e) {
+            if ((e.type === 'keydown') && (e.which !== 13)) { return; }
+            //hide all items from view
+            this.collection.each(function (item) {
+                seenMails[_.ecid(item.attributes)] = true;
+            });
+            this.collection.reset();
+        },
+
         removeNotification: function (e) {
             e.preventDefault();
             var cid = $(e.target).attr('data-cid'),
@@ -193,7 +210,7 @@ define('plugins/notifications/mail/register',
 
     ext.point('io.ox/core/notifications/register').extend({
         id: 'mail',
-        index: 200,
+        index: 600,
         register: function (controller) {
             var notifications = controller.get('io.ox/mail', NotificationsView);
 
@@ -201,7 +218,7 @@ define('plugins/notifications/mail/register',
                 var mailsToAdd = [];
                 //add new ones
                 for (var i = 0; i < mails.length; i++) { //check if models for this mail are already present and not seen
-                    if (!(notifications.collection._byId[mails[i].id]) && !(seenMails[mails[i].id])) {
+                    if (!(notifications.collection._byId[mails[i].id]) && !(seenMails[_.ecid(mails[i])])) {
                         mailsToAdd.push(mails[i]);
                     }
                 }
@@ -218,8 +235,8 @@ define('plugins/notifications/mail/register',
                 mailsToRemove = _.difference(found, unseenArray);//mails in the collection that are not unseen need to be removed
 
                 _(mailsToRemove).each(function (id) {
+                    seenMails[_.ecid(notifications.collection._byId[id].attributes)] = true;//make sure this mail is not added again because it's seen already
                     notifications.collection.remove(notifications.collection._byId[id]);
-                    seenMails[id] = true;//make sure this mail is not added again because it's seen already
                 });
                 _(mailsToAdd.reverse()).each(function (mail) {
                     notifications.collection.unshift(new Backbone.Model(mail), { silent: true });
@@ -228,14 +245,14 @@ define('plugins/notifications/mail/register',
             function removeMails(e, mails) {//removes mails from notificationview
                 _(mails).each(function (mail) {
                     notifications.collection.remove(notifications.collection._byId[mail.id]);
-                    seenMails[mail.id] = true;//make sure this mail is not added again because it's seen already
+                    seenMails[_.ecid(mail)] = true;//make sure this mail is not added again because it's seen already
                 });
             }
             function removeFolder(e, folder) {//removes mails of a whole folder from notificationview
                 _(notifications.collection.models).each(function (mail) {
                     if (mail.get('folder_id') === folder) {
                         notifications.collection.remove(notifications.collection._byId[mail.id]);
-                        seenMails[mail.id] = true;//make sure this mail is not added again because it's seen already
+                        seenMails[_.ecid(mail)] = true;//make sure this mail is not added again because it's seen already
                     }
                 });
             }

@@ -27,7 +27,7 @@ define('io.ox/mail/autoforward/settings/register',
         title: gt('Auto Forward'),
         ref: 'io.ox/autoforward',
         loadSettingPane: false,
-        index: 425,
+        index: 400,
         lazySaveSettings: true
     });
 

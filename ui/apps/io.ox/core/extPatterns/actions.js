@@ -47,7 +47,7 @@ define('io.ox/core/extPatterns/actions',
         });
     };
 
-    var invoke = function (ref, scope, baton) {
+    var invoke = function (ref, context, baton) {
 
         // make sure we have a baton
         baton = ext.Baton.ensure(baton);
@@ -88,12 +88,21 @@ define('io.ox/core/extPatterns/actions',
             }
             if (tmp.length) {
                 // call handlers
-                if (_.isFunction(extension.action)) {
-                    extension.action.call(scope, baton);
-                }
-                if (_.isFunction(extension.multiple)) {
-                    // make sure to always provide an array
-                    extension.multiple.call(scope, tmp, baton);
+                try {
+                    if (_.isFunction(extension.action)) {
+                        extension.action.call(context, baton);
+                    }
+                    if (_.isFunction(extension.multiple)) {
+                        // make sure to always provide an array
+                        extension.multiple.call(context, tmp, baton);
+                    }
+                } catch (e) {
+                    console.error('point("' + ref + '") > invoke()', e.message, {
+                        baton: baton,
+                        context: context,
+                        extension: extension,
+                        exception: e
+                    });
                 }
             }
         }
@@ -108,21 +117,29 @@ define('io.ox/core/extPatterns/actions',
         // combine actions
         var defs = ext.point(ref).map(function (action) {
 
-                var ret = true;
+                var ret = true, params;
 
                 if (stopped) {
                     return $.Deferred().resolve(false);
                 }
 
                 if (_.isFunction(action.requires)) {
-                    ret = action.requires({
+                    params = {
                         baton: baton,
                         collection: collection,
                         context: baton.data,
                         extension: action,
                         point: ref,
                         stopPropagation: stopPropagation
-                    });
+                    };
+                    try {
+                        ret = action.requires(params);
+                    } catch (e) {
+                        params.exception = e;
+                        console.error(
+                            'point("' + ref + '") > "' + action.id + '" > processActions() > requires()', e.message, params
+                        );
+                    }
                 }
 
                 // is not deferred?

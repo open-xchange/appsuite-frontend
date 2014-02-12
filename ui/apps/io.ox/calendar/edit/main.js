@@ -45,7 +45,7 @@ define('io.ox/calendar/edit/main',
                 //be gently
                 if (self.getDirtyStatus()) {
                     require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog({'tabTrap': true})
+                        new dialogs.ModalDialog()
                             .text(gt('Do you really want to discard your changes?'))
                             .addPrimaryButton('delete', gt('Discard'), 'delete', {'tabIndex': '1'})
                             .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
@@ -155,9 +155,9 @@ define('io.ox/calendar/edit/main',
                                                 .text(gt('Conflicts with resources cannot be ignored'))
                                         );
                                     } else {
-                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'));
+                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore', {tabIndex: '1'});
                                     }
-                                    dialog.addButton('cancel', gt('Cancel'))
+                                    dialog.addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                                         .show()
                                         .done(function (action) {
                                             if (action === 'cancel') {
@@ -192,6 +192,14 @@ define('io.ox/calendar/edit/main',
                                 app.dropZone.remove();
                             });
                         }
+
+                        win.on('show', function () {
+                            if (self.model.get('id')) {//set url parameters
+                                self.setState({ folder: self.model.attributes.folder_id, id: self.model.attributes.id });
+                            } else {
+                                self.setState({ folder: self.model.attributes.folder_id, id: null});
+                            }
+                        });
 
                         if (opt.mode === 'edit') {
 
@@ -242,6 +250,7 @@ define('io.ox/calendar/edit/main',
 
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                         self.getWindow().show(_.bind(self.onShowWindow, self));
+                        $(app).trigger('finishedCreating');//used by guided tours so they can show the next step when everything is ready
                     });
                 }
 

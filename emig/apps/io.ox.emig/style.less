@@ -1,0 +1,54 @@
+.io-ox-mail-write .section-item .io-ox-emig {
+    float: right;
+    cursor: pointer;
+    
+    margin-top: -4px;
+    width: 13px;
+    height: 28px;
+   
+    &.none { display: none; }
+    &.wait { display: none; }
+    
+    &.member {
+        background-image: url(images/member.png);
+        &:hover { background-image: url(images/member-hover.png); }
+    }
+    
+    &.secure {
+        background-image: url(images/secure.png);
+        &:hover { background-image: url(images/secure-hover.png); }
+    }
+}
+
+.io-ox-emig-title {
+    text-align: center;
+    font-weight: bold;
+}
+
+.io-ox-emig-popup {
+    font-size: 12px;
+    line-height: 1.2;
+    
+    a { white-space: nowrap; }
+    
+    &.member {
+        padding-left: 80px;
+        background: url(images/logo.png) 10px 0 no-repeat;
+        
+    }
+    
+    &.secure {
+        &>div {
+            position: relative;
+            margin: 0 auto;
+            background: url(images/logo.png) left no-repeat;
+            min-height: 46px;
+            padding-left: 70px;
+            width: 5em;
+            font-weight: bold;
+        }
+        &>span {
+            margin-top: 1em;
+        }
+    }
+}
