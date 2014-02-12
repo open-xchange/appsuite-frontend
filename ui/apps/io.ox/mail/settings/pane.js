@@ -239,7 +239,7 @@ define('io.ox/mail/settings/pane',
                         $('<div>').addClass('control-group form-inline expertmode').append(
                             $('<span>').addClass('text').text(gt('Line wrap when sending text mails after ')),
                             $('<label for="lineWrapAfter">').addClass('justForA11y'),
-                            new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'span1' }).render().$el,
+                            new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'span1', id: 'lineWrapAfter' }).render().$el,
                             $('<span>').addClass('text').text(gt(' characters'))
                         )
                     ),
@@ -247,7 +247,7 @@ define('io.ox/mail/settings/pane',
                         $('<div>').addClass('control-group').append(
                             $('<label>').attr({ 'for': 'defaultSendAddress' }).addClass('control-label').text(gt('Default sender address')),
                             $('<div>').addClass('controls').append(
-                                new mini.SelectView({ list: optionsAllAccounts, name: 'defaultSendAddress', model: mailSettings}).render().$el
+                                new mini.SelectView({ list: optionsAllAccounts, name: 'defaultSendAddress', model: mailSettings, id: 'defaultSendAddress' }).render().$el
                             )
                         )
                     ),
@@ -256,7 +256,7 @@ define('io.ox/mail/settings/pane',
                             $('<label>').attr({ 'for': 'autoSaveDraftsAfter' }).addClass('control-label').text(gt('Auto-save email drafts')),
                             $('<div>').addClass('controls').append(
                                 $('<label>').addClass('select').append(
-                                    new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: mailSettings}).render().$el
+                                    new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: mailSettings, id: 'autoSaveDraftsAfter' }).render().$el
                                 )
                             )
                         )

@@ -35,6 +35,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            if (this.id) this.$el.attr({ id: this.id });
             this.update();
             return this;
         }
@@ -142,7 +143,8 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
                 this.$el.val(this.model.get(this.name));
             },
             render: function () {
-                this.$el.attr({ id: this.name, name: this.name, tabindex: this.options.tabindex || 1 });
+                this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+                if (this.id) this.$el.attr({ id: this.id});
                 this.$el.append(_.map(this.options.list, function (option) {
                     return $('<option>').attr({ value: option.value}).text(option.label);
                 }));

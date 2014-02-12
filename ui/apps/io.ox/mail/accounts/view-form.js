@@ -302,162 +302,135 @@ define.async('io.ox/mail/accounts/view-form',
 
             var formBlocks = [],
 
-                serverSettingsInTitle = $('<legend>').addClass('sectiontitle').text(gt('Server settings')),
-                serverSettingsInBlock = $('<div>').addClass('form-horizontal').append(
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for': 'mail_protocol' }).addClass('control-label').text(gt('Server type')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('select').append(
-                                new mini.SelectView({ list: optionsServerType, name: 'mail_protocol', model: model}).render().$el
+                serverSettingsIn = $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle').text(gt('Server settings')),
+                    $('<div>').addClass('form-horizontal').append(
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for': 'mail_protocol' }).addClass('control-label').text(gt('Server type')),
+                            $('<div>').addClass('controls').append(
+                                new mini.SelectView({ list: optionsServerType, name: 'mail_protocol', model: model, id: 'mail_protocol'}).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').addClass('control-label'),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('checkbox').text(gt('Use SSL connection')).append(
-                                new mini.CheckboxView({ name: 'mail_secure', model: model}).render().$el
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<div>').addClass('controls').append(
+                                $('<label>').addClass('checkbox').text(gt('Use SSL connection')).append(
+                                    new mini.CheckboxView({ name: 'mail_secure', model: model}).render().$el
+                                )
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for': 'mail_server' }).addClass('control-label').text(gt('Server name')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'mail_server', model: model }).render().$el
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for': 'mail_server' }).addClass('control-label').text(gt('Server name')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'mail_server', model: model, id: 'mail_server' }).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for': 'mail_port' }).addClass('control-label').text(gt('Server port')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'mail_port', model: model }).render().$el
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for': 'mail_port' }).addClass('control-label').text(gt('Server port')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'mail_port', model: model, id: 'mail_port' }).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for': 'login' }).addClass('control-label').text(gt('Username')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'login', model: model }).render().$el
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for': 'login' }).addClass('control-label').text(gt('Username')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'login', model: model, id: 'login' }).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for': 'password' }).addClass('control-label').text(gt('Password')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'password', model: model }).render().$el
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for': 'password' }).addClass('control-label').text(gt('Password')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'password', model: model, id: 'password' }).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group pop3').append(
-                        $('<label>').attr({ 'for': 'pop3_refresh_rate' }).text(gt('Refresh rate in minutes:')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('select').append(
-                                new mini.SelectView({ list: optionsRefreshRatePop, name: 'pop3_refresh_rate', model: model}).render().$el
+                        ),
+                        $('<div>').addClass('control-group pop3').append(
+                            $('<label>').attr({ 'for': 'pop3_refresh_rate' }).text(gt('Refresh rate in minutes:')),
+                            $('<div>').addClass('controls').append(
+                                new mini.SelectView({ list: optionsRefreshRatePop, name: 'pop3_refresh_rate', model: model, id: 'pop3_refresh_rate'}).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group pop3').append(
-                        $('<label>').addClass('control-label'),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('checkbox').text(gt('Remove copy from server after retrieving a message')).append(
-                                new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model}).render().$el
+                        ),
+                        $('<div>').addClass('control-group pop3').append(
+                            $('<div>').addClass('controls').append(
+                                $('<label>').addClass('checkbox').text(gt('Remove copy from server after retrieving a message')).append(
+                                    new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model}).render().$el
+                                )
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group pop3').append(
-                        $('<label>').addClass('control-label'),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('checkbox').text(gt('Deleting messages on local storage also deletes them on server')).append(
-                                new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model}).render().$el
+                        ),
+                        $('<div>').addClass('control-group pop3').append(
+                            $('<div>').addClass('controls').append(
+                                $('<label>').addClass('checkbox').text(gt('Deleting messages on local storage also deletes them on server')).append(
+                                    new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model}).render().$el
+                                )
                             )
                         )
                     )
                 ),
 
-                serverSettingsOutTitle = $('<legend>').addClass('sectiontitle').text(gt('Outgoing server settings (SMTP)')),
-
-                serverSettingsOutBlock = $('<div>').addClass('form-horizontal').append(
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').addClass('control-label'),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('checkbox').text(gt('Use SSL connection')).append(
-                                new mini.CheckboxView({ name: 'transport_secure', model: model}).render().$el
+                serverSettingsOut = $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle').text(gt('Outgoing server settings (SMTP)')),
+                    $('<div>').addClass('form-horizontal').append(
+                        $('<div>').addClass('control-group').append(
+                            $('<div>').addClass('controls').append(
+                                $('<label>').addClass('checkbox').text(gt('Use SSL connection')).append(
+                                    new mini.CheckboxView({ name: 'transport_secure', model: model}).render().$el
+                                )
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for':  'transport_server'}).addClass('control-label').text(gt('Server name')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for':  'transport_server'}).addClass('control-label').text(gt('Server name')),
+                            $('<div>').addClass('controls').append(
                                 new mini.InputView({ name: 'transport_server', model: model }).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label').text(gt('Server port')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'transport_port', model: model }).render().$el
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label').text(gt('Server port')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'transport_port', model: model, id: 'transport_server' }).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').addClass('control-label'),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('checkbox').text(gt('Use username and password')).append(
-                                new mini.CheckboxView({ name: 'mail-common-selectfirst', model: model }).render().$el
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<div>').addClass('controls').append(
+                                $('<label>').addClass('checkbox').text(gt('Use username and password')).append(
+                                    new mini.CheckboxView({ name: 'mail-common-selectfirst', model: model }).render().$el
+                                )
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for':  'transport_login'}).addClass('control-label').text(gt('Username')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for':  'transport_login'}).addClass('control-label').text(gt('Username')),
+                            $('<div>').addClass('controls').append(
                                 new mini.InputView({ name: 'transport_login', model: model }).render().$el
                             )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for':  'transport_password'}).addClass('control-label').text(gt('Password')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'transport_password', model: model }).render().$el
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for':  'transport_password'}).addClass('control-label').text(gt('Password')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'transport_password', model: model, id: 'transport_login' }).render().$el
                             )
                         )
                     )
                 ),
-                serverSettingsFolderTitle = $('<legend>').addClass('sectiontitle').text(gt('Folder settings')),
-                serverSettingsFolderBlock = $('<div>').addClass('form-horizontal').append(
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for':  'sent_fullname'}).addClass('control-label').text(gt('Sent folder')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'sent_fullname', model: model }).render().$el.attr({ 'disabled': 'disabled' }),
+
+                serverSettingsFolder = $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle').text(gt('Folder settings')),
+                    $('<div>').addClass('form-horizontal').append(
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for':  'sent_fullname'}).addClass('control-label').text(gt('Sent folder')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'sent_fullname', model: model, id: 'sent_fullname' }).render().$el.attr({ 'disabled': 'disabled' }),
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        ),
-                        $('<label>').attr({ 'for':  'trash_fullname'}).addClass('control-label').text(gt('Trash folder')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'trash_fullname', model: model }).render().$el.attr({ 'disabled': 'disabled' }),
+                            ),
+                            $('<label>').attr({ 'for':  'trash_fullname'}).addClass('control-label').text(gt('Trash folder')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'trash_fullname', model: model, id: 'trash_fullname' }).render().$el.attr({ 'disabled': 'disabled' }),
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        ),
-                        $('<label>').attr({ 'for':  'drafts_fullname'}).addClass('control-label').text(gt('Drafts folder')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'drafts_fullname', model: model }).render().$el.attr({ 'disabled': 'disabled' }),
+                            ),
+                            $('<label>').attr({ 'for':  'drafts_fullname'}).addClass('control-label').text(gt('Drafts folder')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'drafts_fullname', model: model, id: 'drafts_fullname' }).render().$el.attr({ 'disabled': 'disabled' }),
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            )
-                        ),
-                        $('<label>').attr({ 'for':  'spam_fullname'}).addClass('control-label').text(gt('Spam folder')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'spam_fullname', model: model }).render().$el.attr({ 'disabled': 'disabled' }),
+                            ),
+                            $('<label>').attr({ 'for':  'spam_fullname'}).addClass('control-label').text(gt('Spam folder')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'spam_fullname', model: model, id: 'spam_fullname' }).render().$el.attr({ 'disabled': 'disabled' }),
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
                             )
                         )
@@ -465,46 +438,45 @@ define.async('io.ox/mail/accounts/view-form',
                 );
 
             if (!model.isHidden()) {
-                formBlocks.push(serverSettingsInTitle, serverSettingsInBlock, serverSettingsOutTitle, serverSettingsOutBlock, serverSettingsFolderTitle, serverSettingsFolderBlock);
+                formBlocks.push(serverSettingsIn, serverSettingsOut, serverSettingsFolder);
             }
 
             this.append(
-                $('<legend>').addClass('sectiontitle').text(gt('Account settings')),
-                $('<div>').addClass('form-horizontal').append(
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for': 'name'}).addClass('control-label').text(gt('Account name')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'name', model: model }).render().$el
+                $('<fieldset>').append(
+                    $('<legend>').addClass('sectiontitle').text(gt('Account settings')),
+                    $('<div>').addClass('form-horizontal').append(
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for': 'name'}).addClass('control-label').text(gt('Account name')),
+                            $('<div>').addClass('controls').append(
+                                new mini.InputView({ name: 'name', model: model, id: 'name' }).render().$el
+                            )
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for': 'personal'}).addClass('control-label').text(gt('Your name')),
+                            $('<div>').addClass('controls').append(
+                                $('<label>').addClass('text').append(
+                                    new mini.InputView({ name: 'personal', model: model, id: 'personal' }).render().$el
+                                )
+                            )
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<label>').attr({ 'for': 'primary_address'}).addClass('control-label').text(gt('Email address')),
+                            $('<div>').addClass('controls').append(
+                                $('<label>').addClass('text').append(
+                                    new mini.InputView({ name: 'primary_address', model: model, id: 'primary_address' }).render().$el
+                                )
+                            )
+                        ),
+                        $('<div>').addClass('control-group').append(
+                            $('<div>').addClass('controls').append(
+                                $('<label>').addClass('checkbox').text(gt('Use unified mail for this account')).append(
+                                    new mini.CheckboxView({ name: 'unified_inbox_enabled', model: model }).render().$el
+                                )
                             )
                         )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for': 'personal'}).addClass('control-label').text(gt('Your name')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'personal', model: model }).render().$el
-                            )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<label>').attr({ 'for': 'primary_address'}).addClass('control-label').text(gt('Email address')),
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('text').append(
-                                new mini.InputView({ name: 'primary_address', model: model }).render().$el
-                            )
-                        )
-                    ),
-                    $('<div>').addClass('control-group').append(
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('checkbox').text(gt('Use unified mail for this account')).append(
-                                new mini.CheckboxView({ name: 'unified_inbox_enabled', model: model }).render().$el
-                            )
-                        )
-                    ),
-                    formBlocks
-                )
-
+                    )
+                ),
+                formBlocks
             );
         }
     });

@@ -62,10 +62,8 @@ define('io.ox/files/settings/pane',
 
                 this.append(
                     $('<div>').addClass('control-group').append(
-                        $('<div>').addClass('controls').append(
-                            $('<label>').addClass('checkbox').text(gt('Show hidden files and folders')).append(
-                                new mini.CheckboxView({ name: 'showHidden', model: model}).render().$el
-                            )
+                        $('<label>').addClass('checkbox').text(gt('Show hidden files and folders')).append(
+                            new mini.CheckboxView({ name: 'showHidden', model: model}).render().$el
                         )
                     )
                 );

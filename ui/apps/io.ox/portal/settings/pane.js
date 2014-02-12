@@ -423,11 +423,9 @@ define('io.ox/portal/settings/pane',
 
             };
             this.append(
-                $('<legend>').text(gt('Mobile device settings:'))
-            );
-            this.append(
-                $('<div>').addClass('control-group').append(
-                    $('<div>').addClass('controls').append(
+                $('<fieldset>').append(
+                    $('<legend>').text(gt('Mobile device settings:')),
+                    $('<div>').addClass('control-group').append(
                         $('<label>').addClass('checkbox').text(gt('Only show widget summary on mobile devices')).append(
                             buildCheckbox('showHidden')
                         )
