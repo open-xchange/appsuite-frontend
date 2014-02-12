@@ -188,5 +188,14 @@ define('io.ox/mail/toolbar',
     //     actions.invoke('io.ox/mail/actions/move', null, baton);
     // });
 
+    // // go!
+    // commons.addFolderSupport(app, grid, 'mail', options.folder)
+    //     .fail(function (result) {
+    //         var errorMsg = (result && result.error) ? result.error + ' ' : '';
+    //         errorMsg += gt('Application may not work as expected until this problem is solved.');
+    //         notifications.yell('error', errorMsg);
+    //     })
+    //     .always(commons.showWindow(win, grid));
+
     return SimpleMailWriter;
 });

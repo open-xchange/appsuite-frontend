@@ -277,6 +277,26 @@ define('io.ox/core/desktop',
         },
 
         /**
+         * Add mediator extensions
+         * ext.point('<app-name>/mediator'').extend({ ... });
+         */
+        mediator: function (obj) {
+            // get extension point
+            var point = ext.point(this.getName() + '/mediator'), index = 0;
+            // loop over key/value object
+            _(obj).each(function (fn, id) {
+                point.extend({ id: id, index: (index += 100), setup: fn });
+            });
+        },
+
+        /*
+         * setup all mediator extensions
+         */
+        mediate: function () {
+            return ext.point(this.getName() + '/mediator').invoke('setup', null, this);
+        },
+
+        /**
          * Registers an event handler at a global browser object (e.g. the
          * window, the document, or the <body> element) that listens to the
          * specified event or events. The event handler will only be active
