@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -86,14 +86,20 @@ define('io.ox/mail/threadview',
             );
         },
 
-        updateNavigation: function () {
-            var inListMode = this.app.props.get('preview') === 'none';
-            this.$el.toggleClass('back-navigation-visible', inListMode);
-            if (inListMode) {
-                this.$el.find('.position').text(this.listView.getPosition() + 1);
-                this.$el.find('.previous-mail').toggleClass('disabled', !this.listView.hasPrevious());
-                this.$el.find('.next-mail').toggleClass('disabled', !this.listView.hasNext());
-            }
+        updatePosition: function (position) {
+            this.$el.find('.position').text(position);
+        },
+
+        togglePrevious: function (state) {
+            this.$el.find('.previous-mail').toggleClass('disabled', !state);
+        },
+
+        toggleNext: function (state) {
+            this.$el.find('.next-mail').toggleClass('disabled', !state);
+        },
+
+        toggleNavigation: function (state) {
+            this.$el.toggleClass('back-navigation-visible', state);
         },
 
         toggleMail: function (cid, state) {
@@ -122,18 +128,18 @@ define('io.ox/mail/threadview',
 
         reset: function (list) {
             // only filter conversations / single deleted messages are problematic otherwise
-            if (list.length > 1) list = _(list).filter(this.filter);
+            var copy = list.length > 1 ? _(list).filter(this.filter) : list;
+            // all filtered?
+            if (copy.length === 0) copy = list;
             // get models
-            list = _(list).map(function (obj) { return new backbone.Model(obj); });
+            copy = _(copy).map(function (obj) { return new backbone.Model(obj); });
             // prepare to compare current state with new collection
-            var a = _(list).pluck('cid').sort(),
+            var a = _(copy).pluck('cid').sort(),
                 b = _(this.collection.models).pluck('cid').sort();
-            // need to check navigation even if nothing changed
-            this.updateNavigation();
             // avoid unnecessary repaints
             if (_.isEqual(a, b)) return;
             // reset collection
-            this.collection.reset(list);
+            this.collection.reset(copy);
         },
 
         onReset: function () {
@@ -144,7 +150,6 @@ define('io.ox/mail/threadview',
             if (this.collection.length === 0) return;
 
             this.updateHeader();
-            this.updateNavigation();
 
             this.$el.find('.thread-view-list').show();
 
@@ -193,17 +198,17 @@ define('io.ox/mail/threadview',
 
         onBack: function (e) {
             e.preventDefault();
-            this.$el.closest('.preview-visible').removeClass('preview-visible');
+            this.trigger('back');
         },
 
         onPrevious: function (e) {
             e.preventDefault();
-            this.listView.previous();
+            this.trigger('previous');
         },
 
         onNext: function (e) {
             e.preventDefault();
-            this.listView.next();
+            this.trigger('next');
         },
 
         onClick: function (e) {
@@ -223,11 +228,9 @@ define('io.ox/mail/threadview',
             }
         },
 
-        initialize: function (options) {
+        initialize: function () {
 
             this.collection = new backbone.Collection();
-            this.app = options.app;
-            this.listView = options.listView;
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
@@ -236,10 +239,7 @@ define('io.ox/mail/threadview',
                 reset: this.onReset
             });
 
-            this.listenTo(this.app.props, 'change:preview', this.updateNavigation);
-
             this.$ul = $();
-            this.$detail = $();
         },
 
         // return alls items of this list

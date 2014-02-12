@@ -98,7 +98,7 @@ define('io.ox/core/tk/list-selection', [], function () {
                 var node = $(this), cid = node.attr('data-cid');
                 if (cid in hash) {
                     self.check(node);
-                    self.lastIndex = index;
+                    self.index(index);
                 }
             });
 
@@ -129,7 +129,7 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         // a collection reset implies a clear
         reset: function () {
-            this.lastIndex = -1;
+            this.index(-1);
             this.triggerChange();
         },
 
@@ -183,7 +183,7 @@ define('io.ox/core/tk/list-selection', [], function () {
                 // single select
                 node = items.eq(index).attr('tabindex', '1').focus();
                 if (this.isMultiple(e)) this.toggle(node); else this.check(node);
-                this.lastIndex = (items.length + index) % items.length; // support for negative index like -1
+                this.index((items.length + index) % items.length); // support for negative index like -1
             }
         },
 
@@ -199,8 +199,16 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.triggerChange();
         },
 
+        // get/set last index
+        index: function (index) {
+            if (arguments.length === 0) return this.lastIndex;
+            if (this.lastIndex === index) return;
+            this.lastIndex = index;
+            this.view.trigger('selection:change:index', index);
+        },
+
         move: function (step) {
-            var index = this.lastIndex + step, items;
+            var index = this.index() + step, items;
             if (index < 0) return;
             items = this.getItems();
             if (index >= items.length) return;

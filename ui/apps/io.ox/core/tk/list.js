@@ -75,8 +75,7 @@ define('io.ox/core/tk/list',
             var height = this.$el.height(),
                 scrollTop = this.$el.scrollTop(),
                 scrollHeight = this.$el.prop('scrollHeight'),
-                tail = scrollHeight - (scrollTop + height),
-                length = this.collection.length;
+                tail = scrollHeight - (scrollTop + height);
 
             // do anything?
             if (tail > height) return;
@@ -85,6 +84,14 @@ define('io.ox/core/tk/list',
             // really refresh?
             if (tail > 0) return;
             // load more
+            this.processPaginate();
+
+        }, 50),
+
+        // load more data (wraps paginate call)
+        processPaginate: function () {
+            if (this.isBusy || this.complete) return;
+            var length = this.collection.length;
             (this.busy().paginate() || $.when()).then(
                 // success
                 function checkIfComplete() {
@@ -95,8 +102,7 @@ define('io.ox/core/tk/list',
                 // fails
                 this.idle
             );
-
-        }, 50),
+        },
 
         // called when the view model changes (not collection models)
         onModelChange: function () {
@@ -314,7 +320,7 @@ define('io.ox/core/tk/list',
         },
 
         getPosition: function () {
-            return this.selection.lastIndex;
+            return this.selection.index();
         },
 
         hasNext: function () {
@@ -323,7 +329,7 @@ define('io.ox/core/tk/list',
         },
 
         next: function () {
-            if (this.hasNext()) this.selection.next(); else if (!this.complete) this.$el.scrollTop(999999);
+            if (this.hasNext()) this.selection.next(); else this.processPaginate();
         },
 
         hasPrevious: function () {

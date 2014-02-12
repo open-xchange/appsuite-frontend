@@ -177,6 +177,7 @@ define('io.ox/mail/detail/view',
             this.model = pool.getDetailModel(options.data);
             this.cid = this.model.cid;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
+            this.$el.on('dispose', this.dispose.bind(this));
         },
 
         render: function () {
@@ -202,6 +203,11 @@ define('io.ox/mail/detail/view',
             ext.point('io.ox/mail/detail-view').invoke('draw', this.$el, baton);
 
             return this;
+        },
+
+        dispose: function () {
+            this.stopListening();
+            this.model = null;
         }
     });
 

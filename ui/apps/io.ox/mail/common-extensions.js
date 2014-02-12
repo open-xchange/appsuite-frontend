@@ -29,7 +29,7 @@ define('io.ox/mail/common-extensions',
 
     function partiallyUnseen(data) {
         // look for a thread collection
-        var cid = _.cid(data), thread = Pool.getThread(cid);
+        var cid = _.cid(data), thread = api.threads.get(cid);
         // no thread? then just check current object
         if (thread.length <= 1) return util.isUnseen(data);
         // otherwise check collection
@@ -128,14 +128,14 @@ define('io.ox/mail/common-extensions',
 
         answered: function (baton) {
             var data = baton.data,
-                thread = api.tracker.getThread(data) || data,
+                thread = api.threads.get(data) || data,
                 isAnswered = util.isAnswered(thread, data);
             if (isAnswered) this.append('<i class="icon-answered icon-reply" aria-hidden="true">');
         },
 
         forwarded: function (baton) {
             var data = baton.data,
-                thread = api.tracker.getThread(data) || data,
+                thread = api.threads.get(data) || data,
                 isForwarded = util.isForwarded(thread, data);
             if (isForwarded) this.append('<i class="icon-forwarded icon-mail-forward" aria-hidden="true">');
         },

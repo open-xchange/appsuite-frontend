@@ -21,9 +21,10 @@ define('io.ox/mail/api',
      'io.ox/core/notifications',
      'io.ox/mail/util',
      'io.ox/core/api/collection-pool',
+     'io.ox/core/api/collection-loader',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, Pool, settings, gt) {
+    ], function (http, cache, coreConfig, apiFactory, folderAPI, accountAPI, notifications, util, Pool, CollectionLoader, settings, gt) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -508,63 +509,6 @@ define('io.ox/mail/api',
                 _(response.data).each(tracker.addThread);
                 cacheControl[cid] = true;
             });
-    };
-
-    /**
-     * get mails in thread
-     * @param  {object} obj (mail object)
-     * @return {array} of mail objects
-     */
-    api.getThread = function (obj) {
-        var cid, thread, len;
-
-        if (typeof obj === 'string') {
-            cid = obj;
-            obj = _.cid(obj);
-        } else {
-            cid = _.cid(obj);
-            obj = api.reduce(obj);
-        }
-
-        if ((thread = tracker.getThread(cid)).length) {
-            len = thread.length;
-            return _(thread).map(function (obj, i) {
-                return {
-                    folder_id: obj.folder_id,
-                    id: obj.id,
-                    threadKey: cid,
-                    threadPosition: len - i,
-                    threadSize: len
-                };
-            });
-        } else {
-            return [{
-                folder_id: obj.folder_id || obj.folder,
-                id: obj.id,
-                threadKey: cid,
-                threadPosition: 1,
-                threadSize: 1
-            }];
-        }
-    };
-
-    /**
-     * get threads
-     * @param  {array} ids (mail objects)
-     * @return {deferred} returns array of thread objects
-     */
-    api.getThreads = function (ids) {
-        return this.getList(ids).pipe(function (data) {
-            // clone not to mess up with searches
-            data = _.deepClone(data);
-            // inject thread size
-            var i = 0, obj;
-            for (; (obj = data[i]); i++) {
-                obj.threadSize = tracker.getThreadSize(obj);
-                obj.unreadCount = tracker.getUnreadCount(obj);
-            }
-            return data;
-        });
     };
 
     var update = function (list, data, apiAction) {
@@ -1712,6 +1656,86 @@ define('io.ox/mail/api',
                 document.title = document.temptitle;
             }
         }
+    };
+
+    // publish pool
+    api.pool = pool;
+
+    // simple thread support
+    api.threads = {
+
+        // keys are cid, values are array of flat cids
+        hash: {},
+
+        get: function (cid) {
+            if (!_.isString(cid)) return [];
+            var thread = this.hash[cid] || [], collection = pool.get('detail');
+            return _(thread).chain()
+                .map(collection.get, collection)
+                .compact()
+                .invoke('toJSON')
+                .value();
+        },
+
+        add: function (obj) {
+            var cid = _.cid(obj);
+            this.hash[cid] = obj.thread || [cid];
+        }
+    };
+
+    // collection loader
+
+    api.collectionLoader = new CollectionLoader({
+        module: 'mail',
+        getQueryParams: function (params) {
+            // use threads?
+            if (params.sort === 'thread') {
+                return {
+                    action: 'threadedAll',
+                    folder: params.folder,
+                    columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                    sort: '610',
+                    sortKey: 'threaded-' + (params.sort || '610'),
+                    order: params.order || 'desc',
+                    includeSent: !accountAPI.is('sent|drafts', params.folder),
+                    cache: false, // never use server cache
+                    max: (params.offset || 0) + 300,
+                    timezone: 'utc'
+                };
+            } else {
+                return {
+                    action: 'all',
+                    folder: params.folder,
+                    columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                    sort: params.sort || '610',
+                    order: params.order || 'desc',
+                    timezone: 'utc'
+                };
+            }
+        }
+    });
+
+    api.collectionLoader.each = function (obj) {
+        // store thread size
+        obj.threadSize = obj.thread && obj.thread.length;
+        // we use the last item to generate the cid. More robust because unlikely to change.
+        var last = _(obj.thread).last(),
+            thread_cid = _.cid(last);
+        // add back-reference
+        _(obj.thread).each(function (item) {
+            item.thread_cid = thread_cid;
+        });
+        // add to pool
+        api.pool.add('detail', obj.thread);
+        // replace by plain cids
+        obj.thread = _(obj.thread).map(_.cid);
+        // use last item's id and folder_id
+        if (obj.threadSize > 1) {
+            obj.id = last.id;
+            obj.folder_id = last.folder_id;
+        }
+        // add to thread hash
+        api.threads.add(obj);
     };
 
     return api;
