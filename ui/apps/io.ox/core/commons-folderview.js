@@ -648,8 +648,15 @@ define('io.ox/core/commons-folderview',
             }
             appSettings.set('folderview/blacklist', blacklist);
             appSettings.save();
-            //repaint tree
-            baton.tree.repaint();
+
+            //repaint tree but keep scrollposition
+            var node = baton.tree.container.parents('.foldertree-container'),
+                pos = node.scrollTop();
+            
+            baton.tree.repaint().done(function () {
+                node.scrollTop(pos);//apply old scrollposition
+            });
+
             //dropdown menu needs a redraw too
             var ul = baton.$.sidepanel.find('.context-dropdown ul');
             ext.point(POINT + '/sidepanel/context-menu').invoke('draw', ul.empty(), baton);
@@ -665,7 +672,7 @@ define('io.ox/core/commons-folderview',
 
                     var appSettings = baton.app.settings,
                     hide = !appSettings.get('folderview/blacklist', {})[baton.data.id];//apps have their own blacklists for hidden folders
-                    if (!api.is('private', baton.data) || !hide) {//always show unhide function (we don't want to loose folders here) but hide only when it's not a private folder
+                    if (!baton.data.standard_folder || !hide) {//always show unhide function (we don't want to loose folders here) but hide only when it's not a standard folder
                         this.append(
                             $('<li class="divider" role="presentation" aria-hidden="true">'),
                             $('<li>').append(
