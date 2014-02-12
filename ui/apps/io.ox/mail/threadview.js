@@ -49,7 +49,7 @@ define('io.ox/mail/threadview',
         index: 200,
         draw: function () {
             this.$el.append(
-                $('<div class="thread-view-list abs">').append(
+                $('<div class="thread-view-list abs">').hide().append(
                     $('<h1>'),
                     this.$ul = $('<ul class="thread-view list-view mail f6-target" role="listbox">')
                 )
@@ -72,6 +72,7 @@ define('io.ox/mail/threadview',
         empty: function () {
             this.$ul.empty();
             this.$el.scrollTop(0);
+            this.$el.find('.thread-view-list').hide();
         },
 
         updateHeader: function () {
@@ -144,6 +145,8 @@ define('io.ox/mail/threadview',
 
             this.updateHeader();
             this.updateNavigation();
+
+            this.$el.find('.thread-view-list').show();
 
             // draw thread list
             this.$ul.append(
