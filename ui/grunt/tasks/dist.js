@@ -95,6 +95,43 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.config.extend('assemble', {
+        dist: {
+            options: {
+                ext: '',
+                help_languages: (function () {
+                    return grunt.file.expand({cwd: 'help/l10n/'}, '*').map(function (Lang) {
+                        return {
+                            Lang: Lang,
+                            lang: Lang.toLowerCase().replace(/_/g, '-')
+                        }
+                    });
+                })(),
+                help_drive_languages: (function () {
+                    return grunt.file.expand({cwd: 'help-drive/l10n/'}, '*').map(function (Lang) {
+                        return {
+                            Lang: Lang,
+                            lang: Lang.toLowerCase().replace(/_/g, '-')
+                        }
+                    });
+                })(),
+                languages: (function () {
+                    return grunt.file.expand({cwd: 'i18n/'}, '*.po').map(function (file) {
+                        var Lang = file.slice(0, -3);
+                        return {
+                            Lang: Lang,
+                            lang: Lang.toLowerCase().replace(/_/g, '-')
+                        }
+                    });
+                })()
+            },
+            files: [{
+                src: ['debian/**/*.hbs', '*.hbs'],
+                dest: 'dist/package/'
+            }]
+        }
+    });
+
     grunt.config.extend('compress', {
         dist: {
             options: {

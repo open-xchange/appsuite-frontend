@@ -29,40 +29,29 @@ Package: open-xchange-appsuite-help-common
 Architecture: all
 Depends: ${misc:Depends}
 Description: Language-independent files of online help for OX App Suite
-
-## help ##
-#Package: open-xchange-appsuite-help-## lang ##
-#Architecture: all
-#Depends: ${misc:Depends}, open-xchange-appsuite-help-common
-#Provides: open-xchange-appsuite-help
-#Description: Online help for OX App Suite (## Lang ##)
-## end ##
-
+{{#each help_languages}}
+Package: open-xchange-appsuite-help-{{ lang }}
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite ({{ Lang }})
+{{/each}}
 Package: open-xchange-appsuite-help-drive-common
 Architecture: all
 Depends: ${misc:Depends}
 Description: Language-independent files of online help for OX Drive
-
-## help-drive ##
-#Package: open-xchange-appsuite-help-drive-## lang ##
+{{#each help_drive_languages }}
+#Package: open-xchange-appsuite-help-drive-{{ lang }}
 #Architecture: all
 #Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
 #Provides: open-xchange-appsuite-help-drive
-#Description: Online help for OX Drive (## Lang ##)
-## end ##
-
-## l10n ##
-#Package: open-xchange-appsuite-l10n-## lang ##
-#Architecture: all
-#Depends: ${misc:Depends}, open-xchange-l10n-## lang ##
-#Provides: open-xchange-appsuite-l10n
-#Breaks: open-xchange-l10n-## lang ## (<< 7.0.1)
-#Description: Translation of the OX App Suite HTML5 client (## Lang ##)
-## end ##
-
-Package: open-xchange-guidedtours
+#Description: Online help for OX Drive ({{ Lang }})
+{{/each}}
+{{#each languages }}
+Package: open-xchange-appsuite-l10n-{{ lang }}
 Architecture: all
-Depends: ${misc:Depends}, open-xchange-appsuite-manifest
-Description: The default version of the guided tours for the typical applications.
-Replaces: open-xchange-manifest (<< 7.4.2)
-Breaks: open-xchange-manifest (<< 7.4.2)
+Depends: ${misc:Depends}, open-xchange-l10n-{{ lang }}
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-{{ lang }} (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client ({{ Lang }})
+{{/each}}
