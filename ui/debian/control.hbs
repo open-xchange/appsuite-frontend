@@ -41,11 +41,11 @@ Architecture: all
 Depends: ${misc:Depends}
 Description: Language-independent files of online help for OX Drive
 {{#each help_drive_languages }}
-#Package: open-xchange-appsuite-help-drive-{{ lang }}
-#Architecture: all
-#Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
-#Provides: open-xchange-appsuite-help-drive
-#Description: Online help for OX Drive ({{ Lang }})
+Package: open-xchange-appsuite-help-drive-{{ lang }}
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive ({{ Lang }})
 {{/each}}
 {{#each languages }}
 Package: open-xchange-appsuite-l10n-{{ lang }}
