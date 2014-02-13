@@ -39,7 +39,10 @@ define('io.ox/core/folder/imap-subscription',
                     rootFolderId: '1',
                     checkbox: true,
                     all: true,
-                    storage: storage
+                    storage: storage,
+                    filter: function (folder) {
+                        return api.can('imap-subscribe', folder);
+                    }
                 });
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
