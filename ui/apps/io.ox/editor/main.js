@@ -162,7 +162,7 @@ define('io.ox/editor/main',
 
         var app, win, model = new Backbone.Model(), view, previous = {};
 
-        app = ox.ui.createApp({ name: 'io.ox/editor', title: 'Editor' });
+        app = ox.ui.createApp({ name: 'io.ox/editor', title: 'Editor', closable: true });
 
         // launcher
         app.setLauncher(function (options) {
