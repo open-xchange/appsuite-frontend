@@ -300,7 +300,9 @@ define('io.ox/mail/settings/pane',
         index: 500,
         id: 'imap-subscription',
         draw: function () {
-            folderAPI.get({folder: api.getFoldersForType('inbox')})
+            var container = this;
+
+            folderAPI.get({folder: api.getFoldersByType('inbox')})
             .then(function (folders) {
                 return _(folders).values()
                 .map(function (folder) {
@@ -317,7 +319,7 @@ define('io.ox/mail/settings/pane',
 
                 if (_.device('smartphone')) return;
 
-                this.append(
+                container.append(
                     $('<div class="settings sectiondelimiter expertmode">'),
                     $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
                     $('<div class="sectioncontent">').append(
