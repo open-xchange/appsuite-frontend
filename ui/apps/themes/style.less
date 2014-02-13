@@ -1276,6 +1276,24 @@ a.button {
 /* List View */
 .list-view-control {
 
+    .top-toolbar() {
+        top: 0;
+        border-bottom: 1px solid mix(@textColor, @background, 200%/15);
+        display: none;
+    }
+
+    .bottom-toolbar() {
+        bottom: 0;
+        border-top: 1px solid mix(@textColor, @background, 200%/15);
+        display: none;
+        .dropdown-menu {
+            top: auto;
+            bottom: 100%;
+            right: 0;
+            left: auto;
+        }
+    }
+
     .toolbar {
 
         position: absolute;
@@ -1293,21 +1311,8 @@ a.button {
             text-decoration: none;
         }
 
-        &.top {
-            top: 0;
-            border-bottom: 1px solid mix(@textColor, @background, 200%/15);
-        }
-
-        &.bottom {
-            bottom: 0;
-            border-top: 1px solid mix(@textColor, @background, 200%/15);
-            .dropdown-menu {
-                top: auto;
-                bottom: 100%;
-                right: 0;
-                left: auto;
-            }
-        }
+        &.top { .top-toolbar(); }
+        &.bottom { .bottom-toolbar(); }
 
         .grid-info {
             text-align: center;
@@ -1326,22 +1331,41 @@ a.button {
             .dropdown-menu {
                 right: -7px;
                 left: auto;
-                top: 90%;
+                bottom: 100%;
             }
         }
     }
 
-    .toolbar.top { display: none; }
-    .toolbar.bottom { display: none; }
+    &.upside-down .toolbar {
 
-    &.toolbar-top-visible {
-        .toolbar.top { display: block; }
-        .list-view { top: 40px; }
+        &.top {
+            .bottom-toolbar();
+            top: auto;
+            border-bottom: 0;
+        }
+
+        &.bottom {
+            .top-toolbar();
+            bottom: auto;
+            border-top: 0;
+            .dropdown-menu {
+                top: 90%;
+                bottom: auto;
+            }
+        }
     }
 
-    &.toolbar-bottom-visible {
-        .toolbar.bottom { display: block; }
-        .list-view { bottom: 40px; }
+    &.toolbar-top-visible .toolbar.top,
+    &.toolbar-bottom-visible .toolbar.bottom { display: block; }
+
+    &:not(.upside-down) {
+        &.toolbar-top-visible .list-view { top: 40px; }
+        &.toolbar-bottom-visible .list-view { bottom: 40px; }
+    }
+
+    &.upside-down {
+        &.toolbar-top-visible .list-view { bottom: 40px; }
+        &.toolbar-bottom-visible .list-view { top: 40px; }
     }
 
     .list-view {
@@ -1378,7 +1402,7 @@ a.button {
         width: @list-view-padding + 30;
 
         .icon-checkmark {
-            color: fade(@linkColor, 50%);
+            color: #ccc;
             position: absolute;
             left: 18px;
             top: 12px;

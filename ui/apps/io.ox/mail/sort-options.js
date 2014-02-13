@@ -184,7 +184,7 @@ define('io.ox/mail/sort-options',
         baton.app.props.set('preview', option);
     }
 
-    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
         id: 'dropdown',
         index: 1000,
         draw: function (baton) {
@@ -219,14 +219,14 @@ define('io.ox/mail/sort-options',
         }
     }
 
-    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
         id: 'select-all',
         index: 100,
         draw: function (baton) {
             this.append(
                 $('<a href="#" class="select-all">').append(
                     $('<i class="icon-check-empty">'),
-                    $.txt('Tout sélectionner')
+                    $.txt(gt('Select all'))
                 )
                 .on('click', { baton: baton }, toggleSelection)
             );

@@ -266,10 +266,8 @@ define('io.ox/core/settings',
                     force: false
                 }, options);
 
-                if (detached) {
-                    console.warn('Not saving detached settings.', path);
-                }
-                if (!custom && _.isEqual(saved, tree)) return $.when();
+                if (detached) console.warn('Not saving detached settings.', path);
+                if (detached || (!custom && _.isEqual(saved, tree))) return $.when();
 
                 var data = { tree: custom || tree, meta: meta };
                 settingsCache.add(path, data);

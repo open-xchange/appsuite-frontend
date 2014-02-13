@@ -212,6 +212,9 @@
                            'url($1' + path);
     }
 
+    // IE9 fix. Cannot handle more than 30 <style> tags at once.
+    // see e.g. http://dean.edwards.name/weblog/2010/02/bug85/
+
     var concatCSS = {}, nodes = {};
 
     function insertCommon(name, css, selector, node) {
