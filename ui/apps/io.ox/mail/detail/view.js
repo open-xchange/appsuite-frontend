@@ -32,8 +32,14 @@ define('io.ox/mail/detail/view',
     });
 
     ext.point('io.ox/mail/detail-view').extend({
-        id: 'header',
+        id: 'unread-class',
         index: 200,
+        draw: extensions.unreadClass
+    });
+
+    ext.point('io.ox/mail/detail-view').extend({
+        id: 'header',
+        index: 300,
         draw: function (baton) {
             var header = $('<header class="detail-view-header">');
             ext.point('io.ox/mail/detail-view/header').invoke('draw', header, baton);

@@ -122,24 +122,30 @@ define('io.ox/mail/threadview',
             }
         },
 
-        filter: function (data) {
-            return !util.isDeleted(data);
+        show: function (cid) {
+            // no change?
+            if (this.model && this.model.cid === cid) return;
+            // stop listening
+            if (this.model) this.stopListening(this.model);
+            // get model
+            this.model = api.pool.get('detail').get(cid);
+            if (!this.model) return;
+            // listen for changes
+            this.listenTo(this.model, 'change:thread', this.onChange);
+            // reset collection
+            this.collection.reset([], { silent: true });
+            this.reset(cid);
         },
 
-        reset: function (list) {
-            // only filter conversations / single deleted messages are problematic otherwise
-            var copy = list.length > 1 ? _(list).filter(this.filter) : list;
-            // all filtered?
-            if (copy.length === 0) copy = list;
-            // get models
-            copy = _(copy).map(function (obj) { return new backbone.Model(obj); });
-            // prepare to compare current state with new collection
-            var a = _(copy).pluck('cid').sort(),
-                b = _(this.collection.models).pluck('cid').sort();
-            // avoid unnecessary repaints
-            if (_.isEqual(a, b)) return;
+        reset: function () {
+            // has model?
+            if (!this.model) return;
+            // get thread items
+            var thread = api.threads.get(this.model.cid);
+            if (!thread.length) return;
             // reset collection
-            this.collection.reset(copy);
+            var type = this.collection.length === 0 ? 'reset' : 'set';
+            this.collection[type || 'reset'](thread);
         },
 
         onReset: function () {
@@ -155,7 +161,7 @@ define('io.ox/mail/threadview',
 
             // draw thread list
             this.$ul.append(
-                this.collection.chain().filter(this.filter).map(this.renderListItem, this).value()
+                this.collection.chain().map(this.renderListItem, this).value()
             );
 
             this.autoSelectMail();
@@ -189,11 +195,8 @@ define('io.ox/mail/threadview',
             li.remove();
         },
 
-        // called whenever a model inside the collection changes
         onChange: function (/* model */) {
-            // var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
-            //     data = model.toJSON();
-            // // DRAW!
+            this.reset();
         },
 
         onBack: function (e) {
@@ -230,7 +233,9 @@ define('io.ox/mail/threadview',
 
         initialize: function () {
 
+            this.model = null;
             this.collection = new backbone.Collection();
+
 
             this.listenTo(this.collection, {
                 add: this.onAdd,

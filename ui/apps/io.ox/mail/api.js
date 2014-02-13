@@ -422,7 +422,7 @@ define('io.ox/mail/api',
     var cacheControl = {},
         getAll = api.getAll,
         getList = api.getList,
-        remove = api.remove,
+        //remove = api.remove,
         search = api.search;
 
     api.getAll = function (options, useCache) {
@@ -469,14 +469,26 @@ define('io.ox/mail/api',
      * @param  {object} options [see api factory]
      * @return {deferred} resolves as array
      */
-    api.remove = function (ids, options) {
-        return remove(ids, options).then(
-            function success(list) {
-                //update unread counter and folder item counter
-                folderAPI.reload(ids);
-                return list;
-            }
-        );
+    api.remove = function (ids) {
+
+        var collection = pool.get('detail');
+
+        api.trigger('beforedelete', ids);
+
+        _(ids).each(function (item) {
+            var cid = _.cid(item), model = collection.get(cid);
+            if (model) collection.remove(model);
+        });
+
+        return $.when();
+
+        // return remove(ids, options).then(
+        //     function success(list) {
+        //         //update unread counter and folder item counter
+        //         folderAPI.reload(ids);
+        //         return list;
+        //     }
+        // );
     };
 
     /**
@@ -1716,8 +1728,15 @@ define('io.ox/mail/api',
     });
 
     api.collectionLoader.each = function (obj) {
+        // remove deleted mails ()
+        var list = obj.thread;
+        obj.thread = _(list).filter(function (item) {
+            return !util.isDeleted(item);
+        });
+        // all deleted?
+        if (obj.thread.length === 0) obj.thread = list.slice(0, 1);
         // store thread size
-        obj.threadSize = obj.thread && obj.thread.length;
+        obj.threadSize = obj.thread.length;
         // we use the last item to generate the cid. More robust because unlikely to change.
         var last = _(obj.thread).last(),
             thread_cid = _.cid(last);
@@ -1726,7 +1745,8 @@ define('io.ox/mail/api',
             item.thread_cid = thread_cid;
         });
         // add to pool
-        api.pool.add('detail', obj.thread);
+        api.pool.add('detail', _.extend({}, obj));
+        api.pool.add('detail', obj.thread.slice(1));
         // replace by plain cids
         obj.thread = _(obj.thread).map(_.cid);
         // use last item's id and folder_id

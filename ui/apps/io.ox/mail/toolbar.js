@@ -12,66 +12,124 @@
  */
 
 define('io.ox/mail/toolbar',
-    ['io.ox/mail/actions',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/actions',
+     'io.ox/mail/actions',
      'less!io.ox/mail/style.less',
      'io.ox/mail/folderview-extensions'
-    ], function () {
+    ], function (ext, actions) {
 
     'use strict';
 
-    var SimpleMailWriter = Backbone.View.extend({
+    // classic toolbar
+    var toolbar = $('<ul class="classic-toolbar">').append(
+        $('<li><a href="#" role="button" data-action="compose"><b>New</b></a></li>'),
+        $('<li><a href="#" role="button" data-action="delete">Delete</a></li>'), // delete
+        $('<li><a href="#" role="button" data-action="reply-all">Reply <i class="icon-caret-down"/></a></li>'), // reply
+        $('<li><a href="#" role="button" data-action="forward">Forward</a></li>'), // forward
+        $('<li><a href="#" role="button" data-action="spam">Spam</a></li>'), // spam
+        $('<li><a href="#" role="button" data-action="move">Move <i class="icon-caret-down"/></a></li>'), // move
+        $('<li><a href="#" role="button">More <i class="icon-caret-down"/></a></li>') // other
+    );
 
-        className: 'simple-mail-writer abs',
+    function processAction(e) {
+        e.preventDefault();
+        var app = e.data.app,
+            action = $(this).data('action'),
+            selection = _(app.listView.selection.get()).map(_.cid),
+            baton = ext.Baton({ data: selection, app: app });
+        switch (action) {
+        case 'delete':
+            actions.invoke('io.ox/mail/actions/delete', this, baton, e);
+            break;
+        case 'compose':
+            actions.invoke('io.ox/mail/actions/compose', this, baton, e);
+            break;
+        case 'reply-all':
+            if (selection.length !== 1) break;
+            actions.invoke('io.ox/mail/actions/reply-all', this, baton, e);
+            break;
+        case 'forward':
+            if (selection.length === 0) break;
+            actions.invoke('io.ox/mail/actions/forward', this, baton, e);
+            break;
+        case 'move':
+            if (selection.length === 0) break;
+            actions.invoke('io.ox/mail/actions/move', this, baton, e);
+            break;
+        }
+    }
 
-        events: {
-            'click [data-action="send"]': 'onCancel',
-            'click [data-action="draft"]': 'onCancel',
-            'click [data-action="cancel"]': 'onCancel'
-        },
+    toolbar.children().slice(1).hide();
 
-        onCancel: function (e) {
-            e.preventDefault();
-            this.hide();
-            this.reset();
-        },
+    ext.point('io.ox/mail/mediator').extend({
+        id: 'toolbar',
+        index: 'last',
+        setup: function (app) {
 
-        show: function () {
-            this.$el.show();
-            this.$el.find('.field-to').focus();
-        },
+            app.listView.on('selection:change', function (list) {
+                toolbar.children().slice(1).toggle(list.length > 0);
+            });
 
-        hide: function () {
-            this.$el.hide();
-        },
+            toolbar.on('click', 'a', { app: app }, processAction);
 
-        reset: function () {
-            this.$el.find('.editor textarea, input').val('');
-        },
-
-        render: function () {
-            this.$el.hide().append(
-                $('<div class="inline-toolbar">').append(
-                    $('<li><a href="#" role="button" data-action="send"><b>envoyer</b></a></li>'),
-                    $('<li><a href="#" role="button" data-action="draft">enregistrer le brouillon</a></li>'),
-                    $('<li><a href="#" role="button" data-action="cancel">annuler</a></li>')
-                ),
-                $('<div class="writer">').append(
-                    $('<div class="header">').append(
-                        $('<table border="0">').append(
-                            $('<tr><td class="row-label">de :</td><td><b>' + ox.user + '</b></td></tr>'),
-                            $('<tr><td class="row-label">à :</td><td><input type="text" class="field-to input-xxlarge"/></td></tr>'),
-                            $('<tr><td class="row-label">objet :</td><td><input type="text" class="field-subject input-xxlarge" placeholder="Saisissez l\'objet de votre message"/></td></tr>'),
-                            $('<tr><td class="row-label"></td><td><i class="icon-paper-clip"/> joindre un fichier</td></tr>')
-                        )
-                    ),
-                    $('<div class="editor">').append(
-                        $('<textarea>').attr('placeholder', 'Votre message')
-                    )
-                )
-            );
-            return this;
+            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(toolbar);
         }
     });
+
+    // var SimpleMailWriter = Backbone.View.extend({
+
+    //     className: 'simple-mail-writer abs',
+
+    //     events: {
+    //         'click [data-action="send"]': 'onCancel',
+    //         'click [data-action="draft"]': 'onCancel',
+    //         'click [data-action="cancel"]': 'onCancel'
+    //     },
+
+    //     onCancel: function (e) {
+    //         e.preventDefault();
+    //         this.hide();
+    //         this.reset();
+    //     },
+
+    //     show: function () {
+    //         this.$el.show();
+    //         this.$el.find('.field-to').focus();
+    //     },
+
+    //     hide: function () {
+    //         this.$el.hide();
+    //     },
+
+    //     reset: function () {
+    //         this.$el.find('.editor textarea, input').val('');
+    //     },
+
+    //     render: function () {
+    //         this.$el.hide().append(
+    //             $('<div class="inline-toolbar">').append(
+    //                 $('<li><a href="#" role="button" data-action="send"><b>envoyer</b></a></li>'),
+    //                 $('<li><a href="#" role="button" data-action="draft">enregistrer le brouillon</a></li>'),
+    //                 $('<li><a href="#" role="button" data-action="cancel">annuler</a></li>')
+    //             ),
+    //             $('<div class="writer">').append(
+    //                 $('<div class="header">').append(
+    //                     $('<table border="0">').append(
+    //                         $('<tr><td class="row-label">de :</td><td><b>' + ox.user + '</b></td></tr>'),
+    //                         $('<tr><td class="row-label">à :</td><td><input type="text" class="field-to input-xxlarge"/></td></tr>'),
+    //                         $('<tr><td class="row-label">objet :</td><td><input type="text" class="field-subject input-xxlarge" placeholder="Saisissez l\'objet de votre message"/></td></tr>'),
+    //                         $('<tr><td class="row-label"></td><td><i class="icon-paper-clip"/> joindre un fichier</td></tr>')
+    //                     )
+    //                 ),
+    //                 $('<div class="editor">').append(
+    //                     $('<textarea>').attr('placeholder', 'Votre message')
+    //                 )
+    //             )
+    //         );
+    //         return this;
+    //     }
+    // });
 
     //var writer = new SimpleMailWriter();
     //win.nodes.body.append(writer.render().$el);
@@ -80,28 +138,6 @@ define('io.ox/mail/toolbar',
     // $(document).on('click', '.folder.selectable', function (e) {
     //     threadView.onBack(e);
     //     writer.hide();
-    // });
-
-    // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar">').append(
-        // right
-        $('<li class="pull-right"><a href="#" role="button" data-action="setting"><i class="icon-cog"/></a></li>'),
-        $('<li class="pull-right"><a href="#" role="button" data-action="help"><i class="icon-question-sign"/></a></li>'),
-        $('<li class="pull-right"><a href="#" role="button" data-action="refresh"><i class="icon-refresh"/></a></li>'),
-        // left
-        $('<li><a href="#" role="button" data-action="compose"><b>nouveau</b></a></li>'),
-        $('<li><a href="#" role="button" data-action="delete">supprimer</a></li>'), // delete
-        $('<li><a href="#" role="button" data-action="reply-all">répondre <i class="icon-caret-down"/></a></li>'), // reply
-        $('<li><a href="#" role="button" data-action="forward">transférer</a></li>'), // forward
-        $('<li><a href="#" role="button" data-action="spam">spam</a></li>'), // spam
-        $('<li><a href="#" role="button" data-action="move">déplacer <i class="icon-caret-down"/></a></li>'), // move
-        $('<li><a href="#" role="button">autres fonctions <i class="icon-caret-down"/></a></li>') // other
-    );
-
-    toolbar.children().slice(4).hide();
-
-    // listView.on('selection:change', function (list) {
-    //     toolbar.children().slice(4).toggle(list.length > 0);
     // });
 
     // toolbar.on('click', 'a', function (e) {
@@ -154,8 +190,6 @@ define('io.ox/mail/toolbar',
     //     }
     // });
 
-    // win.nodes.body.addClass('classic-toolbar-visible').append(toolbar);
-
     // // Uploads
     // app.queues = {};
 
@@ -197,5 +231,5 @@ define('io.ox/mail/toolbar',
     //     })
     //     .always(commons.showWindow(win, grid));
 
-    return SimpleMailWriter;
+    // return SimpleMailWriter;
 });

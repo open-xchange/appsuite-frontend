@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -19,7 +19,6 @@ define('io.ox/core/tk/list-selection', [], function () {
 
     function Selection(view) {
 
-        this.lastIndex = -1;
         this.view = view;
 
         var self = this;
@@ -63,9 +62,9 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.getItems().filter('[data-cid="' + cid + '"]');
         },
 
-        getCurrentNode: function () {
-            if (this.lastIndex === -1) return;
-            return this.getItems().eq(this.lastIndex);
+        getPosition: function (items) {
+            items = items || this.getItems();
+            return items.index(items.filter('.precursor'));
         },
 
         check: function (nodes) {
@@ -84,7 +83,7 @@ define('io.ox/core/tk/list-selection', [], function () {
 
             if (!_.isArray(list)) return;
 
-            var items = this.getItems(), hash = {}, self = this;
+            var items = this.getItems(), hash = {}, self = this, lastIndex = -1;
 
             this.clear();
 
@@ -98,12 +97,12 @@ define('io.ox/core/tk/list-selection', [], function () {
                 var node = $(this), cid = node.attr('data-cid');
                 if (cid in hash) {
                     self.check(node);
-                    self.index(index);
+                    lastIndex = index;
                 }
             });
 
-            if (this.lastIndex > -1) {
-                items.eq(this.lastIndex).attr('tabindex', '1');
+            if (lastIndex > -1) {
+                items.eq(lastIndex).attr('tabindex', '1');
             }
         },
 
@@ -129,7 +128,6 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         // a collection reset implies a clear
         reset: function () {
-            this.index(-1);
             this.triggerChange();
         },
 
@@ -167,24 +165,34 @@ define('io.ox/core/tk/list-selection', [], function () {
             return !!nodes.length;
         },
 
-        select: function (index, items, e) {
+        pick: function (index, items, e) {
 
-            var start, end, node;
+            var start, end, node, cursor;
 
             items = items || this.getItems();
+            cursor = this.getPosition(items);
 
             if (this.isRange(e)) {
                 // range select
-                var start = Math.min(index, this.lastIndex),
-                    end = Math.max(index, this.lastIndex);
+                var start = Math.min(index, cursor),
+                    end = Math.max(index, cursor);
                 this.check(items.slice(start, end + 1));
                 items.eq(index).attr('tabindex', '1').focus();
             } else {
                 // single select
-                node = items.eq(index).attr('tabindex', '1').focus();
+                items.removeClass('precursor');
+                node = items.eq(index).addClass('precursor').attr('tabindex', '1').focus();
                 if (this.isMultiple(e)) this.toggle(node); else this.check(node);
-                this.index((items.length + index) % items.length); // support for negative index like -1
             }
+        },
+
+        // just select one item (no range; no multiple)
+        select: function (index, items) {
+            items = items || this.getItems();
+            this.resetCheckmark(items);
+            this.resetTabIndex(items);
+            this.pick(index, items);
+            this.triggerChange();
         },
 
         selectAll: function () {
@@ -199,23 +207,11 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.triggerChange();
         },
 
-        // get/set last index
-        index: function (index) {
-            if (arguments.length === 0) return this.lastIndex;
-            if (this.lastIndex === index) return;
-            this.lastIndex = index;
-            this.view.trigger('selection:change:index', index);
-        },
-
         move: function (step) {
-            var index = this.index() + step, items;
-            if (index < 0) return;
-            items = this.getItems();
-            if (index >= items.length) return;
-            this.resetCheckmark(items);
-            this.resetTabIndex(items);
+            var items = this.getItems(),
+                index = this.getPosition() + step;
+            if (index < 0 || index >= items.length) return;
             this.select(index, items);
-            this.triggerChange();
             this.view.trigger('selection:action', this.get());
         },
 
@@ -225,6 +221,30 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         next: function () {
             this.move(+1);
+        },
+
+        // to anticipate a removal of multiple items
+        dodge: function () {
+
+            var items = this.getItems(),
+                selected = items.filter('.selected'),
+                length = selected.length,
+                first = items.index(selected.first()),
+                apply = this.select.bind(this);
+
+            // All: if all items are selected we cannot dodge
+            if (items.length === length) return;
+
+            // Tail: if there's no room inbetween or after the selection we move up
+            if ((first + length) === items.length) return apply(first - 1, items);
+
+            // iterate over list
+            items.slice(first).each(function (index) {
+                if (!$(this).hasClass('selected')) {
+                    apply(first + index, items);
+                    return false;
+                }
+            });
         },
 
         onKeydown: function (e) {
@@ -247,7 +267,7 @@ define('io.ox/core/tk/list-selection', [], function () {
 
             // jump to top/bottom OR range select / single select
             index = this.isMultiple(e) ? (e.which === 38 ? 0 : -1) : index;
-            this.select(index, items, e);
+            this.pick(index, items, e);
             this.triggerChange();
         },
 
@@ -264,7 +284,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.resetTabIndex(items);
 
             // range select / single select
-            this.select(index, items, e);
+            this.pick(index, items, e);
             if (!_.isEqual(previous, this.get())) this.triggerChange();
         },
 

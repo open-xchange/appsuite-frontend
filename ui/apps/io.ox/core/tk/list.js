@@ -160,6 +160,9 @@ define('io.ox/core/tk/list',
 
             this.selection.remove(model.cid, li);
             li.remove();
+
+            // simulate scroll event because the list might need to paginate
+            this.$el.trigger('scroll');
         },
 
         // called whenever a model inside the collection changes
@@ -320,7 +323,7 @@ define('io.ox/core/tk/list',
         },
 
         getPosition: function () {
-            return this.selection.index();
+            return this.selection.getPosition();
         },
 
         hasNext: function () {
