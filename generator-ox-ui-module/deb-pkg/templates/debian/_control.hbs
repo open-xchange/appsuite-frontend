@@ -10,10 +10,9 @@ Architecture: all
 Depends: ${misc:Depends}, open-xchange-appsuite-manifest
 Description: <%= description %>
 
-## Uncomment for multiple packages
-#Package: <%= _.slugify(packageName) %>-static
-#Architecture: all
-#Depends: ${misc:Depends}, open-xchange-appsuite
-#Description: <%= description %>
-# .
-# This package contains the static files for the theme.
+{{#each languages }}
+Package: <%= _.slugify(packageName) %>-l10n-{{ lang }}
+Architecture: all
+Provides: <%= _.slugify(packageName) %>-l10n
+Description: Translation of <%= description %> ({{ Lang }})
+{{/each}}
