@@ -22,25 +22,53 @@ define('io.ox/core/feedback/feedback',
 
     function buildStarWidget(number, hover) {//number of stars and boolean to enable or disable the hovereffect, default is 5 stars and hover enabled
         number = number || 5;//set default 5 stars
-        var value = 1,
-            node = $('<div class="star-wrapper">'),
+        var value = 0,//0 on init
+            node = $('<div tabindex="1" class="star-wrapper tabindex="1" ' +
+                                     //#. %1$d is current raiting
+                                     //#. %2$d is the maximum rating
+                                     //#, c-format
+                    'aria-label="' + gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', value, number) + '">')
+                    .on('keydown', function (e) {
+                        if (e.which === 37) {//left arrow
+                            var activestars = node.find('.active-star').length;
+                            if (activestars - 1 >= 0) {
+                                updateStars({data: {starnumber: activestars - 1}});
+                            }
+                            node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars - 1, number));
+                        } else if (e.which === 39) {//right arrow
+                            var activestars = node.find('.active-star').length;
+                            if (activestars + 1 <= number) {
+                                updateStars({data: {starnumber: activestars + 1}});
+                            }
+                            node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', activestars + 1, number));
+                        } else if (e.which === 13) {//enter
+                            updateStars({type: 'click', data: {starnumber: node.find('.active-star').length}});
+                            node.attr('aria-label', gt('Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust your rating.', value, number));
+                        } else if (e.which === 9) {//tab
+                            updateStars({type: 'mouseleave', data: {starnumber: value}});
+                            node.attr('aria-label', gt('Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating.', value, number));
+                        }
+                    }),
             stars = [];
         //update function
         function updateStars(e) {
             var starnumber = e.data.starnumber;
+
             //reset stars on mouseleave
             if (e.type === 'mouseleave') {
                 starnumber = value;
             }
             _(stars).each(function (star, index) {
+                
                 if (index < starnumber) {
-                    star.css('color', '#fd0');//gold
+                    star.addClass('active-star');
                 } else {
-                    star.css('color', '#ccc');//light grey
+                    star.removeClass('active-star');
                 }
             });
             //update on click
             if (e.type === 'click') {
+                //save value
                 value = starnumber;
             }
         }
@@ -50,7 +78,7 @@ define('io.ox/core/feedback/feedback',
               .on((hover === false ? 'click' : 'click mouseenter mouseleave'), {starnumber: i + 1}, updateStars));
         }
         //trigger initial update
-        stars[0].click();
+        updateStars({data: {starnumber: value}});
 
         node.append(stars);
 
@@ -64,8 +92,9 @@ define('io.ox/core/feedback/feedback',
             data.user_id = ox.user_is;
         }
 
+        console.log(data);//print data to console for now
         return $.when();
-        //when backend is ready remove the placeholder 'return $.when' and use the correct function below
+        //when backend is ready remove the placeholder 'console.log and return $.when' and use the correct function below
 
         /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
             module: 'feedback',
@@ -80,10 +109,10 @@ define('io.ox/core/feedback/feedback',
         show: function () {
             var popup = new dialogs.ModalDialog()
                     .header($('<h4>').text(gt('Feedback')))
-                    .addPrimaryButton('send', gt('Send feedback'), 'send')
-                    .addButton('cancel', gt('Cancel'), 'cancel'),
+                    .addPrimaryButton('send', gt('Send feedback'), 'send', {tabIndex: 1})
+                    .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: 1}),
                 stars = buildStarWidget(settings.get('feeback/numberOfStars', 5), settings.get('feeback/showHover', true)),
-                note = $('<textarea id="feedback-note" class="feedback-note" rows="5">');
+                note = $('<textarea tabindex="1" id="feedback-note" class="feedback-note" rows="5">');
             
             popup.getBody().append($('<div class="feedback-welcome-text">')
                     .text(gt('Welcome. Please provide your feedback about this product')),
@@ -101,7 +130,7 @@ define('io.ox/core/feedback/feedback',
             });
         },
         drawButton: function () {
-            var position = settings.get('feedback/position', 'right'),
+            var position = settings.get('feedback/position', 'left'),
                 feedbackButton = $('<div class="feedback-button">').text('Feedback')
                 .addClass(position + 'side-button')
                 .on('click', this.show);

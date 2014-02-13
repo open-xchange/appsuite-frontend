@@ -744,17 +744,20 @@ define('io.ox/core/main',
             id: 'feedback',
             index: 500,
             draw: function () {
-                this.append(
-                    $('<li>').append(
-                        $('<a href="#" data-action="feedback" role="menuitem" tabindex="1">').text(gt('Give feedback'))
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        require(['io.ox/core/feedback/feedback'], function (feedback) {
-                            feedback.show();
-                        });
-                    })
-                );
+                var currentSetting = settings.get('feeback/show', 'both');
+                if (currentSetting === 'both' || currentSetting === 'topbar') {
+                    this.append(
+                        $('<li>').append(
+                            $('<a href="#" data-action="feedback" role="menuitem" tabindex="1">').text(gt('Give feedback'))
+                        )
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            require(['io.ox/core/feedback/feedback'], function (feedback) {
+                                feedback.show();
+                            });
+                        })
+                    );
+                }
             }
         });
 
@@ -1205,7 +1208,10 @@ define('io.ox/core/main',
                         topbar.hide();
                     }
                     //draw fedbackButton
-                    ext.point('io.ox/core/feedback').invoke('draw');
+                    var currentSetting = settings.get('feeback/show', 'both');
+                    if (currentSetting === 'both' || currentSetting === 'side') {
+                        ext.point('io.ox/core/feedback').invoke('draw');
+                    }
 
                     debug('core: Stage "load" > autoLaunch ...');
 
