@@ -742,7 +742,7 @@ define('io.ox/core/main',
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'feedback',
-            index: 500,
+            index: 250,
             draw: function () {
                 var currentSetting = settings.get('feeback/show', 'both');
                 if (currentSetting === 'both' || currentSetting === 'topbar') {
