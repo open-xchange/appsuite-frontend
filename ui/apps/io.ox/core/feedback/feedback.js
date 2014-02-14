@@ -89,7 +89,7 @@ define('io.ox/core/feedback/feedback',
     function sendFeedback(data) {
         var includeUserInfo = settings.get('feeback/includeUserInfo', false);
         if (includeUserInfo) {
-            data.user_id = ox.user_is;
+            data.user_id = ox.user_id;
         }
 
         console.log(data);//print data to console for now
