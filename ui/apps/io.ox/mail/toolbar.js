@@ -13,67 +13,155 @@
 
 define('io.ox/mail/toolbar',
     ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
      'io.ox/core/extPatterns/actions',
+     'io.ox/mail/api',
+     'gettext!io.ox/mail',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less',
      'io.ox/mail/folderview-extensions'
-    ], function (ext, actions) {
+    ], function (ext, links, actions, api, gt) {
 
     'use strict';
 
-    // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar">').append(
-        $('<li><a href="#" role="button" data-action="compose"><b>New</b></a></li>'),
-        $('<li><a href="#" role="button" data-action="delete">Delete</a></li>'), // delete
-        $('<li><a href="#" role="button" data-action="reply-all">Reply <i class="icon-caret-down"/></a></li>'), // reply
-        $('<li><a href="#" role="button" data-action="forward">Forward</a></li>'), // forward
-        $('<li><a href="#" role="button" data-action="spam">Spam</a></li>'), // spam
-        $('<li><a href="#" role="button" data-action="move">Move <i class="icon-caret-down"/></a></li>'), // move
-        $('<li><a href="#" role="button">More <i class="icon-caret-down"/></a></li>') // other
-    );
+    // define links for classic toolbar
+    var point = ext.point('io.ox/mail/classic-toolbar/links');
 
-    function processAction(e) {
-        e.preventDefault();
-        var app = e.data.app,
-            action = $(this).data('action'),
-            selection = _(app.listView.selection.get()).map(_.cid),
-            baton = ext.Baton({ data: selection, app: app });
-        switch (action) {
-        case 'delete':
-            actions.invoke('io.ox/mail/actions/delete', this, baton, e);
-            break;
-        case 'compose':
-            actions.invoke('io.ox/mail/actions/compose', this, baton, e);
-            break;
-        case 'reply-all':
-            if (selection.length !== 1) break;
-            actions.invoke('io.ox/mail/actions/reply-all', this, baton, e);
-            break;
-        case 'forward':
-            if (selection.length === 0) break;
-            actions.invoke('io.ox/mail/actions/forward', this, baton, e);
-            break;
-        case 'move':
-            if (selection.length === 0) break;
-            actions.invoke('io.ox/mail/actions/move', this, baton, e);
-            break;
+    var meta = {
+        //
+        // --- HI ----
+        //
+        'compose': {
+            prio: 'hi',
+            label: gt('Compose'),
+            title: gt('Compose new email'),
+            drawDisabled: true,
+            ref: 'io.ox/mail/actions/compose'
+        },
+        'reply': {
+            prio: 'hi',
+            icon: 'icon-reply',
+            label: gt('Reply to sender'),
+            drawDisabled: true,
+            ref: 'io.ox/mail/actions/reply'
+        },
+        'reply-all': {
+            prio: 'hi',
+            icon: 'icon-reply-all',
+            label: gt('Reply all recipients'),
+            drawDisabled: true,
+            ref: 'io.ox/mail/actions/reply-all'
+        },
+        'forward': {
+            prio: 'hi',
+            icon: 'icon-mail-forward',
+            label: gt('Forward'),
+            drawDisabled: true,
+            ref: 'io.ox/mail/actions/forward'
+        },
+        'delete': {
+            prio: 'hi',
+            icon: 'icon-trash',
+            label: gt('Delete'),
+            drawDisabled: true,
+            ref: 'io.ox/mail/actions/delete'
+        },
+        'edit': {
+            prio: 'hi',
+            label: gt('Edit draft'),
+            ref: 'io.ox/mail/actions/edit'
+        },
+        //
+        // --- LO ----
+        //
+        'markunread': {
+            prio: 'lo',
+            label: gt('Mark as unread'),
+            ref: 'io.ox/mail/actions/markunread',
+            section: 'flags'
+        },
+        'markread': {
+            prio: 'lo',
+            label: gt('Mark as read'),
+            ref: 'io.ox/mail/actions/markread',
+            section: 'flags'
+        },
+        'print': {
+            prio: 'lo',
+            label: gt('Print'),
+            ref: 'io.ox/mail/actions/print',
+            section: 'export'
+        },
+        'saveEML': {
+            prio: 'lo',
+            label: gt('Save as file'),
+            ref: 'io.ox/mail/actions/save',
+            section: 'export'
+        },
+        'source': {
+            prio: 'lo',
+            //#. source in terms of source code
+            label: gt('View source'),
+            ref: 'io.ox/mail/actions/source',
+            section: 'export'
+        },
+        'reminder': {
+            prio: 'lo',
+            label: gt('Reminder'),
+            ref: 'io.ox/mail/actions/reminder',
+            section: 'keep'
+        },
+        'add-to-portal': {
+            prio: 'lo',
+            label: gt('Add to portal'),
+            ref: 'io.ox/mail/actions/add-to-portal',
+            section: 'keep'
         }
-    }
+    };
 
-    toolbar.children().slice(1).hide();
+    // transform into extensions
+
+    var index = 0;
+
+    _(meta).each(function (extension, id) {
+        extension.id = id;
+        extension.index = (index += 100);
+        point.extend(new links.Link(extension));
+    });
+
+    ext.point('io.ox/mail/classic-toolbar').extend(new links.InlineLinks({
+        index: 100,
+        id: 'toolbar-links',
+        ref: 'io.ox/mail/classic-toolbar/links',
+        classes: '',
+        attributes: {}
+    }));
+
+    // classic toolbar
+    var toolbar = $('<ul class="classic-toolbar" role="menu">'),
+        detail = api.pool.get('detail');
+
+    var updateToolbar = _.debounce(function (list) {
+
+        var data = _(list).map(function (cid) {
+            return detail.get(cid).toJSON();
+        });
+
+        data = data.length === 1 ? data[0] : data;
+
+        ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), ext.Baton({ $el: toolbar, data: data }));
+
+    }, 10);
 
     ext.point('io.ox/mail/mediator').extend({
         id: 'toolbar',
         index: 'last',
         setup: function (app) {
 
-            app.listView.on('selection:change', function (list) {
-                toolbar.children().slice(1).toggle(list.length > 0);
-            });
+            updateToolbar();
+            app.listView.on('selection:change', updateToolbar);
 
-            toolbar.on('click', 'a', { app: app }, processAction);
-
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(toolbar);
+            app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(toolbar);
         }
     });
 

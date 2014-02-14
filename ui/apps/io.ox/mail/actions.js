@@ -51,6 +51,9 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/compose', {
         id: 'compose',
+        requires: function () {
+            return true;
+        },
         action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {

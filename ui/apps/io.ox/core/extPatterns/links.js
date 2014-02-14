@@ -43,7 +43,7 @@ define('io.ox/core/extPatterns/links',
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
                         'role': 'menuitem',
-                        'title': self.label || '',
+                        'title': self.title || self.label || '',
                         'data-section': self.section || 'default',
                         'data-prio': self.prio || 'lo',
                         'data-ref': self.ref,
@@ -58,7 +58,7 @@ define('io.ox/core/extPatterns/links',
                 // has icon?
                 if (self.icon) a.addClass('no-underline');
                 // use tooltip?
-                if (self.icon && self.label) {
+                if ((self.icon && self.label) || self.title) {
                     a.attr({
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
@@ -84,6 +84,7 @@ define('io.ox/core/extPatterns/links',
             this.drawDisabled = function () {
                 this.append(
                     drawDefault()
+                    .tooltip('destroy')
                     .addClass('disabled')
                     .attr({
                         'aria-disabled': true
@@ -177,15 +178,12 @@ define('io.ox/core/extPatterns/links',
     var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
 
         baton = ext.Baton.ensure(baton);
-        var nav = $('<ul class="list-unstyled" role="menubar">').appendTo(node);
 
-        // customize
-        if (extension.attributes) {
-            nav.attr(extension.attributes);
-        }
-        if (extension.classes) {
-            nav.addClass(extension.classes);
-        }
+        var nav = baton.$el ||
+            $('<ul class="list-unstyled" role="menubar">')
+            .addClass(extension.classes || '')
+            .attr(extension.attributes || {})
+            .appendTo(node);
 
         return getLinks(extension, collection, baton, args)
             .always(function (items) {
