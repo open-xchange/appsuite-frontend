@@ -33,6 +33,10 @@ define('plugins/portal/rss/register',
         load: function (baton) {
             var urls = baton.model.get('props').url || [],
                 title = baton.model.attributes.title;
+            //remove empty urls (causes backend error)
+            urls = _(urls).filter(function (url) {
+                return $.trim(url) !== '';
+            });
             return rss.getMany(urls).done(function (data) {
                 //limit data manually till api call can be limited
                 data = data.slice(0, 100);
@@ -174,10 +178,14 @@ define('plugins/portal/rss/register',
             }
 
             deferred.done(function () {
+                //split and remove empty urls (causes backend error)
+                url = _(url.split(/\n/)).filter(function (feed) {
+                    return $.trim(feed) !== '';
+                });
                 dialog.close();
                 model.set({
                     title: description,
-                    props: { url: url.split(/\n/), description: description }
+                    props: { url: url, description: description }
                 }, {validate: true});
                 model.unset('candidate');
             });
