@@ -930,7 +930,7 @@ define('io.ox/core/desktop',
                 ext.point(name + '/window-toolbar').extend({
                     id: 'default',
                     draw: function () {
-                        return $('<div class="window-toolbar">')
+                        return $('<nav class="window-toolbar">')
                             .attr({
                                 'role': 'navigation',
                                 'aria-label': gt('Application Toolbar')

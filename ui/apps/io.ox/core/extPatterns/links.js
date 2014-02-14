@@ -99,8 +99,11 @@ define('io.ox/core/extPatterns/links',
             draw: function (baton) {
                 baton = ext.Baton.ensure(baton);
                 this.append(
-                    $('<li>').attr('role', 'menuitem').append(
-                        $('<a href="#" tabindex="1">').attr('data-action', extension.ref).text(extension.label)
+                    $('<li>').append(
+                        $('<a href="#" tabindex="1">').attr({
+                            'data-action': extension.ref,
+                            'role': 'menuitem'
+                        }).text(extension.label)
                         .on('click', { baton: baton, extension: extension }, actionClick)
                     )
                 );
@@ -157,7 +160,7 @@ define('io.ox/core/extPatterns/links',
     var drawLinks = function (extension, collection, node, baton, args, bootstrapMode) {
 
         baton = ext.Baton.ensure(baton);
-        var nav = $('<ul role="menu">').appendTo(node);
+        var nav = $('<ul role="menubar">').appendTo(node);
 
         // customize
         if (extension.attributes) {
@@ -466,12 +469,12 @@ define('io.ox/core/extPatterns/links',
         function draw(extension, baton) {
             var args = $.makeArray(arguments), a, ul, div, title = [];
             this.append(
-                div = $('<div class="toolbar-button dropdown">').append(
+                div = $('<li class="toolbar-button dropdown">').append(
                     a = $('<a href="#" data-toggle="dropdown" title="" tabindex="1">')
                         .attr('data-ref', extension.ref)
                         .addClass(extension.addClass)
                         .append(extension.icon()),
-                    ul = $('<ul class="dropdown-menu dropdown-right-side" role="menu" aria-hidden="true">')
+                    ul = $('<ul class="dropdown-menu dropdown-right-side" role="menu">')
                 )
             );
             // get links
@@ -492,15 +495,18 @@ define('io.ox/core/extPatterns/links',
                                 x.draw.call(ul, baton);
                             });
                         // set title attribute
-                        a.attr('title', extension.label || title.join(', '))
-                         .attr('aria-label', extension.label || title.join(', '))
-                         .attr('aria-haspopup', true);
+                        a.attr({
+                            'title': extension.label || title.join(', '),
+                            'aria-label': extension.label || title.join(', '),
+                            'role': 'menuitem',
+                            'aria-haspopup': true
+                        });
 
                         div.attr('role', 'menu');
                         // add footer label?
                         if (extension.label) {
                             ul.append(
-                                $('<li class="dropdown-footer">').attr('role', 'menuitem').text(extension.label)
+                                $('<li class="dropdown-footer">').text(extension.label)
                             );
                         }
                     } else {
@@ -510,10 +516,10 @@ define('io.ox/core/extPatterns/links',
                         if (links.length === 1) {
                             // directly link actions
                             a.attr({
-                                title: links[0].label || '',
+                                'title': links[0].label || '',
                                 'aria-label': links[0].label || '',
-                                role: 'menuitem',
-                                tabindex: 1
+                                'role': 'menuitem',
+                                'tabindex': 1
                             })
                             .on('click', { baton: baton, extension: links[0] }, actionClick);
                         } else {
