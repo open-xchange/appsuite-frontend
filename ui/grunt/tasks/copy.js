@@ -17,29 +17,11 @@ module.exports = function (grunt) {
 
     grunt.config('copy', {
 
-        fonts: {
+        themes: {
             files: [
                 {
                     expand: true,
-                    src: ['*', '!*.otf'],
-                    cwd: 'bower_components/font-awesome/fonts/',
-                    dest: 'build/apps/fonts/',
-                    filter: 'isFile'
-                },
-                {
-                    expand: true,
-                    src: ['*', '!*.otf'],
-                    cwd: 'bower_components/open-sans-fontface/fonts/Light/',
-                    dest: 'build/apps/fonts/',
-                    filter: 'isFile'
-                }
-            ]
-        },
-        images: {
-            files: [
-                {
-                    expand: true,
-                    src: ['**/*.{png,gif,ico}'],
+                    src: ['**/*.{png,gif,ico,less,css}'],
                     cwd: 'apps/themes/',
                     dest: 'build/apps/themes/',
                     filter: 'isFile'
@@ -50,7 +32,13 @@ module.exports = function (grunt) {
             files: [
                 {
                     expand: true,
-                    src: ['Chart.js/Chart.js', 'jquery-imageloader/jquery.imageloader.js'],
+                    src: [
+                        'font-awesome/{less,fonts}/*',
+                        'open-sans-fontface/fonts/Light/*',
+                        'Chart.js/Chart.js',
+                        'jquery-imageloader/jquery.imageloader.js',
+                        '!**/*.otf'
+                    ],
                     cwd: 'bower_components/',
                     dest: 'build/apps/3rd.party/',
                     filter: 'isFile'
@@ -73,7 +61,7 @@ module.exports = function (grunt) {
 
     });
 
-    grunt.registerTask('copy_build', ['newer:copy:fonts', 'newer:copy:images', 'newer:copy:thirdparty']);
+    grunt.registerTask('copy_build', ['newer:copy:themes', 'newer:copy:thirdparty']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
 };

@@ -74,10 +74,10 @@ body.down #io-ox-login-container .alert.alert-info {
     font-family: 'OpenSans';
     src: local('Open Sans Light'),
          local('OpenSans-Light'),
-         url('../../fonts/OpenSans-Light.eot'),
-         url('../../fonts/OpenSans-Light.woff') format('woff'),
-         url('../../fonts/OpenSans-Light.ttf') format('truetype'),
-         url('../../fonts/OpenSans-Light.svg#OpenSansLight') format('svg');
+         url('../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.eot'),
+         url('../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.woff') format('woff'),
+         url('../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.ttf') format('truetype'),
+         url('../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.svg#OpenSansLight') format('svg');
     font-weight: 300;
     font-style: normal;
 }
