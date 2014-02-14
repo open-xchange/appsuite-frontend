@@ -40,8 +40,10 @@ backbone-validation/src
 
 bigscreen/src
 
-bootstrap/dist
-bootstrap/fonts
+bootstrap/*
+!bootstrap/less
+!bootstrap/js
+
 bootstrap-datepicker/build
 bootstrap-datepicker/css
 bootstrap-datepicker/less/datepicker.less
@@ -54,9 +56,13 @@ mediaelement/src
 mediaelement/build/jquery.js
 mediaelement/build/DO*
 
-open-sans-fontface/*.css
-open-sans-fontface/*.scss
-open-sans-fontface/fonts/*
+jquery/*
+!jquery/dist
+jquery/dist/*.map
+
+sizzle
+
+open-sans-fontface/*
 !open-sans-fontface/fonts/Light
 
 requirejs/*

@@ -39,7 +39,7 @@ module.exports = function (grunt) {
             },
             files: [
                 {
-                    src: ['bower_components/jquery/jquery.js',
+                    src: ['bower_components/jquery/dist/jquery.js',
                          'lib/jquery.mobile.touch.min.js',
                          'bower_components/underscore/underscore.js', // load this before require.js to keep global object
                          'build/ox.js',
