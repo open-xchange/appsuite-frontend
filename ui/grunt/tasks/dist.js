@@ -104,7 +104,7 @@ module.exports = function (grunt) {
                         return {
                             Lang: Lang,
                             lang: Lang.toLowerCase().replace(/_/g, '-')
-                        }
+                        };
                     });
                 })(),
                 help_drive_languages: (function () {
@@ -112,7 +112,7 @@ module.exports = function (grunt) {
                         return {
                             Lang: Lang,
                             lang: Lang.toLowerCase().replace(/_/g, '-')
-                        }
+                        };
                     });
                 })(),
                 languages: (function () {
@@ -121,7 +121,7 @@ module.exports = function (grunt) {
                         return {
                             Lang: Lang,
                             lang: Lang.toLowerCase().replace(/_/g, '-')
-                        }
+                        };
                     });
                 })()
             },
