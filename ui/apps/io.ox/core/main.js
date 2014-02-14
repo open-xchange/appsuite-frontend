@@ -802,7 +802,7 @@ define('io.ox/core/main',
                 a.dropdown();
 
                 a.one('click', function () {//adjust dropdown on first click to be sure logo is loaded (we need the width)
-                    if ($('#io-ox-top-logo-small').css('width') > '150px') {//adjust dropdown for to large logos
+                    if (parseInt($('#io-ox-top-logo-small').css('width'), 10) > 150) {//adjust dropdown for to large logos
                         ul.css('right', 'auto');
                     }
                 });
