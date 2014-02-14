@@ -788,7 +788,7 @@ define('io.ox/core/main',
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">').append(
                             $('<i class="icon-cog icon-white launcher-icon" aria-hidden="true">')
                         ),
-                        ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu pull-right" role="menu">')
+                        ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
                     )
                 );
                 if (!Modernizr.touch) {
@@ -800,6 +800,12 @@ define('io.ox/core/main',
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
                 a.attr('aria-label', gt('Settings'));
                 a.dropdown();
+
+                a.one('click', function () {//adjust dropdown on first click to be sure logo is loaded (we need the width)
+                    if ($('#io-ox-top-logo-small').css('width') > '150px') {//adjust dropdown for to large logos
+                        ul.css('right', 'auto');
+                    }
+                });
             }
         });
 
