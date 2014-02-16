@@ -9,75 +9,53 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: apps/io.ox/calendar/edit/template.js:77
-#: apps/io.ox/contacts/distrib/create-dist-view.js:40
-#: apps/io.ox/contacts/edit/view-form.js:175
-#: apps/io.ox/contacts/settings/pane.js:102
-#: apps/io.ox/core/folder/imap-subscription.js:58
-#: apps/io.ox/core/folder/imap-subscription.js:63
-#: apps/io.ox/core/permissions/permissions.js:355
-#: apps/io.ox/core/permissions/permissions.js:397
-#: apps/io.ox/core/tk/dialogs.js:535 apps/io.ox/editor/main.js:127
-#: apps/io.ox/editor/main.js:143 apps/io.ox/files/actions.js:538
-#: apps/io.ox/files/views/create.js:116 apps/io.ox/mail/accounts/settings.js:42
-#: apps/io.ox/mail/actions/attachmentSave.js:66
-#: apps/io.ox/mail/mailfilter/settings/filter.js:87
-#: apps/io.ox/mail/settings/signatures/register.js:109
-#: apps/io.ox/mail/write/view-main.js:58 apps/io.ox/oauth/settings.js:80
-#: apps/io.ox/tasks/edit/view-template.js:46
-#: apps/io.ox/tasks/edit/view-template.js:89
-#: apps/plugins/portal/flickr/register.js:226
-#: apps/plugins/portal/rss/register.js:149
-#: apps/plugins/portal/tumblr/register.js:245
-#: apps/plugins/portal/userSettings/register.js:43
-msgid "Save"
+#: apps/io.ox/core/extPatterns/links.js:311
+#: apps/io.ox/core/extPatterns/links.js:314
+#: apps/io.ox/core/extPatterns/links.js:322
+#: apps/io.ox/core/extPatterns/links.js:325
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:586
+msgid "Actions"
 msgstr ""
 
-#: apps/io.ox/editor/main.js:138
-msgid "Enter document title here"
+#: apps/io.ox/core/extPatterns/links.js:312
+#: apps/io.ox/core/extPatterns/links.js:315
+#: apps/io.ox/core/extPatterns/links.js:322
+#: apps/io.ox/core/extPatterns/links.js:325
+#: apps/io.ox/mail/write/view-main.js:771
+msgid "More"
 msgstr ""
 
-#: apps/io.ox/core/about/about.js:66 apps/io.ox/core/commons-folderview.js:529
-#: apps/io.ox/core/permissions/permissions.js:454
-#: apps/io.ox/core/pubsub/publications.js:107 apps/io.ox/core/tk/dialogs.js:535
-#: apps/io.ox/core/wizard/registry.js:60 apps/io.ox/editor/main.js:144
-#: apps/io.ox/files/actions.js:287 apps/io.ox/files/carousel.js:45
-#: apps/io.ox/files/mediaplayer.js:288 apps/io.ox/mail/accounts/settings.js:309
-#: apps/io.ox/mail/accounts/settings.js:331 apps/io.ox/mail/actions.js:192
-#: apps/plugins/upsell/simple-wizard/register.js:91
-msgid "Close"
+#: apps/io.ox/core/desktop.js:209
+msgid "Could not get a default folder for this application."
 msgstr ""
 
-#: apps/io.ox/editor/main.js:151
-msgid "You can quick-save your changes via Ctrl+Enter."
+#: apps/io.ox/core/desktop.js:596
+msgid "There are unsaved changes."
 msgstr ""
 
-#: apps/io.ox/editor/main.js:173
-msgid "Editor"
+#: apps/io.ox/core/desktop.js:936
+msgid "Application Toolbar"
 msgstr ""
 
-#: apps/io.ox/editor/main.js:222
-msgid "This file will be written in your default folder to allow editing"
+#. Title of the browser window
+#. %1$s is the name of the page, e.g. OX App Suite
+#. %2$s is the title of the active app, e.g. Calendar
+#: apps/io.ox/core/desktop.js:1010 apps/io.ox/core/desktop.js:1185
+msgctxt "window title"
+msgid "%1$s %2$s"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/main.js:49 apps/io.ox/contacts/distrib/main.js:182
-#: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:312
-#: apps/io.ox/tasks/edit/main.js:159
-msgid "Do you really want to discard your changes?"
+#: apps/io.ox/core/desktop.js:1466
+msgid "Search for items"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:97
-#: apps/io.ox/contacts/distrib/create-dist-view.js:54
-#: apps/io.ox/contacts/distrib/main.js:183 apps/io.ox/contacts/edit/main.js:248
-#: apps/io.ox/contacts/edit/view-form.js:185
-#: apps/io.ox/contacts/settings/pane.js:103 apps/io.ox/editor/main.js:313
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
-#: apps/io.ox/mail/settings/signatures/register.js:110
-#: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1320 apps/io.ox/mail/write/view-main.js:67
-#: apps/io.ox/tasks/edit/view-template.js:82
-#: apps/plugins/portal/userSettings/register.js:44
-msgid "Discard"
+#: apps/io.ox/core/desktop.js:1477 apps/io.ox/core/desktop.js:1479
+#: apps/io.ox/core/desktop.js:1537 apps/plugins/portal/flickr/register.js:217
+msgid "Search"
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:1529
+msgid "Toggle search"
 msgstr ""
 
 #: apps/io.ox/calendar/acceptdeny.js:89 apps/io.ox/calendar/actions.js:153
@@ -122,6 +100,7 @@ msgstr ""
 #: apps/io.ox/tasks/actions.js:522 apps/io.ox/tasks/edit/main.js:161
 #: apps/io.ox/tasks/edit/util.js:123 apps/plugins/portal/flickr/register.js:227
 #: apps/plugins/portal/rss/register.js:150
+#: apps/plugins/portal/rss/register.js:154
 #: apps/plugins/portal/tumblr/register.js:246
 #: apps/plugins/portal/twitter/util.js:123
 #: apps/plugins/portal/twitter/util.js:452
@@ -129,8 +108,8 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: apps/io.ox/core/folder/imap-subscription.js:58
-msgid "Subscribe IMAP folders"
+#: apps/io.ox/core/desktop.js:1698
+msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
 
 #: apps/io.ox/core/main.js:125
@@ -246,27 +225,27 @@ msgstr ""
 msgid "Sign out"
 msgstr ""
 
-#: apps/io.ox/core/main.js:822
+#: apps/io.ox/core/main.js:828
 msgid "Your Applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:879 apps/io.ox/core/relogin.js:46
+#: apps/io.ox/core/main.js:885 apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr ""
 
-#: apps/io.ox/core/main.js:880 apps/io.ox/core/relogin.js:48
+#: apps/io.ox/core/main.js:886 apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1116
+#: apps/io.ox/core/main.js:1122
 msgid "Restore applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1118
+#: apps/io.ox/core/main.js:1124
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
-#: apps/io.ox/core/main.js:1123
+#: apps/io.ox/core/main.js:1129
 msgid "Continue"
 msgstr ""
 
@@ -301,278 +280,150 @@ msgstr ""
 msgid "Thank you for your feedback"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:64
-msgid "Portal settings"
+#: apps/io.ox/backbone/forms.js:56
+msgid "An error occurred"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:96
-msgid "Add widget"
+#: apps/io.ox/backbone/forms.js:59
+msgid "An error occurred. Please try again later"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:153
-msgid "Black"
+#: apps/io.ox/backbone/forms.js:461 apps/io.ox/backbone/forms.js:785
+#: apps/io.ox/calendar/month/perspective.js:425 apps/io.ox/calendar/util.js:155
+#: apps/io.ox/calendar/util.js:192 apps/io.ox/calendar/week/view.js:150
+#: apps/io.ox/calendar/week/view.js:702
+#: apps/plugins/portal/birthdays/register.js:84
+#: apps/plugins/portal/birthdays/register.js:153
+msgid "Today"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
-#: apps/io.ox/mail/view-detail.js:484 apps/io.ox/portal/settings/pane.js:154
-msgid "Gray"
+#: apps/io.ox/backbone/forms.js:522 apps/io.ox/backbone/forms.js:846
+#: apps/io.ox/calendar/week/view.js:112
+msgid "Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
-#: apps/io.ox/mail/view-detail.js:481 apps/io.ox/portal/settings/pane.js:155
-msgid "Red"
+#: apps/io.ox/backbone/forms.js:540
+msgid "clear"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:72
-#: apps/io.ox/mail/view-detail.js:487 apps/io.ox/portal/settings/pane.js:156
-msgid "Orange"
+#: apps/io.ox/backbone/forms.js:612 apps/io.ox/backbone/forms.js:936
+#: apps/io.ox/backbone/validation.js:60 apps/io.ox/backbone/validation.js:67
+msgid "Please enter a valid date"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:74
-#: apps/io.ox/mail/view-detail.js:486 apps/io.ox/portal/settings/pane.js:157
-msgid "Light green"
+#: apps/io.ox/linkedIn/view-detail.js:65
+msgid "Open on LinkedIn"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:75
-#: apps/io.ox/mail/view-detail.js:483 apps/io.ox/portal/settings/pane.js:158
-msgid "Green"
+#: apps/plugins/portal/rss/register.js:31 apps/plugins/portal/rss/register.js:59
+#: apps/plugins/portal/rss/register.js:201
+msgid "RSS Feed"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:76
-#: apps/io.ox/mail/view-detail.js:489 apps/io.ox/portal/settings/pane.js:159
-msgid "Light blue"
+#: apps/plugins/portal/rss/register.js:69
+msgid "Press [enter] to jump to the rss stream."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
-#: apps/io.ox/mail/view-detail.js:482 apps/io.ox/portal/settings/pane.js:160
-msgid "Blue"
+#: apps/plugins/portal/rss/register.js:72
+msgid "No RSS feeds found."
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:78
-#: apps/io.ox/mail/view-detail.js:485 apps/io.ox/portal/settings/pane.js:161
-msgid "Purple"
+#: apps/plugins/portal/rss/register.js:100
+msgid "show image"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
-#: apps/io.ox/mail/view-detail.js:488 apps/io.ox/portal/settings/pane.js:162
-msgid "Pink"
+#: apps/plugins/portal/rss/register.js:143
+msgid "RSS Feeds"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:174 apps/io.ox/portal/settings/pane.js:176
-msgid "Color"
+#: apps/io.ox/contacts/model.js:280 apps/plugins/portal/rss/register.js:146
+msgid "URL"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:254
-msgid "Drag to reorder widget"
+#: apps/io.ox/calendar/edit/template.js:217 apps/io.ox/files/actions.js:534
+#: apps/io.ox/files/views/create.js:164
+#: apps/io.ox/tasks/edit/view-template.js:119
+#: apps/plugins/portal/flickr/register.js:221
+#: apps/plugins/portal/rss/register.js:144
+#: apps/plugins/portal/rss/register.js:148
+#: apps/plugins/portal/tumblr/register.js:240
+msgid "Description"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:204
-#: apps/io.ox/portal/settings/pane.js:255
-msgid "Use cursor keys to change the item position"
+#: apps/io.ox/calendar/edit/template.js:77
+#: apps/io.ox/contacts/distrib/create-dist-view.js:40
+#: apps/io.ox/contacts/edit/view-form.js:175
+#: apps/io.ox/contacts/settings/pane.js:102
+#: apps/io.ox/core/folder/imap-subscription.js:58
+#: apps/io.ox/core/folder/imap-subscription.js:63
+#: apps/io.ox/core/permissions/permissions.js:355
+#: apps/io.ox/core/permissions/permissions.js:397
+#: apps/io.ox/core/tk/dialogs.js:535 apps/io.ox/editor/main.js:127
+#: apps/io.ox/editor/main.js:143 apps/io.ox/files/actions.js:538
+#: apps/io.ox/files/views/create.js:116 apps/io.ox/mail/accounts/settings.js:42
+#: apps/io.ox/mail/actions/attachmentSave.js:66
+#: apps/io.ox/mail/mailfilter/settings/filter.js:87
+#: apps/io.ox/mail/settings/signatures/register.js:109
+#: apps/io.ox/mail/write/view-main.js:58 apps/io.ox/oauth/settings.js:80
+#: apps/io.ox/tasks/edit/view-template.js:46
+#: apps/io.ox/tasks/edit/view-template.js:89
+#: apps/plugins/portal/flickr/register.js:226
+#: apps/plugins/portal/rss/register.js:149
+#: apps/plugins/portal/rss/register.js:153
+#: apps/plugins/portal/tumblr/register.js:245
+#: apps/plugins/portal/userSettings/register.js:43
+msgid "Save"
 msgstr ""
 
-#: apps/io.ox/calendar/actions.js:572 apps/io.ox/contacts/actions.js:746
-#: apps/io.ox/core/pubsub/settings/pane.js:207 apps/io.ox/files/actions.js:817
-#: apps/io.ox/mail/actions.js:978
-#: apps/io.ox/mail/mailfilter/settings/filter.js:128
-#: apps/io.ox/mail/mailfilter/settings/filter.js:133
-#: apps/io.ox/mail/settings/signatures/register.js:272
-#: apps/io.ox/portal/settings/pane.js:313 apps/io.ox/portal/settings/pane.js:315
-#: apps/io.ox/settings/accounts/settings/pane.js:45
-#: apps/io.ox/settings/accounts/settings/pane.js:49
-#: apps/io.ox/settings/accounts/settings/pane.js:51
-#: apps/io.ox/tasks/actions.js:458
-msgid "Edit"
+#: apps/plugins/portal/rss/register.js:174
+msgid "Please enter a feed URL."
 msgstr ""
 
-#: apps/io.ox/core/pubsub/settings/pane.js:215
-#: apps/io.ox/mail/mailfilter/settings/filter.js:125
-#: apps/io.ox/mail/mailfilter/settings/filter.js:236
-#: apps/io.ox/portal/settings/pane.js:332
-msgid "Disable"
+#: apps/io.ox/editor/main.js:138
+msgid "Enter document title here"
 msgstr ""
 
-#: apps/io.ox/core/pubsub/settings/pane.js:215
-#: apps/io.ox/mail/mailfilter/settings/filter.js:125
-#: apps/io.ox/mail/mailfilter/settings/filter.js:236
-#: apps/io.ox/portal/settings/pane.js:336
-msgid "Enable"
+#: apps/io.ox/core/about/about.js:66 apps/io.ox/core/commons-folderview.js:529
+#: apps/io.ox/core/permissions/permissions.js:454
+#: apps/io.ox/core/pubsub/publications.js:107 apps/io.ox/core/tk/dialogs.js:535
+#: apps/io.ox/core/wizard/registry.js:60 apps/io.ox/editor/main.js:144
+#: apps/io.ox/files/actions.js:287 apps/io.ox/files/carousel.js:45
+#: apps/io.ox/files/mediaplayer.js:288 apps/io.ox/mail/accounts/settings.js:309
+#: apps/io.ox/mail/accounts/settings.js:331 apps/io.ox/mail/actions.js:192
+#: apps/plugins/upsell/simple-wizard/register.js:91
+msgid "Close"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter.js:147
-#: apps/io.ox/portal/settings/pane.js:347
-msgid "remove"
+#: apps/io.ox/editor/main.js:151
+msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:427
-msgid "Mobile device settings:"
+#: apps/io.ox/editor/main.js:173
+msgid "Editor"
 msgstr ""
 
-#: apps/io.ox/portal/settings/pane.js:429
-msgid "Only show widget summary on mobile devices"
+#: apps/io.ox/editor/main.js:222
+msgid "This file will be written in your default folder to allow editing"
 msgstr ""
 
-#: apps/io.ox/backbone/mini-views/date.js:23
-msgid "Year"
+#: apps/io.ox/calendar/edit/main.js:49 apps/io.ox/contacts/distrib/main.js:182
+#: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:312
+#: apps/io.ox/tasks/edit/main.js:159
+msgid "Do you really want to discard your changes?"
 msgstr ""
 
-#: apps/io.ox/backbone/mini-views/date.js:24 apps/io.ox/calendar/actions.js:520
-msgid "Month"
-msgstr ""
-
-#: apps/io.ox/backbone/mini-views/date.js:25 apps/io.ox/calendar/actions.js:499
-#: apps/io.ox/calendar/freebusy/templates.js:75
-msgid "Day"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:39
-msgid "Enabled for inbox only"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:40
-msgid "Enabled for all mail folders"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:41
-msgid "Disabled"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:45
-msgid "Inline"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:46
-msgid "Attachment"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:50 apps/io.ox/mail/write/view-main.js:802
-msgid "HTML"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:51
-msgid "Plain text"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:52
-msgid "HTML and plain text"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:56
-msgid "disabled"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:57
-msgid "1 minute"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:58
-msgid "3 minutes"
-msgstr ""
-
-#: apps/io.ox/core/settings/pane.js:175 apps/io.ox/core/settings/pane.js:236
-#: apps/io.ox/mail/settings/pane.js:59
-msgid "5 minutes"
-msgstr ""
-
-#: apps/io.ox/core/settings/pane.js:176 apps/io.ox/core/settings/pane.js:237
-#: apps/io.ox/mail/settings/pane.js:60
-msgid "10 minutes"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:148
-msgid "Could not save settings"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:174
-msgid "Automatically collect contacts in the folder \"Collected addresses\" while sending"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:177
-msgid "Automatically collect contacts in the folder \"Collected addresses\" while reading"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:187
-msgid "Common"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:189
-msgid "Permanently remove deleted emails"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:193
-msgid "Use fixed-width font for text mails"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/write/main.js:197
-msgid "Compose"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:212
-msgid "Append vCard"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:215
-msgid "Insert the original email text to a reply"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:223
-msgid "Thread view"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:229
-msgid "Forward emails as"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:234
-msgid "Format emails as"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:239 apps/io.ox/mail/settings/pane.js:241
-msgid "Line wrap when sending text mails after "
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:244
-msgid " characters"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:249
-msgid "Default sender address"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:257
-msgid "Auto-save email drafts"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:276
-msgid "Display"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:278
-msgid "Allow html formatted emails"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:281
-msgid "Allow pre-loading of externally linked images"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:284
-msgid "Display emoticons as graphics in text emails"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:287
-msgid "Color quoted lines"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:290
-msgid "Ask for delivery receipt"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:324
-msgid "IMAP folder subscription"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js:326
-msgid "Change subscription"
+#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:97
+#: apps/io.ox/contacts/distrib/create-dist-view.js:54
+#: apps/io.ox/contacts/distrib/main.js:183 apps/io.ox/contacts/edit/main.js:248
+#: apps/io.ox/contacts/edit/view-form.js:185
+#: apps/io.ox/contacts/settings/pane.js:103 apps/io.ox/editor/main.js:313
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
+#: apps/io.ox/mail/settings/signatures/register.js:110
+#: apps/io.ox/mail/write/inplace/inplace.js:114
+#: apps/io.ox/mail/write/main.js:1320 apps/io.ox/mail/write/view-main.js:67
+#: apps/io.ox/tasks/edit/view-template.js:82
+#: apps/plugins/portal/userSettings/register.js:44
+msgid "Discard"
 msgstr ""
 
 #: apps/io.ox/help/center.js:127
@@ -1462,6 +1313,16 @@ msgstr ""
 msgid "Theme"
 msgstr ""
 
+#: apps/io.ox/core/settings/pane.js:175 apps/io.ox/core/settings/pane.js:236
+#: apps/io.ox/mail/settings/pane.js:59
+msgid "5 minutes"
+msgstr ""
+
+#: apps/io.ox/core/settings/pane.js:176 apps/io.ox/core/settings/pane.js:237
+#: apps/io.ox/mail/settings/pane.js:60
+msgid "10 minutes"
+msgstr ""
+
 #: apps/io.ox/calendar/settings/pane.js:53 apps/io.ox/core/settings/pane.js:177
 #: apps/io.ox/core/settings/pane.js:238
 msgid "15 minutes"
@@ -1788,6 +1649,34 @@ msgstr ""
 msgid "Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten"
 msgstr ""
 
+#: apps/io.ox/calendar/actions.js:572 apps/io.ox/contacts/actions.js:746
+#: apps/io.ox/core/pubsub/settings/pane.js:207 apps/io.ox/files/actions.js:817
+#: apps/io.ox/mail/actions.js:978
+#: apps/io.ox/mail/mailfilter/settings/filter.js:128
+#: apps/io.ox/mail/mailfilter/settings/filter.js:133
+#: apps/io.ox/mail/settings/signatures/register.js:272
+#: apps/io.ox/portal/settings/pane.js:313 apps/io.ox/portal/settings/pane.js:315
+#: apps/io.ox/settings/accounts/settings/pane.js:45
+#: apps/io.ox/settings/accounts/settings/pane.js:49
+#: apps/io.ox/settings/accounts/settings/pane.js:51
+#: apps/io.ox/tasks/actions.js:458
+msgid "Edit"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:215
+#: apps/io.ox/mail/mailfilter/settings/filter.js:125
+#: apps/io.ox/mail/mailfilter/settings/filter.js:236
+#: apps/io.ox/portal/settings/pane.js:332
+msgid "Disable"
+msgstr ""
+
+#: apps/io.ox/core/pubsub/settings/pane.js:215
+#: apps/io.ox/mail/mailfilter/settings/filter.js:125
+#: apps/io.ox/mail/mailfilter/settings/filter.js:236
+#: apps/io.ox/portal/settings/pane.js:336
+msgid "Enable"
+msgstr ""
+
 #: apps/io.ox/core/pubsub/settings/pane.js:288
 msgid "Subscription refresh"
 msgstr ""
@@ -2002,55 +1891,6 @@ msgstr ""
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 
-#: apps/io.ox/core/extPatterns/links.js:311
-#: apps/io.ox/core/extPatterns/links.js:322
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:586
-msgid "Actions"
-msgstr ""
-
-#: apps/io.ox/core/extPatterns/links.js:312
-#: apps/io.ox/core/extPatterns/links.js:322
-#: apps/io.ox/mail/write/view-main.js:771
-msgid "More"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:209
-msgid "Could not get a default folder for this application."
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:596
-msgid "There are unsaved changes."
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:936
-msgid "Application Toolbar"
-msgstr ""
-
-#. Title of the browser window
-#. %1$s is the name of the page, e.g. OX App Suite
-#. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1010 apps/io.ox/core/desktop.js:1185
-msgctxt "window title"
-msgid "%1$s %2$s"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:1466
-msgid "Search for items"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:1477 apps/io.ox/core/desktop.js:1479
-#: apps/io.ox/core/desktop.js:1537 apps/plugins/portal/flickr/register.js:217
-msgid "Search"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:1529
-msgid "Toggle search"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:1698
-msgid "Failed to start application. Maybe you have connection problems. Please try again."
-msgstr ""
-
 #: apps/io.ox/core/commons-folderview.js:258 apps/io.ox/core/folder/add.js:81
 msgid "New private folder"
 msgstr ""
@@ -2069,6 +1909,10 @@ msgstr ""
 
 #: apps/io.ox/core/folder/add.js:94
 msgid "Add folder"
+msgstr ""
+
+#: apps/io.ox/core/folder/imap-subscription.js:58
+msgid "Subscribe IMAP folders"
 msgstr ""
 
 #: apps/io.ox/core/tk/dialogs.js:728
@@ -2860,15 +2704,6 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: apps/io.ox/calendar/edit/template.js:217 apps/io.ox/files/actions.js:534
-#: apps/io.ox/files/views/create.js:164
-#: apps/io.ox/tasks/edit/view-template.js:119
-#: apps/plugins/portal/flickr/register.js:221
-#: apps/plugins/portal/rss/register.js:144
-#: apps/plugins/portal/tumblr/register.js:240
-msgid "Description"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/template.js:236
 #: apps/io.ox/tasks/edit/view-template.js:130
 #: apps/io.ox/tasks/edit/view-template.js:143
@@ -3350,45 +3185,91 @@ msgstr ""
 msgid "Just disable widget"
 msgstr ""
 
+#: apps/io.ox/portal/settings/pane.js:64
+msgid "Portal settings"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js:96
+msgid "Add widget"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js:153
+msgid "Black"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
+#: apps/io.ox/mail/view-detail.js:484 apps/io.ox/portal/settings/pane.js:154
+msgid "Gray"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
+#: apps/io.ox/mail/view-detail.js:481 apps/io.ox/portal/settings/pane.js:155
+msgid "Red"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:72
+#: apps/io.ox/mail/view-detail.js:487 apps/io.ox/portal/settings/pane.js:156
+msgid "Orange"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:74
+#: apps/io.ox/mail/view-detail.js:486 apps/io.ox/portal/settings/pane.js:157
+msgid "Light green"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:75
+#: apps/io.ox/mail/view-detail.js:483 apps/io.ox/portal/settings/pane.js:158
+msgid "Green"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:76
+#: apps/io.ox/mail/view-detail.js:489 apps/io.ox/portal/settings/pane.js:159
+msgid "Light blue"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:77
+#: apps/io.ox/mail/view-detail.js:482 apps/io.ox/portal/settings/pane.js:160
+msgid "Blue"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:78
+#: apps/io.ox/mail/view-detail.js:485 apps/io.ox/portal/settings/pane.js:161
+msgid "Purple"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:79
+#: apps/io.ox/mail/view-detail.js:488 apps/io.ox/portal/settings/pane.js:162
+msgid "Pink"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js:174 apps/io.ox/portal/settings/pane.js:176
+msgid "Color"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js:254
+msgid "Drag to reorder widget"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js:204
+#: apps/io.ox/portal/settings/pane.js:255
+msgid "Use cursor keys to change the item position"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js:147
+#: apps/io.ox/portal/settings/pane.js:347
+msgid "remove"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js:427
+msgid "Mobile device settings:"
+msgstr ""
+
+#: apps/io.ox/portal/settings/pane.js:429
+msgid "Only show widget summary on mobile devices"
+msgstr ""
+
 #: apps/io.ox/backbone/basicModel.js:129
 msgid "Invalid data"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:56
-msgid "An error occurred"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:59
-msgid "An error occurred. Please try again later"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:533
-msgid "Show less"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:591 apps/io.ox/mail/detail/content.js:396
-msgid "Show more"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:785 apps/io.ox/calendar/month/perspective.js:425
-#: apps/io.ox/calendar/util.js:155 apps/io.ox/calendar/util.js:192
-#: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:702
-#: apps/plugins/portal/birthdays/register.js:84
-#: apps/plugins/portal/birthdays/register.js:153
-msgid "Today"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:846 apps/io.ox/calendar/week/view.js:112
-msgid "Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key."
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:864
-msgid "clear"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:936 apps/io.ox/backbone/validation.js:60
-#: apps/io.ox/backbone/validation.js:67
-msgid "Please enter a valid date"
 msgstr ""
 
 #: apps/io.ox/backbone/validation.js:38 apps/io.ox/backbone/validation.js:45
@@ -3417,6 +3298,19 @@ msgstr ""
 
 #: apps/io.ox/backbone/validation.js:145
 msgid "Please enter a value"
+msgstr ""
+
+#: apps/io.ox/backbone/mini-views/date.js:23
+msgid "Year"
+msgstr ""
+
+#: apps/io.ox/backbone/mini-views/date.js:24 apps/io.ox/calendar/actions.js:520
+msgid "Month"
+msgstr ""
+
+#: apps/io.ox/backbone/mini-views/date.js:25 apps/io.ox/calendar/actions.js:499
+#: apps/io.ox/calendar/freebusy/templates.js:75
+msgid "Day"
 msgstr ""
 
 #: apps/io.ox/contacts/actions.js:43
@@ -3966,10 +3860,6 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:279
 msgid "Email 3"
-msgstr ""
-
-#: apps/io.ox/contacts/model.js:280 apps/plugins/portal/rss/register.js:142
-msgid "URL"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:281
@@ -5591,6 +5481,10 @@ msgstr ""
 msgid "Repeat"
 msgstr ""
 
+#: apps/io.ox/mail/settings/pane.js:210 apps/io.ox/mail/write/main.js:197
+msgid "Compose"
+msgstr ""
+
 #. %s is the product name
 #: apps/io.ox/mail/write/main.js:218
 msgid "Sent from %s via mobile"
@@ -5756,6 +5650,10 @@ msgstr ""
 #: apps/io.ox/mail/vacationnotice/settings/model.js:132
 #: apps/io.ox/mail/write/view-main.js:801
 msgid "Text"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:50 apps/io.ox/mail/write/view-main.js:802
+msgid "HTML"
 msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/register.js:297
@@ -6279,6 +6177,10 @@ msgstr ""
 msgid "This mail has no content"
 msgstr ""
 
+#: apps/io.ox/backbone/forms.js:591 apps/io.ox/mail/detail/content.js:396
+msgid "Show more"
+msgstr ""
+
 #: apps/io.ox/mail/detail/links.js:113
 msgid "Calendar"
 msgstr ""
@@ -6404,6 +6306,138 @@ msgstr ""
 #: apps/io.ox/mail/guidance/main.js:105
 msgctxt "help"
 msgid "E-Mail Settings"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:39
+msgid "Enabled for inbox only"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:40
+msgid "Enabled for all mail folders"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:41
+msgid "Disabled"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:45
+msgid "Inline"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:46
+msgid "Attachment"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:51
+msgid "Plain text"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:52
+msgid "HTML and plain text"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:56
+msgid "disabled"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:57
+msgid "1 minute"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:58
+msgid "3 minutes"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:148
+msgid "Could not save settings"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:174
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while sending"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:177
+msgid "Automatically collect contacts in the folder \"Collected addresses\" while reading"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:187
+msgid "Common"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:189
+msgid "Permanently remove deleted emails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:193
+msgid "Use fixed-width font for text mails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:212
+msgid "Append vCard"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:215
+msgid "Insert the original email text to a reply"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:223
+msgid "Thread view"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:229
+msgid "Forward emails as"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:234
+msgid "Format emails as"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:239 apps/io.ox/mail/settings/pane.js:241
+msgid "Line wrap when sending text mails after "
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:244
+msgid " characters"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:249
+msgid "Default sender address"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:257
+msgid "Auto-save email drafts"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:276
+msgid "Display"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:278
+msgid "Allow html formatted emails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:281
+msgid "Allow pre-loading of externally linked images"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:284
+msgid "Display emoticons as graphics in text emails"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:287
+msgid "Color quoted lines"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:290
+msgid "Ask for delivery receipt"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:324
+msgid "IMAP folder subscription"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js:326
+msgid "Change subscription"
 msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/register.js:32
@@ -6856,31 +6890,6 @@ msgstr ""
 
 #: apps/plugins/portal/flickr/register.js:281
 msgid "Flickr"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:31 apps/plugins/portal/rss/register.js:55
-#: apps/plugins/portal/rss/register.js:193
-msgid "RSS Feed"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:65
-msgid "Press [enter] to jump to the rss stream."
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:68
-msgid "No RSS feeds found."
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:96
-msgid "show image"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:139
-msgid "RSS Feeds"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:170
-msgid "Please enter a feed URL."
 msgstr ""
 
 #: apps/plugins/portal/calendar/register.js:28
