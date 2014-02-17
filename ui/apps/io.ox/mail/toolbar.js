@@ -15,12 +15,13 @@ define('io.ox/mail/toolbar',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/core/extPatterns/actions',
+     'io.ox/core/tk/flag-picker',
      'io.ox/mail/api',
      'gettext!io.ox/mail',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less',
      'io.ox/mail/folderview-extensions'
-    ], function (ext, links, actions, api, gt) {
+    ], function (ext, links, actions, flagPicker, api, gt) {
 
     'use strict';
 
@@ -65,6 +66,16 @@ define('io.ox/mail/toolbar',
             label: gt('Delete'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/delete'
+        },
+        'color': {
+            prio: 'hi',
+            icon: 'icon-bookmark',
+            //label: gt('Set flag color'),
+            drawDisabled: true,
+            ref: 'io.ox/mail/actions/color',
+            customize: function (baton) {
+                flagPicker.attach(this, { data: baton.data });
+            }
         },
         'edit': {
             prio: 'hi',
@@ -118,6 +129,13 @@ define('io.ox/mail/toolbar',
             section: 'keep'
         }
     };
+
+    // local action
+
+    new actions.Action('io.ox/mail/actions/color', {
+        requires: 'some',
+        action: $.noop
+    });
 
     // transform into extensions
 

@@ -71,19 +71,23 @@ define('io.ox/core/extPatterns/links',
             };
 
         this.draw = this.draw || function (baton) {
+
             baton = ext.Baton.ensure(baton);
+            var link = drawDefault();
 
             this.append(
-                drawDefault(baton)
-                .data({ ref: self.ref, baton: baton })
-                .click(click)
+                link.data({ ref: self.ref, baton: baton }).click(click)
             );
+
+            // call customize? (call after append; must be self - not this)
+            if (self.customize) self.customize.call(link, baton);
         };
 
         if (this.drawDisabled === true) {
-            this.drawDisabled = function () {
+            this.drawDisabled = function (baton) {
+                var link = drawDefault();
                 this.append(
-                    drawDefault()
+                    link
                     .tooltip('destroy')
                     .addClass('disabled')
                     .attr({
@@ -95,6 +99,8 @@ define('io.ox/core/extPatterns/links',
                     })
                     .removeAttr('href')
                 );
+                // call customize? (call after append; must be self - not this)
+                if (self.customize) self.customize.call(link, baton);
             };
         }
     };
@@ -200,9 +206,6 @@ define('io.ox/core/extPatterns/links',
                     }
                     else if (_.isFunction(link.draw)) {
                         link.draw.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
-                        if (_.isFunction(link.customize)) {
-                            link.customize.call(nav.find('a'), baton);
-                        }
                         count++;
                     }
                 });
@@ -244,9 +247,6 @@ define('io.ox/core/extPatterns/links',
                     }
                     else if (_.isFunction(link.draw)) {
                         link.draw.call(bootstrapMode ? $('<li>').appendTo(group) : group, baton);
-                        if (_.isFunction(link.customize)) {
-                            link.customize.call(group.find('a'), baton);
-                        }
                         count++;
                     }
                 });
