@@ -318,16 +318,12 @@ define('io.ox/calendar/util',
         addTimezoneLabel: function (parent, data) {
 
             var current = date.Local.getTTInfoLocal(data.start_date);
-
             parent.append(
                 $.txt(gt.noI18n(that.getTimeInterval(data) + ' ')),
-                $('<span class="label pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
+                $('<span class="label label-default pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
-                    content: getContent,
+                    content: getContent(),
                     html: true,
-                    animation: false,
-                    trigger: 'focus',
-                    container: $('#tmp'),
                     placement: function (tip, element) {
                         // add missing outer class
                         $(tip).addClass('timezones');
@@ -336,9 +332,8 @@ define('io.ox/calendar/util',
                             width = $('body').width() / 2;
                         return off.left > width ? 'left' : 'right';
                     }
-                })
-                .on('dispose', function () {
-                    $(this).popover('destroy'); // avoids zombie-popovers
+                }).on('blur', function () {
+                    $(this).popover('hide');
                 })
             );
 
