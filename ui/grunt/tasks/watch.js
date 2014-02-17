@@ -34,7 +34,7 @@ module.exports = function (grunt) {
             tasks: ['less']
         },
         bootjs: {
-            files: ['<%= jshint.bootjs.src %>'],
+            files: ['src/*.js'],
             tasks: ['concat:bootjs', 'uglify:bootjs']
         },
         all: {

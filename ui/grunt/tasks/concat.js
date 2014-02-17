@@ -17,22 +17,6 @@ module.exports = function (grunt) {
 
     grunt.config('concat', {
 
-        static: {
-            files: [
-                {
-                    src: ['.*', '*', '!*.hbs', '!{core_*,index,signin}.html'],
-                    expand: true,
-                    cwd: 'html/',
-                    dest: 'build/'
-                },
-                {
-                    src: ['o{n,ff}line.js'],
-                    expand: true,
-                    cwd: 'src/',
-                    dest: 'build/'
-                }
-            ]
-        },
         bootjs: {
             options: {
                 banner: 'dependencies = {};\n'
@@ -77,17 +61,7 @@ module.exports = function (grunt) {
                          'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
                          'lib/bootstrap-combobox.js'
                     ],
-                    dest: 'build/src/boot.js'
-                }
-            ]
-        },
-        apps: {
-            files: [
-                {
-                    src: ['apps/**/*.js'],
-                    expand: true,
-                    filter: 'isFile',
-                    dest: 'build/src/'
+                    dest: 'build/boot.js'
                 }
             ]
         },
@@ -130,28 +104,7 @@ module.exports = function (grunt) {
                     dest: 'build/manifests/<%= pkg.name %>.json',
                 }
             ]
-        },
-        dateData: {
-            files: [
-                {
-                    src: ['apps/io.ox/core/date/*.json'],
-                    expand: true,
-                    filter: 'isFile',
-                    dest: 'build/'
-                }
-            ]
-        },
-        specs: {
-            files: [
-                {
-                    src: ['spec/**/*.js'],
-                    expand: true,
-                    filter: 'isFile',
-                    dest: 'build/'
-                }
-            ]
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');

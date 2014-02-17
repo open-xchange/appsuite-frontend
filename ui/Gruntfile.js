@@ -40,17 +40,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
 
     // create a package ready version of the ui (aka what jenkins does)
-    grunt.registerTask('dist', ['copy:dist', 'assemble:dist', 'copy:dist_i18n', 'create_i18n_properties', 'compress:dist']);
+    grunt.registerTask('dist', ['uglify', 'copy:dist', 'assemble:dist', 'copy:dist_i18n', 'create_i18n_properties', 'compress:dist']);
     // default task
-    grunt.registerTask('default', ['checkDependencies', 'lint', 'copy_build', 'assemble_build', 'newer:concat', 'newer:less', 'newer:compile_po', 'force_update', 'newer:uglify']);
-
-    //please document supported options here
-    grunt.task.registerTask('options', 'list supported options', function () {
-        grunt.log.writeln('');
-        grunt.log.writeln('_Custom Options:_');
-        grunt.log.writeln('       --benchmark  displays the execution time of grunt tasks');
-        grunt.log.writeln('           --debug  show debug information of the assemble task');
-        grunt.log.writeln('            --keep  keep debug statements');
-        grunt.log.writeln('    --uncompressed  uglify compress/mangle/beautify is disabled');
-    });
+    grunt.registerTask('default', ['checkDependencies', 'lint', 'copy_build', 'assemble_build', 'newer:concat', 'newer:less', 'newer:compile_po', 'force_update']);
 };

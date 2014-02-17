@@ -16,7 +16,52 @@
 module.exports = function (grunt) {
 
     grunt.config('copy', {
-
+        static: {
+            files: [
+                {
+                    src: ['.*', '*', '!*.hbs', '!{core_*,index,signin}.html'],
+                    expand: true,
+                    cwd: 'html/',
+                    dest: 'build/'
+                },
+                {
+                    src: ['o{n,ff}line.js'],
+                    expand: true,
+                    cwd: 'src/',
+                    dest: 'build/'
+                }
+            ]
+        },
+        apps: {
+            files: [
+                {
+                    src: ['apps/**/*.js'],
+                    expand: true,
+                    filter: 'isFile',
+                    dest: 'build/'
+                }
+            ]
+        },
+        dateData: {
+            files: [
+                {
+                    src: ['apps/io.ox/core/date/*.json'],
+                    expand: true,
+                    filter: 'isFile',
+                    dest: 'build/'
+                }
+            ]
+        },
+        specs: {
+            files: [
+                {
+                    src: ['spec/**/*.js'],
+                    expand: true,
+                    filter: 'isFile',
+                    dest: 'build/'
+                }
+            ]
+        },
         themes: {
             files: [
                 {
@@ -58,10 +103,14 @@ module.exports = function (grunt) {
                 }
             ]
         }
-
     });
 
-    grunt.registerTask('copy_build', ['newer:copy:themes', 'newer:copy:thirdparty']);
+    grunt.registerTask('copy_build', [
+        'newer:copy:static',
+        'newer:copy:apps',
+        'newer:copy:themes',
+        'newer:copy:thirdparty'
+    ]);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
 };

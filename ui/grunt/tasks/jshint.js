@@ -21,9 +21,6 @@ module.exports = function (grunt) {
             jshintrc: true,
             ignores: ['apps/io.ox/core/date.js', 'spec/io.ox/core/date_spec.js'] // date.js has some funky include stuff we have to figure out
         },
-        bootjs: {
-            src: ['src/*.js']
-        },
         specs: {
             src: ['spec/**/*_spec.js']
         },
