@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-30 13:08+0100\n"
+"PO-Revision-Date: 2014-02-17 15:47+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: en_US\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js:76
@@ -4753,7 +4753,7 @@ msgstr "Die Datei ist verfügbar unter %1$s"
 
 #: apps/io.ox/core/pubsub/publications.js:118
 msgid "Share"
-msgstr "Freigegeben"
+msgstr "Freigeben"
 
 #: apps/io.ox/core/pubsub/publications.js:173
 msgid "Name already taken"
