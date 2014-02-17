@@ -888,13 +888,13 @@ define('io.ox/core/main',
             }
         });
 
-        ext.point('io.ox/core/feedback').extend({
-            draw: function () {
-                require(['io.ox/core/feedback/feedback'], function (feedback) {
-                    feedback.drawButton();
-                });
-            }
-        });
+        // ext.point('io.ox/core/feedback').extend({
+        //     draw: function () {
+        //         require(['io.ox/core/feedback/feedback'], function (feedback) {
+        //             feedback.drawButton();
+        //         });
+        //     }
+        // });
 
         // add some senseless characters to avoid unwanted scrolling
         if (location.hash === '') {
