@@ -9,53 +9,76 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: apps/io.ox/core/extPatterns/links.js:311
-#: apps/io.ox/core/extPatterns/links.js:314
-#: apps/io.ox/core/extPatterns/links.js:322
-#: apps/io.ox/core/extPatterns/links.js:325
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:586
-msgid "Actions"
+#: apps/io.ox/calendar/edit/template.js:77
+#: apps/io.ox/contacts/distrib/create-dist-view.js:40
+#: apps/io.ox/contacts/edit/view-form.js:175
+#: apps/io.ox/contacts/settings/pane.js:102
+#: apps/io.ox/core/folder/imap-subscription.js:58
+#: apps/io.ox/core/folder/imap-subscription.js:63
+#: apps/io.ox/core/permissions/permissions.js:355
+#: apps/io.ox/core/permissions/permissions.js:397
+#: apps/io.ox/core/tk/dialogs.js:535 apps/io.ox/editor/main.js:127
+#: apps/io.ox/editor/main.js:143 apps/io.ox/files/actions.js:538
+#: apps/io.ox/files/views/create.js:116 apps/io.ox/mail/accounts/settings.js:42
+#: apps/io.ox/mail/actions/attachmentSave.js:66
+#: apps/io.ox/mail/mailfilter/settings/filter.js:87
+#: apps/io.ox/mail/settings/signatures/register.js:109
+#: apps/io.ox/mail/write/view-main.js:58 apps/io.ox/oauth/settings.js:80
+#: apps/io.ox/tasks/edit/view-template.js:46
+#: apps/io.ox/tasks/edit/view-template.js:89
+#: apps/plugins/portal/flickr/register.js:226
+#: apps/plugins/portal/rss/register.js:149
+#: apps/plugins/portal/rss/register.js:153
+#: apps/plugins/portal/tumblr/register.js:245
+#: apps/plugins/portal/userSettings/register.js:43
+msgid "Save"
 msgstr ""
 
-#: apps/io.ox/core/extPatterns/links.js:312
-#: apps/io.ox/core/extPatterns/links.js:315
-#: apps/io.ox/core/extPatterns/links.js:322
-#: apps/io.ox/core/extPatterns/links.js:325
-#: apps/io.ox/mail/write/view-main.js:771
-msgid "More"
+#: apps/io.ox/editor/main.js:138
+msgid "Enter document title here"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:209
-msgid "Could not get a default folder for this application."
+#: apps/io.ox/core/about/about.js:66 apps/io.ox/core/commons-folderview.js:529
+#: apps/io.ox/core/permissions/permissions.js:454
+#: apps/io.ox/core/pubsub/publications.js:107 apps/io.ox/core/tk/dialogs.js:535
+#: apps/io.ox/core/wizard/registry.js:60 apps/io.ox/editor/main.js:144
+#: apps/io.ox/files/actions.js:287 apps/io.ox/files/carousel.js:45
+#: apps/io.ox/files/mediaplayer.js:288 apps/io.ox/mail/accounts/settings.js:309
+#: apps/io.ox/mail/accounts/settings.js:331 apps/io.ox/mail/actions.js:192
+#: apps/plugins/upsell/simple-wizard/register.js:91
+msgid "Close"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:596
-msgid "There are unsaved changes."
+#: apps/io.ox/editor/main.js:151
+msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:936
-msgid "Application Toolbar"
+#: apps/io.ox/editor/main.js:173
+msgid "Editor"
 msgstr ""
 
-#. Title of the browser window
-#. %1$s is the name of the page, e.g. OX App Suite
-#. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1010 apps/io.ox/core/desktop.js:1185
-msgctxt "window title"
-msgid "%1$s %2$s"
+#: apps/io.ox/editor/main.js:222
+msgid "This file will be written in your default folder to allow editing"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1466
-msgid "Search for items"
+#: apps/io.ox/calendar/edit/main.js:49 apps/io.ox/contacts/distrib/main.js:182
+#: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:312
+#: apps/io.ox/tasks/edit/main.js:159
+msgid "Do you really want to discard your changes?"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1477 apps/io.ox/core/desktop.js:1479
-#: apps/io.ox/core/desktop.js:1537 apps/plugins/portal/flickr/register.js:217
-msgid "Search"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:1529
-msgid "Toggle search"
+#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:97
+#: apps/io.ox/contacts/distrib/create-dist-view.js:54
+#: apps/io.ox/contacts/distrib/main.js:183 apps/io.ox/contacts/edit/main.js:248
+#: apps/io.ox/contacts/edit/view-form.js:185
+#: apps/io.ox/contacts/settings/pane.js:103 apps/io.ox/editor/main.js:313
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
+#: apps/io.ox/mail/settings/signatures/register.js:110
+#: apps/io.ox/mail/write/inplace/inplace.js:114
+#: apps/io.ox/mail/write/main.js:1320 apps/io.ox/mail/write/view-main.js:67
+#: apps/io.ox/tasks/edit/view-template.js:82
+#: apps/plugins/portal/userSettings/register.js:44
+msgid "Discard"
 msgstr ""
 
 #: apps/io.ox/calendar/acceptdeny.js:89 apps/io.ox/calendar/actions.js:153
@@ -108,322 +131,9 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1698
-msgid "Failed to start application. Maybe you have connection problems. Please try again."
-msgstr ""
-
-#: apps/io.ox/core/main.js:125
-msgid "Offline"
-msgstr ""
-
-#: apps/io.ox/backbone/basicModel.js:144 apps/io.ox/core/main.js:136
-msgid "Server unreachable"
-msgstr ""
-
-#: apps/io.ox/core/main.js:152
-msgid "Applications"
-msgstr ""
-
-#: apps/io.ox/core/main.js:156
-msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
-msgstr ""
-
-#: apps/io.ox/core/main.js:162 apps/io.ox/launchpad/main.js:29
-msgctxt "app"
-msgid "Portal"
-msgstr ""
-
-#: apps/io.ox/core/main.js:163 apps/io.ox/launchpad/main.js:30
-#: apps/io.ox/mail/settings/pane.js:164
-msgctxt "app"
-msgid "Mail"
-msgstr ""
-
-#: apps/io.ox/core/main.js:164 apps/io.ox/launchpad/main.js:31
-msgctxt "app"
-msgid "Address Book"
-msgstr ""
-
-#: apps/io.ox/calendar/settings/pane.js:106 apps/io.ox/core/main.js:165
-#: apps/io.ox/launchpad/main.js:32
-msgctxt "app"
-msgid "Calendar"
-msgstr ""
-
-#: apps/io.ox/core/main.js:166 apps/io.ox/launchpad/main.js:33
-msgctxt "app"
-msgid "Scheduling"
-msgstr ""
-
-#: apps/io.ox/core/main.js:167 apps/io.ox/launchpad/main.js:34
-#: apps/io.ox/tasks/settings/pane.js:50
-msgctxt "app"
-msgid "Tasks"
-msgstr ""
-
-#: apps/io.ox/core/main.js:168 apps/io.ox/files/settings/pane.js:53
-#: apps/io.ox/launchpad/main.js:35
-msgctxt "app"
-msgid "Drive"
-msgstr ""
-
-#: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
-msgctxt "app"
-msgid "Conversations"
-msgstr ""
-
-#: apps/io.ox/core/main.js:383
-msgid "You will be automatically signed out in %1$d second"
-msgid_plural "You will be automatically signed out in %1$d seconds"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/core/main.js:402 apps/io.ox/core/settings/pane.js:245
-msgid "Automatic sign out"
-msgstr ""
-
-#: apps/io.ox/core/main.js:406
-msgid "Sign out now"
-msgstr ""
-
-#. %1$s is app title/name
-#: apps/io.ox/core/main.js:517
-msgid "close for %1$s"
-msgstr ""
-
-#: apps/io.ox/core/main.js:635 apps/io.ox/core/pubsub/settings/pane.js:198
-msgid "Refresh"
-msgstr ""
-
-#: apps/io.ox/core/main.js:647 apps/io.ox/core/main.js:801
-msgid "Settings"
-msgstr ""
-
 #: apps/io.ox/calendar/freebusy/templates.js:107 apps/io.ox/core/main.js:674
 #: apps/io.ox/help/center.js:103
 msgid "Help"
-msgstr ""
-
-#: apps/io.ox/core/main.js:706
-msgid "Exit Fullscreen"
-msgstr ""
-
-#: apps/io.ox/core/main.js:709 apps/io.ox/core/main.js:713
-#: apps/io.ox/files/actions.js:1198
-msgid "Fullscreen"
-msgstr ""
-
-#: apps/io.ox/core/main.js:731
-msgid "About"
-msgstr ""
-
-#: apps/io.ox/core/main.js:751
-msgid "Give feedback"
-msgstr ""
-
-#: apps/io.ox/core/main.js:771
-msgid "Sign out"
-msgstr ""
-
-#: apps/io.ox/core/main.js:828
-msgid "Your Applications"
-msgstr ""
-
-#: apps/io.ox/core/main.js:885 apps/io.ox/core/relogin.js:46
-msgid "Your session is expired"
-msgstr ""
-
-#: apps/io.ox/core/main.js:886 apps/io.ox/core/relogin.js:48
-msgid "Please sign in again to continue"
-msgstr ""
-
-#: apps/io.ox/core/main.js:1122
-msgid "Restore applications"
-msgstr ""
-
-#: apps/io.ox/core/main.js:1124
-msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
-msgstr ""
-
-#: apps/io.ox/core/main.js:1129
-msgid "Continue"
-msgstr ""
-
-#: apps/io.ox/core/feedback/feedback.js:30
-#: apps/io.ox/core/feedback/feedback.js:37
-#: apps/io.ox/core/feedback/feedback.js:43
-#: apps/io.ox/core/feedback/feedback.js:49
-msgid "Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating."
-msgstr ""
-
-#: apps/io.ox/core/feedback/feedback.js:46
-msgid "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust your rating."
-msgstr ""
-
-#: apps/io.ox/core/feedback/feedback.js:111
-msgid "Feedback"
-msgstr ""
-
-#: apps/io.ox/core/feedback/feedback.js:112
-msgid "Send feedback"
-msgstr ""
-
-#: apps/io.ox/core/feedback/feedback.js:118
-msgid "Welcome. Please provide your feedback about this product"
-msgstr ""
-
-#: apps/io.ox/core/feedback/feedback.js:120
-msgid "Comments and suggestions"
-msgstr ""
-
-#: apps/io.ox/core/feedback/feedback.js:127
-msgid "Thank you for your feedback"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:56
-msgid "An error occurred"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:59
-msgid "An error occurred. Please try again later"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:461 apps/io.ox/backbone/forms.js:785
-#: apps/io.ox/calendar/month/perspective.js:425 apps/io.ox/calendar/util.js:155
-#: apps/io.ox/calendar/util.js:192 apps/io.ox/calendar/week/view.js:150
-#: apps/io.ox/calendar/week/view.js:702
-#: apps/plugins/portal/birthdays/register.js:84
-#: apps/plugins/portal/birthdays/register.js:153
-msgid "Today"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:522 apps/io.ox/backbone/forms.js:846
-#: apps/io.ox/calendar/week/view.js:112
-msgid "Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key."
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:540
-msgid "clear"
-msgstr ""
-
-#: apps/io.ox/backbone/forms.js:612 apps/io.ox/backbone/forms.js:936
-#: apps/io.ox/backbone/validation.js:60 apps/io.ox/backbone/validation.js:67
-msgid "Please enter a valid date"
-msgstr ""
-
-#: apps/io.ox/linkedIn/view-detail.js:65
-msgid "Open on LinkedIn"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:31 apps/plugins/portal/rss/register.js:59
-#: apps/plugins/portal/rss/register.js:201
-msgid "RSS Feed"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:69
-msgid "Press [enter] to jump to the rss stream."
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:72
-msgid "No RSS feeds found."
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:100
-msgid "show image"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:143
-msgid "RSS Feeds"
-msgstr ""
-
-#: apps/io.ox/contacts/model.js:280 apps/plugins/portal/rss/register.js:146
-msgid "URL"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/template.js:217 apps/io.ox/files/actions.js:534
-#: apps/io.ox/files/views/create.js:164
-#: apps/io.ox/tasks/edit/view-template.js:119
-#: apps/plugins/portal/flickr/register.js:221
-#: apps/plugins/portal/rss/register.js:144
-#: apps/plugins/portal/rss/register.js:148
-#: apps/plugins/portal/tumblr/register.js:240
-msgid "Description"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/template.js:77
-#: apps/io.ox/contacts/distrib/create-dist-view.js:40
-#: apps/io.ox/contacts/edit/view-form.js:175
-#: apps/io.ox/contacts/settings/pane.js:102
-#: apps/io.ox/core/folder/imap-subscription.js:58
-#: apps/io.ox/core/folder/imap-subscription.js:63
-#: apps/io.ox/core/permissions/permissions.js:355
-#: apps/io.ox/core/permissions/permissions.js:397
-#: apps/io.ox/core/tk/dialogs.js:535 apps/io.ox/editor/main.js:127
-#: apps/io.ox/editor/main.js:143 apps/io.ox/files/actions.js:538
-#: apps/io.ox/files/views/create.js:116 apps/io.ox/mail/accounts/settings.js:42
-#: apps/io.ox/mail/actions/attachmentSave.js:66
-#: apps/io.ox/mail/mailfilter/settings/filter.js:87
-#: apps/io.ox/mail/settings/signatures/register.js:109
-#: apps/io.ox/mail/write/view-main.js:58 apps/io.ox/oauth/settings.js:80
-#: apps/io.ox/tasks/edit/view-template.js:46
-#: apps/io.ox/tasks/edit/view-template.js:89
-#: apps/plugins/portal/flickr/register.js:226
-#: apps/plugins/portal/rss/register.js:149
-#: apps/plugins/portal/rss/register.js:153
-#: apps/plugins/portal/tumblr/register.js:245
-#: apps/plugins/portal/userSettings/register.js:43
-msgid "Save"
-msgstr ""
-
-#: apps/plugins/portal/rss/register.js:174
-msgid "Please enter a feed URL."
-msgstr ""
-
-#: apps/io.ox/editor/main.js:138
-msgid "Enter document title here"
-msgstr ""
-
-#: apps/io.ox/core/about/about.js:66 apps/io.ox/core/commons-folderview.js:529
-#: apps/io.ox/core/permissions/permissions.js:454
-#: apps/io.ox/core/pubsub/publications.js:107 apps/io.ox/core/tk/dialogs.js:535
-#: apps/io.ox/core/wizard/registry.js:60 apps/io.ox/editor/main.js:144
-#: apps/io.ox/files/actions.js:287 apps/io.ox/files/carousel.js:45
-#: apps/io.ox/files/mediaplayer.js:288 apps/io.ox/mail/accounts/settings.js:309
-#: apps/io.ox/mail/accounts/settings.js:331 apps/io.ox/mail/actions.js:192
-#: apps/plugins/upsell/simple-wizard/register.js:91
-msgid "Close"
-msgstr ""
-
-#: apps/io.ox/editor/main.js:151
-msgid "You can quick-save your changes via Ctrl+Enter."
-msgstr ""
-
-#: apps/io.ox/editor/main.js:173
-msgid "Editor"
-msgstr ""
-
-#: apps/io.ox/editor/main.js:222
-msgid "This file will be written in your default folder to allow editing"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/main.js:49 apps/io.ox/contacts/distrib/main.js:182
-#: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:312
-#: apps/io.ox/tasks/edit/main.js:159
-msgid "Do you really want to discard your changes?"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/main.js:50 apps/io.ox/calendar/edit/template.js:97
-#: apps/io.ox/contacts/distrib/create-dist-view.js:54
-#: apps/io.ox/contacts/distrib/main.js:183 apps/io.ox/contacts/edit/main.js:248
-#: apps/io.ox/contacts/edit/view-form.js:185
-#: apps/io.ox/contacts/settings/pane.js:103 apps/io.ox/editor/main.js:313
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:60
-#: apps/io.ox/mail/settings/signatures/register.js:110
-#: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1320 apps/io.ox/mail/write/view-main.js:67
-#: apps/io.ox/tasks/edit/view-template.js:82
-#: apps/plugins/portal/userSettings/register.js:44
-msgid "Discard"
 msgstr ""
 
 #: apps/io.ox/help/center.js:127
@@ -1220,6 +930,14 @@ msgstr ""
 msgid "Your IP address has changed"
 msgstr ""
 
+#: apps/io.ox/core/main.js:885 apps/io.ox/core/relogin.js:46
+msgid "Your session is expired"
+msgstr ""
+
+#: apps/io.ox/core/main.js:886 apps/io.ox/core/relogin.js:48
+msgid "Please sign in again to continue"
+msgstr ""
+
 #: apps/io.ox/core/login-i18n.js:24 apps/io.ox/core/relogin.js:51
 #: apps/io.ox/mail/accounts/view-form.js:340
 #: apps/io.ox/mail/accounts/view-form.js:404
@@ -1365,6 +1083,10 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:235
 msgid "Off"
+msgstr ""
+
+#: apps/io.ox/core/main.js:402 apps/io.ox/core/settings/pane.js:245
+msgid "Automatic sign out"
 msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:26
@@ -1649,6 +1371,10 @@ msgstr ""
 msgid "Note: Refreshing this subscription will replace the calendar content with the external content. Changes you have made inside appsuite will be overwritten"
 msgstr ""
 
+#: apps/io.ox/core/main.js:635 apps/io.ox/core/pubsub/settings/pane.js:198
+msgid "Refresh"
+msgstr ""
+
 #: apps/io.ox/calendar/actions.js:572 apps/io.ox/contacts/actions.js:746
 #: apps/io.ox/core/pubsub/settings/pane.js:207 apps/io.ox/files/actions.js:817
 #: apps/io.ox/mail/actions.js:978
@@ -1889,6 +1615,59 @@ msgstr ""
 
 #: apps/io.ox/core/login-i18n.js:46
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
+msgstr ""
+
+#: apps/io.ox/core/extPatterns/links.js:311
+#: apps/io.ox/core/extPatterns/links.js:314
+#: apps/io.ox/core/extPatterns/links.js:322
+#: apps/io.ox/core/extPatterns/links.js:325
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:586
+msgid "Actions"
+msgstr ""
+
+#: apps/io.ox/core/extPatterns/links.js:312
+#: apps/io.ox/core/extPatterns/links.js:315
+#: apps/io.ox/core/extPatterns/links.js:322
+#: apps/io.ox/core/extPatterns/links.js:325
+#: apps/io.ox/mail/write/view-main.js:771
+msgid "More"
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:209
+msgid "Could not get a default folder for this application."
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:596
+msgid "There are unsaved changes."
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:936
+msgid "Application Toolbar"
+msgstr ""
+
+#. Title of the browser window
+#. %1$s is the name of the page, e.g. OX App Suite
+#. %2$s is the title of the active app, e.g. Calendar
+#: apps/io.ox/core/desktop.js:1010 apps/io.ox/core/desktop.js:1185
+msgctxt "window title"
+msgid "%1$s %2$s"
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:1466
+msgid "Search for items"
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:1477 apps/io.ox/core/desktop.js:1479
+#: apps/io.ox/core/desktop.js:1537 apps/plugins/portal/flickr/register.js:217
+msgid "Search"
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:1529
+msgid "Toggle search"
+msgstr ""
+
+#: apps/io.ox/core/desktop.js:1698
+msgid "Failed to start application. Maybe you have connection problems. Please try again."
 msgstr ""
 
 #: apps/io.ox/core/commons-folderview.js:258 apps/io.ox/core/folder/add.js:81
@@ -2189,6 +1968,122 @@ msgctxt "vgrid"
 msgid "Empty"
 msgstr ""
 
+#: apps/io.ox/core/main.js:125
+msgid "Offline"
+msgstr ""
+
+#: apps/io.ox/backbone/basicModel.js:144 apps/io.ox/core/main.js:136
+msgid "Server unreachable"
+msgstr ""
+
+#: apps/io.ox/core/main.js:152
+msgid "Applications"
+msgstr ""
+
+#: apps/io.ox/core/main.js:156
+msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
+msgstr ""
+
+#: apps/io.ox/core/main.js:162 apps/io.ox/launchpad/main.js:29
+msgctxt "app"
+msgid "Portal"
+msgstr ""
+
+#: apps/io.ox/core/main.js:163 apps/io.ox/launchpad/main.js:30
+#: apps/io.ox/mail/settings/pane.js:164
+msgctxt "app"
+msgid "Mail"
+msgstr ""
+
+#: apps/io.ox/core/main.js:164 apps/io.ox/launchpad/main.js:31
+msgctxt "app"
+msgid "Address Book"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js:106 apps/io.ox/core/main.js:165
+#: apps/io.ox/launchpad/main.js:32
+msgctxt "app"
+msgid "Calendar"
+msgstr ""
+
+#: apps/io.ox/core/main.js:166 apps/io.ox/launchpad/main.js:33
+msgctxt "app"
+msgid "Scheduling"
+msgstr ""
+
+#: apps/io.ox/core/main.js:167 apps/io.ox/launchpad/main.js:34
+#: apps/io.ox/tasks/settings/pane.js:50
+msgctxt "app"
+msgid "Tasks"
+msgstr ""
+
+#: apps/io.ox/core/main.js:168 apps/io.ox/files/settings/pane.js:53
+#: apps/io.ox/launchpad/main.js:35
+msgctxt "app"
+msgid "Drive"
+msgstr ""
+
+#: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
+msgctxt "app"
+msgid "Conversations"
+msgstr ""
+
+#: apps/io.ox/core/main.js:383
+msgid "You will be automatically signed out in %1$d second"
+msgid_plural "You will be automatically signed out in %1$d seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/core/main.js:406
+msgid "Sign out now"
+msgstr ""
+
+#. %1$s is app title/name
+#: apps/io.ox/core/main.js:517
+msgid "close for %1$s"
+msgstr ""
+
+#: apps/io.ox/core/main.js:647 apps/io.ox/core/main.js:801
+msgid "Settings"
+msgstr ""
+
+#: apps/io.ox/core/main.js:706
+msgid "Exit Fullscreen"
+msgstr ""
+
+#: apps/io.ox/core/main.js:709 apps/io.ox/core/main.js:713
+#: apps/io.ox/files/actions.js:1198
+msgid "Fullscreen"
+msgstr ""
+
+#: apps/io.ox/core/main.js:731
+msgid "About"
+msgstr ""
+
+#: apps/io.ox/core/main.js:751
+msgid "Give feedback"
+msgstr ""
+
+#: apps/io.ox/core/main.js:771
+msgid "Sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js:828
+msgid "Your Applications"
+msgstr ""
+
+#: apps/io.ox/core/main.js:1122
+msgid "Restore applications"
+msgstr ""
+
+#: apps/io.ox/core/main.js:1124
+msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
+msgstr ""
+
+#: apps/io.ox/core/main.js:1129
+msgid "Continue"
+msgstr ""
+
 #: apps/io.ox/core/commons.js:52
 msgid "<b>%1$d</b> elements selected"
 msgstr ""
@@ -2393,6 +2288,37 @@ msgid "Cannot print this item"
 msgid_plural "Cannot print these items"
 msgstr[0] ""
 msgstr[1] ""
+
+#: apps/io.ox/core/feedback/feedback.js:30
+#: apps/io.ox/core/feedback/feedback.js:37
+#: apps/io.ox/core/feedback/feedback.js:43
+#: apps/io.ox/core/feedback/feedback.js:49
+msgid "Rating %1$d of %2$d. Press Enter to confirm or use the left and right arrowkeys to adjust your rating."
+msgstr ""
+
+#: apps/io.ox/core/feedback/feedback.js:46
+msgid "Rating %1$d of %2$d confirmed. Use the left and right arrowkeys to adjust your rating."
+msgstr ""
+
+#: apps/io.ox/core/feedback/feedback.js:111
+msgid "Feedback"
+msgstr ""
+
+#: apps/io.ox/core/feedback/feedback.js:112
+msgid "Send feedback"
+msgstr ""
+
+#: apps/io.ox/core/feedback/feedback.js:118
+msgid "Welcome. Please provide your feedback about this product"
+msgstr ""
+
+#: apps/io.ox/core/feedback/feedback.js:120
+msgid "Comments and suggestions"
+msgstr ""
+
+#: apps/io.ox/core/feedback/feedback.js:127
+msgid "Thank you for your feedback"
+msgstr ""
 
 #: apps/io.ox/core/commons-folderview.js:58
 msgid "Folders"
@@ -2702,6 +2628,16 @@ msgstr ""
 #: apps/io.ox/mail/write/view-main.js:951
 #: apps/io.ox/tasks/edit/view-template.js:106 apps/io.ox/tasks/main.js:335
 msgid "Subject"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/template.js:217 apps/io.ox/files/actions.js:534
+#: apps/io.ox/files/views/create.js:164
+#: apps/io.ox/tasks/edit/view-template.js:119
+#: apps/plugins/portal/flickr/register.js:221
+#: apps/plugins/portal/rss/register.js:144
+#: apps/plugins/portal/rss/register.js:148
+#: apps/plugins/portal/tumblr/register.js:240
+msgid "Description"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/template.js:236
@@ -3270,6 +3206,37 @@ msgstr ""
 
 #: apps/io.ox/backbone/basicModel.js:129
 msgid "Invalid data"
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:56
+msgid "An error occurred"
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:59
+msgid "An error occurred. Please try again later"
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:461 apps/io.ox/backbone/forms.js:785
+#: apps/io.ox/calendar/month/perspective.js:425 apps/io.ox/calendar/util.js:155
+#: apps/io.ox/calendar/util.js:192 apps/io.ox/calendar/week/view.js:150
+#: apps/io.ox/calendar/week/view.js:702
+#: apps/plugins/portal/birthdays/register.js:84
+#: apps/plugins/portal/birthdays/register.js:153
+msgid "Today"
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:522 apps/io.ox/backbone/forms.js:846
+#: apps/io.ox/calendar/week/view.js:112
+msgid "Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key."
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:540
+msgid "clear"
+msgstr ""
+
+#: apps/io.ox/backbone/forms.js:612 apps/io.ox/backbone/forms.js:936
+#: apps/io.ox/backbone/validation.js:60 apps/io.ox/backbone/validation.js:67
+msgid "Please enter a valid date"
 msgstr ""
 
 #: apps/io.ox/backbone/validation.js:38 apps/io.ox/backbone/validation.js:45
@@ -3862,6 +3829,10 @@ msgstr ""
 msgid "Email 3"
 msgstr ""
 
+#: apps/io.ox/contacts/model.js:280 apps/plugins/portal/rss/register.js:146
+msgid "URL"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js:281
 msgid "Telephone (ISDN)"
 msgstr ""
@@ -4423,6 +4394,10 @@ msgstr ""
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
 #: apps/io.ox/settings/util.js:61
 msgid "Unable to load mail filter settings."
+msgstr ""
+
+#: apps/io.ox/linkedIn/view-detail.js:65
+msgid "Open on LinkedIn"
 msgstr ""
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:31
@@ -6890,6 +6865,31 @@ msgstr ""
 
 #: apps/plugins/portal/flickr/register.js:281
 msgid "Flickr"
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:31 apps/plugins/portal/rss/register.js:59
+#: apps/plugins/portal/rss/register.js:201
+msgid "RSS Feed"
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:69
+msgid "Press [enter] to jump to the rss stream."
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:72
+msgid "No RSS feeds found."
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:100
+msgid "show image"
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:143
+msgid "RSS Feeds"
+msgstr ""
+
+#: apps/plugins/portal/rss/register.js:174
+msgid "Please enter a feed URL."
 msgstr ""
 
 #: apps/plugins/portal/calendar/register.js:28
