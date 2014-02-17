@@ -17,7 +17,7 @@ define('plugins/portal/userSettings/register',
      'io.ox/core/main',
      'gettext!io.ox/core',
      'settings!io.ox/core',
-     'less!plugins/portal/userSettings/style.less'
+     'less!plugins/portal/userSettings/style'
     ], function (ext, main, gt, settings) {
 
     'use strict';

@@ -18,7 +18,7 @@ define('plugins/core/feedback/register',
      'settings!io.ox/core',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
-     'less!plugins/core/feedback/style.less'], function (dialogs, gt, notifications, settings, api, ext) {
+     'less!plugins/core/feedback/style'], function (dialogs, gt, notifications, settings, api, ext) {
 
     'use strict';
 
@@ -62,7 +62,7 @@ define('plugins/core/feedback/register',
                 starnumber = value;
             }
             _(stars).each(function (star, index) {
-                
+
                 if (index < starnumber) {
                     star.addClass('active-star');
                 } else {
@@ -97,7 +97,7 @@ define('plugins/core/feedback/register',
                 console.log(data);//print data to console for now
                 return $.when();
                 //when backend is ready remove the placeholder 'console.log and return $.when' and use the correct function below
-                
+
                 /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
                     module: 'feedback',
                     params: {action: 'send',
@@ -110,7 +110,7 @@ define('plugins/core/feedback/register',
             console.log(data);//print data to console for now
             return $.when();
             //when backend is ready remove the placeholder 'console.log and return $.when' and use the correct function below
-    
+
             /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
                 module: 'feedback',
                 params: {action: 'send',
@@ -120,7 +120,7 @@ define('plugins/core/feedback/register',
             });*/
         }
     }
-    
+
     var feedback = {
         show: function () {
             var popup = new dialogs.ModalDialog()
@@ -133,7 +133,7 @@ define('plugins/core/feedback/register',
             if (supportlink !== '') {
                 supportlink = $('<a href="' + supportlink + '" tabindex="1">');
             }
-            
+
             popup.getBody().append($('<div class="feedback-welcome-text">')
                     .text(gt('Welcome. Please provide your feedback about this product')),
                     stars.node,
@@ -184,7 +184,7 @@ define('plugins/core/feedback/register',
             }
         }
     });
-    
+
     ext.point('io.ox/core/plugins').extend({
         id: 'feedback',
         draw: function () {
@@ -192,7 +192,7 @@ define('plugins/core/feedback/register',
             if (_.device('!small') && (currentSetting === 'both' || currentSetting === 'side')) {
                 feedback.drawButton();
             }
-            
+
         }
     });
 

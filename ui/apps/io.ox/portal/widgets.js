@@ -196,6 +196,8 @@ define('io.ox/portal/widgets',
             var dependencies = _.intersection(collection.pluck('plugin'), api.getAvailablePlugins());
             return require(dependencies).then(function () {
                 return api.removeDisabled();
+            }).fail(function () {
+                console.error('Could not load portal plugin in loadUsedPlugins.');
             });
         },
 
