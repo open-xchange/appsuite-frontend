@@ -47,6 +47,8 @@ define('io.ox/settings/main',
                 this.attr({
                     'aria-label': title
                 });
+                //clean template
+                fields.title.empty();
                 fields.title.append($.txt(
                         title === data.title ? gt(data.title) : title
                     )
@@ -77,9 +79,10 @@ define('io.ox/settings/main',
         // nodes
         left,
         right,
-        expertmode = true, // for testing - better: false,
+        expertmode = false, // for testing - better: false,
         currentSelection = null,
-        previousSelection = null;
+        previousSelection = null,
+        advancedModeOnly = [gt('Mail Filter'), gt('Address Book'), gt('Tasks'), gt('Drive'), gt('Downloads'), gt('Error log')];
 
     function updateExpertMode() {
         var nodes = $('.expertmode');
@@ -142,25 +145,13 @@ define('io.ox/settings/main',
             return $.when();
         };
 
-        win.nodes.controls.append(
-            forms.createCheckbox({
-                dataid: 'settings-expertcb',
-                initialValue: expertmode,
-                label: gt('Expert mode')
-            })
-            .on('update.model', function (e, options) {
-                expertmode = options.value;
-                updateExpertMode();
-            })
-        );
-
         win.addClass('io-ox-settings-main');
 
         var vsplit = commons.vsplit(win.nodes.main, app);
         left = vsplit.left.addClass('leftside border-right');
         right = vsplit.right.addClass('default-content-padding settings-detail-pane f6-target').attr('tabindex', 1).scrollable();
 
-        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, toolbarPlacement: 'none', selectSmart: _.device('!smartphone') });
+        grid = new VGrid(left, { multiple: false, draggable: false, showToggle: false, showCheckbox: false,  toolbarPlacement: 'bottom', selectSmart: _.device('!smartphone') });
 
         // disable the Deserializer
         grid.setDeserialize(function (cid) {
@@ -256,7 +247,14 @@ define('io.ox/settings/main',
         var getAllSettingsPanes = function () {
             var def = $.Deferred();
             appsInitialized.done(function () {
-                def.resolve(ext.point('io.ox/settings/pane').list());
+
+                def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
+                    if (expertmode) {
+                        return true;
+                    } else {
+                        return (_.indexOf(advancedModeOnly, point.title) !== -1) ? false : true;
+                    }
+                }));
             });
 
             appsInitialized.fail(def.reject);
@@ -283,13 +281,13 @@ define('io.ox/settings/main',
                 return require([settingsPath], function () {
                     right.empty().idle(); // again, since require makes this async
                     ext.point(extPointPart).invoke('draw', right, baton);
-                    // updateExpertMode();
+                    updateExpertMode();
                 });
             } else {
                 return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
                     right.empty().idle(); // again, since require makes this async
                     ext.point(extPointPart).invoke('draw', right, baton);
-                    // updateExpertMode();
+                    updateExpertMode();
                 });
             }
         };
@@ -348,6 +346,38 @@ define('io.ox/settings/main',
                 return $.when();
             }
         };
+
+
+        ext.point('settings/vgrid/toolbar').extend({
+            id: 'info',
+            index: 200,
+            draw: function () {
+
+                var buildCheckbox = function () {
+                    var checkbox = $('<input type="checkbox">')
+                    .on('change', function () {
+
+                        expertmode = checkbox.prop('checked');
+                        grid.setAllRequest(getAllSettingsPanes);
+                        grid.paint();
+                        updateExpertMode();
+
+                    }).addClass('input-xlarge');
+                    checkbox.prop('checked', expertmode);
+                    return checkbox;
+                };
+
+                this.append(
+                    $('<div>').addClass('advanced-mode').append(
+                        $('<label>').addClass('checkbox').text(gt('Advanced Mode')).append(
+                            buildCheckbox()
+                        )
+                    )
+                );
+            }
+        });
+
+        ext.point('settings/vgrid/toolbar').invoke('draw', grid.getToolbar());
 
         // go!
         win.show(function () {
