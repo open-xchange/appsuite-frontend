@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "jquery": "~2.1.0",
-    "underscore": "~1.5.2",
+    "underscore": "~1.6.0",
     "mediaelement": "~2.13.2",
     "bootstrap": "~3.1.1",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#bs3",
