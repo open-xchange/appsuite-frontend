@@ -89,11 +89,9 @@
     .info-panel {
         margin-left: 2em;
         display: inline;
-    }
-
-    .info-panel { 
         float: right;
     }
+
     .status, .end-date, .alarm-date, .task-progress {
     	float: right;
     	clear: both;
@@ -119,12 +117,14 @@
 
     .task-details { margin: 1em 0 1em 0; }
 
-    .detail-item, .detail-label, .detail-value, .participants-table-colorsquare { display: inline-block; }
+    .participants-table-colorsquare { display: inline-block; }
 
     .detail-label {
         cursor: default;
         color: #aaa;
         margin-right: 0.5em;
+        text-align: left;
+        width: 220px;
     }
 
     .detail-value { margin-right: 1em; }
@@ -167,9 +167,7 @@
 
         header { margin-bottom: 13px; }
 
-        .detail-item, .detail-label, .detail-value, .participants-table-confirmmessage { display: block; }
-
-        .detail-item { margin-bottom: 1.0em; }
+        .detail-label, .detail-value, .participants-table-confirmmessage { display: block; }
 
         .detail-label { margin-bottom: 0; }
 

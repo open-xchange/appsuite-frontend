@@ -85,7 +85,7 @@ define('io.ox/tasks/view-detail',
             node.append(
                 header.append(
                     infoPanel,
-                    $('<div class="title clear-title">').append(
+                    $('<h1 class="title clear-title">').append(
                         // lock icon
                         data.private_flag ? $('<i class="fa fa-lock private-flag">') : [],
                         // title
@@ -126,21 +126,25 @@ define('io.ox/tasks/view-detail',
                 date_completed: gt('Date completed')
             };
 
-            var $details = $('<div class="task-details">'), hasDetails = false;
+            var $details = $('<dl class="task-details dl-horizontal">'),
+                hasDetails = false;
 
             //add recurrence sentence, use calendarfunction to avoid code duplicates
             if (task.recurrence_type) {
-                $details.append($('<div class="detail-item">').append($('<label class="detail-label">').text(gt('This task recurs')),
-                                $('<div class="detail-value">').text(calendarUtil.getRecurrenceString(data))));
+                $details.append(
+                    $('<dt class="detail-label">').text(gt('This task recurs')),
+                    $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(data))
+                );
+                hasDetails = true;
             }
-            var temp;
+
             _(fields).each(function (label, key) {
                 if (task[key] !== undefined && task[key] !== null && task[key] !== '') {//0 is valid
-                    $details.append(temp = $('<div class="detail-item">').append($('<label class="detail-label">').text(label)));
+                    $details.append($('<dt class="detail-label">').text(label));
                     if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
-                        temp.append($('<div class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
+                        $details.append($('<dd class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
                     } else {
-                        temp.append($('<div class="detail-value">').text(gt.noI18n(task[key])));
+                        $details.append($('<dd class="detail-value">').text(gt.noI18n(task[key])));
                     }
                     hasDetails = true;
                 }
@@ -210,14 +214,14 @@ define('io.ox/tasks/view-detail',
                         }
                     });
                     if (intParticipants.length > 0) {
-                        node.append($('<label class="detail-label">').text(gt('Participants')),
+                        node.append($('<div class="detail-label">').text(gt('Participants')),
                                 table = $('<div class="task-participants-table">'));
                         _(intParticipants).each(function (participant) {
                             lookupParticipant(node, table, participant);
                         });
                     }
                     if (extParticipants.length > 0) {
-                        node.append($('<label class="detail-label">').text(gt('External participants')),
+                        node.append($('<div class="detail-label">').text(gt('External participants')),
                                 table = $('<div class="task-participants-table">'));
                         _(extParticipants).each(function (participant) {
                             lookupParticipant(node, table, participant);
