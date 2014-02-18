@@ -15,20 +15,16 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('serve', {
-
-        options: {
-            prefixes: ['build/', 'build/apps'],
-            manifests: ['build/manifests/']
+    grunt.registerTask('serve', 'Use the appserver to serve your apps', function () {
+        var config = grunt.config().local.appserver;
+        if (config.server === '') {
+            grunt.log.error('Server not specified in grunt/local.conf.json');
+            grunt.log.writeln('Hint: If this is a new setup you may want to copy the file grunt/local.conf.defaults.json to grunt/local.conf.json and change its values according to your setup.');
+        } else {
+            this.async(); // run forever
+            var server = require('../../lib/appserver/server.js');
+            server.create(config);
         }
     });
 
-    grunt.registerTask('serve', 'Use the appserver to serve your apps', function () {
-        this.async(); // run forever
-        var server = require('../../lib/appserver/server.js');
-        var _ = require('underscore');
-        var config = _.extend(this.options(), grunt.config().local.appserver);
-
-        server.create(config);
-    });
 };
