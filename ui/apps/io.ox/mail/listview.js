@@ -48,7 +48,7 @@ define('io.ox/mail/listview',
     ext.point('io.ox/mail/listview/item/small').extend({
         id: 'unread',
         index: 110,
-        draw: extensions.unreadClass
+        draw: extensions.unreadClassPartial
     });
 
     ext.point('io.ox/mail/listview/item/small').extend({
@@ -170,7 +170,7 @@ define('io.ox/mail/listview',
     ext.point('io.ox/mail/listview/item/default').extend({
         id: 'unread',
         index: 110,
-        draw: extensions.unreadClass
+        draw: extensions.unreadClassPartial
     });
 
     ext.point('io.ox/mail/listview/item/default').extend({

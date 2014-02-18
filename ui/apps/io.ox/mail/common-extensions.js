@@ -28,17 +28,6 @@ define('io.ox/mail/common-extensions',
 
     'use strict';
 
-    function partiallyUnseen(data) {
-        // look for a thread collection
-        var cid = _.cid(data), thread = api.threads.get(cid);
-        // no thread? then just check current object
-        if (thread.length <= 1) return util.isUnseen(data);
-        // otherwise check collection
-        return thread.reduce(function (memo, obj) {
-            return memo || util.isUnseen(obj);
-        }, false);
-    }
-
     var extensions = {
 
         picture: function (baton) {
@@ -75,7 +64,13 @@ define('io.ox/mail/common-extensions',
 
         unreadClass: function (baton) {
             var data = baton.data,
-                unread = partiallyUnseen(data);
+                unread = util.isUnseen(data);
+            this.closest('.list-item').toggleClass('unread', unread);
+        },
+
+        unreadClassPartial: function (baton) {
+            var data = baton.data,
+                unread = api.threads.partiallyUnseen(data);
             this.closest('.list-item').toggleClass('unread', unread);
         },
 
@@ -123,7 +118,7 @@ define('io.ox/mail/common-extensions',
         },
 
         unread: function (baton) {
-            var isUnread = partiallyUnseen(baton.data);
+            var isUnread = api.threads.partiallyUnseen(baton.data);
             if (isUnread) this.append('<i class="icon-unread icon-circle" aria-hidden="true">');
         },
 

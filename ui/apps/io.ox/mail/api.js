@@ -777,9 +777,8 @@ define('io.ox/mail/api',
                 folder_id: obj.folder_id,
                 flags: obj.flags
             });
-            if (obj.thread_cid) {
-                pool.propagate('change', _.extend({ timestamp: _.now() }, _.cid(obj.thread_cid)));
-            }
+            // update thread model
+            api.threads.touch(obj);
             api.trigger('update:' + _.ecid(obj), obj);
         });
 
@@ -820,9 +819,8 @@ define('io.ox/mail/api',
                 folder_id: obj.folder_id,
                 flags: obj.flags
             });
-            if (obj.thread_cid) {
-                pool.propagate('change', _.extend({ timestamp: _.now() }, _.cid(obj.thread_cid)));
-            }
+            // update thread model
+            api.threads.touch(obj);
             api.trigger('update:' + _.ecid(obj), obj);
         });
 
@@ -1678,6 +1676,7 @@ define('io.ox/mail/api',
 
         // keys are cid, values are array of flat cids
         hash: {},
+        reverse: {},
 
         contains: function (cid) {
             return !!this.hash[cid];
@@ -1691,6 +1690,14 @@ define('io.ox/mail/api',
                 .compact()
                 .invoke('toJSON')
                 .value();
+        },
+
+        // propagate changed within a thread to root model
+        touch: function (cid) {
+            cid = _.isString(cid) ? cid : _.cid(cid);
+            var top = this.reverse[cid];
+            if (!top) return;
+            pool.propagate('change', _.extend({ timestamp: _.now() }, _.cid(top)));
         },
 
         // resolve a list of cids
@@ -1709,6 +1716,20 @@ define('io.ox/mail/api',
         add: function (obj) {
             var cid = _.cid(obj);
             this.hash[cid] = obj.thread || [cid];
+            _(this.hash[cid]).each(function (thread_cid) {
+                this.reverse[thread_cid] = cid;
+            }, this);
+        },
+
+        partiallyUnseen: function (data) {
+            // look for a thread collection
+            var cid = _.cid(data), thread = this.get(cid);
+            // no thread? then just check current object
+            if (thread.length <= 1) return util.isUnseen(data);
+            // otherwise check collection
+            return thread.reduce(function (memo, obj) {
+                return memo || util.isUnseen(obj);
+            }, false);
         }
     };
 
@@ -1755,12 +1776,7 @@ define('io.ox/mail/api',
         // store thread size
         obj.threadSize = obj.thread.length;
         // we use the last item to generate the cid. More robust because unlikely to change.
-        var last = _(obj.thread).last(),
-            thread_cid = _.cid(last);
-        // add back-reference
-        _(obj.thread).each(function (item) {
-            item.thread_cid = thread_cid;
-        });
+        var last = _(obj.thread).last();
         // add to pool
         api.pool.add('detail', _.extend({}, obj));
         api.pool.add('detail', obj.thread.slice(1));

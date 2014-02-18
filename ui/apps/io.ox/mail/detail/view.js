@@ -151,23 +151,38 @@ define('io.ox/mail/detail/view',
             this.toggle(cid);
         },
 
+        onUnseen: function () {
+            api.markRead(this.model.toJSON());
+        },
+
+        onLoad: function (data) {
+
+            var body = this.$el.find('section.body'),
+                attachments = this.$el.find('section.attachments'),
+                unseen = util.isUnseen(this.model.get('flags'));
+
+            // draw
+            var baton = ext.Baton({ data: data, attachments: util.getAttachments(data) });
+            ext.point('io.ox/mail/detail-view/attachments').invoke('draw', attachments, baton);
+            ext.point('io.ox/mail/detail-view/body').invoke('draw', body.idle(), baton);
+            // merge data
+            this.model.set(data);
+            // process unseen flag
+            if (unseen) this.onUnseen();
+        },
+
         toggle: function (state) {
 
-            var $li = this.$el, body, attachments;
+            var $li = this.$el;
 
             if (state === undefined) $li.toggleClass('expanded'); else $li.toggleClass('expanded', state);
 
             if ($li.attr('data-loaded') === 'false' && $li.hasClass('expanded')) {
                 $li.attr('data-loaded', true);
-                body = $li.find('section.body').busy();
-                attachments = $li.find('section.attachments');
+                $li.find('section.body').busy();
                 // load detailed email data
                 api.get(_.cid(this.cid)).then(
-                    function success(data) {
-                        var baton = ext.Baton({ data: data, attachments: util.getAttachments(data) });
-                        ext.point('io.ox/mail/detail-view/attachments').invoke('draw', attachments, baton);
-                        ext.point('io.ox/mail/detail-view/body').invoke('draw', body.idle(), baton);
-                    },
+                    this.onLoad.bind(this),
                     function fail() {
                         $li.attr('data-loaded', false).removeClass('expanded');
                     }
@@ -180,6 +195,7 @@ define('io.ox/mail/detail/view',
         },
 
         initialize: function (options) {
+
             this.model = pool.getDetailModel(options.data);
             this.cid = this.model.cid;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
