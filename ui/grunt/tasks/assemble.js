@@ -19,7 +19,7 @@ module.exports = function (grunt) {
 
         options: {
             version: '<%= pkg.version %>-<%= pkg.revision %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),
-            enable_debug: String(grunt.option('debug') ? grunt.option('debug') : false),
+            enable_debug: '<%= local.debug %>',
             revision: '<%= pkg.revision %>',
             base: 'v=<%= assemble.options.version %>'
         },

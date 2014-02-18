@@ -7,5 +7,6 @@
 /debian/open-xchange-appsuite*.debhelper.log
 /debian/open-xchange-appsuite*.substvars
 local.conf*
+!local.conf.default.json
 /apps/plugins/playground
 npm-debug.log

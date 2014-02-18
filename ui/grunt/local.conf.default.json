@@ -1,0 +1,7 @@
+{
+    "appserver": {
+        "server": "",
+        "verbose": []
+    },
+    "debug": "false"
+}
