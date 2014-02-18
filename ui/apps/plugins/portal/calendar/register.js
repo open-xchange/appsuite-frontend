@@ -84,7 +84,7 @@ define('plugins/portal/calendar/register',
 
             if (appointments.length === 0) {
                 $content.append(
-                    $('<div class="line">')
+                    $('<li class="line">')
                     .text(gt('You don\'t have any appointments in the near future.'))
                 );
             } else {
