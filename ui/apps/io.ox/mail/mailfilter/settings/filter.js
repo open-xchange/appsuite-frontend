@@ -18,8 +18,9 @@ define('io.ox/mail/mailfilter/settings/filter',
      'io.ox/core/tk/dialogs',
      'io.ox/settings/util',
      'io.ox/mail/mailfilter/settings/filter/view-form',
-     'gettext!io.ox/mail'
-    ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt) {
+     'gettext!io.ox/mail',
+     'io.ox/mail/mailfilter/settings/filter/defaults'
+    ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt, DEFAULTS) {
 
     'use strict';
 
@@ -183,10 +184,22 @@ define('io.ox/mail/mailfilter/settings/filter',
 
                     render: function () {
                         var flag = (this.model.get('flags') || [])[0],
-                            self = this;
+                            self = this,
+                            actions = (this.model.get('actioncmds') || []);
+
+                        function checkForUnknown() {
+                            var unknown = false;
+                            _.each(actions, function (action) {
+                                if (!_.contains(['stop', 'vacation'], action.id)) {
+                                    unknown = _.isEmpty(_.where(DEFAULTS.actions, { id: action.id }));
+                                }
+                            });
+
+                            return unknown ? 'unknown' : undefined;
+                        }
 
                         function getEditableState() {
-                            return _.contains(['autoforward', 'spam', 'vacation'], flag) ? 'fixed' : 'editable';
+                            return (checkForUnknown() === 'unknown' || _.contains(['autoforward', 'spam', 'vacation'], flag))  ? 'fixed' : 'editable';
                         }
 
                         var title = self.model.get('rulename');
@@ -204,7 +217,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                                     'aria-label': title + ', ' + gt('Use cursor keys to change the item position')
                                 }),
                                 $('<div>').addClass('pull-right').append(function () {
-                                    var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (flag || 'common'));
+                                    var point = ext.point('io.ox/settings/mailfilter/filter/settings/actions/' + (checkForUnknown() || flag || 'common'));
                                     point.invoke('draw', $(this), self.model);
                                 }),
                                 title = $('<span>').addClass('list-title').text(title)
