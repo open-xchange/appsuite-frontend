@@ -92,7 +92,7 @@ define('io.ox/calendar/view-detail',
         id: 'title',
         draw: function (baton) {
             this.append(
-                $('<div>').addClass('title clear-title').text(gt.noI18n(baton.data.title || ''))
+                $('<h1>').addClass('title clear-title').text(gt.noI18n(baton.data.title || ''))
             );
         }
     });
@@ -221,7 +221,7 @@ define('io.ox/calendar/view-detail',
                     })
                     .value();
 
-                participants.append($('<div>')
+                participants.append($('<h2>')
                         .addClass('io-ox-label participants-block').text(gt('Participants')));
 
                 var plist = $('<div>').addClass('participant-list').appendTo(participants);
@@ -240,7 +240,7 @@ define('io.ox/calendar/view-detail',
                     //external Participants get their own section
                     var extList;
                     if (external.length > 0) {
-                        participants.append($('<div>')
+                        participants.append($('<h2>')
                                 .addClass('io-ox-label participants-block').text(gt('External participants')),
                                 extList = $('<div>').addClass('participant-list'));
                     }
@@ -280,7 +280,7 @@ define('io.ox/calendar/view-detail',
                     // resources
                     if (resourceList.length) {
                         participants
-                            .append($('<div>').addClass('io-ox-label').text(gt('Resources')))
+                            .append($('<h2>').addClass('io-ox-label').text(gt('Resources')))
                             .append(plist = $('<div>').addClass('participant-list'));
                         // loop over resources
                         _(resourceList)
@@ -321,7 +321,7 @@ define('io.ox/calendar/view-detail',
         id: 'details',
         draw: function (baton) {
             var node = $('<div>').addClass('details')
-                .append($('<div>').addClass('io-ox-label').text(gt('Details')))
+                .append($('<h2>').addClass('io-ox-label').text(gt('Details')))
                 .appendTo(this);
             ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton);
         }
