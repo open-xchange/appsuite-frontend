@@ -44,7 +44,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
 
     // create a package ready version of the ui (aka what jenkins does)
-    grunt.registerTask('dist', ['uglify', 'copy:dist', 'assemble:dist', 'copy:dist_i18n', 'create_i18n_properties', 'compress:dist']);
+    grunt.registerTask('dist', ['uglify', 'copy:dist', 'assemble:dist', 'copy:dist_i18n', 'create_i18n_properties', 'compress:source', 'compress:debian_pkg']);
     // default task
     grunt.registerTask('default', ['checkDependencies', 'lint', 'copy_build', 'assemble_build', 'newer:concat', 'newer:less', 'newer:compile_po', 'force_update']);
 };

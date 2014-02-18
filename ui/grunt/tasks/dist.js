@@ -56,7 +56,7 @@ module.exports = function (grunt) {
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
                 },
                 {
-                    src: ['debian/**/*', '*.spec'],
+                    src: ['debian/**/*', '*.spec', '!**/*.hbs'],
                     dest: 'dist/package/'
                 }
             ]
@@ -152,7 +152,7 @@ module.exports = function (grunt) {
     });
 
     grunt.config.extend('compress', {
-        dist: {
+        source: {
             options: {
                 archive: 'dist/<%= pkg.name %>_<%= pkg.version %>.orig.tar.gz',
                 pretty: true
@@ -161,6 +161,17 @@ module.exports = function (grunt) {
                 expand: true,
                 src: ['<%= pkg.name %>-<%= pkg.version %>/**/*', '<%= pkg.name %>-<%= pkg.version %>/**/.htaccess'],
                 cwd: 'dist/'
+            }]
+        },
+        debian_pkg: {
+            options: {
+                archive: 'dist/<%= pkg.name %>_<%= pkg.version %>.debian.tar.gz',
+                pretty: true
+            },
+            files: [{
+                expand: true,
+                src: ['debian/**/*'],
+                cwd: 'dist/package/'
             }]
         }
     });
