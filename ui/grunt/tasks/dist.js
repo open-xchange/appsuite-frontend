@@ -25,6 +25,17 @@ module.exports = function (grunt) {
         return included;
     }
 
+    function isTranslationModule(file) {
+        var _ = require('underscore'),
+            langs = grunt.file.expand({
+                filter: isPackagedLanguage
+            }, 'i18n/*.po').map(function (fileName) {
+                return fileName.match(/([a-zA-Z_]*).po$/)[1];
+            }),
+            languagePart = file.match(/\.([a-zA-Z_]*)\.js$/)[1];
+        return _(langs).contains(languagePart);
+    }
+
     grunt.config.extend('copy', {
         dist: {
             files: [
@@ -53,9 +64,11 @@ module.exports = function (grunt) {
         dist_i18n: {
             files: [
                 {
-                    src: ['i18n/**/*.po'],
+                    expand: true,
+                    src: ['apps/**/*.js'],
+                    cwd: 'build/',
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
-                    filter: isPackagedLanguage
+                    filter: isTranslationModule
                 }
             ]
         }
