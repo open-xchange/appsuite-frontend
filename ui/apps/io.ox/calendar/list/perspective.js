@@ -254,9 +254,9 @@ define('io.ox/calendar/list/perspective',
             var endDate = new date.Local(dates.end).format(date.DATE);
             grid.setEmptyMessage(function (mode) {
                 if (mode === 'search') {
-                    return gt.format('No appointments found for "%s"', win.search.query);
+                    return gt.format(gt('No appointments found for "%s"'), win.search.query);
                 } else {
-                    return gt.format('No appointments found until %s', endDate);
+                    return gt.format(gt('No appointments found until %s'), endDate);
                 }
             });
             return function () {

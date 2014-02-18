@@ -1092,7 +1092,7 @@ define('io.ox/core/api/folder',
                             .attr({
                                 'role': 'menu',
                                 'aria-haspopup': 'true',
-                                'aria-label': gt.format('subfolders of %s', gt.noI18n(api.getFolderTitle(title, 30)))
+                                'aria-label': gt.format(gt('subfolders of %s'), gt.noI18n(api.getFolderTitle(title, 30)))
                             }).append(
                                 _(list).map(function (folder) {
                                     var $a, $li = $('<li>').append(
