@@ -1085,6 +1085,7 @@ define('io.ox/core/main',
                             dialog = null;
                         });
 
+
                     $('#io-ox-core').append(
                         dialog = $('<div class="core-boot-dialog" tabindex="0">').append(
                             $('<div class="header">').append(
@@ -1223,6 +1224,17 @@ define('io.ox/core/main',
                 .fail(function () {
                     console.warn('core: Stage "load" > loaded.fail!', baton);
                 });
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'applicationcache-updatecheck',
+            index: 650,
+            run: function (baton) {
+                debug('core: Stage "applicationcache-updatecheck"', baton);
+                if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+                    notifications.yell('warning', gt('There is an update available, please reload your browser or press F5.'));
+                }
             }
         });
 
