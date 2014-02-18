@@ -157,7 +157,7 @@ define('io.ox/core/commons',
                     var parent = node.parent();
                     if (len <= 1 && label) {
                         //reset label
-                        parent.attr('aria-label', label);
+                        parent.attr('aria-label', _.escape(label));
                     } else if (len > 1) {
                         //remember label
                         label = label || parent.attr('aria-label');

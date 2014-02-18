@@ -149,7 +149,7 @@ define('io.ox/mail/view-grid-template',
                 }
                 this.attr({
                     'data-index': index,
-                    'aria-label': a11yLabel
+                    'aria-label': _.escape(a11yLabel)
                 });
             }
         },

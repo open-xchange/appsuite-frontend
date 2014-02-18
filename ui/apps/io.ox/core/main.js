@@ -250,7 +250,7 @@ define('io.ox/core/main',
             if (_.isString(label)) {
                 return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
-                return arialabel ? $('<a href="#" class="apptitle" tabindex="1" role="button" aria-label="' + arialabel + '">').append(label) : $('<a href="#" class="apptitle" tabindex="1" role="button">').append(label);
+                return arialabel ? $('<a href="#" class="apptitle" tabindex="1" role="button" aria-label="' + _.escape(arialabel) + '">').append(label) : $('<a href="#" class="apptitle" tabindex="1" role="button">').append(label);
             } else {
                 return label;
             }
