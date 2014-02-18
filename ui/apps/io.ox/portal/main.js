@@ -66,7 +66,7 @@ define('io.ox/portal/main',
                 )
             );
 
-            if (_.device('!small')) {
+            if (_.device('!smartphone')) {
                 widgets.loadAllPlugins().done(function () {
                     // add widgets
                     ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
@@ -75,8 +75,8 @@ define('io.ox/portal/main',
                         }
                     });
                     // please no button
-                    $btn.find('.btn-group').after($greeting);
-                    $btn.find('.btn-group')
+                    $btn.find('.btn-group-portal').after($greeting);
+                    $btn.find('.btn-group-portal')
                         .prepend($('<button type="button" class="btn btn-primary">')
                         .attr({
                             'data-action': 'customize',
