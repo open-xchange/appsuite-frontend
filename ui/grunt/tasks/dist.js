@@ -30,12 +30,18 @@ module.exports = function (grunt) {
             files: [
                 {
                     expand: true,
-                    src: ['apps/**/*', 'manifests/**/*', '*.*', '{core,signin}', '.*'],
+                    src: ['apps/**/*', 'manifests/**/*', '*.*', '{core,signin}', '.*', '!*.js'],
                     cwd: 'build/',
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
                 },
                 {
-                    src: ['help/**/*', 'help-drive/**/*', 'bower_components/**/*', 'bin/touch-appsuite', 'readme.txt', '.htaccess', 'apps/themes/.htaccess'],
+                    src: ['help/**/*', 'help-drive/**/*', 'bin/touch-appsuite', 'readme.txt', 'apps/themes/.htaccess'],
+                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
+                },
+                {
+                    expand: true,
+                    src: ['.htaccess'],
+                    cwd: 'html/',
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
                 },
                 {

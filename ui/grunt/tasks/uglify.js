@@ -15,27 +15,6 @@
 
 module.exports = function (grunt) {
 
-    var keep = !!grunt.option('keep'),
-        uncompressed = !!grunt.option('uncompressed'),
-        options = {
-            //default
-            compressed: {
-                sourceMap: function (path) { return path.replace(/^build\//, 'build/maps/').replace(/\.js$/, '.js.map'); },
-                sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
-                sourceMappingURL: function (path) { return '/appsuite/' + grunt.config.get('assemble.options.base') + path.replace(/^build\//, '/maps/').replace(/\.js$/, '.js.map'); },
-                sourceMapPrefix: 1,
-                compress: {
-                    drop_debugger: !keep
-                }
-            },
-            //via '--uncompressed'
-            uncompressed: {
-                beautify: false,
-                compress: false,
-                mangle: false
-            }
-        };
-
     grunt.config('uglify', {
 
         bootjs: {
@@ -43,22 +22,18 @@ module.exports = function (grunt) {
                 sourceMap: 'build/maps/boot.js.map',
                 sourceMapRoot: '/appsuite/<%= assemble.options.base %>',
                 sourceMappingURL: '/appsuite/<%= assemble.options.base %>/maps/boot.js.map',
-                sourceMapPrefix: 1,
-                compress: {
-                    drop_debugger: !keep
-                }
+                sourceMapPrefix: 1
             },
             files: {
-                'build/boot.js': ['build/src/boot.js']
+                'dist/<%= pkg.name %>-<%= pkg.version %>/boot.js': ['build/boot.js']
             }
         },
 
         apps: {
-            options: uncompressed ? options.uncompressed : options.compressed,
             files: [{
                 src: 'apps/**/*.js',
-                cwd: 'build/src/',
-                dest: 'build/',
+                cwd: 'build/',
+                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
                 filter: 'isFile',
                 expand: true
             }]
