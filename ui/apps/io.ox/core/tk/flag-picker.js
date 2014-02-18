@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/flag-picker', ['io.ox/mail/api', 'gettext!io.ox/mail'], function (api, gt) {
+define('io.ox/core/tk/flag-picker',
+    ['io.ox/mail/api',
+     'io.ox/core/api/folder',
+     'gettext!io.ox/mail'
+    ], function (api, folderAPI, gt) {
 
     'use strict';
 
@@ -93,8 +97,10 @@ define('io.ox/core/tk/flag-picker', ['io.ox/mail/api', 'gettext!io.ox/mail'], fu
                 color = $(e.currentTarget).attr('data-color') || '0',
                 node = $(this).closest('.flag-picker');
 
-            node.find('.dropdown-toggle').focus();
+            data = folderAPI.ignoreSentItems(data);
             api.changeColor(data, color);
+
+            node.find('.dropdown-toggle').focus();
         },
 
         update: function (model) {

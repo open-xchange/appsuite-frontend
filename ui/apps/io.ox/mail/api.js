@@ -1679,14 +1679,31 @@ define('io.ox/mail/api',
         // keys are cid, values are array of flat cids
         hash: {},
 
+        contains: function (cid) {
+            return !!this.hash[cid];
+        },
+
         get: function (cid) {
             if (!_.isString(cid)) return [];
-            var thread = this.hash[cid] || [], collection = pool.get('detail');
+            var thread = this.hash[cid] || [cid], collection = pool.get('detail');
             return _(thread).chain()
                 .map(collection.get, collection)
                 .compact()
                 .invoke('toJSON')
                 .value();
+        },
+
+        // resolve a list of cids
+        resolve: function (list) {
+            return _(list).chain()
+                .map(function (cid) {
+                    // strip 'thread.' prefix
+                    cid = String(cid).replace(/^thread\.(.+)$/, '$1');
+                    // get thread
+                    var thread = api.threads.get(cid);
+                    return thread.length > 0 && thread;
+                })
+                .flatten().compact().value();
         },
 
         add: function (obj) {

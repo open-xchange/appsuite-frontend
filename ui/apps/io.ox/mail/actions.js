@@ -127,15 +127,21 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply-all', {
         id: 'reply-all',
         requires: function (e) {
-            // other recipients that me?
-            return e.collection.has('toplevel', 'one') &&
-                util.hasOtherRecipients(e.context) && !isDraftMail(e.context);
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // multiple and not a thread?
+            if (!e.collection.has('one') && !e.baton.isThread) return;
+            // get first mail
+            var data = e.baton.first();
+            // other recipients that me? and not a draft mail
+            return util.hasOtherRecipients(data) && !isDraftMail(data);
         },
         action: function (baton) {
+            var data = baton.first();
             require(['io.ox/mail/write/main'], function (m) {
-                if (m.reuse('replyall', baton.data)) return;
+                if (m.reuse('replyall', data)) return;
                 m.getApp().launch().done(function () {
-                    this.replyall(baton.data);
+                    this.replyall(data);
                 });
             });
         }
@@ -144,13 +150,21 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reply', {
         id: 'reply',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && util.hasFrom(e.context) && !isDraftMail(e.context);
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // multiple and not a thread?
+            if (!e.collection.has('one') && !e.baton.isThread) return;
+            // get first mail
+            var data = e.baton.first();
+            // has sender? and not a draft mail
+            return util.hasFrom(data) && !isDraftMail(data);
         },
         action: function (baton) {
+            var data = baton.first();
             require(['io.ox/mail/write/main'], function (m) {
-                if (m.reuse('reply', baton.data)) return;
+                if (m.reuse('reply', data)) return;
                 m.getApp().launch().done(function () {
-                    this.reply(baton.data);
+                    this.reply(data);
                 });
             });
         }
@@ -162,10 +176,13 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
+
+            var data = baton.isThread ? baton.first() : baton.data;
+
             require(['io.ox/mail/write/main'], function (m) {
-                if (m.reuse('forward', baton.data)) return;
+                if (m.reuse('forward', data)) return;
                 m.getApp().launch().done(function () {
-                    this.forward(baton.data);
+                    this.forward(data);
                 });
             });
         }
@@ -174,12 +191,20 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/edit', {
         id: 'edit',
         requires: function (e) {
-            return e.collection.has('toplevel', 'one') && isDraftMail(e.context);
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // multiple and not a thread?
+            if (!e.collection.has('one') && !e.baton.isThread) return;
+            // get first mail
+            var data = e.baton.first();
+            // must be draft folder
+            return isDraftMail(data);
         },
         action: function (baton) {
+            var data = baton.first();
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.edit(baton.data);
+                    this.edit(data);
                 });
             });
         }
@@ -187,14 +212,22 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/source', {
         id: 'source',
-        requires: 'toplevel one',
+        requires: function (e) {
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // multiple and not a thread?
+            if (!e.collection.has('one') && !e.baton.isThread) return;
+            // get first mail
+            return true;
+        },
         action: function (baton) {
-            var getSource = api.getSource(baton.data), textarea;
+            var data = baton.first();
+            var getSource = api.getSource(data), textarea;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog({ width: 700 })
                     .addPrimaryButton('close', gt('Close'), 'close', {tabIndex: '1'})
                     .header(
-                        $('<h4>').text(gt('Mail source') + ': ' + (baton.data.subject || ''))
+                        $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
                     )
                     .append(
                         textarea = $('<textarea class="form-control mail-source-view" rows="15" readonly="readonly">')
@@ -314,66 +347,34 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/markunread', {
         id: 'markunread',
         requires: function (e) {
-            var data = e.context;
-
-            if (_.isArray(data)) {
-                var read = false;
-                //don't use each here because you cannot cancel it if one read mail was found
-                for (var i = 0; i < data.length; i++) {
-                    if (!api.tracker.isUnseen(data[i])) {
-                        read = true;
-                        break;
-                    }
-                }
-                return read;
-            }
-            return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === api.FLAGS.SEEN;
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // partiallySeen? has at least one email that's seen?
+            return _(e.baton.array()).reduce(function (memo, obj) {
+                return memo || !util.isUnseen(obj);
+            }, false);
         },
         multiple: function (list) {
-            if ($(this).prop('disabled') !== true) {
-                $(this).prop('disabled', true);//prevent user from hammering the inline link
-                var self = this;
-                api.markUnread(list).done(function (trackerResponse, updateResponse) {
-                    $('.thread-inline-actions').trigger('redraw');
-                    $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
-                    $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
-                }).fail(function () {
-                    $(self).prop('disabled', false);//enable clicking again
-                });
-            }
+            // we don't process sent items
+            list = folderAPI.ignoreSentItems(list);
+            api.markUnread(list);
         }
     });
 
     new Action('io.ox/mail/actions/markread', {
         id: 'markread',
         requires: function (e) {
-            var data = e.context;
-
-            if (_.isArray(data)) {
-                var unRead = false;
-                //don't use each here because you cannot cancel it if one unread mail was found
-                for (var i = 0; i < data.length; i++) {
-                    if (api.tracker.isUnseen(data[i])) {
-                        unRead = true;
-                        break;
-                    }
-                }
-                return unRead;
-            }
-            return e.collection.has('toplevel') && data && (data.flags & api.FLAGS.SEEN) === 0;
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // partiallyUnseen? has at least one email that's seen?
+            return _(e.baton.array()).reduce(function (memo, obj) {
+                return memo || util.isUnseen(obj);
+            }, false);
         },
         multiple: function (list) {
-            if ($(this).prop('disabled') !== true) {
-                $(this).prop('disabled', true);//prevent user from hammering the inline link
-                var self = this;
-                api.markRead(list).done(function (trackerResponse, updateResponse) {
-                    $('.thread-inline-actions').trigger('redraw');
-                    $(self).parents('.io-ox-multi-selection').trigger('redraw', updateResponse);
-                    $(self).parents('section.mail-detail').trigger('redraw', updateResponse);
-                }).fail(function () {
-                    $(self).prop('disabled', false);//enable clicking again
-                });
-            }
+            // we don't process sent items
+            list = folderAPI.ignoreSentItems(list);
+            api.markRead(list);
         }
     });
 
@@ -382,13 +383,12 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/spam', {
         capabilities: 'spam',
         requires: function (e) {
-            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
-                var bool = e.collection.has('toplevel') &&
-                    _(list).reduce(function (memo, data) {
-                        return memo || (!account.is('spam', data.folder_id) && !util.isSpam(data));
-                    }, false);
-                return bool;
-            });
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // is spam?
+            return _(e.baton.array()).reduce(function (memo, obj) {
+                return memo || (!account.is('spam', obj.folder_id) && !util.isSpam(obj));
+            }, false);
         },
         multiple: function (list) {
             api.markSpam(list);
@@ -398,13 +398,12 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/nospam', {
         capabilities: 'spam',
         requires: function (e) {
-            return e.collection.isLarge() || api.getList(e.context).pipe(function (list) {
-                var bool = e.collection.has('toplevel') &&
-                    _(list).reduce(function (memo, data) {
-                        return memo || account.is('spam', data.folder_id) || util.isSpam(data);
-                    }, false);
-                return bool;
-            });
+            // must be top-level
+            if (!e.collection.has('toplevel')) return;
+            // is spam?
+            return _(e.baton.array()).reduce(function (memo, obj) {
+                return memo || account.is('spam', obj.folder_id) || util.isSpam(obj);
+            }, false);
         },
         multiple: function (list) {
             api.noSpam(list);

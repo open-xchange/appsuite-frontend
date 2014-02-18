@@ -436,6 +436,14 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             this.isPropagationStopped = returnTrue;
         },
 
+        first: function () {
+            return _.isArray(this.data) ? this.data[0] : this.data;
+        },
+
+        array: function () {
+            return [].concat(this.data);
+        },
+
         set: function (property, obj) {
             _.extend(this[property], obj);
             return this;

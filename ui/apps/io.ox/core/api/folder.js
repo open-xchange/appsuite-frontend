@@ -1245,6 +1245,8 @@ define('io.ox/core/api/folder',
         }
 
         return function (list) {
+            // not array or just one?
+            if (!_.isArray(list) || list.length === 1) return list;
             // all from same folder?
             if (fromSameFolder(list)) return list;
             // else: exclude sent items

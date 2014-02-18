@@ -148,44 +148,49 @@ define('io.ox/mail/toolbar',
     });
 
     ext.point('io.ox/mail/classic-toolbar').extend(new links.InlineLinks({
+        attributes: {},
+        classes: '',
+        forcelimit: true, // always use drop-down
         index: 100,
         id: 'toolbar-links',
-        ref: 'io.ox/mail/classic-toolbar/links',
-        classes: '',
-        attributes: {},
-        forcelimit: true // always use drop-down
+        ref: 'io.ox/mail/classic-toolbar/links'
     }));
 
     // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="menu">'),
-        detail = api.pool.get('detail');
+    var toolbar = $('<ul class="classic-toolbar" role="menu">');
 
     var updateToolbar = _.debounce(function (list) {
-
-        var data = _(list)
-            .chain()
-            .map(function (cid) {
-                var model = detail.get(cid);
-                return model && model.toJSON();
-            })
-            .compact()
-            .value();
-
-        data = data.length === 1 ? data[0] : data;
-
-        ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), ext.Baton({ $el: toolbar, data: data }));
-
+        if (!list) return;
+        // remember if this list is based on a single thread
+        var isThread = list.length === 1 && /^thread\./.test(list[0]);
+        // resolve thread
+        list = api.threads.resolve(list);
+        // extract single object if length === 1
+        list = list.length === 1 ? list[0] : list;
+        // draw toolbar
+        ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), ext.Baton({ $el: toolbar, data: list, isThread: isThread }));
     }, 10);
 
     ext.point('io.ox/mail/mediator').extend({
         id: 'toolbar',
-        index: 'last',
+        index: 10000,
         setup: function (app) {
+            app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
+                toolbar = $('<ul class="classic-toolbar" role="menu">')
+            );
+            app.updateToolbar = updateToolbar;
+        }
+    });
 
-            updateToolbar();
-            app.listView.on('selection:change', updateToolbar);
-
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(toolbar);
+    ext.point('io.ox/mail/mediator').extend({
+        id: 'update-toolbar',
+        index: 10100,
+        setup: function (app) {
+            app.updateToolbar();
+            // update toolbar on selection change as well as any model change (seen/unseen flag)
+            app.listView.on('selection:change change', function () {
+                app.updateToolbar(app.listView.selection.get());
+            });
         }
     });
 

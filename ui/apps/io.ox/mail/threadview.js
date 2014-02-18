@@ -73,6 +73,7 @@ define('io.ox/mail/threadview',
             this.$ul.empty();
             this.$el.scrollTop(0);
             this.$el.find('.thread-view-list').hide();
+            this.model = null;
         },
 
         updateHeader: function () {
@@ -123,6 +124,8 @@ define('io.ox/mail/threadview',
         },
 
         show: function (cid) {
+            // strip 'thread.' prefix
+            cid = String(cid).replace(/^thread\.(.+)$/, '$1');
             // no change?
             if (this.model && this.model.cid === cid) return;
             // stop listening
@@ -134,7 +137,7 @@ define('io.ox/mail/threadview',
             this.listenTo(this.model, 'change:thread', this.onChange);
             // reset collection
             this.collection.reset([], { silent: true });
-            this.reset(cid);
+            this.reset();
         },
 
         reset: function () {
@@ -150,10 +153,13 @@ define('io.ox/mail/threadview',
 
         onReset: function () {
 
-            this.empty();
-            this.index = 0;
-
-            if (this.collection.length === 0) return;
+            if (this.collection.length === 0) {
+                this.empty();
+                return;
+            } else {
+                this.$ul.empty();
+                this.$el.scrollTop(0);
+            }
 
             this.updateHeader();
 
@@ -235,7 +241,6 @@ define('io.ox/mail/threadview',
 
             this.model = null;
             this.collection = new backbone.Collection();
-
 
             this.listenTo(this.collection, {
                 add: this.onAdd,

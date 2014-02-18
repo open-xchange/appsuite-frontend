@@ -260,8 +260,6 @@ define('io.ox/mail/listview',
         }
     });
 
-    // var ANIMATION_DURATION = 200;
-
     var MailListView = ListView.extend({
 
         ref: 'io.ox/mail/listview',
@@ -269,119 +267,18 @@ define('io.ox/mail/listview',
         initialize: function (options) {
             ListView.prototype.initialize.call(this, options || {});
             this.$el.addClass('mail');
-            // this.on('cursor:right', this.openThread);
-            // this.on('cursor:left', this.closeThread);
-            // this.$el.on('click', '.thread-size', $.proxy(this.toggleThread, this));
         },
 
         filter: function (model) {
             var data = model.toJSON();
             return !util.isDeleted(data);
+        },
+
+        // support for custom cid attributes
+        // needed to identify threads
+        getCID: function (model) {
+            return 'thread.' + model.cid;
         }
-
-        // onRemove: function (model) {
-        //     ListView.prototype.onRemove.call(this, model);
-        //     this.$el.find('li[data-thread="' + model.cid + '"]').remove();
-        // },
-
-        // onChange: function (model) {
-        //     ListView.prototype.onChange.call(this, model);
-        //     this.updateThread(model);
-        // },
-
-        // getThread: function (cid) {
-        //     return this.$el.find('li[data-thread="' + cid + '"]');
-        // },
-
-        // toggleThread: function (e) {
-        //     var open = $(e.currentTarget).attr('data-open') === 'true';
-        //     if (open) this.closeThread(); else this.openThread();
-        // },
-
-        // openThread: function () {
-
-        //     var node, cid, model, thread, li;
-
-        //     node = this.selection.getCurrentNode();
-        //     if (!node || node.find('.thread-size').attr('data-open') === 'true') return;
-
-        //     cid = node.attr('data-cid').replace(/^thread\./, '');
-        //     if (cid === undefined) return;
-
-        //     // get model by cid
-        //     model = this.collection.get(cid);
-        //     if (model === undefined) return;
-
-        //     // get thread
-        //     thread = model.get('thread');
-        //     if (thread.length <= 1) return;
-
-        //     node.find('.thread-size')
-        //         .attr('data-open', 'true')
-        //         .find('i').attr('class', 'icon-caret-down');
-
-        //     li = this.getThread(cid);
-        //     if (li.length) return li.stop().slideDown(ANIMATION_DURATION); // avoid "remove" callback of running closeThread()
-
-        //     this.renderThread(node, model);
-        // },
-
-        // closeThread: function () {
-
-        //     var node, cid;
-
-        //     node = this.selection.getCurrentNode();
-        //     if (!node || node.find('.thread-size').attr('data-open') === 'false') return;
-
-        //     cid = node.attr('data-cid').replace(/^thread\./, '');
-        //     if (cid === undefined) return;
-
-        //     node.find('.thread-size')
-        //         .attr('data-open', 'false')
-        //         .find('i').attr('class', 'icon-caret-right');
-
-        //     this.getThread(cid).slideUp(ANIMATION_DURATION, function () {
-        //         $(this).remove();
-        //     });
-        // },
-
-        // updateThread: function (model) {
-        //     var li = this.getThread(model.cid);
-        //     if (li.length === 0) return;
-        //     this.renderThreadList(li.children('ul').empty(), model);
-        // },
-
-        // renderThread: function (node, model) {
-        //     $('<li>')
-        //     .attr('data-thread', model.cid)
-        //     .hide()
-        //     .append(
-        //         this.renderThreadList($('<ul>'), model)
-        //     )
-        //     .insertAfter(node)
-        //     .slideDown(ANIMATION_DURATION);
-        // },
-
-        // renderThreadList: function (ul, model) {
-        //     return ul.append(
-        //         _(model.get('thread'))
-        //         .chain()
-        //         .filter(function (data) {
-        //             return !util.isDeleted(data);
-        //         })
-        //         .map(this.renderThreadItem, this)
-        //         .value()
-        //     );
-        // },
-
-        // renderThreadItem: function (data) {
-        //     var li = this.scaffold.clone(),
-        //         baton = ext.Baton({ data: data });
-        //     li.addClass('thread-item');
-        //     li.attr('data-cid', _.cid(data));
-        //     ext.point(this.ref + '/thread').invoke('draw', li, baton);
-        //     return li;
-        // }
     });
 
     return MailListView;

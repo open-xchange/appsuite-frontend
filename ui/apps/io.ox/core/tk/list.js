@@ -104,6 +104,12 @@ define('io.ox/core/tk/list',
             );
         },
 
+        // support for custom cid attributes
+        // needed to identify threads
+        getCID: function (model) {
+            return model.cid;
+        },
+
         // called when the view model changes (not collection models)
         onModelChange: function () {
             this.empty();
@@ -140,7 +146,7 @@ define('io.ox/core/tk/list',
 
             // insert or append
             if (index < children.length) children.eq(index).before(li); else this.$el.append(li);
-            this.selection.add(model.cid, li);
+            this.selection.add(this.getCID(model), li);
 
             if (li.position().top <= 0) {
                 this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
@@ -149,7 +155,7 @@ define('io.ox/core/tk/list',
 
         onRemove: function (model) {
 
-            var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
+            var li = this.$el.find('li[data-cid="' + this.getCID(model) + '"]'),
                 top = this.$el.scrollTop();
 
             if (li.length === 0) return;
@@ -158,7 +164,7 @@ define('io.ox/core/tk/list',
                 this.$el.scrollTop(top - li.outerHeight(true));
             }
 
-            this.selection.remove(model.cid, li);
+            this.selection.remove(this.getCID(model), li);
             li.remove();
 
             // simulate scroll event because the list might need to paginate
@@ -167,11 +173,13 @@ define('io.ox/core/tk/list',
 
         // called whenever a model inside the collection changes
         onChange: function (model) {
-            var li = this.$el.find('li[data-cid="' + model.cid + '"]'),
+            var li = this.$el.find('li[data-cid="' + this.getCID(model) + '"]'),
                 data = model.toJSON(),
                 baton = ext.Baton({ data: data, model: model, app: this.app });
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1).empty(), baton);
+            // propagate events
+            this.trigger('change', model);
         },
 
         initialize: function (options) {
@@ -258,11 +266,6 @@ define('io.ox/core/tk/list',
         paginate: NOOP,
         reload: NOOP,
 
-        // // generate composite keys (might differ from _.cid)
-        // cid: function (data) {
-        //     return _.cid(data);
-        // },
-
         render: function () {
             this.$el.attr({
                 'aria-multiselectable': true,
@@ -289,7 +292,7 @@ define('io.ox/core/tk/list',
             var li = this.scaffold.clone(),
                 baton = ext.Baton({ data: model.toJSON(), model: model, app: this.app });
             // add cid and full data
-            li.attr('data-cid', model.cid);
+            li.attr('data-cid', this.getCID(model));
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
