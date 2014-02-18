@@ -23,7 +23,7 @@ module.exports = function (grunt) {
             },
             files: [{
                 src: ['i18n/*.po'],
-                dest: 'build/src/apps/'
+                dest: 'build/apps/'
             }]
         }
 
