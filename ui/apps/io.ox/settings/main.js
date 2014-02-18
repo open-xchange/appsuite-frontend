@@ -252,7 +252,7 @@ define('io.ox/settings/main',
                     if (expertmode) {
                         return true;
                     } else {
-                        return (_.indexOf(advancedModeOnly, point.title) !== -1) ? false : true;
+                        return _.contains(advancedModeOnly, point.title) ? false : true;
                     }
                 }));
             });
