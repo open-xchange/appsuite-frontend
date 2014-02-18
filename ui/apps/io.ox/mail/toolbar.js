@@ -152,7 +152,8 @@ define('io.ox/mail/toolbar',
         id: 'toolbar-links',
         ref: 'io.ox/mail/classic-toolbar/links',
         classes: '',
-        attributes: {}
+        attributes: {},
+        forcelimit: true // always use drop-down
     }));
 
     // classic toolbar
@@ -161,9 +162,14 @@ define('io.ox/mail/toolbar',
 
     var updateToolbar = _.debounce(function (list) {
 
-        var data = _(list).map(function (cid) {
-            return detail.get(cid).toJSON();
-        });
+        var data = _(list)
+            .chain()
+            .map(function (cid) {
+                var model = detail.get(cid);
+                return model && model.toJSON();
+            })
+            .compact()
+            .value();
 
         data = data.length === 1 ? data[0] : data;
 

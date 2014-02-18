@@ -63,25 +63,26 @@ define('io.ox/core/tk/flag-picker', ['io.ox/mail/api', 'gettext!io.ox/mail'], fu
             node.parent().addClass('dropdown flag-picker');
         },
 
-        draw: function (baton) {
+        draw: function (node, baton) {
 
-            var data = baton.data, color = data.color_label || 0, link;
+            var data = baton.data,
+                color = Math.max(0, data.color_label || 0), // to fix buggy -1
+                link;
 
-            this.append(
+            node.append(
                 $('<div>').append(
                     link = $('<a href="#" tabindex="1">').append(
                         $('<i class="flag-dropdown-icon">')
                         .attr('data-color', color)
-                        .addClass(color === 0 ? colorLabelIconEmpty : colorLabelIcon)
-                        .addClass('flag_' + color)
+                        .addClass('flag_' + color + ' ' + (color ? colorLabelIcon : colorLabelIconEmpty))
                     )
                 )
             );
 
-            that.appendDropdown(link, data);
+            this.appendDropdown(link, data);
 
             // listen for change event
-            if (baton.view) baton.view.listenTo(baton.model, 'change:color_label', that.update);
+            if (baton.view) baton.view.listenTo(baton.model, 'change:color_label', this.update);
         },
 
         change: function (e) {
@@ -89,7 +90,7 @@ define('io.ox/core/tk/flag-picker', ['io.ox/mail/api', 'gettext!io.ox/mail'], fu
             e.preventDefault();
 
             var data = e.data.data,
-                color = $(e.currentTarget).attr('data-color'),
+                color = $(e.currentTarget).attr('data-color') || '0',
                 node = $(this).closest('.flag-picker');
 
             node.find('.dropdown-toggle').focus();
@@ -98,7 +99,7 @@ define('io.ox/core/tk/flag-picker', ['io.ox/mail/api', 'gettext!io.ox/mail'], fu
 
         update: function (model) {
             // set proper icon class
-            var color = model.get('color_label') || 0;
+            var color = Math.max(0, model.get('color_label') || 0);
             var className = 'flag-dropdown-icon ';
             className += color === 0 ? colorLabelIconEmpty : colorLabelIcon;
             className += ' flag_' + color;
