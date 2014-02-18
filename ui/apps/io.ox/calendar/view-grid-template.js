@@ -140,7 +140,7 @@ define('io.ox/calendar/view-grid-template',
                 } else {
                     fields.isPrivate.hide();
                 }
-                this.attr({ 'aria-label': a11yLabel });
+                this.attr({ 'aria-label': _.escape(a11yLabel) });
             }
         },
 
