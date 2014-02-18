@@ -58,7 +58,10 @@ define('plugins/portal/tasks/register',
 
             if (tasks.length === 0) {
                 this.append(
-                    content.text(gt('You don\'t have any tasks that are either due soon or overdue.'))
+                    content.append(
+                        $('<li>').text(gt('You don\'t have any tasks that are either due soon or overdue.'))
+                    )
+
                 );
                 return;
             }

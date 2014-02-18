@@ -103,13 +103,15 @@ define('plugins/portal/tumblr/register',
                     }
                 });
 
-                this.append(
-                    $('<ul class="content pointer">').attr({
-                        'tabindex': '1',
-                        'role': 'button',
-                        'aria-label': gt('Press [enter] to jump to the tumblr feed.')
-                    }).append(titles)
-                );
+                if (titles.length > 0) {
+                    this.append(
+                        $('<ul class="content pointer">').attr({
+                            'tabindex': '1',
+                            'role': 'button',
+                            'aria-label': gt('Press [enter] to jump to the tumblr feed.')
+                        }).append(titles)
+                    );
+                }
             }
 
         },
