@@ -23,30 +23,28 @@ module.exports = function (grunt) {
         },
         manifests: {
             files: 'apps/**/manifest.json',
-            tasks: ['manifests', 'force_update']
+            tasks: ['manifests', 'force_update'],
+            options: { livereload: true }
         },
         karma: {
-            files: ['spec/**/*_spec.js', 'build/core'],
+            files: ['spec/**/*_spec.js'],
             tasks: ['newer:jshint:specs', 'newer:concat:specs', 'karma:unit:run']
         },
         less: {
             files: ['apps/**/*.less', 'bower_components/**/*.less'],
-            tasks: ['newer:less', 'force_update']
+            tasks: ['newer:less', 'force_update'],
+            options: { livereload: true }
         },
         bootjs: {
             files: ['src/*.js'],
-            tasks: ['concat:bootjs', 'force_update']
+            tasks: ['concat:bootjs', 'force_update'],
+            options: { livereload: true }
         },
         all: {
             files: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js', 'bower_components/**/*.js'],
             tasks: ['default'],
-            options: { nospawn: true }
-        },
-        livereload: {
-            options: { livereload: true, nospawn: true },
-            files: ['build/core.appcache']
+            options: { nospawn: true, livereload: true }
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');
