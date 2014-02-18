@@ -41,11 +41,11 @@ define('plugins/portal/contacts/register',
                 }
             });
 
-            var list = baton.data.distribution_list || [], content = $('<div class="content pointer">');
+            var list = baton.data.distribution_list || [], content = $('<ul class="content pointer list-unstyled">');
 
             _(list).each(function (obj) {
                 content.append(
-                    $('<div class="paragraph">').append(
+                    $('<li class="paragraph">').append(
                         $('<div class="bold">').text(obj.display_name),
                         $('<div class="accent">').text(obj.mail)
                     )
