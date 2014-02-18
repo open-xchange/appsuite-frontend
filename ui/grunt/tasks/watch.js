@@ -23,22 +23,22 @@ module.exports = function (grunt) {
         },
         manifests: {
             files: 'apps/**/manifest.json',
-            tasks: ['manifests']
+            tasks: ['manifests', 'force_update']
         },
         karma: {
             files: ['spec/**/*_spec.js', 'build/core'],
             tasks: ['newer:jshint:specs', 'newer:concat:specs', 'karma:unit:run']
         },
         less: {
-            files: 'apps/**/*.less',
-            tasks: ['less']
+            files: ['apps/**/*.less', 'bower_components/**/*.less'],
+            tasks: ['newer:less', 'force_update']
         },
         bootjs: {
             files: ['src/*.js'],
-            tasks: ['concat:bootjs', 'uglify:bootjs']
+            tasks: ['concat:bootjs', 'force_update']
         },
         all: {
-            files: ['<%= jshint.all.src %>'],
+            files: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js', 'bower_components/**/*.js'],
             tasks: ['default'],
             options: { nospawn: true }
         },
