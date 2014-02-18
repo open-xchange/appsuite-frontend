@@ -109,6 +109,7 @@ module.exports = function (grunt) {
         'newer:copy:static',
         'newer:copy:apps',
         'newer:copy:themes',
+        'newer:copy:tinymce',
         'newer:copy:thirdparty'
     ]);
 
