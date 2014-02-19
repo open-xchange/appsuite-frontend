@@ -14,6 +14,12 @@
 'use strict';
 
 module.exports = function (grunt) {
+    var languages = grunt.file.expand({
+        filter: isPackagedLanguage
+    }, 'i18n/*.po').map(function (fileName) {
+        return fileName.match(/([a-zA-Z_]*).po$/)[1];
+    });
+
     function isPackagedLanguage(file) {
         //filter all languages that should not be packaged
         //those will have something like ""X-Package: no\n"" in their header
@@ -27,13 +33,8 @@ module.exports = function (grunt) {
 
     function isTranslationModule(file) {
         var _ = require('underscore'),
-            langs = grunt.file.expand({
-                filter: isPackagedLanguage
-            }, 'i18n/*.po').map(function (fileName) {
-                return fileName.match(/([a-zA-Z_]*).po$/)[1];
-            }),
             languagePart = file.match(/\.([a-zA-Z_]*)\.js$/)[1];
-        return _(langs).contains(languagePart);
+        return _(languages).contains(languagePart);
     }
 
     grunt.config.extend('copy', {
@@ -135,8 +136,7 @@ module.exports = function (grunt) {
                     });
                 })(),
                 languages: (function () {
-                    return grunt.file.expand({cwd: 'i18n/'}, '*.po').map(function (file) {
-                        var Lang = file.slice(0, -3);
+                    return languages.map(function (Lang) {
                         return {
                             Lang: Lang,
                             lang: Lang.toLowerCase().replace(/_/g, '-')
