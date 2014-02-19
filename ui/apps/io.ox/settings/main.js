@@ -251,8 +251,8 @@ define('io.ox/settings/main',
                 def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
                     if (expertmode) {
                         return true;
-                    } else {
-                        return point.advancedMode;
+                    } else if (!point.advancedMode) {
+                        return true;
                     }
                 }));
             });
