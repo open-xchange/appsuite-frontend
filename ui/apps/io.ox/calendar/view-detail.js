@@ -365,7 +365,7 @@ define('io.ox/calendar/view-detail',
             this.append(
                 $('<span>')
                     .addClass('detail-label')
-                    .append($.txt(gt('Show as')), $.txt(gt.noI18n(':\u00A0'))),
+                    .append($.txt(gt('Shown as')), $.txt(gt.noI18n(':\u00A0'))),
                 $('<span>')
                     .addClass('detail shown_as ' + util.getShownAsClass(baton.data))
                     .text(gt.noI18n('\u00A0')),
