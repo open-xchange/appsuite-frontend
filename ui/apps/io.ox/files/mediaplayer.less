@@ -43,7 +43,14 @@
             margin-bottom: @playerMargin;
             text-align: right;
 
-            button { margin-left: @playerMargin; }
+            button {
+                margin-left: @playerMargin;
+                &.minimizemediaplayer {
+                    &:hover {
+                        color:#fff
+                    }
+                }
+            }
         }
 
         .mediaplayer_track {
@@ -53,10 +60,12 @@
             background: @playerTrackColor;
 
             .album {
-                width: 120px;
                 text-align: center;
                 font-size: 75px;
                 color: #333;
+                i {
+                    margin-left: 12px;
+                }
             }
 
             .track {
@@ -67,7 +76,7 @@
                 font-weight: 300;
                 max-height: 24px * 3;
                 overflow: hidden;
-                word-break: break-all;
+                text-overflow: ellipsis;
                 margin-right: 12px;
             }
         }
@@ -178,22 +187,22 @@
     .mejs-video { width: 290px;}
 
     .mediaplayer_container .mediaplayer_inner {
-        @width: 320px - 2 * @playerMargin;
+        @width: 320px;
         width: @width;
         margin-left: 0 - @width / 2 - @playerMargin;
     }
 
     .mediaplayer_container .mediaplayer_inner {
         .mediaplayer_track {
-            height: 60px;
+            height: 84px;
 
-            .album { width: 70px; font-size: 50px; }
-            .track { font-size: 14px; }
+            .album { font-size: 50px; }
+            .track { font-size: 14px; margin-top: -8px; }
         }
 
         .mediaplayer_playlist {
-            top: 219px - 60px;
-            width: 290px;
+            top: 128px;
+            width: 294px;
 
             li {
                 &:hover {

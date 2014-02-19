@@ -48,8 +48,8 @@ define('io.ox/files/mediaplayer',
         features: ['playpause', 'progress', 'current', 'volume'],
 
         container: $('<div class="abs mediaplayer_container" tabindex="-1">'),
-        trackdisplay: $('<div class="mediaplayer_track css-table"><div class="css-table-row">' +
-                '<div class="css-table-cell album"></div><div class="css-table-cell"><div class="track"></div></div>' +
+        trackdisplay: $('<div class="mediaplayer_track"><div class="row">' +
+                '<div class="col-xs-3 album"></div><div class="col-xs-9"><div class="track"></div></div>' +
                 '</div></div>'),
         player: $('<div class="mediaplayer_player">'),
         playlist: $('<ul class="mediaplayer_playlist">'),
