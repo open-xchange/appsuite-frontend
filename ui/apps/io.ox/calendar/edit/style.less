@@ -12,22 +12,23 @@
  */
 
 .io-ox-calendar-edit {
+
     max-width: 880px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
 
-    .btn {
+    .row.header .btn {
+        float: right;
         &.save {
-            float: right;
             margin-left: 13px;
         }
-        &.discard { float: right; }
     }
-    [data-extension-id="start-date"],
-    [data-extension-id="end-date"] {
+
+    [data-extension-id="start-date"], [data-extension-id="end-date"] {
         .form-control { display: inline-block; }
     }
+
     [data-extension-id="private_flag"] {
         .checkbox {
             padding-top: 0;
@@ -46,7 +47,9 @@
         font-size: 13px;
         color: #888;
 
-        span { white-space: nowrap; }
+        span {
+            white-space: nowrap;
+        }
     }
 
     div.section {
@@ -70,7 +73,10 @@
             font-size: 14px;
             text-overflow: ellipsis;
         }
-        &.location { width: 100%; }
+
+        &.location {
+            width: 100%;
+        }
     }
 
     .label {
@@ -83,7 +89,10 @@
     }
 
     .dateinput {
-        span.label { background-color: #aaa; }
+        span.label {
+            background-color: #aaa;
+        }
+
         .form-inline {
             input {
                 width: 90px;
@@ -137,7 +146,9 @@
 
     select { width: 100%; }
 
-    .participantsrow { margin-bottom: 30px; }
+    .participantsrow {
+        margin-bottom: 30px;
+    }
 
     .add-participants {
         margin-bottom: 200px;
@@ -196,10 +207,12 @@
     margin: 7px 0 20px 0;
     min-height: 140px;
 
-    .recurrence-detail-toggle .fa-times { color: #888; }
-
     * {
         -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    .recurrence-detail-toggle .fa-times {
+        color: #888;
     }
 
     span.dropdown {
@@ -231,7 +244,6 @@
         h1.title { float: none; }
 
         .sectiontitle { margin: 0; }
-
 
         .dateinput .col-md-6 {
             width: 50%;
