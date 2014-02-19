@@ -114,16 +114,16 @@ define('io.ox/calendar/settings/pane',
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Time')),
-                    $('<div>').addClass('control-group expertmode').append(
+                    $('<legend>').addClass('sectiontitle').text(gt('Time')),
+                    $('<div>').addClass('control-group').append(
                         $('<label>').attr('for', 'interval').addClass('control-label').text(gt('Time scale in minutes')),
                         new mini.SelectView({ list: optionsInterval, name: 'interval', model: model, id: 'interval' }).render().$el
                     ),
-                    $('<div>').addClass('control-group expertmode').append(
+                    $('<div>').addClass('control-group').append(
                         $('<label>').attr('for', 'startTime').addClass('control-label').text(gt('Start of working time')),
                         new mini.SelectView({ list: optionsTime(), name: 'startTime', model: model, id: 'startTime' }).render().$el
                     ),
-                    $('<div>').addClass('control-group expertmode').append(
+                    $('<div>').addClass('control-group').append(
                         $('<label>').attr('for', 'endTime').addClass('control-label').text(gt('End of working time')),
                         new mini.SelectView({ list: optionsTime(), name: 'endTime', model: model, id: 'endTime' }).render().$el
                     )
@@ -138,7 +138,7 @@ define('io.ox/calendar/settings/pane',
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Default calendar view')),
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Default calendar view')),
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').addClass('checkbox').text(gt('Show declined appointments')).append(
                             new mini.CheckboxView({ name: 'showDeclinedAppointments', model: model}).render().$el
@@ -155,7 +155,7 @@ define('io.ox/calendar/settings/pane',
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('New appointment')),
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('New appointment')),
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').attr('for', 'defaultReminder').addClass('control-label').text(gt('Default reminder')),
                         new mini.SelectView({ list: optionsReminder, name: 'defaultReminder', model: model, id: 'defaultReminder' }).render().$el
@@ -176,7 +176,7 @@ define('io.ox/calendar/settings/pane',
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Email notification for appointment')),
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for appointment')),
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').addClass('checkbox').text(gt('Email notification for New, Changed, Deleted?')).append(
                             new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: model}).render().$el
@@ -185,7 +185,7 @@ define('io.ox/calendar/settings/pane',
                 ),
                 $('<fieldset>').append(
 
-                    $('<legend>').addClass('sectiontitle').text(gt('Email notification for Accept/Declined')),
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Email notification for Accept/Declined')),
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').addClass('checkbox').text(gt('Email notification for appointment creator?')).append(
                             new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: model}).render().$el
@@ -198,7 +198,7 @@ define('io.ox/calendar/settings/pane',
                     )
                 ),
                 $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Incoming Notification Mails')),
+                    $('<legend>').addClass('sectiontitle expertmode').text(gt('Incoming Notification Mails')),
                     $('<div>').addClass('control-group expertmode').append(
                         $('<label>').addClass('checkbox').text(gt('Automatically delete a notification mail after it has been accepted or declined?')).append(
                             new mini.CheckboxView({ name: 'deleteInvitationMailAfterAction', model: model}).render().$el
