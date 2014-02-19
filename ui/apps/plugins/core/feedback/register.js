@@ -11,15 +11,18 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/core/feedback/feedback',
+define('plugins/core/feedback/register',
     ['io.ox/core/tk/dialogs',
      'gettext!io.ox/core',
      'io.ox/core/notifications',
      'settings!io.ox/core',
-     'less!io.ox/core/feedback/style.less'], function (dialogs, gt, notifications, settings) {
+     'io.ox/core/api/user',
+     'io.ox/core/extensions',
+     'less!plugins/core/feedback/style.less'], function (dialogs, gt, notifications, settings, api, ext) {
 
     'use strict';
 
+    var includeUserInfo = settings.get('feeback/includeUserInfo', false);
     function buildStarWidget(number, hover) {//number of stars and boolean to enable or disable the hovereffect, default is 5 stars and hover enabled
         number = number || 5;//set default 5 stars
         var value = 0,//0 on init
@@ -87,44 +90,68 @@ define('io.ox/core/feedback/feedback',
     }
 
     function sendFeedback(data) {
-        var includeUserInfo = settings.get('feeback/includeUserInfo', false);
         if (includeUserInfo) {
-            data.user_id = ox.user_id;
+            return api.getCurrentUser().then(function (userdata) {
+                data.user_id = ox.user_id;
+                data.email = userdata.get('email1');
+                console.log(data);//print data to console for now
+                return $.when();
+                //when backend is ready remove the placeholder 'console.log and return $.when' and use the correct function below
+                
+                /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
+                    module: 'feedback',
+                    params: {action: 'send',
+                        timezone: 'UTC'
+                    },
+                    data: data
+                });*/
+            });
+        } else {
+            console.log(data);//print data to console for now
+            return $.when();
+            //when backend is ready remove the placeholder 'console.log and return $.when' and use the correct function below
+    
+            /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
+                module: 'feedback',
+                params: {action: 'send',
+                    timezone: 'UTC'
+                },
+                data: data
+            });*/
         }
-
-        console.log(data);//print data to console for now
-        return $.when();
-        //when backend is ready remove the placeholder 'console.log and return $.when' and use the correct function below
-
-        /*return http.PUT({//could be done to use all folders, see portal widget but not sure if this is needed
-            module: 'feedback',
-            params: {action: 'send',
-                timezone: 'UTC'
-            },
-            data: data
-        });*/
     }
-
-    return {
+    
+    var feedback = {
         show: function () {
             var popup = new dialogs.ModalDialog()
                     .header($('<h4>').text(gt('Feedback')))
                     .addPrimaryButton('send', gt('Send feedback'), 'send', {tabIndex: 1})
                     .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: 1}),
                 stars = buildStarWidget(settings.get('feeback/numberOfStars', 5), settings.get('feeback/showHover', true)),
-                note = $('<textarea tabindex="1" id="feedback-note" class="feedback-note" rows="5">');
+                note = $('<textarea tabindex="1" id="feedback-note" class="feedback-note" rows="5">'),
+                supportlink = settings.get('feedback/supportlink', '');
+            if (supportlink !== '') {
+                supportlink = $('<a href="' + supportlink + '" tabindex="1">');
+            }
             
             popup.getBody().append($('<div class="feedback-welcome-text">')
                     .text(gt('Welcome. Please provide your feedback about this product')),
                     stars.node,
                     $('<label for="feedback-note">').text(gt('Comments and suggestions')),
-                    note);
+                    note,
+                    $('<div class="feedback-info">')
+                        .text(gt('Please note, that support requests cannot be handled via the feedback-formular. When you have questions or problems please contact our support directly')),
+                    supportlink,
+                    $('<div class="feedback-userdata-notice">').text(includeUserInfo ? gt('Your email address will be included when sending this feedback') : ''));
 
             popup.show().done(function (action) {
                 if (action === 'send') {
                     sendFeedback({rating: stars.getValue(), message: note.val()})
                     .done(function () {
                         notifications.yell('success', gt('Thank you for your feedback'));
+                    })
+                    .fail(function (error) {
+                        notifications.yell(error);
                     });
                 }
             });
@@ -138,4 +165,36 @@ define('io.ox/core/feedback/feedback',
             $('#io-ox-core').append(feedbackButton);
         }
     };
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'feedback',
+        index: 250,
+        draw: function () {
+            var currentSetting = settings.get('feeback/show', 'both');
+            if (currentSetting === 'both' || currentSetting === 'topbar') {
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#" data-action="feedback" role="menuitem" tabindex="1">').text(gt('Give feedback'))
+                    )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        feedback.show();
+                    })
+                );
+            }
+        }
+    });
+    
+    ext.point('io.ox/core/plugins').extend({
+        id: 'feedback',
+        draw: function () {
+            var currentSetting = settings.get('feeback/show', 'both');
+            if (_.device('!small') && (currentSetting === 'both' || currentSetting === 'side')) {
+                feedback.drawButton();
+            }
+            
+        }
+    });
+
+    return feedback;
 });

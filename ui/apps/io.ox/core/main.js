@@ -741,27 +741,6 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'feedback',
-            index: 250,
-            draw: function () {
-                var currentSetting = settings.get('feeback/show', 'both');
-                if (currentSetting === 'both' || currentSetting === 'topbar') {
-                    this.append(
-                        $('<li>').append(
-                            $('<a href="#" data-action="feedback" role="menuitem" tabindex="1">').text(gt('Give feedback'))
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            require(['io.ox/core/feedback/feedback'], function (feedback) {
-                                feedback.show();
-                            });
-                        })
-                    );
-                }
-            }
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown').extend({
             id: 'logout',
             index: 1000,
             draw: function () {
@@ -887,14 +866,6 @@ define('io.ox/core/main',
                 );
             }
         });
-
-        // ext.point('io.ox/core/feedback').extend({
-        //     draw: function () {
-        //         require(['io.ox/core/feedback/feedback'], function (feedback) {
-        //             feedback.drawButton();
-        //         });
-        //     }
-        // });
 
         // add some senseless characters to avoid unwanted scrolling
         if (location.hash === '') {
@@ -1213,11 +1184,8 @@ define('io.ox/core/main',
                         $('#io-ox-screens').css('top', '0px');
                         topbar.hide();
                     }
-                    //draw fedbackButton
-                    var currentSetting = settings.get('feeback/show', 'both');
-                    if (currentSetting === 'both' || currentSetting === 'side') {
-                        ext.point('io.ox/core/feedback').invoke('draw');
-                    }
+                    //draw plugins
+                    ext.point('io.ox/core/plugins').invoke('draw');
 
                     debug('core: Stage "load" > autoLaunch ...');
 
