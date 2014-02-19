@@ -7,7 +7,8 @@
         "settings": true,
         "requires": "contacts",
         "refreshable": true,
-        "index": 700
+        "index": 700,
+        "advancedMode": true
     },
     {
         "namespace": "io.ox/dev/testing/main",

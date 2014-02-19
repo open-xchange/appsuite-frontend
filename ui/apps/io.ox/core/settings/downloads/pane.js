@@ -62,7 +62,8 @@ define('io.ox/core/settings/downloads/pane',
         id: 'io.ox/core/downloads',
         index: 'last',
         title: gt('Downloads'),
-        pane: 'io.ox/core/settings/downloads/pane'
+        pane: 'io.ox/core/settings/downloads/pane',
+        advancedMode: true
     });
 
     ext.point('io.ox/core/settings/downloads/pane').extend({

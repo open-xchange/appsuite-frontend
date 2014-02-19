@@ -25,7 +25,8 @@ define('io.ox/core/settings/errorlog/settings/pane',
         id: 'errorlog',
         title: gt('Error log'),
         ref: 'io.ox/core/settings/errorlog',
-        index: 'last'
+        index: 'last',
+        advancedMode: true
     });
 
     var ErrorLogView = Backbone.View.extend({

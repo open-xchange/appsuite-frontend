@@ -20,10 +20,11 @@ define('io.ox/settings/main',
      'io.ox/core/commons',
      'gettext!io.ox/core',
      'settings!io.ox/settings/configjump',
+     'settings!io.ox/core',
      'io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/settings/downloads/pane',
      'less!io.ox/settings/style.less'
-    ], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings) {
+    ], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings, advancedModeSettings) {
 
     'use strict';
 
@@ -79,10 +80,9 @@ define('io.ox/settings/main',
         // nodes
         left,
         right,
-        expertmode = false, // for testing - better: false,
+        expertmode = advancedModeSettings.get('settings/advancedMode', true),
         currentSelection = null,
-        previousSelection = null,
-        advancedModeOnly = [gt('Mail Filter'), gt('Address Book'), gt('Tasks'), gt('Drive'), gt('Downloads'), gt('Error log')];
+        previousSelection = null;
 
     function updateExpertMode() {
         var nodes = $('.expertmode');
@@ -252,7 +252,7 @@ define('io.ox/settings/main',
                     if (expertmode) {
                         return true;
                     } else {
-                        return _.contains(advancedModeOnly, point.title) ? false : true;
+                        return point.advancedMode;
                     }
                 }));
             });
@@ -358,6 +358,7 @@ define('io.ox/settings/main',
                     .on('change', function () {
 
                         expertmode = checkbox.prop('checked');
+                        advancedModeSettings.set('settings/advancedMode', expertmode).save();
                         grid.setAllRequest(getAllSettingsPanes);
                         grid.paint();
                         updateExpertMode();

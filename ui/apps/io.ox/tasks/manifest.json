@@ -6,5 +6,6 @@
     "settings": true,
     "requires": "tasks",
     "refreshable": true,
-    "index": 900
+    "index": 900,
+    "advancedMode": true
 }
