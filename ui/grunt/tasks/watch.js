@@ -30,18 +30,14 @@ module.exports = function (grunt) {
             files: ['spec/**/*_spec.js'],
             tasks: ['newer:jshint:specs', 'newer:concat:specs', 'karma:unit:run']
         },
-        less: {
-            files: ['apps/**/*.less', 'bower_components/**/*.less'],
-            tasks: ['newer:less', 'force_update'],
-            options: { livereload: true }
-        },
-        bootjs: {
-            files: ['src/*.js'],
-            tasks: ['concat:bootjs', 'force_update'],
-            options: { livereload: true }
-        },
         all: {
-            files: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js', 'bower_components/**/*.js'],
+            files: [
+                'Gruntfile.js',
+                'grunt/tasks/*.js',
+                'apps/**/*.{js,less}',
+                'src/*.js',
+                'bower_components/**/*.{js,less}'
+            ],
             tasks: ['default'],
             options: { livereload: true }
         }
