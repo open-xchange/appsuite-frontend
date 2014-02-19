@@ -43,7 +43,7 @@ module.exports = function (grunt) {
         all: {
             files: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js', 'bower_components/**/*.js'],
             tasks: ['default'],
-            options: { nospawn: true, livereload: true }
+            options: { livereload: true }
         }
     });
 
