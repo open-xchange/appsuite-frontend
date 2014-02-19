@@ -428,11 +428,11 @@ define(
                     });
                     it('for inline quoted replies/forwards', function () {
                         //above
-                        settings.set('defaultSignature', "326");
+                        settings.set('defaultSignature', '326');
                         app.setBody('this is quoted text');
                         expect(countLeadingBlanks()).toEqual(1);
                         //below
-                        settings.set('defaultSignature', "294");
+                        settings.set('defaultSignature', '294');
                         app.setBody('this is quoted text');
                         expect(countLeadingBlanks()).toEqual(1);
                         //none
@@ -440,13 +440,13 @@ define(
                         app.setBody('this is quoted text');
                         expect(countLeadingBlanks()).toEqual(1);
                     });
-                   it('for mails from scratch', function () {
+                    it('for mails from scratch', function () {
                         //above: scratch
-                        settings.set('defaultSignature', "326");
+                        settings.set('defaultSignature', '326');
                         app.setBody('');
                         expect(countLeadingBlanks()).toEqual(1);
                         //below: scratch
-                        settings.set('defaultSignature', "294");
+                        settings.set('defaultSignature', '294');
                         app.setBody('');
                         expect(countLeadingBlanks()).toEqual(1);
                         //none: scratch
@@ -491,11 +491,11 @@ define(
                     });
                     it('for inline quoted replies/forwards', function () {
                         //above
-                        settings.set('defaultSignature', "326");
+                        settings.set('defaultSignature', '326');
                         app.setBody('this is quoted text');
                         expect(countLeadingBlanks()).toEqual(2);
                         //below
-                        settings.set('defaultSignature', "294");
+                        settings.set('defaultSignature', '294');
                         app.setBody('this is quoted text');
                         expect(countLeadingBlanks()).toEqual(2);
                         //none
@@ -503,13 +503,13 @@ define(
                         app.setBody('this is quoted text');
                         expect(countLeadingBlanks()).toEqual(2);
                     });
-                   it('for mails from scratch', function () {
+                    it('for mails from scratch', function () {
                         //above: scratch
-                        settings.set('defaultSignature', "326");
+                        settings.set('defaultSignature', '326');
                         app.setBody('');
                         expect(countLeadingBlanks()).toEqual(2);
                         //below: scratch
-                        settings.set('defaultSignature', "294");
+                        settings.set('defaultSignature', '294');
                         app.setBody('');
                         expect(countLeadingBlanks()).toEqual(2);
                         //none: scratch

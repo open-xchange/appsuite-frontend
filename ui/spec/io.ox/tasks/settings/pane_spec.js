@@ -10,7 +10,7 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
- define(['io.ox/core/extensions',
+define(['io.ox/core/extensions',
         'gettext!io.ox/tasks',
         'io.ox/tasks/settings/pane'
         ], function (ext, gt) {
@@ -18,7 +18,7 @@
 
 	describe('tasksettings', function () {
         beforeEach(function () {
-            
+
             $('body', document).append(this.node = $('<div id="tasksettingsNode">'));
             ext.point('io.ox/tasks/settings/detail').invoke('draw', this.node);
 

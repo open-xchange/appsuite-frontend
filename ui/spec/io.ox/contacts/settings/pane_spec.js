@@ -10,7 +10,7 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
- define(['io.ox/core/extensions',
+define(['io.ox/core/extensions',
         'gettext!io.ox/contacts',
         'io.ox/contacts/settings/pane'
         ], function (ext, gt) {
@@ -18,7 +18,7 @@
 
 	describe('contactssettings', function () {
         beforeEach(function () {
-            
+
             $('body', document).append(this.node = $('<div id="contactssettingsNode">'));
             ext.point('io.ox/contacts/settings/detail').invoke('draw', this.node);
 

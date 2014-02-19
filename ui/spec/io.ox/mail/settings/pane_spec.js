@@ -10,7 +10,7 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
- define(['io.ox/core/extensions',
+define(['io.ox/core/extensions',
         'gettext!io.ox/mail',
         'io.ox/mail/settings/pane'
         ], function (ext, gt) {
@@ -18,7 +18,7 @@
 
 	describe('mailsettings', function () {
         beforeEach(function () {
-            
+
             $('body', document).append(this.node = $('<div id="mailsettingsNode">'));
             ext.point('io.ox/mail/settings/detail').invoke('draw', this.node);
 
@@ -37,7 +37,7 @@
 
             this.node.find('input[name="contactCollectOnMailTransport"]').length.should.be.equal(1);
             this.node.find('input[name="contactCollectOnMailTransport"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while sending'));
-            
+
             this.node.find('input[name="contactCollectOnMailAccess"]').length.should.be.equal(1);
             this.node.find('input[name="contactCollectOnMailAccess"]').parent().text().should.be.equal(gt('Automatically collect contacts in the folder "Collected addresses" while reading'));
 
@@ -46,10 +46,10 @@
 
             this.node.find('input[name="appendVcard"]').length.should.be.equal(1);
             this.node.find('input[name="appendVcard"]').parent().text().should.be.equal(gt('Append vCard'));
-            
+
             this.node.find('input[name="appendMailTextOnReply"]').length.should.be.equal(1);
             this.node.find('input[name="appendMailTextOnReply"]').parent().text().should.be.equal(gt('Insert the original email text to a reply'));
-            
+
             // this.node.find('input[name="threadView"]').length.should.be.equal(3); // depends on caps.contactCollect
 
             this.node.find('input[name="forwardMessageAs"]').length.should.be.equal(2);

@@ -10,7 +10,7 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
- define(['io.ox/core/extensions',
+define(['io.ox/core/extensions',
         'gettext!io.ox/calendar',
         'io.ox/calendar/settings/pane'
         ], function (ext, gt) {
@@ -18,7 +18,7 @@
 
 	describe('calendarsettings', function () {
         beforeEach(function () {
-            
+
             $('body', document).append(this.node = $('<div id="calendarsettingsNode">'));
             ext.point('io.ox/calendar/settings/detail').invoke('draw', this.node);
 
@@ -61,7 +61,7 @@
 
             this.node.find('input[name="deleteInvitationMailAfterAction"]').length.should.be.equal(1);
             this.node.find('input[name="deleteInvitationMailAfterAction"]').parent().text().should.be.equal(gt('Automatically delete a notification mail after it has been accepted or declined?'));
-            
+
         });
 
     });

@@ -10,7 +10,7 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
- define(['io.ox/core/extensions',
+define(['io.ox/core/extensions',
         'gettext!io.ox/calendar',
         'fixture!io.ox/core/api/user.json'
 

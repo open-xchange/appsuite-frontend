@@ -10,7 +10,7 @@
  *
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
- define(['io.ox/core/extensions',
+define(['io.ox/core/extensions',
         'gettext!io.ox/files',
         'io.ox/files/settings/pane'
         ], function (ext, gt) {
@@ -18,7 +18,7 @@
 
 	describe('filessettings', function () {
         beforeEach(function () {
-            
+
             $('body', document).append(this.node = $('<div id="filessettingsNode">'));
             ext.point('io.ox/files/settings/detail').invoke('draw', this.node);
 

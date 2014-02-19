@@ -30,7 +30,7 @@ define(['io.ox/mail/detail/content',
                         expect(baton.source.indexOf('target="_blank"')).toBeGreaterThan(-1);
                     else
                         expect(baton.source).toEqual(source);
-                };
+                }
 
                 //target doesn't changed: no valid href
                 test('<a href="">', false);
