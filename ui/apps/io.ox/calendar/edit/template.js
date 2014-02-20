@@ -52,10 +52,10 @@ define('io.ox/calendar/edit/template',
 
     ext.point('io.ox/calendar/edit/section/header').extend({
         draw: function (baton) {
-            var row = $('<div class="row header">');
+            var row = $('<div class="col-lg-12 header">');
             ext.point('io.ox/calendar/edit/section/title').invoke('draw', row, baton);
             ext.point('io.ox/calendar/edit/section/buttons').invoke('draw', row, baton);
-            this.append($('<div class="col-lg-12">').append(row));
+            this.append($('<div class="row">').append(row));
         }
     });
 
@@ -148,7 +148,7 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.DatePicker({
         id: 'start-date',
         index: 400,
-        className: 'col-xs-12 col-sm-6 col-md-4',
+        className: 'col-xs-6 col-sm-6 col-md-4',
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         attribute: 'start_date',
@@ -158,7 +158,7 @@ define('io.ox/calendar/edit/template',
     // end date
     point.extend(new forms.DatePicker({
         id: 'end-date',
-        className: 'col-xs-12 col-sm-6 col-md-4',
+        className: 'col-xs-6 col-sm-6 col-md-4',
         labelClassName: 'control-label desc',
         display: 'DATETIME',
         index: 500,
@@ -196,7 +196,7 @@ define('io.ox/calendar/edit/template',
     // recurrence
     point.extend(new RecurrenceView({
         id: 'recurrence',
-        className: 'col-xs-12',
+        className: 'col-xs-12 recurrenceview',
         index: recurrenceIndex
     }), {
         rowClass: 'collapsed'
@@ -280,7 +280,7 @@ define('io.ox/calendar/edit/template',
         id: 'private_flag',
         labelClassName: 'control-label desc',
         headerClassName: 'control-label desc',
-        className: 'col-md-4',
+        className: 'col-md-4 privateflag',
         header: gt('Type'),
         label: gt('Private'),
         attribute: 'private_flag',
@@ -320,11 +320,13 @@ define('io.ox/calendar/edit/template',
         index: 1500,
         rowClass: 'collapsed',
         draw: function (baton) {
-            var pNode;
+            var pNode,
+                guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="col-md-6">').append(
                     pNode = $('<div class="input-group">').append(
-                        $('<input type="text" class="add-participant form-control" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
+                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
+                        $('<input type="text" class="add-participant form-control" tabindex="1">').attr('placeholder', gt('Add participant/resource')).attr('id', guid),
                         $('<span class="input-group-btn">').append(
                             $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
                                 .append($('<i class="fa fa-plus">'))
@@ -414,9 +416,7 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.CheckBoxField({
         id: 'notify',
         labelClassName: 'control-label desc',
-        //headerClassName: 'control-label desc',
         className: 'col-md-6',
-        //header: gt('Notify all participants via email.'),
         label: gt('Notify all participants by email.'),
         attribute: 'notification',
         index: 1510,
