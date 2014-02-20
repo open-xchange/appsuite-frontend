@@ -609,7 +609,7 @@ define('io.ox/tasks/actions',
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'save',
         index: 400,
-        label: gt('Save to drive'),
+        label: gt('Save to Drive'),
         ref: 'io.ox/tasks/actions/save-attachment'
     }));
 });

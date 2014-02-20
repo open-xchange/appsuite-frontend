@@ -1137,7 +1137,7 @@ define('io.ox/mail/actions',
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'save',
         index: 500,
-        label: gt('Save to drive'),
+        label: gt('Save to Drive'),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 

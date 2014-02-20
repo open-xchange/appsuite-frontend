@@ -26,7 +26,7 @@ define('io.ox/mail/actions/attachmentSave',
     function commit(list, target) {
 
         notifications.yell('busy',
-            gt.ngettext('Saving attachment to drive', 'Saving attachments to drive', list.length) + ' ...'
+            gt.ngettext('Saving attachment to Drive', 'Saving attachments to Drive', list.length) + ' ...'
         );
 
         api.saveAttachments(list, target).then(

@@ -813,7 +813,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/attachment/links').extend(new links.Link({
         id: 'save',
         index: 400,
-        label: gt('Save to drive'),
+        label: gt('Save to Drive'),
         ref: 'io.ox/contacts/actions/save-attachment'
     }));
 });
