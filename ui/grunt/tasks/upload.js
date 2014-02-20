@@ -50,11 +50,13 @@ module.exports = function (grunt) {
                 grunt.log.error(err);
                 done(false);
             })
-            .on('complete', function (res) {
-                if (index === lastIndex) done(true);
+            .on('fail', function (err) {
+                grunt.log.error(err);
+                done(false);
             })
             .on('success', function () {
                 grunt.log.ok('uploaded', file.dest);
+                if (index === lastIndex) done(true);
             });
         });
     });
