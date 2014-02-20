@@ -80,7 +80,7 @@ define('io.ox/settings/main',
         // nodes
         left,
         right,
-        expertmode = advancedModeSettings.get('settings/advancedMode', true),
+        expertmode = advancedModeSettings.get('settings/advancedMode', false),
         currentSelection = null,
         previousSelection = null;
 
