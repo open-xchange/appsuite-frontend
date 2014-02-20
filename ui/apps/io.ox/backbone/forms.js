@@ -261,13 +261,13 @@ define('io.ox/backbone/forms',
         modelEvents['change:' + options.attribute] = 'updateCheckbox';
 
         var basicImplementation = {
-            tagName: 'div',
+            tagName: options.header ? 'fieldset' : 'div',
             modelEvents: modelEvents,
             render: function () {
                 var self = this;
                 this.nodes = {};
                 if (this.header) {
-                    this.$el.append($('<label>').addClass(this.headerClassName || '').text(this.header));
+                    this.$el.append($('<legend>').addClass(this.headerClassName || '').text(this.header));
                 }
                 this.$el.append(
                         $('<label class="checkbox">')
@@ -300,9 +300,10 @@ define('io.ox/backbone/forms',
             tagName: 'div',
             modelEvents: modelEvents,
             render: function () {
-                var self = this;
+                var self = this,
+                    guid = _.uniqueId('form-control-label-');
                 this.nodes = {};
-                this.nodes.select = $('<select class="form-control" tabindex="1">');
+                this.nodes.select = $('<select class="form-control">').attr({ id: guid, tabindex: 1 });
                 if (options.multiple) {
                     this.nodes.select.prop('multiple', true);
                 }
@@ -311,7 +312,7 @@ define('io.ox/backbone/forms',
                         $('<option>', {value: value}).text(label)
                     );
                 });
-                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label).append(this.nodes.select));
+                this.$el.append($('<label>').attr('for', guid).addClass(this.labelClassName || '').text(this.label)).append(this.nodes.select);
                 this.updateChoice();
                 this.nodes.select.on('change', function () {
                     self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
@@ -329,7 +330,7 @@ define('io.ox/backbone/forms',
      */
     function SectionLegend(options) {
         _.extend(this, {
-            tagName: 'div',
+            tagName: 'fieldset',
             render: function () {
                 this.nodes = {};
                 this.$el.append(this.nodes.legend = $('<legend>').text(this.label).addClass('sectiontitle'));
@@ -476,11 +477,13 @@ define('io.ox/backbone/forms',
                 this.nodes = {};
                 this.mobileSet = {};
                 this.$el.append(
-                    this.nodes.controlGroup = $('<div class="control-group">').append(
-                        $('<label>').addClass(options.labelClassName || '').text(this.label),
+                    this.nodes.controlGroup = $('<fieldset>').append(
+                        $('<legend>').addClass(options.labelClassName || '').text(this.label),
                         $('<div class="form-inline">').append(
                             function () {
-                                self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">');
+                                var guid = _.uniqueId('form-control-label-');
+                                self.nodes.dayFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Date'));
+                                self.nodes.dayField = $('<input type="text" tabindex="1" class="form-control datepicker-day-field">').attr('id', guid);
                                 if (options.initialStateDisabled) {
                                     self.nodes.dayField.prop('disabled', true);
                                 }
@@ -496,18 +499,19 @@ define('io.ox/backbone/forms',
 
                                 if (mobileMode) {
                                     self.nodes.dayField.toggleClass('input-medium', 'input-sm');
-                                    return [self.nodes.dayField];
+                                    return [self.nodes.dayFieldLabel, self.nodes.dayField];
                                 } else {
                                     if (options.display === 'DATE') {
-                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
+                                        return [self.nodes.dayFieldLabel, self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
                                     } else if (options.display === 'DATETIME') {
-
-                                        self.nodes.timeField = $('<input type="text" tabindex="1" class="form-control">');
+                                        guid = _.uniqueId('form-control-label-');
+                                        self.nodes.timeFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Time'));
+                                        self.nodes.timeField = $('<input type="text" tabindex="1" class="form-control">').attr('id', guid);
                                         if (self.model.get('full_time')) {
                                             self.nodes.timeField.hide();
                                             self.nodes.timezoneField.hide();
                                         }
-                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
+                                        return [self.nodes.dayFieldLabel, self.nodes.dayField, '&nbsp;', self.nodes.timeFieldLabel, self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
                                     }
                                 }
                             }
