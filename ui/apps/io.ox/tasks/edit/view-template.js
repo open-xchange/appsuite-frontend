@@ -202,7 +202,7 @@ define('io.ox/tasks/edit/view-template',
                     $('<option>', {value: value}).text(label)
                 );
             });
-            this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
+            this.$el.append($('<label for="task-edit-status-select">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
             this.updateChoice();
             this.nodes.select.on('change', function () {
                 if (self.nodes.select.prop('selectedIndex') === 0) {
@@ -282,7 +282,7 @@ define('io.ox/tasks/edit/view-template',
                     $('<option>', {value: value}).text(label)
                 );
             });
-            this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
+            this.$el.append($('<label for="task-edit-priority-select">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
             this.updateChoice();
             this.nodes.select.on('change', function () {
                 self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
@@ -527,7 +527,7 @@ define('io.ox/tasks/edit/view-template',
                     $('<option>', {value: value}).text(label)
                 );
             });
-            this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
+            this.$el.append($('<label for="task-edit-currency">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
             this.updateChoice();
             this.nodes.select.on('change', function () {
                 self.model.set(self.attribute, self.nodes.select.val(), {validate: true});
@@ -617,14 +617,19 @@ define('io.ox/tasks/edit/view-template',
         row: '1',
         draw: function (options) {
             var node = this,
-            input;
+                guid = _.uniqueId('form-control-label-'),
+                input;
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
                 var collection = options.model.getParticipants();
 
                 node.append(
                     input = $('<div class="input-group col-sm-6">').append(
-                        $('<input type="text" class="add-participant task-participant-input-field form-control" tabindex="1">').attr('placeholder', gt('Add participant/resource')),
+                        $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
+                        $('<input type="text" class="add-participant task-participant-input-field form-control">')
+                        .attr({placeholder: gt('Add participant/resource'),
+                               id: guid,
+                               tabindex: 1}),
                         $('<span class="input-group-btn">').append(
                             $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
                                 .append($('<i class="fa fa-plus">'))
