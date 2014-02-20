@@ -583,8 +583,10 @@ define('io.ox/core/tk/attachments',
         }, options);
 
         var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'form-group')),
-            input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr({ tabindex: options.tabindex }),
-            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($('<i class="fa fa-paperclip">'), $.txt(options.buttontext)).append(input),
+            gguid = _.uniqueId('form-control-label-'),
+            label = $('<label>').attr('for', gguid).addClass('sr-only').text(options.buttontext),
+            input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr({ id: gguid, tabindex: options.tabindex }),
+            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($('<i class="fa fa-paperclip">'), $.txt(options.buttontext)).append(label, input),
             driveButton = $('<button type="button" class="btn btn-default" data-action="addinternal">').text(gt('Files'));
 
         if (options.drive && _.device('!smartphone')) {
