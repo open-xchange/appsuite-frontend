@@ -506,7 +506,9 @@ define('io.ox/backbone/forms',
                                     } else if (options.display === 'DATETIME') {
                                         guid = _.uniqueId('form-control-label-');
                                         self.nodes.timeFieldLabel = $('<label class="sr-only">').attr('for', guid).text(gt('Time'));
-                                        self.nodes.timeField = $('<input type="text" tabindex="1" class="form-control">').attr('id', guid);
+                                        self.nodes.timeField = $('<input type="text" tabindex="1" class="form-control">').attr('id', guid).attr({
+                                            'aria-label': gt('Use up and down keys to change the time. Close selection by pressing ESC key.')
+                                        });
                                         if (self.model.get('full_time')) {
                                             self.nodes.timeField.hide();
                                             self.nodes.timezoneField.hide();

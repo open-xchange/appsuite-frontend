@@ -126,7 +126,7 @@ define('io.ox/calendar/edit/template',
         id: 'title',
         index: 200,
         className: 'col-xs-12',
-        labelClassName: 'control-label desc',
+        labelClassName: 'control-label',
         control: '<input type="text" class="form-control">',
         attribute: 'title',
         label: gt('Subject'),
@@ -137,7 +137,7 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.InputField({
         id: 'location',
         className: 'col-xs-12',
-        labelClassName: 'control-label desc',
+        labelClassName: 'control-label',
         index: 300,
         control: '<input type="text" class="form-control">',
         attribute: 'location',
@@ -148,8 +148,8 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.DatePicker({
         id: 'start-date',
         index: 400,
-        className: 'col-xs-6 col-sm-6 col-md-4',
-        labelClassName: 'control-label desc',
+        className: 'dateinput col-xs-6 col-sm-6 col-md-4',
+        labelClassName: 'control-label',
         display: 'DATETIME',
         attribute: 'start_date',
         label: gt('Starts on')
@@ -158,15 +158,14 @@ define('io.ox/calendar/edit/template',
     // end date
     point.extend(new forms.DatePicker({
         id: 'end-date',
-        className: 'col-xs-6 col-sm-6 col-md-4',
-        labelClassName: 'control-label desc',
+        className: 'dateinput col-xs-6 col-sm-6 col-md-4',
+        labelClassName: 'control-label',
         display: 'DATETIME',
         index: 500,
         attribute: 'end_date',
         label: gt('Ends on')
     }), {
-        nextTo: 'start-date',
-        rowClass: 'dateinput'
+        nextTo: 'start-date'
     });
 
     // find free time link
@@ -185,7 +184,7 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.CheckBoxField({
         id: 'full_time',
         className: 'col-xs-12',
-        labelClassName: 'control-label desc',
+        labelClassName: 'control-label',
         label: gt('All day'),
         attribute: 'full_time',
         index: 600
@@ -207,7 +206,7 @@ define('io.ox/calendar/edit/template',
         id: 'note',
         index: 700,
         className: 'col-xs-12',
-        labelClassName: 'control-label desc',
+        labelClassName: 'control-label',
         control: '<textarea class="note form-control">',
         attribute: 'note',
         label: gt('Description')
@@ -245,7 +244,7 @@ define('io.ox/calendar/edit/template',
         point.extend(new forms.SelectBoxField({
             id: 'alarm',
             index: 800,
-            labelClassName: 'control-label desc',
+            labelClassName: 'control-label',
             className: 'col-md-4',
             attribute: 'alarm',
             label: gt('Reminder'),
@@ -263,7 +262,7 @@ define('io.ox/calendar/edit/template',
         attribute: 'shown_as',
         label: //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
                gt('Shown as'),
-        labelClassName: 'control-label desc',
+        labelClassName: 'control-label',
         selectOptions: {
             1: gt('Reserved'),
             2: gt('Temporary'),
@@ -278,8 +277,8 @@ define('io.ox/calendar/edit/template',
     // private?
     point.extend(new forms.CheckBoxField({
         id: 'private_flag',
-        labelClassName: 'control-label desc',
-        headerClassName: 'control-label desc',
+        labelClassName: 'control-label',
+        headerClassName: 'control-label',
         className: 'col-md-4 privateflag',
         header: gt('Type'),
         label: gt('Private'),
@@ -326,9 +325,20 @@ define('io.ox/calendar/edit/template',
                 $('<div class="col-md-6">').append(
                     pNode = $('<div class="input-group">').append(
                         $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
-                        $('<input type="text" class="add-participant form-control" tabindex="1">').attr('placeholder', gt('Add participant/resource')).attr('id', guid),
+                        $('<input class="add-participant form-control">').attr({
+                            type: 'text',
+                            tabindex: 1,
+                            id: guid,
+                            placeholder: gt('Add participant/resource')
+                        }),
                         $('<span class="input-group-btn">').append(
-                            $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
+                            $('<button class="btn btn-default">')
+                                .attr({
+                                    type: 'button',
+                                    tabindex: 1,
+                                    'data-action': 'add',
+                                    'aria-label': gt('Add participant/resource')
+                                })
                                 .append($('<i class="fa fa-plus">'))
                         )
                     )
@@ -415,7 +425,7 @@ define('io.ox/calendar/edit/template',
 
     point.extend(new forms.CheckBoxField({
         id: 'notify',
-        labelClassName: 'control-label desc',
+        labelClassName: 'control-label',
         className: 'col-md-6',
         label: gt('Notify all participants by email.'),
         attribute: 'notification',

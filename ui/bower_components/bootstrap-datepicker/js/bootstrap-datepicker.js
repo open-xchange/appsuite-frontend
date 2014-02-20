@@ -577,7 +577,6 @@
 				cls.push('today');
 			}
 			if (date.valueOf() == currentDate) {
-				this.element.attr('aria-selected', this.getFormattedDate());
 				cls.push('active');
 			}
 			if (date.valueOf() < this.o.startDate || date.valueOf() > this.o.endDate ||
