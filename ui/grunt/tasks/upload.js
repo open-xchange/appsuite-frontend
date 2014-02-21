@@ -60,6 +60,9 @@ module.exports = function (grunt) {
             rest.put(url, {
                 username: config.username,
                 password: config.password,
+                query: {
+                    rev: 'upload'
+                },
                 encoding: 'binary',
                 data: grunt.file.read(file.src)
             })
@@ -79,7 +82,16 @@ module.exports = function (grunt) {
             });
         });
         Q.all(requests).then(function () {
-            done(true);
+            rest.post(baseUrl, {
+                username: config.username,
+                password: config.password,
+                query: {
+                    cmd: 'commit'
+                }
+            })
+            .on('success', function () {
+                done(true);
+            });
         });
     });
 };
