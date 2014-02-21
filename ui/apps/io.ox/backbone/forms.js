@@ -640,25 +640,16 @@ define('io.ox/backbone/forms',
             },
 
             onFullTimeChange: function () {
+                var ft = this.model.get('full_time');
                 if (mobileMode) {
-                    if (this.model.get('full_time')) {
-                        this.nodes.dayField.mobiscroll('option', 'timeWheels', '');//remove the timewheels
-                        this.nodes.dayField.mobiscroll('option', 'timeFormat', '');//remove the timeFormat
-                        this.nodes.timezoneField.hide();
-                    } else {
-                        this.nodes.dayField.mobiscroll('option', 'timeWheels', this.mobileSet.timeWheels);//add the timewheels again
-                        this.nodes.dayField.mobiscroll('option', 'timeFormat', this.mobileSet.timeFormat);//add the timeFormat again
-                        this.nodes.timezoneField.show();
-                    }
+                    this.nodes.dayField.mobiscroll('option', {
+                        timeWheels: ft ? '' : this.mobileSet.timeWheels,
+                        timeFormat: ft ? '' : this.mobileSet.timeFormat
+                    });
                 } else {
-                    if (this.model.get('full_time')) {
-                        this.nodes.timeField.hide();
-                        this.nodes.timezoneField.hide();
-                    } else {
-                        this.nodes.timeField.css('display', '');
-                        this.nodes.timezoneField.css('display', '');
-                    }
+                    this.nodes.timeField.css('display', ft ? 'none' : '');
                 }
+                this.nodes.timezoneField.css('display', ft ? 'none' : '');
             },
 
             modelEvents: modelEvents
