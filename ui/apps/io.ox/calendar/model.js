@@ -276,50 +276,58 @@ define('io.ox/calendar/model',
                 _end = model.get('full_time') ? date.Local.utc(model.get('end_date')) : model.get('end_date'),
                 mark = settings.get('markFulltimeAppointmentsAsFree', false);
 
-            model.on('change:full_time', function () {
-                if (model.get('full_time') === true) {
-                    // save old date
+            model.on('change:full_time', function (m, fulltime) {
+                var oldStart = _start,
+                    oldEnd = _end;
+
+                if (fulltime === true) {
+                    /// save to cache
                     _start = model.get('start_date');
                     _end = model.get('end_date');
+
                     // handle time
-                    var startDate = new date.Local(model.get('start_date')),
-                        endDate = new date.Local(model.get('end_date') - 1);
+                    var startDate = new date.Local(_start),
+                        endDate = new date.Local(_end - 1);
+
                     // parse to fulltime dates
                     startDate.setHours(0, 0, 0, 0);
-                    endDate.setHours(0, 0, 0, 0);
-                    endDate.setDate(endDate.getDate() + 1);
-                    // convert to UTC
-                    model.set('start_date', date.Local.localTime(startDate.getTime()), { validate: true });
-                    model.set('end_date', date.Local.localTime(endDate.getTime()), { validate: true });
+                    endDate.setHours(0, 0, 0, 0).setDate(endDate.getDate() + 1);
+
+                    // convert to UTC and save
+                    m.set('start_date', startDate.local, { validate: true });
+                    m.set('end_date', endDate.local, { validate: true });
 
                     // handle shown as
                     if (mark) {
-                        model.set('shown_as', 4, { validate: true });
+                        m.set('shown_as', 4, { validate: true });
                     }
                 } else {
-                    if (mark) {
-                        model.set('shown_as', 1, { validate: true });
-                    }
+                    // save to cache
+                    _start = date.Local.utc(model.get('start_date'));
+                    _end = date.Local.utc(model.get('end_date'));
 
                     // handle time
-                    var startDate = new date.Local(model.get('start_date')),
-                        endDate = new date.Local(model.get('end_date') + 1);
+                    var startDate = new date.Local(_start),
+                        endDate = new date.Local(_end + 1),
+                        oldStart = new date.Local(oldStart),
+                        oldEnd = new date.Local(oldEnd);
 
-                    // if cache dates are unuseable
-                    if (_end - _start === api.DAY) {
-                        _start = new date.Local().setMinutes(0, 0, 0).add(date.HOUR).getTime();
-                        _end = _start + date.HOUR;
+                    startDate.setHours(oldStart.getHours(), oldStart.getMinutes(), 0, 0);
+                    endDate.setHours(oldEnd.getHours(), oldEnd.getMinutes(), 0, 0);
+
+                    // fix short appointments
+                    if (oldEnd - oldStart > date.DAY) {
+                        endDate.setDate(endDate.getDate() - 1);
                     }
 
-                    _start = new date.Local(_start);
-                    _end = new date.Local(_end);
+                    // save
+                    m.set('start_date', startDate.getTime(), { validate: true });
+                    m.set('end_date', endDate.getTime(), { validate: true });
 
-                    startDate.setHours(_start.getHours(), _start.getMinutes(), 0, 0);
-                    endDate.setHours(_end.getHours(), _end.getMinutes(), 0, 0);
-                    endDate.setDate(endDate.getDate() - 1);
-
-                    model.set('start_date', startDate.getTime(), { validate: true });
-                    model.set('end_date', endDate.getTime(), { validate: true });
+                    // handle shown as
+                    if (mark) {
+                        m.set('shown_as', 1, { validate: true });
+                    }
                 }
             });
         },
