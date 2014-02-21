@@ -148,7 +148,6 @@ define('io.ox/core/commons-folderview',
                             top = current[0].offsetTop - 4;
                             left = current[0].offsetLeft + current[0].offsetWidth;
                         } else {
-                            console.log(e);
                             top = e.pageY - 58;
                             left = e.pageX - 40;
                         }
