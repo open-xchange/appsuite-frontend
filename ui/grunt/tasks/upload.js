@@ -16,11 +16,22 @@
 module.exports = function (grunt) {
     var rest = require('restler');
 
+    function obsConfig(key) {
+        if (grunt.option('obs-' + key)) {
+            return grunt.option('obs-' + key);
+        }
+        var config = grunt.config().local.obs || {};
+
+        return config[key];
+    }
+
     grunt.config('obs_upload', {
         package: {
             options: {
-                url: 'https://buildapi.open-xchange.com/source',
-                project: grunt.option('project')
+                url: obsConfig('url'),
+                project: obsConfig('project'),
+                username: obsConfig('username'),
+                password: obsConfig('password')
             },
             files: [{
                 expand: true,
@@ -40,18 +51,18 @@ module.exports = function (grunt) {
             lastIndex = this.files.length;
 
         this.files.forEach(function (file, index) {
-            grunt.verbose.writeln('uploading to: ', config.url + '/' + config.project + '/' + grunt.config.get('pkg.name') + '/' + file.dest);
+            grunt.verbose.writeln('uploading to: ', config.url + '/source/' + config.project + '/' + grunt.config.get('pkg.name') + '/' + file.dest);
             rest.put(config.url + config.project + '/' + grunt.config.get('pkg.name') + '/' + file.dest, {
                 username: config.username,
                 password: config.password,
                 data: grunt.file.read(file.src)
             })
             .on('error', function (err) {
-                grunt.log.error(err);
+                grunt.log.error(JSON.stringify(err));
                 done(false);
             })
             .on('fail', function (err) {
-                grunt.log.error(err);
+                grunt.log.error(JSON.stringify(err));
                 done(false);
             })
             .on('success', function () {
