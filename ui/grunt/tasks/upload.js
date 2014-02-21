@@ -51,8 +51,9 @@ module.exports = function (grunt) {
             lastIndex = this.files.length;
 
         this.files.forEach(function (file, index) {
-            grunt.verbose.writeln('uploading to: ', config.url + '/source/' + config.project + '/' + grunt.config.get('pkg.name') + '/' + file.dest);
-            rest.put(config.url + config.project + '/' + grunt.config.get('pkg.name') + '/' + file.dest, {
+            var url = config.url + '/source/' + config.project + '/' + grunt.config.get('pkg.name') + '/' + file.dest;
+            grunt.verbose.writeln('uploading to: ', url);
+            rest.put(url, {
                 username: config.username,
                 password: config.password,
                 data: grunt.file.read(file.src)
