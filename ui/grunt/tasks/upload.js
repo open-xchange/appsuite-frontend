@@ -14,7 +14,8 @@
 'use strict';
 
 module.exports = function (grunt) {
-    var rest = require('restler');
+    var rest = require('restler'),
+        Q = require('q');
 
     function obsConfig(key) {
         if (grunt.option('obs-' + key)) {
@@ -48,28 +49,37 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('obs_upload', 'Upload files via HTTP(S) to OBS', function () {
         var config = this.options(),
             done = this.async(),
-            lastIndex = this.files.length;
+            requests = new Array(this.files.length),
+            baseUrl = config.url + '/source/' + config.project + '/' + grunt.config.get('pkg.name');
 
         this.files.forEach(function (file, index) {
-            var url = config.url + '/source/' + config.project + '/' + grunt.config.get('pkg.name') + '/' + file.dest;
+            var url = baseUrl + '/' + file.dest,
+                def = Q.defer();
             grunt.verbose.writeln('uploading to: ', url);
+            requests[index] = def.promise;
             rest.put(url, {
                 username: config.username,
                 password: config.password,
+                encoding: 'binary',
                 data: grunt.file.read(file.src)
             })
             .on('error', function (err) {
                 grunt.log.error(JSON.stringify(err));
+                def.reject(err);
                 done(false);
             })
             .on('fail', function (err) {
                 grunt.log.error(JSON.stringify(err));
+                def.reject(err);
                 done(false);
             })
             .on('success', function () {
                 grunt.log.ok('uploaded', file.dest);
-                if (index === lastIndex) done(true);
+                def.resolve();
             });
+        });
+        Q.all(requests).then(function () {
+            done(true);
         });
     });
 };
