@@ -9,19 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: apps/io.ox/core/settings/pane.js:71 apps/io.ox/settings/main.js:236
-msgid "Basic settings"
-msgstr ""
-
-#: apps/io.ox/settings/accounts/settings/pane.js:122
-#: apps/io.ox/settings/main.js:242
-msgid "Mail and Social Accounts"
-msgstr ""
-
-#: apps/io.ox/settings/main.js:373
-msgid "Advanced Mode"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/template.js:77
 #: apps/io.ox/contacts/distrib/create-dist-view.js:40
 #: apps/io.ox/contacts/edit/view-form.js:175
@@ -1020,6 +1007,10 @@ msgstr ""
 #: apps/io.ox/calendar/settings/pane.js:83
 #: apps/io.ox/contacts/settings/pane.js:39 apps/io.ox/core/settings/pane.js:64
 msgid "The setting has been saved and will become active when you enter the application the next time."
+msgstr ""
+
+#: apps/io.ox/core/settings/pane.js:71 apps/io.ox/settings/main.js:236
+msgid "Basic settings"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:85
@@ -4363,12 +4354,21 @@ msgstr ""
 msgid "Recover passwords"
 msgstr ""
 
+#: apps/io.ox/settings/accounts/settings/pane.js:122
+#: apps/io.ox/settings/main.js:242
+msgid "Mail and Social Accounts"
+msgstr ""
+
 #: apps/io.ox/settings/accounts/settings/pane.js:158
 msgid "Do you really want to delete this account?"
 msgstr ""
 
 #: apps/io.ox/settings/accounts/settings/pane.js:159
 msgid "Delete account"
+msgstr ""
+
+#: apps/io.ox/settings/main.js:373
+msgid "Advanced Mode"
 msgstr ""
 
 #: apps/io.ox/mail/autoforward/settings/register.js:51
