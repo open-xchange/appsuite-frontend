@@ -14,7 +14,8 @@
 'use strict';
 
 module.exports = function (grunt) {
-    var rest = require('restler'),
+    var url = require('url'),
+        fs = require('fs'),
         Q = require('q');
 
     function obsConfig(key) {
@@ -50,48 +51,81 @@ module.exports = function (grunt) {
         var config = this.options(),
             done = this.async(),
             requests = new Array(this.files.length),
-            baseUrl = config.url + '/source/' + config.project + '/' + grunt.config.get('pkg.name');
+            baseUrl = config.url + '/source/' + config.project + '/' + grunt.config.get('pkg.name'),
+            proto = config.url.slice(0, 5) === 'https' ? require('https') : require('http');
 
         this.files.forEach(function (file, index) {
-            var url = baseUrl + '/' + file.dest,
+            var uri = baseUrl + '/' + file.dest,
+                data = url.parse(uri + '?rev=upload'),
+                readFile = Q.denodeify(fs.readFile),
                 def = Q.defer();
-            grunt.verbose.writeln('uploading to: ', url);
+
+            data.auth = [config.username, config.password].join(':');
+            data.method = 'PUT';
+            data.headers = {
+                'Accept': '*/*'
+            };
             requests[index] = def.promise;
-            rest.put(url, {
-                username: config.username,
-                password: config.password,
-                query: {
-                    rev: 'upload'
-                },
-                encoding: 'binary',
-                data: grunt.file.read(file.src)
+            readFile(file.src[0]).then(function (buffer) {
+                var def = Q.defer(),
+                    req;
+
+                grunt.verbose.writeln('Uploading', buffer.length, 'byte to', uri);
+                req = proto.request(data, def.resolve)
+                .on('error', def.reject);
+
+                req.write(buffer);
+
+                req.end();
+                return def.promise;
             })
-            .on('error', function (err) {
-                grunt.log.error(JSON.stringify(err));
+            .then(function (res) {
+                var def = Q.defer();
+                if (res.statusCode === 200) {
+                    res.on('data', def.resolve);
+                } else {
+                    res.on('data', def.reject);
+                }
+
+                return def.promise;
+            })
+            .done(function (res) {
+                grunt.log.ok('uploaded', file.dest, res.toString());
+                def.resolve(res);
+            },
+            function (err) {
+                grunt.log.error(err);
                 def.reject(err);
                 done(false);
-            })
-            .on('fail', function (err) {
-                grunt.log.error(JSON.stringify(err));
-                def.reject(err);
-                done(false);
-            })
-            .on('success', function () {
-                grunt.log.ok('uploaded', file.dest);
-                def.resolve();
             });
         });
-        Q.all(requests).then(function () {
-            rest.post(baseUrl, {
-                username: config.username,
-                password: config.password,
-                query: {
-                    cmd: 'commit'
+        Q.all(requests).done(function () {
+            var data = url.parse(baseUrl + '?cmd=commit'),
+                req;
+
+            data.method = 'POST';
+            data.auth = [config.username, config.password].join(':');
+            data.headers = {
+                'Accept': '*/*'
+            };
+
+            req = proto.request(data, function (res) {
+                if (res.statusCode === 200) {
+                    grunt.verbose.ok('All files uploaded.');
+                    done(true);
+                    return;
                 }
+
+                grunt.log.error('Commit request failed:', require('http').STATUS_CODES[res.statusCode]);
+                res.on('data', grunt.log.error);
+                done(false);
             })
-            .on('success', function () {
-                done(true);
+            .on('error', function (res) {
+                grunt.log.error(JSON.stringify(res));
+                done(false);
             });
+
+            req.end();
         });
     });
 };
