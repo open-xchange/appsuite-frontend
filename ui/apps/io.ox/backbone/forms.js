@@ -75,7 +75,6 @@ define('io.ox/backbone/forms',
             if (this.nodes.controlGroup) {
                 return this.nodes.controlGroup;
             }
-            this.buildControls();
 
             this.nodes.controlGroup = $('<div class="form-group">').appendTo(this.$el);
             this.nodes.controlGroup.append(
