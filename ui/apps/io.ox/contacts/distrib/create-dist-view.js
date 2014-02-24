@@ -73,13 +73,16 @@ define('io.ox/contacts/distrib/create-dist-view',
             gt('Name'), // mind bug #31073
         control: '<input tabindex="1" type="text" class="form-control">',
         buildControls: function () {
-            // debugger;
-            this.nodes.controlGroup.addClass('col-md-12');
             return this.buildElement();
-            // return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
-            //     // element
-            //     this.buildElement()
-            // ));
+        },
+        buildControlGroup: function () {
+            var guid = _.uniqueId('form-control-label-');
+            this.$el.append(
+                this.nodes.controlGroup = $('<div class="form-group col-md-12">').append(
+                    this.buildLabel().attr('for', guid),
+                    this.buildControls().attr('id', guid)
+                )
+            );
         }
     }));
 
