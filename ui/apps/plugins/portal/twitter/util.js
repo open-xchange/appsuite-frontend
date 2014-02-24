@@ -177,7 +177,7 @@ define('plugins/portal/twitter/util',
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str,
             profileLink = 'https://twitter.com/' + tweet.user.screen_name,
             tweeted = new date.Local(parseDate(tweet.created_at)).format(date.DATE_TIME),
-            $myTweet = $('<div class="tweet">').data('entry', tweet),
+            $myTweet = $('<li class="tweet">').data('entry', tweet),
             isCurrentUser = tweet.user.id_str === currentUserID,
             hideFollowButton = (opt === undefined || opt.hideFollowButton === undefined || !opt.hideFollowButton),
             hideLinks = (opt === undefined || opt.hideLinks === undefined || !opt.hideLinks);

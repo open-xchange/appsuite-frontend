@@ -28,7 +28,7 @@ define('plugins/portal/twitter/register',
 
     var loadEntriesPerPage = 10,
         offset = 0,
-        $tweets = $('<div>').addClass('twitter'),
+        $tweets = $('<ul>').addClass('twitter'),
         $busyIndicator = $('<div>').html('&nbsp;'),
         tweetCache = new cache.SimpleCache('twitter-cache', true),
         composeBox,
@@ -174,7 +174,7 @@ define('plugins/portal/twitter/register',
 
     var onPullToRefresh = function () {
         offset = 0;
-        var $first = $('div.tweet:first');
+        var $first = $('li.tweet:first');
         var newestId = $first.data('entry').id_str;
         $tweets.addClass('pulltorefresh-refreshing');
 
@@ -314,11 +314,11 @@ define('plugins/portal/twitter/register',
                 $(this).off('onPullToRefresh', onPullToRefresh);
                 //ptr.detachEvents();
             }).on('onPullToRefreshDown', function () {
-                $('div.tweet > div.text').addClass('pulltorefresh-unselectable');
-                $('div.tweet > div.text > span').addClass('pulltorefresh-unselectable');
+                $('li.tweet > div.text').addClass('pulltorefresh-unselectable');
+                $('li.tweet > div.text > span').addClass('pulltorefresh-unselectable');
             }).on('onPullToRefreshUp', function () {
-                $('div.tweet > div.text').removeClass('pulltorefresh-unselectable');
-                $('div.tweet > div.text > span').removeClass('pulltorefresh-unselectable');
+                $('li.tweet > div.text').removeClass('pulltorefresh-unselectable');
+                $('li.tweet > div.text > span').removeClass('pulltorefresh-unselectable');
             }).on('onAppended', function () {
                 //ptr.attachEvents($('div.io-ox-sidepopup-pane'), $(this), $tweets);
             });
