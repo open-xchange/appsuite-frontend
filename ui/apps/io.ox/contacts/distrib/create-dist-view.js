@@ -28,7 +28,8 @@ define('io.ox/contacts/distrib/create-dist-view',
 
     var point = views.point('io.ox/contacts/distrib/create-dist-view'),
         ContactCreateDistView = point.createView({
-            tagName: 'div'
+            tagName: 'div',
+            className: 'create-distributionlist-view'
         });
 
     point.extend({
@@ -40,22 +41,25 @@ define('io.ox/contacts/distrib/create-dist-view',
             buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
 
             this.$el.append(
-                $('<h1 class="clear-title title">').text(gt('Create distribution list')),
-                // save/create button
-                $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
-                    self.options.parentView.trigger('save:start');
-                    self.options.model.save().done(function () {
-                        self.options.parentView.trigger('save:success');
-                    }).fail(function () {
-                        self.options.parentView.trigger('save:fail');
-                    });
-                }),
-                // cancel button
-                $('<button type="button" class="btn btn-default" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
-                    // use this sneaky channel
-                    $(this).trigger('controller:quit');
-                })
+                $('<div class="header col-md-12">').append(
+                    $('<h1 class="clear-title title">').text(gt('Create distribution list')),
+                    // save/create button
+                    $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
+                        self.options.parentView.trigger('save:start');
+                        self.options.model.save().done(function () {
+                            self.options.parentView.trigger('save:success');
+                        }).fail(function () {
+                            self.options.parentView.trigger('save:fail');
+                        });
+                    }),
+                    // cancel button
+                    $('<button type="button" class="btn btn-default" data-action="discard" tabindex="2">').text(gt('Discard')).on('click', function () {
+                        // use this sneaky channel
+                        $(this).trigger('controller:quit');
+                    })
+                )
             );
+
         }
     });
 
@@ -69,10 +73,13 @@ define('io.ox/contacts/distrib/create-dist-view',
             gt('Name'), // mind bug #31073
         control: '<input tabindex="1" type="text" class="form-control">',
         buildControls: function () {
-            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
-                // element
-                this.buildElement()
-            ));
+            // debugger;
+            this.nodes.controlGroup.addClass('col-md-12');
+            return this.buildElement();
+            // return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
+            //     // element
+            //     this.buildElement()
+            // ));
         }
     }));
 
@@ -83,11 +90,11 @@ define('io.ox/contacts/distrib/create-dist-view',
         render: function () {
             var self = this;
 
-            var pNode = $('<div class="col-md-6 col-lg-6">').append(
+            var pNode = $('<div class="col-xs-12 col-md-6">').append(
                     $('<div class="autocomplete-controls input-group">').append(
                         $('<input tabindex="1" type="text" class="add-participant form-control">').attr('placeholder', gt('Add contact') + ' ...'),
                         $('<span class="input-group-btn">').append(
-                            $('<button type="button" class="btn btn-default" data-action="add" tabindex="1">')
+                            $('<button type="button" class="btn btn-default" aria-label="' + gt('Add contact') + '" data-action="add" tabindex="1">')
                                 .append($('<i class="fa fa-plus">'))
                         )
                     )
@@ -123,8 +130,8 @@ define('io.ox/contacts/distrib/create-dist-view',
             });
 
             this.$el.append(
-                $('<legend>').addClass('sectiontitle').text(gt('Contacts')),
-                this.itemList = $('<div>').addClass('item-list row'),
+                $('<legend>').addClass('sectiontitle col-md-12').text(gt('Contacts')),
+                this.itemList = $('<div>').addClass('item-list col-md-12'),
                 pNode
             );
 
@@ -178,7 +185,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
         drawEmptyItem: function (node) {
             node.append(
-                $('<div>').addClass('listed-item backstripes')
+                $('<div>').addClass('listed-item')
                 .attr({ 'data-mail': 'empty' })
                 .text(gt('This list has no contacts yet'))
             );
@@ -226,7 +233,7 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             var self = this;
 
-            return $('<div class="listed-item col-md-6">')
+            return $('<div class="listed-item col-xs-12 col-md-6">')
                 .attr('data-mail', o.display_name + '_' + o.mail)
                 .append(
                     // contact picture

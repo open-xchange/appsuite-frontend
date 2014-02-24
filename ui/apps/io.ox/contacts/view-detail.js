@@ -104,7 +104,7 @@ define('io.ox/contacts/view-detail',
         draw: function (baton) {
             var node;
             this.append(
-                node = $('<header class="row contact-header">')
+                node = $('<header class="contact-header">')
             );
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
@@ -267,7 +267,7 @@ define('io.ox/contacts/view-detail',
 
         if (rows.length === 0) return $();
 
-        return $('<div class="block">').append(
+        return $('<fieldset class="block">').append(
             [$('<legend>').text(args[0])].concat(rows)
         );
     }
