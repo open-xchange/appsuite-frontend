@@ -13,9 +13,10 @@
 
 define('io.ox/core/tk/list',
     ['io.ox/core/tk/list-selection',
+     'io.ox/core/tk/list-dnd',
      'io.ox/core/extensions',
      'gettext!io.ox/core'
-    ], function (Selection, ext) {
+    ], function (Selection, dnd, ext) {
 
     'use strict';
 
@@ -192,6 +193,9 @@ define('io.ox/core/tk/list',
             this.complete = false;
             this.ignoreFocus = !!options.ignoreFocus;
             this.firstReset = true;
+
+            // enable drag & drop
+            dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
 
             // permenent visual focus
             if (this.ignoreFocus) this.$el.addClass('has-focus');

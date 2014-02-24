@@ -202,7 +202,6 @@ define('io.ox/mail/threadview',
         },
 
         onChange: function () {
-            console.log('threadView.onChange > reset()');
             this.reset();
         },
 

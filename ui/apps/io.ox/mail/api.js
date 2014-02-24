@@ -473,6 +473,7 @@ define('io.ox/mail/api',
 
         var collection = pool.get('detail');
 
+        console.log('remove', ids);
         api.trigger('beforedelete', ids);
 
         _(ids).each(function (item) {
@@ -899,9 +900,18 @@ define('io.ox/mail/api',
      * @return {deferred}
      */
     api.move = function (list, targetFolderId) {
+
         var response;
+        var collection = pool.get('detail');
+
+        api.trigger('beforedelete', list);
+        _(list).each(function (item) {
+            var cid = _.cid(item), model = collection.get(cid);
+            if (model) collection.remove(model);
+        });
+
         if (list.length >= 100) {
-            notifications.yell('info', gt('Moving mails ... This may take a few seconds.'));
+            //notifications.yell('info', gt('Moving mails ... This may take a few seconds.'));
 
             return update(list, { folder_id: targetFolderId }).pipe(function (resp) {
                 response = resp.response;

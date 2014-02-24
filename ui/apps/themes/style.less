@@ -2947,20 +2947,30 @@ a.toolbar-action, .toolbar-action > a {
 
 /** DRAG & DROP **/
 
+@drag-size: 40px;
+
 .drag-helper {
     position: absolute;
     z-index: 65000;
-    background-color: rgba(240, 240, 240, 0.80);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 13px;
     width: 300px;
-    height: 20px;
-    line-height: 20px;
+    height: @drag-size;
+    line-height: @drag-size;
     color: #333;
-    text-shadow: 0 0 5px white;
-    font-weight: bold;
+    background-color: rgba(240, 240, 240, 0.80);
+    padding: 0 14px 0 @drag-size + 14px;
     .ellipsis();
-    .badge { margin-right: 1em; }
+}
+
+.drag-counter {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: @drag-size;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.50);
 }
 
 /** DROPDOWNS **/

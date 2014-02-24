@@ -26,7 +26,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         this.view.$el
             // normal click/keybard navigation
             .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-            .on(Modernizr.touch ? 'tap' : 'mousedown', SELECTABLE, $.proxy(this.onClick, this))
+            .on(Modernizr.touch ? 'tap' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
             // help accessing the list via keyboard if selection is empty
             .on('focus', function () {
                 var node = $(this).find('[tabindex="1"]').first();
@@ -145,8 +145,16 @@ define('io.ox/core/tk/list-selection', [], function () {
             return e && e.shiftKey;
         },
 
+        isCheckmark: function (e) {
+            return e && $(e.target).is('.list-item-checkmark, .icon-checkmark');
+        },
+
         isMultiple: function (e) {
-            return e && (e.metaKey || e.ctrlKey || $(e.target).is('.list-item-checkmark, .icon-checkmark'));
+            return e && (e.metaKey || e.ctrlKey || this.isCheckmark(e));
+        },
+
+        isClick: function (e) {
+            return e && e.type === 'click';
         },
 
         resetTabIndex: function (items) {
@@ -182,7 +190,7 @@ define('io.ox/core/tk/list-selection', [], function () {
                 // single select
                 items.removeClass('precursor');
                 node = items.eq(index).addClass('precursor').attr('tabindex', '1').focus();
-                if (this.isMultiple(e)) this.toggle(node); else this.check(node);
+                if (this.isMultiple(e) && !this.isClick(e)) this.toggle(node); else this.check(node);
             }
         },
 
@@ -272,6 +280,9 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         onClick: function (e) {
+
+            // consider mousedown only if unselected
+            if (e.type === 'mousedown' && $(e.currentTarget).is('.selected')) return;
 
             var items = this.getItems(),
                 current = $(e.currentTarget),

@@ -15,6 +15,8 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
 
     'use strict';
 
+    var SELECTABLE = '.selectable';
+
     function joinTextNodes(nodes, delimiter) {
         nodes = nodes.map(function () { return $.trim($(this).text()); });
         return $.makeArray(nodes).join(delimiter || '');
@@ -34,7 +36,7 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             dragCssClass: undefined,
             dragType: '',
             dropzone: false,
-            dropzoneSelector: '.selectable',
+            dropzoneSelector: SELECTABLE,
             dropType: '',
             selection: null
         }, options);
@@ -71,16 +73,17 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
         }
 
         function over() {
+
             var self = this,
-            ft = $(this).closest('.foldertree-container'),
-            node = ft[0],
-            interval,
-            scrollSpeed = 0,
-            yMax,
-            RANGE = 3 * $(this).height(), // Height of the sensitive area in px. (2 nodes high)
-            MAX = 1, // Maximal scrolling speed in px/ms.
-            scale = MAX / RANGE,
-            nodeOffsetTop = 0;
+                ft = $(this).closest('.foldertree-container'),
+                node = ft[0],
+                interval,
+                scrollSpeed = 0,
+                yMax,
+                RANGE = 3 * $(this).height(), // Height of the sensitive area in px. (2 nodes high)
+                MAX = 1, // Maximal scrolling speed in px/ms.
+                scale = MAX / RANGE,
+                nodeOffsetTop = 0;
 
             $(this).addClass('dnd-over');
 
@@ -93,8 +96,7 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
 
             function canScroll() {
                 var scrollTop = node.scrollTop;
-                return scrollSpeed < 0 && scrollTop > 0 ||
-                       scrollSpeed > 0 && scrollTop < yMax;
+                return scrollSpeed < 0 && scrollTop > 0 || scrollSpeed > 0 && scrollTop < yMax;
             }
 
             // The speed is specified in px/ms. A range of 1 to 10 results
@@ -123,24 +125,27 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
                 }
             }
 
-            $(node).on('mousemove.dnd', function (e) {
-                if (helper === null) return;
-                if (!nodeOffsetTop) { nodeOffsetTop = $(node).offset().top; }
-                var y = e.pageY - nodeOffsetTop;
-                yMax = node.scrollHeight - node.clientHeight;
+            $(node).on({
+                'mousemove.dnd': function (e) {
+                    if (helper === null) return;
+                    if (!nodeOffsetTop) { nodeOffsetTop = $(node).offset().top; }
+                    var y = e.pageY - nodeOffsetTop;
+                    yMax = node.scrollHeight - node.clientHeight;
 
-                if (y < RANGE) {
-                    scrollSpeed = (y - RANGE) * scale;
-                } else if (node.clientHeight - y < RANGE) {
-                    scrollSpeed = (RANGE - node.clientHeight + y) * scale;
-                } else {
+                    if (y < RANGE) {
+                        scrollSpeed = (y - RANGE) * scale;
+                    } else if (node.clientHeight - y < RANGE) {
+                        scrollSpeed = (RANGE - node.clientHeight + y) * scale;
+                    } else {
+                        scrollSpeed = 0;
+                    }
+                    scroll();
+                },
+                'mouseleave.dnd': function () {
                     scrollSpeed = 0;
+                    scroll();
+                    $(node).off('mousemove.dnd mouseleave.dnd');
                 }
-                scroll();
-            }).on('mouseleave.dnd', function () {
-                scrollSpeed = 0;
-                scroll();
-                $(node).off('mousemove.dnd mouseleave.dnd');
             });
         }
 
@@ -153,15 +158,12 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             // unbind
             $(document).off('mousemove.dnd', drag);
             // get data now
-            data = options.selection.get();
-            // empty?
-            if (data.length === 0) {
-                var cid = source.attr('data-obj-id');
-                data = cid ? [_.cid(cid)] : [];
-            }
+            data = _(container.find('.selected')).map(function (node) {
+                return $(node).attr('data-cid');
+            });
             // create helper
             helper = $('<div class="drag-helper">').append(
-                $('<span class="badge badge-important">').text(data.length),
+                $('<span class="drag-counter">').text(data.length),
                 $('<span>').text(options.dragMessage.call(container, data, source))
             );
             // get fast access
@@ -174,8 +176,8 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             // bind
             $(document).on('mousemove.dnd', move)
                 .one('mousemove.dnd', firstMove)
-                .on('mouseover.dnd', '.selectable', over)
-                .on('mouseout.dnd', '.selectable', out);
+                .on('mouseover.dnd', SELECTABLE, over)
+                .on('mouseout.dnd', SELECTABLE, out);
         }
 
         function remove() {
@@ -196,9 +198,7 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             // trigger DOM event
             container.trigger('selection:dragstop');
             // revert?
-            if (helper !== null) {
-                remove();
-            }
+            if (helper !== null) remove();
         }
 
         function drop() {
@@ -236,7 +236,7 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
 
         // draggable?
         if (options.draggable) {
-            container.on('mousedown.dnd', '.selectable', start);
+            container.on('mousedown.dnd', SELECTABLE, start);
         }
         // dropzone?
         if (options.dropzone) {
@@ -253,5 +253,4 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
         // no DND on touch devices
         'enable': _.device('touch') ? $.noop : enable
     };
-
 });

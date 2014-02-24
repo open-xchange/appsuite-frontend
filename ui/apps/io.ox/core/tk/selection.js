@@ -1040,7 +1040,7 @@ define('io.ox/core/tk/selection',
                 }
                 // create helper
                 helper = $('<div class="drag-helper">').append(
-                    $('<span class="badge badge-important">').text(data.length),
+                    $('<span class="drag-counter">').text(data.length),
                     $('<span>').text(options.dragMessage.call(container, data, source))
                 );
                 // get fast access
