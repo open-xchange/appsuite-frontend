@@ -422,7 +422,7 @@ define('io.ox/mail/api',
     var cacheControl = {},
         getAll = api.getAll,
         getList = api.getList,
-        //remove = api.remove,
+        remove = api.remove,
         search = api.search;
 
     api.getAll = function (options, useCache) {
@@ -469,7 +469,7 @@ define('io.ox/mail/api',
      * @param  {object} options [see api factory]
      * @return {deferred} resolves as array
      */
-    api.remove = function (ids) {
+    api.remove = function (ids, options) {
 
         var collection = pool.get('detail');
 
@@ -480,15 +480,13 @@ define('io.ox/mail/api',
             if (model) collection.remove(model);
         });
 
-        return $.when();
-
-        // return remove(ids, options).then(
-        //     function success(list) {
-        //         //update unread counter and folder item counter
-        //         folderAPI.reload(ids);
-        //         return list;
-        //     }
-        // );
+        return remove(ids, options).then(
+            function success(list) {
+                //update unread counter and folder item counter
+                folderAPI.reload(ids);
+                return list;
+            }
+        );
     };
 
     /**

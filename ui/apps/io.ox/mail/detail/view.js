@@ -157,6 +157,10 @@ define('io.ox/mail/detail/view',
 
         onLoad: function (data) {
 
+            // since this function is a callback we have to check this.model
+            // as an indicator whether this view has been destroyed meanwhile
+            if (this.model === null) return;
+
             var body = this.$el.find('section.body'),
                 attachments = this.$el.find('section.attachments'),
                 unseen = util.isUnseen(this.model.get('flags'));
