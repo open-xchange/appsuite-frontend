@@ -632,7 +632,7 @@ define('io.ox/calendar/week/view',
                         .append($('<div>').addClass('number').text(gt.noI18n(number.replace(/^(\d\d?):00 ([AP]M)$/, '$1 $2'))))
                 );
             }
-            timeLabel = $('<div>').addClass('week-container-label').append(timeLabel);
+            timeLabel = $('<div>').addClass('week-container-label').append(timeLabel).attr('aria-hidden', true);
 
             /**
              * change the timeline css top value to the current time position

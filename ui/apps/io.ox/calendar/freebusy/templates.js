@@ -87,7 +87,7 @@ define('io.ox/calendar/freebusy/templates',
             return $('<div class="abs autocomplete-controls input-group">').append(
                 $('<input type="text" class="add-participant form-control" tabindex="1">').attr('placeholder', gt('Add participant') + ' ...'),
                 $('<span class="input-group-btn">').append(
-                    $('<button type="button" class="btn btn-default add-button" data-action="add" tabindex="-1">').append($('<i class="fa fa-plus">'))
+                    $('<button type="button" class="btn btn-default add-button" aria-label="' + gt('Add participant') + '" data-action="add" tabindex="-1">').append($('<i class="fa fa-plus">'))
                 )
             );
         },
