@@ -1348,8 +1348,8 @@ msgstr "Pas de règle définie"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Enregistrement de la pièce jointe dans le lecteur en cours"
-msgstr[1] "Enregistrement des pièces jointes dans le lecteur en cours"
+msgstr[0] "Enregistrement en cours de la pièce jointe dans Drive"
+msgstr[1] "Enregistrement en cours des pièces jointes dans Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1570,7 +1570,7 @@ msgstr "Télécharger"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Enregistrer dans le lecteur"
+msgstr "Enregistrer dans Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"

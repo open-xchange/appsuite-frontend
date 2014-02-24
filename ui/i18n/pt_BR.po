@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-26 16:28-0300\n"
+"PO-Revision-Date: 2014-02-17 15:33-0300\n"
 "Last-Translator: \n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -67,7 +67,7 @@ msgstr "Tarefas"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "Unidade"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -1341,7 +1341,7 @@ msgstr "Não existe regra definida"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Salvando anexo para unidade"
+msgstr[0] "Salvando anexo para drive"
 msgstr[1] "Salvando anexos para unidade"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
@@ -1559,7 +1559,7 @@ msgstr "Baixar"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Salvar para unidade"
+msgstr "Salvar para drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
@@ -2134,7 +2134,7 @@ msgstr "Tela cheia"
 #: apps/io.ox/files/guidance/main.js:90
 msgctxt "help"
 msgid "The Drive App"
-msgstr "A unidade de aplicativo"
+msgstr "Aplicativo Drive"
 
 #: apps/io.ox/files/guidance/main.js:91
 msgctxt "help"
@@ -2154,7 +2154,7 @@ msgstr "Acessando arquivos com o WebDAV"
 #: apps/io.ox/files/guidance/main.js:94
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "Configuração de unidade"
+msgstr "Configuração do Drive"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132
 #: apps/io.ox/files/guidance/main.js:186
@@ -5115,8 +5115,8 @@ msgid ""
 msgstr ""
 "O atualizador fornece um assistente de instalação simples. Siga as instruções "
 "para instalar o aplicativo. O atualizador informará a você de todas as "
-"atualizações para o Connector para Microsoft Outlook, Notifier e Unidade. "
-"Você pode baixar as atualizações de dentro do atualizador."
+"atualizações ao Conector para Microsoft Outlook, Notifier e Drive. "
+"Você pode baixar as atualizações a partir do atualizador."
 
 #: apps/io.ox/core/settings/downloads/pane.js:64
 #: apps/io.ox/core/settings/downloads/pane.js:72

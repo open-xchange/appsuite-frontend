@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-24 15:39+0100\n"
+"PO-Revision-Date: 2014-02-19 20:30+0100\n"
 "Last-Translator: Jacob Sparre Andersen <jacob@bureau-cornavin.com>\n"
 "Language-Team: Danish <da@bureau-cornavin.com>\n"
 "Language: da\n"
@@ -66,7 +66,7 @@ msgstr "Opgaver"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "Drev"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -1330,8 +1330,8 @@ msgstr "Der er ingen regel defineret"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Gemmer vedhæftning på drev"
-msgstr[1] "Gemmer vedhæftninger på drev"
+msgstr[0] "Gemmer vedhæftning på Drive"
+msgstr[1] "Gemmer vedhæftninger på Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1548,7 +1548,7 @@ msgstr "Hent"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Gem på drev"
+msgstr "Gem på Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
@@ -2120,7 +2120,7 @@ msgstr "Fuldskærm"
 #: apps/io.ox/files/guidance/main.js:90
 msgctxt "help"
 msgid "The Drive App"
-msgstr "Drev-app'en"
+msgstr "Drive-app'en"
 
 #: apps/io.ox/files/guidance/main.js:91
 msgctxt "help"
@@ -2140,7 +2140,7 @@ msgstr "Tilgår filer med WebDAV"
 #: apps/io.ox/files/guidance/main.js:94
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "Drev-opsætning"
+msgstr "Drive-opsætning"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132
 #: apps/io.ox/files/guidance/main.js:186
@@ -5087,7 +5087,8 @@ msgid ""
 msgstr ""
 "Opdatereren har en simpel installationsguide. Følg instruktionerne for at "
 "installere programmet. Opdatereren vil informere dig om eventuelle "
-"opdateringer til forbinderen til Microsoft Outlook, \"Notifier\" og \"Drev\". "
+"opdateringer til forbinderen til Microsoft Outlook, \"Notifier\" og "
+"\"Drive\". "
 "Du kan hente "
 "opdateringerne inde fra opdatereren."
 
@@ -5494,7 +5495,8 @@ msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
 msgstr ""
-"Start af programmet fejlede. Måske har du forbindelsesproblemer. Prøv venligst igen."
+"Start af programmet fejlede. Måske har du forbindelsesproblemer. Prøv "
+"venligst igen."
 
 #. Reminder (objective case): in X weeks
 #. %d is the number of weeks

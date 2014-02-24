@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-19 14:19+0100\n"
+"PO-Revision-Date: 2014-02-19 22:19+0100\n"
 "Last-Translator: daiana heinrich <xdaiana@yahoo.com>\n"
 "Language-Team: Romanian <kde-i18n-doc@kde.org>\n"
 "Language: ro\n"
@@ -1349,9 +1349,9 @@ msgstr "Nu a fost definită nicio regulă"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Se salvează fișierul atașat în unitate"
-msgstr[1] "Se salvează fișierele atașate în unitate"
-msgstr[2] "Se salvează fișierele atașate în unitate"
+msgstr[0] "Se salvează fișierul atașat în Drive"
+msgstr[1] "Se salvează fișierele atașate în Drive"
+msgstr[2] "Se salvează fișierele atașate în Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1570,7 +1570,7 @@ msgstr "Descarcă"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Salvează în unitate"
+msgstr "Salvează în Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
