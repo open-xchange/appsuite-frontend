@@ -12,19 +12,9 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-function create(options) {
-    var fs = require('fs');
-    var http = require('http');
-    var https = require('https');
-    var url = require('url');
-    var path = require('path');
-    var escape = require('./common').escape;
+function unifyOptions(options) {
     var normalizePath = require('./common').normalizePath;
-    var connect = require('connect');
-    var appsLoadMiddleware = require('./middleware/appsload');
-    var manifestsMiddleware = require('./middleware/manifests');
-    var localFilesMiddleware = require('./middleware/localfiles');
-    var proxyMiddleware = require('./middleware/proxy');
+    var _ = require('underscore');
 
     var verbose = options.verbose = (options.verbose || []).reduce(function (opt, val) {
         if (val === 'all') {
@@ -34,12 +24,25 @@ function create(options) {
         }
             return opt;
     }, {});
-    options.prefixes = options.prefixes || [];
+    options.prefixes = _(options.prefixes).flatten();
+    options.manifests = _(options.manifests).flatten();
     options.urlPath = normalizePath(options.path || '/appsuite');
 
     if (options.server) {
         options.server = normalizePath(options.server);
     }
+    return options;
+}
+
+function create(options) {
+    var http = require('http');
+    var connect = require('connect');
+    var appsLoadMiddleware = require('./middleware/appsload');
+    var manifestsMiddleware = require('./middleware/manifests');
+    var localFilesMiddleware = require('./middleware/localfiles');
+    var proxyMiddleware = require('./middleware/proxy');
+
+    options = unifyOptions(options);
 
     var handler = connect()
         .use(appsLoadMiddleware.create(options))
@@ -52,5 +55,6 @@ function create(options) {
 }
 
 module.exports = {
-    create: create
+    create: create,
+    unifyOptions: unifyOptions
 };

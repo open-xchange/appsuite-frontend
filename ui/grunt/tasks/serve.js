@@ -14,17 +14,43 @@
 'use strict';
 
 module.exports = function (grunt) {
+    var appserver = {
+        appsload: require('../../lib/appserver/middleware/appsload'),
+        localfiles: require('../../lib/appserver/middleware/localfiles'),
+        manifests: require('../../lib/appserver/middleware/manifests'),
+        proxy: require('../../lib/appserver/middleware/proxy'),
+    };
 
-    grunt.registerTask('serve', 'Use the appserver to serve your apps', function () {
-        var config = grunt.config().local.appserver;
-        if (config.server === '') {
-            grunt.log.error('Server not specified in grunt/local.conf.json');
-            grunt.log.writeln('Hint: If this is a new setup you may want to copy the file grunt/local.conf.defaults.json to grunt/local.conf.json and change its values according to your setup.');
-        } else {
-            this.async(); // run forever
-            var server = require('../../lib/appserver/server.js');
-            server.create(config);
+    grunt.config('connect', {
+        server: {
+            options: {
+                port: 8337,
+                base: ['build/'],
+                livereload: true,
+                middleware: function (connect, options, middlewares) {
+                    var server = require('../../lib/appserver/server'),
+                        config = grunt.config().local.appserver;
+                    if (config.server === '') {
+                        grunt.log.error('Server not specified in grunt/local.conf.json');
+                        grunt.log.writeln('Hint: If this is a new setup you may want to copy the file grunt/local.conf.defaults.json to grunt/local.conf.json and change its values according to your setup.');
+                        grunt.fail.fatal('Please adjust your local.conf.json');
+                    }
+
+                    config.prefixes = (config.prefixes || []).concat([options.base, options.base + '/apps/']);
+                    config.manifests = (config.manifests || []).concat(options.base + '/manifests/');
+                    config = server.unifyOptions(config);
+
+                    middlewares.push(appserver.appsload.create(config));
+                    middlewares.push(appserver.manifests.create(config));
+                    middlewares.push(appserver.localfiles.create(config));
+                    middlewares.push(appserver.proxy.create(config));
+                    return middlewares;
+                }
+            }
         }
     });
 
+    grunt.registerTask('serve', ['connect:server:keepalive']);
+
+    grunt.loadNpmTasks('grunt-contrib-connect');
 };
