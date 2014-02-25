@@ -16,20 +16,18 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
     'use strict';
 
     var util = {
-        splitExtensionsByRow: function (extensions, rows, ignoreTabs) {
+        splitExtensionsByRow: function (extensions, rows) {
             _(extensions).each(function (extension) {
-                if (!(extension.tab && ignoreTabs)) {//ignoreTabs if parameter is set(handled separately)
-                    if (extension.row) {//seperate extensions with rows
-                        if (!rows[extension.row]) {
-                            rows[extension.row] = [];
-                        }
-                        rows[extension.row].push(extension);
-                    } else {//all the rest
-                        if (!rows.rest) {//rest is used for extension points without row
-                            rows.rest = [];
-                        }
-                        rows.rest.push(extension);
+                if (extension.row) {//seperate extensions with rows
+                    if (!rows[extension.row]) {
+                        rows[extension.row] = [];
                     }
+                    rows[extension.row].push(extension);
+                } else {//all the rest
+                    if (!rows.rest) {//rest is used for extension points without row
+                        rows.rest = [];
+                    }
+                    rows.rest.push(extension);
                 }
             });
         },
@@ -37,7 +35,7 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
             return $('<label>').text(text).attr('for', id);
         },
         //build progressField and buttongroup
-        buildProgress: function () {
+        buildProgress: function (val) {
             var val = val || 0,
                 progress = $('<input class="form-control progress-field">').attr({type: 'text', id: 'task-edit-progress-field', tabindex: 1}).val(val),
                 wrapper = $('<div class="input-group">').append(

@@ -13,9 +13,7 @@
 
 .io-ox-tasks-edit-main {
 
-
-
-    label, legend {
+    label, legend , .sectiontitle{
 		margin-bottom: 5px;
 		font-size: 13px;
 		font-weight: 700;
@@ -23,6 +21,10 @@
 		color: #888;
 		border: 0;
     }
+    .row legend {
+        padding-top: 8px;
+    }
+
     .form-inline input{
         width: 90px;
         &.datepicker-day-field {
@@ -47,7 +49,9 @@
     .nav-tabs { margin-top: 20px; }
     .tab-content { margin-top: 13px; }
 
-    .collapsed      { display: none;      }
+    .collapsed, .task-edit-details {//hide collapsed and details on startup
+        display: none;
+        }
     .cancel         { float: right;       }
     .progress-field { text-align: center; }
 
@@ -60,22 +64,25 @@
     }
     .io-ox-tasks-edit {
         max-width: 880px;
-        margin-left: auto;
-        margin-right: auto;
         margin-top: 20px;
-        div:first-child { margin-bottom: 10px; }
+
+        .participantsrow {
+            margin-bottom: 30px;
+        }
         h1.clear-title {
             line-height:0;
             font-size: 20px;
             float: left;
+            padding-bottom: 10px;
         }
     }
 
     .attachment-edit-row,
     .task-edit-row { margin-bottom: 9px; }
 
-    .expand-link {
+    .expand-link, .expand-details-link {
         margin-bottom: 9px;
+        padding-left: 0px;
         display: block;
     }
 
@@ -85,8 +92,6 @@
         min-height: 364px;
         overflow: visible;
     }
-
-    .participantsrow { margin-bottom: 30px; }
 
     .note-field {
         height: 120px;
@@ -113,20 +118,17 @@
 
     .task-add-attachments-input { margin-left: 10px; }
 
-    .sectiontitle {
-        font-size: 13px;
-        font-family: @normal-font-family;
-        font-weight: normal;
-        margin: 20px 0 15px 0;
-        color: #888;
-    }
-
     /* Mobile */
     @media all and (max-width: 980px) {
         .progress-field { width: 49px; }
     }
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
-        .title {
+    
+    	.form-control[readonly] {//datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
+    		background-color: #fff;//white
+    	}
+
+        .clear-title {
             width: 100%; //to push the buttons under the title
         }
         .cancel {
@@ -140,6 +142,7 @@
         }
         .io-ox-tasks-edit {
             margin-top: 0;
+            padding-bottom: 40px;
         }
 
         .participant-wrapper {

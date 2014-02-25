@@ -175,7 +175,7 @@ define('io.ox/core/tk/attachments',
 
                 if (this.attachmentsToAdd.length) {
                     if (oldMode) {
-                        attachmentAPI.createOldWay(apiOptions, self.baton.parentView.$el.find('#attachmentsForm')[0]).fail(function (resp) {
+                        attachmentAPI.createOldWay(apiOptions, self.baton.parentView.$el.find('.attachments-form')[0]).fail(function (resp) {
                             self.model.trigger('backendError', resp);
                             errors.push(resp);
                             allDone -= 2;

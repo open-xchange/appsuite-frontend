@@ -33,6 +33,7 @@ define('io.ox/tasks/edit/view',
         className: 'io-ox-tasks-edit container default-content-padding',
         init: function () {
             this.collapsed = true;
+            this.detailsCollapsed = true;
 
             //if recurrence is set make sure we have start and end date
             //this prevents errors on saving because recurrence needs both fields filled
@@ -58,14 +59,16 @@ define('io.ox/tasks/edit/view',
 
             //hide stuff
             if (!capabilities.has('infostore')) {
-                ext.point('io.ox/tasks/edit/view/tabs').disable('attachments_tab');
+                ext.point('io.ox/tasks/edit/view').disable('attachment_list');
+                ext.point('io.ox/tasks/edit/view').disable('attachment_upload');
             }
             // hide participants tab for PIM user
             if (!capabilities.has('delegate_tasks')) {
-                ext.point('io.ox/tasks/edit/view/tabs').disable('participants_tab');
+                ext.point('io.ox/tasks/edit/view').disable('participants_list');
+                ext.point('io.ox/tasks/edit/view').disable('add_participant');
             }
 
-            util.splitExtensionsByRow(this.point.list(), rows, true);
+            util.splitExtensionsByRow(this.point.list(), rows);
             //draw the rows
             _(rows).each(function (row, key) {
                 if (key !== 'rest') {//leave out all the rest, for now
@@ -90,6 +93,19 @@ define('io.ox/tasks/edit/view',
             if (!self.$el.find('input.title-field').val()) {
                 self.$el.find('.btn[data-action="save"]').prop('disabled', true);
             }
+            //look if there is data beside the default values to trigger autoexpand (only in edit mode)
+            if (self.model.get('id')) {
+                var attributes = _(_(self.model.attributes)
+                    .pick(['start_date', 'end_date', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'numberOfAttachments']))
+                    .filter(function (val) {
+                        return val;
+                    });
+
+                if (attributes.length || self.model.get('status') !== 1 || self.model.get('priority') !== 2 ||
+                        (self.model.get('participants') && self.model.get('participants').length)) {//check if attributes contain values other than the defaults
+                    self.$el.find('.expand-link').click();
+                }
+            }
 
             // Toggle disabled state of save button
             function fnToggleSave(value) {
@@ -99,7 +115,7 @@ define('io.ox/tasks/edit/view',
                 node.prop('disabled', value === '');
             }
             //delegate some events
-            self.$el.delegate('#task-edit-title', 'keyup blur', function () {
+            self.$el.delegate('.title-field', 'keyup blur', function () {
                 var value = $(this).val();
                 var title = value ? value : (self.model.get('id') ? gt('Edit task') : gt('Create task'));
                 app.setTitle(title);

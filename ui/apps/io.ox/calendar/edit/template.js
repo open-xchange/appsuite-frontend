@@ -474,7 +474,8 @@ define('io.ox/calendar/edit/template',
         index: 1800,
         rowClass: 'collapsed',
         draw: function (baton) {
-            var $node = $('<form>').appendTo(this).attr('id', 'attachmentsForm'),
+            var guid = _.uniqueId('form-control-label-'),
+                $node = $('<form class="attachments-form">').appendTo(this).attr('id', guid),
                 $inputWrap = attachments.fileUploadWidget({multi: true}),
                 $input = $inputWrap.find('input[type="file"]'),
                 changeHandler = function (e) {
