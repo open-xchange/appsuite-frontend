@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-26 18:11+0100\n"
+"PO-Revision-Date: 2014-02-15 18:41+0100\n"
 "Last-Translator: Robert Kratky <rkratky@gmail.com>\n"
-"Language-Team: Czech <>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,7 +67,7 @@ msgstr "Úkoly"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "Disk"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -1340,9 +1340,9 @@ msgstr "Není určeno žádné pravidlo"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Ukládám přílohu do úložiště souborů"
-msgstr[1] "Ukládám přílohy do úložiště souborů"
-msgstr[2] "Ukládám přílohy do úložiště souborů"
+msgstr[0] "Ukládám přílohu do Drive"
+msgstr[1] "Ukládám přílohy do Drive"
+msgstr[2] "Ukládám přílohy do Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1560,7 +1560,7 @@ msgstr "Stáhnout"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Uložit do Disku"
+msgstr "Uložit do Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
@@ -2137,7 +2137,7 @@ msgstr "Celá obrazovka"
 #: apps/io.ox/files/guidance/main.js:90
 msgctxt "help"
 msgid "The Drive App"
-msgstr "Aplikace Disk"
+msgstr "Aplikace Drive"
 
 #: apps/io.ox/files/guidance/main.js:91
 msgctxt "help"
@@ -2157,7 +2157,7 @@ msgstr "Přístup k souborům přes WebDAV"
 #: apps/io.ox/files/guidance/main.js:94
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "Nastavení Disku"
+msgstr "Nastavení Drive"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132
 #: apps/io.ox/files/guidance/main.js:186
@@ -5117,9 +5117,8 @@ msgstr ""
 "Aktualizační nástroj poskytuje jednoduchého instalačního průvodce. Pro "
 "instalaci aplikace postupujte podle pokynů. Aktualizační nástroj vás "
 "upozorní na případné aktualizace pro programy Connector for Microsoft "
-"Outlook, Oznamovatel a Disk. Aktualizace lze stáhnout z prostředí "
-"aktualizačního "
-"nástroje."
+"Outlook, Oznamovatel a Drive. Aktualizace lze stáhnout z prostředí "
+"aktualizačního nástroje."
 
 #: apps/io.ox/core/settings/downloads/pane.js:64
 #: apps/io.ox/core/settings/downloads/pane.js:72
