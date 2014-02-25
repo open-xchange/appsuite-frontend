@@ -33,11 +33,11 @@ define('plugins/notifications/tasks/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Overdue Tasks')).append(
-                    $('<div class="clear-button fa fa-times">').attr({ tabindex: 1,
+                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({ tabindex: 1,
                         'aria-label': gt('Press to hide all notifications for overdue tasks.'),
                         'data-action': 'clear',
-                        'focus-id': 'task-overdue-notification-clear',
-                        role: 'button'
+                        'focus-id': 'task-overdue-notification-clear'
                     })
                 ),
                 $('<div class="notifications">')
@@ -245,12 +245,12 @@ define('plugins/notifications/tasks/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Task reminders')).append(
-                    $('<div class="clear-button fa fa-times refocus">').attr({
+                    $('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
+                    .attr({
                         tabindex: 1,
                         'aria-label': gt('Press to hide all task reminders.'),
                         'data-action': 'clear',
-                        'focus-id': 'task-reminder-notification-clear',
-                        role: 'button'
+                        'focus-id': 'task-reminder-notification-clear'
                     })
                 ),
                 $('<div class="notifications">')
@@ -446,12 +446,11 @@ define('plugins/notifications/tasks/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Task invitations'))
-                    .append($('<div>')
+                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                     .attr({ tabindex: 1,
                         'aria-label': gt('Press to hide all task invitations.'),
                         'data-action': 'clear',
-                        'focus-id': 'task-invitation-notification-clear',
-                        role: 'button'}).addClass('clear-button icon-remove refocus')),
+                        'focus-id': 'task-invitation-notification-clear'})),
                 $('<div class="notifications">')
             );
         }

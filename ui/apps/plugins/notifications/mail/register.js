@@ -28,12 +28,11 @@ define('plugins/notifications/mail/register',
             this.append(
                 $('<legend class="section-title">').text(gt('New Mails'))
                     .attr('focusId', 'mail-notification-')//special attribute to restore focus on redraw
-                    .append($('<div>')
+                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                         .attr({ tabindex: 1,
                             'aria-label': gt('Press to hide all notifications for new mails.'),
                             'data-action': 'clear',
-                            'focus-id': 'mail-notification-clear',
-                            role: 'button'}).addClass('clear-button icon-remove refocus')),
+                            'focus-id': 'mail-notification-clear'})),
                 $('<div class="notifications">'),
                 $('<div class="open-app">').append(
                     $('<a role="button" href="#" data-action="open-app" tabindex="1" class="refocus" focus-id="mail-notification-open-app">').text(

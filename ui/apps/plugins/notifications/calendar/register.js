@@ -30,12 +30,11 @@ define('plugins/notifications/calendar/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Appointment invitations'))
-                    .append($('<div>')
+                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                         .attr({ tabindex: 1,
                             'aria-label': gt('Press to hide all appointment invitations.'),
                             'data-action': 'clear',
-                            'focus-id': 'calendar-invite-clear',
-                            role: 'button'}).addClass('clear-button icon-remove refocus')),
+                            'focus-id': 'calendar-invite-clear'})),
                 $('<div class="notifications">')
             );
         }
@@ -45,12 +44,11 @@ define('plugins/notifications/calendar/register',
         draw: function () {
             this.append(
                 $('<legend class="section-title">').text(gt('Appointment reminders'))
-                    .append($('<div>')
+                    .append($('<button type="button" class="btn btn-link clear-button fa fa-times refocus">')
                         .attr({ tabindex: 1,
                             'aria-label': gt('Press to hide all appointment reminders.'),
                             'data-action': 'clear',
-                            'focus-id': 'calendar-reminder-notification-clear',
-                            role: 'button'}).addClass('clear-button icon-remove refocus')),
+                            'focus-id': 'calendar-reminder-notification-clear'})),
                 $('<div class="reminder">')
             );
         }
