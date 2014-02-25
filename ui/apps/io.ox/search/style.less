@@ -1,0 +1,136 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ */
+
+
+//global: input field (topbar, app view)
+#app-search {
+    height: 24px;
+    width: 180px;
+    line-height: 24px;
+}
+
+//global: autocomplete items
+.autocomplete-search {
+    //reset height to default
+    height: auto;
+
+    .label {
+        font-style: italic;
+        color: rgba(128, 128, 128, 0.71)
+    }
+
+
+    //divider/group
+    .unselectable {
+        margin: 0;
+        color: rgba(128, 128, 128, 0.71);
+    }
+
+    .autocomplete-item {
+        margin-bottom: 0;
+        &.indent {
+            padding-left: 20px;
+        }
+    }
+}
+
+//app
+.io-ox-search-main {
+
+    //hide application toolbar
+    .window-body {
+        margin-bottom: 30px;
+        left: 0;
+
+        .window-content {
+            .apps {
+                li {
+                    float: left;
+                    list-style-type: none;
+                    cursor: pointer;
+                    padding: 5px 16px;
+                    margin: 0 10px;
+                    color: #0C68B3;
+                    &.active {
+                        background-color: #0E75C2;
+                        font-weight: bold;
+                        color: white
+                    }
+                }
+                li:hover {
+                    background-color: lightgrey;
+                }
+            }
+
+            .action {
+                padding-left: 10px;
+            }
+
+
+            .result {
+                .item {
+                    padding: 5px 10px 5px 10px;
+                    .line1 {
+                        font-weight: 500;
+                    }
+                    .line2 {
+                        font-style: italic;
+                    }
+                }
+                .item:hover {
+                     background-color: lightgrey;
+                }
+            }
+        }
+
+        .window-statusbar {
+            height: 30px;
+            box-sizing: border-box;
+            border-top: 1px solid black;
+            line-height: 1.2 em;
+            position: fixed;
+            padding: 0 10px;
+
+            line-height: 1.8em;
+
+            bottom: 0;
+            right: 0;
+            left: 0;
+
+            span {
+                margin: 0 30px;
+            }
+
+        }
+    }
+
+    .window-head {
+        display: none;
+    }
+
+    #app-search {
+       width: 600px;
+    }
+
+    .facets {
+        display: flex;
+        span {
+            cursor: pointer;
+            float: left;
+            padding: 10px;
+            margin: 10px;
+            background-color: #0E75C2;
+            color: white;
+        }
+    }
+}

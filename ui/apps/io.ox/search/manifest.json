@@ -1,0 +1,10 @@
+{
+    "title": "Search",
+    "path": "io.ox/search/main",
+    "company": "Open-Xchange",
+    "icon": "search.png",
+    "category": "Dev",
+    "namespace": "io.ox/core/main",
+    "requires": "search",
+    "settings": false
+}
