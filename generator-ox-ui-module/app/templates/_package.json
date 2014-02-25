@@ -18,6 +18,10 @@
     "grunt-require-gettext": "~0.1.2",
     "grunt-contrib-jshint": "~0.8.0",
     "jshint": "Open-Xchange-Frontend/jshint",
-    "underscore": "~1.5.2"
+    "appserver": "Open-Xchange-Frontend/appserver",
+    "underscore": "~1.5.2",
+    "grunt-contrib-compress": "~0.7.0",
+    "q": "~1.0.0",
+    "grunt-contrib-connect": "~0.7.0"
   }
 }

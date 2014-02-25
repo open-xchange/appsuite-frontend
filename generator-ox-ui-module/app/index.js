@@ -46,12 +46,14 @@ OxUiModuleGenerator.prototype.app = function app() {
   this.template('grunt/_i18n.js', 'grunt/tasks/i18n.js');
   this.bulkCopy('grunt/i18n_module.js.tpl', 'grunt/templates/i18n_module.js.tpl');
   this.bulkCopy('grunt/clean.js', 'grunt/tasks/clean.js');
+  this.bulkCopy('grunt/dist.js', 'grunt/tasks/dist.js');
   this.bulkCopy('grunt/concat.js', 'grunt/tasks/concat.js');
   this.bulkCopy('grunt/jshint.js', 'grunt/tasks/jshint.js');
   this.bulkCopy('grunt/jsonlint.js', 'grunt/tasks/jsonlint.js');
   this.bulkCopy('grunt/less.js', 'grunt/tasks/less.js');
   this.bulkCopy('grunt/newer.js', 'grunt/tasks/newer.js');
   this.bulkCopy('grunt/uglify.js', 'grunt/tasks/uglify.js');
+  this.bulkCopy('grunt/upload.js', 'grunt/tasks/upload.js');
   this.bulkCopy('grunt/watch.js', 'grunt/tasks/watch.js');
   this.bulkCopy('gitignore', '.gitignore');
   this.bulkCopy('lessrc', '.lessrc');

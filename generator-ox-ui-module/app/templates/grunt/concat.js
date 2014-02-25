@@ -3,16 +3,6 @@
 module.exports = function (grunt) {
 
     grunt.config('concat', {
-        apps: {
-            files: [
-                {
-                    src: ['apps/**/*.js'],
-                    expand: true,
-                    filter: 'isFile',
-                    dest: 'build/src/'
-                }
-            ]
-        },
         manifests: {
             options: {
                 banner: '[',
@@ -44,18 +34,7 @@ module.exports = function (grunt) {
                     dest: 'build/manifests/<%= pkg.name %>.json',
                 }
             ]
-        },
-        specs: {
-            files: [
-                {
-                    src: ['spec/**/*.js'],
-                    expand: true,
-                    filter: 'isFile',
-                    dest: 'build/'
-                }
-            ]
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');

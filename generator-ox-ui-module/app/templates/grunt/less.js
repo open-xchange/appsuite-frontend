@@ -8,7 +8,7 @@ module.exports = function (grunt) {
             options: { lessrc: '.lessrc' },
             files: [
                 {
-                    src: ['**/*.less'],
+                    src: ['**/*.less', '!themes/**/*.less', '!themes/*.less'],
                     expand: true,
                     ext: '.css',
                     cwd: 'apps/',
