@@ -115,8 +115,10 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         render: function () {
             var self = this;
             this.$el.append(_.map(this.options.list, function (option) {
-                return $('<label>').addClass('radio').text(option.label).append(
-                    $('<input type="radio" name="' + self.name + '">').val(option.value).attr({ tabindex: self.options.tabindex || 1 })
+                return $('<div>').addClass('radio').append(
+                    $('<label>').text(option.label).prepend(
+                        $('<input type="radio" name="' + self.name + '">').val(option.value).attr({ tabindex: self.options.tabindex || 1 })
+                    )
                 );
             }));
             this.update();
