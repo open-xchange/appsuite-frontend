@@ -271,9 +271,10 @@ define('io.ox/mail/write/view-main',
 
             var node, select;
 
-            var node = $('<div class="fromselect-wrapper">').append(
-               $('<label for="from" class="wrapping-label">').text(gt('From')),
-               select = $('<select class="sender-dropdown" name="from" tabindex="7">').css('width', '100%')
+            var guid = _.uniqueId('form-control-label-'),
+                node = $('<div class="fromselect-wrapper">').append(
+               $('<label class="wrapping-label">').attr('for', guid).text(gt('From')),
+               select = $('<select class="sender-dropdown" name="from" tabindex="7">').attr('id', guid).css('width', '100%')
             );
 
             sender.drawOptions(select);
@@ -537,6 +538,7 @@ define('io.ox/mail/write/view-main',
 
             var $inputWrap = attachments.fileUploadWidget({
                     drive: true,
+                    tabindex: 7,
                     buttontext: gt('Add Attachment')
                 }),
                 $input = $inputWrap.find('input[type="file"]'),
