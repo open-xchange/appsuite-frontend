@@ -32,8 +32,12 @@ module.exports = function (grunt) {
     }
 
     function isTranslationModule(file) {
+        return file.match(/\.([a-zA-Z]+_[a-zA-Z]+)\.js$/) && grunt.file.isFile(file);
+    }
+
+    function isPackagedTranslationModule(file) {
         var _ = require('underscore'),
-            languagePart = file.match(/\.([a-zA-Z_]*)\.js$/)[1];
+            languagePart = file.match(/\.([a-zA-Z]+_[a-zA-Z]+)\.js$/)[1];
         return _(languages).contains(languagePart);
     }
 
@@ -61,23 +65,12 @@ module.exports = function (grunt) {
                     dest: 'dist/package/'
                 }
             ]
-        },
-        dist_i18n: {
-            files: [
-                {
-                    expand: true,
-                    src: ['apps/**/*.js'],
-                    cwd: 'build/',
-                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
-                    filter: isTranslationModule
-                }
-            ]
         }
     });
 
     grunt.registerMultiTask('create_i18n_properties', 'Create properties files for i18n configuration', function () {
         this.files.forEach(function (file) {
-            var lang = file.src[0].match(/([a-zA-Z_]*).po$/)[1],
+            var lang = file.src[0].match(/([a-zA-Z]+_[a-zA-Z]+).po$/)[1],
                 _ = require('underscore'),
                 languageNames = _.extend(
                     grunt.file.readJSON('i18n/languagenames.json'),
@@ -112,6 +105,31 @@ module.exports = function (grunt) {
                     return path.join(dest, 'i18n', '<%= pkg.name %>-l10n-' + lang + '.properties');
                 }
             }]
+        }
+    });
+
+    grunt.config.extend('uglify', {
+        dist: {
+            files: [{
+                src: 'apps/**/*.js',
+                cwd: 'build/',
+                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
+                filter: function (f) {
+                    return !isTranslationModule(f) && grunt.file.isFile(f);
+                },
+                expand: true
+            }]
+        },
+        dist_i18n: {
+            files: [
+                {
+                    expand: true,
+                    src: ['apps/**/*.js'],
+                    cwd: 'build/',
+                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
+                    filter: isPackagedTranslationModule
+                }
+            ]
         }
     });
 

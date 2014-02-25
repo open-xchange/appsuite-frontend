@@ -15,7 +15,7 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('uglify', {
+    grunt.config.extend('uglify', {
 
         bootjs: {
             options: {
@@ -27,18 +27,7 @@ module.exports = function (grunt) {
             files: {
                 'dist/<%= pkg.name %>-<%= pkg.version %>/boot.js': ['build/boot.js']
             }
-        },
-
-        apps: {
-            files: [{
-                src: 'apps/**/*.js',
-                cwd: 'build/',
-                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
-                filter: 'isFile',
-                expand: true
-            }]
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
