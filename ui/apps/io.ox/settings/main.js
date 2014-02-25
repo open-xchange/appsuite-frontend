@@ -370,8 +370,10 @@ define('io.ox/settings/main',
 
                 this.append(
                     $('<div>').addClass('advanced-mode').append(
-                        $('<label>').addClass('checkbox').text(gt('Advanced Mode')).append(
-                            buildCheckbox()
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').addClass('control-label').text(gt('Advanced Mode')).prepend(
+                                buildCheckbox()
+                            )
                         )
                     )
                 );

@@ -253,7 +253,7 @@ define('io.ox/mail/settings/pane',
                         $('<label>').attr({ 'for': 'defaultSendAddress' }).text(gt('Default sender address')),
                         $('<div>').addClass('controls').append(
                             $('<div>').addClass('row').append(
-                                $('<div>').addClass('col-xs-4').append(
+                                $('<div>').addClass('col-lg-4 col-xs-12').append(
                                     new mini.SelectView({ list: optionsAllAccounts, name: 'defaultSendAddress', model: mailSettings, id: 'defaultSendAddress', className: 'form-control' }).render().$el
                                 )
                             )
@@ -263,7 +263,7 @@ define('io.ox/mail/settings/pane',
                         $('<label>').attr({ 'for': 'autoSaveDraftsAfter' }).addClass('control-label').text(gt('Auto-save email drafts')),
                         $('<div>').addClass('controls').append(
                             $('<div>').addClass('row').append(
-                                $('<div>').addClass('col-xs-4').append(
+                                $('<div>').addClass('col-lg-4 col-xs-12').append(
                                     new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: mailSettings, id: 'autoSaveDraftsAfter', className: 'form-control' }).render().$el
                                 )
                             )
