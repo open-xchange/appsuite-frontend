@@ -107,7 +107,7 @@ define('io.ox/core/tk/reminder-util',
                    'focus-id': 'reminder-notification-' + focusId,//calendar and task are a bit different here (recurrenceposition etc)
                    role: 'listItem',
                    'tabindex': 1
-        }).addClass('reminder-item refocus');
+        }).addClass('reminder-item refocus clearfix');
         buildActions(actions, options, 'reminder-notification-' + focusId);
 
         node.append(
