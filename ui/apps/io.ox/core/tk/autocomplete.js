@@ -37,6 +37,7 @@ define('io.ox/core/tk/autocomplete',
             api: null,
             node: null,
             container: $('<div>').addClass('autocomplete-popup'),
+            mode: 'participant',
 
             //get data
             source: function (val) {
@@ -99,6 +100,16 @@ define('io.ox/core/tk/autocomplete',
                     var children;
                     if (i >= 0 && i < (children = scrollpane.children()).length) {
                         children.removeClass('selected').eq(i).addClass('selected').intoViewport(o.container);
+
+                        //TODO: select next one
+                        if (o.mode === 'search') {
+                            if (scrollpane.children().eq(i).hasClass('unselectable')) {
+                                var next = index < i ? i + 1 : i - 1;
+                                select(next, processData);
+                                return;
+                            }
+                        }
+
                         index = i;
                         if (processData) {
                             update();
@@ -173,6 +184,70 @@ define('io.ox/core/tk/autocomplete',
                     }
                 },
 
+            create = function (list, query) {
+                if (o.mode === 'participant') {
+                    _(list.slice(0, o.maxResults)).each(function (data, index) {
+                        var node = $('<div class="autocomplete-item">')
+                            .data({
+                                index: index,
+                                contact: data.data,
+                                email: data.email,
+                                field: data.field || '',
+                                phone: data.phone || '',
+                                type: data.type,
+                                distlistarray: data.data.distribution_list,
+                                id: data.data.id,
+                                folder_id: data.data.folder_id,
+                                image1_url: data.data.image1_url,
+                                first_name: data.data.first_name,
+                                last_name: data.data.last_name,
+                                display_name: data.data.display_name
+                            })
+                            .on('click', fnSelectItem);
+                        o.draw.call(node, data, query);
+                        node.appendTo(scrollpane);
+                    });
+                } else {
+                    var index = 0, regular, childs;
+
+                    //apply style
+                    o.container
+                        .addClass('autocomplete-search');
+
+                    _(list).each(function (facet) {
+                        regular = facet.type !== 'query';
+                        childs = facet.values.length > 0;
+                        //delimiter
+                        if (index !== 0 && childs && regular) {
+                            $('<hr class="unselectable">')
+                                .appendTo(scrollpane);
+                        }
+                        //facet
+                        $('<div class="autocomplete-item group unselectable">')
+                            .css('display', regular && childs ? 'inline' : 'none')
+                            .text(facet.name)
+                            .data({
+                                index: index++,
+                                id: facet.id,
+                                label: facet.name,
+                                type: 'group'
+                            })
+                            .appendTo(scrollpane);
+                        //values
+                        _(facet.values).each(function (item) {
+                            item.type = facet.type;
+                            var node = $('<div class="autocomplete-item">')
+                                .on('click', fnSelectItem);
+                            //intend
+                            if (regular)
+                                node.addClass('indent');
+                            o.draw.call(node, item);
+                            node.appendTo(scrollpane);
+                        });
+                    });
+                }
+            },
+
             fnSelectItem = function (e) {
                     e.data = $(this).data();
                     select(e.data.index);
@@ -187,27 +262,9 @@ define('io.ox/core/tk/autocomplete',
                     if (list.length) {
                         o.container.idle();
                         // draw results
-                        _(list.slice(0, o.maxResults)).each(function (data, index) {
-                            var node = $('<div class="autocomplete-item">')
-                                .data({
-                                    index: index,
-                                    contact: data.data,
-                                    email: data.email,
-                                    field: data.field || '',
-                                    phone: data.phone || '',
-                                    type: data.type,
-                                    distlistarray: data.data.distribution_list,
-                                    id: data.data.id,
-                                    folder_id: data.data.folder_id,
-                                    image1_url: data.data.image1_url,
-                                    first_name: data.data.first_name,
-                                    last_name: data.data.last_name,
-                                    display_name: data.data.display_name
-                                })
-                                .on('click', fnSelectItem);
-                            o.draw.call(node, data, query);
-                            node.appendTo(scrollpane);
-                        });
+
+                        create.call(self, list, query);
+
                         // leads to results
                         emptyPrefix = '\u0000';
                         index = -1;
