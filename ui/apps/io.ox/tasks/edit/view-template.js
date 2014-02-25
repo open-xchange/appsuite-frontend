@@ -56,7 +56,7 @@ define('io.ox/tasks/edit/view-template',
                             // check if waiting for attachmenthandling is needed
                             var list = baton.attachmentList;
                             if (list && (list.attachmentsToAdd.length + list.attachmentsToDelete.length) > 0) {
-                                baton.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
+                                baton.model.attributes.tempAttachmentIndicator = true; //temporary indicator so the api knows that attachments need to be handled even if nothing else changes
                             }
                             //accept any formating
                             if (baton.model.get('actual_costs')) {
@@ -588,19 +588,7 @@ define('io.ox/tasks/edit/view-template',
         className: 'col-sm-6 task-edit-details',
         control: '<input type="text" class="target_duration form-control" id="task-edit-target-duration" tabindex="1">',
         attribute: 'target_duration',
-        label: gt('Estimated duration in minutes'),
-        updateModel: function () {
-            var value = this.nodes.inputField.val();
-            if (!isNaN(parseFloat(value, 10)) || value === '') {
-                if (value === '') {
-                    value = null;
-                }
-                this.model.set(this.attribute, value, {validate: true});
-            } else {
-                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
-                this.nodes.inputField.val(this.model.get(this.attribute));
-            }
-        }
+        label: gt('Estimated duration in minutes')
     }), {
         row: '15'
     });
@@ -612,19 +600,7 @@ define('io.ox/tasks/edit/view-template',
         className: 'col-sm-6 task-edit-details',
         control: '<input type="text" class="actual_duration form-control" id="task-edit-actual-duration" tabindex="1">',
         attribute: 'actual_duration',
-        label: gt('Actual duration in minutes'),
-        updateModel: function () {
-            var value = this.nodes.inputField.val();
-            if (!isNaN(parseFloat(value, 10)) || value === '') {
-                if (value === '') {
-                    value = null;
-                }
-                this.model.set(this.attribute, value, {validate: true});
-            } else {
-                setTimeout(function () {notifications.yell('error', gt('Please enter a correct number.')); }, 300);
-                this.nodes.inputField.val(this.model.get(this.attribute));
-            }
-        }
+        label: gt('Actual duration in minutes')
     }), {
         row: '15'
     });

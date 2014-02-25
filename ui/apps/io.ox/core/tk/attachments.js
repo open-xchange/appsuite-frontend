@@ -67,7 +67,7 @@ define('io.ox/core/tk/attachments',
             render: function () {
                 var self = this;
                 _(this.allAttachments).each(function (attachment) {
-                    self.$el.addClass('io-ox-core-tk-attachment-list').append(self.renderAttachment(attachment));
+                    self.$el.addClass('io-ox-core-tk-attachment-list clearfix').append(self.renderAttachment(attachment));//clearfix because all attachments have css float
                 });
 
                 //trigger refresh of attachmentcounter

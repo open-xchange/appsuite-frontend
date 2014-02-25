@@ -95,15 +95,22 @@ define('io.ox/tasks/edit/view',
             }
             //look if there is data beside the default values to trigger autoexpand (only in edit mode)
             if (self.model.get('id')) {
-                var attributes = _(_(self.model.attributes)
-                    .pick(['start_date', 'end_date', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'numberOfAttachments']))
-                    .filter(function (val) {
-                        return val;
-                    });
-
-                if (attributes.length || self.model.get('status') !== 1 || self.model.get('priority') !== 2 ||
+                var details = _(_(self.model.attributes)
+                        .pick(['actual_duration', 'target_duration', 'actual_costs', 'target_costs', 'currency', 'trip_meter', 'billing_information', 'companies']))
+                        .filter(function (val) {
+                            return val;
+                        }),
+                    attributes = _(_(self.model.attributes)
+                        .pick(['start_date', 'end_date', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'numberOfAttachments']))
+                        .filter(function (val) {
+                            return val;
+                        });
+                if (details.length || attributes.length || self.model.get('status') !== 1 || self.model.get('priority') !== 2 ||
                         (self.model.get('participants') && self.model.get('participants').length)) {//check if attributes contain values other than the defaults
                     self.$el.find('.expand-link').click();
+                    if (details.length) {
+                        self.$el.find('.expand-details-link').click();
+                    }
                 }
             }
 
