@@ -104,6 +104,7 @@ define('io.ox/contacts/widgets/pictureUpload',
                 var self = this,
                     dataUrl,
                     imageUrl = this.model.get('image1_url'),
+                    guid = _.uniqueId('form-picture-upload-'),
                     hasImage = false;
 
                 self.oldMode = _.browser.IE < 10;
@@ -131,7 +132,8 @@ define('io.ox/contacts/widgets/pictureUpload',
                             )[hasImage ? 'hide' : 'show']()
                     ),
                     $('<form>').append(
-                        self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="1">')
+                        $('<label class="sr-only">').attr('for', guid).text(gt('Click to upload image')),
+                        self.fileInput = $('<input type="file" name="file" accepts="image/*" tabindex="1">').attr('id', guid)
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);
                             })
