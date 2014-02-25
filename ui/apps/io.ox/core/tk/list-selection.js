@@ -34,7 +34,9 @@ define('io.ox/core/tk/list-selection', [], function () {
             })
             .on(Modernizr.touch ? 'tap' : 'click', SELECTABLE, function (e) {
                 if (!self.isMultiple(e)) self.triggerAction(e);
-            });
+            })
+            // avoid context menu
+            .on('contextmenu', function (e) { e.preventDefault(); });
 
         if (Modernizr.touch) {
             this.view.$el
@@ -153,10 +155,6 @@ define('io.ox/core/tk/list-selection', [], function () {
             return e && (e.metaKey || e.ctrlKey || this.isCheckmark(e));
         },
 
-        isClick: function (e) {
-            return e && e.type === 'click';
-        },
-
         resetTabIndex: function (items) {
             items.filter('[tabindex="1"]').attr('tabindex', '-1');
         },
@@ -190,7 +188,7 @@ define('io.ox/core/tk/list-selection', [], function () {
                 // single select
                 items.removeClass('precursor');
                 node = items.eq(index).addClass('precursor').attr('tabindex', '1').focus();
-                if (this.isMultiple(e) && !this.isClick(e)) this.toggle(node); else this.check(node);
+                if (this.isMultiple(e)) this.toggle(node); else this.check(node);
             }
         },
 
@@ -281,8 +279,10 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         onClick: function (e) {
 
-            // consider mousedown only if unselected
-            if (e.type === 'mousedown' && $(e.currentTarget).is('.selected')) return;
+            // consider mousedown only if unselected and not in multiple-mode
+            if (e.type === 'mousedown' && !this.isMultiple(e) && $(e.currentTarget).is('.selected')) return;
+            // ignore clicks in multiple-mode
+            if (e.type === 'click' && this.isMultiple(e)) return;
 
             var items = this.getItems(),
                 current = $(e.currentTarget),

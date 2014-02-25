@@ -420,10 +420,22 @@ define('io.ox/mail/api',
     // true -> has been fetched in this session
     // false -> caused by refresh
     var cacheControl = {},
+        get = api.get,
         getAll = api.getAll,
         getList = api.getList,
         remove = api.remove,
         search = api.search;
+
+    api.get = function (options) {
+
+        var cid = _.cid(options), model = pool.get('detail').get(cid);
+
+        if (model && model.get('attachments')) return $.when(model.toJSON());
+
+        return get.call(api, options, false).done(function (data) {
+            pool.add('detail', data);
+        });
+    };
 
     api.getAll = function (options, useCache) {
         // use cache?

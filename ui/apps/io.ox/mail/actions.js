@@ -198,7 +198,7 @@ define('io.ox/mail/actions',
             // get first mail
             var data = e.baton.first();
             // must be draft folder
-            return isDraftMail(data);
+            return data && isDraftMail(data);
         },
         action: function (baton) {
             var data = baton.first();
