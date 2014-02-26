@@ -874,6 +874,7 @@ define('io.ox/mail/main',
             var translations = { from: gt('Sender'), to: gt('Recipient'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
                 checkboxes = ext.point('io.ox/mail/search/checkboxes').options(),
                 defaults = ext.point('io.ox/mail/search/defaults').options(),
+                buttongroup =  win.nodes.search.find('.form-search > .input-group > .input-group-btn'),
                 data = {}, button, dataSettings;
 
             if (settings.get('options/' + searchSettingId) === undefined) {
@@ -898,7 +899,8 @@ define('io.ox/mail/main',
             //add dropdown button
             button = $('<button type="button" data-action="search-options" class="btn btn-default search-options" aria-hidden="true">')
                     .append($('<i class="fa fa-cog">'));
-            win.nodes.search.find('.form-search > .input-group > .input-group-btn').prepend(button);
+            if (!buttongroup.find('.search-options').length)
+                buttongroup.prepend(button);
 
             //add dropdown menue
             dropdownOptions({
