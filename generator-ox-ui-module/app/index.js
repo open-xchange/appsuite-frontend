@@ -42,6 +42,7 @@ OxUiModuleGenerator.prototype.app = function app() {
 
   this.template('_package.json', 'package.json');
   this.template('_Gruntfile.js', 'Gruntfile.js');
+  this.bulkCopy('local.conf.default.json', 'grunt/local.conf.default.json');
 
   this.template('grunt/_i18n.js', 'grunt/tasks/i18n.js');
   this.bulkCopy('grunt/i18n_module.js.tpl', 'grunt/templates/i18n_module.js.tpl');

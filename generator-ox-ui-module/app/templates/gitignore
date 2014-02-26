@@ -11,4 +11,5 @@
 /debian/*.substvars
 /node_modules
 local.conf*
+!local.conf.default.json
 npm-debug.log
