@@ -90,7 +90,8 @@ module.exports = function (grunt) {
                 return def.promise;
             })
             .done(function (res) {
-                grunt.log.ok('uploaded', file.dest, res.toString());
+                grunt.log.ok('uploaded', file.dest);
+                grunt.verbose.writeln('Response:\n', res.toString());
                 def.resolve(res);
             },
             function (err) {
@@ -111,7 +112,8 @@ module.exports = function (grunt) {
 
             req = proto.request(data, function (res) {
                 if (res.statusCode === 200) {
-                    grunt.verbose.ok('All files uploaded.');
+                    grunt.log.ok('All files uploaded.');
+                    grunt.verbose.writeln('Response:\n', res.toString());
                     done(true);
                     return;
                 }
