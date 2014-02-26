@@ -20,12 +20,7 @@ module.exports = function (grunt) {
             files: ['<%= jshint.all.src %>'],
             tasks: ['default'],
             options: { nospawn: true }
-        },
-        livereload: {
-            options: { livereload: true, nospawn: true },
-            files: ['build/core.appcache']
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');
