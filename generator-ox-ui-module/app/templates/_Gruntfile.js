@@ -19,7 +19,7 @@ module.exports = function (grunt) {
 
     // custom tasks
     grunt.registerTask('manifests', ['newer:jsonlint:manifests', 'concat:manifests']);
-    grunt.registerTask('lint', ['newer:parallelize:jshint:all', 'newer:jsonlint:manifests']);
+    grunt.registerTask('lint', ['newer:jshint:all', 'newer:jsonlint:manifests']);
 
     // testing stuff
     grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
