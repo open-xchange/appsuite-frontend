@@ -77,7 +77,7 @@ define('plugins/core/feedback/register',
         }
         //build stars
         for (var i = 0; i < number; i++) {
-            stars.push($('<i class="icon-star rating-star">')
+            stars.push($('<i class="fa fa-star rating-star">')
               .on((hover === false ? 'click' : 'click mouseenter mouseleave'), {starnumber: i + 1}, updateStars));
         }
         //trigger initial update
@@ -123,12 +123,13 @@ define('plugins/core/feedback/register',
 
     var feedback = {
         show: function () {
-            var popup = new dialogs.ModalDialog()
+            var guid = _.uniqueId('feedback-note-'),
+                popup = new dialogs.ModalDialog()
                     .header($('<h4>').text(gt('Feedback')))
                     .addPrimaryButton('send', gt('Send feedback'), 'send', {tabIndex: 1})
                     .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: 1}),
                 stars = buildStarWidget(settings.get('feeback/numberOfStars', 5), settings.get('feeback/showHover', true)),
-                note = $('<textarea tabindex="1" id="feedback-note" class="feedback-note" rows="5">'),
+                note = $('<textarea tabindex="1" id="' + guid + '" class="feedback-note form-control" rows="5">'),
                 supportlink = settings.get('feedback/supportlink', '');
             if (supportlink !== '') {
                 supportlink = $('<a href="' + supportlink + '" tabindex="1">');
@@ -137,7 +138,7 @@ define('plugins/core/feedback/register',
             popup.getBody().append($('<div class="feedback-welcome-text">')
                     .text(gt('Welcome. Please provide your feedback about this product')),
                     stars.node,
-                    $('<label for="feedback-note">').text(gt('Comments and suggestions')),
+                    $('<label class="feedback-label" for="' + guid + '">').text(gt('Comments and suggestions')),
                     note,
                     $('<div class="feedback-info">')
                         .text(gt('Please note, that support requests cannot be handled via the feedback-formular. When you have questions or problems please contact our support directly')),
