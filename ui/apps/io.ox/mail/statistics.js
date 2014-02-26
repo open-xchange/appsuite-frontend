@@ -15,8 +15,9 @@ define('io.ox/mail/statistics',
     ['io.ox/mail/api',
      'io.ox/core/api/account',
      'gettext!io.ox/mail',
+     'io.ox/core/date',
      'apps/3rd.party/Chart.js/Chart.js'
-    ], function (api, accountAPI, gt) {
+    ], function (api, accountAPI, gt, date) {
 
     'use strict';
 
@@ -123,19 +124,25 @@ define('io.ox/mail/statistics',
             fetch({ folder: options.folder, columns: COLUMNS }).then(
                 function success(data) {
 
-                    var days = [0, 0, 0, 0, 0, 0, 0];
+                    var days = [0, 0, 0, 0, 0, 0, 0],
+                        tempDays = date.locale.days,//get localized dates
+                        weekdays = tempDays.slice(date.locale.weekStart, tempDays.length).concat(tempDays.slice(0, date.locale.weekStart));//adjust weekstart
 
+                    weekdays = _(weekdays).map(function (val) {
+                        return val.substr(0, 2);
+                    });
                     _(data).each(function (obj) {
-                        var day = (new Date(obj.received_date).getUTCDay() + 6) % 7;
+                        var day = new Date(obj.received_date).getUTCDay();
                         days[day]++;
                     });
 
                     days = _(days).map(function (sum) {
                         return Math.round(sum / data.length * 100);
                     });
+                    days = days.slice(date.locale.weekStart, days.length).concat(days.slice(0, date.locale.weekStart));//adjust weekstart
 
                     var chart = {
-                        labels: 'Mo Di Mi Do Fr Sa So'.split(' '),
+                        labels: weekdays,
                         datasets: [{
                             fillColor: 'rgba(0, 136, 204, 0.15)',
                             strokeColor: 'rgba(0, 136, 204, 0.80)',
