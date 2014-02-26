@@ -13,25 +13,38 @@
 
 define('io.ox/search/main',
     ['gettext!io.ox/search',
+     'settings!io.ox/core',
      'io.ox/core/extensions',
      'io.ox/search/model',
      'io.ox/search/view',
      'io.ox/search/api',
      'io.ox/core/notifications',
      'less!io.ox/search/style'
-    ], function (gt, ext, Model, View, api, notifications) {
+    ], function (gt, settings, ext, Model, View, api, notifications) {
 
     'use strict';
 
     ext.point('io.ox/search/main').extend({
         index: 100,
-        row: '0',
+        id: 'default',
         config: function (data) {
+            data.defaultApp =  settings.get('settings/defaultSearchApp', 'io.ox/mail');
+        }
+    });
+
+    ext.point('io.ox/search/main').extend({
+        index: 200,
+        id: 'mapping',
+        config: function (data) {
+
+            //active app : app searched in
             data.mapping = {
-                'io.ox/files' : 'io.ox/inforstore',
-                'io.ox/portal' : 'io.ox/mail',
-                'io.ox/search' : 'io.ox/mail',
-                'io.ox/settings' : 'io.ox/mail'
+                //name mapping
+                'io.ox/files' : 'io.ox/infostore',
+                //fallback/default mapping
+                'io.ox/portal' : data.defaultApp,
+                'io.ox/search' : data.defaultApp,
+                'io.ox/settings' : data.defaultApp
             };
         }
     });
