@@ -42,6 +42,32 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     });
 
     //
+    // <input type="password">
+    //
+
+    var PasswordView = AbstractView.extend({
+        tagName: 'input type="password"',
+        className: 'form-control',
+        events: { 'change': 'onChange' },
+        onChange: function () {
+            this.model.set(this.name, this.$el.val(), { validate: true });
+        },
+        setup: function (options) {
+            this.name = options.name;
+            this.listenTo(this.model, 'change:' + this.name, this.update);
+        },
+        update: function () {
+            this.$el.val($.trim(this.model.get(this.name)));
+        },
+        render: function () {
+            this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            if (this.id) this.$el.attr({ id: this.id });
+            this.update();
+            return this;
+        }
+    });
+
+    //
     // <textarea>
     //
 
@@ -158,6 +184,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
     return {
         AbstractView: AbstractView,
         InputView: InputView,
+        PasswordView: PasswordView,
         TextView: TextView,
         CheckboxView: CheckboxView,
         RadioView: RadioView,

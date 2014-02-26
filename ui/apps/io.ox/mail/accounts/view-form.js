@@ -344,7 +344,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'password' }).addClass('control-label col-sm-3').text(gt('Password')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'password', model: model, id: 'password', className: 'form-control' }).render().$el
+                                new mini.PasswordView({ name: 'password', model: model, id: 'password', className: 'form-control' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group pop3').append(
@@ -417,7 +417,7 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'transport_password'}).addClass('control-label col-sm-3').text(gt('Password')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'transport_password', model: model, id: 'transport_password' }).render().$el
+                                new mini.PasswordView({ name: 'transport_password', model: model, id: 'transport_password' }).render().$el
                             )
                         )
                     )
