@@ -753,7 +753,12 @@ define('io.ox/core/commons-folderview',
             $(window).off('resize.folderview').on('resize.folderview', function () {
                 if (!visible) { fnHide(); } else { fnShow(true);  }
             });
-            $(window).off('orientationchange.folderview').on('orientationchange.folderview', fnHide);
+            //don't hide foldertree on orientationchange on desktops
+            //event is triggered when resizing the window and width becomes smaller than height and vice versa
+            //see Bug 31055
+            if (_.device('!desktop')) {
+                $(window).off('orientationchange.folderview').on('orientationchange.folderview', fnHide);
+            }
         };
 
         fnResize = function () {
