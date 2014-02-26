@@ -1,18 +1,19 @@
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2012, 2013, 2014.
 # Kalman Kemenczy <kkemenczy@opensuse.org>, 2013.
+# Kálmán Kéménczy <kkemenczy@gmail.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-26 05:22+0100\n"
-"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"PO-Revision-Date: 2014-02-22 22:36+0900\n"
+"Last-Translator: Kálmán Kéménczy <kkemenczy@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.5\n"
 
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js:76
@@ -66,7 +67,7 @@ msgstr "Feladatok"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "Meghajtó"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -1339,8 +1340,8 @@ msgstr "Nincs megadva szabály"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Melléklet mentése a meghajtóra"
-msgstr[1] "Mellékletek mentése a meghajtóra"
+msgstr[0] "Melléklet mentése a Drive-ra"
+msgstr[1] "Mellékletek mentése a Drive-ra"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1557,7 +1558,7 @@ msgstr "Letöltés"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Mentés a meghajtóra"
+msgstr "Mentés a Drive-ra"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
@@ -2129,7 +2130,7 @@ msgstr "Teljes képernyő"
 #: apps/io.ox/files/guidance/main.js:90
 msgctxt "help"
 msgid "The Drive App"
-msgstr "A meghajtó app"
+msgstr "A Drive app"
 
 #: apps/io.ox/files/guidance/main.js:91
 msgctxt "help"
@@ -2149,7 +2150,7 @@ msgstr "Fájlok elérése WebDAV-val"
 #: apps/io.ox/files/guidance/main.js:94
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "Meghajtóbeállítások"
+msgstr "Drive beállítások"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132
 #: apps/io.ox/files/guidance/main.js:186
@@ -5102,7 +5103,7 @@ msgid ""
 msgstr ""
 "A frissítő egy egyszerű telepítővarázslót biztosít. Kövesse annak "
 "utasításait az alkalmazás telepítéséhez. A frissítő értesíti a Connector for "
-"Microsoft Outlook, az értesítő és a meghajtó frissítéseiről. A frissítéseket "
+"Microsoft Outlook, az értesítő és a Drive frissítéseiről. A frissítéseket "
 "a "
 "frissítőből töltheti le."
 

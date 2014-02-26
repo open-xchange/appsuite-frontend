@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-25 16:28+0100\n"
+"PO-Revision-Date: 2014-02-18 21:26+0100\n"
 "Last-Translator: Ivar Snaaijer\n"
 "Language-Team: Dutch <kde-i18n-doc@kde.org>\n"
 "Language: nl\n"
@@ -67,7 +67,7 @@ msgstr "Taken"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "Disk"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -1347,8 +1347,8 @@ msgstr "Er zijn geen regels gedefinieerd"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Bijlage opslaan op disk"
-msgstr[1] "Bijlagen opslaan op schijf"
+msgstr[0] "Bijlage opslaan naar Drive"
+msgstr[1] "Bijlagen opslaan naar Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1565,7 +1565,7 @@ msgstr "Downloaden"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Opslaan op disk"
+msgstr "Opslaan naar Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
@@ -2147,7 +2147,7 @@ msgstr "Volledig scherm"
 #: apps/io.ox/files/guidance/main.js:90
 msgctxt "help"
 msgid "The Drive App"
-msgstr "De Disk App"
+msgstr "De Drive App"
 
 #: apps/io.ox/files/guidance/main.js:91
 msgctxt "help"
@@ -2167,7 +2167,7 @@ msgstr "Benaderen van bestanden met WebDAV"
 #: apps/io.ox/files/guidance/main.js:94
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "Diskinstellingen"
+msgstr "Drive instellingen"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132
 #: apps/io.ox/files/guidance/main.js:186
@@ -5147,9 +5147,9 @@ msgid ""
 msgstr ""
 "De updater biedt een eenvoudige installatie-wizard aan. Volg de instructies "
 "om de toepassing te installeren. De updater zal u op de hoogte brengen van "
-"alle updates voor de Connector voor Microsoft Outlook, de Notifier en Disk. U "
-"kunt "
-"de updates vanuit de updater downloaden."
+"alle updates voor de Connector voor Microsoft Outlook, de Notifier en Drive. "
+"U "
+"kunt de updates vanuit de updater downloaden."
 
 #: apps/io.ox/core/settings/downloads/pane.js:64
 #: apps/io.ox/core/settings/downloads/pane.js:72

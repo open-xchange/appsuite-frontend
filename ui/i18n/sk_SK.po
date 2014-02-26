@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-16 12:52+0200\n"
+"PO-Revision-Date: 2014-02-20 16:37+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -67,7 +67,7 @@ msgstr "Úlohy"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "Disk"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -1347,9 +1347,9 @@ msgstr "Žiadne pravidlo nie je definované"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Ukladá sa príloha na disk"
-msgstr[1] "Ukladajú sa prílohy na disk"
-msgstr[2] "Ukladajú sa prílohy na disk"
+msgstr[0] "Ukladá sa príloha na Drive"
+msgstr[1] "Ukladajú sa prílohy na Drive"
+msgstr[2] "Ukladajú sa prílohy na Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1567,7 +1567,7 @@ msgstr "Stiahnuť"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Uložiť na disk"
+msgstr "Uložiť na Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
@@ -2145,7 +2145,7 @@ msgstr "Celoobrazovkový režim"
 #: apps/io.ox/files/guidance/main.js:90
 msgctxt "help"
 msgid "The Drive App"
-msgstr "Aplikácia Disk"
+msgstr "Aplikácia Drive"
 
 #: apps/io.ox/files/guidance/main.js:91
 msgctxt "help"
@@ -2165,7 +2165,7 @@ msgstr "Prístup k súborom prostredníctvom WebDAV"
 #: apps/io.ox/files/guidance/main.js:94
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "Nastavenie Disku"
+msgstr "Nastavenie Drive"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132
 #: apps/io.ox/files/guidance/main.js:186
@@ -5131,7 +5131,7 @@ msgid ""
 msgstr ""
 "Aktualizátor poskytuje jednoduchého sprievodcu inštaláciou. Aplikáciu "
 "nainštalujete podľa pokynov. Aktualizátor vás bude informovať o prípadných "
-"aktualizáciách aplikácií Konektor pre Microsoft Outlook, Upozorňovač a Disk. "
+"aktualizáciách aplikácií Konektor pre Microsoft Outlook, Notifier a Drive. "
 "Aktualizácie si môžete stiahnuť priamo z aktualizátora."
 
 #: apps/io.ox/core/settings/downloads/pane.js:64

@@ -63,7 +63,7 @@ msgstr "Tehtävät"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "Asema"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -104,7 +104,7 @@ msgstr "Ei lähettäjää"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:70
 #: apps/io.ox/mail/view-detail.js:473 apps/io.ox/mail/view-detail.js:480
 msgid "None"
-msgstr "Ei yhtään"
+msgstr "Ei tunnistetta"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:71
 #: apps/io.ox/mail/view-detail.js:474 apps/io.ox/mail/view-detail.js:481
@@ -290,7 +290,7 @@ msgstr "Sinun roskapostilta suojaamiseksesi ulkoiset kuvat on estetty."
 
 #: apps/io.ox/mail/view-detail.js:1006
 msgid "A delivery receipt has been sent"
-msgstr "Toimituksen vahvistus lähetetty"
+msgstr "Toimituksen kuittaus lähetetty"
 
 #: apps/io.ox/mail/view-detail.js:1028
 msgid "Send a delivery receipt"
@@ -387,7 +387,7 @@ msgstr "Tallenna"
 #: apps/io.ox/tasks/edit/view-template.js:75
 #: apps/plugins/portal/userSettings/register.js:42
 msgid "Discard"
-msgstr "Hylkää"
+msgstr "Peruuta"
 
 #: apps/io.ox/core/tk/vgrid.js:281 apps/io.ox/core/tk/vgrid.js:388
 #: apps/io.ox/core/tk/vgrid.js:400
@@ -446,7 +446,7 @@ msgstr "Muokkaa"
 #: apps/io.ox/tasks/main.js:101 apps/plugins/portal/twitter/util.js:318
 #: apps/plugins/portal/twitter/util.js:451
 msgid "Delete"
-msgstr "Poista pysyvästi"
+msgstr "Poista"
 
 #. Section title for the mobile signature
 #: apps/io.ox/mail/settings/signatures/register.js:296
@@ -470,11 +470,11 @@ msgstr "Lisää uusi allekirjoitus"
 
 #: apps/io.ox/mail/settings/pane.js:34
 msgid "Common"
-msgstr "Yhteinen"
+msgstr "Yleiset"
 
 #: apps/io.ox/mail/settings/pane.js:35
 msgid "Permanently remove deleted emails"
-msgstr "Pysyvästi poista poistetut sähköpostit"
+msgstr "Poista poistetut viestit pysyvästi"
 
 #: apps/io.ox/mail/settings/pane.js:36
 msgid ""
@@ -494,15 +494,15 @@ msgstr "Näytä tekstimuotoiset postit vakiolevyisellä kirjasimella"
 
 #: apps/io.ox/mail/settings/pane.js:39 apps/io.ox/mail/write/main.js:200
 msgid "Compose"
-msgstr "Uusi"
+msgstr "Uusi viesti"
 
 #: apps/io.ox/mail/settings/pane.js:40
 msgid "Append vCard"
-msgstr "Lisää vCard"
+msgstr "Lisää vCard käyntikorttini"
 
 #: apps/io.ox/mail/settings/pane.js:41
 msgid "Ask for delivery receipt"
-msgstr "Pyydä toimituksen vahvistusta"
+msgstr "Pyydä kuittaus kun viesti on toimitettu"
 
 #: apps/io.ox/mail/settings/pane.js:42
 msgid "Insert the original email text to a reply"
@@ -510,7 +510,7 @@ msgstr "Lisää alkuperäisen viesti teksti vastaukseen"
 
 #: apps/io.ox/mail/settings/pane.js:43
 msgid "Forward emails as"
-msgstr "Välitä postit muodossa"
+msgstr "Viestien välitys"
 
 #: apps/io.ox/mail/settings/pane.js:44
 msgid "Inline"
@@ -554,7 +554,7 @@ msgstr "Luonnosten automaattinen tallennus"
 
 #: apps/io.ox/mail/settings/pane.js:54
 msgid "Display"
-msgstr "Esitysmuoto"
+msgstr "Viestien näyttäminen"
 
 #: apps/io.ox/mail/settings/pane.js:55
 msgid "Allow html formatted emails"
@@ -562,7 +562,7 @@ msgstr "Salli html muotoillut sähköpostit"
 
 #: apps/io.ox/mail/settings/pane.js:56
 msgid "Allow pre-loading of externally linked images"
-msgstr "Salli muualta linkattujen kuvien ennakoiva lataaminen"
+msgstr "Salli muualta linkitettyjen kuvien ennakoiva lataaminen"
 
 #: apps/io.ox/mail/settings/pane.js:57
 msgid "Display emoticons as graphics in text emails"
@@ -616,7 +616,7 @@ msgstr "Asetuksia ei voitu tallentaa"
 
 #: apps/io.ox/mail/settings/pane.js:189
 msgid "IMAP folder subscription"
-msgstr "IMAP-protokollan kansioiden tilaus"
+msgstr "IMAP-kansioiden tilaus"
 
 #: apps/io.ox/mail/settings/pane.js:191
 msgid "Change subscription"
@@ -719,7 +719,7 @@ msgstr "Lisää"
 #: apps/plugins/portal/twitter/util.js:452
 #: apps/plugins/portal/userSettings/register.js:88
 msgid "Cancel"
-msgstr "Peru"
+msgstr "Peruuta"
 
 #: apps/io.ox/mail/write/inline-images.js:117
 msgid "Please select a file to insert"
@@ -740,7 +740,7 @@ msgstr "Lisää liite tiputtamalla tiedosto mihin tahansa"
 
 #: apps/io.ox/mail/actions.js:919 apps/io.ox/mail/write/main.js:660
 msgid "Compose new mail"
-msgstr "Uusi posti"
+msgstr "Uusi viesti"
 
 #: apps/io.ox/mail/write/main.js:661
 msgid "Reply all"
@@ -861,7 +861,7 @@ msgstr "Liitteet"
 #: apps/io.ox/mail/write/view-main.js:538
 msgid ""
 "You can drag and drop files from your computer here to add as attachment."
-msgstr "Lisätäksesi liitteenä, siirrä ja tiputa tiedostoja koneeltasi tähän."
+msgstr "Voit raahata ja pudottaa liitetiedostosi tähän."
 
 #: apps/io.ox/mail/write/view-main.js:545
 msgid "Add Attachment"
@@ -900,7 +900,7 @@ msgstr "Vaihtoehdot"
 #: apps/io.ox/tasks/edit/view-template.js:299 apps/io.ox/tasks/main.js:336
 #: apps/io.ox/tasks/print.js:103
 msgid "Priority"
-msgstr "Tärkeys"
+msgstr "Prioriteetti"
 
 #: apps/io.ox/mail/write/view-main.js:781
 #: apps/io.ox/mail/write/view-main.js:782
@@ -920,11 +920,11 @@ msgstr "Matala"
 
 #: apps/io.ox/mail/write/view-main.js:791
 msgid "Attach my vCard"
-msgstr "Liitä minun vCard tietoni"
+msgstr "Liitä vCard käyntikorttini"
 
 #: apps/io.ox/mail/write/view-main.js:795
 msgid "Delivery Receipt"
-msgstr "Toimituksen vahvistus"
+msgstr "Toimituksen kuittaus"
 
 #: apps/io.ox/mail/write/view-main.js:800
 msgid "Text format"
@@ -985,7 +985,7 @@ msgstr "Päivämäärä"
 
 #: apps/io.ox/mail/main.js:291
 msgid "Label"
-msgstr "Seloste"
+msgstr "Tunniste"
 
 #: apps/io.ox/mail/main.js:293
 msgid "Size"
@@ -1151,7 +1151,7 @@ msgstr "nähty"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:40
 msgid "Contains"
-msgstr "Sisältää"
+msgstr "Sisältää merkkejä"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:41
 msgid "Is exactly"
@@ -1159,11 +1159,11 @@ msgstr "On täsmälleen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:42
 msgid "Matches"
-msgstr "Vastine"
+msgstr "Vastaa merkkejä"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:43
 msgid "Regex"
-msgstr "Regex (säännölliset lausekkeet)"
+msgstr "Säännöllinen lauseke (regex)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:47
 msgid "Sender/From"
@@ -1175,11 +1175,11 @@ msgstr "Kuka tahansa vastaanottaja"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:50
 msgid "Mailing list"
-msgstr "Postilista"
+msgstr "Jakelulista"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:53
 msgid "Header"
-msgstr "Otsake"
+msgstr "Otsaketiedot"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:54
 msgid "Envelope"
@@ -1207,15 +1207,15 @@ msgstr "Hylkää käyttäen syytä"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:64
 msgid "Mark mail as"
-msgstr "Merkitse posti"
+msgstr "Merkitse"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:65
 msgid "Tag mail with"
-msgstr "Tagaa posti"
+msgstr "Aseta avainsana"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:66
 msgid "Flag mail with"
-msgstr "Aseta postille lipuke"
+msgstr "Aseta tunniste"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:123
 msgid ""
@@ -1273,7 +1273,7 @@ msgstr "Sovella sääntöä, jos jokin ehto täyttyy."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:132
 msgid "Process subsequent rules"
-msgstr "Käsittele seuraavat säännöt"
+msgstr "Jos viesti täyttää tämän säännön, suorita myös muut säännöt"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:39
 msgid "Create new rule"
@@ -1318,8 +1318,8 @@ msgstr "Ei sääntöjä määriteltynä"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Tallennetaan liitettä asemalle"
-msgstr[1] "Tallennetaan liitteitä asemalle"
+msgstr[0] "Tallennetaan liitettä Drivelle"
+msgstr[1] "Tallennetaan liitteitä Drivelle"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1450,14 +1450,14 @@ msgstr "Vastaa kaikille"
 #. German, for example, should be just "Ungelesen"
 #: apps/io.ox/mail/actions.js:998
 msgid "Mark unread"
-msgstr "Lukematon"
+msgstr "Merkitse lukemattomaksi"
 
 #. Translation should be as short a possible
 #. Instead of "Mark as read" it's just "Mark read"
 #. German, for example, should be just "Gelesen"
 #: apps/io.ox/mail/actions.js:1010
 msgid "Mark read"
-msgstr "Luettu"
+msgstr "Merkitse luetuksi"
 
 #: apps/io.ox/mail/actions.js:1024
 msgid "Mark as spam"
@@ -1469,7 +1469,7 @@ msgstr "Ei roskapostia"
 
 #: apps/io.ox/mail/actions.js:1057
 msgid "View source"
-msgstr "Näytä raakamuoto"
+msgstr "Näytä lähdekoodi"
 
 #: apps/io.ox/calendar/actions.js:559 apps/io.ox/calendar/actions.js:598
 #: apps/io.ox/contacts/actions.js:325 apps/io.ox/contacts/actions.js:736
@@ -1534,11 +1534,11 @@ msgstr "Lataa"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Tallenna asemalle"
+msgstr "Tallenna Drivelle"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
-msgstr "Lähetä uusi posti"
+msgstr "Lähetä uusi viesti"
 
 #: apps/io.ox/calendar/actions.js:637 apps/io.ox/mail/actions.js:1152
 #: apps/io.ox/mail/actions.js:1154
@@ -1840,7 +1840,7 @@ msgstr "Siirretään posteja... Tämä voi kestää muutaman sekunnin."
 
 #: apps/io.ox/mail/api.js:1657
 msgid "New Mail"
-msgstr "Uusi posti"
+msgstr "Uusi viesti"
 
 #: apps/io.ox/mail/autoforward/settings/model.js:87
 #: apps/io.ox/mail/autoforward/settings/register.js:27
@@ -1861,7 +1861,7 @@ msgstr "Käytössä"
 
 #: apps/io.ox/mail/folderview-extensions.js:88
 msgid "Mark all mails as read"
-msgstr "Merkitse kaikki postit luetuiksi."
+msgstr "Merkitse kaikki postit luetuiksi"
 
 #: apps/io.ox/mail/folderview-extensions.js:99
 msgid "Cleaning up... This may take a few seconds."
@@ -2098,12 +2098,12 @@ msgstr "Katsoa diaesitys"
 #: apps/io.ox/core/main.js:712 apps/io.ox/core/main.js:716
 #: apps/io.ox/files/actions.js:1174
 msgid "Fullscreen"
-msgstr "Koko näytön"
+msgstr "Koko näyttö"
 
 #: apps/io.ox/files/guidance/main.js:90
 msgctxt "help"
 msgid "The Drive App"
-msgstr "Asema App"
+msgstr "Drive App"
 
 #: apps/io.ox/files/guidance/main.js:91
 msgctxt "help"
@@ -2123,7 +2123,7 @@ msgstr "Tiedostoihin pääsy WebDAV kautta"
 #: apps/io.ox/files/guidance/main.js:94
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "Aseman asetukset"
+msgstr "Driven asetukset"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132
 #: apps/io.ox/files/guidance/main.js:186
@@ -2388,7 +2388,7 @@ msgstr "Ole hyvä ja syötä käypä sähköpostiosoite tai puhelinnumero"
 
 #: apps/io.ox/backbone/validation.js:86
 msgid "Please enter a valid object"
-msgstr "Ole hyvä ja syötä käypä objekti"
+msgstr "Ole hyvä ja syötä käypä kohde"
 
 #: apps/io.ox/backbone/validation.js:138
 msgid "Please enter a value"
@@ -2889,7 +2889,7 @@ msgstr "Luo tehtävä"
 
 #: apps/io.ox/tasks/edit/main.js:155
 msgid "Discard changes"
-msgstr "Hylkää muutokset"
+msgstr "Peru muutokset"
 
 #: apps/io.ox/calendar/edit/template.js:77
 #: apps/io.ox/tasks/edit/view-template.js:40
@@ -4782,13 +4782,13 @@ msgstr "katso kansiota"
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js:129
 msgid "create objects"
-msgstr "luo objekteja"
+msgstr "luo kohteita"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js:131
 #: apps/io.ox/core/permissions/permissions.js:133
 msgid "create objects and subfolders"
-msgstr "luo uusia objekteja ja alikansioita"
+msgstr "luo uusia kohteita ja alikansioita"
 
 #. object permissions - read
 #: apps/io.ox/core/permissions/permissions.js:137
@@ -4798,13 +4798,13 @@ msgstr "ei lukuoikeuksia"
 #. object permissions - read
 #: apps/io.ox/core/permissions/permissions.js:139
 msgid "read own objects"
-msgstr "lue omat objektit"
+msgstr "lue omat kohteet"
 
 #. object permissions - read
 #: apps/io.ox/core/permissions/permissions.js:141
 #: apps/io.ox/core/permissions/permissions.js:143
 msgid "read all objects"
-msgstr "lue kaikki objektit"
+msgstr "lue kaikki kohteet"
 
 #. object permissions - edit/modify
 #: apps/io.ox/core/permissions/permissions.js:147
@@ -4814,13 +4814,13 @@ msgstr "ei muokkausoikeuksia"
 #. object permissions - edit/modify
 #: apps/io.ox/core/permissions/permissions.js:149
 msgid "edit own objects"
-msgstr "muokkaa omia objekteja"
+msgstr "muokkaa omia kohteita"
 
 #. object permissions - edit/modify
 #: apps/io.ox/core/permissions/permissions.js:151
 #: apps/io.ox/core/permissions/permissions.js:153
 msgid "edit all objects"
-msgstr "muokkaa kaikkia objekteja"
+msgstr "muokkaa kaikkia kohteita"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js:157
@@ -4830,13 +4830,13 @@ msgstr "ei poisto-oikeuksia"
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js:159
 msgid "delete only own objects"
-msgstr "poista vain omat objektit"
+msgstr "poista vain omat kohteet"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js:161
 #: apps/io.ox/core/permissions/permissions.js:163
 msgid "delete all objects"
-msgstr "poista kaikki objektit"
+msgstr "poista kaikki kohteet"
 
 #: apps/io.ox/core/permissions/permissions.js:231
 msgid "Owner"
@@ -4849,7 +4849,7 @@ msgstr "Kansion oikeudet"
 
 #: apps/io.ox/core/permissions/permissions.js:243
 msgid "Object permissions"
-msgstr "Objektin oikeudet"
+msgstr "Kohteen oikeudet"
 
 #: apps/io.ox/core/permissions/permissions.js:248
 msgid "The user has administrative rights"
@@ -4953,7 +4953,7 @@ msgid ""
 "to install the application. The updater will inform you of any updates for "
 "the Connector for Microsoft Outlook, Notifier and Drive. You can download "
 "the updates from within the updater."
-msgstr "Päivittäjä tarjoaa yksinkertaisen ohjatun asennuksen. Seuraa ohjeita asentaaksesi sovelluksen. Päivittäjä kertoo sinulle päivityksistä Microsoft Outlook Connector, Notifier ja Asema komponentteihin.  Voit ladata päivitykset päivittäjästä."
+msgstr "Päivittäjä tarjoaa yksinkertaisen ohjatun asennuksen. Seuraa ohjeita asentaaksesi sovelluksen. Päivittäjä kertoo sinulle päivityksistä Microsoft Outlook Connector, Notifier ja Drive komponentteihin.  Voit ladata päivitykset päivittäjästä."
 
 #: apps/io.ox/core/settings/downloads/pane.js:64
 #: apps/io.ox/core/settings/downloads/pane.js:72
@@ -5001,7 +5001,7 @@ msgstr "Keskimääräinen aika: %1$s ms"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:128
 msgid "Loss: %1$s %"
-msgstr "Kato: %1$s %"
+msgstr "Kadotetut: %1$s %"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:129
 msgid "Uptime: %1$s minutes"
@@ -5023,7 +5023,7 @@ msgstr "Hitaat pyynnöt"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:220
 msgid "Loss"
-msgstr "Kato"
+msgstr "Kadotetut pyynnöt"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:225
 msgid "No errors"
@@ -5100,7 +5100,7 @@ msgstr "Valinnan yksityiskohdat"
 
 #: apps/io.ox/core/commons.js:186
 msgid "No elements selected"
-msgstr "Ei valittuja alkioita"
+msgstr "Ei valittuja kohteita"
 
 #: apps/io.ox/core/commons.js:351
 msgid "Searched in all folders"
@@ -5640,7 +5640,7 @@ msgstr[1] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
 
 #: apps/io.ox/core/main.js:407
 msgid "Sign out now"
-msgstr "Uloskirjaudu heti"
+msgstr "Kirjaudu heti ulos"
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js:519
@@ -5661,7 +5661,7 @@ msgstr "Tietoja"
 
 #: apps/io.ox/core/main.js:753
 msgid "Sign out"
-msgstr "Uloskirjaudu"
+msgstr "Kirjaudu ulos"
 
 #: apps/io.ox/core/main.js:804
 msgid "Your Applications"
@@ -5702,13 +5702,13 @@ msgstr "Ohjeen tai asetusten näyttämiseksi, käytä kuvakkeita valikkopalkin o
 
 #: apps/io.ox/tours/main.js:85
 msgid "New objects icon"
-msgstr "Uusia objekteja kuvake"
+msgstr "Uusia kohteita kuvake"
 
 #: apps/io.ox/tours/main.js:88
 msgid ""
 "The New objects icon shows the number of unread E-Mails or other "
 "notifications. If clicking the icon, the info area opens."
-msgstr "Uusien objetien kuvake näyttää lukemattomien sähköpostien tai muiden ilmoitusten määrän. Kuvaketta painettaessa tietoalue aukeaa."
+msgstr "Uusien kohteiden kuvake näyttää lukemattomien sähköpostien tai muiden ilmoitusten määrän. Kuvaketta painettaessa tietoalue aukeaa."
 
 #: apps/io.ox/tours/main.js:93
 msgid "Info area"
@@ -5726,7 +5726,7 @@ msgstr "Uusien kohteiden luonti"
 
 #: apps/io.ox/tours/main.js:103
 msgid "To create a new E-Mail, click the Compose new E-Mail icon at the top."
-msgstr "Luodaksesi uuden sähköpostin, napsauta yläreunan Uusi posti kuvaketta."
+msgstr "Luodaksesi uuden sähköpostin, napsauta yläreunan Uusi viesti kuvaketta."
 
 #: apps/io.ox/tours/main.js:108
 msgid "Opening or closing the folder tree"
@@ -5738,11 +5738,11 @@ msgstr "Avataksesi tai sulkeaksesi kansiopuun, napsauta Vaihda kansiota kuvakett
 
 #: apps/io.ox/tours/main.js:114
 msgid "Searching for objects"
-msgstr "Objektien etsiminen"
+msgstr "Kohteiden etsiminen"
 
 #: apps/io.ox/tours/main.js:117
 msgid "To search for objects, click the Toggle search icon."
-msgstr "Etsiäksesi objekteja, napsauta Vaihtele hakua kuvaketta."
+msgstr "Etsiäksesi kohteita, napsauta Vaihtele hakua kuvaketta."
 
 #: apps/io.ox/tours/main.js:120
 msgid "Folder tree"
@@ -5752,7 +5752,7 @@ msgstr "Kansiopuu"
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the sidebar."
-msgstr "Avaa kansiopuusta kansio jonka objekteja haluat katsella laitanäkymässä."
+msgstr "Avaa kansiopuusta kansio jonka kohteita haluat katsella laitanäkymässä."
 
 #: apps/io.ox/tours/main.js:126
 msgid "Sidebar"
@@ -5762,7 +5762,7 @@ msgstr "Laitanäkymä"
 msgid ""
 "Use the sidebar to select an object in order to view its contents or to "
 "apply functions."
-msgstr "Valitse laitanäkymästä objekti jota haluat katsella tai johon haluat kohdentaa toimintoja."
+msgstr "Valitse laitanäkymästä kohde jota haluat katsella tai johon haluat kohdentaa toimintoja."
 
 #: apps/io.ox/tours/main.js:132
 msgid "Display area"
@@ -5772,7 +5772,7 @@ msgstr "Näyttöalue"
 msgid ""
 "The display area shows an object's content. At the top of the display area "
 "you will find functions for e.g. moving or deleting objects."
-msgstr "Näyttöalue esittää objektin sisällön. Näyttöalueen yläosasta löydät toimintoja esimerkiksi objektin siirtämiseen tai poistamiseen."
+msgstr "Näyttöalue esittää kohteen sisällön. Näyttöalueen yläosasta löydät toimintoja esimerkiksi kohteen siirtämiseen tai poistamiseen."
 
 #: apps/io.ox/tours/main.js:138
 msgid "Further information"
@@ -5843,7 +5843,7 @@ msgstr "Uuden sähköpostin laatiminen"
 #: apps/io.ox/tours/main.js:212
 msgid ""
 "To compose a new E-Mail, click on the Compose new E-Mail icon at the top."
-msgstr "Uuden sähköpostin laatimiseksi, napsauta yläreunan Uusi posti kuvaketta."
+msgstr "Uuden sähköpostin laatimiseksi, napsauta yläreunan Uusi viesti kuvaketta."
 
 #: apps/io.ox/tours/main.js:230
 msgid "Entering the recipient's name"
@@ -6282,7 +6282,7 @@ msgstr "Uloskirjautuminen"
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
-msgstr "Uloskirjautuaksesi, napsauta järjestelmävalikkon hammaspyöräkuvaketta valikkopalkin oikeassa reunassa. Valitse Uloskirjaudu."
+msgstr "Kirjautuaksesi ulos, napsauta järjestelmävalikkon hammaspyöräkuvaketta valikkopalkin oikeassa reunassa. Valitse Kirjaudu ulos."
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/main.js:732
@@ -7009,7 +7009,7 @@ msgstr "Näytä inbox"
 
 #: apps/plugins/notifications/mail/register.js:57
 msgid "New Mail from %1$s %2$s. Press [enter] to open"
-msgstr "Uusi posti %1$s %2$s. Paina [enter] avataksesi"
+msgstr "Uusi viesti %1$s %2$s. Paina [enter] avataksesi"
 
 #: apps/plugins/notifications/calendar/register.js:32
 msgid "Appointment invitations"
