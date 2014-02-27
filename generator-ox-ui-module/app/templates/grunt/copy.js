@@ -21,6 +21,13 @@ module.exports = function (grunt) {
                     cwd: 'apps/themes/',
                     dest: 'build/apps/themes/',
                     filter: 'isFile'
+                },
+                {
+                    expand: true,
+                    src: ['**/*.{png,gif,ico}', '!themes/**/*'],
+                    cwd: 'apps/',
+                    dest: 'build/apps/themes/default/',
+                    filter: 'isFile'
                 }
             ]
         }
