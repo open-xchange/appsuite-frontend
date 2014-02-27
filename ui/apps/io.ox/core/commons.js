@@ -94,10 +94,13 @@ define('io.ox/core/commons',
             }
 
             return function (id, node, selection, api, grid) {
-                var buttons = $('.window-toolbar .toolbar-button'),
-                    toolbar = $('.window-toolbar'),
+
+                var context = $(node).closest('.window-container'),  // get current app's window container as context
+                    buttons = $('.window-toolbar .toolbar-button', context),
+                    toolbar = $('.window-toolbar', context),
                     toolbarID = 'multi-select-toolbar',
                     container;
+
                 if ($('#' + toolbarID).length > 0) {
                     // reuse old toolbar
                     container = $('#' + toolbarID);
@@ -116,7 +119,7 @@ define('io.ox/core/commons',
                         $('#' + toolbarID).remove();
                         buttons.show();
                     }
-                }, 300);
+                }, 10);
             };
         }()),
 
