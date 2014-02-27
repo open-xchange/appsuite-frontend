@@ -34,6 +34,9 @@ module.exports = function (grunt) {
                     config.manifests = (config.manifests || []).concat(options.base + '/manifests/');
                     config = appserver.tools.unifyOptions(config);
 
+                    // Todo: Take care of middlewares by connect
+                    middlewares = [];
+
                     middlewares.push(appserver.middleware.appsload(config));
                     middlewares.push(appserver.middleware.manifests(config));
                     middlewares.push(appserver.middleware.localfiles(config));
