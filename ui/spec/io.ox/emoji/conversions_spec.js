@@ -105,6 +105,18 @@ define([
                     expect(emoji.jisToUnified('\uf98b')).toBe('\u2600');
                 });
             });
+
+            describe('all -> unified', function () {
+                beforeEach(function () {
+                    this.emoji = emoji.getInstance();
+                    this.convert = emoji.converterFor({from: 'all', to: 'unified'});
+                });
+
+                it('should convert all known encodings to unified', function () {
+                    var text = 'softbank: \ue04a; shift_jis: \uf98b; unified: \u2600';
+                    expect(this.convert(text)).toBe('softbank: \u2600; shift_jis: \u2600; unified: \u2600');
+                });
+            });
             // everything else should be tested by emoji lib
         });
     });

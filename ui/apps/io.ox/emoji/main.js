@@ -370,6 +370,12 @@ define('io.ox/emoji/main',
                         forceEmojiIcons: true
                     }), format);
                 };
+            } else if (options.from === 'all' && options.to === 'unified') {
+                return function (text) {
+                    text = self.softbankToUnified(text);
+                    text = self.jisToUnified(text);
+                    return text;
+                };
             }
             return;
         },
