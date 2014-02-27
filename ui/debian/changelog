@@ -1,9 +1,3 @@
-open-xchange-appsuite (7.4.2-10) stable; urgency=low
-
-  * First candidate for 7.4.2 spreadsheet release
-
- -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 26 Feb 2014 11:01:43 +0100
-
 open-xchange-appsuite (7.4.2-9) stable; urgency=low
 
   * Build for patch 2014-02-24
