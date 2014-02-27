@@ -186,31 +186,40 @@ define('io.ox/mail/main',
         // threadview is based on a 500 (default) mail limit
         // in order to view all mails in a folder we offer a link
         options.tail = function (all) {
-            var threadSort = this.prop('sort') === 'thread',
+            var isThread = this.prop('sort') === 'thread',
+                useLimit = this.prop('limit') || isThread,
                 inAllMode = this.getMode() === 'all',
                 isUnreadOnly = this.prop('unread'),
-                hideTail = !threadSort || !inAllMode || isUnreadOnly,
+                hideTail = !useLimit || !inAllMode || isUnreadOnly,
                 count = 0;
             // hide?
             if (hideTail) return $();
             // complex count
             count = _(all).reduce(function (sum, obj) {
-                return sum + obj.thread.length;
+                return sum + (obj.thread ? obj.thread.length : 1);
             }, 0);
-            if (count < this.option('max')) return $();
+            if (this.prop('limit') && count < this.prop('limit')) return $();
+            if (isThread && count < this.option('max')) return $();
             // show tail
             return $('<div class="vgrid-cell tail">').append(
-                $('<a href="#" tabindex="-1">').text(gt('Show all mails. Note: Mails are no longer grouped by conversation.'))
+                $('<a href="#" tabindex="-1">').text(
+                    isThread ?
+                        gt('Show all mails. Note: Mails are no longer grouped by conversation.') :
+                        gt('Show all mails.')
+                )
             );
         };
 
         grid = new VGrid(left, options);
         commons.addPropertyCaching(grid, {props: ['sort', 'order'], keyprop: 'folder'});
 
+        var LIMIT = settings.get('gridLimit', 0);
+        grid.prop('limit', LIMIT);
+
         // tail click
         left.on('click', '.vgrid-cell.tail', function (e) {
             e.preventDefault();
-            grid.prop('sort', '610').refresh();
+            grid.prop('limit', 0).prop('sort', 610).refresh();
         });
 
         // add template
@@ -222,12 +231,12 @@ define('io.ox/mail/main',
             canDeletePermission = undefined;
             // remove delete button
             removeButton();
+            // reset limit
+            grid.prop('limit', LIMIT);
             // reset "unread only"
             grid.prop('unread', false);
             // template changes for unified mail
-
             var unified = account.parseAccountId(folder, true) === 0 ? false : folderAPI.is('unifiedfolder', folder);
-
             if (unified !== tmpl.unified) {
                 tmpl.unified = unified;
                 grid.updateTemplates();
@@ -496,6 +505,9 @@ define('io.ox/mail/main',
             options.sort = adjustSort(options.sort, options.folder);
             this.prop('sort', options.sort);
             call = options.sort === 'thread' ? 'getAllThreads' : 'getAll';
+
+            // limit?
+            if (this.prop('limit')) options.limit = '0,' + this.prop('limit');
 
             return api[call](options, 'auto').then(function (response) {
                 var data = response.data || response;
