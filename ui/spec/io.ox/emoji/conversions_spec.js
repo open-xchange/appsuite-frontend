@@ -116,6 +116,10 @@ define([
                     var text = 'softbank: \ue04a; shift_jis: \uf98b; unified: \u2600';
                     expect(this.convert(text)).toBe('softbank: \u2600; shift_jis: \u2600; unified: \u2600');
                 });
+
+                it('should not fail with undefined parameter', function () {
+                    expect(this.convert()).toBe('');
+                });
             });
             // everything else should be tested by emoji lib
         });
