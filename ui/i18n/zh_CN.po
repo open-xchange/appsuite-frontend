@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-19 01:32+1000\n"
+"PO-Revision-Date: 2014-02-21 08:30+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: en_US\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js:76
@@ -65,7 +65,7 @@ msgstr "任务"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "盘"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -1322,8 +1322,8 @@ msgstr "没有定义规则"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "保存附件在磁盘中"
-msgstr[1] "保存附件在磁盘中"
+msgstr[0] "保存附件到 Drive"
+msgstr[1] "保存附件到 Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1538,7 +1538,7 @@ msgstr "下载"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "保存到磁盘"
+msgstr "保存到 Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
@@ -2107,7 +2107,7 @@ msgstr "全屏幕"
 #: apps/io.ox/files/guidance/main.js:90
 msgctxt "help"
 msgid "The Drive App"
-msgstr "磁盘应用程序"
+msgstr "Drive 应用程序"
 
 #: apps/io.ox/files/guidance/main.js:91
 msgctxt "help"
@@ -2127,7 +2127,7 @@ msgstr "以 WebDAV 访问文件"
 #: apps/io.ox/files/guidance/main.js:94
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "磁盘设置"
+msgstr "Drive 设置"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132
 #: apps/io.ox/files/guidance/main.js:186
@@ -5014,7 +5014,7 @@ msgid ""
 "the updates from within the updater."
 msgstr ""
 "更新器提供简易安装向导，请按照指示安装应用。更新器会告诉您任何微软 Outlook、"
-"通知器、磁盘的更新，您可以在更新器里下载更新。"
+"Notifier、Drive 的更新，您可以在更新器里下载更新。"
 
 #: apps/io.ox/core/settings/downloads/pane.js:64
 #: apps/io.ox/core/settings/downloads/pane.js:72

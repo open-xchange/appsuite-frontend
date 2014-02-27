@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-18 15:01-0700\n"
-"Last-Translator: Timothy Friesen <timothy.friesen@gmail.com>\n"
+"PO-Revision-Date: 2014-02-19 10:53-0700\n"
+"Last-Translator: \n"
 "Language-Team: British English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
@@ -1336,8 +1336,8 @@ msgstr "There is no rule defined"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Saving attachment to drive"
-msgstr[1] "Saving attachments to drive"
+msgstr[0] "Saving attachment to Drive"
+msgstr[1] "Saving attachments to Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1554,7 +1554,7 @@ msgstr "Download"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Save to drive"
+msgstr "Save to Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"

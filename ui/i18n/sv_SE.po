@@ -1333,8 +1333,8 @@ msgstr "Ingen regel har definierats."
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Spara bilaga till enhet"
-msgstr[1] "Spara bilagor till enhet"
+msgstr[0] "Spara bilaga till Drive"
+msgstr[1] "Spara bilagor till Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1550,7 +1550,7 @@ msgstr "Ladda ner"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Spara till enhet"
+msgstr "Spara till Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"

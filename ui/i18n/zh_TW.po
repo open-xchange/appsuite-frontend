@@ -3,15 +3,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-15 16:41+0800\n"
+"PO-Revision-Date: 2014-02-21 14:29+0800\n"
 "Last-Translator: \n"
-"Language-Team: American English <kde-i18n-de@kde.org>\n"
-"Language: en_US\n"
+"Language-Team: \n"
+"Language: zh_Hant_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #. Placeholder in furigana field
 #: apps/l10n/ja_JP/io.ox/register.js:76
@@ -65,7 +65,7 @@ msgstr "任務"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "雲端硬碟"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -1322,8 +1322,8 @@ msgstr "沒有定義規則"
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "將附件保存在雲端硬碟中"
-msgstr[1] "將附件保存在資訊存儲"
+msgstr[0] "將附件保存到 Drive"
+msgstr[1] "將附件保存到 Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1538,7 +1538,7 @@ msgstr "下載"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "儲存至雲端硬碟"
+msgstr "儲存至 Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
@@ -2107,7 +2107,7 @@ msgstr "全螢幕"
 #: apps/io.ox/files/guidance/main.js:90
 msgctxt "help"
 msgid "The Drive App"
-msgstr "雲端硬碟應用程式"
+msgstr "Drive 應用程式"
 
 #: apps/io.ox/files/guidance/main.js:91
 msgctxt "help"
@@ -2127,7 +2127,7 @@ msgstr "使用 WebDAV 存取檔案"
 #: apps/io.ox/files/guidance/main.js:94
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "雲端硬碟設定"
+msgstr "Drive 設定"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:132
 #: apps/io.ox/files/guidance/main.js:186
@@ -5015,8 +5015,8 @@ msgid ""
 "the updates from within the updater."
 msgstr ""
 "更新器提供簡單的安裝精靈。請依照指示安裝應用程式，更新器將會在有  Connector "
-"for Microsoft Outlook、通知器與雲端硬碟的更新時通知您。您可以在更新器內下載更"
-"新。"
+"for Microsoft Outlook、Notifier 與 Drive 的更新時通知您。您可以在更新器內下載"
+"更新。"
 
 #: apps/io.ox/core/settings/downloads/pane.js:64
 #: apps/io.ox/core/settings/downloads/pane.js:72
@@ -5784,7 +5784,7 @@ msgstr "資訊區域"
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened on the right side."
-msgstr "有新通知，例如約會邀請十，資訊區域將會開啟於右邊。"
+msgstr "有新通知，例如約會邀請時，資訊區域將會開啟於右邊。"
 
 #: apps/io.ox/tours/main.js:100
 msgid "Creating new items"
@@ -7677,7 +7677,7 @@ msgstr "按 [Enter] 以跳至 Facebook 串流。"
 
 #: apps/plugins/portal/facebook/register.js:390
 msgid "Liked a link: %s"
-msgstr "對連結說讚：%s"
+msgstr "對連結說讚: %s"
 
 #~ msgid "Document"
 #~ msgstr "文檔"
