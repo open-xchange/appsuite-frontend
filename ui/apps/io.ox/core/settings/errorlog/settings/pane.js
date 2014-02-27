@@ -15,9 +15,10 @@ define('io.ox/core/settings/errorlog/settings/pane',
     ['io.ox/core/extensions',
      'io.ox/core/http',
      'io.ox/core/date',
+     'settings!io.ox/core',
      'gettext!io.ox/core',
      'apps/3rd.party/Chart.js/Chart.js'
-    ], function (ext, http, date, gt) {
+    ], function (ext, http, date, settings, gt) {
 
     'use strict';
 
@@ -87,9 +88,13 @@ define('io.ox/core/settings/errorlog/settings/pane',
             this.$el.empty();
 
             this.renderSummary();
-            this.renderStatistics();
-            this.renderChart();
-            this.updateStatistics();
+
+            if (settings.get('ping/enabled', false)) {
+                this.renderStatistics();
+                this.renderChart();
+                this.updateStatistics();
+            }
+
             this.renderTabs();
             this.collection.each(this.renderError, this);
 

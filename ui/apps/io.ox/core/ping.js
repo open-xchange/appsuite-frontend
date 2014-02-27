@@ -18,7 +18,7 @@ define('io.ox/core/ping',
 
     'use strict';
 
-    var enabled = settings.get('ping/enabled', true),
+    var enabled = settings.get('ping/enabled', false),
         interval = settings.get('ping/interval', 30),
         mode = 'none',
         intervalHandle = null;
