@@ -39,7 +39,12 @@ define('io.ox/core/folder/imap-subscription',
                     rootFolderId: '1',
                     checkbox: true,
                     all: true,
-                    storage: storage
+                    storage: storage,
+                    filter: function (folder) {
+                        // also allow top-level mailfolders
+                        // top-level folder of external accounts don’t have imap-subscribe capability :\
+                        return (/^default\d+(\W|$)$/i).test(folder.id) || api.can('imap-subscribe', folder);
+                    }
                 });
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {

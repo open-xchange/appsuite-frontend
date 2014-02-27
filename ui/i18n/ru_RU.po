@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-20 16:01+0000\n"
+"PO-Revision-Date: 2014-02-21 09:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
@@ -66,7 +66,7 @@ msgstr "Задачи"
 #: apps/io.ox/launchpad/main.js:35
 msgctxt "app"
 msgid "Drive"
-msgstr "Диск"
+msgstr "Drive"
 
 #: apps/io.ox/core/main.js:169 apps/io.ox/launchpad/main.js:36
 msgctxt "app"
@@ -1335,9 +1335,9 @@ msgstr "Нет правил."
 #: apps/io.ox/mail/actions/attachmentSave.js:29
 msgid "Saving attachment to drive"
 msgid_plural "Saving attachments to drive"
-msgstr[0] "Загрузка вложения на диск"
-msgstr[1] "Загрузка вложений на диск"
-msgstr[2] "Загрузка вложений на диск"
+msgstr[0] "Сохранение вложения в Drive"
+msgstr[1] "Сохранение вложений в Drive"
+msgstr[2] "Сохранение вложений в Drive"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:41
 msgid "Attachment has been saved"
@@ -1554,7 +1554,7 @@ msgstr "Загрузить"
 #: apps/io.ox/mail/actions.js:1138 apps/io.ox/mail/actions.js:1140
 #: apps/io.ox/tasks/actions.js:612
 msgid "Save to drive"
-msgstr "Сохранить на диск"
+msgstr "Сохранить в Drive"
 
 #: apps/io.ox/mail/actions.js:1147
 msgid "Send new mail"
@@ -2198,8 +2198,7 @@ msgid ""
 "These statistics only include folders, which have a depth less than four in "
 "the folder structure from the folder \"%1$s\"."
 msgstr ""
-"Эта статистика включает папки с глубиной не более 4, "
-"начиная с папки «%1$s»."
+"Эта статистика включает папки с глубиной не более 4, начиная с папки «%1$s»."
 
 #: apps/io.ox/files/guidance/statistics.js:323
 msgid "Top 10 file types"
@@ -3258,8 +3257,8 @@ msgid ""
 msgstr ""
 "Из соображений безопасности пароли всех учетных записей зашифрованы с "
 "помощью пароля основной учетной записи. При изменении этого пароля другие "
-"учетные записи станут недоступны. Для их восстановления "
-"используйте старый пароль:"
+"учетные записи станут недоступны. Для их восстановления используйте старый "
+"пароль:"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js:28
 #: apps/io.ox/settings/accounts/settings/pane.js:106
@@ -3488,8 +3487,8 @@ msgid ""
 "to the start time, hold the mouse button, and <b>drag the mouse</b> to the "
 "end time."
 msgstr ""
-"Выберите свободную секцию. Наведите курсор на время начала, "
-"нажмите кнопку мыши и  <b>перетащите курсор </b> на время окончания."
+"Выберите свободную секцию. Наведите курсор на время начала, нажмите кнопку "
+"мыши и  <b>перетащите курсор </b> на время окончания."
 
 #: apps/io.ox/calendar/freebusy/templates.js:97
 msgid ""
@@ -4653,8 +4652,8 @@ msgid ""
 "the external content. Changes you have made inside appsuite will be "
 "overwritten"
 msgstr ""
-"Примечание. Обновление подписки заменит содержимое календаря. "
-"Существующие настройки будут переопределены."
+"Примечание. Обновление подписки заменит содержимое календаря. Существующие "
+"настройки будут переопределены."
 
 #: apps/io.ox/core/main.js:637 apps/io.ox/core/pubsub/settings/pane.js:198
 msgid "Refresh"
@@ -5038,8 +5037,8 @@ msgid ""
 "The settings for collecting contacts in this folder will become disabled "
 "when you enter the application the next time."
 msgstr ""
-"Параметры сбора контактов в этой папке будут отключены при следующем "
-"запуске приложения."
+"Параметры сбора контактов в этой папке будут отключены при следующем запуске "
+"приложения."
 
 #: apps/io.ox/core/api/folder.js:648
 msgid ""
