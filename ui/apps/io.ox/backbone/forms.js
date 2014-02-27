@@ -169,12 +169,13 @@ define('io.ox/backbone/forms',
     function SelectControlGroup(options) {
         _.extend(this, new ControlGroup(options), {
             buildElement: function () {
-                var self = this;
+                var self = this,
+                    guid = _.uniqueId('form-control-label-');
                 if (this.nodes.element) {
                     return this.nodes.element;
                 }
-
-                this.nodes.element = $('<select tabindex="1">').addClass('form-control');
+                this.nodes.label.attr('for', guid);
+                this.nodes.element = $('<select>').attr({ tabindex: options.tabindex || 1, id: guid}).addClass('form-control');
                 _(this.selectOptions).each(function (label, value) {
                     self.nodes.element.append(
                         $('<option>', {value: value}).text(label)

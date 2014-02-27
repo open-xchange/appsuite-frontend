@@ -117,7 +117,7 @@ define('io.ox/calendar/settings/pane',
                     $('<legend>').addClass('sectiontitle').text(gt('Time')),
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('row').append(
-                            $('<label>').attr('for', 'interval').addClass('control-label col-sm-3').text(gt('Time scale in minutes')),
+                            $('<label>').attr('for', 'interval').addClass('control-label col-sm-4').text(gt('Time scale in minutes')),
                             $('<div>').addClass('col-sm-4').append(
                                 new mini.SelectView({ list: optionsInterval, name: 'interval', model: model, id: 'interval', className: 'form-control' }).render().$el
                             )
@@ -125,7 +125,7 @@ define('io.ox/calendar/settings/pane',
                     ),
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('row').append(
-                            $('<label>').attr('for', 'startTime').addClass('control-label col-sm-3').text(gt('Start of working time')),
+                            $('<label>').attr('for', 'startTime').addClass('control-label col-sm-4').text(gt('Start of working time')),
                             $('<div>').addClass('col-sm-4').append(
                                 new mini.SelectView({ list: optionsTime(), name: 'startTime', model: model, id: 'startTime', className: 'form-control' }).render().$el
                             )
@@ -133,7 +133,7 @@ define('io.ox/calendar/settings/pane',
                     ),
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('row').append(
-                            $('<label>').attr('for', 'endTime').addClass('control-label col-sm-3').text(gt('End of working time')),
+                            $('<label>').attr('for', 'endTime').addClass('control-label col-sm-4').text(gt('End of working time')),
                             $('<div>').addClass('col-sm-4').append(
                                 new mini.SelectView({ list: optionsTime(), name: 'endTime', model: model, id: 'endTime', className: 'form-control' }).render().$el
                             )
@@ -176,7 +176,7 @@ define('io.ox/calendar/settings/pane',
                     $('<legend>').addClass('sectiontitle expertmode').text(gt('New appointment')),
                     $('<div>').addClass('form-group expertmode').append(
                         $('<div>').addClass('row').append(
-                            $('<label>').attr('for', 'defaultReminder').addClass('control-label col-sm-3').text(gt('Default reminder')),
+                            $('<label>').attr('for', 'defaultReminder').addClass('control-label col-sm-4').text(gt('Default reminder')),
                             $('<div>').addClass('col-sm-4').append(
                                 new mini.SelectView({ list: optionsReminder, name: 'defaultReminder', model: model, id: 'defaultReminder', className: 'form-control' }).render().$el
                             )
