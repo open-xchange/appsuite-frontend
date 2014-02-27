@@ -61,7 +61,11 @@ define('io.ox/mail/write/main',
         minute: 60000, //60s
         minutes: 60000
     },
-        autoSavedMail = false;
+        autoSavedMail = false,
+        convertAllToUnified = emoji.converterFor({
+            from: 'all',
+            to: 'unified'
+        });
 
     function stopAutoSave(app) {
         if (app.autosave) {
@@ -690,7 +694,7 @@ define('io.ox/mail/write/main',
             var data = mail.data;
 
             this.setFrom(data);
-            this.setSubject(data.subject);
+            this.setSubject(convertAllToUnified(data.subject));
             this.setTo(data.to);
             this.setCC(data.cc);
             this.setBCC(data.bcc);
@@ -727,6 +731,8 @@ define('io.ox/mail/write/main',
                 if (editorMode === 'html') {
                     content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
                 }
+                // convert different emoji encodings to unified
+                content = convertAllToUnified(content);
                 if (mail.replaceBody !== 'no') {
                     app[mail.initial ? 'setBody' : 'setRawBody'](content);
                 }
