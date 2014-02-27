@@ -17,8 +17,11 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
 
     var emoji,
         convert = function (text) {
-            text = emoji.softbankToUnified(text);
-            text = emoji.jisToUnified(text);
+            var allToUnified = emoji.converterFor({
+                from: 'all',
+                to: 'unified'
+            });
+            text = allToUnified(text);
             text = emoji.unifiedToImageTag(text, {
                 forceEmojiIcons: settings.get('forceEmojiIcons', false)
             });
