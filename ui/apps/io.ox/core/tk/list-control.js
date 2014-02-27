@@ -19,6 +19,34 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
 
         className: 'abs list-view-control',
 
+        events: {
+            'mousedown .resizebar': 'onResize'
+        },
+
+        onResize: function (e) {
+            e.preventDefault();
+            var left = this.$el.parent(),
+                right = left.siblings('.rightside'),
+                base = e.pageX - left.width(),
+                limitX = $(document).width() - 250;
+            $(document).on({
+                'mousemove.resize': function (e) {
+                    var width = Math.max(250, Math.min(e.pageX, limitX) - base);
+                    left.css('width', width);
+                    right.css('left', width);
+                },
+                'mouseup.resize': function () {
+                    $(this).off('mousemove.resize mouseup.resize');
+                }
+            });
+        },
+
+        resizable: function () {
+            // ignore touch devicess
+            if (_.device('touch')) return;
+            this.$el.append('<div class="resizebar">');
+        },
+
         initialize: function (options) {
             this.listView = options.listView;
             this.id = options.id || 'default';

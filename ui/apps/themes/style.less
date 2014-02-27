@@ -1276,6 +1276,8 @@ a.button {
 /* List View */
 .list-view-control {
 
+    background-color: #fff;
+
     .top-toolbar() {
         top: 0;
         border-bottom: 1px solid mix(@textColor, @background, 200%/15);
@@ -1371,6 +1373,19 @@ a.button {
     .list-view {
         height: auto;
         z-index: 1;
+    }
+
+    .resizebar {
+        background: transparent;
+        width: 5px;
+        height: 100%;
+        position: relative;
+        z-index: 10000;
+        float: right;
+        cursor: e-resize;
+        cursor: ew-resize;
+        cursor: col-resize;
+        right: -3px;
     }
 }
 
