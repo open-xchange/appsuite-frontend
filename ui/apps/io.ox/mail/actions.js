@@ -68,6 +68,7 @@ define('io.ox/mail/actions',
         requires: 'toplevel some delete',
         multiple: function (list) {
 
+            var all = list.slice();
             list = folderAPI.ignoreSentItems(list);
 
             var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
@@ -96,8 +97,7 @@ define('io.ox/mail/actions',
                         });
                 });
             } else {
-                api.remove(list).done(function () {
-                }).fail(function (e) {
+                api.remove(list, all).fail(function (e) {
                     // mail quota exceeded?
                     if (e.code === 'MSG-0039') {
                         require(['io.ox/core/tk/dialogs'], function (dialogs) {

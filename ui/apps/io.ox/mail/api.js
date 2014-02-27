@@ -481,25 +481,23 @@ define('io.ox/mail/api',
      * @param  {object} options [see api factory]
      * @return {deferred} resolves as array
      */
-    api.remove = function (ids, options) {
+    api.remove = function (ids, all) {
 
         var collection = pool.get('detail');
 
-        console.log('remove', ids);
-        api.trigger('beforedelete', ids);
+        // we need the original list of ids "all" to also catch threads
+        // that start with an email from the sent folder
+        api.trigger('beforedelete', all);
 
-        _(ids).each(function (item) {
+        _(all).each(function (item) {
             var cid = _.cid(item), model = collection.get(cid);
             if (model) collection.remove(model);
         });
 
-        return remove(ids, options).then(
-            function success(list) {
-                //update unread counter and folder item counter
-                folderAPI.reload(ids);
-                return list;
-            }
-        );
+        return remove(ids).done(function () {
+            // update unread counter and folder item counter
+            folderAPI.reload(ids);
+        });
     };
 
     /**
@@ -917,6 +915,7 @@ define('io.ox/mail/api',
         var collection = pool.get('detail');
 
         api.trigger('beforedelete', list);
+
         _(list).each(function (item) {
             var cid = _.cid(item), model = collection.get(cid);
             if (model) collection.remove(model);

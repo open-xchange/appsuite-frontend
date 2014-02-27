@@ -255,8 +255,23 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         onKeydown: function (e) {
 
+            // [enter] > action
             if (e.which === 13) return this.triggerAction(e);
 
+            // [Ctrl|Cmd + A] > select all
+            if ((e.which === 97 || e.which === 65) && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                return this.selectAll();
+            }
+
+            // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
+            if (e.which === 8 || e.which === 46) {
+                e.preventDefault();
+                this.view.trigger('selection:delete', this.get());
+                return;
+            }
+
+            // check for cursor keys; otherwise we're done here
             if (e.which !== 40 && e.which !== 38) return;
 
             var items = this.getItems(),
@@ -320,11 +335,9 @@ define('io.ox/core/tk/list-selection', [], function () {
         onTapRemove: function (e) {
             e.preventDefault();
             var node = $(e.currentTarget).closest(SELECTABLE),
-                cid = node.attr('data-cid'),
-                model = this.view.collection.get(cid);
-            // mockup solution; would not directly remove
-            // this should be done by the API
-            if (model) this.view.collection.remove(model);
+                cid = node.attr('data-cid');
+            // propagate event
+            this.view.trigger('selection:delete', [cid]);
         }
     });
 

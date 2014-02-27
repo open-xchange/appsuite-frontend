@@ -149,6 +149,12 @@ define('io.ox/mail/common-extensions',
             );
         },
 
+        // a11y: set title attribute on outer list item
+        title: function (baton) {
+            var subject = util.getSubject(baton.data);
+            this.closest('.list-item').attr('title', subject);
+        },
+
         recipients: (function () {
 
             // var drawAllDropDown = function (node, label, data) {

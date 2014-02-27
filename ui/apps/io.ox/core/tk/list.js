@@ -41,7 +41,7 @@ define('io.ox/core/tk/list',
         // see http://blog.paciellogroup.com/2010/04/html5-and-the-myth-of-wai-aria-redundance/
         scaffold: $(
             '<li class="list-item selectable" tabindex="-1" role="option" aria-selected="false">' +
-            '<div class="list-item-checkmark"><i class="icon-checkmark"/></div>' +
+            '<div class="list-item-checkmark"><i class="icon-checkmark" aria-hidden="true"/></div>' +
             '<div class="list-item-content"></div>' +
             '</li>'
         ),
