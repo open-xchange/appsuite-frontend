@@ -6,7 +6,8 @@ module.exports = function (grunt) {
 
         options: {
             interrupt: true,
-            spawn: true
+            spawn: true,
+            debounceDelay: 1500
         },
         manifests: {
             files: 'apps/**/manifest.json',
