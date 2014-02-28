@@ -545,6 +545,23 @@ $(window).load(function () {
                     return $.when();
                 }
 
+                // greedy prefetch - we usually need this
+                var params = {
+                    action: 'threadedAll',
+                    folder: 'default0/INBOX',
+                    columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                    sort: '610',
+                    order: 'desc',
+                    includeSent: true,
+                    max: 300,
+                    timezone: 'utc',
+                    limit: '0,30'
+                };
+                http.GET({ module: 'mail', params: params })
+                .done(function (data) {
+                    ox.rampup['mail/' + $.param(params)] = data;
+                });
+
                 debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
                 return manifests.manager.loadPluginsFor('core').always(gettext.enable);
             }

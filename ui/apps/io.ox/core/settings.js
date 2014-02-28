@@ -195,6 +195,7 @@ define('io.ox/core/settings',
                 // cache hit
                 tree = data.tree;
                 meta = data.meta;
+                saved = JSON.parse(JSON.stringify(tree));
                 return $.Deferred().resolve({ tree: tree, meta: meta });
             }
             else if (ox.online) {
@@ -257,7 +258,8 @@ define('io.ox/core/settings',
                 save = _.throttle(sendRequest, 5000); // limit to 5 seconds
 
             return function (custom, options) {
-                //options
+
+                // options
                 var opt = $.extend({
                     force: false
                 }, options);

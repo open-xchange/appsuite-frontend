@@ -611,13 +611,13 @@ define('io.ox/core/main',
             index: 100,
             draw: function () {
                 var self = this;
-                // we don't need this right from the start,
-                // so let's delay this for responsiveness
                 if (ox.online) {
-                    _.defer(function () {
+                    // we don't need this right from the start,
+                    // so let's delay this for responsiveness!
+                    setTimeout(function () {
                         self.prepend(notifications.attach(addLauncher));
                         tabManager();
-                    });
+                    }, 2000);
                 }
             }
         });
@@ -1016,26 +1016,26 @@ define('io.ox/core/main',
             }
         });
 
-        new Stage('io.ox/core/stages', {
-            id: 'update-tasks',
-            index: 200,
-            run: function () {
+        // new Stage('io.ox/core/stages', {
+        //     id: 'update-tasks',
+        //     index: 200,
+        //     run: function () {
 
-                debug('core: Stage "update-tasks"');
+        //         debug('core: Stage "update-tasks"');
 
-                require(['io.ox/core/updates/updater']).then(
-                    function success(updater) {
-                        // this is not mission-critical so continue if anything fails
-                        return updater.runUpdates().always(function () {
-                            return $.when();
-                        });
-                    },
-                    function fail() {
-                        return $.when();
-                    }
-                );
-            }
-        });
+        //         require(['io.ox/core/updates/updater']).then(
+        //             function success(updater) {
+        //                 // this is not mission-critical so continue if anything fails
+        //                 return updater.runUpdates().always(function () {
+        //                     return $.when();
+        //                 });
+        //             },
+        //             function fail() {
+        //                 return $.when();
+        //             }
+        //         );
+        //     }
+        // });
 
         // TODO (mattes): Solve this differently.
         // new Stage('io.ox/core/stages', {

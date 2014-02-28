@@ -693,7 +693,8 @@ define('io.ox/core/commons-folderview',
             tmpVisible = false,
             top = 0,
             onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
-            fnHide, fnShow, fnResize, fnShowSml, fnHideSml, initResize, restoreWidth, makeResizable,
+            fnHide, fnShow, fnResize, fnShowSml, fnHideSml, initResize,
+            applyInitialWidth, restoreWidth, makeResizable,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
@@ -745,6 +746,13 @@ define('io.ox/core/commons-folderview',
         }());
 
         restoreWidth = $.noop;
+
+        applyInitialWidth = function () {
+            var width = app.settings.get('folderview/width/' + _.display(), 250);
+            var nodes = app.getWindow().nodes;
+            nodes.body.css('left', width + 'px');
+            nodes.sidepanel.css('width', width + 'px');
+        };
 
         makeResizable = function () {
 
@@ -1074,6 +1082,7 @@ define('io.ox/core/commons-folderview',
         });
 
         if (options.visible === true) {
+            applyInitialWidth();
             toggleTree();
             app.getWindow().on('open', initResize);
         }

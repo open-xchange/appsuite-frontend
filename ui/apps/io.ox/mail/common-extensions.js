@@ -22,8 +22,7 @@ define('io.ox/mail/common-extensions',
      'io.ox/contacts/api',
      'io.ox/core/api/collection-pool',
      'io.ox/core/tk/flag-picker',
-     'gettext!io.ox/mail',
-     'apps/io.ox/core/tk/jquery.lazyload.js'
+     'gettext!io.ox/mail'
     ], function (ext, links, actions, util, api, account, date, contactsAPI, Pool, flagPicker, gt) {
 
     'use strict';

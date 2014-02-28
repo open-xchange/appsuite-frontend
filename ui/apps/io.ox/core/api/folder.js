@@ -161,6 +161,11 @@ define('io.ox/core/api/folder',
         return true;
     };
 
+    // use ramp-up data
+    if (ox.rampup && ox.rampup.rootFolder) {
+        folderCache.add(1, ox.rampup.rootFolder);
+    }
+
     var api = {
 
         get: function (options) {
