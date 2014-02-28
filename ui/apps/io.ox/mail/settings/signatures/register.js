@@ -251,8 +251,8 @@ define('io.ox/mail/settings/signatures/register',
         id: 'signatures',
         index: 300,
         draw: function () {
-            var $node = this;
-            var $list, signatures;
+            var $node, $list, signatures;
+            this.append($node = $('<fieldset>'));
             function fnDrawAll() {
                 snippets.getAll('signature').done(function (sigs) {
                     signatures = {};
@@ -355,16 +355,16 @@ define('io.ox/mail/settings/signatures/register',
                 var section;
 
                 $node.append(
-                    section = $('<div class="sectioncontent">').append(
-                        $('<button type="button" class="btn btn-primary">').text(gt('Add new signature')).on('click', fnEditSignature)
+                    section = $('<div class="sectioncontent btn-toolbar">').append(
+                        $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Add new signature')).on('click', fnEditSignature)
                     )
                 );
 
                 require(['io.ox/core/config'], function (config) {
                     if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
                         section.append(
-                            $('<br>'),
-                            $('<a href="#">').text(gt('Import signatures')).on('click', function (e) {
+
+                            $('<button type="button" class="btn btn-primary" tabindex="1">').text(gt('Import signatures')).on('click', function (e) {
                                 fnImportSignatures(e, config.get('gui.mail.signatures'));
                                 return false;
                             })
