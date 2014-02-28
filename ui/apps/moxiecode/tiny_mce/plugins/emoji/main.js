@@ -373,6 +373,7 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                     text = self.jisToUnified(text);
                     return text;
                 };
+            }
             return;
         },
 
