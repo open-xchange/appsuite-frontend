@@ -158,10 +158,16 @@ define('io.ox/files/views/create',
                 id: 'comment',
                 index: 300,
                 draw: function () {
+                    var guid = _.uniqueId('form-control-label-');
                     this.append(
                         $('<div class"form-group">').append(
-                            $('<label>').text(gt('Description')),
-                            $('<textarea name="description" rows="4" class="form-control" tabindex="1"></textarea>')
+                            $('<label>').text(gt('Description')).attr('for', guid),
+                            $('<textarea class="form-control"></textarea>').attr({
+                                tabindex: 1,
+                                rows: 4,
+                                name: 'description',
+                                id: guid
+                            })
                         )
                     );
                 }
