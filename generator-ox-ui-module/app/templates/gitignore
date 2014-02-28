@@ -4,6 +4,7 @@
 *.swp
 *.kate-swp
 /build
+/dist
 /tmp
 /debian/files
 /debian/*/

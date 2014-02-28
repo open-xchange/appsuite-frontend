@@ -2,7 +2,7 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('uglify', {
+    grunt.config.extend('uglify', {
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
