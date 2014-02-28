@@ -74,6 +74,11 @@ define('io.ox/core/api/user',
         }
     });
 
+    // use rampup data
+    if (ox.rampup.user && ox.rampup.user.id === ox.user_id) {
+        api.caches.add(ox.rampup.user);
+    }
+
     /**
      * update user attributes
      * @param  {object} o (o.data contains key/values of changed attributes)
