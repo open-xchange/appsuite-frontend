@@ -205,7 +205,7 @@ define('io.ox/mail/main',
                 $('<a href="#" tabindex="-1">').text(
                     isThread ?
                         gt('Show all mails. Note: Mails are no longer grouped by conversation.') :
-                        gt('Show all mails.')
+                        settings.get('gridLimitLabel') || gt('Show all mails.')
                 )
             );
         };
