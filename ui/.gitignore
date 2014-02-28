@@ -6,6 +6,7 @@
 /debian/open-xchange-appsuite*/
 /debian/open-xchange-appsuite*.debhelper.log
 /debian/open-xchange-appsuite*.substvars
+/.externalToolBuilders/Grunt*
 local.conf*
 !local.conf.default.json
 /apps/plugins/playground
