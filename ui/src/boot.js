@@ -494,76 +494,22 @@ $(window).load(function () {
             manifests.reset();
         }
 
-        function setFallbackConfig() {
-            var webmail = {  path: 'io.ox/mail/main', requires: 'webmail', title: 'Mail' };
-            updateServerConfig({
-                buildDate: '',
-                contact: '',
-                copyright: '',
-                capabilities: [{ attributes: {}, backendSupport: false, id: 'webmail' }],
-                forgotPassword: false,
-                languages: {},
-                manifests: [webmail],
-                pageHeader: '',
-                pageHeaderPrefix: '',
-                pageTitle: '',
-                productName: '',
-                productNameMail: '',
-                serverVersion: '',
-                version: ''
-            });
-        }
-
-        function getCachedServerConfig(configCache, cacheKey, useFallback, def) {
-            if (!configCache || !cacheKey) {
-                setFallbackConfig();
-                def.resolve();
-                return;
-            }
-            configCache.get(cacheKey).done(function (co) {
-                if (co !== null) {
-                    updateServerConfig(co.data);
-                    def.resolve();
-                } else if (useFallback) {
-                    setFallbackConfig();
-                    def.resolve();
-                } else {
-                    def.reject();
-                }
-            });
-        }
-
-        var configCache,
-            HOUR = 60000 * 60;
-
         function fetchServerConfig(cacheKey) {
-            var def = $.Deferred();
-            if (ox.online) {
-                // check cache
-                configCache.get(cacheKey).done(function (co) {
-                    if (co !== null && co.timestamp > (_.now() - HOUR * 12)) {
-                        updateServerConfig(co.data);
-                        def.resolve();
-                    }
-                    // fetch fresh manifests
-                    http.GET({
-                        module: 'apps/manifests',
-                        params: { action: 'config' },
-                        appendSession: (cacheKey === 'userconfig')
-                    })
-                    .done(function (data) {
-                        configCache.add(cacheKey, { data: data, timestamp: _.now() });
-                        updateServerConfig(data);
-                        def.resolve();
-                    })
-                    .fail(function () {
-                        getCachedServerConfig(configCache, cacheKey, false, def);
-                    });
-                });
-            } else {
-                getCachedServerConfig(configCache, cacheKey, true, def);
+            var haveSession = (cacheKey === 'userconfig'), data;
+            // try rampup data
+            if (haveSession && (data = ox.rampup.serverConfig)) {
+                updateServerConfig(data);
+                return $.Deferred().resolve(data);
             }
-            return def;
+            // fetch fresh manifests
+            return http.GET({
+                module: 'apps/manifests',
+                params: { action: 'config' },
+                appendSession: haveSession
+            })
+            .done(function (data) {
+                updateServerConfig(data);
+            });
         }
 
         function fetchUserSpecificServerConfig() {
@@ -663,8 +609,6 @@ $(window).load(function () {
                     ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
                     _.url.redirect(ref ? ref : '#');
 
-                    configCache = new cache.SimpleCache('manifests', true);
-
                     // fetch user config
                     ox.secretCookie = hash.secretCookie === 'true';
                     fetchUserSpecificServerConfig().done(function () {
@@ -717,7 +661,6 @@ $(window).load(function () {
             } else if (hash.autologin === 'false') {
 
                 // needed for show-stopping errors like broken settings
-                configCache = new cache.SimpleCache('manifests', true);
                 continueWithoutAutoLogin();
 
             } else if (!ox.online) {
@@ -731,12 +674,7 @@ $(window).load(function () {
                 debug('boot.js: autoLogin > session.autoLogin()');
 
                 // try auto login!?
-                session.autoLogin()
-                .always(function () {
-                    // init manifest cache now (have ox.user now)
-                    configCache = new cache.SimpleCache('manifests', true);
-                })
-                .then(
+                session.autoLogin().then(
                     function loginSuccess(data) {
                         // now we're sure the server is up
                         serverUp();
