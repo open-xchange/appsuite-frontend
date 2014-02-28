@@ -172,13 +172,13 @@ define('io.ox/mail/detail/links',
             if (baton.isHTML && regMailComplex.test(text)) {
                 node.replaceWith(
                     $('<div>')
-                    .html(text.replace(regMailComplexReplace, '<a href="mailto:$6">$2$3</a>'))
+                    .html(text.replace(regMailComplexReplace, '<a href="mailto:$6" target="_blank">$2$3</a>'))
                     .contents()
                 );
             } else {
                 node.replaceWith(
                     $('<div>')
-                    .html(text.replace(regMailReplace, '<a href="mailto:$1">$1</a>'))
+                    .html(text.replace(regMailReplace, '<a href="mailto:$1" target="_blank">$1</a>'))
                     .contents()
                 );
             }

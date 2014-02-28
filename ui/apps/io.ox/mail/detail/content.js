@@ -109,7 +109,7 @@ define('io.ox/mail/detail/content',
                 if (/<br\/?>/.test(args[0])) return args[0];
                 // ignore if display name is again mail address
                 if (/@/.test(args[2])) return args[0];
-                return '<a href="mailto:' + args[6] + '">' + args[2] + (args[3] || '') + '</a>';
+                return '<a href="mailto:' + args[6] + '" target="_blank">' + args[2] + (args[3] || '') + '</a>';
             });
 
         // split source to safely ignore tags
@@ -382,10 +382,12 @@ define('io.ox/mail/detail/content',
             // for support for very large mails we do the following stuff manually,
             // otherwise jQuery explodes with "Maximum call stack size exceeded"
             _(this.get(0).getElementsByTagName('A')).each(function (node) {
-                var link = $(node).filter('[href^="mailto:"]').on('click', mailTo),
+                var link = $(node)
+                        .filter('[href^="mailto:"]')
+                        .on('click', mailTo)
+                        .attr('target', '_blank'), // to be safe
                     text = link.text();
-
-                //trim text if it contains mailto:...
+                // trim text if it contains mailto:...
                 if (text.search(/^mailto:/) > -1) {
                     text = text.substring(7);//cut of mailto
                     text = text.split(/\?/, 2)[0];//cut of additional parameters

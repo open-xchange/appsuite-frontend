@@ -383,46 +383,47 @@ define('io.ox/core/api/account',
         });
     };
 
-    var rampup = true, cache = {};
+    api.cache = {};
+
+    if (ox.rampup && ox.rampup.accounts) {
+        _(ox.rampup.accounts).each(function (data) {
+            var account = process(http.makeObject(data, 'account'));
+            api.cache[account.id] = account;
+        });
+    }
 
     /**
      * get all accounts
      * @return {deferred} returns array of account object
      */
-    api.all = function (options) {
+    api.all = function () {
 
         function load() {
-            // try rampup data / don't do this on refresh, so use local "rampup" flag
-            if (rampup && ox.rampup && ox.rampup.accounts) {
-                rampup = false;
-                return $.Deferred().resolve(
-                    _(ox.rampup.accounts).map(function (data) {
-                        return http.makeObject(data, 'account');
-                    })
-                );
-            }
-            else if (_(cache).size() > 0) {
-                return $.Deferred().resolve(
-                    _(cache).values()
-                );
-            }
-            else {
+            if (_(api.cache).size() > 0) {
+                // cache hit
+                return $.Deferred().resolve(_(api.cache).values());
+            } else {
+                // cache miss
                 return http.GET({
                     module: 'account',
                     params: { action: 'all' },
                     appendColumns: true,
                     processResponse: true
+                })
+                .then(function (data) {
+                    // process and add to cache
+                    data = process(data);
+                    api.cache = {};
+                    _(data).each(function (account) {
+                        api.cache[account.id] = process(account);
+                    });
+                    return data;
                 });
             }
         }
 
-        options = options || {};
+        return load().done(function (list) {
 
-        return load().then(function (list) {
-
-            process(list);
-
-            cache = {};
             idHash = {};
             typeHash = {};
 
@@ -435,10 +436,7 @@ define('io.ox/core/api/account',
                 _('sent drafts trash spam'.split(' ')).each(function (type) {
                     typeHash[account[type + '_fullname']] = type;
                 });
-                // add to cache
-                cache[account.id] = account;
             });
-            return list;
         });
     };
 
@@ -451,11 +449,11 @@ define('io.ox/core/api/account',
 
         var getter = function () {
             return api.all().then(function () {
-                return cache[id];
+                return api.cache[id];
             });
         };
 
-        return cache[id] ? $.Deferred.resolve(cache[id]) : getter();
+        return api.cache[id] ? $.Deferred().resolve(api.cache[id]) : getter();
     };
 
     /**
@@ -473,7 +471,7 @@ define('io.ox/core/api/account',
         })
         .then(function (data) {
             // reload all accounts
-            cache = {};
+            api.cache = {};
             return api.all().then(function () {
                 api.trigger('create:account', { id: data.id, email: data.primary_address, name: data.name });
                 require(['io.ox/core/api/folder'], function (api) {
@@ -501,7 +499,7 @@ define('io.ox/core/api/account',
         })
         .done(function () {
             // remove from local cache
-            delete cache[data.id];
+            delete api.cache[data.id];
             api.trigger('refresh.all');
             api.trigger('delete');
             require(['io.ox/core/api/folder'], function (api) {
@@ -559,9 +557,9 @@ define('io.ox/core/api/account',
             var id = result.id;
 
             // detect changes
-            if (cache[id]) {
+            if (api.cache[id]) {
                 var enabled = result.unified_inbox_enabled;
-                if (cache[id].unified_inbox_enabled !== enabled) {
+                if (api.cache[id].unified_inbox_enabled !== enabled) {
                     require(['io.ox/core/api/folder'], function (api) {
                         api.propagate(enabled ? 'account:unified-enable' : 'account:unified-disable');
                     });
@@ -583,7 +581,7 @@ define('io.ox/core/api/account',
 
             return reload().done(function (result) {
                 // update call returned the new account (this is the case for mail)
-                cache[id] = result;
+                api.cache[id] = result;
             })
             .done(function (result) {
                 api.trigger('refresh.all');
@@ -607,8 +605,6 @@ define('io.ox/core/api/account',
             }
         });
     };
-
-    api.cache = cache;
 
     /**
      * jslob testapi
@@ -673,7 +669,7 @@ define('io.ox/core/api/account',
      * @return {promise}
      */
     api.refresh = function () {
-        cache = {};
+        api.cache = {};
         api.trigger('refresh.all');
     };
 

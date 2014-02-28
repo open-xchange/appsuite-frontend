@@ -22,7 +22,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
         return f;
     }
 
-    describe('The ListView', function () {
+    xdescribe('The ListView', function () {
 
         beforeEach(function () {
 

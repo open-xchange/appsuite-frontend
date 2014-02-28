@@ -68,14 +68,14 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
 
             it('injects index property', function () {
                 var data = [{ a: 10 }];
-                this.loader.addIndex(0, data);
+                this.loader.addIndex(0, {}, data);
                 expect(data).toEqual([{ a: 10, index: 0 }]);
             });
 
             it('calls each()', function () {
                 var data = [{ a: 10 }];
                 this.loader.each = function (obj) { obj.test = true; };
-                this.loader.addIndex(0, data);
+                this.loader.addIndex(0, {}, data);
                 expect(data).toEqual([{ a: 10, index: 0, test: true }]);
             });
         });

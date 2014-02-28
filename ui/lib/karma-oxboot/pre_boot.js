@@ -29,6 +29,7 @@ window.ox = {
     loginLocation: 'signin',
     logoutLocation: 'signin',
     online: true,
+    rampup: {},
     revision: '1',
     root: root,
     secretCookie: false, // auto-login

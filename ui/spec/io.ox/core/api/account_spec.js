@@ -108,20 +108,18 @@ define(['shared/examples/for/api',
             var done = new Done();
             waitsFor(done, 'set data');
 
-            api.cache.clear()
-                .then(api.cache.keys)
-                .then(function (keys) {
-                    expect(keys.length).toBe(0);
-                    // now add custom data
-                    return $.when(
-                        api.cache.add(account0)
-                    );
-                })
-                .then(api.all)
-                .done(function (accounts) {
-                    done.yep();
+            // clear
+            api.cache = {};
+            expect(_(api.cache).size()).toBe(0);
+            // now add custom data
+            api.cache[account0.id] = account0;
+            // get all -- NO CLUE why we need that wait; without wait() the server is not yet up
+            _.wait(1).then(function () {
+                api.all().done(function (accounts) {
                     expect(accounts.length).toBe(1);
+                    done.yep();
                 });
+            });
         });
 
         it('returns proper account data', function () {
@@ -205,12 +203,9 @@ define(['shared/examples/for/api',
 
             // clear "personal" first
             account0.personal = '';
+            api.cache[account0.id] = account0;
 
-            $.when(
-                api.getDefaultDisplayName(),
-                api.cache.add(account0)
-            )
-            .done(function (name) {
+            api.getDefaultDisplayName().done(function (name) {
                 api.getPrimaryAddress(0).done(function (address) {
                     done.yep();
                     expect(address).toEqual([name, 'otto.xentner@open-xchange.com']);
@@ -225,17 +220,16 @@ define(['shared/examples/for/api',
 
             // add some addresses. with some falsy white-space and upper-case
             account0.addresses = ' otto.xentner@open-xchange.com ,ALL@open-xchange.com, alias@open-xchange.com,another.alias@open-xchange.com ';
+            api.cache[0] = account0;
 
-            api.cache.add(account0).done(function () {
-                api.getSenderAddresses(0).done(function (addresses) {
-                    done.yep();
-                    expect(addresses).toEqual([
-                        ['Otto Xentner', 'alias@open-xchange.com'],
-                        ['Otto Xentner', 'all@open-xchange.com'],
-                        ['Otto Xentner', 'another.alias@open-xchange.com'],
-                        ['Otto Xentner', 'otto.xentner@open-xchange.com']
-                    ]);
-                });
+            api.getSenderAddresses(0).done(function (addresses) {
+                done.yep();
+                expect(addresses).toEqual([
+                    ['Otto Xentner', 'alias@open-xchange.com'],
+                    ['Otto Xentner', 'all@open-xchange.com'],
+                    ['Otto Xentner', 'another.alias@open-xchange.com'],
+                    ['Otto Xentner', 'otto.xentner@open-xchange.com']
+                ]);
             });
         });
 
@@ -245,27 +239,27 @@ define(['shared/examples/for/api',
             waitsFor(done, 'all sender addresses');
 
             // add second account
-            var account1 = _.extend(account0, {
+            var account1 = _.extend({}, account0, {
                 addresses: ' test@gmail.com,   FOO@gmail.com, yeah@gmail.com',
                 id: 1,
                 personal: 'Test',
                 primary_address: 'FOO@gmail.com'
             });
 
-            api.cache.add(account1).done(function () {
-                api.getAllSenderAddresses().done(function (addresses) {
-                    var expected = [
-                        ['Otto Xentner', 'alias@open-xchange.com'],
-                        ['Otto Xentner', 'all@open-xchange.com'],
-                        ['Otto Xentner', 'another.alias@open-xchange.com'],
-                        ['Otto Xentner', 'otto.xentner@open-xchange.com'],
-                        ['Test', 'foo@gmail.com'],
-                        ['Test', 'test@gmail.com'],
-                        ['Test', 'yeah@gmail.com']
-                    ];
-                    expect(addresses).toEqual(expected);
-                    done.yep();
-                });
+            api.cache[1] = account1;
+
+            api.getAllSenderAddresses().done(function (addresses) {
+                var expected = [
+                    ['Otto Xentner', 'alias@open-xchange.com'],
+                    ['Otto Xentner', 'all@open-xchange.com'],
+                    ['Otto Xentner', 'another.alias@open-xchange.com'],
+                    ['Otto Xentner', 'otto.xentner@open-xchange.com'],
+                    ['Test', 'foo@gmail.com'],
+                    ['Test', 'test@gmail.com'],
+                    ['Test', 'yeah@gmail.com']
+                ];
+                expect(addresses).toEqual(expected);
+                done.yep();
             });
         });
 
@@ -377,12 +371,11 @@ define(['shared/examples/for/api',
             var done = new Done(), self = this;
             waitsFor(done, 'reset data');
 
-            api.cache.clear()
-            .then(function () {
-                return require(['settings!io.ox/mail']).then(function (settings) {
-                    self.after(function () {
-                        settings.set('defaultSendAddress');
-                    });
+            api.cache = {};
+
+            require(['settings!io.ox/mail']).then(function (settings) {
+                self.after(function () {
+                    settings.set('defaultSendAddress');
                 });
             })
             .then(function () {

@@ -426,13 +426,14 @@ define('io.ox/mail/api',
         remove = api.remove,
         search = api.search;
 
-    api.get = function (options) {
+    api.get = function (obj, options) {
 
-        var cid = _.cid(options), model = pool.get('detail').get(cid);
+        var cid = _.isObject(obj) ? _.cid(obj) : obj,
+            model = pool.get('detail').get(cid);
 
         if (model && model.get('attachments')) return $.when(model.toJSON());
 
-        return get.call(api, options, false).done(function (data) {
+        return get.call(api, obj, options && options.cache).done(function (data) {
             pool.add('detail', data);
         });
     };

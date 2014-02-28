@@ -88,6 +88,7 @@ define('io.ox/core/desktop',
                          .always(def.resolve);
             } else {
                 upsell.trigger({ type: 'app', id: id, missing: upsell.missing(requires) });
+                return $.when();
             }
         },
 
