@@ -69,6 +69,7 @@ define('io.ox/core/session',
             .then(
                 function (data) {
                     ox.secretCookie = true;
+                    ox.rampup = data.rampUp || ox.rampup || {};
                     return data;
                 },
                 function (data) {
@@ -156,6 +157,8 @@ define('io.ox/core/session',
                             }
                         })
                         .done(function (data) {
+                            // copy rampup data
+                            ox.rampup = data.rampUp || ox.rampup || {};
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
                             set(data, forceLanguage);

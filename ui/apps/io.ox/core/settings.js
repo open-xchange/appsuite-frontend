@@ -13,9 +13,8 @@
 
 define('io.ox/core/settings',
     ['io.ox/core/http',
-     'io.ox/core/cache',
      'io.ox/core/event'
-    ], function (http, cache, Event) {
+    ], function (http, Event) {
 
     'use strict';
 
@@ -49,8 +48,7 @@ define('io.ox/core/settings',
         return clone(tmp);
     };
 
-    var settingsCache,      // once cache for all
-        pending = {};       // pending requests?
+    var pending = {};       // pending requests?
 
     var Settings = function (path, tree, meta) {
 
@@ -159,7 +157,9 @@ define('io.ox/core/settings',
 
         this.load = function () {
 
-            var load = function () {
+            var data;
+
+            function load() {
                 return http.PUT({
                     module: 'jslob',
                     params: { action: 'list' },
@@ -187,41 +187,37 @@ define('io.ox/core/settings',
                 )
                 .then(function () {
                     self.trigger('load', tree, meta);
-                    var data = { tree: tree, meta: meta };
-                    return settingsCache.add(path, data).pipe(function () { return data; });
-                });
-            };
-
-            return settingsCache.get(path).pipe(function (data) {
-                if (data !== null) {
-                    tree = data.tree;
-                    meta = data.meta;
-                    if (ox.online) load(); // read-through caching
-                    return data;
-                } else if (ox.online) {
-                    return load();
-                } else { // offline
-                    self.detach();
                     return { tree: tree, meta: meta };
-                }
-            });
+                });
+            }
+
+            if (ox.rampup.jslobs && (data = ox.rampup.jslobs[path])) {
+                // cache hit
+                tree = data.tree;
+                meta = data.meta;
+                return $.Deferred().resolve({ tree: tree, meta: meta });
+            }
+            else if (ox.online) {
+                // online
+                return load();
+            }
+            else {
+                // offline
+                self.detach();
+                return { tree: tree, meta: meta };
+            }
         };
 
         this.clear = function () {
-            return settingsCache.remove(path).pipe(function () {
-                return http.PUT({
-                    module: 'jslob',
-                    params: {
-                        action: 'set',
-                        id: path
-                    },
-                    data: {}
-                })
-                .done(function () {
-                    tree = {};
-                    meta = {};
-                    self.trigger('reset');
-                });
+            return http.PUT({
+                module: 'jslob',
+                params: { action: 'set', id: path },
+                data: {}
+            })
+            .done(function () {
+                tree = {};
+                meta = {};
+                self.trigger('reset');
             });
         };
 
@@ -234,7 +230,7 @@ define('io.ox/core/settings',
         };
 
         /**
-         * Save settings to cache and backend.
+         * Save settings to backend.
          *
          * You can use the request object to find out whether the save
          * attempt was successful.
@@ -270,7 +266,6 @@ define('io.ox/core/settings',
                 if (detached || (!custom && _.isEqual(saved, tree))) return $.when();
 
                 var data = { tree: custom || tree, meta: meta };
-                settingsCache.add(path, data);
                 pending[path] = this;
                 if (opt.force) {
                     sendRequest(data.tree);
@@ -305,90 +300,35 @@ define('io.ox/core/settings',
                 });
             }
 
-            //yell on reject
+            // yell on reject
             return def.fail(function (e) {
-                        require(['io.ox/core/notifications'], function (notifications) {
-                            var obj = e || { type: 'error' };
-                            //use obj.message for custom error message
-                            notifications.yell(obj);
-                        });
-                    });
+                require(['io.ox/core/notifications'], function (notifications) {
+                    var obj = e || { type: 'error' };
+                    //use obj.message for custom error message
+                    notifications.yell(obj);
+                });
+            });
         };
 
         Event.extend(this);
     };
 
-    var list = 'io.ox/core io.ox/core/updates io.ox/core/settingOptions io.ox/mail io.ox/mail/emoji io.ox/contacts io.ox/calendar io.ox/tasks io.ox/files'.split(' '), promise;
-
-    function preload(path) {
-        if (!promise) {
-            promise = http.PUT({
-                module: 'jslob',
-                params: { action: 'list' },
-                data: list
-            })
-            .then(function (data) {
-                var hash = {};
-                _(data).each(function (jslob) {
-                    hash[jslob.id] = { tree: jslob.tree, meta: jslob.meta };
-                });
-                return hash;
-            });
-        }
-        return promise.then(function (hash) {
-            return require([path + '/settings/defaults']).then(
-               function defaultsSuccess(defaults) {
-                    if (hash[path] && hash[path].tree) {
-                        hash[path].tree = _.extend(defaults, hash[path].tree || {});
-                    }
-                    return hash[path] || { tree: {}, meta: {} };
-                },
-                function defaultsFail() {
-                    console.warn('Could not load defaults for', path);
-                    return $.Deferred().resolve(
-                        hash[path] || { tree: {}, meta: {} }
-                    );
-                }
-            );
-        });
-    }
-
     return {
         load: function (name, req, load) {
-            // init cache?
-            if (!settingsCache) {
-                settingsCache = new cache.SimpleCache('settings', true);
-            }
-            // bulk load?
-            if (_(list).contains(name)) {
-                preload(name).then(
-                    function preloadSuccess(data) {
-                        var settings = new Settings(name, data.tree, data.meta);
-                        load(settings);
-                    },
-                    function preloadFail(e) {
-                        // hard fail
-                        alert('Severe error: Failed to load important user settings. Please check your connection and retry.');
-                        localStorage.setItem('errormsg', e.error);//message to display on loginpage
-                        location.href = 'signin#autologin=false';
+            var settings = new Settings(name);
+            settings.load().then(
+                function loadSuccess() {
+                    load(settings);
+                },
+                function loadFail() {
+                    try {
+                        load.error({});
+                    } catch (e) {
+                        console.error(e.message);
                     }
-                );
-            } else {
-                var settings = new Settings(name);
-                settings.load().then(
-                    function loadSuccess() {
-                        load(settings);
-                    },
-                    function loadFail() {
-                        try {
-                            load.error({});
-                        } catch (e) {
-                            console.error(e.message);
-                        }
-                        requirejs.undef('settings!' + name);
-                    }
-                );
-            }
+                    requirejs.undef('settings!' + name);
+                }
+            );
         }
     };
 });
