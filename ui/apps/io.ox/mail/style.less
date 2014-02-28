@@ -220,6 +220,18 @@
     section.attachments:empty { display: none; }
 }
 
+.mail-reader {
+    background-color: #eee;
+    .overflow();
+    .thread-view-control {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .thread-view-control, .thread-view-list {
+        position: static;
+    }
+}
+
 /* ListView */
 
 .list-view.mail {

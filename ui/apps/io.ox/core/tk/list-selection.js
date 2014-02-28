@@ -35,6 +35,10 @@ define('io.ox/core/tk/list-selection', [], function () {
             .on(Modernizr.touch ? 'tap' : 'click', SELECTABLE, function (e) {
                 if (!self.isMultiple(e)) self.triggerAction(e);
             })
+            // double clikc
+            .on('dblclick', SELECTABLE, function (e) {
+                self.triggerDouble(e);
+            })
             // avoid context menu
             .on('contextmenu', function (e) { e.preventDefault(); });
 
@@ -111,6 +115,11 @@ define('io.ox/core/tk/list-selection', [], function () {
         triggerAction: function (e) {
             var cid = $(e.currentTarget).attr('data-cid');
             this.view.trigger('selection:action', [cid]);
+        },
+
+        triggerDouble: function (e) {
+            var cid = $(e.currentTarget).attr('data-cid');
+            this.view.trigger('selection:doubleclick', [cid]);
         },
 
         triggerChange: function () {

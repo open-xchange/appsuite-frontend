@@ -281,12 +281,7 @@ define('io.ox/core/desktop',
          * ext.point('<app-name>/mediator'').extend({ ... });
          */
         mediator: function (obj) {
-            // get extension point
-            var point = ext.point(this.getName() + '/mediator'), index = 0;
-            // loop over key/value object
-            _(obj).each(function (fn, id) {
-                point.extend({ id: id, index: (index += 100), setup: fn });
-            });
+            ox.ui.App.mediator(this.getName(), obj);
         },
 
         /*
@@ -380,11 +375,11 @@ define('io.ox/core/desktop',
                 if (isDisabled) {
                     deferred = $.Deferred().reject();
                 } else {
-                    options = options || {};
+                    this.options = options || {};
                     if (name) {
-                        ext.point(name + '/main').invoke('launch', this, options);
+                        ext.point(name + '/main').invoke('launch', this, this.options);
                     }
-                    deferred = this.get('launch').call(this, options) || $.when();
+                    deferred = this.get('launch').call(this, this.options) || $.when();
                 }
                 deferred.then(
                     function success() {
@@ -491,6 +486,19 @@ define('io.ox/core/desktop',
 
     // static methods
     _.extend(ox.ui.App, {
+
+        /**
+         * Add mediator extensions
+         * ext.point('<app-name>/mediator'').extend({ ... });
+         */
+        mediator: function (name, obj) {
+            // get extension point
+            var point = ext.point(name + '/mediator'), index = 0;
+            // loop over key/value object
+            _(obj).each(function (fn, id) {
+                point.extend({ id: id, index: (index += 100), setup: fn });
+            });
+        },
 
         canRestore: function () {
             // use get instead of contains since it might exist as empty list

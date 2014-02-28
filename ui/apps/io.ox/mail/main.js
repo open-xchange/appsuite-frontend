@@ -905,6 +905,18 @@ define('io.ox/mail/main',
                 defaults: data,
                 settings: settings
             });
+        },
+
+        /*
+         * Add support for selection:
+         */
+        'selection-doubleclick': function (app) {
+            // reader does not make sense on small devices
+            // they already see emails in full screen
+            if (_.device('small')) return;
+            app.listView.on('selection:doubleclick', function (list) {
+                ox.launch('io.ox/mail/reader/main', { cid: list[0] });
+            });
         }
 
         app.on('folder:change', function () {
