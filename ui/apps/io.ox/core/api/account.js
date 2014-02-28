@@ -535,7 +535,7 @@ define('io.ox/core/api/account',
      * @return {deferred} returns best available mail server settings (may be incomplete or empty)
      */
     api.autoconfig = function (data) {
-        return http.GET({
+        return http.POST({
             module: 'autoconfig',
             params: {
                 action: 'get',
