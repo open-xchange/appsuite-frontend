@@ -193,7 +193,7 @@
                 .append(
                     o.dismissable ? $('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">').html('&times;') : $(),
                     o.title ? $('<h4 class="alert-heading">').text(o.title) : $(),
-                    o.text ? $('<p>').text(o.text) : $()
+                    o.message ? $('<p>').text(o.message) : $()
                 );
     };
 
