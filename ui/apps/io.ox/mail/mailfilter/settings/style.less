@@ -13,8 +13,9 @@
 
     .action.dropup.open { position:relative; }
 
-    .action.dropdown.value.mark-as {
-        margin-right: 15px;
+    a.dropdown-toggle {
+        padding-top: 5px;
+        display: inline-block;
     }
 
     a.newcondition, a.newaction {
@@ -24,7 +25,7 @@
     }
 
     a.folderselect {
-        margin: 0 10px;
+        padding-top: 5px;
         float: left;
     }
 
@@ -46,16 +47,27 @@
         margin: 0 0 7px 0;
         text-align: left;
 
-        .widget-controls {
-            label {
-                margin-right:1em;
-            }
+        .singleline {
+            line-height: 30px;
         }
 
-        .inline-input {
-            display: inline-block;
-            width: 247px;
+        .doubleline {
+            line-height: 63px;
         }
+
+        .center {
+            text-align: center;
+        }
+
+        .rightalign {
+            text-align: right;
+
+            .dropdown-menu {
+                text-align: left;
+            }
+
+        }
+
     }
 
     li.filter-settings-view.warning {
@@ -73,6 +85,7 @@
     }
 
     .flag-dropdown ul {
+        text-align: left;
         font: 14px/20 @normal-font-family;
         right: -2px;
         left: auto;

@@ -19,7 +19,9 @@ define('io.ox/mail/mailfilter/settings/filter',
      'io.ox/settings/util',
      'io.ox/mail/mailfilter/settings/filter/view-form',
      'gettext!io.ox/mail',
-     'io.ox/mail/mailfilter/settings/filter/defaults'
+     'io.ox/mail/mailfilter/settings/filter/defaults',
+     'apps/3rd.party/jquery-ui.min.js'
+
     ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt, DEFAULTS) {
 
     'use strict';
@@ -127,7 +129,7 @@ define('io.ox/mail/mailfilter/settings/filter',
 
             $(this).append(
                 $('<a>').addClass('action').text(gt('Edit')).attr({
-                    type: 'button',
+                    href: '#',
                     role: 'button',
                     'data-action': flag === 'vacation' ? 'edit-vacation' : 'edit',
                     tabindex: 1,

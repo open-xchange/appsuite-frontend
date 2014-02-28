@@ -23,8 +23,8 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
         drawInputfieldTestSecond: function (activeValue, label) {
             var inputid = _.uniqueId('change-text-test-second');
             return [
-                $('<label>').attr('for', inputid).text(label = label ? label : ''),
-                $('<div>').addClass('first-label inline-input ').append(
+                $('<label>').addClass('col-md-3 control-label').attr('for', inputid).text(label = label ? label : ''),
+                $('<div>').addClass('first-label inline-input col-md-9').append(
                     $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-test-second', 'tabindex': '1'}).val(activeValue)
                 )
             ];
