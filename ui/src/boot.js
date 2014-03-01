@@ -273,9 +273,30 @@ $(window).load(function () {
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
             require(['settings!io.ox/core'], function (settings) {
-                var theme = _.url.hash('theme') || settings.get('theme') || 'default';
-                debug('boot.js: loadCore > load config ...');
 
+                // greedy prefetch for mail app
+                // need to get this request out as soon as possible
+                if (settings.get('autoStart') === 'io.ox/mail/main') {
+                    var params = {
+                        action: 'threadedAll',
+                        folder: 'default0/INBOX',
+                        columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                        sort: '610',
+                        order: 'desc',
+                        includeSent: true,
+                        max: 300,
+                        timezone: 'utc',
+                        limit: '0,30'
+                    };
+                    http.GET({ module: 'mail', params: params }).done(function (data) {
+                        // the collection loader will check ox.rampup for this data
+                        ox.rampup['mail/' + $.param(params)] = data;
+                    });
+                }
+
+                var theme = _.url.hash('theme') || settings.get('theme') || 'default';
+
+                debug('boot.js: loadCore > load config ...');
                 debug('boot.js: loadCore > require "main" & set theme', theme);
 
                 var def1 = require(['io.ox/core/main']),
@@ -544,23 +565,6 @@ $(window).load(function () {
                     gettext.enable();
                     return $.when();
                 }
-
-                // greedy prefetch - we usually need this
-                var params = {
-                    action: 'threadedAll',
-                    folder: 'default0/INBOX',
-                    columns: '102,600,601,602,603,604,605,607,610,611,614,652',
-                    sort: '610',
-                    order: 'desc',
-                    includeSent: true,
-                    max: 300,
-                    timezone: 'utc',
-                    limit: '0,30'
-                };
-                http.GET({ module: 'mail', params: params })
-                .done(function (data) {
-                    ox.rampup['mail/' + $.param(params)] = data;
-                });
 
                 debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
                 return manifests.manager.loadPluginsFor('core').always(gettext.enable);

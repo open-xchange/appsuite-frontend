@@ -817,11 +817,7 @@ define('io.ox/core/commons-folderview',
 
         fnResize = function () {
             var nodes = app.getWindow().nodes;
-            if ($(document).width() > 700) {
-                nodes.body.css('left', '50px');
-            } else {
-                nodes.body.css('left', '0px');
-            }
+            nodes.body.css('left', $(document).width() > 700 ? '50px' : '0px');
         };
 
         fnHide = function () {
@@ -839,7 +835,6 @@ define('io.ox/core/commons-folderview',
         fnShow = function (resized) {
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
             var nodes = app.getWindow().nodes;
-            fnResize();
             nodes.sidepanel.addClass('visible');
             restoreWidth();
             if (!resized) {
