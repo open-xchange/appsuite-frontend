@@ -343,9 +343,8 @@ define('io.ox/core/tk/selection',
             var key = self.serialize(id);
             selectedItems[key] = id;
             var $node = (node || getNode(key));
-            if (options.tabFix !== false) {
-                $node.focus();
-            }
+            // set focus?
+            if (container.has(document.activeElement).length && options.tabFix !== false) $node.focus();
             return $node
                 .addClass(self.classSelected)
                 .attr({
