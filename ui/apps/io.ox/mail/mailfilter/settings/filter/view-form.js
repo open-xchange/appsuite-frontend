@@ -256,14 +256,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 var node = $(e.target),
                     value = node.attr('data-value') ? node.attr('data-value') : node.parent().attr('data-value'),
                     link = node.closest('.action').find('a.dropdown-toggle'),
-
                     list = link.closest('li'),
+                    label =  list.find('label.sr-only'),
+                    testTitle = list.find('.list-title').text(),
                     type = list.attr('data-type'),
                     testID = list.attr('data-test-id'),
 
                     testArray =  this.model.get('test'),
                     translatedValue = type === 'size' ? sizeValues[value] : containsValues[value];
 
+                label.text(testTitle + ' ' + value);
                 link.text(translatedValue);
 
                 if (checkForMultipleTests(this.el).length > 1) {
@@ -281,14 +283,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 var node = $(e.target),
                     value = node.attr('data-value') ? node.attr('data-value') : node.parent().attr('data-value'),
                     link = node.closest('.action').find('a.dropdown-toggle'),
-
                     list = link.closest('li'),
                     actionID = list.attr('data-action-id'),
                     actionsArray =  this.model.get('actioncmds'),
                     translatedValue = flagValues[value];
 
                 link.text(translatedValue);
-
                 actionsArray[actionID].flags = [value];
                 this.model.set('actioncmds', actionsArray);
 
@@ -344,9 +344,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                 var node = $(e.target),
                     value = node.val(),
                     list = node.closest('li'),
+                    label =  list.find('label.sr-only'),
+                    actionTitle = list.find('.list-title').text(),
                     type = list.attr('data-type'),
                     actionID = list.attr('data-action-id'),
                     actionArray =  this.model.get('actioncmds');
+
+                label.text(actionTitle);
 
                 if (type === 'flags') {
 
@@ -452,13 +456,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             $('<div>').addClass('col-md-6 singleline').append(
                                 $('<span>').addClass('list-title').text(headerTranslation[test.id])
                             ),
-                            $('<div>').addClass('col-md-5 widget-controls').append(
+                            $('<div>').addClass('col-md-5').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-md-6').append(
                                         elements.drawOptions(test.comparison, sizeValues)
                                     ),
-                                    $('<div class="inline-input col-md-6">').append(
-                                        elements.drawInputfieldTest(test.size)
+                                    $('<div class="col-md-6">').append(
+                                        elements.drawInputfieldTest(test.comparison, test.size)
                                     )
                                 )
                             ),
@@ -484,7 +488,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                 $('<div>').addClass('col-md-6 doubleline').append(
                                     $('<span>').addClass('list-title').text(name)
                                 ),
-                                $('<div>').addClass('col-md-5 widget-controls').append(
+                                $('<div>').addClass('col-md-5').append(
                                     $('<div>').addClass('row').append(
                                         elements.drawInputfieldTestSecond(test.headers[0], gt('Name'))
                                     ),
@@ -492,8 +496,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                         $('<div>').addClass('col-md-3').append(
                                             elements.drawOptions(test.comparison, containsValues)
                                         ),
-                                        $('<div class="inline-input col-md-9">').append(
-                                            elements.drawInputfieldTest(test.values[0])
+                                        $('<div class="col-md-9">').append(
+                                            elements.drawInputfieldTest(name + ' ' + test.comparison, test.values[0])
                                         )
                                     )
                                 ),
@@ -508,13 +512,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                 $('<div>').addClass('col-md-6 singleline').append(
                                     $('<span>').addClass('list-title').text(name)
                                 ),
-                                $('<div>').addClass('col-md-5 widget-controls').append(
+                                $('<div>').addClass('col-md-5').append(
                                     $('<div>').addClass('row').append(
                                         $('<div>').addClass('col-md-3').append(
                                             elements.drawOptions(test.comparison, containsValues)
                                         ),
-                                        $('<div class="inline-input col-md-9">').append(
-                                            elements.drawInputfieldTest(test.values[0])
+                                        $('<div class="col-md-9">').append(
+                                            elements.drawInputfieldTest(name + ' ' + test.comparison, test.values[0])
                                         )
                                     )
                                 ),
@@ -532,13 +536,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                             $('<div>').addClass('col-md-6 singleline').append(
                                 $('<span>').addClass('list-title').text(headerTranslation[test.id])
                             ),
-                            $('<div>').addClass(' col-md-5 widget-controls').append(
+                            $('<div>').addClass(' col-md-5').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-md-3').append(
                                         elements.drawOptions(test.comparison, containsValues)
                                     ),
-                                    $('<div class="inline-input col-md-9">').append(
-                                        elements.drawInputfieldTest(test.values[0])
+                                    $('<div class="col-md-9">').append(
+                                        elements.drawInputfieldTest(headerTranslation[test.id] + ' ' + test.comparison, test.values[0])
                                     )
                                 )
                             ),
@@ -559,10 +563,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                 $('<div>').addClass('col-md-6 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
                                 ),
-                                $('<div>').addClass('col-md-5 widget-controls').append(
+                                $('<div>').addClass('col-md-5').append(
                                     $('<div>').addClass('row').append(
                                         $('<div>').addClass('col-md-12').append(
-                                            elements.drawInputfieldAction(action.to)
+                                            elements.drawInputfieldAction(actionsTranslations[action.id], action.to)
                                         )
                                     )
                                 ),
@@ -579,13 +583,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                 $('<div>').addClass('col-md-4 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
                                 ),
-                                $('<div>').addClass(' col-md-7 widget-controls').append(
+                                $('<div>').addClass(' col-md-7').append(
                                     $('<div>').addClass('row').append(
                                         $('<div>').addClass('col-md-4').append(
                                             elements.drawFolderSelect()
                                         ),
-                                        $('<div class="inline-input col-md-8">').append(
-                                            elements.drawDisabledInputfield(prepareFolderForDisplay(action.into))
+                                        $('<div class="col-md-8">').append(
+                                            elements.drawDisabledInputfield(actionsTranslations[action.id], prepareFolderForDisplay(action.into))
                                         )
                                     )
                                 ),
@@ -601,10 +605,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                 $('<div>').addClass('col-md-6 singleline').append(
                                     $('<span>').addClass('list-title').text(actionsTranslations[action.id])
                                 ),
-                                $('<div>').addClass('col-md-5 widget-controls').append(
+                                $('<div>').addClass('col-md-5').append(
                                     $('<div>').addClass('row').append(
                                         $('<div>').addClass('col-md-12').append(
-                                            elements.drawInputfieldAction(action.text)
+                                            elements.drawInputfieldAction(actionsTranslations[action.id], action.text)
                                         )
                                     )
                                 ),
@@ -621,7 +625,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                         $('<span>').addClass('list-title').text(actionsTranslations.markmail)
                                     ),
 
-                                    $('<div>').addClass('col-md-5 widget-controls').append(
+                                    $('<div>').addClass('col-md-5').append(
                                         $('<div>').addClass('row').append(
                                             $('<div>').addClass('col-md-3 col-md-offset-9 rightalign').append(
                                                 elements.drawOptionsActions(action.flags[0], flagValues, 'mark-as')
@@ -639,7 +643,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                         $('<span>').addClass('list-title').text(actionsTranslations.flag)
                                     ),
 
-                                    $('<div>').addClass('col-md-5 widget-controls').append(
+                                    $('<div>').addClass('col-md-5').append(
                                         $('<div>').addClass('row').append(
                                             $('<div>').addClass('col-md-3 col-md-offset-9 rightalign').append(
                                                 elements.drawColorDropdown(action.flags[0], COLORS, COLORFLAGS)
@@ -656,10 +660,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
                                     $('<div>').addClass('col-md-6 singleline').append(
                                         $('<span>').addClass('list-title').text(actionsTranslations.tag)
                                     ),
-                                    $('<div>').addClass('col-md-5 widget-controls').append(
+                                    $('<div>').addClass('col-md-5').append(
                                         $('<div>').addClass('row').append(
                                             $('<div>').addClass('col-md-12').append(
-                                                elements.drawInputfieldAction(action.flags[0].replace(/^\$+/, ''))
+                                                elements.drawInputfieldAction(actionsTranslations.tag, action.flags[0].replace(/^\$+/, ''))
                                             )
                                         )
                                     ),
@@ -716,7 +720,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         index: 100,
         fluid: true,
         label: gt('Rule name'),
-        control: '<input type="text" class="form-control" name="rulename" tabindex="1">',
+        control: '<input type="text" class="form-control" id="rulename" name="rulename" tabindex="1">',
         attribute: 'rulename'
     }));
 

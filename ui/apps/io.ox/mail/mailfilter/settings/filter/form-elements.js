@@ -16,8 +16,9 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
     'use strict';
 
     return {
-        drawInputfieldTest: function (activeValue) {
-            return $('<input class="form-control">').attr({ type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'}).val(activeValue);
+        drawInputfieldTest: function (labeltext, activeValue) {
+            var inputid = _.uniqueId('change-text-test-first');
+            return [$('<label>').attr('for', inputid).addClass('sr-only').text(labeltext), $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'}).val(activeValue)];
         },
 
         drawInputfieldTestSecond: function (activeValue, label) {
@@ -30,12 +31,14 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             ];
         },
 
-        drawInputfieldAction: function (activeValue) {
-            return $('<input class="form-control">').attr({ type: 'text', 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
+        drawInputfieldAction: function (labeltext, activeValue) {
+            var inputid = _.uniqueId('change-text-action');
+            return [$('<label>').attr('for', inputid).addClass('sr-only').text(labeltext), $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue)];
         },
 
-        drawDisabledInputfield: function (activeValue) {
-            return $('<input class="form-control">').attr({ type: 'text', disabled: 'disabled', title: activeValue, 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue);
+        drawDisabledInputfield: function (labeltext, activeValue) {
+            var inputid = _.uniqueId('change-text-action');
+            return [$('<label>').attr('for', inputid).addClass('sr-only').text(labeltext), $('<input class="form-control">').attr({ id: inputid, type: 'text', disabled: 'disabled', title: activeValue, 'data-action': 'change-text-action', 'tabindex': '1'}).val(activeValue)];
         },
 
         drawFolderSelect: function () {
