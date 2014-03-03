@@ -1,4 +1,4 @@
-# generator-ox-ui-module [![Build Status](https://secure.travis-ci.org/johnyb/generator-ox-ui-module.png?branch=master)](https://travis-ci.org/johnyb/generator-ox-ui-module)
+# generator-ox-ui-module
 
 A generator for [Yeoman](http://yeoman.io).
 
