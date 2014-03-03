@@ -23,7 +23,7 @@ OxUiModuleGenerator.prototype.askFor = function askFor() {
 
   var prompts = [{
     name: 'moduleName',
-    message: 'What do you want the name of your module to be?',
+    message: 'What do you want the name of your package to be?',
     default: this.appname
   }];
 
