@@ -21,6 +21,17 @@ OxUiModuleGenerator.prototype.askFor = function askFor() {
   // have Yeoman greet the user.
   console.log(this.yeoman);
 
+  //TODO: once this has been released with yo, switch to their version
+  try {
+    this.appname = require(path.join(process.cwd(), 'bower.json')).name;
+  } catch (e) {
+    try {
+      this.appname = require(path.join(process.cwd(), 'package.json')).name;
+    } catch (e) {
+      this.appname = path.basename(process.cwd());
+    }
+  }
+
   var prompts = [{
     name: 'moduleName',
     message: 'What do you want the name of your package to be?',
