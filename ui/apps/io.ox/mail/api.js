@@ -1759,7 +1759,7 @@ define('io.ox/mail/api',
         module: 'mail',
         getQueryParams: function (params) {
             // use threads?
-            if (params.sort === 'thread') {
+            if (params.thread === 'true') {
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
@@ -1784,7 +1784,9 @@ define('io.ox/mail/api',
     });
 
     api.collectionLoader.each = function (obj) {
-        // remove deleted mails ()
+        // lacks thread property
+        if (!obj.thread) obj.thread = [obj];
+        // remove deleted mails
         var list = obj.thread;
         obj.thread = _(list).filter(function (item) {
             return !util.isDeleted(item);

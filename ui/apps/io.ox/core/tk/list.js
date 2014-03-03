@@ -201,7 +201,7 @@ define('io.ox/core/tk/list',
             if (this.ignoreFocus) this.$el.addClass('has-focus');
 
             // don't know why but listenTo doesn't work here
-            this.model.on('change', this.onModelChange, this);
+            this.model.on('change', _.debounce(this.onModelChange, 10), this);
 
             // make sure busy & idle use proper this (for convenient callbacks)
             _.bindAll(this, 'busy', 'idle');

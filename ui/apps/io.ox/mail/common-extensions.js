@@ -342,7 +342,7 @@ define('io.ox/mail/common-extensions',
 
         attachmentPreview: (function () {
 
-            var regSupportsPreview = /\.(gif|bmp|tiff|jpe?g|gmp|png|pdf|docx?|xlsx?|pptx?)$/i,
+            var regSupportsPreview = /\.(gif|bmp|tiff|jpe?g|gmp|png|pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
                 regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
 
             return function (baton) {
