@@ -335,7 +335,7 @@ define('io.ox/mail/settings/pane',
             }).then(function (subscriptionPossible) {
                 if (!subscriptionPossible) return;
 
-                var button = $('<button type="button" class="btn btn-primary">').on('click', changeIMAPSubscription);
+                var button = $('<button type="button" class="btn btn-primary" tabindex="1">').on('click', changeIMAPSubscription);
 
                 if (_.device('smartphone')) return;
 

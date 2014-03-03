@@ -82,7 +82,7 @@ define('io.ox/core/settings/pane',
                 this.append(
                     $('<div class="control-group">').append(
                         $('<div class="controls">').append(
-                            $('<a class="btn btn-default">').text(gt('Change password'))
+                            $('<button type="button" class="btn btn-default" tabindex="1">').text(gt('Change password'))
                             .on('click', userSettings.changePassword)
                         )
                     )
