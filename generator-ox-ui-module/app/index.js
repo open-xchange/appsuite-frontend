@@ -35,6 +35,11 @@ OxUiModuleGenerator.prototype.askFor = function askFor() {
 };
 
 OxUiModuleGenerator.prototype.app = function app() {
+  /* This method uses buildCopy, because copy will automatically try to template
+   * every file. This is unwanted (would have used this.template instead), but
+   * yeoman API says, it's there for backwards-compatibility. Need to wait until
+   * this has been dropped by the yeoman team.
+   */
   this.mkdir('apps');
   this.mkdir('grunt');
   this.mkdir('grunt/tasks');
