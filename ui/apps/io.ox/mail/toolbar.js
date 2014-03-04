@@ -17,11 +17,12 @@ define('io.ox/mail/toolbar',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/tk/flag-picker',
      'io.ox/mail/api',
+     'io.ox/backbone/mini-views/dropdown',
      'gettext!io.ox/mail',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less',
      'io.ox/mail/folderview-extensions'
-    ], function (ext, links, actions, flagPicker, api, gt) {
+    ], function (ext, links, actions, flagPicker, api, Dropdown, gt) {
 
     'use strict';
 
@@ -157,10 +158,32 @@ define('io.ox/mail/toolbar',
         attributes: {},
         classes: '',
         forcelimit: true, // always use drop-down
-        index: 100,
+        index: 200,
         id: 'toolbar-links',
         ref: 'io.ox/mail/classic-toolbar/links'
     }));
+
+    // view dropdown
+    ext.point('io.ox/mail/classic-toolbar').extend({
+        id: 'view-dropdown',
+        index: 100,
+        draw: function (baton) {
+
+            if (_.device('small')) return;
+
+            this.prepend(
+                new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
+                .header(gt('Preview pane'))
+                .option('preview', 'right', gt('Right'))
+                .option('preview', 'bottom', gt('Bottom'))
+                .option('preview', 'none', gt('None'))
+                .divider()
+                .option('folderview', true, gt('Show folders'))
+                .render()
+                .$el.addClass('pull-right')
+            );
+        }
+    });
 
     // classic toolbar
     var toolbar = $('<ul class="classic-toolbar" role="menu">');
@@ -191,7 +214,7 @@ define('io.ox/mail/toolbar',
 
     ext.point('io.ox/mail/mediator').extend({
         id: 'update-toolbar',
-        index: 10100,
+        index: 10200,
         setup: function (app) {
             app.updateToolbar();
             // update toolbar on selection change as well as any model change (seen/unseen flag)
@@ -200,6 +223,7 @@ define('io.ox/mail/toolbar',
             });
         }
     });
+
 
     // // Uploads
     // app.queues = {};

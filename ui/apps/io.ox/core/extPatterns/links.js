@@ -331,7 +331,7 @@ define('io.ox/core/extPatterns/links',
                             }).append(
                                 isSmall ?
                                     [$.txt(gt('Actions')), $('<b class="caret">')] :
-                                    [$.txt(gt('More')), $.txt(_.noI18n(' ...')), $('<b class="caret">')]
+                                    [$.txt(gt('More')), $('<i class="icon-caret-down">')]
                             )
                             .on(Modernizr.touch ? 'touchstart' : 'click', function () {
                                 // fix dropdown position on-the-fly

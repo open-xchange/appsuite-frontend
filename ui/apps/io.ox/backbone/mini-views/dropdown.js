@@ -1,0 +1,87 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstract'], function (AbstractView) {
+
+    'use strict';
+
+    // Bootstrap dropdown
+
+    var Dropdown = AbstractView.extend({
+
+        tagName: 'div',
+        className: 'dropdown',
+
+        events: {
+            'click ul a': 'onClick'
+        },
+
+        onClick: function (e) {
+            e.preventDefault();
+            var node = $(e.currentTarget),
+                name = node.attr('data-name'),
+                value = node.data('value'),
+                toggle = node.data('toggle');
+            this.model.set(name, toggle === true ? !this.model.get(name) : value);
+        },
+
+        setup: function (options) {
+            this.label = options.label;
+            this.$ul = $('<ul class="dropdown-menu" role="menu">');
+            this.listenTo(this.model, 'change', this.update);
+        },
+
+        update: function () {
+            var $el = this.$el;
+            _(this.model.changed).each(function (value, name) {
+                var li = $el.find('[data-name="' + name + '"]');
+                li.children('i').attr('class', 'icon-fixed-width icon-none');
+                li.filter('[data-value="' + value + '"]').children('i').attr('class', 'icon-fixed-width icon-ok');
+            }, this);
+        },
+
+        option: function (name, value, text) {
+            this.$ul.append(
+                $('<li>').append(
+                    $('<a>', { href: '#', 'data-name': name, 'data-value': value, 'data-toggle': _.isBoolean(value) }).append(
+                        $('<i class="icon-fixed-width">').addClass(this.model.get(name) === value ? 'icon-ok' : 'icon-none'),
+                        $('<span>').text(text)
+                    )
+                )
+            );
+            return this;
+        },
+
+        header: function (text) {
+            this.$ul.append($('<li class="dropdown-header">').text(text));
+            return this;
+        },
+
+        divider: function () {
+            this.$ul.append('<li class="divider">');
+            return this;
+        },
+
+        render: function () {
+            this.$el.append(
+                $('<a href="#" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').append(
+                    $.txt(this.label), $('<i class="icon-caret-down">')
+                ),
+                this.$ul
+            );
+            return this;
+        }
+    });
+
+    return Dropdown;
+});

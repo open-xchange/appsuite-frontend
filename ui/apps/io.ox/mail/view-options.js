@@ -13,59 +13,34 @@
 
 define('io.ox/mail/view-options',
     ['io.ox/core/extensions',
-     'gettext!io.ox/mail',
-     'settings!io.ox/mail'
-    ], function (ext, gt /*, settings*/) {
+     'io.ox/backbone/mini-views/dropdown',
+     'gettext!io.ox/mail'
+    ], function (ext, Dropdown, gt) {
 
     'use strict';
-
-    function drawOption(name, value, text, toggle) {
-        return $('<li>').append(
-            $('<a>', { href: '#', 'data-name': name, 'data-value': value, 'data-toggle': !!toggle }).append(
-                $('<i class="icon-none">'), $('<span>').text(text)
-            )
-        );
-    }
-
-    function drawValue(model, name) {
-        var value = model.get(name),
-            li = this.find('[data-name="' + name + '"]');
-        li.children('i').attr('class', 'icon-none');
-        li.filter('[data-value="' + value + '"]').children('i').attr('class', 'icon-ok');
-    }
-
-    function connect(model, name) {
-        drawValue.call(this, model, name);
-        model.on('change:' + name, drawValue.bind(this, model, name));
-    }
 
     ext.point('io.ox/mail/view-options').extend({
         id: 'sort',
         index: 100,
-        draw: function (baton) {
-            this.append(
-                $('<li class="dropdown-header">').text(gt('Sort by')),
-                drawOption('sort', '610', gt('Date')),
-                drawOption('sort', 'from-to', gt('From')),
-                drawOption('sort', '651', gt('Unread')),
-                drawOption('sort', '608', gt('Size')),
-                drawOption('sort', '607', gt('Subject')),
-                drawOption('sort', '102', gt('Label'))
-            );
-            connect.call(this, baton.app.props, 'sort');
+        draw: function () {
+            this.data('view')
+                .option('sort', 610, gt('Date'))
+                .option('sort', 'from-to', gt('From'))
+                .option('sort', 651, gt('Unread'))
+                .option('sort', 608, gt('Size'))
+                .option('sort', 607, gt('Subject'))
+                .option('sort', 102, gt('Label'));
         }
     });
 
     ext.point('io.ox/mail/view-options').extend({
         id: 'order',
         index: 200,
-        draw: function (baton) {
-            this.append(
-                $('<li class="divider"></li>'),
-                drawOption('order', 'asc', gt('Ascending')),
-                drawOption('order', 'desc', gt('Descending'))
-            );
-            connect.call(this, baton.app.props, 'order');
+        draw: function () {
+            this.data('view')
+                .divider()
+                .option('order', 'asc', gt('Ascending'))
+                .option('order', 'desc', gt('Descending'));
         }
     });
 
@@ -75,77 +50,25 @@ define('io.ox/mail/view-options',
         draw: function (baton) {
             // don't add if thread view is disabled server-side
             if (baton.app.settings.get('threadView') === 'off') return;
-            this.append(
-                $('<li class="divider"></li>'),
-                drawOption('thread', true, gt('Conversations'), true)
-            );
-            connect.call(this, baton.app.props, 'thread');
+            this.data('view')
+                .divider()
+                .option('thread', true, gt('Conversations'));
         }
     });
-
-    ext.point('io.ox/mail/view-options').extend({
-        id: 'preview',
-        index: 400,
-        draw: function (baton) {
-            if (_.device('small')) return;
-            this.append(
-                $('<li class="divider"></li>'),
-                $('<li class="dropdown-header">').text(gt('Preview pane')),
-                drawOption('preview', 'right', gt('Right')),
-                drawOption('preview', 'bottom', gt('Bottom')),
-                drawOption('preview', 'none', gt('None'))
-            );
-            connect.call(this, baton.app.props, 'preview');
-        }
-    });
-
-    ext.point('io.ox/mail/view-options').extend({
-        id: 'folderview',
-        index: 500,
-        draw: function (baton) {
-            if (_.device('small')) return;
-            this.append(
-                $('<li class="divider"></li>'),
-                drawOption('folderview', true, gt('Show folders'), true)
-            );
-            connect.call(this, baton.app.props, 'folderview');
-        }
-    });
-
-    function applyOption(e) {
-        e.preventDefault();
-        var name = $(this).attr('data-name'),
-            value = $(this).data('value'),
-            toggle = $(this).data('toggle'),
-            model = e.data.model;
-        console.log('applyOption', name, value, 'toggle?', toggle);
-        if (toggle === true) {
-            model.set(name, !model.get(name));
-        } else {
-            model.set(name, value);
-        }
-    }
 
     ext.point('io.ox/mail/list-view/toolbar/top').extend({
         id: 'dropdown',
         index: 1000,
         draw: function (baton) {
 
-            this.append(
-                $('<div class="grid-options dropdown">').append(
-                    $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">')
-                    .append(
-                        $.txt(gt('View')),
-                        $.txt(' '),
-                        $('<i class="icon-caret-down">')
-                    )
-                    .dropdown(),
-                    $('<ul class="dropdown-menu" role="menu">')
-                )
-            );
+            var dropdown = new Dropdown({
+                //#. Sort options drop-down
+                label: gt.pgettext('dropdown', 'Sort by'),
+                model: baton.app.props
+            });
 
-            ext.point('io.ox/mail/view-options').invoke('draw', this.find('.dropdown-menu'), baton);
-            this.find('.dropdown-menu').on('click', 'a', { model: baton.app.props }, applyOption);
+            ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
+            this.append(dropdown.render().$el.addClass('grid-options'));
         }
     });
 
