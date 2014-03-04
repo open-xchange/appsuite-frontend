@@ -87,7 +87,7 @@ define('io.ox/mail/common-extensions',
 
         flag: function (baton) {
 
-            var color = parseInt(baton.data.color_label || 0, 10);
+            var color = api.threads.color(baton.data);
             if (color <= 0) return; // 0 and a buggy -1
 
             this.append(

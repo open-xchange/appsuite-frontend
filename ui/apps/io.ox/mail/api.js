@@ -1753,6 +1753,17 @@ define('io.ox/mail/api',
             return thread.reduce(function (memo, obj) {
                 return memo || util.isUnseen(obj);
             }, false);
+        },
+
+        color: function (data) {
+            // look for a thread collection
+            var cid = _.cid(data), thread = this.get(cid);
+            // no thread? then just check current object
+            if (thread.length <= 1) return parseInt(data.color_label || 0, 10);
+            // otherwise check collection
+            return thread.reduce(function (memo, obj) {
+                return memo || parseInt(obj.color_label || 0, 10);
+            }, 0);
         }
     };
 
