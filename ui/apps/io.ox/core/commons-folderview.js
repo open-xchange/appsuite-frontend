@@ -750,9 +750,6 @@ define('io.ox/core/commons-folderview',
                 app.settings.set('folderview/width/' + _.display(), width).save();
             });
 
-            $(window).off('resize.folderview').on('resize.folderview', function () {
-                if (!visible) { fnHide(); } else { fnShow(true);  }
-            });
             //don't hide foldertree on orientationchange on desktops
             //event is triggered when resizing the window and width becomes smaller than height and vice versa
             //see Bug 31055
