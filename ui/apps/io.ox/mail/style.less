@@ -256,7 +256,13 @@
         display: inline-block;
         margin-left: 0.5em;
         float: right;
-        opacity: 0.70;
+    }
+
+    .date { opacity: 0.70; }
+    .size { color: @linkColor; }
+
+    &.visible-selection.has-focus .list-item.selected .size {
+        color: #fff;
     }
 
     .subject {
