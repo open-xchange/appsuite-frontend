@@ -156,9 +156,13 @@ define('io.ox/mail/listview',
     });
 
     ext.point('io.ox/mail/listview/item/default/row1').extend({
-        id: 'date',
+        id: 'date/size',
         index: 100,
-        draw: extensions.date
+        draw: function (baton) {
+            // show date or size depending on sort option
+            var fn = baton.app.props.get('sort') === '608' ? 'size' : 'date';
+            extensions[fn].call(this, baton);
+        }
     });
 
     ext.point('io.ox/mail/listview/item/default/row1').extend({

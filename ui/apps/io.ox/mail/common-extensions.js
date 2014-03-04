@@ -19,11 +19,12 @@ define('io.ox/mail/common-extensions',
      'io.ox/mail/api',
      'io.ox/core/api/account',
      'io.ox/core/date',
+     'io.ox/core/strings',
      'io.ox/contacts/api',
      'io.ox/core/api/collection-pool',
      'io.ox/core/tk/flag-picker',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, util, api, account, date, contactsAPI, Pool, flagPicker, gt) {
+    ], function (ext, links, actions, util, api, account, date, strings, contactsAPI, Pool, flagPicker, gt) {
 
     'use strict';
 
@@ -58,6 +59,13 @@ define('io.ox/mail/common-extensions',
                 $('<div class="from">').append(
                     util.getFrom(data, field)
                 )
+            );
+        },
+
+        size: function (baton) {
+            if (!_.isNumber(baton.data.size)) return;
+            this.append(
+                $('<span class="size">').text(strings.fileSize(baton.data.size, 1))
             );
         },
 

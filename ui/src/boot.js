@@ -280,7 +280,7 @@ $(window).load(function () {
                     var params = {
                         action: 'threadedAll',
                         folder: 'default0/INBOX',
-                        columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                        columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
                         sort: '610',
                         order: 'desc',
                         includeSent: true,

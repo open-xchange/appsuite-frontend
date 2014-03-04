@@ -1761,7 +1761,7 @@ define('io.ox/mail/api',
                 return {
                     action: 'threadedAll',
                     folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                    columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
                     sort: '610',
                     order: params.order || 'desc',
                     includeSent: !accountAPI.is('sent|drafts', params.folder),
@@ -1772,7 +1772,7 @@ define('io.ox/mail/api',
                 return {
                     action: 'all',
                     folder: params.folder,
-                    columns: '102,600,601,602,603,604,605,607,610,611,614,652',
+                    columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
                     sort: params.sort || '610',
                     order: params.order || 'desc',
                     timezone: 'utc'
