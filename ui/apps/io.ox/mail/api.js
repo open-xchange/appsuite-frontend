@@ -421,7 +421,6 @@ define('io.ox/mail/api',
         get = api.get,
         getAll = api.getAll,
         getList = api.getList,
-        remove = api.remove,
         search = api.search;
 
     api.get = function (obj, options) {
@@ -493,7 +492,13 @@ define('io.ox/mail/api',
             if (model) collection.remove(model);
         });
 
-        return remove(ids).done(function () {
+        return http.PUT({
+            module: 'mail',
+            params: { action: 'delete', timestamp: _.then() },
+            data: http.simplify(ids),
+            appendColumns: false
+        })
+        .done(function () {
             // update unread counter and folder item counter
             folderAPI.reload(ids);
         });
