@@ -346,8 +346,6 @@ define('io.ox/mail/api',
             get: function (data, options) {
                 // inject view (text/html/noimg). need this to generate proper cache keys.
                 data.view = options.view;
-                // a mail should be always marked as seen on fetch
-                data.flags = data.flags | 32;
                 // was unseen?
                 if (data.unseen) folderAPI.decUnread(data);
                 return data;
@@ -1480,16 +1478,14 @@ define('io.ox/mail/api',
      * @return {promise}
      */
     api.refresh = function () {
-        if (ox.online) {
-            // reset cache control
-            _(cacheControl).each(function (val, cid) {
-                cacheControl[cid] = false;
-            });
-            api.checkInbox().always(function () {
-                // trigger
-                api.trigger('refresh.all');
-            });
-        }
+        if (!ox.online) return;
+        // reset cache control
+        _(cacheControl).each(function (val, cid) {
+            cacheControl[cid] = false;
+        });
+        api.checkInbox().always(function () {
+            api.trigger('refresh.all');
+        });
     };
 
     /**
