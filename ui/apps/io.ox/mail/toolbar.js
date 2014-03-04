@@ -145,6 +145,12 @@ define('io.ox/mail/toolbar',
             label: gt('Add to portal'),
             ref: 'io.ox/mail/actions/add-to-portal',
             section: 'keep'
+        },
+        'folder': {
+            prio: 'lo',
+            label: gt('Show/hide folder'),
+            ref: 'io.ox/mail/actions/toggle-folder',
+            section: 'keep'
         }
     };
 
@@ -235,5 +241,38 @@ define('io.ox/mail/toolbar',
             });
         }
     });
+
+
+    // // Uploads
+    // app.queues = {};
+
+    // if (settings.get('features/importEML') !== false) {
+    //     app.queues.importEML = upload.createQueue({
+    //         start: function () {
+    //             win.busy();
+    //         },
+    //         progress: function (file) {
+    //             return api.importEML({ file: file, folder: app.folder.get() })
+    //                 .done(function (data) {
+    //                     var first = _(data.data || []).first() || {};
+    //                     if ('Error' in first) {
+    //                         notifications.yell('error', first.Error);
+    //                     } else {
+    //                         grid.selection.set(first);
+    //                         notifications.yell('success', gt('Mail has been imported'));
+    //                     }
+    //                 });
+    //         },
+    //         stop: function () {
+    //             win.idle();
+    //         },
+    //         type: 'importEML'
+    //     });
+    // }
+
+    // // drag & drop
+    // win.nodes.outer.on('selection:drop', function (e, baton) {
+    //     actions.invoke('io.ox/mail/actions/move', null, baton);
+    // });
 
 });

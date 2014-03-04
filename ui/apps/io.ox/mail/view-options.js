@@ -53,11 +53,62 @@ define('io.ox/mail/view-options',
         draw: function (baton) {
             // don't add if thread view is disabled server-side
             if (baton.app.settings.get('threadView') === 'off') return;
+
             this.data('view')
                 .divider()
                 .option('thread', true, gt('Conversations'));
+
+            this.append(
+                $('<li class="divider"></li>'),
+                drawOption('thread', true, gt('Conversations'), true)
+            );
+            connect.call(this, baton.app.props, 'thread');
         }
     });
+
+    ext.point('io.ox/mail/view-options').extend({
+        id: 'preview',
+        index: 400,
+        draw: function (baton) {
+            if (_.device('small')) return;
+            this.append(
+                $('<li class="divider"></li>'),
+                $('<li class="dropdown-header">').text(gt('Preview pane')),
+                drawOption('preview', 'right', gt('Right')),
+                drawOption('preview', 'bottom', gt('Bottom')),
+                drawOption('preview', 'none', gt('None'))
+            );
+            connect.call(this, baton.app.props, 'preview');
+        }
+    });
+
+    ext.point('io.ox/mail/view-options').extend({
+        id: 'folderview',
+        index: 500,
+        draw: function (baton) {
+            if (_.device('small')) return;
+            this.append(
+                $('<li class="divider"></li>'),
+                drawOption('folderview', true, gt('Show folders'), true)
+            );
+            connect.call(this, baton.app.props, 'folderview');
+        }
+    });
+
+    function applyOption(e) {
+        e.preventDefault();
+        var name = $(this).attr('data-name'),
+            value = $(this).data('value'),
+            toggle = $(this).data('toggle'),
+            model = e.data.model;
+        console.log('applyOption', name, value, 'toggle?', toggle);
+        if (toggle === true) {
+            model.set(name, !model.get(name));
+        } else {
+            model.set(name, value);
+        }
+    }
+
 
     ext.point('io.ox/mail/list-view/toolbar/top').extend({
         id: 'dropdown',

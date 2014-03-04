@@ -181,6 +181,13 @@ define('io.ox/mail/main',
         },
 
         /*
+         * Set folderview property
+         */
+        'prop-folderview': function (app) {
+            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+        },
+
+        /*
          * Respond to changed sort option
          */
         'change:sort': function (app) {
