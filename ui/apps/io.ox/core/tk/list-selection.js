@@ -180,6 +180,16 @@ define('io.ox/core/tk/list-selection', [], function () {
             return !!nodes.length;
         },
 
+        focus: function (index, items) {
+            items = items || this.getItems();
+            var node = items.eq(index).attr('tabindex', '1').focus();
+            // workaround for chrome's CSS bug:
+            // styles of "selected" class are not applied if focus triggers scrolling.
+            // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
+            if (_.device('chrome')) node.hide(0, function () { $(this).show(); });
+            return node;
+        },
+
         pick: function (index, items, e) {
 
             var start, end, node, cursor;
@@ -192,11 +202,11 @@ define('io.ox/core/tk/list-selection', [], function () {
                 var start = Math.min(index, cursor),
                     end = Math.max(index, cursor);
                 this.check(items.slice(start, end + 1));
-                items.eq(index).attr('tabindex', '1').focus();
+                this.focus(index, items);
             } else {
                 // single select
                 items.removeClass('precursor');
-                node = items.eq(index).addClass('precursor').attr('tabindex', '1').focus();
+                node = this.focus(index, items).addClass('precursor');
                 if (this.isMultiple(e)) this.toggle(node); else this.check(node);
             }
         },
@@ -213,7 +223,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         selectAll: function () {
             var items = this.getItems();
             this.check(items.slice(0, items.length));
-            items.eq(0).attr('tabindex', '1').focus();
+            this.focus(0, items);
             this.triggerChange();
         },
 
@@ -225,7 +235,8 @@ define('io.ox/core/tk/list-selection', [], function () {
         move: function (step) {
             var items = this.getItems(),
                 index = this.getPosition() + step;
-            if (index < 0 || index >= items.length) return;
+            if (index < 0) index = 0;
+            else if (index >= items.length) index = items.length - 1;
             this.select(index, items);
             this.view.trigger('selection:action', this.get());
         },
@@ -262,26 +273,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             });
         },
 
-        onKeydown: function (e) {
-
-            // [enter] > action
-            if (e.which === 13) return this.triggerAction(e);
-
-            // [Ctrl|Cmd + A] > select all
-            if ((e.which === 97 || e.which === 65) && (e.ctrlKey || e.metaKey)) {
-                e.preventDefault();
-                return this.selectAll();
-            }
-
-            // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
-            if (e.which === 8 || e.which === 46) {
-                e.preventDefault();
-                this.view.trigger('selection:delete', this.get());
-                return;
-            }
-
-            // check for cursor keys; otherwise we're done here
-            if (e.which !== 40 && e.which !== 38) return;
+        onCursorUpDown: function (e) {
 
             var items = this.getItems(),
                 current = $(document.activeElement),
@@ -299,6 +291,53 @@ define('io.ox/core/tk/list-selection', [], function () {
             index = this.isMultiple(e) ? (e.which === 38 ? 0 : -1) : index;
             this.pick(index, items, e);
             this.triggerChange();
+        },
+
+        onPageUpDown: function (e) {
+            e.preventDefault();
+            var items = this.getItems(), height = items.first().outerHeight(), step;
+            if (!height) return;
+            step = Math.floor(this.view.$el.height() / height);
+            if (e.which === 33) this.move(-step); else this.move(step);
+        },
+
+        onKeydown: function (e) {
+
+            switch (e.which) {
+
+            // [enter] > action
+            case 13:
+                this.triggerAction(e);
+                break;
+
+            // [Ctrl|Cmd + A] > select all
+            case 65:
+            case 97:
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    this.selectAll();
+                }
+                break;
+
+            // [Del], [Backspace] or [fn+Backspace] (MacOS) > delete item
+            case 8:
+            case 46:
+                e.preventDefault();
+                this.view.trigger('selection:delete', this.get());
+                break;
+
+            // cursor up/down
+            case 38:
+            case 40:
+                this.onCursorUpDown(e);
+                break;
+
+            // page up/down
+            case 33:
+            case 34:
+                this.onPageUpDown(e);
+                break;
+            }
         },
 
         onClick: function (e) {
