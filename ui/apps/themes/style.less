@@ -1309,8 +1309,8 @@ a.button {
         z-index: 2;
 
         a {
-            i { color: black; display: inline-block; }
             text-decoration: none;
+            i { color: black; display: inline-block; }
         }
 
         &.top { .top-toolbar(); }
@@ -1326,6 +1326,10 @@ a.button {
             }
         }
 
+        .grid-options > a {
+            color: #888;
+        }
+
         .grid-options.dropdown {
             position: absolute;
             right: 13px;
@@ -1333,7 +1337,6 @@ a.button {
             .dropdown-menu {
                 right: -7px;
                 left: auto;
-                bottom: 100%;
             }
         }
     }

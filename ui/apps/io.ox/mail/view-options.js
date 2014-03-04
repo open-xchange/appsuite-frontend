@@ -251,7 +251,7 @@ define('io.ox/mail/view-options',
         }
     }
 
-    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
+    ext.point('io.ox/mail/list-view/toolbar/top').extend({
         id: 'dropdown',
         index: 1000,
         draw: function (baton) {
@@ -259,7 +259,11 @@ define('io.ox/mail/view-options',
             this.append(
                 $('<div class="grid-options dropdown">').append(
                     $('<a href="#" tabindex="1" data-toggle="dropdown" role="menuitem" aria-haspopup="true">')
-                    .append($.txt(gt('View')))
+                    .append(
+                        $.txt(gt('View')),
+                        $.txt(' '),
+                        $('<i class="icon-caret-down">')
+                    )
                     .dropdown(),
                     $('<ul class="dropdown-menu" role="menu">')
                 )
@@ -283,7 +287,7 @@ define('io.ox/mail/view-options',
         }
     }
 
-    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
+    ext.point('io.ox/mail/list-view/toolbar/top').extend({
         id: 'select-all',
         index: 100,
         draw: function (baton) {
