@@ -22,8 +22,9 @@ define('io.ox/mail/settings/pane',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
      'gettext!io.ox/mail',
-     'io.ox/core/api/account'
-    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, tmpl, ext, notifications, gt, api) {
+     'io.ox/core/api/account',
+     'io.ox/core/api/folder'
+    ], function (settings, userAPI, capabilities, contactsAPI, mailUtil, mailSettingsModel, tmpl, ext, notifications, gt, api, folderAPI) {
 
     'use strict';
 
@@ -180,17 +181,33 @@ define('io.ox/mail/settings/pane',
         index: 400,
         id: 'imap-subscription',
         draw: function () {
-            var button = $('<button type="button" class="btn btn-primary">').on('click', changeIMAPSubscription);
+            var container = this;
 
-            if (_.device('smartphone')) return;
+            folderAPI.get({folder: api.getFoldersByType('inbox')})
+            .then(function (folders) {
+                return _(folders).values()
+                .map(function (folder) {
+                    return folderAPI.can('imap-subscribe', folder);
+                })
+                .reduce(function (acc, value) {
+                    // enough if one of the folders can subscribe
+                    return acc || value;
+                }, false);
+            }).then(function (subscriptionPossible) {
+                if (!subscriptionPossible) return;
 
-            this.append(
-                $('<div class="settings sectiondelimiter expertmode">'),
-                $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
-                $('<div class="sectioncontent">').append(
-                    button.text(gt('Change subscription'))
-                )
-            );
+                var button = $('<button type="button" class="btn btn-primary">').on('click', changeIMAPSubscription);
+
+                if (_.device('smartphone')) return;
+
+                container.append(
+                    $('<div class="settings sectiondelimiter expertmode">'),
+                    $('<legend class="sectiontitle">').text(gt('IMAP folder subscription')),
+                    $('<div class="sectioncontent">').append(
+                        button.text(gt('Change subscription'))
+                    )
+                );
+            });
         }
     });
 

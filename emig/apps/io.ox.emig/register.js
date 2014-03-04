@@ -52,45 +52,92 @@ define('io.ox.emig/register', [
             });
         }
         
-        var state = win.app['io.ox.emig'] = { senderStatus: false };
-        ext.point('io.ox/mail/write/initializers/after').extend({
-            modify: checkSender
+        var state = win.app['io.ox.emig'] = {
+            senderStatus: false,
+            addressCache: {},
+            pending: null
+        };
+        view.leftside.find('.sender-dropdown').on('change', function () {
+            checkSender(win.app);
         });
-        view.leftside.find('.sender-dropdown').on('change', checkSender);
-        
-        function checkSender() {
-            var address = win.app.getFrom()[1];
-/*
-            setTimeout(function () {
-                resetStatus(/netline/.test(address) || !state.senderStatus);
-            }, 500 + Math.random() * 1000);
-*/
-            http.PUT({
-                module: 'emig',
-                params: { action: 'sender' },
-                data: { address: address }
-            }).done(resetStatus);
-
-        }
-        
-        function resetStatus(status) {
-            if (status === state.senderStatus) return;
-            state.senderStatus = status;
-            view.leftside.find('.io-ox-emig').each(function (i, badge) {
-                setStatus(badge, win.app);
-            });
-        }
     });
     
+    ext.point('io.ox/mail/write/initializers/after').extend({
+        modify: function () { checkSender(this); }
+    });
+    
+    function checkSender(app) {
+        var address = app.getFrom()[1];
+        
+        http.PUT({
+            module: 'emig',
+            params: { action: 'sender' },
+            data: { address: address }
+        }).done(resetStatus);
+
+        function resetStatus(status) {
+            var state = app['io.ox.emig'];
+            if (!state || status === state.senderStatus) return;
+            state.senderStatus = status;
+            app.getView().leftside.find('.io-ox-emig').each(
+                function (i, badge) { setStatus(badge, app); });
+        }
+    }
+    
     function setStatus(badge, app) {
-        if (app['io.ox.emig'] && app['io.ox.emig'].senderStatus) {
+        var state = app['io.ox.emig'];
+        if (state && state.senderStatus) {
             var address = badge.getAttribute('data-address');
-            check(address).done(function (status) {
+            check(address, state).done(function (status) {
                 badge.className = 'io-ox-emig ' +
                     ['none', 'member', 'secure'][status];
             });
         } else {
             badge.className = 'io-ox-emig none';
+        }
+    }
+    
+    // Address cache
+    
+    function check(address, state) {
+        var def = $.Deferred();
+        if (address in state.addressCache) {
+            def.resolve(state.addressCache[address]);
+        } else {
+            if (!state.pending) {
+                setTimeout(request, 0);
+                state.pending = [];
+            }
+            state.pending.push({
+                address: address,
+                callback: function (status) {
+                    state.addressCache[address] = status;
+                    def.resolve(status);
+                }
+            });
+        }
+        return def.promise();
+        
+        function request() {
+            var current = state.pending;
+            state.pending = null;
+            
+            var data = [];
+            for (var i = 0; i < current.length; i++) {
+                data.push(current[i].address);
+            }
+            
+            http.PUT({
+                module: 'emig',
+                params: { action: 'recipients' },
+                data: data
+            }).done(done);
+            
+            function done(reply) {
+                for (var i = 0; i < current.length; i++) {
+                    current[i].callback(reply[i] || 0);
+                }
+            }
         }
     }
     
@@ -151,54 +198,4 @@ define('io.ox.emig/register', [
         return node;
     }
     
-    // Address cache
-
-    var addressCache = {}, pending = null;
-
-    function check(address) {
-        var def = $.Deferred();
-        if (address in addressCache) {
-            def.resolve(addressCache[address]);
-        } else {
-            if (!pending) {
-                setTimeout(request, 0);
-                pending = [];
-            }
-            pending.push({
-                address: address,
-                callback: function (status) {
-                    addressCache[address] = status;
-                    def.resolve(status);
-                }
-            });
-        }
-        return def.promise();
-    }
-
-    function request() {
-        var current = pending;
-        pending = null;
-        
-        var data = [];
-        for (var i = 0; i < current.length; i++) data.push(current[i].address);
-
-        /*setTimeout(function () {
-            var reply = [];
-            for (var i = 0; i < current.length; i++) {
-                reply.push(Math.floor(Math.random() * 3));
-            }
-            done({ data: reply });
-        }, 500 + Math.random() * 1000); */
-        http.PUT({
-            module: 'emig',
-            params: { action: 'recipients' },
-            data: data
-        }).done(done);
-        function done(reply) {
-            for (var i = 0; i < current.length; i++) {
-                current[i].callback(reply[i] || 0);
-            }
-        }
-    }
-
 });
