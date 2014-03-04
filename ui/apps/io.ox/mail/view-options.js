@@ -77,7 +77,7 @@ define('io.ox/mail/view-options',
             if (baton.app.settings.get('threadView') === 'off') return;
             this.append(
                 $('<li class="divider"></li>'),
-                drawOption('thread', 'true', gt('Conversations'), true)
+                drawOption('thread', true, gt('Conversations'), true)
             );
             connect.call(this, baton.app.props, 'thread');
         }
@@ -99,14 +99,28 @@ define('io.ox/mail/view-options',
         }
     });
 
+    ext.point('io.ox/mail/view-options').extend({
+        id: 'folderview',
+        index: 500,
+        draw: function (baton) {
+            if (_.device('small')) return;
+            this.append(
+                $('<li class="divider"></li>'),
+                drawOption('folderview', true, gt('Show folders'), true)
+            );
+            connect.call(this, baton.app.props, 'folderview');
+        }
+    });
+
     function applyOption(e) {
         e.preventDefault();
         var name = $(this).attr('data-name'),
-            value = $(this).attr('data-value'),
-            toggle = $(this).attr('data-toggle'),
+            value = $(this).data('value'),
+            toggle = $(this).data('toggle'),
             model = e.data.model;
-        if (toggle === 'true') {
-            model.set(name, model.get(name) === 'true' ? 'false' : 'true');
+        console.log('applyOption', name, value, 'toggle?', toggle);
+        if (toggle === true) {
+            model.set(name, !model.get(name));
         } else {
             model.set(name, value);
         }

@@ -127,10 +127,16 @@ define('io.ox/mail/toolbar',
             label: gt('Add to portal'),
             ref: 'io.ox/mail/actions/add-to-portal',
             section: 'keep'
+        },
+        'folder': {
+            prio: 'lo',
+            label: gt('Show/hide folder'),
+            ref: 'io.ox/mail/actions/toggle-folder',
+            section: 'keep'
         }
     };
 
-    // local action
+    // local dummy action
 
     new actions.Action('io.ox/mail/actions/color', {
         requires: 'some',
@@ -168,7 +174,8 @@ define('io.ox/mail/toolbar',
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
         // draw toolbar
-        ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), ext.Baton({ $el: toolbar, data: list, isThread: isThread }));
+        var baton = ext.Baton({ $el: toolbar, data: list, isThread: isThread, app: this });
+        ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), baton);
     }, 10);
 
     ext.point('io.ox/mail/mediator').extend({
@@ -193,119 +200,6 @@ define('io.ox/mail/toolbar',
             });
         }
     });
-
-    // var SimpleMailWriter = Backbone.View.extend({
-
-    //     className: 'simple-mail-writer abs',
-
-    //     events: {
-    //         'click [data-action="send"]': 'onCancel',
-    //         'click [data-action="draft"]': 'onCancel',
-    //         'click [data-action="cancel"]': 'onCancel'
-    //     },
-
-    //     onCancel: function (e) {
-    //         e.preventDefault();
-    //         this.hide();
-    //         this.reset();
-    //     },
-
-    //     show: function () {
-    //         this.$el.show();
-    //         this.$el.find('.field-to').focus();
-    //     },
-
-    //     hide: function () {
-    //         this.$el.hide();
-    //     },
-
-    //     reset: function () {
-    //         this.$el.find('.editor textarea, input').val('');
-    //     },
-
-    //     render: function () {
-    //         this.$el.hide().append(
-    //             $('<div class="inline-toolbar">').append(
-    //                 $('<li><a href="#" role="button" data-action="send"><b>envoyer</b></a></li>'),
-    //                 $('<li><a href="#" role="button" data-action="draft">enregistrer le brouillon</a></li>'),
-    //                 $('<li><a href="#" role="button" data-action="cancel">annuler</a></li>')
-    //             ),
-    //             $('<div class="writer">').append(
-    //                 $('<div class="header">').append(
-    //                     $('<table border="0">').append(
-    //                         $('<tr><td class="row-label">de :</td><td><b>' + ox.user + '</b></td></tr>'),
-    //                         $('<tr><td class="row-label">à :</td><td><input type="text" class="field-to input-xxlarge"/></td></tr>'),
-    //                         $('<tr><td class="row-label">objet :</td><td><input type="text" class="field-subject input-xxlarge" placeholder="Saisissez l\'objet de votre message"/></td></tr>'),
-    //                         $('<tr><td class="row-label"></td><td><i class="icon-paper-clip"/> joindre un fichier</td></tr>')
-    //                     )
-    //                 ),
-    //                 $('<div class="editor">').append(
-    //                     $('<textarea>').attr('placeholder', 'Votre message')
-    //                 )
-    //             )
-    //         );
-    //         return this;
-    //     }
-    // });
-
-    //var writer = new SimpleMailWriter();
-    //win.nodes.body.append(writer.render().$el);
-
-    // hide writer / go back to list
-    // $(document).on('click', '.folder.selectable', function (e) {
-    //     threadView.onBack(e);
-    //     writer.hide();
-    // });
-
-    // toolbar.on('click', 'a', function (e) {
-    //     e.preventDefault();
-    //     var action = $(this).data('action'),
-    //         selection = _(listView.selection.get()).map(_.cid),
-    //         baton = ext.Baton({ data: selection, app: app });
-    //     switch (action) {
-    //     case 'compose':
-    //         if (e.altKey || e.shiftKey)
-    //             actions.invoke('io.ox/mail/actions/compose', this, baton, e);
-    //             else writer.show();
-    //         break;
-    //     case 'reply-all':
-    //         if (selection.length !== 1) break;
-    //         actions.invoke('io.ox/mail/actions/reply-all', this, baton, e);
-    //         break;
-    //     case 'forward':
-    //         if (selection.length === 0) break;
-    //         actions.invoke('io.ox/mail/actions/forward', this, baton, e);
-    //         break;
-    //     case 'move':
-    //         if (selection.length === 0) break;
-    //         actions.invoke('io.ox/mail/actions/move', this, baton, e);
-    //         break;
-    //     case 'setting':
-    //         ox.launch('io.ox/settings/main');
-    //         break;
-    //     case 'help':
-    //         var helpDir = 'help/' + ox.language + '/',
-    //             startingPoints = {
-    //             'io.ox/contacts': 'ox.appsuite.user.chap.contacts.html',
-    //             'io.ox/calendar': 'ox.appsuite.user.chap.calendar.html',
-    //             'io.ox/tasks': 'ox.appsuite.user.chap.tasks.html',
-    //             'io.ox/mail': 'ox.appsuite.user.chap.email.html',
-    //             'io.ox/files': 'ox.appsuite.user.chap.files.html',
-    //             'io.ox/portal': 'ox.appsuite.user.sect.portal.customize.html'
-    //         };
-    //         var currentApp = ox.ui.App.getCurrentApp(),
-    //         currentType = currentApp.attributes.name,
-    //         target = currentType in startingPoints ? startingPoints[currentType] : 'index.html';
-    //         window.open(helpDir + target);
-    //         break;
-    //     case 'refresh':
-    //         ox.trigger('refresh^');
-    //         break;
-    //     default:
-    //         notifications.yell('info', 'Just a test (' + action + ')');
-    //         break;
-    //     }
-    // });
 
     // // Uploads
     // app.queues = {};
@@ -338,15 +232,4 @@ define('io.ox/mail/toolbar',
     // win.nodes.outer.on('selection:drop', function (e, baton) {
     //     actions.invoke('io.ox/mail/actions/move', null, baton);
     // });
-
-    // // go!
-    // commons.addFolderSupport(app, grid, 'mail', options.folder)
-    //     .fail(function (result) {
-    //         var errorMsg = (result && result.error) ? result.error + ' ' : '';
-    //         errorMsg += gt('Application may not work as expected until this problem is solved.');
-    //         notifications.yell('error', errorMsg);
-    //     })
-    //     .always(commons.showWindow(win, grid));
-
-    // return SimpleMailWriter;
 });

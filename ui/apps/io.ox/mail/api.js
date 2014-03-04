@@ -1762,7 +1762,7 @@ define('io.ox/mail/api',
         module: 'mail',
         getQueryParams: function (params) {
             // use threads?
-            if (params.thread === 'true') {
+            if (params.thread === true) {
                 return {
                     action: 'threadedAll',
                     folder: params.folder,

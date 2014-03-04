@@ -46,10 +46,11 @@ define('io.ox/core/desktop',
             title: ''
         },
 
-        initialize: function () {
+        initialize: function (options) {
             var self = this;
             this.guid = appGuid++;
             this.id = this.id || 'app-' + appGuid;
+            this.options = options || {};
             this.getInstance = function () {
                 return self;
             };
@@ -376,7 +377,7 @@ define('io.ox/core/desktop',
                 if (isDisabled) {
                     deferred = $.Deferred().reject();
                 } else {
-                    this.options = options || {};
+                    _.extend(this.options, options);
                     if (name) {
                         ext.point(name + '/main').invoke('launch', this, this.options);
                     }
@@ -914,12 +915,11 @@ define('io.ox/core/desktop',
             },
 
             // window class
-            Window = function (id, name) {
+            Window = function (options) {
 
-                name = name || 'generic';
-
-                this.id = id;
-                this.name = name;
+                this.options = options || {};
+                this.id = options.id;
+                this.name = options.name || 'generic';
                 this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
                 this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
@@ -931,7 +931,8 @@ define('io.ox/core/desktop',
                     perspectives = {},
                     self = this,
                     firstShow = true,
-                    shown = $.Deferred();
+                    shown = $.Deferred(),
+                    name = this.name;
 
                 this.updateToolbar = function () {
                     var folder = this.app && this.app.folder ? this.app.folder.get() : null,
@@ -1390,7 +1391,7 @@ define('io.ox/core/desktop',
                 width = meta[0],
                 unit = meta[1],
                 // create new window instance
-                win = new Window(opt.id, opt.name);
+                win = new Window(opt);
 
             // window container
             win.nodes.outer = $('<div class="window-container">')

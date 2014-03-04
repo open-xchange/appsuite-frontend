@@ -759,8 +759,9 @@ define('io.ox/core/commons-folderview',
             var resizeBar, minSidePanelWidth, windowContainer, maxSidePanelWidth;
 
             sidepanel.append(resizeBar = $('<div class="resizebar">'));
+
             // needs to match min-width!
-            minSidePanelWidth = 170;
+            minSidePanelWidth = 150;
 
             function resetWidths() {
                 if ($(window).width() < 700) {
@@ -790,34 +791,40 @@ define('io.ox/core/commons-folderview',
 
             resizeBar.off('mousedown').on('mousedown', function (e) {
                 e.preventDefault();
-                windowContainer.on('mousemove', function (e) {
-                    var newWidth = e.pageX;
-                    if (newWidth < maxSidePanelWidth && newWidth > minSidePanelWidth) {
-                        app.trigger('folderview:resize');
-                        applyWidth(newWidth);
+                windowContainer.on({
+                    'mousemove.resize': function (e) {
+                        var newWidth = e.pageX;
+                        if (newWidth < maxSidePanelWidth && newWidth > minSidePanelWidth) {
+                            app.trigger('folderview:resize');
+                            applyWidth(newWidth);
+                        }
+                    },
+                    'mouseup.resize': function (e) {
+                        $(this).off('mousemove.resize mouseup.resize');
+                        // auto-close?
+                        if (e.pageX < minSidePanelWidth) {
+                            fnHide();
+                        } else {
+                            var width = $(this).data('resize-width') || 250;
+                            app.settings.set('folderview/width/' + _.display(), width).save();
+                        }
                     }
                 });
             });
 
             getWidths();
 
-            windowContainer.on('mouseup', function () {
-                windowContainer.off('mousemove');
-                var width = $(this).data('resize-width') || 250;
-                app.settings.set('folderview/width/' + _.display(), width).save();
+            $(window).off('resize.folderview').on('resize.folderview', function () {
+                if (!visible) { fnHide(); } else { fnShow(true);  }
             });
-
-            //don't hide foldertree on orientationchange on desktops
-            //event is triggered when resizing the window and width becomes smaller than height and vice versa
-            //see Bug 31055
-            if (_.device('!desktop')) {
-                $(window).off('orientationchange.folderview').on('orientationchange.folderview', fnHide);
-            }
+            $(window).off('orientationchange.folderview').on('orientationchange.folderview', fnHide);
         };
 
         fnResize = function () {
-            var nodes = app.getWindow().nodes;
-            nodes.body.css('left', $(document).width() > 700 ? '50px' : '0px');
+            var win = app.getWindow(),
+                chromeless = win.options.chromeless,
+                tooSmall = $(document).width() <= 700;
+            win.nodes.body.css('left', chromeless || tooSmall ? 0 : 50);
         };
 
         fnHide = function () {
@@ -862,11 +869,12 @@ define('io.ox/core/commons-folderview',
             return $.when();
         };
 
-        toggle = function () {
+        toggle = function (state) {
+            if (state === undefined) state = !visible;
             if (_.device('smartphone')) {
-                if (visible) { fnHideSml(); } else { fnShowSml();  }
+                if (state) fnShowSml(); else fnHideSml();
             } else {
-                if (visible) { fnHide(); } else { fnShow();  }
+                if (state) fnShow(); else fnHide();
             }
         };
 
