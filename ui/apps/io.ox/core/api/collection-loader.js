@@ -91,8 +91,15 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         },
 
         fetch: function (params) {
-            var rampup = ox.rampup[this.module + '/' + $.param(params) + '&session=' + ox.session];
-            if (rampup) return $.Deferred().resolve(rampup);
+
+            var key = this.module + '/' + $.param(params) + '&session=' + ox.session,
+                rampup = ox.rampup[key];
+
+            if (rampup) {
+                delete ox.rampup[key];
+                return $.Deferred().resolve(rampup);
+            }
+
             return http.GET({ module: this.module, params: params });
         },
 

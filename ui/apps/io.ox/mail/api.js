@@ -1656,7 +1656,9 @@ define('io.ox/mail/api',
             $.when.apply($, _.map(
                 [api.caches.all].concat(_.toArray(folderAPI.caches)),
                 function (cache) { return cache.grepRemove(re); }
-            )).done(function () { api.trigger('refresh.all'); });
+            ));
+            // uncommented: triggers too many refresh.all
+            // .done(function () { api.trigger('refresh.all'); });
         });
     });
 
