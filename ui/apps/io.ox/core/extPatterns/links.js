@@ -64,8 +64,11 @@ define('io.ox/core/extPatterns/links',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
                         'data-container': 'body'
+                    })
+                    .tooltip()
+                    .on('dispose', function () {
+                        $(this).tooltip('hide');
                     });
-                    a.tooltip();
                 }
                 return a;
             };
