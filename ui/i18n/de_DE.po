@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-02-17 15:47+0100\n"
+"PO-Revision-Date: 2014-03-04 10:59+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: en_US\n"
@@ -127,7 +127,7 @@ msgstr "Blau"
 #: apps/io.ox/mail/view-detail.js:476 apps/io.ox/mail/view-detail.js:483
 #: apps/io.ox/portal/settings/pane.js:157
 msgid "Green"
-msgstr "Green"
+msgstr "Grün"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
 #: apps/io.ox/mail/view-detail.js:477 apps/io.ox/mail/view-detail.js:484
