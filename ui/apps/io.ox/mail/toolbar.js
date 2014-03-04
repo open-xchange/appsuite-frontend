@@ -71,7 +71,7 @@ define('io.ox/mail/toolbar',
         'color': {
             prio: 'hi',
             icon: 'icon-bookmark',
-            //label: gt('Set flag color'),
+            label: gt('Set flag color'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {

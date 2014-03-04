@@ -761,7 +761,7 @@ define('io.ox/core/commons-folderview',
             sidepanel.append(resizeBar = $('<div class="resizebar">'));
 
             // needs to match min-width!
-            minSidePanelWidth = 150;
+            minSidePanelWidth = 100;
 
             function resetWidths() {
                 if ($(window).width() < 700) {

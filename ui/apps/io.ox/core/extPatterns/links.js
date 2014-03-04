@@ -36,6 +36,7 @@ define('io.ox/core/extPatterns/links',
                     baton = node.data('baton'),
                     ref = node.data('ref');
                 baton.e = e;
+                node.tooltip('hide');
                 actions.invoke(ref, this, baton, e);
             },
             drawDefault = function () {
