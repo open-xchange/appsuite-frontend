@@ -256,7 +256,11 @@ define('io.ox/mail/write/main',
             // remove current signature from editor
             if (isHTML) {
                 ed.find('.io-ox-signature').each(function () {
-                    var node = $(this), text = node.html();
+                    var node = $(this),
+                        text = node.html()
+                            //remove added image urls(tiny adds them automatically)
+                            .replace(/ data-mce-src="[^"]+"\s?/, '');
+
                     if (app.isSignature(text)) {
                         // remove entire node
                         node.remove();
