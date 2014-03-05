@@ -545,12 +545,12 @@ define('io.ox/contacts/api',
 
         } else if (_.isString(options.image1_url) && options.image1_url !== '') {
 
-            params = $.param($.extend({}, {
+            params = $.extend({}, {
                 // scale
                 width: options.width,
                 height: options.height,
                 scaleType: options.scaleType
-            }));
+            });
             url = options.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
 
         }
