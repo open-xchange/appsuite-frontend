@@ -42,18 +42,12 @@ define('io.ox/search/view-template',
                     model: model,
                     //TODO: would be nice to have this move to control
                     source: function (val) {
-                        return app.apiproxy
-                                .search(val)
-                                .then(function (data) {
-                                    return $.extend(data, {hits: 0});
-                                });
+                        return app.apiproxy.search(val);
                     },
-                    draw: function (item) {
-                        var node = $(this),
-                            query = model.get('query'),
-                            text = item.type === 'query' ? query + ' <span class="label">in ' + item.label + '</span>' : item.label;
-                        node.html(text);
-                        node.data(item);
+                    draw: function (value) {
+                        $(this)
+                            .data(value)
+                            .html(value.display_name);
                     },
                     stringify: function () {
                         //keep input value when item selected
@@ -62,8 +56,8 @@ define('io.ox/search/view-template',
                     click: function (e) {
                         //apply selected filter
                         var node = $(e.target).closest('.autocomplete-item'),
-                            data = node.data();
-                        model.addFilter(data);
+                            value = node.data();
+                        model.add(value.facet, value.id);
                     }
                 })
                 .on('selected', function () {
@@ -148,22 +142,126 @@ define('io.ox/search/view-template',
         draw: function (baton) {
             var node = $('<div class="col-lg-12 facets">'),
                 model = baton.model,
-                data = model.get('active');
+                list = model.get('poollist'),
+                value, tmp;
 
-            _.each(data, function (facet) {
+
+            _.each(list, function (item) {
+                //get active value
+                value = model.get('pool')[item.facet].values[item.value];
+
                 node.append(
-                    $('<span>').text(facet.label)
-                        .append(
-                            $('<i class="fa fa-times action">')
-                            .on('click', function () {
-                                baton.model.removeFilter(facet);
-                            })
-                        )
+                    tmp = $('<span>').html(value.display_name)
+                );
+                //general stuff
+                ext.point('io.ox/search/view/window/facets')
+                    .invoke('draw', tmp, value, baton);
+
+                //addiotional actions per id/type
+                ext.point('io.ox/search/view/window/facets/' + value.facet)
+                    .invoke('draw', tmp, value, baton);
+
+                //remove action
+                tmp.append(
+                    $('<i class="fa fa-times action">')
+                    .on('click', function () {
+                        baton.model.remove(value.facet, value.id);
+                        //baton.model.removeValue(value);
+                    })
                 );
             });
             this.append(node);
         }
     });
+
+    ext.point('io.ox/search/view/window/facets').extend({
+        draw: function (value, baton) {
+            var facet = baton.model.getFacet(value.facet),
+                filters = facet ? facet.values[0].options || [] : [],
+                self = this,
+                node, menu;
+            if (filters.length) {
+                menu = $('<ul class="dropdown-menu" role="menu">');
+                _.each(filters, function (item) {
+                    menu.append(
+                        $('<li role="presentation">').append(
+                             $('<a role="menuitem" tabindex="-1" href="#">')
+                                 .text(item.display_name)
+                        ).click('on', function () {
+                            baton.model.update(facet.id, value.id, {option: item.id});
+
+                            baton.model.trigger('query');
+                        })
+                    );
+                });
+                self.append(menu);
+                //TODO: a11y
+                node = $('<i class="fa fa-chevron-down action">')
+                        .on('click', function () {
+                            menu.toggle();
+                        });
+                this.append(node);
+            }
+        }
+    });
+
+
+    function folderdialoge(facet, baton) {
+        require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
+            var label = 'Choose',
+                id = facet.values[0].id,
+                type = baton.model.getModule();
+
+            var dialog = new dialogs.ModalDialog()
+                .header($('<h4>').text(label))
+                .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
+                .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
+            dialog.getBody().css({ height: '250px' });
+
+            var tree = new views.FolderTree(dialog.getBody(), {
+                    type: type,
+                    tabindex: 0,
+                    customize: function (data) {
+                        if (data.id === id) {
+                            this.removeClass('selectable').addClass('disabled');
+                        }
+                    }
+                });
+
+            dialog.show(function () {
+                tree.paint().done(function () {
+                    tree.select(id).done(function () {
+                        dialog.getBody().focus();
+                    });
+                });
+            })
+            .done(function (action) {
+                if (action === 'ok') {
+                    var target = _(tree.selection.get()).first(),
+                        //TODO: better way tp get label?!
+                        label = $(arguments[2]).find('[data-obj-id="' + target + '"]').attr('aria-label');
+                    baton.model.update(facet.id, id, {custom: target, display_name: label});
+                }
+                tree.destroy().done(function () {
+                    tree = dialog = null;
+                });
+            });
+        });
+    }
+
+
+    ext.point('io.ox/search/view/window/facets/folder').extend({
+        draw: function (value, baton) {
+            var node = $('<i class="fa fa-chevron-down action">')
+                        .on('click', function () {
+                            var facet = baton.model.get('folder');
+                            folderdialoge(facet, baton);
+                        });
+            this.append(node);
+        }
+    });
+
+
 
     point.extend({
         id: 'delim',
@@ -204,8 +302,8 @@ define('io.ox/search/view-template',
                 switch (baton.model.getModule()) {
                 case 'mail':
                     tmp.append(
-                        $('<div class="line1">').text('(' + item.id + ') ' + item.subject),
-                        $('<div class="line1">').text('folder: ' + item.folder_id)
+                        $('<div class="line1">').text(item.from[0][0] || item.from[0][1]),
+                        $('<div class="line1">').text('(' + item.id + ') ' + item.subject)
                     );
                     break;
                 case 'contacts':

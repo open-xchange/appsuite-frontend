@@ -52,7 +52,7 @@ define('io.ox/core/tk/autocomplete',
             },
 
             name: function (data) {
-                return util.unescapeDisplayName(data.display_name);
+                return util.unescapedisplay_name(data.display_name);
             },
 
             // object related unique string
@@ -214,8 +214,13 @@ define('io.ox/core/tk/autocomplete',
                     o.container
                         .addClass('autocomplete-search');
 
+                    //ignore hidden facets
+                    list = _(list).filter(function (facet) {
+                        return !facet.hidden;
+                    });
+
                     _(list).each(function (facet) {
-                        regular = facet.type !== 'query';
+                        regular = !(facet.field_facet) && !!facet.display_name;
                         childs = facet.values.length > 0;
                         //delimiter
                         if (index !== 0 && childs && regular) {
@@ -225,23 +230,23 @@ define('io.ox/core/tk/autocomplete',
                         //facet
                         $('<div class="autocomplete-item group unselectable">')
                             .css('display', regular && childs ? 'inline' : 'none')
-                            .text(facet.name)
+                            .text(facet.display_name)
                             .data({
                                 index: index++,
                                 id: facet.id,
-                                label: facet.name,
+                                label: facet.display_name,
                                 type: 'group'
                             })
                             .appendTo(scrollpane);
                         //values
-                        _(facet.values).each(function (item) {
-                            item.type = facet.type;
+                        _(facet.values).each(function (value) {
+                            value.facet = facet.id;
                             var node = $('<div class="autocomplete-item">')
                                 .on('click', fnSelectItem);
                             //intend
                             if (regular)
                                 node.addClass('indent');
-                            o.draw.call(node, item);
+                            o.draw.call(node, value);
                             node.appendTo(scrollpane);
                         });
                     });

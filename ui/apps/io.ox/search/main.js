@@ -28,15 +28,30 @@ define('io.ox/search/main',
         index: 100,
         id: 'default',
         config: function (data) {
-            data.defaultApp =  settings.get('settings/defaultSearchApp', 'io.ox/mail');
+            data.defaultApp =  settings.get('settings/search/default', 'io.ox/mail');
         }
     });
 
     ext.point('io.ox/search/main').extend({
         index: 200,
+        id: 'custom',
+        config: function (data) {
+            data.custom =  settings.get('settings/search/custom', ['time']);
+        }
+    });
+
+    ext.point('io.ox/search/main').extend({
+        index: 300,
+        id: 'mandatory',
+        config: function (data) {
+            data.mandatory =  settings.get('settings/search/mandatory/folder', ['mail', 'infostore']);
+        }
+    });
+
+    ext.point('io.ox/search/main').extend({
+        index: 400,
         id: 'mapping',
         config: function (data) {
-
             //active app : app searched in
             data.mapping = {
                 //name mapping
@@ -116,29 +131,30 @@ define('io.ox/search/main',
                     },
                     data: {
                         prefix: query,
-                        activeFacets: model.getActive()
+                        //use returned facets array from last query request
+                        facets: model.getFacets() //model.get('data').facets || ''
                     }
                 };
 
                 return api.autocomplete($.extend(standard, options))
-                    .then(function (data) {
-                        //remove already active static filters
-                        var hash = {};
+                    .then(function (obj) {
 
-                        //build hash
-                        _.each(model.get('active'), function (item) {
-                            if (item.type === 'static')
-                                hash[item.facet] = true;
+                        //TODO: remove when backend is ready
+                        _.each(obj.facets.values, function (value) {
+                            //multifilter facet
+                            if (value.options)
+                                value.options = value.options[0];
+
                         });
 
-                        //remove
-                        data.list = _.filter(data.list, function (facet) {
-                            return !hash[facet.id];
-                        });
+                        //match convention in autocomplete tk
+                        var data = {
+                            list: obj.facets,
+                            hits: 0
+                        };
                         model.set({
                             query: query,
-                            autocomplete: data
-
+                            autocomplete: data.list
                         }, {
                             silent: true
                         });
@@ -152,7 +168,7 @@ define('io.ox/search/main',
                             module: model.getModule()
                         },
                         data: {
-                            filters: model.getFilter(),
+                            facets: model.getFacets(),
                             start: model.get('start'),
                             size: model.get('size')
                         }
