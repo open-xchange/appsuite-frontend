@@ -1195,7 +1195,7 @@ define('io.ox/core/desktop',
                         }
                         this.trigger('change:title');
                     } else {
-                        console.error('window.setTitle(str) exprects string!', str);
+                        console.error('window.setTitle(str) expects string!', str);
                     }
                     return this;
                 };
