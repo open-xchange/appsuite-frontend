@@ -26,8 +26,9 @@ define('io.ox/editor/main',
         className: 'io-ox-editor container-fluid abs',
 
         events: {
-            'submit .form-inline': 'onSubmit',
+            'submit form': 'onSubmit',
             'keydown .title': 'onTitleKeydown',
+            'keyup .title': 'onTitleKeyup',
             'keydown .content': 'onContentKeydown',
             'click .save': 'onSave',
             'click .quit': 'onQuit'
@@ -42,6 +43,10 @@ define('io.ox/editor/main',
                 e.preventDefault();
                 this.focus();
             }
+        },
+
+        onTitleKeyup: function () {
+            this.model.trigger('keyup:title', this.getTitle());
         },
 
         onContentKeydown: function (e) {
@@ -197,6 +202,15 @@ define('io.ox/editor/main',
             } else {
                 app.create();
             }
+
+            model.on('keyup:title', function (title) {
+                if (!title) {
+                    title = gt('Editor');
+                }
+                win.setTitle(title);
+                app.setTitle(title);
+            });
+
         });
 
         app.create = function (options) {
@@ -293,6 +307,13 @@ define('io.ox/editor/main',
                 .done(function (data, text) {
                     win.idle();
                     app.setState({ folder: o.folder_id, id: o.id });
+                    var title = data.title;
+                    if (!title) {
+                        title = gt('Editor');
+                    }
+                    win.setTitle(title);
+                    app.setTitle(title);
+
                     model.set(previous = $.extend(data, { content: text[0] }));
                     view.focus();
                     def.resolve();
