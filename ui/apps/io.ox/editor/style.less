@@ -13,66 +13,26 @@
 
 .io-ox-editor {
 
-    width: 90%;
-    max-width: 800px;
-    margin: 30px auto 30px auto;
+    max-width: 880px;
+    margin-top: 20px;
 
-    form {
-        height: 100%;
-        margin: 0;
-    }
-
-    .header {
-        position: relative;
-        height: 50px;
-        z-index: 2;
-    }
-    .button-wrap {
-        display: inline-block;
-        float: right;
-    }
-    .body {
-        position: relative;
-        top: -50px;
-        padding-top: 50px;
-        height: 100%;
-        width: 100%;
-        z-index: 1;
-    }
-
-    .footer {
-        position: absolute;
-        width: 100%;
-        bottom: 20px;
-    }
-
-    .title {
-        border: 1px solid #f5f5f5;
+     .title {
         font-weight: bold;
-        width: 55%;
-        padding-left: 13px;
-        padding-right: 13px;
-        &:focus { border-color: rgba(82, 168, 236, 0.8); }
     }
 
-    .save {
-        width: 120px;
-        float: right;
+    form, .body, .body>div {
+        height: 100%;
     }
 
-    .quit {
-        width: 120px;
-        float: right;
-        margin-right: 10px;
+    .body {
+        padding-bottom: 55px;
     }
 
-    textarea {
+    textarea.form-control {
         font-family: monospace;
-        font-size: 14px;
         line-height: 1.3333em;
         color: #333;
         padding: 13px;
-        width: 100%;
         height: 100%;
     }
 
@@ -80,14 +40,11 @@
         overflow: hidden;
         margin: 0;
     }
-    // mobile
-    @media (max-width: 700px) {
-        .title {
-            width: 100%;
-            padding: 14px;
-        }
-        .button-wrap { margin-top: 10px; }
-        .body { padding-top: 80px; }
-    }
-}
 
+    @media (max-width: @screen-xs-max) {
+        .body {
+            padding-bottom: 100px;
+        }
+    }
+
+ }

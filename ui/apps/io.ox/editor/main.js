@@ -23,7 +23,7 @@ define('io.ox/editor/main',
 
     var EditorView = Backbone.View.extend({
 
-        className: 'io-ox-editor abs',
+        className: 'io-ox-editor container-fluid abs',
 
         events: {
             'submit .form-inline': 'onSubmit',
@@ -128,27 +128,36 @@ define('io.ox/editor/main',
         },
 
         render: function () {
-
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<form class="form-inline">').append(
-                    $('<div class="header">').append(
+                $('<form role="form">').append(
+                    $('<div class="row">').append(
                         // title
-
-                        $('<input type="text" class="title form-control" tabindex="1" maxlength="350">')
-                        .attr('placeholder', gt('Enter document title here')),
+                        $('<div class="form-group col-xs-12 col-sm-8">').append(
+                            $('<label class="sr-only">').attr('for', guid).text(gt('Enter document title here')),
+                            $('<input class="title form-control">').attr({
+                                id: guid,
+                                placeholder: gt('Enter document title here'),
+                                maxlength: 350,
+                                tabindex: 1,
+                                type: 'text'
+                            })
+                        ),
 
                         // save & close buttons
-
-                        $('<div class="button-wrap">').append(
-                            $('<button type="button" class="save btn btn-primary" tabindex="3">').text(gt('Save')),
-                            $('<button type="button" class="quit btn btn-default" tabindex="4">').text(gt('Close'))
+                        $('<div class="form-group col-xs-6 col-sm-2">').append(
+                            $('<button type="button" class="save btn btn-primary btn-block" tabindex="3">').text(gt('Save'))
+                        ),
+                        $('<div class="form-group col-xs-6 col-sm-2">').append(
+                            $('<button type="button" class="quit btn btn-default btn-block" tabindex="4">').text(gt('Close'))
                         )
-
                     ),
-                    $('<div class="body">').append(
-                        // editor
-                        $('<textarea class="content form-control" tabindex="2">').val('')
-                        .attr('placeholder', _.device('ios || android') ? '': gt('You can quick-save your changes via Ctrl+Enter.'))
+                    $('<div class="body row">').append(
+                        $('<div class="col-md-12">').append(
+                            // editor
+                            $('<textarea class="content form-control" tabindex="2">').val('')
+                                .attr('placeholder', _.device('ios || android') ? '': gt('You can quick-save your changes via Ctrl+Enter.'))
+                        )
                     )
                 )
             );
