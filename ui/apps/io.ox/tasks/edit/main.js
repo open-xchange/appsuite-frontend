@@ -162,7 +162,7 @@ define('io.ox/tasks/edit/main',
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-                                clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                clean(); // clean before resolve
                                 model.factory.realm('edit').release();//old model no longer needed
                                 def.resolve();
                             } else {

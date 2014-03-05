@@ -101,7 +101,7 @@ define('io.ox/tasks/edit/view',
                             return val;
                         }),
                     attributes = _(_(self.model.attributes)
-                        .pick(['start_date', 'end_date', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'numberOfAttachments']))
+                        .pick(['start_date', 'end_date', 'alarm', 'recurrence_type', 'percent_completed', 'private_flag', 'number_of_attachments']))
                         .filter(function (val) {
                             return val;
                         });
