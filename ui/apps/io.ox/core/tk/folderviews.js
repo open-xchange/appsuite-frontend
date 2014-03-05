@@ -1018,7 +1018,7 @@ define('io.ox/core/tk/folderviews',
                 //apply blacklist to hide folders
                 var hidden = [],
                     items,
-                    blacklist = opt.app.settings.get('folderview/blacklist', {}),
+                    blacklist = (!opt.app) ? {} : opt.app.settings.get('folderview/blacklist', {}),
                     blacklistCheck = function (folder) {
                         var check = blacklist[folder.id];
                         if (check) {
