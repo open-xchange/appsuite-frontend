@@ -35,6 +35,7 @@ define('io.ox/mail/toolbar',
         //
         'compose': {
             prio: 'hi',
+            mobile: 'hi',
             label: gt('Compose'),
             title: gt('Compose new email'),
             drawDisabled: true,
@@ -42,6 +43,7 @@ define('io.ox/mail/toolbar',
         },
         'reply': {
             prio: 'hi',
+            mobile: 'lo',
             icon: 'icon-reply',
             label: gt('Reply to sender'),
             drawDisabled: true,
@@ -49,6 +51,7 @@ define('io.ox/mail/toolbar',
         },
         'reply-all': {
             prio: 'hi',
+            mobile: 'lo',
             icon: 'icon-reply-all',
             label: gt('Reply all recipients'),
             drawDisabled: true,
@@ -56,6 +59,7 @@ define('io.ox/mail/toolbar',
         },
         'forward': {
             prio: 'hi',
+            mobile: 'lo',
             icon: 'icon-mail-forward',
             label: gt('Forward'),
             drawDisabled: true,
@@ -63,6 +67,7 @@ define('io.ox/mail/toolbar',
         },
         'delete': {
             prio: 'hi',
+            mobile: 'lo',
             icon: 'icon-trash',
             label: gt('Delete'),
             drawDisabled: true,
@@ -70,8 +75,9 @@ define('io.ox/mail/toolbar',
         },
         'color': {
             prio: 'hi',
+            mobile: 'none',
             icon: 'icon-bookmark',
-            label: gt('Set flag color'),
+            label: gt('Set color'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
@@ -80,6 +86,7 @@ define('io.ox/mail/toolbar',
         },
         'edit': {
             prio: 'hi',
+            mobile: 'lo',
             label: gt('Edit draft'),
             ref: 'io.ox/mail/actions/edit'
         },
@@ -88,30 +95,35 @@ define('io.ox/mail/toolbar',
         //
         'markunread': {
             prio: 'lo',
+            mobile: 'lo',
             label: gt('Mark as unread'),
             ref: 'io.ox/mail/actions/markunread',
             section: 'flags'
         },
         'markread': {
             prio: 'lo',
+            mobile: 'lo',
             label: gt('Mark as read'),
             ref: 'io.ox/mail/actions/markread',
             section: 'flags'
         },
         'print': {
             prio: 'lo',
+            mobile: 'lo',
             label: gt('Print'),
             ref: 'io.ox/mail/actions/print',
             section: 'export'
         },
         'saveEML': {
             prio: 'lo',
+            mobile: 'lo',
             label: gt('Save as file'),
             ref: 'io.ox/mail/actions/save',
             section: 'export'
         },
         'source': {
             prio: 'lo',
+            mobile: 'none',
             //#. source in terms of source code
             label: gt('View source'),
             ref: 'io.ox/mail/actions/source',
@@ -119,20 +131,16 @@ define('io.ox/mail/toolbar',
         },
         'reminder': {
             prio: 'lo',
+            mobile: 'none',
             label: gt('Reminder'),
             ref: 'io.ox/mail/actions/reminder',
             section: 'keep'
         },
         'add-to-portal': {
             prio: 'lo',
+            mobile: 'none',
             label: gt('Add to portal'),
             ref: 'io.ox/mail/actions/add-to-portal',
-            section: 'keep'
-        },
-        'folder': {
-            prio: 'lo',
-            label: gt('Show/hide folder'),
-            ref: 'io.ox/mail/actions/toggle-folder',
             section: 'keep'
         }
     };

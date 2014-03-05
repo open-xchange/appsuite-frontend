@@ -3216,12 +3216,13 @@ input.flat-input {
         -webkit-backface-visibility: hidden;
     }
 
-    .vsplit .leftside { width: 50%; right: auto; }
-    .vsplit .rightside { left: 50%; width: 50%; top: 41px; right: auto; }
+    .vsplit .leftside { width: 50%; right: auto; z-index: 1; }
+    .vsplit .rightside { left: 50%; width: 50%; top: 41px; right: auto; z-index: 2; }
     .vsplit .rightside-navbar {
         position: absolute; top: 0; left: 50%; width: 50%; height: 45px;
         background-color: #eee; border-bottom: 1px solid #ccc;
         padding: 5px 13px 5px 13px;
+        z-index: 2;
     }
     .vsplit-reverse {
         .rightside-navbar, .rightside { display:none; }

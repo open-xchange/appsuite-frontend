@@ -895,11 +895,11 @@ define('io.ox/core/main',
         };
 
         var mobileAutoLaunchArray = function () {
-            var autoStart = _([].concat(settings.get('autoStartMobile', 'io.ox/portal'))).filter(function (o) {
+            var autoStart = _([].concat(settings.get('autoStartMobile', 'io.ox/mail'))).filter(function (o) {
                 return !_.isUndefined(o) && !_.isNull(o);
             });
-            //always add mail as fallback
-            autoStart.push('io.ox/mail');
+            // add mail as fallback
+            if (autoStart[0] !== 'io.ox/mail') autoStart.push('io.ox/mail');
             return autoStart;
         };
 

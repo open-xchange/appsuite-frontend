@@ -40,19 +40,19 @@ define('io.ox/core/extPatterns/links',
                 actions.invoke(ref, this, baton, e);
             },
             drawDefault = function () {
+                var prio = _.device('small') ? self.mobile : self.prio;
                 var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
                         'role': 'menuitem',
                         'title': self.title || self.label || '',
                         'data-section': self.section || 'default',
-                        'data-prio': self.prio || 'lo',
-                        'data-ref': self.ref,
-                        'data-prio-mobile': self.prioMobile || 'none'
+                        'data-prio': _.device('small') ? (self.mobile || 'none') : (self.prio || 'lo'),
+                        'data-ref': self.ref
                     });
                 // icons are prefered over labels
                 a.append(
-                    (self.icon && $('<i>').addClass(self.icon)) ||
+                    (self.icon && prio === 'hi' && $('<i>').addClass(self.icon)) ||
                     (self.label && $.txt(self.label)) ||
                     $()
                 );
@@ -203,7 +203,7 @@ define('io.ox/core/extPatterns/links',
                 _(items).each(function (item) {
                     var link = item.link;
                     if (item.state === false) {
-                        if (_.isFunction(link.drawDisabled)) {
+                        if (_.isFunction(link.drawDisabled) && !_.device('small')) {
                             link.drawDisabled.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
                             count++;
                         }
@@ -318,7 +318,10 @@ define('io.ox/core/extPatterns/links',
                     lo = all.children().filter('[data-prio="lo"]').parent(),
                     isSmall = _.device('small');
 
-                if ((!multiple || options.forcelimit) && (isSmall || (all.length > 5 && lo.length > 1))) {
+                // remove unimportant links on smartphone (prio='none')
+                if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
+
+                if ((!multiple || options.forcelimit) && (isSmall || all.length > 5) && lo.length > 1) {
                     nav.append(
                         $('<li class="dropdown">').append(
                             $('<a class="actionlink">')
@@ -329,10 +332,10 @@ define('io.ox/core/extPatterns/links',
                                 'aria-haspopup': 'true',
                                 'tabindex': '1',
                                 'role': 'menuitem'
-                            }).append(
-                                isSmall ?
-                                    [$.txt(gt('Actions')), $('<b class="caret">')] :
-                                    [$.txt(gt('More')), $('<i class="icon-caret-down">')]
+                            })
+                            .append(
+                                $.txt(isSmall ? gt('Actions') : gt('More')),
+                                $('<i class="icon-caret-down">')
                             )
                             .on(Modernizr.touch ? 'touchstart' : 'click', function () {
                                 // fix dropdown position on-the-fly
@@ -345,9 +348,6 @@ define('io.ox/core/extPatterns/links',
                                 'aria-label': isSmall ? gt('Actions') : gt('More')
                             })
                             .append(function () {
-                                if (isSmall) {
-                                    return all.children().filter('[data-prio-mobile="none"]').parent();
-                                }
                                 // loop over all items and visually group by "section"
                                 var items = [], currentSection = '';
                                 lo.each(function () {
