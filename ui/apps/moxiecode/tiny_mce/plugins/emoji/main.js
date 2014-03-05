@@ -366,6 +366,13 @@ define('moxiecode/tiny_mce/plugins/emoji/main',
                         forceEmojiIcons: true
                     }), format || 'html');
                 };
+            } else if (options.from === 'all' && options.to === 'unified') {
+                return function (text) {
+                    text = text || '';
+                    text = self.softbankToUnified(text);
+                    text = self.jisToUnified(text);
+                    return text;
+                };
             }
             return;
         },
