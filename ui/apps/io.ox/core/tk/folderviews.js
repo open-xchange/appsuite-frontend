@@ -949,12 +949,12 @@ define('io.ox/core/tk/folderviews',
                 );
             } else {
                 var container = $('<div class="hidden-folders-container">').hide(),
-                    arrow = $('<i class="hidden-folders-icon icon-caret-right">');
+                    arrow = $('<i class="hidden-folders-icon fa fa-caret-right">');
                 this.append($('<div class="section-title hidden-folders-link">').text(sections[baton.id])
                     .on('click', function (e) {
                         e.preventDefault();
                         container.toggle();
-                        arrow.toggleClass('icon-caret-right icon-caret-down');
+                        arrow.toggleClass('fa-caret-right fa-caret-down');
                         baton.selection.updateIndex();//hidden items are not in the selection, so it must be updated
                     }).append(arrow), container);
             }
