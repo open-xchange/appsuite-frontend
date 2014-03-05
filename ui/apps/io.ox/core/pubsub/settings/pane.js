@@ -389,7 +389,7 @@ define('io.ox/core/pubsub/settings/pane',
         function addHint() {
             if ((hint = getHint())) {
                 // add node
-                node.after(hintNode = $('<div class="empty">').text(hint + '.'));
+                node.append(hintNode = $('<li class="empty">').text(hint + '.'));
             }
         }
 
@@ -404,18 +404,22 @@ define('io.ox/core/pubsub/settings/pane',
 
             if (capabilities.has('publication')) {
                 this.$el.append(
-                    // pub
-                    both ? $('<h2 class="pane-headline">').text(gt('Publications')) : $(),
-                    baton.pubListNode = $('<ul class="list-unstyled publications">')
+                    $('<fieldset>').append(
+                        // pub
+                        both ? $('<legend class="pane-headline">').text(gt('Publications')) : $(),
+                        baton.pubListNode = $('<ul class="list-unstyled publications">')
+                    )
                 );
                 setupList(baton.pubListNode.empty(), baton.publications, 'publication');
             }
 
             if (capabilities.has('subscription')) {
                 this.$el.append(
-                    // sub
-                    both ? $('<h2 class="pane-headline">').text(gt('Subscriptions')) : $(),
-                    baton.subListNode = $('<ul class="list-unstyled subscriptions">')
+                    $('<fieldset>').append(
+                        // sub
+                        both ? $('<legend class="pane-headline">').text(gt('Subscriptions')) : $(),
+                        baton.subListNode = $('<ul class="list-unstyled subscriptions">')
+                    )
                 );
                 setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
             }
