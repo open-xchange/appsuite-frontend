@@ -538,6 +538,7 @@ msgstr ""
 
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
+#. #-#-#-#-#-#-#-#-#-#
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/calendar/actions.js:273 apps/io.ox/calendar/actions.js:604
 #: apps/io.ox/calendar/invitations/register.js:35
@@ -6093,6 +6094,7 @@ msgstr ""
 msgid "Month View"
 msgstr ""
 
+#. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. #-#-#-#-#-#-#-#-#-#
 #. %1$d = Calendar week
