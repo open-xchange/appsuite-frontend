@@ -19,13 +19,13 @@ define('io.ox/mail/toolbar',
      'io.ox/mail/api',
      'io.ox/backbone/mini-views/dropdown',
      'io.ox/core/tk/upload',
-     'io.ox/core/extPatterns/dnd',
+     'io.ox/core/dropzone',
      'io.ox/core/notifications',
      'gettext!io.ox/mail',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less',
      'io.ox/mail/folderview-extensions'
-    ], function (ext, links, actions, flagPicker, api, Dropdown, upload, dnd, notifications, gt) {
+    ], function (ext, links, actions, flagPicker, api, Dropdown, upload, dropzone, notifications, gt) {
 
     'use strict';
 
@@ -272,8 +272,9 @@ define('io.ox/mail/toolbar',
             };
 
             // drop zone
-            var dropZone = new dnd.UploadZone({ ref: 'io.ox/mail/dnd/actions' }, app);
-            win.on('show', dropZone.include).on('hide', dropZone.remove);
+            win.nodes.main.append(
+                new dropzone.Inplace().render().$el
+            );
         }
     });
 

@@ -97,7 +97,59 @@ define('io.ox/core/extPatterns/dnd',
         };
     };
 
+    // Backbone Dropzone
+    var InplaceDropzone = Backbone.View.extend({
+
+        className: 'inplace-dropzone',
+
+        events: {
+            'drop': 'onDrop'
+        },
+
+        onDrag: function (e) {
+            switch (e.type) {
+            case 'dragenter':
+                this.show();
+                break;
+            case 'drop':
+                e.preventDefault();
+                /* falls through */
+            case 'dragleave':
+                this.hide();
+                break;
+            }
+        },
+
+        onDrop: function () {
+            console.log('DROP!');
+        },
+
+        show: function () {
+            console.log('Show!');
+        },
+
+        hide: function () {
+            console.log('Hide!');
+        },
+
+        initialize: function (options) {
+            this.options = options;
+            $(document).on('dragenter dragleave drop', $.proxy(this.onDrag, this));
+            this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
+        },
+
+        render: function () {
+            return this;
+        },
+
+        dispose: function () {
+            this.stopListening();
+            $(document).off('dragenter dragleave drop', this.onDrag);
+        }
+    });
+
     return {
-        UploadZone: UploadZone
+        UploadZone: UploadZone,
+        InplaceDropzone: InplaceDropzone
     };
 });

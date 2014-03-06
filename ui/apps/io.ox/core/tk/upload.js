@@ -301,7 +301,8 @@ define('io.ox/core/tk/upload',
     }
 
     return {
-        dnd : {
+
+        dnd: {
             enabled: Modernizr.draganddrop,
             createDropZone: function (options) {
                 options = options || {};
@@ -311,6 +312,7 @@ define('io.ox/core/tk/upload',
                 return new DropZone(options);
             }
         },
+
         createQueue: function (delegate) {
             return new FileProcessingQueue(delegate);
         }
