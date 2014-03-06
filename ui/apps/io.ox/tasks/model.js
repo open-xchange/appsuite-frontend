@@ -100,7 +100,7 @@ define('io.ox/tasks/model',
         validate: function (attributes) {
             if (attributes.start_date && attributes.end_date && attributes.end_date <= attributes.start_date) {
                 //this.add('start_date', gt('The start date must be before the end date.')); // see Bug 27742
-                this.add('end_date', gt('The start date must be before the end date.'));
+                this.add('end_date', gt('The start date must be before the due date.'));
             }
         }
     });
@@ -146,7 +146,7 @@ define('io.ox/tasks/model',
         id: 'recurrence-needs-end-date',
         validate: function (attributes) {
             if (attributes.recurrence_type && (attributes.end_date === undefined || attributes.end_date === null)) {//0 is a valid number so check precisely
-                this.add('end_date', gt('Recurring tasks need a valid end date.'));
+                this.add('end_date', gt('Recurring tasks need a valid due date.'));
             }
         }
     });

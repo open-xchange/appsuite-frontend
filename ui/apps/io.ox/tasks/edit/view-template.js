@@ -161,7 +161,7 @@ define('io.ox/tasks/edit/view-template',
         className: 'col-xs-6 collapsed',
         attribute: 'start_date',
         required: false,
-        label: gt('Starts on'),
+        label: gt('Start date'),
         utc: true,
         clearButton: _.device('small')//add clearbutton on mobile devices
     }), {
