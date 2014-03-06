@@ -60,9 +60,8 @@ define('io.ox/mail/actions/attachmentSave',
     return {
 
         multiple: function (list) {
-
             var dialog = new dialogs.ModalDialog()
-                .header($('<h4>').text('Save attachment'))
+                .header($('<h4>').text(gt('Save attachment')))
                 .addPrimaryButton('ok', gt('Save'), 'ok', {tabIndex: '1'})
                 .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'});
 
