@@ -436,7 +436,11 @@ define('io.ox/contacts/view-detail',
                         }),
                         row('URL', function () {
                             if (baton.data.url) {
-                                return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
+                                if (baton.data.url.indexOf('http://') !== 0 && baton.data.url.indexOf('https://') !== 0) {//fix urls
+                                    return $('<a>', { href: 'http://' + baton.data.url, target: '_blank' }).text(baton.data.url);
+                                } else {
+                                    return $('<a>', { href: baton.data.url, target: '_blank' }).text(baton.data.url);
+                                }
                             }
                         })
                     )
