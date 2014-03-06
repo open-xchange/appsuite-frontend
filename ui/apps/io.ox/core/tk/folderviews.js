@@ -564,6 +564,7 @@ define('io.ox/core/tk/folderviews',
                 self.selection.destroy();
                 self.internal.destroy();
                 container.empty();
+                container.trigger('destroy');//trigger event so eventhandlers for repainting can be removed
                 container = self.container = self.selection = self.internal = null;
             });
         };
@@ -1082,8 +1083,14 @@ define('io.ox/core/tk/folderviews',
             return $.when();
         };
 
-        api.on('delete create', function () {
+        function eventHandler() {//wrapper function to bind and unbind repaint function
             self.repaint();
+        }
+
+        api.on('delete create', eventHandler);
+
+        container.one('destroy', function () {
+            api.off('delete create', eventHandler);
         });
     }
 
