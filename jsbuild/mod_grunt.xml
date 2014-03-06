@@ -222,21 +222,60 @@
     </macrodef>
 
     <!-- =================================================================================
-C:\Users\Daniel>where grunt node
-C:\Users\Daniel\AppData\Roaming\npm\grunt
-C:\Users\Daniel\AppData\Roaming\npm\grunt.cmd
-C:\Program Files\nodejs\node.exe
-
-C:\Users\Daniel>echo %PATH%
-C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Window
-s\System32\WindowsPowerShell\v1.0\;C:\Program Files\nodejs\;C:\Program Files\TortoiseGit\bin;C:\Dev\msysgit\cmd;C:\Progr
-am Files (x86)\Astaro\Astaro SSL VPN Client\bin;C:\Users\Daniel\AppData\Roaming\npm
-
-C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\ThinkPad\Bluetooth Software\;C:\Program Files\ThinkPad\Bluetooth Software\syswow64;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Common Files\Lenovo;C:\Program Files (x86)\Common Files\Ulead Systems\MPEG;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\Lenovo\Access Connections\;C:\SWTOOLS\ReadyApps;C:\Program Files (x86)\Symantec\VIP Access Client\;C:\Program Files (x86)\Common Files\Lenovo;C:\Program Files\TortoiseGit\bin;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x86;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x64;C:\Program Files (x86)\Git\cmd;C:\Program Files\nodejs\;C:\Program Files (x86)\Astaro\Astaro SSL VPN Client\bin;C:\Users\Ingo\AppData\Roaming\npm
       -->
     <macrodef name="mod_grunt.-impl-init-env-4-windows">
     <sequential>
-        <fail message="not implemented yet ..." />
+
+		<var name ="local.exe.grunt"
+		     value="${user-home}/appdata/roaming/npm/grunt"
+		/>
+	    <if>
+            <available file="${local.exe.grunt}" />
+            <then>
+	            <echo message="... found GRUNT exe at '${local.exe.grunt}'" />
+            	<var name="mod_grunt.exe.grunt" value="${local.exe.grunt}" />
+            </then>
+        </if>
+
+		<var name ="local.exe.npm"
+		     value="c:/progra~1/nodejs/node_modules/npm"
+		/>
+	    <if>
+            <available file="${local.exe.npm}" />
+            <then>
+	            <echo message="... found NPM exe at '${local.exe.npm}'" />
+            	<var name="mod_grunt.exe.npm" value="${local.exe.npm}" />
+            </then>
+        </if>
+
+		<var name ="local.exe.bower"
+		     value="${user-home}/appdata/roaming/npm/bower"
+		/>
+	    <if>
+            <available file="${local.exe.grunt}" />
+            <then>
+	            <echo message="... found BOWER exe at '${local.exe.bower}'" />
+            	<var name="mod_grunt.exe.bower" value="${local.exe.bower}" />
+            </then>
+        </if>
+
+		<var name ="mod_grunt.PATH"
+		     value="${mod_grunt.env.PATH}"
+		/>
+        <if>
+            <available file="${user-home}/appdata/roaming/npm" />
+            <then>
+        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH};${user-home}/appdata/roaming/npm" />
+        	</then>
+        </if>
+
+        <if>
+            <available file="c:/progra~1/nodejs" />
+            <then>
+        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH};c:/progra~1/nodejs" />
+        	</then>
+        </if>
+
     </sequential>
     </macrodef>
 
@@ -245,31 +284,42 @@ C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x8
     <macrodef name="mod_grunt.-impl-init-env-4-mac">
     <sequential>
 
+		<var name ="local.exe.grunt"
+		     value="/opt/local/bin/grunt"
+		/>
         <if>
-            <available file="/opt/local/bin/grunt" />
+            <available file="${local.exe.grunt}" />
             <then>
-	            <echo message="... found GRUNT exe at /opt/local/bin/grunt" />
-            	<var name="mod_grunt.exe.grunt" value="/opt/local/bin/grunt" />
+	            <echo message="... found GRUNT exe at '${local.exe.grunt}'" />
+            	<var name="mod_grunt.exe.grunt" value="${local.exe.grunt}" />
             </then>
         </if>
 
+		<var name ="local.exe.npm"
+		     value="/opt/local/bin/npm"
+		/>
         <if>
-            <available file="/opt/local/bin/npm" />
+            <available file="${local.exe.npm}" />
             <then>
-	            <echo message="... found NPM exe at /opt/local/bin/npm" />
-            	<var name="mod_grunt.exe.npm" value="/opt/local/bin/npm" />
+	            <echo message="... found NPM exe at '${local.exe.npm}'" />
+            	<var name="mod_grunt.exe.npm" value="${local.exe.npm}" />
             </then>
         </if>
 
+		<var name ="local.exe.bower"
+		     value="/opt/local/bin/bower"
+		/>
         <if>
-            <available file="/opt/local/bin/bower" />
+            <available file="${local.exe.bower}" />
             <then>
-	            <echo message="... found BOWER exe at /opt/local/bin/bower" />
-            	<var name="mod_grunt.exe.bower" value="/opt/local/bin/bower" />
+	            <echo message="... found BOWER exe at '${local.exe.bower}'" />
+            	<var name="mod_grunt.exe.bower" value="${local.exe.bower}" />
             </then>
         </if>
         
-		<var name="mod_grunt.PATH" value="${mod_grunt.env.PATH}" />
+		<var name ="mod_grunt.PATH"
+		     value="${mod_grunt.env.PATH}"
+		/>
         <if>
             <available file="/opt/local/bin" />
             <then>
@@ -291,7 +341,57 @@ C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x8
       -->
     <macrodef name="mod_grunt.-impl-init-env-4-linux">
     <sequential>
-        <fail message="not implemented yet ..." />
+
+		<var name ="local.exe.grunt"
+		     value="/usr/local/bin/grunt"
+		/>
+        <if>
+            <available file="${local.exe.grunt}" />
+            <then>
+	            <echo message="... found GRUNT exe at '${local.exe.grunt}'" />
+            	<var name="mod_grunt.exe.grunt" value="${local.exe.grunt}" />
+            </then>
+        </if>
+
+		<var name ="local.exe.npm"
+		     value="/usr/bin/npm"
+		/>
+        <if>
+            <available file="${local.exe.npm}" />
+            <then>
+	            <echo message="... found NPM exe at '${local.exe.npm}'" />
+            	<var name="mod_grunt.exe.npm" value="${local.exe.npm}" />
+            </then>
+        </if>
+
+		<var name ="local.exe.bower"
+		     value="/usr/local/bin/bower"
+		/>
+        <if>
+            <available file="${local.exe.bower}" />
+            <then>
+	            <echo message="... found BOWER exe at '${local.exe.bower}'" />
+            	<var name="mod_grunt.exe.bower" value="${local.exe.bower}" />
+            </then>
+        </if>
+<!--        
+		<var name ="mod_grunt.PATH"
+		     value="${mod_grunt.env.PATH}"
+		/>
+        <if>
+            <available file="/opt/local/bin" />
+            <then>
+        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}:/opt/local/bin" />
+        	</then>
+        </if>
+
+        <if>
+            <available file="/opt/local/sbin" />
+            <then>
+        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}:/opt/local/sbin" />
+        	</then>
+        </if>
+-->
     </sequential>
     </macrodef>
 
