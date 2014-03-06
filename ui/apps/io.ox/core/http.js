@@ -794,7 +794,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 })
                 .fail(function (xhr, textStatus, errorThrown) {
                     that.trigger('stop fail', r.xhr);
-                    r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'general') }, xhr);
+                    r.def.reject({ error: xhr.status + ' ' + (errorThrown || 'An unknown error occurred') }, xhr);
                     r = null;
                 });
         }

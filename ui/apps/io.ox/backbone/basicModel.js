@@ -140,7 +140,7 @@ define('io.ox/backbone/basicModel',
                         self.trigger('sync', response);
                     })
                     .fail(function (response, xhr) {
-                        if (xhr && xhr.status === 404) {
+                        if (xhr && (xhr.status === 404 || xhr.status === 0)) {
                             response.error = gt('Server unreachable');
                         }
                         callbacks.error(model, response);

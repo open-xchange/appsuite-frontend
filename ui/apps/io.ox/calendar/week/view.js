@@ -78,8 +78,8 @@ define('io.ox/calendar/week/view',
             if (_.device('touch')) {
                 _.extend(events, {
                     'taphold .week-container>.day,.fulltime>.day': 'onCreateAppointment',
-                    'swipeleft .timeslot' : 'onControlView',
-                    'swiperight .timeslot' : 'onControlView'
+                    'swipeleft .timeslot': 'onControlView',
+                    'swiperight .timeslot': 'onControlView'
                 });
             } else {
                 _.extend(events, {
@@ -89,9 +89,9 @@ define('io.ox/calendar/week/view',
                     _.extend(events, {
                         'mouseenter .appointment': 'onHover',
                         'mouseleave .appointment': 'onHover',
-                        'mousedown .week-container>.day' : 'onLasso',
-                        'mousemove .week-container>.day' : 'onLasso',
-                        'mouseup' : 'onLasso'
+                        'mousedown .week-container>.day': 'onLasso',
+                        'mousemove .week-container>.day': 'onLasso',
+                        'mouseup': 'onLasso'
                     });
                 }
             }
