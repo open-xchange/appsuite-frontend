@@ -42,8 +42,7 @@ define('io.ox/mail/autoforward/settings/register',
             require(['io.ox/mail/autoforward/settings/filter'], function (filters) {
 
                 userAPI.get().done(function (user) {
-                    var multiValues = {};
-                    filters.editAutoForward($container, multiValues, user.email1).done(function (filter) {
+                    filters.editAutoForward($container, user.email1).done(function (filter) {
                         filterModel = filter;
                     }).fail(function (error) {
                         var msg;

@@ -23,7 +23,7 @@ define('io.ox/mail/autoforward/settings/filter',
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/autoforward/model', api);
 
     return {
-        editAutoForward: function ($node, multiValues, userMainEmail) {
+        editAutoForward: function ($node, userMainEmail) {
             var deferred = $.Deferred();
 
             api.getRules('autoforward').done(function (data) {
@@ -33,7 +33,7 @@ define('io.ox/mail/autoforward/settings/filter',
                         ForwardEdit,
                         autoForward;
                     autoForwardData.userMainEmail = userMainEmail;
-                    ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward', multiValues);
+                    ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward');
 
                     autoForward = new ForwardEdit({model: factory.create(autoForwardData)});
 
@@ -63,7 +63,7 @@ define('io.ox/mail/autoforward/settings/filter',
                         }
                     });
                     autoForwardData.userMainEmail = userMainEmail;
-                    ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward', multiValues);
+                    ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward');
 
                     autoForward = new ForwardEdit({model: factory.create(autoForwardData)});
 

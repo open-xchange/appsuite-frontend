@@ -15,11 +15,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
     ['io.ox/core/notifications',
      'gettext!io.ox/settings/settings',
      'io.ox/core/extensions',
-     'io.ox/backbone/views',
      'io.ox/mail/mailfilter/settings/filter/form-elements',
      'io.ox/mail/mailfilter/settings/filter/defaults',
      'io.ox/backbone/mini-views'
-    ], function (notifications, gt, ext, views, elements, DEFAULTS, mini) {
+    ], function (notifications, gt, ext, elements, DEFAULTS, mini) {
 
     'use strict';
 
