@@ -4,6 +4,12 @@ open-xchange-appsuite (7.6.0-0) unstable; urgency=low
 
  -- Markus Wagner <markus.wagner@open-xchange.com>  Wed, 12 Feb 2014 11:46:45 +0100
 
+open-xchange-appsuite (7.4.2-10) stable; urgency=low
+
+  * Build for patch 2013-03-05
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Thu, 27 Feb 2014 15:50:06 +0100
+
 open-xchange-appsuite (7.4.2-9) stable; urgency=low
 
   * Build for patch 2014-02-24
