@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name   ="mod_grunt"
+         basedir=".">
+
+    <!-- =================================================================================
+         provide functions around the grunt build environment
+      -->
+    <description>
+    </description>
+	
+    <!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.init">
+    <sequential>
+
+		<if>
+			<not><isset property="mod_grunt.is-initialized" /></not>
+			<then>
+				<echo message="init ..." />
+		
+				<property environment="mod_grunt.env"/>
+				<property name="mod_grunt.path.user-config" value="${user.home}/.jsbuild"                         />
+				<property name="mod_grunt.file.user-config" value="${mod_grunt.path.user-config}/conf.properties" />
+		
+				<condition property="mod_grunt.is-windows">
+					<os family="windows" />
+				</condition>
+	
+				<condition property="mod_grunt.is-mac">
+					<os family="mac" />
+				</condition>
+	
+				<condition property="mod_grunt.is-linux">
+					<os family="unix" />
+				</condition>
+
+				<mod_grunt.-impl-init-from-magic       />
+				<mod_grunt.-impl-init-from-env         />
+				<mod_grunt.-impl-init-from-user-config />
+		
+				<echoproperties prefix="mod_grunt."/>
+
+				<fail unless="mod_grunt.exe.npm"   message="miss NPM   executable ..." />
+				<fail unless="mod_grunt.exe.bower" message="miss BOWER executable ..." />
+				<fail unless="mod_grunt.exe.grunt" message="miss GRUNT executable ..." />
+
+				<var name="mod_grunt.is-initialized" value="true" />
+		
+			</then>
+		</if>
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.prepare-gruntenv-in-project">
+    	<attribute name="prjpath" />
+    <sequential>
+
+		<echo message="check if project '@{prjpath}' needs to be prepared for NPM and BOWER ..." />
+		<mod_done.is-done done-id="@{prjpath}"
+						  is-done="local.is-done"
+		/>
+		
+		<if>
+			<istrue value="${local.is-done}" />
+			<then>
+				<echo message="... NO - was done before" />
+			</then>
+			<else>
+				<echo message="... YES - will do it now" />
+				
+				<if>
+					<istrue value="${mod_grunt.is-windows}" />
+					<then>
+						<exec executable ="${mod_grunt.exe.npm}"
+							  dir        ="@{prjpath}"
+							  failonerror="true"
+						>
+							<env key="PATH" path="${mod_grunt.PATH}" />
+							<arg value="install" />
+						</exec>
+					</then>
+					<else>
+						<exec executable ="${mod_grunt.exe.npm}"
+							  dir        ="@{prjpath}"
+							  failonerror="true"
+						>
+							<env key="PATH" path="${mod_grunt.PATH}" />
+							<arg value="install" />
+						</exec>
+						<fail message="MOIN MOIN : WITHOUT ROOT ACCESS RIGHTS I CANT HELP YOU. Please call 'npm install' manually within '@{prjpath}' !" />
+					</else>
+				</if>
+
+				<exec executable ="${mod_grunt.exe.bower}"
+					  dir        ="@{prjpath}"
+					  failonerror="true"
+				>
+					<env key="PATH" path="${mod_grunt.PATH}" />
+					<arg value="install" />
+				</exec>
+
+				<mod_done.set-done done-id="@{prjpath}"
+				/>
+
+			</else>
+		</if>
+    
+    </sequential>
+    </macrodef>
+
+	<!-- =================================================================================
+         PUBLIC
+         
+         clean the project by removing it's output tree's
+         
+         @param prjpath [IN]
+                the project path where output paths must be cleaned for.
+      -->
+    <macrodef name="mod_grunt.clean">
+
+        <attribute name="prjpath"   />
+
+    <sequential>
+        
+        <mod_grunt.init />
+        
+        <mod_grunt.-impl-grunt prjpath="${basedir}">
+	        <arg value="clean" />
+        </mod_grunt.-impl-grunt>
+        
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+         PUBLIC
+         
+         build the project full
+         
+         @param prjpath [IN]
+                the project path to be build here.
+      -->
+    <macrodef name="mod_grunt.build-full">
+
+        <attribute name="prjpath"   />
+
+    <sequential>
+        
+        <mod_grunt.init />
+
+        <mod_grunt.-impl-grunt prjpath="${basedir}"
+        />
+        
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+         PUBLIC
+         
+         build the project incremental (changes only)
+         
+         @param prjpath [IN]
+                the project path to be build here.
+      -->
+    <macrodef name="mod_grunt.build-incremental">
+
+        <attribute name="prjpath"   />
+
+    <sequential>
+        
+        <mod_grunt.init />
+
+        <mod_grunt.-impl-grunt prjpath="${basedir}"
+        />
+        
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.-impl-init-from-magic">
+    <sequential>
+
+    	<echo message="scan your system and do some magic ..." />
+
+		<var name="local.done" value="false" />
+        <if>
+        	<and>
+				<isfalse value="${local.done}"           />
+				<istrue  value="${mod_grunt.is-windows}" />
+            </and>
+            <then>
+                <echo message="define environment for WINDOWS ..." />
+                <mod_grunt.-impl-init-env-4-windows />
+                <var name="local.done" value="true" />
+            </then>
+        </if>
+        <if>
+        	<and>
+				<isfalse value="${local.done}"       />
+				<istrue  value="${mod_grunt.is-mac}" />
+    		</and>
+            <then>
+                <echo message="define environment for MAC ..." />
+                <mod_grunt.-impl-init-env-4-mac />
+                <var name="local.done" value="true" />
+            </then>
+        </if>
+        <if>
+        	<and>
+				<isfalse value="${local.done}"         />
+				<istrue  value="${mod_grunt.is-linux}" />
+    		</and>
+            <then>
+                <echo message="define environment for LINUX ..." />
+                <mod_grunt.-impl-init-env-4-linux />
+                <var name="local.done" value="true" />
+            </then>
+        </if>
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+C:\Users\Daniel>where grunt node
+C:\Users\Daniel\AppData\Roaming\npm\grunt
+C:\Users\Daniel\AppData\Roaming\npm\grunt.cmd
+C:\Program Files\nodejs\node.exe
+
+C:\Users\Daniel>echo %PATH%
+C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Window
+s\System32\WindowsPowerShell\v1.0\;C:\Program Files\nodejs\;C:\Program Files\TortoiseGit\bin;C:\Dev\msysgit\cmd;C:\Progr
+am Files (x86)\Astaro\Astaro SSL VPN Client\bin;C:\Users\Daniel\AppData\Roaming\npm
+
+C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\ThinkPad\Bluetooth Software\;C:\Program Files\ThinkPad\Bluetooth Software\syswow64;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Common Files\Lenovo;C:\Program Files (x86)\Common Files\Ulead Systems\MPEG;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\Lenovo\Access Connections\;C:\SWTOOLS\ReadyApps;C:\Program Files (x86)\Symantec\VIP Access Client\;C:\Program Files (x86)\Common Files\Lenovo;C:\Program Files\TortoiseGit\bin;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x86;C:\Program Files (x86)\Intel\OpenCL SDK\2.0\bin\x64;C:\Program Files (x86)\Git\cmd;C:\Program Files\nodejs\;C:\Program Files (x86)\Astaro\Astaro SSL VPN Client\bin;C:\Users\Ingo\AppData\Roaming\npm
+      -->
+    <macrodef name="mod_grunt.-impl-init-env-4-windows">
+    <sequential>
+        <fail message="not implemented yet ..." />
+    </sequential>
+    </macrodef>
+
+	<!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.-impl-init-env-4-mac">
+    <sequential>
+
+        <if>
+            <available file="/opt/local/bin/grunt" />
+            <then>
+	            <echo message="... found GRUNT exe at /opt/local/bin/grunt" />
+            	<var name="mod_grunt.exe.grunt" value="/opt/local/bin/grunt" />
+            </then>
+        </if>
+
+        <if>
+            <available file="/opt/local/bin/npm" />
+            <then>
+	            <echo message="... found NPM exe at /opt/local/bin/npm" />
+            	<var name="mod_grunt.exe.npm" value="/opt/local/bin/npm" />
+            </then>
+        </if>
+
+        <if>
+            <available file="/opt/local/bin/bower" />
+            <then>
+	            <echo message="... found BOWER exe at /opt/local/bin/bower" />
+            	<var name="mod_grunt.exe.bower" value="/opt/local/bin/bower" />
+            </then>
+        </if>
+        
+		<var name="mod_grunt.PATH" value="${mod_grunt.env.PATH}" />
+        <if>
+            <available file="/opt/local/bin" />
+            <then>
+        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}:/opt/local/bin" />
+        	</then>
+        </if>
+
+        <if>
+            <available file="/opt/local/sbin" />
+            <then>
+        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}:/opt/local/sbin" />
+        	</then>
+        </if>
+        
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.-impl-init-env-4-linux">
+    <sequential>
+        <fail message="not implemented yet ..." />
+    </sequential>
+    </macrodef>
+
+	<!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.-impl-init-from-env">
+    <sequential>
+        <!--
+        not implemented yet .-)
+        
+    	<property environment="env" />
+    	-->
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.-impl-init-from-user-config">
+    <sequential>
+
+        <echo message="search for config file ${mod_grunt.file.user-config} ..." />
+
+        <if>
+            <available file="${mod_grunt.file.user-config}" />
+        	<then>
+                <echo message="load config file ${mod_grunt.file.user-config} ..." />
+        		<property file  ="${mod_grunt.file.user-config}"
+        				  prefix="local.env."
+        		/>
+
+        		<echoproperties prefix="local.env." />
+        	</then>
+        	<else>
+                <echo message="... no user config file" />
+        	</else>
+        </if>
+
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+         PRIVATE
+         
+         calls the JS Grunt environment to do a build .-)
+         
+         @param prjpath [IN]
+                the project path to be build here.
+
+         @param arguments [IN]
+                optional list of arguments passed to underlying GRUNT call.
+      -->
+    <macrodef name="mod_grunt.-impl-grunt">
+
+        <attribute name="prjpath"   />
+        <element   name="arguments" implicit="true" optional="true" />
+
+    <sequential>
+
+		<echo message="PATH = ${mod_grunt.PATH}" />
+		<echo message="prj  = @{prjpath}"        />
+		
+        <exec executable ="${mod_grunt.exe.grunt}"
+              dir        ="@{prjpath}"
+        	  failonerror="true"
+        >
+	        <env key="PATH" path="${mod_grunt.PATH}" />
+	        <arg value="--no-color" />
+            <arguments />
+        </exec>
+
+    </sequential>
+    </macrodef>
+
+</project>
