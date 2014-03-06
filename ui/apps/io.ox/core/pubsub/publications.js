@@ -89,8 +89,7 @@ define('io.ox/core/pubsub/publications',
         finish: function (url) {
 
             url = _.escape(url);
-
-            var isFolder = !!this.model.attributes.entity.folder,
+            var isFolder = !!this.model.attributes.entity.folder && !this.model.attributes.entity.id,
                 message = isFolder ?
                     //#. %1$s is the publication link http://...
                     gt('The folder is available at %1$s') :
