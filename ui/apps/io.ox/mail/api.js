@@ -1318,7 +1318,7 @@ define('io.ox/mail/api',
                     dest_folder: target,
                     attachment: data.id
                 },
-                data: { folder_id: target, description: 'Saved mail attachment' },
+                data: { folder_id: target, description: gt('Saved mail attachment') },
                 appendColumns: false
             });
         });
