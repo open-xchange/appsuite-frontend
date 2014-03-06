@@ -18,11 +18,14 @@ define('io.ox/mail/toolbar',
      'io.ox/core/tk/flag-picker',
      'io.ox/mail/api',
      'io.ox/backbone/mini-views/dropdown',
+     'io.ox/core/tk/upload',
+     'io.ox/core/extPatterns/dnd',
+     'io.ox/core/notifications',
      'gettext!io.ox/mail',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.less',
      'io.ox/mail/folderview-extensions'
-    ], function (ext, links, actions, flagPicker, api, Dropdown, gt) {
+    ], function (ext, links, actions, flagPicker, api, Dropdown, upload, dnd, notifications, gt) {
 
     'use strict';
 
@@ -234,34 +237,44 @@ define('io.ox/mail/toolbar',
 
 
     // // Uploads
-    // app.queues = {};
+    //
 
-    // if (settings.get('features/importEML') !== false) {
-    //     app.queues.importEML = upload.createQueue({
-    //         start: function () {
-    //             win.busy();
-    //         },
-    //         progress: function (file) {
-    //             return api.importEML({ file: file, folder: app.folder.get() })
-    //                 .done(function (data) {
-    //                     var first = _(data.data || []).first() || {};
-    //                     if ('Error' in first) {
-    //                         notifications.yell('error', first.Error);
-    //                     } else {
-    //                         grid.selection.set(first);
-    //                         notifications.yell('success', gt('Mail has been imported'));
-    //                     }
-    //                 });
-    //         },
-    //         stop: function () {
-    //             win.idle();
-    //         },
-    //         type: 'importEML'
-    //     });
-    // }
+    ext.point('io.ox/mail/mediator').extend({
+        id: 'uploads',
+        index: 10300,
+        setup: function (app) {
 
-    // // drag & drop
-    // win.nodes.outer.on('selection:drop', function (e, baton) {
-    //     actions.invoke('io.ox/mail/actions/move', null, baton);
-    // });
+            if (app.settings.get('features/importEML') === false) return;
+
+            var win = app.getWindow();
+
+            app.queues = {
+                'importEML': upload.createQueue({
+                    start: function () {
+                        win.busy();
+                    },
+                    progress: function (file) {
+                        return api.importEML({ file: file, folder: app.folder.get() })
+                            .done(function (data) {
+                                var first = _(data.data || []).first() || {};
+                                if ('Error' in first) {
+                                    notifications.yell('error', first.Error);
+                                } else {
+                                    notifications.yell('success', gt('Mail has been imported'));
+                                }
+                            });
+                    },
+                    stop: function () {
+                        win.idle();
+                    },
+                    type: 'importEML'
+                })
+            };
+
+            // drop zone
+            var dropZone = new dnd.UploadZone({ ref: 'io.ox/mail/dnd/actions' }, app);
+            win.on('show', dropZone.include).on('hide', dropZone.remove);
+        }
+    });
+
 });

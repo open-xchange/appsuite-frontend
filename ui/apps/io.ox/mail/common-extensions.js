@@ -103,8 +103,6 @@ define('io.ox/mail/common-extensions',
             this.append(
                 $('<div class="thread-size" aria-hidden="true" data-open="false">').append(
                     $('<span class="number">').text(_.noI18n(data.threadSize))
-                    // $.txt(' '),
-                    // $('<i class="icon-caret-right">')
                 )
             );
         },
