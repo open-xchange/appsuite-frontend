@@ -15,11 +15,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
     ['io.ox/core/notifications',
      'gettext!io.ox/settings/settings',
      'io.ox/core/extensions',
-     'io.ox/backbone/forms',
      'io.ox/backbone/views',
      'io.ox/mail/mailfilter/settings/filter/form-elements',
-     'io.ox/mail/mailfilter/settings/filter/defaults'
-    ], function (notifications, gt, ext, forms, views, elements, DEFAULTS) {
+     'io.ox/mail/mailfilter/settings/filter/defaults',
+     'io.ox/backbone/mini-views'
+    ], function (notifications, gt, ext, views, elements, DEFAULTS, mini) {
 
     'use strict';
 
@@ -715,14 +715,16 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
         }
     });
 
-    views.point(POINT + '/view').extend(new forms.ControlGroup({
+    ext.point(POINT + '/view').extend({
         id: 'rulename',
         index: 100,
-        fluid: true,
-        label: gt('Rule name'),
-        control: '<input type="text" class="form-control" id="rulename" name="rulename" tabindex="1">',
-        attribute: 'rulename'
-    }));
+        draw: function (baton) {
+            this.append(
+                $('<label for="rulename">').text(gt('Rule name')),
+                new mini.InputView({ name: 'rulename', model: baton.model, className: 'form-control', id: 'rulename' }).render().$el
+            );
+        }
+    });
 
     ext.point(POINT + '/view').extend({
         index: 100,

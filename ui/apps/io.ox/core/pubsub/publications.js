@@ -14,7 +14,6 @@
 define('io.ox/core/pubsub/publications',
     ['io.ox/core/pubsub/model',
      'io.ox/core/extensions',
-     'io.ox/backbone/forms',
      'io.ox/core/api/pubsub',
      'io.ox/core/api/templating',
      'io.ox/core/api/folder',
@@ -23,7 +22,7 @@ define('io.ox/core/pubsub/publications',
      'settings!io.ox/core',
      'gettext!io.ox/core/pubsub',
      'less!io.ox/core/pubsub/style'
-    ], function (pubsub, ext, forms, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
+    ], function (pubsub, ext, api, templAPI, folderAPI, notifications, dialogs, settings, gt)  {
 
     'use strict';
 
