@@ -7969,11 +7969,11 @@ msgstr "Account hinzufügen"
 msgid "Social accounts are only used to download contact and/or calendar data"
 msgstr ""
 "Social Accounts werden nur zum Herunterladen von Kontakt- und/oder "
-"Kalenderdaten verwendet."
+"Kalenderdaten verwendet"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:94
 msgid "Such data will never be uploaded"
-msgstr "Solche Daten werden niemals hochgeladen."
+msgstr "Solche Daten werden niemals hochgeladen"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:101
 msgid ""
