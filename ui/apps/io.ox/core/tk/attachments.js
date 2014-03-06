@@ -85,7 +85,7 @@ define('io.ox/core/tk/attachments',
                         $('<div class="row-2">').append(
                             size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
                         ),
-                        removeFile = $('<a href="#" class="remove" tabindex="1" title="Remove attachment">').append($('<i class="fa fa-trash-o">'))
+                        removeFile = $('<a href="#" class="remove" tabindex="1">').attr('title', gt('Remove attachment')).append($('<i class="fa fa-trash-o">'))
                     )
                 );
 
