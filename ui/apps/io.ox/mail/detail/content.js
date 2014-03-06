@@ -131,25 +131,12 @@ define('io.ox/mail/detail/content',
         return text;
     };
 
-    var blockquoteMore, blockquoteClickOpen, blockquoteCollapsedHeight = 57, mailTo;
-
-    blockquoteMore = function (e) {
+    var explandBlockquote = function (e) {
         e.preventDefault();
-        blockquoteClickOpen.call($(this).prev().get(0));
-        $(this).hide();
+        $(this).hide().prev().slideDown('fast');
     };
 
-    blockquoteClickOpen = function () {
-        var h = this.scrollHeight + 'px';
-        $(this)
-            .off('click.open')
-            .stop().animate({ maxHeight: h }, 300, function () {
-                $(this).css('opacity', 1.00).removeClass('collapsed-blockquote');
-            });
-        $(this).next().hide();
-    };
-
-    mailTo = function (e) {
+    var mailTo = function (e) {
         e.preventDefault();
         var node = $(this),
             email = node.attr('href').substr(7), // cut off leading "mailto:"
@@ -408,22 +395,13 @@ define('io.ox/mail/detail/content',
             // blockquotes (top-level only)
             this.find('blockquote').not(this.find('blockquote blockquote')).each(function () {
                 var node = $(this);
-                node.addClass('collapsed-blockquote')
-                    .css({ opacity: 0.50, maxHeight: blockquoteCollapsedHeight })
-                    .on('click.open', blockquoteClickOpen)
-                    .after(
-                        $('<a href="#" class="toggle-blockquote">').text(gt('Show more'))
-                        .on('click', blockquoteMore)
-                    );
-                setTimeout(function () {
-                    if ((node.prop('scrollHeight') - 3) <= node.prop('offsetHeight')) { // 3 rows a 20px line-height
-                        node.removeClass('collapsed-blockquote')
-                            .css('maxHeight', '')
-                            .off('click.open dblclick.close')
-                            .next().remove();
-                    }
-                    node = null;
-                }, 0);
+                node.addClass('collapsed-blockquote').after(
+                    $('<div class="blockquote-toggle">').append(
+                        $('<a href="#" tabindex="1"><i class="icon-ellipsis-horizontal"></i></a>')
+                        .attr('title', gt('Show quoted text'))
+                    )
+                    .on('click', explandBlockquote)
+                );
             });
         }
     });

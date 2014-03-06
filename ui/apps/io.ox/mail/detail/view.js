@@ -147,6 +147,10 @@ define('io.ox/mail/detail/view',
             // ignore click on/inside <a> tags
             if ($(e.target).closest('a').length) return;
 
+            // fix collapsed blockquotes
+            this.$el.find('.collapsed-blockquote').hide();
+            this.$el.find('.blockquote-toggle').show();
+
             var cid = $(e.currentTarget).closest('li').data('cid');
             this.toggle(cid);
         },

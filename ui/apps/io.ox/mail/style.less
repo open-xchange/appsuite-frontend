@@ -1179,18 +1179,31 @@ textarea.inplace-editor {
     }
 
     .collapsed-blockquote {
-        /* padding: 0 1em 0 39px !important; */
-        max-width: 450px;
-        overflow: hidden !important;
-        cursor: pointer;
+        display: none;
     }
 
-    .toggle-blockquote {
-        display: block;
-        margin: 0em 0 1em 0;
-        font-size: 12px;
-        position: relative;
-        left: 16px;
+    .blockquote-toggle {
+        margin: 7px 0;
+        a {
+            color: #888;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            padding: 0px 10px;
+            display: inline-block;
+            font-size: 14px;
+            line-height: 16px;
+            outline: none;
+            i {
+                font-size: 14px;
+                line-height: 16px;
+            }
+            &:hover, &:focus {
+                color: #fff;
+                background-color: @linkColor;
+                border-color: darken(@linkColor, 10%);
+                text-decoration: none;
+            }
+        }
     }
 
     /* label dropdown */
