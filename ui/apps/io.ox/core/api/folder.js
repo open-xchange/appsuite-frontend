@@ -161,10 +161,66 @@ define('io.ox/core/api/folder',
         return true;
     };
 
+    var processFolderList = function (id, data) {
+
+        // apply blacklist
+        data = _.filter(data, visible);
+
+        // fix order of mail folders (INBOX first)
+        if (id === '1') {
+
+            var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
+
+            // get unified folder first
+            _(data).find(function (folder) {
+                return account.isUnified(folder.id) && !!(head[0] = folder);
+            });
+
+            // get standard folders
+            _(data).each(function (folder) {
+                _(types).find(function (type, index) {
+                    return account.is(type, folder.id) && !!(head[index + 1] = folder);
+                });
+            });
+
+            // exclude unified and standard folders
+            data = _(data).reject(function (folder) {
+                return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
+            });
+
+            // sort the rest
+            data.sort(function (a, b) {
+                // external accounts at last
+                var extA = account.isExternal(a.id),
+                    extB = account.isExternal(b.id),
+                    order = a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
+                if (extA && extB) return order;
+                if (extA) return +1;
+                if (extB) return -1;
+                return order;
+            });
+
+            // combine
+            data.unshift.apply(data, _(head).compact());
+        }
+
+        return data;
+    };
+
     // use ramp-up data
-    if (ox.rampup && ox.rampup.rootFolder) {
-        folderCache.add(1, ox.rampup.rootFolder);
-    }
+    _(ox.rampup.folder).each(function (data, id) {
+        folderCache.add(id, data);
+    });
+
+    ox.rampup.folderlist = ox.rampup.folderlist || {};
+
+    _(ox.rampup.folderlist).each(function (list, id) {
+        // make objects
+        ox.rampup.folderlist[id] = _(list).map(function (data) {
+            return http.makeObject(data, 'folders');
+        });
+    });
+
 
     var api = {
 
@@ -239,87 +295,57 @@ define('io.ox/core/api/folder',
                 });
             }
 
-            function getter() {
-                return http.GET({
-                    module: 'folders',
-                    params: {
-                        action: 'list',
-                        parent: opt.folder,
-                        tree: '1',
-                        all: opt.all ? '1' : '0',
-                        altNames: true,
-                        timezone: 'UTC'
-                    },
-                    appendColumns: true
-                })
-                .then(function (data, timestamp) {
-
-                    // rearrange on multiple ???
-                    if (data.timestamp) {
-                        timestamp = _.then(); // force update
-                        data = data.data;
-                    }
-
-                    // apply blacklist
-                    data = _.filter(data, visible);
-
-                    // fix order of mail folders (INBOX first)
-                    if (opt.folder === '1') {
-
-                        var head = new Array(1 + 5), types = 'inbox sent drafts trash spam'.split(' ');
-
-                        // get unified folder first
-                        _(data).find(function (folder) {
-                            return account.isUnified(folder.id) && !!(head[0] = folder);
-                        });
-
-                        // get standard folders
-                        _(data).each(function (folder) {
-                            _(types).find(function (type, index) {
-                                return account.is(type, folder.id) && !!(head[index + 1] = folder);
-                            });
-                        });
-
-                        // exclude unified and standard folders
-                        data = _(data).reject(function (folder) {
-                            return account.isUnified(folder.id) || account.isStandardFolder(folder.id);
-                        });
-
-                        // sort the rest
-                        data.sort(function (a, b) {
-                            // external accounts at last
-                            var extA = account.isExternal(a.id),
-                                extB = account.isExternal(b.id),
-                                order = a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
-                            if (extA && extB) return order;
-                            if (extA) return +1;
-                            if (extB) return -1;
-                            return order;
-                        });
-
-                        // combine
-                        data.unshift.apply(data, _(head).compact());
-                    }
-
-                    return $.when(
-                        // add to cache
-                        cache.add(opt.folder, data),
-                        // also add to folder cache
-                        $.when.apply($,
-                            _(data).map(function (folder) {
-                                return folderCache.add(folder.id, folder);
-                            })
-                        )
-                    )
-                    .pipe(function () {
-                        return data;
+            function fetch(opt) {
+                var data = ox.rampup.folderlist[opt.folder];
+                if (data) {
+                    delete ox.rampup.folderlist[opt.folder];
+                    return $.Deferred().resolve(data);
+                } else {
+                    return http.GET({
+                        module: 'folders',
+                        params: {
+                            action: 'list',
+                            parent: opt.folder,
+                            tree: '1',
+                            all: opt.all ? '1' : '0',
+                            altNames: true,
+                            timezone: 'UTC'
+                        },
+                        appendColumns: true
                     });
-                })
-                .fail(function (e) {
-                    if (ox.debug) {
-                        console.error('folder.getSubFolders', opt.folder, e.error, e);
+                }
+            }
+
+            function getter() {
+                return fetch(opt).then(
+                    function success(data, timestamp) {
+
+                        // rearrange on multiple ???
+                        if (data.timestamp) {
+                            timestamp = _.then(); // force update
+                            data = data.data;
+                        }
+
+                        data = processFolderList(opt.folder, data);
+
+                        return $.when(
+                            // add to cache
+                            cache.add(opt.folder, data),
+                            // also add to folder cache
+                            $.when.apply($,
+                                _(data).map(function (folder) {
+                                    return folderCache.add(folder.id, folder);
+                                })
+                            )
+                        )
+                        .then(function () {
+                            return data;
+                        });
+                    },
+                    function fail(e) {
+                        if (ox.debug) console.error('folder.getSubFolders', opt.folder, e.error, e);
                     }
-                });
+                );
             }
 
             return opt.cache === false ?
