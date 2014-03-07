@@ -228,7 +228,7 @@
     <sequential>
 
 		<var name ="local.exe.grunt"
-		     value="${user-home}/appdata/roaming/npm/grunt"
+		     value="${user.home}/AppData/Roaming/npm/grunt.cmd"
 		/>
 	    <if>
             <available file="${local.exe.grunt}" />
@@ -250,30 +250,31 @@
         </if>
 
 		<var name ="local.exe.bower"
-		     value="${user-home}/appdata/roaming/npm/bower"
+		     value="${user.home}/AppData/Roaming/npm/bower.cmd"
 		/>
 	    <if>
-            <available file="${local.exe.grunt}" />
+            <available file="${local.exe.bower}" />
             <then>
 	            <echo message="... found BOWER exe at '${local.exe.bower}'" />
             	<var name="mod_grunt.exe.bower" value="${local.exe.bower}" />
             </then>
         </if>
 
-		<var name ="mod_grunt.PATH"
-		     value="${mod_grunt.env.PATH}"
-		/>
         <if>
-            <available file="${user-home}/appdata/roaming/npm" />
+            <available file="${user.home}/AppData/Roaming/npm" />
             <then>
-        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH};${user-home}/appdata/roaming/npm" />
+        		<var name ="mod_grunt.PATH"
+        			 value="${mod_grunt.PATH}${path.separator}${user.home}/AppData/Roaming/npm"
+        		/>
         	</then>
         </if>
 
         <if>
             <available file="c:/progra~1/nodejs" />
             <then>
-        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH};c:/progra~1/nodejs" />
+        		<var name ="mod_grunt.PATH"
+        			 value="${mod_grunt.PATH}${path.separator}c:/progra~1/nodejs"
+        		/>
         	</then>
         </if>
 
@@ -321,14 +322,14 @@
         <if>
             <available file="/opt/local/bin" />
             <then>
-        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}:/opt/local/bin" />
+        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}${path.separator}/opt/local/bin" />
         	</then>
         </if>
 
         <if>
             <available file="/opt/local/sbin" />
             <then>
-        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}:/opt/local/sbin" />
+        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}${path.separator}/opt/local/sbin" />
         	</then>
         </if>
         
@@ -372,21 +373,9 @@
             	<var name="mod_grunt.exe.bower" value="${local.exe.bower}" />
             </then>
         </if>
-<!--        
-        <if>
-            <available file="/opt/local/bin" />
-            <then>
-        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}:/opt/local/bin" />
-        	</then>
-        </if>
 
-        <if>
-            <available file="/opt/local/sbin" />
-            <then>
-        		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}:/opt/local/sbin" />
-        	</then>
-        </if>
--->
+		<!-- seems the PATH is good enough on linux .-) -->
+
     </sequential>
     </macrodef>
 
@@ -394,9 +383,35 @@
       -->
     <macrodef name="mod_grunt.-impl-init-from-env">
     <sequential>
-		<var name ="mod_grunt.PATH"
-		     value="${mod_grunt.env.PATH}"
-		/>
+
+		<!-- handle windows different : There "Path" is used instead of "PATH" ! -->
+        <if>
+        	<and>
+				<istrue value   ="${mod_grunt.is-windows}" />
+				<isset  property="mod_grunt.env.Path"      />
+            </and>
+			<then>
+				<var name ="mod_grunt.PATH"
+					 value="${mod_grunt.env.Path}"
+				/>
+			</then>
+		</if>
+
+        <if>
+        	<and>
+        		<or>
+				<istrue value   ="${mod_grunt.is-mac}"   />
+				<istrue value   ="${mod_grunt.is-linux}" />
+        		</or>
+				<isset  property="mod_grunt.env.PATH"  />
+            </and>
+			<then>
+				<var name ="mod_grunt.PATH"
+					 value="${mod_grunt.env.PATH}"
+				/>
+			</then>
+		</if>
+
     </sequential>
     </macrodef>
 
@@ -444,8 +459,9 @@
 				<if>
 					<isset property="local.env.env.path" />
 					<then>
+						<!-- path.separator comes from ANT ! -->
 						<var name ="mod_grunt.PATH"
-						     value="${mod_grunt.PATH}:${local.env.env.path}"
+						     value="${mod_grunt.PATH}${path.separator}${local.env.env.path}"
 						/>
 					</then>
 				</if>
