@@ -60,10 +60,10 @@ define('io.ox/mail/import',
 
             zone.on({
                 'show': function () {
-                    app.listControl.$el.hide();
+                    app.listControl.$el.stop().hide();
                 },
                 'hide': function () {
-                    app.listControl.$el.show();
+                    app.listControl.$el.fadeIn('fast');
                 },
                 'drop': function (files) {
                     app.queues.importEML.offer(files, { folder: app.folder.get() });
