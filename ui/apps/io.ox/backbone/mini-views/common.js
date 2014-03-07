@@ -80,6 +80,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         setup: function (options) {
             this.name = options.name;
+            this.rows = options.rows;
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
@@ -87,6 +88,7 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
         },
         render: function () {
             this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            if (this.rows) this.$el.attr({ rows: this.rows });
             this.update();
             return this;
         }

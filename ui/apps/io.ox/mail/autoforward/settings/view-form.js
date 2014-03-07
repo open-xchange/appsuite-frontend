@@ -14,63 +14,60 @@
 define('io.ox/mail/autoforward/settings/view-form',
     ['io.ox/mail/autoforward/settings/model',
      'io.ox/backbone/views',
-     'io.ox/backbone/forms',
+     'io.ox/core/extensions',
+     'io.ox/backbone/mini-views',
      'less!io.ox/mail/autoforward/settings/style'
-    ], function (model, views, forms) {
+    ], function (model, views, ext, mini) {
 
     'use strict';
 
     function createAutoForwardEdit(ref) {
         var point = views.point(ref + '/edit/view'),
-            VacationEditView = point.createView({
+            AutoforwardEditView = point.createView({
                 tagName: 'div',
                 className: 'edit-autoforward'
             });
 
-        point.extend(new forms.Header({
+        ext.point(ref + '/edit/view').extend({
             index: 50,
             id: 'headline',
-            label: model.fields.headline
-        }));
-
-        // Show backend errors
-        point.extend(new forms.ErrorAlert({
-            id: ref + '/edit/view/backendErrors',
-            className: 'col-md-7',
-            index: 100,
-            customizeNode: function () {
-                this.$el.css({
-                    marginTop: '15px'
-                });
+            draw: function () {
+                this.append($('<div>').append(
+                    $('<h1>').text(model.fields.headline)
+                ));
             }
-        }));
+        });
 
-        point.extend(new forms.ControlGroup({
-            id: ref + '/edit/view/forwardmail',
+        ext.point(ref + '/edit/view').extend({
             index: 150,
-            label: model.fields.forwardmail,
-            control: '<input type="text" id="forwardmail" class="form-control" name="forwardmail" tabindex="1">',
-            attribute: 'forwardmail',
-            customizeNode: function () {
-                this.$el.css({
-                    clear: 'both'
-                });
+            id: ref + '/edit/view/forwardmail',
+            draw: function (baton) {
+                this.append(
+                    $('<div>').addClass('form-group').append(
+                        $('<label for="forwardmail">').text(model.fields.forwardmail),
+                        new mini.InputView({ name: 'forwardmail', model: baton.model, className: 'form-control', id: 'forwardmail' }).render().$el
+                    )
+                );
             }
-        }));
+        });
 
-        point.extend(new forms.CheckBoxField({
-            id: ref + '/edit/view/active',
+        ext.point(ref + '/edit/view').extend({
             index: 350,
-            label: model.fields.active,
-            attribute: 'active',
-            customizeNode: function () {
-                this.$el.css({
-                    width: '300px'
-                });
+            id: ref + '/edit/view/active',
+            draw: function (baton) {
+                this.append(
+                    $('<div>').addClass('form-group').append(
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').text(model.fields.active).prepend(
+                                new mini.CheckboxView({ name: 'active', model: baton.model }).render().$el
+                            )
+                        )
+                    )
+                );
             }
-        }));
+        });
 
-        return VacationEditView;
+        return AutoforwardEditView;
     }
 
     return {
