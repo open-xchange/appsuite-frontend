@@ -153,9 +153,27 @@ define('io.ox/mail/detail/content',
         e.preventDefault();
         var node = $(this),
             email = node.attr('href').substr(7), // cut off leading "mailto:"
-            text = node.text();
+            text = node.text(),
+            tmp,
+            params,
+            data;
+
+        //check for additional parameters
+        tmp = email.split(/\?/, 2);
+        params = _.deserialize(tmp[1]);
+        // Bug: 31345
+        for (var key in params) {
+            params[key.toLowerCase()] = params[key];
+        }
+        email = tmp[0];
+        // save data
+        data = {
+            to: [[text, email]],
+            subject: params.subject,
+            attachments: [{ content: params.body || '' }]
+        };
         ox.launch('io.ox/mail/write/main').done(function () {
-            this.compose({ to: [[text, email]] });
+            this.compose(data);
         });
     };
 
