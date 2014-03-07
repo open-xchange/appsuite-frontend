@@ -58,7 +58,7 @@ define('plugins/notifications/calendar/register',
         draw: function (baton) {
             var model = baton.model;
             this.attr({
-                role: 'listItem',
+                role: 'listitem',
                 'data-cid': model.get('cid'),
                 'focus-id': 'calendar-invite-' + model.get('cid'),
                 'tabindex': 1,

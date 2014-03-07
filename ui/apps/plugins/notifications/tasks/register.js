@@ -56,7 +56,7 @@ define('plugins/notifications/tasks/register',
         var label = gt('Overdue Task. %1$s %2$s. Press [enter] to open', _.noI18n(model.get('title')), endText);
 
         node.append(
-            $('<div class="taskNotification item refocus" tabindex="1" role="listItem">')
+            $('<div class="taskNotification item refocus" tabindex="1" role="listitem">')
             .attr({'data-cid': model.get('cid'),
                    'focus-id': 'task-overdue-notification-' + model.get('cid'),
                    'model-cid': model.cid,
@@ -467,7 +467,7 @@ define('plugins/notifications/tasks/register',
                     //#. %2$s task end date
                     //#, c-format
             var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
-            this.attr({role: 'listItem',
+            this.attr({role: 'listitem',
                        'data-cid': _.ecid(baton.model.attributes),
                        'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
                        tabindex: 1,
