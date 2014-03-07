@@ -222,7 +222,6 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             var data = baton.first();
-            var getSource = api.getSource(data), textarea;
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog({ width: 700 })
                     .addPrimaryButton('close', gt('Close'), 'close', {tabIndex: '1'})
@@ -230,20 +229,16 @@ define('io.ox/mail/actions',
                         $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
                     )
                     .append(
-                        textarea = $('<textarea class="form-control mail-source-view" rows="15" readonly="readonly">')
+                        $('<textarea class="form-control mail-source-view" rows="15" readonly="readonly">')
                         .on('keydown', function (e) {
-                            if (e.which !== 27) {
-                                e.stopPropagation();
-                            }
+                            if (e.which !== 27) e.stopPropagation();
                         })
                     )
                     .show(function () {
-                        var self = this.busy();
-                        getSource.done(function (src) {
-                            textarea.val(src || '').css({ visibility: 'visible',  cursor: 'default' });
-                            textarea = getSource = null;
-                            self.idle();
-                        });
+                        api.getSource(data).done(function (src) {
+                            this.find('textarea').val(src || '').css({ visibility: 'visible', cursor: 'default' });
+                            this.idle();
+                        }.bind(this));
                     });
             });
         }

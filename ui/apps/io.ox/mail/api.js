@@ -428,7 +428,7 @@ define('io.ox/mail/api',
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
             model = pool.get('detail').get(cid);
 
-        if (model && model.get('attachments')) return $.when(model.toJSON());
+        if (!obj.src && model && model.get('attachments')) return $.when(model.toJSON());
 
         return get.call(api, obj, options && options.cache).done(function (data) {
             pool.add('detail', data);
@@ -1151,7 +1151,7 @@ define('io.ox/mail/api',
         return this.get({
             action: 'get',
             id: obj.id,
-            src: 1,
+            src: true,
             folder: obj.folder || obj.folder_id,
             view: 'html'
         }, false);
