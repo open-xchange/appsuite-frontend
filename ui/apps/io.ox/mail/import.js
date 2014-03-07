@@ -54,7 +54,7 @@ define('io.ox/mail/import',
             };
 
             var zone = new dropzone.Inplace({
-                text: gt('Drop EML file here for import'),
+                caption: gt('Drop EML file here for import'),
                 filter: /\.eml$/i
             });
 

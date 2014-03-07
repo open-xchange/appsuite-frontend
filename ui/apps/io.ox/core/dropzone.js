@@ -23,7 +23,10 @@ define('io.ox/core/dropzone', [], function () {
         className: 'inplace-dropzone',
 
         events: {
-            'drop': 'onDrop'
+            'drop': 'onDrop',
+            'dragenter .dropzone-overlay': 'onDragenter',
+            'dragover .dropzone-overlay': 'onDragover',
+            'dragleave .dropzone-overlay': 'onDragleave'
         },
 
         onLeave: function (e) {
@@ -57,7 +60,7 @@ define('io.ox/core/dropzone', [], function () {
 
         show: function (e) {
             // show dropzone
-            if (!this.accepts(e)) return;
+            if (!this.isFile(e)) return;
             this.visible = true;
             this.$el.show();
             this.trigger('show');
@@ -70,15 +73,6 @@ define('io.ox/core/dropzone', [], function () {
             this.trigger('hide');
         },
 
-        drop: function (e) {
-            // final event when a file was dropped over the dropzone
-            var files = _(e.originalEvent.dataTransfer.files).toArray();
-            // filter valid files
-            files = _(files).filter(this.filter, this);
-            // call proper event
-            this.trigger(files.length > 0 ? 'drop' : 'invalid', files, e);
-        },
-
         initialize: function (options) {
             this.options = options;
             this.visible = false;
@@ -89,43 +83,55 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         isFile: function (e) {
+            // we need this function to make sure the user drags
+            // a file and not just selected text, for example.
             // adopted from: http://stackoverflow.com/questions/6848043/how-do-i-detect-a-file-is-being-dragged-rather-than-a-draggable-element-on-my-pa
             var dt = e.originalEvent.dataTransfer;
             if (_.browser.Firefox) return e.type === 'dragleave' ? dt.dropEffect === 'none' : dt.dropEffect !== 'none';
             return _(dt.types).contains('Files') || _(dt.types).contains('application/x-moz-file');
         },
 
-        accepts: function (e) {
-            // we need this function to make sure the user drags
-            // a file and not just selected text, for example.
-            return this.isFile(e);
+        getFiles: function (e) {
+            var files = _(e.originalEvent.dataTransfer.files).toArray(),
+                filter = this.options.filter;
+            // no regex?
+            if (!_.isRegExp(filter)) return files;
+            // apply regex to filter valid files
+            return _(files).filter(function (file) {
+                return filter.test(file.name);
+            });
         },
 
-        filter: function (file) {
-            // apply regex to filter valid files
-            var filter = this.options.filter, name = file.name;
-            return !_.isRegExp(filter) || filter.test(name);
+        onDragenter: function (e) {
+            // highlight dropzone
+            $(e.currentTarget).parent().addClass('dragover');
+        },
+
+        onDragover: function (e) {
+            // takes care of drop effect
+            e.originalEvent.dataTransfer.dropEffect = 'copy';
+        },
+
+        onDragleave: function (e) {
+            // remove highlight
+            $(e.currentTarget).parent().removeClass('dragover');
+        },
+
+        // while we can ignore document's drop event, we need this one
+        // to detect that a file was dropped over the dropzone
+        onDrop: function (e) {
+            // final event when a file was dropped over the dropzone
+            var files = this.getFiles(e);
+            // call proper event
+            this.trigger(files.length > 0 ? 'drop' : 'invalid', files, e);
         },
 
         render: function () {
 
             this.$el.hide().append(
-                $('<div class="abs dropzone-caption">').text(this.options.text || ''),
+                $('<div class="abs dropzone-caption">').text(this.options.caption || ''),
                 $('<div class="abs dropzone-dragover"><i class="icon-ok"></i></div>'),
-                $('<div class="abs dropzone-overlay">').on({
-                    // highlight dropzone
-                    'dragover': function (e) {
-                        $(this).parent().addClass('dragover');
-                        e.originalEvent.dataTransfer.dropEffect = 'copy';
-                    },
-                    // remove highlight
-                    'dragleave': function () {
-                        $(this).parent().removeClass('dragover');
-                    },
-                    // while we can ignore document's drop event, we need this one
-                    // to detect that a file was dropped over the dropzone
-                    'drop': this.drop.bind(this)
-                })
+                $('<div class="abs dropzone-overlay">')
             );
 
             return this;
