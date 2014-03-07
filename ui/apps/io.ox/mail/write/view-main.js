@@ -22,20 +22,18 @@ define('io.ox/mail/write/view-main',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/mail/util',
-     'io.ox/core/api/user',
      'io.ox/core/capabilities',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
      'io.ox/core/api/account',
      'io.ox/core/api/snippets',
-     'io.ox/core/strings',
      'io.ox/core/util',
      'io.ox/core/notifications',
      'io.ox/mail/sender',
      'io.ox/core/tk/attachments',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, userAPI, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, strings, util, notifications, sender, attachments, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, util, notifications, sender, attachments, settings, gt) {
 
     'use strict';
 
@@ -268,14 +266,13 @@ define('io.ox/mail/write/view-main',
         },
 
         createSenderField: function () {
-
-            var node, select;
-
-            var guid = _.uniqueId('form-control-label-'),
+            var node,
+                select,
+                guid = _.uniqueId('form-control-label-'),
                 node = $('<div class="fromselect-wrapper">').append(
-               $('<label class="wrapping-label">').attr('for', guid).text(gt('From')),
-               select = $('<select class="sender-dropdown" name="from" tabindex="7">').attr('id', guid).css('width', '100%')
-            );
+                    $('<label class="wrapping-label">').attr('for', guid).text(gt('From')),
+                    select = $('<select class="sender-dropdown" name="from" tabindex="7">').attr('id', guid).css('width', '100%')
+                );
 
             sender.drawOptions(select);
 
