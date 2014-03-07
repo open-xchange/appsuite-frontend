@@ -263,33 +263,44 @@ define('io.ox/contacts/view-detail',
     function block() {
 
         var args = _(arguments).toArray(),
-            rows = _(args.slice(1)).compact();
+            rows = _(args.slice(1)).compact(),
+            noDl = _.isBoolean(args.slice(-1)[0]) ? args.slice(-1)[0] : false,
+            block = $('<fieldset class="block">'),
+            dl = $('<dl class="dl-horizontal">'),
+            self = noDl ? block : dl.appendTo(block);
 
-        if (rows.length === 0) return $();
+        // if block empty
+        if (rows.length < 1) return $();
 
-        return $('<fieldset class="block">').append(
-            [$('<legend>').text(args[0])].concat(rows)
+        _.each(rows, function (el) {
+            self.append(el);
+        });
+
+        return block.prepend(
+            $('<legend>').text(args[0])
         );
     }
 
     function row(id, builder) {
-
         var build = builder();
         if (!build) return null;
-
-        return $('<div>').attr('data-property', id).append(
-            $('<label>').text(model.fields[id]),
-            _.isString(build) ? $.txt(build) : build
-        );
+        return function () {
+            $(this).append(
+                $('<dt>').text(model.fields[id]),
+                $('<dd>').append(_.isString(build) ? $.txt(build) : build)
+            );
+        };
     }
 
     function simple(data, id, label) {
         var value = $.trim(data[id]);
         if (!value) return null;
-        return $('<div>').attr('data-property', id).append(
-            $('<label>').text(label || model.fields[id]),
-            $('<span>').text(value)
-        );
+        return function () {
+            $(this).append(
+                $('<dt>').text(label || model.fields[id]),
+                $('<dd>').text(value)
+            );
+        };
     }
 
     function clickMail(e) {
@@ -304,14 +315,18 @@ define('io.ox/contacts/view-detail',
         });
     }
 
-    function mail(address, name, id) {
+    function mail(address, name) {
         if (!address) return null;
-        return $('<div>').attr('data-property', id).append(
-            $('<label>').text(gt('Email')),
-            $('<a>', { href: 'mailto:' + address })
-                .text(_.noI18n(address))
-                .on('click', { email: address, display_name: name }, clickMail)
-        );
+        return function () {
+            $(this).append(
+                $('<dt>').text(gt('Email')),
+                $('<dd>').append(
+                    $('<a>', { href: 'mailto:' + address })
+                        .text(_.noI18n(address))
+                        .on('click', { email: address, display_name: name }, clickMail)
+                )
+            );
+        };
     }
 
     function getMailAddresses(data) {
@@ -328,37 +343,48 @@ define('io.ox/contacts/view-detail',
     function phone(data, id, label) {
         var number = $.trim(data[id]);
         if (!number) return null;
-        return $('<div>').attr('data-property', id).append(
-            $('<label>').text(label || model.fields[id]),
-            $('<a>', { href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number }).text(number)
-        );
+        return function () {
+            $(this).append(
+                $('<dt>').text(label || model.fields[id]),
+                $('<dd>').append(
+                    $('<a>', { href: _.device('smartphone') ? 'tel:' + number : 'callto:' + number }).text(number)
+                )
+            );
+        };
     }
 
     function IM(number, id) {
-
         number = $.trim(number);
         if (!number) return null;
 
-        var node = $('<div>').attr('data-property', id), obj = {};
+        var obj = {};
 
         if (/^skype:/.test(number)) {
             number = number.split('skype:')[1];
-            return node.append(
-                $('<label>').text('Skype'),
-                $('<a>', { href: 'callto:' + number + '?call' }).text(number)
-            );
+            return function () {
+                $(this).append(
+                    $('<dt>').text('Skype'),
+                    $('<dd>').append(
+                        $('<a>', { href: 'callto:' + number + '?call' }).text(number)
+                    )
+                );
+            };
         }
 
         if (/^x-apple:/.test(number)) {
             number = number.split('x-apple:')[1];
-            return node.append(
-                $('<label>').text('iMessage'),
-                $('<a>', { href: 'imessage://' + number + '@me.com' }).text(number)
-            );
+            return function () {
+                $(this).append(
+                    $('<dt>').text('iMessage'),
+                    $('<dd>').append(
+                        $('<a>', { href: 'imessage://' + number + '@me.com' }).text(number)
+                    )
+                );
+            };
         }
 
         obj[id] = number;
-        return simple(id, gt('Messenger'), obj);
+        return simple(obj, id, gt('Messenger'));
     }
 
     // data is full contact data
@@ -380,16 +406,20 @@ define('io.ox/contacts/view-detail',
             //#. %5$s is the country
             gt('%1$s\n%2$s %3$s\n%4$s\n%5$s', data);
 
-        return $('<a class="google-maps" target="_blank">')
-            .attr('href', 'http://www.google.com/maps?q=' + encodeURIComponent(text.replace('/\n/g', ', ')))
-            .attr('data-property', type)
-            .append(
-                $.txt($.trim(text)),
-                $('<caption>').append(
-                    $('<i class="fa fa-external-link">'),
-                    $.txt(' Google Maps \u2122') // \u2122 = &trade;
-                )
+        return function () {
+            $(this).append(
+                $('<a class="google-maps" target="_blank">')
+                    .attr('href', 'http://www.google.com/maps?q=' + encodeURIComponent(text.replace('/\n/g', ', ')))
+                    .attr('data-property', type)
+                    .append(
+                        $('<address>').text($.trim(text)),
+                        $('<p>').append(
+                            $('<i class="fa fa-external-link">'),
+                            $.txt(' Google Maps \u2122') // \u2122 = &trade;
+                        )
+                    )
             );
+        };
     }
 
     ext.point('io.ox/contacts/detail/content')
@@ -403,7 +433,10 @@ define('io.ox/contacts/view-detail',
                 var comment = $.trim(baton.data.note || '');
                 if (comment !== '') {
                     this.append(
-                        $('<div class="comment">').text(comment)
+                        $('<fieldset>').append(
+                            $('<legend class="sr-only">').text(gt('Comment')),
+                            $('<div class="comment">').text(comment)
+                        )
                     );
                 }
             }
@@ -434,7 +467,7 @@ define('io.ox/contacts/view-detail',
                                 }
                             }
                         }),
-                        row('URL', function () {
+                        row('url', function () {
                             if (baton.data.url) {
                                 if (baton.data.url.indexOf('http://') !== 0 && baton.data.url.indexOf('https://') !== 0) {//fix urls
                                     return $('<a>', { href: 'http://' + baton.data.url, target: '_blank' }).text(baton.data.url);
@@ -524,8 +557,10 @@ define('io.ox/contacts/view-detail',
                 var data = baton.data;
 
                 this.append(
-                    block(gt('Business Address'),
-                        address(data, 'business')
+                    block(
+                        gt('Business Address'),
+                        address(data, 'business'),
+                        true
                     )
                     .attr('data-block', 'business-address')
                 );
@@ -540,8 +575,10 @@ define('io.ox/contacts/view-detail',
                 var data = baton.data;
 
                 this.append(
-                    block(gt('Home Address'),
-                        address(data, 'home')
+                    block(
+                        gt('Home Address'),
+                        address(data, 'home'),
+                        true
                     )
                     .attr('data-block', 'home-address')
                 );
@@ -556,8 +593,10 @@ define('io.ox/contacts/view-detail',
                 var data = baton.data;
 
                 this.append(
-                    block(gt('Other Address'),
-                        address(data, 'other')
+                    block(
+                        gt('Other Address'),
+                        address(data, 'other'),
+                        true
                     )
                     .attr('data-block', 'other-address')
                 );
@@ -655,7 +694,7 @@ define('io.ox/contacts/view-detail',
             // not supported
             if (!Modernizr.canvas || data.mark_as_distributionlist) return;
 
-            var node = $('<div class="block">'),
+            var node = $('<fieldset class="block">'),
                 show = function (e) {
                     e.preventDefault();
                     node.empty().busy();
@@ -684,6 +723,7 @@ define('io.ox/contacts/view-detail',
             this.append(node);
 
             node.append(
+                $('<legend class="sr-only">').text(gt('Show QR code')),
                 $('<i class="fa fa-qrcode">'), $.txt(' '),
                 showLink
             );
