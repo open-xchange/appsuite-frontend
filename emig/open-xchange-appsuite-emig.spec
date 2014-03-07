@@ -1,7 +1,7 @@
 Name:           open-xchange-appsuite-emig
 Version:        7.4.2
 %define         ox_release 1
-Release:        %{ox_release}
+Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
 License:        CC-BY-NC-SA-3.0
