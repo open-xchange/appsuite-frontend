@@ -19,8 +19,9 @@
 				<echo message="init ..." />
 		
 				<property environment="mod_grunt.env"/>
-				<property name="mod_grunt.path.user-config" value="${user.home}/.jsbuild"                         />
-				<property name="mod_grunt.file.user-config" value="${mod_grunt.path.user-config}/conf.properties" />
+
+				<property name="mod_grunt.path.user-env"    value="${user.home}/.builddev"                                           /><!-- This path must be in sync with oxbuild environment ! -->
+				<property name="mod_grunt.file.user-config" value="${mod_grunt.path.user-env}/config/general/jsbuild-env.properties" />
 		
 				<condition property="mod_grunt.is-windows">
 					<os family="windows" />
@@ -56,7 +57,7 @@
     <macrodef name="mod_grunt.prepare-gruntenv-in-project">
     	<attribute name="prjpath" />
     <sequential>
-
+<!--
 		<echo message="check if project '@{prjpath}' needs to be prepared for NPM and BOWER ..." />
 		<mod_done.is-done done-id="@{prjpath}"
 						  is-done="local.is-done"
@@ -106,7 +107,7 @@
 
 			</else>
 		</if>
-    
+    -->
     </sequential>
     </macrodef>
 
@@ -317,9 +318,6 @@
             </then>
         </if>
         
-		<var name ="mod_grunt.PATH"
-		     value="${mod_grunt.env.PATH}"
-		/>
         <if>
             <available file="/opt/local/bin" />
             <then>
@@ -375,9 +373,6 @@
             </then>
         </if>
 <!--        
-		<var name ="mod_grunt.PATH"
-		     value="${mod_grunt.env.PATH}"
-		/>
         <if>
             <available file="/opt/local/bin" />
             <then>
@@ -399,11 +394,9 @@
       -->
     <macrodef name="mod_grunt.-impl-init-from-env">
     <sequential>
-        <!--
-        not implemented yet .-)
-        
-    	<property environment="env" />
-    	-->
+		<var name ="mod_grunt.PATH"
+		     value="${mod_grunt.env.PATH}"
+		/>
     </sequential>
     </macrodef>
 
@@ -423,7 +416,41 @@
         		/>
 
         		<echoproperties prefix="local.env." />
-        	</then>
+        		
+				<if>
+					<isset property="local.env.exe.bower" />
+					<then>
+						<var name ="mod_grunt.exe.bower"
+						     value="${local.env.exe.bower}"
+						/>
+					</then>
+				</if>
+				<if>
+					<isset property="local.env.exe.npm" />
+					<then>
+						<var name ="mod_grunt.exe.npm"
+						     value="${local.env.exe.npm}"
+						/>
+					</then>
+				</if>
+				<if>
+					<isset property="local.env.exe.grunt" />
+					<then>
+						<var name ="mod_grunt.exe.grunt"
+						     value="${local.env.exe.grunt}"
+						/>
+					</then>
+				</if>
+				<if>
+					<isset property="local.env.env.path" />
+					<then>
+						<var name ="mod_grunt.PATH"
+						     value="${mod_grunt.PATH}:${local.env.env.path}"
+						/>
+					</then>
+				</if>
+
+			</then>
         	<else>
                 <echo message="... no user config file" />
         	</else>
