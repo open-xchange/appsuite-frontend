@@ -25,15 +25,6 @@ define('io.ox/core/commons-folderview',
 
     function initExtensions(POINT, app) {
 
-        // mobile quirks
-        /* our product gets designed by others, turn this on again
-        if (_.device('small')) {
-            //nobody needs options and create in folder tree on mobile
-            ext.point(POINT + '/sidepanel/toolbar').disable('add');
-            ext.point(POINT + '/sidepanel/toolbar').disable('options');
-        }
-        */
-
         // default options
         ext.point(POINT + '/options').extend({
             id: 'defaults',
@@ -1019,7 +1010,7 @@ define('io.ox/core/commons-folderview',
             app.hideFolderView = _.device('smartphone') ? fnHideSml : fnHide;
             app.toggleFolderView = toggle;
             loadTree = toggleTree = $.noop;
-            return require(['io.ox/core/tk/folderviews']).pipe(initTree);
+            return require(['io.ox/core/tk/folderviews']).then(initTree);
         };
 
         toggleTree = loadTree;
@@ -1043,7 +1034,8 @@ define('io.ox/core/commons-folderview',
         baton.options = options;
 
         // draw sidepanel & container
-        ext.point(POINT + '/sidepanel').invoke('draw', app.getWindow().nodes.sidepanel, baton);
+
+        ext.point(POINT + '/sidepanel').invoke('draw', (options.folderTreeContainer) ? options.folderTreeContainer: app.getWindow().nodes.sidepanel, baton);
 
         if (_.device('smartphone')) {
             ext.point(POINT + '/sidepanel/mobile').invoke('draw', app.getWindow().nodes.outer, baton);
