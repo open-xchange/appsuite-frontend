@@ -394,8 +394,7 @@ define('io.ox/mail/detail/content',
             if (settings.get('features/autoCollapseBlockquotes', true) !== true) return;
             // blockquotes (top-level only)
             this.find('blockquote').not(this.find('blockquote blockquote')).each(function () {
-                var node = $(this);
-                node.addClass('collapsed-blockquote').after(
+                $(this).addClass('collapsed-blockquote').after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
                         $('<i class="icon-ellipsis-horizontal" tabindex="1">')
