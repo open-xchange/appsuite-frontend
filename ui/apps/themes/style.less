@@ -3001,18 +3001,33 @@ a.toolbar-action, .toolbar-action > a {
     position: relative;
     &.abs { position: absolute; }
 
-    caption {
-        position: absolute;
+    .dropzone-caption, .dropzone-dragover {
         color: #888;
         text-align: center;
         top: 50%;
         width: 100%;
         margin-top: -10px;
+        z-index: 1;
+    }
+
+    .dropzone-dragover {
+        color: #ddd;
+        font-size: 60px;
+        line-height: 80px;
+        margin-top: -40px;
+        display: none;
+    }
+
+    .dropzone-overlay {
+        background-color: white;
+        opacity: 0.01;
+        z-index: 2;
     }
 
     &.dragover {
         border-color: #ccc;
-        caption { color: #ccc; }
+        .dropzone-caption { display: none; }
+        .dropzone-dragover { display: block; }
     }
 }
 

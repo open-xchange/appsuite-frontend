@@ -110,23 +110,23 @@ define('io.ox/core/dropzone', [], function () {
         render: function () {
 
             this.$el.hide().append(
-                $('<caption>').text(this.options.text || '')
+                $('<div class="abs dropzone-caption">').text(this.options.text || ''),
+                $('<div class="abs dropzone-dragover"><i class="icon-ok"></i></div>'),
+                $('<div class="abs dropzone-overlay">').on({
+                    // highlight dropzone
+                    'dragover': function (e) {
+                        $(this).parent().addClass('dragover');
+                        e.originalEvent.dataTransfer.dropEffect = 'copy';
+                    },
+                    // remove highlight
+                    'dragleave': function () {
+                        $(this).parent().removeClass('dragover');
+                    },
+                    // while we can ignore document's drop event, we need this one
+                    // to detect that a file was dropped over the dropzone
+                    'drop': this.drop.bind(this)
+                })
             );
-
-            this.$el.on({
-                // highlight dropzone
-                'dragover': function (e) {
-                    $(this).addClass('dragover');
-                    e.originalEvent.dataTransfer.dropEffect = 'copy';
-                },
-                // remove highlight
-                'dragleave': function () {
-                    $(this).removeClass('dragover');
-                },
-                // while we can ignore document's drop event, we need this one
-                // to detect that a file was dropped over the dropzone
-                'drop': this.drop.bind(this)
-            });
 
             return this;
         },
