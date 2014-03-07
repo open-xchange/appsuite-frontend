@@ -109,12 +109,9 @@ define('io.ox/core/dropzone', [], function () {
 
         render: function () {
 
-            if (this.options.text) {
-                this.$el.append(
-                    $('<caption>').text(this.options.text)
-                );
-            }
-            this.$el.hide();
+            this.$el.hide().append(
+                $('<caption>').text(this.options.text || '')
+            );
 
             this.$el.on({
                 // highlight dropzone
