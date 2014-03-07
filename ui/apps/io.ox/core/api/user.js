@@ -13,10 +13,28 @@
 
 define('io.ox/core/api/user',
     ['io.ox/core/http',
-     'io.ox/core/api/factory'
-    ], function (http, apiFactory) {
+     'io.ox/core/api/factory',
+     'io.ox/contacts/util',
+     'io.ox/core/date'
+    ], function (http, apiFactory, util, date) {
 
     'use strict';
+
+    var convertResponseToGregorian = function (response) {//helper function
+        if (response.id) {//we have only one user
+            if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {//convert birthdays with year 1 from julian to gregorian calendar
+                response.birthday = util.julianToGregorian(response.birthday);
+            }
+            return response;
+        } else {//we have an array of users
+            _(response).each(function (contact) {//convert birthdays with year 1 from julian to gregorian calendar
+                if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {//birthday without year
+                    contact.birthday = util.julianToGregorian(contact.birthday);
+                }
+            });
+            return response;
+        }
+    };
 
     // generate basic API
     var api = apiFactory({
@@ -49,6 +67,10 @@ define('io.ox/core/api/user',
                     return { pattern: query };
                 }
             }
+        },
+        pipe: {
+            get: convertResponseToGregorian,
+            search: convertResponseToGregorian
         }
     });
 
@@ -64,6 +86,9 @@ define('io.ox/core/api/user',
         if (_.isEmpty(o.data)) {
             return $.when();
         } else {
+            if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+                o.data.birthday = util.gregorianToJulian(o.data.birthday);
+            }
             return http.PUT({
                     module: 'user',
                     params: {

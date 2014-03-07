@@ -19,8 +19,9 @@ define('io.ox/contacts/api',
      'io.ox/core/cache',
      'io.ox/contacts/util',
      'l10n/ja_JP/io.ox/collation',
-     'settings!io.ox/contacts'
-    ], function (ext, http, apiFactory, notifications, cache, util, collation, settings) {
+     'settings!io.ox/contacts',
+     'io.ox/core/date'
+    ], function (ext, http, apiFactory, notifications, cache, util, collation, settings, date) {
 
     'use strict';
 
@@ -33,6 +34,21 @@ define('io.ox/contacts/api',
             cellular: ['551', '552'],
             fax: ['544', '550', '554'],
             addresses: '506 507 508 509 510 523 525 526 527 528 538 539 540 541'.split(' ')
+        },
+        convertResponseToGregorian = function (response) {//helper function
+            if (response.id) {//we have only one contact
+                if (response.birthday && new date.UTC(response.birthday).getYear() === 1) {//convert birthdays with year 1 from julian to gregorian calendar
+                    response.birthday = util.julianToGregorian(response.birthday);
+                }
+                return response;
+            } else {//we have an array of contacts
+                _(response).each(function (contact) {//convert birthdays with year 1 from julian to gregorian calendar
+                    if (contact.birthday && new date.UTC(contact.birthday).getYear() === 1) {//birthday without year
+                        contact.birthday = util.julianToGregorian(contact.birthday);
+                    }
+                });
+                return response;
+            }
         };
 
     //mapped ids for msisdn
@@ -206,7 +222,10 @@ define('io.ox/contacts/api',
                     response = response.slice(count).concat(response.slice(0, count));
                 }
                 return response;
-            }
+            },
+            get: convertResponseToGregorian,
+            search: convertResponseToGregorian,
+            advancedsearch: convertResponseToGregorian
         }
     });
 
@@ -236,6 +255,10 @@ define('io.ox/contacts/api',
         wat(data, 'email1');
         wat(data, 'email2');
         wat(data, 'email3');
+
+        if (data.birthday && new date.UTC(data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+            data.birthday = util.gregorianToJulian(data.birthday);
+        }
 
         var method,
             attachmentHandlingNeeded = data.tempAttachmentIndicator,
@@ -314,6 +337,9 @@ define('io.ox/contacts/api',
                 return $.when();
             }
         } else {
+            if (o.data.birthday && new date.UTC(o.data.birthday).getYear() === 1) {//convert birthdays with year 1(birthdays without year) from gregorian to julian calendar
+                o.data.birthday = util.gregorianToJulian(o.data.birthday);
+            }
             // go!
             return http.PUT({
                 module: 'contacts',
@@ -773,7 +799,7 @@ define('io.ox/contacts/api',
         return http.GET({
             module: 'contacts',
             params: params
-        });
+        }).then(convertResponseToGregorian);
     };
 
     /**

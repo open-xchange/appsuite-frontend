@@ -47,9 +47,8 @@ define('plugins/portal/birthdays/register',
         title: gt('Birthdays'),
 
         load: function (baton) {
-            var aDay = 24 * 60 * 60 * 1000,
-                start = new date.UTC().setHours(0, 0, 0, 0).getTime() - aDay,
-                end = start + WEEKS * aDay * 7;
+            var start = new date.UTC().setHours(0, 0, 0, 0).getTime() - date.DAY,
+                end = start + WEEKS * date.WEEK;
             return api.birthdays({ start: start, end: end, right_hand_limit: 25 }).done(function (data) {
                 baton.data = data;
             });

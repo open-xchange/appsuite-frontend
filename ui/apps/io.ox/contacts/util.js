@@ -14,8 +14,9 @@
 define('io.ox/contacts/util',
     ['io.ox/core/util',
      'settings!io.ox/contacts',
-     'gettext!io.ox/contacts'
-    ], function (util, settings, gt) {
+     'gettext!io.ox/contacts',
+     'io.ox/core/date'
+    ], function (util, settings, gt, date) {
 
     'use strict';
 
@@ -36,6 +37,24 @@ define('io.ox/contacts/util',
     // vanity fix
     function getTitle(field) {
         return (/^(dr\.?|prof\.?)/i).test(field) ? field : '';
+    }
+
+    //helper function for birthdays without year
+    //calculates the difference between gregorian and julian calendar
+    function calculateDayDifference(time) {
+        var myDay = new date.UTC(time),
+            century, tempA, tempB;
+
+        if (myDay.getMonth() < 2) {
+            century = Math.floor((myDay.getYear() - 1) / 100);
+        } else {
+            century = Math.floor(myDay.getYear() / 100);
+        }
+        tempA = Math.floor(century / 4);
+        tempB = century % 4;
+
+        return Math.abs((3 * tempA + tempB - 2) * date.DAY);
+        
     }
 
     var that = {
@@ -235,6 +254,14 @@ define('io.ox/contacts/util',
                 }
             });
             return field;
+        },
+        //used to change birthdays without year(we save them as year 1) from gregorian to julian calendar (year 1 is julian, current calendar is gregorian)
+        gregorianToJulian: function (timestamp) {
+            return new date.UTC(timestamp - calculateDayDifference(timestamp)).getTime();
+        },
+        //used to change birthdays without year(we save them as year 1) from julian to gregorian calendar (year 1 is julian, current calendar is gregorian)
+        julianToGregorian: function (timestamp) {
+            return new date.UTC(timestamp + calculateDayDifference(timestamp)).getTime();
         }
     };
 
