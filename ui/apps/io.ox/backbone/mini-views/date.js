@@ -44,7 +44,7 @@ define('io.ox/backbone/mini-views/date',
         var node = $('<select tabindex="1">').attr({ name: name, title: titles[name] }),
             i = Math.min(from, to),
             $i = Math.max(from, to),
-            d = new date.Local(0),
+            d = new date.UTC(0),
             options = [],
             empty, text;
 
