@@ -271,9 +271,19 @@ define('io.ox/mail/toolbar',
                 })
             };
 
-            // drop zone
-            win.nodes.main.append(
-                new dropzone.Inplace().render().$el
+            var zone = new dropzone.Inplace({ text: 'Drop EML file here for import' });
+
+            zone.on({
+                'show': function () {
+                    app.listControl.$el.hide();
+                },
+                'hide': function () {
+                    app.listControl.$el.show();
+                }
+            });
+
+            app.left.append(
+                zone.render().$el.addClass('abs')
             );
         }
     });

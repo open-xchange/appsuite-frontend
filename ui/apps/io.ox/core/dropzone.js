@@ -45,13 +45,14 @@ define('io.ox/core/dropzone', [], function () {
                 break;
             case 'drop':
                 this.stop(e);
+                this.hide();
                 this.onDrop(e);
                 return false;
             }
         },
 
-        onDrop: function (e) {
-            console.log('DROP!', e);
+        onDrop: function () {
+            this.trigger('drop');
         },
 
         stop: function (e) {
@@ -60,13 +61,15 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         show: function () {
-            console.log('Show!');
             this.visible = true;
+            this.$el.show();
+            this.trigger('show');
         },
 
         hide: function () {
-            console.log('Hide!');
             this.visible = false;
+            this.$el.hide();
+            this.trigger('hide');
         },
 
         initialize: function (options) {
@@ -79,6 +82,12 @@ define('io.ox/core/dropzone', [], function () {
         },
 
         render: function () {
+            if (this.options.text) {
+                this.$el.append(
+                    $('<caption>').text(this.options.text)
+                );
+            }
+            this.$el.hide();
             return this;
         },
 
