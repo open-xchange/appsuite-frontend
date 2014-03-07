@@ -782,11 +782,14 @@ define('io.ox/mail/write/main',
             }
 
             var mailto, tmp, params, def = $.Deferred();
-
             // triggerd by mailto?
             if (data === undefined && (mailto = _.url.hash('mailto'))) {
                 tmp = mailto.split(/\?/, 2);
                 params = _.deserialize(tmp[1]);
+                // Bug: 31345
+                for (var key in params) {
+                    params[key.toLowerCase()] = params[key];
+                }
                 tmp = tmp[0].split(/\:/, 2);
                 // save data
                 data = {

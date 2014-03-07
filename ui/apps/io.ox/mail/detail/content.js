@@ -161,6 +161,10 @@ define('io.ox/mail/detail/content',
         //check for additional parameters
         tmp = email.split(/\?/, 2);
         params = _.deserialize(tmp[1]);
+        // Bug: 31345
+        for (var key in params) {
+            params[key.toLowerCase()] = params[key];
+        }
         email = tmp[0];
         // save data
         data = {
