@@ -217,10 +217,12 @@
 
     .recipient-name {
         font-weight: 500;
+        .ellipsis();
     }
 
     .email {
         color: @link-color;
+        .ellipsis();
     }
 }
 
@@ -241,9 +243,7 @@
     }
 
     div {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        .ellipsis();
     }
 
     .remove {
@@ -310,12 +310,18 @@
 }
 
 .io-ox-mail-write .section-item .row-1 {
-    position: absolute; left: 40px; right: 30px;
-    overflow: hidden; text-overflow: ellipsis;
+    position: absolute;
+    left: 40px;
+    right: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .io-ox-mail-write .section-item .row-2 {
-    position: absolute; left: 40px; right: 30px; top: 23px;
+    position: absolute;
+    left: 40px;
+    right: 30px;
+    top: 23px;
 }
 
 .io-ox-mail-write .section-item .filesize {
