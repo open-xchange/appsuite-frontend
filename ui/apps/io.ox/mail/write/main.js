@@ -448,13 +448,12 @@ define('io.ox/mail/write/main',
         };
 
         app.setFrom = function (data) {
-
             var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
                 select = view.leftside.find('.sender-dropdown');
 
             // from is already set in the mail, prefer this
-            if (data.from && data.from.length === 2) {
-                sender.set(select, data.from);
+            if (data.from && data.from.length === 1) {
+                sender.set(select, data.from[0]);
                 return;
             }
 
