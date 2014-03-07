@@ -279,7 +279,8 @@ define('io.ox/core/extPatterns/links',
         var extension = _.extend(this, {
             classes: 'io-ox-inline-links',
             attributes: {
-                'aria-label': gt.format(gt('Inline menu %s'), options.title || '')
+                //#. %1$s inline menu title for better accessibility
+                'aria-label': gt('Inline menu %1$s', options.title || '')
             }
         }, options);
 
