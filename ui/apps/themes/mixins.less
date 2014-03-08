@@ -84,3 +84,12 @@
         opacity: @opacity;
     }
 }
+
+.fontWeight(@weight) {
+    font-weight: @weight;
+}
+
+.fontWeight(@weight) when (@weight = 300) {
+    // automatically inject light font-family, especially for Windows
+    font-family: @lightFontFamily;
+}

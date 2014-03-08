@@ -128,18 +128,17 @@
 
 
 .list-view.mail .list-item.small.unread {
-    .from span.person, .subject, .date { font-weight: bold }
+    .from span.person, .subject, .date { .fontWeight(bold); }
 }
 
 .list-view.mail .list-item.small .priority { float: none; }
-.list-view.mail .list-item.small .from span.person { font-weight: normal; }
+.list-view.mail .list-item.small .from span.person { .fontWeight(normal); }
 
 .mail-detail div.subject {
     font-family: @normalFontFamily;
-    font-weight: normal;
+    .fontWeight(300);
     font-size: 24px;
     line-height: 32px;
-    font-weight: 300;
     margin: 0 0 28px -68px;
 }
 
@@ -247,12 +246,12 @@
         .ellipsis();
         span.person {
             color: inherit;
-            font-weight: 500;
+            .fontWeight(500);
         }
     }
 
     .date, .size {
-        font-weight: 300;
+        .fontWeight(300);
         display: inline-block;
         margin-left: 0.5em;
         float: right;
@@ -267,7 +266,7 @@
 
     .subject {
 
-        font-weight: 300;
+        .fontWeight(300);
         line-height: 20px; // need that to avoid flicker base on icon height
         .ellipsis();
 
@@ -320,7 +319,7 @@
 
     .thread-size {
         min-width: 1em;
-        font-weight: normal;
+        .fontWeight(normal);
         padding: 0 0.5em 0 0.5em;
         margin-left: 7px;
         display: inline-block;
@@ -349,7 +348,7 @@
         padding: 5px @list-view-padding 5px (@list-view-padding + 30px);
 
         .from span.person {
-            font-weight: normal;
+            .fontWeight(normal);
         }
 
         i.icon-unread {
@@ -364,7 +363,7 @@
     .thread-item:last-child { padding-bottom: 7px; }
 
     a.n-more {
-        font-weight: 300;
+        .fontWeight(300);
     }
 
     .attachments {
@@ -503,7 +502,7 @@
     padding: 20px;
     background-color: #eee;
     & > h1 {
-        font-weight: 300;
+        .fontWeight(300);
         font-size: 20px;
         line-height: 24px;
         padding: 20px;
@@ -640,7 +639,7 @@ textarea.inplace-editor {
         .ellipsis();
         span.person {
             color: inherit;
-            font-weight: 500;
+            .fontWeight(500);
         }
     }
 }
@@ -684,7 +683,7 @@ textarea.inplace-editor {
 .vgrid-cell.mail {
 
     .subject {
-        font-weight: 200;
+        .fontWeight(300);
         .ellipsis();
     }
 
@@ -712,16 +711,16 @@ textarea.inplace-editor {
     &.forwarded i.icon-forwarded { display: inline-block; color: #888; float: left;}
 
     &.unread .subject {
-        font-weight: normal;
+        .fontWeight(normal);
     }
 
     &.unread .date {
-        font-weight: bold;
+        .fontWeight(bold);
         color: #333;
     }
 
     &.unread .from span.person {
-        font-weight: 800;
+        .fontWeight(bold);
     }
 
     &.deleted *:not(.swipeDelete) {
@@ -749,18 +748,18 @@ textarea.inplace-editor {
 
 .vgrid-cell.mail .from span.person {
     color: black;
-    font-weight: 500;
+    .fontWeight(500);
 }
 
 .vgrid-cell.mail.me .from {
     color: #aaa;
-    font-weight: normal;
+    .fontWeight(normal);
 }
 
 .vgrid-cell.mail .date,
 .vgrid-cell.thread-summary .date {
     color: #777;
-    font-weight: 300;
+    .fontWeight(300);
     display: inline-block;
     float: right;
 }
@@ -778,7 +777,7 @@ textarea.inplace-editor {
     .thread-size {
         color: #999;
         min-width: 1em;
-        font-weight: normal;
+        .fontWeight(normal);
         padding: 0 0.5em 0 0.5em;
         margin-left: 10px;
         display: inline-block;
@@ -814,7 +813,7 @@ textarea.inplace-editor {
 
 .vgrid-cell .thread-summary-item.unread,
 .vgrid-cell .thread-summary-item.unread .date {
-    font-weight: bold;
+    .fontWeight(bold);
 }
 
 .vgrid-cell {
@@ -849,7 +848,7 @@ textarea.inplace-editor {
 }
 
 .vgrid-cell .thread-summary-from { }
-.vgrid-cell .thread-summary-subject { font-weight: 300; color: #555; }
+.vgrid-cell .thread-summary-subject { .fontWeight(300); color: #555; }
 
 .vgrid-cell .thread-summary-left { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vgrid-cell .thread-summary-right {
@@ -1030,8 +1029,7 @@ textarea.inplace-editor {
     }
 
     .subject {
-        font-family: @lightFontFamily;
-        font-weight: 300;
+        .fontWeight(300);
         font-size: 18px;
         line-height: 21px;
         margin: 7px 0;
@@ -1042,7 +1040,7 @@ textarea.inplace-editor {
     }
 
     .from .person-link.person-from {
-        font-weight: 500;
+        .fontWeight(500);
         color: black;
     }
 
@@ -1108,7 +1106,7 @@ textarea.inplace-editor {
     }
 
     .priority {
-        font-weight: bold;
+        .fontWeight(bold);
         vertical-align: top;
         white-space: nowrap;
         .high {
@@ -1128,7 +1126,7 @@ textarea.inplace-editor {
 
     .io-ox-label {
         color: #888;
-        font-weight: 300;
+        .fontWeight(300);
         white-space: nowrap;
     }
 
@@ -1203,11 +1201,11 @@ textarea.inplace-editor {
 
     /* label dropdown */
     .active-label {
-        font-weight: bold;
+        .fontWeight(bold);
     }
 
     .detail-view-header {
-        font-weight: 300;
+        .fontWeight(300);
         padding: 20px @header-padding;
         padding-left: @picture-padding + @unread-toggle-width;
     }
@@ -1251,7 +1249,7 @@ textarea.inplace-editor {
     .content {
 
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-weight: 400;
+        .fontWeight(400);
         font-size: 14px;
         line-height: 20px;
         /* max-width: 1000px; */ /* Max-width does not work here, see Bug #24505 */
@@ -1366,7 +1364,7 @@ textarea.inplace-editor {
         .calendar-detail .label {
             display: block;
             text-shadow: none;
-            font-weight: normal;
+            .fontWeight(normal);
             background-color: transparent;
         }
 
@@ -1381,7 +1379,7 @@ textarea.inplace-editor {
         color: black;
         width: 100%;
         padding: 6px 13px 6px 13px;
-        font-weight: bold;
+        .fontWeight(bold);
         text-shadow: 0 0 3px white;
     }
 }
@@ -1498,7 +1496,7 @@ h4.mail-attachment-preview {
 /* smartphone */
 @media (max-width: 480px), (max-device-width: 480px)  {
     .vgrid-cell.mail .from span.person {
-        font-weight: 600;
+        .fontWeight(600);
     }
     .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail {
         padding: 5px;
@@ -1521,7 +1519,7 @@ h4.mail-attachment-preview {
 
         .from.list {
             font-size: 13px;
-            a { word-break: break-all; font-weight: bold;}
+            a { word-break: break-all; .fontWeight(bold); }
             i { display: none; }
         }
         .to-cc.list, .attachment-list.list { margin-bottom: 5px; }
@@ -1537,7 +1535,7 @@ h4.mail-attachment-preview {
         }
         .subject {
             font-size: 13px;
-            font-weight: bold;
+            .fontWeight(bold);
             margin: 5px 0 0 0;
         }
         .date {
