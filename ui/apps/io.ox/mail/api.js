@@ -428,7 +428,8 @@ define('io.ox/mail/api',
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
             model = pool.get('detail').get(cid);
 
-        if (!obj.src && model && model.get('attachments')) return $.when(model.toJSON());
+        // TODO: make this smarter
+        if (!obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
 
         return get.call(api, obj, options && options.cache).done(function (data) {
             pool.add('detail', data);

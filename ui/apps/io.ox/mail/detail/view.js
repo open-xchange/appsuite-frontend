@@ -92,8 +92,26 @@ define('io.ox/mail/detail/view',
     });
 
     ext.point('io.ox/mail/detail-view').extend({
-        id: 'body',
+        id: 'notifications',
         index: 300,
+        draw: function (baton) {
+            var section = $('<section class="notifications">');
+            ext.point('io.ox/mail/detail-view/notifications').invoke('draw', section, baton);
+            this.append(section);
+        }
+    });
+
+    var INDEX_notifications = 0;
+
+    ext.point('io.ox/mail/detail-view/notifications').extend({
+        id: 'external-images',
+        index: INDEX_notifications += 100,
+        draw: extensions.externalImages
+    });
+
+    ext.point('io.ox/mail/detail-view').extend({
+        id: 'body',
+        index: 400,
         draw: function () {
             this.append(
                 $('<section class="attachments">'),
@@ -140,6 +158,13 @@ define('io.ox/mail/detail/view',
             this.$el.toggleClass('unread', util.isUnseen(this.model.get('flags')));
         },
 
+        onChangeContent: function () {
+            var data = this.model.toJSON(),
+                baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
+                body = this.$el.find('section.body').empty();
+            ext.point('io.ox/mail/detail-view/body').invoke('draw', body, baton);
+        },
+
         onToggle: function (e) {
 
             if (e.type === 'keydown' && e.which !== 13) return;
@@ -165,18 +190,29 @@ define('io.ox/mail/detail/view',
             // as an indicator whether this view has been destroyed meanwhile
             if (this.model === null) return;
 
-            var body = this.$el.find('section.body'),
-                attachments = this.$el.find('section.attachments'),
+            var attachments = this.$el.find('section.attachments'),
                 unseen = util.isUnseen(this.model.get('flags'));
 
-            // draw
+            // done
+            this.trigger('load:done');
+
+            // draw attachments
             var baton = ext.Baton({ data: data, attachments: util.getAttachments(data) });
             ext.point('io.ox/mail/detail-view/attachments').invoke('draw', attachments, baton);
-            ext.point('io.ox/mail/detail-view/body').invoke('draw', body.idle(), baton);
+
+            // draw body
+            this.onChangeContent();
+
             // merge data
             this.model.set(data);
+
             // process unseen flag
             if (unseen) this.onUnseen();
+        },
+
+        onLoadFail: function () {
+            this.trigger('load:done');
+            this.$el.attr('data-loaded', false).removeClass('expanded');
         },
 
         toggle: function (state) {
@@ -187,14 +223,9 @@ define('io.ox/mail/detail/view',
 
             if ($li.attr('data-loaded') === 'false' && $li.hasClass('expanded')) {
                 $li.attr('data-loaded', true);
-                $li.find('section.body').busy();
+                this.trigger('load');
                 // load detailed email data
-                api.get(_.cid(this.cid)).then(
-                    this.onLoad.bind(this),
-                    function fail() {
-                        $li.attr('data-loaded', false).removeClass('expanded');
-                    }
-                );
+                api.get(_.cid(this.cid)).then(this.onLoad.bind(this), this.onLoadFail.bind(this));
             }
         },
 
@@ -207,7 +238,17 @@ define('io.ox/mail/detail/view',
             this.model = pool.getDetailModel(options.data);
             this.cid = this.model.cid;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
+            this.listenTo(this.model, 'change:attachments', this.onChangeContent);
             this.$el.on('dispose', this.dispose.bind(this));
+
+            this.on({
+                'load': function () {
+                    this.$el.find('section.body').empty().busy();
+                },
+                'load:done': function () {
+                    this.$el.find('section.body').idle();
+                }
+            });
         },
 
         render: function () {

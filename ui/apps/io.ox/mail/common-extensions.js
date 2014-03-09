@@ -410,6 +410,44 @@ define('io.ox/mail/common-extensions',
                     .on('click', { view: baton.view }, toggle)
                 );
             };
+        }()),
+
+        externalImages: (function () {
+
+            function loadImages(e) {
+                e.preventDefault();
+                var view = e.data.view;
+                view.trigger('load');
+                // get unmodified mail
+                api.getUnmodified(_.cid(view.cid)).done(function (data) {
+                    view.trigger('load:done');
+                    view.model.set(data);
+                });
+            }
+
+            function draw(model) {
+
+                if (model.get('modified') !== 1) {
+                    this.find('.external-images').remove();
+                } else {
+                    this.append(
+                        $('<div class="alert alert-info external-images">').append(
+                            $('<a>').text(gt('Show images')),
+                            $('<i>').append(
+                                $.txt(_.noI18n(' \u2013 ')),
+                                $.txt(gt('External images have been blocked to protect you against potential spam!'))
+                            )
+                        )
+                    );
+                }
+            }
+
+            return function (baton) {
+                draw.call(this, baton.model);
+                this.on('click', '.external-images', { view: baton.view }, loadImages);
+                baton.model.on('change:modified', draw.bind(this));
+            };
+
         }())
     };
 
