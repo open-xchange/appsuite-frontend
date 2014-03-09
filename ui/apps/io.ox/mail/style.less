@@ -1293,9 +1293,11 @@ textarea.inplace-editor {
         h5 { font-size: 0.83 * @base; }
         h6 { font-size: 0.67 * @base; }
 
-        // fix long links
         a {
-            word-break: break-word;
+            word-break: break-word; // fix long links
+            color: #08c; // not @linkColor!
+            text-decoration: underline;
+            &:hover { color: #08c; }
         }
 
         // reset bootstrap stuff
