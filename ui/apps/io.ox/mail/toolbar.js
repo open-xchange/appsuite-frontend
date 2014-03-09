@@ -177,12 +177,12 @@ define('io.ox/mail/toolbar',
     // view dropdown
     ext.point('io.ox/mail/classic-toolbar').extend({
         id: 'view-dropdown',
-        index: 100,
+        index: 10000,
         draw: function (baton) {
 
             if (_.device('small')) return;
 
-            this.prepend(
+            this.append(
                 new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
                 .header(gt('Preview pane'))
                 .option('preview', 'right', gt('Right'))

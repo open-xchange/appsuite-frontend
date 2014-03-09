@@ -42,6 +42,7 @@
         list-style: none;
         display: inline-block;
         padding: 0;
+        float: left; // to support pull-right while keeping items in-order (a11y)
         & > a {
             display: inline-block;
             line-height: 20px;
@@ -55,7 +56,10 @@
             }
         }
     }
-    li.pull-right > .dropdown-menu { right: 10px; }
+    & > li.pull-right {
+        float: right;
+        & > .dropdown-menu { right: 10px; }
+    }
 }
 
 .list-view-control .toolbar {
