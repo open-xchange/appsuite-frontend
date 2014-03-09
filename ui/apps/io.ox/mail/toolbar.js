@@ -190,6 +190,7 @@ define('io.ox/mail/toolbar',
                 .option('preview', 'none', gt('None'))
                 .divider()
                 .option('folderview', true, gt('Show folders'))
+                .option('checkboxes', true, gt('Show checkboxes'))
                 .render()
                 .$el.addClass('pull-right')
             );

@@ -60,6 +60,7 @@ define('io.ox/mail/import',
 
             zone.on({
                 'show': function () {
+                    app.right.removeClass('preview-visible');
                     app.listControl.$el.stop().hide();
                 },
                 'hide': function () {
