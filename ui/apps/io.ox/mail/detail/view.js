@@ -110,6 +110,12 @@ define('io.ox/mail/detail/view',
     });
 
     ext.point('io.ox/mail/detail-view/notifications').extend({
+        id: 'disposition-notification',
+        index: INDEX_notifications += 100,
+        draw: extensions.dispositionNotification
+    });
+
+    ext.point('io.ox/mail/detail-view/notifications').extend({
         id: 'external-images',
         index: INDEX_notifications += 100,
         draw: extensions.externalImages

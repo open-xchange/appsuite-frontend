@@ -20,12 +20,13 @@ define('io.ox/mail/common-extensions',
      'io.ox/core/api/account',
      'io.ox/core/date',
      'io.ox/core/strings',
+     'io.ox/core/notifications',
      'io.ox/contacts/api',
      'io.ox/core/api/collection-pool',
      'io.ox/core/tk/flag-picker',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, util, api, account, date, strings, contactsAPI, Pool, flagPicker, settings, gt) {
+    ], function (ext, links, actions, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, settings, gt) {
 
     'use strict';
 
@@ -433,11 +434,9 @@ define('io.ox/mail/common-extensions',
                 } else {
                     this.append(
                         $('<div class="alert alert-info external-images">').append(
-                            $('<a>').text(gt('Show images')),
-                            $('<i>').append(
-                                $.txt(_.noI18n(' \u2013 ')),
-                                $.txt(gt('External images have been blocked to protect you against potential spam!'))
-                            )
+                            $('<a href="#" class="btn btn-primary btn-small" tabindex="1">').text(gt('Show images')),
+                            $.txt(_.noI18n('\u00A0\u00A0 ')),
+                            $.txt(gt('External images have been blocked to protect you against potential spam!'))
                         )
                     );
                 }
@@ -476,7 +475,53 @@ define('io.ox/mail/common-extensions',
                 baton.model.on('change:headers', draw.bind(this));
             };
 
-        }())
+        }()),
+
+        dispositionNotification: (function () {
+
+            function returnReceipt(e) {
+                e.preventDefault();
+                var view = e.data.view, obj = _.cid(view.cid);
+                view.model.set('disp_notification_to', '');
+                api.ack({ folder: obj.folder_id, id: obj.id }).done(function () {
+                    notifications.yell(
+                        'success',
+                        //#. delivery receipt; German "Lesebestätigung"
+                        gt('A return receipt has been sent')
+                    );
+                });
+            }
+
+            function draw(model) {
+
+                this.find('.disposition-notification').remove();
+
+                // has proper attribute?
+                if (!model.get('disp_notification_to')) return;
+                // user does not ignore this feature?
+                if (!settings.get('sendDispositionNotification', false)) return;
+                // is not in drafts folder?
+                if (account.is('drafts', model.get('folder_id'))) return;
+
+                this.append(
+                    $('<div class="alert alert-info disposition-notification">').append(
+                        $('<a href="#" class="btn btn-primary btn-small" tabindex="1">').text(
+                            //#. Respond to delivery receipt; German "Lesebestätigung senden"
+                            gt('Send a return receipt')
+                        ),
+                        $.txt(_.noI18n('\u00A0\u00A0 ')),
+                        $.txt(gt('The sender wants to get notified when you have read this email'))
+                    )
+                );
+            }
+
+            return function (baton) {
+                draw.call(this, baton.model);
+                this.on('click', '.disposition-notification', { view: baton.view }, returnReceipt);
+                baton.model.on('change:disp_notification_to', draw.bind(this));
+            };
+
+        }()),
     };
 
     return extensions;

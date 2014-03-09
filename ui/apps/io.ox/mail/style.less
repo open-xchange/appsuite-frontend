@@ -1012,10 +1012,6 @@ textarea.inplace-editor {
         }
     }
 
-    .alert {
-        margin: 1em 0;
-    }
-
     .date {
         color: #888;
         display: block;
@@ -1213,12 +1209,20 @@ textarea.inplace-editor {
         padding-left: @picture-padding + @unread-toggle-width;
     }
 
+    .notifications {
+        cursor: default;
+    }
+
     .alert, .well {
         margin: 0;
-        border: 0px none;
+        border: 0;
         padding: 10px 20px;
         .border-radius(0px);
         .box-shadow(none);
+    }
+
+    .alert + .alert {
+        margin-top: 1px;
     }
 
     .well {
