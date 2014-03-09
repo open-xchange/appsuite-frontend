@@ -104,6 +104,12 @@ define('io.ox/mail/detail/view',
     var INDEX_notifications = 0;
 
     ext.point('io.ox/mail/detail-view/notifications').extend({
+        id: 'phishing',
+        index: INDEX_notifications += 100,
+        draw: extensions.phishing
+    });
+
+    ext.point('io.ox/mail/detail-view/notifications').extend({
         id: 'external-images',
         index: INDEX_notifications += 100,
         draw: extensions.externalImages

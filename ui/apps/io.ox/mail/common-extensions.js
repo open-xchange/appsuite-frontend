@@ -23,8 +23,9 @@ define('io.ox/mail/common-extensions',
      'io.ox/contacts/api',
      'io.ox/core/api/collection-pool',
      'io.ox/core/tk/flag-picker',
+     'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, util, api, account, date, strings, contactsAPI, Pool, flagPicker, gt) {
+    ], function (ext, links, actions, util, api, account, date, strings, contactsAPI, Pool, flagPicker, settings, gt) {
 
     'use strict';
 
@@ -446,6 +447,33 @@ define('io.ox/mail/common-extensions',
                 draw.call(this, baton.model);
                 this.on('click', '.external-images', { view: baton.view }, loadImages);
                 baton.model.on('change:modified', draw.bind(this));
+            };
+
+        }()),
+
+        phishing: (function () {
+
+            var headers = _(settings.get('phishing/headers', ['phishing-test']));
+
+            function draw(model) {
+
+                // avoid duplicates
+                if (this.find('.phishing').length) return;
+
+                _(model.get('headers')).find(function (value, name) {
+                    if (headers.contains(name)) {
+                        this.append(
+                            $('<div class="alert alert-error phishing">')
+                            .text(gt('Warning: This message might be a phishing or scam mail'))
+                        );
+                        return true;
+                    }
+                }, this);
+            }
+
+            return function (baton) {
+                draw.call(this, baton.model);
+                baton.model.on('change:headers', draw.bind(this));
             };
 
         }())
