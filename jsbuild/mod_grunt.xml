@@ -58,6 +58,8 @@
     	<attribute name="prjpath" />
     <sequential>
 <!--
+        <mod_grunt.init />
+
 		<echo message="check if project '@{prjpath}' needs to be prepared for NPM and BOWER ..." />
 		<mod_done.is-done done-id="@{prjpath}"
 						  is-done="local.is-done"
@@ -127,7 +129,7 @@
         
         <mod_grunt.init />
         
-        <mod_grunt.-impl-grunt prjpath="${basedir}">
+        <mod_grunt.-impl-grunt prjpath="@{prjpath}">
 	        <arg value="clean" />
         </mod_grunt.-impl-grunt>
         
@@ -150,7 +152,7 @@
         
         <mod_grunt.init />
 
-        <mod_grunt.-impl-grunt prjpath="${basedir}"
+        <mod_grunt.-impl-grunt prjpath="@{prjpath}"
         />
         
     </sequential>
@@ -172,7 +174,7 @@
         
         <mod_grunt.init />
 
-        <mod_grunt.-impl-grunt prjpath="${basedir}"
+        <mod_grunt.-impl-grunt prjpath="@{prjpath}"
         />
         
     </sequential>
