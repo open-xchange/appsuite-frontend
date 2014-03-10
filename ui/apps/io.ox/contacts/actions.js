@@ -161,6 +161,7 @@ define('io.ox/contacts/actions',
                                 select: function (id) {
                                     settings.set('folderpopup/last', id).save();
                                 },
+                                targetmode: true,
                                 dialogmode: true
                             });
 

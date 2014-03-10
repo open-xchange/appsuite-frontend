@@ -34,6 +34,7 @@ define('io.ox/core/tk/folderviews',
         SUB_PADDING = _.device('small') ? SMALL_FOLDER_PADDING : DESKTOP_FOLDER_PADDING,
 
         tmplFolder = $('<div class="folder selectable" role="treeitem" tabindex="-1">'),
+        tmplFolderDisabled = $('<div class="folder disabled" tabindex="-1">'),
         tmplSub = $('<div class="subfolders"role="group">').hide(),
 
         TRUE = function () { return true; };
@@ -829,8 +830,10 @@ define('io.ox/core/tk/folderviews',
             var hasProperType = !options.type || options.type === data.module,
                 isSelectable = hasProperType, // so: all folder that I can see
                 isReadable = isSelectable && api.can('read', data),
-                isExpandable = !!data.subfolders;
+                isExpandable = !!data.subfolders,
+                isEnabled = !(options.targetmode && isReadable && !api.can('create', data));
 
+            if (!isEnabled) { this.addClass('disabled'); isSelectable = false; }
             if (isExpandable) { this.addClass('expandable'); }
             if (!isReadable) { this.addClass('unreadable'); }
             if (!isSelectable) { this.removeClass('selectable').addClass('unselectable'); }
@@ -975,10 +978,14 @@ define('io.ox/core/tk/folderviews',
 
     ext.point('io.ox/foldertree/section/folder').extend({
         draw: function (baton) {
-            var folder = tmplFolder.clone();
+            var isEnabled = !(baton.options.targetmode && !api.can('create', baton.data)),
+                folder = isEnabled ? tmplFolder.clone() : tmplFolderDisabled.clone();
+
             folder.append('<span class="folder-label">').attr('data-obj-id', baton.data.id);
             // update selection
-            baton.selection.addToIndex(baton.data.id);
+            if (isEnabled) {
+                baton.selection.addToIndex(baton.data.id);
+            }
             // invoke extension points
             ext.point('io.ox/foldertree/folder').invoke('customize', folder, baton.data, baton.options);
             this.append(folder);

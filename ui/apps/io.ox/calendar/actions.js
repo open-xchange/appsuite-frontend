@@ -416,6 +416,7 @@ define('io.ox/calendar/actions',
                             select: function (id) {
                                 contactSettings.set('folderpopup/last', id).save();
                             },
+                            targetmode: true,
                             dialogmode: true
                         });
 

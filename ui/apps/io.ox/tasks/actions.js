@@ -198,6 +198,7 @@ define('io.ox/tasks/actions',
                     var tree = new views.FolderList(popup.getBody(), {
                             type: 'tasks',
                             tabindex: 0,
+                            targetmode: true,
                             dialogmode: true
                         }),
                         id = String(task.folder || task.folder_id);

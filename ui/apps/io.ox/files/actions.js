@@ -599,7 +599,8 @@ define('io.ox/files/actions',
                                 },
                                 select: function (id) {
                                     settings.set('folderpopup/last', id).save();
-                                }
+                                },
+                                targetmode: true
                             });
 
                         dialog.show(function () {

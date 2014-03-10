@@ -278,7 +278,8 @@ define('io.ox/mail/actions',
                                 },
                                 select: function (id) {
                                     settings.set('folderpopup/last', id).save();
-                                }
+                                },
+                                targetmode: true
                             });
                         dialog.show(function () {
                             tree.paint().done(function () {
