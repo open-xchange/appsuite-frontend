@@ -721,6 +721,7 @@ $(window).load(function () {
                         debug('boot.js: autoLogin > loginSuccess');
                         // are we on login page?
                         if (ox.signin) {
+                            ox.language = data.locale; // bug #31433
                             gotoCore(true);
                         } else {
                             debug('boot.js: autoLogin > loginSuccess > fetch user config ...');
@@ -868,7 +869,7 @@ $(window).load(function () {
                 // cannot change type with jQuery's attr()
                 $('#io-ox-login-username')[0].type = 'text';
             }
-            
+
             //show errors saved inlocalstorage
             if (localStorage.getItem('errormsg')) {
                 feedback('error', $.txt(localStorage.getItem('errormsg')));
