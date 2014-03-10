@@ -40,6 +40,7 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel').extend({
             index: 100,
             draw: function (baton) {
+
                 this.prepend(
                     // sidepanel
                     baton.$.sidepanel = $('<div class="abs border-right foldertree-sidepanel">')
@@ -844,26 +845,29 @@ define('io.ox/core/commons-folderview',
         };
 
         fnHideSml = function () {
-            app.settings.set('folderview/visible/' + _.display(), visible = false).save();
+            /*app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
             var nodes = app.getWindow().nodes;
             $('.window-container-center', nodes.outer).removeClass('animate-moveright').addClass('animate-moveleft');
             baton.$.spacer.hide();
-            app.trigger('folderview:close');
+            app.trigger('folderview:close');*/
         };
 
         fnShowSml = function () {
+            /*
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
             var nodes = app.getWindow().nodes;
             $('.window-container-center', nodes.outer).removeClass('animate-moveleft').addClass('animate-moveright');
             baton.$.spacer.show();
             app.trigger('folderview:open');
+            */
             return $.when();
         };
 
         toggle = function (state) {
             if (state === undefined) state = !visible;
-            if (_.device('smartphone')) {
+
+            if (false && _.device('smartphone')) {
                 if (state) fnShowSml(); else fnHideSml();
             } else {
                 if (state) fnShow(); else fnHide();
@@ -916,16 +920,10 @@ define('io.ox/core/commons-folderview',
             // mobile quirks, cannot be applied to css class
             // because it would be applied to desktop clients using
             // a small screen, too
+
             if (_.device('smartphone')) {
                 // mobile stuff
-                $('.window-sidepanel').css({
-                    'width': '90%',
-                    'left': '-90%',
-                    'right': 'intial'
-                });
-                // listen to swipe
-                // TODO: works not reliable on android stock browsers, add a manual close button also
-                sidepanel.on('swipeleft', toggle);
+                $('.window-sidepanel').hide();
 
             }
 
@@ -1006,8 +1004,8 @@ define('io.ox/core/commons-folderview',
 
         loadTree = function () {
             toggle();
-            app.showFolderView = _.device('smartphone') ? fnShowSml : fnShow;
-            app.hideFolderView = _.device('smartphone') ? fnHideSml : fnHide;
+            app.showFolderView = /*_.device('smartphone') ? fnShowSml :*/ fnShow;
+            app.hideFolderView = /*_.device('smartphone') ? fnHideSml :*/ fnHide;
             app.toggleFolderView = toggle;
             loadTree = toggleTree = $.noop;
             return require(['io.ox/core/tk/folderviews']).then(initTree);
@@ -1038,7 +1036,7 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel').invoke('draw', (options.folderTreeContainer) ? options.folderTreeContainer: app.getWindow().nodes.sidepanel, baton);
 
         if (_.device('smartphone')) {
-            ext.point(POINT + '/sidepanel/mobile').invoke('draw', app.getWindow().nodes.outer, baton);
+            //ext.point(POINT + '/sidepanel/mobile').invoke('draw', app.getWindow().nodes.outer, baton);
         }
 
         sidepanel = baton.$.sidepanel;

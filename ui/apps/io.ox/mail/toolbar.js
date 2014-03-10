@@ -203,6 +203,27 @@ define('io.ox/mail/toolbar',
         }
     });
 
+    // mobile navigation
+    ext.point('io.ox/mail/classic-toolbar').extend({
+        id: 'mobile-back',
+        index: 1, // be the first
+        draw: function (baton) {
+
+            if (_.device('!small')) return;
+
+            this.append(
+               $('<li>').append(
+                    $('<a>').append(
+                        $('<i class="icon-chevron-left">'),
+                        gt('Back')
+                    ).on('tap', function () {
+                        baton.app.pages.goBack();
+                    })
+                )
+            );
+        }
+    });
+
     // classic toolbar
     var toolbar = $('<ul class="classic-toolbar" role="menu">');
 

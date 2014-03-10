@@ -11,8 +11,23 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/pageController', ['less!io.ox/core/pageController.less'], function () {
+define('io.ox/core/pageController',
+    ['io.ox/core/extPatterns/links',
+    'less!io.ox/core/pageController.less'], function (links) {
+
     'use strict';
+
+    var Action = links.Action;
+
+    new Action('io.ox/mail/actions/navigation', {
+        id: 'back',
+        requires: function () {
+            return true;
+        },
+        action: function (baton) {
+            console.log('wurstblinker', baton);
+        }
+    });
 
     var PageController = function () {
         var pages = {},
@@ -20,12 +35,11 @@ define('io.ox/core/pageController', ['less!io.ox/core/pageController.less'], fun
             order = [],
             self = this;
 
+        // just for testing atm
         $(window).on('popstate', function () {
             // TODO make this safe to work
             self.goBack();
         });
-
-
 
         function createPage(opt) {
             var defaults = {
@@ -127,7 +141,8 @@ define('io.ox/core/pageController', ['less!io.ox/core/pageController.less'], fun
         this.goBack = function () {
             var cPos = _.indexOf(order, current);
             if (cPos === 0) return;
-            console.log(order, cPos);
+
+            // TODO respect real last page
             this.changePage(order[cPos - 2], {animation: 'slideright'});
         };
 
@@ -139,6 +154,7 @@ define('io.ox/core/pageController', ['less!io.ox/core/pageController.less'], fun
         this.getPage = function (page) {
             if (!pages[page]) {
                 console.error('PageController: Page ' + page + ' does not exist.');
+                console.error('PageController: Available pages are ' + order.join());
                 return;
             }
             if (_.device('!small')) {
