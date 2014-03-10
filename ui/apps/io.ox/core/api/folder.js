@@ -1016,6 +1016,9 @@ define('io.ox/core/api/folder',
 
         title = String(title || '').trim();
 
+        // anything to do?
+        if (title.length < max) return title;
+
         var leadingDelimiter = /[_-]/.test(title[0]) ? title[0] : false,
             endingDelimiter = /[_-]/.test(title[title.length - 1]) ? title[title.length - 1] : false,
             split = title.split(/[ _-]+/),
@@ -1034,7 +1037,6 @@ define('io.ox/core/api/folder',
 
         while (length > max && split.length > 2) {
             var index = Math.floor(split.length / 2);
-
             length -= split[index].length + 2;
             split.splice(index, 1);
             delimiters.splice(index + 1, 1);
