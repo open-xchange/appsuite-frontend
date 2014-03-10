@@ -1,0 +1,100 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Alexander Quast <alexander.quast@open-xchange.com>
+ */
+
+
+.page {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+
+    &:not(.current):not(.inmotion) {
+        display: none;
+    }
+    .content {
+        margin: 0 8px;
+    }
+}
+
+/*
+ *   Animation stuff
+ */
+
+.in, .out{
+    -webkit-animation-duration: 350ms;
+    -webkit-animation-fill-mode: both;
+    -webkit-animation-timing-function: cubic-bezier(.1, .7, .1, 1);
+            animation-timing-function: cubic-bezier(.1, .7, .1, 1);
+
+}
+
+.slideleft.in {
+    -webkit-animation-name: slideLeftIn;
+}
+
+.slideleft.out {
+    -webkit-animation-name: slideLeftOut;
+}
+
+@-webkit-keyframes slideLeftIn {
+    0% {
+        -webkit-transform: translate3d(100%,0, 0);
+        -webkit-box-shadow: -10px 0 10px -5px rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        -webkit-transform: translate3d(0 ,0, 0);
+        -webkit-box-shadow: -10px 0 10px -5px rgba(0, 0, 0, 0.02);
+    }
+}
+
+@-webkit-keyframes slideLeftOut {
+    0% {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(-100%, 0, 0);
+    }
+}
+
+.slideright.in {
+    -webkit-animation-name: slideRightIn;
+}
+
+.slideright.out {
+    -webkit-animation-name: slideRightOut;
+}
+
+@-webkit-keyframes slideRightIn {
+    0% {
+        -webkit-transform: translate3d(-100%, 0, 0);
+        -webkit-box-shadow: -10px 0 10px -5px rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        -webkit-box-shadow: -10px 0 10px -5px rgba(0, 0, 0, 0.02);
+
+    }
+}
+
+@-webkit-keyframes slideRightOut {
+    0% {
+        -webkit-transform: translate3d(0, 0, 0);
+        -webkit-box-shadow: -10px 0 10px -5px rgba(0, 0, 0, 0.2);
+    }
+    100% {
+        -webkit-transform: translate3d(100%, 0, 0);
+        -webkit-box-shadow: -10px 0 10px -5px rgba(0, 0, 0, 0.02);
+    }
+}

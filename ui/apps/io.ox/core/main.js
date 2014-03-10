@@ -935,7 +935,7 @@ define('io.ox/core/main',
 
             // always use portal on small devices!
             if (_.device('small')) {
-                return mobileAutoLaunchArray();
+                mobileAutoLaunchArray();
             }
 
             var appURL = _.url.hash('app'),

@@ -20,9 +20,10 @@ define('io.ox/core/desktop',
      'io.ox/core/notifications',
      'io.ox/core/upsell',
      'io.ox/core/adaptiveLoader',
+     'io.ox/core/pageController',
      'settings!io.ox/core',
      'gettext!io.ox/core'
-    ], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, coreConfig, gt) {
+    ], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, PageController, coreConfig, gt) {
 
     'use strict';
 
@@ -292,6 +293,11 @@ define('io.ox/core/desktop',
         mediate: function () {
             return ext.point(this.getName() + '/mediator').invoke('setup', null, this);
         },
+
+        /*
+         * add a new page controller to App.
+         */
+        pages: new PageController(),
 
         /**
          * Registers an event handler at a global browser object (e.g. the
