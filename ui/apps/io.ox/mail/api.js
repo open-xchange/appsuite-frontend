@@ -866,9 +866,12 @@ define('io.ox/mail/api',
         this.trigger('refresh.pending');
         tracker.clear();
         return update(list, { flags: api.FLAGS.SPAM, value: true })
-            .then(function () {
-                return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-            })
+            .then(
+                function sucess() {
+                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
+                },
+                notifications.yell
+            )
             .done(function () {
                 api.trigger('refresh.all');
             });
@@ -878,9 +881,12 @@ define('io.ox/mail/api',
         this.trigger('refresh.pending');
         tracker.clear();
         return update(list, { flags: api.FLAGS.SPAM, value: false })
-            .then(function () {
-                return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
-            })
+            .then(
+                function success() {
+                    return api.caches.all.grepRemove(_(list).first().folder_id + DELIM);
+                },
+                notifications.yell
+            )
             .done(function () {
                 api.trigger('refresh.all');
             });
