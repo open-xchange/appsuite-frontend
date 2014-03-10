@@ -786,7 +786,7 @@ define('io.ox/core/tk/folderviews',
             if (data) {
                 // unpack array; pluck 'id'
                 data = _.isArray(data) ? data[0] : data;
-                data = _.isString(data) ? data : String(data.id);
+                data = _.isObject(data) ? String(data.id) : String(data);
                 // get path
                 return api.getPath({ folder: data }).pipe(function (list) {
                     var def = $.Deferred();
