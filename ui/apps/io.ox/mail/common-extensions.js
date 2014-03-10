@@ -479,10 +479,13 @@ define('io.ox/mail/common-extensions',
 
         dispositionNotification: (function () {
 
+            var skip = {};
+
             function returnReceipt(e) {
                 e.preventDefault();
                 var view = e.data.view, obj = _.cid(view.cid);
                 view.model.set('disp_notification_to', '');
+                skip[view.cid] = true;
                 api.ack({ folder: obj.folder_id, id: obj.id }).done(function () {
                     notifications.yell(
                         'success',
@@ -492,12 +495,23 @@ define('io.ox/mail/common-extensions',
                 });
             }
 
+            function cancel(e) {
+                e.preventDefault();
+                // add to skip hash
+                var view = e.data.view;
+                skip[view.cid] = true;
+            }
+
             function draw(model) {
 
                 this.find('.disposition-notification').remove();
 
+                // skip? (cancaled or already returned)
+                if (skip[model.cid]) return;
                 // has proper attribute?
                 if (!model.get('disp_notification_to')) return;
+                // is unseen or was unseen?
+                if (!util.isUnseen(model.get('flags')) && !model.get('unread')) return;
                 // user does not ignore this feature?
                 if (!settings.get('sendDispositionNotification', false)) return;
                 // is not in drafts folder?
@@ -505,6 +519,7 @@ define('io.ox/mail/common-extensions',
 
                 this.append(
                     $('<div class="alert alert-info disposition-notification">').append(
+                        $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
                         $('<a href="#" class="btn btn-primary btn-small" tabindex="1">').text(
                             //#. Respond to delivery receipt; German "Lesebestätigung senden"
                             gt('Send a return receipt')
@@ -517,7 +532,8 @@ define('io.ox/mail/common-extensions',
 
             return function (baton) {
                 draw.call(this, baton.model);
-                this.on('click', '.disposition-notification', { view: baton.view }, returnReceipt);
+                this.on('click', '.disposition-notification .btn', { view: baton.view }, returnReceipt);
+                this.on('click', '.disposition-notification .close', { view: baton.view }, cancel);
                 baton.model.on('change:disp_notification_to', draw.bind(this));
             };
 
