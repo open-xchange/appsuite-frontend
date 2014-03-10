@@ -177,14 +177,17 @@ define('io.ox/core/print',
                 // create new callback & open print window
                 var id = addCallback(options, { data: args, i18n: options.i18n, length: args.length, filtered: all - args.length  }),
                     url = options.file + '?' + id;
-                if (options.window) {
-                    options.window.location = url;
-                    callbacks[id] = options.window;
-                } else {
-                    callbacks[id] = that.openURL(url);
-                }
-                // remove old callbacks
-                removeCallbacks();
+                // defer the following (see bug #31301)
+                _.defer(function () {
+                    if (options.window) {
+                        options.window.location = url;
+                        callbacks[id] = options.window;
+                    } else {
+                        callbacks[id] = that.openURL(url);
+                    }
+                    // remove old callbacks
+                    removeCallbacks();
+                });
             })
             .fail(function () {
                 if (options.window) {
