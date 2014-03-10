@@ -24,7 +24,7 @@
     "grunt-karma": "~0.6.2",
     "grunt-modernizr": "~0.4.1",
     "grunt-newer": "~0.6.0",
-    "grunt-require-gettext": "~0.2.0",
+    "grunt-require-gettext": "^0.2.1",
     "jasmine-sinon": "~0.3.1",
     "jshint": "Open-Xchange-Frontend/jshint",
     "appserver": "~0.1.0",
