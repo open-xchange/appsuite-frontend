@@ -32,6 +32,7 @@ define('io.ox/core/login-i18n', ['gettext!io.ox/core/login'], function (gt) {
         gt('Please enter your password.');
         gt('Your browser version is not supported!');
         gt('Your browser is not supported!');
+        gt('This browser is not supported on your current platform.');
         //#. %n in the lowest version of Android
         gt('You need to use Android %n or higher.');
         //#. %n is the lowest version of iOS
