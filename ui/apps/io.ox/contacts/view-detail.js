@@ -262,9 +262,14 @@ define('io.ox/contacts/view-detail',
 
     function block() {
 
+        function removeAndSplice() {
+            rows.splice(-1, 1);
+            return args.slice(-1)[0];
+        }
+
         var args = _(arguments).toArray(),
             rows = _(args.slice(1)).compact(),
-            noDl = _.isBoolean(args.slice(-1)[0]) ? args.slice(-1)[0] : false,
+            noDl = _.isBoolean(args.slice(-1)[0]) ? removeAndSplice() : false,
             block = $('<fieldset class="block">'),
             dl = $('<dl class="dl-horizontal">'),
             self = noDl ? block : dl.appendTo(block);
