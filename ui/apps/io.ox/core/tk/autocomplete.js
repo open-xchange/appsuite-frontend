@@ -308,7 +308,9 @@ define('io.ox/core/tk/autocomplete',
 
             // handle key down (esc/cursor only)
             fnKeyDown = function (e) {
-                // e.stopPropagation();
+
+                var selected;
+
                 if (isOpen) {
                     switch (e.which) {
                     case 27: // escape
@@ -316,9 +318,7 @@ define('io.ox/core/tk/autocomplete',
                         break;
                     case 39: // cursor right
                         e.preventDefault();
-                        if (!e.shiftKey) {
-                            update();
-                        }
+                        if (!e.shiftKey) update();
                         break;
                     case 13: // enter
 
@@ -327,7 +327,7 @@ define('io.ox/core/tk/autocomplete',
                         // 2. use selected item or auto-select first item
                         // we use second approach here - this still allows to add custom mail addresses
 
-                        var selected = scrollpane.find('.selected');
+                        selected = scrollpane.find('.selected');
 
                         if (selected.length) {
                             // use selected item
@@ -343,10 +343,15 @@ define('io.ox/core/tk/autocomplete',
 
                         break;
                     case 9:  // tab
-                        e.preventDefault();
                         if (!e.shiftKey) { // ignore back-tab
-                            val = $.trim($(this).val(''));
-                            close();
+                            selected = scrollpane.find('.selected');
+                            if (selected.length) {
+                                e.preventDefault();
+                                selected.trigger('click');
+                            } else {
+                                $(this).val(val = '');
+                                close();
+                            }
                         }
                         break;
                     case 38: // cursor up
