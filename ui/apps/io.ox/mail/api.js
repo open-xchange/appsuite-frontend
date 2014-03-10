@@ -1592,7 +1592,7 @@ define('io.ox/mail/api',
             });
     };
 
-    // send delivery receipt
+    // send return receipt
     // data must include "folder" and "id"
     api.ack = function (data) {
 

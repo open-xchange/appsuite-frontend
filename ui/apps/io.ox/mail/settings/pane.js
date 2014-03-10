@@ -305,7 +305,7 @@ define('io.ox/mail/settings/pane',
                             )
                         ),
                         $('<div>').addClass('checkbox').append(
-                            $('<label>').text(gt('Ask for delivery receipt')).prepend(
+                            $('<label>').text(gt('Ask for return receipt')).prepend(
                                 new mini.CheckboxView({ name: 'sendDispositionNotification', model: mailSettings}).render().$el
                             )
                         )

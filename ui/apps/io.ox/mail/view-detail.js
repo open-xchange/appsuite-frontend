@@ -1003,7 +1003,7 @@ define('io.ox/mail/view-detail',
         e.preventDefault();
         api.ack({ folder: e.data.folder_id, id: e.data.id });
         $(this).attr('class', 'alert alert-success')
-            .text(gt('A delivery receipt has been sent'))
+            .text(gt('A return receipt has been sent'))
             .delay(5000).fadeOut();
     }
 
@@ -1025,7 +1025,7 @@ define('io.ox/mail/view-detail',
             this.append(
                 $('<div class="alert alert-info cursor-pointer">')
                 .append(
-                     $('<a href="#">').text(gt('Send a delivery receipt')),
+                     $('<a href="#">').text(gt('Send a return receipt')),
                      $('<i>').append(
                          $.txt(_.noI18n(' \u2013 ')), // long dash
                          $.txt(gt('The sender wants to get a notification when you have read this email'))
