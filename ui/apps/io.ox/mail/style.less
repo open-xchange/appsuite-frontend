@@ -205,10 +205,12 @@
         background-color: #fff;
         display: none;
         width: 100%;
-        min-height: 100px;
         cursor: default;
         outline: 0;
         .box-sizing(border-box);
+        &.loading {
+            min-height: 80px;
+        }
     }
     section.attachments {
         margin-bottom: 10px;
@@ -510,7 +512,7 @@
         line-height: 24px;
         padding: 20px;
         margin: 0;
-        border-bottom: 1px solid #ccc;
+        // border-bottom: 1px solid #ccc;
         background-color: white;
         .summary {
             color: #888;
@@ -1234,10 +1236,6 @@ textarea.inplace-editor {
         border: 1px solid white; // to work with outline
         display: table;
         background-color: white;
-    }
-
-    article.io-ox-busy {
-        min-height: 100px;
     }
 
     article.text-html.horizontal-scrolling {

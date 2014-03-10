@@ -206,6 +206,7 @@ define('io.ox/mail/detail/view',
                 unseen = util.isUnseen(this.model.get('flags'));
 
             // done
+            this.$el.find('section.body').removeClass('loading');
             this.trigger('load:done');
 
             // draw attachments
@@ -235,6 +236,7 @@ define('io.ox/mail/detail/view',
 
             if ($li.attr('data-loaded') === 'false' && $li.hasClass('expanded')) {
                 $li.attr('data-loaded', true);
+                $li.find('section.body').addClass('loading');
                 this.trigger('load');
                 // load detailed email data
                 api.get(_.cid(this.cid)).then(this.onLoad.bind(this), this.onLoadFail.bind(this));
