@@ -16,6 +16,8 @@ override_dh_auto_install:
 	mkdir -p $(BACKEND)
 	cp -r apps $(FRONTEND)
 	cp -r manifests $(FRONTEND)
+	cp core $(FRONTEND)
+	cp signin $(FRONTEND)
 	cp *.* $(FRONTEND)
 	cp .htaccess $(FRONTEND)
 	cp -r help $(FRONTEND)
@@ -38,6 +40,10 @@ override_dh_auto_install:
 	    mv "$(FRONTEND)/help-drive/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help-drive/"; \
 	done
 	cp -r $(FRONTEND)/apps $(BACKEND)/
+	cp $(FRONTEND)/*.* $(BACKEND)/
+	cp $(FRONTEND)/core $(BACKEND)/
+	cp $(FRONTEND)/signin $(BACKEND)/
+	cp -r $(FRONTEND)/manifests $(BACKEND)/
 	mkdir -p debian/open-xchange-appsuite/opt/open-xchange/sbin
 	sed -e "s:## cd ##:cd /var/www/appsuite:" bin/touch-appsuite > \
 	    debian/open-xchange-appsuite/opt/open-xchange/sbin/touch-appsuite
