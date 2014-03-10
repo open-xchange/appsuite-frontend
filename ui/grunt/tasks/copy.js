@@ -108,6 +108,7 @@ module.exports = function (grunt) {
     grunt.registerTask('copy_build', [
         'newer:copy:static',
         'newer:copy:apps',
+        'newer:copy:dateData',
         'newer:copy:themes',
         'newer:copy:tinymce',
         'newer:copy:thirdparty'
