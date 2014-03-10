@@ -64,7 +64,9 @@ define('io.ox/contacts/distrib/create-dist-view',
         index: 200,
         attribute: 'display_name',
         className: 'row-fluid',
-        label: gt('List name'), // noun
+        label:
+            //#. Name of distribution list
+            gt('Name'), // mind bug #31073
         control: '<input tabindex="1" type="text" class="span6">',
         buildControls: function () {
             return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
