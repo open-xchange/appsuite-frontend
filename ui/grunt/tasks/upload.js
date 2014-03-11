@@ -113,8 +113,10 @@ module.exports = function (grunt) {
             req = proto.request(data, function (res) {
                 if (res.statusCode === 200) {
                     grunt.log.ok('All files uploaded.');
-                    grunt.verbose.writeln('Response:\n', res.toString());
-                    done(true);
+                    res.on('data', function (data) {
+                        grunt.verbose.writeln('Response:\n', data.toString());
+                        done(true);
+                    });
                     return;
                 }
 
