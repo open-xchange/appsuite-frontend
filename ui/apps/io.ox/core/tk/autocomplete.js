@@ -52,7 +52,7 @@ define('io.ox/core/tk/autocomplete',
             },
 
             name: function (data) {
-                return util.unescapedisplay_name(data.display_name);
+                return util.unescapeDisplayName(data.display_name);
             },
 
             // object related unique string
