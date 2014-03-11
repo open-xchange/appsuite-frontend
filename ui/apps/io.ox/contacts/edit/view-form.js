@@ -119,7 +119,7 @@ define('io.ox/contacts/edit/view-form',
         delete meta.i18n.attachments;
     }
 
-    if (capabilities.has('gab')) {
+    if (capabilities.has('read_create_shared_folders')) {
         meta.sections.personal.push('private_flag');
     }
 
