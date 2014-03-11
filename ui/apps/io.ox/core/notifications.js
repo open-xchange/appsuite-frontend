@@ -389,7 +389,7 @@ define('io.ox/core/notifications',
                     busy: 'fa fa-refresh fa-spin',
                     error: 'fa fa-exclamation',
                     info: 'fa fa-exclamation',
-                    success: 'fa fa-ok',
+                    success: 'fa fa-check',
                     warning: 'fa fa-exclamation'
                 },
 
