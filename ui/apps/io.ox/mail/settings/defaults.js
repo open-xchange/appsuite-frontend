@@ -25,7 +25,7 @@ define('io.ox/mail/settings/defaults', [], function () {
         'appendMailTextOnReply': true,
         'forwardMessageAs': 'Inline',
         'messageFormat': 'html',
-        'lineWrapAfter': '',
+        'lineWrapAfter': '0',
         'defaultSendAddress': '',
         'autoSaveDraftsAfter': false,
         'allowHtmlMessages': true,

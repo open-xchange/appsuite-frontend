@@ -245,11 +245,15 @@ define('io.ox/mail/settings/pane',
                 ),
                 $('<div>').addClass('settings sectiondelimiter'),
                 $('<fieldset>').append(
-                    $('<div>').addClass('form-group form-inline expertmode').append(
-                        $('<span>').addClass('text').text(gt('Line wrap when sending text mails after ')),
-                        $('<label for="lineWrapAfter">').addClass('sr-only').text((gt('Line wrap when sending text mails after how much characters'))),
-                        new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'form-control', id: 'lineWrapAfter' }).render().$el,
-                        $('<span>').addClass('text').text(gt(' characters'))
+                    $('<div>').addClass('form-group expertmode').append(
+                        $('<label for="lineWrapAfter">').addClass('control-label').text((gt('Automatically wrap plain text after characters:'))),
+                        $('<div>').addClass('controls').append(
+                            $('<div>').addClass('row').append(
+                                $('<div>').addClass('col-md-2').append(
+                                    new mini.InputView({ name: 'lineWrapAfter', model: mailSettings, className: 'form-control', id: 'lineWrapAfter' }).render().$el
+                                )
+                            )
+                        )
                     ),
                     $('<div>').addClass('form-group').append(
                         $('<label>').attr({ 'for': 'defaultSendAddress' }).text(gt('Default sender address')),
