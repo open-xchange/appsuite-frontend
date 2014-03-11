@@ -15,7 +15,7 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('copy', {
+    grunt.config.extend('copy', {
         static: {
             files: [
                 {
