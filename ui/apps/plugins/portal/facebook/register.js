@@ -130,10 +130,6 @@ define('plugins/portal/facebook/register',
             });
         },
 
-        action: function () {
-            window.open('https://www.facebook.com/me', 'facebook');
-        },
-
         isEnabled: function () {
             return keychain.isEnabled('facebook');
         },

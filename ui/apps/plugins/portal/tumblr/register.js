@@ -35,10 +35,6 @@ define('plugins/portal/tumblr/register',
 
         title: 'Tumblr',
 
-        action: function (baton) {
-            window.open('http://' + baton.model.get('props').url, 'tumblr');
-        },
-
         initialize: function (baton) {
 
             function initFeed() {
