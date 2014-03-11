@@ -244,6 +244,29 @@
         ]]>
     </scriptdef>
 
+    <!-- =======================================================================
+      -->
+    <scriptdef name    ="mod_utils.string-contains"
+               language="javascript">
+
+        <attribute name="string"       />
+        <attribute name="search"       />
+    	<attribute name="result-prop"  />
+
+        <![CDATA[
+			//importPackage(java.lang);
+			var sString      = attributes.get("string"      );
+			var sSearch      = attributes.get("search"      );
+			var sResultProp  = attributes.get("result-prop" );
+			var bContains    = (sString.indexOf(sSearch) > 0);
+
+			//java.lang.System.out.println("'"+sString+"'.contains('"+sSearch+"') = '"+bContains+"'");
+			//java.lang.System.out.println("set result prop '"+sResultProp+"' to = '"+bContains+"'");
+			
+			project.setProperty (sResultProp, bContains);
+        ]]>
+    </scriptdef>
+
     <!-- =================================================================================
       -->
     <macrodef name="mod_utils.slow-down">

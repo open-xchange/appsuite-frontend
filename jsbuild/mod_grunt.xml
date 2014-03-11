@@ -35,6 +35,7 @@
 					<os family="unix" />
 				</condition>
 
+				<mod_grunt.-impl-init-defaults         />
 				<mod_grunt.-impl-init-from-magic       />
 				<mod_grunt.-impl-init-from-env         />
 				<mod_grunt.-impl-init-from-user-config />
@@ -118,6 +119,8 @@
 	        <arg value="clean" />
         </mod_grunt.-impl-grunt>
         
+		<mod_grunt.-impl-clean-apache-if-needed prjpath="@{prjpath}" />
+        
     </sequential>
     </macrodef>
 
@@ -138,6 +141,8 @@
         <mod_grunt.init />
 
         <mod_grunt.-impl-grunt prjpath="@{prjpath}"
+        />
+        <mod_grunt.-impl-deploy prjpath="@{prjpath}"
         />
         
     </sequential>
@@ -161,7 +166,88 @@
 
         <mod_grunt.-impl-grunt prjpath="@{prjpath}"
         />
+        <mod_grunt.-impl-deploy prjpath="@{prjpath}"
+        />
         
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.-impl-deploy">
+        <attribute name="prjpath" />
+    <sequential>
+    
+    	<echo message="deploy frontend files ..." />
+    
+    	<if>
+			<equals arg1="${mod_grunt.mode}" arg2="appserver" />
+			<then>
+				<echo message="... to appserver" />
+			</then>
+    	</if>
+
+    	<if>
+			<equals arg1="${mod_grunt.mode}" arg2="apache" />
+			<then>
+				<echo message="... to apache" />
+				
+				<fail unless ="mod_grunt.path.apache"
+				      message="Miss configured path to apache documents. Did you define 'path.apache' in jsbuild-env.properties file ?"
+				/>
+				
+				<mod_grunt.-impl-get-appsuite-path appsuite-path="local.path.appsuite-in-apache" />
+				
+				<mkdir dir="${local.path.appsuite-in-apache}" />
+				
+				<copy todir="${local.path.appsuite-in-apache}">
+					<fileset dir="@{prjpath}/build" />
+				</copy>
+			</then>
+    	</if>
+    
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+         tricky : we are called for every frontend project separately ...
+                  so it's not a good idea to clean the apache path on every call ...
+                  Do it for the FIRST project of build chain only ...
+                  thats the web/ui project .-)
+      -->
+    <macrodef name="mod_grunt.-impl-clean-apache-if-needed">
+    <attribute name="prjpath" />
+	<sequential>
+        
+        <!-- check for /web/ui ...
+             otherwhise office-web/ui will be detected too :-)
+          -->
+        <mod_utils.string-contains string     ="@{prjpath}"
+        						   search     ="/web/ui"
+        						   result-prop="local.is-web-project"
+        />
+        
+        <if>
+        	<and>
+				<istrue value="${local.is-web-project}" />
+				<equals arg1="${mod_grunt.mode}" arg2="apache" />
+	        </and>
+	        <then>
+				<mod_grunt.-impl-get-appsuite-path appsuite-path="local.path.appsuite-in-apache" />
+				<delete dir="${local.path.appsuite-in-apache}" />
+			</then>
+		</if>
+        
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.-impl-init-defaults">
+    <sequential>
+    
+    	<var name="mod_grunt.mode" value="appserver" />
+    
     </sequential>
     </macrodef>
 
@@ -226,7 +312,7 @@
         </if>
 
 		<var name ="local.exe.npm"
-		     value="c:/progra~1/nodejs/node_modules/npm"
+		     value="c:/progra~1/nodejs/npm.cmd"
 		/>
 	    <if>
             <available file="${local.exe.npm}" />
@@ -319,6 +405,13 @@
         		<var name="mod_grunt.PATH" value="${mod_grunt.PATH}${path.separator}/opt/local/sbin" />
         	</then>
         </if>
+
+        <if>
+            <available file="/Library/WebServer/Documents" />
+            <then>
+        		<var name="mod_grunt.path.apache" value="/Library/WebServer/Documents" />
+        	</then>
+        </if>
         
     </sequential>
     </macrodef>
@@ -361,7 +454,14 @@
             </then>
         </if>
 
-		<!-- seems the PATH is good enough on linux .-) -->
+		<!-- seems the PATH variable is good enough on linux .-) -->
+		
+		<if>
+			<available file="/var/www" />
+            <then>
+        		<var name="mod_grunt.path.apache" value="/var/www" />
+        	</then>
+        </if>
 
     </sequential>
     </macrodef>
@@ -452,6 +552,14 @@
 						/>
 					</then>
 				</if>
+				<if>
+					<isset property="local.env.mode" />
+					<then>
+						<var name ="mod_grunt.mode"
+						     value="${local.env.mode}"
+						/>
+					</then>
+				</if>
 
 			</then>
         	<else>
@@ -459,6 +567,22 @@
         	</else>
         </if>
 
+    </sequential>
+    </macrodef>
+
+    <!-- =================================================================================
+      -->
+    <macrodef name="mod_grunt.-impl-get-appsuite-path">
+    <attribute name="appsuite-path" />
+    <sequential>
+    
+    	<fail unless ="mod_grunt.path.apache"
+    	      message="Miss apache path. Did you configure it ?"
+    	/>
+    
+    	<var name ="@{appsuite-path}"
+    	     value="${mod_grunt.path.apache}/appsuite" />
+    
     </sequential>
     </macrodef>
 
