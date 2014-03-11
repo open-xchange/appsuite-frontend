@@ -111,7 +111,7 @@ module.exports = function (grunt) {
     grunt.config.extend('uglify', {
         dist: {
             files: [{
-                src: ['apps/**/*.js', '*.js'],
+                src: ['apps/**/*.js'],
                 cwd: 'build/',
                 dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
                 filter: function (f) {
@@ -130,6 +130,17 @@ module.exports = function (grunt) {
                     filter: isPackagedTranslationModule
                 }
             ]
+        },
+        dist_rootfolder: {
+            files: [{
+                src: ['*.js'],
+                cwd: 'build/',
+                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
+                filter: function (f) {
+                    return !isTranslationModule(f) && grunt.file.isFile(f);
+                },
+                expand: true
+            }]
         }
     });
 
