@@ -41,10 +41,6 @@ define('plugins/portal/flickr/register',
 
         title: 'Flickr',
 
-        action: function () {
-            window.open('http://www.flickr.com/', 'flickr');
-        },
-
         initialize: function (baton) {
 
             function initFeed() {
