@@ -877,8 +877,6 @@ define('io.ox/mail/actions',
                         taskAPI.create({
                             title: titleInput.val(),
                             folder_id: coreConfig.get('folder/tasks'),
-                            end_date: dates.endDate,
-                            start_date: dates.endDate,
                             alarm: dates.alarmDate,
                             note: noteInput.val(),
                             status: 1,
