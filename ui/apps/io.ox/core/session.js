@@ -165,7 +165,12 @@ define('io.ox/core/session',
                                 def.resolve(data);
                             }
                         })
-                        .fail(def.reject);
+                        .fail(function (response) {
+                            if (console && console.error) {
+                                console.error('Login failed!', response.error, response.error_desc || '');
+                            }
+                            def.reject(response);
+                        });
                     }
                 } else {
                     // offline
