@@ -470,9 +470,11 @@ define('io.ox/mail/util',
                         .trim();
                 },
                 add = function (text, isHTML) {
-                    return general(text)
-                        //remove html tags (for plaintext emails)
-                        .replace(isHTML ? nothing : htmltags, '');
+                    var clean = general(text)
+                                //remove html tags (for plaintext emails)
+                                .replace(isHTML ? nothing : htmltags, '');
+                    //special entities like '&'/&amp;
+                    return isHTML ? $('<dummy>').html(clean).html() : clean;
                 },
                 preview = function (text) {
                     return general(text)

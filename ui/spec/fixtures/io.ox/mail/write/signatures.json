@@ -121,6 +121,23 @@
                     "misc": {
                         "insertion": "below"
                     }
+                },
+                {
+                    "displayname": "SINGLELINE (SPECIAL)",
+                    "content": "&",
+                    "shared": false,
+                    "id": "340",
+                    "module": "io.ox/mail",
+                    "createdby": 395,
+                    "type": "signature",
+                    "props": {
+                        "Message-ID": "<1107857077.404.1389171824428.open-xchange@appsuite-dev-gw2>",
+                        "MIME-Version": "1.0",
+                        "Content-Type": "multipart/mixed;  boundary=\"----=_Part_2701_2010031979.1389090431122\""
+                    },
+                    "misc": {
+                        "insertion": "below"
+                    }
                 }
             ]
 
