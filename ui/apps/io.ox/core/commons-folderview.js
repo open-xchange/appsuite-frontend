@@ -139,17 +139,18 @@ define('io.ox/core/commons-folderview',
                     }
 
                     setTimeout(function () {
-                        var top, left, menu, height, maxHeight;
+                        var offset, top, left, menu, height, maxHeight;
                         // show first to get proper dimensions
                         dropdown.find('.dropdown-toggle').dropdown('toggle');
                         current.addClass('dropdown-opened');
                         // exceeds window?
                         if (e.type !== 'contextmenu') {
-                            top = current[0].offsetTop - 4;
-                            left = current[0].offsetLeft + current[0].offsetWidth;
+                            offset = current.offset();
+                            top = offset.top - 4;
+                            left = offset.left + current.parent().width();
                         } else {
-                            top = e.pageY - 58;
-                            left = e.pageX - 40;
+                            top = e.pageY - 15;
+                            left = e.pageX + 15;
                         }
                         menu = dropdown.find('.dropdown-menu');
                         height = menu.outerHeight();
@@ -632,7 +633,7 @@ define('io.ox/core/commons-folderview',
                 data = baton.data,
                 appSettings = e.data.appSettings,
                 blacklist = appSettings.get('folderview/blacklist', {});
-            
+
             //update blacklist
             if (e.data.hide) {
                 blacklist[data.id] = true;
@@ -645,7 +646,7 @@ define('io.ox/core/commons-folderview',
             //repaint tree but keep scrollposition
             var node = baton.tree.container.parents('.foldertree-container'),
                 pos = node.scrollTop();
-            
+
             baton.tree.repaint().done(function () {
                 node.scrollTop(pos);//apply old scrollposition
             });
@@ -675,9 +676,9 @@ define('io.ox/core/commons-folderview',
                             )
                         );
                     }
-                    
+
                 }
-                
+
             }
         });
     }
