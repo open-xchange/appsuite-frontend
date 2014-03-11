@@ -1370,7 +1370,7 @@ define('io.ox/mail/api',
                 });
             } else {
                 // single EML
-                url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:]/g, '_') + '.eml') : '') + '?' +
+                url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
                     $.param($.extend(api.reduce(first), {
                         action: 'get',
                         src: 1,
@@ -1381,7 +1381,7 @@ define('io.ox/mail/api',
             }
         } else {
             // inject filename for more convenient file downloads
-            url += (data.filename ? '/' + encodeURIComponent(data.filename.replace(/[\\:]/g, '_')) : '') + '?' +
+            url += (data.filename ? '/' + encodeURIComponent(data.filename.replace(/[\\:\/]/g, '_')) : '') + '?' +
                 $.param({
                     action: 'attachment',
                     folder: (data.parent || data.mail).folder_id,
