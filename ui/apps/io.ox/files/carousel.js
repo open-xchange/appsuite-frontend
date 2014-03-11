@@ -115,12 +115,12 @@ define('io.ox/files/carousel',
                 this.nextControl.show();
             }
             // before transition
-            this.container.on('slide', function () {
+            this.container.on('slide.bs.carousel', function () {
                 self.pos.sliding = true;
             });
 
             // after transition
-            this.container.on('slid', function () {
+            this.container.on('slid.bs.carousel', function () {
                 var oldpos = pos.cur;
                 pos.cur = parseInt(self.container.find('.item.active').attr('data-index'), 10);
 
@@ -299,8 +299,8 @@ define('io.ox/files/carousel',
                 container: this.container
             });
             this.container
-                .off('slid')
-                .off('slide')
+                .off('slid.bs.carousel')
+                .off('slide.bs.carousel')
                 .off('click swipeleft', '.item')
                 .off('click swiperight', '.item');
 
