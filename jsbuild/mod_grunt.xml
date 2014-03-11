@@ -57,7 +57,7 @@
     <macrodef name="mod_grunt.prepare-gruntenv-in-project">
     	<attribute name="prjpath" />
     <sequential>
-<!--
+
         <mod_grunt.init />
 
 		<echo message="check if project '@{prjpath}' needs to be prepared for NPM and BOWER ..." />
@@ -73,28 +73,13 @@
 			<else>
 				<echo message="... YES - will do it now" />
 				
-				<if>
-					<istrue value="${mod_grunt.is-windows}" />
-					<then>
-						<exec executable ="${mod_grunt.exe.npm}"
-							  dir        ="@{prjpath}"
-							  failonerror="true"
-						>
-							<env key="PATH" path="${mod_grunt.PATH}" />
-							<arg value="install" />
-						</exec>
-					</then>
-					<else>
-						<exec executable ="${mod_grunt.exe.npm}"
-							  dir        ="@{prjpath}"
-							  failonerror="true"
-						>
-							<env key="PATH" path="${mod_grunt.PATH}" />
-							<arg value="install" />
-						</exec>
-						<fail message="MOIN MOIN : WITHOUT ROOT ACCESS RIGHTS I CANT HELP YOU. Please call 'npm install' manually within '@{prjpath}' !" />
-					</else>
-				</if>
+				<exec executable ="${mod_grunt.exe.npm}"
+					  dir        ="@{prjpath}"
+					  failonerror="true"
+				>
+					<env key="PATH" path="${mod_grunt.PATH}" />
+					<arg value="install" />
+				</exec>
 
 				<exec executable ="${mod_grunt.exe.bower}"
 					  dir        ="@{prjpath}"
@@ -109,7 +94,7 @@
 
 			</else>
 		</if>
-    -->
+
     </sequential>
     </macrodef>
 
