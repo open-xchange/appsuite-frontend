@@ -110,6 +110,7 @@ module.exports = function (grunt) {
                 'Accept': '*/*'
             };
 
+            grunt.verbose.writeln('Commiting files.');
             req = proto.request(data, function (res) {
                 if (res.statusCode === 200) {
                     grunt.log.ok('All files uploaded.');
