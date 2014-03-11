@@ -611,6 +611,11 @@ $(window).load(function () {
                             // now we're sure the server is up
                             serverUp();
                             debug('boot.js: fetchGeneralServerConfig > success');
+                            // forceHTTPS
+                            if (ox.serverConfig.forceHTTPS && location.protocol !== 'https:') {
+                                location.href = 'https:' + location.href.substring(location.protocol.length);
+                                return;
+                            }
                             // set page title now
                             if (_.device('!small')) {
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '') + ' ' + 'Login';
@@ -618,7 +623,7 @@ $(window).load(function () {
                                 document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                                 $('[name="apple-mobile-web-app-title"]').attr({ content: document.title });
                             }
-
+                            // theme
                             themes.set(ox.serverConfig.signinTheme || 'login');
                             // continue
                             gettext.setLanguage('en_US');
