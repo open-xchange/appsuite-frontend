@@ -324,15 +324,29 @@ define('io.ox/tasks/util',
             },
 
             getPriority: function (data) {
-                // normal?
-                if (data && data.priority === 2) return $();
-                var i = $('<i class="fa fa-exclamation">'),
-                    indicator = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
-                if (data && data.priority === 3) {
-                    return indicator.addClass('high').attr('title', gt('High priority'));
-                } else {
-                    return indicator.addClass('low').attr('title', gt('Low priority'));
+                if (data) {
+                    var p = data.priority || 0,
+                        $span = $('<span>');
+                    switch (p) {
+                        case 0:
+                            $span.addClass('noprio').attr('title', gt('No priority'));
+                            break;
+                        case 1:
+                            $span.addClass('low').attr('title', gt('Low priority'));
+                            break;
+                        case 2:
+                            $span.addClass('medium').attr('title', gt('Medium priority'));
+                            break;
+                        case 3:
+                            $span.addClass('high').attr('title', gt('High priority'));
+                            break;
+                    }
+                    for (var i = 0; i < p; i++) {
+                        $span.append($('<i class="fa fa-exclamation">'));
+                    }
+                    return $span;
                 }
+
             }
         };
 
