@@ -307,6 +307,15 @@ define('io.ox/mail/detail/content',
                 var node = $(this), bgcolor = node.attr('bgcolor');
                 node.css('background-color', bgcolor);
             });
+            this.find('table[cellpadding]').each(function () {
+                var node = $(this), cellpadding = node.attr('cellpadding');
+                if (node.attr('cellspacing') === '0') {
+                    node.css('border-collapse', 'collapse');
+                }
+                node.find('th, td').each(function () {
+                    $(this).css('padding', cellpadding);
+                });
+            });
         }
     });
 
