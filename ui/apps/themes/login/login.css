@@ -98,7 +98,7 @@ body.down #io-ox-login-container .alert.alert-info {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 65000;
+    z-index: 65300;
     -webkit-transform: translateZ(0); /* activate GPU acceleration */
 }
 
