@@ -36,7 +36,7 @@ define('io.ox/core/extPatterns/links',
                     baton = node.data('baton'),
                     ref = node.data('ref');
                 baton.e = e;
-                //node.tooltip('hide');
+                node.tooltip('hide');
                 actions.invoke(ref, this, baton, e);
             },
             drawDefault = function () {
@@ -65,11 +65,11 @@ define('io.ox/core/extPatterns/links',
                         'data-placement': 'bottom',
                         'data-animation': 'false',
                         'data-container': 'body'
+                    })
+                    .tooltip()
+                    .on('dispose', function () {
+                        $(this).tooltip('hide');
                     });
-                    //.tooltip();
-                    // .on('dispose', function () {
-                    //     $(this).tooltip('hide');
-                    // });
                 }
                 return a;
             };
