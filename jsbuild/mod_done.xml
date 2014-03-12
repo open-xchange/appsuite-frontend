@@ -127,6 +127,17 @@
     </macrodef>
     
     <!-- =======================================================================
+         clean the DB so all done states are gone and we can start new and fresh .-)
+	  -->
+    <macrodef name="mod_done.clean-db">
+    	<sequential>
+    	
+    	<delete dir="${mod_done.path.db}" />
+
+        </sequential>
+    </macrodef>
+
+    <!-- =======================================================================
          normalize the given id.
 
          @param id [IN]
