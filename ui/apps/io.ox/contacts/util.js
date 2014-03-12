@@ -98,11 +98,11 @@ define('io.ox/contacts/util',
                         //#. %1$s is the first name
                         //#. %2$s is the last name
                         //#. %3$s is the title
-                        gt('%3$s %2$s, %1$s') :
+                        '%3$s %2$s, %1$s' :
                         //#. Name without title
                         //#. %1$s is the first name
                         //#. %2$s is the last name
-                        gt('%2$s, %1$s');
+                        '%2$s, %1$s';
                 }
 
                 return { format: format, params: params };

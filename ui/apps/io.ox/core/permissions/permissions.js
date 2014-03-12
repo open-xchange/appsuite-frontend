@@ -251,6 +251,7 @@ define('io.ox/core/permissions/permissions',
                 options.addClass('readwrite');
             } else {
                 options.addClass('readonly');
+                options.find('span.dropdown a').attr({'aria-haspopup': false, 'data-toggle': null, 'disabled': 'disabled'});//disable dropdown
             }
             node.append(
                 addRemoveButton(baton.model.get('entity')),
