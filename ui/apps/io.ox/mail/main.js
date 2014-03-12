@@ -854,16 +854,9 @@ define('io.ox/mail/main',
         // search
         function initSearch() {
             var isSentfolder = (app.folder.get() === app.settings.get('defaultFolder/sent')) ? true : false,
-                searchSettingId = isSentfolder ? 'mail.search.sent' : 'mail.search',
-                order = ['from', 'to', 'cc', 'subject', 'text'];
+                searchSettingId = isSentfolder ? 'mail.search.sent' : 'mail.search';
 
-            ext.point('io.ox/mail/search/defaults').extend({
-                from: true,
-                to: true,
-                cc: true,
-                subject: true
-            });
-
+            //available 'checkboxes'
             ext.point('io.ox/mail/search/checkboxes').extend({
                 from: true,
                 to: true,
@@ -872,29 +865,32 @@ define('io.ox/mail/main',
                 text: true
             });
 
+            //defines preselected 'checkboxes' when user enters search first time
+            ext.point('io.ox/mail/search/defaults').extend({
+                from: true,
+                to: true,
+                cc: true,
+                subject: true
+            });
+
             var translations = { from: gt('Sender'), to: gt('Recipient'), cc: gt('CC'), subject: gt('Subject'), text: gt('Mail text') },
                 checkboxes = ext.point('io.ox/mail/search/checkboxes').options(),
                 defaults = ext.point('io.ox/mail/search/defaults').options(),
-                data = {}, button, dataSettings;
+                dataSettings = settings.get('options/' + searchSettingId, {}),
+                data = {}, button;
 
-            if (settings.get('options/' + searchSettingId) === undefined) {
-                //normalise data
-                _(checkboxes).each(function (flag, name) {
-                    if (flag === true) {
-                        data[name] = {
-                            name: name,
-                            label: translations[name] || name,
-                            checked: defaults[name] || false
-                        };
-                    }
-                });
-            } else {
-                dataSettings = settings.get('options/' + searchSettingId);
-                _(order).each(function (name) {
-                    data[name] = dataSettings[name];
-                    data[name].label = translations[name] || name;
-                });
-            }
+            //prepare data
+            _(checkboxes).each(function (enabled, name) {
+                //only available checkboxes
+                if (enabled) {
+                    data[name] = $.extend(
+                        //defaults
+                        { checked: defaults[name] || false, name: name, label: translations[name] || name },
+                        //checked last time?
+                        { checked: (dataSettings[name] || {}).checked }
+                    );
+                }
+            });
 
             //add dropdown button
             button = $('<button type="button" data-action="search-options" class="btn fixed-btn search-options" aria-hidden="true">')
