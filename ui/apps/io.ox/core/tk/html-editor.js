@@ -491,6 +491,7 @@ define.async('io.ox/core/tk/html-editor',
             theme_advanced_buttons3: toolbar3,
             theme_advanced_toolbar_location: settings.get('tinyMCE/theme_advanced_toolbar_location', 'top'),
             theme_advanced_toolbar_align: settings.get('tinyMCE/theme_advanced_toolbar_align', 'left'),
+            theme_advanced_statusbar_location: 'none',
 
             // formats
             theme_advanced_blockformats: 'h1,h2,h3,h4,p',

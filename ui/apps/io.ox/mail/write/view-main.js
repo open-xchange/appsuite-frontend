@@ -271,7 +271,7 @@ define('io.ox/mail/write/view-main',
                 guid = _.uniqueId('form-control-label-'),
                 node = $('<div class="fromselect-wrapper">').append(
                     $('<label class="wrapping-label">').attr('for', guid).text(gt('From')),
-                    select = $('<select class="sender-dropdown" name="from" tabindex="7">').attr('id', guid).css('width', '100%')
+                    select = $('<select class="sender-dropdown form-control" name="from" tabindex="7">').attr('id', guid).css('width', '100%')
                 );
 
             sender.drawOptions(select);
