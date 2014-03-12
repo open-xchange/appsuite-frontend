@@ -653,18 +653,20 @@ define('io.ox/mail/write/view-main',
                     tree.selection.on('select', function (e, folderId) {
                         filesPane.empty();
                         filesAPI.getAll({ folder: folderId }, false).then(function (files) {
-                            var fileArr = [];
-                            if (files.length) {
-                                for (var i = 0; i < files.length; i++) {
-                                    var file = files[i],
-                                        title = (file.filename || file.title),
-                                        input = $('<input type="checkbox" class="reflect-selection" tabindex="-1" value="' + file.id + '"/>').data('fileData', file),
-                                        label = $('<label class="checkbox" title="' + title + '">').append(input),
-                                        labelWrapper = $('<div class="labelwrapper">').append(label);
-                                    fileArr.push($('<div class="file selectable" data-obj-id="' + _.cid(file) + '">').append(labelWrapper, $('<span>').text(' ' + title)));
-                                }
-                            }
-                            filesPane.append(fileArr);
+                            filesPane.append(
+                                _(files).map(function (file) {
+                                    var title = (file.filename || file.title);
+                                    return $('<div class="file selectable">').attr('data-obj-id', _.cid(file)).append(
+                                        $('<div class="labelwrapper">').append(
+                                            $('<label class="checkbox">').attr('title', title).append(
+                                                $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
+                                                .val(file.id).data('fileData', file)
+                                            )
+                                        ),
+                                        $('<span>').text(' ' + title)
+                                    );
+                                })
+                            );
                             self.selection.clear();
                             self.selection.init(files);
                             self.selection.selectFirst();
