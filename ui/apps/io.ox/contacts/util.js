@@ -54,7 +54,7 @@ define('io.ox/contacts/util',
         tempB = century % 4;
 
         return Math.abs((3 * tempA + tempB - 2) * date.DAY);
-        
+
     }
 
     var that = {

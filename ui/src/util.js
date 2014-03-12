@@ -633,8 +633,8 @@
                 if (typeof o === 'string') {
                     // integer based ids?
                     if ((m = o.match(/^(\d*?)\.(\d+)(\.(\d+))?$/)) && m.length) {
-                        tmp = { folder_id: String(m[1]), id: m[2] + '' };
-                        if (m[4] !== undefined) { tmp[r] = m[4] + ''; }
+                        tmp = { folder_id: String(m[1]), id: String(m[2])};
+                        if (m[4] !== undefined) { tmp[r] = String(m[4]); }
                         return tmp;
                     }
                     // character based? (double tuple)
@@ -720,7 +720,9 @@
 
     /* jshint -W015 */
     _.unescapeHTML.entities = (function (es) {
-        for (var i in es) es[i] = String.fromCharCode(es[i]);
+        for (var i in es) {
+            es[i] = String.fromCharCode(es[i]);
+        }
         return es;
     }({
         nbsp: 160, iexcl: 161, cent: 162, pound: 163, curren: 164, yen: 165,

@@ -137,8 +137,6 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                 //     }
                 // }));
 
-
-
                 ext.point(ref + '/edit/view').extend({
                     index: 425,
                     id: ref + '/edit/view/timeframecheckbox',
@@ -183,9 +181,6 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                         );
                     }
                 });
-
-
-
 
                 // point.extend(new forms.DatePicker({
                 //     id: ref + '/edit/view/end_date',

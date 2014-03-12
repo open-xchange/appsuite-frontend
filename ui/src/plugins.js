@@ -152,7 +152,7 @@
                 }
             };
         }());
-    }*/ else if (Modernizr.websqldatabase && ! _.device('Safari && desktop') && (_.browser.ios < 7)) {
+    }*/ else if (Modernizr.websqldatabase && !_.device('Safari && desktop') && (_.browser.ios < 7)) {
         // Web SQL
         (function () {
             var initialization = $.Deferred();
@@ -480,7 +480,9 @@
                 var f3 = function (i) {
                     f2[i] = function () { f[i].apply(f, arguments); };
                 };
-                for (var i in f) f3(i);
+                for (var i in f) {
+                   f3(i);
+                }
                 callbacks[name] = function (newF) { f = newF; };
                 load(f2);
             }

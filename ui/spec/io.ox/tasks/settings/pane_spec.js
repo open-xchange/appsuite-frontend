@@ -15,7 +15,6 @@ define(['io.ox/core/extensions',
         'io.ox/tasks/settings/pane'
         ], function (ext, gt) {
 
-
 	describe('tasksettings', function () {
         beforeEach(function () {
 

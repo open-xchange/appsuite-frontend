@@ -150,7 +150,6 @@ define('io.ox/core/tk/autocomplete',
                             h = self.outerHeight();
                         o.container.hide().appendTo(self.closest(o.parentSelector));
 
-
                         var parent = self.closest(o.parentSelector).offsetParent(),
                             parentOffset = parent.offset(),
                             myTop = off.top + h - parentOffset.top + parent.scrollTop(),

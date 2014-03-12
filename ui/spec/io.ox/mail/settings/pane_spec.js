@@ -15,7 +15,6 @@ define(['io.ox/core/extensions',
         'io.ox/mail/settings/pane'
         ], function (ext, gt) {
 
-
 	describe('mailsettings', function () {
         beforeEach(function () {
 

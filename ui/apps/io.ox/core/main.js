@@ -1085,7 +1085,6 @@ define('io.ox/core/main',
                             dialog = null;
                         });
 
-
                     $('#io-ox-core').append(
                         dialog = $('<div class="core-boot-dialog" tabindex="0">').append(
                             $('<div class="header">').append(

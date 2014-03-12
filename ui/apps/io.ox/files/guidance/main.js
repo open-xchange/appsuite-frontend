@@ -53,17 +53,17 @@ define('io.ox/files/guidance/main',
     function reloadPopup(app) {
         var id = app.get('name'),
             folder = lastBaton.folder;
-        
+
         settings.load().done(function () {//force reload of settings to get updated quota
             var quota = settings.get('properties');
             lastPopup.empty();
-    
+
             require(['io.ox/files/guidance/statistics'], function (statistics) {
                 statistics.clearCache();
-    
+
                 app.folder.getData().done(function (data) {
                     var baton = new ext.Baton({ id: id, dialog: lastBaton.dialog, folder: folder, app: app, data: data, quota: quota, options: { type: 'files'}});
-    
+
                     ext.point('io.ox/files/guidance').invoke('draw', lastPopup, baton);
                 });
             });

@@ -100,7 +100,7 @@
                         }
                     docElem.insertBefore(fakeBody, docElem.firstChild);
                     docElem.insertBefore(styleBlock, docElem.firstChild);
-                    cache[q] = ((window.getComputedStyle ? window.getComputedStyle(testDiv,null) : testDiv.currentStyle)['position'] == 'absolute');
+                    cache[q] = ((window.getComputedStyle ? window.getComputedStyle(testDiv,null) : testDiv.currentStyle).position == 'absolute');
                     docElem.removeChild(fakeBody);
                     docElem.removeChild(styleBlock);
                 }
@@ -174,7 +174,7 @@
                 unknown: true
             };
             // reset all other browsers
-            for (var i = 0; i < browsers.length; i ++) {
+            for (var i = 0; i < browsers.length; i++) {
                 us.browser[browsers[i]] = undefined;
             }
         } finally {

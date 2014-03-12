@@ -15,7 +15,6 @@ define(['io.ox/core/extensions',
         'io.ox/files/settings/pane'
         ], function (ext, gt) {
 
-
 	describe('filessettings', function () {
         beforeEach(function () {
 

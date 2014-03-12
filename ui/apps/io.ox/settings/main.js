@@ -347,7 +347,6 @@ define('io.ox/settings/main',
             }
         };
 
-
         ext.point('settings/vgrid/toolbar').extend({
             id: 'info',
             index: 200,

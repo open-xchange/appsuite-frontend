@@ -145,7 +145,6 @@ define('io.ox/search/view-template',
                 list = model.get('poollist'),
                 value, tmp;
 
-
             _.each(list, function (item) {
                 //get active value
                 value = model.get('pool')[item.facet].values[item.value];
@@ -205,7 +204,6 @@ define('io.ox/search/view-template',
         }
     });
 
-
     function folderdialoge(facet, baton) {
         require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
             var label = 'Choose',
@@ -249,7 +247,6 @@ define('io.ox/search/view-template',
         });
     }
 
-
     ext.point('io.ox/search/view/window/facets/folder').extend({
         draw: function (value, baton) {
             var node = $('<i class="fa fa-chevron-down action">')
@@ -260,8 +257,6 @@ define('io.ox/search/view-template',
             this.append(node);
         }
     });
-
-
 
     point.extend({
         id: 'delim',

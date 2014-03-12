@@ -26,7 +26,6 @@ define('io.ox/contacts/settings/pane',
         contactsModel =  settings.createModel(contactsSettingsModel),
         reloadMe = [];
 
-
     contactsModel.on('change', function (e, path) {
         contactsModel.saveAndYell().then(
             function success() {

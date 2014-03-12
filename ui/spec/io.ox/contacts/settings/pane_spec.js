@@ -15,7 +15,6 @@ define(['io.ox/core/extensions',
         'io.ox/contacts/settings/pane'
         ], function (ext, gt) {
 
-
 	describe('contactssettings', function () {
         beforeEach(function () {
 
@@ -42,4 +41,3 @@ define(['io.ox/core/extensions',
     });
 
 });
-

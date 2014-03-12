@@ -15,7 +15,6 @@ define(['io.ox/core/extensions',
         'io.ox/calendar/settings/pane'
         ], function (ext, gt) {
 
-
 	describe('calendarsettings', function () {
         beforeEach(function () {
 
