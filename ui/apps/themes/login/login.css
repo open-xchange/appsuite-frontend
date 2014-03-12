@@ -257,6 +257,7 @@ body.down #io-ox-login-container .alert.alert-info {
 }
 
 #io-ox-login-feedback {
+    margin-top: 13px;
     min-height: 3em; /* for busy animation */
 }
 
