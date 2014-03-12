@@ -26,7 +26,7 @@ define('io.ox/tasks/model',
     var defaults = {
             title: '',
             status: 1,
-            priority: 2,
+            priority: null, // changed from 2 (medium) to "no-priority" which is null at OX, see BUG 31466
             percent_completed: 0,
             folder_id: api.getDefaultFolder(),
             recurrence_type: 0,
