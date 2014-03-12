@@ -72,36 +72,6 @@ module.exports = function (grunt) {
                     filter: 'isFile'
                 }
             ]
-        },
-        thirdparty: {
-            files: [
-                {
-                    expand: true,
-                    src: [
-                        'font-awesome/{less,fonts}/*',
-                        'open-sans-fontface/fonts/Light/*',
-                        'Chart.js/Chart.js',
-                        'jquery-imageloader/jquery.imageloader.js',
-                        '!**/*.otf'
-                    ],
-                    cwd: 'bower_components/',
-                    dest: 'build/apps/3rd.party/',
-                    filter: 'isFile'
-                },
-                {
-                    expand: true,
-                    src: ['jquery-ui.min.js', 'view-qrcode.js', 'hopscotch/*', 'mobiscroll/css/*'],
-                    cwd: 'lib/',
-                    dest: 'build/apps/3rd.party/'
-                },
-                {
-                    expand: true,
-                    src: ['*.{js,png,svg,swf,gif,css,xap}', '!{jquery,*.min}.js'],
-                    cwd: 'bower_components/mediaelement/build/',
-                    dest: 'build/apps/3rd.party/mediaelement/',
-                    filter: 'isFile'
-                }
-            ]
         }
     });
 
