@@ -67,7 +67,7 @@ define('io.ox/contacts/api',
                 sort: '607', // 607 = magic field
                 order: 'asc',
                 admin: function () {
-                    return settings.get('showAdmin');
+                    return settings.get('showAdmin', false);
                 }
             },
             list: {
@@ -88,6 +88,7 @@ define('io.ox/contacts/api',
                     query = query + '*';
                     var data = {
                         orSearch: true,
+                        admin: settings.get('showAdmin', false),
                         emailAutoComplete: !!opt.emailAutoComplete
                     },
                     defaultBehaviour = true,
@@ -503,6 +504,7 @@ define('io.ox/contacts/api',
                 module: 'contacts',
                 params: {
                     action: 'search',
+                    admin: settings.get('showAdmin', false),
                     columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
                     timezone: 'UTC'
                 },
