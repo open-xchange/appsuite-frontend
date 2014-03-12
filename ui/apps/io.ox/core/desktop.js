@@ -1635,7 +1635,8 @@ define('io.ox/core/desktop',
 
             require(req).always(clearViaLauncher(blockertimer)).then(
                 def.resolve,
-                function fail() {
+                function fail(errcode) {
+                    console.error(errcode);
                     def.reject(false);
                     if (_.isArray(req)) {
                         for (var i = 0; i < req.length; i++) {
