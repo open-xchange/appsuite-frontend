@@ -1678,7 +1678,7 @@ define('io.ox/calendar/week/view',
                         //#. add confirmation status behind appointment title
                         //#. %1$s = apppintment title
                         //#, c-format
-                        gt('%1$s\u00A0(Tentative)');
+                        gt('%1$s (Tentative)');
                 }
             }
 
