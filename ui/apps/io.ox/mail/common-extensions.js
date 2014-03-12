@@ -112,7 +112,7 @@ define('io.ox/mail/common-extensions',
         paperClip: function (baton) {
             if (!baton.data.attachment) return;
             this.append(
-                $('<i class="icon-paper-clip has-attachments" aria-hidden="true">')
+                $('<i class="fa fa-paperclip has-attachments" aria-hidden="true">')
             );
         },
 
@@ -126,21 +126,21 @@ define('io.ox/mail/common-extensions',
 
         unread: function (baton) {
             var isUnread = api.threads.partiallyUnseen(baton.data);
-            if (isUnread) this.append('<i class="icon-unread icon-circle" aria-hidden="true">');
+            if (isUnread) this.append('<i class="icon-unread fa fa-circle" aria-hidden="true">');
         },
 
         answered: function (baton) {
             var data = baton.data,
                 thread = api.threads.get(data) || data,
                 isAnswered = util.isAnswered(thread, data);
-            if (isAnswered) this.append('<i class="icon-answered icon-reply" aria-hidden="true">');
+            if (isAnswered) this.append('<i class="icon-answered fa fa-reply" aria-hidden="true">');
         },
 
         forwarded: function (baton) {
             var data = baton.data,
                 thread = api.threads.get(data) || data,
                 isForwarded = util.isForwarded(thread, data);
-            if (isForwarded) this.append('<i class="icon-forwarded icon-mail-forward" aria-hidden="true">');
+            if (isForwarded) this.append('<i class="icon-forwarded fa fa-mail-forward" aria-hidden="true">');
         },
 
         subject: function (baton) {
@@ -318,7 +318,7 @@ define('io.ox/mail/common-extensions',
                         // draw
                         var dd = drawAttachmentDropDown(list, _.noI18n(label), a);
                         dd.find('a').first().addClass('attachment-link').prepend(
-                            $('<i class="icon-paper-clip">'),
+                            $('<i class="fa fa-paperclip">'),
                             $.txt('\u00A0')
                         );
                         // cut off long lists?
@@ -408,7 +408,7 @@ define('io.ox/mail/common-extensions',
 
             return function (baton) {
                 this.append(
-                    $('<a href="#" class="unread-toggle"><i class="icon-circle"/></a>')
+                    $('<a href="#" class="unread-toggle"><i class="fa fa-circle"/></a>')
                     .on('click', { view: baton.view }, toggle)
                 );
             };
