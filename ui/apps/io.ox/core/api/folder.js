@@ -283,9 +283,13 @@ define('io.ox/core/api/folder',
                         // sort the rest
                         data.sort(function (a, b) {
                             // external accounts at last
-                            if (account.isExternal(a.id)) return +1;
-                            if (account.isExternal(b.id)) return -1;
-                            return a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
+                            var extA = account.isExternal(a.id),
+                                extB = account.isExternal(b.id),
+                                order = a.title.toLowerCase() > b.title.toLowerCase() ? +1 : -1;
+                            if (extA && extB) return order;
+                            if (extA) return +1;
+                            if (extB) return -1;
+                            return order;
                         });
 
                         // combine
