@@ -104,6 +104,28 @@ div.hopscotch-bubble {
     }
 }
 
+.io-ox-busy {
+    position: relative;
+}
+
+.io-ox-busy:before {
+    position: absolute;
+    top: 50%;
+    margin-top: -10px;
+    width: 100%;
+    text-align: center;
+    /* icon-refresh */
+    font-size: 20px;
+    font-family: 'FontAwesome';
+    content: '\f021';
+    color: #ccc;
+    /* icon-spin */
+    -moz-animation: spin 1.5s infinite linear;
+    -o-animation: spin 1.5s infinite linear;
+    -webkit-animation: spin 1.5s infinite linear;
+    animation: spin 1.5s infinite linear;
+}
+
 #io-ox-core {
 
     // Bug 27436
