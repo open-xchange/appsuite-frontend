@@ -79,11 +79,11 @@ define('io.ox/mail/view-options',
         e.preventDefault();
         var i = $(this).find('i'),
             selection = e.data.baton.app.listView.selection;
-        if (i.hasClass('icon-check')) {
-            i.attr('class', 'icon-check-empty');
+        if (i.hasClass('fa-check-square-o')) {
+            i.attr('class', 'fa fa-square-o');
             selection.selectNone();
         } else {
-            i.attr('class', 'icon-check');
+            i.attr('class', 'fa fa-check-square-o');
             selection.selectAll();
         }
     }
@@ -94,7 +94,7 @@ define('io.ox/mail/view-options',
         draw: function (baton) {
             this.append(
                 $('<a href="#" class="select-all" tabindex="1">').append(
-                    $('<i class="icon-check-empty">'),
+                    $('<i class="fa fa-square-o">'),
                     $.txt(gt('Select all'))
                 )
                 .on('click', { baton: baton }, toggleSelection)

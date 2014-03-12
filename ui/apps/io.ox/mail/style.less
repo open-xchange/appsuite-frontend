@@ -37,7 +37,6 @@
     border-bottom: 1px solid #ddd;
     margin: 0;
     padding: 0 4px 0 5px;
-    .box-sizing(border-box);
     & > li {
         list-style: none;
         display: inline-block;
@@ -47,7 +46,7 @@
             display: inline-block;
             line-height: 20px;
             padding: 12px 14px;
-            color: @linkColor;
+            color: @link-color;
             float: left;
             outline: 0;
             i { text-decoration: none; }
@@ -106,7 +105,7 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.10);
 }
 
-.list-item.small .list-item-checkmark .icon-checkmark {
+.list-item.small .list-item-checkmark .fa.fa-checkmark {
     top: 8px;
 }
 
@@ -115,14 +114,12 @@
     display: table;
     width: 100%;
     table-layout: fixed;
-    .box-sizing(border-box);
 }
 
 .list-item-column {
     display: table-cell;
     vertical-align: middle;
     padding: 0;
-    .box-sizing(border-box);
     &.column-1 { width: 30px; text-align: center; }
     &.column-2 { width: 30px; text-align: center; }
     &.column-3 { width: 35%; }
@@ -193,7 +190,6 @@
             overflow: auto;
             outline: 0;
             border: 0px none;
-            .box-sizing(border-box);
         }
     }
 }
@@ -207,7 +203,6 @@
         width: 100%;
         cursor: default;
         outline: 0;
-        .box-sizing(border-box);
         &.loading {
             min-height: 80px;
         }
@@ -216,10 +211,13 @@
         margin-bottom: 10px;
         display: none;
     }
+    section.notifications {
+        display: none;
+    }
 }
 
 .mail-detail.expanded {
-    section.attachments { display: block; }
+    section.attachments, section.notifications { display: block; }
     section.body { display: table; /* for proper overflow behavior */ }
     section.attachments:empty { display: none; }
 }
@@ -263,7 +261,7 @@
     }
 
     .date { opacity: 0.70; }
-    .size { color: @linkColor; }
+    .size { color: @link-color; }
 
     &.visible-selection.has-focus .list-item.selected .size {
         color: #fff;
@@ -282,7 +280,7 @@
             margin-right: 7px;
         }
 
-        i.icon-unread { color: @linkColor; }
+        i.icon-unread { color: @link-color; }
         i.icon-answered { color: #aaa; }
         i.icon-forwarded { color: #888; }
     }
@@ -304,13 +302,12 @@
         padding: 0;
         margin-left: 7px;
         float: right;
-        .box-sizing(border-box);
     }
 
     .priority {
         float: right;
-        .high { color: @mailPriority; }
-        .low { color: @mailPriorityLow; }
+        .high { color: @mail-priority; }
+        .low { color: @mail-priority-low; }
     }
 
     .list-item.deleted {
@@ -323,7 +320,7 @@
     }
 
     .thread-size {
-        min-width: 1em;
+        min-width: 2em;
         .fontWeight(normal);
         padding: 0 0.5em 0 0.5em;
         margin-left: 7px;
@@ -333,14 +330,8 @@
         overflow: visible;
         text-align: center;
         border-radius: 5px;
-
         color: rgba(0, 0, 0, 0.4);
         background-color: rgba(0, 0, 0, 0.07);
-
-        .icon-caret-right, .icon-caret-down {
-            width: 7px;
-            display: inline-block;
-        }
     }
 
     &.visible-selection.has-focus .selected .thread-size {
@@ -357,7 +348,7 @@
         }
 
         i.icon-unread {
-            color: @linkColor;
+            color: @link-color;
             position: absolute;
             line-height: 20px;
             left: @list-view-padding;
@@ -385,11 +376,11 @@
         }
         .icon-paper-clip {
             font-size: 16px;
-            color: @linkColor;
+            color: @link-color;
         }
         .io-ox-inline-links {
             display: inline;
-            font-family: @normalFontFamily;
+            font-family: @normal-font-family;
             font-size: 13px;
             li { margin-right: 14px; }
         }
@@ -456,7 +447,7 @@
 }
 
 .mail-detail .flag-picker .dropdown-menu {
-    font: 14px/20 @normalFontFamily;
+    font: 14px/20 @normal-font-family;
     top: 110%;
 }
 
@@ -468,7 +459,7 @@
     float: right;
 
     ul {
-        font: 14px/20 @normalFontFamily;
+        font: 14px/20 @normal-font-family;
         right: -20px;
         left: auto;
         top: 120%;
@@ -535,7 +526,6 @@ textarea.inplace-editor {
     border-radius: 0;
     border: 1px solid white;
     .box-shadow(none);
-    .box-sizing(border-box);
     &:focus {
         border-color: #66AFE9;
         outline: 0;
@@ -962,7 +952,7 @@ textarea.inplace-editor {
         display: none;
         border: 0px solid #FFF;
         border-width: 14px 14px 0 0;
-        border-top-color: @linkColor;
+        border-top-color: @link-color;
     }
 
     &.list-item:focus {
@@ -1066,6 +1056,11 @@ textarea.inplace-editor {
         float: right;
         display: inline-block;
         margin-left: 0.5em;
+    }
+
+    .external-images {
+        .btn { float: left; margin-right: 20px; }
+        .commect { display: table; }
     }
 
     .flag-dropdown {
@@ -1194,7 +1189,7 @@ textarea.inplace-editor {
             outline: none;
             &:hover, &:focus {
                 color: #fff;
-                background-color: @linkColor;
+                background-color: @link-color;
                 text-decoration: none;
             }
         }
@@ -1241,7 +1236,6 @@ textarea.inplace-editor {
     article.text-html.horizontal-scrolling {
         max-width: 100%;
         overflow-x: auto;
-        box-sizing: border-box;
         margin-right: -10000px; /* funky trick */
     }
 
@@ -1315,7 +1309,7 @@ textarea.inplace-editor {
         }
 
         p {
-            font-family: @normalFontFamily;
+            font-family: @normal-font-family;
             margin: 0 0 14px 0;
         }
 

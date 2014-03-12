@@ -397,7 +397,7 @@ define('io.ox/mail/detail/content',
                 $(this).addClass('collapsed-blockquote').after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
-                        $('<i class="icon-ellipsis-horizontal" tabindex="1">')
+                        $('<i class="fa fa-ellipsis-h" tabindex="1">')
                         .attr('title', gt('Show quoted text'))
                     )
                     .on('click', explandBlockquote)

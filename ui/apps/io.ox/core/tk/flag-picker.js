@@ -33,8 +33,8 @@ define('io.ox/core/tk/flag-picker',
         YELLOW:     gt('Yellow')
     };
 
-    var colorLabelIconEmpty = 'icon-bookmark-empty',
-        colorLabelIcon = 'icon-bookmark';
+    var colorLabelIconEmpty = 'fa fa-bookmark-o',
+        colorLabelIcon = 'fa fa-bookmark';
 
     var that = {
 

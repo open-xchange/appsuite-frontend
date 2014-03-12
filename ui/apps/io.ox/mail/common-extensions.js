@@ -93,7 +93,7 @@ define('io.ox/mail/common-extensions',
             if (color <= 0) return; // 0 and a buggy -1
 
             this.append(
-                $('<i class="flag flag_' + color + ' icon-bookmark" aria-hidden="true">')
+                $('<i class="flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
             );
         },
 
@@ -435,8 +435,7 @@ define('io.ox/mail/common-extensions',
                     this.append(
                         $('<div class="alert alert-info external-images">').append(
                             $('<a href="#" class="btn btn-primary btn-small" tabindex="1">').text(gt('Show images')),
-                            $.txt(_.noI18n('\u00A0\u00A0 ')),
-                            $.txt(gt('External images have been blocked to protect you against potential spam!'))
+                            $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
                         )
                     );
                 }

@@ -45,8 +45,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             var $el = this.$el;
             _(this.model.changed).each(function (value, name) {
                 var li = $el.find('[data-name="' + name + '"]');
-                li.children('i').attr('class', 'icon-fixed-width icon-none');
-                li.filter('[data-value="' + value + '"]').children('i').attr('class', 'icon-fixed-width icon-ok');
+                li.children('i').attr('class', 'fa fa-fw fa-none');
+                li.filter('[data-value="' + value + '"]').children('i').attr('class', 'fa fa-fw fa-check');
             }, this);
         },
 
@@ -54,7 +54,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$ul.append(
                 $('<li>').append(
                     $('<a>', { href: '#', 'data-name': name, 'data-value': value, 'data-toggle': _.isBoolean(value) }).append(
-                        $('<i class="icon-fixed-width">').addClass(this.model.get(name) === value ? 'icon-ok' : 'icon-none'),
+                        $('<i class="fa fa-fw">').addClass(this.model.get(name) === value ? 'fa-check' : 'fa-none'),
                         $('<span>').text(text)
                     )
                 )
@@ -75,7 +75,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         render: function () {
             this.$el.append(
                 $('<a href="#" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').append(
-                    $.txt(this.label), $('<i class="icon-caret-down">')
+                    $.txt(this.label), $('<i class="fa fa-caret-down">')
                 ),
                 this.$ul
             );

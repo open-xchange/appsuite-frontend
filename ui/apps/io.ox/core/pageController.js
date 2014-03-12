@@ -13,7 +13,7 @@
 
 define('io.ox/core/pageController',
     ['io.ox/core/extPatterns/links',
-    'less!io.ox/core/pageController.less'], function (links) {
+    'less!io.ox/core/pageController'], function (links) {
 
     'use strict';
 

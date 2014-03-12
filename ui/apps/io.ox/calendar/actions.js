@@ -594,7 +594,7 @@ define('io.ox/calendar/actions',
         index: 400,
         prio: 'lo',
         id: 'print',
-        icon: 'icon-print',
+        icon: 'fa fa-print',
         label: gt('Print'),
         ref: 'io.ox/calendar/detail/actions/print-appointment'
     }));
@@ -603,7 +603,7 @@ define('io.ox/calendar/actions',
         index: 500,
         prio: 'hi',
         id: 'delete',
-        icon: 'icon-trash',
+        icon: 'fa fa-trash-o',
         label: gt('Delete'),
         ref: 'io.ox/calendar/detail/actions/delete'
     }));

@@ -23,7 +23,7 @@ define('io.ox/mail/toolbar',
      'io.ox/core/notifications',
      'gettext!io.ox/mail',
      'io.ox/mail/actions',
-     'less!io.ox/mail/style.less',
+     'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
     ], function (ext, links, actions, flagPicker, api, Dropdown, upload, dropzone, notifications, gt) {
 
@@ -47,7 +47,7 @@ define('io.ox/mail/toolbar',
         'reply': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'icon-reply',
+            icon: 'fa fa-reply',
             label: gt('Reply to sender'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/reply'
@@ -55,7 +55,7 @@ define('io.ox/mail/toolbar',
         'reply-all': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'icon-reply-all',
+            icon: 'fa fa-reply-all',
             label: gt('Reply all recipients'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/reply-all'
@@ -63,7 +63,7 @@ define('io.ox/mail/toolbar',
         'forward': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'icon-mail-forward',
+            icon: 'fa fa-mail-forward',
             label: gt('Forward'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/forward'
@@ -71,7 +71,7 @@ define('io.ox/mail/toolbar',
         'delete': {
             prio: 'hi',
             mobile: 'lo',
-            icon: 'icon-trash',
+            icon: 'fa fa-trash-o',
             label: gt('Delete'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/delete'
@@ -79,7 +79,7 @@ define('io.ox/mail/toolbar',
         'color': {
             prio: 'hi',
             mobile: 'none',
-            icon: 'icon-bookmark',
+            icon: 'fa fa-bookmark',
             label: gt('Set color'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/color',
@@ -214,7 +214,7 @@ define('io.ox/mail/toolbar',
             this.append(
                $('<li>').append(
                     $('<a>').append(
-                        $('<i class="icon-chevron-left">'),
+                        $('<i class="fa fa-chevron-left">'),
                         gt('Back')
                     ).on('tap', function () {
                         baton.app.pages.goBack();
@@ -262,38 +262,5 @@ define('io.ox/mail/toolbar',
             });
         }
     });
-
-
-    // // Uploads
-    // app.queues = {};
-
-    // if (settings.get('features/importEML') !== false) {
-    //     app.queues.importEML = upload.createQueue({
-    //         start: function () {
-    //             win.busy();
-    //         },
-    //         progress: function (file) {
-    //             return api.importEML({ file: file, folder: app.folder.get() })
-    //                 .done(function (data) {
-    //                     var first = _(data.data || []).first() || {};
-    //                     if ('Error' in first) {
-    //                         notifications.yell('error', first.Error);
-    //                     } else {
-    //                         grid.selection.set(first);
-    //                         notifications.yell('success', gt('Mail has been imported'));
-    //                     }
-    //                 });
-    //         },
-    //         stop: function () {
-    //             win.idle();
-    //         },
-    //         type: 'importEML'
-    //     });
-    // }
-
-    // // drag & drop
-    // win.nodes.outer.on('selection:drop', function (e, baton) {
-    //     actions.invoke('io.ox/mail/actions/move', null, baton);
-    // });
 
 });

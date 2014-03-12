@@ -960,7 +960,6 @@ div.hopscotch-bubble {
     z-index: 2;
     overflow: hidden;
     display: none;
-    .box-sizing(border-box);
 
     &.visible {
         display:block;
@@ -1281,13 +1280,13 @@ a.button {
 
     .top-toolbar() {
         top: 0;
-        border-bottom: 1px solid mix(@textColor, @background, 200%/15);
+        border-bottom: 1px solid mix(@text-color, @background, 200%/15);
         display: none;
     }
 
     .bottom-toolbar() {
         bottom: 0;
-        border-top: 1px solid mix(@textColor, @background, 200%/15);
+        border-top: 1px solid mix(@text-color, @background, 200%/15);
         display: none;
         .dropdown-menu {
             top: auto;
@@ -1303,7 +1302,7 @@ a.button {
         display: none;
         right: 0;
         left: 0;
-        height: 40px - 1;
+        height: 40px;
         line-height: 40px - 1;
         padding: 0 14px;
         background-color: #fff;
@@ -1420,15 +1419,13 @@ a.button {
         left: 0;
         width: @list-view-padding + 30;
 
-        .icon-checkmark {
+        .fa-checkmark {
             color: #ccc;
             position: absolute;
             left: 18px;
             top: 12px;
             font-size: 18px;
-            &:before { content: "\f096"; }
-            // \f10c: icon-circle-blank
-            // \f096: icon-check-empty
+            &:before { content: "\f096"; } // fa-square-o
         }
     }
 
@@ -1440,25 +1437,23 @@ a.button {
     }
 
     .list-item.selected {
-        .icon-checkmark {
+        .fa-checkmark {
             color: #08c;
-            &:before { content: "\f046"; }
-            // \f05d: icon-ok-circle
-            // \f046: icon-check
+            &:before { content: "\f046"; } // fa-check-square-o
         }
     }
 
     &.visible-selection .list-item.selected {
         background-color: #ddd;
         -webkit-font-smoothing: antialiased;
-        .icon-checkmark {
+        .fa-checkmark {
             color: #aaa;
         }
     }
 
     &.visible-selection.has-focus .list-item.selected {
         color: white;
-        background-color: @selectedBackground;
+        background-color: @selected-background;
     }
 
     .list-item-row {
@@ -1482,7 +1477,6 @@ a.button {
         text-align: center;
         padding: 40px 0;
         margin-bottom: 0px;
-        .box-sizing(border-box);
     }
 
     .list-item.busy-indicator.io-ox-busy {
@@ -1796,7 +1790,6 @@ a.button {
 
 .leftside {
     position: absolute;
-<<<<<<< HEAD
     top: 0;
     bottom: 0;
     left: 0;
@@ -1807,7 +1800,6 @@ a.button {
 .rightside {
     outline: none;
     position: absolute;
-<<<<<<< HEAD
     top: 0;
     right: 0;
     bottom: 0;

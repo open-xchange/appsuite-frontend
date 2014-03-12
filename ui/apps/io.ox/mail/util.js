@@ -361,18 +361,8 @@ define('io.ox/mail/util',
         getPriority: function (data) {
             // normal?
             if (data && data.priority === 3) return $();
-<<<<<<< HEAD
-            var i = $('<i class="fa fa-exclamation">'),
-                indicator = $('<span>').append(_.noI18n('\u00A0'), i, i, i);
-            if (data && data.priority < 3) {
-                return indicator.addClass('high').attr('title', gt('High priority'));
-            } else {
-                return indicator.addClass('low').attr('title', gt('Low priority'));
-            }
-=======
-            if (data && data.priority < 3) return $('<span class="high">\u00A0<i class="icon-exclamation"/></span>').attr('title', gt('High priority'));
-            return $('<span class="low">\u00A0<i class="icon-minus"/></span>').attr('title', gt('Low priority'));
->>>>>>> Pagination: Introduce new mail views (in progress)
+            if (data && data.priority < 3) return $('<span class="high">\u00A0<i class="fa fa-exclamation"/></span>').attr('title', gt('High priority'));
+            return $('<span class="low">\u00A0<i class="fa fa-minus"/></span>').attr('title', gt('Low priority'));
         },
 
         getAccountName: function (data) {

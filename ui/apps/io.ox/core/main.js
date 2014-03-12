@@ -763,7 +763,7 @@ define('io.ox/core/main',
                 this.append(
                     div = $('<div class="launcher" role="presentation">').append(
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" tabindex="1">').append(
-                            $('<i class="fa fa-cog icon-white launcher-icon" aria-hidden="true">')
+                            $('<i class="fa fa-cog launcher-icon" aria-hidden="true">')
                         ),
                         ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
                     )
@@ -802,7 +802,7 @@ define('io.ox/core/main',
             id: 'default',
             draw: function () {
                 if (capabilities.has('launchpad')) {
-                    addLauncher('left', $('<i class="fa fa-th icon-white">').attr('aria-label', gt('Your Applications')), function () {
+                    addLauncher('left', $('<i class="fa fa-th">').attr('aria-label', gt('Your Applications')), function () {
                         return require(['io.ox/launchpad/main'], function (m) {
                             launchers.children().removeClass('active-app');
                             launcherDropdown.children().removeClass('active-app');

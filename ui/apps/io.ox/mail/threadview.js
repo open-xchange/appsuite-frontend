@@ -31,13 +31,13 @@ define('io.ox/mail/threadview',
                 $('<nav class="back-navigation">').append(
                     $('<div class="button">').append(
                         $('<a href="#" class="back" tabindex="1">').append(
-                            $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
+                            $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
                         )
                     ),
                     $('<div class="position">'),
                     $('<div class="prev-next">').append(
-                        $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="icon-chevron-up">'),
-                        $('<a href="#" class="next-mail" tabindex="1">').append('<i class="icon-chevron-down">')
+                        $('<a href="#" class="previous-mail" tabindex="1">').append('<i class="fa fa-chevron-up">'),
+                        $('<a href="#" class="next-mail" tabindex="1">').append('<i class="fa fa-chevron-down">')
                     )
                 )
             );
