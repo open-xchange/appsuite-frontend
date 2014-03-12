@@ -27,7 +27,13 @@
 }
 
 /* Bootstrap overrides BEGIN */
-label { font-weight:normal; }
+.checkbox.control-label, label { font-weight:normal; }
+
+.checkbox.control-label {
+    input[type=checkbox] {
+        margin-top: 2px;
+    }
+}
 
 .btn-file {
     position: relative;
