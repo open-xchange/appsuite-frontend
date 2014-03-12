@@ -576,6 +576,14 @@
 						/>
 					</then>
 				</if>
+				<if>
+					<isset property="local.env.path.apache" />
+					<then>
+						<var name ="mod_grunt.path.apache"
+						     value="${local.env.path.apache}"
+						/>
+					</then>
+				</if>
 
 			</then>
         	<else>
