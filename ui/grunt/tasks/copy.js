@@ -31,7 +31,7 @@ module.exports = function (grunt) {
                     dest: 'build/'
                 },
                 {
-                    src: ['apps/**/*.json', '!apps/io.ox/core/date/*.json', '!apps/**/manifest.json'],
+                    src: ['apps/**/*.{json,yml}', '!apps/io.ox/core/date/*.json', '!apps/**/manifest.json'],
                     dest: 'build/'
                 }
             ]
