@@ -13,14 +13,13 @@
 
 @controlsHeight: 30px;
 @participantsWidth: 340px;
-@bottom: @controlsHeight + 3 * 2 + 1;
 
 .free-busy-controls {
 
     top: auto;
     background-color: whiteSmoke;
     border-top: 1px solid #ddd;
-    padding: 3px 13px 3px 13px;
+    padding: 0 13px 0 13px;
     height: @controlsHeight;
 
     .hint {
@@ -64,7 +63,7 @@
 
     .participants-view-scrollpane {
         top: 120px;
-        bottom: @bottom;
+        bottom: @controlsHeight;
         padding: 0 13px 13px 13px;
         width: @participantsWidth;
         .overflow-y();
@@ -73,7 +72,7 @@
     .week-view {
         top: 10px;
         left: @participantsWidth;
-        bottom: @bottom;
+        bottom: @controlsHeight;
         z-index: 10;
     }
 
