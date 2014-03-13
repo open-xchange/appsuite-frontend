@@ -152,7 +152,7 @@ define('io.ox/core/settings/pane',
         }));
 
         // Themes
-        var availableThemes = settingOptions.get('themes');
+        var availableThemes = settingOptions.get('themes') || {};
 
         //  until we get translated themes from backend
         if (availableThemes['default']) {
