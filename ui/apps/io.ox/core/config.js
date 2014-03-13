@@ -135,7 +135,7 @@ define.async('io.ox/core/config', ['io.ox/core/http', 'io.ox/core/cache'], funct
 
             // trick to be fast: cached?
             if (!configCache) {
-                configCache = new cache.SimpleCache('config', true);
+                configCache = new cache.SimpleCache('config');
             }
 
             configCache.get('default').done(function (data) {

@@ -30,7 +30,7 @@ define('plugins/portal/twitter/register',
         offset = 0,
         $tweets = $('<ul>').addClass('twitter list-unstyled'),
         $busyIndicator = $('<div>').html('&nbsp;'),
-        tweetCache = new cache.SimpleCache('twitter-cache', true),
+        tweetCache = new cache.SimpleCache('twitter-cache'),
         composeBox,
         offline = false;
 

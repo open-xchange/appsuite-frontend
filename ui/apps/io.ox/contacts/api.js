@@ -475,7 +475,7 @@ define('io.ox/contacts/api',
     });
 
     /** @define {object} simple contact cache */
-    var fetchCache = new cache.SimpleCache('contacts-fetching', true);
+    var fetchCache = new cache.SimpleCache('contacts-fetching');
 
     /**
      * clear fetching cache

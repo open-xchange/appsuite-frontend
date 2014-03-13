@@ -36,7 +36,7 @@ define('io.ox/core/desktop',
 
     // top bar
     var appGuid = 0,
-        appCache = new cache.SimpleCache('app-cache', true);
+        appCache = new cache.SimpleCache('app-cache');
 
     // Apps collection
     ox.ui.apps = new Backbone.Collection();

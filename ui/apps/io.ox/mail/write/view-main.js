@@ -582,8 +582,8 @@ define('io.ox/mail/write/view-main',
 
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/cache', 'io.ox/files/api', 'io.ox/core/tk/selection']).done(function (dialogs, folderviews, cache, filesAPI, Selection) {
 
-                    var folderCache = new cache.SimpleCache('folder-all', false),
-                        subFolderCache = new cache.SimpleCache('subfolder-all', false),
+                    var folderCache = new cache.SimpleCache('folder-all'),
+                        subFolderCache = new cache.SimpleCache('subfolder-all'),
                         storage = {
                             folderCache: folderCache,
                             subFolderCache: subFolderCache

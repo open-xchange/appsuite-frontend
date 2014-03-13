@@ -114,14 +114,14 @@ define('io.ox/core/cache',
                 persistentCache = storages[opt.persistent],
                 fluentCache = storages[opt.fluent],
                 // use persistent storage?
-                persist = function () { return false; },
-                // persist = (ox.secretCookie === true && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
-                //         function () {
-                //             return ox.user !== '';
-                //         } :
-                //         function () {
-                //             return false;
-                //         }),
+                persist = (persistent === true && ox.secretCookie === true && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' ?
+                        function () {
+                            console.log('watt?', name);
+                            return ox.user !== '';
+                        } :
+                        function () {
+                            return false;
+                        }),
 
                 // define id now; user & language should never change on-the-fly
                 id = _(['appsuite.cache',  ox.user, ox.language, name || '']).compact().join('.'),

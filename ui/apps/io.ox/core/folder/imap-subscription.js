@@ -25,8 +25,8 @@ define('io.ox/core/folder/imap-subscription',
 
         show: function () {
 
-            var folderCache = new cache.SimpleCache('folder-all', false),
-                subFolderCache = new cache.SimpleCache('subfolder-all', false),
+            var folderCache = new cache.SimpleCache('folder-all'),
+                subFolderCache = new cache.SimpleCache('subfolder-all'),
                 storage = {
                     folderCache: folderCache,
                     subFolderCache: subFolderCache

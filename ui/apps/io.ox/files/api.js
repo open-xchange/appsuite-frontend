@@ -312,7 +312,7 @@ define('io.ox/files/api',
     //     });
     // };
 
-    api.caches.versions = new cache.SimpleCache('files-versions', true);
+    api.caches.versions = new cache.SimpleCache('files-versions');
 
     /**
      * map error codes and text phrases for user feedback
