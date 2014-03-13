@@ -241,18 +241,22 @@ define('plugins/notifications/mail/register',
                     notifications.collection.unshift(new Backbone.Model(mail), { silent: true });
                 });
             }
-            function removeMails(e, mails) {//removes mails from notificationview
+            function removeMails(e, mails) {
                 _(mails).each(function (mail) {
                     notifications.collection.remove(notifications.collection._byId[mail.id]);
-                    seenMails[_.ecid(mail)] = true;//make sure this mail is not added again because it's seen already
+                    seenMails[_.ecid(mail)] = true; // make sure this mail is not added again because it's seen already
                 });
             }
-            function removeFolder(e, folder) {//removes mails of a whole folder from notificationview
-                _(notifications.collection.models).each(function (mail) {
-                    if (mail.get('folder_id') === folder) {
-                        notifications.collection.remove(notifications.collection._byId[mail.id]);
-                        seenMails[_.ecid(mail)] = true;//make sure this mail is not added again because it's seen already
-                    }
+
+            // removes mails of a whole folder from notificationview
+            function removeFolder(e, folder) {
+                // create a copy / each & remove doesn't work
+                var list = notifications.collection.filter(function (model) {
+                    return model.get('folder_id') === folder;
+                });
+                _(list).each(function (model) {
+                    notifications.collection.remove(model);
+                    seenMails[_.ecid(model.toJSON())] = true; // make sure this mail is not added again because it's seen already
                 });
             }
 
@@ -280,19 +284,9 @@ define('plugins/notifications/mail/register',
                 }
             });
 
-            api.on('delete update:set-seen', function (e, mails) {
-                if (!_.isArray(mails)) {
-                    mails = [].concat(mails);
-                }
-                if (mails.length > 0 && !mails[0].id) {//check if we have a folder seen action
-                    removeFolder(e, mails[0].folder);
-                } else {
-                    removeMails(e, mails);
-                }
-                if (notifications.collection.length === 0) {//all mails read. remove new Mail title
-                    api.newMailTitle(false);
-                }
-
+            api.on('delete update:set-seen', function (e, param) {
+                if (_.isArray(param)) removeMails(e, param); else removeFolder(e, param);
+                if (notifications.collection.length === 0) api.newMailTitle(false);
             });
 
             api.checkInbox();

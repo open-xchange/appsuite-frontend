@@ -389,7 +389,6 @@ define('io.ox/mail/detail/content',
         index: 1000,
         process: function (baton) {
             // auto-collapse blockquotes?
-            if (baton.isLarge) return;
             if (baton.options.autoCollapseBlockquotes === false) return;
             if (settings.get('features/autoCollapseBlockquotes', true) !== true) return;
             // blockquotes (top-level only)

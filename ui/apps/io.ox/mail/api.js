@@ -857,17 +857,35 @@ define('io.ox/mail/api',
         );
     };
 
-    api.markFolderRead = function (folder) {
+    api.allSeen = function (folder) {
 
-        // getAll contains flags
-        return api.getAll({ folder: folder }).then(function (list) {
+        // loop over detail collection
+        pool.get('detail').each(function (model) {
+            var data = model.toJSON();
+            if (util.isUnseen(data)) {
+                pool.propagate('change', {
+                    id: data.id,
+                    folder_id: data.folder_id,
+                    flags: data.flags | 32
+                });
+                // update affected threads
+                api.threads.touch(data);
+            }
+        });
 
-            // reduce to unread items
-            list = _(list).filter(function (obj) {
-                return util.isUnseen(obj);
-            });
+        // remove notifications in notification area
+        api.trigger('update:set-seen', folder);
 
-            return api.markRead(list);
+        return http.PUT({
+            module: 'mail',
+            params: {
+                action: 'all_seen',
+                folder: folder
+            },
+            appendColumns: false
+        })
+        .done(function () {
+            folderAPI.reload(folder);
         });
     };
 
