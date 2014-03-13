@@ -17,7 +17,7 @@ module.exports = function (grunt) {
 
     grunt.config('jsonlint', {
 
-        manifests: {
+        all: {
             src: ['apps/**/*.json']
         }
 
