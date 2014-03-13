@@ -302,6 +302,8 @@ define('io.ox/mail/write/main',
                 currentSignature = text;
             }
 
+            addBlankLine(signature);
+
             ed.focus();
         };
 
@@ -470,12 +472,14 @@ define('io.ox/mail/write/main',
             return str.replace(/[\s\uFEFF\xA0]+$/, '');
         }
 
-        var addBlankLine = function (content, signature) {
-            var blankline = editorMode === 'html' ? '<p></p>' : '',
+        var addBlankLine = function (signature) {
+            var content = editor.getContent(),
+                blankline = editorMode === 'html' ? '<p><br></p>' : '',
                 pos = signature ? signature.misc && signature.misc.insertion || 'below' : 'below';
-            //avoid extra blank lines for 'below' default signatures (take a look at prependConent for details)
-            if (!(content === '' && pos === 'below' && editorMode === 'text'))
+            //required only in html mode with 'above' pos (and if it's not set already)
+            if (!(content === '' && pos === 'below' && editorMode === 'text') && content.indexOf(blankline) !== 0) {
                 app.getEditor().prependContent(blankline);
+            }
         };
 
         app.setBody = function (str) {
@@ -496,8 +500,6 @@ define('io.ox/mail/write/main',
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 app.setSignature(({ data: ds}));
             }
-            //get position
-            addBlankLine(content, ds);
         };
 
         app.getRecipients = function (id) {
