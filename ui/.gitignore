@@ -10,3 +10,4 @@ local.conf*
 !local.conf.default.json
 /apps/plugins/playground
 npm-debug.log
+/bower_components
