@@ -1,5 +1,5 @@
 Name:           open-xchange-appsuite-emig
-Version:        0.0.1
+Version:        7.4.2
 %define         ox_release 1
 Release:        %{ox_release}
 Group:          Applications/Productivity
