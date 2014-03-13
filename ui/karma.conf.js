@@ -6,6 +6,7 @@ module.exports = function(config) {
 
     // base path, that will be used to resolve files and exclude
     basePath: 'build/',
+    builddir: 'build/',
 
     plugins: [
         'karma-*',

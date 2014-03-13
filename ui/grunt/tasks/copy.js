@@ -63,6 +63,12 @@ module.exports = function (grunt) {
                     expand: true,
                     filter: 'isFile',
                     dest: 'build/'
+                },
+                {
+                    src: ['spec/fixtures/**/*'],
+                    expand: true,
+                    filter: 'isFile',
+                    dest: 'build/'
                 }
             ]
         },
@@ -85,7 +91,8 @@ module.exports = function (grunt) {
         'newer:copy:dateData',
         'newer:copy:themes',
         'newer:copy:tinymce',
-        'newer:copy:thirdparty'
+        'newer:copy:thirdparty',
+        'newer:copy:specs'
     ]);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
