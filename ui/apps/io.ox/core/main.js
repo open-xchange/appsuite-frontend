@@ -810,7 +810,8 @@ define('io.ox/core/main',
                             m.show();
                         });
                     })
-                    .addClass('left-corner'); // to match dimensions of side navigation
+                    .addClass('left-corner') // to match dimensions of side navigation
+                    .attr('data-app-name', 'launchpad'); // make QA happy (launchpad is not a "real" app, so no app-name, but should be accessible, too)
                 }
             }
         });
