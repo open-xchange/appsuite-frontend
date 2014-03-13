@@ -34,17 +34,50 @@
     }
 }
 
+.inline-action-wrapper {
+	.inline-actions {
+	    .io-ox-inline-links{
+	        margin: 0 0 0 0;
+	
+	        li {
+	           padding: 2px;
+	           padding-top: 5px;
+	        }
+	    }
+	
+	    a.fullscreen:before {content: "("; color:black;}
+	    a.fullscreen:after {content: ")"; color:black;}
+	
+	    a {
+	        &.slideshow,
+	        &.mediaplayer { display: none; }
+	    }
+	
+	    a.mediaplayer { margin-left: 1em; }
+	
+	    span.slideshow_fullscreen {
+	        display: none;
+	        margin-left: 5px;
+	        margin-right: 5px;
+	    }
+	}
+	.inline-actions-right {
+		padding-top: 5px;
+	}
+}
+
+
 .files-wrapper {
 
     @innerHeight: 110px;
     @outerWidth:  138px;
 
+    min-height: 100px;
     position: absolute;
-    top: 0;
+    top: 50px;//will be adjusted manually if topbar becomes larger
     left: 0;
     right: 0;
     bottom: 0;
-    min-height: 100px;
 
     .overflow(auto);
     -webkit-overflow-scrolling: touch;
@@ -65,44 +98,6 @@
         padding: 15px 40px;
         width: 100%;
         min-height: 200px; // for busy animation
-
-        .inline-actions {
-            min-height: 30px;
-            float: left;
-            //space for inline-actions-right
-            margin: 0 125px 20px 0;
-
-            .io-ox-inline-links {
-                margin: 0 0 0 0;
-
-                li {
-                    padding: 2px;
-                    padding-top: 5px;
-                }
-            }
-
-            a.fullscreen:before {content: "("; color:black;}
-            a.fullscreen:after {content: ")"; color:black;}
-
-            a {
-                &.slideshow,
-                &.mediaplayer { display: none; }
-            }
-
-            a.mediaplayer { margin-left: 1em; }
-
-            span.slideshow_fullscreen {
-                display: none;
-                margin-left: 5px;
-                margin-right: 5px;
-            }
-        }
-
-        //layout change action
-        .inline-actions-right {
-            position: absolute;
-            right: 40px;
-        }
     }
 
     .files-container {

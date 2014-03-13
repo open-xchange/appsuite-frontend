@@ -36,7 +36,7 @@ define('io.ox/files/fluid/perspective',
         loadFilesDef = $.Deferred(),
         dialog = new dialogs.SidePopup({ focus: false }),
         //nodes
-        filesContainer, breadcrumb, inlineRight, inline, wrapper,
+        filesContainer, breadcrumb, inlineRight, inline, wrapper, inlineActionWrapper,
         scrollpane = $('<div class="files-scrollable-pane" role="section">'),
         topBar = $('<div class="window-content-top">'), // used on desktop
         topActions = $('<div class="inline-actions-ms">').appendTo(topBar),
@@ -696,7 +696,10 @@ define('io.ox/files/fluid/perspective',
                     container.addClass('width-less-than-768 width-less-than-480');
             };
             adjustWidth();
-            app.on('folderview:close folderview:open folderview:resize', _.debounce(adjustWidth, 300));
+            app.on('folderview:close folderview:open folderview:resize', _.debounce(function () {
+                    adjustWidth();
+                    wrapper.css('top', inlineActionWrapper.css('height'));//adjust scrollable pane top if topbarsize increases
+                }, 300));//let the foldertree draw or we get wrong values
 
             //register dnd handler
             dropZoneInit(app);
@@ -763,7 +766,7 @@ define('io.ox/files/fluid/perspective',
             };
 
             drawFiles = function (files) {
-                filesContainer.find('.scroll-spacer').before(
+                filesContainer.append(
                     _(files).map(function (file) {
                         drawnCids.push(_.cid(file));
                         return drawFile(file);
@@ -854,28 +857,34 @@ define('io.ox/files/fluid/perspective',
                         if (!breadcrumb)
                             scrollpane.prepend(breadcrumb = $('<div>'));
                         // add inline link
-                        if ($('.inline-actions', scrollpane).length === 0) {
-                            breadcrumb.after(
-                                inline = $('<div>').addClass('inline-actions'),
-                                inlineRight = $('<div>').addClass('inline-actions-right'),
-                                $('<div>').addClass('clearfix')
+                        if ($('.inline-actions', self.main).length === 0) {
+                            wrapper.before(
+                                inlineActionWrapper = $('<div class="inline-action-wrapper navbar navbar-default" role="navigation">').append(
+                                    $('<div class="container-fluid">').append(
+                                        inline = $('<div>').addClass('navbar-left inline-actions'),
+                                        inlineRight = $('<div>').addClass('navbar-right inline-actions-right')
+                                    )
+                                )
                             );
                         }
-
-                        // add element to provoke scrolling
-                        filesContainer.append(
-                            $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
-                        );
 
                         displayedRows = layout.iconRows;
                         start = 0;
                         end = displayedRows * layout.iconCols;
-                        if (layout.iconCols <= 3) end = end + 10;
+                        if (layout.iconCols <= 3) { end = end + 10; }
+                        var displayedIds = allIds.slice(start, end);
 
-                        redraw(allIds.slice(start, end));
+                        // provoke scrolling if not all elements are displayed
+                        // if not, there is no possibility to display all elements due to our loading on demand
+                        if (displayedIds < allIds) {
+                            filesContainer.css('height', parseInt(parseInt(wrapper.css('height'), 10) + 1, 10) + 'px');//one pixel to large so a scrollbar is displayed
+                        }
+
+                        redraw(displayedIds);
 
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
                         ext.point('io.ox/files/icons/actions-right').invoke('draw', inlineRight.empty(), baton);
+
                         //set button state
                         inlineRight.find('[data-ref="io.ox/files/actions/layout-' + baton.options.mode + '"]').addClass('active');
 
@@ -884,6 +893,8 @@ define('io.ox/files/fluid/perspective',
                                 .trigger('update', 'inital');
                         //focus handling
                         filesContainer.trigger('data:loaded');
+                        //wait a bit to let topbar draw then adjust scrollpane height
+                        setTimeout(function () {wrapper.css('top', inlineActionWrapper.css('height')); }, 100);
                     },
                     function fail(response) {
                         if (response) {
@@ -910,6 +921,8 @@ define('io.ox/files/fluid/perspective',
                 redraw(allIds.slice(start, end));
                 //adjust topBar width on window resize
                 adjustWidth();
+                //adjust scrollable pane top if topbarsize increases
+                wrapper.css('top', inlineActionWrapper.css('height'));
             };
 
             app.queues = {};
