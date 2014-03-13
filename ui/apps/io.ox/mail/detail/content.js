@@ -81,6 +81,7 @@ define('io.ox/mail/detail/content',
                     // if we hit &quot;-) we just return
                     if (quot) return all;
                     // otherwise find emote
+                    console.log('replace', match, '>', emotes[match]);
                     var emote = $('<div>').html(emotes[match]).text();
                     return !emote ? match : emote;
                 });

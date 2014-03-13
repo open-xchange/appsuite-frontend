@@ -131,13 +131,9 @@ define('io.ox/mail/detail/links',
         processDeepLink = function (text, node) {
 
             var data = parse(text),
-                link = $('<a href="" target="_blank" class="deep-link" style="text-decoration: none; font-family: Arial;">')
+                link = $('<a role="button" href="#" target="_blank" class="deep-link btn btn-primary btn-xs" style="font-family: Arial; color: white; text-decoration: none;">')
                     .attr('href', data.link)
-                    .append(
-                        $('<span class="label label-info">').text(
-                            'id' in data ? items[data.app] : folders[data.app]
-                        )
-                    );
+                    .text('id' in data ? items[data.app] : folders[data.app]);
 
             // internal document?
             if (isValidHost(data.link)) {

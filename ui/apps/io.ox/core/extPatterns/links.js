@@ -36,8 +36,8 @@ define('io.ox/core/extPatterns/links',
                     baton = node.data('baton'),
                     ref = node.data('ref');
                 baton.e = e;
-                node.tooltip('hide');
                 actions.invoke(ref, this, baton, e);
+                _.defer(function () { node.tooltip('hide'); });
             },
             drawDefault = function () {
                 var prio = _.device('small') ? self.mobile : self.prio;

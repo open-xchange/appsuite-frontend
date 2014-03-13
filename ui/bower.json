@@ -26,7 +26,8 @@
     "jquery-placeholder": "2.0.7",
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
-    "requirejs": "2.1.11",
-    "bootstrap-accessibility-plugin": "https://github.com/paypal/bootstrap-accessibility-plugin.git"
+    "requirejs": "~2.1.11",
+    "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git",
+    "jquery.lazyload": "~1.9.3"
   }
 }

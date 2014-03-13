@@ -30,16 +30,19 @@ define('io.ox/core/pageController',
     });
 
     var PageController = function () {
+
         var pages = {},
             current,
             order = [],
             self = this;
 
         // just for testing atm
-        $(window).on('popstate', function () {
-            // TODO make this safe to work
-            self.goBack();
-        });
+        if (_.device('small')) {
+            $(window).on('popstate', function () {
+                // TODO make this safe to work
+                self.goBack();
+            });
+        }
 
         function createPage(opt) {
             var defaults = {

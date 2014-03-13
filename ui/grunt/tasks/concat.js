@@ -36,6 +36,7 @@ module.exports = function (grunt) {
                          'bower_components/bigscreen/bigscreen.js',
                          'bower_components/jquery-placeholder/jquery.placeholder.js',
                          'bower_components/textarea-helper/textarea-helper.js',
+                         'bower_components/jquery.lazyload/jquery.lazyload.js',
                          'src/util.js',
                          'src/browser.js',
                          'src/plugins.js',
