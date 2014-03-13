@@ -73,7 +73,7 @@ define('io.ox/mail/detail/content',
             ':(': '&#x1F61E;'
         };
 
-        var regex = /(&quot)?([:;]-?[(|)D])\W/g;
+        var regex = /(&quot)?([:;]-?[(|)D])(\W|$)/g;
 
         return function (text) {
             if (settings.get('displayEmoticons') && capabilities.has('emoji')) {
@@ -81,7 +81,6 @@ define('io.ox/mail/detail/content',
                     // if we hit &quot;-) we just return
                     if (quot) return all;
                     // otherwise find emote
-                    console.log('replace', match, '>', emotes[match]);
                     var emote = $('<div>').html(emotes[match]).text();
                     return !emote ? match : emote;
                 });
