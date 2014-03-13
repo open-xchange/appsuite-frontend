@@ -64,14 +64,14 @@ define('io.ox/settings/accounts/settings/pane',
                             })
                             .append($('<i class="fa fa-trash-o">')) :
                             // empty dummy
-                            $('<a class="remove">').attr({
+                            $('<a class="remove" style="display: none">').attr({
                                 href: '#',
                                 tabindex: -1,
                                 role: 'button',
                                 title: gt('Delete'),
                                 'aria-label': o.get('displayName') + ', ' + gt('Delete')
                             })
-                            .append($('<i class="fa fa-trash-o" style="visibility: hidden">'))
+                            .append($('<i class="fa fa-trash-o" >'))
                     )
                 );
         },

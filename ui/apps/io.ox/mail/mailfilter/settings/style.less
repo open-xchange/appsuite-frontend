@@ -7,7 +7,7 @@
     }
 }
 
-.io-ox-mailfilter-edit{
+.io-ox-mailfilter-edit {
 
     .warning { color:  #B94A48; }
 
@@ -115,6 +115,32 @@
         height: 22px;
         border: 1px solid rgba(0, 0, 0, 0.2);
         .border-radius(5px);
+    }
+
+    a[data-action="remove-test"], a[data-action="remove-action"] {
+        position: absolute;
+        top: -8px;
+        color: #aaa;
+        width: 44px;
+        height: 44px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: @trash-icon-hover-background;
+            text-decoration: none;
+
+            i {
+                color: @trash-icon-hover-color;
+            }
+        }
+
+        i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -7px 0 0 -6px;
+            color: #aaa;
+        }
     }
 
 }

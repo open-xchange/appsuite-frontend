@@ -31,7 +31,10 @@
             text-align: right;
             position: relative;
 
-            &.draggable { padding-left: 60px; }
+            &.draggable { 
+                padding-left: 60px;
+                padding-right: 40px;
+            }
 
             .drag-handle {
                 position: absolute;
@@ -65,7 +68,7 @@
                 a[data-action="remove"], a[data-action="delete"] {
                     &:hover {
                         i.fa-trash-o {
-                            color: @gray;
+                            color: @trash-icon-hover-color;
                             text-decoration: none;
                         }
                     }
@@ -93,6 +96,27 @@
 
             a[data-action="toggle"] { margin-right: 1.4em; }
 
+            a[data-action="remove"], a[data-action="delete"] {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 45px;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: @trash-icon-hover-background;
+                }
+
+                i {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    margin: -7px 0 0 -6px;
+                    color: #aaa;
+                }
+            }
+
             @media (max-width: 480px), (max-device-width: 480px) {
                 a[data-action="toggle"] {
                     color: #000000;
@@ -113,6 +137,10 @@
                 background-color: #eee;
                 .widget-title { font-style: italic; font-weight: normal; color: #888; }
             }
+        }
+
+        .io-ox-accounts-settings li.widget-settings-view {
+             padding-right: 40px;
         }
 
     }
