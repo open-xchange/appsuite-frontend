@@ -13,7 +13,7 @@ module.exports = function (grunt) {
     grunt.config('watch', {
 
         options: {
-            interrupt: true,
+            interrupt: false,
             spawn: true,
             debounceDelay: 1500
         },
