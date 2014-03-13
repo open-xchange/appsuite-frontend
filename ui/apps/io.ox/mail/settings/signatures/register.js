@@ -360,6 +360,15 @@ define('io.ox/mail/settings/signatures/register',
                     )
                 );
 
+                section.append(
+                    $('<button type="button" class="btn btn-primary" tabindex="1">')
+                        .text(gt('Unset default signature'))
+                        .on('click', function () {
+                            settings.set('defaultSignature', '');
+                            fnDrawAll();
+                        })
+                );
+
                 require(['io.ox/core/config'], function (config) {
                     if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
                         section.append(
