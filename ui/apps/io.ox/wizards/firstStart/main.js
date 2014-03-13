@@ -14,8 +14,7 @@
 define('io.ox/wizards/firstStart/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/extensions',
-    'settings!io.ox/core',
-    'less!io.ox/wizards/firstStart/style'
+    'settings!io.ox/core'
 ], function (Stage, ext, settings) {
 
     'use strict';
@@ -40,7 +39,7 @@ define('io.ox/wizards/firstStart/main', [
                         def.resolve();
                         return $.Deferred().reject();
                     }
-                    return require(['io.ox/core/wizard/registry']);
+                    return require(['io.ox/core/wizard/registry', 'less!io.ox/wizards/firstStart/style']);
                 })
                 .then(function (registry) {
                     return $.when(
