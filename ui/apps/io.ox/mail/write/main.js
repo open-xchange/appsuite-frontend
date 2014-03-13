@@ -1102,6 +1102,7 @@ define('io.ox/mail/write/main',
             //convert to target emoji send encoding
             if (convert && emoji.sendEncoding() !== 'unified') {
                 //convert to send encoding (NOOP, if target encoding is 'unified')
+                mail.data.subject = convert(mail.data.subject);
                 mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
             }
 
