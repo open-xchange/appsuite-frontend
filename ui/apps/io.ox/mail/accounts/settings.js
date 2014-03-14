@@ -45,12 +45,28 @@ define('io.ox/mail/accounts/settings',
             this.find('input[type=text]:first').focus();
         });
 
+        //show errors
+        myModel.on('validated', function (valid, model, error) {
+            var $form = myView.$el;
+            $form.find('.error').removeClass('error');
+            $form.find('.help-block').remove();
+
+            _.each(error, function (message, key) {
+                var $field = myView.$el.find('#' + key).parent(),
+                    $row = $field.closest('.form-group'),
+                    helpBlock = $('<div class="help-block error">');
+                helpBlock.append($.txt(message));
+                $field.append(helpBlock);
+                $row.addClass('error');
+            });
+        });
+
         myView.dialog.on('save', function () {
             myModel.validate();
             if (myModel.isValid()) {
                 myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
             } else {
-                notifications.yell('error', gt('Account settings could not be saved.'));
+                notifications.yell('error', gt('Account settings could not be saved. Please take a look at the annotations in the form. '));
                 myView.dialog.idle();
 
                 //disable fields for primary account again
