@@ -110,6 +110,20 @@ define('io.ox/mail/toolbar',
             ref: 'io.ox/mail/actions/markread',
             section: 'flags'
         },
+        'move': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Move'),
+            ref: 'io.ox/mail/actions/move',
+            section: 'file-op'
+        },
+        'copy': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Copy'),
+            ref: 'io.ox/mail/actions/copy',
+            section: 'file-op'
+        },
         'print': {
             prio: 'lo',
             mobile: 'lo',

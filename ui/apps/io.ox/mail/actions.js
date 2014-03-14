@@ -264,14 +264,12 @@ define('io.ox/mail/actions',
             requires: 'toplevel some',
             multiple: function (list, baton) {
 
-                var vGrid = baton.grid || ('app' in baton && baton.app.getGrid());
-
                 list = folderAPI.ignoreSentItems(list);
 
                 require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
 
                     function commit(target) {
-                        if (type === 'move' && vGrid) vGrid.busy();
+
                         api[type](list, target).then(
                             function (resp) {
                                 if (resp) {
@@ -281,16 +279,14 @@ define('io.ox/mail/actions',
                                     api.refresh();
                                 }
                                 folderAPI.reload(target, list);
-                                if (type === 'move' && vGrid) vGrid.idle();
                             },
                             notifications.yell
                         );
                     }
 
                     if (baton.target) {
-                        if (list[0].folder_id !== baton.target) {
-                            commit(baton.target);
-                        }
+
+                        if (list[0].folder_id !== baton.target) commit(baton.target);
 
                     } else {
                         var dialog = new dialogs.ModalDialog()
