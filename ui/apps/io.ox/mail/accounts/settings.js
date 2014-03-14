@@ -35,6 +35,8 @@ define('io.ox/mail/accounts/settings',
             width: 600,
             async: true
         });
+        //TOOD: hack to avoid horizontal scrollbar
+        myView.dialog.getBody().css('padding-right', '15px');
 
         myView.dialog.append(
             myView.render().el
