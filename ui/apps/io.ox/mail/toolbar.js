@@ -226,27 +226,6 @@ define('io.ox/mail/toolbar',
         }
     });
 
-    // mobile navigation
-    ext.point('io.ox/mail/classic-toolbar').extend({
-        id: 'mobile-back',
-        index: 1, // be the first
-        draw: function (baton) {
-
-            if (_.device('!small')) return;
-
-            this.append(
-               $('<li>').append(
-                    $('<a>').append(
-                        $('<i class="fa fa-chevron-left">'),
-                        gt('Back')
-                    ).on('tap', function () {
-                        baton.app.pages.goBack();
-                    })
-                )
-            );
-        }
-    });
-
     // classic toolbar
     var toolbar = $('<ul class="classic-toolbar" role="menu">');
 
@@ -267,8 +246,9 @@ define('io.ox/mail/toolbar',
         id: 'toolbar',
         index: 10000,
         setup: function (app) {
+            if (_.device('small')) return;
             app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-                toolbar = $('<ul class="classic-toolbar" role="menu">')
+               toolbar = $('<ul class="classic-toolbar" role="menu">')
             );
             app.updateToolbar = updateToolbar;
         }
@@ -278,6 +258,7 @@ define('io.ox/mail/toolbar',
         id: 'update-toolbar',
         index: 10200,
         setup: function (app) {
+            if (_.device('small')) return;
             app.updateToolbar();
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.listView.on('selection:change change', function () {

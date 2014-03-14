@@ -12,37 +12,17 @@
  */
 
 define('io.ox/core/pageController',
-    ['io.ox/core/extPatterns/links',
-    'less!io.ox/core/pageController'], function (links) {
+    ['less!io.ox/core/pageController'], function () {
 
     'use strict';
-
-    var Action = links.Action;
-
-    new Action('io.ox/mail/actions/navigation', {
-        id: 'back',
-        requires: function () {
-            return true;
-        },
-        action: function (baton) {
-            console.log('wurstblinker', baton);
-        }
-    });
 
     var PageController = function () {
 
         var pages = {},
             current,
             order = [],
+            lastPage = [],
             self = this;
-
-        // just for testing atm
-        if (_.device('small')) {
-            $(window).on('popstate', function () {
-                // TODO make this safe to work
-                self.goBack();
-            });
-        }
 
         function createPage(opt) {
             var defaults = {
@@ -54,7 +34,8 @@ define('io.ox/core/pageController',
             opt = _.extend(defaults, opt);
             // store page
             pages[opt.name] = {
-                $el: $(opt.tag).addClass(opt.classes)
+                $el: $(opt.tag).addClass(opt.classes),
+                navbar: opt.navbar
             };
 
             // pages must be created in the correct order
@@ -85,17 +66,18 @@ define('io.ox/core/pageController',
          * with given animation and options
          */
         this.changePage = function (to, options) {
-            console.log(to, opt);
+            // check if valid
+            if (!pages[to]) {
+                console.warn('target page does not exist: ', to);
+                return;
+            }
+            // check if same page
             if (to === current) return;
+
             var opt = _.extend({ from: current, animation: 'slideleft' }, options || {}),
                 $toPage = pages[to].$el,
                 $fromPage = pages[opt.from].$el;
 
-             // check if valid
-            if (!$toPage) {
-                console.warn('target page does not exist: ', opt.to);
-                return;
-            }
             // trigger 'before' events
             $toPage.trigger('pagebeforeshow', {frompage: opt.from});
             $fromPage.trigger('pagebeforehide', {topage: opt.to});
@@ -111,8 +93,9 @@ define('io.ox/core/pageController',
             } catch (e) {
 
             }
-
-            // start animation to page in
+            // save for back-button
+            lastPage = current;
+            // start animation to-page in
             current = to;
 
             _.defer(function () {
@@ -135,16 +118,15 @@ define('io.ox/core/pageController',
                     });
             }, 1);
 
-            window.history.pushState({foo: 1});
 
         };
 
         this.goBack = function () {
-            var cPos = _.indexOf(order, current);
-            if (cPos === 0) return;
-
+            // TODO overhaulin, this is special for mail
+            var target = lastPage;
+            if (current === 'listView') target = 'folderTree';
             // TODO respect real last page
-            this.changePage(order[cPos - 2], {animation: 'slideright'});
+            this.changePage(target, {animation: 'slideright'});
         };
 
         this.addPage = function (opt) {
@@ -165,6 +147,14 @@ define('io.ox/core/pageController',
                 // on mobile we need a page object to work with
                 return pages[page].$el;
             }
+        };
+
+        this.getNavbar = function (page) {
+            if (!pages[page]) {
+                console.error('PageController: Page ' + page + ' does not exist.');
+                return;
+            }
+            return pages[page].navbar;
         };
 
         this.getCurrentPage = function () {

@@ -22,6 +22,7 @@ define('io.ox/mail/main',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
+     'io.ox/mail/navbarViews',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
@@ -29,7 +30,7 @@ define('io.ox/mail/main',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, gt, settings) {
+    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, gt, settings) {
 
     'use strict';
 
@@ -44,29 +45,53 @@ define('io.ox/mail/main',
         'pages-mobile': function (app) {
             if (_.device('!small')) return;
             var c = app.getWindow().nodes.main;
+            var toolbar = $('<div class="mobile-toolbar">');
+
+            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(toolbar);
 
             // create 4 pages
             app.pages.addPage({
                 name: 'folderTree',
-                container: c
+                container: c,
+                navbar: new Bars.NavbarView({
+                    el: toolbar,
+                    app: app
+                })
             });
 
             app.pages.addPage({
                 name: 'listView',
                 container: c,
-                startPage: true
+                startPage: true,
+                navbar: new Bars.NavbarView({
+                    el: toolbar,
+                    app: app
+                })
             });
 
             app.pages.addPage({
                 name: 'threadView',
-                container: c
+                container: c,
+                navbar: new Bars.NavbarView({
+                    el: toolbar,
+                    app: app
+                })
             });
 
             app.pages.addPage({
                 name: 'detailView',
-                container: c
+                container: c,
+                navbar: new Bars.NavbarView({
+                    el: toolbar,
+                    app: app
+                })
             });
 
+            app.toolbar = new Bars.ToolbarView({app: app});
+
+            // debug
+            //app.listView.model.set('thread', true);
+            window.kack = app;
         },
 
         'pages-desktop': function (app) {
@@ -115,9 +140,21 @@ define('io.ox/mail/main',
         'folder-view-mobile': function (app) {
             // folder tree
             if (_.device('!small')) return;
+
             commons.addFolderView(app, { type: 'mail', folderTreeContainer: app.pages.getPage('folderTree')});
-            app.getWindow().nodes.sidepanel.addClass('border-right');
+
+            // make folder visible by default
             app.toggleFolderView(true);
+
+            // always change folder on foldertap
+            app.pages.getPage('folderTree').on('tap', '.folder.selectable', function () {
+                app.pages.changePage('listView');
+                app.folder.getData().done(function (d) {
+                    app.pages.getNavbar('listView').setTitle(d.title);
+                });
+            });
+
+
         },
         /*
          * Split into left and right pane
@@ -155,6 +192,7 @@ define('io.ox/mail/main',
             app.listView = new MailListView({ app: app, ignoreFocus: true });
             app.listView.model.set({ folder: app.folder.get() });
             // for debugging
+            app.listView.model.set('thread', true);
             window.list = app.listView;
         },
 
@@ -314,24 +352,10 @@ define('io.ox/mail/main',
          * Respond to folder change
          */
         'folder:change': function (app) {
-            if (_.device('small')) return;
             app.on('folder:change', function (id) {
                 var options = app.getViewOptions(id);
                 app.props.set(options);
                 app.listView.model.set('folder', id);
-            });
-        },
-
-           /*
-         * Respond to folder change
-         */
-        'folder:change-mobile': function (app) {
-            if (_.device('!small')) return;
-            app.on('folder:change', function (id) {
-                var options = app.getViewOptions(id);
-                app.props.set(options);
-                app.listView.model.set('folder', id);
-                app.pages.changePage('listView');
             });
         },
 
@@ -387,8 +411,16 @@ define('io.ox/mail/main',
                 'selection:action': function (list) {
                     // make sure we are not in multi-selection
                     if (app.listView.selection.get().length === 1) {
-                        app.showMail(list[0]);
-                        app.pages.changePage('detailView');
+                        // check for thread
+                        var cid = list[0].substr(7);
+                        var isThread = this.collection.get(cid).get('threadSize') > 1;
+
+                        if (isThread) {
+                            app.pages.changePage('threadView');
+                        } else {
+                            app.showMail(list[0]);
+                            app.pages.changePage('detailView');
+                        }
                     }
                 }
             });

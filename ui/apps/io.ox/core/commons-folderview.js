@@ -835,7 +835,9 @@ define('io.ox/core/commons-folderview',
             if (!resized) {
                 baton.$.container.focus();
             }
+
             if (previous !== visible) app.trigger('folderview:open');
+
             return $.when();
         };
 
