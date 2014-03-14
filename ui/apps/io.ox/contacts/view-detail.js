@@ -308,7 +308,7 @@ define('io.ox/contacts/view-detail',
     function mail(address, name, id) {
         if (!address) return null;
         return $('<div>').attr('data-property', id).append(
-            $('<label>').text(gt('Email')),
+            $('<label>').text(model.fields[id]),
             $('<a>', { href: 'mailto:' + address })
                 .text(_.noI18n(address))
                 .on('click', { email: address, display_name: name }, clickMail)
