@@ -50,6 +50,7 @@ define('io.ox/mail/main',
             app.getWindow()
                 .nodes.body.addClass('classic-toolbar-visible').append(toolbar);
 
+
             // create 4 pages
             app.pages.addPage({
                 name: 'folderTree',
@@ -63,7 +64,7 @@ define('io.ox/mail/main',
             app.pages.addPage({
                 name: 'listView',
                 container: c,
-                //startPage: true,
+                startPage: true,
                 navbar: new Bars.NavbarView({
                     el: toolbar,
                     app: app
@@ -116,6 +117,7 @@ define('io.ox/mail/main',
             // TODO restore last folder as starting point
             app.pages.showPage('listView');
 
+
         },
 
         'pages-desktop': function (app) {
@@ -165,6 +167,7 @@ define('io.ox/mail/main',
             // folder tree
             if (_.device('!small')) return;
 
+            // init folderview with custom container
             commons.addFolderView(app, { type: 'mail', folderTreeContainer: app.pages.getPage('folderTree')});
 
             // make folder visible by default
@@ -382,6 +385,7 @@ define('io.ox/mail/main',
             });
         },
 
+
         /*
          * Change foldername on mobiles in navbar
          */
@@ -393,6 +397,7 @@ define('io.ox/mail/main',
                 });
             });
         },
+
 
         /*
          * Define basic function to show an email

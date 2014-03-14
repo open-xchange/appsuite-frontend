@@ -122,6 +122,7 @@ define('io.ox/core/pageController',
             // make new toolbar visible
             pages[opt.from].navbar.hide();
             pages[to].navbar.render();
+
         };
 
         this.goBack = function () {

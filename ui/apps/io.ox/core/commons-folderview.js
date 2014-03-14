@@ -838,7 +838,6 @@ define('io.ox/core/commons-folderview',
 
             if (previous !== visible) app.trigger('folderview:open');
 
-
             return $.when();
         };
 
@@ -989,15 +988,8 @@ define('io.ox/core/commons-folderview',
         };
 
         loadTree = function () {
-<<<<<<< HEAD
             toggle(true);
             app.showFolderView = app.hideFolderView = app.toggleFolderView = $.noop;
-=======
-            toggle();
-            app.showFolderView = _.device('smartphone') ? fnShowSml : fnShow;
-            app.hideFolderView = _.device('smartphone') ? fnHideSml : fnHide;
-            app.toggleFolderView = toggle;
->>>>>>> Reverted changes in commons-folderview
             loadTree = toggleTree = $.noop;
             return require(['io.ox/core/tk/folderviews']).then(initTree);
         };
