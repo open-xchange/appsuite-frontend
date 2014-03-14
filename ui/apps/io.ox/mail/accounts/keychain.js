@@ -93,6 +93,7 @@ define.async('io.ox/mail/accounts/keychain',
 
     extension = {
         id: 'mail',
+        index: 100,
         // displayName appears in drop-down menu
         displayName: gt('Mail account'),
         actionName: 'mailaccount',
