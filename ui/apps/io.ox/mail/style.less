@@ -24,10 +24,37 @@
 
 @unread-toggle-width: 40px;
 
+
 .classic-toolbar-visible .window-content { top: 45px; }
 .rightside.classic-toolbar-visible .thread-view-control { top: 45px }
 
-.classic-toolbar, .inline-toolbar {
+.mobile-toolbar {
+    text-align: center;
+    font-size: 16px;
+    .navbar-action {
+        .ellipsis();
+        max-width: 60px;
+        top: 10px;
+        position: absolute;
+        &.left {
+            left: 5px;
+        }
+        &.right {
+            right: 5px;
+        }
+    }
+    .navbar-title {
+        .ellipsis();
+        margin: 10px 40px;
+    }
+}
+
+.classic-toolbar-visible {
+    .window-content { top: 45px; }
+}
+
+
+.classic-toolbar, .inline-toolbar, .mobile-toolbar {
     position: absolute;
     top: 0;
     width: 100%;
