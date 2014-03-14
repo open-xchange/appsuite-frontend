@@ -50,6 +50,11 @@ define('io.ox/mail/main',
 
             app.getWindow()
                 .nodes.body.addClass('classic-toolbar-visible').append(toolbar);
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> Working on toolbars and navbars for mobile pagination
             // create 4 pages
             app.pages.addPage({
                 name: 'folderTree',
@@ -63,7 +68,6 @@ define('io.ox/mail/main',
             app.pages.addPage({
                 name: 'listView',
                 container: c,
-                //startPage: true,
                 navbar: new Bars.NavbarView({
                     el: toolbar,
                     app: app
@@ -122,30 +126,6 @@ define('io.ox/mail/main',
             // TODO restore last folder as starting point
             app.pages.showPage('listView');
 
-        },
-        /*
-         * Init all nav- and toolbar labels for mobile
-         */
-        'bars-mobile': function (app) {
-
-            if (!_.device('small')) return;
-
-            app.pages.getNavbar('listView').setLeft(gt('Folders'));
-
-            app.pages.getNavbar('folderTree')
-                .setTitle(gt('Folders'))
-                .setLeft(false);
-
-            app.pages.getNavbar('detailView')
-                .setTitle('') // no title
-                .setLeft(gt('Back'));
-
-            app.pages.getNavbar('threadView')
-                .setTitle(gt('Thread'))
-                .setLeft(gt('Back'));
-
-            // TODO restore last folder as starting point
-            app.pages.showPage('listView');
 
         },
 
@@ -221,6 +201,7 @@ define('io.ox/mail/main',
                         app.pages.getNavbar('folderTree').setRight(gt('Edit'));
                     }
                 });
+
 
             var view = new FolderView(app, { type: 'mail', container: app.pages.getPage('folderTree') });
             view.handleFolderChange();
@@ -468,19 +449,6 @@ define('io.ox/mail/main',
             if (!_.device('small')) return;
             app.on('folder:change', function () {
                 if (app.props.get('mobileFolderSelectMode')) return;
-                app.folder.getData().done(function (d) {
-                    app.pages.getNavbar('listView').setTitle(d.title);
-                });
-            });
-        },
-
-
-        /*
-         * Change foldername on mobiles in navbar
-         */
-        'folder:change-mobile': function (app) {
-            if (!_.device('small')) return;
-            app.on('folder:change', function () {
                 app.folder.getData().done(function (d) {
                     app.pages.getNavbar('listView').setTitle(d.title);
                 });
