@@ -228,14 +228,6 @@ define('io.ox/mail/common-extensions',
 
                 this.append(container);
 
-                // if (_.device('!smartphone')) {
-                //     if (!(!showCC && showTO && data.to[0][1] === 'undisclosed-recipients:;')) {
-                //         var dd = $('<div class="recipient-actions">');
-                //         drawAllDropDown(dd, $('<i class="icon-group">'), data);
-                //         dd.appendTo(container);
-                //     }
-                // }
-
                 var items = container.find('.person-link');
                 if (items.length > 3) {
                     container.children().slice(4).hide();

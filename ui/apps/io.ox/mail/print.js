@@ -15,9 +15,9 @@ define('io.ox/mail/print',
     ['io.ox/core/print',
      'io.ox/mail/api',
      'io.ox/mail/util',
-     'io.ox/mail/view-detail',
+     'io.ox/mail/view/content',
      'gettext!io.ox/mail'
-    ], function (print, api, util, detailview,  gt) {
+    ], function (print, api, util, content,  gt) {
 
     'use strict';
 
@@ -33,8 +33,7 @@ define('io.ox/mail/print',
             source = source.replace(regImageSrc, '$1' + ox.apiRoot);
             return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
         } else {
-            //use cleanup from detailview
-            return detailview.getContent(data, { autoCollapseBlockquotes: false }).content.html();
+            return content.get(data, { autoCollapseBlockquotes: false }).content.html();
         }
     }
 

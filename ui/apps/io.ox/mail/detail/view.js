@@ -18,7 +18,8 @@ define('io.ox/mail/detail/view',
      'io.ox/mail/util',
      'io.ox/core/api/collection-pool',
      'io.ox/mail/detail/content',
-     'gettext!io.ox/mail'
+     'gettext!io.ox/mail',
+     'less!io.ox/mail/style'
     ], function (extensions, ext, api, util, Pool, content, gt) {
 
     'use strict';

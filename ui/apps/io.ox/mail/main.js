@@ -99,7 +99,8 @@ define('io.ox/mail/main',
             commons.addFolderView(app, { type: 'mail' });
             app.getWindow().nodes.sidepanel.addClass('border-right');
         },
-/*
+
+        /*
          * Folder view support
          */
         'folder-view-mobile': function (app) {
@@ -167,9 +168,7 @@ define('io.ox/mail/main',
         'get-view-options': function (app) {
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder]);
-
-                return _.extend({ sort: '610', order: 'desc', thread: false }, options);
-
+                return _.extend({ sort: 610, order: 'desc', thread: false }, options);
             };
         },
 
@@ -192,8 +191,7 @@ define('io.ox/mail/main',
                 model.set('order', (/^(610|608)$/).test(value) ? 'desc' : 'asc', { silent: true });
                 app.props.set('order', model.get('order'));
                 // turn off conversation mode for any sort order but date (610)
-
-                if (value !== '610') app.props.set('thread', false);
+                if (value !== 610) app.props.set('thread', false);
                 // now change sort columns
                 model.set('sort', value);
             });
@@ -214,8 +212,7 @@ define('io.ox/mail/main',
         'change:thread': function (app) {
             app.props.on('change:thread', function (model, value) {
                 if (value === true) {
-
-                    app.props.set('sort', '610');
+                    app.props.set('sort', 610);
                     app.listView.model.set('thread', true);
                 } else {
                     app.listView.model.set('thread', false);
@@ -249,7 +246,6 @@ define('io.ox/mail/main',
          * Setup list view control
          */
         'list-view-control': function (app) {
-
             app.listControl = new ListViewControl({ id: 'io.ox/mail', listView: app.listView, app: app });
             app.left.append(app.listControl.render().$el);
             // make resizable
@@ -260,7 +256,6 @@ define('io.ox/mail/main',
          * Setup thread view
          */
         'thread-view': function (app) {
-
             app.threadView = new ThreadView();
             app.right.append(app.threadView.render().$el);
         },

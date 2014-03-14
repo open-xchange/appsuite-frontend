@@ -183,8 +183,8 @@ define('io.ox/preview/main',
         id: 'eml',
         supports: ['eml', 'message/rfc822'],
         draw: function (file) {
-            var self = this;
-            require(['io.ox/mail/view-detail'], function (view) {
+            var self = this.busy();
+            require(['io.ox/mail/detail/view'], function (detail) {
                 var data = file.data.nested_message;
                 data.parent = file.parent;
                 //preview during compose (forward mail as attachment)
@@ -201,7 +201,8 @@ define('io.ox/preview/main',
                         needsfix: true
                     };
                 }
-                self.append(view.draw(data).css('padding', 0));
+                var view = new detail.View({ data: data });
+                self.idle().append(view.render().expand().$el.addClass('no-padding'));
             });
         },
         omitClick: true

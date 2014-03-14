@@ -27,6 +27,18 @@ define('plugins/portal/mail/register',
     // helper to remember tracked mails
     var trackedMails = [];
 
+    function draw(baton) {
+        var popup = this.busy();
+        require(['io.ox/mail/detail/view'], function (detail) {
+            var obj = api.reduce(baton.item);
+            api.get(obj).done(function (data) {
+                var view = new detail.View({ data: data });
+                popup.idle().append(view.render().expand().$el.addClass('no-padding'));
+                data = null;
+            });
+        });
+    }
+
     ext.point('io.ox/portal/widget/mail').extend({
 
         title: gt('Inbox'),
@@ -144,17 +156,7 @@ define('plugins/portal/mail/register',
             this.append($content);
         },
 
-        draw: function (baton) {
-            var popup = this.busy();
-            require(['io.ox/mail/detail/view'], function (detail) {
-                var obj = api.reduce(baton.item);
-                api.get(obj).done(function (data) {
-                    var view = new detail.View({ data: data });
-                    popup.idle().append(view.render().expand().$el.addClass('no-padding'));
-                    data = null;
-                });
-            });
-        }
+        draw: draw
     });
 
     ext.point('io.ox/portal/widget/mail/settings').extend({
@@ -213,14 +215,6 @@ define('plugins/portal/mail/register',
             );
         },
 
-        draw: function (baton) {
-            var popup = this.busy();
-            require(['io.ox/mail/view-detail'], function (view) {
-                var obj = api.reduce(baton.item);
-                api.get(obj).done(function (data) {
-                    popup.idle().append(view.draw(data));
-                });
-            });
-        }
+        draw: draw
     });
 });
