@@ -236,6 +236,10 @@ body.down #io-ox-login-container .alert.alert-info {
     border: 1px solid #CCC;
 }
 
+#io-ox-login-store label {
+    font-weight: normal;
+}
+
 #login-box-content td {
     padding: 0 15px 8px 0;
 }
