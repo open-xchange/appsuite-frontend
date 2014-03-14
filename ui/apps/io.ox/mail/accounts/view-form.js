@@ -201,11 +201,6 @@ define.async('io.ox/mail/accounts/view-form',
                 }
 
                 function saveAccount() {
-                    if (!self.model.isNew()) {
-                        // updating account, since we save on close of the dialog,
-                        // dialog is already gone, tell the user that something is happening
-                        notifications.yell('busy', gt('Updating account data. This might take a few seconds.'));
-                    }
 
                     // revert default display name
                     var personal = self.model.get('personal');
