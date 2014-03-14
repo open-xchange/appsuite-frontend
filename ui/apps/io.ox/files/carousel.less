@@ -42,10 +42,16 @@
             .carousel-caption {
 
                 background: rgba(0, 0, 0, 0.75);
-                padding: 5px 15px 15px 15px;
+                padding: 5px 13px 13px 13px;
+                left: 0;
+                right: 0;
                 bottom: 0;
 
-                h4 { text-align: center; }
+                h4 {
+                    text-align: center;
+                    font-size: 14px;
+                    .ellipsis();
+                }
 
                 .breadcrumb {
                     opacity: 0.8;
@@ -76,8 +82,12 @@
     }
 
     .closecarousel {
+        color: rgba(255, 255, 255, 0.54);
         position: absolute;
-        bottom: 26px;
-        right: 13px;
+        top: 8px;
+        right: 7px;
+        &:hover {
+            color: #fff;
+        }
     }
 }
