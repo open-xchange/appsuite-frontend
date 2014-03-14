@@ -486,7 +486,7 @@ define('io.ox/core/notifications',
 
                     node.attr('class', className).append(
                         $('<div class="icon">').append(
-                            $('<i>').addClass(icons[o.type] || 'icon-none')
+                            $('<i>').addClass(icons[o.type] || 'fa fa-fw')
                         ),
                         $('<div class="message user-select-text">').append(
                             o.headline ? $('<h2 class="headline">').text(o.headline) : [],

@@ -161,7 +161,7 @@ define('io.ox/core/emoji/view', [
                         $('<a href="#" class="emoji-option">')
                         .attr('data-collection', collection)
                         .append(
-                            $('<i>').addClass(collection === current ? 'fa fa-check' : 'icon-none'),
+                            $('<i>').addClass(collection === current ? 'fa fa-check' : 'fa fa-fw'),
                             $.txt(self.emoji.getTitle(collection))
                         )
                     );
@@ -257,7 +257,7 @@ define('io.ox/core/emoji/view', [
                 } else {
                     // set visual check-mark in drop-down menu
                     var options = this.$el.find('.emoji-options');
-                    options.find('[data-collection] i').attr('class', 'icon-none');
+                    options.find('[data-collection] i').attr('class', 'fa fa-fw');
                     options.find('[data-collection="' + collection + '"]')
                         .find('i').attr('class', 'fa fa-check');
                 }

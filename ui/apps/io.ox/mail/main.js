@@ -311,7 +311,7 @@ define('io.ox/mail/main',
                 list = dataMenu;
             }
             // uncheck all, except the mobile-menu close row
-            list.find('i:not(.fa-chevron-down)').attr('class', 'icon-none');
+            list.find('i:not(.fa-chevron-down)').attr('class', 'fa fa-fw');
             // sort
             list.find(
                     '[data-option="' + props.sort + '"], ' +

@@ -145,7 +145,7 @@ define('io.ox/core/tk/folderviews',
             },
 
             updateArrow = function () {
-                var className = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'icon-none';
+                var className = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'fa fa-fw';
                 if (hasChildren()) {
                     nodes.folder.attr('aria-expanded', isOpen() ? 'true' : 'false');
                 } else {
@@ -158,7 +158,7 @@ define('io.ox/core/tk/folderviews',
             },
 
             hideArrow = function () {
-                nodes.arrow.find('i').attr('class', 'icon-none');
+                nodes.arrow.find('i').attr('class', 'fa fa-fw');
             },
 
             openNode = function () {

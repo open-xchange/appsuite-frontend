@@ -147,13 +147,13 @@ define('io.ox/core/tk/dropdown-options',
             _(nodes).each(function (node, name) {
                 var item = data[name];
                 //reset
-                node.find('i').removeClass('fa-check icon-none');
+                node.find('i').removeClass('fa-check fa-fw');
                 //set icons
                 if (item.checked) {
                     selected.push(item.label);
                     node.find('i').addClass('fa fa-check');
                 } else {
-                    node.find('i').addClass('icon-none');
+                    node.find('i').addClass('fa fa-fw');
                 }
             });
 
@@ -188,7 +188,7 @@ define('io.ox/core/tk/dropdown-options',
                      nodes[item.name] = $('<li>').append($('<a href="#">')
                         .attr({ tabindex: $anchor.attr('tabindex') })
                         .append(
-                            $('<i class="icon-none">'),
+                            $('<i class="fa fa-fw">'),
                             $.txt(item.label)
                         )
                         .on('click', function (e) {

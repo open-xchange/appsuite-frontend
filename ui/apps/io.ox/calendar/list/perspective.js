@@ -195,7 +195,7 @@ define('io.ox/calendar/list/perspective',
                 showAll = $('[data-option="all"]', list).parent(),
                 props = grid.prop();
             // uncheck all
-            list.find('i').attr('class', 'icon-none');
+            list.find('i').attr('class', 'fa fa-fw');
 
             app.folder.getData().done(function (folder) {
                 showAll[folder.type === 1 ? 'show' : 'hide']();

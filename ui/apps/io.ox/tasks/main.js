@@ -272,7 +272,7 @@ define('io.ox/tasks/main',
                 list = dropdown.find('ul'),
                 props = grid.prop();
             // uncheck all
-            list.find('i').attr('class', 'icon-none');
+            list.find('i').attr('class', 'fa fa-fw');
             // check right options
             list.find(
                     '[data-option="' + props.sort + '"], ' +
