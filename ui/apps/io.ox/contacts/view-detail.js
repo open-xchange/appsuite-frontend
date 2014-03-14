@@ -320,7 +320,7 @@ define('io.ox/contacts/view-detail',
         });
     }
 
-    function mail(address, name) {
+    function mail(address, name, id) {
         if (!address) return null;
         return function () {
             $(this).append(
