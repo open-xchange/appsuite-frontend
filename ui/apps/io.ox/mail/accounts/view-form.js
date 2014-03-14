@@ -244,16 +244,45 @@ define.async('io.ox/mail/accounts/view-form',
                 }
 
                 if (needToValidate(list, differences)) {
-                    validationCheck(this.model.attributes).done(function (response, warnings) {
-                        if (response) {
-                            saveAccount();
-                        } else {
-                            if (warnings && warnings.error) {
-                                notifications.yell('error', _.noI18n(warnings.error));
-                            } else {
-                                notifications.yell('error', gt('This account cannot be validated'));
-                            }
+                    validationCheck(this.model.attributes).done(function (response, error) {
+                        var hasError = !!response || [].concat(error.categories).indexOf('ERROR') > -1,
+                            hasWarning = error && error.warnings;
+
+                        if (hasError) {
+                            //on error yell
+                            notifications.yell(error);
                             self.dialog.idle();
+                        } else if (hasWarning) {
+                            //on warning ask user
+                            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                                var messages = _.map([].concat(error.warnings), function (warn) {
+                                    return $('<div>')
+                                            .addClass('alert alert-warning')
+                                            .css('margin', '10px')
+                                            .text(warn.error);
+                                });
+
+                                new dialogs.ModalDialog()
+                                    .header(
+                                        $('<h4>').text(gt('Warnings'))
+                                    )
+                                    .build(function () {
+                                        this.getContentNode().append(messages);
+                                    })
+                                    .addPrimaryButton('proceed', gt('Ignore Warnings'))
+                                    .addButton('cancel', gt('Cancel'))
+                                    .show()
+                                    .done(function (action) {
+                                        if (action === 'proceed') {
+                                            saveAccount();
+                                        } else {
+                                            self.dialog.idle();
+                                        }
+                                    });
+                            });
+                        } else {
+                            //on success save
+                            saveAccount();
                         }
                     });
                 } else {
