@@ -922,7 +922,10 @@ define('io.ox/files/fluid/perspective',
                 //adjust topBar width on window resize
                 adjustWidth();
                 //adjust scrollable pane top if topbarsize increases
-                wrapper.css('top', inlineActionWrapper.css('height'));
+                var topbarHeight = (inlineActionWrapper.css('height'));
+                if (topbarHeight !== '0px') {//in editmode there is no topbar, so changes here
+                    wrapper.css('top', topbarHeight);
+                }
             };
 
             app.queues = {};
