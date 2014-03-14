@@ -53,6 +53,15 @@ define.async('io.ox/mail/accounts/view-form',
 
         oldModel,
 
+        //customize mini views: suppress validate onChange (validated when user hits save)
+        custom = {
+            onChange: function () {
+                this.model.set(this.name, this.$el.val(), { validate: false });
+            }
+        },
+        InputView = mini.InputView.extend(custom),
+        PasswordView = mini.PasswordView.extend(custom),
+
         validationCheck = function (data) {
 
             data = _.extend({
@@ -326,25 +335,25 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'mail_server' }).addClass('control-label col-sm-3').text(gt('Server name')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'mail_server', model: model, id: 'mail_server', className: 'form-control' }).render().$el
+                                new InputView({ name: 'mail_server', model: model, id: 'mail_server', className: 'form-control' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'mail_port' }).addClass('control-label col-sm-3').text(gt('Server port')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'mail_port', model: model, id: 'mail_port', className: 'form-control' }).render().$el
+                                new InputView({ name: 'mail_port', model: model, id: 'mail_port', className: 'form-control' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'login' }).addClass('control-label col-sm-3').text(gt('Username')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'login', model: model, id: 'login', className: 'form-control' }).render().$el
+                                new InputView({ name: 'login', model: model, id: 'login', className: 'form-control' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'password' }).addClass('control-label col-sm-3').text(gt('Password')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.PasswordView({ name: 'password', model: model, id: 'password', className: 'form-control' }).render().$el
+                                new PasswordView({ name: 'password', model: model, id: 'password', className: 'form-control' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group pop3').append(
@@ -390,13 +399,13 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'transport_server'}).addClass('control-label col-sm-3').text(gt('Server name')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'transport_server', model: model, id: 'transport_server' }).render().$el
+                                new InputView({ name: 'transport_server', model: model, id: 'transport_server' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'transport_port'}).addClass('control-label col-sm-3').text(gt('Server port')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'transport_port', model: model, id: 'transport_port', className: 'form-control' }).render().$el
+                                new InputView({ name: 'transport_port', model: model, id: 'transport_port', className: 'form-control' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group').append(
@@ -411,13 +420,13 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'transport_login'}).addClass('control-label col-sm-3').text(gt('Username')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'transport_login', model: model, id: 'transport_login' }).render().$el
+                                new InputView({ name: 'transport_login', model: model, id: 'transport_login' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'transport_password'}).addClass('control-label col-sm-3').text(gt('Password')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.PasswordView({ name: 'transport_password', model: model, id: 'transport_password' }).render().$el
+                                new PasswordView({ name: 'transport_password', model: model, id: 'transport_password' }).render().$el
                             )
                         )
                     )
@@ -429,28 +438,28 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'sent_fullname'}).addClass('control-label col-sm-3').text(gt('Sent folder')),
                             $('<div>').addClass('col-sm-6 variable_size').append(
-                                new mini.InputView({ name: 'sent_fullname', model: model, id: 'sent_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
+                                new InputView({ name: 'sent_fullname', model: model, id: 'sent_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
                             ),
                             $('<div>').addClass('col-sm-1').append(
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
                             ),
                             $('<label>').attr({ 'for':  'trash_fullname'}).addClass('control-label col-sm-3').text(gt('Trash folder')),
                             $('<div>').addClass('col-sm-6 variable_size').append(
-                                new mini.InputView({ name: 'trash_fullname', model: model, id: 'trash_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
+                                new InputView({ name: 'trash_fullname', model: model, id: 'trash_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
                             ),
                             $('<div>').addClass('col-sm-1').append(
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
                             ),
                             $('<label>').attr({ 'for':  'drafts_fullname'}).addClass('control-label col-sm-3').text(gt('Drafts folder')),
                             $('<div>').addClass('col-sm-6 variable_size').append(
-                                new mini.InputView({ name: 'drafts_fullname', model: model, id: 'drafts_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
+                                new InputView({ name: 'drafts_fullname', model: model, id: 'drafts_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
                             ),
                             $('<div>').addClass('col-sm-1').append(
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
                             ),
                             $('<label>').attr({ 'for':  'spam_fullname'}).addClass('control-label col-sm-3').text(gt('Spam folder')),
                             $('<div>').addClass('col-sm-6 variable_size').append(
-                                new mini.InputView({ name: 'spam_fullname', model: model, id: 'spam_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
+                                new InputView({ name: 'spam_fullname', model: model, id: 'spam_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
                             ),
                             $('<div>').addClass('col-sm-1').append(
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
@@ -470,19 +479,19 @@ define.async('io.ox/mail/accounts/view-form',
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'name'}).addClass('control-label col-sm-3').text(gt('Account name')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'name', model: model, id: 'name', className: 'form-control' }).render().$el
+                                new InputView({ name: 'name', model: model, id: 'name', className: 'form-control' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'personal'}).addClass('control-label col-sm-3').text(gt('Your name')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'personal', model: model, id: 'personal', className: 'form-control' }).render().$el
+                                new InputView({ name: 'personal', model: model, id: 'personal', className: 'form-control' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'primary_address'}).addClass('control-label col-sm-3').text(gt('Email address')),
                             $('<div>').addClass('col-sm-8').append(
-                                new mini.InputView({ name: 'primary_address', model: model, id: 'primary_address', className: 'form-control' }).render().$el
+                                new InputView({ name: 'primary_address', model: model, id: 'primary_address', className: 'form-control' }).render().$el
                             )
                         ),
                         $('<div>').addClass('form-group').append(
