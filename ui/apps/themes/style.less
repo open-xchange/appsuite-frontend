@@ -544,9 +544,11 @@ div.hopscotch-bubble {
           to { color: #555; }
     }
 
-    .fa-refresh {
+    i.fa-refresh {
 
-        color: @gray;
+        @color: rgba(255, 255, 255, 0.30);
+
+        color: @color;
         .transition(color 0.2s linear);
 
         /* http://stackoverflow.com/questions/7947385/hovering-over-css-transition-in-safari-lightens-certain-font-color */
@@ -560,7 +562,7 @@ div.hopscotch-bubble {
             -webkit-animation-play-state: paused;
             -moz-animation-play-state: paused;
             animation-play-state: paused;
-            color: #888;
+            color: @color;
         }
     }
 
@@ -638,15 +640,16 @@ div.hopscotch-bubble {
 /* notifications */
 
 #io-ox-notifications {
-    display: none;
+
 
     position: absolute;
     z-index: 30;
     top: 40px;
     bottom: 0;
 
-    background-color: #222;
-    border-top: 1px solid #000;
+    background-color: rgba(0, 0, 0, 0.8);
+
+    display: none;
 
     .overflow-x(hidden);
     .overflow-y(auto);
@@ -654,18 +657,14 @@ div.hopscotch-bubble {
      &:focus { outline: 0; }
 
     @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
-
         width: 100%;
-
-        &.active {
-             display:block;
-        }
+        background-color: #222;
+        &.active { display:block; }
     }
 
     @media (min-width: 481px) {
         width: 350px;
         right: -350px;
-        .box-shadow(0 10px 20px 1px black);
          &.active { right: 0; }
     }
 
@@ -1869,7 +1868,7 @@ a.button {
 }
 
 .default-content-padding {
-    padding: 30px 40px 30px 40px;
+    padding: 30px;
 }
 
 .attachment-list {
@@ -2242,6 +2241,55 @@ ul.io-ox-inline-links + header {
     .window-container-center > &.left {
         left: @window-head-width;
     }
+
+    // larger popups for notification overlay
+    .notifications-overlay &.right { left: 39.5%; }
+    .notifications-overlay &.left { right: 39.5%; }
+}
+
+
+.io-ox-sidepopup-arrow {
+
+    position: absolute;
+    z-index: 4;
+
+    .border, .triangle {
+        position: absolute;
+        height: 0;
+        width: 0;
+        border: 20px solid transparent;
+        top: -20px;
+    }
+
+    &.left {
+        left: 0;
+        right: 49.5%;
+        .border {
+            border-left-color: #eee;
+            right: -40px;
+        }
+        .triangle {
+            border-left-color: #fff;
+            right: -39px;
+        }
+    }
+
+    &.right {
+        left: 49.5%;
+        right: 0;
+        .border {
+            border-right-color: #eee;
+            left: -40px;
+        }
+        .triangle {
+            border-right-color: #fff;
+            left: -39px;
+        }
+    }
+
+    // larger popups for notification overlay
+    .notifications-overlay &.right { left: 39.5%; }
+    .notifications-overlay &.left { right: 39.5%; }
 }
 
 .content-v-shift .io-ox-sidepopup {
@@ -2282,7 +2330,7 @@ ul.io-ox-inline-links + header {
 .io-ox-sidepopup-close {
 
     text-align: right;
-    margin: 0 40px;
+    margin: 0 30px;
 
     .btn {
         margin-left: 13px;
@@ -2304,63 +2352,6 @@ ul.io-ox-inline-links + header {
             text-decoration: none;
         }
     }
-}
-
-.io-ox-sidepopup-arrow {
-
-    position: absolute;
-    z-index: 4;
-
-    .border {
-        position: absolute;
-        height: 0;
-        width: 0;
-        border: 20px solid transparent;
-        top: -20px;
-    }
-
-    .triangle {
-        position: absolute;
-        height: 0;
-        width: 0;
-        border: 20px solid transparent;
-        top: -20px;
-    }
-
-    &.left {
-
-        left: 0;
-        right: 49.5%;
-
-        .border {
-            border-left-color: #eee;
-            right: -40px;
-        }
-
-        .triangle {
-            border-left-color: #fff;
-            right: -39px;
-        }
-
-    }
-
-    &.right {
-
-        left: 49.5%;
-        right: 0;
-
-        .border {
-            border-right-color: #eee;
-            left: -40px;
-        }
-
-        .triangle {
-            border-right-color: #fff;
-            left: -39px;
-        }
-
-    }
-
 }
 
 /* input fields */

@@ -135,40 +135,44 @@ define('plugins/notifications/mail/register',
                 sidepopup = overlay.prop('sidepopup'),
                 cleanUp = function (e, mails) {
                     _(mails).each(function (obj) {
-                        if (cid === _.cid(obj)) {
-                            e.data.popup.close();
-                        }
+                        if (cid === _.cid(obj)) e.data.popup.close();
                     });
                 };
             // toggle?
             if (sidepopup && cid === overlay.find('[data-cid]').data('cid')) {
                 sidepopup.close();
             } else {
+                // open dialog first to be visually responsive
+                require(['io.ox/core/tk/dialogs', 'io.ox/mail/detail/view'], function (dialogs, detail) {
+                    // open SidePopup without array
+                    var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
+                        .setTarget(overlay.empty())
+                        .on('close', function () {
+                            api.off('delete', cleanUp);
+                            if (_.device('smartphone') && overlay.children().length > 0) {
+                                overlay.addClass('active');
+                            } else if (_.device('smartphone')) {
+                                overlay.removeClass('active');
+                                $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
+                            }
+                            $('#io-ox-notifications .item').first().focus();//focus first for now
+                        })
+                        .show(e, function (popup) {
+                            // fetch proper mail now
+                            popup.busy();
+                            api.get(_.cid(cid)).done(function (data) {
 
-                // fetch proper mail first
-                api.get(_.cid(cid)).done(function (data) {
-                    require(['io.ox/core/tk/dialogs', 'io.ox/mail/view-detail'], function (dialogs, view) {
-                        // open SidePopup without array
-                        var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
-                            .setTarget(overlay.empty())
-                            .on('close', function () {
-                                api.off('delete', cleanUp);
-                                if (_.device('smartphone') && overlay.children().length > 0) {
-                                    overlay.addClass('active');
-                                } else if (_.device('smartphone')) {
-                                    overlay.removeClass('active');
-                                    $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
-                                }
-                                $('#io-ox-notifications .item').first().focus();//focus first for now
-                            })
-                            .show(e, function (popup) {
-                                popup.append(view.draw(data));
+                                var view = new detail.View({ data: data, $el: popup });
+                                popup.idle().append(view.render().expand().$el.addClass('no-padding'));
+
                                 if (_.device('smartphone')) {
                                     $('#io-ox-notifications').removeClass('active');
                                 }
-                                api.on('delete', {popup: detailPopup}, cleanUp);//if mail gets deleted we must close the sidepopup or it will show a blank page
+
+                                // if mail gets deleted we must close the sidepopup or it will show a blank page
+                                api.on('delete', { popup: detailPopup }, cleanUp);
                             });
-                    });
+                        });
                 });
             }
         },

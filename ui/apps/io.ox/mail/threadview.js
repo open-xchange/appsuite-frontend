@@ -51,7 +51,7 @@ define('io.ox/mail/threadview',
             this.$el.append(
                 $('<div class="thread-view-list abs">').hide().append(
                     $('<h1>'),
-                    this.$ul = $('<ul class="thread-view list-view mail f6-target" role="listbox">')
+                    this.$ul = $('<ul class="thread-view list-view f6-target" role="listbox">')
                 )
             );
         }
@@ -263,8 +263,8 @@ define('io.ox/mail/threadview',
         },
 
         renderListItem: function (model) {
-            var view = new detail.View({ data: model.toJSON(), app: this.app });
-            return view.render().$el;
+            var view = new detail.View({ tagName: 'li', data: model.toJSON() });
+            return view.render().$el.attr({ role: 'listitem', tabindex: '1' });
         },
     });
 

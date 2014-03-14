@@ -157,8 +157,7 @@ define('io.ox/mail/detail/view',
 
     var View = Backbone.View.extend({
 
-        tagName: 'li',
-        className: 'list-item mail-detail',
+        className: 'list-item mail-item mail-detail',
 
         events: {
             'keydown': 'onToggle',
@@ -241,10 +240,12 @@ define('io.ox/mail/detail/view',
                 // load detailed email data
                 api.get(_.cid(this.cid)).then(this.onLoad.bind(this), this.onLoadFail.bind(this));
             }
+
+            return this;
         },
 
-        show: function () {
-            this.toggle(true);
+        expand: function () {
+            return this.toggle(true);
         },
 
         initialize: function (options) {
@@ -278,9 +279,7 @@ define('io.ox/mail/detail/view',
             this.$el.attr({
                 'aria-label': title,
                 'data-cid': this.cid,
-                'data-loaded': 'false',
-                'role': 'listitem',
-                'tabindex': '1'
+                'data-loaded': 'false'
             });
 
             this.$el.data({ view: this, model: this.model });

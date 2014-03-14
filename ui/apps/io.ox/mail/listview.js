@@ -274,7 +274,7 @@ define('io.ox/mail/listview',
 
         initialize: function (options) {
             ListView.prototype.initialize.call(this, options || {});
-            this.$el.addClass('mail');
+            this.$el.addClass('mail-item');
         },
 
         filter: function (model) {
