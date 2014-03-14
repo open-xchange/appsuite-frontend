@@ -146,10 +146,12 @@ define('plugins/portal/mail/register',
 
         draw: function (baton) {
             var popup = this.busy();
-            require(['io.ox/mail/view-detail'], function (view) {
+            require(['io.ox/mail/detail/view'], function (detail) {
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
-                    popup.idle().append(view.draw(data));
+                    var view = new detail.View({ data: data });
+                    popup.idle().append(view.render().expand().$el.addClass('no-padding'));
+                    data = null;
                 });
             });
         }

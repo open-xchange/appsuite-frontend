@@ -162,7 +162,7 @@ define('plugins/notifications/mail/register',
                             popup.busy();
                             api.get(_.cid(cid)).done(function (data) {
 
-                                var view = new detail.View({ data: data, $el: popup });
+                                var view = new detail.View({ data: data });
                                 popup.idle().append(view.render().expand().$el.addClass('no-padding'));
 
                                 if (_.device('smartphone')) {

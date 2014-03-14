@@ -86,8 +86,9 @@ define('plugins/halo/mail/register',
                 new dialogs.SidePopup().delegate(node, '.vgrid-cell', function (pane, e, target) {
                     var msg = target.data('objectData');
                     api.get({ folder: msg.folder_id, id: msg.id }).done(function (data) {
-                        require(['io.ox/mail/view-detail'], function (view) {
-                            pane.append(view.draw(data));
+                        require(['io.ox/mail/detail/view'], function (detail) {
+                            var view = new detail.View({ data: data });
+                            pane.append(view.render().expand().$el.addClass('no-padding'));
                             data = null;
                         });
                     });
