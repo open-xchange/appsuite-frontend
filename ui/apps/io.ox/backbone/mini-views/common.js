@@ -60,7 +60,12 @@ define('io.ox/backbone/mini-views/common', ['io.ox/backbone/mini-views/abstract'
             this.$el.val($.trim(this.model.get(this.name)));
         },
         render: function () {
-            this.$el.attr({ name: this.name, tabindex: this.options.tabindex || 1 });
+            this.$el.attr({
+                autocomplete: 'off',
+                autocorrect: 'off',
+                name: this.name,
+                tabindex: this.options.tabindex || 1
+            });
             if (this.id) this.$el.attr({ id: this.id });
             this.update();
             return this;
