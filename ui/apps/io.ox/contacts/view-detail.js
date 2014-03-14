@@ -324,7 +324,7 @@ define('io.ox/contacts/view-detail',
         if (!address) return null;
         return function () {
             $(this).append(
-                $('<dt>').text(gt('Email')),
+                $('<dt>').text(model.fields[id]),
                 $('<dd>').append(
                     $('<a>', { href: 'mailto:' + address })
                         .text(_.noI18n(address))
