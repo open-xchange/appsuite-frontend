@@ -170,6 +170,7 @@ define('io.ox/mail/threadview',
                 this.collection.chain().map(this.renderListItem, this).value()
             );
 
+            this.zIndex();
             this.autoSelectMail();
         },
 
@@ -185,6 +186,8 @@ define('io.ox/mail/threadview',
             if (li.position().top <= 0) {
                 this.$ul.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
             }
+
+            this.zIndex();
         },
 
         onRemove: function (model) {
@@ -257,15 +260,25 @@ define('io.ox/mail/threadview',
             return this.$ul.children('.list-item');
         },
 
+        // render scaffold
         render: function () {
             ext.point('io.ox/mail/thread-view').invoke('draw', this);
             return this;
         },
 
+        // render an email
         renderListItem: function (model) {
             var view = new detail.View({ tagName: 'li', data: model.toJSON(), disable: { 'io.ox/mail/detail-view': 'subject' } });
             return view.render().$el.attr({ role: 'listitem', tabindex: '1' });
         },
+
+        // update zIndex for all list-items (descending)
+        zIndex: function () {
+            var items = this.getItems(), length = items.length;
+            items.each(function (index) {
+                $(this).css('zIndex', length - index);
+            });
+        }
     });
 
     return ThreadView;
