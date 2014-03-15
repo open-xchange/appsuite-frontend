@@ -135,13 +135,6 @@
 .list-view .list-item.mail-item.small .priority { float: none; }
 .list-view .list-item.mail-item.small .from span.person { .fontWeight(normal); }
 
-.mail-detail div.subject {
-    .fontWeight(300);
-    font-size: 24px;
-    line-height: 32px;
-    margin: 0 0 28px -68px;
-}
-
 .preview-bottom .mail-detail-pane .mail-detail-decorator { padding: 0; }
 .preview-bottom .inplace-reply { margin: 14px; }
 
@@ -222,6 +215,7 @@
     }
 
     &.no-padding {
+        h1.subject,
         section.body,
         section.notifications,
         section.attachments { padding-left: 0; padding-right: 0; }
@@ -273,7 +267,7 @@
         color: #fff;
     }
 
-    .subject {
+    div.subject {
 
         .fontWeight(300);
         line-height: 20px; // need that to avoid flicker base on icon height
@@ -501,17 +495,20 @@
     background-color: #eee;
 }
 
+.subject() {
+    font-size: 20px;
+    line-height: 24px;
+    padding: 20px;
+    margin: 0;
+    .fontWeight(300);
+}
+
 .thread-view-list {
     overflow: auto;
     padding: 20px;
     background-color: #eee;
     & > h1 {
-        .fontWeight(300);
-        font-size: 20px;
-        line-height: 24px;
-        padding: 20px;
-        margin: 0;
-        // border-bottom: 1px solid #ccc;
+        .subject();
         background-color: white;
         .summary {
             color: #888;
@@ -804,20 +801,16 @@ textarea.inplace-editor {
         float: right;
     }
 
-    .subject.empty {
-        font-style: italic;
-        color: #aaa;
-    }
-
     .from.list {
         display: block;
     }
 
     .subject {
-        .fontWeight(300);
-        font-size: 18px;
-        line-height: 21px;
-        margin: 7px 0;
+        .subject();
+        &.empty {
+            font-style: italic;
+            color: #aaa;
+        }
     }
 
     .from .person-link.person-sender {

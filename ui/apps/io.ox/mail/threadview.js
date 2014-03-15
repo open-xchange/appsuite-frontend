@@ -263,7 +263,7 @@ define('io.ox/mail/threadview',
         },
 
         renderListItem: function (model) {
-            var view = new detail.View({ tagName: 'li', data: model.toJSON() });
+            var view = new detail.View({ tagName: 'li', data: model.toJSON(), disable: { 'io.ox/mail/detail-view': 'subject' } });
             return view.render().$el.attr({ role: 'listitem', tabindex: '1' });
         },
     });

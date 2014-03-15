@@ -24,9 +24,11 @@ define('io.ox/mail/detail/view',
 
     'use strict';
 
+    var INDEX = 0;
+
     ext.point('io.ox/mail/detail-view').extend({
         id: 'focus-indicator',
-        index: 100,
+        index: INDEX += 100,
         draw: function () {
             this.append('<div class="focus-indicator">');
         }
@@ -34,13 +36,24 @@ define('io.ox/mail/detail/view',
 
     ext.point('io.ox/mail/detail-view').extend({
         id: 'unread-class',
-        index: 200,
+        index: INDEX += 100,
         draw: extensions.unreadClass
     });
 
     ext.point('io.ox/mail/detail-view').extend({
+        id: 'subject',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var subject = util.getSubject(baton.data);
+            this.append(
+                $('<h1 class="subject">').text(subject)
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/detail-view').extend({
         id: 'header',
-        index: 300,
+        index: INDEX += 100,
         draw: function (baton) {
             var header = $('<header class="detail-view-header">');
             ext.point('io.ox/mail/detail-view/header').invoke('draw', header, baton);
@@ -94,7 +107,7 @@ define('io.ox/mail/detail/view',
 
     ext.point('io.ox/mail/detail-view').extend({
         id: 'notifications',
-        index: 300,
+        index: INDEX += 100,
         draw: function (baton) {
             var section = $('<section class="notifications">');
             ext.point('io.ox/mail/detail-view/notifications').invoke('draw', section, baton);
@@ -124,7 +137,7 @@ define('io.ox/mail/detail/view',
 
     ext.point('io.ox/mail/detail-view').extend({
         id: 'body',
-        index: 400,
+        index: INDEX += 100,
         draw: function () {
             this.append(
                 $('<section class="attachments">'),
@@ -251,6 +264,7 @@ define('io.ox/mail/detail/view',
 
         initialize: function (options) {
 
+            this.options = options || {};
             this.model = pool.getDetailModel(options.data);
             this.cid = this.model.cid;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
@@ -276,6 +290,11 @@ define('io.ox/mail/detail/view',
                     //#. %1$s: Mail sender
                     //#. %2$s: Mail subject
                     gt('Email from %1$s: %2$s', util.getDisplayName(data.from[0]), subject) : subject;
+
+            // disable extensions?
+            _(this.options.disable).each(function (extension, point) {
+                baton.disable(point, extension);
+            });
 
             this.$el.attr({
                 'aria-label': title,

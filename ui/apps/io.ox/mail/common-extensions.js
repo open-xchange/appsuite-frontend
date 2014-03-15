@@ -412,6 +412,7 @@ define('io.ox/mail/common-extensions',
                 e.preventDefault();
                 var view = e.data.view;
                 view.trigger('load');
+                view.$el.find('.external-images').remove();
                 // get unmodified mail
                 api.getUnmodified(_.cid(view.cid)).done(function (data) {
                     view.trigger('load:done');
