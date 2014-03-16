@@ -89,13 +89,13 @@
 }
 
 .preview-bottom {
-    .leftside { left: 0; right: 0; bottom: auto; width: auto; height: 45%; border-bottom: 1px solid #ccc;  z-index: 2; }
-    .rightside { left: 0; right: 0; top: 45%; z-index: 1; }
+    .leftside { left: 0; right: 0; bottom: auto; width: auto !important; height: 45%; border-bottom: 1px solid #ccc;  z-index: 2; }
+    .rightside { left: 0 !important; right: 0; top: 45%; z-index: 1; }
 }
 
 .preview-none {
-    .leftside { top: 0; left: 0; right: 0; bottom: 0; width: auto; z-index: 1; }
-    .rightside { top: 0; right: 0; bottom: 0; left: 0; width: auto; display: none; z-index: 2; }
+    .leftside { top: 0; left: 0; right: 0; bottom: 0; width: auto !important; z-index: 1; }
+    .rightside { top: 0; right: 0; bottom: 0; left: 0 !important; width: auto; display: none; z-index: 2; }
     .rightside.preview-visible { display: block; }
 }
 
@@ -242,7 +242,11 @@
         float: left;
         margin: 0px 14px 0 0;
         .picture(40px, 40px);
-        display: none;
+    }
+
+    .selected .contact-picture {
+        opacity: 0.25;
+        -webkit-filter: saturate(0);
     }
 
     .from {
@@ -504,9 +508,9 @@
 }
 
 .thread-view-list {
-    overflow: auto;
     padding: 20px;
     background-color: #eee;
+    &.scrollable { overflow: auto; }
     & > h1 {
         .subject();
         background-color: white;
@@ -582,7 +586,7 @@ textarea.inplace-editor {
             i { margin-left: 14px; }
         }
 
-        [class^="icon-"] {
+         .fa { // was [class^="icon-"]
             color: inherit;
             display: inline-block;
             vertical-align: middle;

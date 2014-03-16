@@ -87,9 +87,7 @@ define('plugins/portal/files/register',
         },
 
         draw: function (baton) {
-
             var popup = this.busy();
-
             require(['io.ox/files/fluid/view-detail'], function (view) {
                 var obj = api.reduce(baton.data);
                 api.get(obj).done(function (data) {

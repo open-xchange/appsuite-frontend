@@ -194,6 +194,13 @@ define('io.ox/mail/toolbar',
         ref: 'io.ox/mail/classic-toolbar/links'
     }));
 
+    // local mediator
+    function updateContactPicture() {
+        // only show this option if preview pane is right (vsplit)
+        var li = this.$el.find('[data-name="contactPictures"]').parent();
+        if (this.model.get('preview') === 'right') li.show(); else li.hide();
+    }
+
     // view dropdown
     ext.point('io.ox/mail/classic-toolbar').extend({
         id: 'view-dropdown',
@@ -202,18 +209,23 @@ define('io.ox/mail/toolbar',
 
             if (_.device('small')) return;
 
+            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
+            .header(gt('Preview pane'))
+            .option('preview', 'right', gt('Right'))
+            .option('preview', 'bottom', gt('Bottom'))
+            .option('preview', 'none', gt('None'))
+            .divider()
+            .header(gt('Options'))
+            .option('folderview', true, gt('Folder view'))
+            .option('checkboxes', true, gt('Easy multi-selection'))
+            .option('contactPictures', true, gt('Contact pictures'))
+            .listenTo(baton.app.props, 'change:preview', updateContactPicture);
+
             this.append(
-                new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
-                .header(gt('Preview pane'))
-                .option('preview', 'right', gt('Right'))
-                .option('preview', 'bottom', gt('Bottom'))
-                .option('preview', 'none', gt('None'))
-                .divider()
-                .option('folderview', true, gt('Show folders'))
-                .option('checkboxes', true, gt('Show checkboxes'))
-                .render()
-                .$el.addClass('pull-right')
+                dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
             );
+
+            updateContactPicture.call(dropdown);
         }
     });
 

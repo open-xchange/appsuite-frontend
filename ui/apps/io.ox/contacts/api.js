@@ -550,10 +550,14 @@ define('io.ox/contacts/api',
         });
     };
 
+    // local hash to recognize URLs that have been fetched already
+    var cachesURLs = {};
+
     // node is optional. if missing function returns just the URL
     api.pictureHalo = function (/* [node], options */) {
 
-        var args = _(arguments).toArray(), node, options, params, fallback, url, img;
+        var args = _(arguments).toArray(), node, options, params, fallback, url;
+
         // use copy of data object because of delete-statements
         if (args.length === 1) {
             options = _.clone(args[0]);
@@ -632,14 +636,39 @@ define('io.ox/contacts/api',
         // just return URL
         if (!node) return url;
 
-        // load image and return node
-        img = new Image();
-        $(img).one('load error', function (e) {
-            var fail = img.width === 1 || e.type === 'error';
-            node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
-            node = img = null;
+        // cached?
+        if (cachesURLs[url]) {
+            return node.css('background-image', 'url(' + cachesURLs[url] + ')');
+        }
+
+        // load image
+        _.defer(function () {
+            // use lazyload?
+            var scrollpane = node.closest('.scrollpane');
+            if (scrollpane.length) {
+                node.attr('data-original', url).lazyload({
+                    container: scrollpane,
+                    effect: 'show',
+                    error: function () {
+                        node.css('background-image', 'url(' + fallback + ')');
+                        node = scrollpane = null;
+                    },
+                    load: function (elements_left, settings, image) {
+                        if (image.width === 1) node.css('background-image', 'url(' + fallback + ')');
+                        else cachesURLs[url] = url;
+                        node = scrollpane = null;
+                    }
+                });
+            } else {
+                $(new Image()).one('load error', function (e) {
+                    var fail = this.width === 1 || e.type === 'error';
+                    if (!fail) cachesURLs[url] = url;
+                    node.css('background-image', 'url(' + (fail ? fallback : url) + ')');
+                    node = null;
+                })
+                .attr('src', url);
+            }
         });
-        img.src = url;
 
         return node;
     };

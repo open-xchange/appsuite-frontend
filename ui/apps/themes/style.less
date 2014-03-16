@@ -1416,12 +1416,15 @@ a.button {
 .list-view {
 
     height: 100%;
-    overflow: auto;
     list-style-type: none;
     padding: 0;
     margin: 0;
     outline: 0;
     .user-select(none);
+
+    &.scrollpane {
+        overflow-y: auto;
+    }
 
     .list-item, .list-header {
         position: relative;

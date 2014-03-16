@@ -135,8 +135,9 @@ define('io.ox/mail/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                preview: app.settings.get('preview', 'right'),
-                checkboxes: app.settings.get('showCheckboxes', true),
+                'preview': app.settings.get('preview', 'right'),
+                'checkboxes': app.settings.get('showCheckboxes', true),
+                'contactPictures': app.settings.get('showContactPictures', false)
             });
         },
 
@@ -230,6 +231,7 @@ define('io.ox/mail/main',
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
                     .set('preview', data.preview)
                     .set('showCheckboxes', data.checkboxes)
+                    .set('showContactPictures', data.contactPictures)
                     .save();
             }, 500));
         },
@@ -594,7 +596,15 @@ define('io.ox/mail/main',
             app.props.on('change:checkboxes', function (model, value) {
                 app.listView.toggleCheckboxes(value);
             });
+        },
 
+        /*
+         * Respond to change:contactPictures
+         */
+        'change:contactPictures': function (app) {
+            app.props.on('change:contactPictures', function () {
+                app.listView.redraw();
+            });
         }
     });
 
