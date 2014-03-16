@@ -97,16 +97,21 @@
 
             /* When appear is triggered load original image. */
             $self.one("appear", function() {
+
                 if (!this.loaded) {
                     if (settings.appear) {
                         var elements_left = elements.length;
                         settings.appear.call(self, elements_left, settings);
                     }
-                    $("<img />")
-                        .bind("load", function() {
+                    $("<img>")
+                        .one("load", function() {
 
                             var original = $self.attr("data-" + settings.data_attribute);
-                            $self.hide();
+
+                            if (settings.effect !== 'show') {
+                                console.log('hide', original);
+                                $self.hide();
+                            }
                             if ($self.is("img")) {
                                 $self.attr("src", original);
                             } else {
@@ -124,7 +129,13 @@
 
                             if (settings.load) {
                                 var elements_left = elements.length;
-                                settings.load.call(self, elements_left, settings);
+                                settings.load.call(self, elements_left, settings, this);
+                            }
+                        })
+                        .one("error", function() {
+                            if (settings.error) {
+                                var elements_left = elements.length;
+                                settings.load.call(self, elements_left, settings, this);
                             }
                         })
                         .attr("src", $self.attr("data-" + settings.data_attribute));
