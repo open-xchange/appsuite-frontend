@@ -831,7 +831,7 @@ define('io.ox/files/actions',
         id: 'delete',
         index: index += 100,
         prio: 'hi',
-        icon: 'icon-trash',
+        icon: 'fa fa-trash-o',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
     }));

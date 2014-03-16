@@ -584,7 +584,7 @@ define('io.ox/calendar/actions',
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
-        prio: 'lo',
+        prio: 'hi',
         id: 'move',
         label: gt('Move'),
         ref: 'io.ox/calendar/detail/actions/move'
@@ -592,7 +592,7 @@ define('io.ox/calendar/actions',
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 400,
-        prio: 'lo',
+        prio: 'hi',
         id: 'print',
         icon: 'fa fa-print',
         label: gt('Print'),

@@ -534,8 +534,8 @@ define('io.ox/tasks/actions',
         id: 'done',
         index: 300,
         prio: 'hi',
-        icon: 'icon-check-sign',
-        label: gt('Done'),
+        icon: 'fa fa-check-square-o',
+        label: gt('Mark as done'),
         ref: 'io.ox/tasks/actions/done'
     }));
 
@@ -552,7 +552,7 @@ define('io.ox/tasks/actions',
         id: 'delete',
         index: 400,
         prio: 'hi',
-        icon: 'icon-trash',
+        icon: 'fa fa-trash-o',
         label: gt('Delete'),
         ref: 'io.ox/tasks/actions/delete'
     }));
