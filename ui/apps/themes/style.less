@@ -3678,3 +3678,66 @@ wbr:after { content: "\00200B" }
     -webkit-transition-duration: none;
     left:90%;
 }
+
+/* High contrast */
+
+html.high-contrast {
+
+    @border-color: #ccc;
+
+    #io-ox-topbar {
+
+        color: black;
+        background-color: #fff;
+        background-image: none;
+        border-bottom: 1px solid @border-color;
+
+        .launcher > a, i.fa.launcher-icon {
+            color: #333;
+        }
+
+        .launcher.active-app {
+            background-color: @link-color;
+            & > a { color: #fff; }
+        }
+
+        .launcher a.notifications-icon .badge {
+            color: #fff;
+        }
+    }
+
+    #io-ox-top-logo-small {
+        display: none;
+    }
+
+    // .foldertree-sidepanel {
+    //     background-color: #fff;
+    //     background-image: none;
+    // }
+
+    // .io-ox-foldertree .folder .folder-label {
+    //     font-weight: normal;
+    // }
+
+    // .border-right, .border-left, .classic-toolbar, .toolbar.top {
+    //     border-color: @border-color;
+    // }
+
+    // .thread-view-list {
+    //     background-color: #ddd;
+    // }
+
+    // .thread-view.list-view .list-item {
+    //     border: 0px none;
+    //     margin-bottom: 7px;
+    // }
+
+    // .list-view .list-item .list-item-checkmark .fa-checkmark {
+    //     color: #333;
+    // }
+
+    // .mail-item .thread-size {
+    //     color: #fff;
+    //     background-color: rgba(0, 0, 0, 0.5);
+    // }
+}
