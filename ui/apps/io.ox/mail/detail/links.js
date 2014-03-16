@@ -30,20 +30,33 @@ define('io.ox/mail/detail/links',
     $(document).on('click', '.deep-link-files', function (e) {
         e.preventDefault();
         var data = $(this).data();
-        ox.launch('io.ox/files/main', { folder: data.folder, perspective: 'fluid:list' }).done(function () {
-            var app = this, folder = data.folder, id = data.id;
-            // switch to proper perspective
-            ox.ui.Perspective.show(app, 'fluid:list').done(function () {
-                // set proper folder
-                if (app.folder.get() === folder) {
-                    app.selection.set(id);
-                } else {
-                    app.folder.set(folder).done(function () {
-                        app.selection.set(id);
+        if (data.id) {
+            // open file in side-popup
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/files/api', 'io.ox/files/fluid/view-detail']).done(function (dialogs, api, view) {
+                new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
+                    popup.busy();
+                    api.get(_.cid(data.id)).done(function (data) {
+                        popup.idle().append(view.draw(data));
                     });
-                }
+                });
             });
-        });
+        } else {
+            // open files app
+            ox.launch('io.ox/files/main', { folder: data.folder, perspective: 'fluid:list' }).done(function () {
+                var app = this, folder = data.folder, id = data.id;
+                // switch to proper perspective
+                ox.ui.Perspective.show(app, 'fluid:list').done(function () {
+                    // set proper folder
+                    if (app.folder.get() === folder) {
+                        app.selection.set(id);
+                    } else {
+                        app.folder.set(folder).done(function () {
+                            app.selection.set(id);
+                        });
+                    }
+                });
+            });
+        }
     });
 
     $(document).on('click', '.deep-link-contacts', function (e) {
