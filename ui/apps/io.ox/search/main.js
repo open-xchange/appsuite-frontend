@@ -197,21 +197,16 @@ define('io.ox/search/main',
                 app.view.redraw();
             });
 
-    //TODO: remove hack; timeout -> via ext point
-    setTimeout(function () {
-        var test = $('<div>');
-
-        app.view = View.factory
-                    .create(app, model, test)
-                    .render();
-
-        $('#io-ox-topbar .launchers-secondary').append(
-            $('<li>').addClass('launcher').append(test)
-        );
-    }, 500);
-
     return {
         getApp: app.getInstance,
+        init: function (container) {
+            var $container = container || $('<div>');
+            app.view = View.factory
+                        .create(app, model, $container)
+                        .render($container);
+
+            return $container;
+        },
         reuse: function () {
             return ox.ui.App.reuse('io.ox/search');
         }

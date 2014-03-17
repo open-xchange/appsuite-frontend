@@ -623,6 +623,25 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right').extend({
+            id: 'search',
+            index: 150,
+            draw: function () {
+                if (capabilities.has('search')) {
+                    var container = $('<div>');
+                    //add launcher
+                    this.append(
+                        addLauncher('right', container, $.noop(), gt('Refresh'))
+                        .attr('id', 'io-ox-searchfield-topbar')
+                    );
+                    //add search input field to launcher
+                    require(['io.ox/search/main'], function (searchapp) {
+                        searchapp.init(container);
+                    });
+                }
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
             id: 'refresh',
             index: 200,
             draw: function () {
