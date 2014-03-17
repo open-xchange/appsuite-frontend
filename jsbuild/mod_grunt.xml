@@ -73,6 +73,9 @@
 			</then>
 			<else>
 				<echo message="... YES - will do it now" />
+
+				<delete dir="@{prjpath}/node_modules"     quiet="true" />
+				<delete dir="@{prjpath}/bower_components" quiet="true" />
 				
 				<exec executable ="${mod_grunt.exe.npm}"
 					  dir        ="@{prjpath}"
@@ -114,12 +117,12 @@
     <sequential>
         
         <mod_grunt.init />
-        
+
+		<mod_grunt.-impl-clean-specials prjpath="@{prjpath}" />
+
         <mod_grunt.-impl-grunt prjpath="@{prjpath}">
 	        <arg value="clean" />
         </mod_grunt.-impl-grunt>
-        
-		<mod_grunt.-impl-clean-specials prjpath="@{prjpath}" />
         
     </sequential>
     </macrodef>
