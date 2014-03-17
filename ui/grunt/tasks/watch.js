@@ -39,7 +39,7 @@ module.exports = function (grunt) {
                 'src/*.js',
                 'bower_components/**/*.{js,less}'
             ],
-            tasks: ['default'],
+            tasks: ['default', 'karma:unit:run'],
             options: { livereload: true }
         }
     });
