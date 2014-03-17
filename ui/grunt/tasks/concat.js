@@ -61,7 +61,8 @@ module.exports = function (grunt) {
                          'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
                          'lib/bootstrap-combobox.js'
                     ],
-                    dest: 'build/boot.js'
+                    dest: 'build/boot.js',
+                    nonull: true
                 }
             ]
         },
@@ -69,7 +70,8 @@ module.exports = function (grunt) {
             files: [
                 {
                     src: ['lib/mobiscroll/js/mobiscroll.core.js', 'lib/mobiscroll/js/mobiscroll.datetime.js', 'lib/mobiscroll/js/mobiscroll.ios7.js'],
-                    dest: 'build/apps/3rd.party/mobiscroll/mobiscroll.js'
+                    dest: 'build/apps/3rd.party/mobiscroll/mobiscroll.js',
+                    nonull: true
                 }
             ]
         },
