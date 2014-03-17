@@ -144,6 +144,13 @@ define('io.ox/core/api/pubsub',
                         id : data.id,
                         folder: folder
                     }
+                }).then(this.resolve, function (resp) {
+                    //special error 'verfication needed': create clickable link
+                    var link = resp.error_params[0];
+                    if (resp.code === 'SUB-90112' && link) {
+                        resp.error_html = resp.error.replace(link, '<a href="' + link + '" title="' + link + '" target="_blank">Link</>');
+                    }
+                    return resp;
                 });
             });
         }
