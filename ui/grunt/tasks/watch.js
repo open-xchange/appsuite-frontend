@@ -28,8 +28,8 @@ module.exports = function (grunt) {
             options: { livereload: true }
         },
         karma: {
-            files: ['spec/**/*_spec.js'],
-            tasks: ['newer:jshint:specs', 'newer:concat:specs', 'karma:unit:run']
+            files: ['spec/**/*'],
+            tasks: ['newer:jshint:specs', 'newer:copy:specs', 'karma:unit:run']
         },
         all: {
             files: [

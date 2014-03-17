@@ -41,7 +41,7 @@ module.exports = function (grunt) {
     grunt.registerTask('tinymce_update', ['curl:tinymceMain', 'curl:tinymceLanguagePack', 'unzip:tinymceMain', 'unzip:tinymceLanguagePack', 'copy:tinymce']);
 
     // testing stuff
-    grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
+    grunt.registerTask('test', ['karma:unit:start']);
 
     // steps to build the ui (ready for development)
     grunt.registerTask('build', ['bower', 'lint', 'copy_build', 'assemble_build', 'newer:concat', 'newer:less', 'newer:compile_po']);
