@@ -333,7 +333,7 @@ define('io.ox/core/tk/autocomplete',
                             selected.trigger('click');
                         } else {
                             // auto-select first item
-                            scrollpane.find('.autocomplete-item').first().click();
+                            scrollpane.find('.autocomplete-item:visible').first().click();
                         }
 
                         // calendar: add string
