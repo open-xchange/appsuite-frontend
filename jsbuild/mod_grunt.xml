@@ -221,10 +221,11 @@
         <!-- check for /web/ui ...
              otherwhise office-web/ui will be detected too :-)
           -->
-        <mod_utils.string-contains string     ="@{prjpath}"
-        						   search     ="/web/ui"
-        						   result-prop="local.is-web-project"
-        />
+
+		<mod_utils.string-contains string     ="@{prjpath}"
+								   search     ="${file.separator}web${file.separator}ui"
+								   result-prop="local.is-web-project"
+		/>
         
         <if>
 			<istrue value="${local.is-web-project}" />
@@ -450,6 +451,16 @@
             	<var name="mod_grunt.exe.grunt" value="${local.exe.grunt}" />
             </then>
         </if>
+		<var name ="local.exe.grunt"
+		     value="/usr/bin/grunt"
+		/>
+        <if>
+            <available file="${local.exe.grunt}" />
+            <then>
+	            <echo message="... found GRUNT exe at '${local.exe.grunt}'" />
+            	<var name="mod_grunt.exe.grunt" value="${local.exe.grunt}" />
+            </then>
+        </if>
 
 		<var name ="local.exe.npm"
 		     value="/usr/bin/npm"
@@ -464,6 +475,16 @@
 
 		<var name ="local.exe.bower"
 		     value="/usr/local/bin/bower"
+		/>
+        <if>
+            <available file="${local.exe.bower}" />
+            <then>
+	            <echo message="... found BOWER exe at '${local.exe.bower}'" />
+            	<var name="mod_grunt.exe.bower" value="${local.exe.bower}" />
+            </then>
+        </if>
+		<var name ="local.exe.bower"
+		     value="/usr/bin/bower"
 		/>
         <if>
             <available file="${local.exe.bower}" />
