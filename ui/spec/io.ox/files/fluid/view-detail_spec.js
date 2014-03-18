@@ -245,8 +245,7 @@ define(['io.ox/files/fluid/view-detail',
                 expect(this.node.find('ul.breadcrumb').length).toBe(1);
             });
             it('that allows uploading a new file version', function () {
-                expect(this.node.find('.fileupload').length).toBe(1);
-                expect(this.node.find('.fileupload.btn-file').hasClass('disabled')).toBeFalsy();
+                expect(this.node.find('input.file-input').length).toBe(1);
             });
         });
     });
