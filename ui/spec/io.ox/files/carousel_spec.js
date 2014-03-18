@@ -65,7 +65,7 @@ define(['io.ox/files/carousel'], function (slideshow) {
             });
 
             it('should display the next button', function () {
-                expect(this.node.find('a[data-slide="next"]:visible').length).toBeTruthy();
+                expect(this.node.find('a[data-slide="next"]').attr('style')).not.toMatch(/display:\w*none;/);
             });
 
             it('should have a close button', function () {
