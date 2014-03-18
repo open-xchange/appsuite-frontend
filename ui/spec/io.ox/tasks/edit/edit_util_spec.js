@@ -125,8 +125,8 @@ define(['io.ox/tasks/edit/util',
                 fluidRow = util.buildExtensionRow(node, rows[1], baton);
 
                 expect(fluidRow.is('div')).toBeTruthy();
-                expect(fluidRow.hasClass('row-fluid')).toBeTruthy();
-                expect(fluidRow.hasClass('task-edit-row')).toBeTruthy();
+                expect(fluidRow.hasClass('row')).toBeTruthy();
+                //expect(fluidRow.hasClass('task-edit-row')).toBeTruthy();
                 expect(fluidRow.children().length).toEqual(1);
                 this.after(function () {
                     node.remove();
@@ -144,8 +144,8 @@ define(['io.ox/tasks/edit/util',
                 row = $(parent.children()[0]);
 
                 expect(row.is('div')).toBeTruthy();
-                expect(row.hasClass('row-fluid')).toBeTruthy();
-                expect(row.hasClass('task-edit-row')).toBeTruthy();
+                expect(row.hasClass('row')).toBeTruthy();
+                //expect(row.hasClass('task-edit-row')).toBeTruthy();
                 expect(row.children().length).toEqual(4);
                 this.after(function () {
                     parent.remove();
@@ -199,10 +199,6 @@ define(['io.ox/tasks/edit/util',
                 row = $(parent.children()[0]);
 
                 expect(row.children().length).toEqual(4);
-                expect(nodes[0].hasClass('span12')).toBeTruthy();
-                expect(nodes[1].hasClass('span12')).toBeTruthy();
-                expect(nodes[2].hasClass('span12')).toBeTruthy();
-                expect(nodes[3].hasClass('span12')).toBeFalsy();//labels don't have span12
 
                 this.after(function () {
                     parent.remove();

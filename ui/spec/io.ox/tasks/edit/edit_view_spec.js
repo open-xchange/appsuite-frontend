@@ -45,18 +45,21 @@ define(['io.ox/tasks/edit/main',
             describe('task edit view', function () {
                 describe('should contain', function () {
                     it('a headline', function () {
-                        expect(node.find('.task-edit-headline').length).toEqual(1);
-                        expect(node.find('.task-edit-headline .clear-title').length).toEqual(1);
-                        expect(node.find('.task-edit-headline [data-action="save"]').length).toEqual(1);
-                        expect(node.find('.task-edit-headline [data-action="discard"]').length).toEqual(1);
+                        expect(node.find('h1.clear-title').length).toEqual(1);
+                    });
+                    it('a save button', function () {
+                        expect(node.find('button[data-action="save"]').length).toEqual(1);
+                    });
+                    it('a discard button', function () {
+                        expect(node.find('button[data-action="discard"]').length).toEqual(1);
                     });
                     it('a title inputfield', function () {
-                        expect(node.find('#task-edit-title').length).toEqual(1);
-                        expect(node.find('#task-edit-title').parent().is('label')).toBeTruthy();
+                        expect(node.find('input.title-field').length).toEqual(1);
+                        expect(node.find('input.title-field').prev().is('label')).toBeTruthy();
                     });
                     it('a description textarea', function () {
-                        expect(node.find('#task-edit-note').length).toEqual(1);
-                        expect(node.find('#task-edit-note').parent().is('label')).toBeTruthy();
+                        expect(node.find('textarea.note-field').length).toEqual(1);
+                        expect(node.find('textarea.note-field').prev().is('label')).toBeTruthy();
                     });
                     it('an expansion link', function () {
                         expect(node.find('.expand-link').length).toEqual(1);
@@ -81,12 +84,12 @@ define(['io.ox/tasks/edit/main',
                     });
                     it('a reminder inputfield', function () {
                         expect(node.find('[data-extension-id="alarm"]').length).toEqual(1);
-                        expect(node.find('[data-extension-id="alarm"] label').length).toEqual(1);
+                        expect(node.find('[data-extension-id="alarm"] label').length).toEqual(2);
                         expect(node.find('[data-extension-id="alarm"] input').length).toEqual(2);//alarm has date and time field
                     });
                     it('a status selectbox', function () {
-                        expect(node.find('#task-edit-status-select').length).toEqual(1);
-                        expect(node.find('#task-edit-status-select').children().length).toEqual(5);
+                        expect(node.find('[data-extension-id="status"] select').length).toEqual(1);
+                        expect(node.find('[data-extension-id="status"] select').children().length).toEqual(5);
                     });
                     it('a progress buttongroup', function () {
                         expect(node.find('#task-edit-progress-field').length).toEqual(1);
@@ -94,25 +97,16 @@ define(['io.ox/tasks/edit/main',
                         expect(node.find('[data-action="minus"]').length).toEqual(1);
                     });
                     it('a priority selectbox', function () {
-                        expect(node.find('#task-edit-priority-select').length).toEqual(1);
-                        expect(node.find('#task-edit-priority-select').children().length).toEqual(3);
+                        expect(node.find('[data-extension-id="priority"] select').length).toEqual(1);
+                        expect(node.find('[data-extension-id="priority"] select').children().length).toEqual(3);
                     });
                     it('a private checkbox', function () {
                         expect(node.find('.private-flag').length).toEqual(1);
                         expect(node.find('.private-flag input[type="checkbox"]').length).toEqual(1);
                     });
-                    it('tabs', function () {
-                        expect(node.find('.nav-tabs').length).toEqual(1);
-                        expect(node.find('.tab-content').length).toEqual(1);
-                        expect(node.find('.tab-pane').length).toEqual(3);
-                    });
                     it('a correct participants tab', function () {//needs tasks delegate capability
                         expect(node.find('.task-participant-input-field').length).toEqual(1);
                         expect(node.find('.participantsrow').length).toEqual(1);
-                    });
-                    it('a correct attachments tab', function () {//needs infostore capability
-                        expect(node.find('[data-extension-id="attachment_list"]').length).toEqual(1);
-                        expect(node.find('#attachmentsForm').length).toEqual(1);
                     });
                     it('a correct details tab', function () {
                         expect(node.find('[data-extension-id="target_duration"]').length).toEqual(1);
@@ -126,8 +120,8 @@ define(['io.ox/tasks/edit/main',
                 });
                 describe('headline', function () {
                     it('should have correct text', function () {
-                        expect(node.find('.task-edit-headline .clear-title').text()).toEqual(gt('Create task'));
-                        expect(node.find('.task-edit-headline [data-action="save"]').text()).toEqual(gt('Create'));
+                        expect(node.find('h1.clear-title').text()).toEqual(gt('Create task'));
+                        expect(node.find('button[data-action="save"]').text()).toEqual(gt('Create'));
                     });
                 });
                 describe('title', function () {
@@ -139,11 +133,11 @@ define(['io.ox/tasks/edit/main',
                 });
                 describe('expansion link', function () {
                     it('should toggle collapsed items', function () {
-                        expect(node.find('.collapsed:visible').length).toBeGreaterThan(0);
+                        expect(node.find('.collapsed').attr('style')).not.toMatch(/display:\w*block;/);
                         node.find('.expand-link').click();
-                        expect(node.find('.collapsed:visible').length).toEqual(0);
+                        expect(node.find('.collapsed').attr('style')).toBeFalsy();
                         node.find('.expand-link').click();
-                        expect(node.find('.collapsed:visible').length).toBeGreaterThan(0);
+                        expect(node.find('.collapsed').attr('style')).not.toMatch(/display:\w*block;/);
                     });
                     it('should change text', function () {
                         expect(node.find('.expand-link').text()).toEqual(gt('Expand form'));

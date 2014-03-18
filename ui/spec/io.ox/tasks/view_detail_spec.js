@@ -38,7 +38,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                 expect(node.find('.status').length).toBe(1);
                 expect(node.find('.note').length).toBe(1);
                 //recurrence/datecompleted, start_date, target_duration, actual_duration, target_costs, actual_costs, trip_meter, billing_information, companies
-                expect(node.find('.task-details').children().length).toBe(9);
+                expect(node.find('.task-details').children().length).toBe(18);
             });
 
             xit('should draw every participant', function () {//find out why this fails in phantom, chrome is fine
