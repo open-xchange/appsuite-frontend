@@ -269,7 +269,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 // three undeleted, seen mails
                 this.collection.reset([createItem(3, 0), createItem(5, 1), createItem(6, 2)]);
                 // add header element
-                list.$el.append(
+                this.list.$el.append(
                     $('<li class="list-header" style="background: red; height: 50px">')
                 );
             });
@@ -324,7 +324,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
             it('should update properly (case: mixed)', function () {
 
                 // add 1, add 2, remove 3, add 4, remove 5, add 7
-                this.collection.set([createItem(1, 0), createItem(2, 1), createItem(4, 2), createItem(6, 3), createItem(7, 4)])
+                this.collection.set([createItem(1, 0), createItem(2, 1), createItem(4, 2), createItem(6, 3), createItem(7, 4)]);
 
                 var nodes = this.list.$el.children();
                 expect(this.list.collection.length).toBe(5);

@@ -24,13 +24,13 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
 
     function fetch(params) {
         return $.Deferred().resolve(
-            params.limit === '0,3' ? [{ id: 10 },{ id: 20 },{ id: 30 }] : [{ id: 40 },{ id: 50 },{ id: 60 }]
+            params.limit === '0,3' ? [{ id: 10 }, { id: 20 }, { id: 30 }] : [{ id: 40 }, { id: 50 }, { id: 60 }]
         );
     }
 
     function fetchAlternative(params) {
         return $.Deferred().resolve(
-            [{ id: 70 },{ id: 20 },{ id: 40 },{ id: 50 },{ id: 80 }]
+            [{ id: 70 }, { id: 20 }, { id: 40 }, { id: 50 }, { id: 80 }]
         );
     }
 
@@ -98,8 +98,8 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                 waitsFor(done);
                 this.loader.load().done(function (collection) {
                     expect(collection instanceof Backbone.Collection).toBe(true);
-                    expect(collection.pluck('id')).toEqual([10,20,30]);
-                    expect(collection.pluck('index')).toEqual([0,1,2]);
+                    expect(collection.pluck('id')).toEqual([10, 20, 30]);
+                    expect(collection.pluck('index')).toEqual([0, 1, 2]);
                     done.yep();
                 });
             });
@@ -109,8 +109,8 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                 waitsFor(done);
                 this.loader.load().done(function () {
                     loader.paginate().done(function (collection) {
-                        expect(collection.pluck('id')).toEqual([10,20,30,40,50,60]);
-                        expect(collection.pluck('index')).toEqual([0,1,2,3,4,5]);
+                        expect(collection.pluck('id')).toEqual([10, 20, 30, 40, 50, 60]);
+                        expect(collection.pluck('index')).toEqual([0, 1, 2, 3, 4, 5]);
                         done.yep();
                     });
                 });
@@ -122,8 +122,8 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                 this.loader.load().done(function () {
                     loader.fetch = fetchAlternative;
                     loader.reload().done(function (collection) {
-                        expect(collection.pluck('id')).toEqual([70,20,40,50,80]);
-                        expect(collection.pluck('index')).toEqual([0,1,2,3,4]);
+                        expect(collection.pluck('id')).toEqual([70, 20, 40, 50, 80]);
+                        expect(collection.pluck('index')).toEqual([0, 1, 2, 3, 4]);
                         done.yep();
                     });
                 });
