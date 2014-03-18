@@ -61,8 +61,7 @@ define(['io.ox/core/extensions',
             this.node.find('input[name="messageFormat"]:eq(2)').parent().text().should.be.equal(gt('HTML and plain text'));
 
             this.node.find('input[type="text"]').length.should.be.equal(1);
-            this.node.find('input[type="text"]').parent().prev().text().should.be.equal(gt('Line wrap when sending text mails after '));
-            this.node.find('input[type="text"]').next().text().should.be.equal(gt(' characters'));
+            this.node.find('input[type="text"]').closest('.form-group').find('label').text().should.be.equal(gt('Automatically wrap plain text after characters:'));
 
             this.node.find('select[id="defaultSendAddress"]').length.should.be.equal(1);
 
@@ -80,7 +79,7 @@ define(['io.ox/core/extensions',
             this.node.find('input[name="isColorQuoted"]').parent().text().should.be.equal(gt('Color quoted lines'));
 
             this.node.find('input[name="sendDispositionNotification"]').length.should.be.equal(1);
-            this.node.find('input[name="sendDispositionNotification"]').parent().text().should.be.equal(gt('Ask for delivery receipt'));
+            this.node.find('input[name="sendDispositionNotification"]').parent().text().should.be.equal(gt('Ask for return receipt'));
 
         });
 
