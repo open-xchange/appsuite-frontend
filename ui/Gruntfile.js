@@ -44,7 +44,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['karma:unit:start']);
 
     // steps to build the ui (ready for development)
-    grunt.registerTask('build', ['bower', 'lint', 'copy_build', 'assemble_build', 'newer:concat', 'newer:less', 'newer:compile_po']);
+    grunt.registerTask('build', ['bower', 'lint', 'copy_build', 'assemble_build', 'newer:concat', 'newer:less', 'compile_po']);
     // create a package ready version of the ui (aka what jenkins does)
     grunt.registerTask('dist', ['clean', 'build', 'uglify', 'copy:dist', 'assemble:dist', 'create_i18n_properties', 'compress:source']);
     // default task
