@@ -1,8 +1,8 @@
-open-xchange-appsuite-emig (7.4.2-1) unstable; urgency=low
+open-xchange-appsuite-emig (7.6.0-0) unstable; urgency=low
 
   * Fixed version number.
 
- -- Viktor Pracht <viktor.pracht@open-xchange.com>  Sat, 07 Dec 2013 10:22:30 +0100
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 18 Mar 2014 14:21:00 +0100
 
 open-xchange-appsuite-emig (0.0.1-2) stable; urgency=low
 
