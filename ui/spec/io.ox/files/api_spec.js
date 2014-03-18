@@ -199,25 +199,25 @@ define(['io.ox/files/api',
             describe('to construct concrete api urls', function () {
                 it('to view a file', function () {
                     var resp = api.getUrl(locked, 'view'),
-                        exp = '/api/files/my-test-file.txt?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&delivery=view';
+                        exp = '/api/files/my-test-file.txt?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=view';
                     expect(resp).to.be.equal(exp);
                     //alias
                     expect(resp).to.be.equal(api.getUrl(locked, 'open'));
                 });
                 it('to play a file', function () {
-                    var exp = '/api/files?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&delivery=view';
+                    var exp = '/api/files?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=view';
                     expect(api.getUrl(locked, 'play')).to.be.equal(exp);
                 });
                 it('to download a file', function () {
-                    var exp = '/api/files/my-test-file.txt?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&delivery=download';
+                    var exp = '/api/files/my-test-file.txt?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=download';
                     expect(api.getUrl(locked, 'download')).to.be.equal(exp);
                 });
                 it('to get a thumbnail of a file', function () {
-                    var exp = '/api/files?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&delivery=view&content_type=application/octet-stream';
+                    var exp = '/api/files?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=view&content_type=application/octet-stream';
                     expect(api.getUrl(locked, 'thumbnail')).to.be.equal(exp);
                 });
                 it('to get a preview of a file', function () {
-                    var exp = '/api/files?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&delivery=view&format=preview_image&content_type=image/jpeg';
+                    var exp = '/api/files?action=document&folder=0815&id=4710&version=3&context=1337%2C_%2C0&1384938624162&delivery=view&format=preview_image&content_type=image/jpeg';
                     expect(api.getUrl(locked, 'preview')).to.be.equal(exp);
                 });
                 it('to get a cover of a file', function () {
