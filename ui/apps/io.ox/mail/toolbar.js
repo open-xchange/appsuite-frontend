@@ -217,7 +217,7 @@ define('io.ox/mail/toolbar',
             .divider()
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
-            .option('checkboxes', true, gt('Easy multi-selection'))
+            .option('checkboxes', true, gt('Checkboxes'))
             .option('contactPictures', true, gt('Contact pictures'))
             .listenTo(baton.app.props, 'change:preview', updateContactPicture);
 
