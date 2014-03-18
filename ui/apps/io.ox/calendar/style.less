@@ -19,16 +19,15 @@
         padding-top: @calendar-toolbar-top-padding;
 
         .info {
-            .ellipsis();
             text-align: left;
             width: 30%;
             position: absolute;
             left: @weekview-time-width;
             line-height: @calendar-toolbar-height - @calendar-toolbar-top-padding;
-            font-family: @light-font-family;
             font-size: 20px;
             color: #333;
-
+            .ellipsis();
+            .fontWeight(300);
             .cw {
                 font-size: 14px;
                 color: #888;
