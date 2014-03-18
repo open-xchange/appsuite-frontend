@@ -268,7 +268,7 @@ define('io.ox/mail/threadview',
 
         // render an email
         renderListItem: function (model) {
-            var view = new detail.View({ tagName: 'li', data: model.toJSON(), disable: { 'io.ox/mail/detail-view': 'subject' } });
+            var view = new detail.View({ tagName: 'li', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
             return view.render().$el.attr({ role: 'listitem', tabindex: '1' });
         },
 

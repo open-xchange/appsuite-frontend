@@ -206,6 +206,8 @@
     }
     section.notifications {
         display: none;
+        margin: 14px 0;
+        &:empty { margin: 0; }
     }
 
     &.expanded {
@@ -257,6 +259,8 @@
         }
     }
 
+    .unread .from span.person { font-weight: bold; }
+
     .date, .size {
         .fontWeight(300);
         display: inline-block;
@@ -278,6 +282,7 @@
         .ellipsis();
 
         i {
+            font-size: 14px;
             display: inline-block;
             float: left;
             line-height: 20px;
@@ -415,7 +420,7 @@
         width: @unread-toggle-width;
         height: 40px;
         text-align: center;
-        //background-color: yellow;
+        font-size: 14px;
         color: #ddd;
         &:hover { text-decoration: none; color: #aaa; }
     }
@@ -1018,7 +1023,7 @@ textarea.inplace-editor {
     .alert, .well {
         margin: 0;
         border: 0;
-        padding: 10px 40px 10px 20px;
+        padding: 14px 40px 14px 20px;
         .border-radius(0px);
         .box-shadow(none);
     }
@@ -1027,8 +1032,8 @@ textarea.inplace-editor {
         margin-top: 1px;
     }
 
-    .well {
-        padding: 20px;
+    .well + .well {
+        border-top: 1px solid #ddd;
     }
 
     article {

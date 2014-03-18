@@ -26,7 +26,7 @@ define('io.ox/mail/detail/view',
 
     var INDEX = 0;
 
-    ext.point('io.ox/mail/detail-view').extend({
+    ext.point('io.ox/mail/detail').extend({
         id: 'focus-indicator',
         index: INDEX += 100,
         draw: function () {
@@ -34,13 +34,13 @@ define('io.ox/mail/detail/view',
         }
     });
 
-    ext.point('io.ox/mail/detail-view').extend({
+    ext.point('io.ox/mail/detail').extend({
         id: 'unread-class',
         index: INDEX += 100,
         draw: extensions.unreadClass
     });
 
-    ext.point('io.ox/mail/detail-view').extend({
+    ext.point('io.ox/mail/detail').extend({
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
@@ -51,91 +51,91 @@ define('io.ox/mail/detail/view',
         }
     });
 
-    ext.point('io.ox/mail/detail-view').extend({
+    ext.point('io.ox/mail/detail').extend({
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {
             var header = $('<header class="detail-view-header">');
-            ext.point('io.ox/mail/detail-view/header').invoke('draw', header, baton);
+            ext.point('io.ox/mail/detail/header').invoke('draw', header, baton);
             this.append(header);
         }
     });
 
     var INDEX_header = 0;
 
-    ext.point('io.ox/mail/detail-view/header').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'picture',
         index: INDEX_header += 100,
         draw: extensions.picture
     });
 
-    ext.point('io.ox/mail/detail-view/header').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'unread-toggle',
         index: INDEX_header += 100,
         draw: extensions.unreadToggle
     });
 
-    ext.point('io.ox/mail/detail-view/header').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'date',
         index: INDEX_header += 100,
         draw: extensions.date
     });
 
-    ext.point('io.ox/mail/detail-view/header').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'from',
         index: INDEX_header += 100,
         draw: extensions.from
     });
 
-    ext.point('io.ox/mail/detail-view/header').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'flag-picker',
         index: INDEX_header += 100,
         draw: extensions.flagPicker
     });
 
-    ext.point('io.ox/mail/detail-view/header').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'paper-clip',
         index: INDEX_header += 100,
         draw: extensions.paperClip
     });
 
-    ext.point('io.ox/mail/detail-view/header').extend({
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'recipients',
         index: INDEX_header += 100,
         draw: extensions.recipients
     });
 
-    ext.point('io.ox/mail/detail-view').extend({
+    ext.point('io.ox/mail/detail').extend({
         id: 'notifications',
         index: INDEX += 100,
         draw: function (baton) {
             var section = $('<section class="notifications">');
-            ext.point('io.ox/mail/detail-view/notifications').invoke('draw', section, baton);
+            ext.point('io.ox/mail/detail/notifications').invoke('draw', section, baton);
             this.append(section);
         }
     });
 
     var INDEX_notifications = 0;
 
-    ext.point('io.ox/mail/detail-view/notifications').extend({
+    ext.point('io.ox/mail/detail/notifications').extend({
         id: 'phishing',
         index: INDEX_notifications += 100,
         draw: extensions.phishing
     });
 
-    ext.point('io.ox/mail/detail-view/notifications').extend({
+    ext.point('io.ox/mail/detail/notifications').extend({
         id: 'disposition-notification',
         index: INDEX_notifications += 100,
         draw: extensions.dispositionNotification
     });
 
-    ext.point('io.ox/mail/detail-view/notifications').extend({
+    ext.point('io.ox/mail/detail/notifications').extend({
         id: 'external-images',
         index: INDEX_notifications += 100,
         draw: extensions.externalImages
     });
 
-    ext.point('io.ox/mail/detail-view').extend({
+    ext.point('io.ox/mail/detail').extend({
         id: 'body',
         index: INDEX += 100,
         draw: function () {
@@ -146,19 +146,19 @@ define('io.ox/mail/detail/view',
         }
     });
 
-    ext.point('io.ox/mail/detail-view/attachments').extend({
+    ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-list',
         index: 100,
         draw: extensions.attachmentList
     });
 
-    ext.point('io.ox/mail/detail-view/attachments').extend({
+    ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-preview',
         index: 200,
         draw: extensions.attachmentPreview
     });
 
-    ext.point('io.ox/mail/detail-view/body').extend({
+    ext.point('io.ox/mail/detail/body').extend({
         id: 'content',
         index: 1000,
         draw: function (baton) {
@@ -187,7 +187,7 @@ define('io.ox/mail/detail/view',
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
                 body = this.$el.find('section.body').empty();
-            ext.point('io.ox/mail/detail-view/body').invoke('draw', body, baton);
+            ext.point('io.ox/mail/detail/body').invoke('draw', body, baton);
         },
 
         onToggle: function (e) {
@@ -224,7 +224,7 @@ define('io.ox/mail/detail/view',
 
             // draw attachments
             var baton = ext.Baton({ data: data, attachments: util.getAttachments(data) });
-            ext.point('io.ox/mail/detail-view/attachments').invoke('draw', attachments, baton);
+            ext.point('io.ox/mail/detail/attachments').invoke('draw', attachments, baton);
 
             // draw body
             this.onChangeContent();
@@ -304,7 +304,7 @@ define('io.ox/mail/detail/view',
 
             this.$el.data({ view: this, model: this.model });
 
-            ext.point('io.ox/mail/detail-view').invoke('draw', this.$el, baton);
+            ext.point('io.ox/mail/detail').invoke('draw', this.$el, baton);
 
             return this;
         },
