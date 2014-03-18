@@ -14,7 +14,8 @@
 define(['io.ox/core/extensions',
         'io.ox/core/tk/attachments',
         'io.ox/core/notifications',
-        'spec/shared/capabilities'], function (ext, attachments, notifications, caputil) {
+        'spec/shared/capabilities',
+        'fixture!io.ox/files/attachment.json'], function (ext, attachments, notifications, caputil, attachmentFile) {
 
     'use strict';
 
@@ -82,10 +83,6 @@ define(['io.ox/core/extensions',
 
             beforeEach(function () {
                 this.baton = new ext.Baton();
-                this.file = {
-                    name: 'Testfile',
-                    size: 1000
-                };
             });
 
             afterEach(function () {
@@ -100,7 +97,7 @@ define(['io.ox/core/extensions',
                         'infostoreQuota': 2000,
                         'infostoreUsage': 1000
                     })
-                    .then(createList(this.baton, this.file));
+                    .then(createList(this.baton, attachmentFile));
                 });
 
                 it('should be cleared', function () {
@@ -141,7 +138,7 @@ define(['io.ox/core/extensions',
                             'infostoreQuota': 1999,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.have.property('reason');
@@ -158,7 +155,7 @@ define(['io.ox/core/extensions',
                             'infostoreQuota': 2000,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.have.property('reason');
@@ -175,7 +172,7 @@ define(['io.ox/core/extensions',
                             'infostoreQuota': 2000,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
@@ -191,7 +188,7 @@ define(['io.ox/core/extensions',
                             'infostoreQuota': 2001,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
@@ -207,7 +204,7 @@ define(['io.ox/core/extensions',
                             'infostoreQuota': 0,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
@@ -223,7 +220,7 @@ define(['io.ox/core/extensions',
                             'infostoreQuota': -1,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
@@ -239,7 +236,7 @@ define(['io.ox/core/extensions',
                             'infostoreQuota': 0,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
@@ -255,7 +252,7 @@ define(['io.ox/core/extensions',
                             'infostoreQuota': -1,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, this.file))
+                        .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
@@ -273,7 +270,7 @@ define(['io.ox/core/extensions',
                             'attachmentQuota': 999,
                             'attachmentQuotaPerFile': 1000
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.have.property('reason');
@@ -289,7 +286,7 @@ define(['io.ox/core/extensions',
                             'attachmentQuota': 1000,
                             'attachmentQuotaPerFile': 1000
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
@@ -304,7 +301,7 @@ define(['io.ox/core/extensions',
                             'attachmentQuota': 1001,
                             'attachmentQuotaPerFile': 1001
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
@@ -319,7 +316,7 @@ define(['io.ox/core/extensions',
                             'attachmentQuota': 0,
                             'attachmentQuotaPerFile': 0
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
@@ -334,7 +331,7 @@ define(['io.ox/core/extensions',
                             'attachmentQuota': -1,
                             'attachmentQuotaPerFile': -1
                         })
-                        .then(createList(this.baton, this.file, true))
+                        .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
                             chai.expect(result).to.have.property('added');
                             chai.expect(result).to.not.have.property('reason');
