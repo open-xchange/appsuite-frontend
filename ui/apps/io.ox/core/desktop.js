@@ -1113,9 +1113,9 @@ define('io.ox/core/desktop',
                             .not(':disabled').prop('disabled', true).addClass(TOGGLE_CLASS);
                         if (_.isNumber(pct)) {
                             pct = Math.max(0, Math.min(pct, 1));
-                            blocker.idle().find('.bar').eq(0).css('width', (pct * 100) + '%').parent().show();
+                            blocker.idle().find('.progress-bar').eq(0).css('width', (pct * 100) + '%').parent().show();
                             if (_.isNumber(sub)) {
-                                blocker.find('.bar').eq(1).css('width', (sub * 100) + '%').parent().show();
+                                blocker.find('.progress-bar').eq(1).css('width', (sub * 100) + '%').parent().show();
                             }
                             blocker.show();
                         } else {
@@ -1389,8 +1389,8 @@ define('io.ox/core/desktop',
                         // blocker
                         win.nodes.blocker = $('<div class="abs window-blocker">').hide().append(
                             $('<div class="abs header">'),
-                            $('<div class="progress progress-striped active first"><div class="bar" style="width: 0%;"></div></div>').hide(),
-                            $('<div class="progress progress-striped progress-warning active second"><div class="bar" style="width: 0%;"></div></div>').hide(),
+                            $('<div class="progress progress-striped active first"><div class="progress-bar" style="width: 0%;"></div></div>').hide(),
+                            $('<div class="progress progress-striped progress-warning active second"><div class="progress-bar" style="width: 0%;"></div></div>').hide(),
                             $('<div class="abs footer">')
                         ),
                         // window HEAD

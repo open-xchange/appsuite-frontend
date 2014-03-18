@@ -104,7 +104,7 @@ define('plugins/portal/userSettings/register',
                     newPass2 = $('<input type="password" class="form-control repeat-new-password">'),
                     strengthLabel = $('<label class="password-strength-label">').hide(),//hide till new pw is inserted
                     strengthBarWrapper = $('<div class="progress">').append(
-                        strengthBar = $('<div class="bar password-strength-bar">')).hide(),//hide till new pw is inserted
+                        strengthBar = $('<div class="progress-bar password-strength-bar">')).hide(),//hide till new pw is inserted
                     passwordHintContainer = $('<div class=password-hint-container>').hide(),
                     $('<div class="alert alert-info">')
                     .css('margin', '14px 0')

@@ -85,7 +85,7 @@ define('plugins/portal/quota/register',
 
             var width = getWidth(usage, size);
 
-            return $('<div class="bar">')
+            return $('<div class="progress-bar">')
                 .css('width', width + '%')
                 .addClass(width < 90 ? 'default' : 'bar-danger');
         };

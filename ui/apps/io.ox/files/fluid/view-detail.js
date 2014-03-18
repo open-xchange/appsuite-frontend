@@ -205,7 +205,7 @@ define('io.ox/files/fluid/view-detail',
                     ),
                     $uploadButton = $('<button type="button" data-action="upload" tabindex="1">')
                         .addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
-                    $progressBarWrapper = $('<div>').addClass('row-fluid').append($progressBar = $('<div>').addClass('bar')),
+                    $progressBarWrapper = $('<div>').addClass('row').append($progressBar = $('<div>').addClass('progress-bar')),
                     $('<div>').addClass('comment').append(
                         $comment = $('<div class="row">').append(
                             $('<label>').text(gt('Version Comment')),

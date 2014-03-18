@@ -952,7 +952,7 @@ define('io.ox/mail/view-detail',
                         this.append(
                             $('<div class="mail-warning progress progress-warning progress-striped">')
                             .append(
-                                 $('<div class="bar">')
+                                 $('<div class="progress-bar">')
                                  .text(gt('Warning: This message might be a phishing or scam mail'))
                              )
                         );
