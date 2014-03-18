@@ -508,7 +508,7 @@ define('io.ox/calendar/invitations/register',
             .find(selector).addClass('disabled').prop('disabled', true);
         }
 
-        view.well.slideDown(300);
+        view.well.fadeIn(300);
     }
 
     var ItipView = Backbone.View.extend({
