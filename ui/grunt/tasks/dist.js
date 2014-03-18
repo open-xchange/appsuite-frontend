@@ -191,17 +191,6 @@ module.exports = function (grunt) {
                 src: ['<%= pkg.name %>-<%= pkg.version %>/**/*', '<%= pkg.name %>-<%= pkg.version %>/**/.htaccess'],
                 cwd: 'dist/'
             }]
-        },
-        debian_pkg: {
-            options: {
-                archive: 'dist/<%= pkg.name %>_<%= pkg.version %>.debian.tar.gz',
-                pretty: true
-            },
-            files: [{
-                expand: true,
-                src: ['debian/**/*'],
-                cwd: 'dist/package/'
-            }]
         }
     });
 
