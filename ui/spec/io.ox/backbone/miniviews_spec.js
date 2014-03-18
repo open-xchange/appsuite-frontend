@@ -199,7 +199,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date'], f
             it('is a <div> tag with three <select> contols', function () {
                 expect(this.view.$el.prop('tagName')).toBe('DIV');
                 expect(this.view.$el.children().length).toBe(3);
-                expect(this.view.$el.children('select').length).toBe(3);
+                expect(this.view.$el.find('div > select').length).toBe(3);
             });
 
             it('contains 0001 as fallback year', function () {
