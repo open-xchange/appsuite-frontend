@@ -647,12 +647,30 @@ define('io.ox/calendar/util',
             });
         },
 
-        createRecipientsArray: function (participants) {
-            return this.resolveParticipants(participants, 'rec');
+        createRecipientsArray: function (data) {
+            // include external organizer
+            var list = data.participants.slice();
+            if (!data.organizerId && _.isString(data.organizer)) {
+                list.unshift({
+                    display_name: data.organizer,
+                    mail: data.organizer,
+                    type: 5
+                });
+            }
+            return this.resolveParticipants(list, 'rec');
         },
 
-        createDistlistArray: function (participants) {
-            return this.resolveParticipants(participants, 'dist');
+        createDistlistArray: function (data) {
+            // include external organizer
+            var list = data.participants.slice();
+            if (!data.organizerId && _.isString(data.organizer)) {
+                list.unshift({
+                    display_name: data.organizer,
+                    mail: data.organizer,
+                    type: 5
+                });
+            }
+            return this.resolveParticipants(list, 'dist');
         },
 
         getUserIdByInternalId: function (internal) {
@@ -660,7 +678,6 @@ define('io.ox/calendar/util',
                 return data.user_id;
             });
         }
-
     };
 
     return that;

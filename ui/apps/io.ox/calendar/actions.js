@@ -75,7 +75,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/sendmail', {
         capabilities: 'webmail',
         action: function (baton) {
-            util.createRecipientsArray(baton.data.participants).done(function (recipients) {
+            util.createRecipientsArray(baton.data).done(function (recipients) {
                 ox.load(['io.ox/mail/write/main']).done(function (m) {
                     m.getApp().launch().done(function () {
                         this.compose({to: recipients, subject: baton.data.title});
@@ -90,11 +90,22 @@ define('io.ox/calendar/actions',
         action: function (baton) {
             require(['io.ox/calendar/edit/main'], function (m) {
                 m.getApp().launch().done(function () {
+                    // include external organizer
+                    var data = baton.data,
+                        participants = data.participants.slice();
+                    if (!data.organizerId && _.isString(data.organizer)) {
+                        participants.unshift({
+                            display_name: data.organizer,
+                            email1: data.organizer,
+                            mail: data.organizer,
+                            type: 5
+                        });
+                    }
                     // open create dialog with same participants
-                    var data = {
+                    data = {
                         folder_id: coreSettings.get('folder/calendar'),
-                        participants: baton.data.participants,
-                        title: baton.data.title
+                        participants: participants,
+                        title: data.title
                     };
                     this.create(data);
                     this.model.toSync = data;
@@ -106,7 +117,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         capabilities: 'contacts',
         action: function (baton) {
-            util.createDistlistArray(baton.data.participants).done(function (distlist) {
+            util.createDistlistArray(baton.data).done(function (distlist) {
                 ox.load(['io.ox/contacts/distrib/main']).done(function (m) {
                     m.getApp().launch().done(function () {
                         this.create(coreSettings.get('folder/contacts'), { distribution_list: distlist });
