@@ -36,7 +36,7 @@ define('io.ox/contacts/util',
 
     // vanity fix
     function getTitle(field) {
-        return (/^(dr\.?|prof\.?)/i).test(field) ? field : '';
+        return (/^(<span class="title">)?(dr\.?|prof\.?)/i).test(field) ? field : '';
     }
 
     //helper function for birthdays without year
@@ -125,8 +125,15 @@ define('io.ox/contacts/util',
             return { format: _.noI18n(''), params: [] };
         },
 
-        getFullName: function (obj) {
-            var fmt = this.getFullNameFormat(obj);
+        getFullName: function (obj, htmlOutput) {
+            var copy = obj, fmt;
+            if (htmlOutput === true) {
+                copy = {};
+                _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
+                    copy[id] = '<span class="' + id + '">' + _.escape(obj[id]) + '</span>';
+                });
+            }
+            fmt = this.getFullNameFormat(copy);
             return gt.format(fmt.format, fmt.params);
         },
 

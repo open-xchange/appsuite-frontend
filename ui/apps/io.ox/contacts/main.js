@@ -170,16 +170,23 @@ define('io.ox/contacts/main',
                 return { name: name, private_flag: private_flag, description: description };
             },
             set: function (data, fields) {
-                var name, description;
+                var fullname, name, description;
                 if (data.mark_as_distributionlist === true) {
                     name = data.display_name || '';
                     fields.name.text(_.noI18n(name));
                     fields.private_flag.toggle(!!data.private_flag);
                     fields.description.text(gt('Distribution list'));
                 } else {
-                    name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name);
+                    fullname = $.trim(util.getFullName(data));
+                    if (fullname) {
+                        name = fullname;
+                        fullname = util.getFullName(data, true); // use html output
+                        fields.name.html(fullname);
+                    } else {
+                        name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name);
+                        fields.name.text(_.noI18n(name));
+                    }
                     description = $.trim(util.getDescription(data));
-                    fields.name.text(_.noI18n(name));
                     fields.private_flag.toggle(!!data.private_flag);
                     fields.description.text(_.noI18n(description));
                     if (name === '' && description === '') {
