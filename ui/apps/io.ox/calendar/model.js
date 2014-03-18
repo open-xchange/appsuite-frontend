@@ -308,7 +308,7 @@ define('io.ox/calendar/model',
 
                     // handle time
                     var startDate = new date.Local(_start),
-                        endDate = new date.Local(_end + 1),
+                        endDate = new date.Local(_end - 1),
                         oldStart = new date.Local(oldStart),
                         oldEnd = new date.Local(oldEnd);
 
