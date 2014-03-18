@@ -360,6 +360,17 @@ define('io.ox/core/tk/vgrid',
             container.css('webkitTransform', 'translate3d(0, 0, 0)');
         }
 
+        // IE focus fix for bug 31617.
+        // "The focus event does not bubble in Internet Explorer"
+        // http://api.jquery.com/focus/
+        if (_.device('IE')) {
+            container.on('click', function () {
+                var top = scrollpane.scrollTop();
+                container.focus();
+                scrollpane.scrollTop(top);
+            });
+        }
+
         // add event hub
         Events.extend(this);
 
