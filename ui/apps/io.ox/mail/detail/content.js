@@ -307,7 +307,7 @@ define('io.ox/mail/detail/content',
                     var node = $(this), style = node.attr('style');
                     // style might already contain padding or padding-top/right/bottom/left.
                     // So we add the cellpadding at the beginning so that it doesn't overwrite existing paddings
-                    node.attr('style', 'padding: ' + cellpadding + '; ' + style);
+                    node.attr('style', 'padding: ' + cellpadding + 'px; ' + style);
                 });
             });
         }
