@@ -263,6 +263,15 @@ define('io.ox/mail/main',
         },
 
         /*
+         * Selection message
+         */
+        'selection-message': function (app) {
+            app.right.append(
+                $('<div class="io-ox-center selection-message"><div></div></div>')
+            );
+        },
+
+        /*
          * Connect thread view's top nagivation with list view
          */
         'navigation': function (app) {
@@ -334,6 +343,22 @@ define('io.ox/mail/main',
         'show-empty': function (app) {
             app.showEmpty = function () {
                 app.threadView.empty();
+                app.right.find('.selection-message div').text(
+                    gt('No message selected')
+                );
+            };
+        },
+
+        /*
+         * Define function to reflect multiple selection
+         */
+        'show-multiple': function (app) {
+            app.showMultiple = function (list) {
+                app.threadView.empty();
+                list = api.threads.resolve(list);
+                app.right.find('.selection-message div').text(
+                    gt('%1$d messages selected', list.length)
+                );
             };
         },
 
@@ -395,7 +420,7 @@ define('io.ox/mail/main',
                     break;
                 case 'multiple':
                     resetRight('selection-multiple');
-                    app.showEmpty();
+                    app.showMultiple(list);
                     break;
                 }
             }, 100);
@@ -407,8 +432,8 @@ define('io.ox/mail/main',
                 'selection:one': function (list) {
                     react('one', list);
                 },
-                'selection:multiple': function () {
-                    react('multiple');
+                'selection:multiple': function (list) {
+                    react('multiple', list);
                 },
                 'selection:action': function (list) {
                     // make sure we are not in multi-selection
