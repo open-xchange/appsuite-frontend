@@ -1,0 +1,205 @@
+Name:           open-xchange-appsuite
+Version:        7.6.0
+%define         ox_release 0
+%define         ci_cnt 0
+%define         b_cnt 0
+Release:        %{ox_release}_%{ci_cnt}.%{b_cnt}
+Group:          Applications/Productivity
+Vendor:         Open-Xchange
+URL:            http://open-xchange.com
+Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
+License:        CC-BY-NC-SA
+Summary:        OX App Suite HTML5 client
+Source:         %{name}_%{version}.orig.tar.gz
+
+BuildArch:      noarch
+BuildRoot:      %{_tmppath}/%{name}-%{version}-root
+
+%if 0%{?suse_version}
+Requires:       apache2
+%endif
+%if 0%{?fedora_version} || 0%{?rhel_version}
+Requires:       httpd
+%endif
+
+%if 0%{?rhel_version} || 0%{?fedora_version}
+%define docroot /var/www/html/appsuite
+%else
+%define docroot /srv/www/htdocs/appsuite
+%endif
+
+%description
+OX App Suite HTML5 client
+
+%package        manifest
+Group:          Applications/Productivity
+Summary:        Manifest and apps included in the OX App Suite HTML5 client
+Requires:       open-xchange-core
+Requires(post): open-xchange-halo
+Requires:       open-xchange-appsuite-l10n-en-us
+
+%description    manifest
+OX App Suite HTML5 client
+
+This package contains the manifest for installation on the backend.
+
+%package        help-common
+Group:          Applications/Productivity
+Summary:        Language-independent files of online help for OX App Suite
+
+%description    help-common
+Language-independent files of online help for OX App Suite
+{{#each help_languages}}
+%package       help-{{ lang }}
+Group:         Applications/Productivity
+Summary:       Online help for OX App Suite ({{ Lang }})
+Provides:      open-xchange-appsuite-help
+Requires:      open-xchange-appsuite-help-common
+
+%description   help-{{ lang }}
+Online help for OX App Suite ({{ Lang }})
+{{/each}}
+%package        help-drive-common
+Group:          Applications/Productivity
+Summary:        Language-independent files of online help for OX Drive
+
+%description    help-drive-common
+Language-independent files of online help for OX Drive
+{{#each help_drive_languages}}
+%package       help-drive-{{ lang }}
+Group:         Applications/Productivity
+Summary:       Online help for OX Drive ({{ Lang }})
+Provides:      open-xchange-appsuite-help-drive
+Requires:      open-xchange-appsuite-help-drive-common
+
+%description   help-drive-{{ lang }}
+Online help for OX Drive ({{ Lang }})
+{{/each}}
+{{#each languages}}
+%package       l10n-{{ lang }}
+Group:         Applications/Productivity
+Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Requires:      open-xchange-l10n-{{ lang }}
+Provides:      open-xchange-appsuite-l10n
+
+%description   l10n-{{ lang }}
+Translation of the OX App Suite HTML5 client ({{ Lang }})
+{{/each}}
+
+%prep
+%setup -q
+
+%build
+
+%install
+APPSUITE=/opt/open-xchange/appsuite/
+
+{{#each languages }}
+find apps \( -type f -o -type l \) -name '*.{{ Lang }}.js' \
+    -print0 | xargs -0 -I '{}' sh -c 'mkdir -p "tmp/l10n/`dirname {}`"; mv "{}" "tmp/l10n/{}"'
+find tmp/l10n/apps \( -type f -o -type l \) -name '*.{{ Lang }}.js' \
+   | sed -e "s,tmp/l10n/,$APPSUITE," > tmp/files-{{ lang }}
+{{/each}}
+
+mkdir -p "%{buildroot}$APPSUITE"
+mkdir -p "%{buildroot}%{docroot}"
+cp -r apps "%{buildroot}%{docroot}"
+cp -r apps "%{buildroot}$APPSUITE"
+cp -r manifests "%{buildroot}%{docroot}"
+cp -r manifests "%{buildroot}$APPSUITE"
+cp core "%{buildroot}%{docroot}"
+cp core "%{buildroot}$APPSUITE"
+cp signin "%{buildroot}%{docroot}"
+cp signin "%{buildroot}$APPSUITE"
+cp *.* "%{buildroot}%{docroot}"
+cp *.* "%{buildroot}$APPSUITE"
+cp .htaccess "%{buildroot}%{docroot}"
+cp -r help "%{buildroot}%{docroot}"
+cp -r help-drive "%{buildroot}%{docroot}"
+
+mkdir -p "%{buildroot}/opt/open-xchange/sbin"
+sed -e "s:## cd ##:cd %{docroot}:" bin/touch-appsuite > \
+    "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
+chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
+
+find "%{buildroot}$APPSUITE" -type d \
+    | sed -e 's,%{buildroot},%dir ,' > tmp/files
+find "%{buildroot}$APPSUITE" \( -type f -o -type l \) \
+    | sed -e 's,%{buildroot},,' >> tmp/files
+
+cp -r tmp/l10n/apps "%{buildroot}$APPSUITE"
+mkdir -p "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
+cp i18n/*.properties "%{buildroot}/opt/open-xchange/etc/languages/appsuite/"
+
+
+%clean
+APPSUITE=/opt/open-xchange/appsuite/
+rm -r "%{buildroot}%{docroot}"
+rm -r "%{buildroot}$APPSUITE"
+
+%define update /opt/open-xchange/appsuite/share/update-themes.sh
+
+%post manifest
+if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
+
+%postun manifest
+if [ $1 -lt 1 ]; then
+    rm -rf /opt/open-xchange/appsuite/apps/themes/*/less || true
+else
+    if [ -x %{update} ]; then %{update}; fi
+fi
+
+%triggerpostun manifest -- open-xchange-appsuite-manifest < 7.2.0
+if [ -x %{update} ]; then %{update}; fi
+
+%files
+%defattr(-,root,root)
+%doc readme.txt
+%dir %{docroot}
+%{docroot}
+%exclude %{docroot}/help
+%exclude %{docroot}/help-drive
+%config(noreplace) %{docroot}/apps/themes/.htaccess
+%dir /opt/open-xchange
+%dir /opt/open-xchange/sbin
+/opt/open-xchange/sbin/touch-appsuite
+
+%files manifest -f tmp/files
+%defattr(-,root,root)
+%dir /opt/open-xchange
+
+%files help-common
+%defattr(-,root,root)
+%dir %{docroot}/help
+%{docroot}/help
+%exclude %{docroot}/help/l10n
+
+{{#each help_languages}}
+%files help-{{ lang }}
+%defattr(-,root,root)
+%dir %{docroot}/help/l10n
+%{docroot}/help/l10n/{{ Lang }}
+{{/each}}
+
+%files help-drive-common
+%defattr(-,root,root)
+%dir %{docroot}/help-drive
+%{docroot}/help-drive
+%exclude %{docroot}/help-drive/l10n
+
+{{#each help_drive_languages}}
+%files help-drive-{{ lang }}
+%defattr(-,root,root)
+%dir %{docroot}/help-drive/l10n
+%{docroot}/help-drive/l10n/{{ Lang }}
+{{/each}}
+{{#each languages}}
+%files l10n-{{ lang }} -f tmp/files-{{ lang }}
+%defattr(-,root,root)
+%dir /opt/open-xchange/etc
+%dir /opt/open-xchange/etc/languages
+%dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-{{ lang }}.properties
+{{/each}}
+
+%changelog
