@@ -65,7 +65,7 @@ define(['io.ox/files/fluid/view-detail',
             beforeEach(function () {
                 var node = this.node = view.draw(baton);
                 waitsFor(function () {
-                    return node.find('ul.io-ox-inline-links').children.length > 0;
+                    return node.find('ul.io-ox-inline-links').children().length > 0;
                 }, 'menu to render', 1000);
             });
             describe('with a container that', function () {
