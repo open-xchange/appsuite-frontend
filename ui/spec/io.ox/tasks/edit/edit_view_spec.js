@@ -127,7 +127,7 @@ define(['io.ox/tasks/edit/main',
                 describe('title', function () {
                     it('should change apptitle', function () {
                         expect(app.getTitle()).toEqual(gt('Create task'));
-                        node.find('#task-edit-title').val('test').trigger('keyup');//simulate keyboard
+                        node.find('input.title-field').val('test').trigger('keyup');//simulate keyboard
                         expect(app.getTitle()).toEqual('test');
                     });
                 });

@@ -79,10 +79,9 @@ define(['io.ox/tasks/edit/util',
 
                 expect(_(progress).size()).toEqual(2);
                 expect($(progress.progress).val()).toEqual('0');
-                expect(progress.wrapper.children().length).toEqual(3);
+                expect(progress.wrapper.children().length).toEqual(2);
                 expect($(progress.wrapper.children()[0]).is('input')).toBeTruthy();
-                expect($(progress.wrapper.children()[1]).is('button')).toBeTruthy();
-                expect($(progress.wrapper.children()[2]).is('button')).toBeTruthy();
+                expect($(progress.wrapper).find('button').length).toEqual(2);
             });
             it('should keep value between 0 and 100', function () {
                 var progress = util.buildProgress('0');
@@ -94,24 +93,24 @@ define(['io.ox/tasks/edit/util',
                 expect($(progress.progress).val()).toEqual('100');
 
                 $(progress.progress).val('400');
-                $(progress.wrapper.children()[2]).click();//update inputfield
+                $(progress.wrapper).find('button')[1].click();//update inputfield
                 expect($(progress.progress).val()).toEqual('100');
 
                 $(progress.progress).val('-45');
-                $(progress.wrapper.children()[1]).click();//update inputfield
+                $(progress.wrapper).find('button')[0].click();//update inputfield
                 expect($(progress.progress).val()).toEqual('0');
             });
             it(' + button should trigger change event', function () {
                 var progress = util.buildProgress('0');
 
                 expect(progress.progress).toTrigger('change');
-                $(progress.wrapper.children()[2]).click();//update inputfield
+                $(progress.wrapper).find('button')[1].click();//update inputfield
             });
             it(' - button should trigger change event', function () {
                 var progress = util.buildProgress('100');
 
                 expect(progress.progress).toTrigger('change');
-                $(progress.wrapper.children()[1]).click();//update inputfield
+                $(progress.wrapper).find('button')[0].click();//update inputfield
             });
         });
         describe('buildExtensionRow', function () {
