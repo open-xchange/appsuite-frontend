@@ -116,7 +116,6 @@ define('io.ox/core/cache',
                 // use persistent storage?
                 persist = (persistent === true && ox.secretCookie === true && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' ?
                         function () {
-                            console.log('watt?', name);
                             return ox.user !== '';
                         } :
                         function () {
