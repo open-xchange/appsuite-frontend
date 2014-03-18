@@ -1,3 +1,9 @@
+open-xchange-appsuite-emig (0.0.1-2) stable; urgency=low
+
+  * Build for patch 2014-03-14
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 14 Mar 2014 14:38:57 +0100
+
 open-xchange-appsuite-emig (0.0.1-1) unstable; urgency=low
 
   * Initial Release.
