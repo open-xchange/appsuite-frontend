@@ -32,7 +32,6 @@ define('io.ox/files/views/create',
                 var dialog = new dialogs.CreateDialog({ width: 450, center: true, async: true, container: $('.io-ox-files-window'), 'tabTrap': true }),
                     $form = $('<form>', { 'class': 'files-create col-lg-12', 'accept-charset': 'UTF-8', enctype: 'multipart/form-data', method: 'POST' }),
                     description = '';
-                dialog.getContentNode().css('height', '300px'); // 400 is quite much
                 ext.point(POINT + '/form').invoke('draw', $form, baton);
                 ext.point(POINT + '/filelist').invoke();
 
@@ -160,7 +159,7 @@ define('io.ox/files/views/create',
                 draw: function () {
                     var guid = _.uniqueId('form-control-label-');
                     this.append(
-                        $('<div class"form-group">').append(
+                        $('<div class="form-group">').append(
                             $('<label>').text(gt('Description')).attr('for', guid),
                             $('<textarea class="form-control"></textarea>').attr({
                                 tabindex: 1,

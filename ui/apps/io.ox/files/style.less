@@ -38,23 +38,23 @@
 	.inline-actions {
 	    .io-ox-inline-links{
 	        margin: 0 0 0 0;
-	
+
 	        li {
 	           padding: 2px;
 	           padding-top: 5px;
 	        }
 	    }
-	
+
 	    a.fullscreen:before {content: "("; color:black;}
 	    a.fullscreen:after {content: ")"; color:black;}
-	
+
 	    a {
 	        &.slideshow,
 	        &.mediaplayer { display: none; }
 	    }
-	
+
 	    a.mediaplayer { margin-left: 1em; }
-	
+
 	    span.slideshow_fullscreen {
 	        display: none;
 	        margin-left: 5px;
@@ -769,7 +769,7 @@ ul.breadcrumb li.prefix {
         max-height: 100%;
         .modal-body {
             max-height: auto;
-            .row-fluid textarea.span12 { max-height: 100px; }
+            .row textarea.col-lg-12 { max-height: 100px; }
             .fileupload .uneditable-input { width: 130px; }
         }
         .modal-footer {
@@ -779,7 +779,7 @@ ul.breadcrumb li.prefix {
             right: 0;
             padding: 0;
 
-            .row-fluid {
+            .row {
                 [class*="col-"] {
                     margin-left: 0;
                     float: left;
@@ -793,7 +793,7 @@ ul.breadcrumb li.prefix {
                     padding: 0;
                     line-height: 40px;
                 }
-                .span3 {
+                .col-md-3 {
                     width: 50%;
                 }
             }
@@ -819,3 +819,5 @@ ul.breadcrumb li.prefix {
         }
     }
 }
+
+ .io-ox-files-main .io-ox-dialog-popup .modal-body { overflow-x: hidden; }
