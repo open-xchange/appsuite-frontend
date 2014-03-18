@@ -304,7 +304,10 @@ define('io.ox/mail/detail/content',
                     node.css('border-collapse', 'collapse');
                 }
                 node.find('th, td').each(function () {
-                    $(this).css('padding', cellpadding);
+                    var node = $(this), style = node.attr('style');
+                    // style might already contain padding or padding-top/right/bottom/left.
+                    // So we add the cellpadding at the beginning so that it doesn't overwrite existing paddings
+                    node.attr('style', 'padding: ' + cellpadding + '; ' + style);
                 });
             });
         }
