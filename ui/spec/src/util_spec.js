@@ -99,58 +99,6 @@ define([], function () {
             });
         });
 
-        describe('_.rot', function () {
-            //TODO
-        });
-
-        describe('_.getCookie', function () {
-            //TODO
-        });
-
-        describe('_.setCookie', function () {
-            //TODO
-        });
-
-        describe('_.firstOf', function () {
-            //TODO
-        });
-
-        describe('_.call', function () {
-            //TODO
-        });
-
-        describe('_.now', function () {
-            //TODO
-        });
-
-        describe('_.utc', function () {
-            //TODO
-        });
-
-        describe('_.then', function () {
-            //TODO
-        });
-
-        describe('_.firstOf', function () {
-            //TODO
-        });
-
-        describe('_.copy', function () {
-            //TODO
-        });
-
-        describe('_.deepClone', function () {
-            //TODO
-        });
-
-        describe('_.lfo', function () {
-            //TODO
-        });
-
-        describe('_.queued', function () {
-            //TODO
-        });
-
         describe('_.printf', function () {
             var str = 'The answer to life, the universe and everything is %1$s';
             it('should always return a string and ignore invalid args', function () {
@@ -165,10 +113,6 @@ define([], function () {
             it('should replace placeholders with args', function () {
                 expect(_.printf(str, 42)).to.equal('The answer to life, the universe and everything is 42');
             });
-        });
-
-        describe('_.aprintf', function () {
-            //TODO
         });
 
         describe('_.formatError', function () {
@@ -251,15 +195,15 @@ define([], function () {
             });
         });
 
-        describe('_.tick', function () {
+        //describe('_.tick', function () {
             //TODO
-        });
+        //});
 
-        describe('_.wait', function () {
+        //describe('_.wait', function () {
             //TODO
-        });
+        //});
 
-        describe('_.mythrottle', function () {
+        it('_.mythrottle', function () {
             var finished,
                 //now = new Date(),
                 counter = 0,
@@ -296,14 +240,6 @@ define([], function () {
                 // console.log('called: ', counterrepaint);
                 expect(counterrepaint).to.be.equal(3);
             });
-        });
-
-        describe('_.makeExtendable', function () {
-            //TODO
-        });
-
-        describe('_.clock', function () {
-            //TODO
         });
 
         describe('_.cid', function () {
@@ -413,10 +349,6 @@ define([], function () {
                 this.expect(_.noI18n.text()).toBeJquery(_.noI18n.text());
                 this.expect(_.noI18n.text('abed', 'troy')).toBeJquery();
             });
-        });
-
-        describe('_.escapeRegExp', function () {
-            //TODO
         });
 
         describe('_.unescapeHTML', function () {
