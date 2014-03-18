@@ -59,6 +59,7 @@
         "sinon": false,
         "spyOn": false,
         "xit": false,
+        "xdescribe": false,
         "jasmine": false
     }
 }
