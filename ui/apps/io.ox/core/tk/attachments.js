@@ -595,7 +595,7 @@ define('io.ox/core/tk/attachments',
             uploadButton.removeClass('active');
         });
 
-        if (options.drive && _.device('!smartphone')) {
+        if (options.drive && _.device('!smartphone') && capabilities.has('infostore')) {
             node.append(
                 $('<div class="btn-group">').append(uploadButton, driveButton)
             );
