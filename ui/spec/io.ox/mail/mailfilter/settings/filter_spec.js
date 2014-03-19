@@ -106,7 +106,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
                 expect(this.node.find('li[data-id="2"]').hasClass('disabled')).toBe(true);
                 expect(this.node.find('li[data-id="3"]').hasClass('editable')).toBe(false);
                 expect(this.node.find('li a.drag-handle').length).toBe(4);
-                expect(this.node.find('li .list-title').length).toBe(4);
+                expect(this.node.find('li .widget-title').length).toBe(4);
                 expect(this.node.find('li [data-action="edit"]').length).toBe(2);
                 expect(this.node.find('li [data-action="edit-vacation"]').length).toBe(1);
                 expect(this.node.find('li [data-action="toggle"]').length).toBe(3);
