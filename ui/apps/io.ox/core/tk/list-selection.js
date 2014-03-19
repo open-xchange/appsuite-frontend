@@ -246,7 +246,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         next: function () {
-            this.move(+1);
+            this.move(1);
         },
 
         // to anticipate a removal of multiple items

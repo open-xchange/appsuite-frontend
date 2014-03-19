@@ -221,7 +221,6 @@ define('io.ox/core/api/folder',
         });
     });
 
-
     var api = {
 
         get: function (options) {

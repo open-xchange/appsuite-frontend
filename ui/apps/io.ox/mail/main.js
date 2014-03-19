@@ -67,8 +67,6 @@ define('io.ox/mail/main',
                 container: c
             });
 
-
-            window.kack = app;
         },
 
         'pages-desktop': function (app) {
@@ -441,7 +439,6 @@ define('io.ox/mail/main',
                 }
             });
         },
-
 
         /*
          * Thread view navigation must respond to changing preview mode

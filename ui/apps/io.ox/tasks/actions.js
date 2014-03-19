@@ -547,7 +547,6 @@ define('io.ox/tasks/actions',
         ref: 'io.ox/tasks/actions/undone'
     }));
 
-
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'delete',
         index: 400,
@@ -556,7 +555,6 @@ define('io.ox/tasks/actions',
         label: gt('Delete'),
         ref: 'io.ox/tasks/actions/delete'
     }));
-
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'move',

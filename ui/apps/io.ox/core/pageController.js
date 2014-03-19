@@ -100,7 +100,6 @@ define('io.ox/core/pageController',
             $toPage.trigger('pagebeforeshow', {frompage: opt.from});
             $fromPage.trigger('pagebeforehide', {topage: opt.to});
 
-
             try {
                 if (document.activeElement &&
                     document.activeElement.nodeName.toLowerCase() !== 'body') {
@@ -133,7 +132,6 @@ define('io.ox/core/pageController',
                         //console.log('animation end fromPage');
                         $(this).removeClass('out inmotion ' + opt.animation);
                         $fromPage.trigger('pagehide', {from: opt.from, to: opt.to});
-
                     });
             }, 1);
 
@@ -182,7 +180,6 @@ define('io.ox/core/pageController',
         this.getPages = function () {
             return pages;
         };
-
 
     };
 
