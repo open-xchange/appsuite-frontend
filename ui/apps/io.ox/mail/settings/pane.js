@@ -246,7 +246,8 @@ define('io.ox/mail/settings/pane',
                 $('<div>').addClass('settings sectiondelimiter'),
                 $('<fieldset>').append(
                     $('<div>').addClass('form-group expertmode').append(
-                        $('<label for="lineWrapAfter">').addClass('control-label').text((gt('Automatically wrap plain text after characters:'))),
+                                                                                        //#. It's a label for an inputfield with a number
+                        $('<label for="lineWrapAfter">').addClass('control-label').text((gt('Automatically wrap plain text after character:'))),
                         $('<div>').addClass('controls').append(
                             $('<div>').addClass('row').append(
                                 $('<div>').addClass('col-md-2').append(

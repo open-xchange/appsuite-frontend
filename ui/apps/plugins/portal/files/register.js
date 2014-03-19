@@ -46,8 +46,8 @@ define('plugins/portal/files/register',
         },
 
         preview: function (baton) {
-
-            var content = $('<div class="content pointer" tabindex="1" role="button" aria-label="' + gt('Press [enter] to jump to ') + baton.data.filename + '">'),
+                                                                                                     //#. %1$s is a filename
+            var content = $('<div class="content pointer" tabindex="1" role="button" aria-label="' + gt.format('Press [enter] to jump to %1$s', baton.data.filename) + '">'),
                 data, options, url;
 
             if (_.isEmpty(baton.data.filename)) {
