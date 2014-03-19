@@ -17,6 +17,15 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
 
     describe('Mail content processing', function () {
 
+        beforeEach(function () {
+            //prevent settings from being stored on server
+            this.settingsSpy = sinon.stub(settings, 'save');
+        });
+
+        afterEach(function () {
+            this.settingsSpy.restore();
+        });
+
         ox.serverConfig.hosts = ['localhost'];
 
         function process(str, type) {
@@ -46,7 +55,7 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
         });
 
         it('should set proper class for fixed width fonts', function () {
-            settings.set('useFixedWidthFont', true).detach();
+            settings.set('useFixedWidthFont', true);
             var result = process('Test', 'text/plain');
             expect(result.content.hasClass('fixed-width-font')).toBe(true);
         });

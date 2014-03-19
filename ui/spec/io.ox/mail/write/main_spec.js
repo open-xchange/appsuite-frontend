@@ -18,7 +18,7 @@ define(['io.ox/mail/write/main',
 
     var capabilities = caputil.preset('common').init('io.ox/mail/write/main', main);
 
-    describe('mail write app', function () {
+    xdescribe('mail write app', function () {
         beforeEach(function () {
             ox.testUtils.stubAppsuiteBody();
             settings.set('messageFormat', 'text');

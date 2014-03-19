@@ -27,7 +27,7 @@ define(
         return f;
     }
 
-    describe('Mail editor', function () {
+    xdescribe('Mail editor', function () {
 
         var app = null, ed = null;
 

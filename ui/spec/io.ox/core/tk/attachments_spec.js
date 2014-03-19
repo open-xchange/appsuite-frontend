@@ -108,7 +108,7 @@ define(['io.ox/core/extensions',
                         self.baton.fileList.clear();
                         var result = self.baton.fileList.get();
                         chai.expect(result).to.be.an('array');
-                        chai.expect(result).not.to.contain(self.file);
+                        chai.expect(result).to.be.empty;
 
                         return 'done';
                     });
@@ -121,7 +121,7 @@ define(['io.ox/core/extensions',
                     .then(function () {
                         var result = self.baton.fileList.get();
                         chai.expect(result).to.be.an('array');
-                        chai.expect(result).to.contain(self.file);
+                        chai.expect(result).to.have.deep.property('[0]', attachmentFile);
 
                         return 'done';
                     });

@@ -29,7 +29,7 @@ define(
         return f;
     }
 
-    describe('Mail compose dialog', function () {
+    xdescribe('Mail compose dialog', function () {
 
         beforeEach(function () {
             settings.set('messageFormat', 'html');

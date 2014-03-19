@@ -32,7 +32,7 @@ define(
         return $.trim((String(str)).replace(/[\r\n]+/g, ''));
     }
 
-    describe('Paste HTML contents', function () {
+    xdescribe('Paste HTML contents', function () {
 
         var app = null, ed = null, form = $(),
             base = ox.base + '/apps/io.ox/mail/write/test';
