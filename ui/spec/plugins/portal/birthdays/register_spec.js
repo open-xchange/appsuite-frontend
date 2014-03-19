@@ -53,7 +53,7 @@ define(['plugins/portal/birthdays/register',
                 expect(this.node.find('li').length).toEqual(5);
             });
             it('not draw year if its year 1', function () {
-                expect($(this.node.find('.accent')[4]).text()).toEqual('10.6.');
+                expect($(this.node.find('.accent')[4]).text()).toEqual('12.6.');
             });
             it('recognize yesterday/today/tomorrow', function () {
                 expect($(this.node.find('.accent')[0]).text()).toEqual('Gestern');

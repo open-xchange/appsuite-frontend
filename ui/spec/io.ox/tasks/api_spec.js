@@ -79,6 +79,9 @@ define(['shared/examples/for/api',
                 this.server.respondWith('PUT', /api\/tasks\?action=update/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{}}');
                 });
+                this.server.respondWith('GET', /api\/tasks\?action=get/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data": ' + JSON.stringify(apiTestData.testDataUpdate) + '}');
+                });
                 this.server.autoRespond = false;
             });
             it('should update a task', function () {
