@@ -61,7 +61,7 @@ define(['io.ox/core/extensions',
             this.node.find('input[name="messageFormat"]:eq(2)').parent().text().should.be.equal(gt('HTML and plain text'));
 
             this.node.find('input[type="text"]').length.should.be.equal(1);
-            this.node.find('input[type="text"]').closest('.form-group').find('label').text().should.be.equal(gt('Automatically wrap plain text after characters:'));
+            this.node.find('input[type="text"]').closest('.form-group').find('label').text().should.be.equal(gt('Automatically wrap plain text after character:'));
 
             this.node.find('select[id="defaultSendAddress"]').length.should.be.equal(1);
 
