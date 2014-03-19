@@ -65,10 +65,10 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
 
         });
 
-        it('should draw all initial ui componets', function () {
+        it('should draw all initial ui components', function () {
 
             expect($popup.find('[name="rulename"]').length).toBe(1);
-            expect($popup.find('.alert.alert-block').length).toBe(1);
+            expect($popup.find('.alert.alert-warning').length).toBe(1);
             expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add condition') + ')').length).toBe(1);
             expect($popup.find('a[data-toggle="dropdown"]:contains(' + gt('Add action') + ')').length).toBe(1);
             expect($popup.find('[data-action="check-for-stop"]').length).toBe(1);
