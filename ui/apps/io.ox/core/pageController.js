@@ -47,7 +47,7 @@ define('io.ox/core/pageController',
         function createPage(opt) {
             var defaults = {
                 tag: '<div>',
-                classes: 'page',
+                classes: 'io-ox-core-page page',
                 container: $()
             };
 

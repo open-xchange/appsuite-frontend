@@ -12,19 +12,21 @@
  */
 
 
-.page {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
+.io-ox-core-page {
+    .page {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
 
-    &:not(.current):not(.inmotion) {
-        display: none;
-    }
-    .content {
-        margin: 0 8px;
+        &:not(.current):not(.inmotion) {
+            display: none;
+        }
+        .content {
+            margin: 0 8px;
+        }
     }
 }
 
