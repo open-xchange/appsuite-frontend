@@ -30,14 +30,14 @@ override_dh_auto_install:
 	for i in help/l10n/*; do \
 	    lang=$${i#help/l10n/}; \
 	    pkgname=open-xchange-appsuite-help-`echo $$lang | awk '{print tolower($$0)}' | sed "s/_/-/"`; \
-	    mkdir -p "debian/$$pkgname/var/www/appsuite/help/"; \
-	    mv "$(FRONTEND)/help/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help/"; \
+	    mkdir -p "debian/$$pkgname/var/www/appsuite/help/l10n"; \
+	    mv "$(FRONTEND)/help/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help/l10n/"; \
 	done
 	for i in help-drive/l10n/*; do \
 	    lang=$${i#help-drive/l10n/}; \
 	    pkgname=open-xchange-appsuite-help-drive-`echo $$lang | awk '{print tolower($$0)}' | sed "s/_/-/"`; \
-	    mkdir -p "debian/$$pkgname/var/www/appsuite/help-drive/"; \
-	    mv "$(FRONTEND)/help-drive/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help-drive/"; \
+	    mkdir -p "debian/$$pkgname/var/www/appsuite/help-drive/l10n"; \
+	    mv "$(FRONTEND)/help-drive/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help-drive/l10n"; \
 	done
 	cp -r $(FRONTEND)/apps $(BACKEND)/
 	cp $(FRONTEND)/*.* $(BACKEND)/
