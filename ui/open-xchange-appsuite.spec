@@ -193,6 +193,7 @@ if [ -x %{update} ]; then %{update}; fi
 %defattr(-,root,root)
 %dir %{docroot}/help
 %{docroot}/help
+%exclude %{docroot}/help/l10n
 
 ## help ##
 #%files help-## lang ##
@@ -205,6 +206,7 @@ if [ -x %{update} ]; then %{update}; fi
 %defattr(-,root,root)
 %dir %{docroot}/help-drive
 %{docroot}/help-drive
+%exclude %{docroot}/help-drive/l10n
 
 ## help-drive ##
 #%files help-drive-## lang ##
