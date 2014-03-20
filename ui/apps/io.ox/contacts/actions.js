@@ -588,7 +588,7 @@ define('io.ox/contacts/actions',
 
     new Action('io.ox/contacts/actions/open-attachment', {
         id: 'open',
-        requires: 'some',
+        requires: 'one',
         multiple: function (list) {
             require(['io.ox/core/api/attachment'], function (attachmentAPI) {
                 _(list).each(function (data) {
