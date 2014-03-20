@@ -46,11 +46,7 @@ define(['io.ox/tasks/edit/main',
                 describe('should contain', function () {
                     it('a headline', function () {
                         expect(node.find('h1.clear-title').length).toEqual(1);
-                    });
-                    it('a save button', function () {
                         expect(node.find('button[data-action="save"]').length).toEqual(1);
-                    });
-                    it('a discard button', function () {
                         expect(node.find('button[data-action="discard"]').length).toEqual(1);
                     });
                     it('a title inputfield', function () {
@@ -64,12 +60,10 @@ define(['io.ox/tasks/edit/main',
                     it('an expansion link', function () {
                         expect(node.find('.expand-link').length).toEqual(1);
                     });
-                    it('a start date inputfield', function () {
+                    it('a date inputfields', function () {
                         expect(node.find('[data-extension-id="start_date"]').length).toEqual(1);
                         expect(node.find('[data-extension-id="start_date"] label').length).toEqual(1);
                         expect(node.find('[data-extension-id="start_date"] input').length).toEqual(1);
-                    });
-                    it('an end date inputfield', function () {
                         expect(node.find('[data-extension-id="end_date"]').length).toEqual(1);
                         expect(node.find('[data-extension-id="end_date"] label').length).toEqual(1);
                         expect(node.find('[data-extension-id="end_date"] input').length).toEqual(1);
@@ -79,28 +73,20 @@ define(['io.ox/tasks/edit/main',
                         expect(node.find('.io-ox-recurrence-view').length).toEqual(1);
                         expect(node.find('[data-extension-id="recurrence"] input[type="checkbox"]').length).toEqual(1);
                     });
-                    it('a reminder selectonbox', function () {
+                    it('a reminder controls', function () {
                         expect(node.find('#task-edit-reminder-select').length).toEqual(1);
-                    });
-                    it('a reminder inputfield', function () {
                         expect(node.find('[data-extension-id="alarm"]').length).toEqual(1);
                         expect(node.find('[data-extension-id="alarm"] label').length).toEqual(2);
                         expect(node.find('[data-extension-id="alarm"] input').length).toEqual(2);//alarm has date and time field
                     });
-                    it('a status selectbox', function () {
+                    it('a status controls', function () {
                         expect(node.find('[data-extension-id="status"] select').length).toEqual(1);
                         expect(node.find('[data-extension-id="status"] select').children().length).toEqual(5);
-                    });
-                    it('a progress buttongroup', function () {
                         expect(node.find('#task-edit-progress-field').length).toEqual(1);
                         expect(node.find('[data-action="plus"]').length).toEqual(1);
                         expect(node.find('[data-action="minus"]').length).toEqual(1);
-                    });
-                    it('a priority selectbox', function () {
                         expect(node.find('[data-extension-id="priority"] select').length).toEqual(1);
-                        expect(node.find('[data-extension-id="priority"] select').children().length).toEqual(3);
-                    });
-                    it('a private checkbox', function () {
+                        expect(node.find('[data-extension-id="priority"] select').children().length).toEqual(4);
                         expect(node.find('.private-flag').length).toEqual(1);
                         expect(node.find('.private-flag input[type="checkbox"]').length).toEqual(1);
                     });
@@ -133,18 +119,40 @@ define(['io.ox/tasks/edit/main',
                 });
                 describe('expansion link', function () {
                     it('should toggle collapsed items', function () {
-                        expect(node.find('.collapsed').attr('style')).not.toMatch(/display:\w*block;/);
-                        node.find('.expand-link').click();
-                        expect(node.find('.collapsed').attr('style')).toBeFalsy();
-                        node.find('.expand-link').click();
-                        expect(node.find('.collapsed').attr('style')).not.toMatch(/display:\w*block;/);
+                        var link = node.find('.expand-link');
+                        expect(link.attr('style')).not.toMatch(/display:\w*block;/);
+                        link.click();
+                        expect(link.attr('style')).toBeFalsy();
+                        link.click();
+                        expect(link.attr('style')).not.toMatch(/display:\w*block;/);
                     });
                     it('should change text', function () {
-                        expect(node.find('.expand-link').text()).toEqual(gt('Expand form'));
+                        var link = node.find('.expand-link');
+                        expect(link.text()).toEqual(gt('Expand form'));
+                        link.click();
+                        expect(link.text()).toEqual(gt('Collapse form'));
+                        link.click();
+                        expect(link.text()).toEqual(gt('Expand form'));
+                    });
+                });
+                describe('details expansion link', function () {
+                    it('should toggle collapsed items', function () {
                         node.find('.expand-link').click();
-                        expect(node.find('.expand-link').text()).toEqual(gt('Collapse form'));
+                        var link = node.find('.expand-details-link');
+                        expect(link.attr('style')).not.toMatch(/display:\w*block;/);
+                        link.click();
+                        expect(link.attr('style')).toBeFalsy();
+                        link.click();
+                        expect(link.attr('style')).not.toMatch(/display:\w*block;/);
+                    });
+                    it('should change text', function () {
                         node.find('.expand-link').click();
-                        expect(node.find('.expand-link').text()).toEqual(gt('Expand form'));
+                        var link = node.find('.expand-details-link');
+                        expect(link.text()).toEqual(gt('Show details'));
+                        link.click();
+                        expect(link.text()).toEqual(gt('Hide details'));
+                        link.click();
+                        expect(link.text()).toEqual(gt('Show details'));
                     });
                 });
                 describe('reminder selector', function () {

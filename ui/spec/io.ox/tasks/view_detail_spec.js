@@ -41,7 +41,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                 expect(node.find('.task-details').children().length).toBe(18);
             });
 
-            xit('should draw every participant', function () {//find out why this fails in phantom, chrome is fine
+            it('should draw every participant', function () {//find out why this fails in phantom, chrome is fine
 
                 var baton = ext.Baton({ data: testData.testData });
                 node = detailView.draw(baton);
