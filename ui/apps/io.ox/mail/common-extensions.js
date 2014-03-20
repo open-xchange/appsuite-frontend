@@ -400,7 +400,7 @@ define('io.ox/mail/common-extensions',
 
             return function (baton) {
                 this.append(
-                    $('<a href="#" class="unread-toggle"><i class="fa fa-circle"/></a>')
+                    $('<a href="#" class="unread-toggle" tabindex="1"><i class="fa fa-circle"/></a>')
                     .on('click', { view: baton.view }, toggle)
                 );
             };

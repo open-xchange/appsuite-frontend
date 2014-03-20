@@ -99,10 +99,13 @@
     .rightside.preview-visible { display: block; }
 }
 
+.list-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+}
+
 .list-item.small {
     padding-top: 7px;
     padding-bottom: 7px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.10);
 }
 
 .list-item.small .list-item-checkmark .fa.fa-checkmark {
@@ -632,8 +635,11 @@ textarea.inplace-editor {
     }
 
     .list-item:last-child {
-        border-bottom: 0px none;
         margin-bottom: 0;
+    }
+
+    .list-item:focus {
+        border-bottom: 1px solid @link-color;
     }
 }
 
@@ -730,21 +736,8 @@ textarea.inplace-editor {
     @header-padding: 19px;
     @picture-padding: @picture-width + @header-padding;
 
-    .focus-indicator {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 0;
-        width: 0;
-        display: none;
-        border: 0px solid #FFF;
-        border-width: 0px 14px 14px 0;
-        border-right-color: @link-color;
-    }
-
     &.list-item:focus {
         outline: 0;
-        .focus-indicator { display: block; }
     }
 
     &.io-ox-busy {

@@ -27,14 +27,6 @@ define('io.ox/mail/detail/view',
     var INDEX = 0;
 
     ext.point('io.ox/mail/detail').extend({
-        id: 'focus-indicator',
-        index: INDEX += 100,
-        draw: function () {
-            this.append('<div class="focus-indicator">');
-        }
-    });
-
-    ext.point('io.ox/mail/detail').extend({
         id: 'unread-class',
         index: INDEX += 100,
         draw: extensions.unreadClass

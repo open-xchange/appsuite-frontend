@@ -1297,6 +1297,7 @@ a.button {
 /* List View */
 .list-view-control {
 
+    @height: 45px;
     background-color: #fff;
 
     .top-toolbar() {
@@ -1323,9 +1324,9 @@ a.button {
         display: none;
         right: 0;
         left: 0;
-        height: 40px;
-        line-height: 40px - 1;
-        padding: 0 14px;
+        height: @height;
+        line-height: @height - 1;
+        padding: 2px 14px;
         background-color: #fff;
         z-index: 2;
 
@@ -1337,24 +1338,14 @@ a.button {
         &.top { .top-toolbar(); }
         &.bottom { .bottom-toolbar(); }
 
-        .grid-info {
-            text-align: center;
-            margin: 0 30px;
-            .ellipsis;
-            .folder-count {
-                font-size: 13px;
-                color: #888;
-            }
-        }
-
         .grid-options > a {
-            color: #888;
+            color: #555;
         }
 
         .grid-options.dropdown {
             position: absolute;
             right: 18px;
-            top: 0px;
+            top: 2px;
             .dropdown-menu {
                 right: -7px;
                 left: auto;
@@ -1385,13 +1376,13 @@ a.button {
     &.toolbar-bottom-visible .toolbar.bottom { display: block; }
 
     &:not(.upside-down) {
-        &.toolbar-top-visible .list-view { top: 40px; }
-        &.toolbar-bottom-visible .list-view { bottom: 40px; }
+        &.toolbar-top-visible .list-view { top: @height; }
+        &.toolbar-bottom-visible .list-view { bottom: @height; }
     }
 
     &.upside-down {
-        &.toolbar-top-visible .list-view { bottom: 40px; }
-        &.toolbar-bottom-visible .list-view { top: 40px; }
+        &.toolbar-top-visible .list-view { bottom: @height; }
+        &.toolbar-bottom-visible .list-view { top: @height; }
     }
 
     .list-view {
@@ -1430,7 +1421,7 @@ a.button {
         position: relative;
         font-size: 13px;
         line-height: 19px;
-        padding: 10px @list-view-padding 12px (@list-view-padding + 30px);
+        padding: 9px @list-view-padding 9px (@list-view-padding + 30px);
         cursor: pointer;
         outline: 0;
     }
@@ -2609,8 +2600,6 @@ input.nice-input {
     }
 
     .folder-counter-badge, .folder-options-badge {
-        color: #888;
-        line-height: 26px;
         padding: 0 0.75em 0 0.75em;
         margin-top: 2px;
         margin-bottom: 2px;
@@ -2618,6 +2607,18 @@ input.nice-input {
         background-color: #f0f0f0;
         border-radius: 5px;
         &:focus i, &:hover i { text-decoration: none; }
+    }
+
+    .folder-options-badge {
+        color: #888;
+        line-height: 26px;
+    }
+
+    .folder-counter-badge {
+        color: inherit;
+        background-color: transparent;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        line-height: 24px;
     }
 
     // more space for fat fingers
@@ -2748,11 +2749,6 @@ input.nice-input {
                 .shared-by {
                     padding-left: 0;
                     font-size: 12px;
-                }
-
-                .folder-counter-badge {
-                    background-color: @foldertree-badge-background;
-                    color: @foldertree-badge-color;
                 }
 
                 .folder-options-badge {
@@ -3045,7 +3041,7 @@ a.toolbar-action, .toolbar-action > a {
 /** DROPDOWNS **/
 
 .dropdown a i.fa-caret-down {
-    color: rgba(0, 0, 0, 0.40);
+    color: inherit;
     display: inline-block;
     margin-left: 5px;
 }
