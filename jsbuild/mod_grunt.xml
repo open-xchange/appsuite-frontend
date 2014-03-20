@@ -463,6 +463,16 @@
         </if>
 
 		<var name ="local.exe.npm"
+		     value="/usr/local/bin/npm"
+		/>
+        <if>
+            <available file="${local.exe.npm}" />
+            <then>
+	            <echo message="... found NPM exe at '${local.exe.npm}'" />
+            	<var name="mod_grunt.exe.npm" value="${local.exe.npm}" />
+            </then>
+        </if>
+		<var name ="local.exe.npm"
 		     value="/usr/bin/npm"
 		/>
         <if>
