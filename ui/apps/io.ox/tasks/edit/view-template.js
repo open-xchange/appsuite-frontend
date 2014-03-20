@@ -335,6 +335,7 @@ define('io.ox/tasks/edit/view-template',
         },
         attribute: 'priority',
         selectOptions: {
+            0: gt('None'),
             1: gt('Low'),
             2: gt('Medium'),
             3: gt('High')
