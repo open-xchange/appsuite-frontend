@@ -512,6 +512,9 @@ define('io.ox/mail/main',
          */
         'prefetch': function (app) {
 
+            var count = settings.get('prefetch/count', 5);
+            if (!_.isNumber(count) || count <= 0) return;
+
             app.prefetch = function (collection) {
                 // get first 10 undeleted emails
                 var http = require('io.ox/core/http');
@@ -520,7 +523,7 @@ define('io.ox/mail/main',
                     .filter(function (obj) {
                         return !util.isDeleted(obj);
                     })
-                    .slice(0, 10)
+                    .slice(0, count)
                     .each(function (model) {
                         var thread = model.get('thread'), i, obj;
                         for (i = thread.length - 1; obj = _.cid(thread[i]); i--) {
