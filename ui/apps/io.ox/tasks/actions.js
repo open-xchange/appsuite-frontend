@@ -395,7 +395,7 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/open-attachment', {
         id: 'open',
-        requires: 'some',
+        requires: 'one',
         multiple: function (list) {
             ox.load(['io.ox/core/api/attachment']).done(function (attachmentAPI) {
                 _(list).each(function (data) {
