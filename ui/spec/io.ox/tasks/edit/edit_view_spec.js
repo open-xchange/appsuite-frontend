@@ -24,7 +24,7 @@ define(['io.ox/tasks/edit/main',
                 function () {
                     //launch app
                     app = edit.getApp();
-                    app.launch({ folderid: 555123456 });
+                    app.launch({ folder_id: 555123456 });
 
                     view = app.view,
                     node = view.$el,
@@ -133,6 +133,10 @@ define(['io.ox/tasks/edit/main',
                         expect(link.text()).toEqual(gt('Collapse form'));
                         link.click();
                         expect(link.text()).toEqual(gt('Expand form'));
+                    });
+                    it('should be collapsed on init', function () {
+                        expect(node.find('.collapsed').length).toEqual(16);
+                        expect(node.find('.collapsed:visible').length).toEqual(0);
                     });
                 });
                 describe('details expansion link', function () {
