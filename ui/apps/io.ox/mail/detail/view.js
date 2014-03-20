@@ -130,7 +130,7 @@ define('io.ox/mail/detail/view',
     ext.point('io.ox/mail/detail').extend({
         id: 'body',
         index: INDEX += 100,
-        draw: function (baton) {
+        draw: function () {
             this.append(
                 $('<section class="attachments">'),
                 $('<section class="body user-select-text">')
