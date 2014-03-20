@@ -18,26 +18,31 @@ module.exports = function (grunt) {
     grunt.config('watch', {
 
         options: {
-            interrupt: false,
-            spawn: true,
-            debounceDelay: 1500
+            interval: 500,
+            interrupt: true,
+            debounceDelay: 500
         },
         manifests: {
-            files: 'apps/**/manifest.json',
+            files: ['apps/**/*.json', '!apps/io.ox/core/date/*'],
             tasks: ['manifests', 'force_update'],
             options: { livereload: true }
         },
         karma: {
-            files: ['spec/**/*'],
+            files: ['spec/**/*.js'],
             tasks: ['newer:jshint:specs', 'newer:copy:specs', 'karma:unit:run']
+        },
+        configs: {
+            options: { reload: true },
+            files: [
+                'Gruntfile.js',
+                'grunt/tasks/*.js'
+            ],
+            tasks: ['default']
         },
         all: {
             files: [
-                'Gruntfile.js',
-                'grunt/tasks/*.js',
                 'apps/**/*.{js,less}',
-                'src/*.js',
-                'bower_components/**/*.{js,less}'
+                'lib/**/*.js'
             ],
             tasks: ['default', 'karma:unit:run'],
             options: { livereload: true }
