@@ -38,8 +38,6 @@ define('io.ox/files/fluid/perspective',
         //nodes
         filesContainer, breadcrumb, inlineRight, inline, wrapper, inlineActionWrapper,
         scrollpane = $('<div class="files-scrollable-pane" role="section">'),
-        topBar = $('<div class="window-content-top">'), // used on desktop
-        topActions = $('<div class="inline-actions-ms">').appendTo(topBar),
         regexp = {};
 
     //init
@@ -259,31 +257,34 @@ define('io.ox/files/fluid/perspective',
                 .keyboard(scrollpane, true)
                 // toggle visibility of multiselect actions
                 .on('change', function (e, selected) {
-                    var self = this, dummy = $('<div>');
+                    var self = this,
+                        tempBaton = _.clone(baton);
 
-                    // clear top-bar
-                    topActions.empty();
+                    // update top-bar
+                    var oldTopbarsize = inlineActionWrapper.css('height');
+
+                    if (selected.length === 1) {
+                        api.get(selected[0]).done(function (filedata) {
+                            ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), _.extend(tempBaton, {data: filedata}));
+                            ext.point('io.ox/files/icons/actions-right').invoke('draw', inlineRight.empty(), baton);
+                        });
+                    } else if (selected.length === 0) {
+                        ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), baton);
+                        ext.point('io.ox/files/icons/actions-right').invoke('draw', inlineRight.empty(), baton);
+                    } else {
+                        ext.point('io.ox/files/icons/actions').invoke('draw', inline.empty(), _.extend(tempBaton, {data: selected}));
+                        ext.point('io.ox/files/icons/actions-right').invoke('draw', inlineRight.empty(), baton);
+                    }
 
                     if (_.device('smartphone') && baton.options.mode === 'list') {
                         // use custom multiselect toolbar
                         toggleToolbar(selected, self);
-                    } else {
-
-                        if (selected.length > 1) {
-                            // workaround for mediaplayer
-                            var dummyGrid =  { getApp: function () { return baton.app; } };
-                            // draw inline links
-                            commons.multiSelection('io.ox/files', dummy, selected, api, dummyGrid, {forcelimit: true});
-                            // append to bar
-                            topActions.append(dummy.find('.io-ox-inline-links'));
-                            // fade in or yet visible?
-                            if (!topActions.is(':visible')) {
-                                topBar.stop().fadeIn(250);
-                            }
-                        } else {
-                            topBar.stop().hide();
-                        }
                     }
+
+                    if (oldTopbarsize !== inlineActionWrapper.css('height')) {
+                        wrapper.css('top', inlineActionWrapper.css('height'));//adjust scrollable pane top if topbarsize changes
+                    }
+
                     // set url
                     var id = _(selected.length > 50 ? selected.slice(0, 1) : selected).map(function (obj) {
                         return self.serialize(obj);
@@ -652,7 +653,6 @@ define('io.ox/files/fluid/perspective',
             baton.options.mode = identifyMode(opt);
 
             self.main.empty().append(
-                                topBar,
                                 wrapper = $('<div class="files-wrapper">')
                                             .attr({
                                                 'role': 'main',
@@ -923,7 +923,7 @@ define('io.ox/files/fluid/perspective',
                 adjustWidth();
                 //adjust scrollable pane top if topbarsize increases
                 var topbarHeight = (inlineActionWrapper.css('height'));
-                if (topbarHeight !== '0px') {//in editmode there is no topbar, so changes here
+                if (topbarHeight !== '0px') {//in editmode there is no topbar, so no changes here
                     wrapper.css('top', topbarHeight);
                 }
             };

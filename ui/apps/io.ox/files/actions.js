@@ -204,7 +204,7 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/sendlink', {
         capabilities: 'webmail !alone',
         requires: function (e) {
-            return _.device('!small') && e.collection.has('some') &&  (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') &&  (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -229,7 +229,7 @@ define('io.ox/files/actions',
         capabilities: 'webmail',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+            return e.collection.has('some') && !_.isEmpty(e.baton.data) && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
                 _(list).reduce(function (memo, obj) {
                     return memo || obj.file_size > 0;
                 }, false);
@@ -251,7 +251,7 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/showlink', {
         capabilities: '!alone',
         requires: function (e) {
-            return _.device('!small') && e.collection.has('some');
+            return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some');
         },
         multiple: function (list) {
 
@@ -356,7 +356,7 @@ define('io.ox/files/actions',
         capabilities: '!alone',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return _.device('!small') && e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
+            return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
                 _(list).reduce(function (memo, obj) {
                     return memo || !api.tracker.isLocked(obj);
                 }, false);
@@ -630,7 +630,9 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
-        require: 'one',
+        requires: function (e) {
+            return e.collection.has('one') && !_.isEmpty(e.baton.data);
+        },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
                 widgets.add('stickyfile', {
@@ -1164,6 +1166,7 @@ define('io.ox/files/actions',
     ext.point('io.ox/files/icons/actions').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',
+        forcelimit: true,
         ref: 'io.ox/files/icons/inline'
     }));
 
@@ -1213,6 +1216,93 @@ define('io.ox/files/actions',
         id: 'mediaplayer-video',
         label: gt('Play video files'),
         ref: 'io.ox/files/icons/videoplayer'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'download',
+        index: 600,
+        prio: 'lo',
+        label: gt('Download'),
+        ref: 'io.ox/files/actions/download'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'delete',
+        index: 700,
+        prio: 'lo',
+        label: gt('Delete'),
+        ref: 'io.ox/files/actions/delete'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'send',
+        index: 800,
+        prio: 'lo',
+        label: gt('Send by mail'),
+        ref: 'io.ox/files/actions/send',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'sendlink',
+        index: 900,
+        prio: 'lo',
+        label: gt('Send as internal link'),
+        ref: 'io.ox/files/actions/sendlink',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'showlink',
+        index: 1000,
+        prio: 'lo',
+        label: gt('Show internal link'),
+        ref: 'io.ox/files/actions/showlink',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'add-to-portal',
+        index: 1100,
+        prio: 'lo',
+        label: gt('Add to portal'),
+        ref: 'io.ox/files/actions/add-to-portal',
+        section: 'share'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'move',
+        index: 1200,
+        label: gt('Move'),
+        prio: 'lo',
+        ref: 'io.ox/files/actions/move',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'copy',
+        index: 1300,
+        prio: 'lo',
+        label: gt('Copy'),
+        ref: 'io.ox/files/actions/copy',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'lock',
+        index: 1400,
+        prio: 'lo',
+        label: gt('Lock'),
+        ref: 'io.ox/files/actions/lock',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        id: 'unlock',
+        index: 1500,
+        label: gt('Unlock'),
+        ref: 'io.ox/files/actions/unlock',
+        section: 'file-op'
     }));
 
     //rightside
