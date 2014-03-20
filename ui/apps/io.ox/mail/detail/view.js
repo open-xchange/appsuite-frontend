@@ -130,7 +130,7 @@ define('io.ox/mail/detail/view',
     ext.point('io.ox/mail/detail').extend({
         id: 'body',
         index: INDEX += 100,
-        draw: function () {
+        draw: function (baton) {
             this.append(
                 $('<section class="attachments">'),
                 $('<section class="body user-select-text">')
@@ -175,11 +175,18 @@ define('io.ox/mail/detail/view',
             this.$el.toggleClass('unread', util.isUnseen(this.model.get('flags')));
         },
 
+        onChangeAttachments: function () {
+            var data = this.model.toJSON(),
+                baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
+                node = this.$el.find('section.attachments').empty();
+            ext.point('io.ox/mail/detail/attachments').invoke('draw', node, baton);
+        },
+
         onChangeContent: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, attachments: util.getAttachments(data) }),
-                body = this.$el.find('section.body').empty();
-            ext.point('io.ox/mail/detail/body').invoke('draw', body, baton);
+                node = this.$el.find('section.body').empty();
+            ext.point('io.ox/mail/detail/body').invoke('draw', node, baton);
         },
 
         onToggle: function (e) {
@@ -207,18 +214,14 @@ define('io.ox/mail/detail/view',
             // as an indicator whether this view has been destroyed meanwhile
             if (this.model === null) return;
 
-            var attachments = this.$el.find('section.attachments'),
-                unseen = util.isUnseen(this.model.get('flags'));
+            var unseen = util.isUnseen(this.model.get('flags'));
 
             // done
             this.$el.find('section.body').removeClass('loading');
             this.trigger('load:done');
 
-            // draw attachments
-            var baton = ext.Baton({ data: data, attachments: util.getAttachments(data) });
-            ext.point('io.ox/mail/detail/attachments').invoke('draw', attachments, baton);
-
-            // draw body
+            // draw
+            this.onChangeAttachments();
             this.onChangeContent();
 
             // merge data
@@ -271,6 +274,15 @@ define('io.ox/mail/detail/view',
                     this.$el.find('section.body').idle();
                 }
             });
+        },
+
+        redraw: function () {
+            this.$el.empty();
+            this.render();
+            if (this.$el.hasClass('expanded')) {
+                this.onChangeAttachments();
+                this.onChangeContent();
+            }
         },
 
         render: function () {
