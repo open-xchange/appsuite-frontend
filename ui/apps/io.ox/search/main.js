@@ -36,7 +36,7 @@ define('io.ox/search/main',
         index: 200,
         id: 'custom',
         config: function (data) {
-            data.custom =  settings.get('settings/search/custom', ['time']);
+            data.custom =  settings.get('settings/search/custom/time', ['mail']);
         }
     });
 

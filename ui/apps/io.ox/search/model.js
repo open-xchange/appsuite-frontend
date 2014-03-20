@@ -42,7 +42,10 @@ define('io.ox/search/model',
         //autocomplete response
         autocomplete: [],
         //query call result
-        data: [],
+        data: {
+            results: {
+            }
+        },
         //active facets
         active: [],
         pool: {},

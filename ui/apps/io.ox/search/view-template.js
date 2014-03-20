@@ -98,7 +98,7 @@ define('io.ox/search/view-template',
         index: 100,
         row: '0',
         draw: function (baton) {
-            var module = baton.model.getModule(),
+            var id = baton.model.getApp(),
                 node = $('<ul class="col-lg-12 apps">');
 
             _(appAPI.getFavorites()).each(function (app) {
@@ -109,8 +109,8 @@ define('io.ox/search/view-template',
                 );
             });
             //mark as active
-            if (module !== '') {
-                node.find('[data-app="' + module + '"]').addClass('active');
+            if (id !== '') {
+                node.find('[data-app="' + id + '"]').addClass('active');
             }
             //register click handler
             node.find('li').on('click', function (e) {
@@ -290,7 +290,7 @@ define('io.ox/search/view-template',
         row: '0',
         draw: function (baton) {
             var node = $('<div class="col-lg-12 result">'),
-                data = baton.model.get('data').results;
+                data = baton.model.get('data').results || {};
 
             _.each(data, function (item) {
                 var tmp = $('<div class="item">');
@@ -329,7 +329,7 @@ define('io.ox/search/view-template',
                 node.append(tmp);
             });
 
-            if (data.length === 0) {
+            if (!data.length) {
                 node.append(
                     $('<div class="item">').append(
                         $('<div class="line1">').text('No results')
