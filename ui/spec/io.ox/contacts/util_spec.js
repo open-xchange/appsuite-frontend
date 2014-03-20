@@ -93,5 +93,15 @@ define(['io.ox/contacts/util'], function (util) {
             expect(util.calcMailField(testPerson, testPerson.email1)).toEqual(1);
             expect(util.calcMailField(testPerson, testPerson.email3)).toEqual(3);
         });
+        
+        it('should correctly convert birthdays to Gregorian calendar', function () {
+            expect(util.julianToGregorian(-62122809600000))//May 29 Year 1
+                .toEqual(-62122636800000);//May 31 Year 1
+        });
+
+        it('should correctly convert birthdays to Julian calendar', function () {
+            expect(util.gregorianToJulian(-62122636800000))//May 31 Year 1
+                .toEqual(-62122809600000);//May 29 Year 1
+        });
     });
 });

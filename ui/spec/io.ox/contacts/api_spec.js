@@ -11,11 +11,23 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/contacts/api'], function (api) {
+define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
 
     'use strict';
 
     describe('Contact API', function () {
+
+        beforeEach(function () {
+            this.server.respondWith('GET', /api\/contacts\?action=get/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{"id":1337, "birthday":-62122809600000}}');
+            });
+            this.server.respondWith('PUT', /api\/contacts\?action=new/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{"id":1338}}');
+            });
+            this.server.respondWith('PUT', /api\/contacts\?action=update/, function (xhr) {
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, '{"timestamp":1368791630910,"data":{"id":1338}}');
+            });
+        });
 
         it('should return proper image path for internal users', function () {
             var url = api.pictureHalo({ internal_userid: 1, folder_id: 6, id: 1337 });
@@ -55,6 +67,30 @@ define(['io.ox/contacts/api'], function (api) {
         it('should return proper image path for groups', function () {
             var url = api.pictureHalo({ members: [], id: 1337 });
             expect(url).toBe(ox.base + '/apps/themes/default/dummypicture_group.png');
+        });
+
+        it('GET should convert birthday to Julian calendar', function () {
+            var result = api.get({folder: 6, id: 1337});
+            expect(result).toResolve();
+            result.done(function (data) {
+                expect(data.birthday).toBe(-62122636800000);
+            });
+        });
+
+        it('CREATE should convert birthday to Gregorian calendar', function () {
+            var spy = sinon.spy(util, 'gregorianToJulian'),
+                result = api.create({folder: 6, birthday: -62122636800000});
+            expect(result).toResolve();
+            expect(spy.called).toBeTruthy();
+            util.gregorianToJulian.restore();
+        });
+
+        it('UPDATE should convert birthday to Gregorian calendar', function () {
+            var spy = sinon.spy(util, 'gregorianToJulian'),
+                result = api.update({folder: 6, id: 1338, data: {birthday: -62122636800000}});
+            expect(result).toResolve();
+            expect(spy.called).toBeTruthy();
+            util.gregorianToJulian.restore();
         });
     });
 });
