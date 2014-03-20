@@ -147,7 +147,9 @@ define('io.ox/mail/main',
             app.toggleFolderView(true);
 
             // always change folder on foldertap
-            app.pages.getPage('folderTree').on('tap', '.folder.selectable', function () {
+            app.pages.getPage('folderTree').on('tap', '.folder .selectable', function (e) {
+                e.preventDefault();
+                console.log('changing! apge');
                 app.pages.changePage('listView');
                 app.folder.getData().done(function (d) {
                     app.pages.getNavbar('listView').setTitle(d.title);
@@ -282,7 +284,7 @@ define('io.ox/mail/main',
         },
 
         /*
-         * Restore view options
+         * Restore view opt
          */
         'restore-view-options': function (app) {
             var data = app.getViewOptions(app.folder.get());

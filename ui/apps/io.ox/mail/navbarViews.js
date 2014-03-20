@@ -11,7 +11,8 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/mail/navbarViews', ['io.ox/core/extensions',  'gettext!io.ox/mail'], function (ext) {
+define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
+    'gettext!io.ox/mail'], function (ext) {
 
     'use strict';
 
