@@ -20,7 +20,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1394011605903</id>
+			<id>1395312834799</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -29,7 +29,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1394011605906</id>
+			<id>1395312834808</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -38,16 +38,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1394011605909</id>
-			<name></name>
-			<type>26</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-true-false-grunt</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1394011605911</id>
+			<id>1395312834815</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
