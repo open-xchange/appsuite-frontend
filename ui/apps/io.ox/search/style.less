@@ -12,6 +12,23 @@
  */
 
 
+#io-ox-searchfield-topbar.launcher {
+    display: inline-block;
+}
+#io-ox-searchfield-topbar-icon.launcher {
+    display: none;
+}
+
+//replace searchfield with icon on small devices
+@media all and (max-width: 800px), all and (max-device-width: 800px) {
+    #io-ox-searchfield-topbar.launcher {
+        display: none;
+    }
+    #io-ox-searchfield-topbar-icon.launcher {
+        display: inline-block;
+    }
+}
+
 //global: input field (topbar, app view)
 #app-search {
     height: 24px;

@@ -627,9 +627,20 @@ define('io.ox/core/main',
             index: 150,
             draw: function () {
                 if (capabilities.has('search')) {
-                    var container = $('<div>');
-                    //add launcher
-                    this.append(
+                    var container = $('<div>'),
+                        self = this;
+                    //add search icon
+                    self.append(
+                        addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
+                                require(['io.ox/search/main'], function (searchapp) {
+                                    searchapp.run();
+                                });
+                            },  gt('Search'))
+                        .attr('id', 'io-ox-searchfield-topbar-icon')
+                    );
+
+                    //add search field
+                    self.append(
                         addLauncher('right', container, $.noop(), gt('Refresh'))
                         .attr('id', 'io-ox-searchfield-topbar')
                     );

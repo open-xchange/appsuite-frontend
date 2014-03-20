@@ -80,7 +80,7 @@ define('io.ox/search/main',
         yell = function (error) {
             notifications.yell('error', error.error_desc);
         },
-        win, model;
+        win, model, run;
 
     //define launcher callback
     app.setLauncher(function (options) {
@@ -177,10 +177,7 @@ define('io.ox/search/main',
                 return api.query(opt)
                         .then(function (result) {
                             model.set('data', result);
-                            if (!app.launched)
-                                app.launch.call(app);
-                            else
-                                app.view.redraw();
+                            run();
                         }, yell);
             }
         }
@@ -197,8 +194,17 @@ define('io.ox/search/main',
                 app.view.redraw();
             });
 
+    //run app
+    run = function () {
+        if (app.get('state') === 'running')
+            app.view.redraw();
+        else
+            app.launch.call(app);
+    };
+
     return {
         getApp: app.getInstance,
+        run: run,
         init: function (container) {
             var $container = container || $('<div>');
             app.view = View.factory
