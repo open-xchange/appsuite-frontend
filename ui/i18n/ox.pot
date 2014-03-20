@@ -162,7 +162,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/acceptdeny.js:57
 #: module:io.ox/calendar
-#: apps/io.ox/tasks/actions.js:573
+#: apps/io.ox/tasks/actions.js:571
 #: module:io.ox/tasks
 msgid "Change confirmation status"
 msgstr ""
@@ -378,7 +378,7 @@ msgstr ""
 #: apps/io.ox/settings/accounts/settings/pane.js:72
 #: apps/io.ox/tasks/actions.js:59
 #: module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:556
+#: apps/io.ox/tasks/actions.js:555
 #: apps/io.ox/tasks/main.js:101
 #: apps/plugins/portal/twitter/util.js:318
 #: module:plugins/portal
@@ -405,7 +405,7 @@ msgstr ""
 #: apps/io.ox/tasks/actions.js:194
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/actions.js:195
-#: apps/io.ox/tasks/actions.js:565
+#: apps/io.ox/tasks/actions.js:563
 msgid "Move"
 msgstr ""
 
@@ -455,7 +455,7 @@ msgstr ""
 #: apps/io.ox/mail/actions.js:1063
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:130
-#: apps/io.ox/tasks/actions.js:581
+#: apps/io.ox/tasks/actions.js:579
 #: module:io.ox/tasks
 msgid "Print"
 msgstr ""
@@ -2078,7 +2078,7 @@ msgstr ""
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1110
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:589
+#: apps/io.ox/tasks/actions.js:587
 #: module:io.ox/tasks
 #: apps/io.ox/tours/main.js:549
 #: module:io.ox/tours
@@ -2092,7 +2092,7 @@ msgstr ""
 #: apps/io.ox/core/tk/attachmentsUtil.js:92
 #: apps/io.ox/mail/actions.js:1117
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:596
+#: apps/io.ox/tasks/actions.js:594
 #: module:io.ox/tasks
 msgid "Preview"
 msgstr ""
@@ -2103,7 +2103,7 @@ msgstr ""
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1124
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:603
+#: apps/io.ox/tasks/actions.js:601
 #: module:io.ox/tasks
 msgid "Open in browser"
 msgstr ""
@@ -2117,7 +2117,7 @@ msgstr ""
 #: apps/io.ox/files/actions.js:965
 #: apps/io.ox/mail/actions.js:1131
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:610
+#: apps/io.ox/tasks/actions.js:608
 #: module:io.ox/tasks
 #: apps/plugins/portal/updater/register.js:37
 #: module:plugins/portal
@@ -2130,7 +2130,7 @@ msgstr ""
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1138
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:617
+#: apps/io.ox/tasks/actions.js:615
 #: module:io.ox/tasks
 msgid "Save to Drive"
 msgstr ""
@@ -3006,50 +3006,50 @@ msgstr ""
 msgid "Accessing global address book is not permitted"
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:490
+#: apps/io.ox/core/api/folder.js:489
 #: module:io.ox/core
 msgid "The settings for collecting contacts in this folder will become disabled when you enter the application the next time."
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:546
+#: apps/io.ox/core/api/folder.js:545
 #: module:io.ox/core
 #: apps/io.ox/core/pubsub/subscriptions.js:158
 #: module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:683
+#: apps/io.ox/core/api/folder.js:682
 #: module:io.ox/core
 msgid "Could not save settings. There have to be at least one user with administration rights."
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:1132
+#: apps/io.ox/core/api/folder.js:1131
 #: module:io.ox/core
 msgid "subfolders of %s"
 msgstr ""
 
 #. %1$s is the filename
-#: apps/io.ox/core/api/folder.js:1255
+#: apps/io.ox/core/api/folder.js:1254
 #: module:io.ox/core
 msgid "Folder with name \"%1$s\" will be hidden. Enable setting \"Show hidden files and folders\" to access this folder again."
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:1304
+#: apps/io.ox/core/api/folder.js:1303
 #: module:io.ox/core
 msgid "File names must not be empty"
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:1305
+#: apps/io.ox/core/api/folder.js:1304
 #: module:io.ox/core
 msgid "Folder names must not be empty"
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:1316
+#: apps/io.ox/core/api/folder.js:1315
 #: module:io.ox/core
 msgid "File names must not contain slashes"
 msgstr ""
 
-#: apps/io.ox/core/api/folder.js:1317
+#: apps/io.ox/core/api/folder.js:1316
 #: module:io.ox/core
 msgid "Folder names must not contain slashes"
 msgstr ""
@@ -6064,22 +6064,22 @@ msgstr ""
 msgid "Couldn't load your mail filters."
 msgstr ""
 
-#: apps/io.ox/mail/main.js:128
+#: apps/io.ox/mail/main.js:126
 #: module:io.ox/mail
 msgid "Mail Details"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:347
+#: apps/io.ox/mail/main.js:345
 #: module:io.ox/mail
 msgid "No message selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:360
+#: apps/io.ox/mail/main.js:358
 #: module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:657
+#: apps/io.ox/mail/main.js:654
 #: module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
