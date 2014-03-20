@@ -23,6 +23,7 @@ define('io.ox/mail/main',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
      'io.ox/mail/navbarViews',
+     'io.ox/core/commons-folderview',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
@@ -30,7 +31,7 @@ define('io.ox/mail/main',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, gt, settings) {
+    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, FolderView, gt, settings) {
 
     'use strict';
 
@@ -94,17 +95,23 @@ define('io.ox/mail/main',
             // debug
             //app.listView.model.set('thread', true);
             window.kack = app;
+
         },
         /*
          * Init all nav- and toolbar labels for mobile
          */
         'bars-mobile': function (app) {
 
-            app.pages.getNavbar('listView').setLeft(gt('Folders'));
+            if (!_.device('small')) return;
+
+            app.pages.getNavbar('listView')
+                .setLeft(gt('Folders'))
+                .setRight(gt('Edit'));
 
             app.pages.getNavbar('folderTree')
                 .setTitle(gt('Folders'))
-                .setLeft(false);
+                .setLeft(false)
+                .setRight(gt('Edit'));
 
             app.pages.getNavbar('detailView')
                 .setTitle('') // no title
@@ -116,7 +123,6 @@ define('io.ox/mail/main',
 
             // TODO restore last folder as starting point
             app.pages.showPage('listView');
-
 
         },
 
@@ -161,27 +167,71 @@ define('io.ox/mail/main',
         },
 
         /*
+         * Default application properties
+         */
+        'props': function (app) {
+            // introduce shared properties
+            app.props = new Backbone.Model({
+                'preview': app.settings.get('preview', 'right'),
+                'checkboxes': app.settings.get('showCheckboxes', true),
+                'contactPictures': app.settings.get('showContactPictures', false),
+                'mobileFolderSelectMode': false
+            });
+        },
+
+        /*
          * Folder view support
          */
         'folder-view-mobile': function (app) {
-            // folder tree
+
             if (_.device('!small')) return;
 
             // init folderview with custom container
-            commons.addFolderView(app, { type: 'mail', folderTreeContainer: app.pages.getPage('folderTree')});
 
-            // make folder visible by default
-            app.toggleFolderView(true);
+            var view = new FolderView(app, { type: 'mail', container: app.pages.getPage('folderTree') });
+            view.handleFolderChange();
+            view.load();
 
             // always change folder on click
             // No way to use tap here since folderselection really messes up the event chain
             app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
+                if (app.props.get('mobileFolderSelectMode') === true) return; // do not change page in edit mode
                 if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
+
                 app.pages.changePage('listView');
             });
 
 
+            // make folder visible by default
+            app.toggleFolderView(true);
+
+            // add the edit ability
+            // don't change folders on tap, just trigger contextmenu
+            app.pages.getNavbar('folderTree')
+                .setRightAction(function () {
+
+                    if (!app.props.get('mobileFolderSelectMode')) {
+
+                        app.props.set('mobileFolderSelectMode', true);
+                        app.pages.getNavbar('folderTree').setRight(gt('Cancel'));
+                    } else {
+                        app.props.set('mobileFolderSelectMode', false);
+                        app.pages.getNavbar('folderTree').setRight(gt('Edit'));
+                    }
+                });
+
         },
+
+        /*
+         * Edit mode for mobile devices in folderview
+         */
+        'folder-view-editMode': function () {
+            if (!_.device('small')) return;
+            app.props.on('change:mobileFolderSelectMode', function () {
+                console.log('folder edit mode action');
+            });
+        },
+
         /*
          * Split into left and right pane
          */
@@ -196,18 +246,6 @@ define('io.ox/mail/main',
             app.right = right.addClass('mail-detail-pane').attr({
                 'role': 'complementary',
                 'aria-label': gt('Mail Details')
-            });
-        },
-
-        /*
-         * Default application properties
-         */
-        'props': function (app) {
-            // introduce shared properties
-            app.props = new Backbone.Model({
-                'layout': app.settings.get('layout', 'vertical'),
-                'checkboxes': app.settings.get('showCheckboxes', true),
-                'contactPictures': app.settings.get('showContactPictures', false)
             });
         },
 
@@ -329,8 +367,28 @@ define('io.ox/mail/main',
          * Setup thread view
          */
         'thread-view': function (app) {
-            app.threadView = new ThreadView();
+            if (_.device('small')) return;
+            app.threadView = new ThreadView.Desktop();
             app.right.append(app.threadView.render().$el);
+        },
+
+        'thread-view-mobile': function (app) {
+            if (!_.device('small')) return;
+
+            // showing single mails will be done with the plain desktop threadview
+            app.threadView = new ThreadView.Mobile();
+            app.threadView.$el.on('showmail', function (e) {
+                var cid = $(e.target).data().cid;
+                app.showMail(cid);
+                app.pages.changePage('detailView');
+            });
+
+            //app.right.append(app.threadView.render().$el);
+
+            // The mobile threadview uses a normal threadview as base as well
+            //app.mobileThreadView = new ThreadView.Mobile();
+            app.pages.getPage('threadView').append(app.threadView.render().$el);
+
         },
 
         /*
@@ -392,6 +450,7 @@ define('io.ox/mail/main',
         'folder:change-mobile': function (app) {
             if (!_.device('small')) return;
             app.on('folder:change', function () {
+                if (app.props.get('mobileFolderSelectMode')) return;
                 app.folder.getData().done(function (d) {
                     app.pages.getNavbar('listView').setTitle(d.title);
                 });
@@ -403,7 +462,30 @@ define('io.ox/mail/main',
          * Define basic function to show an email
          */
         'show-mail': function (app) {
+            if (_.device('small')) return;
             app.showMail = function (cid) {
+                app.threadView.show(cid);
+            };
+        },
+
+           /*
+         * Define basic function to show an email
+         */
+        'show-mail-mobile': function (app) {
+            if (!_.device('small')) return;
+            app.showMail = function (cid) {
+                app.pages.getPage('detailView').empty().append(app.threadView.renderMail(cid));
+            };
+        },
+
+
+        /*
+         * Define basic function to show an thread overview on mobile
+         */
+        'mobile-show-thread-overview': function (app) {
+            // clicking on a thread will show a custom overview
+            // based on a custom threadview only showing mail headers
+            app.showThreadOverview = function (cid) {
                 app.threadView.show(cid);
             };
         },
@@ -452,10 +534,11 @@ define('io.ox/mail/main',
                     // make sure we are not in multi-selection
                     if (app.listView.selection.get().length === 1) {
                         // check for thread
-                        var cid = list[0].substr(7);
-                        var isThread = this.collection.get(cid).get('threadSize') > 1;
+                        var cid = list[0].substr(7),
+                            isThread = this.collection.get(cid).get('threadSize') > 1;
 
                         if (isThread) {
+                            app.showThreadOverview(list[0]);
                             app.pages.changePage('threadView');
                         } else {
                             app.showMail(list[0]);
@@ -602,6 +685,7 @@ define('io.ox/mail/main',
         },
 
         'init-navbarlabel-mobile': function (app) {
+            if (!_.device('small')) return;
             // prepare first start
             app.listView.on('first-reset', function () {
                 app.folder.getData().done(function (d) {

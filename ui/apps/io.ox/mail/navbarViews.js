@@ -11,12 +11,10 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-<<<<<<< HEAD
+
 define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
     'gettext!io.ox/mail'], function (ext) {
-=======
-define('io.ox/mail/navbarViews', ['io.ox/core/extensions',  'gettext!io.ox/mail'], function (ext) {
->>>>>>> Working on toolbars and navbars for mobile pagination
+
 
     'use strict';
 
@@ -27,10 +25,9 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',  'gettext!io.ox/mail'
         id: 'btn-left',
         index: 100,
         draw: function (baton) {
-<<<<<<< HEAD
+
             if (!baton.left) return;
-=======
->>>>>>> Working on toolbars and navbars for mobile pagination
+
             this.$el.append(
                 $('<div class="navbar-action left">').append(
                     $('<a>').append(
@@ -58,11 +55,11 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',  'gettext!io.ox/mail'
     ext.point('io.ox/mail/mobile/navbar').extend({
         id: 'btn-right',
         index: 300,
-<<<<<<< HEAD
+
         draw: function (baton) {
             if (!baton.right) return;
             this.$el.append(
-                $('<div class="navbar-action left">').append(
+                $('<div class="navbar-action right">').append(
                     $('<a>').append(
                         baton.right
                     ).on('tap', function (e) {
@@ -106,43 +103,18 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',  'gettext!io.ox/mail'
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
-=======
-        draw: function () {
-           //noting
-        }
-    });
 
-    var BarView = Backbone.View.extend({
-        tagName: 'div',
-        className: 'toolbar-content'
-    });
-
-
-    var NavbarView = BarView.extend({
-
-        left: 'Back',
-        right: 'Foo',
-        title: 'FooBar',
-
-        initialize: function (opt) {
-            console.log('init Navbar', opt);
-            this.el = opt.el;
-            this.app = opt.app;
-            this.left = opt.left;
-            this.right = opt.right;
->>>>>>> Working on toolbars and navbars for mobile pagination
         },
 
         render: function () {
-            this.$el.empty();
-<<<<<<< HEAD
-            this.$el.show();
-=======
->>>>>>> Working on toolbars and navbars for mobile pagination
+
+            this.$el.empty().show();
+
             ext.point('io.ox/mail/mobile/navbar').invoke('draw', this, {
                 left: this.left,
                 right: this.right,
                 title: this.title,
+                rightAction: this.rightAction || $.noop,
                 app: this.app
             });
             return this;
@@ -164,10 +136,14 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',  'gettext!io.ox/mail'
             this.right = $node;
             this.render();
             return this;
+        },
+        // TODO change to event based
+        setRightAction: function (fn) {
+            this.rightAction = fn;
         }
     });
 
-<<<<<<< HEAD
+
     /*
      * Toolbars
      * Will be blaced at the bottom of a page to
@@ -177,14 +153,7 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',  'gettext!io.ox/mail'
         initialize: function () {
         },
         render: function () {
-=======
-    var ToolbarView = BarView.extend({
-        initialize: function () {
-            console.log('init Toolbar');
-        },
-        render: function () {
-            console.log('rendering Toolbar');
->>>>>>> Working on toolbars and navbars for mobile pagination
+
             ext.point('io.ox/mail/mobile/toolbar').invoke('draw', this);
             return this;
         }
