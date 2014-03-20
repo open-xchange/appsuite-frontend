@@ -32,6 +32,7 @@ ExpiresByType text/javascript "access plus 6 months"
 ExpiresByType application/x-javascript "access plus 6 months"
 ExpiresByType text/cache-manifest "access plus 0 seconds"
 ExpiresByType audio/mp3 "access plus 6 months"
+ExpiresByType application/font-woff "access plus 6 months"
 
 # cache buster (exclude cache manifests and main pages)
 <FilesMatch "^(?!(core|signin)).*$">

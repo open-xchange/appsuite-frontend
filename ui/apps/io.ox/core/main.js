@@ -1230,17 +1230,6 @@ define('io.ox/core/main',
         });
 
         new Stage('io.ox/core/stages', {
-            id: 'applicationcache-updatecheck',
-            index: 650,
-            run: function (baton) {
-                debug('core: Stage "applicationcache-updatecheck"', baton);
-                if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
-                    notifications.yell('warning', gt('There is an update available, please reload your browser or press F5.'));
-                }
-            }
-        });
-
-        new Stage('io.ox/core/stages', {
             id: 'curtain',
             index: 700,
             run: function (baton) {

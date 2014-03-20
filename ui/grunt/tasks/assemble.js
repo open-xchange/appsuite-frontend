@@ -58,23 +58,7 @@ module.exports = function (grunt) {
                     dest: 'build/'
                 }
             ]
-        },
-        appcache: {
-            options: {
-                layout: false,
-                ext: '.appcache'
-            },
-            files: [
-                {
-                    src: ['*.appcache.hbs'],
-                    expand: true,
-                    cwd: 'html/',
-                    ext: '.appcache',
-                    dest: 'build/'
-                }
-            ]
         }
-
     });
 
     grunt.registerTask('assemble_build', ['newer:assemble:base', 'newer:assemble:ox', 'newer:assemble:appcache']);
