@@ -337,7 +337,6 @@ define('io.ox/contacts/view-detail',
     function getMailAddresses(data) {
         return _([data.email1, data.email2, data.email3])
             .chain()
-            .compact()
             .map(function (address) {
                 return $.trim(address).toLowerCase();
             })
