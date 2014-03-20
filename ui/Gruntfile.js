@@ -36,7 +36,7 @@ module.exports = function (grunt) {
     // custom tasks
     grunt.registerTask('manifests', ['newer:jsonlint:all', 'concat:manifests']);
     grunt.registerTask('lint', ['newer:jshint:all', 'newer:jsonlint:all']);
-    grunt.registerTask('force_update', ['assemble:base', 'assemble:appcache']);
+    grunt.registerTask('force_update', ['assemble:base']);
     grunt.registerTask('bootjs', ['newer:assemble:ox', 'newer:concat:bootjs']);
     grunt.registerTask('tinymce_update', ['curl:tinymceMain', 'curl:tinymceLanguagePack', 'unzip:tinymceMain', 'unzip:tinymceLanguagePack', 'copy:tinymce']);
 

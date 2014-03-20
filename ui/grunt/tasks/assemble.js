@@ -61,7 +61,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('assemble_build', ['newer:assemble:base', 'newer:assemble:ox', 'newer:assemble:appcache']);
+    grunt.registerTask('assemble_build', ['newer:assemble:base', 'newer:assemble:ox']);
 
     grunt.loadNpmTasks('assemble');
 };
