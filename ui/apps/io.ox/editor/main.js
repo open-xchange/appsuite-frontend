@@ -294,6 +294,7 @@ define('io.ox/editor/main',
 
         app.load = function (o) {
             var def = $.Deferred();
+            app.cid = 'io.ox/editor:edit.' + _.cid(o);
             win.on('show', function () {
                 app.setState({ folder: o.folder_id, id: o.id });
             });
@@ -358,6 +359,11 @@ define('io.ox/editor/main',
     }
 
     return {
-        getApp: createInstance
+
+        getApp: createInstance,
+
+        reuse: function (data) {
+            return ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(data));
+        }
     };
 });

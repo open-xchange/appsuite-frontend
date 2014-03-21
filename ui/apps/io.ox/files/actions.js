@@ -123,6 +123,7 @@ define('io.ox/files/actions',
                 return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write');
             },
             action: function (baton) {
+                if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) return;
                 ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id });
             }
         });
