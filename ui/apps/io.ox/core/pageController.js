@@ -119,6 +119,7 @@ define('io.ox/core/pageController',
                     });
             }, 1);
 
+
             // make new toolbar visible
             pages[opt.from].navbar.hide();
             pages[to].navbar.render();
@@ -128,7 +129,9 @@ define('io.ox/core/pageController',
         this.goBack = function () {
             // TODO overhaulin, this is special for mail
             var target = lastPage;
+            // this is not a browsing history, so we have to maintain special states
             if (current === 'listView') target = 'folderTree';
+            if (current === 'threadView') target = 'listView';
             // TODO respect real last page
             this.changePage(target, {animation: 'slideright'});
         };

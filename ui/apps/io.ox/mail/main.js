@@ -50,7 +50,10 @@ define('io.ox/mail/main',
 
             app.getWindow()
                 .nodes.body.addClass('classic-toolbar-visible').append(toolbar);
+<<<<<<< HEAD
 
+=======
+>>>>>>> Pagination mobile
 
             // create 4 pages
             app.pages.addPage({
@@ -65,7 +68,7 @@ define('io.ox/mail/main',
             app.pages.addPage({
                 name: 'listView',
                 container: c,
-                startPage: true,
+                //startPage: true,
                 navbar: new Bars.NavbarView({
                     el: toolbar,
                     app: app
@@ -112,6 +115,29 @@ define('io.ox/mail/main',
                 .setTitle(gt('Folders'))
                 .setLeft(false)
                 .setRight(gt('Edit'));
+
+            app.pages.getNavbar('detailView')
+                .setTitle('') // no title
+                .setLeft(gt('Back'));
+
+            app.pages.getNavbar('threadView')
+                .setTitle(gt('Thread'))
+                .setLeft(gt('Back'));
+
+            // TODO restore last folder as starting point
+            app.pages.showPage('listView');
+
+        },
+        /*
+         * Init all nav- and toolbar labels for mobile
+         */
+        'bars-mobile': function (app) {
+
+            app.pages.getNavbar('listView').setLeft(gt('Folders'));
+
+            app.pages.getNavbar('folderTree')
+                .setTitle(gt('Folders'))
+                .setLeft(false);
 
             app.pages.getNavbar('detailView')
                 .setTitle('') // no title
@@ -205,6 +231,7 @@ define('io.ox/mail/main',
             // make folder visible by default
             app.toggleFolderView(true);
 
+<<<<<<< HEAD
             // add the edit ability
             // don't change folders on tap, just trigger contextmenu
             app.pages.getNavbar('folderTree')
@@ -219,6 +246,14 @@ define('io.ox/mail/main',
                         app.pages.getNavbar('folderTree').setRight(gt('Edit'));
                     }
                 });
+=======
+            // always change folder on click
+            // No way to use tap here since folderselection really messes up the event chain
+            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
+                if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
+                app.pages.changePage('listView');
+            });
+>>>>>>> Pagination mobile
 
         },
 
@@ -459,6 +494,18 @@ define('io.ox/mail/main',
 
 
         /*
+         * Change foldername on mobiles in navbar
+         */
+        'folder:change-mobile': function (app) {
+            if (!_.device('small')) return;
+            app.on('folder:change', function () {
+                app.folder.getData().done(function (d) {
+                    app.pages.getNavbar('listView').setTitle(d.title);
+                });
+            });
+        },
+
+        /*
          * Define basic function to show an email
          */
         'show-mail': function (app) {
@@ -685,7 +732,10 @@ define('io.ox/mail/main',
         },
 
         'init-navbarlabel-mobile': function (app) {
+<<<<<<< HEAD
             if (!_.device('small')) return;
+=======
+>>>>>>> Pagination mobile
             // prepare first start
             app.listView.on('first-reset', function () {
                 app.folder.getData().done(function (d) {
