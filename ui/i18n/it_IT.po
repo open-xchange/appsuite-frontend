@@ -51,7 +51,7 @@ msgstr[1] "%1$d settimane"
 msgid "%1$d files has been changed recently"
 msgstr "%1$d file sono stati modificati di recente"
 
-#: apps/io.ox/mail/threadview.js:86 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:99 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages in this conversation"
 msgstr "Conversazioni recenti"
@@ -284,7 +284,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elementi selezionati"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "Una notifica di consegna di consegna è stata inviata"
@@ -567,7 +567,7 @@ msgstr "Modifica la data iniziale"
 msgid "Administrator"
 msgstr "Amministratore"
 
-#: apps/io.ox/settings/main.js:373 module:io.ox/core
+#: apps/io.ox/settings/main.js:376 module:io.ox/core
 #, fuzzy
 msgid "Advanced Settings"
 msgstr "Impostazioni Drive"
@@ -873,8 +873,8 @@ msgid "B"
 msgstr "B"
 
 #: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:34 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:244
+#: apps/io.ox/mail/threadview.js:35 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:245
 msgid "Back"
 msgstr "Indietro"
 
@@ -884,7 +884,7 @@ msgid "Back to appointment"
 msgstr "Torna all'appuntamento"
 
 #: apps/io.ox/core/settings/pane.js:71 module:io.ox/core
-#: apps/io.ox/settings/main.js:236
+#: apps/io.ox/settings/main.js:239
 msgid "Basic settings"
 msgstr "Impostazioni di base"
 
@@ -932,7 +932,7 @@ msgstr "Copia nascosta (CCN) a"
 msgid "Blue"
 msgstr "Blu"
 
-#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:216 module:io.ox/mail
 #, fuzzy
 msgid "Bottom"
 msgstr "Bordo inferiore"
@@ -1159,7 +1159,7 @@ msgstr "Le modifiche sono state salvate."
 msgid "Character"
 msgstr "Carattere"
 
-#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
 #, fuzzy
 msgid "Checkboxes"
 msgstr "Commuta le caselle di selezione"
@@ -1405,7 +1405,7 @@ msgstr "Contatto"
 msgid "Contact Details"
 msgstr "Dettagli contatto"
 
-#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:222 module:io.ox/mail
 #, fuzzy
 msgid "Contact pictures"
 msgstr "Contatti"
@@ -2257,7 +2257,7 @@ msgstr "Indirizzi di posta elettronica"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:296 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:299 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Annualmente il %2$d %1$s"
@@ -2575,7 +2575,7 @@ msgstr "Account esterni di posta elettronica"
 msgid "External contact"
 msgstr "Contatto esterno"
 
-#: apps/io.ox/mail/common-extensions.js:431 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -2798,7 +2798,7 @@ msgid "Folder type"
 msgstr "Tipo di cartella"
 
 #: apps/io.ox/core/tk/folderviews.js:478 module:io.ox/core
-#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
 msgid "Folder view"
 msgstr "Vista della cartella"
 
@@ -3516,7 +3516,7 @@ msgid "Mail and Messaging"
 msgstr "Posta e messaggistica"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:120
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:242
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:245
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Posta e account sociali"
@@ -3570,12 +3570,9 @@ msgid "Mail source"
 msgstr "Sorgente del messaggio"
 
 #: apps/io.ox/core/tk/upload.js:106 module:io.ox/core
-msgid "Mail was not imported, only .eml files are supported."
-msgstr "Il messaggio non è stato importato, sono supportati solo i file .eml."
-
 #: apps/io.ox/mail/import.js:73 module:io.ox/mail
 #, fuzzy
-msgid "Mail was not imported. Only *.eml files are supported!"
+msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Il messaggio non è stato importato, sono supportati solo i file .eml."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
@@ -4073,7 +4070,7 @@ msgstr "Ancora nessun commento in bacheca."
 #: apps/io.ox/core/tk/attachments.js:418 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
-#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:216
+#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:217
 #: apps/io.ox/tasks/edit/view-template.js:338 module:io.ox/tasks/edit
 msgid "None"
 msgstr "Nessuno"
@@ -4226,6 +4223,12 @@ msgstr "Apri nel browser"
 msgid "Open on LinkedIn"
 msgstr "LinkedIn"
 
+#: apps/io.ox/mail/threadview.js:74 module:io.ox/mail
+#, fuzzy
+#| msgid "All messages"
+msgid "Open/close all messages"
+msgstr "Tutti i messaggi"
+
 #: apps/io.ox/tours/main.js:290 module:io.ox/tours
 msgid "Opening E-Mail threads"
 msgstr "Aprire le conversazioni di posta"
@@ -4327,7 +4330,7 @@ msgid "Optional 20"
 msgstr "Opzionale 20"
 
 #: apps/io.ox/core/emoji/view.js:119 module:io.ox/mail/emoji
-#: apps/io.ox/mail/toolbar.js:218 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:770
 msgid "Options"
 msgstr "Opzioni"
@@ -4771,7 +4774,7 @@ msgstr "Premi per nascondere i promemoria delle attività."
 msgid "Preview"
 msgstr "Anteprima"
 
-#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
 #, fuzzy
 msgid "Preview pane"
 msgstr "Anteprima"
@@ -5196,7 +5199,7 @@ msgstr "Retweet di %s"
 msgid "Review your purchases"
 msgstr "Verifica i tuoi acquisti"
 
-#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
 msgid "Right"
 msgstr "Destra"
 
@@ -5376,7 +5379,7 @@ msgid "Send"
 msgstr "Invia"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:517 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:519 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Invia una notifica di consegna"
@@ -5570,7 +5573,7 @@ msgstr "Mostra le attività completate"
 msgid "Show hidden files and folders"
 msgstr "Mostra i file e le cartelle nascoste"
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:432 module:io.ox/mail
 msgid "Show images"
 msgstr "Mostra le immagini"
 
@@ -6315,7 +6318,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Il nome file fornito supera la lunghezza consentita."
 
-#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:522 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -7270,7 +7273,8 @@ msgstr "Commento della versione"
 msgid "Version history"
 msgstr "Storico delle versioni"
 
-#: apps/io.ox/mail/toolbar.js:212 module:io.ox/mail
+#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
 #, fuzzy
 msgid "View"
 msgstr "&Vista"
@@ -7292,7 +7296,7 @@ msgstr "Visualizza il sorgente"
 msgid "Waiting"
 msgstr "In attesa"
 
-#: apps/io.ox/mail/common-extensions.js:458 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr ""
 "Avviso: questo messaggio di posta potrebbe essere un tentativo di frode"
@@ -7713,11 +7717,13 @@ msgstr[1] "dopo %1$d appuntamenti"
 msgid "and"
 msgstr "e"
 
-#: apps/io.ox/mail/common-extensions.js:235 module:io.ox/mail
+#. %1$d - number of other recipients (names will be shown if string is clicked)
+#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:328 module:io.ox/mail
+#. %1$d - number of attachments not shown (will be shown when string is clicked)
+#: apps/io.ox/mail/common-extensions.js:330 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -8534,9 +8540,6 @@ msgstr "annuale"
 
 #~ msgid "All changes saved"
 #~ msgstr "Tutte le modifiche sono state salvate"
-
-#~ msgid "All messages"
-#~ msgstr "Tutti i messaggi"
 
 #~ msgid "All users"
 #~ msgstr "Tutti gli utenti"
@@ -10158,6 +10161,10 @@ msgstr "annuale"
 
 #~ msgid "Mail text"
 #~ msgstr "Testo del messaggio"
+
+#~ msgid "Mail was not imported, only .eml files are supported."
+#~ msgstr ""
+#~ "Il messaggio non è stato importato, sono supportati solo i file .eml."
 
 #~ msgid "Mailfilter created"
 #~ msgstr "Filtro messaggi creato"

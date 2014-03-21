@@ -47,7 +47,7 @@ msgstr[1] "%1$d viikkoa"
 msgid "%1$d files has been changed recently"
 msgstr "%1$s tiedostoa on hiljattain muutettu"
 
-#: apps/io.ox/mail/threadview.js:86 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:99 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages in this conversation"
 msgstr "Tuoreimmat keskustelut"
@@ -280,7 +280,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> alkiota valittu"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "Toimituksen kuittaus lähetetty"
@@ -563,7 +563,7 @@ msgstr "Säädä aloituspäivämäärää"
 msgid "Administrator"
 msgstr "Ylläpitäjä"
 
-#: apps/io.ox/settings/main.js:373 module:io.ox/core
+#: apps/io.ox/settings/main.js:376 module:io.ox/core
 #, fuzzy
 msgid "Advanced Settings"
 msgstr "Driven asetukset"
@@ -864,8 +864,8 @@ msgid "B"
 msgstr "T"
 
 #: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:34 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:244
+#: apps/io.ox/mail/threadview.js:35 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:245
 msgid "Back"
 msgstr "Takaisin"
 
@@ -875,7 +875,7 @@ msgid "Back to appointment"
 msgstr "Takaisin tapaamiseen"
 
 #: apps/io.ox/core/settings/pane.js:71 module:io.ox/core
-#: apps/io.ox/settings/main.js:236
+#: apps/io.ox/settings/main.js:239
 msgid "Basic settings"
 msgstr "Perusasetukset"
 
@@ -923,7 +923,7 @@ msgstr "Piilokopio (BCC)"
 msgid "Blue"
 msgstr "Sininen"
 
-#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:216 module:io.ox/mail
 msgid "Bottom"
 msgstr ""
 
@@ -1149,7 +1149,7 @@ msgstr "Muutokset tallennettu."
 msgid "Character"
 msgstr "Hahmot"
 
-#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
 #, fuzzy
 msgid "Checkboxes"
 msgstr "Vaihtele valintaruutua"
@@ -1395,7 +1395,7 @@ msgstr "Yhteystieto"
 msgid "Contact Details"
 msgstr "Yhteystiedon yksityiskohdat"
 
-#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:222 module:io.ox/mail
 #, fuzzy
 msgid "Contact pictures"
 msgstr "Yhteystiedot"
@@ -2243,7 +2243,7 @@ msgstr "Sähköpostiosoitteet"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:296 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:299 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Vuosittain %1$s %2$d"
@@ -2559,7 +2559,7 @@ msgstr "Ulkoiset sähköpostitilit"
 msgid "External contact"
 msgstr "Ulkoinen yhteystieto"
 
-#: apps/io.ox/mail/common-extensions.js:431 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Sinun roskapostilta suojaamiseksesi ulkoiset kuvat on estetty."
@@ -2778,7 +2778,7 @@ msgid "Folder type"
 msgstr "Kansion tyyppi"
 
 #: apps/io.ox/core/tk/folderviews.js:478 module:io.ox/core
-#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
 msgid "Folder view"
 msgstr "Kansionäkymä"
 
@@ -3490,7 +3490,7 @@ msgid "Mail and Messaging"
 msgstr "Posti ja viestiminen"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:120
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:242
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:245
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Posti ja Some-tilit"
@@ -3544,12 +3544,9 @@ msgid "Mail source"
 msgstr "Postilähde"
 
 #: apps/io.ox/core/tk/upload.js:106 module:io.ox/core
-msgid "Mail was not imported, only .eml files are supported."
-msgstr "Postia ei voitu tuoda. Vain .eml tiedostot ovat tuettuja."
-
 #: apps/io.ox/mail/import.js:73 module:io.ox/mail
 #, fuzzy
-msgid "Mail was not imported. Only *.eml files are supported!"
+msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Postia ei voitu tuoda. Vain .eml tiedostot ovat tuettuja."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
@@ -4047,7 +4044,7 @@ msgstr "Ei vielä seinäpostauksia."
 #: apps/io.ox/core/tk/attachments.js:418 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
-#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:216
+#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:217
 #: apps/io.ox/tasks/edit/view-template.js:338 module:io.ox/tasks/edit
 msgid "None"
 msgstr "Ei tunnistetta"
@@ -4197,6 +4194,10 @@ msgstr "Avaa selaimessa"
 msgid "Open on LinkedIn"
 msgstr "LinkedIn"
 
+#: apps/io.ox/mail/threadview.js:74 module:io.ox/mail
+msgid "Open/close all messages"
+msgstr ""
+
 #: apps/io.ox/tours/main.js:290 module:io.ox/tours
 msgid "Opening E-Mail threads"
 msgstr "Sähköpostikeskustelun avaaminen"
@@ -4298,7 +4299,7 @@ msgid "Optional 20"
 msgstr "Vapaavalintainen 20"
 
 #: apps/io.ox/core/emoji/view.js:119 module:io.ox/mail/emoji
-#: apps/io.ox/mail/toolbar.js:218 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:770
 msgid "Options"
 msgstr "Vaihtoehdot"
@@ -4742,7 +4743,7 @@ msgstr "Paina pillottaaksesi kaikki tehtävämuistutukset."
 msgid "Preview"
 msgstr "Esikatselu"
 
-#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
 #, fuzzy
 msgid "Preview pane"
 msgstr "Esikatselu"
@@ -5167,7 +5168,7 @@ msgstr "%s retweettaama"
 msgid "Review your purchases"
 msgstr "Tarkistele ostoksiasi"
 
-#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
 #, fuzzy
 msgid "Right"
 msgstr "illalla"
@@ -5348,7 +5349,7 @@ msgid "Send"
 msgstr "Lähetä"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:517 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:519 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Lähetä toimituksen vavhistus"
@@ -5540,7 +5541,7 @@ msgstr "Näytä valmiit tehtävät"
 msgid "Show hidden files and folders"
 msgstr "Näytä piilotetut tiedostot ja kansiot"
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:432 module:io.ox/mail
 msgid "Show images"
 msgstr "Näytä kuvat"
 
@@ -6268,7 +6269,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Annettu tiedostonimi ylittää sallitun enimmäispituuden."
 
-#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:522 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -7207,7 +7208,8 @@ msgstr "Version kommentti"
 msgid "Version history"
 msgstr "Versiohistoria"
 
-#: apps/io.ox/mail/toolbar.js:212 module:io.ox/mail
+#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
 #, fuzzy
 msgid "View"
 msgstr "Päivänäkymä"
@@ -7229,7 +7231,7 @@ msgstr "Näytä lähdekoodi"
 msgid "Waiting"
 msgstr "Odottaa"
 
-#: apps/io.ox/mail/common-extensions.js:458 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Varoitus: Tämä viesti voi olla urkinta- tai huijausposti"
 
@@ -7646,11 +7648,13 @@ msgstr[1] "%1$d tapaamisen jälkeen"
 msgid "and"
 msgstr "ja"
 
-#: apps/io.ox/mail/common-extensions.js:235 module:io.ox/mail
+#. %1$d - number of other recipients (names will be shown if string is clicked)
+#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:328 module:io.ox/mail
+#. %1$d - number of attachments not shown (will be shown when string is clicked)
+#: apps/io.ox/mail/common-extensions.js:330 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -8279,6 +8283,9 @@ msgstr "vuosittain"
 
 #~ msgid "Mail text"
 #~ msgstr "Postin teksti"
+
+#~ msgid "Mail was not imported, only .eml files are supported."
+#~ msgstr "Postia ei voitu tuoda. Vain .eml tiedostot ovat tuettuja."
 
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "Siirretään posteja... Tämä voi kestää muutaman sekunnin."

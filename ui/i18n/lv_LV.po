@@ -52,7 +52,7 @@ msgstr[2] "%1$d nedēļas"
 msgid "%1$d files has been changed recently"
 msgstr "%1$d faili ir nesen izmainīti"
 
-#: apps/io.ox/mail/threadview.js:86 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:99 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages in this conversation"
 msgstr "Nesnās sarunas"
@@ -289,7 +289,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elementi iezīmēti"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "Piegādes apstiprinājums ir nosūtīts"
@@ -572,7 +572,7 @@ msgstr "Koriģēt sākuma datumu"
 msgid "Administrator"
 msgstr "Administrators"
 
-#: apps/io.ox/settings/main.js:373 module:io.ox/core
+#: apps/io.ox/settings/main.js:376 module:io.ox/core
 #, fuzzy
 msgid "Advanced Settings"
 msgstr "Aplikācijas Drive iestatījumi"
@@ -880,8 +880,8 @@ msgid "B"
 msgstr "B"
 
 #: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:34 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:244
+#: apps/io.ox/mail/threadview.js:35 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:245
 msgid "Back"
 msgstr "Atpakaļ"
 
@@ -891,7 +891,7 @@ msgid "Back to appointment"
 msgstr "Atpakaļ uz tikšanos"
 
 #: apps/io.ox/core/settings/pane.js:71 module:io.ox/core
-#: apps/io.ox/settings/main.js:236
+#: apps/io.ox/settings/main.js:239
 msgid "Basic settings"
 msgstr "Pamata iestatījumi"
 
@@ -939,7 +939,7 @@ msgstr "Otrā kopija (BCC)"
 msgid "Blue"
 msgstr "Zils"
 
-#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:216 module:io.ox/mail
 #, fuzzy
 msgid "Bottom"
 msgstr "Apakšmala"
@@ -1167,7 +1167,7 @@ msgstr "Izmaiņas ir saglabātas"
 msgid "Character"
 msgstr "Simbols"
 
-#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
 #, fuzzy
 msgid "Checkboxes"
 msgstr "Pārslēgt iezīmes"
@@ -1413,7 +1413,7 @@ msgstr "Kontakts"
 msgid "Contact Details"
 msgstr "Kontakta detaļas"
 
-#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:222 module:io.ox/mail
 #, fuzzy
 msgid "Contact pictures"
 msgstr "Kontakti"
@@ -2274,7 +2274,7 @@ msgstr "E-pasta adreses"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:296 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:299 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Katra gada %2$s %1$s"
@@ -2591,7 +2591,7 @@ msgstr "Ārējie e-pasta konti"
 msgid "External contact"
 msgstr "Ārējs kontakts"
 
-#: apps/io.ox/mail/common-extensions.js:431 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -2814,7 +2814,7 @@ msgid "Folder type"
 msgstr "Mapes tips"
 
 #: apps/io.ox/core/tk/folderviews.js:478 module:io.ox/core
-#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
 msgid "Folder view"
 msgstr "Mapes skats"
 
@@ -3530,7 +3530,7 @@ msgid "Mail and Messaging"
 msgstr "Ziņapmaiņa"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:120
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:242
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:245
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "E-pasta un sociālie konti"
@@ -3584,12 +3584,9 @@ msgid "Mail source"
 msgstr "Pasta avots"
 
 #: apps/io.ox/core/tk/upload.js:106 module:io.ox/core
-msgid "Mail was not imported, only .eml files are supported."
-msgstr "Pasts nav importēts jo atbalstīti tiek tikai .eml faili."
-
 #: apps/io.ox/mail/import.js:73 module:io.ox/mail
 #, fuzzy
-msgid "Mail was not imported. Only *.eml files are supported!"
+msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Pasts nav importēts jo atbalstīti tiek tikai .eml faili."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
@@ -4087,7 +4084,7 @@ msgstr "Nav neviena sienas postera."
 #: apps/io.ox/core/tk/attachments.js:418 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
-#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:216
+#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:217
 #: apps/io.ox/tasks/edit/view-template.js:338 module:io.ox/tasks/edit
 msgid "None"
 msgstr "Nekas"
@@ -4243,6 +4240,12 @@ msgstr "Atvērt pārlūkā"
 msgid "Open on LinkedIn"
 msgstr "LinkedIn"
 
+#: apps/io.ox/mail/threadview.js:74 module:io.ox/mail
+#, fuzzy
+#| msgid "All messages"
+msgid "Open/close all messages"
+msgstr "Visi ziņojumi"
+
 #: apps/io.ox/tours/main.js:290 module:io.ox/tours
 msgid "Opening E-Mail threads"
 msgstr "E-pasta sarunu atvēršana"
@@ -4344,7 +4347,7 @@ msgid "Optional 20"
 msgstr "Papildus 20"
 
 #: apps/io.ox/core/emoji/view.js:119 module:io.ox/mail/emoji
-#: apps/io.ox/mail/toolbar.js:218 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:770
 msgid "Options"
 msgstr "Opcijas"
@@ -4794,7 +4797,7 @@ msgstr "Piespiediet, lai paslēptu visis uzdevumu atgādinājumus."
 msgid "Preview"
 msgstr "Apskats"
 
-#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
 #, fuzzy
 msgid "Preview pane"
 msgstr "Apskats"
@@ -5219,7 +5222,7 @@ msgstr "Atbildēja %s"
 msgid "Review your purchases"
 msgstr "Skatīs savus pirkumus"
 
-#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
 msgid "Right"
 msgstr "Labējs"
 
@@ -5400,7 +5403,7 @@ msgid "Send"
 msgstr "Sūtīt"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:517 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:519 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Nosūtīt piegādes apstiprinājumu"
@@ -5594,7 +5597,7 @@ msgstr "Rādīt pabeigtos uzdevumus"
 msgid "Show hidden files and folders"
 msgstr "Rādīt paslēptos failus un mapes"
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:432 module:io.ox/mail
 msgid "Show images"
 msgstr "Rādīt attēlus"
 
@@ -6332,7 +6335,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Norādītā faila vārda garums pārsniedz pieļaujamo limitu."
 
-#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:522 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -7285,7 +7288,8 @@ msgstr "Versijas komentārs"
 msgid "Version history"
 msgstr "Versiju vēsture"
 
-#: apps/io.ox/mail/toolbar.js:212 module:io.ox/mail
+#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
 #, fuzzy
 msgid "View"
 msgstr "&Skats"
@@ -7307,7 +7311,7 @@ msgstr "Skatīt avotu"
 msgid "Waiting"
 msgstr "Gaidīšana"
 
-#: apps/io.ox/mail/common-extensions.js:458 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Brīdinājums: Šis ziņojums var būt e-pasta krāpniecība!"
 
@@ -7740,11 +7744,13 @@ msgstr[2] "pēc %1$d reizēm"
 msgid "and"
 msgstr "un"
 
-#: apps/io.ox/mail/common-extensions.js:235 module:io.ox/mail
+#. %1$d - number of other recipients (names will be shown if string is clicked)
+#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:328 module:io.ox/mail
+#. %1$d - number of attachments not shown (will be shown when string is clicked)
+#: apps/io.ox/mail/common-extensions.js:330 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -8574,9 +8580,6 @@ msgstr "ik-gada"
 
 #~ msgid "All changes saved"
 #~ msgstr "Visas izmaiņas saglabātas"
-
-#~ msgid "All messages"
-#~ msgstr "Visi ziņojumi"
 
 #~ msgid "All users"
 #~ msgstr "Visi lietotāji"
@@ -10692,6 +10695,9 @@ msgstr "ik-gada"
 
 #~ msgid "Mail text"
 #~ msgstr "Vēstules teksts"
+
+#~ msgid "Mail was not imported, only .eml files are supported."
+#~ msgstr "Pasts nav importēts jo atbalstīti tiek tikai .eml faili."
 
 #~ msgid "Mailfilter created"
 #~ msgstr "Pasta filtrs ir izveidots"

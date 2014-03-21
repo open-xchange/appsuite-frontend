@@ -103,7 +103,7 @@ define('io.ox/core/tk/upload',
                         for (var i = 0; i < files.length; i++) {
                             var valid_extensions = /(\.eml)$/i;
                             if (!valid_extensions.test(files[i].name)) {
-                                notifications.yell('error', gt('Mail was not imported, only .eml files are supported.'));
+                                notifications.yell('error', gt('Mail was not imported. Only .eml files are supported.'));
                                 removeOverlay(e);
                                 return false;
                             }

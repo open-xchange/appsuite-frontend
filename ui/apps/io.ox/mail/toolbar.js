@@ -209,6 +209,7 @@ define('io.ox/mail/toolbar',
 
             if (_.device('small')) return;
 
+            //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
             .header(gt('Preview pane'))
             .option('preview', 'right', gt('Right'))

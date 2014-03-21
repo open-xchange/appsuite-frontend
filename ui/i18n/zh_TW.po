@@ -48,7 +48,7 @@ msgstr[1] "%1$d 周"
 msgid "%1$d files has been changed recently"
 msgstr "最近有 %1$d 個被修改的檔案"
 
-#: apps/io.ox/mail/threadview.js:86 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:99 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages in this conversation"
 msgstr "近期對話"
@@ -281,7 +281,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "已選擇 <b>%1$d</b> 個元素"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "已寄出送達回執"
@@ -564,7 +564,7 @@ msgstr "調整起始日期"
 msgid "Administrator"
 msgstr "管理員"
 
-#: apps/io.ox/settings/main.js:373 module:io.ox/core
+#: apps/io.ox/settings/main.js:376 module:io.ox/core
 #, fuzzy
 msgid "Advanced Settings"
 msgstr "Drive 設定"
@@ -857,8 +857,8 @@ msgid "B"
 msgstr "B"
 
 #: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:34 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:244
+#: apps/io.ox/mail/threadview.js:35 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:245
 msgid "Back"
 msgstr "向後"
 
@@ -868,7 +868,7 @@ msgid "Back to appointment"
 msgstr "回到約會"
 
 #: apps/io.ox/core/settings/pane.js:71 module:io.ox/core
-#: apps/io.ox/settings/main.js:236
+#: apps/io.ox/settings/main.js:239
 msgid "Basic settings"
 msgstr "基礎設定"
 
@@ -914,7 +914,7 @@ msgstr "密件副本 (BCC) 致"
 msgid "Blue"
 msgstr "藍色"
 
-#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:216 module:io.ox/mail
 #, fuzzy
 msgid "Bottom"
 msgstr "下邊框"
@@ -1139,7 +1139,7 @@ msgstr "已儲存更改。"
 msgid "Character"
 msgstr "字元"
 
-#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
 #, fuzzy
 msgid "Checkboxes"
 msgstr "切換選取盒"
@@ -1383,7 +1383,7 @@ msgstr "聯繫人"
 msgid "Contact Details"
 msgstr "聯絡人詳細資訊"
 
-#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:222 module:io.ox/mail
 #, fuzzy
 msgid "Contact pictures"
 msgstr "成員"
@@ -2226,7 +2226,7 @@ msgstr "電子郵件位址"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:296 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:299 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "每年的 %1$s %2$d 日"
@@ -2537,7 +2537,7 @@ msgstr "外部電子郵件帳號"
 msgid "External contact"
 msgstr "外部聯絡人"
 
-#: apps/io.ox/mail/common-extensions.js:431 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "為保護您的隱私，已阻止預載外部圖片"
@@ -2752,7 +2752,7 @@ msgid "Folder type"
 msgstr "文件夾類型"
 
 #: apps/io.ox/core/tk/folderviews.js:478 module:io.ox/core
-#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
 msgid "Folder view"
 msgstr "文件夾面板"
 
@@ -3452,7 +3452,7 @@ msgid "Mail and Messaging"
 msgstr "郵件與訊息"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:120
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:242
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:245
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "郵件與社交帳戶"
@@ -3506,12 +3506,9 @@ msgid "Mail source"
 msgstr "郵件來源"
 
 #: apps/io.ox/core/tk/upload.js:106 module:io.ox/core
-msgid "Mail was not imported, only .eml files are supported."
-msgstr "郵件未被匯入，僅支援 .eml 檔案。"
-
 #: apps/io.ox/mail/import.js:73 module:io.ox/mail
 #, fuzzy
-msgid "Mail was not imported. Only *.eml files are supported!"
+msgid "Mail was not imported. Only .eml files are supported."
 msgstr "郵件未被匯入，僅支援 .eml 檔案。"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
@@ -4009,7 +4006,7 @@ msgstr "尚無塗鴉牆貼文。"
 #: apps/io.ox/core/tk/attachments.js:418 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
-#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:216
+#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:217
 #: apps/io.ox/tasks/edit/view-template.js:338 module:io.ox/tasks/edit
 msgid "None"
 msgstr "無"
@@ -4157,6 +4154,12 @@ msgstr "在瀏覽器開啟"
 msgid "Open on LinkedIn"
 msgstr "LinkedIn"
 
+#: apps/io.ox/mail/threadview.js:74 module:io.ox/mail
+#, fuzzy
+#| msgid "All messages"
+msgid "Open/close all messages"
+msgstr "所有訊息"
+
 #: apps/io.ox/tours/main.js:290 module:io.ox/tours
 msgid "Opening E-Mail threads"
 msgstr "開啟郵件討論串"
@@ -4258,7 +4261,7 @@ msgid "Optional 20"
 msgstr "選項 20"
 
 #: apps/io.ox/core/emoji/view.js:119 module:io.ox/mail/emoji
-#: apps/io.ox/mail/toolbar.js:218 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:770
 msgid "Options"
 msgstr "選項"
@@ -4700,7 +4703,7 @@ msgstr "按下以隱藏所有工作提醒。"
 msgid "Preview"
 msgstr "預覽"
 
-#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
 #, fuzzy
 msgid "Preview pane"
 msgstr "預覽"
@@ -5125,7 +5128,7 @@ msgstr "由 %s 轉推"
 msgid "Review your purchases"
 msgstr "確認您的購買"
 
-#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
 msgid "Right"
 msgstr "置右"
 
@@ -5305,7 +5308,7 @@ msgid "Send"
 msgstr "發送"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:517 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:519 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "傳送送達回執"
@@ -5499,7 +5502,7 @@ msgstr "顯示完成工作"
 msgid "Show hidden files and folders"
 msgstr "顯示隱藏檔案與資料夾"
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:432 module:io.ox/mail
 msgid "Show images"
 msgstr "顯示圖片"
 
@@ -6209,7 +6212,7 @@ msgstr "郵件主旨右邊的數字代表討論串中的郵件數量。要開啟
 msgid "The provided filename exceeds the allowed length."
 msgstr "檔名超過允許的長度。"
 
-#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:522 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr "寄件者想在您閱讀此郵件時收到通知"
@@ -7077,7 +7080,8 @@ msgstr "版本注釋"
 msgid "Version history"
 msgstr "版本記錄"
 
-#: apps/io.ox/mail/toolbar.js:212 module:io.ox/mail
+#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
 #, fuzzy
 msgid "View"
 msgstr "視圖 (&V)"
@@ -7099,7 +7103,7 @@ msgstr "檢視原始碼"
 msgid "Waiting"
 msgstr "等待中"
 
-#: apps/io.ox/mail/common-extensions.js:458 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告：該郵件可能存在郵件欺詐"
 
@@ -7506,11 +7510,13 @@ msgstr[1] "%1$d 次約會後"
 msgid "and"
 msgstr "與"
 
-#: apps/io.ox/mail/common-extensions.js:235 module:io.ox/mail
+#. %1$d - number of other recipients (names will be shown if string is clicked)
+#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:328 module:io.ox/mail
+#. %1$d - number of attachments not shown (will be shown when string is clicked)
+#: apps/io.ox/mail/common-extensions.js:330 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -8310,9 +8316,6 @@ msgstr "每年"
 
 #~ msgid "All changes saved"
 #~ msgstr "已儲存所有修改"
-
-#~ msgid "All messages"
-#~ msgstr "所有訊息"
 
 #~ msgid "All users"
 #~ msgstr "所有用戶"
@@ -9815,6 +9818,9 @@ msgstr "每年"
 
 #~ msgid "Mail text"
 #~ msgstr "郵件文字"
+
+#~ msgid "Mail was not imported, only .eml files are supported."
+#~ msgstr "郵件未被匯入，僅支援 .eml 檔案。"
 
 #~ msgid "Mailfilter created"
 #~ msgstr "已建立郵件篩選"

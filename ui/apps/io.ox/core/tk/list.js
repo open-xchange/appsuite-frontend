@@ -14,8 +14,7 @@
 define('io.ox/core/tk/list',
     ['io.ox/core/tk/list-selection',
      'io.ox/core/tk/list-dnd',
-     'io.ox/core/extensions',
-     'gettext!io.ox/core'
+     'io.ox/core/extensions'
     ], function (Selection, dnd, ext) {
 
     'use strict';

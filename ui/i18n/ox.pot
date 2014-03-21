@@ -3285,9 +3285,9 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js:655
 #: module:io.ox/core
-#: apps/io.ox/mail/threadview.js:34
+#: apps/io.ox/mail/threadview.js:35
 #: module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:244
+#: apps/io.ox/mail/toolbar.js:245
 msgid "Back"
 msgstr ""
 
@@ -3353,7 +3353,7 @@ msgstr ""
 
 #: apps/io.ox/core/emoji/view.js:119
 #: module:io.ox/mail/emoji
-#: apps/io.ox/mail/toolbar.js:218
+#: apps/io.ox/mail/toolbar.js:219
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:770
 msgid "Options"
@@ -4313,7 +4313,7 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:71
 #: module:io.ox/core
-#: apps/io.ox/settings/main.js:236
+#: apps/io.ox/settings/main.js:239
 msgid "Basic settings"
 msgstr ""
 
@@ -4372,7 +4372,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/toolbar.js:216
+#: apps/io.ox/mail/toolbar.js:217
 #: apps/io.ox/tasks/edit/view-template.js:338
 #: module:io.ox/tasks/edit
 msgid "None"
@@ -4635,7 +4635,7 @@ msgstr ""
 
 #: apps/io.ox/core/tk/folderviews.js:478
 #: module:io.ox/core
-#: apps/io.ox/mail/toolbar.js:219
+#: apps/io.ox/mail/toolbar.js:220
 #: module:io.ox/mail
 msgid "Folder view"
 msgstr ""
@@ -4796,7 +4796,9 @@ msgstr ""
 
 #: apps/io.ox/core/tk/upload.js:106
 #: module:io.ox/core
-msgid "Mail was not imported, only .eml files are supported."
+#: apps/io.ox/mail/import.js:73
+#: module:io.ox/mail
+msgid "Mail was not imported. Only .eml files are supported."
 msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js:281
@@ -5902,44 +5904,46 @@ msgstr[1] ""
 msgid "Bcc"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:235
+#. %1$d - number of other recipients (names will be shown if string is clicked)
+#: apps/io.ox/mail/common-extensions.js:236
 #: module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:328
+#. %1$d - number of attachments not shown (will be shown when string is clicked)
+#: apps/io.ox/mail/common-extensions.js:330
 #: module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:430
+#: apps/io.ox/mail/common-extensions.js:432
 #: module:io.ox/mail
 msgid "Show images"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:431
+#: apps/io.ox/mail/common-extensions.js:433
 #: module:io.ox/mail
 msgid "External images have been blocked to protect you against potential spam!"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:458
+#: apps/io.ox/mail/common-extensions.js:460
 #: module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr ""
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:485
+#: apps/io.ox/mail/common-extensions.js:487
 #: module:io.ox/mail
 msgid "A return receipt has been sent"
 msgstr ""
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:517
+#: apps/io.ox/mail/common-extensions.js:519
 #: module:io.ox/mail
 msgid "Send a return receipt"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:520
+#: apps/io.ox/mail/common-extensions.js:522
 #: module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -5976,7 +5980,7 @@ msgstr ""
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:296
+#: apps/io.ox/mail/detail/view.js:299
 #: module:io.ox/mail
 msgid "Email from %1$s: %2$s"
 msgstr ""
@@ -6068,11 +6072,6 @@ msgstr ""
 #: apps/io.ox/mail/import.js:57
 #: module:io.ox/mail
 msgid "Drop EML file here for import"
-msgstr ""
-
-#: apps/io.ox/mail/import.js:73
-#: module:io.ox/mail
-msgid "Mail was not imported. Only *.eml files are supported!"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:42
@@ -6588,7 +6587,12 @@ msgstr ""
 msgid "Mails per hour (%)"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js:86
+#: apps/io.ox/mail/threadview.js:74
+#: module:io.ox/mail
+msgid "Open/close all messages"
+msgstr ""
+
+#: apps/io.ox/mail/threadview.js:99
 #: module:io.ox/mail
 msgid "%1$d messages in this conversation"
 msgstr ""
@@ -6633,32 +6637,33 @@ msgstr ""
 msgid "Show/hide folder"
 msgstr ""
 
-#: apps/io.ox/mail/toolbar.js:212
+#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#: apps/io.ox/mail/toolbar.js:213
 #: module:io.ox/mail
 msgid "View"
 msgstr ""
 
-#: apps/io.ox/mail/toolbar.js:213
+#: apps/io.ox/mail/toolbar.js:214
 #: module:io.ox/mail
 msgid "Preview pane"
 msgstr ""
 
-#: apps/io.ox/mail/toolbar.js:214
+#: apps/io.ox/mail/toolbar.js:215
 #: module:io.ox/mail
 msgid "Right"
 msgstr ""
 
-#: apps/io.ox/mail/toolbar.js:215
+#: apps/io.ox/mail/toolbar.js:216
 #: module:io.ox/mail
 msgid "Bottom"
 msgstr ""
 
-#: apps/io.ox/mail/toolbar.js:220
+#: apps/io.ox/mail/toolbar.js:221
 #: module:io.ox/mail
 msgid "Checkboxes"
 msgstr ""
 
-#: apps/io.ox/mail/toolbar.js:221
+#: apps/io.ox/mail/toolbar.js:222
 #: module:io.ox/mail
 msgid "Contact pictures"
 msgstr ""
@@ -7201,7 +7206,7 @@ msgstr ""
 
 #: apps/io.ox/settings/accounts/settings/pane.js:120
 #: module:io.ox/settings/accounts
-#: apps/io.ox/settings/main.js:242
+#: apps/io.ox/settings/main.js:245
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr ""
@@ -7216,7 +7221,7 @@ msgstr ""
 msgid "Delete account"
 msgstr ""
 
-#: apps/io.ox/settings/main.js:373
+#: apps/io.ox/settings/main.js:376
 #: module:io.ox/core
 msgid "Advanced Settings"
 msgstr ""

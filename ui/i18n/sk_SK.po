@@ -54,7 +54,7 @@ msgstr[2] "%1$d týždňov"
 msgid "%1$d files has been changed recently"
 msgstr "%1$d súbory boli nedávno zmenené"
 
-#: apps/io.ox/mail/threadview.js:86 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:99 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages in this conversation"
 msgstr "Nedávne konverzácie"
@@ -291,7 +291,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> prvkov vybraných"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "Bolo poslané potvrdenie o doručení"
@@ -574,7 +574,7 @@ msgstr "Zmeniť dátum začiatku"
 msgid "Administrator"
 msgstr "Správca"
 
-#: apps/io.ox/settings/main.js:373 module:io.ox/core
+#: apps/io.ox/settings/main.js:376 module:io.ox/core
 #, fuzzy
 msgid "Advanced Settings"
 msgstr "Nastavenie Drive"
@@ -879,8 +879,8 @@ msgid "B"
 msgstr "B"
 
 #: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:34 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:244
+#: apps/io.ox/mail/threadview.js:35 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:245
 msgid "Back"
 msgstr "Späť"
 
@@ -890,7 +890,7 @@ msgid "Back to appointment"
 msgstr "Späť na schôdzku"
 
 #: apps/io.ox/core/settings/pane.js:71 module:io.ox/core
-#: apps/io.ox/settings/main.js:236
+#: apps/io.ox/settings/main.js:239
 msgid "Basic settings"
 msgstr "Základné nastavenia"
 
@@ -938,7 +938,7 @@ msgstr "Skrytá kópia (BCC)"
 msgid "Blue"
 msgstr "Modrá"
 
-#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:216 module:io.ox/mail
 #, fuzzy
 msgid "Bottom"
 msgstr "Okaj dolu"
@@ -1166,7 +1166,7 @@ msgstr "Všetky zmeny boli uložené."
 msgid "Character"
 msgstr "Znak"
 
-#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
 #, fuzzy
 msgid "Checkboxes"
 msgstr "Zmeniť označenie políčok"
@@ -1412,7 +1412,7 @@ msgstr "Kontakt"
 msgid "Contact Details"
 msgstr "Podrobnosti kontaktu"
 
-#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:222 module:io.ox/mail
 #, fuzzy
 msgid "Contact pictures"
 msgstr "Členovia"
@@ -2269,7 +2269,7 @@ msgstr "Emailové adresy"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:296 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:299 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Každý rok %2$d. %1$s"
@@ -2585,7 +2585,7 @@ msgstr "Externé emailové účty"
 msgid "External contact"
 msgstr "Externý kontakt"
 
-#: apps/io.ox/mail/common-extensions.js:431 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -2809,7 +2809,7 @@ msgid "Folder type"
 msgstr "Typ priečinka"
 
 #: apps/io.ox/core/tk/folderviews.js:478 module:io.ox/core
-#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
 msgid "Folder view"
 msgstr "Zobrazenie priečinkov"
 
@@ -3528,7 +3528,7 @@ msgid "Mail and Messaging"
 msgstr "Pošta a posielanie správ"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:120
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:242
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:245
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Emailové a sociálne účty"
@@ -3582,12 +3582,9 @@ msgid "Mail source"
 msgstr "Zdroj pošty"
 
 #: apps/io.ox/core/tk/upload.js:106 module:io.ox/core
-msgid "Mail was not imported, only .eml files are supported."
-msgstr "Pošta sa neimportovala, sú podporované iba súbory .eml."
-
 #: apps/io.ox/mail/import.js:73 module:io.ox/mail
 #, fuzzy
-msgid "Mail was not imported. Only *.eml files are supported!"
+msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Pošta sa neimportovala, sú podporované iba súbory .eml."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
@@ -4085,7 +4082,7 @@ msgstr "Zatiaľ žiadne príspevky na nástenke."
 #: apps/io.ox/core/tk/attachments.js:418 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
-#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:216
+#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:217
 #: apps/io.ox/tasks/edit/view-template.js:338 module:io.ox/tasks/edit
 msgid "None"
 msgstr "Žiadne"
@@ -4238,6 +4235,12 @@ msgstr "Otvoriť v prehliadači"
 msgid "Open on LinkedIn"
 msgstr "LinkedIn"
 
+#: apps/io.ox/mail/threadview.js:74 module:io.ox/mail
+#, fuzzy
+#| msgid "All messages"
+msgid "Open/close all messages"
+msgstr "Všetky správy"
+
 #: apps/io.ox/tours/main.js:290 module:io.ox/tours
 msgid "Opening E-Mail threads"
 msgstr "Otvárenie vlákien emailov"
@@ -4339,7 +4342,7 @@ msgid "Optional 20"
 msgstr "Voliteľné 20"
 
 #: apps/io.ox/core/emoji/view.js:119 module:io.ox/mail/emoji
-#: apps/io.ox/mail/toolbar.js:218 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:770
 msgid "Options"
 msgstr "Možnosti"
@@ -4789,7 +4792,7 @@ msgstr "Stlačením skryjete všetky pripomenutia úloh."
 msgid "Preview"
 msgstr "Náhľad"
 
-#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
 #, fuzzy
 msgid "Preview pane"
 msgstr "Náhľad"
@@ -5214,7 +5217,7 @@ msgstr "Retweetoval %s"
 msgid "Review your purchases"
 msgstr "Skontrolovať vaše nákupy"
 
-#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
 msgid "Right"
 msgstr "Vpravo"
 
@@ -5395,7 +5398,7 @@ msgid "Send"
 msgstr "Poslať"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:517 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:519 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Poslať potvrdenie o doručení"
@@ -5589,7 +5592,7 @@ msgstr "Zobraziť hotové úlohy"
 msgid "Show hidden files and folders"
 msgstr "Zobraziť skryté súbory a priečinky"
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:432 module:io.ox/mail
 msgid "Show images"
 msgstr "Zobraziť obrázky"
 
@@ -6321,7 +6324,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Poskytnutý názov súboru prekračuje povolenú dĺžku."
 
-#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:522 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Odosielateľ chce dostať oznámenie, keď si prečítate tento email"
@@ -7256,7 +7259,8 @@ msgstr "Komentár k verzii"
 msgid "Version history"
 msgstr "História verzií"
 
-#: apps/io.ox/mail/toolbar.js:212 module:io.ox/mail
+#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
 #, fuzzy
 msgid "View"
 msgstr "&Zobraziť"
@@ -7278,7 +7282,7 @@ msgstr "Zobraziť zdroj"
 msgid "Waiting"
 msgstr "Čaká sa"
 
-#: apps/io.ox/mail/common-extensions.js:458 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Upozornenie: Táto správa môže byť podvodný email!"
 
@@ -7708,11 +7712,13 @@ msgstr[2] "po %1$d schôdzkach"
 msgid "and"
 msgstr "a"
 
-#: apps/io.ox/mail/common-extensions.js:235 module:io.ox/mail
+#. %1$d - number of other recipients (names will be shown if string is clicked)
+#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:328 module:io.ox/mail
+#. %1$d - number of attachments not shown (will be shown when string is clicked)
+#: apps/io.ox/mail/common-extensions.js:330 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -8539,9 +8545,6 @@ msgstr "ročne"
 
 #~ msgid "All changes saved"
 #~ msgstr "Všetky zmeny boli uložené"
-
-#~ msgid "All messages"
-#~ msgstr "Všetky správy"
 
 #~ msgid "All users"
 #~ msgstr "Všetci používatelia"
@@ -10655,6 +10658,9 @@ msgstr "ročne"
 
 #~ msgid "Mail text"
 #~ msgstr "Text správy"
+
+#~ msgid "Mail was not imported, only .eml files are supported."
+#~ msgstr "Pošta sa neimportovala, sú podporované iba súbory .eml."
 
 #~ msgid "Mailfilter created"
 #~ msgstr "Filter pošty bol vytvorený"

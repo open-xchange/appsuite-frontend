@@ -232,6 +232,7 @@ define('io.ox/mail/common-extensions',
                 if (items.length > 3) {
                     container.children().slice(4).hide();
                     container.append(
+                        //#. %1$d - number of other recipients (names will be shown if string is clicked)
                         $('<a href="#" class="show-all-recipients">').text(gt('and %1$d others', items.length - 2))
                     );
                     container.on('click', showAllRecipients);
@@ -325,6 +326,7 @@ define('io.ox/mail/common-extensions',
                 if (length > 3) {
                     list.append(
                         $('<a href="#" class="n-more">').text(
+                            //#. %1$d - number of attachments not shown (will be shown when string is clicked)
                             gt('and %1$d others ...', length - 2)
                         )
                         .click(showAllAttachments)

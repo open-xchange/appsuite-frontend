@@ -70,7 +70,7 @@ define('io.ox/mail/import',
                     app.queues.importEML.offer(files, { folder: app.folder.get() });
                 },
                 'invalid': function () {
-                    notifications.yell('error', gt('Mail was not imported. Only *.eml files are supported!'));
+                    notifications.yell('error', gt('Mail was not imported. Only .eml files are supported.'));
                 }
             });
 

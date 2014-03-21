@@ -50,7 +50,7 @@ msgstr[1] "%d hét"
 msgid "%1$d files has been changed recently"
 msgstr "%1$d fájl változott mostanság"
 
-#: apps/io.ox/mail/threadview.js:86 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:99 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages in this conversation"
 msgstr "Legutóbbi társalgások"
@@ -283,7 +283,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elem kijelölve"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "A tértivevény elküldve"
@@ -566,7 +566,7 @@ msgstr "Kezdés dátumának módosítása"
 msgid "Administrator"
 msgstr "Adminisztrátor"
 
-#: apps/io.ox/settings/main.js:373 module:io.ox/core
+#: apps/io.ox/settings/main.js:376 module:io.ox/core
 #, fuzzy
 msgid "Advanced Settings"
 msgstr "Drive beállítások"
@@ -873,8 +873,8 @@ msgid "B"
 msgstr "B"
 
 #: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:34 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:244
+#: apps/io.ox/mail/threadview.js:35 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:245
 msgid "Back"
 msgstr "Vissza"
 
@@ -884,7 +884,7 @@ msgid "Back to appointment"
 msgstr "Vissza a találkozóhoz"
 
 #: apps/io.ox/core/settings/pane.js:71 module:io.ox/core
-#: apps/io.ox/settings/main.js:236
+#: apps/io.ox/settings/main.js:239
 msgid "Basic settings"
 msgstr "Alapbeállítások"
 
@@ -932,7 +932,7 @@ msgstr "Rejtett másolatot (BCC) kap"
 msgid "Blue"
 msgstr "Kék"
 
-#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:216 module:io.ox/mail
 #, fuzzy
 msgid "Bottom"
 msgstr "Szegély lent"
@@ -1159,7 +1159,7 @@ msgstr "A változtatások mentésre kerültek."
 msgid "Character"
 msgstr "Karakter"
 
-#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
 #, fuzzy
 msgid "Checkboxes"
 msgstr "Kijelölések átváltása"
@@ -1406,7 +1406,7 @@ msgstr "Névjegy"
 msgid "Contact Details"
 msgstr "Partner részletei"
 
-#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:222 module:io.ox/mail
 #, fuzzy
 msgid "Contact pictures"
 msgstr "Névjegyek"
@@ -2261,7 +2261,7 @@ msgstr "E-mail címek"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:296 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:299 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Minden év %1$s %2$d. napján"
@@ -2578,7 +2578,7 @@ msgstr "Külső e-mail fiókok"
 msgid "External contact"
 msgstr "Külső névjegy"
 
-#: apps/io.ox/mail/common-extensions.js:431 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "A lehetséges levélszemét miatt a külső képek betöltése le lett tiltva!"
@@ -2797,7 +2797,7 @@ msgid "Folder type"
 msgstr "Mappatípus"
 
 #: apps/io.ox/core/tk/folderviews.js:478 module:io.ox/core
-#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
 msgid "Folder view"
 msgstr "Mappa nézet"
 
@@ -3513,7 +3513,7 @@ msgid "Mail and Messaging"
 msgstr "Levél és üzenetküldés"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:120
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:242
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:245
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Posta- és közösségi fiókok"
@@ -3567,12 +3567,9 @@ msgid "Mail source"
 msgstr "Levélforrás"
 
 #: apps/io.ox/core/tk/upload.js:106 module:io.ox/core
-msgid "Mail was not imported, only .eml files are supported."
-msgstr "A levél nem lett importálva, csak a .eml fájlok támogatottak."
-
 #: apps/io.ox/mail/import.js:73 module:io.ox/mail
 #, fuzzy
-msgid "Mail was not imported. Only *.eml files are supported!"
+msgid "Mail was not imported. Only .eml files are supported."
 msgstr "A levél nem lett importálva, csak a .eml fájlok támogatottak."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
@@ -4070,7 +4067,7 @@ msgstr "Még nincsenek üzenetek a falon."
 #: apps/io.ox/core/tk/attachments.js:418 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
-#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:216
+#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:217
 #: apps/io.ox/tasks/edit/view-template.js:338 module:io.ox/tasks/edit
 msgid "None"
 msgstr "Nincs"
@@ -4221,6 +4218,12 @@ msgstr "Megnyitás böngészőben"
 msgid "Open on LinkedIn"
 msgstr "LinkedIn"
 
+#: apps/io.ox/mail/threadview.js:74 module:io.ox/mail
+#, fuzzy
+#| msgid "All messages"
+msgid "Open/close all messages"
+msgstr "Minden üzenet"
+
 #: apps/io.ox/tours/main.js:290 module:io.ox/tours
 msgid "Opening E-Mail threads"
 msgstr "Üzenetszálak megnyitása"
@@ -4322,7 +4325,7 @@ msgid "Optional 20"
 msgstr "Opcionális 20"
 
 #: apps/io.ox/core/emoji/view.js:119 module:io.ox/mail/emoji
-#: apps/io.ox/mail/toolbar.js:218 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:770
 msgid "Options"
 msgstr "Beállítások"
@@ -4768,7 +4771,7 @@ msgstr "Nyomja meg az összes feladatemlékeztető elrejtéséhez."
 msgid "Preview"
 msgstr "Előnézet"
 
-#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
 #, fuzzy
 msgid "Preview pane"
 msgstr "Előnézet"
@@ -5193,7 +5196,7 @@ msgstr "%s újracsiripelte"
 msgid "Review your purchases"
 msgstr "Vásárlás áttekintése"
 
-#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
 msgid "Right"
 msgstr "Jobbra"
 
@@ -5373,7 +5376,7 @@ msgid "Send"
 msgstr "Küldés"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:517 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:519 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Tértivevény küldése"
@@ -5567,7 +5570,7 @@ msgstr "Kész feladatok megjelenítése"
 msgid "Show hidden files and folders"
 msgstr "Rejtett fájlok és mappák megjelenítése"
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:432 module:io.ox/mail
 msgid "Show images"
 msgstr "Képek megjelenítése"
 
@@ -6304,7 +6307,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "A megadott fájlnév hossza meghaladja az engedélyezett méretet."
 
-#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:522 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -7246,7 +7249,8 @@ msgstr "Megjegyzés a verzióhoz"
 msgid "Version history"
 msgstr "Verziótörténet"
 
-#: apps/io.ox/mail/toolbar.js:212 module:io.ox/mail
+#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
 #, fuzzy
 msgid "View"
 msgstr "Napnézet"
@@ -7268,7 +7272,7 @@ msgstr "Forrás megtekintése"
 msgid "Waiting"
 msgstr "Várakozás"
 
-#: apps/io.ox/mail/common-extensions.js:458 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Figyelem: Ez az üzenet egy adathalász vagy becsapós e-mail lehet"
 
@@ -7685,11 +7689,13 @@ msgstr[1] "%1$d találkozó után"
 msgid "and"
 msgstr "és"
 
-#: apps/io.ox/mail/common-extensions.js:235 module:io.ox/mail
+#. %1$d - number of other recipients (names will be shown if string is clicked)
+#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:328 module:io.ox/mail
+#. %1$d - number of attachments not shown (will be shown when string is clicked)
+#: apps/io.ox/mail/common-extensions.js:330 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -8316,9 +8322,6 @@ msgstr "évente"
 
 #~ msgid "All changes saved"
 #~ msgstr "Minden üzenet elmentve"
-
-#~ msgid "All messages"
-#~ msgstr "Minden üzenet"
 
 #~ msgid "Alternative Email"
 #~ msgstr "Alternatív e-mail"
@@ -8960,6 +8963,9 @@ msgstr "évente"
 
 #~ msgid "Mail text"
 #~ msgstr "Levélszöveg"
+
+#~ msgid "Mail was not imported, only .eml files are supported."
+#~ msgstr "A levél nem lett importálva, csak a .eml fájlok támogatottak."
 
 #~ msgid "Mailfilter created"
 #~ msgstr "Levélszűrő létrehozva"

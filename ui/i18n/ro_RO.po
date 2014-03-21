@@ -11,7 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
 "X-Generator: Poedit 1.5.7\n"
 
 #. File size
@@ -53,7 +54,7 @@ msgstr[2] "%1$d de săptămâni"
 msgid "%1$d files has been changed recently"
 msgstr "%1$d fișiere au fost modificate recent"
 
-#: apps/io.ox/mail/threadview.js:86 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:99 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages in this conversation"
 msgstr "Conversații recente"
@@ -290,7 +291,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elemente selectate"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:485 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "A fost trimisă o confirmare de primire"
@@ -573,7 +574,7 @@ msgstr "Modifică data de început"
 msgid "Administrator"
 msgstr "Administrator"
 
-#: apps/io.ox/settings/main.js:373 module:io.ox/core
+#: apps/io.ox/settings/main.js:376 module:io.ox/core
 #, fuzzy
 msgid "Advanced Settings"
 msgstr "Setări Drive"
@@ -880,8 +881,8 @@ msgid "B"
 msgstr "B"
 
 #: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:34 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:244
+#: apps/io.ox/mail/threadview.js:35 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:245
 msgid "Back"
 msgstr "Înapoi"
 
@@ -891,7 +892,7 @@ msgid "Back to appointment"
 msgstr "Înapoi la întâlnire"
 
 #: apps/io.ox/core/settings/pane.js:71 module:io.ox/core
-#: apps/io.ox/settings/main.js:236
+#: apps/io.ox/settings/main.js:239
 msgid "Basic settings"
 msgstr "Setări de bază"
 
@@ -939,7 +940,7 @@ msgstr "Copie invizibilă (BCC) către"
 msgid "Blue"
 msgstr "Albastru"
 
-#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:216 module:io.ox/mail
 #, fuzzy
 msgid "Bottom"
 msgstr "Bordură jos"
@@ -1167,7 +1168,7 @@ msgstr "Modificările au fost salvate."
 msgid "Character"
 msgstr "Caracter"
 
-#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
 #, fuzzy
 msgid "Checkboxes"
 msgstr "Comutare casete de selectare"
@@ -1416,7 +1417,7 @@ msgstr "Contact"
 msgid "Contact Details"
 msgstr "Detalii de contact"
 
-#: apps/io.ox/mail/toolbar.js:221 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:222 module:io.ox/mail
 #, fuzzy
 msgid "Contact pictures"
 msgstr "Contacte"
@@ -2273,7 +2274,7 @@ msgstr "Adrese de e-mail"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:296 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:299 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Anual în ziua de %1$s %2$d"
@@ -2590,7 +2591,7 @@ msgstr "Conturi de e-mail externe"
 msgid "External contact"
 msgstr "Contact extern"
 
-#: apps/io.ox/mail/common-extensions.js:431 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:433 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -2813,7 +2814,7 @@ msgid "Folder type"
 msgstr "Tip dosar"
 
 #: apps/io.ox/core/tk/folderviews.js:478 module:io.ox/core
-#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:220 module:io.ox/mail
 msgid "Folder view"
 msgstr "Vedere dosar"
 
@@ -3534,7 +3535,7 @@ msgid "Mail and Messaging"
 msgstr "Mail și mesagerie"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:120
-#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:242
+#: module:io.ox/settings/accounts apps/io.ox/settings/main.js:245
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
 msgstr "Conturi de e-mail și sociale"
@@ -3588,12 +3589,9 @@ msgid "Mail source"
 msgstr "Sursa mailului"
 
 #: apps/io.ox/core/tk/upload.js:106 module:io.ox/core
-msgid "Mail was not imported, only .eml files are supported."
-msgstr "Mailul nu a fost importat, doar fișierele .eml sunt suportate."
-
 #: apps/io.ox/mail/import.js:73 module:io.ox/mail
 #, fuzzy
-msgid "Mail was not imported. Only *.eml files are supported!"
+msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Mailul nu a fost importat, doar fișierele .eml sunt suportate."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:48
@@ -4091,7 +4089,7 @@ msgstr "Nicio postare pe perete."
 #: apps/io.ox/core/tk/attachments.js:418 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/flag-picker.js:23 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:68
-#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:216
+#: module:io.ox/settings/settings apps/io.ox/mail/toolbar.js:217
 #: apps/io.ox/tasks/edit/view-template.js:338 module:io.ox/tasks/edit
 msgid "None"
 msgstr "Niciunul"
@@ -4244,6 +4242,12 @@ msgstr "Deschide în navigator"
 msgid "Open on LinkedIn"
 msgstr "LinkedIn"
 
+#: apps/io.ox/mail/threadview.js:74 module:io.ox/mail
+#, fuzzy
+#| msgid "All messages"
+msgid "Open/close all messages"
+msgstr "Toate mesajele"
+
 #: apps/io.ox/tours/main.js:290 module:io.ox/tours
 msgid "Opening E-Mail threads"
 msgstr "Deschiderea conversațiilor"
@@ -4345,7 +4349,7 @@ msgid "Optional 20"
 msgstr "Opțional 20"
 
 #: apps/io.ox/core/emoji/view.js:119 module:io.ox/mail/emoji
-#: apps/io.ox/mail/toolbar.js:218 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:219 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:770
 msgid "Options"
 msgstr "Opțiuni"
@@ -4798,7 +4802,7 @@ msgstr "Apăsați pentru a acunde toate mementourile pentru sarcini."
 msgid "Preview"
 msgstr "Previzualizare"
 
-#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
 #, fuzzy
 msgid "Preview pane"
 msgstr "Previzualizare"
@@ -5226,7 +5230,7 @@ msgstr "Mesaj Twitter retrimis de %s"
 msgid "Review your purchases"
 msgstr "Revedeți cumpărăturile"
 
-#: apps/io.ox/mail/toolbar.js:214 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
 msgid "Right"
 msgstr "Dreapta"
 
@@ -5407,7 +5411,7 @@ msgid "Send"
 msgstr "Trimite"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:517 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:519 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Trimite o confirmare de primire"
@@ -5601,7 +5605,7 @@ msgstr "Afișează sarcinile efectuate"
 msgid "Show hidden files and folders"
 msgstr "Afișează fișierele și dosarele ascunse"
 
-#: apps/io.ox/mail/common-extensions.js:430 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:432 module:io.ox/mail
 msgid "Show images"
 msgstr "Afișează imaginile"
 
@@ -6339,7 +6343,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Numele fișierului depășește lungimea permisă."
 
-#: apps/io.ox/mail/common-extensions.js:520 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:522 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Expeditorul dorește să primească o notificare când citiți acest e-mail"
@@ -7298,7 +7302,8 @@ msgstr "Comentariu versiune"
 msgid "Version history"
 msgstr "Istoric versiuni"
 
-#: apps/io.ox/mail/toolbar.js:212 module:io.ox/mail
+#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
+#: apps/io.ox/mail/toolbar.js:213 module:io.ox/mail
 #, fuzzy
 msgid "View"
 msgstr "&Vizualizează"
@@ -7320,7 +7325,7 @@ msgstr "Afișează sursa"
 msgid "Waiting"
 msgstr "Așteptare"
 
-#: apps/io.ox/mail/common-extensions.js:458 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Avertisment: Este posibil ca acest mesaj să fie o escrocherie"
 
@@ -7751,11 +7756,13 @@ msgstr[2] "după %1$d de întâlniri"
 msgid "and"
 msgstr "și"
 
-#: apps/io.ox/mail/common-extensions.js:235 module:io.ox/mail
+#. %1$d - number of other recipients (names will be shown if string is clicked)
+#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
-#: apps/io.ox/mail/common-extensions.js:328 module:io.ox/mail
+#. %1$d - number of attachments not shown (will be shown when string is clicked)
+#: apps/io.ox/mail/common-extensions.js:330 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -8598,9 +8605,6 @@ msgstr "anual"
 
 #~ msgid "All changes saved"
 #~ msgstr "Toate modificările au fost salvate"
-
-#~ msgid "All messages"
-#~ msgstr "Toate mesajele"
 
 #~ msgid "All users"
 #~ msgstr "Toți utilizatorii"
@@ -10732,6 +10736,9 @@ msgstr "anual"
 
 #~ msgid "Mail text"
 #~ msgstr "Textul mailului"
+
+#~ msgid "Mail was not imported, only .eml files are supported."
+#~ msgstr "Mailul nu a fost importat, doar fișierele .eml sunt suportate."
 
 #~ msgid "Mailfilter created"
 #~ msgstr "Filtru de mesaje creat"
