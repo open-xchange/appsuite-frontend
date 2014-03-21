@@ -192,22 +192,26 @@ define('io.ox/files/fluid/view-detail',
             $commentArea,
             $comment,
             $uploadButton,
+            $cancelUploadButton,
             $progressBarWrapper,
             $progressBar,
             $input = attachments.fileUploadWidget({
+                multi: false,//two new versions at the same time makes no sense
                 buttontext: gt('Upload a new version')
             });
 
             $node = $('<form>').append(
-                $('<div>').addClass('row').append(
+                $('<div>').append(
                     $('<div class="pull-left">').append(
                         $input
                     ),
                     $uploadButton = $('<button type="button" data-action="upload" tabindex="1">')
                         .addClass('uploadbutton btn btn-primary pull-right').text(gt('Upload file')),
+                    $cancelUploadButton = $('<button>', {'data-dismiss': 'fileupload', tabindex: 1, 'aria-label': 'cancel'})
+                        .addClass('btn pull-right').text(gt('Cancel')).hide(),
                     $progressBarWrapper = $('<div>').addClass('row').append($progressBar = $('<div>').addClass('progress-bar')),
                     $('<div>').addClass('comment').append(
-                        $comment = $('<div class="row">').append(
+                        $comment = $('<div>').append(
                             $('<label>').text(gt('Version Comment')),
                             $commentArea = $('<textarea class="form-control" rows="5" tabindex="1"></textarea>')
                         ).hide()
@@ -216,18 +220,17 @@ define('io.ox/files/fluid/view-detail',
             ).appendTo(this);
 
             var resetCommentArea = function () {
-                if ($input.find('[data-dismiss="fileupload"]').is(':visible')) {
-                    $uploadButton.show().text(gt('Upload new version'));
-                    $commentArea.removeClass('disabled').val('');
-                    $comment.hide();
-                    $uploadButton.hide();
-                    //general upload error
-                    $uploadButton.removeClass('disabled');
-                    $input.closest('form').get(0).reset();
-                    //hide progressbar
-                    $progressBarWrapper.removeClass('progress');
-                    $progressBar.css('width', '0%');
-                }
+                $uploadButton.text(gt('Upload new version'));
+                $commentArea.removeClass('disabled').val('');
+                $comment.hide();
+                $uploadButton.hide();
+                $cancelUploadButton.hide();
+                //general upload error
+                $uploadButton.removeClass('disabled');
+                $input.closest('form').get(0).reset();
+                //hide progressbar
+                $progressBarWrapper.removeClass('progress');
+                $progressBar.css('width', '0%');
             };
 
             var uploadFailed = function (e) {
@@ -274,12 +277,16 @@ define('io.ox/files/fluid/view-detail',
             });
 
             $input.on('change', function () {
-                if ($input.find('[data-dismiss="fileupload"]').is(':visible')) {
+                if (!_.isEmpty($input.find('input[type="file"]').val())) {
+                    $cancelUploadButton.show();
                     $uploadButton.show();
                     $comment.show();
                     $commentArea.focus();
+                } else {
+                    resetCommentArea();
                 }
-            }).find('[data-dismiss="fileupload"]').on('click', function (e) {
+            });
+            $cancelUploadButton.on('click', function (e) {
                 e.preventDefault();
                 resetCommentArea(e);
             });
