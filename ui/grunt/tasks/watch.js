@@ -42,7 +42,10 @@ module.exports = function (grunt) {
         all: {
             files: [
                 'apps/**/*.{js,less}',
-                'lib/**/*.js'
+                'src/*',
+                'lib/**/*.js',
+                'bower.json',
+                'package.json'
             ],
             tasks: ['default', 'karma:unit:run'],
             options: { livereload: true }
