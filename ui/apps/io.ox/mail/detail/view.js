@@ -242,6 +242,9 @@ define('io.ox/mail/detail/view',
 
             if (state === undefined) $li.toggleClass('expanded'); else $li.toggleClass('expanded', state);
 
+            // trigger DOM event that bubbles
+            this.$el.trigger('toggle');
+
             if ($li.attr('data-loaded') === 'false' && $li.hasClass('expanded')) {
                 $li.attr('data-loaded', true);
                 $li.find('section.body').addClass('loading');

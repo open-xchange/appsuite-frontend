@@ -516,12 +516,24 @@
 }
 
 .thread-view-list {
+
     padding: 20px;
     background-color: #eee;
     &.scrollable { overflow: auto; }
+
     & > h1 {
+
         .subject();
         background-color: white;
+
+        .toggle-all {
+            color: #ccc;
+            float: right;
+            outline: 0;
+            &:hover { color: #aaa; }
+            &:focus { color: @link-color; }
+        }
+
         .summary {
             color: #888;
             font-size: 13px;

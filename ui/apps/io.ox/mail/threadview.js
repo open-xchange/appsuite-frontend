@@ -18,8 +18,9 @@ define('io.ox/mail/threadview',
      'io.ox/mail/util',
      'io.ox/core/api/backbone',
      'io.ox/mail/detail/view',
+     'io.ox/core/http',
      'gettext!io.ox/mail',
-     'io.ox/mail/listview'], function (extensions, ext, api, util, backbone, detail, gt) {
+     'io.ox/mail/listview'], function (extensions, ext, api, util, backbone, detail, http, gt) {
 
     'use strict';
 
@@ -57,6 +58,49 @@ define('io.ox/mail/threadview',
         }
     });
 
+    ext.point('io.ox/mail/thread-view/header').extend({
+        id: 'toggle-all',
+        index: 100,
+        draw: function (baton) {
+            if (baton.view.collection.length <= 1) return;
+            this.append(
+                $('<a href="#" class="toggle-all" tabindex="1">')
+                .append('<i class="fa fa-angle-double-down">')
+                .attr({
+                    'data-toggle': 'tooltip',
+                    'data-placement': 'left',
+                    'data-animation': 'false',
+                    'data-container': 'body',
+                    'title': gt('Open/close all messages')
+                })
+                .tooltip()
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/thread-view/header').extend({
+        id: 'subject',
+        index: 200,
+        draw: function (baton) {
+            var subject = util.getSubject(baton.view.collection.at(0).toJSON());
+            this.append(
+                $('<div class="subject">').text(subject)
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/thread-view/header').extend({
+        id: 'summary',
+        index: 300,
+        draw: function (baton) {
+            var length = baton.view.collection.length;
+            if (length <= 1) return;
+            this.append(
+                $('<div class="summary">').text(gt('%1$d messages in this conversation', length))
+            );
+        }
+    });
+
     var ThreadView = Backbone.View.extend({
 
         tagName: 'div',
@@ -66,6 +110,7 @@ define('io.ox/mail/threadview',
             'click .button a.back': 'onBack',
             'click .back-navigation .previous-mail': 'onPrevious',
             'click .back-navigation .next-mail': 'onNext',
+            'click .toggle-all': 'onToggleAll',
             'keydown': 'onKeydown'
         },
 
@@ -77,14 +122,9 @@ define('io.ox/mail/threadview',
         },
 
         updateHeader: function () {
-            var subject = util.getSubject(this.collection.at(0).toJSON());
-            this.$el.find('.thread-view-list > h1').empty().append(
-                // subject
-                $('<div class="subject">').text(subject),
-                // summary
-                this.collection.length > 1 ?
-                    $('<div class="summary">').text(gt('%1$d messages in this conversation', this.collection.length)) : []
-            );
+            var baton = new ext.Baton({ view: this }),
+                node = this.$el.find('.thread-view-list > h1').empty();
+            ext.point('io.ox/mail/thread-view/header').invoke('draw', node, baton);
         },
 
         updatePosition: function (position) {
@@ -101,6 +141,27 @@ define('io.ox/mail/threadview',
 
         toggleNavigation: function (state) {
             this.$el.toggleClass('back-navigation-visible', state);
+        },
+
+        onToggle: _.debounce(function () {
+            var items = this.getItems(),
+                open = items.filter('.expanded'),
+                state = items.length > open.length,
+                icon = state ? 'fa-angle-double-down' : 'fa-angle-double-up';
+            this.$el.find('.toggle-all i').attr('class', 'fa ' + icon);
+        }, 10),
+
+        onToggleAll: function (e) {
+            e.preventDefault();
+            var items = this.getItems(),
+                open = items.filter('.expanded'),
+                state = items.length > open.length;
+            // pause http layer to combine GET requests
+            http.pause();
+            this.collection.each(function (model) {
+                this.toggleMail(model.cid, state);
+            }, this);
+            http.resume();
         },
 
         toggleMail: function (cid, state) {
@@ -253,6 +314,8 @@ define('io.ox/mail/threadview',
             });
 
             this.$ul = $();
+
+            this.$el.on('toggle', '.list-item', this.onToggle.bind(this));
         },
 
         // return alls items of this list
