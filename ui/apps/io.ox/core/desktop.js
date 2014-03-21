@@ -36,7 +36,7 @@ define('io.ox/core/desktop',
 
     // top bar
     var appGuid = 0,
-        appCache = new cache.SimpleCache('app-cache');
+        appCache = new cache.SimpleCache('app-cache', true);
 
     // Apps collection
     ox.ui.apps = new Backbone.Collection();
@@ -517,21 +517,20 @@ define('io.ox/core/desktop',
 
         getSavePoints: function () {
             return appCache.get('savepoints').then(function (list) {
-                if (!list) {
+                if (!list || _.isEmpty(list)) {
                     list = coreConfig.get('savepoints', []);
                 }
                 return _(list || []).filter(function (obj) {
                     var hasPoint = 'point' in obj,
-                        sameVersion = obj.version === ox.version,
                         sameUA = obj.ua === navigator.userAgent;
-                    return (hasPoint && sameVersion && sameUA);
+                    return (hasPoint && sameUA);
                 });
             });
         },
 
         setSavePoints: function (list) {
             list = list || [];
-            coreConfig.set('savepoints', list);
+            coreConfig.set('savepoints', list).save();
             return appCache.add('savepoints', list);
         },
 
