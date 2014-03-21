@@ -51,8 +51,8 @@ define(['io.ox/calendar/main',
             waitsFor(loaded, ' calendar app did not start', ox.TestTimeout);
             main.getApp().launch().done(function () {
                 var app = this;
-                loaded.yep();
                 expect(app.get('state')).toBe('running');
+                loaded.yep();
             });
         });
 
@@ -61,9 +61,9 @@ define(['io.ox/calendar/main',
                 loaded = new Done();
             waitsFor(loaded, ' change perspective to listview not completed', ox.TestTimeout);
             ox.ui.Perspective.show(app, 'list').done(function () {
-                loaded.yep();
                 var perspective = app.attributes.window.currentPerspective;
                 expect(perspective).toBe('list');
+                loaded.yep();
             });
 
         });
