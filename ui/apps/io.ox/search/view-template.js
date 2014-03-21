@@ -16,7 +16,7 @@ define('io.ox/search/view-template',
      'io.ox/core/extensions',
      'io.ox/core/api/apps',
      'io.ox/core/tk/autocomplete',
-     'io.ox/search/view-template'
+     'io.ox/search/items/view-template'
     ], function (gt, ext, appAPI) {
 
     'use strict';
@@ -285,62 +285,6 @@ define('io.ox/search/view-template',
     });
 
     point.extend({
-        id: 'results',
-        index: 400,
-        row: '0',
-        draw: function (baton) {
-            var node = $('<div class="col-lg-12 result">'),
-                data = baton.model.get('data').results || {};
-
-            _.each(data, function (item) {
-                var tmp = $('<div class="item">');
-                switch (baton.model.getModule()) {
-                case 'mail':
-                    tmp.append(
-                        $('<div class="line1">').text(item.from[0][0] || item.from[0][1]),
-                        $('<div class="line1">').text('(' + item.id + ') ' + item.subject)
-                    );
-                    break;
-                case 'contacts':
-                    tmp.append(
-                        $('<div class="line1">').text('(' + item.id + ') ' + item.display_name),
-                        $('<div class="line1">').text(item.email1)
-                    );
-                    break;
-                case 'tasks':
-                    tmp.append(
-                        $('<div class="line1">').text('(' + item.id + ') ' + item.title),
-                        $('<div class="line1">').text('folder: ' + item.folder_id)
-                    );
-                    break;
-                case 'infostore':
-                    tmp.append(
-                        $('<div class="line1">').text('please define in search/view-template.js'),
-                        $('<div class="line1">').text('')
-                    );
-                    break;
-                case 'calendar':
-                    tmp.append(
-                        $('<div class="line1">').text('please define in search/view-template.js'),
-                        $('<div class="line1">').text('')
-                    );
-                    break;
-                }
-                node.append(tmp);
-            });
-
-            if (!data.length) {
-                node.append(
-                    $('<div class="item">').append(
-                        $('<div class="line1">').text('No results')
-                    )
-                );
-            }
-            this.append(node);
-        }
-    });
-
-    point.extend({
         id: 'statusbar',
         index: 400,
         row: '0',
@@ -348,9 +292,9 @@ define('io.ox/search/view-template',
             this.parent().find('.window-statusbar').remove();
 
             var node = $('<footer class="window-statusbar">').append(
-                $('<span>').text('current:' + baton.model.get('data').results.length),
-                $('<span>').text('start:' + baton.model.get('data').start + '(' + baton.model.get('start') + ')'),
-                $('<span>').text('size:' + baton.model.get('data').size + '(' + baton.model.get('size') + ')')
+                $('<span>').text('current:' + baton.model.get('items').length),
+                $('<span>').text('start:' + baton.model.get('start')),
+                $('<span>').text('size:' + baton.model.get('size'))
             );
             this.parent().append(node);
         }

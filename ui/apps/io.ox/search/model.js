@@ -264,10 +264,6 @@ define('io.ox/search/model',
         }
     });
 
-    Validations.validationFor('io.ox/tasks/model', {
-        title: {format: 'module'}
-    });
-
     ext.point('io.ox/search/model/validation').extend({
         id: 'recurrence-needs-end-date',
         validate: function (attributes) {
@@ -279,8 +275,6 @@ define('io.ox/search/model',
 
     return {
         defaults: defaults,
-        factory: factory,
-        task: factory.model,
-        tasks: factory.collection
+        factory: factory
     };
 });
