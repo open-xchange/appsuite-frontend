@@ -836,7 +836,28 @@ define('io.ox/core/commons-folderview',
                 baton.$.container.focus();
             }
 
-            if (previous !== visible) app.trigger('folderview:open');
+            app.trigger('folderview:open');
+            return $.when();
+        };
+
+        fnHideSml = function () {
+
+            app.settings.set('folderview/visible/' + _.display(), visible = false).save();
+            top = container.scrollTop();
+            var nodes = app.getWindow().nodes;
+            $('.window-container-center', nodes.outer).removeClass('animate-moveright').addClass('animate-moveleft');
+            baton.$.spacer.hide();
+            app.trigger('folderview:close');
+        };
+
+        fnShowSml = function () {
+
+            app.settings.set('folderview/visible/' + _.display(), visible = true).save();
+            var nodes = app.getWindow().nodes;
+            $('.window-container-center', nodes.outer).removeClass('animate-moveleft').addClass('animate-moveright');
+            baton.$.spacer.show();
+            app.trigger('folderview:open');
+
 
             return $.when();
         };
@@ -844,8 +865,12 @@ define('io.ox/core/commons-folderview',
         toggle = function (state) {
             if (state === undefined) state = !visible;
 
-            if (state) fnShow(); else fnHide();
 
+            if (_.device('smartphone')) {
+                if (state) fnShowSml(); else fnHideSml();
+            } else {
+                if (state) fnShow(); else fnHide();
+            }
 
         };
 
@@ -988,8 +1013,12 @@ define('io.ox/core/commons-folderview',
         };
 
         loadTree = function () {
-            toggle(true);
-            app.showFolderView = app.hideFolderView = app.toggleFolderView = $.noop;
+
+            toggle();
+            app.showFolderView = _.device('smartphone') ? fnShowSml : fnShow;
+            app.hideFolderView = _.device('smartphone') ? fnHideSml : fnHide;
+            app.toggleFolderView = toggle;
+
             loadTree = toggleTree = $.noop;
             return require(['io.ox/core/tk/folderviews']).then(initTree);
         };
