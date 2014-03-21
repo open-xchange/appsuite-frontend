@@ -232,7 +232,7 @@ $(window).load(function () {
                     // use redirect servlet for real login request
                     // this even makes chrome and safari asking for storing credentials
                     // skip this for auto-login or during offline mode
-                    if (viaAutoLogin || !ox.online) {
+                    if (viaAutoLogin) {
                         _.url.redirect(location);
                     } else {
                         // use redirect servlet
@@ -393,7 +393,7 @@ $(window).load(function () {
             if ($.trim(username).length === 0) {
                 return fail({ error: gt('Please enter your credentials.'), code: 'UI-0001' }, 'username');
             }
-            if ($.trim(password).length === 0 && ox.online) {
+            if ($.trim(password).length === 0) {
                 return fail({ error: gt('Please enter your password.'), code: 'UI-0002' }, 'password');
             }
             // login
@@ -549,11 +549,6 @@ $(window).load(function () {
                 // Set user's language (as opposed to the browser's language)
                 // Load core plugins
                 gettext.setLanguage(ox.language);
-                if (!ox.online) {
-                    gettext.enable();
-                    return $.when();
-                }
-
                 debug('boot.js: loadCoreFiles > loadPluginsFor(core) ...');
                 return manifests.manager.loadPluginsFor('core').always(gettext.enable);
             }
@@ -671,12 +666,6 @@ $(window).load(function () {
 
                 // needed for show-stopping errors like broken settings
                 continueWithoutAutoLogin();
-
-            } else if (!ox.online) {
-
-                // not online - no auto-login possible
-                debug('boot.js: autoLogin > Offline');
-                gotoSignin();
 
             } else {
 
@@ -821,14 +810,6 @@ $(window).load(function () {
                 $('#io-ox-forgot-password').remove();
             } else {
                 $('#io-ox-forgot-password').find('a').attr('href', sc.forgotPassword);
-            }
-
-            // disable password?
-            if (!ox.online) {
-                $('#io-ox-login-password').prop('disabled', true);
-                feedback('info', 'Offline mode');
-            } else {
-                $('#io-ox-login-password').prop('disabled', false);
             }
 
             // set username input type to text in IE
