@@ -68,7 +68,7 @@ define('io.ox/core/tk/selection',
             clickHandler,
             mouseupHandler,
             mousedownHandler,
-            touchstartHandler,
+            touchHandler,
             update,
             clear,
             isSelected,
@@ -314,15 +314,17 @@ define('io.ox/core/tk/selection',
             }
         };
 
-        touchstartHandler = function (e) {
+        touchHandler = function (e) {
             var node, key, id;
-
-            // check if the touchstart was triggerd from a inline button or folder tree
-            if (mobileSelectMode) {
+            if (!e.isDefaultPrevented()) {
                 node = $(this);
                 key = node.attr('data-obj-id');
                 id = bHasIndex ? (observedItems[getIndex(key)] || {}).data : key;
-                apply(id, e, true);
+
+                // check if the touchstart was triggerd from a inline button or folder tree
+                if (mobileSelectMode) {
+                    apply(id, e, true);
+                }
             }
         };
 
@@ -913,7 +915,7 @@ define('io.ox/core/tk/selection',
             .on('mousedown', '.selectable', mousedownHandler)
             .on('mouseup', '.selectable', mouseupHandler)
             .on('click', '.selectable', clickHandler)
-            .on('tap', '.selectable', touchstartHandler);
+            .on('tap', '.selectable', touchHandler);
 
         /*
         * DND
