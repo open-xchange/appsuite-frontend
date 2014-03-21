@@ -13,11 +13,12 @@
 
 define('io.ox/search/model',
     ['io.ox/search/api',
+     'io.ox/search/items/collection',
      'io.ox/backbone/modelFactory',
      'io.ox/backbone/validation',
      'io.ox/core/extensions',
      'gettext!io.ox/core'
-    ], function (api, ModelFactory, Validations, ext, gt) {
+    ], function (api, Items, ModelFactory, Validations, ext, gt) {
 
     'use strict';
 
@@ -27,6 +28,7 @@ define('io.ox/search/model',
      */
 
     var options = {},
+        items = new Items(),
         defaults, factory;
 
     //fetch settings/options
@@ -42,10 +44,7 @@ define('io.ox/search/model',
         //autocomplete response
         autocomplete: [],
         //query call result
-        data: {
-            results: {
-            }
-        },
+        items: items,
         //active facets
         active: [],
         pool: {},
@@ -232,6 +231,22 @@ define('io.ox/search/model',
                     this.add('folder', 'custom', this.getFolder() || 'default0/INBOX');
                 }
                 return this.fetch();
+            },
+            setItems: function (data) {
+                var application = this.getApp(),
+                    list = _.map(data.results, function (item) {
+                        return {
+                            id: item.id,
+                            folder: item.folder || item.folder_id,
+                            //in case we support multiapp results in future
+                            application: application,
+                            data: item
+                        };
+                    });
+
+                //TODO: bette use set?
+                items.reset();
+                items.add(list);
             },
             reset: function () {
                 this.set({

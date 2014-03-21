@@ -20,7 +20,7 @@ define('io.ox/search/main',
      'io.ox/search/api',
      'io.ox/core/notifications',
      'less!io.ox/search/style'
-    ], function (gt, settings, ext, Model, View, api, notifications) {
+    ], function (gt, settings, ext, SearchModel, SearchView, api, notifications) {
 
     'use strict';
 
@@ -99,7 +99,7 @@ define('io.ox/search/main',
         app.setWindow(win);
 
         //use application view
-        app.view = View.factory
+        app.view = SearchView.factory
                     .create(app, model, win.nodes.main);
 
         //update model
@@ -176,7 +176,7 @@ define('io.ox/search/main',
 
                 return api.query(opt)
                         .then(function (result) {
-                            model.set('data', result);
+                            model.setItems(result);
                             run();
                         }, yell);
             }
@@ -184,7 +184,7 @@ define('io.ox/search/main',
     });
 
     //init model and listeners
-    model = Model.factory.create({mode: 'widget'})
+    model = SearchModel.factory.create({mode: 'widget'})
             .on('query change:start change:size', app.apiproxy.query)
             // .on('all', function (name, model, value) {
             //     console.log('event: ', name, value);
@@ -207,7 +207,7 @@ define('io.ox/search/main',
         run: run,
         init: function (container) {
             var $container = container || $('<div>');
-            app.view = View.factory
+            app.view = SearchView.factory
                         .create(app, model, $container)
                         .render($container);
 
