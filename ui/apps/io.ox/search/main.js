@@ -56,7 +56,10 @@ define('io.ox/search/main',
             //active app : app searched in
             data.mapping = {
                 //name mapping
-                'io.ox/files' : 'io.ox/infostore',
+                //'io.ox/files' : 'io.ox/infostore',
+
+                //TODO: when supported enable drive again
+                'io.ox/files' : data.defaultApp,
                 //fallback/default mapping
                 'io.ox/portal' : data.defaultApp,
                 'io.ox/search' : data.defaultApp,

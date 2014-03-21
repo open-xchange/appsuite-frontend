@@ -202,8 +202,8 @@ define('io.ox/search/model',
                 return active;
             },
             setModule: function (module) {
-                var current = this.get('module');
-                this.set('module', module, {silent: true});
+                var current = this.get('app');
+                this.set('app', module, {silent: true});
                 if (current !== module) {
                     this.reset();
                     //inital or tabswitch
@@ -249,11 +249,13 @@ define('io.ox/search/model',
                 items.add(list);
             },
             reset: function () {
+                items.reset();
                 this.set({
                     query: '',
-                    autocomplete: {},
-                    data: [],
+                    autocomplete: [],
                     active: [],
+                    pool: {},
+                    poollist: [],
                     start: 0
                 },
                 {

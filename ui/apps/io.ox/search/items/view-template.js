@@ -73,16 +73,6 @@ define('io.ox/search/items/view-template',
 
             });
 
-            //delegate item click
-            // node.delegate('.item', 'click', function (e) {
-            //     var node = $(this);
-            //     baton.app.trigger('itemclick', e, {
-            //         app: node.attr('data-app'),
-            //         id: node.attr('data-id'),
-            //         folder_id: node.attr('data-folder'),
-            //     });
-            // });
-
             if (!data.length) {
                 node.append(
                     $('<div class="item">').append(

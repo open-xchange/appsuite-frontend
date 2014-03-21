@@ -115,7 +115,7 @@ define('io.ox/search/view-template',
             //register click handler
             node.find('li').on('click', function (e) {
                 var node = $(e.target);
-                baton.model.setModule(node.attr('class'));
+                baton.model.setModule(node.attr('data-app'));
             });
 
             this.append(node);
@@ -143,11 +143,11 @@ define('io.ox/search/view-template',
             var node = $('<div class="col-lg-12 facets">'),
                 model = baton.model,
                 list = model.get('poollist'),
-                value, tmp;
+                tmp;
 
             _.each(list, function (item) {
                 //get active value
-                value = model.get('pool')[item.facet].values[item.value];
+                var value = model.get('pool')[item.facet].values[item.value];
 
                 node.append(
                     tmp = $('<span>').html(value.display_name)
@@ -165,7 +165,6 @@ define('io.ox/search/view-template',
                     $('<i class="fa fa-times action">')
                     .on('click', function () {
                         baton.model.remove(value.facet, value.id);
-                        //baton.model.removeValue(value);
                     })
                 );
             });
@@ -188,7 +187,6 @@ define('io.ox/search/view-template',
                                  .text(item.display_name)
                         ).click('on', function () {
                             baton.model.update(facet.id, value.id, {option: item.id});
-
                             baton.model.trigger('query');
                         })
                     );
@@ -197,7 +195,17 @@ define('io.ox/search/view-template',
                 //TODO: a11y
                 node = $('<i class="fa fa-chevron-down action">')
                         .on('click', function () {
-                            menu.toggle();
+                            var left = self.offset().left || 0,
+                                height = self.outerHeight(),
+                                width = self.outerWidth();
+                            menu.css({
+                                    left: left + 'px',
+                                    top: height + 8 + 'px',
+                                    width: width + 'px',
+                                    'min-width': width + 'px',
+                                    'border-radius': '0px'
+                                })
+                                .toggle();
                         });
                 this.append(node);
             }
