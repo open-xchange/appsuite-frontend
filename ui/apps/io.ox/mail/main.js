@@ -50,11 +50,6 @@ define('io.ox/mail/main',
 
             app.getWindow()
                 .nodes.body.addClass('classic-toolbar-visible').append(toolbar);
-<<<<<<< HEAD
-
-=======
->>>>>>> Pagination mobile
-
             // create 4 pages
             app.pages.addPage({
                 name: 'folderTree',
@@ -132,6 +127,8 @@ define('io.ox/mail/main',
          * Init all nav- and toolbar labels for mobile
          */
         'bars-mobile': function (app) {
+
+            if (!_.device('small')) return;
 
             app.pages.getNavbar('listView').setLeft(gt('Folders'));
 
@@ -212,28 +209,6 @@ define('io.ox/mail/main',
 
             if (_.device('!small')) return;
 
-            // init folderview with custom container
-
-            var view = new FolderView(app, { type: 'mail', container: app.pages.getPage('folderTree') });
-            view.handleFolderChange();
-            view.load();
-
-            // always change folder on click
-            // No way to use tap here since folderselection really messes up the event chain
-            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
-                if (app.props.get('mobileFolderSelectMode') === true) return; // do not change page in edit mode
-                if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
-
-                app.pages.changePage('listView');
-            });
-
-
-            // make folder visible by default
-            app.toggleFolderView(true);
-
-<<<<<<< HEAD
-            // add the edit ability
-            // don't change folders on tap, just trigger contextmenu
             app.pages.getNavbar('folderTree')
                 .setRightAction(function () {
 
@@ -246,14 +221,21 @@ define('io.ox/mail/main',
                         app.pages.getNavbar('folderTree').setRight(gt('Edit'));
                     }
                 });
-=======
+
+            var view = new FolderView(app, { type: 'mail', container: app.pages.getPage('folderTree') });
+            view.handleFolderChange();
+            view.load();
+
+            // make folder visible by default
+            app.toggleFolderView(true);
+
             // always change folder on click
             // No way to use tap here since folderselection really messes up the event chain
             app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
                 if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
                 app.pages.changePage('listView');
             });
->>>>>>> Pagination mobile
+
 
         },
 
@@ -732,10 +714,8 @@ define('io.ox/mail/main',
         },
 
         'init-navbarlabel-mobile': function (app) {
-<<<<<<< HEAD
             if (!_.device('small')) return;
-=======
->>>>>>> Pagination mobile
+
             // prepare first start
             app.listView.on('first-reset', function () {
                 app.folder.getData().done(function (d) {
