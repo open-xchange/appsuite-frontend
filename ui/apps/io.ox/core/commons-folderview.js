@@ -838,12 +838,16 @@ define('io.ox/core/commons-folderview',
 
             if (previous !== visible) app.trigger('folderview:open');
 
+
             return $.when();
         };
 
         toggle = function (state) {
             if (state === undefined) state = !visible;
+
             if (state) fnShow(); else fnHide();
+
+
         };
 
         initResize = function () {
@@ -892,10 +896,16 @@ define('io.ox/core/commons-folderview',
             // mobile quirks, cannot be applied to css class
             // because it would be applied to desktop clients using
             // a small screen, too
-
             if (_.device('smartphone')) {
                 // mobile stuff
-                $('.window-sidepanel').hide();
+                $('.window-sidepanel').css({
+                    'width': '90%',
+                    'left': '-90%',
+                    'right': 'intial'
+                });
+                // listen to swipe
+                // TODO: works not reliable on android stock browsers, add a manual close button also
+                sidepanel.on('swipeleft', toggle);
 
             }
 
@@ -979,8 +989,15 @@ define('io.ox/core/commons-folderview',
         };
 
         loadTree = function () {
+<<<<<<< HEAD
             toggle(true);
             app.showFolderView = app.hideFolderView = app.toggleFolderView = $.noop;
+=======
+            toggle();
+            app.showFolderView = _.device('smartphone') ? fnShowSml : fnShow;
+            app.hideFolderView = _.device('smartphone') ? fnHideSml : fnHide;
+            app.toggleFolderView = toggle;
+>>>>>>> Reverted changes in commons-folderview
             loadTree = toggleTree = $.noop;
             return require(['io.ox/core/tk/folderviews']).then(initTree);
         };
@@ -1010,7 +1027,7 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel').invoke('draw', (options.folderTreeContainer) ? options.folderTreeContainer: app.getWindow().nodes.sidepanel, baton);
 
         if (_.device('smartphone')) {
-            //ext.point(POINT + '/sidepanel/mobile').invoke('draw', app.getWindow().nodes.outer, baton);
+            ext.point(POINT + '/sidepanel/mobile').invoke('draw', app.getWindow().nodes.outer, baton);
         }
 
         sidepanel = baton.$.sidepanel;
