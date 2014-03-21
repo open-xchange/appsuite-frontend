@@ -1142,13 +1142,23 @@ define('io.ox/core/main',
                     // draw savepoints to allow the user removing them
                     ox.ui.App.getSavePoints().done(function (list) {
                         _(list).each(function (item) {
+                            var info = item.description || item.module,
+                                versionInfo = $();
+                            if (item.version !== ox.version) {
+                                var version = item.version || '';
+                                version = version.split('.').slice(0, -2).join('.');
+                                if (version) {
+                                    versionInfo = $('<span>').addClass('oldversion').text(gt.noI18n('(' + version + ')'));
+                                }
+                            }
                             this.append(
                                 $('<li class="restore-item">').append(
                                     $('<a href="#" role="button" class="remove">').data(item).append(
                                         $('<i class="icon-trash">')
                                     ),
                                     item.icon ? $('<i class="' + item.icon + '">') : $(),
-                                    $('<span>').text(gt.noI18n(item.description || item.module))
+                                    $('<span>').text(gt.noI18n(info)),
+                                    versionInfo
                                 )
                             );
                         }, dialog.find('.content'));
