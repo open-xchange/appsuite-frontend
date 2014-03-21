@@ -14,10 +14,7 @@
 'use strict';
 
 module.exports = function (grunt) {
-    var wrench = require('wrench');
-    wrench.readdirSyncRecursive('apps/themes').filter(function (file) {
-        return file.match(/\/definitions.less$/);
-    }).forEach(function (file) {
+    grunt.file.expand({cwd: 'apps/themes/'}, '*/definitions.less').forEach(function (file) {
         var themeName = file.replace(/\/definitions.less$/, '');
         var theme = {};
         theme[themeName] = {
