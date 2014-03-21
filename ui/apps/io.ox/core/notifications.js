@@ -31,53 +31,28 @@ define('io.ox/core/notifications',
             this.$el.find('.badge').toggleClass('empty', count === 0);
             this.$el.find('.number').text(_.noI18n(count >= 100 ? '99+' : count));
 
-            this.$el.attr(
+            new NotificationController().yell('screenreader',
                     //#. %1$d number of notifications
                     //#, c-format
-                    'aria-label', gt.format(gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
-                            'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')), this.model.get('count')));
+                    gt.format(gt.ngettext('You have %1$d notification.',
+                            'You have %1$d notifications.', this.model.get('count')), this.model.get('count')));
 
         },
         onToggle: function (open) {
             this.$el.find('.badge i').attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
         },
         render: function () {
-            var numberNode;
             this.$el.attr({ href: '#',
                             tabindex: '1',
-                            role: 'button',
-                            //#. %1$d number of notifications
-                            //#, c-format
-                            'aria-label': gt.format(gt.ngettext('You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.',
-                                    'You have %1$d notifications. Press [enter] to jump to the notification area and [escape] to close it again.', this.model.get('count')), this.model.get('count'))})
+                            role: 'button'})
                 .append(
                 $('<span class="badge">').append(
-                    numberNode = $('<span class="number">'),
+                     $('<span class="number">'),
                     $.txt(' '),
                     $('<i class="fa fa-caret-right">')
                 )
              );
 
-            var autoOpenSetting = settings.get('autoOpenNotification', 'noEmail');
-            if (autoOpenSetting === 'never') {
-                numberNode.attr({role: 'alert',
-                    'aria-atomic': false,
-                    'aria-live': 'polite',
-                    'aria-relevant': 'all',
-                    //#. %1$d number of notifications
-                    //#, c-format
-                    'aria-label': gt.format(gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count')), this.model.get('count'))
-                });
-            } else {
-                numberNode.attr({role: 'alert',
-                    'aria-atomic': false,
-                    'aria-live': 'polite',
-                    'aria-relevant': 'all',
-                    //#. %1$d number of notifications
-                    //#, c-format
-                    'aria-label': gt.format(gt.ngettext('You have %1$d notification', 'You have %1$d notifications', this.model.get('count')), this.model.get('count'))
-                });
-            }
             this.onChange();
             return this;
         },
@@ -367,12 +342,12 @@ define('io.ox/core/notifications',
 
         },
 
-        // type = info | warning | error | success
+        // type = info | warning | error | success | screenreader
         yell: (function () {
 
             //$('#io-ox-core').prepend($('<div id="io-ox-notifications-popups">'));
 
-            var validType = /^(busy|error|info|success|warning)$/,
+            var validType = /^(busy|error|info|success|warning|screenreader)$/,
                 active = false,
                 timer = null,
                 isSmartphone = _.device('smartphone'),
@@ -382,7 +357,8 @@ define('io.ox/core/notifications',
                     error: 30000,
                     info: 10000,
                     success: 4000,
-                    warning: 10000
+                    warning: 10000,
+                    screenreader: 0,
                 },
 
                 icons = {
@@ -470,7 +446,7 @@ define('io.ox/core/notifications',
 
                     var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
                         reuse = false,
-                        className = 'io-ox-alert io-ox-alert-' + o.type,
+                        className = 'io-ox-alert io-ox-alert-' + o.type + (o.type === 'screenreader' ? ' sr-only' : ''),
                         wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal';
 
                     // reuse existing alert?
@@ -487,13 +463,23 @@ define('io.ox/core/notifications',
                     node.attr('class', className).append(
                         $('<div class="icon">').append(
                             $('<i>').addClass(icons[o.type] || 'fa fa-fw')
-                        ),
-                        $('<div class="message user-select-text">').append(
-                            o.headline ? $('<h2 class="headline">').text(o.headline) : [],
+                        ));
+                    if (o.type !== 'screenreader') {
+                        node.append(
+                            $('<div class="message user-select-text">').append(
+                                o.headline ? $('<h2 class="headline">').text(o.headline) : [],
+                                $('<div>').css('word-break', wordbreak).html(html)
+                            ),
+                            $('<a href="#" class="close" tabindex="1">').html('&times')
+                        );
+                    } else {
+                        node.append(
+                            $('<div class="message user-select-text">').append(
+                                o.headline ? $('<h2 class="headline">').text(o.headline) : []
+                            ),
                             $('<div>').css('word-break', wordbreak).html(html)
-                        ),
-                        $('<a href="#" class="close" tabindex="1">').html('&times')
-                    );
+                        );
+                    }
 
                     if (!reuse) $('body').append(node);
 
