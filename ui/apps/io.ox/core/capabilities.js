@@ -70,9 +70,11 @@ define('io.ox/core/capabilities', function () {
 
     api.reset();
 
-    var hash = _.url.hash('cap');
-    if (hash) {
-        _(hash.split(/\s*[, ]\s*/)).each(function (id) {
+    // use ref? to get cap parameter
+    var hash = _.url.hash('ref') ? _.deserialize(_.url.hash('ref')) : _.url.hash();
+
+    if (hash.cap) {
+        _(hash.cap.split(/\s*[, ]\s*/)).each(function (id) {
             if (id[0] === '-') {
                 id = id.substr(1);
                 disabled[id] = true;
@@ -89,9 +91,8 @@ define('io.ox/core/capabilities', function () {
     }
 
     // disable via hash?
-    hash = _.url.hash('disableFeature');
-    if (hash) {
-        _(hash.split(/\s*[, ]\s*/)).each(function (id) {
+    if (hash.disableFeature) {
+        _(hash.disableFeature.split(/\s*[, ]\s*/)).each(function (id) {
             disabled[id] = true;
         });
         if (!_.isEmpty(disabled)) {
