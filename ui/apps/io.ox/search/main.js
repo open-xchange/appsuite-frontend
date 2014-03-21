@@ -15,12 +15,13 @@ define('io.ox/search/main',
     ['gettext!io.ox/search',
      'settings!io.ox/core',
      'io.ox/core/extensions',
+     'io.ox/core/tk/dialogs',
      'io.ox/search/model',
      'io.ox/search/view',
      'io.ox/search/api',
      'io.ox/core/notifications',
      'less!io.ox/search/style'
-    ], function (gt, settings, ext, SearchModel, SearchView, api, notifications) {
+    ], function (gt, settings, ext, dialogs, SearchModel, SearchView, api, notifications) {
 
     'use strict';
 
@@ -64,6 +65,19 @@ define('io.ox/search/main',
         }
     });
 
+    function openSidePopup(popup, e, target) {
+        var id = target.attr('data-id'),
+            item = model.get('items').get(id),
+            baton = {};
+
+        baton.data = item.get('data');
+
+        // defer to get visual feedback first (e.g. script errors)
+        _.defer(function () {
+            ext.point('io.ox/search/items/' + model.getModule()).invoke('draw', popup, baton);
+        });
+    }
+
     //TODO: use custom node for autocomplete (autocomplete items appended here)
     //TODO: facete options (e.g. all, recipient, sender)
     var app = ox.ui.createApp({
@@ -80,6 +94,7 @@ define('io.ox/search/main',
         yell = function (error) {
             notifications.yell('error', error.error_desc);
         },
+        sidepopup = new dialogs.SidePopup({tabTrap: true}),
         win, model, run;
 
     //define launcher callback
@@ -113,6 +128,8 @@ define('io.ox/search/main',
 
         // return deferred
         return show(win).done(function () {
+            // add side popup and delgate item clicks
+            sidepopup.delegate(app.view.$el, '.item', openSidePopup);
             //TODO:
             //$(input.app).focus();
         });
