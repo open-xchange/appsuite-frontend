@@ -82,6 +82,7 @@ define('io.ox/core/pageController',
             $toPage.trigger('pagebeforeshow', {frompage: opt.from});
             $fromPage.trigger('pagebeforehide', {topage: opt.to});
 
+            // page blur, dismiss keyboard
             try {
                 if (document.activeElement &&
                     document.activeElement.nodeName.toLowerCase() !== 'body') {
@@ -118,7 +119,9 @@ define('io.ox/core/pageController',
                     });
             }, 1);
 
-
+            // make new toolbar visible
+            pages[opt.from].navbar.hide();
+            pages[to].navbar.render();
         };
 
         this.goBack = function () {
@@ -164,6 +167,7 @@ define('io.ox/core/pageController',
         this.setCurrentPage = function (page) {
             if (current) pages[current].$el.removeClass('current');
             pages[page].$el.addClass('current');
+            pages[page].navbar.render();
             current = page;
         };
 

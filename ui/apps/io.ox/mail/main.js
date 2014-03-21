@@ -47,7 +47,8 @@ define('io.ox/mail/main',
             var c = app.getWindow().nodes.main;
             var toolbar = $('<div class="mobile-toolbar">');
 
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(toolbar);
+            app.getWindow()
+                .nodes.body.addClass('classic-toolbar-visible').append(toolbar);
 
             // create 4 pages
             app.pages.addPage({
@@ -62,7 +63,7 @@ define('io.ox/mail/main',
             app.pages.addPage({
                 name: 'listView',
                 container: c,
-                startPage: true,
+                //startPage: true,
                 navbar: new Bars.NavbarView({
                     el: toolbar,
                     app: app
@@ -92,6 +93,29 @@ define('io.ox/mail/main',
             // debug
             //app.listView.model.set('thread', true);
             window.kack = app;
+        },
+        /*
+         * Init all nav- and toolbar labels for mobile
+         */
+        'bars-mobile': function (app) {
+
+            app.pages.getNavbar('listView').setLeft(gt('Folders'));
+
+            app.pages.getNavbar('folderTree')
+                .setTitle(gt('Folders'))
+                .setLeft(false);
+
+            app.pages.getNavbar('detailView')
+                .setTitle('') // no title
+                .setLeft(gt('Back'));
+
+            app.pages.getNavbar('threadView')
+                .setTitle(gt('Thread'))
+                .setLeft(gt('Back'));
+
+            // TODO restore last folder as starting point
+            app.pages.showPage('listView');
+
         },
 
         'pages-desktop': function (app) {
@@ -146,14 +170,11 @@ define('io.ox/mail/main',
             // make folder visible by default
             app.toggleFolderView(true);
 
-            // always change folder on foldertap
-            app.pages.getPage('folderTree').on('tap', '.folder .selectable', function (e) {
-                e.preventDefault();
-                console.log('changing! apge');
+            // always change folder on click
+            // No way to use tap here since folderselection really messes up the event chain
+            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
+                if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
                 app.pages.changePage('listView');
-                app.folder.getData().done(function (d) {
-                    app.pages.getNavbar('listView').setTitle(d.title);
-                });
             });
 
 
@@ -362,6 +383,18 @@ define('io.ox/mail/main',
         },
 
         /*
+         * Change foldername on mobiles in navbar
+         */
+        'folder:change-mobile': function (app) {
+            if (!_.device('small')) return;
+            app.on('folder:change', function () {
+                app.folder.getData().done(function (d) {
+                    app.pages.getNavbar('listView').setTitle(d.title);
+                });
+            });
+        },
+
+        /*
          * Define basic function to show an email
          */
         'show-mail': function (app) {
@@ -559,6 +592,15 @@ define('io.ox/mail/main',
                             return true;
                         }
                     });
+                });
+            });
+        },
+
+        'init-navbarlabel-mobile': function (app) {
+            // prepare first start
+            app.listView.on('first-reset', function () {
+                app.folder.getData().done(function (d) {
+                    app.pages.getNavbar('listView').setTitle(d.title);
                 });
             });
         },

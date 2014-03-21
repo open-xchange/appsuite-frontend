@@ -23,6 +23,7 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
         id: 'btn-left',
         index: 100,
         draw: function (baton) {
+            if (!baton.left) return;
             this.$el.append(
                 $('<div class="navbar-action left">').append(
                     $('<a>').append(
@@ -50,33 +51,58 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
     ext.point('io.ox/mail/mobile/navbar').extend({
         id: 'btn-right',
         index: 300,
-        draw: function () {
-           //noting
+        draw: function (baton) {
+            if (!baton.right) return;
+            this.$el.append(
+                $('<div class="navbar-action left">').append(
+                    $('<a>').append(
+                        baton.right
+                    ).on('tap', function (e) {
+                        e.preventDefault();
+                        baton.rightAction(e);
+                    })
+                )
+            );
         }
     });
 
+    /*
+     * Abstract Barview
+     * Just a superclass for toolbar and navbar
+     * Holds some shared
+     */
     var BarView = Backbone.View.extend({
         tagName: 'div',
-        className: 'toolbar-content'
+        className: 'toolbar-content',
+        show: function () {
+            this.$el.show();
+            return this;
+        },
+        hide: function () {
+            this.$el.hide();
+            return this;
+        }
+
     });
 
-
+    /*
+     * Navbars
+     * Placed at the top of a page to handle navigation and state
+     * Some Navbars will get action buttons as well, inspired by iOS
+     */
     var NavbarView = BarView.extend({
 
-        left: 'Back',
-        right: 'Foo',
-        title: 'FooBar',
-
         initialize: function (opt) {
-            console.log('init Navbar', opt);
             this.el = opt.el;
             this.app = opt.app;
-            this.left = opt.left;
-            this.right = opt.right;
+            this.title = (opt.title) ? opt.title : '';
+            this.left = (opt.left) ? opt.left : false;
+            this.right = (opt.right) ? opt.right : false;
         },
 
         render: function () {
             this.$el.empty();
+            this.$el.show();
             ext.point('io.ox/mail/mobile/navbar').invoke('draw', this, {
                 left: this.left,
                 right: this.right,
@@ -105,12 +131,15 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
         }
     });
 
+    /*
+     * Toolbars
+     * Will be blaced at the bottom of a page to
+     * hold one ore more action icons/links
+     */
     var ToolbarView = BarView.extend({
         initialize: function () {
-            console.log('init Toolbar');
         },
         render: function () {
-            console.log('rendering Toolbar');
             ext.point('io.ox/mail/mobile/toolbar').invoke('draw', this);
             return this;
         }

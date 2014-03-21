@@ -142,11 +142,7 @@ define('io.ox/core/commons',
                         $('#' + toolbarID).remove();
                         buttons.show();
                     }
-<<<<<<< HEAD
-                }, 100);
-=======
                 }, 10);
->>>>>>> c469990... Fixed Bug 30338 - [L3] multi-select and -deselect all items in grid view confuses bottom bar
             };
         }()),
 
