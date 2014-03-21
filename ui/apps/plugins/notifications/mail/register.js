@@ -78,8 +78,7 @@ define('plugins/notifications/mail/register',
             'keydown [data-action="clear"]': 'clearItems',
             'click [data-action="clear"]': 'clearItems',
             'click .item': 'openMail',
-            'keydown .item': 'openMail',
-            'dispose .item': 'removeNotification' //seems to be unused
+            'keydown .item': 'openMail'
         },
 
         render: function () {
@@ -103,7 +102,7 @@ define('plugins/notifications/mail/register',
             });
 
             if (mails.length > 0) {
-                api.getList(mails).done(function (response) {
+                api.getList(mails, true, {unseen: true}).done(function (response) {
                     view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
                     //save data to model so we don't need to ask again everytime
                     for (i = 0; i < mails.length; i++) {
@@ -160,7 +159,7 @@ define('plugins/notifications/mail/register',
                         .show(e, function (popup) {
                             // fetch proper mail now
                             popup.busy();
-                            api.get(_.cid(cid)).done(function (data) {
+                            api.get(_.extend(_.cid(cid), {unseen: true})).done(function (data) {//detail view sets unseen so get the unseen mail here to prevent errors
 
                                 var view = new detail.View({ data: data });
                                 popup.idle().append(view.render().expand().$el.addClass('no-padding'));
@@ -193,17 +192,6 @@ define('plugins/notifications/mail/register',
                 seenMails[_.ecid(item.attributes)] = true;
             });
             this.collection.reset();
-        },
-
-        removeNotification: function (e) {
-            e.preventDefault();
-            var cid = $(e.target).attr('data-cid'),
-                idArray = cid.split('.');
-            for (var i = 0; i < this.collection.length; i++) {
-                if (this.collection.models[i].get('folder_id') === idArray[0] && this.collection.models[i].get('id') === idArray[1]) {
-                    this.collection.remove(this.collection.models[i]);
-                }
-            }
         }
     });
 
