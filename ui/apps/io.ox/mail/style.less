@@ -130,13 +130,23 @@
     &.column-5 { width: 100px; text-align: right; }
 }
 
+.list-view .list-item {
 
-.list-view .list-item.mail-item.small.unread {
-    .from span.person, .subject, .date { .fontWeight(bold); }
+    &.small {
+
+        .priority { float: none; }
+        .from span.person { .fontWeight(normal); }
+
+        &.unread {
+            .from span.person, .subject, .date { .fontWeight(bold); }
+        }
+    }
+
+    &.unread .date {
+        opacity: 1;
+        .fontWeight(bold);
+    }
 }
-
-.list-view .list-item.mail-item.small .priority { float: none; }
-.list-view .list-item.mail-item.small .from span.person { .fontWeight(normal); }
 
 .preview-bottom .mail-detail-pane .mail-detail-decorator { padding: 0; }
 .preview-bottom .inplace-reply { margin: 14px; }
