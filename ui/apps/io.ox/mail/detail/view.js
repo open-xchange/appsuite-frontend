@@ -62,6 +62,17 @@ define('io.ox/mail/detail/view',
     });
 
     ext.point('io.ox/mail/detail/header').extend({
+        id: 'drag-support',
+        index: INDEX_header += 100,
+        draw: function (baton) {
+            this.attr({
+                'data-drag-data': 'thread.' + _.cid(baton.data),
+                'data-drag-message': util.getSubject(baton.data)
+            });
+        }
+    });
+
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'unread-toggle',
         index: INDEX_header += 100,
         draw: extensions.unreadToggle
@@ -201,6 +212,9 @@ define('io.ox/mail/detail/view',
 
             // ignore click on/inside <a> tags
             if ($(e.target).closest('a').length) return;
+
+            // don't toggle single messages
+            if (this.$el.siblings().length === 0) return;
 
             // fix collapsed blockquotes
             this.$el.find('.collapsed-blockquote').hide();

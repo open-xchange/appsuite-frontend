@@ -18,9 +18,10 @@ define('io.ox/mail/threadview',
      'io.ox/mail/util',
      'io.ox/core/api/backbone',
      'io.ox/mail/detail/view',
+     'io.ox/core/tk/list-dnd',
      'io.ox/core/http',
      'gettext!io.ox/mail',
-     'io.ox/mail/listview'], function (extensions, ext, api, util, backbone, detail, http, gt) {
+     'io.ox/mail/listview'], function (extensions, ext, api, util, backbone, detail, dnd, http, gt) {
 
     'use strict';
 
@@ -121,11 +122,19 @@ define('io.ox/mail/threadview',
             this.model = null;
         },
 
-        updateHeader: function () {
+        updateHeader: _.debounce(function () {
+
             var baton = new ext.Baton({ view: this }),
                 node = this.$el.find('.thread-view-list > h1').empty();
             ext.point('io.ox/mail/thread-view/header').invoke('draw', node, baton);
-        },
+
+
+            if (this.collection.length > 1)
+                this.$el.find('.thread-view').addClass('multiple-messages');
+            else
+                this.$el.find('.thread-view').removeClass('multiple-messages');
+
+        }, 10),
 
         updatePosition: function (position) {
             this.$el.find('.position').text(position);
@@ -249,6 +258,7 @@ define('io.ox/mail/threadview',
             }
 
             this.zIndex();
+            this.updateHeader();
         },
 
         onRemove: function (model) {
@@ -263,6 +273,7 @@ define('io.ox/mail/threadview',
             }
 
             li.remove();
+            this.updateHeader();
         },
 
         onChange: function () {
@@ -316,6 +327,14 @@ define('io.ox/mail/threadview',
             this.$ul = $();
 
             this.$el.on('toggle', '.list-item', this.onToggle.bind(this));
+
+            // enable drag & drop support
+            dnd.enable({
+                container: this.$el,
+                draggable: true,
+                selectable: '.detail-view-header',
+                simple: true
+            });
         },
 
         // return alls items of this list

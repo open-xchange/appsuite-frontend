@@ -15,8 +15,6 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
 
     'use strict';
 
-    var SELECTABLE = '.selectable';
-
     function joinTextNodes(nodes, delimiter) {
         nodes = nodes.map(function () { return $.trim($(this).text()); });
         return $.makeArray(nodes).join(delimiter || '');
@@ -30,18 +28,18 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
     function enable(options) {
 
         options = _.extend({
-            container: container,
+            container: $(),
+            data: null,
             draggable: false,
             dragMessage: defaultMessage,
-            dragCssClass: undefined,
             dragType: '',
             dropzone: false,
-            dropzoneSelector: SELECTABLE,
+            dropzoneSelector: '.selectable',
             dropType: '',
-            selection: null
+            selection: null,
+            selectable: '.selectable',
+            simple: false
         }, options);
-
-        if (options.selection === null) console.error('list-dnd: No selection!', options);
 
         var container = options.container || $(),
             data,
@@ -158,13 +156,17 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             // unbind
             $(document).off('mousemove.dnd', drag);
             // get data now
-            data = _(container.find('.selected')).map(function (node) {
-                return $(node).attr('data-cid');
-            });
+            data = source.attr('data-drag-data') ?
+                [source.attr('data-drag-data')] :
+                _(container.find('.selected')).map(function (node) {
+                    return $(node).attr('data-cid');
+                });
             // create helper
             helper = $('<div class="drag-helper">').append(
                 $('<span class="drag-counter">').text(data.length),
-                $('<span>').text(options.dragMessage.call(container, data, source))
+                $('<span>').text(
+                    source.attr('data-drag-message') || options.dragMessage.call(container, data, source)
+                )
             );
             // get fast access
             fast = helper[0].style;
@@ -176,8 +178,8 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
             // bind
             $(document).on('mousemove.dnd', move)
                 .one('mousemove.dnd', firstMove)
-                .on('mouseover.dnd', SELECTABLE, over)
-                .on('mouseout.dnd', SELECTABLE, out);
+                .on('mouseover.dnd', options.dropzoneSelector, over)
+                .on('mouseout.dnd', options.dropzoneSelector, out);
         }
 
         function remove() {
@@ -236,10 +238,12 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
 
         // draggable?
         if (options.draggable) {
-            container.on('mousedown.dnd', SELECTABLE, start);
+            container.on('mousedown.dnd', options.selectable, start);
         }
+
         // dropzone?
         if (options.dropzone) {
+            if (options.selection === null) console.error('list-dnd: Selection required for dropzone!', options);
             container.addClass('dropzone')
                 .attr('data-dropzones', options.dropzoneSelector)
                 .on('drop', function (e, baton) {
