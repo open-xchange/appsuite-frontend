@@ -153,7 +153,6 @@ if [ -x %{update} ]; then %{update}; fi
 %files
 %defattr(-,root,root)
 %doc readme.txt
-%dir %{docroot}
 %{docroot}
 %exclude %{docroot}/help
 %exclude %{docroot}/help-drive
@@ -168,7 +167,6 @@ if [ -x %{update} ]; then %{update}; fi
 
 %files help-common
 %defattr(-,root,root)
-%dir %{docroot}/help
 %{docroot}/help
 %exclude %{docroot}/help/l10n
 
@@ -181,7 +179,6 @@ if [ -x %{update} ]; then %{update}; fi
 
 %files help-drive-common
 %defattr(-,root,root)
-%dir %{docroot}/help-drive
 %{docroot}/help-drive
 %exclude %{docroot}/help-drive/l10n
 
