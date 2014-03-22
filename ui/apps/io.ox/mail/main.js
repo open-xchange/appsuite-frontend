@@ -133,7 +133,7 @@ define('io.ox/mail/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'preview': app.settings.get('preview', 'right'),
+                'layout': app.settings.get('layout', 'vertical'),
                 'checkboxes': app.settings.get('showCheckboxes', true),
                 'contactPictures': app.settings.get('showContactPictures', false)
             });
@@ -227,7 +227,7 @@ define('io.ox/mail/main',
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
-                    .set('preview', data.preview)
+                    .set('layout', data.layout)
                     .set('showCheckboxes', data.checkboxes)
                     .set('showContactPictures', data.contactPictures)
                     .save();
@@ -293,7 +293,7 @@ define('io.ox/mail/main',
         'position': function (app) {
             app.listView.on({
                 'selection:change:index': function () {
-                    if (app.props.get('preview') !== 'none') return;
+                    if (app.props.get('layout') !== 'list') return;
                     app.threadView.updatePosition(app.listView.getPosition() + 1);
                     app.threadView.togglePrevious(app.listView.hasPrevious());
                     app.threadView.toggleNext(app.listView.hasNext());
@@ -400,7 +400,7 @@ define('io.ox/mail/main',
 
             var react = _.debounce(function (type, list) {
 
-                if (app.props.get('preview') === 'none' && type === 'action') {
+                if (app.props.get('layout') === 'list' && type === 'action') {
                     resetRight('selection-one preview-visible');
                     app.showMail(list[0]);
                     return;
@@ -441,40 +441,53 @@ define('io.ox/mail/main',
         },
 
         /*
-         * Thread view navigation must respond to changing preview mode
+         * Thread view navigation must respond to changing layout
          */
-        'change:preview': function (app) {
+        'change:layout': function (app) {
 
-            app.props.on('change:preview', function (model, value) {
-                app.threadView.toggleNavigation(value === 'none');
+            app.props.on('change:layout', function (model, value) {
+                app.threadView.toggleNavigation(value === 'list');
             });
 
-            app.threadView.toggleNavigation(app.props.get('preview') === 'none');
+            app.threadView.toggleNavigation(app.props.get('layout') === 'list');
         },
 
         /*
-         * Respond to changing preview mode
+         * Respond to changing layout
          */
-        'apply-preview-mode': function (app) {
+        'apply-layout': function (app) {
 
-            app.applyPreviewMode = function () {
-                var preview = app.props.get('preview'), node = app.getWindow().nodes.main;
-                if (preview === 'right') {
-                    node.addClass('preview-right').removeClass('preview-bottom preview-none');
-                } else if (preview === 'bottom') {
-                    node.addClass('preview-bottom').removeClass('preview-right preview-none');
-                } else if (preview === 'none') {
-                    node.addClass('preview-none').removeClass('preview-right preview-bottom');
+            app.applyLayout = function () {
+
+                var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, className;
+
+                if (layout === 'vertical' || layout === 'compact') {
+                    nodes.main.addClass('preview-right').removeClass('preview-bottom preview-none');
+                } else if (layout === 'horizontal') {
+                    nodes.main.addClass('preview-bottom').removeClass('preview-right preview-none');
+                } else if (layout === 'list') {
+                    nodes.main.addClass('preview-none').removeClass('preview-right preview-bottom');
+                }
+
+                // relocate toolbar
+                toolbar = nodes.body.find('.classic-toolbar');
+                className = 'classic-toolbar-visible';
+                if (layout === 'compact') {
+                    nodes.body.removeClass(className);
+                    app.right.addClass(className).prepend(toolbar);
+                } else {
+                    app.right.removeClass(className);
+                    nodes.body.addClass(className).prepend(toolbar);
                 }
             };
 
-            app.props.on('change:preview', function () {
-                app.applyPreviewMode();
+            app.props.on('change:layout', function () {
+                app.applyLayout();
                 app.listView.redraw();
             });
 
             app.getWindow().on('show:initial', function () {
-                app.applyPreviewMode();
+                app.applyLayout();
             });
         },
 

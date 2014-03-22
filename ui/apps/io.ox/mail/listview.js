@@ -35,8 +35,8 @@ define('io.ox/mail/listview',
                 return sum + (util.isDeleted(data) ? 0 : 1);
             }, 0);
 
-            var preview = baton.app.props.get('preview'),
-                isSmall = preview === 'bottom' || preview === 'none';
+            var layout = baton.app.props.get('layout'),
+                isSmall = layout === 'horizontal' || layout === 'list';
 
             this.closest('.list-item').toggleClass('small', isSmall);
             ext.point('io.ox/mail/listview/item/' + (isSmall ? 'small' : 'default')).invoke('draw', this, baton);
@@ -175,7 +175,7 @@ define('io.ox/mail/listview',
 
     ext.point('io.ox/mail/listview/item/default/row1').extend({
         id: 'from',
-        index: 200,
+        index: 300,
         draw: extensions.from
     });
 

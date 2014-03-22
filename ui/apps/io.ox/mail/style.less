@@ -24,9 +24,8 @@
 
 @unread-toggle-width: 40px;
 
-.classic-toolbar-visible {
-    .window-content { top: 45px; }
-}
+.classic-toolbar-visible .window-content { top: 45px; }
+.rightside.classic-toolbar-visible .thread-view-control { top: 45px }
 
 .classic-toolbar, .inline-toolbar {
     position: absolute;
@@ -288,6 +287,10 @@
         color: #fff;
     }
 
+    .actions {
+        margin-left: 14px;
+    }
+
     div.subject {
 
         .fontWeight(300);
@@ -449,7 +452,6 @@
         display: inline-block;
         margin-left: 7px;
         position: relative;
-        z-index: 12004;
         .dropdown-toggle {
             font-size: 20px;
             &:hover { text-decoration: none; }

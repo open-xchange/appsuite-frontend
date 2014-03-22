@@ -162,6 +162,22 @@ define('io.ox/mail/common-extensions',
             this.closest('.list-item').attr('title', subject);
         },
 
+        actions: function () {
+            this.append(
+                $('<div class="dropdown pull-right actions" data-dropdown="actions">').append(
+                    $('<a href="#" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="1">').append(
+                        $.txt(gt('Actions')),
+                        $('<i class="fa fa-caret-down">')
+                    ),
+                    $('<ul class="dropdown-menu" role="menu">').append(
+                        $('<li><a href="#">Coming soon</a></li>'),
+                        $('<li><a href="#">Hello World</a></li>'),
+                        $('<li><a href="#">Test ...</a></li>')
+                    )
+                )
+            );
+        },
+
         recipients: (function () {
 
             // var drawAllDropDown = function (node, label, data) {

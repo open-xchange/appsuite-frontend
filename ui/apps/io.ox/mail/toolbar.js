@@ -196,9 +196,10 @@ define('io.ox/mail/toolbar',
 
     // local mediator
     function updateContactPicture() {
-        // only show this option if preview pane is right (vsplit)
-        var li = this.$el.find('[data-name="contactPictures"]').parent();
-        if (this.model.get('preview') === 'right') li.show(); else li.hide();
+        // only show this option if preview pane is right (vertical/compact)
+        var li = this.$el.find('[data-name="contactPictures"]').parent(),
+            layout = this.model.get('layout');
+        if (layout === 'vertical' || layout === 'compact') li.show(); else li.hide();
     }
 
     // view dropdown
@@ -211,16 +212,17 @@ define('io.ox/mail/toolbar',
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
-            .header(gt('Preview pane'))
-            .option('preview', 'right', gt('Right'))
-            .option('preview', 'bottom', gt('Bottom'))
-            .option('preview', 'none', gt('None'))
+            .header(gt('Layout'))
+            .option('layout', 'vertical', gt('Vertical'))
+            .option('layout', 'compact', gt('Compact'))
+            .option('layout', 'horizontal', gt('Horizontal'))
+            .option('layout', 'list', gt('List'))
             .divider()
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
             .option('checkboxes', true, gt('Checkboxes'))
             .option('contactPictures', true, gt('Contact pictures'))
-            .listenTo(baton.app.props, 'change:preview', updateContactPicture);
+            .listenTo(baton.app.props, 'change:layout', updateContactPicture);
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')

@@ -68,6 +68,12 @@ define('io.ox/mail/detail/view',
     });
 
     ext.point('io.ox/mail/detail/header').extend({
+        id: 'actions',
+        index: INDEX_header += 100,
+        draw: extensions.actions
+    });
+
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'date',
         index: INDEX_header += 100,
         draw: extensions.date
