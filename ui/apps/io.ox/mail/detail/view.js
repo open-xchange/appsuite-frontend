@@ -85,15 +85,6 @@ define('io.ox/mail/detail/view',
         draw: extensions.actions
     });
 
-    // ext.point('io.ox/mail/detail/header').extend(new links.DropdownLinks({
-    //     attributes: {},
-    //     classes: 'pull-right actions',
-    //     dropdown: true,
-    //     index: INDEX_header += 100,
-    //     id: 'actions',
-    //     label: gt('Actions'),
-    //     ref: 'io.ox/mail/links/inline'
-    // }));
 
     ext.point('io.ox/mail/detail/header').extend({
         id: 'date',
