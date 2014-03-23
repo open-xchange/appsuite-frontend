@@ -96,6 +96,17 @@ define('io.ox/mail/main',
             // folder tree
             commons.addFolderView(app, { type: 'mail' });
             app.getWindow().nodes.sidepanel.addClass('border-right');
+
+        },
+
+        /*
+         * Convenience functin to toggle folder view
+         */
+        'folder-view-toggle': function (app) {
+            if (_.device('small')) return;
+            app.getWindow().nodes.main.on('dblclick', '.list-view-control .toolbar', function () {
+                app.toggleFolderView();
+            });
         },
 
         /*

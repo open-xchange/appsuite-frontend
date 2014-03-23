@@ -66,7 +66,7 @@ define('io.ox/mail/detail/view',
         index: INDEX_header += 100,
         draw: function (baton) {
             this.attr({
-                'data-drag-data': 'thread.' + _.cid(baton.data),
+                'data-drag-data': _.cid(baton.data),
                 'data-drag-message': util.getSubject(baton.data)
             });
         }
