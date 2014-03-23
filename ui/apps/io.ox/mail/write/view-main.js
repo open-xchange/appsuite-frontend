@@ -659,8 +659,8 @@ define('io.ox/mail/write/view-main',
                                         ),
                                         $('<span>').text(' ' + title)
                                     );
-                                    ext.point(POINT + "/filelist/filePicker/customizer").invoke('customize', $div, file);
-                                    return $div; 
+                                    ext.point(POINT + '/filelist/filePicker/customizer').invoke('customize', $div, file);
+                                    return $div;
                                 })
                             );
                             self.selection.clear();
