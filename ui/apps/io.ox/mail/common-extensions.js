@@ -126,7 +126,7 @@ define('io.ox/mail/common-extensions',
 
         unread: function (baton) {
             var isUnread = api.threads.partiallyUnseen(baton.data);
-            if (isUnread) this.append('<i class="icon-unread fa fa-circle" aria-hidden="true">');
+            if (isUnread) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
         },
 
         answered: function (baton) {
@@ -418,7 +418,7 @@ define('io.ox/mail/common-extensions',
 
             return function (baton) {
                 this.append(
-                    $('<a href="#" class="unread-toggle" tabindex="1"><i class="fa fa-circle"/></a>')
+                    $('<a href="#" class="unread-toggle" tabindex="1"><i class="fa"/></a>')
                     .on('click', { view: baton.view }, toggle)
                 );
             };

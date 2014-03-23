@@ -143,9 +143,13 @@
         }
     }
 
-    &.unread .date {
-        opacity: 1;
-        .fontWeight(bold);
+    &.unread {
+        .date { opacity: 1; .fontWeight(bold); }
+        .subject { color: @link-color; }
+    }
+
+    &.unread.selected {
+        .subject { color: #fff; }
     }
 }
 
@@ -439,14 +443,16 @@
         height: 40px;
         text-align: center;
         font-size: 14px;
-        color: #ddd;
+        color: #ccc;
         &:hover { text-decoration: none; color: #aaa; }
+        i.fa:before { content: "\f003"; /* fa-envelope-o */ }
     }
 
     &.no-padding .unread-toggle { left: 40px; }
 
     &.unread .unread-toggle {
         color: #08c;
+        i.fa:before { content: "\f0e0"; /* fa-envelope */ }
     }
 
     .flag-picker {
@@ -815,7 +821,6 @@ textarea.inplace-editor {
     }
 
     .date {
-        color: #888;
         display: block;
         float: right;
     }
