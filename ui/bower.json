@@ -27,7 +27,7 @@
     "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
     "textarea-helper": "https://github.com/Codecademy/textarea-helper.git#0.3.1",
     "requirejs": "2.1.11",
-    "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#85516f720e948c1c2d2f0a570f052fb3db35ad59",
+    "bootstrap-accessibility-plugin": "https://github.com/Open-Xchange-Frontend/bootstrap-accessibility-plugin.git#2aee04879e5bf527cdd3c70e7d1c6c6faef125b1",
     "jquery.lazyload": "https://github.com/Open-Xchange-Frontend/jquery_lazyload.git#aac4435ac7c09de8f271d82a761ad2442fb37c72"
   }
 }
