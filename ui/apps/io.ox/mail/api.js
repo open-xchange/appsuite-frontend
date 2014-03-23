@@ -944,63 +944,19 @@ define('io.ox/mail/api',
             if (model) collection.remove(model);
         });
 
-        if (list.length >= 100) {
-            //notifications.yell('info', gt('Moving mails ... This may take a few seconds.'));
-
-            return update(list, { folder_id: targetFolderId }).pipe(function (resp) {
-                response = resp.response;
-                return resp.list;
-            })
-            .pipe(function () {
-                var errorText;
-                for (var i = 0; i < response.length; i++) {//look if something went wrong
-                    if (response[i].error) {
-                        errorText = response[i].error.error;
-                        break;
-                    }
+        // start update on server
+        return update(list, { folder_id: targetFolderId }).then(function () {
+            var errorText, i = 0, $i = response.length;
+            for (; i < $i; i++) { // look if anything went wrong
+                if (response[i].error) {
+                    errorText = response[i].error.error;
+                    break;
                 }
-
-                api.trigger('move', list, targetFolderId);
-                folderAPI.reload(targetFolderId, list);
-                api.caches.all.clear().done(function () {
-                    api.trigger('refresh.all');
-                });
-                if (errorText) {
-                    return errorText;
-                }
-            });
-
-        } else {
-         // call updateCaches (part of remove process) to be responsive
-            return api.updateCaches(list).pipe(function () {
-                // trigger visual refresh
-                api.trigger('refresh.all');
-                // start update on server
-                return update(list, { folder_id: targetFolderId })
-                    .pipe(function (resp) {
-                        response = resp.response;
-                        list = _.isArray(list) ? list : [list];
-                        return _(list).map(function (obj) {
-                            return (clearCaches(obj, targetFolderId))();
-                        });
-                    })
-                    .pipe(function () {
-                        var errorText;
-                        for (var i = 0; i < response.length; i++) {//look if something went wrong
-                            if (response[i].error) {
-                                errorText = response[i].error.error;
-                                break;
-                            }
-                        }
-                        api.trigger('move', list, targetFolderId);
-                        folderAPI.reload(targetFolderId, list);
-                        if (errorText) {
-                            return errorText;
-                        }
-                    });
-            });
-        }
-
+            }
+            api.trigger('move', list, targetFolderId);
+            folderAPI.reload(targetFolderId, list);
+            if (errorText) return errorText;
+        });
     };
 
     /**
