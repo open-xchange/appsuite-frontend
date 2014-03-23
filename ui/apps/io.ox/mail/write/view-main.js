@@ -650,7 +650,7 @@ define('io.ox/mail/write/view-main',
                             filesPane.append(
                                 _(files).map(function (file) {
                                     var title = (file.filename || file.title);
-                                    return $('<div class="file selectable">').attr('data-obj-id', _.cid(file)).append(
+                                    var $div = $('<div class="file selectable">').attr('data-obj-id', _.cid(file)).append(
                                         $('<div class="labelwrapper">').append(
                                             $('<label class="checkbox">').attr('title', title).append(
                                                 $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
@@ -659,6 +659,8 @@ define('io.ox/mail/write/view-main',
                                         ),
                                         $('<span>').text(' ' + title)
                                     );
+                                    ext.point(POINT + "/filelist/filePicker/customizer").invoke('customize', $div, file);
+                                    return $div; 
                                 })
                             );
                             self.selection.clear();
