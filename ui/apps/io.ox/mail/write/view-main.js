@@ -689,7 +689,8 @@ define('io.ox/mail/write/view-main',
                 preview: true,
                 index: 300,
                 $el: $('<div>').insertBefore(uploadSection.section.find('div.form-group:last')),
-                registerTo: [self, this.baton]
+                registerTo: [self, this.baton],
+                ref: POINT + '/filelist/file/customizer'
             }, this.baton), {
                 rowClass: 'collapsed'
             });

@@ -18,8 +18,9 @@ define('io.ox/core/tk/attachmentsUtil',
      'gettext!io.ox/core/tk/attachments',
      'io.ox/core/extPatterns/links',
      'io.ox/core/capabilities',
+     'io.ox/core/extensions',
      'less!io.ox/core/tk/attachments'
-    ], function (strings, pre, dialogs, gt, links, capabilities) {
+    ], function (strings, pre, dialogs, gt, links, capabilities, ext) {
 
     'use strict';
 
@@ -187,7 +188,8 @@ define('io.ox/core/tk/attachmentsUtil',
                     }, options),
                 //normalisation
                 name = obj.name || obj.filename || obj.subject || '\u00A0',
-                size = obj.file_size || obj.size || 0;
+                size = obj.file_size || obj.size || 0,
+                $node;
 
             //prepare data
             size = size !== 0 ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
@@ -205,7 +207,7 @@ define('io.ox/core/tk/attachmentsUtil',
             }
 
             //create node
-            return $('<div>')
+            $node = $('<div>')
                 .addClass(this.itemClasses)
                 .append(
                     //file
@@ -233,6 +235,15 @@ define('io.ox/core/tk/attachmentsUtil',
                             })
                     )
             );
+            
+            if (options.ref) {
+                var fileObj = JSON.parse(JSON.serialize(obj));
+                fileObj.name = name;
+                fileObj.size = size;
+                ext.point(options.ref).invoke('customize', $node, fileObj);
+            }
+
+            return $node;
         },
 
         /**
