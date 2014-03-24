@@ -159,12 +159,6 @@ define('io.ox/mail/toolbar',
             label: gt('Add to portal'),
             ref: 'io.ox/mail/actions/add-to-portal',
             section: 'keep'
-        },
-        'folder': {
-            prio: 'lo',
-            label: gt('Show/hide folder'),
-            ref: 'io.ox/mail/actions/toggle-folder',
-            section: 'keep'
         }
     };
 

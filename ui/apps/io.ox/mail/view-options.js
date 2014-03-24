@@ -71,7 +71,7 @@ define('io.ox/mail/view-options',
             });
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options'));
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right'));
         }
     });
 
@@ -93,12 +93,57 @@ define('io.ox/mail/view-options',
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="select-all" tabindex="1">').append(
+                $('<a href="#" class="toolbar-item select-all" tabindex="1">').append(
                     $('<i class="fa fa-square-o">'),
                     $.txt(gt('Select all'))
                 )
                 .on('click', { baton: baton }, toggleSelection)
             );
+        }
+    });
+
+    function toggleFolderView(e) {
+        e.preventDefault();
+        e.data.app.toggleFolderView(e.data.state);
+    }
+
+    function onFolderViewOpen(app) {
+        app.getWindow().nodes.main.find('.list-view-control')
+            .removeClass('toolbar-bottom-visible');
+    }
+
+    function onFolderViewClose(app) {
+        app.getWindow().nodes.main.find('.list-view-control')
+            .addClass('toolbar-bottom-visible');
+    }
+
+    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
+        id: 'toggle-folderview',
+        index: 100,
+        draw: function (baton) {
+
+            this.append(
+                $('<a href="#" class="toolbar-item" tabindex="1">')
+                .attr('title', gt('Open folder view'))
+                .append($('<i class="fa fa-angle-double-right">'))
+                .on('click', { app: baton.app, state: true }, toggleFolderView)
+            );
+
+            baton.app.getWindow().nodes.sidepanel.find('.foldertree-sidepanel').append(
+                $('<div class="generic-toolbar bottom visual-focus toolbar-small">').append(
+                    $('<a href="#" class="toolbar-item" tabindex="1">')
+                    .attr('title', gt('Close folder view'))
+                    .append($('<i class="fa fa-angle-double-left">'))
+                    .on('click', { app: baton.app, state: false }, toggleFolderView)
+                )
+            );
+
+            baton.app.on({
+                'folderview:open': onFolderViewOpen.bind(null, baton.app),
+                'folderview:close': onFolderViewClose.bind(null, baton.app)
+            });
+
+            if (baton.app.folderViewIsVisible()) _.defer(onFolderViewOpen, baton.app);
         }
     });
 });

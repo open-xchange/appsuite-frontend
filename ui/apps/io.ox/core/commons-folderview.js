@@ -685,7 +685,7 @@ define('io.ox/core/commons-folderview',
             tmpVisible = false,
             top = 0,
             onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
-            fnHide, fnShow, fnResize, fnShowSml, fnHideSml, initResize,
+            fnHide, fnShow, fnResize, initResize,
             applyInitialWidth, restoreWidth, makeResizable,
             toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
@@ -712,16 +712,11 @@ define('io.ox/core/commons-folderview',
 
             return function (e, selection) {
 
-                var id = _(selection).first(),
-                    previous = current;
+                var id = _(selection).first();
 
                 current = id;
 
                 api.get({ folder: id }).done(function (data) {
-                    if (_.device('small') && previous !== null) {
-                        // close tree
-                        fnHideSml();
-                    }
 
                     if (data.module === options.type) {
                         if (id !== current) return;
@@ -821,57 +816,32 @@ define('io.ox/core/commons-folderview',
         };
 
         fnHide = function () {
+            var previous = visible, nodes;
             app.settings.set('folderview/visible/' + _.display(), visible = false).save();
             top = container.scrollTop();
-            var nodes = app.getWindow().nodes;
+            nodes = app.getWindow().nodes;
             fnResize();
             nodes.sidepanel.removeClass('visible').css('width', '');
-            app.trigger('folderview:close');
-            if (app.getGrid) {
-                app.getGrid().focus();
-            }
+            if (previous !== visible) app.trigger('folderview:close');
+            if (app.getGrid) app.getGrid().focus();
         };
 
         fnShow = function (resized) {
+            var previous = visible, nodes;
             app.settings.set('folderview/visible/' + _.display(), visible = true).save();
-            var nodes = app.getWindow().nodes;
+            nodes = app.getWindow().nodes;
             nodes.sidepanel.addClass('visible');
             restoreWidth();
             if (!resized) {
                 baton.$.container.focus();
             }
-            app.trigger('folderview:open');
-            return $.when();
-        };
-
-        fnHideSml = function () {
-            /*app.settings.set('folderview/visible/' + _.display(), visible = false).save();
-            top = container.scrollTop();
-            var nodes = app.getWindow().nodes;
-            $('.window-container-center', nodes.outer).removeClass('animate-moveright').addClass('animate-moveleft');
-            baton.$.spacer.hide();
-            app.trigger('folderview:close');*/
-        };
-
-        fnShowSml = function () {
-            /*
-            app.settings.set('folderview/visible/' + _.display(), visible = true).save();
-            var nodes = app.getWindow().nodes;
-            $('.window-container-center', nodes.outer).removeClass('animate-moveleft').addClass('animate-moveright');
-            baton.$.spacer.show();
-            app.trigger('folderview:open');
-            */
+            if (previous !== visible) app.trigger('folderview:open');
             return $.when();
         };
 
         toggle = function (state) {
             if (state === undefined) state = !visible;
-
-            if (false && _.device('smartphone')) {
-                if (state) fnShowSml(); else fnHideSml();
-            } else {
-                if (state) fnShow(); else fnHide();
-            }
+            if (state) fnShow(); else fnHide();
         };
 
         initResize = function () {
@@ -997,16 +967,18 @@ define('io.ox/core/commons-folderview',
                     //     return false;
                     // });
 
+                    app.showFolderView = fnShow;
+                    app.hideFolderView = fnHide;
+                    app.toggleFolderView = toggle;
+
                     initTree = loadTree = null;
                 });
             });
         };
 
         loadTree = function () {
-            toggle();
-            app.showFolderView = /*_.device('smartphone') ? fnShowSml :*/ fnShow;
-            app.hideFolderView = /*_.device('smartphone') ? fnHideSml :*/ fnHide;
-            app.toggleFolderView = toggle;
+            toggle(true);
+            app.showFolderView = app.hideFolderView = app.toggleFolderView = $.noop;
             loadTree = toggleTree = $.noop;
             return require(['io.ox/core/tk/folderviews']).then(initTree);
         };

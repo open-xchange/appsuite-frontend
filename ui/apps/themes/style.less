@@ -1312,18 +1312,15 @@ a.button {
 /* List View */
 .list-view-control {
 
-    @height: 45px;
+    @height-default: 45px;
+    @height-small: 35px;
     background-color: #fff;
 
     .top-toolbar() {
-        top: 0;
-        border-bottom: 1px solid mix(@text-color, @background, 200%/15);
         display: none;
     }
 
     .bottom-toolbar() {
-        bottom: 0;
-        border-top: 1px solid mix(@text-color, @background, 200%/15);
         display: none;
         .dropdown-menu {
             top: auto;
@@ -1335,36 +1332,11 @@ a.button {
 
     .toolbar {
 
-        position: absolute;
-        display: none;
-        right: 0;
-        left: 0;
-        height: @height;
-        line-height: @height - 1;
-        padding: 1px 14px;
-        background-color: #fff;
-        z-index: 2;
-
-        a {
-            text-decoration: none;
-            i { color: black; display: inline-block; }
-        }
-
         &.top { .top-toolbar(); }
         &.bottom { .bottom-toolbar(); }
 
         .grid-options > a {
             color: #555;
-        }
-
-        .grid-options.dropdown {
-            position: absolute;
-            right: 18px;
-            top: 1px;
-            .dropdown-menu {
-                right: -7px;
-                left: auto;
-            }
         }
     }
 
@@ -1391,13 +1363,13 @@ a.button {
     &.toolbar-bottom-visible .toolbar.bottom { display: block; }
 
     &:not(.upside-down) {
-        &.toolbar-top-visible .list-view { top: @height; }
-        &.toolbar-bottom-visible .list-view { bottom: @height; }
+        &.toolbar-top-visible .list-view { top: @height-default; }
+        &.toolbar-bottom-visible .list-view { bottom: @height-small; }
     }
 
     &.upside-down {
-        &.toolbar-top-visible .list-view { bottom: @height; }
-        &.toolbar-bottom-visible .list-view { top: @height; }
+        &.toolbar-top-visible .list-view { bottom: @height-default; }
+        &.toolbar-bottom-visible .list-view { top: @height-small; }
     }
 
     .list-view {
@@ -2458,7 +2430,7 @@ input.nice-input {
 
     overflow: auto;
     outline: 0;
-    padding: 13px 0 4px 0;
+    padding: 7px 0 4px 0;
     .user-select(none);
 
     .folder-root {
@@ -2813,19 +2785,83 @@ input.nice-input {
 
     }
 
-    .foldertree-toolbar {
-        top: auto;
-        height: 40px - 1;
-        bottom: 0;
-        line-height: 40px - 1;
-        border-top: 1px solid rgba(0, 0, 0, 0.20);
+    .generic-toolbar {
+        border-color: rgba(0, 0, 0, 0.20);
         background-color: rgba(0, 0, 0, 0.02);
+    }
+}
 
-        .toolbar-action {
-            line-height: 40px - 1;
+//
+// Generic toolbar
+//
+
+.generic-toolbar {
+
+    @height-default: 45px;
+    @height-small: 40px;
+
+    position: absolute;
+    z-index: 2;
+
+    width: 100%;
+    height: @height-default;
+    padding: 0;
+    background-color: #fff;
+    border: 0px solid mix(@text-color, @background, 200%/15);
+
+    font-size: 14px;
+    line-height: @height-default - 1;
+
+    &.top {
+        top: 0;
+        border-bottom-width: 1px;
+    }
+
+    &.bottom {
+        bottom: 0;
+        border-top-width: 1px;
+    }
+
+    .toolbar-item {
+
+        color: #333;
+        display: inline-block;
+        float: left;
+        line-height: @height-default - 1;
+        padding: 0 14px;
+        text-decoration: none;
+
+        &:first-child { padding-left: 18px; }
+        &:last-child { padding-right: 18px; }
+    }
+
+    &.visual-focus .toolbar-item {
+
+        outline: 0;
+
+        &:hover {
+            color: #555;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        &:focus {
+            color: #fff;
+            background-color: @toolbar-focus-color;
+        }
+
+        &:focus > i { color: #fff; }
+    }
+
+    &.toolbar-small {
+        height: @height-small;
+        line-height: @height-small - 1;
+        .toolbar-item {
+            line-height: @height-small - 1;
         }
     }
 }
+
+// ------
 
 .toolbar-action {
     display: inline-block;

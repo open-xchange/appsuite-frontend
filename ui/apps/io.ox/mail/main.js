@@ -115,11 +115,9 @@ define('io.ox/mail/main',
         'folder-view-mobile': function (app) {
             // folder tree
             if (_.device('!small')) return;
-
             commons.addFolderView(app, { type: 'mail', folderTreeContainer: app.pages.getPage('folderTree')});
             app.getWindow().nodes.sidepanel.addClass('border-right');
             app.toggleFolderView(true);
-
         },
         /*
          * Split into left and right pane
