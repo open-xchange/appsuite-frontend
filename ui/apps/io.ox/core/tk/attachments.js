@@ -253,7 +253,8 @@ define('io.ox/core/tk/attachments',
                 var opt = {
                     showpreview: options.preview && util.hasPreview(file) && baton.view && baton.view.rightside,
                     rightside: (baton.view ? baton.view.rightside : undefined),
-                    labelmax: options.labelmax
+                    labelmax: options.labelmax,
+                    ref: options.ref
                 };
                 return util.node.call(this, file, opt);
             },
