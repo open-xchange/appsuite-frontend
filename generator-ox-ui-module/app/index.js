@@ -51,27 +51,31 @@ OxUiModuleGenerator.prototype.app = function app() {
    * yeoman API says, it's there for backwards-compatibility. Need to wait until
    * this has been dropped by the yeoman team.
    */
-  this.mkdir('apps');
+  this.mkdir('apps/themes/default');
   this.mkdir('grunt');
   this.mkdir('grunt/tasks');
   this.mkdir('grunt/templates');
 
   this.template('_package.json', 'package.json');
+  this.template('_bower.json', 'bower.json');
   this.template('_Gruntfile.js', 'Gruntfile.js');
   this.bulkCopy('local.conf.default.json', 'grunt/local.conf.default.json');
+  this.bulkCopy('apps/themes/default/definitions.less', 'apps/themes/default/definitions.less');
 
   this.template('grunt/_i18n.js', 'grunt/tasks/i18n.js');
   this.bulkCopy('grunt/i18n_module.js.tpl', 'grunt/templates/i18n_module.js.tpl');
+  this.bulkCopy('grunt/bower.js', 'grunt/tasks/bower.js');
+  this.bulkCopy('grunt/checkDependencies.js', 'grunt/tasks/checkDependencies.js');
   this.bulkCopy('grunt/clean.js', 'grunt/tasks/clean.js');
-  this.bulkCopy('grunt/dist.js', 'grunt/tasks/dist.js');
   this.bulkCopy('grunt/concat.js', 'grunt/tasks/concat.js');
   this.bulkCopy('grunt/copy.js', 'grunt/tasks/copy.js');
+  this.bulkCopy('grunt/dist.js', 'grunt/tasks/dist.js');
   this.bulkCopy('grunt/jshint.js', 'grunt/tasks/jshint.js');
   this.bulkCopy('grunt/jsonlint.js', 'grunt/tasks/jsonlint.js');
+  this.bulkCopy('grunt/karma.js', 'grunt/tasks/karma.js');
   this.bulkCopy('grunt/less.js', 'grunt/tasks/less.js');
   this.bulkCopy('grunt/newer.js', 'grunt/tasks/newer.js');
-  this.bulkCopy('grunt/uglify.js', 'grunt/tasks/uglify.js');
-  this.bulkCopy('grunt/upload.js', 'grunt/tasks/upload.js');
+  this.bulkCopy('grunt/serve.js', 'grunt/tasks/serve.js');
   this.bulkCopy('grunt/watch.js', 'grunt/tasks/watch.js');
   this.bulkCopy('gitignore', '.gitignore');
   this.bulkCopy('lessrc', '.lessrc');

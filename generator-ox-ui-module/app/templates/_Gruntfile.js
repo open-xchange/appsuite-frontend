@@ -22,20 +22,34 @@ module.exports = function (grunt) {
         grunt.file.exists('grunt/local.conf.json') ? grunt.file.readJSON('grunt/local.conf.json') : {}
     ));
 
-    // load installed grunt tasks from specified folder
-    grunt.loadTasks('grunt/tasks');
+    grunt.util.runPrefixedSubtasksFor = function (main_task, prefix) {
+        return function () {
+            var list = [];
+
+            for (var key in grunt.config(main_task)) {
+                if (key.substr(0, prefix.length) === prefix) {
+                    list.push(key);
+                }
+            }
+            list = list.map(function (name) {
+                return main_task + ':' + name;
+            });
+
+            grunt.task.run(list);
+        };
+    };
 
     // custom tasks
     grunt.registerTask('manifests', ['newer:jsonlint:manifests', 'concat:manifests']);
     grunt.registerTask('lint', ['newer:jshint:all', 'newer:jsonlint:all']);
 
-    // testing stuff
-    grunt.registerTask('test', ['default', 'karma:unit:start', 'watch']);
-
     // steps to build the ui (ready for development)
-    grunt.registerTask('build', ['lint', 'copy_build', 'newer:concat', 'newer:less', 'newer:compile_po']);
+    grunt.registerTask('build', ['bower', 'lint', 'copy_build', 'newer:concat', 'newer:less', 'compile_po']);
     // create a package ready version of the ui (aka what jenkins does)
-    grunt.registerTask('dist', ['clean', 'build', 'uglify', 'copy:dist', 'assemble:dist', 'compress:source']);
+    grunt.registerTask('dist', ['clean', 'build', 'uglify', 'copy_dist', 'assemble:dist', 'compress:source']);
     // default task
-    grunt.registerTask('default', ['build']);
+    grunt.registerTask('default', ['checkDependencies', 'build']);
+
+    // load installed grunt tasks from specified folder
+    grunt.loadTasks('grunt/tasks');
 };

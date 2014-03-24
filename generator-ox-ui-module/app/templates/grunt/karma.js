@@ -29,5 +29,8 @@ module.exports = function (grunt) {
 
     });
 
+    // testing stuff
+    grunt.registerTask('test', ['karma:unit:start']);
+
     grunt.loadNpmTasks('grunt-karma');
 };

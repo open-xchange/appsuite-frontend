@@ -6,6 +6,7 @@
 /build
 /dist
 /tmp
+/ox.pot
 /debian/files
 /debian/*/
 /debian/*.debhelper.log
@@ -14,3 +15,4 @@
 local.conf*
 !local.conf.default.json
 npm-debug.log
+/bower_components

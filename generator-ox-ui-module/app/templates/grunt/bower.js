@@ -10,8 +10,12 @@
 
 module.exports = function (grunt) {
 
-    grunt.config.extend('uglify', {
+    grunt.config('bower', {
+
+        options: { copy: false },
+        install: {}
+
     });
 
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-bower-task');
 };

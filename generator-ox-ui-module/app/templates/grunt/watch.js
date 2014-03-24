@@ -10,25 +10,40 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('watch', {
+    grunt.config.extend('watch', {
 
         options: {
-            interrupt: false,
-            spawn: true,
-            debounceDelay: 1500
+            interval: 500,
+            interrupt: true,
+            debounceDelay: 500
         },
         manifests: {
             files: 'apps/**/manifest.json',
-            tasks: ['manifests']
+            tasks: ['manifests', 'force_update'],
+            options: { livereload: true }
         },
-        less: {
-            files: 'apps/**/*.less',
-            tasks: ['less']
+        karma: {
+            files: ['spec/**/*.js'],
+            tasks: ['newer:jshint:specs', 'newer:copy:specs', 'karma:unit:run']
+        },
+        configs: {
+            options: { reload: true },
+            files: [
+                'Gruntfile.js',
+                'grunt/tasks/*.js'
+            ],
+            tasks: ['default']
         },
         all: {
-            files: ['<%= jshint.all.src %>'],
-            tasks: ['default'],
-            options: { nospawn: true }
+            files: [
+                'apps/**/*.{js,less}',
+                'src/*',
+                'lib/**/*.js',
+                'bower.json',
+                'package.json'
+            ],
+            tasks: ['default', 'karma:unit:run'],
+            options: { livereload: true }
         }
     });
 

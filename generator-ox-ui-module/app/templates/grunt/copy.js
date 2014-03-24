@@ -10,7 +10,7 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('copy', {
+    grunt.config.extend('copy', {
         apps: {
             files: [
                 {

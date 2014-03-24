@@ -26,7 +26,6 @@ module.exports = function (grunt) {
         return included;
     }
 
-
     function isTranslationModule(file) {
         return file.match(/\.([a-zA-Z]+_[a-zA-Z]+)\.js$/) && grunt.file.isFile(file);
     }
@@ -42,7 +41,7 @@ module.exports = function (grunt) {
             files: [
                 {
                     expand: true,
-                    src: ['apps/**/*', 'manifests/**/*', '*.*', '!*.js'],
+                    src: ['apps/**/*', 'manifests/**/*', '*', '!*.js'],
                     cwd: 'build/',
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
                 },
@@ -54,14 +53,16 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('copy_dist', grunt.util.runPrefixedSubtasksFor('copy', 'dist'));
+
     grunt.config.extend('uglify', {
         dist: {
             files: [{
-                src: 'apps/**/*.js',
+                src: ['apps/**/*.js'],
                 cwd: 'build/',
                 dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
                 filter: function (f) {
-                    return !isTranslationModule(f) &&  grunt.file.isFile(f);
+                    return !isTranslationModule(f) && grunt.file.isFile(f);
                 },
                 expand: true
             }]
@@ -93,8 +94,12 @@ module.exports = function (grunt) {
                 })()
             },
             files: [{
-                src: ['debian/**/*.hbs', '*.hbs'],
+                src: ['debian/**/*.hbs'],
                 dest: 'dist/package/'
+            },
+            {
+                src: ['*.spec.hbs'],
+                dest: 'dist/'
             }]
         }
     });
@@ -107,7 +112,7 @@ module.exports = function (grunt) {
             },
             files: [{
                 expand: true,
-                src: ['<%= pkg.name %>-<%= pkg.version %>/**/*', '<%= pkg.name %>-<%= pkg.version %>/**/.htaccess'],
+                src: ['<%= pkg.name %>-<%= pkg.version %>/**/*'],
                 cwd: 'dist/'
             }]
         }
