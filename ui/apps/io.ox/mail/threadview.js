@@ -102,6 +102,8 @@ define('io.ox/mail/threadview',
         }
     });
 
+
+
     var ThreadView = Backbone.View.extend({
 
         tagName: 'div',
@@ -363,6 +365,43 @@ define('io.ox/mail/threadview',
         }
     });
 
-    return ThreadView;
+        // Mobile
+    ext.point('io.ox/mail/mobile/thread-view').extend({
+        id: 'thread-view-list',
+        index: 100,
+        draw: function () {
+            this.$el.append(
+                $('<div class="thread-view-list scrollable abs">').hide().append(
+                    $('<h1>'),
+                    this.$ul = $('<ul class="thread-view list-view f6-target" role="wurstblinker">')
+                )
+            );
+        }
+    });
+
+
+    var MobileThreadView = ThreadView.extend({
+        showMail: function () {
+           // TODO
+        },
+        // render scaffold
+        render: function () {
+            // custom render
+            ext.point('io.ox/mail/mobile/thread-view').invoke('draw', this);
+            return this;
+        },
+        // render an email
+        renderListItem: function (model) {
+            // custom view
+            var view = new detail.MobileView({ tagName: 'li', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            return view.render().$el.attr({ role: 'listitem', tabindex: '1' });
+        }
+    });
+
+
+    return {
+        Desktop: ThreadView,
+        Mobile: MobileThreadView
+    };
 
 });

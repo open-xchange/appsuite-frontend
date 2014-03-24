@@ -356,5 +356,16 @@ define('io.ox/mail/detail/view',
         }
     });
 
-    return { View: View };
+    var MobileView = View.extend({
+        toggle: function () {
+            // prevent default
+            return this;
+        }
+
+    });
+
+    return {
+        View: View,
+        MobileView: MobileView
+    };
 });
