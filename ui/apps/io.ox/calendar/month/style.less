@@ -59,10 +59,10 @@
 
             .week-info {
 
-                position: absolute;
-                right: 0;
+                position: relative;
+                float: right;
                 width: 100/8%; /* fix for different round functions */
-                height: 100/6%;
+                height: 100%;
                 padding: 13px 13px 13px 1px;
                 font-size: 11px;
                 line-height: 1.0em;
@@ -90,8 +90,7 @@
                 display: inline-block;
                 width: 100/8%;
                 height: 100%;
-                border-right: 1px solid #ccc;
-                border-top: 1px solid #ccc;
+                border-top: 1px solid #eee;
                 background-color: #fff;
                 .transition(background-color 0.2s linear);
                 .backface-visibility(hidden);
@@ -114,6 +113,7 @@
                     font-size: 11px;
                     line-height: 1em;
                     background-color: #fff;
+                    border-top-left-radius: 9px;
                     .transition(background-color 0.2s linear);
                     .user-select(none);
                     cursor: default;
@@ -136,7 +136,7 @@
                 }
 
                 .list {
-                    margin: 4px;
+                    margin: 2px;
                     .overflow-y(auto);
                 }
 
@@ -185,6 +185,8 @@
     /* Appointment */
     .appointment {
 
+        padding: 0px 2px;
+        border-radius: 9px;
         line-height: 14px;
         margin-bottom: 1px;
         white-space: nowrap;
