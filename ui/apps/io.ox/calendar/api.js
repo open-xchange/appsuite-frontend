@@ -404,7 +404,7 @@ define('io.ox/calendar/api',
 
         /**
          * change confirmation status
-         * @param  {object} o (properties: id, folder, data)
+         * @param  {object} o (properties: id, folder, data, occurrence)
          * @fires  api#mark:invite:confirmed (o)
          * @fires  api#update (data)
          * @fires  api#update: + cid
@@ -413,8 +413,15 @@ define('io.ox/calendar/api',
         confirm: function (o) {
 
             var folder_id = o.folder_id || o.folder,
-                key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
-                alarm = -1;
+                key = folder_id + '.' + o.id + '.' + (o.occurrence || 0),
+                alarm = -1,
+                params = {
+                    action: 'confirm',
+                    folder: folder_id,
+                    id: o.id,
+                    timestamp: _.now(),
+                    timezone: 'UTC'
+                };
 
             // contains alarm?
             if ('alarm' in o.data) {
@@ -422,15 +429,14 @@ define('io.ox/calendar/api',
                 delete o.data.alarm;
             }
 
+            // occurrence
+            if (o.occurrence) {
+                params.occurrence = o.occurrence;
+            }
+
             return http.PUT({
                 module: 'calendar',
-                params: {
-                    action: 'confirm',
-                    folder: o.folder,
-                    id: o.id,
-                    timestamp: _.now(),
-                    timezone: 'UTC'
-                },
+                params: params,
                 data: o.data,
                 appendColumns: false
             })
@@ -462,18 +468,19 @@ define('io.ox/calendar/api',
     /**
      * removes recurrence information
      * @param  {object} obj (appointment object)
-     * @return {object} appointment object
+     * @return {object} reduced copy of appointment object
      */
     api.removeRecurrenceInformation = function (obj) {
         var recAttr = ['change_exceptions', 'delete_exceptions', 'days',
-            'day_in_month', 'month', 'interval', 'until', 'occurrences'];
+            'day_in_month', 'month', 'interval', 'until', 'occurrences'],
+            ret = _.clone(obj);
         for (var i = 0; i < recAttr.length; i++) {
-            if (obj[recAttr[i]]) {
-                delete obj[recAttr[i]];
+            if (ret[recAttr[i]]) {
+                delete ret[recAttr[i]];
             }
         }
-        obj.recurrence_type = 0;
-        return obj;
+        ret.recurrence_type = 0;
+        return ret;
     };
 
     /**
