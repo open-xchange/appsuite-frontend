@@ -128,7 +128,7 @@ module.exports = function (grunt) {
             },
             files: [{
                 expand: true,
-                src: ['<%= pkg.name %>-<%= pkg.version %>/**/*'],
+                src: ['<%= pkg.name %>-<%= pkg.version %>/**/*', '<%= pkg.name %>-<%= pkg.version %>/**/.*'],
                 cwd: 'dist/'
             }]
         }
