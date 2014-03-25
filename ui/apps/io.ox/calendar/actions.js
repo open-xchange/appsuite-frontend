@@ -580,6 +580,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 100,
         prio: 'hi',
+        mobile: 'lo',
         id: 'edit',
         label: gt('Edit'),
         ref: 'io.ox/calendar/detail/actions/edit'
@@ -588,6 +589,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 200,
         prio: 'hi',
+        mobile: 'lo',
         id: 'changestatus',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
@@ -596,6 +598,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
         prio: 'hi',
+        mobile: 'lo',
         id: 'move',
         label: gt('Move'),
         ref: 'io.ox/calendar/detail/actions/move'
@@ -613,6 +616,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 500,
         prio: 'hi',
+        mobile: 'lo',
         id: 'delete',
         icon: 'fa fa-trash-o',
         label: gt('Delete'),
@@ -629,6 +633,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
         index: 100,
         prio: 'hi',
+        mobile: 'lo',
         id: 'send mail',
         label: gt('Send mail to all participants'),
         ref: 'io.ox/calendar/detail/actions/sendmail'
@@ -637,6 +642,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
         index: 200,
         prio: 'hi',
+        mobile: 'lo',
         id: 'invite',
         label: gt('Invite to new appointment'),
         ref: 'io.ox/calendar/detail/actions/invite'
@@ -645,6 +651,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
         index: 300,
         prio: 'hi',
+        mobile: 'lo',
         id: 'save as distlist',
         label: gt('Save as distribution list'),
         ref: 'io.ox/calendar/detail/actions/save-as-distlist'
