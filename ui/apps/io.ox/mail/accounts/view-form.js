@@ -45,7 +45,7 @@ define.async('io.ox/mail/accounts/view-form',
         //conditional defaults
         defaults = {
             pop3: {
-                pop3_refresh_rate: optionsRefreshRatePop[0],
+                pop3_refresh_rate: optionsRefreshRatePop[0].value,
                 pop3_delete_write_through: false,
                 pop3_expunge_on_quit: false
             }
