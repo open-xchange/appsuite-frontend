@@ -26,6 +26,10 @@ module.exports = function (grunt) {
         return included;
     }
 
+    function isTranslationModule(file) {
+        return file.match(/\.([a-zA-Z]+_[a-zA-Z]+)\.js$/) && grunt.file.isFile(file);
+    }
+
     grunt.config.extend('copy', {
         dist_custom: {
             files: [
