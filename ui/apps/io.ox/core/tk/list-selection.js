@@ -26,13 +26,13 @@ define('io.ox/core/tk/list-selection', [], function () {
         this.view.$el
             // normal click/keybard navigation
             .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-            .on(Modernizr.touch ? 'tap' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
+            .on(Modernizr.touch ? 'click' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
             // help accessing the list via keyboard if selection is empty
             .on('focus', function () {
                 var node = $(this).find('[tabindex="1"]').first();
                 if (node.length) node.focus();
             })
-            .on(Modernizr.touch ? 'tap' : 'click', SELECTABLE, function (e) {
+            .on(Modernizr.touch ? 'click' : 'click', SELECTABLE, function (e) {
                 if (!self.isMultiple(e)) self.triggerAction(e);
             })
             // double clikc
@@ -46,7 +46,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.view.$el
                 .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
                 .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
-                .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this));
+                .on('click', '.swipe-left-content', $.proxy(this.onTapRemove, this));
         }
     }
 
@@ -374,7 +374,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.resetSwipe($(e.currentTarget));
         },
 
-        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="icon-trash"/></div>'),
+        inplaceRemoveScaffold: $('<div class="swipe-left-content"><i class="fa fa-trash-o"/></div>'),
 
         renderInplaceRemove: function (node) {
             node.append(this.inplaceRemoveScaffold.clone());
@@ -382,6 +382,7 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         onTapRemove: function (e) {
             e.preventDefault();
+            e.stopImmediatePropagation(); // prevent a new select happening on the deleted cell
             var node = $(e.currentTarget).closest(SELECTABLE),
                 cid = node.attr('data-cid');
             // propagate event

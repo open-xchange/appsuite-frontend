@@ -226,7 +226,7 @@ define('io.ox/mail/main',
         'folder-view-editMode': function () {
             if (!_.device('small')) return;
             app.props.on('change:mobileFolderSelectMode', function () {
-
+                console.log('folder edit mode action');
             });
         },
 
@@ -373,7 +373,6 @@ define('io.ox/mail/main',
         'thread-view-mobile': function (app) {
             if (!_.device('small')) return;
 
-
             // showing single mails will be done with the plain desktop threadview
             app.threadView = new ThreadView.Mobile();
             app.threadView.$el.on('showmail', function (e) {
@@ -383,6 +382,7 @@ define('io.ox/mail/main',
             });
 
             //app.right.append(app.threadView.render().$el);
+
 
             // The mobile threadview uses a normal threadview as base as well
             //app.mobileThreadView = new ThreadView.Mobile();
@@ -489,14 +489,6 @@ define('io.ox/mail/main',
             };
         },
 
-        /*
-         * Define basic function to show an thread overview on mobile
-         */
-        'mobile-show-thread-overview': function (app) {
-            app.showThreadOverview = function (cid) {
-                app.mobileThreadView.show(cid);
-            };
-        },
 
         /*
          * Define basic function to reflect empty selection
