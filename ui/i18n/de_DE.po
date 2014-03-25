@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-03-25 11:06+0100\n"
+"PO-Revision-Date: 2014-03-25 13:38+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -5611,7 +5611,7 @@ msgstr "Antwort an alle Empfänger"
 
 #: apps/io.ox/mail/toolbar.js:83 module:io.ox/mail
 msgid "Set color"
-msgstr "Farbe festlegen"
+msgstr "Farbe zuweisen"
 
 #: apps/io.ox/mail/toolbar.js:93 module:io.ox/mail
 msgid "Edit draft"
