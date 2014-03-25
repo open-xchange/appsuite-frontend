@@ -50,6 +50,22 @@ define('io.ox/mail/autoforward/settings/view-form',
                 );
             }
         });
+        
+        ext.point(ref + '/edit/view').extend({
+            index: 250,
+            id: ref + '/edit/view/keep',
+            draw: function (baton) {
+                this.append(
+                    $('<div>').addClass('form-group').append(
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').text(model.fields.keep).prepend(
+                                new mini.CheckboxView({ name: 'keep', model: baton.model }).render().$el
+                            )
+                        )
+                    )
+                );
+            }
+        });
 
         ext.point(ref + '/edit/view').extend({
             index: 350,

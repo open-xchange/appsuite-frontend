@@ -56,10 +56,13 @@ define('io.ox/mail/autoforward/settings/filter',
 
                     autoForwardData.id = data[0].id;
                     autoForwardData.active = data[0].active;
+                    autoForwardData.keep = false;
 
                     _(data[0].actioncmds).each(function (value) {
                         if (value.id === 'redirect') {
                             autoForwardData.forwardmail = value.to;
+                        } else if (value.id === 'keep') {
+                            autoForwardData.keep = true;
                         }
                     });
                     autoForwardData.userMainEmail = userMainEmail;
