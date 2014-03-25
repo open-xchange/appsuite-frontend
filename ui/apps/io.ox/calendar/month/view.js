@@ -206,7 +206,7 @@ define('io.ox/calendar/month/view',
             var self = this,
                 tempDate;
             // clear first
-            $('.appointment, .icon-circle', this.$el).remove();
+            $('.appointment, .fa-circle', this.$el).remove();
 
             // loop over all appointments
             this.collection.each(function (model) {
@@ -396,7 +396,7 @@ define('io.ox/calendar/month/view',
         id: 'default',
         index: 100,
         draw: function () {
-            this.append('<i class="icon-circle">');
+            this.append('<i class="fa fa-circle">');
         }
     });
 
