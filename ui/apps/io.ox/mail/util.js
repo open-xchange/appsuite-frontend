@@ -361,8 +361,8 @@ define('io.ox/mail/util',
         getPriority: function (data) {
             // normal?
             if (data && data.priority === 3) return $();
-            if (data && data.priority < 3) return $('<span class="high">\u00A0<i class="fa fa-exclamation"/></span>').attr('title', gt('High priority'));
-            return $('<span class="low">\u00A0<i class="fa fa-minus"/></span>').attr('title', gt('Low priority'));
+            if (data && data.priority < 3) return $('<span class="high"><i class="fa fa-exclamation"/></span>').attr('title', gt('High priority'));
+            return $('<span class="low"><i class="fa fa-minus"/></span>').attr('title', gt('Low priority'));
         },
 
         getAccountName: function (data) {
@@ -371,8 +371,8 @@ define('io.ox/mail/util',
             return (/^default0/).test(id) ? gt('Primary account') : (data ? data.account_name : 'N/A');
         },
 
-        getTime: function (timestamp) {
-            return getDateFormated(timestamp, { fulldate: false });
+        getTime: function (timestamp, fulldate) {
+            return getDateFormated(timestamp, { fulldate: !!fulldate });
         },
 
         getDateTime: function (timestamp, options) {

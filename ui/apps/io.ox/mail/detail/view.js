@@ -18,9 +18,10 @@ define('io.ox/mail/detail/view',
      'io.ox/mail/util',
      'io.ox/core/api/collection-pool',
      'io.ox/mail/detail/content',
+     'io.ox/core/extPatterns/links',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style'
-    ], function (extensions, ext, api, util, Pool, content, gt) {
+    ], function (extensions, ext, api, util, Pool, content, links, gt) {
 
     'use strict';
 
@@ -84,22 +85,44 @@ define('io.ox/mail/detail/view',
         draw: extensions.actions
     });
 
+    // ext.point('io.ox/mail/detail/header').extend(new links.DropdownLinks({
+    //     attributes: {},
+    //     classes: 'pull-right actions',
+    //     dropdown: true,
+    //     index: INDEX_header += 100,
+    //     id: 'actions',
+    //     label: gt('Actions'),
+    //     ref: 'io.ox/mail/links/inline'
+    // }));
+
     ext.point('io.ox/mail/detail/header').extend({
         id: 'date',
         index: INDEX_header += 100,
-        draw: extensions.date
+        draw: extensions.fulldate
     });
 
     ext.point('io.ox/mail/detail/header').extend({
         id: 'from',
         index: INDEX_header += 100,
-        draw: extensions.from
+        draw: function (baton) {
+            this.append(
+                $('<div class="from">').append(
+                    util.serializeList(baton.data, 'from')
+                )
+            );
+        }
     });
 
     ext.point('io.ox/mail/detail/header').extend({
         id: 'flag-picker',
         index: INDEX_header += 100,
         draw: extensions.flagPicker
+    });
+
+    ext.point('io.ox/mail/detail/header').extend({
+        id: 'priority',
+        index: INDEX_header += 100,
+        draw: extensions.priority
     });
 
     ext.point('io.ox/mail/detail/header').extend({

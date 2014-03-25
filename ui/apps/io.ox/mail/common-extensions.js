@@ -43,15 +43,19 @@ define('io.ox/mail/common-extensions',
             );
         },
 
-        date: function (baton) {
+        date: function (baton, fulldate) {
             var data = baton.data, t = data.received_date, d;
             if (!_.isNumber(t)) return;
             d = new date.Local(t);
             this.append(
                 $('<time class="date">')
                 .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
-                .text(_.noI18n(util.getTime(t)))
+                .text(_.noI18n(util.getTime(t, !!fulldate)))
             );
+        },
+
+        fulldate: function (baton) {
+            extensions.date.call(this, baton, true);
         },
 
         from: function (baton) {
