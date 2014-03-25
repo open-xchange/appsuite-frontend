@@ -51,7 +51,7 @@ OxUiModuleGenerator.prototype.app = function app() {
    * yeoman API says, it's there for backwards-compatibility. Need to wait until
    * this has been dropped by the yeoman team.
    */
-  this.mkdir('apps/themes/default');
+  this.mkdir('apps');
   this.mkdir('grunt');
   this.mkdir('grunt/tasks');
   this.mkdir('grunt/templates');
@@ -60,7 +60,6 @@ OxUiModuleGenerator.prototype.app = function app() {
   this.template('_bower.json', 'bower.json');
   this.template('_Gruntfile.js', 'Gruntfile.js');
   this.bulkCopy('local.conf.default.json', 'grunt/local.conf.default.json');
-  this.bulkCopy('apps/themes/default/definitions.less', 'apps/themes/default/definitions.less');
 
   this.template('grunt/_i18n.js', 'grunt/tasks/i18n.js');
   this.bulkCopy('grunt/i18n_module.js.tpl', 'grunt/templates/i18n_module.js.tpl');
@@ -77,8 +76,7 @@ OxUiModuleGenerator.prototype.app = function app() {
   this.bulkCopy('grunt/newer.js', 'grunt/tasks/newer.js');
   this.bulkCopy('grunt/serve.js', 'grunt/tasks/serve.js');
   this.bulkCopy('grunt/watch.js', 'grunt/tasks/watch.js');
-  this.bulkCopy('gitignore', '.gitignore');
-  this.bulkCopy('lessrc', '.lessrc');
+  this.copy('gitignore', '.gitignore');
 };
 
 OxUiModuleGenerator.prototype.projectfiles = function projectfiles() {

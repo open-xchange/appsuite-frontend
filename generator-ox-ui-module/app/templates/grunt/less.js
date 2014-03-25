@@ -9,7 +9,7 @@
 'use strict';
 
 module.exports = function (grunt) {
-    grunt.file.expand({cwd: 'apps/themes/'}, '*/definitions.less').forEach(function (file) {
+    ['default'].concat(grunt.file.expand({cwd: 'apps/themes/'}, '*/definitions.less')).forEach(function (file) {
         var themeName = file.replace(/\/definitions.less$/, '');
         var theme = {};
         theme[themeName] = {
