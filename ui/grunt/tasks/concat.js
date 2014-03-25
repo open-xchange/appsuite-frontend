@@ -42,15 +42,15 @@ module.exports = function (grunt) {
                     src: ['apps/**/manifest.json'],
                     rename: function (dest, file) {
                         var data = JSON.parse(grunt.file.read(file)),
-                        packageName = [].concat(data).map(function (obj) {
-                            return obj.package;
-                        }).reduce(function (acc, name) {
-                            name = name || grunt.config('pkg').name;
-                            //ignore the initial value of acc
-                            if (!acc) return name;
-                            if (acc !== name) grunt.fail.warn('Multiple package targets per manifest.json are not supported any longer. Create a manifest.json for each package.');
-                            return name;
-                        }, null);
+                            packageName = [].concat(data).map(function (obj) {
+                                return obj.package;
+                            }).reduce(function (acc, name) {
+                                name = name || grunt.config('pkg').name;
+                                //ignore the initial value of acc
+                                if (!acc) return name;
+                                if (acc !== name) grunt.fail.warn('Multiple package targets per manifest.json are not supported any longer. Create a manifest.json for each package.');
+                                return name;
+                            }, null);
                         return dest + packageName + '.json';
                     },
                     dest: 'build/manifests/',

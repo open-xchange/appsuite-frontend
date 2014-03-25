@@ -110,8 +110,12 @@ module.exports = function (grunt) {
                 })()
             },
             files: [{
-                src: ['debian/**/*.hbs', '*.hbs'],
+                src: ['debian/**/*.hbs'],
                 dest: 'dist/package/'
+            },
+            {
+                src: ['*.spec.hbs'],
+                dest: 'dist/'
             }]
         }
     });
