@@ -237,7 +237,7 @@ define('io.ox/core/tk/attachmentsUtil',
             );
             
             if (options.ref) {
-                var fileObj = JSON.parse(JSON.serialize(obj));
+                var fileObj = JSON.parse(JSON.stringify(obj));
                 fileObj.name = name;
                 fileObj.size = size;
                 ext.point(options.ref).invoke('customize', $node, fileObj);
