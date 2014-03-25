@@ -52,7 +52,7 @@ define('io.ox/mail/view-options',
         index: 300,
         draw: function (baton) {
             // don't add if thread view is disabled server-side
-            if (baton.app.settings.get('threadView') === 'off') return;
+            if (baton.app.settings.get('threadSupport', true) === false) return;
             this.data('view')
                 .divider()
                 .option('thread', true, gt('Conversations'));

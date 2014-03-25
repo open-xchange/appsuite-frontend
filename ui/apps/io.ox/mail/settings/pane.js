@@ -35,12 +35,6 @@ define('io.ox/mail/settings/pane',
         optionsAllAccounts,
         caps,
 
-        optionsThreadview = [
-            { label: gt('Enabled for inbox only'), value: 'inbox' },
-            { label: gt('Enabled for all mail folders'), value: 'on' },
-            { label: gt('Disabled'), value: 'off' }
-        ],
-
         optionsForwardEmailAs = [
             { label: gt('Inline'), value: 'Inline' },
             { label: gt('Attachment'), value: 'Attachment' }
@@ -227,12 +221,6 @@ define('io.ox/mail/settings/pane',
                                 new mini.CheckboxView({ name: 'appendMailTextOnReply', model: mailSettings}).render().$el
                             )
                         )
-                    )
-                ),
-                $('<div>').attr({ 'data-property-section': 'threadView'}).append(
-                    $('<fieldset>').append(
-                        $('<legend>').addClass('sectiontitle').text(gt('Thread view')),
-                        new mini.RadioView({ list: optionsThreadview, name: 'threadView', model: mailSettings}).render().$el
                     )
                 ),
                 $('<fieldset>').append(
