@@ -63,6 +63,7 @@ define('io.ox/mail/main',
             app.pages.addPage({
                 name: 'listView',
                 container: c,
+                startPage: true,
                 navbar: new Bars.NavbarView({
                     el: toolbar,
                     app: app
@@ -215,8 +216,6 @@ define('io.ox/mail/main',
 
                 app.pages.changePage('listView');
             });
-
-
 
         },
 
