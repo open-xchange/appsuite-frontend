@@ -879,11 +879,11 @@ define('io.ox/core/desktop',
         var guid = 0,
 
             pane = $('#io-ox-windowmanager-pane'),
-
+            /*
             getX = function (node) {
                 return node.data('x') || 0;
             },
-
+            */
             /*scrollTo = function (node, cont) {
                 if (true) {
                     _.call(cont);
