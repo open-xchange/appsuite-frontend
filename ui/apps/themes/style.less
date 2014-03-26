@@ -769,23 +769,24 @@ div.hopscotch-bubble {
 .io-ox-alert {
 
     position: absolute;
-    top: -200px;
+    top: 30px;
     left: 50%;
     margin-left: -230px;
     width: 460px;
     background-color: rgba(255, 255, 255, 0.95);
     z-index: 65500;
-    box-shadow: 0 0 50px -1px rgba(0, 0, 0, 0.60);
+    box-shadow: 0 0 50px -1px rgba(0, 0, 0, 0.30);
     outline: 0;
-    .border-radius(8px);
-    .transition(top 0.20s ease-out);
+    opacity: 0;
+    .border-radius(5px);
+    .transition(opacity 0.20s ease-out);
 
     &:focus {
         background-color: #fff;
     }
 
     &.slide-in {
-        top: 20px;
+        opacity: 1.0;
     }
 
     .headline {
@@ -807,7 +808,7 @@ div.hopscotch-bubble {
         position: absolute;
         top: 15px;
         left: 10px;
-        font-size: 30px;
+        font-size: 24px;
         color: #aaa;
         width: 50px;
         text-align: center;
@@ -825,7 +826,7 @@ div.hopscotch-bubble {
     }
 
     .close:hover, .close:focus {
-        background-color: rgba(0, 0, 0, 0.30);
+        background-color: rgba(0, 0, 0, 0.10);
     }
 
     &.io-ox-alert-info .icon { color: #08c; }
