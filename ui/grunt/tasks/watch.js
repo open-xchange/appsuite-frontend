@@ -10,6 +10,18 @@
 
 module.exports = function (grunt) {
 
+    var livereloadConfig = (function () {
+            var conf = grunt.config().local.appserver;
+            if (conf && conf.protocol === 'https') {
+                return {
+                    key: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.key'),
+                    cert: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.crt')
+                };
+            } else {
+                return true;
+            }
+        }());
+
     grunt.config.extend('watch', {
 
         options: {
@@ -20,7 +32,7 @@ module.exports = function (grunt) {
         manifests: {
             files: ['apps/**/*.json', '!apps/io.ox/core/date/*'],
             tasks: ['manifests', 'force_update'],
-            options: { livereload: true }
+            options: { livereload: livereloadConfig }
         },
         karma: {
             files: ['spec/**/*.js'],
@@ -43,7 +55,7 @@ module.exports = function (grunt) {
                 'package.json'
             ],
             tasks: ['default', 'karma:unit:run'],
-            options: { livereload: true }
+            options: { livereload: livereloadConfig }
         }
     });
 
