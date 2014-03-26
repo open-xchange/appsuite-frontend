@@ -57,7 +57,7 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
 
             var top = $('<nav class="toolbar generic-toolbar top">'),
                 topPoint = ext.point(this.id + '/list-view/toolbar/top'),
-                bottom = $('<nav class="toolbar generic-toolbar visual-focus bottom toolbar-small">'),
+                bottom = $('<nav class="toolbar generic-toolbar visual-focus bottom">'),
                 bottomPoint = ext.point(this.id + '/list-view/toolbar/bottom'),
                 baton = new ext.Baton({ view: this, app: this.options.app });
 

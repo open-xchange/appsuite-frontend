@@ -130,7 +130,7 @@ define('io.ox/mail/view-options',
             );
 
             baton.app.getWindow().nodes.sidepanel.find('.foldertree-sidepanel').append(
-                $('<div class="generic-toolbar bottom visual-focus toolbar-small">').append(
+                $('<div class="generic-toolbar bottom visual-focus">').append(
                     $('<a href="#" class="toolbar-item" tabindex="1">')
                     .attr('title', gt('Close folder view'))
                     .append($('<i class="fa fa-angle-double-left">'))

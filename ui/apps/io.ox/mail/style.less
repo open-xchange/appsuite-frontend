@@ -50,15 +50,18 @@
     }
 }
 
-.classic-toolbar-visible .window-content { top: 45px; }
-.rightside.classic-toolbar-visible .thread-view-control { top: 45px }
+@toolbar-line-height: 19px;
+@toolbar-vertical-padding: 10px;
+@toolbar-height: @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
 
+.classic-toolbar-visible .window-content { top: @toolbar-height; }
+.rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
 
 .classic-toolbar, .inline-toolbar, .mobile-toolbar {
     position: absolute;
     top: 0;
     width: 100%;
-    height: 45px;
+    height: @toolbar-height;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
     margin: 0;
@@ -71,8 +74,8 @@
         float: left; // to support pull-right while keeping items in-order (a11y)
         & > a {
             display: inline-block;
-            line-height: 20px;
-            padding: 12px 14px;
+            line-height: @toolbar-line-height;
+            padding: @toolbar-vertical-padding 14px;
             color: @link-color;
             float: left;
             outline: 0;
