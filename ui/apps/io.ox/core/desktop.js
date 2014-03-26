@@ -884,8 +884,11 @@ define('io.ox/core/desktop',
                 return node.data('x') || 0;
             },
 
-            scrollTo = function (node, cont) {
-
+            /*scrollTo = function (node, cont) {
+                if (true) {
+                    _.call(cont);
+                    return;
+                }
                 var index = node.data('index') || 0,
                     left = (-index * 101),
                     done = function () {
@@ -917,7 +920,7 @@ define('io.ox/core/desktop',
                 } else {
                     done();
                 }
-            },
+            },*/
 
             // window class
             Window = function (options) {
@@ -1008,9 +1011,11 @@ define('io.ox/core/desktop',
                     // if not current window or if detached (via funny race conditions)
                     if (!appchange && self && (currentWindow !== this || parent.length === 0)) {
                         // show
-                        if (firstShow) {
+
+                        /*if (firstShow) {
                             node.data('index', guid - 1).css('left', ((guid - 1) * 101) + '%');
-                        }
+                        }*/
+
                         if (node.parent().length === 0) {
                             if (this.simple) {
                                 node.insertAfter('#io-ox-topbar');
@@ -1027,42 +1032,44 @@ define('io.ox/core/desktop',
                             _.url.hash('app', self.app.getName());
                         }
                         node.show();
-                        scrollTo(node, function () {
-                            if (self === null) return;
-                            if (currentWindow && currentWindow !== self) {
-                                currentWindow.hide();
-                            }
-                            currentWindow = self;
-                            _.call(cont);
-                            self.state.visible = true;
-                            self.state.open = true;
-                            self.trigger('show');
-                            if (_.device('!small')) {
-                                document.temptitle = gt.format(
-                                    //#. Title of the browser window
-                                    //#. %1$s is the name of the page, e.g. OX App Suite
-                                    //#. %2$s is the title of the active app, e.g. Calendar
-                                    gt.pgettext('window title', '%1$s %2$s'),
-                                    _.noI18n(ox.serverConfig.pageTitle),
-                                    self.getTitle());
-                                if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
-                                    document.title = document.temptitle;
-                                }
-                            } else {
-                                document.title = _.noI18n(ox.serverConfig.pageTitle);
-                            }
 
-                            if (firstShow) {
-                                shown.resolve();
-                                self.trigger('show:initial'); // alias for open
-                                self.trigger('open');
-                                self.state.running = true;
-                                ox.ui.windowManager.trigger('window.open', self);
-                                firstShow = false;
+                        //scrollTo(node, function () {
+                        if (self === null) return;
+                        if (currentWindow && currentWindow !== self) {
+                            currentWindow.hide();
+                        }
+                        currentWindow = self;
+                        _.call(cont);
+                        self.state.visible = true;
+                        self.state.open = true;
+                        self.trigger('show');
+                        if (_.device('!small')) {
+                            document.temptitle = gt.format(
+                                //#. Title of the browser window
+                                //#. %1$s is the name of the page, e.g. OX App Suite
+                                //#. %2$s is the title of the active app, e.g. Calendar
+                                gt.pgettext('window title', '%1$s %2$s'),
+                                _.noI18n(ox.serverConfig.pageTitle),
+                                self.getTitle());
+                            if (document.fixedtitle !== true) {//to prevent erasing the New Mail title
+                                document.title = document.temptitle;
                             }
-                            ox.ui.windowManager.trigger('window.show', self);
-                            ox.ui.apps.trigger('resume', self.app);
-                        });
+                        } else {
+                            document.title = _.noI18n(ox.serverConfig.pageTitle);
+                        }
+
+                        if (firstShow) {
+                            shown.resolve();
+                            self.trigger('show:initial'); // alias for open
+                            self.trigger('open');
+                            self.state.running = true;
+                            ox.ui.windowManager.trigger('window.open', self);
+                            firstShow = false;
+                        }
+                        ox.ui.windowManager.trigger('window.show', self);
+                        ox.ui.apps.trigger('resume', self.app);
+
+                        //});
                     } else {
                         _.call(cont);
                     }
