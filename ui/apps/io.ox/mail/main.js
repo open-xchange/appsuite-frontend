@@ -167,7 +167,7 @@ define('io.ox/mail/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'preview': app.settings.get('preview', 'right'),
+                'layout': app.settings.get('layout', 'vertical'),
                 'checkboxes': app.settings.get('showCheckboxes', true),
                 'contactPictures': app.settings.get('showContactPictures', false),
                 'mobileFolderSelectMode': false
