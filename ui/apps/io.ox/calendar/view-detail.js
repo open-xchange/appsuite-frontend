@@ -316,6 +316,29 @@ define('io.ox/calendar/view-detail',
                     }
                 })
                 .always(function () {
+                    // add summary
+                    var sumData = util.getConfirmationSummary(confirmations);
+                    if (sumData.count > 3) {
+                        var sum = $('<div>').addClass('summary');
+                        _.each(sumData, function (res) {
+                            if (res.count > 0) {
+                                sum.append(
+                                    $('<span>')
+                                        .addClass('countgroup')
+                                        .text(res.count)
+                                        .prepend(
+                                            $('<span>')
+                                                .addClass('status ' + res.css)
+                                                .append(res.icon)
+                                        )
+                                );
+                            }
+                        });
+                        // if (sumData.count > 10) {
+                        //     sum.append($('<span>').addClass('countgroup').text('(' + sumData.count + ')'));
+                        // }
+                        participants.append(sum);
+                    }
                     // draw action links
                     ext.point('io.ox/calendar/detail/inline-actions-participantrelated').invoke('draw', participants, baton);
                     // finish

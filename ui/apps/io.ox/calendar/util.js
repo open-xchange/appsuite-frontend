@@ -568,6 +568,23 @@ define('io.ox/calendar/util',
             return hash[user] ? hash[user].comment : '';
         },
 
+        getConfirmationSummary: function (conf) {
+            var ret = { count: 0 };
+            // init
+            _.each(confirmClass, function (cls, i) {
+                ret[i] = {
+                    icon: n_confirm[i] || '<i class="fa fa-exclamation-circle">',
+                    count: 0,
+                    css: cls
+                };
+            });
+            _.each(conf, function (c) {
+                ret[c.status].count++;
+                ret.count++;
+            });
+            return ret;
+        },
+
         getWeekScaffold: function (timestamp) {
             var day = new date.Local(timestamp).setStartOfWeek(),
                 i = 0, obj, ret = {}, today = new date.Local().getDays();

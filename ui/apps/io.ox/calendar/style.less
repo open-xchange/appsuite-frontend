@@ -421,6 +421,51 @@
             border: none;
         }
 
+        .status {
+
+            position: absolute;
+            margin-left: 4px;
+
+            &.unconfirmed {
+                color: #428BCA; /* blue */
+            }
+
+            &.accepted {
+
+                color: #8EB360; /* green */
+
+                i {
+                    opacity: 0.25;
+                }
+
+            }
+
+            &.declined {
+                color: #913F3F; /* red */
+            }
+
+            &.tentative {
+                color: #c80; /* orange */
+
+                i {
+                    opacity: 0.50;
+                }
+            }
+
+        }
+
+        .summary {
+
+            .status {
+                position: relative;
+                margin-right: 0.3em;
+            }
+
+            .countgroup {
+                margin-right: 0.5em;
+            }
+        }
+
         .participant-list {
 
             -webkit-column-width: 250px;
@@ -454,35 +499,6 @@
                         text-decoration: line-through; color: #913F3F;
                     }
 
-                }
-
-                .status {
-
-                    position: absolute;
-                    margin-left: 4px;
-
-                    &.accepted {
-
-                        color: #8EB360; /* green */
-
-                        i {
-                            opacity: 0.25;
-                        }
-
-                    }
-
-                    &.declined {
-                        color: #913F3F; /* red */
-                    }
-
-                    &.tentative {
-                        color: #c80; /* orange */
-                    }
-
-                }
-
-                .fa-times, .fa-question-circle {
-                    opacity: 0.50;
                 }
 
                 .comment {
