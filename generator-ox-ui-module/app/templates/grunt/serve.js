@@ -15,6 +15,7 @@ module.exports = function (grunt) {
         server: {
             options: {
                 port: 8337,
+                protocol: grunt.config().local.appserver.protocol || 'http',
                 base: ['build/'],
                 livereload: true,
                 middleware: function (connect, options, middlewares) {

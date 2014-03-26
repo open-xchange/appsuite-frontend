@@ -1,5 +1,6 @@
 {
     "appserver": {
+        "protocol": "http",
         "server": "",
         "verbose": [],
         "prefixes": ["build/", "build/apps"],
