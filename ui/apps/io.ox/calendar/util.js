@@ -319,7 +319,7 @@ define('io.ox/calendar/util',
 
             var current = date.Local.getTTInfoLocal(data.start_date);
             parent.append(
-                $.txt(gt.noI18n(that.getTimeInterval(data) + ' ')),
+                $.txt(gt.noI18n(that.getTimeInterval(data))),
                 $('<span class="label label-default pointer" tabindex="-1">').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent(),
@@ -330,16 +330,16 @@ define('io.ox/calendar/util',
                         // get placement
                         var off = $(element).offset(),
                             width = $('body').width() / 2;
-                        return off.left > width ? 'left' : 'right';
+                        return off.left > width ? 'left' : 'left';
                     }
                 }).on('blur', function () {
-                    $(this).popover('hide');
+                    // $(this).popover('hide');
                 })
             );
 
             function getContent() {
                 // hard coded for demo purposes
-                var div = $('<div>');
+                var div = $('<ul class="list-unstyled">');
                 $.when.apply($, _.map(
                     ['America/Los_Angeles',
                      'America/New_York',
@@ -349,17 +349,20 @@ define('io.ox/calendar/util',
                     .done(function () {
                         _(Array.prototype.slice.call(arguments)).each(function (zone) {
                             // must use outer DIV with "clear: both" here for proper layout in firefox
-                            div.append($('<div class="clear">').append(
-                                $('<span>').text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
-                                $('<b>').append($('<span>')
+                            div.append($('<li>').append(
+                                $('<span>')
+                                    .text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
+                                $('<span>')
                                     .addClass('label label-info')
-                                    .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr))),
-                                $('<i>').text(gt.noI18n(that.getTimeInterval(data, zone)))
+                                    .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr)),
+                                $('<span>')
+                                    .addClass('time')
+                                    .text(gt.noI18n(that.getTimeInterval(data, zone)))
                             ));
                         });
                     });
 
-                return $('<div class="list">').append(div);
+                return div;
             }
 
             return parent;
