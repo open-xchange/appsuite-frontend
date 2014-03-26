@@ -562,7 +562,7 @@ $(window).load(function () {
                             serverUp();
                             debug('boot.js: fetchGeneralServerConfig > success');
                             // forceHTTPS
-                            if (ox.serverConfig.forceHTTPS && location.protocol !== 'https:') {
+                            if (ox.serverConfig.forceHTTPS && location.protocol !== 'https:' && location.hostname !== 'localhost') {
                                 location.href = 'https:' + location.href.substring(location.protocol.length);
                                 return;
                             }
