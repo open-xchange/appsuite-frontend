@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
+define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks', 'less!io.ox/tasks/edit/style'], function (gt) {
 
     'use strict';
 
@@ -124,11 +124,16 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
             var popup = new dialogs.ModalDialog()
                 .addPrimaryButton('ChangeConfState', gt('Change state'), 'ChangeConfState', {tabIndex: '1'})
                 .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'}),
-                body = popup.getBody(),
+                body = popup.getBody().addClass('task-confirmation-dialog'),
                 title,
                 note,
-                message,
-                state;
+                messageId = _.uniqueId('form-control-label-'),
+                stateId = _.uniqueId('form-control-label-'),
+                message = $('<input tabindex=1 class="form-control">').attr({type: 'text', id: messageId}),
+                state = $('<select tabindex=1 class="form-control stateselect" data-action="selector">').attr('id', stateId).append(
+                        $('<option>').text(gt('Confirm')),
+                        $('<option>').text(gt('Decline')),
+                        $('<option>').text(gt('Tentative')));
 
             if (isArray) {//if model is actually an array with attributes it should work too but needs parameter or script stops working without notice...strange
                 title = model.title || '\u2014';
@@ -139,14 +144,17 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks'], function (gt) {
             }
 
             body.append($('<h4>').text(_.noI18n(title)),
-                        $('<div>').text(_.noI18n(note)).css({color: '#888', 'margin-bottom': '5px'}));
-            util.buildRow(body, [[util.buildLabel(gt('Confirmation status', 'confStateInput')),
-                        state = $('<select class="stateselect" data-action="selector">').attr('id', 'confStateInput').append(
-                        $('<option>').text(gt('Confirm')),
-                        $('<option>').text(gt('Decline')),
-                        $('<option>').text(gt('Tentative')))],
-                        [util.buildLabel(gt('Confirmation message', 'confMessageInput')), message = $('<input>')
-                             .attr({type: 'text', id: 'confMessageInput'})]]);
+                        $('<div class="note">').text(_.noI18n(note)),
+                        $('<div class="row confirmation-controls">').append(
+                                $('<div class="col-sm-6">').append(
+                                        $('<label>').text(gt('Confirmation status')).attr('for', stateId),
+                                        state
+                                        ),
+                                $('<div class="col-sm-6">').append(
+                                        $('<label>').text(gt('Confirmation message')).attr('for', messageId),
+                                        message
+                                        )
+                                ));
             return {popup: popup, state: state, message: message};
         }
     };
