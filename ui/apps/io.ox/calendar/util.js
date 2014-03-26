@@ -324,16 +324,15 @@ define('io.ox/calendar/util',
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent(),
                     html: true,
-                    placement: function (tip, element) {
+                    trigger: 'hover',
+                    placement: function (tip) {
                         // add missing outer class
                         $(tip).addClass('timezones');
                         // get placement
-                        var off = $(element).offset(),
-                            width = $('body').width() / 2;
-                        return off.left > width ? 'left' : 'left';
+                        return 'left';
                     }
                 }).on('blur', function () {
-                    // $(this).popover('hide');
+                    $(this).popover('hide');
                 })
             );
 
