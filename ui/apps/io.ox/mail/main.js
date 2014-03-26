@@ -89,11 +89,7 @@ define('io.ox/mail/main',
             });
 
             app.toolbar = new Bars.ToolbarView({app: app});
-
-            // debug
-            //app.listView.model.set('thread', true);
-            window.kack = app;
-
+            window.wurst = app;
         },
         /*
          * Init all nav- and toolbar labels for mobile
@@ -380,13 +376,7 @@ define('io.ox/mail/main',
                 app.pages.changePage('detailView');
             });
 
-            //app.right.append(app.threadView.render().$el);
-
-
-            // The mobile threadview uses a normal threadview as base as well
-            //app.mobileThreadView = new ThreadView.Mobile();
             app.pages.getPage('threadView').append(app.threadView.render().$el);
-
 
         },
 

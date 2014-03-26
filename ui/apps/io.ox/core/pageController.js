@@ -100,10 +100,9 @@ define('io.ox/core/pageController',
             current = to;
 
             _.defer(function () {
-                $toPage.addClass('in current ' + opt.animation)
+                $toPage.addClass('io-ox-core-animation in current ' + opt.animation)
                     .one('webkitAnimationEnd animationend', function () {
-                        //console.log('animation end toPAge');
-                        $(this).removeClass('in ' + opt.animation);
+                        $(this).removeClass('io-ox-core-animation in ' + opt.animation);
                         $toPage.trigger('pageshow', {from: opt.from, to: opt.to});
                     });
             }, 1);
@@ -111,14 +110,12 @@ define('io.ox/core/pageController',
             // start animation "from" page out
             _.defer(function () {
                 $fromPage.removeClass('current')
-                    .addClass('out inmotion ' + opt.animation)
+                    .addClass('io-ox-core-animation out inmotion ' + opt.animation)
                     .one('webkitAnimationEnd animationend', function () {
-                        //console.log('animation end fromPage');
-                        $(this).removeClass('out inmotion ' + opt.animation);
+                        $(this).removeClass('io-ox-core-animation out inmotion ' + opt.animation);
                         $fromPage.trigger('pagehide', {from: opt.from, to: opt.to});
                     });
             }, 1);
-
 
             // make new toolbar visible
             pages[opt.from].navbar.hide();
