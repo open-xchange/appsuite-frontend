@@ -53,7 +53,7 @@ msgstr "最近有 %1$d 個被修改的檔案"
 msgid "%1$d messages in this conversation"
 msgstr "近期對話"
 
-#: apps/io.ox/mail/main.js:367 module:io.ox/mail
+#: apps/io.ox/mail/main.js:502 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages selected"
 msgstr "已選擇 <b>%1$d</b> 個元素"
@@ -643,7 +643,7 @@ msgstr "附加 vCard"
 msgid "Application Toolbar"
 msgstr "應用程式工具列"
 
-#: apps/io.ox/mail/main.js:679 module:io.ox/mail
+#: apps/io.ox/mail/main.js:834 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此問題解決前應用程式可能暫時無法使用。"
 
@@ -857,9 +857,9 @@ msgstr "平均時間: %1$s ms"
 msgid "B"
 msgstr "B"
 
-#: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:36 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:241
+#: apps/io.ox/core/commons.js:666 module:io.ox/core
+#: apps/io.ox/mail/main.js:112 module:io.ox/mail apps/io.ox/mail/main.js:116
+#: apps/io.ox/mail/threadview.js:36
 msgid "Back"
 msgstr "向後"
 
@@ -1017,7 +1017,8 @@ msgstr "日曆"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: module:io.ox/settings/settings apps/io.ox/mail/write/inline-images.js:80
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:190
+#: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
@@ -2137,6 +2138,8 @@ msgstr "EB"
 #: apps/io.ox/mail/actions.js:973 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
+#: apps/io.ox/mail/main.js:103 apps/io.ox/mail/main.js:108
+#: apps/io.ox/mail/main.js:193
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2241,7 +2244,7 @@ msgstr "電子郵件位址"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:342 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:333 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "每年的 %1$s %2$d 日"
@@ -2777,6 +2780,7 @@ msgid "Folder-specific actions"
 msgstr "資料夾行為"
 
 #: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
+#: apps/io.ox/mail/main.js:102 module:io.ox/mail apps/io.ox/mail/main.js:106
 msgid "Folders"
 msgstr "文件夾"
 
@@ -3255,7 +3259,7 @@ msgstr "等於"
 msgid "Is smaller than"
 msgstr "小於"
 
-#: apps/io.ox/core/commons.js:648 module:io.ox/core
+#: apps/io.ox/core/commons.js:659 module:io.ox/core
 msgid "Items"
 msgstr "項目"
 
@@ -3458,7 +3462,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "郵件"
 
-#: apps/io.ox/mail/main.js:135 module:io.ox/mail
+#: apps/io.ox/mail/main.js:241 module:io.ox/mail
 msgid "Mail Details"
 msgstr "郵件詳細資訊"
 
@@ -3676,7 +3680,7 @@ msgstr "中間名"
 msgid "Minimize"
 msgstr "最小化"
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:78 module:io.ox/core
 #, c-format
 msgid "Minimum password length is %1$d."
@@ -3930,7 +3934,7 @@ msgstr "約會詳情"
 msgid "No birthdays within the next %1$d weeks"
 msgstr "下 %1$d 週內沒有人生日"
 
-#: apps/io.ox/core/commons.js:186 module:io.ox/core
+#: apps/io.ox/core/commons.js:189 module:io.ox/core
 msgid "No elements selected"
 msgstr "無選擇任何元素"
 
@@ -3964,7 +3968,7 @@ msgstr "您的收件匣中沒有郵件"
 msgid "No matching templates on this Server"
 msgstr "伺服器上沒有符合的範本"
 
-#: apps/io.ox/mail/main.js:354 module:io.ox/mail
+#: apps/io.ox/mail/main.js:489 module:io.ox/mail
 #, fuzzy
 msgid "No message selected"
 msgstr "無選擇任何元素"
@@ -4358,48 +4362,48 @@ msgstr "參與者"
 msgid "Password"
 msgstr "密碼"
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:83 module:io.ox/core
 #, fuzzy, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "成本必須在 -%1$d 到 %1$d 之間。"
 
 #: apps/plugins/portal/userSettings/register.js:88 module:io.ox/core
-msgid "Passwordstrength: Good"
+msgid "Password strength: Good"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:92 module:io.ox/core
-msgid "Passwordstrength: Lengendary!"
+msgid "Password strength: Legendary!"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
-msgid "Passwordstrength: Strong"
+msgid "Password strength: Strong"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:75 module:io.ox/core
-msgid "Passwordstrength: Too short"
+msgid "Password strength: Too short"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:91 module:io.ox/core
-msgid "Passwordstrength: Very strong"
+msgid "Password strength: Very strong"
 msgstr ""
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:84 module:io.ox/core
 #, c-format
-msgid "Passwordstrength: Very weak"
+msgid "Password strength: Very weak"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:86 module:io.ox/core
-msgid "Passwordstrength: Weak"
+msgid "Password strength: Weak"
 msgstr ""
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:79 module:io.ox/core
 #, c-format
-msgid "Passwordstrength: Wrong length"
+msgid "Password strength: Wrong length"
 msgstr ""
 
 #. Emoji category
@@ -5076,14 +5080,14 @@ msgstr "全部回覆"
 msgid "Reply all"
 msgstr "全部回復"
 
-#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
-#, fuzzy
-msgid "Reply all recipients"
-msgstr "所有收件人"
-
 #: apps/io.ox/mail/write/view-main.js:289 module:io.ox/mail
 msgid "Reply to"
 msgstr "回復給"
+
+#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
+#, fuzzy
+msgid "Reply to all recipients"
+msgstr "所有收件人"
 
 #: apps/io.ox/mail/toolbar.js:51 module:io.ox/mail
 #, fuzzy
@@ -5116,7 +5120,7 @@ msgstr "資源"
 msgid "Restore applications"
 msgstr "還原應用程式"
 
-#: apps/io.ox/core/commons.js:790 module:io.ox/core
+#: apps/io.ox/core/commons.js:801 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:297 module:io.ox/mail
 msgid "Retry"
 msgstr "蟲試"
@@ -5281,11 +5285,11 @@ msgid "Searched for: %1$s"
 msgstr "已搜尋: %1$s"
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:365 module:io.ox/core
+#: apps/io.ox/core/commons.js:368 module:io.ox/core
 msgid "Searched in"
 msgstr "搜尋於"
 
-#: apps/io.ox/core/commons.js:359 module:io.ox/core
+#: apps/io.ox/core/commons.js:362 module:io.ox/core
 msgid "Searched in all folders"
 msgstr "在所有資料夾搜尋"
 
@@ -5315,7 +5319,7 @@ msgstr "全部不選"
 msgid "Selecting a view"
 msgstr "選擇視圖"
 
-#: apps/io.ox/core/commons.js:165 module:io.ox/core
+#: apps/io.ox/core/commons.js:168 module:io.ox/core
 msgid "Selection Details"
 msgstr "選擇範圍詳情"
 
@@ -6057,7 +6061,7 @@ msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">october</a>."
+"data-attribute=\"month\">October</a>."
 msgstr ""
 "約會將於每年 <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">"
 "十月</a> 的 <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">"
@@ -6071,7 +6075,7 @@ msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
 "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
 "span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">october</a>."
+"\">October</a>."
 msgstr ""
 "約會將於每年的 <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
 "\">十月</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth"
@@ -6540,6 +6544,12 @@ msgid ""
 "This widget is currently offline because the twitter rate limit exceeded."
 msgstr "因為超過 Twitter 使用率限制，此小工具目前已離線。"
 
+#: apps/io.ox/mail/main.js:115 module:io.ox/mail
+#, fuzzy
+#| msgid "Thread view"
+msgid "Thread"
+msgstr "討論串視圖"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:365
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:436
@@ -6803,8 +6813,8 @@ msgstr "今天"
 msgid "Toggle checkboxes"
 msgstr "切換選取盒"
 
-#: apps/io.ox/core/commons-folderview.js:1017 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:1045
+#: apps/io.ox/core/commons-folderview.js:1072 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:1100
 msgid "Toggle folder"
 msgstr "切換文件夾"
 
@@ -10302,9 +10312,6 @@ msgstr "每年"
 
 #~ msgid "This feature is deactivated"
 #~ msgstr "此功能已被停用"
-
-#~ msgid "Thread view"
-#~ msgstr "討論串視圖"
 
 #~ msgid "Tiles"
 #~ msgstr "磚塊"

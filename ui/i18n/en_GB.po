@@ -54,7 +54,7 @@ msgstr "%1$d files have been changed recently"
 msgid "%1$d messages in this conversation"
 msgstr "Recent conversations"
 
-#: apps/io.ox/mail/main.js:367 module:io.ox/mail
+#: apps/io.ox/mail/main.js:502 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages selected"
 msgstr "<b>%1$d</b> elements selected"
@@ -644,7 +644,7 @@ msgstr "Append vCard"
 msgid "Application Toolbar"
 msgstr "Application Tool bar"
 
-#: apps/io.ox/mail/main.js:679 module:io.ox/mail
+#: apps/io.ox/mail/main.js:834 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Application may not work as expected until this problem is solved."
 
@@ -867,9 +867,9 @@ msgstr "Average time: %1$s MS"
 msgid "B"
 msgstr "B"
 
-#: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:36 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:241
+#: apps/io.ox/core/commons.js:666 module:io.ox/core
+#: apps/io.ox/mail/main.js:112 module:io.ox/mail apps/io.ox/mail/main.js:116
+#: apps/io.ox/mail/threadview.js:36
 msgid "Back"
 msgstr "Back"
 
@@ -1031,7 +1031,8 @@ msgstr "Calendar"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: module:io.ox/settings/settings apps/io.ox/mail/write/inline-images.js:80
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:190
+#: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
@@ -2166,6 +2167,8 @@ msgstr "EB"
 #: apps/io.ox/mail/actions.js:973 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
+#: apps/io.ox/mail/main.js:103 apps/io.ox/mail/main.js:108
+#: apps/io.ox/mail/main.js:193
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2273,7 +2276,7 @@ msgstr "Email addresses"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:342 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:333 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Yearly on %1$s %2$d"
@@ -2821,6 +2824,7 @@ msgid "Folder-specific actions"
 msgstr "Folder-specific actions"
 
 #: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
+#: apps/io.ox/mail/main.js:102 module:io.ox/mail apps/io.ox/mail/main.js:106
 msgid "Folders"
 msgstr "Folders"
 
@@ -3316,7 +3320,7 @@ msgstr "Is exactly"
 msgid "Is smaller than"
 msgstr "Is smaller than"
 
-#: apps/io.ox/core/commons.js:648 module:io.ox/core
+#: apps/io.ox/core/commons.js:659 module:io.ox/core
 msgid "Items"
 msgstr "Items"
 
@@ -3519,7 +3523,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Email"
 
-#: apps/io.ox/mail/main.js:135 module:io.ox/mail
+#: apps/io.ox/mail/main.js:241 module:io.ox/mail
 msgid "Mail Details"
 msgstr "E-mail Details"
 
@@ -3737,7 +3741,7 @@ msgstr "Middle name"
 msgid "Minimize"
 msgstr "Minimise"
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:78 module:io.ox/core
 #, c-format
 msgid "Minimum password length is %1$d."
@@ -3991,7 +3995,7 @@ msgstr "Appointment Details"
 msgid "No birthdays within the next %1$d weeks"
 msgstr "No birthdays within the next %1$d weeks"
 
-#: apps/io.ox/core/commons.js:186 module:io.ox/core
+#: apps/io.ox/core/commons.js:189 module:io.ox/core
 msgid "No elements selected"
 msgstr "No elements selected"
 
@@ -4025,7 +4029,7 @@ msgstr "No email messages in your inbox"
 msgid "No matching templates on this Server"
 msgstr "No matching templates on this server"
 
-#: apps/io.ox/mail/main.js:354 module:io.ox/mail
+#: apps/io.ox/mail/main.js:489 module:io.ox/mail
 #, fuzzy
 msgid "No message selected"
 msgstr "No elements selected"
@@ -4420,48 +4424,48 @@ msgstr "Participants"
 msgid "Password"
 msgstr "Password"
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:83 module:io.ox/core
 #, fuzzy, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "Costs must be between -%1$d and %1$d."
 
 #: apps/plugins/portal/userSettings/register.js:88 module:io.ox/core
-msgid "Passwordstrength: Good"
+msgid "Password strength: Good"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:92 module:io.ox/core
-msgid "Passwordstrength: Lengendary!"
+msgid "Password strength: Legendary!"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
-msgid "Passwordstrength: Strong"
+msgid "Password strength: Strong"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:75 module:io.ox/core
-msgid "Passwordstrength: Too short"
+msgid "Password strength: Too short"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:91 module:io.ox/core
-msgid "Passwordstrength: Very strong"
+msgid "Password strength: Very strong"
 msgstr ""
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:84 module:io.ox/core
 #, c-format
-msgid "Passwordstrength: Very weak"
+msgid "Password strength: Very weak"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:86 module:io.ox/core
-msgid "Passwordstrength: Weak"
+msgid "Password strength: Weak"
 msgstr ""
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:79 module:io.ox/core
 #, c-format
-msgid "Passwordstrength: Wrong length"
+msgid "Password strength: Wrong length"
 msgstr ""
 
 #. Emoji category
@@ -5141,14 +5145,14 @@ msgstr "Reply All"
 msgid "Reply all"
 msgstr "Reply all"
 
-#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
-#, fuzzy
-msgid "Reply all recipients"
-msgstr "All recipients"
-
 #: apps/io.ox/mail/write/view-main.js:289 module:io.ox/mail
 msgid "Reply to"
 msgstr "Reply to"
+
+#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
+#, fuzzy
+msgid "Reply to all recipients"
+msgstr "All recipients"
 
 #: apps/io.ox/mail/toolbar.js:51 module:io.ox/mail
 #, fuzzy
@@ -5181,7 +5185,7 @@ msgstr "Resources"
 msgid "Restore applications"
 msgstr "Restore applications"
 
-#: apps/io.ox/core/commons.js:790 module:io.ox/core
+#: apps/io.ox/core/commons.js:801 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:297 module:io.ox/mail
 msgid "Retry"
 msgstr "Retry"
@@ -5346,11 +5350,11 @@ msgid "Searched for: %1$s"
 msgstr "Searched for: %1$s"
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:365 module:io.ox/core
+#: apps/io.ox/core/commons.js:368 module:io.ox/core
 msgid "Searched in"
 msgstr "Searched in"
 
-#: apps/io.ox/core/commons.js:359 module:io.ox/core
+#: apps/io.ox/core/commons.js:362 module:io.ox/core
 msgid "Searched in all folders"
 msgstr "Searched in all folders"
 
@@ -5380,7 +5384,7 @@ msgstr "Select none"
 msgid "Selecting a view"
 msgstr "Selecting a view"
 
-#: apps/io.ox/core/commons.js:165 module:io.ox/core
+#: apps/io.ox/core/commons.js:168 module:io.ox/core
 msgid "Selection Details"
 msgstr "Selection Details"
 
@@ -6128,7 +6132,7 @@ msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">october</a>."
+"data-attribute=\"month\">October</a>."
 msgstr ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
@@ -6142,7 +6146,7 @@ msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
 "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
 "span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">october</a>."
+"\">October</a>."
 msgstr ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
 "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
@@ -6644,6 +6648,12 @@ msgid ""
 msgstr ""
 "This widget is currently offline because the Twitter rate limit was exceeded."
 
+#: apps/io.ox/mail/main.js:115 module:io.ox/mail
+#, fuzzy
+#| msgid "Thread view"
+msgid "Thread"
+msgstr "Thread view"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:365
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:436
@@ -6942,8 +6952,8 @@ msgstr "Today"
 msgid "Toggle checkboxes"
 msgstr "Toggle checkboxes"
 
-#: apps/io.ox/core/commons-folderview.js:1017 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:1045
+#: apps/io.ox/core/commons-folderview.js:1072 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:1100
 msgid "Toggle folder"
 msgstr "Toggle folder"
 
@@ -8790,9 +8800,6 @@ msgstr "yearly"
 
 #~ msgid "This feature is deactivated"
 #~ msgstr "This feature is deactivated"
-
-#~ msgid "Thread view"
-#~ msgstr "Thread view"
 
 #~ msgid "Tiles"
 #~ msgstr "Tiles"

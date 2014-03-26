@@ -57,7 +57,7 @@ msgstr "%1$d faili ir nesen izmainīti"
 msgid "%1$d messages in this conversation"
 msgstr "Nesnās sarunas"
 
-#: apps/io.ox/mail/main.js:367 module:io.ox/mail
+#: apps/io.ox/mail/main.js:502 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages selected"
 msgstr "<b>%1$d</b> elementi iezīmēti"
@@ -651,7 +651,7 @@ msgstr "Pievienot vCard"
 msgid "Application Toolbar"
 msgstr "Aplikācijas rīkjosla"
 
-#: apps/io.ox/mail/main.js:679 module:io.ox/mail
+#: apps/io.ox/mail/main.js:834 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikācija var nestrādāt kā paredzēts kamēr šī problēma nav atrisināta."
@@ -880,9 +880,9 @@ msgstr "Vidējais laiks: %1$s ms"
 msgid "B"
 msgstr "B"
 
-#: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:36 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:241
+#: apps/io.ox/core/commons.js:666 module:io.ox/core
+#: apps/io.ox/mail/main.js:112 module:io.ox/mail apps/io.ox/mail/main.js:116
+#: apps/io.ox/mail/threadview.js:36
 msgid "Back"
 msgstr "Atpakaļ"
 
@@ -1044,7 +1044,8 @@ msgstr "Kalendārs"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: module:io.ox/settings/settings apps/io.ox/mail/write/inline-images.js:80
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:190
+#: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
@@ -2183,6 +2184,8 @@ msgstr "EB"
 #: apps/io.ox/mail/actions.js:973 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
+#: apps/io.ox/mail/main.js:103 apps/io.ox/mail/main.js:108
+#: apps/io.ox/mail/main.js:193
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2289,7 +2292,7 @@ msgstr "E-pasta adreses"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:342 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:333 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Katra gada %2$s %1$s"
@@ -2839,6 +2842,7 @@ msgid "Folder-specific actions"
 msgstr "Mapes darbības"
 
 #: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
+#: apps/io.ox/mail/main.js:102 module:io.ox/mail apps/io.ox/mail/main.js:106
 msgid "Folders"
 msgstr "Mapes"
 
@@ -3333,7 +3337,7 @@ msgstr "Ir tieši"
 msgid "Is smaller than"
 msgstr "Ir mazāks par"
 
-#: apps/io.ox/core/commons.js:648 module:io.ox/core
+#: apps/io.ox/core/commons.js:659 module:io.ox/core
 msgid "Items"
 msgstr "Vienības"
 
@@ -3536,7 +3540,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Pasts"
 
-#: apps/io.ox/mail/main.js:135 module:io.ox/mail
+#: apps/io.ox/mail/main.js:241 module:io.ox/mail
 msgid "Mail Details"
 msgstr "Pasta detaļas"
 
@@ -3754,7 +3758,7 @@ msgstr "Otrais vārds"
 msgid "Minimize"
 msgstr "Minimzēt"
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:78 module:io.ox/core
 #, fuzzy, c-format
 msgid "Minimum password length is %1$d."
@@ -4008,7 +4012,7 @@ msgstr "Šodien nav nevienas tikšanās"
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Nākamajās %1$d nedēļas nav nevienas dzimšanas dienas"
 
-#: apps/io.ox/core/commons.js:186 module:io.ox/core
+#: apps/io.ox/core/commons.js:189 module:io.ox/core
 msgid "No elements selected"
 msgstr "Neviens elements nav izvēlēts"
 
@@ -4042,7 +4046,7 @@ msgstr "Jūsu pasta kastē nav vēstuļu"
 msgid "No matching templates on this Server"
 msgstr "Šajā serverī nav atbilstošu sagatavju"
 
-#: apps/io.ox/mail/main.js:354 module:io.ox/mail
+#: apps/io.ox/mail/main.js:489 module:io.ox/mail
 #, fuzzy
 msgid "No message selected"
 msgstr "Neviens elements nav izvēlēts"
@@ -4444,8 +4448,8 @@ msgstr "Dalībnieki"
 msgid "Password"
 msgstr "Parole"
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:83 module:io.ox/core
 #, fuzzy, c-format
 msgid "Password length must be between %1$d and %2$d characters."
@@ -4453,45 +4457,45 @@ msgstr "Paroles garumam ir jābūt starp %1$s un %2$s simboliem."
 
 #: apps/plugins/portal/userSettings/register.js:88 module:io.ox/core
 #, fuzzy
-msgid "Passwordstrength: Good"
+msgid "Password strength: Good"
 msgstr "Paroles drošums"
 
 #: apps/plugins/portal/userSettings/register.js:92 module:io.ox/core
 #, fuzzy
-msgid "Passwordstrength: Lengendary!"
+msgid "Password strength: Legendary!"
 msgstr "Paroles drošums"
 
 #: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
 #, fuzzy
-msgid "Passwordstrength: Strong"
+msgid "Password strength: Strong"
 msgstr "Paroles drošums"
 
 #: apps/plugins/portal/userSettings/register.js:75 module:io.ox/core
 #, fuzzy
-msgid "Passwordstrength: Too short"
+msgid "Password strength: Too short"
 msgstr "Paroles drošums"
 
 #: apps/plugins/portal/userSettings/register.js:91 module:io.ox/core
 #, fuzzy
-msgid "Passwordstrength: Very strong"
+msgid "Password strength: Very strong"
 msgstr "Paroles drošums"
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:84 module:io.ox/core
 #, fuzzy, c-format
-msgid "Passwordstrength: Very weak"
+msgid "Password strength: Very weak"
 msgstr "Paroles drošums"
 
 #: apps/plugins/portal/userSettings/register.js:86 module:io.ox/core
 #, fuzzy
-msgid "Passwordstrength: Weak"
+msgid "Password strength: Weak"
 msgstr "Paroles drošums"
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:79 module:io.ox/core
 #, fuzzy, c-format
-msgid "Passwordstrength: Wrong length"
+msgid "Password strength: Wrong length"
 msgstr "Paroles drošums"
 
 #. Emoji category
@@ -5170,14 +5174,14 @@ msgstr "Atbildēt visiem"
 msgid "Reply all"
 msgstr "Atbildēt visiem"
 
-#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
-#, fuzzy
-msgid "Reply all recipients"
-msgstr "Visi saņēmēji"
-
 #: apps/io.ox/mail/write/view-main.js:289 module:io.ox/mail
 msgid "Reply to"
 msgstr "Atbildēt"
+
+#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
+#, fuzzy
+msgid "Reply to all recipients"
+msgstr "Visi saņēmēji"
 
 #: apps/io.ox/mail/toolbar.js:51 module:io.ox/mail
 #, fuzzy
@@ -5210,7 +5214,7 @@ msgstr "Resursi"
 msgid "Restore applications"
 msgstr "Atjaunot aplikācijas"
 
-#: apps/io.ox/core/commons.js:790 module:io.ox/core
+#: apps/io.ox/core/commons.js:801 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:297 module:io.ox/mail
 msgid "Retry"
 msgstr "Vēlreiz"
@@ -5376,11 +5380,11 @@ msgid "Searched for: %1$s"
 msgstr "Meklējums pēc: %1$s"
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:365 module:io.ox/core
+#: apps/io.ox/core/commons.js:368 module:io.ox/core
 msgid "Searched in"
 msgstr "Meklēts iekš"
 
-#: apps/io.ox/core/commons.js:359 module:io.ox/core
+#: apps/io.ox/core/commons.js:362 module:io.ox/core
 msgid "Searched in all folders"
 msgstr "Meklēt visās mapēs"
 
@@ -5410,7 +5414,7 @@ msgstr "Izvēlēties neko"
 msgid "Selecting a view"
 msgstr "Skata izvēle"
 
-#: apps/io.ox/core/commons.js:165 module:io.ox/core
+#: apps/io.ox/core/commons.js:168 module:io.ox/core
 msgid "Selection Details"
 msgstr "Izvēles detaļas"
 
@@ -6164,7 +6168,7 @@ msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">october</a>."
+"data-attribute=\"month\">October</a>."
 msgstr ""
 "Darbība tiek atkārtota: <a href=\"#\" data-widget=\"options\" data-attribute="
 "\"ordinal\"> pirmajā </a> <a href=\"#\" data-widget=\"options\" data-"
@@ -6178,7 +6182,7 @@ msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
 "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
 "span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">october</a>."
+"\">October</a>."
 msgstr ""
 "Darbība tiek atkārtota katru gadu: <a href=\"#\" data-widget=\"number\" data-"
 "attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> of <a "
@@ -6690,6 +6694,12 @@ msgid ""
 "This widget is currently offline because the twitter rate limit exceeded."
 msgstr "Šis rīks pašreiz ir bezsaistē, jo Twitter likmes limits ir pārsniegts."
 
+#: apps/io.ox/mail/main.js:115 module:io.ox/mail
+#, fuzzy
+#| msgid "Thread view"
+msgid "Thread"
+msgstr "Tematisks skats"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:365
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:436
@@ -7006,8 +7016,8 @@ msgstr "Šodien"
 msgid "Toggle checkboxes"
 msgstr "Pārslēgt iezīmes"
 
-#: apps/io.ox/core/commons-folderview.js:1017 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:1045
+#: apps/io.ox/core/commons-folderview.js:1072 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:1100
 msgid "Toggle folder"
 msgstr "Pārslēgt mapi"
 
@@ -12488,9 +12498,6 @@ msgstr "ik-gada"
 #~ msgstr[0] "Sesija tiks pārtraukta pēc %d sekundes."
 #~ msgstr[1] "Sesija tiks pārtraukta pēc %d sekundēm."
 #~ msgstr[2] "Sesija tiks pārtraukta pēc %d sekundēm."
-
-#~ msgid "Thread view"
-#~ msgstr "Tematisks skats"
 
 #~ msgid "Thu"
 #~ msgstr "Cet."

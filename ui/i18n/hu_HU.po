@@ -55,7 +55,7 @@ msgstr "%1$d fájl változott mostanság"
 msgid "%1$d messages in this conversation"
 msgstr "Legutóbbi társalgások"
 
-#: apps/io.ox/mail/main.js:367 module:io.ox/mail
+#: apps/io.ox/mail/main.js:502 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages selected"
 msgstr "<b>%1$d</b> elem kijelölve"
@@ -645,7 +645,7 @@ msgstr "vCard hozzáadása"
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
-#: apps/io.ox/mail/main.js:679 module:io.ox/mail
+#: apps/io.ox/mail/main.js:834 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Az alkalmazás nem feltétlenül fog az elvárható módon működni a probléma "
@@ -873,9 +873,9 @@ msgstr "Átlagos idő: %1$s ms"
 msgid "B"
 msgstr "B"
 
-#: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:36 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:241
+#: apps/io.ox/core/commons.js:666 module:io.ox/core
+#: apps/io.ox/mail/main.js:112 module:io.ox/mail apps/io.ox/mail/main.js:116
+#: apps/io.ox/mail/threadview.js:36
 msgid "Back"
 msgstr "Vissza"
 
@@ -1037,7 +1037,8 @@ msgstr "Naptár"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: module:io.ox/settings/settings apps/io.ox/mail/write/inline-images.js:80
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:190
+#: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
@@ -2171,6 +2172,8 @@ msgstr "EB"
 #: apps/io.ox/mail/actions.js:973 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
+#: apps/io.ox/mail/main.js:103 apps/io.ox/mail/main.js:108
+#: apps/io.ox/mail/main.js:193
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2278,7 +2281,7 @@ msgstr "E-mail címek"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:342 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:333 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Minden év %1$s %2$d. napján"
@@ -2824,6 +2827,7 @@ msgid "Folder-specific actions"
 msgstr "Mappaspecifikus műveletek"
 
 #: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
+#: apps/io.ox/mail/main.js:102 module:io.ox/mail apps/io.ox/mail/main.js:106
 msgid "Folders"
 msgstr "Mappák"
 
@@ -3318,7 +3322,7 @@ msgstr "Pontosan"
 msgid "Is smaller than"
 msgstr "Kisebb, mint"
 
-#: apps/io.ox/core/commons.js:648 module:io.ox/core
+#: apps/io.ox/core/commons.js:659 module:io.ox/core
 msgid "Items"
 msgstr "Elemek"
 
@@ -3521,7 +3525,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Levelek"
 
-#: apps/io.ox/mail/main.js:135 module:io.ox/mail
+#: apps/io.ox/mail/main.js:241 module:io.ox/mail
 msgid "Mail Details"
 msgstr "Levél részletei"
 
@@ -3739,7 +3743,7 @@ msgstr "Középső név"
 msgid "Minimize"
 msgstr "Minimalizálás"
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:78 module:io.ox/core
 #, c-format
 msgid "Minimum password length is %1$d."
@@ -3993,7 +3997,7 @@ msgstr "Találkozó részletei"
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Nincsenek születésnapok a következő %1$d héten"
 
-#: apps/io.ox/core/commons.js:186 module:io.ox/core
+#: apps/io.ox/core/commons.js:189 module:io.ox/core
 msgid "No elements selected"
 msgstr "Nincs elem kijelölve"
 
@@ -4027,7 +4031,7 @@ msgstr "Nincsenek levelek Beérkezett üzenetek mappában"
 msgid "No matching templates on this Server"
 msgstr "Nincsenek megfelelő sablonok ezen a kiszolgálón"
 
-#: apps/io.ox/mail/main.js:354 module:io.ox/mail
+#: apps/io.ox/mail/main.js:489 module:io.ox/mail
 #, fuzzy
 msgid "No message selected"
 msgstr "Nincs elem kijelölve"
@@ -4424,48 +4428,48 @@ msgstr "Résztvevők"
 msgid "Password"
 msgstr "Jelszó"
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:83 module:io.ox/core
 #, fuzzy, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "A költségnek -%1$d és %1$d között kell lennie."
 
 #: apps/plugins/portal/userSettings/register.js:88 module:io.ox/core
-msgid "Passwordstrength: Good"
+msgid "Password strength: Good"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:92 module:io.ox/core
-msgid "Passwordstrength: Lengendary!"
+msgid "Password strength: Legendary!"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
-msgid "Passwordstrength: Strong"
+msgid "Password strength: Strong"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:75 module:io.ox/core
-msgid "Passwordstrength: Too short"
+msgid "Password strength: Too short"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:91 module:io.ox/core
-msgid "Passwordstrength: Very strong"
+msgid "Password strength: Very strong"
 msgstr ""
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:84 module:io.ox/core
 #, c-format
-msgid "Passwordstrength: Very weak"
+msgid "Password strength: Very weak"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js:86 module:io.ox/core
-msgid "Passwordstrength: Weak"
+msgid "Password strength: Weak"
 msgstr ""
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:79 module:io.ox/core
 #, c-format
-msgid "Passwordstrength: Wrong length"
+msgid "Password strength: Wrong length"
 msgstr ""
 
 #. Emoji category
@@ -5146,14 +5150,14 @@ msgstr "Válasz mindenkinek"
 msgid "Reply all"
 msgstr "Válasz mindenkinek"
 
-#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
-#, fuzzy
-msgid "Reply all recipients"
-msgstr "Bármely címzett"
-
 #: apps/io.ox/mail/write/view-main.js:289 module:io.ox/mail
 msgid "Reply to"
 msgstr "Válaszcím"
+
+#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
+#, fuzzy
+msgid "Reply to all recipients"
+msgstr "Bármely címzett"
 
 #: apps/io.ox/mail/toolbar.js:51 module:io.ox/mail
 #, fuzzy
@@ -5186,7 +5190,7 @@ msgstr "Erőforrások"
 msgid "Restore applications"
 msgstr "Alkalmazások visszaállítása"
 
-#: apps/io.ox/core/commons.js:790 module:io.ox/core
+#: apps/io.ox/core/commons.js:801 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:297 module:io.ox/mail
 msgid "Retry"
 msgstr "Újra"
@@ -5351,11 +5355,11 @@ msgid "Searched for: %1$s"
 msgstr "Keresve: %1$s"
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:365 module:io.ox/core
+#: apps/io.ox/core/commons.js:368 module:io.ox/core
 msgid "Searched in"
 msgstr "Keresve itt:"
 
-#: apps/io.ox/core/commons.js:359 module:io.ox/core
+#: apps/io.ox/core/commons.js:362 module:io.ox/core
 msgid "Searched in all folders"
 msgstr "Keresve minden mappában"
 
@@ -5385,7 +5389,7 @@ msgstr "Kijelölés megszüntetése"
 msgid "Selecting a view"
 msgstr "Nézet kiválasztása"
 
-#: apps/io.ox/core/commons.js:165 module:io.ox/core
+#: apps/io.ox/core/commons.js:168 module:io.ox/core
 msgid "Selection Details"
 msgstr "Kijelölés részletei"
 
@@ -6137,7 +6141,7 @@ msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">october</a>."
+"data-attribute=\"month\">October</a>."
 msgstr ""
 "A találkozó <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
 "\">október</a> minden <a href=\"#\" data-widget=\"options\" data-attribute="
@@ -6151,7 +6155,7 @@ msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
 "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
 "span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">october</a>."
+"\">October</a>."
 msgstr ""
 "A találkozó minden év <a href=\"#\" data-widget=\"options\" data-attribute="
 "\"month\">október</a> <a href=\"#\" data-widget=\"number\" data-attribute="
@@ -6657,6 +6661,12 @@ msgstr ""
 "Ez a widget ki van kapcsolva, mert a Twitter gyorsasági korlátja túl lett "
 "lépve."
 
+#: apps/io.ox/mail/main.js:115 module:io.ox/mail
+#, fuzzy
+#| msgid "Thread view"
+msgid "Thread"
+msgstr "Szálnézet"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:365
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:436
@@ -6969,8 +6979,8 @@ msgstr "Ma"
 msgid "Toggle checkboxes"
 msgstr "Kijelölések átváltása"
 
-#: apps/io.ox/core/commons-folderview.js:1017 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:1045
+#: apps/io.ox/core/commons-folderview.js:1072 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:1100
 msgid "Toggle folder"
 msgstr "Mappa átváltása"
 
@@ -9459,9 +9469,6 @@ msgstr "évente"
 
 #~ msgid "This feature is deactivated"
 #~ msgstr "A funkció deaktiválva van"
-
-#~ msgid "Thread view"
-#~ msgstr "Szálnézet"
 
 #~ msgid "Tiles"
 #~ msgstr "Mozaik"

@@ -55,7 +55,7 @@ msgstr "%1$d Dateien wurden kürzlich geändert"
 msgid "%1$d messages in this conversation"
 msgstr "%1$d Nachrichten in dieser Konversation"
 
-#: apps/io.ox/mail/main.js:367 module:io.ox/mail
+#: apps/io.ox/mail/main.js:502 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d Nachrichten markiert"
 
@@ -637,7 +637,7 @@ msgstr "Visitenkarte anhängen"
 msgid "Application Toolbar"
 msgstr "Applikations-Werkzeugleiste"
 
-#: apps/io.ox/mail/main.js:679 module:io.ox/mail
+#: apps/io.ox/mail/main.js:834 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Die Applikation wird möglicherweise nicht erwartungsgemäß funktionieren, "
@@ -861,9 +861,9 @@ msgstr "Durchschnittliche Zeit: %1$s ms"
 msgid "B"
 msgstr "B"
 
-#: apps/io.ox/core/commons.js:655 module:io.ox/core
-#: apps/io.ox/mail/threadview.js:36 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:241
+#: apps/io.ox/core/commons.js:666 module:io.ox/core
+#: apps/io.ox/mail/main.js:112 module:io.ox/mail apps/io.ox/mail/main.js:116
+#: apps/io.ox/mail/threadview.js:36
 msgid "Back"
 msgstr "Zurück"
 
@@ -1025,7 +1025,8 @@ msgstr "Kalender"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: module:io.ox/settings/settings apps/io.ox/mail/write/inline-images.js:80
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:190
+#: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
@@ -2158,6 +2159,8 @@ msgstr "EB"
 #: apps/io.ox/mail/actions.js:973 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
+#: apps/io.ox/mail/main.js:103 apps/io.ox/mail/main.js:108
+#: apps/io.ox/mail/main.js:193
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2264,7 +2267,7 @@ msgstr "E-Mail-Adressen"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:342 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:333 module:io.ox/mail
 msgid "Email from %1$s: %2$s"
 msgstr "E-Mail von %1$s: %2$s"
 
@@ -2816,6 +2819,7 @@ msgid "Folder-specific actions"
 msgstr "Ordnerspezifische Aktionen"
 
 #: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
+#: apps/io.ox/mail/main.js:102 module:io.ox/mail apps/io.ox/mail/main.js:106
 msgid "Folders"
 msgstr "Ordner"
 
@@ -3307,7 +3311,7 @@ msgstr "stimmt exakt überein mit"
 msgid "Is smaller than"
 msgstr "ist kleiner als"
 
-#: apps/io.ox/core/commons.js:648 module:io.ox/core
+#: apps/io.ox/core/commons.js:659 module:io.ox/core
 msgid "Items"
 msgstr "Objekte"
 
@@ -3512,7 +3516,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "E-Mail"
 
-#: apps/io.ox/mail/main.js:135 module:io.ox/mail
+#: apps/io.ox/mail/main.js:241 module:io.ox/mail
 msgid "Mail Details"
 msgstr "E-Mail-Details"
 
@@ -3726,7 +3730,7 @@ msgstr "Zweiter Vorname"
 msgid "Minimize"
 msgstr "Minimieren"
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:78 module:io.ox/core
 #, c-format
 msgid "Minimum password length is %1$d."
@@ -3977,7 +3981,7 @@ msgstr "Keine Termine gefunden bis %s"
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Keine Geburtstage in den nächsten %1$d Wochen"
 
-#: apps/io.ox/core/commons.js:186 module:io.ox/core
+#: apps/io.ox/core/commons.js:189 module:io.ox/core
 msgid "No elements selected"
 msgstr "Keine Elemente markiert"
 
@@ -4011,7 +4015,7 @@ msgstr "Die Inbox enthält keine E-Mails"
 msgid "No matching templates on this Server"
 msgstr "Dieser Server enthält keine passenden Vorlagen"
 
-#: apps/io.ox/mail/main.js:354 module:io.ox/mail
+#: apps/io.ox/mail/main.js:489 module:io.ox/mail
 msgid "No message selected"
 msgstr "Kein Nachricht markiert"
 
@@ -4404,49 +4408,61 @@ msgstr "Teilnehmer"
 msgid "Password"
 msgstr "Passwort"
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:83 module:io.ox/core
 #, c-format
 msgid "Password length must be between %1$d and %2$d characters."
 msgstr "Passwortlänge muss zwischen %1$d und %2$d Zeichen liegen."
 
 #: apps/plugins/portal/userSettings/register.js:88 module:io.ox/core
-msgid "Passwordstrength: Good"
+#, fuzzy
+#| msgid "Passwordstrength: Good"
+msgid "Password strength: Good"
 msgstr "Passwortstärke: gut"
 
 #: apps/plugins/portal/userSettings/register.js:92 module:io.ox/core
 #, fuzzy
-msgid "Passwordstrength: Lengendary!"
+msgid "Password strength: Legendary!"
 msgstr "Passwortstärke: Legendär!"
 
 #: apps/plugins/portal/userSettings/register.js:90 module:io.ox/core
-msgid "Passwordstrength: Strong"
+#, fuzzy
+#| msgid "Passwordstrength: Strong"
+msgid "Password strength: Strong"
 msgstr "Passwortstärke: stark"
 
 #: apps/plugins/portal/userSettings/register.js:75 module:io.ox/core
-msgid "Passwordstrength: Too short"
+#, fuzzy
+#| msgid "Passwordstrength: Too short"
+msgid "Password strength: Too short"
 msgstr "Passwortstärke: zu kurz"
 
 #: apps/plugins/portal/userSettings/register.js:91 module:io.ox/core
-msgid "Passwordstrength: Very strong"
+#, fuzzy
+#| msgid "Passwordstrength: Very strong"
+msgid "Password strength: Very strong"
 msgstr "Passwortstärke: sehr stark"
 
-#. %1$s is the minimum passwordlength
-#. %2$s is the maximum passwordlength
+#. %1$s is the minimum password length
+#. %2$s is the maximum password length
 #: apps/plugins/portal/userSettings/register.js:84 module:io.ox/core
-#, c-format
-msgid "Passwordstrength: Very weak"
+#, fuzzy, c-format
+#| msgid "Passwordstrength: Very weak"
+msgid "Password strength: Very weak"
 msgstr "Passwortstärke: sehr schwach"
 
 #: apps/plugins/portal/userSettings/register.js:86 module:io.ox/core
-msgid "Passwordstrength: Weak"
+#, fuzzy
+#| msgid "Passwordstrength: Weak"
+msgid "Password strength: Weak"
 msgstr "Passwortstärke: schwach"
 
-#. %1$s is the minimum passwordlength
+#. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js:79 module:io.ox/core
-#, c-format
-msgid "Passwordstrength: Wrong length"
+#, fuzzy, c-format
+#| msgid "Passwordstrength: Wrong length"
+msgid "Password strength: Wrong length"
 msgstr "Passwortstärke: falsche Länge"
 
 #. Emoji category
@@ -5141,14 +5157,14 @@ msgstr "Allen antworten"
 msgid "Reply all"
 msgstr "Allen antworten"
 
-#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
-#, fuzzy
-msgid "Reply all recipients"
-msgstr "Antwort an alle Empfänger"
-
 #: apps/io.ox/mail/write/view-main.js:289 module:io.ox/mail
 msgid "Reply to"
 msgstr "Antworten an"
+
+#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
+#, fuzzy
+msgid "Reply to all recipients"
+msgstr "Antwort an alle Empfänger"
 
 #: apps/io.ox/mail/toolbar.js:51 module:io.ox/mail
 msgid "Reply to sender"
@@ -5180,7 +5196,7 @@ msgstr "Ressourcen"
 msgid "Restore applications"
 msgstr "Applikationen wiederherstellen"
 
-#: apps/io.ox/core/commons.js:790 module:io.ox/core
+#: apps/io.ox/core/commons.js:801 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:297 module:io.ox/mail
 msgid "Retry"
 msgstr "Erneut versuchen"
@@ -5340,11 +5356,11 @@ msgid "Searched for: %1$s"
 msgstr "Gesucht nach: %1$s"
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:365 module:io.ox/core
+#: apps/io.ox/core/commons.js:368 module:io.ox/core
 msgid "Searched in"
 msgstr "Gesucht wurde in"
 
-#: apps/io.ox/core/commons.js:359 module:io.ox/core
+#: apps/io.ox/core/commons.js:362 module:io.ox/core
 msgid "Searched in all folders"
 msgstr "Suche erfolgte über alle Ordner"
 
@@ -5374,7 +5390,7 @@ msgstr "Keine wählen"
 msgid "Selecting a view"
 msgstr "Eine Ansicht wählen"
 
-#: apps/io.ox/core/commons.js:165 module:io.ox/core
+#: apps/io.ox/core/commons.js:168 module:io.ox/core
 msgid "Selection Details"
 msgstr "Auswahl-Details"
 
@@ -6117,7 +6133,7 @@ msgid ""
 "The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
 "attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">october</a>."
+"data-attribute=\"month\">October</a>."
 msgstr ""
 "Der Termin findet jeden <a href=\"#\" data-widget=\"options\" data-attribute="
 "\"ordinal\">ersten</a> <a href=\"#\" data-widget=\"options\" data-attribute="
@@ -6131,7 +6147,7 @@ msgid ""
 "The appointment is repeated every year on day <a href=\"#\" data-widget="
 "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
 "span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">october</a>."
+"\">October</a>."
 msgstr ""
 "Der Termin findet jedes Jahr am Tag <a href=\"#\" data-widget=\"number\" "
 "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</ span></a> "
@@ -6642,6 +6658,12 @@ msgid ""
 msgstr ""
 "Dieses Widget ist derzeit offline, da das Twitter-Limit überschritten wurde."
 
+#: apps/io.ox/mail/main.js:115 module:io.ox/mail
+#, fuzzy
+#| msgid "Thread view"
+msgid "Thread"
+msgstr "Thread-Ansicht"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:365
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:436
@@ -6959,8 +6981,8 @@ msgstr "Heute"
 msgid "Toggle checkboxes"
 msgstr "Kontrollfelder an/aus"
 
-#: apps/io.ox/core/commons-folderview.js:1017 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:1045
+#: apps/io.ox/core/commons-folderview.js:1072 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:1100
 msgid "Toggle folder"
 msgstr "Ordner an/aus"
 
@@ -9779,9 +9801,6 @@ msgstr "jährlich"
 #~ msgstr ""
 #~ "Diese Datei enthält keine Beschreibung. Mit einem Doppelklick können Sie "
 #~ "eine eintragen."
-
-#~ msgid "Thread view"
-#~ msgstr "Thread-Ansicht"
 
 #~ msgid "Tiles"
 #~ msgstr "Kacheln"
