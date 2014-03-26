@@ -7,7 +7,9 @@ var yeoman = require('yeoman-generator');
 var DebpkgGenerator = module.exports = function DebpkgGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
 
-    var pkgFile = options.argv.remain[0];
+    this.generateStatic = options.static;
+
+    var pkgFile = options.argv.remain[0] || 'package.json';
     if (!fs.existsSync(pkgFile)) {
         console.log('Package file not found, aborting ...');
         return;
@@ -35,7 +37,7 @@ DebpkgGenerator.prototype.askFor = function askFor() {
         prompts.push({
             name: 'maintainerName',
             message: 'Who would you want the maintainer of your project to be?',
-            default: this.maintainer || ''
+            default: this.authorName || ''
         }, {
             name: 'email',
             message: 'Would you mind telling me the email address of the maintainer?',
@@ -47,7 +49,7 @@ DebpkgGenerator.prototype.askFor = function askFor() {
         prompts.push({
             name: 'copyright',
             message: 'What would you like the copyright string to be?',
-            default: '(c) ' + (new Date()).getFullYear() + ' ' + this.maintainerName || ''
+            default: '(c) ' + (new Date()).getFullYear() + ' ' + (this.authorName || '')
         });
     }
 
@@ -59,11 +61,21 @@ DebpkgGenerator.prototype.askFor = function askFor() {
         });
     }
 
+    if (this.generateStatic === undefined) {
+        prompts.push({
+            type: 'confirm',
+            name: 'generateStatic',
+            message: 'Would you like to generate a separate frontend package containing static files?',
+            default: false
+        });
+    }
+
     this.prompt(prompts, function (props) {
         this.maintainer = this.maintainerName || props.maintainerName + '<' + this.email || props.email + '>';
         this.copyright = this.copyright || props.copyright;
         this.licenseName = this.licenseName || props.licenseName;
         this.license = ''; // TODO: add license text here!
+        this.static_frontend_package = this.generateStatic || props.generateStatic;
 
         cb();
     }.bind(this));
@@ -84,10 +96,10 @@ DebpkgGenerator.prototype.files = function files() {
     //reset interpolate settings to ignore ES6 delimiters: ${}, because this breaks the template
     var interpolate = this._.templateSettings.interpolate;
     this._.templateSettings.interpolate = /<%=([\s\S]+?)%>/g;
-    this.template('debian/_control', 'debian/control');
+    this.template('debian/_control.hbs', 'debian/control.hbs');
+    this.template('debian/_rules', 'debian/rules');
     this._.templateSettings.interpolate = interpolate;
     interpolate = null;
 
     this.template('debian/_copyright', 'debian/copyright');
-    this.template('debian/_rules', 'debian/rules');
 };

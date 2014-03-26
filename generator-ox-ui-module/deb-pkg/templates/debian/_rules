@@ -11,7 +11,7 @@ endif
 BACKEND := debian/<%= _.slugify(packageName) %>/opt/open-xchange/appsuite
 <% if (static_frontend_package) { %>
 FRONTEND := debian/<%= _.slugify(packageName) %>-static/var/www/appsuite
-<% } %
+<% } %>
 
 override_dh_auto_install:
 	mkdir -p $(BACKEND)
