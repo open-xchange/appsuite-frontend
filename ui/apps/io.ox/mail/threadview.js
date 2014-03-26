@@ -346,7 +346,6 @@ define('io.ox/mail/threadview',
 
         // render scaffold
         render: function () {
-            console.log('old render');
             ext.point('io.ox/mail/thread-view').invoke('draw', this);
             return this;
         },
