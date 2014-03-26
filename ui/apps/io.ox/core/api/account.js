@@ -499,7 +499,7 @@ define('io.ox/core/api/account',
         })
         .done(function () {
             // remove from local cache
-            delete api.cache[data.id];
+            delete api.cache[data];
             api.trigger('refresh.all');
             api.trigger('delete');
             require(['io.ox/core/api/folder'], function (api) {
