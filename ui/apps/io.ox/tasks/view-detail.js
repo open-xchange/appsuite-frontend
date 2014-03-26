@@ -159,10 +159,10 @@ define('io.ox/tasks/view-detail',
                 require(['io.ox/core/api/user'], function (userAPI) {
                     var table,
                         states = [
-                            [gt('Not yet confirmed'), 'gray'],
-                            [gt('Confirmed'), 'green'],
-                            [gt('Declined'), 'red'],
-                            [gt('Tentative'), 'yellow']
+                            ['', ''],
+                            ['confirmed', '<i class="fa fa-check">'],
+                            ['declined', '<i class="fa fa-times">'],
+                            ['tentative', '<i class="fa fa-question-circle">']
                         ],
                         lookupParticipant = function (node, table, participant) {
                             if (participant.id) {//external participants don't have an id but the display name is already given
@@ -187,10 +187,7 @@ define('io.ox/tasks/view-detail',
                                     $('<span class="halo-link participants-table-name">').data(_.extend(participant, { display_name: name, email1: participant.mail })).append($('<a href="#">').text(name)))
                                 );
                             }
-                            row.append(
-                                $('<span>').addClass('participants-table-colorsquare').css('background-color', states[participant.confirmation || 0][1]),
-                                $('<span>').text(states[participant.confirmation || 0][0])
-                                );
+                            row.append($(states[participant.confirmation || 0][1])).addClass(states[participant.confirmation || 0][0]);
                             if (participant.confirmmessage) {
                                 row.append($('<span>').addClass('participants-table-confirmmessage').text(_.noI18n(participant.confirmmessage)));
                             }

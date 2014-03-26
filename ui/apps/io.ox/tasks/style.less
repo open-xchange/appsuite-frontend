@@ -117,8 +117,6 @@
 
     .task-details { margin: 1em 0 1em 0; }
 
-    .participants-table-colorsquare { display: inline-block; }
-
     .detail-label {
         cursor: default;
         color: #aaa;
@@ -137,15 +135,21 @@
 
     .participants-table-name { padding-right: 10px; }
 
-    .participants-table-colorsquare {
-        width: 13px;
-        height: 13px;
-        margin-right: 5px;
-    }
-
     .participants-table-confirmmessage { padding-left: 10px; }
 
-    .task-participant { padding-bottom: 5px; }
+    .task-participant {
+        padding-bottom: 5px;
+    	&.confirmed{
+    		i { opacity: 0.25; }
+            i, a{ color: #8EB360; }
+        }
+        &.declined{
+            i, a{ color: #913F3F; };
+        }
+        &.tentative{
+            i, a{ color: #c80; };
+        }
+    }
 
     .priority {
         font-weight: bold;
