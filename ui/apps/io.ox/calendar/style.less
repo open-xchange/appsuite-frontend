@@ -54,9 +54,7 @@
         }
 
         .pagination {
-
             margin:  0 0 0 @weekview-time-width;
-
         }
 
     }
@@ -370,67 +368,35 @@
     font-weight: 300;
 
     .io-ox-inline-links:first-child {
-        margin: 0 0 20px 0;
-    }
-
-    .appointment-date {
-        font-family: @light-font-family;
-        font-weight: 300;
-        font-size: 1.1em;
-        color: #ccc;
+        margin-top: 0;
     }
 
     .interval {
         color: #555;
         white-space: nowrap;
         float: right;
+        &>span { margin-left: 5px; }
     }
 
     .day {
+        font-size: 1.1em;
         color: #888;
     }
 
     .private-flag {
-            font-size: 18pt;
-            margin-right: 11px;
-            color: #aaa;
+        font-size: 18pt;
+        margin-right: 11px;
+        color: #aaa;
     }
 
     .title {
         display: inline-block;
-        font-size: 18pt;
-        line-height: 22pt;
         margin: 0.25em 0 0.25em 0;
     }
 
     .location {
         color: #888;
         margin-bottom: 1em;
-    }
-
-    .io-ox-label {
-        font-family: @light-font-family;
-        font-weight: 300;
-        font-size: 9pt;
-        color: #333;
-        clear: both;
-        border-bottom: 1px solid #eee;
-        padding: 1em 0 0.25em 0em;
-        margin-bottom: 0.5em;
-    }
-
-    .io-ox-label.participants-block .io-ox-inline-links {
-        float: right;
-        margin: 0;
-        font-size: 9pt;
-        font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
-
-        a { color: #333; }
-    }
-
-    .io-ox-label.sublabel {
-        border-bottom: none;
-        color: #AAA;
     }
 
     .note {
@@ -441,134 +407,123 @@
         cursor: text;
     }
 
-    .participants {
-        min-height: 2em;
-    }
-
-    .participants-clear {
-        clear: both;
-        height: 1px;
-    }
-
-    .participant-list {
-        -webkit-column-width: 250px;
-        -webkit-column-gap: 20px;
-        -moz-column-width: 250px;
-        -moz-column-gap: 20px;
-        column-width: 250px;
-        column-gap: 20px;
-    }
-
-    .participant {
-        line-height: 2em;
-        position: relative; //needed so icons position correctly if participants are displayed in 2 columns
-        display: inline-block;
-        width: 250px;
-        margin: 0 20px 0em 0;
-        float: left;
-        cursor: pointer;
-    }
-
-    .detail-label {
-        font-family: @light-font-family;
-        font-weight: 300;
-        display: inline-block;
-        width: 110px;
-        white-space: nowrap;
-        color: #666;
-    }
-
-    .details {
+    .io-ox-label {
         font-size: 0.9em;
+        padding: 1em 0 0.25em 0em;
+        margin-bottom: 0.5em;
     }
 
-    .detail {
-        white-space: nowrap;
-    }
+    .participants {
 
-    .detail.shown_as {
+        min-height: 2em;
 
-        display: inline-block;
-        height: 14px;
-        width: 14px;
-        line-height: 14px;
-
-        &.reserved {
-            background-color: @appointment-reserved;
-        }
-        &.temporary {
-            background-color: @appointment-temporary;
-        }
-        &.absent {
-            background-color: @appointment-absent;
-        }
-        &.free {
-            background-color: @appointment-free;
-        }
-    }
-
-    .participant {
-
-        .person {
-
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			max-width: 236px; //icons are 14px
-			display: inline-block;
-
-            &.accepted {
-                color: #799952;  /* green */
-            }
-
-            &.declined {
-                text-decoration: line-through; color: #913F3F;
-            }
-
+        .group {
+            border: none;
         }
 
-        .status {
+        .participant-list {
 
-			position: absolute;
-			margin-left: 2px;
+            -webkit-column-width: 250px;
+            -webkit-column-gap: 20px;
+            -moz-column-width: 250px;
+            -moz-column-gap: 20px;
+            column-width: 250px;
+            column-gap: 20px;
 
-            &.accepted {
+            .participant {
 
-                color: #8EB360; /* green */
+                line-height: 2em;
+                position: relative; //needed so icons position correctly if participants are displayed in 2 columns
+                width: 250px;
+                margin: 0 20px 0em 0;
+                cursor: pointer;
 
-                i {
-                    opacity: 0.25;
+                .person {
+
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    max-width: 236px; //icons are 14px
+                    display: inline-block;
+
+                    &.accepted {
+                        color: #799952;  /* green */
+                    }
+
+                    &.declined {
+                        text-decoration: line-through; color: #913F3F;
+                    }
+
+                }
+
+                .status {
+
+                    position: absolute;
+                    margin-left: 4px;
+
+                    &.accepted {
+
+                        color: #8EB360; /* green */
+
+                        i {
+                            opacity: 0.25;
+                        }
+
+                    }
+
+                    &.declined {
+                        color: #913F3F; /* red */
+                    }
+
+                    &.tentative {
+                        color: #c80; /* orange */
+                    }
+
+                }
+
+                .fa-times, .fa-question-circle {
+                    opacity: 0.50;
+                }
+
+                .comment {
+                    color: #888;
+                    white-space: normal;
+                    padding-left: 1em;
+                    line-height: 1.2em;
+                    margin-bottom: 0.5em;
                 }
 
             }
 
-            &.declined {
-                color: #913F3F; /* red */
-            }
-
-            &.tentative {
-                color: #c80; /* orange */
-            }
-
         }
 
-        .fa-times, .fa-question-circle {
-            opacity: 0.50;
-        }
-
-        .comment {
-            color: #888;
-            display: block;
-            white-space: normal;
-            padding-left: 1em;
-            line-height: 1.2em;
-            margin-bottom: 0.5em;
-        }
     }
 
-    .group {
-        margin: 0.75em 0 0.25em 0;
-        color: #333;
+    .details {
+
+        font-size: 0.9em;
+
+        dt {
+            font-weight: 300;
+            color: #666;
+            text-align: left;
+        }
+
+        .shown_as {
+            &.reserved {
+                color: @appointment-reserved;
+            }
+            &.temporary {
+                color: @appointment-temporary;
+            }
+            &.absent {
+                color: @appointment-absent;
+            }
+            &.free {
+                color: @appointment-free;
+            }
+        }
+
     }
 
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
@@ -601,31 +556,21 @@
         min-width: 236px;
         width: 280px;
 
-        .popover-content .list {
+        .popover-content ul {
 
-            .clear {
-                clear: both;
-            }
-
-            i {
-                font-style: normal;
-                display: inline-block;
+            .time {
                 float: right;
             }
 
-            b {
-                font-weight: normal;
-                padding-left: 1em;
-                width: 3em;
-                display: inline-block;
+            .label {
                 float: right;
+                margin-left: 5px;
             }
         }
     }
 }
 
 /* Invitations */
-
 .itip-section.io-ox-busy {
     min-height: 60px;
 }

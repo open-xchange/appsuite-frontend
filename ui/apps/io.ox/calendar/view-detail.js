@@ -43,8 +43,8 @@ define('io.ox/calendar/view-detail',
         index: 200,
         id: 'date',
         draw: function (baton) {
-            var node;
-            this.append(node = $('<div class="appointment-date">'));
+            var node = $('<div>');
+            this.append(node);
             ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton);
         }
     });
@@ -153,14 +153,18 @@ define('io.ox/calendar/view-detail',
             name = display_name = obj.display_name || mail_lc;
         }
 
-        node = $('<div class="participant">')
+        node = $('<li class="participant">')
             .addClass(looksLikeResource(obj) ? 'halo-resource-link' : 'halo-link')
-            .append($('<a href="#">').addClass(personClass + ' ' + statusClass).text(gt.noI18n(name)))
-            .append($('<span>').addClass('status ' + statusClass).html(' ' + confirm))
+            .append(
+                $('<a href="#">').addClass(personClass + ' ' + statusClass).text(gt.noI18n(name)),
+                // has confirmation icon?
+                confirm !== '' ? $('<span>').addClass('status ' + statusClass).append(confirm) : '',
+                // has confirmation comment?
+                comment !== '' ? $('<div>').addClass('comment').text(gt.noI18n(conf.comment)) : ''
+            )
             .data(_.extend(obj, { display_name: display_name, email1: mail_lc }));
-        // has confirmation comment?
         if (comment !== '') {
-            node.append($('<span>').addClass('comment').text(gt.noI18n(conf.comment)));
+            node.append();
         }
         return node;
     }
@@ -170,7 +174,9 @@ define('io.ox/calendar/view-detail',
         id: 'participants',
         draw: function (baton) {
 
-            var list = baton.data.participants || {}, $i = list.length, MIN = 0,
+            var list = baton.data.participants || {},
+                $i = list.length,
+                MIN = 0,
                 participants = $i > MIN ? $('<div>').addClass('participants') : $(),
                 confirmations = {};
 
@@ -221,10 +227,14 @@ define('io.ox/calendar/view-detail',
                     })
                     .value();
 
-                participants.append($('<h2>')
-                        .addClass('io-ox-label participants-block').text(gt('Participants')));
+                var plist;
 
-                var plist = $('<div>').addClass('participant-list').appendTo(participants);
+                participants.append(
+                    $('<fieldset>').append(
+                        $('<legend>').addClass('io-ox-label').text(gt('Participants')),
+                        plist = $('<ul>').addClass('participant-list list-inline')
+                    )
+                );
 
                 $.when(userAPI.getList(users), groupAPI.getList(groups), resourceAPI.getList(resources))
                 .done(function (userList, groupList, resourceList) {
@@ -237,17 +247,22 @@ define('io.ox/calendar/view-detail',
                         .each(function (obj) {
                             plist.append(drawParticipant(obj, confirmations));
                         });
+
                     //external Participants get their own section
                     var extList;
                     if (external.length > 0) {
-                        participants.append($('<h2>')
-                                .addClass('io-ox-label participants-block').text(gt('External participants')),
-                                extList = $('<div>').addClass('participant-list'));
+                        participants.append(
+                            $('<fieldset>').append(
+                                $('<legend>').addClass('io-ox-label').text(gt('External participants')),
+                                extList = $('<ul>').addClass('participant-list list-inline')
+                            )
+                        );
                     }
                     // loop over external participants
                     _(external).each(function (obj) {
                         extList.append(drawParticipant(obj, confirmations));
                     });
+
                     // loop over groups
                     _(groupList)
                         .chain()
@@ -260,9 +275,13 @@ define('io.ox/calendar/view-detail',
                             memberList = _(obj.members).difference(users);
                             if (memberList.length) {
                                 // new section
-                                participants
-                                    .append($('<div>').addClass('group').text(gt.noI18n(obj.display_name + ':')))
-                                    .append(glist = $('<div>').addClass('participant-list'));
+                                participants.append(
+                                    $('<fieldset>').append(
+                                        $('<legend>').addClass('group io-ox-label').text(gt.noI18n(obj.display_name + ':')),
+                                        glist = $('<ul>').addClass('participant-list list-inline')
+                                    )
+                                );
+
                                 userAPI.getList(memberList)
                                     .done(function (members) {
                                         // loop members
@@ -279,9 +298,12 @@ define('io.ox/calendar/view-detail',
                         });
                     // resources
                     if (resourceList.length) {
-                        participants
-                            .append($('<h2>').addClass('io-ox-label').text(gt('Resources')))
-                            .append(plist = $('<div>').addClass('participant-list'));
+                        participants.append(
+                            $('<fieldset>').append(
+                                $('<legend>').addClass('io-ox-label').text(gt('Resources')),
+                                plist = $('<ul>').addClass('participant-list list-inline')
+                            )
+                        );
                         // loop over resources
                         _(resourceList)
                             .chain()
@@ -294,9 +316,10 @@ define('io.ox/calendar/view-detail',
                     }
                 })
                 .always(function () {
+                    // draw action links
+                    ext.point('io.ox/calendar/detail/inline-actions-participantrelated').invoke('draw', participants, baton);
                     // finish
-                    participants.idle()
-                        .append($('<div>').addClass('participants-clear'));
+                    participants.idle();
                 });
             }
 
@@ -304,14 +327,13 @@ define('io.ox/calendar/view-detail',
         }
     });
 
-    ext.point('io.ox/calendar/detail').extend({
+    ext.point('io.ox/calendar/detail/inline-actions-participantrelated').extend({
         index: 700,
         id: 'inline-actions-participantrelated',
         draw: function (baton) {
             if (baton.data.participants && baton.data.participants.length > 1) {
                 ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, baton);
             }
-
         }
     });
 
@@ -320,9 +342,14 @@ define('io.ox/calendar/view-detail',
         index: 800,
         id: 'details',
         draw: function (baton) {
-            var node = $('<div>').addClass('details')
-                .append($('<h2>').addClass('io-ox-label').text(gt('Details')))
-                .appendTo(this);
+            var node = $('<dl>');
+            this.append(
+                $('<fieldset>').addClass('details')
+                    .append(
+                        $('<legend>').addClass('io-ox-label').text(gt('Details')),
+                        node.addClass('dl-horizontal')
+                )
+            );
             ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton);
         }
     });
@@ -337,10 +364,10 @@ define('io.ox/calendar/view-detail',
             if (!baton.data.organizerId && !baton.data.organizer) return;
 
             this.append(
-                $('<span class="detail-label">').append(
+                $('<dt>').append(
                     $.txt(gt('Organizer')), $.txt(gt.noI18n(':\u00A0'))
                 ),
-                $('<span class="detail organizer">').append(
+                $('<dd class="detail organizer">').append(
                     baton.data.organizerId ?
                         $('<a href="#" class="halo-link">').data({ user_id: baton.data.organizerId }).append(
                             userAPI.getTextNode(baton.data.organizerId)
@@ -348,8 +375,7 @@ define('io.ox/calendar/view-detail',
                         $('<a href="#" class="halo-link">').data({ email1: baton.data.organizer }).text(
                             baton.data.organizer
                         )
-                ),
-                $('<br>')
+                )
              );
         }
     });
@@ -360,16 +386,15 @@ define('io.ox/calendar/view-detail',
         id: 'shownAs',
         draw: function (baton) {
             this.append(
-                $('<span>')
-                    .addClass('detail-label')
+                $('<dt>')
                     .append($.txt(gt('Shown as')), $.txt(gt.noI18n(':\u00A0'))),
-                $('<span>')
-                    .addClass('detail shown_as ' + util.getShownAsClass(baton.data))
-                    .text(gt.noI18n('\u00A0')),
-                $('<span>')
-                    .addClass('detail shown-as')
-                    .append($.txt(gt.noI18n('\u00A0')), $.txt(util.getShownAs(baton.data))),
-                $('<br>')
+                $('<dd>')
+                    .append(
+                        $('<i>').addClass('fa fa-square shown_as ' + util.getShownAsClass(baton.data)),
+                        $('<span>')
+                            .addClass('detail shown-as')
+                            .append($.txt(gt.noI18n('\u00A0')), $.txt(util.getShownAs(baton.data)))
+                    )
             );
         }
     });
@@ -381,12 +406,11 @@ define('io.ox/calendar/view-detail',
         draw: function (baton) {
             if (baton.data.folder_id) {
                 this.append(
-                    $('<span class="detail-label">')
+                    $('<dt>')
                         .append($.txt(gt('Folder')), $.txt(gt.noI18n(':\u00A0'))),
-                    $('<span class="detail folder">')
+                    $('<dd>')
                         .attr('data-folder', baton.data.folder_id)
-                        .append(folderAPI.getTextNode(baton.data.folder_id)),
-                    $('<br>')
+                        .append(folderAPI.getTextNode(baton.data.folder_id))
                 );
             }
         }
@@ -399,17 +423,16 @@ define('io.ox/calendar/view-detail',
         draw: function (baton) {
             if (baton.data.creation_date || baton.data.created_by) {
                 this.append(
-                    $('<span class="detail-label">').append(
+                    $('<dt>').append(
                         $.txt(gt('Created')), $.txt(gt.noI18n(':\u00A0'))
                     ),
-                    $('<span class="detail created">').append(
+                    $('<dd>').append(
                         $('<span>').text(gt.noI18n(baton.data.creation_date ? util.getDate(baton.data.creation_date) : '')),
                         $('<span>').text(gt.noI18n(baton.data.creation_date ? ' \u2013 ' : '')),
                         $('<a href="#" class="halo-link">').data({ user_id: baton.data.created_by }).append(
                             baton.data.created_by ? userAPI.getTextNode(baton.data.created_by) : ''
                         )
-                    ),
-                    $('<br>')
+                    )
                  );
             }
         }
@@ -422,17 +445,16 @@ define('io.ox/calendar/view-detail',
         draw: function (baton) {
             if (baton.data.last_modified || baton.data.modified_by) {
                 this.append(
-                    $('<span class="detail-label">').append(
+                    $('<dt>').append(
                         $.txt(gt('Modified')), $.txt(gt.noI18n(':\u00A0'))
                     ),
-                    $('<span class="detail modified">').append(
+                    $('<dd>').append(
                         $('<span>').text(gt.noI18n(baton.data.last_modified ? util.getDate(baton.data.last_modified) : '')),
                         $('<span>').text(gt.noI18n(baton.data.last_modified ? ' \u2013 ' : '')),
                         $('<a href="#" class="halo-link">').data({ user_id: baton.data.modified_by }).append(
                             baton.data.modified_by ? userAPI.getTextNode(baton.data.modified_by) : ''
                         )
-                    ),
-                    $('<br>')
+                    )
                  );
             }
         }
@@ -442,17 +464,16 @@ define('io.ox/calendar/view-detail',
         id: 'attachments',
         index: 550,
         draw: function (baton) {
-            var $node;
+            var $node = $('<fieldset>').append(
+                $('<legend>').addClass('io-ox-label').text(gt('Attachments'))
+            );
+
             if (calAPI.uploadInProgress(_.ecid(baton.data))) {
                 this.append(
-                        $('<div class="io-ox-label">').text(gt('Attachments')),
-                        $node = $('<div>').css({width: '30%', height: '12px'}).busy()
-                    );
-            } else if (baton.data.number_of_attachments && baton.data.number_of_attachment !== 0) {
-                this.append(
-                    $('<div class="io-ox-label">').text(gt('Attachments')),
-                    $node = $('<div>')
+                    $node.css({width: '30%', height: '12px'}).busy()
                 );
+            } else if (baton.data.number_of_attachments && baton.data.number_of_attachment !== 0) {
+                this.append($node);
                 ext.point('io.ox/calendar/detail/attachments').invoke('draw', $node, baton);
             }
         }
