@@ -455,7 +455,11 @@ define('io.ox/mail/detail/content',
                 baton.source = $.trim(baton.source);
                 baton.isHTML = regHTML.test(baton.type);
                 baton.isText = !baton.isHTML;
-                baton.isLarge = baton.source.length > 1024 * 32; // > 32 KB
+                // large emails cannot be processed because it takes too much time
+                // on slow devices or slow browsers. 32 KB is a good size limit; we cannot
+                // measure the overall performance of the device but we know that
+                // a fresh Chrome browser can handle larger mails without grilling the CPU.
+                baton.isLarge = baton.source.length > (1024 * (_.device('chrome >= 30') ? 64 : 32));
 
                 // process source
                 ext.point('io.ox/mail/detail/source').invoke('process', $(), baton);
