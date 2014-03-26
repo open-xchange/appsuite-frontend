@@ -22,6 +22,7 @@
     min-height: 50px;
 }
 
+@icon-size: 18px;
 @unread-toggle-width: 40px;
 
 
@@ -345,7 +346,7 @@
     }
 
     .fa-paperclip.has-attachments {
-        font-size: 20px;
+        font-size: @icon-size;
         width: 18px;
         height: 18px;
         margin-left: 7px;
@@ -484,7 +485,7 @@
         margin-left: 7px;
         position: relative;
         .dropdown-toggle {
-            font-size: 20px;
+            font-size: @icon-size;
             &:hover { text-decoration: none; }
         }
         .flag-dropdown-icon.flag_0 {
@@ -688,8 +689,9 @@ textarea.inplace-editor {
     .list-item {
         background-color: white;
         clear: both;
-        padding: 0px;
-        border-bottom: 1px solid #ccc;
+        padding: 0;
+        margin-bottom: 7px;
+        border-bottom: 1px solid transparent;
     }
 
     .list-item:last-child {
@@ -939,7 +941,7 @@ textarea.inplace-editor {
 
     .priority {
         float: right;
-        font-size: 20px;
+        font-size: @icon-size;
         .fontWeight(bold);
         display: inline-block;
         margin-left: 7px;
@@ -972,6 +974,7 @@ textarea.inplace-editor {
 
     &:not(.expanded) .recipients {
         height: 20px;
+        opacity: 0.3;
         .ellipsis();
     }
 
@@ -1022,6 +1025,9 @@ textarea.inplace-editor {
     }
 
     .blockquote-toggle {
+        color: #888;
+        font-size: 13px;
+        padding-left: 44px;
         margin: 7px 0;
         i {
             color: #888;
@@ -1032,6 +1038,8 @@ textarea.inplace-editor {
             line-height: 16px;
             cursor: pointer;
             outline: none;
+            position: absolute;
+            left: 0;
             &:hover, &:focus {
                 color: #fff;
                 background-color: @link-color;

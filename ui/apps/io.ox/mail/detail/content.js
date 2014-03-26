@@ -387,6 +387,18 @@ define('io.ox/mail/detail/content',
         }
     });
 
+    function getText(node) {
+        // get text content for current node if it's a text node
+        var value = (node.nodeType === 3 && String(node.nodeValue).trim()) || '',
+            // ignore white-space
+            str = value ? value + ' ' : '';
+        // loop over child nodes for recursion
+        _(node.childNodes).each(function (child) {
+            str += getText(child);
+        });
+        return str;
+    }
+
     ext.point('io.ox/mail/detail/content').extend({
         id: 'auto-collapse',
         index: 1000,
@@ -396,11 +408,14 @@ define('io.ox/mail/detail/content',
             if (settings.get('features/autoCollapseBlockquotes', true) !== true) return;
             // blockquotes (top-level only)
             this.find('blockquote').not(this.find('blockquote blockquote')).each(function () {
+                var text = getText(this);
+                if (text.length > 300) text = text.substr(0, 300) + '\u2026'; // ellipsis
                 $(this).addClass('collapsed-blockquote').after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
                         $('<i class="fa fa-ellipsis-h" tabindex="1">')
-                        .attr('title', gt('Show quoted text'))
+                        .attr('title', gt('Show quoted text')),
+                        $.txt(text)
                     )
                     .on('click', explandBlockquote)
                 );
