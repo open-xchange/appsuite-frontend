@@ -29,6 +29,7 @@ define('io.ox/mail/util',
         format = _.printf,
         MINUTE = 60 * 1000,
         HOUR = MINUTE * 60,
+        DAY = HOUR * 24,
 
         ngettext = function (s, p, n) {
             return n > 1 ? p : s;
@@ -42,11 +43,14 @@ define('io.ox/mail/util',
         },
 
         getDateFormated = function (timestamp, options) {
-            if (!_.isNumber(timestamp))
-                return gt('unknown');
-            var opt = $.extend({ fulldate: true, filtertoday: true }, options || {}),
+
+            if (!_.isNumber(timestamp)) return gt('unknown');
+
+            var opt = $.extend({ fulldate: false, filtertoday: true }, options || {}),
                 now = new date.Local(),
                 d = new date.Local(timestamp),
+                base, delta,
+
                 timestr = function () {
                     return d.format(date.TIME);
                 },
@@ -58,7 +62,18 @@ define('io.ox/mail/util',
                         d.getMonth() === now.getMonth() &&
                         d.getYear() === now.getYear();
                 };
-            return isSameDay() && opt.filtertoday ? timestr() : datestr();
+
+            if (opt.filtertoday && isSameDay()) return timestr();
+
+            if (opt.smart) {
+                base = Math.floor(timestamp / DAY) * DAY;
+                now = Math.floor(_.utc() / DAY) * DAY;
+                delta = Math.floor((now - base) / DAY);
+                if (delta === 1) return gt('Yesterday');
+                else if (delta <= 6) return d.format('EEEE');
+            }
+
+            return datestr();
         },
 
         trimAddress = function (address) {
@@ -371,8 +386,8 @@ define('io.ox/mail/util',
             return (/^default0/).test(id) ? gt('Primary account') : (data ? data.account_name : 'N/A');
         },
 
-        getTime: function (timestamp, fulldate) {
-            return getDateFormated(timestamp, { fulldate: !!fulldate });
+        getTime: function (timestamp) {
+            return getDateFormated(timestamp, { fulldate: false });
         },
 
         getDateTime: function (timestamp, options) {

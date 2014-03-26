@@ -43,19 +43,23 @@ define('io.ox/mail/common-extensions',
             );
         },
 
-        date: function (baton, fulldate) {
+        date: function (baton, options) {
             var data = baton.data, t = data.received_date, d;
             if (!_.isNumber(t)) return;
             d = new date.Local(t);
             this.append(
                 $('<time class="date">')
                 .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
-                .text(_.noI18n(util.getTime(t, !!fulldate)))
+                .text(_.noI18n(util.getDateTime(t, options)))
             );
         },
 
+        smartdate: function (baton) {
+            extensions.date.call(this, baton, { fulldate: false, smart: true });
+        },
+
         fulldate: function (baton) {
-            extensions.date.call(this, baton, true);
+            extensions.date.call(this, baton, { fulldate: true, smart: false });
         },
 
         from: function (baton) {

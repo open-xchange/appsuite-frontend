@@ -136,7 +136,7 @@ define('io.ox/mail/listview',
         index: 100,
         draw: function (baton) {
             // show date or size depending on sort option
-            var fn = baton.app.props.get('sort') === 608 ? 'size' : 'date';
+            var fn = baton.app.props.get('sort') === 608 ? 'size' : 'smartdate';
             extensions[fn].call(this, baton);
         }
     });
@@ -168,7 +168,7 @@ define('io.ox/mail/listview',
         index: 100,
         draw: function (baton) {
             // show date or size depending on sort option
-            var fn = baton.app.props.get('sort') === 608 ? 'size' : 'date';
+            var fn = baton.app.props.get('sort') === 608 ? 'size' : 'smartdate';
             extensions[fn].call(this, baton);
         }
     });
