@@ -587,7 +587,9 @@ $(window).load(function () {
                     );
                 } else {
                     // we need to fetch the server config to get custom logout locations
-                    fetchGeneralServerConfig().always(gotoSignin);
+                    fetchGeneralServerConfig().always(function () {
+                        gotoSignin();
+                    });
                 }
             }
 
