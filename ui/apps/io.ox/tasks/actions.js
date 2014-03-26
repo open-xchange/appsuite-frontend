@@ -456,6 +456,7 @@ define('io.ox/tasks/actions',
         id: 'edit',
         index: 100,
         prio: 'hi',
+        mobile: 'hi',
         label: gt('Edit'),
         ref: 'io.ox/tasks/actions/edit'
     }));
@@ -469,6 +470,7 @@ define('io.ox/tasks/actions',
         id: 'changeDueDate',
         index: 200,
         prio: 'hi',
+        mobile: 'lo',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
             var data = baton.data;
@@ -534,6 +536,7 @@ define('io.ox/tasks/actions',
         id: 'done',
         index: 300,
         prio: 'hi',
+        mobile: 'hi',
         icon: 'fa fa-check-square-o',
         label: gt('Mark as done'),
         ref: 'io.ox/tasks/actions/done'
@@ -543,6 +546,7 @@ define('io.ox/tasks/actions',
         id: 'unDone',
         index: 310,
         prio: 'hi',
+        mobile: 'hi',
         label: gt('Undone'),
         ref: 'io.ox/tasks/actions/undone'
     }));
@@ -551,6 +555,7 @@ define('io.ox/tasks/actions',
         id: 'delete',
         index: 400,
         prio: 'hi',
+        mobile: 'hi',
         icon: 'fa fa-trash-o',
         label: gt('Delete'),
         ref: 'io.ox/tasks/actions/delete'
@@ -560,6 +565,7 @@ define('io.ox/tasks/actions',
         id: 'move',
         index: 500,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Move'),
         ref: 'io.ox/tasks/actions/move'
     }));
@@ -568,6 +574,7 @@ define('io.ox/tasks/actions',
         id: 'confirm',
         index: 600,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Change confirmation status'),
         ref: 'io.ox/tasks/actions/confirm'
     }));
@@ -576,6 +583,7 @@ define('io.ox/tasks/actions',
         id: 'print',
         index: 700,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Print'),
         ref: 'io.ox/tasks/actions/print'
     }));
