@@ -282,7 +282,7 @@ define('io.ox/files/fluid/perspective',
                     }
 
                     if (oldTopbarsize !== inlineActionWrapper.css('height')) {
-                        wrapper.css('top', inlineActionWrapper.css('height'));//adjust scrollable pane top if topbarsize changes
+                        setTimeout(function () {wrapper.css('top', inlineActionWrapper.css('height')); }, 100);//adjust scrollable pane top if topbarsize changes
                     }
 
                     // set url
@@ -653,14 +653,14 @@ define('io.ox/files/fluid/perspective',
             baton.options.mode = identifyMode(opt);
 
             self.main.empty().append(
-                                wrapper = $('<div class="files-wrapper">')
-                                            .attr({
-                                                'role': 'main',
-                                                'aria-label': gt('Files View')
-                                            })
-                                            .append(
-                                                scrollpane
-                                            )
+                wrapper = $('<div class="files-wrapper">')
+                    .attr({
+                        'role': 'main',
+                        'aria-label': gt('Files View')
+                    })
+                    .append(
+                        scrollpane
+                )
             );
 
             //register selection accessible via 'self.selection'
@@ -848,6 +848,9 @@ define('io.ox/files/fluid/perspective',
                         ids = _.uniq(ids, function (file) {
                             return _.cid(file);
                         });
+                        if (_.device('small')) {
+                            ext.point('io.ox/files/icons/actions-right').disable('inline-links');
+                        }
 
                         scrollpane.empty().idle();
                         baton.allIds = allIds = ids;
