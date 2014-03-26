@@ -25,9 +25,6 @@
 @unread-toggle-width: 40px;
 
 
-.classic-toolbar-visible .window-content { top: 45px; }
-.rightside.classic-toolbar-visible .thread-view-control { top: 45px }
-
 .mobile-toolbar {
     text-align: center;
     font-size: 16px;
@@ -52,9 +49,8 @@
     }
 }
 
-.classic-toolbar-visible {
-    .window-content { top: 45px; }
-}
+.classic-toolbar-visible .window-content { top: 45px; }
+.rightside.classic-toolbar-visible .thread-view-control { top: 45px }
 
 
 .classic-toolbar, .inline-toolbar, .mobile-toolbar {
@@ -322,7 +318,7 @@
 
     .actions {
         margin-left: 14px;
-        .fontWeight(normal);
+
     }
 
     div.subject {
@@ -1327,10 +1323,31 @@ h4.mail-attachment-preview {
 
 /* smartphone */
 @media (max-width: 480px), (max-device-width: 480px)  {
-
     .thread-view-list {
         padding: 0;
+        & > h1 {
+            font-size: 16px;
+        }
     }
+
+    .mail-detail {
+        .subject {
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+        .detail-view-header {
+            padding-left: 20px;
+            .sp {
+                margin-right: 4px;
+            }
+        }
+        .unread-toggle {
+            left: 0px;
+        }
+    }
+
+
+
 
     .io-ox-sidepopup-pane .mail-detail-decorator .mail-detail {
         padding: 5px;

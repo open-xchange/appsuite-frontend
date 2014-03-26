@@ -85,15 +85,6 @@ define('io.ox/mail/detail/view',
         draw: extensions.actions
     });
 
-    // ext.point('io.ox/mail/detail/header').extend(new links.DropdownLinks({
-    //     attributes: {},
-    //     classes: 'pull-right actions',
-    //     dropdown: true,
-    //     index: INDEX_header += 100,
-    //     id: 'actions',
-    //     label: gt('Actions'),
-    //     ref: 'io.ox/mail/links/inline'
-    // }));
 
     ext.point('io.ox/mail/detail/header').extend({
         id: 'date',
@@ -343,7 +334,13 @@ define('io.ox/mail/detail/view',
 
             // disable extensions?
             _(this.options.disable).each(function (extension, point) {
-                baton.disable(point, extension);
+                if (_.isArray(extension)) {
+                    _(extension).each(function (ext) {
+                        baton.disable(point, ext);
+                    });
+                } else {
+                    baton.disable(point, extension);
+                }
             });
 
             this.$el.attr({
@@ -365,5 +362,38 @@ define('io.ox/mail/detail/view',
         }
     });
 
-    return { View: View };
+    var MobileHeaderView = View.extend({
+        events: {
+            'click .detail-view-header': 'onClick'
+        },
+        onClick: function () {
+            this.$el.trigger('showmail');
+        },
+        toggle: function () {
+            // prevent default
+            return this;
+        }
+
+    });
+
+    var MobileDetailView = View.extend({
+        showMail: function () {
+            var $li = this.$el;
+            if ($li.attr('data-loaded') === 'false') {
+                $li.attr('data-loaded', true);
+                $li.find('section.body').addClass('loading');
+                this.trigger('load');
+                // load detailed email data
+                api.get(_.cid(this.cid)).then(this.onLoad.bind(this), this.onLoadFail.bind(this));
+            }
+            return this;
+        }
+
+    });
+
+    return {
+        View: View,
+        MobileHeaderView: MobileHeaderView,
+        MobileDetailView: MobileDetailView
+    };
 });

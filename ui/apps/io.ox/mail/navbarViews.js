@@ -11,8 +11,10 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
+
 define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
     'gettext!io.ox/mail'], function (ext) {
+
 
     'use strict';
 
@@ -23,7 +25,9 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
         id: 'btn-left',
         index: 100,
         draw: function (baton) {
+
             if (!baton.left) return;
+
             this.$el.append(
                 $('<div class="navbar-action left">').append(
                     $('<a>').append(
@@ -51,10 +55,11 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
     ext.point('io.ox/mail/mobile/navbar').extend({
         id: 'btn-right',
         index: 300,
+
         draw: function (baton) {
             if (!baton.right) return;
             this.$el.append(
-                $('<div class="navbar-action left">').append(
+                $('<div class="navbar-action right">').append(
                     $('<a>').append(
                         baton.right
                     ).on('tap', function (e) {
@@ -98,15 +103,18 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
+
         },
 
         render: function () {
-            this.$el.empty();
-            this.$el.show();
+
+            this.$el.empty().show();
+
             ext.point('io.ox/mail/mobile/navbar').invoke('draw', this, {
                 left: this.left,
                 right: this.right,
                 title: this.title,
+                rightAction: this.rightAction || $.noop,
                 app: this.app
             });
             return this;
@@ -128,8 +136,13 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
             this.right = $node;
             this.render();
             return this;
+        },
+        // TODO change to event based
+        setRightAction: function (fn) {
+            this.rightAction = fn;
         }
     });
+
 
     /*
      * Toolbars
@@ -140,6 +153,7 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
         initialize: function () {
         },
         render: function () {
+
             ext.point('io.ox/mail/mobile/toolbar').invoke('draw', this);
             return this;
         }

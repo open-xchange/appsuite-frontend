@@ -102,6 +102,8 @@ define('io.ox/mail/threadview',
         }
     });
 
+
+
     var ThreadView = Backbone.View.extend({
 
         tagName: 'div',
@@ -344,6 +346,7 @@ define('io.ox/mail/threadview',
 
         // render scaffold
         render: function () {
+            console.log('old render');
             ext.point('io.ox/mail/thread-view').invoke('draw', this);
             return this;
         },
@@ -363,6 +366,106 @@ define('io.ox/mail/threadview',
         }
     });
 
-    return ThreadView;
+    // Mobile
+    ext.point('io.ox/mail/mobile/thread-view').extend({
+        id: 'thread-view-list',
+        index: 100,
+        draw: function () {
+            this.$el.append(
+                $('<div class="thread-view-list scrollable abs">').hide().append(
+                    $('<h1>'),
+                    this.$ul = $('<ul class="thread-view list-view f6-target" role="wurstblinker">')
+                )
+            );
+        }
+    });
+
+    // Mobile
+    ext.point('io.ox/mail/mobile').extend({
+        id: 'remove-halo-link',
+        index: 100,
+        customize: function () {
+            var elem = this.$el.find('.person-link');
+            _(elem).each(function (el) {
+                var span = $('<span>').text($(el).text());
+                span.addClass(elem.attr('class'));
+                span.addClass('sp');
+                $(el).after(span);
+                //el.remove();
+            });
+            elem.remove();
+        }
+    });
+
+    var MobileThreadView = ThreadView.extend({
+
+        initialize: function () {
+            this.model = null;
+            this.collection = new backbone.Collection();
+
+            this.listenTo(this.collection, {
+                add: this.onAdd,
+                change: this.onChange,
+                remove: this.onRemove,
+                reset: this.onReset
+            });
+
+            this.$ul = $();
+        },
+
+        // render an email
+        renderListItem: function (model) {
+            // custom view
+            var view = new detail.MobileHeaderView({
+                tagName: 'li',
+                data: model.toJSON(),
+                disable: {
+                    'io.ox/mail/detail': 'subject',
+                    'io.ox/mail/detail/header': ['flag-picker', 'actions', 'unread-toggle']
+                }
+            });
+
+            view.render().$el.attr({ role: 'listitem', tabindex: '1' });
+
+            ext.point('io.ox/mail/mobile').invoke('customize', view);
+
+            return view.$el;
+        },
+        renderMail: function (cid) {
+            // strip 'thread.' prefix
+            cid = String(cid).replace(/^thread\.(.+)$/, '$1');
+
+            /*
+            // no change?
+            if (this.model && this.model.cid === cid) return;
+            // stop listening
+            if (this.model) this.stopListening(this.model);
+            // get model
+            this.model = api.pool.get('detail').get(cid);
+            if (!this.model) return;
+            // listen for changes
+            this.listenTo(this.model, 'change:thread', this.onChange);
+            // reset collection
+            this.collection.reset([], { silent: true });
+            this.reset();
+            */
+            var model = api.pool.get('detail').get(cid);
+            if (!model) return;
+
+            var view = new detail.MobileDetailView({
+                tagName: 'li',
+                data: model.toJSON()
+            });
+            return view.render().toggle().$el.attr({ role: 'listitem', tabindex: '1' });
+
+
+        }
+    });
+
+
+    return {
+        Desktop: ThreadView,
+        Mobile: MobileThreadView
+    };
 
 });

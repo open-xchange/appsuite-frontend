@@ -17,7 +17,7 @@ define('io.ox/core/commons',
      'gettext!io.ox/core',
      'io.ox/core/commons-folderview',
      'io.ox/core/api/folder'
-    ], function (ext, links, gt, folderview, folderAPI) {
+    ], function (ext, links, gt, FolderView, folderAPI) {
 
     'use strict';
 
@@ -610,7 +610,15 @@ define('io.ox/core/commons',
             });
         },
 
-        addFolderView: folderview.add,
+        addFolderView: function (app, options) {
+            var view = new FolderView(app, options);
+            view.handleFolderChange();
+            view.resizable();
+            view.actionLink();
+            view.handleDrag();
+            view.start();
+            return view;
+        },
 
         vsplit: (function () {
             var selectionInProgress = false;
