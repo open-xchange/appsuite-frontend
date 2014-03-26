@@ -13,8 +13,7 @@
 
 define('io.ox/search/items/view-template',
     ['gettext!io.ox/core',
-     'io.ox/core/extensions',
-     'io.ox/search/items/register'
+     'io.ox/core/extensions'
     ], function (gt, ext) {
 
     'use strict';
@@ -24,10 +23,10 @@ define('io.ox/search/items/view-template',
         index: 400,
         row: '0',
         draw: function (baton) {
-            var node = $('<div class="col-lg-12 result">'),
-                data = baton.model.get('items');
+            var node = $('<div class="col-sm-12 result">'),
+                items = baton.model.get('items');
 
-            data.each(function (model) {
+            items.each(function (model) {
                 var tmp = $('<div class="item">'),
                     item = model.get('data');
 
@@ -41,31 +40,31 @@ define('io.ox/search/items/view-template',
                 case 'mail':
                     tmp.append(
                         $('<div class="line1">').text(item.from[0][0] || item.from[0][1]),
-                        $('<div class="line1">').text('(' + item.id + ') ' + item.subject)
+                        $('<div class="line2">').text('(' + item.id + ') ' + item.subject)
                     );
                     break;
                 case 'contacts':
                     tmp.append(
                         $('<div class="line1">').text('(' + item.id + ') ' + item.display_name),
-                        $('<div class="line1">').text(item.email1)
+                        $('<div class="line2">').text(item.email1)
                     );
                     break;
                 case 'tasks':
                     tmp.append(
                         $('<div class="line1">').text('(' + item.id + ') ' + item.title),
-                        $('<div class="line1">').text('folder: ' + item.folder_id)
+                        $('<div class="line2">').text('folder: ' + item.folder_id)
                     );
                     break;
                 case 'infostore':
                     tmp.append(
                         $('<div class="line1">').text('please define in search/view-template.js'),
-                        $('<div class="line1">').text('')
+                        $('<div class="line2">').text('')
                     );
                     break;
                 case 'calendar':
                     tmp.append(
                         $('<div class="line1">').text('(' + item.id + ') ' + item.title),
-                        $('<div class="line1">').text('folder: ' + item.folder_id)
+                        $('<div class="line2">').text('folder: ' + item.folder_id)
                     );
                     break;
                 }
@@ -73,17 +72,14 @@ define('io.ox/search/items/view-template',
 
             });
 
-            if (!data.length) {
+            if (items.timestamp && !items.length) {
                 node.append(
                     $('<div class="item">').append(
-                        $('<div class="line1">').text('No results')
+                        $('<div class="line2">').text(gt('No items found'))
                     )
                 );
             }
             this.append(node);
         }
     });
-
-    //just used to clean up the view class
-    return null;
 });

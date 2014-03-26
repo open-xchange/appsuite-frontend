@@ -627,7 +627,7 @@ define('io.ox/core/main',
             index: 150,
             draw: function () {
                 if (capabilities.has('search')) {
-                    var container = $('<div>'),
+                    var placeholder = $('<span>'),
                         self = this;
                     //add search icon
                     self.append(
@@ -636,17 +636,19 @@ define('io.ox/core/main',
                                     searchapp.run();
                                 });
                             },  gt('Search'))
-                        .attr('id', 'io-ox-searchfield-topbar-icon')
+                        .attr('id', 'io-ox-search-topbar-icon')
+                        .addClass('io-ox-search')
+                    );
+                    //add search field placeholder
+                    self.append(
+                        addLauncher('right', placeholder, $.noop(), gt('Refresh'))
+                        .attr('id', 'io-ox-search-topbar')
+                        .addClass('io-ox-search')
                     );
 
-                    //add search field
-                    self.append(
-                        addLauncher('right', container, $.noop(), gt('Refresh'))
-                        .attr('id', 'io-ox-searchfield-topbar')
-                    );
-                    //add search input field to launcher
+                    //replace placeholder with concrete search field
                     require(['io.ox/search/main'], function (searchapp) {
-                        searchapp.init(container);
+                        placeholder.replaceWith(searchapp.init());
                     });
                 }
             }

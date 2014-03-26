@@ -45,7 +45,7 @@ define('io.ox/search/api',
                 data: {
                     facets: [],
                     start: 0,
-                    size: 10
+                    size: 100
                 }
             }
         }

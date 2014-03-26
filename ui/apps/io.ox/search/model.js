@@ -13,12 +13,12 @@
 
 define('io.ox/search/model',
     ['io.ox/search/api',
-     'io.ox/search/items/collection',
+     'io.ox/search/items/main',
      'io.ox/backbone/modelFactory',
      'io.ox/backbone/validation',
      'io.ox/core/extensions',
      'gettext!io.ox/core'
-    ], function (api, Items, ModelFactory, Validations, ext, gt) {
+    ], function (api, items, ModelFactory, Validations, ext, gt) {
 
     'use strict';
 
@@ -28,7 +28,7 @@ define('io.ox/search/model',
      */
 
     var options = {},
-        items = new Items(),
+        items = new items.Collection(),
         defaults, factory;
 
     //fetch settings/options
@@ -64,7 +64,7 @@ define('io.ox/search/model',
         options: {},
         //current folder
         start: 0,
-        size: 20
+        size: 100
     };
 
     factory = new ModelFactory({
@@ -85,10 +85,6 @@ define('io.ox/search/model',
             },
             getModule: function () {
                 return this.getApp().split('/')[1];
-            },
-            getTitle: function () {
-                //TODO: gt supports dynamic ???
-                return gt('Search in') + ' ' + this.getModule();
             },
             //ALT
             add: function (facet, value, option) {
@@ -136,19 +132,20 @@ define('io.ox/search/model',
             },
             remove: function (facet, value) {
                 var pool = this.get('pool'),
-                    list = this.get('poollist');
+                    list = this.get('poollist'),
+                    //flag: remove all facets
+                    global = !facet && !value;
                 //remove from  pool list
                 for (var i = list.length - 1; i >= 0; i--) {
                     var item = list[i];
-                    if (item.facet === facet && item.value === value) {
+                    if (global || (item.facet === facet && item.value === value)) {
                         //remove from pool
-                        delete pool[facet].values[value];
+                        delete pool[item.facet].values[item.value];
                         //remove empty facet from pool
-                        if (_.isEmpty(pool[facet].values))
-                            delete pool[facet];
+                        if (_.isEmpty(pool[item.facet].values))
+                            delete pool[item.facet];
                         //remove from list
                         list.splice(i, 1);
-
                     }
                 }
                 console.log('remove', list.length, list);
@@ -192,11 +189,15 @@ define('io.ox/search/model',
                     } else {
                         simple = _.copy(value, true);
                     }
-                    active.push({
-                        facet: facet.id,
-                        value: value.custom || value.id,
-                        filter: facet.custom ? null : simple.filter
-                    });
+
+                    //
+                    if (!!value) {
+                        active.push({
+                            facet: facet.id,
+                            value: value.custom || value.id,
+                            filter: facet.custom ? null : simple.filter
+                        });
+                    }
                     console.log('fetch', active.length, active);
                 });
                 return active;
@@ -206,9 +207,6 @@ define('io.ox/search/model',
                 this.set('app', module, {silent: true});
                 if (current !== module) {
                     this.reset();
-                    //inital or tabswitch
-                    // if (_.isEmpty(current))
-                    //     this.trigger('query change:module');
                 }
             },
             getFolder: function () {
@@ -225,14 +223,17 @@ define('io.ox/search/model',
             },
             //
             getFacets: function () {
-                var addFolder = options.mandatory.indexOf(this.getModule()) >= 0 && !this.get('pool').folder;
+                var addFolder = !this.get('pool').folder;
                 //mandatory and not set yet
                 if (addFolder) {
-                    this.add('folder', 'custom', this.getFolder() || 'default0/INBOX');
+                    this.add('folder', 'custom', this.isMandatory('folder') ? this.getFolder() || 'default0/INBOX' : undefined);
                 }
                 return this.fetch();
             },
-            setItems: function (data) {
+            isMandatory: function (key) {
+                return (options.mandatory[key] || []).indexOf(this.getModule()) >= 0;
+            },
+            setItems: function (data, timestamp) {
                 var application = this.getApp(),
                     list = _.map(data.results, function (item) {
                         return {
@@ -244,12 +245,17 @@ define('io.ox/search/model',
                         };
                     });
 
-                //TODO: bette use set?
+                //set collection
                 items.reset();
                 items.add(list);
+                items.timestamp = timestamp || Date.now();
+            },
+            getOptions: function () {
+                return  _.copy(options);
             },
             reset: function () {
                 items.reset();
+                delete items.timestamp;
                 this.set({
                     query: '',
                     autocomplete: [],

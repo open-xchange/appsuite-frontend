@@ -45,7 +45,8 @@ define('io.ox/search/main',
         index: 300,
         id: 'mandatory',
         config: function (data) {
-            data.mandatory =  settings.get('settings/search/mandatory/folder', ['mail', 'infostore']);
+            data.mandatory = data.mandatory || {};
+            data.mandatory.folder = settings.get('settings/search/mandatory/folder', ['mail', 'infostore']);
         }
     });
 
@@ -82,38 +83,76 @@ define('io.ox/search/main',
     }
 
     //TODO: use custom node for autocomplete (autocomplete items appended here)
-    //TODO: facete options (e.g. all, recipient, sender)
     var app = ox.ui.createApp({
             name: 'io.ox/search',
-            title: 'Search'
-            //TODO: destroys app
-            //closable: true
+            title: 'Search',
+            closable: true
         }),
-        show = function (win) {
-            var def = $.Deferred();
-            win.show(def.resolve);
-            return def;
-        },
+        //init window
+        win = ox.ui.createWindow({
+            name: 'io.ox/search',
+            title: 'Search',
+            toolbar: true,
+            search: false
+        }),
         yell = function (error) {
             notifications.yell('error', error.error_desc);
         },
         sidepopup = new dialogs.SidePopup({tabTrap: true}),
         win, model, run;
 
+
+    //hide/show topbar search field
+    win.on('show', function () {
+        $('#io-ox-search-topbar').hide();
+    });
+    win.on('hide', function () {
+        $('#io-ox-search-topbar').show();
+    });
+    //ensure launchbar entry
+    win.on('show', function () {
+        if (!ox.ui.apps.get(app))
+            ox.ui.apps.add(app);
+    });
+    app.busy = function () {
+        return win.nodes.body.busy();
+    };
+
+    app.idle = function () {
+        return win.nodes.body.idle();
+    };
+
+    //reduced version of app.quit to ensure app/window is reusable
+    app.quit = function () {
+        // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
+        if ((app.getWindow() && app.getWindow().state.visible) && (!_.url.hash('app') || app.getName() === _.url.hash('app').split(':', 1)[0])) {
+            //we are still in the app to close so we can clear the URL
+            _.url.hash({ app: null, folder: null, perspective: null, id: null });
+        }
+
+        // destroy stuff
+        app.folder.destroy();
+        if (app.has('window')) {
+            win.trigger('quit');
+            ox.ui.windowManager.trigger('window.quit', win);
+        }
+        // remove from list
+        ox.ui.apps.remove(app);
+
+        // mark as not running
+        app.trigger('quit');
+    };
     //define launcher callback
     app.setLauncher(function (options) {
         var opt = $.extend({}, options || {});
 
-        app.launched = true;
+        win.nodes.main.addClass('io-ox-search f6-target').attr({
+            'tabindex': '1',
+            'role': 'main',
+            'aria-label': gt('Search')
+        });
 
-        //init window
-        win = ox.ui.createWindow({
-                name: 'io.ox/search',
-                title: 'Search',
-                toolbar: true,
-                search: false
-            });
-        win.addClass('io-ox-search-main');
+
         app.setWindow(win);
 
         //use application view
@@ -126,15 +165,11 @@ define('io.ox/search/main',
             query: opt.query
         });
 
-        //TODO: gt
-        app.setTitle(model.getTitle());
+        app.setTitle(gt('Search'));
 
         // return deferred
-        return show(win).done(function () {
-            // add side popup and delgate item clicks
+        win.show(function () {
             sidepopup.delegate(app.view.$el, '.item', openSidePopup);
-            //TODO:
-            //$(input.app).focus();
         });
     });
 
@@ -192,11 +227,14 @@ define('io.ox/search/main',
                             start: model.get('start'),
                             size: model.get('size')
                         }
-                    };
+                    },
+                    start = Date.now();
+
+                app.busy();
 
                 return api.query(opt)
                         .then(function (result) {
-                            model.setItems(result);
+                            model.setItems(result, start);
                             run();
                         }, yell);
             }
@@ -206,35 +244,30 @@ define('io.ox/search/main',
     //init model and listeners
     model = SearchModel.factory.create({mode: 'widget'})
             .on('query change:start change:size', app.apiproxy.query)
-            // .on('all', function (name, model, value) {
-            //     console.log('event: ', name, value);
-            // })
             .on('reset change', function () {
-                //console.log('-> redraw: ', arguments);
                 app.view.redraw();
             });
 
     //run app
     run = function () {
-        if (app.get('state') === 'running')
+        if (app.get('state') === 'running') {
+            //reuse
+            app.launch();
             app.view.redraw();
-        else
+        } else {
             app.launch.call(app);
+        }
+        app.idle();
     };
 
     return {
         getApp: app.getInstance,
         run: run,
-        init: function (container) {
-            var $container = container || $('<div>');
+        init: function () {
             app.view = SearchView.factory
-                        .create(app, model, $container)
-                        .render($container);
-
-            return $container;
-        },
-        reuse: function () {
-            return ox.ui.App.reuse('io.ox/search');
+                        .create(app, model)
+                        .render();
+            return model.get('mode') === 'widget' ? app.view.$el.find('input') : app.view.$el;
         }
     };
 });

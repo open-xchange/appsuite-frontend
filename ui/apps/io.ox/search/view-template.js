@@ -15,8 +15,7 @@ define('io.ox/search/view-template',
     ['gettext!io.ox/core',
      'io.ox/core/extensions',
      'io.ox/core/api/apps',
-     'io.ox/core/tk/autocomplete',
-     'io.ox/search/items/view-template'
+     'io.ox/core/tk/autocomplete'
     ], function (gt, ext, appAPI) {
 
     'use strict';
@@ -32,9 +31,15 @@ define('io.ox/search/view-template',
             var ref,
                 app = baton.app,
                 model = baton.model,
-                node = $('<div class="col-sm-12 query">');
+                mode = model.get('mode');
 
-            ref = $('<input name="app-search" id="app-search" type="text">')
+            ref = $('<input>')
+                .attr({
+                    type: 'text',
+                    tabindex: 1,
+                    placeholder: gt('Search') + ' ...'
+                })
+                .addClass('search-field form-control ' + mode)
                 .autocomplete({
                     api: app.apiproxy,
                     minLength: 3,
@@ -57,6 +62,9 @@ define('io.ox/search/view-template',
                         //apply selected filter
                         var node = $(e.target).closest('.autocomplete-item'),
                             value = node.data();
+                        if (mode === 'widget') {
+                            model.remove();
+                        }
                         model.add(value.facet, value.id);
                     }
                 })
@@ -65,7 +73,7 @@ define('io.ox/search/view-template',
                     $(ref).val('');
                 });
 
-            return node.append(ref);
+            return $(this).append(ref);
         };
 
     //widget mode
@@ -74,39 +82,29 @@ define('io.ox/search/view-template',
         index: 200,
         row: '0',
         draw: function (baton) {
-            this.append(
-                dropdown(baton)
-            );
+            dropdown.call(this, baton);
         }
     });
 
     //window mode
-    point.extend({
-        id: 'headline',
-        index: 100,
-        row: '0',
-        draw: function () {
-            this.append($('<div class="col-lg-12 headline">').append(
-                    $('<h1 class="clear-title">').text(gt('Search'))
-                )
-            );
-        }
-    });
-
     point.extend({
         id: 'apps',
         index: 100,
         row: '0',
         draw: function (baton) {
             var id = baton.model.getApp(),
-                node = $('<ul class="col-lg-12 apps">');
-
+                opt = baton.model.getOptions(),
+                node = $('<ol class="col-sm-12 apps">');
+            //add links for supported apps
             _(appAPI.getFavorites()).each(function (app) {
-                node.append(
-                    $('<li>')
-                    .attr('data-app', app.id)
-                    .text(gt.pgettext('app', app.title))
-                );
+                if (!opt.mapping[app.id]) {
+                    node.append(
+                        $('<li>')
+                            .addClass('app')
+                            .attr('data-app', app.id)
+                            .text(gt.pgettext('app', app.title))
+                    );
+                }
             });
             //mark as active
             if (id !== '') {
@@ -127,7 +125,8 @@ define('io.ox/search/view-template',
         index: 200,
         row: '0',
         draw: function (baton) {
-            this.append(dropdown(baton));
+            var row = $('<div class="col-sm-12 query">').appendTo(this);
+            dropdown.call(row, baton);
         }
     });
 
@@ -140,17 +139,18 @@ define('io.ox/search/view-template',
             this.draw.call(baton.$, baton);
         },
         draw: function (baton) {
-            var node = $('<div class="col-lg-12 facets">'),
+            var node = $('<ol class="col-sm-12 facets group">'),
                 model = baton.model,
                 list = model.get('poollist'),
                 tmp;
 
             _.each(list, function (item) {
                 //get active value
-                var value = model.get('pool')[item.facet].values[item.value];
+                var value = model.get('pool')[item.facet].values[item.value],
+                    isMandatory = model.isMandatory(item.facet);
 
                 node.append(
-                    tmp = $('<span>').html(value.display_name)
+                    tmp = $('<li>').html(value.display_name)
                 );
                 //general stuff
                 ext.point('io.ox/search/view/window/facets')
@@ -160,15 +160,37 @@ define('io.ox/search/view-template',
                 ext.point('io.ox/search/view/window/facets/' + value.facet)
                     .invoke('draw', tmp, value, baton);
 
-                //remove action
-                tmp.append(
-                    $('<i class="fa fa-times action">')
-                    .on('click', function () {
-                        baton.model.remove(value.facet, value.id);
-                    })
-                );
+                tmp.addClass('facet');
+
+                //remove action for non mandatory facets
+                if (!isMandatory) {
+                    tmp.append(
+                        $('<i class="fa fa-times action">')
+                        .on('click', function () {
+                            baton.model.remove(value.facet, value.id);
+                        })
+                    );
+                }
             });
             this.append(node);
+        }
+    });
+
+    point.extend({
+        id: 'info',
+        index: 300,
+        draw: function (baton) {
+            var items = baton.model.get('items'),
+                timespend = Math.round((Date.now() - items.timestamp) / 100) / 10;
+            if (items.timestamp) {
+                this.append(
+                    $('<div>')
+                    .addClass('col-sm-12 info')
+                    .append(
+                        gt('Found %1$s items in %2$s seconds', items.length, timespend)
+                    )
+                );
+            }
         }
     });
 
@@ -179,7 +201,7 @@ define('io.ox/search/view-template',
                 self = this,
                 node, menu;
             if (filters.length) {
-                menu = $('<ul class="dropdown-menu" role="menu">');
+                menu = $('<ol class="dropdown-menu" role="menu">');
                 _.each(filters, function (item) {
                     menu.append(
                         $('<li role="presentation">').append(
@@ -192,14 +214,14 @@ define('io.ox/search/view-template',
                     );
                 });
                 self.append(menu);
-                //TODO: a11y
+                //set right position for dropdown
                 node = $('<i class="fa fa-chevron-down action">')
                         .on('click', function () {
                             var left = self.offset().left || 0,
                                 height = self.outerHeight(),
                                 width = self.outerWidth();
                             menu.css({
-                                    left: left + 'px',
+                                    left: (left - 13) + 'px',
                                     top: height + 8 + 'px',
                                     width: width + 'px',
                                     'min-width': width + 'px',
@@ -256,55 +278,39 @@ define('io.ox/search/view-template',
     }
 
     ext.point('io.ox/search/view/window/facets/folder').extend({
+        id: 'icon',
+        index: '100',
+        draw: function () {
+            this.prepend(
+                $('<i class="fa fa-folder">')
+                .css({
+                    'padding-right': '10px',
+                    opacity: 0.2
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/search/view/window/facets/folder').extend({
+        id: 'fallback',
+        index: '200',
+        draw: function (value) {
+            if (!value.display_name)
+                this.html('<i>' + gt('All folders') + '</i>');
+        }
+    });
+
+    ext.point('io.ox/search/view/window/facets/folder').extend({
+        id: 'actions',
+        index: '300',
         draw: function (value, baton) {
+            //add actions
             var node = $('<i class="fa fa-chevron-down action">')
                         .on('click', function () {
                             var facet = baton.model.get('folder');
                             folderdialoge(facet, baton);
                         });
             this.append(node);
-        }
-    });
-
-    point.extend({
-        id: 'delim',
-        index: 300,
-        row: '0',
-        draw: function (baton) {
-            this.append(
-                $('<div class="delim">').append(
-                    $('<i class="fa fa-angle-left action" style="float: left">')
-                        .on('click', function () {
-                            var start = baton.model.get('start');
-                            start = Math.max(start - baton.model.get('size'), 0);
-                            baton.model.set('start', start);
-
-                        }),
-                    $('<i class="fa fa-angle-right action" style="float: right">')
-                            .on('click', function () {
-                                var start = baton.model.get('start');
-                                start = start + baton.model.get('size');
-                                baton.model.set('start', start);
-                            }),
-                    $('<hr style="clear: both">')
-                )
-            );
-        }
-    });
-
-    point.extend({
-        id: 'statusbar',
-        index: 400,
-        row: '0',
-        draw: function (baton) {
-            this.parent().find('.window-statusbar').remove();
-
-            var node = $('<footer class="window-statusbar">').append(
-                $('<span>').text('current:' + baton.model.get('items').length),
-                $('<span>').text('start:' + baton.model.get('start')),
-                $('<span>').text('size:' + baton.model.get('size'))
-            );
-            this.parent().append(node);
         }
     });
 

@@ -79,6 +79,13 @@ define('io.ox/core/tk/autocomplete',
             // state
             isOpen = false,
 
+            reposition = _.debounce(function () {
+                    //popup stays next to input
+                    var left = parseInt(o.container.css('left').replace('px', ''), 10),
+                        diff = self.offset().left - o.container.offset().left;
+                    o.container.css('left', (left + diff) + 'px');
+                }, 100),
+
             update = function () {
                 // get data from current item and update input field
                 var data = scrollpane.children().eq(Math.max(0, index)).data();
@@ -144,6 +151,7 @@ define('io.ox/core/tk/autocomplete',
                     if (!isOpen) {
                         // toggle blur handlers
                         self.off('blur', o.blur).on('blur', fnBlur);
+                        $(window).on('resize', reposition);
                         // calculate position/dimension and show popup
                         var off = self.offset(),
                             w = self.outerWidth(),
@@ -176,6 +184,7 @@ define('io.ox/core/tk/autocomplete',
                     if (isOpen) {
                         // toggle blur handlers
                         self.on('blur', o.blur).off('blur', fnBlur);
+                        $(window).off('resize', reposition);
                         scrollpane.empty();
                         o.container.detach();
                         isOpen = false;

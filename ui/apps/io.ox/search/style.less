@@ -12,29 +12,22 @@
  */
 
 
-#io-ox-searchfield-topbar.launcher {
+//topbar search-field vs. icon
+#io-ox-search-topbar.launcher {
     display: inline-block;
 }
-#io-ox-searchfield-topbar-icon.launcher {
+#io-ox-search-topbar-icon.launcher {
     display: none;
 }
-
-//replace searchfield with icon on small devices
 @media all and (max-width: 800px), all and (max-device-width: 800px) {
-    #io-ox-searchfield-topbar.launcher {
+    #io-ox-search-topbar.launcher {
         display: none;
     }
-    #io-ox-searchfield-topbar-icon.launcher {
+    #io-ox-search-topbar-icon.launcher {
         display: inline-block;
     }
 }
 
-//global: input field (topbar, app view)
-#app-search {
-    height: 24px;
-    width: 180px;
-    line-height: 24px;
-}
 
 //global: autocomplete items
 .autocomplete-search {
@@ -46,7 +39,6 @@
         color: rgba(128, 128, 128, 0.71)
     }
 
-
     //divider/group
     .unselectable {
         margin: 0;
@@ -55,112 +47,118 @@
 
     .autocomplete-item {
         margin-bottom: 0;
+        padding: 3px 3px;
         &.indent {
             padding-left: 20px;
         }
     }
 }
 
-//app
-.io-ox-search-main {
 
-    //hide application toolbar
-    .window-body {
-        margin-bottom: 30px;
-        left: 0;
-
-        .window-content {
-            .apps {
-                li {
-                    float: left;
-                    list-style-type: none;
-                    cursor: pointer;
-                    padding: 5px 16px;
-                    margin: 0 10px;
-                    color: #0C68B3;
-                    &.active {
-                        background-color: #0E75C2;
-                        font-weight: bold;
-                        color: white
-                    }
-                }
-                li:hover {
-                    background-color: lightgrey;
-                }
-            }
-
-            .action {
-                padding-left: 10px;
-            }
-
-
-            .result {
-                .item {
-                    padding: 5px 10px 5px 10px;
-                    .line1 {
-                        font-weight: 500;
-                    }
-                    .line2 {
-                        font-style: italic;
-                    }
-                }
-                .item:hover {
-                     background-color: lightgrey;
-                }
-            }
-        }
-
-        .window-statusbar {
-            height: 30px;
-            box-sizing: border-box;
-            border-top: 1px solid black;
-            line-height: 1.2 em;
-            position: fixed;
-            padding: 0 10px;
-
-            line-height: 1.8em;
-
-            bottom: 0;
-            right: 0;
-            left: 0;
-
-            span {
-                margin: 0 30px;
-            }
-
-        }
-    }
-
+//hide/adjust default window parts
+.io-ox-search-window {
+    //hide head
     .window-head {
         display: none;
     }
-
-    #app-search {
-       width: 600px;
+    //remove reserved space for head
+    .window-body {
+        left: 0;
     }
+    //scrollable
+    .window-content {
+        padding: 13px 0 13px 13px;
+        overflow: auto;
+    }
+}
 
-    .facets {
+
+//app and lauchner parent class
+.io-ox-search {
+
+    //section: app
+    .apps {
         display: flex;
-        span {
+        margin: 20px 0 0 0;
+        .app {
+            list-style-type: none;
+            text-align: center;
             cursor: pointer;
-            padding: 10px;
-            margin: 10px;
-            //height: 40px;
-            background-color: #0E75C2;
-            color: white;
+            max-width: 160px;
+            padding: 4px 16px;
+            margin: 0 16px;
+            color: #0C68B3;
+            flex: 0 0 auto;
+            &.active {
+                background-color: #0E75C2;
+                color: white
+            }
+            &:hover {
+                text-decoration: underline;
+            }
         }
-        // .top-placement {
-        // width: 168px;
-        // padding: 8px;
-        //  padding-top: 50px;
-        // position: fixed;
-        // z-index: 2;
-        // color: black;
-        // border: 1px red solid;
-        // background-color: white;
-        // }
-
     }
 
+    //section: query
+    .query {
+        display: flex;
+    }
+    .search-field {
+        width: 180px;
+        padding: 4px 8px;
+        &.widget {
+            height: 24px;
+        }
+        &.window {
+            height: 30px;
+            margin-bottom: 16px;
+            flex: 0 1 auto;
+            width: 500px;
+        }
+        &.form-control {
+            //override 'block'
+            display: inline-block;
+        }
+    }
 
+    //section: facets
+    .facets {
+        .facet {
+            float: left;
+            list-style-type: none;
+            padding: 6px 12px;
+            margin: 10px 10px 0 0;
+            background-color: #F8F8F8;
+            color: #161616;
+            color: rgba(0,0,0,.5);
+            .user-select(none);
+            cursor: default;
+            .action {
+                padding-left: 10px;
+                cursor: pointer;
+            }
+        }
+        &:after {
+            clear: both;
+        }
+    }
+
+    .info {
+        margin: 10px 14px;
+        padding: 10px;
+        border-left: 3px solid #eee;
+        width: 500px;
+        background-color: #f4f8fa;
+        border-color: #5bc0de;
+    }
+
+    //section: results
+    //handled in /items/*
+
+    //learned from http://css-tricks.com/snippets/css/clear-fix/
+    .group:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
 }
