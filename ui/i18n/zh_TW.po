@@ -177,7 +177,7 @@ msgid_plural "%1$d items"
 msgstr[0] "1 個項目"
 msgstr[1] "%1$d 個項目"
 
-#: apps/io.ox/mail/settings/pane.js:57 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:51 module:io.ox/mail
 msgid "1 minute"
 msgstr "1 分鐘"
 
@@ -186,7 +186,7 @@ msgid "1 week"
 msgstr "1 周"
 
 #: apps/io.ox/core/settings/pane.js:182 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:249 apps/io.ox/mail/settings/pane.js:60
+#: apps/io.ox/core/settings/pane.js:249 apps/io.ox/mail/settings/pane.js:54
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 分鐘"
@@ -224,7 +224,7 @@ msgstr "2 周"
 msgid "3 days"
 msgstr "3 天"
 
-#: apps/io.ox/mail/settings/pane.js:58 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:52 module:io.ox/mail
 msgid "3 minutes"
 msgstr "3 分鐘"
 
@@ -259,7 +259,7 @@ msgid "5 days"
 msgstr "5 天"
 
 #: apps/io.ox/core/settings/pane.js:181 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:248 apps/io.ox/mail/settings/pane.js:59
+#: apps/io.ox/core/settings/pane.js:248 apps/io.ox/mail/settings/pane.js:53
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 分鐘"
@@ -281,7 +281,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "已選擇 <b>%1$d</b> 個元素"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:507 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "已寄出送達回執"
@@ -370,7 +370,7 @@ msgstr ""
 
 #: apps/io.ox/core/extPatterns/links.js:337 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:348
-#: apps/io.ox/mail/common-extensions.js:169 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:173 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:694
 #: module:io.ox/settings/settings
 msgid "Actions"
@@ -586,11 +586,11 @@ msgstr "所有附件"
 msgid "All day"
 msgstr "整天"
 
-#: apps/io.ox/mail/settings/pane.js:293 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:281 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "允許 HTML 格式的電子郵件"
 
-#: apps/io.ox/mail/settings/pane.js:298 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:286 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "允許預載外部鏈結圖像"
 
@@ -635,7 +635,7 @@ msgstr "周年紀念日"
 msgid "Any recipient"
 msgstr "任何收件人"
 
-#: apps/io.ox/mail/settings/pane.js:221 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:215 module:io.ox/mail
 msgid "Append vCard"
 msgstr "附加 vCard"
 
@@ -747,7 +747,7 @@ msgstr "確定要刪除此 Tweet 嗎？"
 msgid "Ascending"
 msgstr "昇冪"
 
-#: apps/io.ox/mail/settings/pane.js:313 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:301 module:io.ox/mail
 #, fuzzy
 msgid "Ask for return receipt"
 msgstr "請求送達回執"
@@ -766,7 +766,7 @@ msgstr "在顯示區域的頂端將會顯示所選資料夾的路徑，點選路
 msgid "Attach my vCard"
 msgstr "附加我的 vCard "
 
-#: apps/io.ox/mail/settings/pane.js:46 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:40 module:io.ox/mail
 msgid "Attachment"
 msgstr "附件"
 
@@ -813,7 +813,7 @@ msgstr "作者"
 msgid "Auto Forward"
 msgstr "自動轉寄"
 
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:258 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "自動保存電子郵件草稿"
 
@@ -826,13 +826,13 @@ msgstr "自動開啟通知區域"
 msgid "Automatic sign out"
 msgstr "自動登出"
 
-#: apps/io.ox/mail/settings/pane.js:182 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:176 module:io.ox/mail
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "reading"
 msgstr "閱讀時自動將收集到的聯絡人加入到「收集到的地址」資料夾？"
 
-#: apps/io.ox/mail/settings/pane.js:177 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:171 module:io.ox/mail
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
@@ -845,7 +845,7 @@ msgid ""
 msgstr "在接受或拒絕邀請後自動刪除通知郵件？"
 
 #. It's a label for an inputfield with a number
-#: apps/io.ox/mail/settings/pane.js:250 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:238 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr ""
 
@@ -873,7 +873,7 @@ msgstr "回到約會"
 msgid "Basic settings"
 msgstr "基礎設定"
 
-#: apps/io.ox/mail/common-extensions.js:237 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:241 module:io.ox/mail
 msgid "Bcc"
 msgstr "密件抄送"
 
@@ -1104,11 +1104,11 @@ msgstr "更改密碼並登出"
 msgid "Change state"
 msgstr "更改狀態"
 
-#: apps/io.ox/calendar/actions.js:592 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:594 module:io.ox/calendar
 msgid "Change status"
 msgstr "更改狀態"
 
-#: apps/io.ox/mail/settings/pane.js:350 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
 msgid "Change subscription"
 msgstr "修改訂閱"
 
@@ -1274,7 +1274,7 @@ msgstr "摺疊表單"
 msgid "Color"
 msgstr "顏色"
 
-#: apps/io.ox/mail/settings/pane.js:308 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:296 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "顏色引用線"
 
@@ -1296,7 +1296,7 @@ msgstr ""
 msgid "Commercial Register"
 msgstr "商業註冊"
 
-#: apps/io.ox/mail/settings/pane.js:193 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:187 module:io.ox/mail
 msgid "Common"
 msgstr "共同設置"
 
@@ -1326,7 +1326,7 @@ msgstr "公司"
 msgid "Company"
 msgstr "公司"
 
-#: apps/io.ox/mail/settings/pane.js:218 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:212 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:42 apps/io.ox/mail/write/main.js:201
 msgid "Compose"
 msgstr "撰寫"
@@ -1437,7 +1437,7 @@ msgstr "談話"
 msgid "Copy"
 msgstr "複製"
 
-#: apps/io.ox/mail/common-extensions.js:226 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:230 module:io.ox/mail
 #: apps/io.ox/mail/print.js:72
 msgctxt "CC"
 msgid "Copy"
@@ -1488,7 +1488,7 @@ msgstr "無法載入新推文。"
 msgid "Could not load this list"
 msgstr "無法載入此清單"
 
-#: apps/io.ox/mail/settings/pane.js:150 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:144 module:io.ox/mail
 msgid "Could not save settings"
 msgstr "無法儲存設定"
 
@@ -1720,7 +1720,7 @@ msgstr "預設日曆視圖"
 msgid "Default reminder"
 msgstr "預設提醒時間"
 
-#: apps/io.ox/mail/settings/pane.js:260 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:248 module:io.ox/mail
 msgid "Default sender address"
 msgstr "預設寄件者地址"
 
@@ -1733,7 +1733,7 @@ msgstr "延遲"
 #. Really delete portal widget - in contrast to "just disable"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/calendar/actions.js:284 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:618
+#: apps/io.ox/calendar/actions.js:622
 #: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:754 apps/io.ox/contacts/main.js:107
@@ -1832,10 +1832,6 @@ msgstr "禁用"
 msgid "Disable widget"
 msgstr "停用小工具"
 
-#: apps/io.ox/mail/settings/pane.js:41 module:io.ox/mail
-msgid "Disabled"
-msgstr "禁用"
-
 #: apps/io.ox/calendar/edit/main.js:50 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/template.js:96
 #: apps/io.ox/contacts/distrib/create-dist-view.js:56 module:io.ox/contacts
@@ -1858,7 +1854,7 @@ msgstr "放棄"
 msgid "Discard changes"
 msgstr "放棄修改"
 
-#: apps/io.ox/mail/settings/pane.js:290 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:278 module:io.ox/mail
 msgid "Display"
 msgstr "顯示"
 
@@ -1870,7 +1866,7 @@ msgstr "顯示名稱"
 msgid "Display area"
 msgstr "顯示區域"
 
-#: apps/io.ox/mail/settings/pane.js:303 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "在純文字電子郵件中以圖形顯示表情符號"
 
@@ -2134,7 +2130,7 @@ msgstr "電子郵件選項"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/calendar/actions.js:584 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
 #: apps/io.ox/contacts/actions.js:745 module:io.ox/contacts
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:821 module:io.ox/files
@@ -2245,7 +2241,7 @@ msgstr "電子郵件位址"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:319 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:342 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "每年的 %1$s %2$d 日"
@@ -2326,14 +2322,6 @@ msgstr "啟用"
 #: apps/io.ox/mail/autoforward/settings/model.js:89 module:io.ox/mail
 msgid "Enabled"
 msgstr "啟用"
-
-#: apps/io.ox/mail/settings/pane.js:40 module:io.ox/mail
-msgid "Enabled for all mail folders"
-msgstr "對所有郵件資料夾啟用"
-
-#: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
-msgid "Enabled for inbox only"
-msgstr "僅對收件匣啟用"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:134 module:io.ox/mail
 msgid "Enabled for the following addresses"
@@ -2556,7 +2544,7 @@ msgstr "外部電子郵件帳號"
 msgid "External contact"
 msgstr "外部聯絡人"
 
-#: apps/io.ox/mail/common-extensions.js:449 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:453 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "為保護您的隱私，已阻止預載外部圖片"
@@ -2823,7 +2811,7 @@ msgstr "忘記密碼？"
 msgid "Format"
 msgstr "格式"
 
-#: apps/io.ox/mail/settings/pane.js:243 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:231 module:io.ox/mail
 msgid "Format emails as"
 msgstr "將電子郵件格式化為 "
 
@@ -2836,7 +2824,7 @@ msgstr "轉發"
 msgid "Forward all incoming emails to this address"
 msgstr "轉寄所有郵件至此地址"
 
-#: apps/io.ox/mail/settings/pane.js:239 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:227 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "轉發電子郵件為"
 
@@ -2950,12 +2938,12 @@ msgstr "指引"
 msgid "Guided tour for this app"
 msgstr "此應用程式的導覽"
 
-#: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:44 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:803
 msgid "HTML"
 msgstr "HTML"
 
-#: apps/io.ox/mail/settings/pane.js:52 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:46 module:io.ox/mail
 msgid "HTML and plain text"
 msgstr "HTML 和純文本"
 
@@ -3065,7 +3053,7 @@ msgstr "這個功能如何使用？"
 msgid "How the settings are organized"
 msgstr "設定如何整理"
 
-#: apps/io.ox/mail/settings/pane.js:348 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:336 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "IMAP 資料夾訂閱"
 
@@ -3192,7 +3180,7 @@ msgstr "信息"
 msgid "Info area"
 msgstr "資訊區域"
 
-#: apps/io.ox/mail/settings/pane.js:45 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
 msgid "Inline"
 msgstr "內聯"
 
@@ -3210,7 +3198,7 @@ msgstr "插入"
 msgid "Insert inline image"
 msgstr "插入行內圖片"
 
-#: apps/io.ox/mail/settings/pane.js:226 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:220 module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "於回覆中插入原始電子郵件文字"
 
@@ -3243,7 +3231,7 @@ msgstr "無效資料"
 msgid "Invite to appointment"
 msgstr "約會敲請"
 
-#: apps/io.ox/calendar/actions.js:641 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:647 module:io.ox/calendar
 msgid "Invite to new appointment"
 msgstr "邀請至新約會"
 
@@ -3326,6 +3314,10 @@ msgstr "KB"
 #: module:io.ox/settings/settings
 msgid "Keep"
 msgstr "保留"
+
+#: apps/io.ox/mail/autoforward/settings/model.js:90 module:io.ox/mail
+msgid "Keep a copy of the message"
+msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:100 module:io.ox/core
 msgid "Language"
@@ -3460,7 +3452,7 @@ msgid "Mail"
 msgstr "郵件"
 
 #: apps/io.ox/core/main.js:162 module:io.ox/core
-#: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:166
+#: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:160
 #: module:io.ox/mail
 msgctxt "app"
 msgid "Mail"
@@ -3758,7 +3750,7 @@ msgid "More"
 msgstr "更多"
 
 #: apps/io.ox/calendar/actions.js:415 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:600
+#: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:603
 #: apps/io.ox/contacts/actions.js:192 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:768
 #: apps/io.ox/core/commons-folderview.js:612 module:io.ox/core
@@ -4415,7 +4407,7 @@ msgstr ""
 msgid "People"
 msgstr "人文"
 
-#: apps/io.ox/mail/settings/pane.js:196 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:190 module:io.ox/mail
 msgid "Permanently remove deleted emails"
 msgstr "永久移除已刪除的電子郵件"
 
@@ -4503,7 +4495,7 @@ msgstr "粉紅色"
 msgid "Places"
 msgstr "地點"
 
-#: apps/io.ox/mail/settings/pane.js:51 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:45 module:io.ox/mail
 msgid "Plain text"
 msgstr "純文本"
 
@@ -4754,7 +4746,7 @@ msgid "Primary account"
 msgstr "主要帳號"
 
 #: apps/io.ox/calendar/actions.js:569 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:609 apps/io.ox/contacts/actions.js:325
+#: apps/io.ox/calendar/actions.js:612 apps/io.ox/contacts/actions.js:325
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:729
 #: apps/io.ox/core/print.js:108 module:io.ox/core
 #: apps/io.ox/mail/actions.js:1063 module:io.ox/mail
@@ -5207,7 +5199,7 @@ msgstr "星期六"
 msgid "Save"
 msgstr "保存"
 
-#: apps/io.ox/calendar/actions.js:649 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:656 module:io.ox/calendar
 #: apps/io.ox/mail/actions.js:1152 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "儲存為通訊組列表"
@@ -5333,7 +5325,7 @@ msgid "Send"
 msgstr "發送"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:539 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "傳送送達回執"
@@ -5361,7 +5353,7 @@ msgstr "寄送電子郵件"
 msgid "Send mail"
 msgstr "寄送郵件"
 
-#: apps/io.ox/calendar/actions.js:633 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:638 module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "傳送郵件給所有參與者"
 
@@ -5529,7 +5521,7 @@ msgstr "顯示完成工作"
 msgid "Show hidden files and folders"
 msgstr "顯示隱藏檔案與資料夾"
 
-#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:452 module:io.ox/mail
 msgid "Show images"
 msgstr "顯示圖片"
 
@@ -6234,7 +6226,7 @@ msgstr "郵件主旨右邊的數字代表討論串中的郵件數量。要開啟
 msgid "The provided filename exceeds the allowed length."
 msgstr "檔名超過允許的長度。"
 
-#: apps/io.ox/mail/common-extensions.js:538 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:542 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr "寄件者想在您閱讀此郵件時收到通知"
@@ -6548,10 +6540,6 @@ msgid ""
 "This widget is currently offline because the twitter rate limit exceeded."
 msgstr "因為超過 Twitter 使用率限制，此小工具目前已離線。"
 
-#: apps/io.ox/mail/settings/pane.js:234 module:io.ox/mail
-msgid "Thread view"
-msgstr "討論串視圖"
-
 #: apps/io.ox/calendar/edit/recurrence-view.js:365
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:436
@@ -6587,7 +6575,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "頭銜 [稱呼]"
 
-#: apps/io.ox/mail/common-extensions.js:215 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:219 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:71
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7047,7 +7035,7 @@ msgstr ""
 msgid "Use cursor keys to change the item position"
 msgstr "使用方向鍵修改物件位置"
 
-#: apps/io.ox/mail/settings/pane.js:202 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:196 module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "針對純文字郵件使用固定寬度字體顯示"
 
@@ -7129,7 +7117,7 @@ msgstr "檢視原始碼"
 msgid "Waiting"
 msgstr "等待中"
 
-#: apps/io.ox/mail/common-extensions.js:476 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:480 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告：該郵件可能存在郵件欺詐"
 
@@ -7523,12 +7511,12 @@ msgid "and"
 msgstr "與"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:256 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:346 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:350 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -7595,7 +7583,7 @@ msgstr "僅刪除自己的物件"
 msgid "deleted"
 msgstr "已刪除"
 
-#: apps/io.ox/mail/settings/pane.js:56 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
 msgid "disabled"
 msgstr "禁用"
 
@@ -9205,6 +9193,9 @@ msgstr "每年"
 #~ msgid "Disable all"
 #~ msgstr "全部禁用"
 
+#~ msgid "Disabled"
+#~ msgstr "禁用"
+
 #~ msgid "Display as"
 #~ msgstr "顯示為"
 
@@ -9468,6 +9459,12 @@ msgstr "每年"
 
 #~ msgid "Enable visual effects"
 #~ msgstr "啟用視覺效果"
+
+#~ msgid "Enabled for all mail folders"
+#~ msgstr "對所有郵件資料夾啟用"
+
+#~ msgid "Enabled for inbox only"
+#~ msgstr "僅對收件匣啟用"
 
 #~ msgid ""
 #~ "Enables offline access to e-mail, calendar, tasks, and contacts folders. "
@@ -10305,6 +10302,9 @@ msgstr "每年"
 
 #~ msgid "This feature is deactivated"
 #~ msgstr "此功能已被停用"
+
+#~ msgid "Thread view"
+#~ msgstr "討論串視圖"
 
 #~ msgid "Tiles"
 #~ msgstr "磚塊"

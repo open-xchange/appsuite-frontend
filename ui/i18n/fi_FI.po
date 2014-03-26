@@ -176,7 +176,7 @@ msgid_plural "%1$d items"
 msgstr[0] "1 kohta"
 msgstr[1] "%1$d kohtaa"
 
-#: apps/io.ox/mail/settings/pane.js:57 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:51 module:io.ox/mail
 msgid "1 minute"
 msgstr "1 minuutti"
 
@@ -185,7 +185,7 @@ msgid "1 week"
 msgstr "1 viikko"
 
 #: apps/io.ox/core/settings/pane.js:182 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:249 apps/io.ox/mail/settings/pane.js:60
+#: apps/io.ox/core/settings/pane.js:249 apps/io.ox/mail/settings/pane.js:54
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minuuttia"
@@ -223,7 +223,7 @@ msgstr "2 viikkoa"
 msgid "3 days"
 msgstr "3 päivää"
 
-#: apps/io.ox/mail/settings/pane.js:58 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:52 module:io.ox/mail
 msgid "3 minutes"
 msgstr "3 minuuttia"
 
@@ -258,7 +258,7 @@ msgid "5 days"
 msgstr "5 päivää"
 
 #: apps/io.ox/core/settings/pane.js:181 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:248 apps/io.ox/mail/settings/pane.js:59
+#: apps/io.ox/core/settings/pane.js:248 apps/io.ox/mail/settings/pane.js:53
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minuuttia"
@@ -280,7 +280,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> alkiota valittu"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:507 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "Toimituksen kuittaus lähetetty"
@@ -369,7 +369,7 @@ msgstr ""
 
 #: apps/io.ox/core/extPatterns/links.js:337 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:348
-#: apps/io.ox/mail/common-extensions.js:169 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:173 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:694
 #: module:io.ox/settings/settings
 msgid "Actions"
@@ -585,11 +585,11 @@ msgstr "Kaikki liitteet"
 msgid "All day"
 msgstr "Koko päivän"
 
-#: apps/io.ox/mail/settings/pane.js:293 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:281 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Salli html muotoillut sähköpostit"
 
-#: apps/io.ox/mail/settings/pane.js:298 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:286 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Salli muualta linkitettyjen kuvien ennakoiva lataaminen"
 
@@ -634,7 +634,7 @@ msgstr "Vuosipäivä"
 msgid "Any recipient"
 msgstr "Kuka tahansa vastaanottaja"
 
-#: apps/io.ox/mail/settings/pane.js:221 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:215 module:io.ox/mail
 msgid "Append vCard"
 msgstr "Lisää vCard käyntikorttini"
 
@@ -747,7 +747,7 @@ msgstr "Oletko varma että haluat poistaa tämän tweetin?"
 msgid "Ascending"
 msgstr "Nouseva"
 
-#: apps/io.ox/mail/settings/pane.js:313 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:301 module:io.ox/mail
 #, fuzzy
 msgid "Ask for return receipt"
 msgstr "Pyydä kuittaus kun viesti on toimitettu"
@@ -768,7 +768,7 @@ msgstr ""
 msgid "Attach my vCard"
 msgstr "Liitä vCard käyntikorttini"
 
-#: apps/io.ox/mail/settings/pane.js:46 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:40 module:io.ox/mail
 msgid "Attachment"
 msgstr "Liitteenä"
 
@@ -815,7 +815,7 @@ msgstr "Tekijä"
 msgid "Auto Forward"
 msgstr "Automaattinen välitys"
 
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:258 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Luonnosten automaattinen tallennus"
 
@@ -828,7 +828,7 @@ msgstr "Ilmoitusalueen automaattinen avaus"
 msgid "Automatic sign out"
 msgstr "Automaattinen uloskirjautuminen"
 
-#: apps/io.ox/mail/settings/pane.js:182 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:176 module:io.ox/mail
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "reading"
@@ -836,7 +836,7 @@ msgstr ""
 "Luettaessa automaattisesti kerää yhteystietoja kansioon \"Collected addresses"
 "\""
 
-#: apps/io.ox/mail/settings/pane.js:177 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:171 module:io.ox/mail
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
@@ -852,7 +852,7 @@ msgstr ""
 "Automaattisesti poista ilmoitusposti, kun se on hyväksytty tai hylätty?"
 
 #. It's a label for an inputfield with a number
-#: apps/io.ox/mail/settings/pane.js:250 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:238 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr ""
 
@@ -880,7 +880,7 @@ msgstr "Takaisin tapaamiseen"
 msgid "Basic settings"
 msgstr "Perusasetukset"
 
-#: apps/io.ox/mail/common-extensions.js:237 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:241 module:io.ox/mail
 msgid "Bcc"
 msgstr "Piilokopio"
 
@@ -1115,11 +1115,11 @@ msgstr "Vaihda salasana ja kirjaudu ulos."
 msgid "Change state"
 msgstr "Muuta tilaa"
 
-#: apps/io.ox/calendar/actions.js:592 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:594 module:io.ox/calendar
 msgid "Change status"
 msgstr "Muuta tilannetta"
 
-#: apps/io.ox/mail/settings/pane.js:350 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
 msgid "Change subscription"
 msgstr "Muuta tilausta"
 
@@ -1287,7 +1287,7 @@ msgstr "Pienennä lomake"
 msgid "Color"
 msgstr "Väri"
 
-#: apps/io.ox/mail/settings/pane.js:308 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:296 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Värjää lainaukset"
 
@@ -1309,7 +1309,7 @@ msgstr ""
 msgid "Commercial Register"
 msgstr "kaupparekisteri"
 
-#: apps/io.ox/mail/settings/pane.js:193 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:187 module:io.ox/mail
 msgid "Common"
 msgstr "Yleiset"
 
@@ -1339,7 +1339,7 @@ msgstr "Yritykset"
 msgid "Company"
 msgstr "Yhtiö"
 
-#: apps/io.ox/mail/settings/pane.js:218 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:212 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:42 apps/io.ox/mail/write/main.js:201
 msgid "Compose"
 msgstr "Uusi viesti"
@@ -1450,7 +1450,7 @@ msgstr "Keskustelut"
 msgid "Copy"
 msgstr "Kopioi"
 
-#: apps/io.ox/mail/common-extensions.js:226 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:230 module:io.ox/mail
 #: apps/io.ox/mail/print.js:72
 msgctxt "CC"
 msgid "Copy"
@@ -1501,7 +1501,7 @@ msgstr "Uusia tweettejä ei voitu ladata."
 msgid "Could not load this list"
 msgstr "Tätä listaa ei voitu ladata"
 
-#: apps/io.ox/mail/settings/pane.js:150 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:144 module:io.ox/mail
 msgid "Could not save settings"
 msgstr "Asetuksia ei voitu tallentaa"
 
@@ -1735,7 +1735,7 @@ msgstr "Kalenterin oletusnäkymä"
 msgid "Default reminder"
 msgstr "Oletusmuistutus"
 
-#: apps/io.ox/mail/settings/pane.js:260 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:248 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Oletuslähettäjä"
 
@@ -1748,7 +1748,7 @@ msgstr "Lykätty"
 #. Really delete portal widget - in contrast to "just disable"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/calendar/actions.js:284 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:618
+#: apps/io.ox/calendar/actions.js:622
 #: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:754 apps/io.ox/contacts/main.js:107
@@ -1849,10 +1849,6 @@ msgstr "Kytke pois"
 msgid "Disable widget"
 msgstr "Poista widget käytöstä"
 
-#: apps/io.ox/mail/settings/pane.js:41 module:io.ox/mail
-msgid "Disabled"
-msgstr "Pois käytöstä"
-
 #: apps/io.ox/calendar/edit/main.js:50 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/template.js:96
 #: apps/io.ox/contacts/distrib/create-dist-view.js:56 module:io.ox/contacts
@@ -1875,7 +1871,7 @@ msgstr "Peruuta"
 msgid "Discard changes"
 msgstr "Peru muutokset"
 
-#: apps/io.ox/mail/settings/pane.js:290 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:278 module:io.ox/mail
 msgid "Display"
 msgstr "Viestien näyttäminen"
 
@@ -1887,7 +1883,7 @@ msgstr "Näytä nimi"
 msgid "Display area"
 msgstr "Näyttöalue"
 
-#: apps/io.ox/mail/settings/pane.js:303 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Näytä hymiöt kuvina tekstimuotoisissa posteissa"
 
@@ -2151,7 +2147,7 @@ msgstr "Sähköpostiasetukset"
 msgid "EB"
 msgstr "ET"
 
-#: apps/io.ox/calendar/actions.js:584 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
 #: apps/io.ox/contacts/actions.js:745 module:io.ox/contacts
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:821 module:io.ox/files
@@ -2263,7 +2259,7 @@ msgstr "Sähköpostiosoitteet"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:319 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:342 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Vuosittain %1$s %2$d"
@@ -2345,14 +2341,6 @@ msgstr "Kytke päälle"
 #: apps/io.ox/mail/autoforward/settings/model.js:89 module:io.ox/mail
 msgid "Enabled"
 msgstr "Käytössä"
-
-#: apps/io.ox/mail/settings/pane.js:40 module:io.ox/mail
-msgid "Enabled for all mail folders"
-msgstr "Käytössä kaikille postikansioille"
-
-#: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
-msgid "Enabled for inbox only"
-msgstr "Käytössä vain INBOX kansiolle"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:134 module:io.ox/mail
 msgid "Enabled for the following addresses"
@@ -2579,7 +2567,7 @@ msgstr "Ulkoiset sähköpostitilit"
 msgid "External contact"
 msgstr "Ulkoinen yhteystieto"
 
-#: apps/io.ox/mail/common-extensions.js:449 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:453 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Sinun roskapostilta suojaamiseksesi ulkoiset kuvat on estetty."
@@ -2850,7 +2838,7 @@ msgstr "Unohditko salasanasi?"
 msgid "Format"
 msgstr "Muotoile"
 
-#: apps/io.ox/mail/settings/pane.js:243 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:231 module:io.ox/mail
 msgid "Format emails as"
 msgstr "Sähköpostin muoto"
 
@@ -2863,7 +2851,7 @@ msgstr "Välitä"
 msgid "Forward all incoming emails to this address"
 msgstr "Välitä kaikki saapuva posti tähän osoitteeseen"
 
-#: apps/io.ox/mail/settings/pane.js:239 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:227 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Viestien välitys"
 
@@ -2977,12 +2965,12 @@ msgstr "Ohjausta"
 msgid "Guided tour for this app"
 msgstr "Tämän sovelluksen ohjattu esittely"
 
-#: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:44 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:803
 msgid "HTML"
 msgstr "HTML"
 
-#: apps/io.ox/mail/settings/pane.js:52 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:46 module:io.ox/mail
 msgid "HTML and plain text"
 msgstr "HTML ja teksti"
 
@@ -3092,7 +3080,7 @@ msgstr "Kuinka tämä toimii?"
 msgid "How the settings are organized"
 msgstr "Asetusten järjestys"
 
-#: apps/io.ox/mail/settings/pane.js:348 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:336 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "IMAP-kansioiden tilaus"
 
@@ -3229,7 +3217,7 @@ msgstr "Info"
 msgid "Info area"
 msgstr "Tietoalue"
 
-#: apps/io.ox/mail/settings/pane.js:45 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
 msgid "Inline"
 msgstr "Tekstissä"
 
@@ -3247,7 +3235,7 @@ msgstr "Lisää"
 msgid "Insert inline image"
 msgstr "Lisää joukkoon kuva"
 
-#: apps/io.ox/mail/settings/pane.js:226 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:220 module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Lisää alkuperäisen viesti teksti vastaukseen"
 
@@ -3282,7 +3270,7 @@ msgstr "Epäkelpo tieto"
 msgid "Invite to appointment"
 msgstr "Kutsu tapaamiseen"
 
-#: apps/io.ox/calendar/actions.js:641 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:647 module:io.ox/calendar
 msgid "Invite to new appointment"
 msgstr "Kutsu uuteen tapaamiseen"
 
@@ -3365,6 +3353,10 @@ msgstr "KT"
 #: module:io.ox/settings/settings
 msgid "Keep"
 msgstr "Säilytä"
+
+#: apps/io.ox/mail/autoforward/settings/model.js:90 module:io.ox/mail
+msgid "Keep a copy of the message"
+msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:100 module:io.ox/core
 msgid "Language"
@@ -3499,7 +3491,7 @@ msgid "Mail"
 msgstr "Posti"
 
 #: apps/io.ox/core/main.js:162 module:io.ox/core
-#: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:166
+#: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:160
 #: module:io.ox/mail
 msgctxt "app"
 msgid "Mail"
@@ -3797,7 +3789,7 @@ msgid "More"
 msgstr "Lisää"
 
 #: apps/io.ox/calendar/actions.js:415 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:600
+#: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:603
 #: apps/io.ox/contacts/actions.js:192 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:768
 #: apps/io.ox/core/commons-folderview.js:612 module:io.ox/core
@@ -4454,7 +4446,7 @@ msgstr ""
 msgid "People"
 msgstr "Ihmiset"
 
-#: apps/io.ox/mail/settings/pane.js:196 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:190 module:io.ox/mail
 msgid "Permanently remove deleted emails"
 msgstr "Poista poistetut viestit pysyvästi"
 
@@ -4542,7 +4534,7 @@ msgstr "Vaaleanpunainen"
 msgid "Places"
 msgstr "Paikat"
 
-#: apps/io.ox/mail/settings/pane.js:51 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:45 module:io.ox/mail
 msgid "Plain text"
 msgstr "Teksti"
 
@@ -4795,7 +4787,7 @@ msgid "Primary account"
 msgstr "Ensisijainen tili"
 
 #: apps/io.ox/calendar/actions.js:569 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:609 apps/io.ox/contacts/actions.js:325
+#: apps/io.ox/calendar/actions.js:612 apps/io.ox/contacts/actions.js:325
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:729
 #: apps/io.ox/core/print.js:108 module:io.ox/core
 #: apps/io.ox/mail/actions.js:1063 module:io.ox/mail
@@ -5248,7 +5240,7 @@ msgstr "lauantai"
 msgid "Save"
 msgstr "Tallenna"
 
-#: apps/io.ox/calendar/actions.js:649 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:656 module:io.ox/calendar
 #: apps/io.ox/mail/actions.js:1152 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Tallenna jakelulistana"
@@ -5374,7 +5366,7 @@ msgid "Send"
 msgstr "Lähetä"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:539 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Lähetä toimituksen vavhistus"
@@ -5401,7 +5393,7 @@ msgstr ""
 msgid "Send mail"
 msgstr "Lähetä posti"
 
-#: apps/io.ox/calendar/actions.js:633 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:638 module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Lähetä postia kaikille osallistujille"
 
@@ -5568,7 +5560,7 @@ msgstr "Näytä valmiit tehtävät"
 msgid "Show hidden files and folders"
 msgstr "Näytä piilotetut tiedostot ja kansiot"
 
-#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:452 module:io.ox/mail
 msgid "Show images"
 msgstr "Näytä kuvat"
 
@@ -6291,7 +6283,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Annettu tiedostonimi ylittää sallitun enimmäispituuden."
 
-#: apps/io.ox/mail/common-extensions.js:538 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:542 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -6627,10 +6619,6 @@ msgid ""
 "This widget is currently offline because the twitter rate limit exceeded."
 msgstr "Tämä widget on offline, koska twitter nopeusrajoitus ylittyi."
 
-#: apps/io.ox/mail/settings/pane.js:234 module:io.ox/mail
-msgid "Thread view"
-msgstr "Keskustelunäkymä"
-
 #: apps/io.ox/calendar/edit/recurrence-view.js:365
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:436
@@ -6666,7 +6654,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titteli"
 
-#: apps/io.ox/mail/common-extensions.js:215 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:219 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:71
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7172,7 +7160,7 @@ msgstr ""
 msgid "Use cursor keys to change the item position"
 msgstr "Käytä nuolinäppäimiä muuttaaksesi kohdan sijaintia"
 
-#: apps/io.ox/mail/settings/pane.js:202 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:196 module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Näytä tekstimuotoiset postit vakiolevyisellä kirjasimella"
 
@@ -7257,7 +7245,7 @@ msgstr "Näytä lähdekoodi"
 msgid "Waiting"
 msgstr "Odottaa"
 
-#: apps/io.ox/mail/common-extensions.js:476 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:480 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Varoitus: Tämä viesti voi olla urkinta- tai huijausposti"
 
@@ -7657,12 +7645,12 @@ msgid "and"
 msgstr "ja"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:256 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:346 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:350 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -7729,7 +7717,7 @@ msgstr "poista vain omat kohteet"
 msgid "deleted"
 msgstr "poistettu"
 
-#: apps/io.ox/mail/settings/pane.js:56 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
 msgid "disabled"
 msgstr "pois käytöstä"
 
@@ -8210,6 +8198,9 @@ msgstr "vuosittain"
 #~ msgid "Deleting messages on local storage also deletes them on server"
 #~ msgstr "Paikallisten viestien poistaminen poistaa ne myös palvelimelta"
 
+#~ msgid "Disabled"
+#~ msgstr "Pois käytöstä"
+
 #~ msgid "Document"
 #~ msgstr "Asiakirja"
 
@@ -8221,6 +8212,12 @@ msgstr "vuosittain"
 
 #~ msgid "Email address"
 #~ msgstr "Sähköpostiosoite"
+
+#~ msgid "Enabled for all mail folders"
+#~ msgstr "Käytössä kaikille postikansioille"
+
+#~ msgid "Enabled for inbox only"
+#~ msgstr "Käytössä vain INBOX kansiolle"
 
 #~ msgid "Entire thread"
 #~ msgstr "Koko keskustelu"
@@ -8456,6 +8453,9 @@ msgstr "vuosittain"
 
 #~ msgid "This account cannot be validated"
 #~ msgstr "Tätä tiliä ei pystytä varmentamaan"
+
+#~ msgid "Thread view"
+#~ msgstr "Keskustelunäkymä"
 
 #~ msgid "Tiles"
 #~ msgstr "Sovellusikkunat"

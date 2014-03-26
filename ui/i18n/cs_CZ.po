@@ -187,7 +187,7 @@ msgstr[0] "1 položka"
 msgstr[1] "%1$d položky"
 msgstr[2] "%1$d položek"
 
-#: apps/io.ox/mail/settings/pane.js:57 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:51 module:io.ox/mail
 msgid "1 minute"
 msgstr "1 minuta"
 
@@ -196,7 +196,7 @@ msgid "1 week"
 msgstr "1 týden"
 
 #: apps/io.ox/core/settings/pane.js:182 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:249 apps/io.ox/mail/settings/pane.js:60
+#: apps/io.ox/core/settings/pane.js:249 apps/io.ox/mail/settings/pane.js:54
 #: module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minut"
@@ -234,7 +234,7 @@ msgstr "2 týdny"
 msgid "3 days"
 msgstr "3 dny"
 
-#: apps/io.ox/mail/settings/pane.js:58 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:52 module:io.ox/mail
 msgid "3 minutes"
 msgstr "3 minuty"
 
@@ -269,7 +269,7 @@ msgid "5 days"
 msgstr "5 dní"
 
 #: apps/io.ox/core/settings/pane.js:181 module:io.ox/core
-#: apps/io.ox/core/settings/pane.js:248 apps/io.ox/mail/settings/pane.js:59
+#: apps/io.ox/core/settings/pane.js:248 apps/io.ox/mail/settings/pane.js:53
 #: module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minut"
@@ -291,7 +291,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> prvků vybráno"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:507 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "Bylo odesláno potvrzení o doručení"
@@ -380,7 +380,7 @@ msgstr ""
 
 #: apps/io.ox/core/extPatterns/links.js:337 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:348
-#: apps/io.ox/mail/common-extensions.js:169 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:173 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:694
 #: module:io.ox/settings/settings
 msgid "Actions"
@@ -596,11 +596,11 @@ msgstr "Všechny přílohy"
 msgid "All day"
 msgstr "Celý den"
 
-#: apps/io.ox/mail/settings/pane.js:293 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:281 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Povolit zprávy s HTML formátováním"
 
-#: apps/io.ox/mail/settings/pane.js:298 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:286 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Povolit přednačítání obrázků odkazovaných z externích zdrojů"
 
@@ -645,7 +645,7 @@ msgstr "Výročí"
 msgid "Any recipient"
 msgstr "Kterýkoliv adresát"
 
-#: apps/io.ox/mail/settings/pane.js:221 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:215 module:io.ox/mail
 msgid "Append vCard"
 msgstr "Připojit vCard"
 
@@ -761,7 +761,7 @@ msgstr "Opravdu chcete smazat tento tweet?"
 msgid "Ascending"
 msgstr "Vzestupně"
 
-#: apps/io.ox/mail/settings/pane.js:313 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:301 module:io.ox/mail
 #, fuzzy
 msgid "Ask for return receipt"
 msgstr "Požádat o potvrzení o doručení"
@@ -782,7 +782,7 @@ msgstr ""
 msgid "Attach my vCard"
 msgstr "Připojit moji vCard"
 
-#: apps/io.ox/mail/settings/pane.js:46 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:40 module:io.ox/mail
 msgid "Attachment"
 msgstr "Příloha"
 
@@ -830,7 +830,7 @@ msgstr "Autor"
 msgid "Auto Forward"
 msgstr "Automaticky přeposlat"
 
-#: apps/io.ox/mail/settings/pane.js:270 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:258 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Automaticky ukládat koncepty zpráv"
 
@@ -843,13 +843,13 @@ msgstr "Automatické otevření oznamovací oblasti"
 msgid "Automatic sign out"
 msgstr "Automatické odhlášení"
 
-#: apps/io.ox/mail/settings/pane.js:182 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:176 module:io.ox/mail
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "reading"
 msgstr "Při čtení automaticky ukládat kontakty ve složce „Sebrané adresy“"
 
-#: apps/io.ox/mail/settings/pane.js:177 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:171 module:io.ox/mail
 msgid ""
 "Automatically collect contacts in the folder \"Collected addresses\" while "
 "sending"
@@ -863,7 +863,7 @@ msgstr ""
 "Automaticky vymazat potvrzovací zprávu, po té co byla přijata nebo odmítnuta?"
 
 #. It's a label for an inputfield with a number
-#: apps/io.ox/mail/settings/pane.js:250 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:238 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr ""
 
@@ -891,7 +891,7 @@ msgstr "Zpět na schůzku"
 msgid "Basic settings"
 msgstr "Základní nastavení"
 
-#: apps/io.ox/mail/common-extensions.js:237 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:241 module:io.ox/mail
 msgid "Bcc"
 msgstr "Bcc"
 
@@ -1125,11 +1125,11 @@ msgstr "Změnit heslo a odhlásit se"
 msgid "Change state"
 msgstr "Změnit stav"
 
-#: apps/io.ox/calendar/actions.js:592 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:594 module:io.ox/calendar
 msgid "Change status"
 msgstr "Změnit stav"
 
-#: apps/io.ox/mail/settings/pane.js:350 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
 msgid "Change subscription"
 msgstr "Změnit přihlášení k odběru"
 
@@ -1297,7 +1297,7 @@ msgstr "Skrýt formulář"
 msgid "Color"
 msgstr "Barva"
 
-#: apps/io.ox/mail/settings/pane.js:308 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:296 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Obarvit citované řádky"
 
@@ -1319,7 +1319,7 @@ msgstr ""
 msgid "Commercial Register"
 msgstr "Obchodní rejstřík"
 
-#: apps/io.ox/mail/settings/pane.js:193 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:187 module:io.ox/mail
 msgid "Common"
 msgstr "Obecné"
 
@@ -1349,7 +1349,7 @@ msgstr "Firmy"
 msgid "Company"
 msgstr "Firma"
 
-#: apps/io.ox/mail/settings/pane.js:218 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:212 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:42 apps/io.ox/mail/write/main.js:201
 msgid "Compose"
 msgstr "Psaní zpráv"
@@ -1460,7 +1460,7 @@ msgstr "Konverzace"
 msgid "Copy"
 msgstr "Kopírovat"
 
-#: apps/io.ox/mail/common-extensions.js:226 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:230 module:io.ox/mail
 #: apps/io.ox/mail/print.js:72
 msgctxt "CC"
 msgid "Copy"
@@ -1512,7 +1512,7 @@ msgstr "Nepodařilo se načíst nové tweety."
 msgid "Could not load this list"
 msgstr "Seznam se nepodařilo načíst"
 
-#: apps/io.ox/mail/settings/pane.js:150 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:144 module:io.ox/mail
 msgid "Could not save settings"
 msgstr "Nepodařilo se uložit nastavení"
 
@@ -1746,7 +1746,7 @@ msgstr "Výchozí zobrazení kalendáře"
 msgid "Default reminder"
 msgstr "Výchozí upomínka"
 
-#: apps/io.ox/mail/settings/pane.js:260 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:248 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Výchozí adresa odesílatele"
 
@@ -1759,7 +1759,7 @@ msgstr "Odloženo"
 #. Really delete portal widget - in contrast to "just disable"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/calendar/actions.js:284 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:618
+#: apps/io.ox/calendar/actions.js:622
 #: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:754 apps/io.ox/contacts/main.js:107
@@ -1859,10 +1859,6 @@ msgstr "Zakázat"
 msgid "Disable widget"
 msgstr "Vypnout widget"
 
-#: apps/io.ox/mail/settings/pane.js:41 module:io.ox/mail
-msgid "Disabled"
-msgstr "Zakázaný"
-
 #: apps/io.ox/calendar/edit/main.js:50 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/template.js:96
 #: apps/io.ox/contacts/distrib/create-dist-view.js:56 module:io.ox/contacts
@@ -1885,7 +1881,7 @@ msgstr "Zahodit"
 msgid "Discard changes"
 msgstr "Zahodit změnit"
 
-#: apps/io.ox/mail/settings/pane.js:290 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:278 module:io.ox/mail
 msgid "Display"
 msgstr "Zobrazení"
 
@@ -1897,7 +1893,7 @@ msgstr "Zobrazované jméno"
 msgid "Display area"
 msgstr "Zobrazovací oblast"
 
-#: apps/io.ox/mail/settings/pane.js:303 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Zobrazit emotikony graficky v textových zprávách"
 
@@ -2164,7 +2160,7 @@ msgstr "Nastavení e-mailu"
 msgid "EB"
 msgstr "EB"
 
-#: apps/io.ox/calendar/actions.js:584 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
 #: apps/io.ox/contacts/actions.js:745 module:io.ox/contacts
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:821 module:io.ox/files
@@ -2276,7 +2272,7 @@ msgstr "E-mailové adresy"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
-#: apps/io.ox/mail/detail/view.js:319 module:io.ox/mail
+#: apps/io.ox/mail/detail/view.js:342 module:io.ox/mail
 #, fuzzy
 msgid "Email from %1$s: %2$s"
 msgstr "Každý %1$s %2$s"
@@ -2358,14 +2354,6 @@ msgstr "Povolit"
 #: apps/io.ox/mail/autoforward/settings/model.js:89 module:io.ox/mail
 msgid "Enabled"
 msgstr "Povoleno"
-
-#: apps/io.ox/mail/settings/pane.js:40 module:io.ox/mail
-msgid "Enabled for all mail folders"
-msgstr "Povolený pro všechny poštovní složky"
-
-#: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
-msgid "Enabled for inbox only"
-msgstr "Povolený pouze pro složku příchozí pošty"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:134 module:io.ox/mail
 msgid "Enabled for the following addresses"
@@ -2591,7 +2579,7 @@ msgstr "Externí e-mailové účty"
 msgid "External contact"
 msgstr "Externí kontakt"
 
-#: apps/io.ox/mail/common-extensions.js:449 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:453 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Obrázky z externích zdrojů byly zablokovány kvůli ochraně před spamem."
@@ -2861,7 +2849,7 @@ msgstr "Zapomněli jste heslo?"
 msgid "Format"
 msgstr "Formát"
 
-#: apps/io.ox/mail/settings/pane.js:243 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:231 module:io.ox/mail
 msgid "Format emails as"
 msgstr "Formátovat e-maily jako"
 
@@ -2874,7 +2862,7 @@ msgstr "Přeposlat"
 msgid "Forward all incoming emails to this address"
 msgstr "Přeposlat veškeré příchozí zprávy na tuto adresu"
 
-#: apps/io.ox/mail/settings/pane.js:239 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:227 module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Přeposílat zprávy jako"
 
@@ -2988,12 +2976,12 @@ msgstr "Nápověda"
 msgid "Guided tour for this app"
 msgstr "Prohlídka pro tuto aplikaci"
 
-#: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:44 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:803
 msgid "HTML"
 msgstr "HTML"
 
-#: apps/io.ox/mail/settings/pane.js:52 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:46 module:io.ox/mail
 msgid "HTML and plain text"
 msgstr "HTML a prostý text"
 
@@ -3105,7 +3093,7 @@ msgstr "Jak to funguje?"
 msgid "How the settings are organized"
 msgstr "Jak je Nastavení organizované"
 
-#: apps/io.ox/mail/settings/pane.js:348 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:336 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "Přihlášení k odběru složky IMAP"
 
@@ -3243,7 +3231,7 @@ msgstr "Info"
 msgid "Info area"
 msgstr "Informační oblast"
 
-#: apps/io.ox/mail/settings/pane.js:45 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
 msgid "Inline"
 msgstr "Vložené"
 
@@ -3261,7 +3249,7 @@ msgstr "Vložit"
 msgid "Insert inline image"
 msgstr "Vložit obrázek do textu"
 
-#: apps/io.ox/mail/settings/pane.js:226 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:220 module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Vložit text původní zprávy do odpovědi"
 
@@ -3296,7 +3284,7 @@ msgstr "Neplatná data"
 msgid "Invite to appointment"
 msgstr "Pozvat na schůzku"
 
-#: apps/io.ox/calendar/actions.js:641 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:647 module:io.ox/calendar
 msgid "Invite to new appointment"
 msgstr "Pozvat na novou schůzku"
 
@@ -3379,6 +3367,10 @@ msgstr "kB"
 #: module:io.ox/settings/settings
 msgid "Keep"
 msgstr "Ponechat"
+
+#: apps/io.ox/mail/autoforward/settings/model.js:90 module:io.ox/mail
+msgid "Keep a copy of the message"
+msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:100 module:io.ox/core
 msgid "Language"
@@ -3513,7 +3505,7 @@ msgid "Mail"
 msgstr "Pošta"
 
 #: apps/io.ox/core/main.js:162 module:io.ox/core
-#: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:166
+#: apps/io.ox/launchpad/main.js:30 apps/io.ox/mail/settings/pane.js:160
 #: module:io.ox/mail
 msgctxt "app"
 msgid "Mail"
@@ -3811,7 +3803,7 @@ msgid "More"
 msgstr "Více"
 
 #: apps/io.ox/calendar/actions.js:415 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:600
+#: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:603
 #: apps/io.ox/contacts/actions.js:192 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:768
 #: apps/io.ox/core/commons-folderview.js:612 module:io.ox/core
@@ -4479,7 +4471,7 @@ msgstr "Síla hesla"
 msgid "People"
 msgstr "Lidé"
 
-#: apps/io.ox/mail/settings/pane.js:196 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:190 module:io.ox/mail
 msgid "Permanently remove deleted emails"
 msgstr "Natrvalo odstranit smazané zprávy"
 
@@ -4567,7 +4559,7 @@ msgstr "Růžová"
 msgid "Places"
 msgstr "Místa"
 
-#: apps/io.ox/mail/settings/pane.js:51 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:45 module:io.ox/mail
 msgid "Plain text"
 msgstr "Prostý text"
 
@@ -4820,7 +4812,7 @@ msgid "Primary account"
 msgstr "Primární účet"
 
 #: apps/io.ox/calendar/actions.js:569 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:609 apps/io.ox/contacts/actions.js:325
+#: apps/io.ox/calendar/actions.js:612 apps/io.ox/contacts/actions.js:325
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:729
 #: apps/io.ox/core/print.js:108 module:io.ox/core
 #: apps/io.ox/mail/actions.js:1063 module:io.ox/mail
@@ -5273,7 +5265,7 @@ msgstr "Sobota"
 msgid "Save"
 msgstr "Uložit"
 
-#: apps/io.ox/calendar/actions.js:649 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:656 module:io.ox/calendar
 #: apps/io.ox/mail/actions.js:1152 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Uložit jako distribuční seznam"
@@ -5400,7 +5392,7 @@ msgid "Send"
 msgstr "Poslat"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:535 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:539 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Poslat potvrzení o doručení"
@@ -5428,7 +5420,7 @@ msgstr "Druhé pole"
 msgid "Send mail"
 msgstr "Poslat zprávu"
 
-#: apps/io.ox/calendar/actions.js:633 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:638 module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Poslat zprávu všem účastníkům"
 
@@ -5596,7 +5588,7 @@ msgstr "Zobrazit dokončené úkoly"
 msgid "Show hidden files and folders"
 msgstr "Zobrazit skryté soubory a složky"
 
-#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:452 module:io.ox/mail
 msgid "Show images"
 msgstr "Zobrazit obrázky"
 
@@ -6324,7 +6316,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Zadaný název souboru překračuje povolenou délku."
 
-#: apps/io.ox/mail/common-extensions.js:538 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:542 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Odesílatel si přeje dostat potvrzení, když si zprávu přečtete"
@@ -6667,10 +6659,6 @@ msgstr ""
 "Tento prvek je v tuto chvíli odpojený, protože byl překročen limit četnosti "
 "zpráv z twitteru."
 
-#: apps/io.ox/mail/settings/pane.js:234 module:io.ox/mail
-msgid "Thread view"
-msgstr "Vláknový pohled"
-
 #: apps/io.ox/calendar/edit/recurrence-view.js:365
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:436
@@ -6706,7 +6694,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titul"
 
-#: apps/io.ox/mail/common-extensions.js:215 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:219 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:71
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7209,7 +7197,7 @@ msgstr ""
 msgid "Use cursor keys to change the item position"
 msgstr "Pozici položky změňte pomocí kurzorových kláves."
 
-#: apps/io.ox/mail/settings/pane.js:202 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:196 module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Pro textové e-maily používat písmo s pevnou šířkou"
 
@@ -7295,7 +7283,7 @@ msgstr "Zobrazit zdroj"
 msgid "Waiting"
 msgstr "Čekám"
 
-#: apps/io.ox/mail/common-extensions.js:476 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:480 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Varování: Tato zpráva je možná e-mailový podvod"
 
@@ -7703,12 +7691,12 @@ msgid "and"
 msgstr "a"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:256 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:346 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:350 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -7775,7 +7763,7 @@ msgstr "mazání vlastních objektů"
 msgid "deleted"
 msgstr "smazáno"
 
-#: apps/io.ox/mail/settings/pane.js:56 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:50 module:io.ox/mail
 msgid "disabled"
 msgstr "zakázáno"
 
@@ -11090,6 +11078,9 @@ msgstr "ročně"
 #~ msgid "Disable all"
 #~ msgstr "Zakázat vše"
 
+#~ msgid "Disabled"
+#~ msgstr "Zakázaný"
+
 #~ msgid "Display as"
 #~ msgstr "Zobrazit jako"
 
@@ -11387,6 +11378,12 @@ msgstr "ročně"
 
 #~ msgid "Enable visual effects"
 #~ msgstr "Povolit vzhledové efekty"
+
+#~ msgid "Enabled for all mail folders"
+#~ msgstr "Povolený pro všechny poštovní složky"
+
+#~ msgid "Enabled for inbox only"
+#~ msgstr "Povolený pouze pro složku příchozí pošty"
 
 #~ msgid ""
 #~ "Enables offline access to e-mail, calendar, tasks, and contacts folders. "
@@ -15219,6 +15216,9 @@ msgstr "ročně"
 #~ "[resources]\n"
 #~ "\n"
 #~ "========================================== "
+
+#~ msgid "Thread view"
+#~ msgstr "Vláknový pohled"
 
 #~ msgid "Thu"
 #~ msgstr "Čt"
