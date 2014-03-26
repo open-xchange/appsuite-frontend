@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-02-19 20:30+0100\n"
+"PO-Revision-Date: 2014-03-26 13:54+0100\n"
 "Last-Translator: Jacob Sparre Andersen <jacob@bureau-cornavin.com>\n"
 "Language-Team: Danish <da@bureau-cornavin.com>\n"
 "Language: da_DK\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #. File size
 #. %1$d is the number
@@ -976,7 +976,7 @@ msgstr "CSV"
 #: apps/io.ox/calendar/month/view.js:133 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:831
 msgid "CW %1$d"
-msgstr "CW %1$d"
+msgstr "Uge %1$d"
 
 #: apps/io.ox/core/commons-folderview.js:501 module:io.ox/core
 msgid "CalDAV URL"
