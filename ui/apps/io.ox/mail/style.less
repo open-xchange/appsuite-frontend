@@ -1358,8 +1358,30 @@ h4.mail-attachment-preview {
 
             padding: 10px;
         }
-    }
+        &:not(.expanded) .recipients {
+            opacity: 1;
+        }
+        .subject {
+            font-size: 16px;
+            padding: 10px 0 0 0;
+        }
 
+        header {
+            border-bottom: 1px solid #ccc;
+
+            &.mobile-detail-view-mail {
+                .date {
+                    margin: 0;
+                    float: left;
+                }
+            }
+        }
+    }
+    .thread-view.list-view {
+        .list-item {
+            margin-bottom: 0px;
+        }
+    }
 
 
 

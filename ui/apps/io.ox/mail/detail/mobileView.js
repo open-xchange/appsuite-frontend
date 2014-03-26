@@ -37,7 +37,7 @@ define('io.ox/mail/detail/mobileView',
         id: 'header',
         index: INDEX += 100,
         draw: function (baton) {
-            var header = $('<header class="detail-view-header">');
+            var header = $('<header class="mobile-detail-view-mail detail-view-header">');
             ext.point('io.ox/mail/mobile/detail/header').invoke('draw', header, baton);
             this.append(header);
         }
@@ -77,12 +77,6 @@ define('io.ox/mail/detail/mobileView',
 
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
-        id: 'date',
-        index: INDEX_header += 100,
-        draw: extensions.fulldate
-    });
-
-    ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'from',
         index: INDEX_header += 100,
         draw: function (baton) {
@@ -94,11 +88,7 @@ define('io.ox/mail/detail/mobileView',
         }
     });
 
-    ext.point('io.ox/mail/mobile/detail/header').extend({
-        id: 'flag-picker',
-        index: INDEX_header += 100,
-        draw: extensions.flagPicker
-    });
+
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'priority',
@@ -130,6 +120,18 @@ define('io.ox/mail/detail/mobileView',
         }
     });
 
+
+    ext.point('io.ox/mail/mobile/detail/header').extend({
+        id: 'date',
+        index: INDEX_header += 100,
+        draw: extensions.fulldate
+    });
+
+    ext.point('io.ox/mail/mobile/detail/header').extend({
+        id: 'flag-picker',
+        index: INDEX_header += 100,
+        draw: extensions.flagPicker
+    });
 
     ext.point('io.ox/mail/mobile/detail').extend({
         id: 'notifications',
@@ -176,6 +178,7 @@ define('io.ox/mail/detail/mobileView',
 
     /*
      * Used for header information in threads on mobile (threadView page)
+     * Uses all extension points from desktop view
      */
     var MobileHeaderView = DetailView.View.extend({
         events: {
@@ -194,6 +197,7 @@ define('io.ox/mail/detail/mobileView',
 
     /*
      * DetailView for mobile use
+     * uses extionsion point defined in this file
      */
     var MobileDetailView = DetailView.View.extend({
         showMail: function () {

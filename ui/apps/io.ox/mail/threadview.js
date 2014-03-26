@@ -458,7 +458,16 @@ define('io.ox/mail/threadview',
             return view.render().toggle().$el.attr({ role: 'listitem', tabindex: '1' });
 
 
-        }
+        },
+        // render scaffold
+        render: function () {
+
+            // disable some points
+            ext.point('io.ox/mail/thread-view/header').disable('toggle-all');
+
+            ext.point('io.ox/mail/thread-view').invoke('draw', this);
+            return this;
+        },
     });
 
 
