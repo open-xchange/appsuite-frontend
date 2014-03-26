@@ -205,7 +205,7 @@ define('io.ox/calendar/list/perspective',
             list.find(
                 '[data-option="' + props.order + '"], ' +
                 '[data-option="' + (settings.get('showAllPrivateAppointments', false) ? 'all' : '~all') + '"]')
-                .find('i').attr('class', 'fa-check');
+                .find('i').attr('class', 'fa fa-check');
             // order
             var opacity = [1, 0.4][props.order === 'asc' ? 'slice' : 'reverse']();
             dropdown.find('.fa-arrow-down').css('opacity', opacity[0]).end()
