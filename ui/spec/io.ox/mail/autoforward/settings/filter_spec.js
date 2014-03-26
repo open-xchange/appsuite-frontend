@@ -73,8 +73,10 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
         it('should draw the form', function () {
             expect(this.node.find('input[name="forwardmail"]').length).toBe(1);
             expect(this.node.find('input[name="forwardmail"]').val()).toBe('tester@open-xchange.com');
-            expect(this.node.find('input[type="checkbox"]').length).toBe(1);
-            expect(this.node.find('input[type="checkbox"]').prop('checked')).toBe(false);
+            expect(this.node.find('input[name="keep"]').length).toBe(1);
+            expect(this.node.find('input[name="keep"]').prop('checked')).toBe(true);
+            expect(this.node.find('input[name="active"]').length).toBe(1);
+            expect(this.node.find('input[name="active"]').prop('checked')).toBe(false);
         });
 
         xit('should create the filtermodel', function () {
