@@ -56,7 +56,7 @@ define('io.ox/mail/toolbar',
             prio: 'hi',
             mobile: 'lo',
             icon: 'fa fa-reply-all',
-            label: gt('Reply all recipients'),
+            label: gt('Reply to all recipients'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/reply-all'
         },

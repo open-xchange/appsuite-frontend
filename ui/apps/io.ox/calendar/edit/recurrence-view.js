@@ -382,7 +382,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             gt: gt
                         }
                     }),
-                    yearlyDate: new ConfigSentence(gt('The appointment is repeated every year on day <a href="#" data-widget="number" data-attribute="dayInMonth"><span class="number-control">10</span></a> of <a href="#" data-widget="options" data-attribute="month">october</a>. '), {
+                    yearlyDate: new ConfigSentence(gt('The appointment is repeated every year on day <a href="#" data-widget="number" data-attribute="dayInMonth"><span class="number-control">10</span></a> of <a href="#" data-widget="options" data-attribute="month">October</a>. '), {
                         id: 'yearlyDate',
                         tabindex: self.tabindex,
                         dayInMonth: {
@@ -410,7 +410,7 @@ define('io.ox/calendar/edit/recurrence-view',
                             initial: 2
                         }
                     }),
-                    yearlyDay: new ConfigSentence(gt('The appointment is repeated every <a href="#" data-widget="options" data-attribute="ordinal">first</a> <a href="#" data-widget="options" data-attribute="day">Wednesday</a> in <a href="#" data-widget="options" data-attribute="month">october</a>. '), {
+                    yearlyDay: new ConfigSentence(gt('The appointment is repeated every <a href="#" data-widget="options" data-attribute="ordinal">first</a> <a href="#" data-widget="options" data-attribute="day">Wednesday</a> in <a href="#" data-widget="options" data-attribute="month">October</a>. '), {
                         id: 'yearlyDay',
                         tabindex: self.tabindex,
                         ordinal: {

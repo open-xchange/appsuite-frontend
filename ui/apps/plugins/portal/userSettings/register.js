@@ -72,24 +72,24 @@ define('plugins/portal/userSettings/register',
                 minLength = settings.get('password/minLength', 4),
                 maxLength = settings.get('password/maxLength', 0),
                 pwStrengths = [
-                    {label: gt('Passwordstrength: Too short'), color: 'bar-darkgrey', barLength: '20%',
-                              //#. %1$s is the minimum passwordlength
+                    {label: gt('Password strength: Too short'), color: 'bar-darkgrey', barLength: '20%',
+                              //#. %1$s is the minimum password length
                               //#, c-format
                         hint: gt('Minimum password length is %1$d.', minLength)},//darkgrey
-                    {label: gt('Passwordstrength: Wrong length'), color: 'bar-darkgrey', barLength: '20%',
-                              //#. %1$s is the minimum passwordlength
-                              //#. %2$s is the maximum passwordlength
+                    {label: gt('Password strength: Wrong length'), color: 'bar-darkgrey', barLength: '20%',
+                              //#. %1$s is the minimum password length
+                              //#. %2$s is the maximum password length
                               //#, c-format
                         hint: gt('Password length must be between %1$d and %2$d characters.', minLength, maxLength)},//darkgrey
-                    {label: gt('Passwordstrength: Very weak'), color: 'bar-darkgrey', barLength: '20%',
+                    {label: gt('Password strength: Very weak'), color: 'bar-darkgrey', barLength: '20%',
                      hint: gt('Your password is more secure if it also contains capital letters, numbers, and special characters like $, _, %')},//darkgrey
-                    {label: gt('Passwordstrength: Weak'), color: 'bar-danger', barLength: '40%',
+                    {label: gt('Password strength: Weak'), color: 'bar-danger', barLength: '40%',
                      hint: gt('Your password is more secure if it also contains capital letters, numbers, and special characters like $, _, %')},//red
-                    {label: gt('Passwordstrength: Good'), color: 'bar-success', barLength: '60%',
+                    {label: gt('Password strength: Good'), color: 'bar-success', barLength: '60%',
                      hint: gt('Your password is more secure if it also contains capital letters, numbers, and special characters like $, _, %')},//green
-                    {label: gt('Passwordstrength: Strong'), color: 'bar-info', barLength: '80%'},//blue
-                    {label: gt('Passwordstrength: Very strong'), color: 'bar-epic', barLength: '100%'},//purple
-                    {label: gt('Passwordstrength: Lengendary!'), color: 'bar-legendary', barLength: '100%'},//Orange
+                    {label: gt('Password strength: Strong'), color: 'bar-info', barLength: '80%'},//blue
+                    {label: gt('Password strength: Very strong'), color: 'bar-epic', barLength: '100%'},//purple
+                    {label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%'},//Orange
                 ];
 
             new dialogs.ModalDialog({ async: true, width: 400 })
