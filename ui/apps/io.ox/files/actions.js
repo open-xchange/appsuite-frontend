@@ -477,9 +477,7 @@ define('io.ox/files/actions',
                         $('<h4>').text(gt('Rename'))
                     )
                     .append(
-                        $('<div class="row">').append(
-                            $('<input type="text" name="name" class="form-control tabindex="1"">')
-                        )
+                        $('<input type="text" name="name" class="form-control" tabindex="1">')
                     )
                     .addPrimaryButton('rename', gt('Rename'), 'rename', {'tabIndex': '1'})
                     .addButton('cancel', gt('Cancel'),  'cancel', {'tabIndex': '1'})
