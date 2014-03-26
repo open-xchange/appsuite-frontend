@@ -158,7 +158,7 @@ define('io.ox/mail/threadview',
         onToggle: _.debounce(function () {
             var items = this.getItems(),
                 open = items.filter('.expanded'),
-                state = items.length > open.length,
+                state = open.length === 0,
                 icon = state ? 'fa-angle-double-down' : 'fa-angle-double-up';
             this.$el.find('.toggle-all i').attr('class', 'fa ' + icon);
         }, 10),
@@ -167,7 +167,7 @@ define('io.ox/mail/threadview',
             e.preventDefault();
             var items = this.getItems(),
                 open = items.filter('.expanded'),
-                state = items.length > open.length;
+                state = open.length === 0; // only open all if all are closed
             // pause http layer to combine GET requests
             http.pause();
             this.collection.each(function (model) {
