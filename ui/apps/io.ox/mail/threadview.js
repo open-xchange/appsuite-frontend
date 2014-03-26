@@ -18,10 +18,11 @@ define('io.ox/mail/threadview',
      'io.ox/mail/util',
      'io.ox/core/api/backbone',
      'io.ox/mail/detail/view',
+     'io.ox/mail/detail/mobileView',
      'io.ox/core/tk/list-dnd',
      'io.ox/core/http',
      'gettext!io.ox/mail',
-     'io.ox/mail/listview'], function (extensions, ext, api, util, backbone, detail, dnd, http, gt) {
+     'io.ox/mail/listview'], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, http, gt) {
 
     'use strict';
 
@@ -390,7 +391,6 @@ define('io.ox/mail/threadview',
                 span.addClass(elem.attr('class'));
                 span.addClass('sp');
                 $(el).after(span);
-                //el.remove();
             });
             elem.remove();
         }
@@ -415,7 +415,7 @@ define('io.ox/mail/threadview',
         // render an email
         renderListItem: function (model) {
             // custom view
-            var view = new detail.MobileHeaderView({
+            var view = new detailViewMobile.HeaderView({
                 tagName: 'li',
                 data: model.toJSON(),
                 disable: {
@@ -451,7 +451,7 @@ define('io.ox/mail/threadview',
             var model = api.pool.get('detail').get(cid);
             if (!model) return;
 
-            var view = new detail.MobileDetailView({
+            var view = new detailViewMobile.DetailView({
                 tagName: 'li',
                 data: model.toJSON()
             });

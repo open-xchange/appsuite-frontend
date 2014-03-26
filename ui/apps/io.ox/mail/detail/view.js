@@ -362,38 +362,7 @@ define('io.ox/mail/detail/view',
         }
     });
 
-    var MobileHeaderView = View.extend({
-        events: {
-            'click .detail-view-header': 'onClick'
-        },
-        onClick: function () {
-            this.$el.trigger('showmail');
-        },
-        toggle: function () {
-            // prevent default
-            return this;
-        }
-
-    });
-
-    var MobileDetailView = View.extend({
-        showMail: function () {
-            var $li = this.$el;
-            if ($li.attr('data-loaded') === 'false') {
-                $li.attr('data-loaded', true);
-                $li.find('section.body').addClass('loading');
-                this.trigger('load');
-                // load detailed email data
-                api.get(_.cid(this.cid)).then(this.onLoad.bind(this), this.onLoadFail.bind(this));
-            }
-            return this;
-        }
-
-    });
-
     return {
-        View: View,
-        MobileHeaderView: MobileHeaderView,
-        MobileDetailView: MobileDetailView
+        View: View
     };
 });
