@@ -929,13 +929,13 @@ define('io.ox/mail/actions',
 
     var INDEX = 0;
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 10, // should be first
-        prio: 'hi',
-        id: 'unselect',
-        label: gt('Unselect all'),
-        ref: 'io.ox/mail/actions/unselect'
-    }));
+    // ext.point('io.ox/mail/links/inline').extend(new links.Link({
+    //     index: 10, // should be first
+    //     prio: 'hi',
+    //     id: 'unselect',
+    //     label: gt('Unselect all'),
+    //     ref: 'io.ox/mail/actions/unselect'
+    // }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
@@ -943,7 +943,8 @@ define('io.ox/mail/actions',
         id: 'reply',
         icon: 'icon-reply',
         label: gt('Reply'),
-        ref: 'io.ox/mail/actions/reply'
+        ref: 'io.ox/mail/actions/reply',
+        section: 'standard'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -953,7 +954,8 @@ define('io.ox/mail/actions',
         label: gt('Reply All'),
         icon: 'icon-reply-all',
         ref: 'io.ox/mail/actions/reply-all',
-        drawDisabled: true
+        drawDisabled: true,
+        section: 'standard'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -962,7 +964,8 @@ define('io.ox/mail/actions',
         id: 'forward',
         icon: 'icon-mail-forward',
         label: gt('Forward'),
-        ref: 'io.ox/mail/actions/forward'
+        ref: 'io.ox/mail/actions/forward',
+        section: 'standard'
     }));
 
     // edit draft
@@ -971,7 +974,8 @@ define('io.ox/mail/actions',
         prio: 'hi',
         id: 'edit',
         label: gt('Edit'),
-        ref: 'io.ox/mail/actions/edit'
+        ref: 'io.ox/mail/actions/edit',
+        section: 'standard'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -980,7 +984,8 @@ define('io.ox/mail/actions',
         id: 'delete',
         icon: 'icon-trash',
         label: gt('Delete'),
-        ref: 'io.ox/mail/actions/delete'
+        ref: 'io.ox/mail/actions/delete',
+        section: 'standard'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -993,7 +998,8 @@ define('io.ox/mail/actions',
             //#. Instead of "Mark as unread" it's just "Mark unread"
             //#. German, for example, should be just "Ungelesen"
             gt('Mark unread'),
-        ref: 'io.ox/mail/actions/markunread'
+        ref: 'io.ox/mail/actions/markunread',
+        section: 'flags'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -1006,7 +1012,8 @@ define('io.ox/mail/actions',
             //#. Instead of "Mark as read" it's just "Mark read"
             //#. German, for example, should be just "Gelesen"
             gt('Mark read'),
-        ref: 'io.ox/mail/actions/markread'
+        ref: 'io.ox/mail/actions/markread',
+        section: 'flags'
     }));
 
     new Action('io.ox/mail/actions/label', {
@@ -1020,7 +1027,8 @@ define('io.ox/mail/actions',
         prio: 'hi',
         id: 'spam',
         label: gt('Mark as spam'),
-        ref: 'io.ox/mail/actions/spam'
+        ref: 'io.ox/mail/actions/spam',
+        section: 'flags'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -1028,15 +1036,48 @@ define('io.ox/mail/actions',
         prio: 'hi',
         id: 'nospam',
         label: gt('Not spam'),
-        ref: 'io.ox/mail/actions/nospam'
+        ref: 'io.ox/mail/actions/nospam',
+        section: 'flags'
     }));
+
+    // recipients
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        id: 'sendmail',
+        index: INDEX += 100,
+        prio: 'lo',
+        label: gt('Send new mail'),
+        ref: 'io.ox/mail/actions/sendmail',
+        section: 'recipients'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        id: 'invite-to-appointment',
+        index: INDEX += 100,
+        prio: 'lo',
+        label: gt('Invite to appointment'),
+        ref: 'io.ox/mail/actions/invite',
+        section: 'recipients'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        id: 'save-as-distlist',
+        index: INDEX += 100,
+        prio: 'lo',
+        label: gt('Save as distribution list'),
+        ref: 'io.ox/mail/actions/createdistlist',
+        section: 'recipients'
+    }));
+
+    // file op
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
         id: 'move',
         label: gt('Move'),
-        ref: 'io.ox/mail/actions/move'
+        ref: 'io.ox/mail/actions/move',
+        section: 'file-op'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -1044,7 +1085,26 @@ define('io.ox/mail/actions',
         prio: 'lo',
         id: 'copy',
         label: gt('Copy'),
-        ref: 'io.ox/mail/actions/copy'
+        ref: 'io.ox/mail/actions/copy',
+        section: 'file-op'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'lo',
+        id: 'print',
+        label: gt('Print'),
+        ref: 'io.ox/mail/actions/print',
+        section: 'export'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'lo',
+        id: 'saveEML',
+        label: gt('Save as file'),
+        ref: 'io.ox/mail/actions/save',
+        section: 'export'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -1053,15 +1113,8 @@ define('io.ox/mail/actions',
         id: 'source',
         //#. source in terms of source code
         label: gt('View source'),
-        ref: 'io.ox/mail/actions/source'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'lo',
-        id: 'print',
-        label: gt('Print'),
-        ref: 'io.ox/mail/actions/print'
+        ref: 'io.ox/mail/actions/source',
+        section: 'export'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -1069,7 +1122,8 @@ define('io.ox/mail/actions',
         prio: 'lo',
         id: 'reminder',
         label: gt('Reminder'),
-        ref: 'io.ox/mail/actions/reminder'
+        ref: 'io.ox/mail/actions/reminder',
+        section: 'keep'
     }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
@@ -1077,15 +1131,8 @@ define('io.ox/mail/actions',
         prio: 'lo',
         id: 'add-to-portal',
         label: gt('Add to portal'),
-        ref: 'io.ox/mail/actions/add-to-portal'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'lo',
-        id: 'saveEML',
-        label: gt('Save as file'),
-        ref: 'io.ox/mail/actions/save'
+        ref: 'io.ox/mail/actions/add-to-portal',
+        section: 'keep'
     }));
 
     // Attachments
@@ -1137,27 +1184,6 @@ define('io.ox/mail/actions',
         index: 500,
         label: gt('Save to Drive'),
         ref: 'io.ox/mail/actions/save-attachment'
-    }));
-
-    ext.point('io.ox/mail/all/actions').extend(new links.Link({
-        id: 'sendmail',
-        index: 100,
-        label: gt('Send new mail'),
-        ref: 'io.ox/mail/actions/sendmail'
-    }));
-
-    ext.point('io.ox/mail/all/actions').extend(new links.Link({
-        id: 'save-as-distlist',
-        index: 200,
-        label: gt('Save as distribution list'),
-        ref: 'io.ox/mail/actions/createdistlist'
-    }));
-
-    ext.point('io.ox/mail/all/actions').extend(new links.Link({
-        id: 'invite-to-appointment',
-        index: 300,
-        label: gt('Invite to appointment'),
-        ref: 'io.ox/mail/actions/invite'
     }));
 
     // DND actions

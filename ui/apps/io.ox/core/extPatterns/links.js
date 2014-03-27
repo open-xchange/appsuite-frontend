@@ -39,8 +39,9 @@ define('io.ox/core/extPatterns/links',
                 actions.invoke(ref, this, baton, e);
                 _.defer(function () { node.tooltip('hide'); });
             },
-            drawDefault = function () {
+            drawDefault = function (baton) {
                 var prio = _.device('small') ? self.mobile : self.prio;
+                var icons = self.icon && baton.options.icons !== false;
                 var a = $('<a>', { href: '#', tabindex: 1, 'data-action': self.id })
                     .addClass(self.cssClasses || 'io-ox-action-link')
                     .attr({
@@ -52,14 +53,14 @@ define('io.ox/core/extPatterns/links',
                     });
                 // icons are prefered over labels
                 a.append(
-                    (self.icon && prio === 'hi' && $('<i>').addClass(self.icon)) ||
+                    (icons && prio === 'hi' && $('<i>').addClass(self.icon)) ||
                     (self.label && $.txt(self.label)) ||
                     $()
                 );
                 // has icon?
-                if (self.icon) a.addClass('no-underline');
+                if (icons) a.addClass('no-underline');
                 // use tooltip?
-                if ((self.icon && self.label) || self.title) {
+                if ((icons && self.label) || self.title) {
                     a.attr({
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
@@ -77,7 +78,7 @@ define('io.ox/core/extPatterns/links',
         this.draw = this.draw || function (baton) {
 
             baton = ext.Baton.ensure(baton);
-            var link = drawDefault();
+            var link = drawDefault(baton);
 
             this.append(
                 link.data({ ref: self.ref, baton: baton }).click(click)
@@ -89,7 +90,7 @@ define('io.ox/core/extPatterns/links',
 
         if (this.drawDisabled === true) {
             this.drawDisabled = function (baton) {
-                var link = drawDefault();
+                var link = drawDefault(baton);
                 this.append(
                     link
                     .tooltip('destroy')
@@ -107,10 +108,6 @@ define('io.ox/core/extPatterns/links',
                 if (self.customize) self.customize.call(link, baton);
             };
         }
-    };
-
-    var XLink = function (id, options) {
-        ext.point(id).extend(new Link(options));
     };
 
     function actionClick(e) {
@@ -288,6 +285,20 @@ define('io.ox/core/extPatterns/links',
         };
     };
 
+    function injectDividers(node) {
+        // loop over all items and visually group by "section"
+        var currentSection = '';
+        node.children('li').each(function () {
+            var node = $(this), section = node.children('a').attr('data-section');
+            // add divider?
+            if (section === undefined) return;
+            if (currentSection !== '' && currentSection !== section) {
+                node.before('<li class="divider" role="presentation">');
+            }
+            currentSection = section;
+        });
+    }
+
     /**
      * @param {object}  options
      * @param {boolean} options.forcelimit force usage of 'more...'
@@ -324,15 +335,7 @@ define('io.ox/core/extPatterns/links',
                 if ((!multiple || options.forcelimit) && (isSmall || all.length > 5) && lo.length > 1) {
                     nav.append(
                         $('<li class="dropdown">').append(
-                            $('<a class="actionlink">')
-                            .attr({
-                                'href': '#',
-                                'data-toggle': 'dropdown',
-                                'data-action': 'more',
-                                'aria-haspopup': 'true',
-                                'tabindex': '1',
-                                'role': 'menuitem'
-                            })
+                            $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
                             .append(
                                 $.txt(isSmall ? gt('Actions') : gt('More')),
                                 $('<i class="fa fa-caret-down">')
@@ -342,28 +345,12 @@ define('io.ox/core/extPatterns/links',
                                 var left = $(this).parent().position().left;
                                 $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' pull-right'));
                             }),
-                            $('<ul class="dropdown-menu pull-right">')
-                            .attr({
-                                'role': 'menu',
-                                'aria-label': isSmall ? gt('Actions') : gt('More')
-                            })
-                            .append(function () {
-                                // loop over all items and visually group by "section"
-                                var items = [], currentSection = '';
-                                lo.each(function () {
-                                    var node = $(this), section = node.find('a').attr('data-section');
-                                    // add divider?
-                                    if (currentSection !== '' && currentSection !== section) {
-                                        items.push($('<li class="divider" role="presentation">'));
-                                    }
-                                    currentSection = section;
-                                    // add item
-                                    items.push(node);
-                                });
-                                return items;
-                            })
+                            $('<ul class="dropdown-menu pull-right" role="menu">')
+                            .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
+                            .append(lo)
                         )
                     );
+                    injectDividers(nav.find('ul'));
                 }
                 all = lo = null;
                 if (options.customizeNode) {
@@ -386,53 +373,47 @@ define('io.ox/core/extPatterns/links',
         };
     };
 
-    var z = 0;
+    var drawDropDownItems = function (options, baton, args) {
+        baton.$el = $(this).find('ul').empty();
+        drawLinks(options, new Collection(baton.data), null, baton, args, true).done(function () {
+            injectDividers(baton.$el);
+        });
+    };
+
+    var beforeOpenDropDown = function (e) {
+        var baton = e.data.baton;
+        baton.data = baton.model ? baton.model.toJSON() : baton.data;
+        baton.options.icons = false;
+        drawDropDownItems.call($(this), baton.options, baton, e.data.args);
+    };
+
     var drawDropDown = function (options, baton) {
-        if (options.zIndex !== undefined) {
-            z = options.zIndex;
-        }
-        var args = $.makeArray(arguments),
-            node = $('<div>').addClass('dropdown')
-                .css('display', 'inline-block')
-                .appendTo(this),
-            label = options.label || baton.label || '###',
-            $toggle = $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
+
+        var label = options.label, args = $.makeArray(arguments), node;
+
+        // label: Use baton or String or DOM node
+        label = baton.label || (_.isString(label) ? $.txt(label) : label);
+
+        // build dropdown
+        this.append(
+            node = $('<div class="dropdown">').append(
+                $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .data('context', baton.data)
-                .append(
-                    _.isString(label) ? $.txt(label) : label,
-                    $('<span>').text(_.noI18n(' ')),
-                    $('<b>').addClass('caret')
-                )
-                .appendTo(node);
+                .append(label, $('<i class="fa fa-caret-down">')),
+                $('<ul class="dropdown-menu" role="menu">')
+            )
+        );
 
-        if (options.zIndex !== undefined) {
-            node.css('zIndex', (z = z > 0 ? z - 1 : 11000));
-        }
-
-        // TODO remove this whole 'inline-js-spacing' solution
-        // better use CSS :after to insert spaces
-        // dont' do this crap on mobile, textnode can not be styled or overwritten later...
-        if (_.device('!smartphone')) {
-            node.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
-        }
-
-        // create & add node first, since the rest is async
-        options.classes += ' dropdown-menu';
-        if (options.open === 'left') {
-            options.classes += ' pull-right';
+        // use smart update?
+        if (baton.model) {
+            node.on('show.bs.dropdown', { options: options, baton: baton, args: args }, beforeOpenDropDown);
         } else {
-            $toggle.on(Modernizr.touch ? 'touchstart' : 'click', function () {
-                // fix dropdown position on-the-fly
-                node.find('ul.dropdown-menu').addClass(node.position().left < 100 ? '' : 'dropdown-right');
-            });
+            _.defer(drawDropDownItems.bind(node), options, baton, args);
         }
 
-        // defer drawing of drop-down options since they're not visible immediately
-        setTimeout(function () {
-            drawLinks(options, new Collection(baton.data), node, baton, args, true);
-        }, 100);
-
-        $toggle.dropdown();
+        // usual customizations
+        if (options.classes) node.addClass(options.classes);
+        if (options.attributes) node.attr(options.attributes);
 
         return node;
     };
@@ -443,20 +424,6 @@ define('io.ox/core/extPatterns/links',
             baton = ext.Baton.ensure(baton);
             return drawDropDown.call(this, o, baton);
         };
-    };
-
-    var Dropdown = function (id, options) {
-        var o = options || {};
-        o.ref = id + '/' + o.id;
-        ext.point(id).extend(
-            _.extend({
-                ref: o.ref,
-                draw: function (baton) {
-                    baton = ext.Baton.ensure(baton);
-                    drawDropDown.call(this, o, baton);
-                }
-            }, o)
-        );
     };
 
     var drawButtonGroup = function (options, baton) {
@@ -582,7 +549,6 @@ define('io.ox/core/extPatterns/links',
     return {
         Action: Action,
         Link: Link,
-        XLink: XLink, // TODO: consolidate Link/XLink
         Button: Button,
         ActionLink: ActionLink,
         ToolbarButtons: ToolbarButtons,
@@ -590,7 +556,6 @@ define('io.ox/core/extPatterns/links',
         InlineLinks: InlineLinks,
         InlineButtonGroup: InlineButtonGroup,
         DropdownLinks: DropdownLinks,
-        Dropdown: Dropdown,
         ButtonGroup: ButtonGroup,
         ActionGroup: ActionGroup
     };

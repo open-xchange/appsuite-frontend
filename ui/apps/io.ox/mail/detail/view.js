@@ -79,12 +79,13 @@ define('io.ox/mail/detail/view',
         draw: extensions.unreadToggle
     });
 
-    ext.point('io.ox/mail/detail/header').extend({
+    ext.point('io.ox/mail/detail/header').extend(new links.DropdownLinks({
         id: 'actions',
         index: INDEX_header += 100,
-        draw: extensions.actions
-    });
-
+        classes: 'actions pull-right',
+        label: gt('Actions'),
+        ref: 'io.ox/mail/links/inline'
+    }));
 
     ext.point('io.ox/mail/detail/header').extend({
         id: 'date',
