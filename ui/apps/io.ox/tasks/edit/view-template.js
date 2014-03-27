@@ -390,14 +390,13 @@ define('io.ox/tasks/edit/view-template',
         row: '10',
         draw: function (options) {
             var node = $('<div class="col-sm-6 collapsed">').appendTo(this),
-                guid = _.uniqueId('form-control-label-'),
-                input;
+                guid = _.uniqueId('form-control-label-');
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
 
                 var collection = options.model.getParticipants();
 
                 node.append(
-                    input = $('<div class="input-group">').append(
+                    $('<div class="input-group">').append(
                         $('<label class="sr-only">').text(gt('Add participant/resource')).attr('for', guid),
                         $('<input type="text" class="add-participant task-participant-input-field form-control">')
                         .attr({placeholder: gt('Add participant/resource'),
@@ -412,7 +411,8 @@ define('io.ox/tasks/edit/view-template',
 
                 var autocomplete = new AddParticipantsView({el: node});
                 autocomplete.render({
-                    parentSelector: '.io-ox-tasks-edit'
+                    parentSelector: '.io-ox-tasks-edit',
+                    resources: false//adding resources throws a backend error
                 });
 
                 //add recipents to baton-data-node; used to filter sugestions list in view
