@@ -227,11 +227,12 @@ define('io.ox/calendar/view-detail',
                     })
                     .value();
 
-                var plist;
+                var plist,
+                    legend;
 
                 participants.append(
                     $('<fieldset>').append(
-                        $('<legend>').addClass('io-ox-label').text(gt('Participants')),
+                        legend = $('<legend>').addClass('io-ox-label').text(gt('Participants')),
                         plist = $('<ul>').addClass('participant-list list-inline')
                     )
                 );
@@ -323,7 +324,11 @@ define('io.ox/calendar/view-detail',
                         _.each(sumData, function (res) {
                             if (res.count > 0) {
                                 sum.append(
-                                    $('<span>')
+                                    $('<a>')
+                                        .attr({
+                                            href: '#',
+                                            title: gt(res.css)
+                                        })
                                         .addClass('countgroup')
                                         .text(res.count)
                                         .prepend(
@@ -331,13 +336,26 @@ define('io.ox/calendar/view-detail',
                                                 .addClass('status ' + res.css)
                                                 .append(res.icon)
                                         )
+                                        .on('click', function (e) {
+                                            e.preventDefault();
+                                            if ($(this).hasClass('badge')) {
+                                                $(this).removeClass('badge');
+                                                $('.participant', participants)
+                                                    .show();
+                                            } else {
+                                                $('.participant', participants)
+                                                    .show()
+                                                    .find('a.person:not(.' + res.css + ')')
+                                                    .parent()
+                                                    .toggle();
+                                                $('.countgroup', participants).removeClass('badge');
+                                                $(this).addClass('badge');
+                                            }
+                                        })
                                 );
                             }
                         });
-                        // if (sumData.count > 10) {
-                        //     sum.append($('<span>').addClass('countgroup').text('(' + sumData.count + ')'));
-                        // }
-                        participants.append(sum);
+                        legend.append(sum);
                     }
                     // draw action links
                     ext.point('io.ox/calendar/detail/inline-actions-participantrelated').invoke('draw', participants, baton);

@@ -456,13 +456,25 @@
 
         .summary {
 
+            float: right;
+            display: inline-block;
+
             .status {
                 position: relative;
                 margin-right: 0.3em;
             }
 
             .countgroup {
+
                 margin-right: 0.5em;
+                cursor: pointer;
+
+                &.badge {
+                    background-color: #fff;
+                    color: #000;
+                    border: 1px solid #888;
+                    margin: 0;
+                }
             }
         }
 
