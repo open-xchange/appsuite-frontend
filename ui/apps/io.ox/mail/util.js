@@ -368,6 +368,9 @@ define('io.ox/mail/util',
 
             if (subject === '') return gt('No subject');
 
+            // remove mailing list stuff
+            subject = subject.replace(/\[[^\[]*\]\s*/g, '');
+
             return keepFirstPrefix ?
                 subject.replace(/^((re|fwd|aw|wg):\s?)((re|fwd|aw|wg):\s?)*/i, '$1') :
                 subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
