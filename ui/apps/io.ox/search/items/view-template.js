@@ -23,11 +23,11 @@ define('io.ox/search/items/view-template',
         index: 400,
         row: '0',
         draw: function (baton) {
-            var node = $('<div class="col-sm-12 result">'),
+            var node = $('<ol class="col-sm-12 result">'),
                 items = baton.model.get('items');
 
             items.each(function (model) {
-                var tmp = $('<div class="item">'),
+                var tmp = $('<li class="item">'),
                     item = model.get('data');
 
                 tmp.attr({
@@ -39,19 +39,19 @@ define('io.ox/search/items/view-template',
                 switch (baton.model.getModule()) {
                 case 'mail':
                     tmp.append(
-                        $('<div class="line1">').text(item.from[0][0] || item.from[0][1]),
+                        $('<div class="line1">').text((item.from[0][0] || item.from[0][1]).replace(/\"/gi, '')),
                         $('<div class="line2">').text('(' + item.id + ') ' + item.subject)
                     );
                     break;
                 case 'contacts':
                     tmp.append(
-                        $('<div class="line1">').text('(' + item.id + ') ' + item.display_name),
+                        $('<div class="line1">').text(/*'(' + item.id + ') ' + */item.display_name),
                         $('<div class="line2">').text(item.email1)
                     );
                     break;
                 case 'tasks':
                     tmp.append(
-                        $('<div class="line1">').text('(' + item.id + ') ' + item.title),
+                        $('<div class="line1">').text(/*'(' + item.id + ') ' + */item.title),
                         $('<div class="line2">').text('folder: ' + item.folder_id)
                     );
                     break;
@@ -63,7 +63,7 @@ define('io.ox/search/items/view-template',
                     break;
                 case 'calendar':
                     tmp.append(
-                        $('<div class="line1">').text('(' + item.id + ') ' + item.title),
+                        $('<div class="line1">').text(/*'(' + item.id + ') ' + */item.title),
                         $('<div class="line2">').text('folder: ' + item.folder_id)
                     );
                     break;

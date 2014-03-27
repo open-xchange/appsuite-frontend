@@ -116,13 +116,25 @@ define('io.ox/search/model',
                         //add facet
                         pool[facet] = pool[facet] || item;
                         //add value
-                        pool[facet].values[value] = itemvalue;
-                        //add ids to pool list
-                        list.push({
+
+                        //we have to create custom ids here to support 'global'
+                        if (facet === 'global') {
+                            //pseudo uuid
+                            value = Date.now();
+                            itemvalue.id = value;
+                        }
+
+                        //add option to value
+                        var compact = {
                             facet: facet,
                             value: value,
                             option: option || itemvalue.filter ? '' : itemvalue.options[0].id
-                        });
+                        };
+
+                        itemvalue._compact = compact;
+                        pool[facet].values[value] = itemvalue;
+                        //add ids to pool list
+                        list.push(compact);
                     }
                 });
                 console.log('add', list.length, list);

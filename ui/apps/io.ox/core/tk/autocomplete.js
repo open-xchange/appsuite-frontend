@@ -347,7 +347,7 @@ define('io.ox/core/tk/autocomplete',
 
                         // calendar: add string
                         var value = $.trim($(this).val());
-                        if (value.length > 0) $(this).trigger('selected', val);
+                        if (value.length > 0) $(this).trigger('selected', val, (val || '').length >= o.minLength);
 
                         break;
                     case 9:  // tab
@@ -390,7 +390,7 @@ define('io.ox/core/tk/autocomplete',
                     case 9:
                         var val = $.trim($(this).val());
                         if (val.length > 0) {
-                            $(this).trigger('selected', val);
+                            $(this).trigger('selected', val, (val || '').length >= o.minLength);
                         }
                         break;
                     }

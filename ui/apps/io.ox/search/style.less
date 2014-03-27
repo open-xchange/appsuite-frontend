@@ -72,6 +72,10 @@
     }
 }
 
+//app content padding
+.io-ox-search.window-content {
+    padding: 14px;
+}
 
 //app and lauchner parent class
 .io-ox-search {
@@ -79,14 +83,14 @@
     //section: app
     .apps {
         display: flex;
-        margin: 20px 0 0 0;
+        margin-bottom: 14px;
+        list-style-type: none;
         .app {
-            list-style-type: none;
             text-align: center;
             cursor: pointer;
             max-width: 160px;
             padding: 4px 16px;
-            margin: 0 16px;
+            margin-right: 16px;
             color: #0C68B3;
             flex: 0 0 auto;
             &.active {
@@ -102,6 +106,7 @@
     //section: query
     .query {
         display: flex;
+        margin-bottom: 14px;
     }
     .search-field {
         width: 180px;
@@ -111,7 +116,6 @@
         }
         &.window {
             height: 30px;
-            margin-bottom: 16px;
             flex: 0 1 auto;
             width: 500px;
         }
@@ -121,35 +125,48 @@
         }
     }
 
+    //section: info
+    .info {
+        margin: 0 14px 4px 14px;
+        padding: 10px;
+        border-left: 3px solid #eee;
+        width: 500px;
+        background-color: #f4f8fa;
+        border-color: #5bc0de;
+    }
+
+
     //section: facets
     .facets {
+        margin-bottom: 14px;
         .facet {
             float: left;
             list-style-type: none;
-            padding: 6px 12px;
-            margin: 10px 10px 0 0;
-            background-color: #F8F8F8;
+            padding: 6px 10px;
+            margin-right: 10px;
+            background-color: #E9E9E9;
             color: #161616;
-            color: rgba(0,0,0,.5);
             .user-select(none);
             cursor: default;
             .action {
                 padding-left: 10px;
                 cursor: pointer;
             }
+            .name, i {
+                color: rgba(0,0,0,.5);
+            }
+            .name:after {
+                content: '\00a0';
+            }
+            .dropdown-menu li .fa {
+                width: 2em;
+                text-align: left;
+            }
+
         }
         &:after {
             clear: both;
         }
-    }
-
-    .info {
-        margin: 10px 14px;
-        padding: 10px;
-        border-left: 3px solid #eee;
-        width: 500px;
-        background-color: #f4f8fa;
-        border-color: #5bc0de;
     }
 
     //section: results
