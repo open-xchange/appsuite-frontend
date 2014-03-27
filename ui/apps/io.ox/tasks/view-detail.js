@@ -157,10 +157,9 @@ define('io.ox/tasks/view-detail',
 
             if (task.participants && task.participants.length > 0) {
                 require(['io.ox/core/api/user'], function (userAPI) {
-                    var table,
-                        states = [
+                    var states = [
                             ['', ''],
-                            ['confirmed', '<i class="fa fa-check">'],
+                            ['accepted', '<i class="fa fa-check">'],
                             ['declined', '<i class="fa fa-times">'],
                             ['tentative', '<i class="fa fa-question-circle">']
                         ],
@@ -177,19 +176,28 @@ define('io.ox/tasks/view-detail',
                             }
                         },
                         drawParticipant = function (table, participant, name, userInformation) {
-                            var row;
                             if (userInformation) {
-                                table.append(row = $('<div class="task-participant">').append(
-                                    $('<span class="halo-link participants-table-name">').data(_.extend(userInformation, { display_name: name, email1: userInformation.email1 })).append($('<a href="#">').text(name)))
+                                table.append($('<li class="halo-link participant">')
+                                    .data(_.extend(userInformation, { display_name: name, email1: userInformation.email1 }))
+                                    .append(
+                                        $('<a href="#">').addClass('person ' + states[participant.confirmation || 0][0]).text(gt.noI18n(name)),
+                                        // has confirmation icon?
+                                        participant.confirmation !== '' ? $('<span>').addClass('state ' + states[participant.confirmation || 0][0]).append($(states[participant.confirmation || 0][1])) : '',
+                                        // has confirmation comment?
+                                        participant.confirmmessage !== '' ? $('<div>').addClass('comment').text(gt.noI18n(participant.confirmmessage)) : ''
+                                    )
                                 );
                             } else {
-                                table.append(row = $('<div class="task-participant">').append(
-                                    $('<span class="halo-link participants-table-name">').data(_.extend(participant, { display_name: name, email1: participant.mail })).append($('<a href="#">').text(name)))
-                                );
-                            }
-                            row.append($(states[participant.confirmation || 0][1])).addClass(states[participant.confirmation || 0][0]);
-                            if (participant.confirmmessage) {
-                                row.append($('<span>').addClass('participants-table-confirmmessage').text(_.noI18n(participant.confirmmessage)));
+                                table.append($('<li class="halo-link participant">')
+                                        .data(_.extend(participant, { display_name: name, email1: participant.mail }))
+                                        .append(
+                                            $('<a href="#">').addClass('person ' + states[participant.confirmation || 0][0]).text(gt.noI18n(name)),
+                                            // has confirmation icon?
+                                            participant.confirmation !== '' ? $('<span>').addClass('stat ' + states[participant.confirmation || 0][0]).append($(states[participant.confirmation || 0][1])) : '',
+                                            // has confirmation comment?
+                                            participant.confirmmessage !== '' ? $('<div>').addClass('comment').text(gt.noI18n(participant.confirmmessage)) : ''
+                                        )
+                                    );
                             }
                         },
                         failedToLoad = function (node, table, participant) {
@@ -199,6 +207,8 @@ define('io.ox/tasks/view-detail',
                                 })
                             );
                         },
+                        participantsWrapper = $('<div class="participants">'),
+                        list,
                         intParticipants = [],
                         extParticipants = [];
 
@@ -211,19 +221,50 @@ define('io.ox/tasks/view-detail',
                             intParticipants.push(participant);
                         }
                     });
+
                     if (intParticipants.length > 0) {
-                        node.append($('<div class="detail-label">').text(gt('Participants')),
-                                table = $('<div class="task-participants-table">'));
+                        //draw markup
+                        participantsWrapper.append($('<fieldset>').append(
+                            $('<legend class="io-ox-label">').text(gt('Participants')),
+                            list = $('<ul class="participant-list list-inline">')
+                        ));
                         _(intParticipants).each(function (participant) {
-                            lookupParticipant(node, table, participant);
+                            lookupParticipant(list, list, participant);
                         });
                     }
                     if (extParticipants.length > 0) {
-                        node.append($('<div class="detail-label">').text(gt('External participants')),
-                                table = $('<div class="task-participants-table">'));
+                        //draw markup
+                        participantsWrapper.append($('<fieldset>').append(
+                            $('<legend class="io-ox-label">').text(gt('External participants')),
+                            list = $('<ul class="participant-list list-inline">')
+                        ));
                         _(extParticipants).each(function (participant) {
-                            lookupParticipant(node, table, participant);
+                            lookupParticipant(list, list, participant);
                         });
+                    }
+                    //summary
+                    var confirmations = calendarUtil.getConfirmations({users: task.users, confirmations: extParticipants}),
+                        sumData = calendarUtil.getConfirmationSummary(confirmations);
+                    if (sumData.count > 3) {
+                        var sum = $('<div>').addClass('summary');
+                        _.each(sumData, function (res) {
+                            if (res.count > 0) {
+                                sum.append(
+                                    $('<span>')
+                                        .addClass('countgroup')
+                                        .text(res.count)
+                                        .prepend(
+                                            $('<span>')
+                                                .addClass('state ' + res.css)
+                                                .append(res.icon)
+                                        )
+                                );
+                            }
+                        });
+                        participantsWrapper.append(sum);
+                    }
+                    if (list) {
+                        node.append(participantsWrapper);
                     }
                 });
             }
