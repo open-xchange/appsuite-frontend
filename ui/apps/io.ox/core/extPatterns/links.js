@@ -374,7 +374,7 @@ define('io.ox/core/extPatterns/links',
     };
 
     var drawDropDownItems = function (options, baton, args) {
-        baton.$el = $(this).find('ul').empty();
+        baton.$el = this.find('ul').empty();
         drawLinks(options, new Collection(baton.data), null, baton, args, true).done(function () {
             injectDividers(baton.$el);
         });
@@ -384,7 +384,7 @@ define('io.ox/core/extPatterns/links',
         var baton = e.data.baton;
         baton.data = baton.model ? baton.model.toJSON() : baton.data;
         baton.options.icons = false;
-        drawDropDownItems.call($(this), baton.options, baton, e.data.args);
+        drawDropDownItems.call($(this), e.data.options, baton, e.data.args);
     };
 
     var drawDropDown = function (options, baton) {
@@ -398,7 +398,6 @@ define('io.ox/core/extPatterns/links',
         this.append(
             node = $('<div class="dropdown">').append(
                 $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
-                .data('context', baton.data)
                 .append(label, $('<i class="fa fa-caret-down">')),
                 $('<ul class="dropdown-menu" role="menu">')
             )
