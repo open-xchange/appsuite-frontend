@@ -57,8 +57,5 @@ override_dh_auto_clean:
 	rm -rf $(FRONTEND) $(BACKEND) debian/open-xchange-appsuite-l10n-*/opt/open-xchange/appsuite \
 	debian/open-xchange-appsuite-help-*/var/www/appsuite
 
-override_dh_fixperms:
-	dh_fixperms -v
-
 %:
 	dh $@
