@@ -64,15 +64,6 @@ define(['io.ox/tasks/edit/util',
                 expect(extensionPoints.length).toEqual(length);
             });
         });
-        describe('buildLabel', function () {
-            it('should create correct nodes', function () {
-                var label = util.buildLabel('I am the text.', 'I_am_the_id');
-
-                expect(label.is('label')).toBeTruthy();
-                expect(label.attr('for')).toEqual('I_am_the_id');
-                expect(label.text()).toEqual('I am the text.');
-            });
-        });
         describe('buildProgress', function () {
             it('should create correct nodes', function () {
                 var progress = util.buildProgress('0');
@@ -201,63 +192,6 @@ define(['io.ox/tasks/edit/util',
 
                 this.after(function () {
                     parent.remove();
-                });
-            });
-        });
-        describe('buildConfirmationPopup', function () {
-            it('should work with arrays and models', function () {
-                var testModel = model.factory.create(testData.testData),
-                    popupWrapper;
-
-                //model
-                popupWrapper = util.buildConfirmationPopup(testModel, dialogs, false);
-                expect(popupWrapper.popup).toBeDefined();
-                expect(popupWrapper.message).toBeDefined();
-
-                popupWrapper.popup.close();
-
-                //Array
-                popupWrapper = util.buildConfirmationPopup(testData.testData, dialogs, true);
-                expect(popupWrapper.popup).toBeDefined();
-                expect(popupWrapper.message).toBeDefined();
-
-                this.after(function () {
-                    popupWrapper.popup.close();
-                });
-            });
-            it('should display data', function () {
-                var testModel = model.factory.create(testData.testData),
-                    body,
-                    popupWrapper;
-
-                popupWrapper = util.buildConfirmationPopup(testModel, dialogs, false);
-                body = popupWrapper.popup.getBody();
-
-                expect(body.find('h4').text()).toEqual('Test Termin');
-                expect(body.find('h4').next().text()).toEqual('Ich bin Detailreich');
-
-                this.after(function () {
-                    popupWrapper.popup.close();
-                });
-            });
-            it('should contain controls', function () {
-                var testModel = model.factory.create(testData.testData),
-                    body,
-                    footer,
-                    popupWrapper;
-
-                popupWrapper = util.buildConfirmationPopup(testModel, dialogs, false);
-                var message = popupWrapper.message;
-                body = popupWrapper.popup.getBody();
-                footer = popupWrapper.popup.getFooter();
-
-                expect(body.find('select').length).toEqual(1);//select
-                expect(body.find('select').children().length).toEqual(3);//options(tentative, confirn, decline)
-                expect(body.find('input').length).toEqual(1);//confirmation message
-                expect(footer.find('button').length).toEqual(2);//cancel and ok button
-
-                this.after(function () {
-                    popupWrapper.popup.close();
                 });
             });
         });

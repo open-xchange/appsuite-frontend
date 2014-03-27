@@ -162,7 +162,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                 }, 'open popup', ox.testTimeout);
 
                 runs(function () {
-                    $('[data-action="ChangeConfState"]').click();
+                    $('[data-action="accepted"]').click();
                     waitsFor(function () {
                         return apiCallUpdate;
                     }, 'call api confirm', ox.testTimeout);

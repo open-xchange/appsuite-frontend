@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks', 'less!io.ox/tasks/edit/style'], function (gt) {
+define('io.ox/tasks/edit/util', [], function () {
 
     'use strict';
 
@@ -30,9 +30,6 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks', 'less!io.ox/tasks/edit/s
                     rows.rest.push(extension);
                 }
             });
-        },
-        buildLabel: function (text, id) {
-            return $('<label>').text(text).attr('for', id);
         },
         //build progressField and buttongroup
         buildProgress: function (val) {
@@ -117,45 +114,6 @@ define('io.ox/tasks/edit/util', ['gettext!io.ox/tasks', 'less!io.ox/tasks/edit/s
             if (fillGrid || fillGrid === undefined) {
                 row.children().children().not('label').addClass('col-md-12');
             }
-        },
-
-        buildConfirmationPopup: function (model, dialogs, isArray) {
-            //build popup
-            var popup = new dialogs.ModalDialog()
-                .addPrimaryButton('ChangeConfState', gt('Change state'), 'ChangeConfState', {tabIndex: '1'})
-                .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'}),
-                body = popup.getBody().addClass('task-confirmation-dialog'),
-                title,
-                note,
-                messageId = _.uniqueId('form-control-label-'),
-                stateId = _.uniqueId('form-control-label-'),
-                message = $('<input tabindex=1 class="form-control">').attr({type: 'text', id: messageId}),
-                state = $('<select tabindex=1 class="form-control stateselect" data-action="selector">').attr('id', stateId).append(
-                        $('<option>').text(gt('Confirm')),
-                        $('<option>').text(gt('Decline')),
-                        $('<option>').text(gt('Tentative')));
-
-            if (isArray) {//if model is actually an array with attributes it should work too but needs parameter or script stops working without notice...strange
-                title = model.title || '\u2014';
-                note  = model.note || '\u2014';
-            } else {
-                title = model.get('title') || '\u2014';
-                note  = model.get('note') || '\u2014';
-            }
-
-            body.append($('<h4>').text(_.noI18n(title)),
-                        $('<div class="note">').text(_.noI18n(note)),
-                        $('<div class="row confirmation-controls">').append(
-                                $('<div class="col-sm-6">').append(
-                                        $('<label>').text(gt('Confirmation status')).attr('for', stateId),
-                                        state
-                                        ),
-                                $('<div class="col-sm-6">').append(
-                                        $('<label>').text(gt('Confirmation message')).attr('for', messageId),
-                                        message
-                                        )
-                                ));
-            return {popup: popup, state: state, message: message};
         }
     };
 
