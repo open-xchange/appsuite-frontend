@@ -22,18 +22,22 @@ define('io.ox/calendar/acceptdeny',
 
     'use strict';
 
-    return function (o) {
-
+    return function (o, options) {
+        options = options || {};
         function cont(series) {
 
-            var showReminderSelect = util.getConfirmationStatus(o) !== 1,
+            var showReminderSelect = !options.taskmode && util.getConfirmationStatus(o) !== 1,
                 message = util.getConfirmationMessage(o),
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
                 defaultReminder = calSettings.get('defaultReminder', 15),
                 apiData = { folder: o.folder_id, id: o.id };
 
-            if (!series && o.recurrence_position) {
+            if (options.api) {//use different api if provided (tasks use this)
+                api = options.api;
+            }
+
+            if (!options.taskmode && !series && o.recurrence_position) {
                 apiData.recurrence_position = o.recurrence_position;
             }
 
@@ -44,8 +48,8 @@ define('io.ox/calendar/acceptdeny',
                         $('<label>').attr('for', 'reminderSelect').text(gt('Reminder')),
                         $('<select id="reminderSelect" class="form-control" data-property="reminder">').append(function () {
                             var self = $(this),
-                                options = util.getReminderOptions();
-                            _(options).each(function (label, value) {
+                                reminderOptions = util.getReminderOptions();
+                            _(reminderOptions).each(function (label, value) {
                                 self.append($('<option>', { value: value }).text(label));
                             });
                         })
@@ -59,7 +63,18 @@ define('io.ox/calendar/acceptdeny',
                             data = api.removeRecurrenceInformation(data);
                         }
 
-                        var recurrenceString = util.getRecurrenceString(data);
+                        var recurrenceString = util.getRecurrenceString(data),
+                            description = $('<b>').text(data.title);
+                        if (!options.taskmode) {
+                            description = [
+                                $('<b>').text(data.title),
+                                $.txt(', '),
+                                $.txt(gt.noI18n(util.getDateInterval(data))),
+                                $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''))),
+                                $.txt(' '),
+                                $.txt(util.getTimeInterval(data))
+                            ];
+                        }
 
                         this.getHeader().append(
                             $('<h4>').text(gt('Change confirmation status'))
@@ -69,12 +84,7 @@ define('io.ox/calendar/acceptdeny',
                                 gt('You are about to change your confirmation status. Please leave a comment for other participants.')
                             ),
                             $('<p>').append(
-                                $('<b>').text(data.title),
-                                $.txt(', '),
-                                $.txt(gt.noI18n(util.getDateInterval(data))),
-                                $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''))),
-                                $.txt(' '),
-                                $.txt(util.getTimeInterval(data))
+                                description
                             ),
                             $('<div class="form-group">').css({'margin-top': '20px'}).append(
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment')),
@@ -125,11 +135,15 @@ define('io.ox/calendar/acceptdeny',
                                 apiData.data.alarm = parseInt(reminderSelect.find('select').val(), 10);
                             }
 
-                            if (!series && o.recurrence_position) {
+                            if (!options.taskmode && !series && o.recurrence_position) {
                                 _.extend(apiData, { occurrence: o.recurrence_position });
                             }
 
-                            api.confirm(apiData).fail(
+                            api.confirm(apiData).done(function () {
+                                if (options.callback) {
+                                    options.callback();
+                                }
+                            }).fail(
                                 function fail(e) {
                                     if (ox.debug) console.log('error', e);
                                 }
@@ -140,7 +154,7 @@ define('io.ox/calendar/acceptdeny',
         }
 
         // series?
-        if (o.recurrence_type > 0 && o.recurrence_position) {
+        if (!options.taskmode && o.recurrence_type > 0 && o.recurrence_position) {
             return new dialogs.ModalDialog()
                 .text(gt('Do you want to confirm the whole series or just one appointment within the series?'))
                 .addPrimaryButton('series',

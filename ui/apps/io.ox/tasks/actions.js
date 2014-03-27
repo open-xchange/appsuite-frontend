@@ -258,22 +258,13 @@ define('io.ox/tasks/actions',
         },
         action: function (baton) {
             var data = baton.data;
-            ox.load(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs', 'io.ox/tasks/api']).done(function (editUtil, dialogs, api) {
-                //build popup
-                var popup = editUtil.buildConfirmationPopup(data, dialogs, true);
-                //go
-                popup.popup.show().done(function (action) {
-                    if (action === 'ChangeConfState') {
-                        var state = popup.state.prop('selectedIndex') + 1,
-                            message = popup.message.val();
-                        api.confirm({id: data.id,
-                                     folder_id: data.folder_id,
-                                     data: {confirmation: state,
-                                            confirmmessage: message}
-                        }).done(function () {
-                            //update detailview
-                            api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
-                        });
+            ox.load(['io.ox/calendar/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
+                acceptdeny(data, {
+                    taskmode: true,
+                    api: api,
+                    callback: function () {
+                        //update detailview
+                        api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
                     }
                 });
             });

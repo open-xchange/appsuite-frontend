@@ -578,26 +578,12 @@ define('plugins/notifications/tasks/register',
             e.stopPropagation();
             if ((e.type !== 'click') && (e.which !== 13)) { return; }//only open if click or enter is pressed
 
-            var model = this.model;
-            require(['io.ox/tasks/edit/util', 'io.ox/core/tk/dialogs'], function (editUtil, dialogs) {
-                //build popup
-                var popup = editUtil.buildConfirmationPopup(model, dialogs);
-                //go
-                popup.popup.show().done(function (action) {
-                    if (action === 'ChangeConfState') {
-                        var state = popup.state.prop('selectedIndex') + 1,
-                            message = popup.message.val();
-                        api.confirm({id: model.get('id'),
-                                     folder_id: model.get('folder_id'),
-                                     data: {confirmation: state,
-                                            confirmmessage: message}
-                        }).done(function () {
-                            //update detailview
-                            var data = model.toJSON();
-                            api.trigger('update:' + _.ecid(data));
-                        });
-                    }
-                });
+            var data = this.model.attributes;
+            ox.load(['io.ox/calendar/acceptdeny', 'io.ox/tasks/api']).done(function (acceptdeny, api) {
+                acceptdeny(data, {taskmode: true, api: api, callback: function () {
+                    //update detailview
+                    api.trigger('update:' + _.ecid({id: data.id, folder_id: data.folder_id}));
+                }});
             });
         }
     });
