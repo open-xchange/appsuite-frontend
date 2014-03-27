@@ -245,7 +245,6 @@ define('io.ox/portal/settings/pane',
                 title = widgets.getTitle(data, point.prop('title'));
             this
                 .addClass(data.protectedWidget && data.protectedWidget === true ? ' protected' : ' draggable')
-                .attr('title', gt('Drag to reorder widget'))
                 .append(
                     data.protectedWidget && data.protectedWidget === true ? $() :
                     $('<a>')
@@ -253,6 +252,7 @@ define('io.ox/portal/settings/pane',
                     .attr({
                         href: '#',
                         'aria-label': title + ', ' + gt('Use cursor keys to change the item position'),
+                        'title': gt('Drag to reorder widget'),
                         role: 'button',
                         tabindex: 1
                     })
