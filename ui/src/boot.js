@@ -34,7 +34,6 @@ $(window).load(function () {
     var DURATION = 250,
         // functions
         boot,
-        appCache = $.Deferred(),
         cont,
         cleanUp,
         gotoCore,
@@ -868,7 +867,7 @@ $(window).load(function () {
                 // cannot change type with jQuery's attr()
                 $('#io-ox-login-username')[0].type = 'text';
             }
-            
+
             //show errors saved inlocalstorage
             if (localStorage.getItem('errormsg')) {
                 feedback('error', $.txt(localStorage.getItem('errormsg')));
@@ -973,10 +972,8 @@ $(window).load(function () {
             });
         };
 
-        appCache.done(function () {
-            // try auto login first
-            autoLogin();
-        });
+        // try auto login first
+        autoLogin();
     }
 
     function loadFail(e) {
@@ -993,43 +990,4 @@ $(window).load(function () {
         'themes', 'io.ox/core/settings'],
         loadSuccess, loadFail
     );
-
-    // reload if files have change; need this during development
-    if (Modernizr.applicationcache && ox.debug && _.device('chrome || ios') && $('html').attr('manifest')) {
-
-        (function () {
-
-            var ac = window.applicationCache, clear, updateReady, cont;
-
-            clear = function () {
-                ac.removeEventListener('cached', cont, false);
-                ac.removeEventListener('noupdate', cont, false);
-                ac.removeEventListener('error', cont, false);
-                ac.removeEventListener('updateready', updateReady, false);
-            };
-
-            updateReady = function () {
-                // if manifest has changed, we have to swap caches and reload
-                if (ac.status === ac.UPDATEREADY) {
-                    clear();
-                    serverUp(); // avoid error
-                    location.reload();
-                }
-            };
-
-            cont = function (e) {
-                clear();
-                debug('boot.js: applicationcache > resolve');
-                appCache.resolve();
-            };
-
-            ac.addEventListener('cached', cont, false);
-            ac.addEventListener('noupdate', cont, false);
-            ac.addEventListener('error', cont, false);
-            ac.addEventListener('updateready', updateReady, false);
-
-        }());
-    } else {
-        appCache.resolve();
-    }
 });
