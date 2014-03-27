@@ -393,6 +393,8 @@ define('io.ox/core/commons',
          * Wire first refresh
          */
         wireFirstRefresh: function (app, api) {
+            // don't need first refresh if persistence=false
+            if (ox.serverConfig.persistence === false) return;
             // open (first show)
             app.getWindow().on('open', function () {
                 if (api.needsRefresh(app.folder.get())) {

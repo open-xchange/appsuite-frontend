@@ -1227,6 +1227,7 @@ define('io.ox/core/tk/vgrid',
                 node.detach();
             });
             pool = [];
+            if (!initialized) return; // no need to update if not yet initialized
             init();
             this.repaint();
         };
