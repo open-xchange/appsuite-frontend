@@ -10,9 +10,24 @@
 
 module.exports = function (grunt) {
 
+    var conf = grunt.config().local.appserver;
+    var proto = (conf && conf.protocol === 'https') ? 'https' : 'http';
+
     var livereloadConfig = (function () {
-            var conf = grunt.config().local.appserver;
-            if (conf && conf.protocol === 'https') {
+            var net = require('net');
+            var server = net.createServer();
+            var skipLivereload = false;
+            server.on('error', function () {
+                grunt.verbose.writeln('Livereload instance running, will enable send_livereload task.');
+                skipLivereload = true;
+            });
+            server.listen(35729, function () {
+                grunt.verbose.writeln('No Livereload instance running, will configure watch to start one.');
+                server.close();
+            });
+            if (skipLivereload) {
+                return false;
+            } else if (proto === 'https') {
                 return {
                     key: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.key'),
                     cert: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.crt')
@@ -22,6 +37,32 @@ module.exports = function (grunt) {
             }
         }());
 
+    grunt.registerTask('send_livereload', function () {
+        var done = this.async();
+        if (!!livereloadConfig) {
+            grunt.verbose.writeln('Using livereload from watch');
+            done();
+            return;
+        }
+        var http = require(proto);
+        var req = http.request({
+            hostname: 'localhost',
+            port: 35729,
+            path: '/changed',
+            method: 'POST',
+            rejectUnauthorized: false
+        }, function () {
+            grunt.verbose.writeln('Livereload request sent');
+            done();
+        });
+        req.on('error', function (err) {
+            grunt.log.warn('Could not send livereload:', err);
+            done();
+        });
+        req.write(JSON.stringify({files: ['boot.js']}));
+        req.end();
+    });
+
     grunt.config.extend('watch', {
 
         options: {
@@ -30,8 +71,8 @@ module.exports = function (grunt) {
             debounceDelay: 500
         },
         manifests: {
-            files: ['apps/**/*.json', '!apps/io.ox/core/date/*'],
-            tasks: ['manifests', 'force_update'],
+            files: 'apps/**/manifest.json',
+            tasks: ['manifests', 'force_update', 'send_livereload'],
             options: { livereload: livereloadConfig }
         },
         karma: {
@@ -54,7 +95,7 @@ module.exports = function (grunt) {
                 'bower.json',
                 'package.json'
             ],
-            tasks: ['default', 'karma:unit:run'],
+            tasks: ['default', 'send_livereload', 'karma:unit:run'],
             options: { livereload: livereloadConfig }
         }
     });
