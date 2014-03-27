@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-27 16:01+0100\n"
+"PO-Revision-Date: 2014-03-27 10:56+0100\n"
 "Last-Translator: Eric Bischoff <eric@bureau-cornavin.com>\n"
 "Language-Team: French <fr@bureau-cornavin.com>\n"
 "Language: fr_FR\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #. File size
 #. %1$d is the number
@@ -4957,7 +4957,7 @@ msgstr "Publications"
 
 #: apps/io.ox/core/pubsub/settings/register.js:26 module:io.ox/core/pubsub
 msgid "Publications and Subscriptions"
-msgstr "ublications et abonnements"
+msgstr "Publications et abonnements"
 
 #: apps/io.ox/core/pubsub/publications.js:172 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/publications.js:233
