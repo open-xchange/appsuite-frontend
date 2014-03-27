@@ -384,7 +384,7 @@ define('io.ox/core/notifications',
                         .on('transitionend webkitTransitionEnd', function () {
                             $(this).remove();
                         })
-                        .removeClass('slide-in');
+                        .removeClass('appear');
                 },
 
                 click = function (e) {
@@ -409,7 +409,7 @@ define('io.ox/core/notifications',
                     }
                 };
 
-            $(document).on('click tap', click);
+            $(document).on(_.device('touch') ? 'tap' : 'click', click);
 
             return function (type, message) {
 
@@ -422,8 +422,8 @@ define('io.ox/core/notifications',
                     type: 'info'
                 };
 
-                // catch server error?
                 if (_.isObject(type)) {
+                    // catch server error?
                     if ('error' in type) {
                         o.type = 'error';
                         o.message = type.message || type.error;
@@ -450,12 +450,12 @@ define('io.ox/core/notifications',
                         wordbreak = html.indexOf('http') >= 0 ? 'break-all' : 'normal';
 
                     // reuse existing alert?
-                    var node = $('.io-ox-alert.slide-in');
+                    var node = $('.io-ox-alert');
 
                     if (node.length) {
                         node.empty();
                         reuse = true;
-                        className += ' slide-in';
+                        className += ' appear';
                     } else {
                         node = $('<div role="alert" tabindex="-1">');
                     }
@@ -463,7 +463,9 @@ define('io.ox/core/notifications',
                     node.attr('class', className).append(
                         $('<div class="icon">').append(
                             $('<i>').addClass(icons[o.type] || 'fa fa-fw')
-                        ));
+                        )
+                    );
+
                     if (o.type !== 'screenreader') {
                         node.append(
                             $('<div class="message user-select-text">').append(
@@ -486,8 +488,8 @@ define('io.ox/core/notifications',
                     // put at end of stack not to run into opening click
                     setTimeout(function () {
                         active = true;
-                        if (!reuse) node.addClass('slide-in');
-                    }, 300);
+                        if (!reuse) node.addClass('appear');
+                    }, _.device('touch') ? 300 : 0);
                 }
             };
         }())
