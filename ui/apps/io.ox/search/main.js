@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -104,7 +104,9 @@ define('io.ox/search/main',
 
     //hide/show topbar search field
     win.on('show', function () {
-        $('#io-ox-search-topbar').hide();
+        $('#io-ox-search-topbar')
+            .hide()
+            .find('.search-field.widget').val('');
     });
     win.on('hide', function () {
         $('#io-ox-search-topbar').show();
@@ -185,36 +187,41 @@ define('io.ox/search/main',
                         module: model.getModule()
                     },
                     data: {
-                        prefix: query,
-                        //use returned facets array from last query request
-                        facets: model.getFacets() //model.get('data').facets || ''
+                        prefix: query
                     }
                 };
 
-                return api.autocomplete($.extend(standard, options))
-                    .then(function (obj) {
+                return model.getFacets()
+                        .then(function (facets) {
+                            //extend standard options
+                            standard.data.facets = facets;
+                        })
+                        .then(function () {
+                            //call server
+                            return api.autocomplete($.extend(standard, options));
+                        })
+                        .then(function (obj) {
+                            //TODO: remove when backend is ready
+                            _.each(obj.facets.values, function (value) {
+                                //multifilter facet
+                                if (value.options)
+                                    value.options = value.options[0];
 
-                        //TODO: remove when backend is ready
-                        _.each(obj.facets.values, function (value) {
-                            //multifilter facet
-                            if (value.options)
-                                value.options = value.options[0];
+                            });
 
-                        });
-
-                        //match convention in autocomplete tk
-                        var data = {
-                            list: obj.facets,
-                            hits: 0
-                        };
-                        model.set({
-                            query: query,
-                            autocomplete: data.list
-                        }, {
-                            silent: true
-                        });
-                        return data;
-                    }, yell);
+                            //match convention in autocomplete tk
+                            var data = {
+                                list: obj.facets,
+                                hits: 0
+                            };
+                            model.set({
+                                query: query,
+                                autocomplete: data.list
+                            }, {
+                                silent: true
+                            });
+                            return data;
+                        }, yell);
             },
             query: function () {
                 var opt = {
@@ -223,7 +230,6 @@ define('io.ox/search/main',
                             module: model.getModule()
                         },
                         data: {
-                            facets: model.getFacets(),
                             start: model.get('start'),
                             size: model.get('size')
                         }
@@ -231,9 +237,17 @@ define('io.ox/search/main',
                     start = Date.now();
 
                 app.busy();
-
-                return api.query(opt)
+                return model.getFacets()
+                        .then(function (facets) {
+                            //extend options
+                            opt.data.facets = facets;
+                        })
+                        .then(function () {
+                            //call server
+                            return api.query(opt);
+                        })
                         .then(function (result) {
+                            //update model
                             model.setItems(result, start);
                             run();
                         }, yell);

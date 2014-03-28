@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -15,8 +15,9 @@ define('io.ox/search/view-template',
     ['gettext!io.ox/core',
      'io.ox/core/extensions',
      'io.ox/core/api/apps',
+     'io.ox/search/util',
      'io.ox/core/tk/autocomplete'
-    ], function (gt, ext, appAPI) {
+    ], function (gt, ext, appAPI, util) {
 
     'use strict';
 
@@ -27,6 +28,11 @@ define('io.ox/search/view-template',
      */
 
     var point = ext.point('io.ox/search/view/window'),
+        SORT = {
+            current: 1,
+            default: 2,
+            standard: 3
+        },
         dropdown = function (baton) {
             var ref,
                 app = baton.app,
@@ -178,12 +184,27 @@ define('io.ox/search/view-template',
             $('.io-ox-search .facet').delegate('.option', 'click', function (e) {
                 var link = $(e.target).closest('a'),
                     list = link.closest('ol'),
-                    option = link.attr('data-option'),
+                    option = link.attr('data-action') || link.attr('data-custom') || link.attr('data-option'),
                     facet = list.attr('data-facet'),
-                    value = list.attr('data-value');
+                    value = list.attr('data-value'),
+                    data = {};
+
                 //select option
-                baton.model.update(facet, value, {option: option});
-                baton.model.trigger('query');
+                if (option === 'dialog') {
+                    //open folder dialog
+                    var facet = baton.model.get('folder');
+                    folderDialog(facet, baton);
+                } else {
+                    if (facet === 'folder') {
+                        //overwrite custom
+                        baton.model.update(facet, value, {display_name: link.attr('title'), custom: option });
+                    } else {
+                        //use existing option
+                        baton.model.update(facet, value, {option: option });
+                    }
+                    baton.model.update(facet, value, data);
+                    baton.model.trigger('query');
+                }
             });
         }
     });
@@ -194,7 +215,7 @@ define('io.ox/search/view-template',
         index: 100,
         draw: function (value) {
             var label,
-                options = value.options || [],
+                options = value.options,
                 option = value._compact.option;
 
             if (value.facet === 'folder')
@@ -250,7 +271,6 @@ define('io.ox/search/view-template',
                 self = this,
                 current = value._compact.option, option,
                 icon, menu;
-            //console.log(current);
             if (filters.length) {
                 menu = $('<ol class="dropdown-menu" role="menu">')
                         .attr({
@@ -286,9 +306,8 @@ define('io.ox/search/view-template',
         index: 400,
         draw: function (value, baton) {
             var isMandatory = baton.model.isMandatory(value.facet);
-
            //remove action for non mandatory facets
-            if (!isMandatory) {
+            if (!isMandatory && value.facet !== 'folder') {
                 this.append(
                     $('<i class="fa fa-times action">')
                     .on('click', function () {
@@ -303,7 +322,7 @@ define('io.ox/search/view-template',
     //facet type: folder
     function folderDialog(facet, baton) {
         require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
-            var label = 'Choose',
+            var label = gt('Folder'),
                 id = facet.values[0].id,
                 type = baton.model.getModule();
 
@@ -313,7 +332,10 @@ define('io.ox/search/view-template',
                 .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
             dialog.getBody().css({ height: '250px' });
 
-            var tree = new views.FolderTree(dialog.getBody(), {
+            //use foldertree or folderlist
+            var TreeConstructor = ['mail', 'drive'].indexOf(type) > 0 ? views.FolderTree : views.FolderList;
+
+            var tree = new TreeConstructor(dialog.getBody(), {
                     type: type,
                     tabindex: 0,
                     customize: function (data) {
@@ -357,13 +379,51 @@ define('io.ox/search/view-template',
         id: 'actions',
         index: '300',
         draw: function (value, baton) {
-            //add actions
-            var node = $('<i class="fa fa-chevron-down action">')
-                        .on('click', function () {
-                            var facet = baton.model.get('folder');
-                            folderDialog(facet, baton);
-                        });
-            this.append(node);
+            var action = $('<i class="fa fa-chevron-down action">').on('click', optionsDialog),
+                menu = $('<ol class="dropdown-menu" role="menu">')
+                    .attr({
+                        'data-facet': 'folder',
+                        'data-value': 'custom'
+                    });
+
+            this.append(menu, action);
+
+            //add fodlers
+            util.getFolders(baton.model)
+                .then(function (list) {
+                    //sort by type
+                    list.sort(function (a, b) {
+                        return SORT[a.type] - SORT[b.type];
+                    });
+                    //add option
+                    _.each(list, function (folder) {
+                        menu.append(
+                            $('<li role="presentation">').append(
+                                $('<a role="menuitem" tabindex="-1" href="#">')
+                                    .append(
+                                        //$('<i class="fa fa-fw fa-none">'),
+                                        $('<span>').text(folder.title)
+                                    )
+                                    .addClass('option')
+                                    .attr('data-custom', folder.id)
+                                    .attr('title', folder.title)
+                            )
+                        );
+                    });
+
+                    //add option to open dialog
+                    menu.append(
+                        $('<li role="presentation">').append(
+                             $('<a role="menuitem" tabindex="-1" href="#">')
+                                .append(
+                                    //$('<i class="fa fa-fw fa-none">'),
+                                    $('<span>').text(gt('More') + '...')
+                                )
+                                .addClass('option more')
+                                .attr('data-action', 'dialog')
+                        )
+                    );
+                });
         }
     });
 

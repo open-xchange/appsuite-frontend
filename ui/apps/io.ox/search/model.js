@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -15,10 +15,11 @@ define('io.ox/search/model',
     ['io.ox/search/api',
      'io.ox/search/items/main',
      'io.ox/backbone/modelFactory',
+     'io.ox/search/util',
      'io.ox/backbone/validation',
      'io.ox/core/extensions',
      'gettext!io.ox/core'
-    ], function (api, items, ModelFactory, Validations, ext, gt) {
+    ], function (api, items, ModelFactory, util, Validations, ext, gt) {
 
     'use strict';
 
@@ -105,8 +106,8 @@ define('io.ox/search/model',
 
                         //overwrite
                         if (!!item.custom) {
-                            itemvalue.custom = option;
-                            itemvalue.display_name = option;
+                            itemvalue.custom = option.custom;
+                            itemvalue.display_name = option.display_name;
                             //update 'folder' value
                             _.extend(data.values[0], itemvalue);
                         }
@@ -137,7 +138,6 @@ define('io.ox/search/model',
                         list.push(compact);
                     }
                 });
-                console.log('add', list.length, list);
 
                 if (facet !== 'folder')
                     this.trigger('query');
@@ -160,7 +160,6 @@ define('io.ox/search/model',
                         list.splice(i, 1);
                     }
                 }
-                console.log('remove', list.length, list);
                 this.trigger('query');
             },
             update: function (facet, value, data) {
@@ -170,7 +169,7 @@ define('io.ox/search/model',
                 //update opt reference in pool list
                 if (isCustom) {
                     //update pool item itself
-                    _.extend(this.get('pool')[facet].values[value], data);
+                    $.extend(this.get('pool')[facet].values[value], data);
                 } else {
                     //update poollist
                     for (var i = list.length - 1; i >= 0; i--) {
@@ -180,7 +179,6 @@ define('io.ox/search/model',
                         }
                     }
                 }
-                console.log('update', list.length, list);
                 this.trigger('query');
             },
             fetch: function () {
@@ -210,7 +208,6 @@ define('io.ox/search/model',
                             filter: facet.custom ? null : simple.filter
                         });
                     }
-                    console.log('fetch', active.length, active);
                 });
                 return active;
             },
@@ -235,12 +232,22 @@ define('io.ox/search/model',
             },
             //
             getFacets: function () {
-                var addFolder = !this.get('pool').folder;
-                //mandatory and not set yet
-                if (addFolder) {
-                    this.add('folder', 'custom', this.isMandatory('folder') ? this.getFolder() || 'default0/INBOX' : undefined);
-                }
-                return this.fetch();
+                var self = this,
+                    missingFolder = !this.get('pool').folder,
+                    def = missingFolder && this.isMandatory('folder') ? util.getFirstChoice(this) : $.Deferred().resolve({});
+
+                return def
+                        .then(function (data) {
+                            //folder data available (if needed)
+                            if (missingFolder) {
+                                //add (and update for the right display name)
+                                self.add('folder', 'custom', data);
+                            }
+                        })
+                        .then(function () {
+                            //return active filters
+                            return self.fetch();
+                        });
             },
             isMandatory: function (key) {
                 return (options.mandatory[key] || []).indexOf(this.getModule()) >= 0;
