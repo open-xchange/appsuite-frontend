@@ -177,7 +177,7 @@ define('io.ox/mail/threadview',
         },
 
         toggleMail: function (cid, state) {
-            var $li = this.$ul.children('[data-cid="' + cid + '"]'),
+            var $li = this.$ul.children('[data-cid="' + $.escape(cid) + '"]'),
                 view = $li.data('view');
             if (view) view.toggle(state);
         },

@@ -23,7 +23,9 @@
     };
 
     $.escape = function (str) {
-        return String(str).replace(/([!"#$%&'()*+,.\/:;<=>?@\[\]\^`{|}~])/g, '\\$1');
+        // escape !"#$%&'()*+,./:;<=>?@[\]^`{|}~
+        // see http://api.jquery.com/category/selectors/
+        return String(str).replace(/([!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~])/g, '\\$1');
     };
 
     $.button = function (options) {
