@@ -131,6 +131,14 @@ $(window).load(function () {
         };
     }
 
+    if (_.device('tablet')) {
+        // dismiss dropdown on rotation change due to
+        // positioning issues
+        $(document).on('orientationchange', function () {
+            $('body').trigger('click');
+        });
+    }
+
     // be busy
     $('#background-loader').busy();
 
