@@ -152,7 +152,7 @@ define('io.ox/tasks/view-detail',
         index: 500,
         id: 'participants',
         draw: function (baton) {
-            var pView = new ParticipantsView(baton, {inlineLinks: false});
+            var pView = new ParticipantsView(baton);
             this.append(pView.draw());
         }
     });
