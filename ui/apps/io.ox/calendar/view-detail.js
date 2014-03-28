@@ -232,7 +232,7 @@ define('io.ox/calendar/view-detail',
                     $('<dt>').append(
                         $.txt(gt('Created')), $.txt(gt.noI18n(':\u00A0'))
                     ),
-                    $('<dd>').append(
+                    $('<dd class="created">').append(
                         $('<span>').text(gt.noI18n(baton.data.creation_date ? util.getDate(baton.data.creation_date) : '')),
                         $('<span>').text(gt.noI18n(baton.data.creation_date ? ' \u2013 ' : '')),
                         $('<a href="#" class="halo-link">').data({ user_id: baton.data.created_by }).append(
@@ -254,7 +254,7 @@ define('io.ox/calendar/view-detail',
                     $('<dt>').append(
                         $.txt(gt('Modified')), $.txt(gt.noI18n(':\u00A0'))
                     ),
-                    $('<dd>').append(
+                    $('<dd class="modified">').append(
                         $('<span>').text(gt.noI18n(baton.data.last_modified ? util.getDate(baton.data.last_modified) : '')),
                         $('<span>').text(gt.noI18n(baton.data.last_modified ? ' \u2013 ' : '')),
                         $('<a href="#" class="halo-link">').data({ user_id: baton.data.modified_by }).append(

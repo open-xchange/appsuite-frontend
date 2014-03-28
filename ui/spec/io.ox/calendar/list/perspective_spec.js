@@ -194,7 +194,7 @@ define(['io.ox/calendar/main',
 
             it('and it should show the duration of the appointment', function () {
                 var right = this.nodes.body.find('.rightside');
-                expect(right.find('.interval').text()).toBe('13:00-14:00 UTC');
+                expect(right.find('.interval').text()).toBe('13:00-14:00UTC');
             });
 
             it('and it should show the notes of the appointment', function () {

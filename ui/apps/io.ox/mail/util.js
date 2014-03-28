@@ -389,11 +389,12 @@ define('io.ox/mail/util',
             return (/^default0/).test(id) ? gt('Primary account') : (data ? data.account_name : 'N/A');
         },
 
-        getTime: function (timestamp) {
-            return getDateFormated(timestamp, { fulldate: false });
+        getTime: function (timestamp, options) {
+            return getDateFormated(timestamp, options);
         },
 
         getDateTime: function (timestamp, options) {
+            options = _.extend({ fulldate: true }, options);
             return getDateFormated(timestamp, options);
         },
 

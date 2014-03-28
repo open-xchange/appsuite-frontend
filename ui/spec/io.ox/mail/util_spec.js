@@ -151,7 +151,7 @@ define(['io.ox/mail/util',
         });
 
         describe('from check', function () {
-            it('should return false on invalid data', function () {
+            it('should return false on invalid date', function () {
                 //invalid
                 expect(util.hasFrom('')).toBeFalsy();
                 expect(util.hasFrom(null)).toBeFalsy();
@@ -197,7 +197,7 @@ define(['io.ox/mail/util',
         describe('getAccountName', function () {
             var expect = chai.expect;
             var account_name = 'Pierce Hawthorne';
-            it('should return a fallback string for invalid data', function () {
+            it('should return a fallback string for invalid date', function () {
                 expect(util.getAccountName(undefined)).to.be.equal('N/A');
             });
             it('should return the account name for all ids others than primary', function () {
@@ -212,12 +212,12 @@ define(['io.ox/mail/util',
 
         describe('timestamp functions', function () {
             var expect = chai.expect;
-            it('should return "unknown" for invalid data', function () {
+            it('should return "unknown" for invalid date', function () {
                 expect(util.getTime(undefined), 'getTime').to.be.equal('unbekannt');
                 expect(util.getDateTime(undefined), 'getDateTime').to.be.equal('unbekannt');
                 expect(util.getFullDate(undefined), 'getFullDate').to.be.equal('unbekannt');
             });
-            it('should return a date string for valid data', function () {
+            it('should return a date string for valid date', function () {
                 expect(util.getTime(1379508350), 'getTime').to.be.equal('16.1.1970');
                 expect(util.getDateTime(1379508350), 'getDateTime').to.be.equal('16.1.1970 23:11');
                 expect(util.getFullDate(1379508350), 'getFullDate').to.be.equal('16.1.1970 23:11');
@@ -227,7 +227,7 @@ define(['io.ox/mail/util',
         describe('some of the check functions', function () {
             //TODO: use chai-all plugin
             var expect = chai.expect;
-            it('should return "undefined" for invalid data', function () {
+            it('should return "undefined" for invalid date', function () {
                 //invalid: returns undefined
                 expect(util.isUnseen(undefined), 'isUnseen').is.undefined;
                 expect(util.isDeleted(undefined), 'isDeleted').is.undefined;
@@ -235,17 +235,17 @@ define(['io.ox/mail/util',
                 expect(util.byMyself(undefined), 'byMyself').is.undefined;
                 expect(util.getInitialDefaultSender(undefined), 'getInitialDefaultSender').is.undefined;
             });
-            it('should return "false" for invalid data', function () {
+            it('should return "false" for invalid date', function () {
                 expect(util.isAnswered(undefined), 'isAnswered').is.false;
                 expect(util.isForwarded(undefined), 'isForwarded').is.false;
                 expect(util.isAttachment(undefined), 'isAttachment').is.false;
                 expect(util.isAttachment([]), 'isAttachment').is.false;
                 expect(util.hasOtherRecipients(undefined), 'hasOtherRecipients').is.false;
             });
-            it('should return "0" for invalid data', function () {
+            it('should return "0" for invalid date', function () {
                 expect(util.count(undefined), 'count').to.be.a('number').and.to.be.equal(0);
             });
-            it('should return an empty array for invalid data', function () {
+            it('should return an empty array for invalid date', function () {
                 expect(util.getAttachments(undefined), 'getInitialDefaultSender')
                     .to.be.an('array').and
                     .to.be.empty;
