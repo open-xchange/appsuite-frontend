@@ -6,7 +6,7 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
@@ -15,6 +15,7 @@
 //topbar search-field vs. icon
 #io-ox-search-topbar.launcher {
     display: inline-block;
+    max-width: 17em;
 }
 #io-ox-search-topbar-icon.launcher {
     display: none;
@@ -33,6 +34,8 @@
 .autocomplete-search {
     //reset height to default
     height: auto;
+    min-width: 300px;
+    max-height: 500px;
 
     .label {
         font-style: italic;
@@ -85,6 +88,19 @@
 //app and lauchner parent class
 .io-ox-search {
 
+    //submit button
+    .btn-search {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    //submit button: widget
+    &>.btn-search {
+        height: 24px;
+        line-height: 12px;
+        vertical-align: baseline;
+    }
+
     //section: app
     .apps {
         display: flex;
@@ -116,6 +132,8 @@
     .search-field {
         width: 180px;
         padding: 4px 8px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
         &.widget {
             height: 24px;
         }
@@ -123,6 +141,7 @@
             height: 30px;
             flex: 0 1 auto;
             width: 500px;
+            border-right: 0;
         }
         &.form-control {
             //override 'block'

@@ -51,6 +51,7 @@ define('io.ox/search/view-template',
                     api: app.apiproxy,
                     minLength: 3,
                     mode: 'search',
+                    parentSelector: '.io-ox-search',
                     model: model,
                     //TODO: would be nice to have this move to control
                     source: function (val) {
@@ -81,7 +82,31 @@ define('io.ox/search/view-template',
                         $(ref).val('');
                 });
 
-            return $(this).append(ref);
+            $(this).append(ref);
+
+            //submit
+            this.append(
+                $('<button type="button" class="btn btn-default btn-search">')
+                .addClass(mode !== 'widget' ? 'btn-primary' : '')
+                .append(
+                    $('<i class="fa fa-search"></i>')
+                )
+                .on('click', function () {
+                    if (!ref.val().trim()) {
+                        //open search app
+                        require(['io.ox/search/main'], function (searchapp) {
+                            searchapp.run();
+                        });
+                    } else {
+                        //construct enter event to
+                        var e = $.Event('keydown');
+                        e.which = 13;
+                        $(ref).trigger(e);
+                    }
+                })
+            );
+
+            return $(this);
         };
 
     //widget mode

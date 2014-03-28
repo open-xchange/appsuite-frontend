@@ -281,7 +281,7 @@ define('io.ox/search/main',
             app.view = SearchView.factory
                         .create(app, model)
                         .render();
-            return model.get('mode') === 'widget' ? app.view.$el.find('input') : app.view.$el;
+            return model.get('mode') === 'widget' ? app.view.$el.find('input, button') : app.view.$el;
         }
     };
 });

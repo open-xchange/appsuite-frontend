@@ -237,7 +237,6 @@ define('io.ox/core/tk/autocomplete',
                         }
                         //facet
                         $('<div class="autocomplete-item group unselectable">')
-                            .css('display', regular && childs ? 'inline' : 'none')
                             .text(facet.display_name)
                             .data({
                                 index: index++,
@@ -342,7 +341,7 @@ define('io.ox/core/tk/autocomplete',
                             selected.trigger('click');
                         } else {
                             // auto-select first item
-                            scrollpane.find('.autocomplete-item:visible').first().click();
+                            scrollpane.find('.autocomplete-item:visible:not(.unselectable)').first().click();
                         }
 
                         // calendar: add string
