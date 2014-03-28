@@ -96,7 +96,7 @@
         float: right;
     }
 
-    .status, .end-date, .alarm-date, .task-progress {
+    .state, .end-date, .alarm-date, .task-progress {
     	float: right;
     	clear: both;
     }
@@ -110,8 +110,10 @@
         margin-top: 0.8em;
         margin-bottom: 0.5em;
         font-weight: 300;
-
-        .dropdown { margin-right: 1em; }
+        .dropdown {
+            margin-right: 1em;
+            display: inline-block;
+        }
     }
 
     .attachment-item {
@@ -149,7 +151,7 @@
             border: none;
         }
 
-        .state {
+        .status {
 
             position: absolute;
             margin-left: 4px;
@@ -184,13 +186,24 @@
 
         .summary {
 
-            .state {
+            float: right;
+            display: inline-block;
+
+            .status {
                 position: relative;
                 margin-right: 0.3em;
             }
 
             .countgroup {
                 margin-right: 0.5em;
+                cursor: pointer;
+
+                &.badge {
+                    background-color: #fff;
+                    color: #000;
+                    border: 1px solid #888;
+                    margin: 0;
+                }
             }
         }
 

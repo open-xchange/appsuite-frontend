@@ -41,101 +41,91 @@ define('io.ox/tasks/view-detail',
                     node.replaceWith(self.draw(tmp));
                 })
                 .addClass('tasks-detailview');
-
+            baton.interpretedData = task;
             // inline links
             ext.point('io.ox/tasks/detail-inline').invoke('draw', node, baton);
+            //content
+            ext.point('io.ox/tasks/detail-view').invoke('draw', node, baton);
 
-            var header = $('<header>');
+            return node;
+        }
+    };
 
-            var infoPanel = $('<div>').addClass('info-panel');
-
-            if (task.end_date) {
-                infoPanel.append(
-                        $('<div>').addClass('end-date').text(
-                            //#. %1$s due date of a task
-                            //#, c-format
-                            gt('Due %1$s', _.noI18n(task.end_date))
-                        )
-                );
-            }
-
-            if (task.alarm && !_.device('small')) {//alarm makes no sense if reminders are disabled
-                infoPanel.append(
-                        $('<div>').addClass('alarm-date').text(
-                            //#. %1$s reminder date of a task
-                            //#, c-format
-                            gt('Reminder date %1$s', _.noI18n(task.alarm))
-                        )
-                );
-            }
-            if (task.percent_completed && task.percent_completed !== 0) {
-                infoPanel.append(
-                        $('<div>').addClass('task-progress').text(
-                            //#. %1$s how much of a task is completed in percent, values from 0-100
-                            //#, c-format
-                            gt('Progress %1$s %', _.noI18n(task.percent_completed))
-                        )
-                    );
-            }
-            infoPanel.append(
-                // status
-                $('<div>').text(task.status).addClass('status ' +  task.badge)
-            );
-
-            node.append(
-                header.append(
-                    infoPanel,
+    // detail-view
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 100,
+        id: 'header',
+        draw: function (baton) {
+            var infoPanel,
+                task = baton.interpretedData;
+            this.append(
+                $('<header>').append(
+                    infoPanel = $('<div>').addClass('info-panel'),
                     $('<h1 class="title clear-title">').append(
                         // lock icon
-                        data.private_flag ? $('<i class="fa fa-lock private-flag">') : [],
+                        baton.data.private_flag ? $('<i class="fa fa-lock private-flag">') : [],
                         // priority
                         $('<span class="priority">').append(
                             util.getPriority(task)
                         ),
                         // title
                         $.txt(gt.noI18n(task.title))
-
                     )
                 )
             );
-
-            if (api.uploadInProgress(_.ecid(data))) {
-                $('<div>').addClass('attachments-container')
+            ext.point('io.ox/tasks/detail-view/infopanel').invoke('draw', infoPanel, task);
+        }
+    });
+    
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 200,
+        id: 'attachments',
+        draw: function (baton) {
+            var task = baton.interpretedData;
+            if (api.uploadInProgress(_.ecid(baton.data))) {
+                this.append($('<div>').addClass('attachments-container')
                     .append(
                         $('<span>').text(gt('Attachments') + ' \u00A0\u00A0').addClass('attachments'),
-                        $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy())
-                    .appendTo(node);
+                        $('<div>').css({width: '70px', height: '12px', display: 'inline-block'}).busy()));
             } else if (task.number_of_attachments > 0) {
-                ext.point('io.ox/tasks/detail-attach').invoke('draw', node, task);
+                ext.point('io.ox/tasks/detail-attach').invoke('draw', this, task);
             }
-
-            node.append(
+        }
+    });
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 300,
+        id: 'note',
+        draw: function (baton) {
+            this.append(
                 $('<div class="note">').html(
-                    gt.noI18n(_.escape($.trim(task.note)).replace(/\n/g, '<br>'))
+                    gt.noI18n(_.escape($.trim(baton.interpretedData.note)).replace(/\n/g, '<br>'))
                 )
             );
-
-            var fields = {
-                start_date: gt('Start date'),
-                target_duration: gt('Estimated duration in minutes'),
-                actual_duration: gt('Actual duration in minutes'),
-                target_costs: gt('Estimated costs'),
-                actual_costs: gt('Actual costs'),
-                trip_meter: gt('Distance'),
-                billing_information: gt('Billing information'),
-                companies: gt('Companies'),
-                date_completed: gt('Date completed')
-            };
-
-            var $details = $('<dl class="task-details dl-horizontal">'),
+        }
+    });
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 400,
+        id: 'details',
+        draw: function (baton) {
+            var task = baton.interpretedData,
+                fields = {
+                    start_date: gt('Start date'),
+                    target_duration: gt('Estimated duration in minutes'),
+                    actual_duration: gt('Actual duration in minutes'),
+                    target_costs: gt('Estimated costs'),
+                    actual_costs: gt('Actual costs'),
+                    trip_meter: gt('Distance'),
+                    billing_information: gt('Billing information'),
+                    companies: gt('Companies'),
+                    date_completed: gt('Date completed')
+                },
+                $details = $('<dl class="task-details dl-horizontal">'),
                 hasDetails = false;
 
-            //add recurrence sentence, use calendarfunction to avoid code duplicates
             if (task.recurrence_type) {
                 $details.append(
-                    $('<dt class="detail-label">').text(gt('This task recurs')),
-                    $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(data))
-                );
+                    $('<dd class="detail-value">').text(gt('This task recurs')),
+                    $('<dd class="detail-value">').text(calendarUtil.getRecurrenceString(baton.data)));
                 hasDetails = true;
             }
 
@@ -152,13 +142,21 @@ define('io.ox/tasks/view-detail',
             });
 
             if (hasDetails) {
-                node.append($details);
+                this.append($details);
             }
+        }
+    });
 
+    ext.point('io.ox/tasks/detail-view').extend({
+        index: 500,
+        id: 'participants',
+        draw: function (baton) {
+            var task = baton.interpretedData,
+                self = this;
             if (task.participants && task.participants.length > 0) {
                 require(['io.ox/core/api/user'], function (userAPI) {
                     var states = [
-                            ['', ''],
+                            ['unconfirmed', ''],
                             ['accepted', '<i class="fa fa-check">'],
                             ['declined', '<i class="fa fa-times">'],
                             ['tentative', '<i class="fa fa-question-circle">']
@@ -182,7 +180,7 @@ define('io.ox/tasks/view-detail',
                                     .append(
                                         $('<a href="#">').addClass('person ' + states[participant.confirmation || 0][0]).text(gt.noI18n(name)),
                                         // has confirmation icon?
-                                        participant.confirmation !== '' ? $('<span>').addClass('state ' + states[participant.confirmation || 0][0]).append($(states[participant.confirmation || 0][1])) : '',
+                                        participant.confirmation !== '' ? $('<span>').addClass('status ' + states[participant.confirmation || 0][0]).append($(states[participant.confirmation || 0][1])) : '',
                                         // has confirmation comment?
                                         participant.confirmmessage !== '' ? $('<div>').addClass('comment').text(gt.noI18n(participant.confirmmessage)) : ''
                                     )
@@ -193,7 +191,7 @@ define('io.ox/tasks/view-detail',
                                         .append(
                                             $('<a href="#">').addClass('person ' + states[participant.confirmation || 0][0]).text(gt.noI18n(name)),
                                             // has confirmation icon?
-                                            participant.confirmation !== '' ? $('<span>').addClass('stat ' + states[participant.confirmation || 0][0]).append($(states[participant.confirmation || 0][1])) : '',
+                                            participant.confirmation !== '' ? $('<span>').addClass('status ' + states[participant.confirmation || 0][0]).append($(states[participant.confirmation || 0][1])) : '',
                                             // has confirmation comment?
                                             participant.confirmmessage !== '' ? $('<div>').addClass('comment').text(gt.noI18n(participant.confirmmessage)) : ''
                                         )
@@ -209,6 +207,7 @@ define('io.ox/tasks/view-detail',
                         },
                         participantsWrapper = $('<div class="participants">'),
                         list,
+                        legend,
                         intParticipants = [],
                         extParticipants = [];
 
@@ -225,7 +224,7 @@ define('io.ox/tasks/view-detail',
                     if (intParticipants.length > 0) {
                         //draw markup
                         participantsWrapper.append($('<fieldset>').append(
-                            $('<legend class="io-ox-label">').text(gt('Participants')),
+                            legend = $('<legend class="io-ox-label">').text(gt('Participants')),
                             list = $('<ul class="participant-list list-inline">')
                         ));
                         _(intParticipants).each(function (participant) {
@@ -250,30 +249,87 @@ define('io.ox/tasks/view-detail',
                         _.each(sumData, function (res) {
                             if (res.count > 0) {
                                 sum.append(
-                                    $('<span>')
+                                    $('<a>')
+                                        .attr({
+                                            href: '#',
+                                            title: gt(res.css)
+                                        })
                                         .addClass('countgroup')
                                         .text(res.count)
                                         .prepend(
                                             $('<span>')
-                                                .addClass('state ' + res.css)
+                                                .addClass('status ' + res.css)
                                                 .append(res.icon)
                                         )
+                                        .on('click', function (e) {
+                                            e.preventDefault();
+                                            if ($(this).hasClass('badge')) {
+                                                $(this).removeClass('badge');
+                                                $('.participant', participantsWrapper)
+                                                    .show();
+                                            } else {
+                                                $('.participant', participantsWrapper)
+                                                    .show()
+                                                    .find('a.person:not(.' + res.css + ')')
+                                                    .parent()
+                                                    .toggle();
+                                                $('.countgroup', participantsWrapper).removeClass('badge');
+                                                $(this).addClass('badge');
+                                            }
+                                        })
                                 );
                             }
                         });
-                        participantsWrapper.append(sum);
+                        legend.append(sum);
                     }
                     if (list) {
-                        node.append(participantsWrapper);
+                        self.append(participantsWrapper);
                     }
                 });
             }
-
-            return node;
         }
-    };
+    });
 
-    // inline links for each task
+    ext.point('io.ox/tasks/detail-view/infopanel').extend({
+        index: 100,
+        id: 'infopanel',
+        draw: function (task) {
+            if (task.end_date) {
+                this.append(
+                        $('<div>').addClass('end-date').text(
+                            //#. %1$s due date of a task
+                            //#, c-format
+                            gt('Due %1$s', _.noI18n(task.end_date))
+                        )
+                );
+            }
+
+            if (task.alarm && !_.device('small')) {//alarm makes no sense if reminders are disabled
+                this.append(
+                        $('<div>').addClass('alarm-date').text(
+                            //#. %1$s reminder date of a task
+                            //#, c-format
+                            gt('Reminder date %1$s', _.noI18n(task.alarm))
+                        )
+                );
+            }
+            if (task.percent_completed && task.percent_completed !== 0) {
+                this.append(
+                        $('<div>').addClass('task-progress').text(
+                            //#. %1$s how much of a task is completed in percent, values from 0-100
+                            //#, c-format
+                            gt('Progress %1$s %', _.noI18n(task.percent_completed))
+                        )
+                    );
+            }
+            this.append(
+                // status
+                $('<div>').text(task.status).addClass('state ' +  task.badge)
+            );
+        }
+    });
+
+    // inline links
     ext.point('io.ox/tasks/detail-inline').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',
@@ -286,7 +342,7 @@ define('io.ox/tasks/view-detail',
         id: 'attachments',
         draw: function (task) {
             var attachmentNode;
-            if (this.hasClass('attachments-container')) {//if attachmentrequest fails the container is allready there
+            if (this.hasClass('attachments-container')) {//if attachmentrequest fails the container is already there
                 attachmentNode = this;
             } else {
                 attachmentNode = $('<div>').addClass('attachments-container').appendTo(this);//else build new
