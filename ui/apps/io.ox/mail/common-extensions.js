@@ -108,6 +108,7 @@ define('io.ox/mail/common-extensions',
         threadSize: function (baton) {
 
             var data = baton.data;
+            if (!_.isNumber(data.threadSize)) return;
             if (data.threadSize <= 1) return;
 
             this.append(

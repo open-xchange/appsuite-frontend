@@ -18,9 +18,8 @@ define('io.ox/mail/listview',
      'io.ox/mail/api',
      'io.ox/core/api/account',
      'io.ox/core/tk/list',
-     'io.ox/core/date',
      'io.ox/mail/view-options'
-    ], function (extensions, ext, util, api, account, ListView, date) {
+    ], function (extensions, ext, util, api, account, ListView) {
 
     'use strict';
 
@@ -34,6 +33,11 @@ define('io.ox/mail/listview',
             data.threadSize = _(data.thread).reduce(function (sum, data) {
                 return sum + (util.isDeleted(data) ? 0 : 1);
             }, 0);
+
+            if (!baton.app) {
+                ext.point('io.ox/mail/listview/item/default').invoke('draw', this, baton);
+                return;
+            }
 
             var layout = baton.app.props.get('layout'),
                 isSmall = layout === 'horizontal' || layout === 'list';
@@ -147,7 +151,7 @@ define('io.ox/mail/listview',
         id: 'picture',
         before: 'row1',
         draw: function (baton) {
-            if (baton.app.props.get('contactPictures')) {
+            if (baton.app && baton.app.props.get('contactPictures')) {
                 extensions.picture.call(this, baton);
             }
         }
@@ -168,7 +172,7 @@ define('io.ox/mail/listview',
         index: 100,
         draw: function (baton) {
             // show date or size depending on sort option
-            var fn = baton.app.props.get('sort') === 608 ? 'size' : 'smartdate';
+            var fn = baton.app && baton.app.props.get('sort') === 608 ? 'size' : 'smartdate';
             extensions[fn].call(this, baton);
         }
     });
@@ -234,41 +238,6 @@ define('io.ox/mail/listview',
             extensions.unread.call(node, baton);
             extensions.answered.call(node, baton);
             extensions.forwarded.call(node, baton);
-        }
-    });
-
-    ext.point('io.ox/mail/listview/thread').extend({
-        id: 'default',
-        index: 100,
-        draw: function (baton) {
-
-            var data = baton.data,
-                t = data.received_date,
-                d = new date.Local(t);
-
-            this.append(
-                // date
-                $('<time class="date">')
-                .attr('datetime', d.format('yyyy-MM-dd hh:mm'))
-                .text(_.noI18n(util.getTime(t))),
-                // from
-                $('<div class="from">').append(
-                    util.getFrom(data, 'from')
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/listview/thread').extend({
-        id: 'unread',
-        index: 200,
-        draw: function (baton) {
-            var data = baton.data;
-            if (api.tracker.isUnseen(data) || (('threadSize' in data) && api.tracker.isPartiallyUnseen(data))) {
-                this.addClass('unread').prepend(
-                    $('<i class="icon-unread icon-circle pull-left" aria-hidden="true">')
-                );
-            }
         }
     });
 
