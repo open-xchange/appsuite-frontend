@@ -505,6 +505,13 @@ $(window).load(function () {
 
         function updateServerConfig(data) {
             ox.serverConfig = data || {};
+            // transform stupid language array
+            ox.serverConfig.languages = _(ox.serverConfig.languages).chain()
+                .map(function (item) {
+                    return [_(item).keys()[0], _(item).values()[0]];
+                })
+                .object().value();
+            // ----
             require('io.ox/core/capabilities').reset();
             require('io.ox/core/manifests').reset();
             capabilities.reset();
