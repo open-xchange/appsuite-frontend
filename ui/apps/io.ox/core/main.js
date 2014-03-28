@@ -211,9 +211,6 @@ define('io.ox/core/main',
                 if (hidden === 1) {
                     itemsLeftWidth += launcherDropDownIconWidth;
                 }
-                if (visibleTabs <= 4) {
-                    //$('.launcher.left-corner', topbar).hide();
-                }
             }
         }
         $('li', launcherDropdown).hide();
