@@ -56,4 +56,5 @@ module.exports = function (grunt) {
 
     // load installed grunt tasks from specified folder
     grunt.loadTasks('grunt/tasks');
+    grunt.loadTasks('grunt/tasks/custom');
 };
