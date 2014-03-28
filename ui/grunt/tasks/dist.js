@@ -84,6 +84,8 @@ module.exports = function (grunt) {
         dist: {
             options: {
                 ext: '',
+                //HACK: setting pages to true, allows some of the files.src entries to be empty
+                pages: true,
                 help_languages: (function () {
                     return grunt.file.expand({cwd: 'help/l10n/'}, '*').map(function (Lang) {
                         return {
