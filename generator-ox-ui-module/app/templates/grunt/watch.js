@@ -13,33 +13,31 @@ module.exports = function (grunt) {
     var conf = grunt.config().local.appserver;
     var proto = (conf && conf.protocol === 'https') ? 'https' : 'http';
 
-    var livereloadConfig = (function () {
-            var net = require('net');
-            var server = net.createServer();
-            var skipLivereload = false;
-            server.on('error', function () {
-                grunt.verbose.writeln('Livereload instance running, will enable send_livereload task.');
-                skipLivereload = true;
-            });
-            server.listen(35729, function () {
-                grunt.verbose.writeln('No Livereload instance running, will configure watch to start one.');
-                server.close();
-            });
-            if (skipLivereload) {
-                return false;
-            } else if (proto === 'https') {
-                return {
-                    key: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.key'),
-                    cert: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.crt')
-                };
-            } else {
-                return true;
-            }
-        }());
+    var net = require('net');
+    var server = net.createServer();
+    server.on('error', function () {
+        grunt.verbose.writeln('Livereload instance running, will enable send_livereload task.');
+    });
+    server.listen(35729, function () {
+        var lrConf = true;
+        grunt.verbose.writeln('No Livereload instance running, will configure watch to start one.');
+        if (proto === 'https') {
+            lrConf = {
+                key: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.key'),
+                cert: grunt.file.read('node_modules/grunt-contrib-connect/tasks/certs/server.crt')
+            };
+        }
+        grunt.config.set('watch.manifests.options.livereload', lrConf);
+        grunt.config.set('watch.all.options.livereload', lrConf);
+        if (grunt.task.current.name === 'watch') {
+            grunt.task.run('watch');
+        }
+        server.close();
+    });
 
     grunt.registerTask('send_livereload', function () {
         var done = this.async();
-        if (!!livereloadConfig) {
+        if (!!grunt.config('watch.all.options.livereload')) {
             grunt.verbose.writeln('Using livereload from watch');
             done();
             return;
@@ -73,7 +71,7 @@ module.exports = function (grunt) {
         manifests: {
             files: 'apps/**/manifest.json',
             tasks: ['manifests', 'force_update', 'send_livereload'],
-            options: { livereload: livereloadConfig }
+            options: {}
         },
         karma: {
             files: ['spec/**/*.js'],
@@ -96,7 +94,7 @@ module.exports = function (grunt) {
                 'package.json'
             ],
             tasks: ['default', 'send_livereload', 'karma:unit:run'],
-            options: { livereload: livereloadConfig }
+            options: {}
         }
     });
 

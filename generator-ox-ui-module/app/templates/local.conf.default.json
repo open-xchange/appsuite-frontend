@@ -1,6 +1,7 @@
 {
     "appserver": {
         "protocol": "http",
+        "livereload": true,
         "server": "",
         "verbose": [],
         "prefixes": ["build/", "build/apps"],
