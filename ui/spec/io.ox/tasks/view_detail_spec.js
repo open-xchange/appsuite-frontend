@@ -35,7 +35,7 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                 expect(node.find('.end-date').length).toBe(1);
                 expect(node.find('.alarm-date').length).toBe(1);
                 expect(node.find('.task-progress').length).toBe(1);
-                expect(node.find('.status').length).toBe(1);
+                expect(node.find('.state').length).toBe(1);
                 expect(node.find('.note').length).toBe(1);
                 //recurrence/datecompleted, start_date, target_duration, actual_duration, target_costs, actual_costs, trip_meter, billing_information, companies
                 expect(node.find('.task-details').children().length).toBe(18);
@@ -47,11 +47,11 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
                 node = detailView.draw(baton);
 
                 waitsFor(function () {
-                    return node.find('.task-participant').length === 2;
+                    return node.find('.participant').length === 2;
                 }, 'paint user', ox.testTimeout);
 
                 runs(function () {
-                    expect(node.find('.task-participant').length).toBe(2); // one external and one internal participant
+                    expect(node.find('.participant').length).toBe(2); // one external and one internal participant
                 });
             });
 
