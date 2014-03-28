@@ -54,6 +54,10 @@ module.exports = function (grunt) {
                     ],
                     expand: true,
                     rename: function (dest) { return dest; },
+                    filter: function () {
+                        //only generate this file if there is a style.less for this theme
+                        return grunt.file.exists('apps/themes/' + themeName + '/style.less');
+                    },
                     dest: 'build/apps/themes/' + themeName + '/style.css'
                 },
                 {
