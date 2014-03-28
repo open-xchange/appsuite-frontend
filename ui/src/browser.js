@@ -225,6 +225,11 @@
         for (var q in queries) {
              display[q] = matchMedia(queries[q]).matches;
         }
+        if (diplay.large) {
+            display.small = display.medium = false;
+        } else if (display.medium) {
+            display.small = false;
+        }
     }
 
     queryScreen();
