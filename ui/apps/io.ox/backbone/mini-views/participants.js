@@ -80,6 +80,13 @@ define('io.ox/backbone/mini-views/participants',
         }, options);
 
         this.draw = function () {
+            //make it usable with or without model
+            var changedBaton = false;
+            if (!baton.data) {
+                baton.data = baton.model.attributes;
+                changedBaton = true;
+            }
+
             var list = baton.data.participants || {},
                 $i = list.length,
                 MIN = 0,
@@ -227,12 +234,9 @@ define('io.ox/backbone/mini-views/participants',
                     }
                 })
                 .always(function () {
-                    if (!options.summary) {
-                        return;
-                    }
                     // add summary
                     var sumData = util.getConfirmationSummary(confirmations);
-                    if (sumData.count > 3) {
+                    if (options.summary && sumData.count > 3) {
                         var sum = $('<div>').addClass('summary');
                         _.each(sumData, function (res) {
                             if (res.count > 0) {
@@ -269,6 +273,9 @@ define('io.ox/backbone/mini-views/participants',
                             }
                         });
                         participants.find('legend').first().append(sum);
+                    }
+                    if (changedBaton) {//remove temporary changes
+                        delete baton.data;
                     }
                     // draw action links if extension point is provided
                     if (options.inlineLinks) {
