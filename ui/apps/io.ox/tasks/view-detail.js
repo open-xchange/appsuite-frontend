@@ -18,9 +18,10 @@ define('io.ox/tasks/view-detail',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/tasks/api',
+     'io.ox/backbone/mini-views/participants',
      'io.ox/tasks/actions',
      'less!io.ox/tasks/style'
-    ], function (util, calendarUtil, gt, ext, links, api) {
+    ], function (util, calendarUtil, gt, ext, links, api, ParticipantsView) {
 
     'use strict';
 
@@ -151,142 +152,8 @@ define('io.ox/tasks/view-detail',
         index: 500,
         id: 'participants',
         draw: function (baton) {
-            var task = baton.interpretedData,
-                self = this;
-            if (task.participants && task.participants.length > 0) {
-                require(['io.ox/core/api/user'], function (userAPI) {
-                    var states = [
-                            ['unconfirmed', ''],
-                            ['accepted', '<i class="fa fa-check">'],
-                            ['declined', '<i class="fa fa-times">'],
-                            ['tentative', '<i class="fa fa-question-circle">']
-                        ],
-                        lookupParticipant = function (node, table, participant) {
-                            if (participant.id) {//external participants don't have an id but the display name is already given
-                                userAPI.get({id: participant.id}).done(function (userInformation) {
-                                        drawParticipant(table, participant, userInformation.display_name, userInformation);
-                                    }).fail(function () {
-                                        failedToLoad(node, table, participant);
-                                    });
-                            } else {
-                                participant.display_name = participant.display_name || participant.mail.split('@')[0] || '';
-                                drawParticipant(table, participant, $.trim(participant.display_name + ' <' + participant.mail + '>'));
-                            }
-                        },
-                        drawParticipant = function (table, participant, name, userInformation) {
-                            if (userInformation) {
-                                table.append($('<li class="halo-link participant">')
-                                    .data(_.extend(userInformation, { display_name: name, email1: userInformation.email1 }))
-                                    .append(
-                                        $('<a href="#">').addClass('person ' + states[participant.confirmation || 0][0]).text(gt.noI18n(name)),
-                                        // has confirmation icon?
-                                        participant.confirmation !== '' ? $('<span>').addClass('status ' + states[participant.confirmation || 0][0]).append($(states[participant.confirmation || 0][1])) : '',
-                                        // has confirmation comment?
-                                        participant.confirmmessage !== '' ? $('<div>').addClass('comment').text(gt.noI18n(participant.confirmmessage)) : ''
-                                    )
-                                );
-                            } else {
-                                table.append($('<li class="halo-link participant">')
-                                        .data(_.extend(participant, { display_name: name, email1: participant.mail }))
-                                        .append(
-                                            $('<a href="#">').addClass('person ' + states[participant.confirmation || 0][0]).text(gt.noI18n(name)),
-                                            // has confirmation icon?
-                                            participant.confirmation !== '' ? $('<span>').addClass('status ' + states[participant.confirmation || 0][0]).append($(states[participant.confirmation || 0][1])) : '',
-                                            // has confirmation comment?
-                                            participant.confirmmessage !== '' ? $('<div>').addClass('comment').text(gt.noI18n(participant.confirmmessage)) : ''
-                                        )
-                                    );
-                            }
-                        },
-                        failedToLoad = function (node, table, participant) {
-                            node.append(
-                                $.fail(gt('Could not load all participants for this task.'), function () {
-                                    lookupParticipant(node, table, participant);
-                                })
-                            );
-                        },
-                        participantsWrapper = $('<div class="participants">'),
-                        list,
-                        legend,
-                        intParticipants = [],
-                        extParticipants = [];
-
-                    //divide participants into internal and external users
-
-                    _(task.participants).each(function (participant) {
-                        if (participant.type === 5) {
-                            extParticipants.push(participant);
-                        } else {
-                            intParticipants.push(participant);
-                        }
-                    });
-
-                    if (intParticipants.length > 0) {
-                        //draw markup
-                        participantsWrapper.append($('<fieldset>').append(
-                            legend = $('<legend class="io-ox-label">').text(gt('Participants')),
-                            list = $('<ul class="participant-list list-inline">')
-                        ));
-                        _(intParticipants).each(function (participant) {
-                            lookupParticipant(list, list, participant);
-                        });
-                    }
-                    if (extParticipants.length > 0) {
-                        //draw markup
-                        participantsWrapper.append($('<fieldset>').append(
-                            $('<legend class="io-ox-label">').text(gt('External participants')),
-                            list = $('<ul class="participant-list list-inline">')
-                        ));
-                        _(extParticipants).each(function (participant) {
-                            lookupParticipant(list, list, participant);
-                        });
-                    }
-                    //summary
-                    var confirmations = calendarUtil.getConfirmations({users: task.users, confirmations: extParticipants}),
-                        sumData = calendarUtil.getConfirmationSummary(confirmations);
-                    if (sumData.count > 3) {
-                        var sum = $('<div>').addClass('summary');
-                        _.each(sumData, function (res) {
-                            if (res.count > 0) {
-                                sum.append(
-                                    $('<a>')
-                                        .attr({
-                                            href: '#',
-                                            title: gt(res.css)
-                                        })
-                                        .addClass('countgroup')
-                                        .text(res.count)
-                                        .prepend(
-                                            $('<span>')
-                                                .addClass('status ' + res.css)
-                                                .append(res.icon)
-                                        )
-                                        .on('click', function (e) {
-                                            e.preventDefault();
-                                            if ($(this).hasClass('badge')) {
-                                                $(this).removeClass('badge');
-                                                $('.participant', participantsWrapper)
-                                                    .show();
-                                            } else {
-                                                $('.participant', participantsWrapper)
-                                                    .show()
-                                                    .find('a.person:not(.' + res.css + ')')
-                                                    .parent()
-                                                    .toggle();
-                                                $('.countgroup', participantsWrapper).removeClass('badge');
-                                                $(this).addClass('badge');
-                                            }
-                                        })
-                                );
-                            }
-                        });
-                        legend.append(sum);
-                    }
-                    if (list) {
-                        self.append(participantsWrapper);
-                    }
-                });
-            }
+            var pView = new ParticipantsView(baton, {inlineLinks: false});
+            this.append(pView.draw());
         }
     });
 
