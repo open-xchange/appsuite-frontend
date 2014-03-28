@@ -204,7 +204,7 @@ define('io.ox/search/view-template',
                     return item.id === option;
                 });
 
-                label = current.display_name;
+                label = current && current.display_name;
             }
 
             if (label) {

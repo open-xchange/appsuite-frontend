@@ -13,7 +13,8 @@
 
 define('io.ox/search/items/view-template',
     ['gettext!io.ox/core',
-     'io.ox/core/extensions'
+     'io.ox/core/extensions',
+     'io.ox/mail/listview'
     ], function (gt, ext) {
 
     'use strict';
@@ -23,12 +24,19 @@ define('io.ox/search/items/view-template',
         index: 400,
         row: '0',
         draw: function (baton) {
-            var node = $('<ol class="col-sm-12 result">'),
-                items = baton.model.get('items');
+
+            var node = $('<ul class="col-sm-12 result list-view">'),
+                items = baton.model.get('items'),
+                module = baton.model.getModule();
+
+            // app-specific classes
+            if (module === 'mail') node.addClass('mail-item');
 
             items.each(function (model) {
+
                 var tmp = $('<li class="item">'),
-                    item = model.get('data');
+                    item = model.get('data'),
+                    baton = new ext.Baton({ data: item });
 
                 tmp.attr({
                     'data-id': model.get('id'),
@@ -36,12 +44,9 @@ define('io.ox/search/items/view-template',
                     'data-app': model.get('application'),
                 });
 
-                switch (baton.model.getModule()) {
+                switch (module) {
                 case 'mail':
-                    tmp.append(
-                        $('<div class="line1">').text((item.from[0][0] || item.from[0][1]).replace(/\"/gi, '')),
-                        $('<div class="line2">').text('(' + item.id + ') ' + item.subject)
-                    );
+                    ext.point('io.ox/mail/listview/item/default').invoke('draw', tmp, baton);
                     break;
                 case 'contacts':
                     tmp.append(
@@ -69,7 +74,6 @@ define('io.ox/search/items/view-template',
                     break;
                 }
                 node.append(tmp);
-
             });
 
             if (items.timestamp && !items.length) {
@@ -79,6 +83,7 @@ define('io.ox/search/items/view-template',
                     )
                 );
             }
+
             this.append(node);
         }
     });
