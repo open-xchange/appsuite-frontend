@@ -46,7 +46,7 @@ OxUiModuleGenerator.prototype.askFor = function askFor() {
 };
 
 OxUiModuleGenerator.prototype.app = function app() {
-  /* This method uses buildCopy, because copy will automatically try to template
+  /* This method uses bulkCopy, because copy will automatically try to template
    * every file. This is unwanted (would have used this.template instead), but
    * yeoman API says, it's there for backwards-compatibility. Need to wait until
    * this has been dropped by the yeoman team.
@@ -59,7 +59,7 @@ OxUiModuleGenerator.prototype.app = function app() {
   this.template('_package.json', 'package.json');
   this.template('_bower.json', 'bower.json');
   this.template('_Gruntfile.js', 'Gruntfile.js');
-  this.bulkCopy('local.conf.default.json', 'grunt/local.conf.default.json');
+  this.copy('local.conf.default.json', 'grunt/local.conf.default.json');
 
   this.template('grunt/_i18n.js', 'grunt/tasks/i18n.js');
   this.bulkCopy('grunt/i18n_module.js.tpl', 'grunt/templates/i18n_module.js.tpl');
@@ -80,5 +80,5 @@ OxUiModuleGenerator.prototype.app = function app() {
 };
 
 OxUiModuleGenerator.prototype.projectfiles = function projectfiles() {
-  this.bulkCopy('jshintrc', '.jshintrc');
+  this.copy('jshintrc', '.jshintrc');
 };
