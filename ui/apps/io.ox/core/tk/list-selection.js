@@ -29,8 +29,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             .on(Modernizr.touch ? 'click' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
             // help accessing the list via keyboard if selection is empty
             .on('focus', function () {
-                var node = $(this).find('[tabindex="1"]').first();
-                if (node.length) node.focus();
+                self.select(0);
             })
             .on(Modernizr.touch ? 'click' : 'click', SELECTABLE, function (e) {
                 if (!self.isMultiple(e)) self.triggerAction(e);
@@ -214,6 +213,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         // just select one item (no range; no multiple)
         select: function (index, items) {
             items = items || this.getItems();
+            if (index >= items.length) return;
             this.resetCheckmark(items);
             this.resetTabIndex(items);
             this.pick(index, items);

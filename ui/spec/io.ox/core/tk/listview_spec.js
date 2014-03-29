@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
+define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
 
     'use strict';
 
@@ -22,14 +22,14 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
         return f;
     }
 
-    xdescribe('The ListView', function () {
+    describe('The ListView.', function () {
 
         beforeEach(function () {
 
             this.collection = new api.Collection();
-            this.list = listView.getInstance();
-            this.list.setCollection(this.collection);
+            this.list = new ListView();
             this.list.model.set({ folder: 'default0/INBOX', limit: 30 });
+            this.list.setCollection(this.collection);
 
             $('body', document).append(
                 this.list.render().$el
@@ -71,7 +71,11 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 expect(items.is('li')).toBe(true);
                 expect(items.hasClass('list-item')).toBe(true);
                 expect(items.attr('role')).toBe('option');
-                expect(items.attr('data-cid')).toBe(model.cid);
+                expect(items.attr('data-cid')).toBe('thread.' + model.cid);
+            });
+
+            it('should have one list item', function () {
+                expect(this.list.$el.children().length).toBe(1);
             });
 
             it('should be empty again if item gets removed', function () {
@@ -82,10 +86,6 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
             it('should be empty again if collection is reset', function () {
                 this.collection.reset();
                 expect(this.list.$el.children().length).toBe(0);
-            });
-
-            it('should have one list item', function () {
-                expect(this.list.$el.children().length).toBe(1);
             });
 
             it('should contain proper data', function () {
@@ -112,17 +112,17 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
             });
 
             it('should have one unread item', function () {
-                expect(this.list.$el.find('.icon-unread.icon-circle').length).toBe(1);
+                expect(this.list.$el.find('.icon-unread.fa-envelope').length).toBe(1);
             });
 
             it('should have one item with attachments', function () {
-                expect(this.list.$el.find('.icon-paper-clip').length).toBe(1);
+                expect(this.list.$el.find('.fa-paperclip').length).toBe(1);
             });
 
             it('should reflect unread updates via model change', function () {
                 // set first mail to unread
                 this.collection.at(0).set('flags', 0);
-                expect(this.list.$el.find('.icon-unread.icon-circle').length).toBe(2);
+                expect(this.list.$el.find('.icon-unread.fa-envelope').length).toBe(2);
             });
 
             it('should reflect unread updates via collection change', function () {
@@ -130,7 +130,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 this.collection.add([
                     JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":0,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"1","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"1","folder_id":"default0/INBOX","flags":0,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}')
                 ], { merge: true });
-                expect(this.list.$el.find('.icon-unread.icon-circle').length).toBe(2);
+                expect(this.list.$el.find('.icon-unread.fa-envelope').length).toBe(2);
             });
 
             it('should reflect an item removal', function () {
@@ -140,7 +140,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
             });
         });
 
-        describe('check selection', function () {
+        describe('selection', function () {
 
             beforeEach(function () {
                 // three undeleted, seen mails
@@ -212,7 +212,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
 
             it('should handle click events correctly', function () {
 
-                var type = Modernizr.touch ? 'tap' : 'mousedown',
+                var type = Modernizr.touch ? 'click' : 'mousedown', // not tap?
                     nodes = this.list.$el.children(), e;
 
                 // start with empty selection
@@ -279,7 +279,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
             });
 
             it('should have three mails', function () {
-                expect(this.list.$el.children().length).toBe(3);
+                expect(this.list.getItems().length).toBe(3);
             });
 
             it('should update properly (case: empty)', function () {
@@ -287,9 +287,9 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 // remove all
                 this.collection.set([]);
 
-                var nodes = this.list.$el.children();
                 expect(this.list.collection.length).toBe(0);
-                expect(nodes.length).toBe(0);
+                expect(this.list.getItems().length).toBe(0); // all list items were removed
+                expect(this.list.$el.children().length).toBe(1); // header element still there
             });
 
             it('should update properly (case: prepend)', function () {
@@ -297,14 +297,17 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 // add 1, add 2
                 this.collection.set([createItem(1, 0), createItem(2, 1), createItem(3, 2), createItem(4, 3), createItem(6, 4)]);
 
-                var nodes = this.list.$el.children();
+                var nodes = this.list.$el.children(),
+                    items = this.list.getItems();
+
                 expect(this.list.collection.length).toBe(5);
-                expect(nodes.length).toBe(5);
-                expect(nodes.eq(0).is('[data-cid="default0/INBOX.1"]')).toBe(true);
-                expect(nodes.eq(1).is('[data-cid="default0/INBOX.2"]')).toBe(true);
-                expect(nodes.eq(2).is('[data-cid="default0/INBOX.3"]')).toBe(true);
-                expect(nodes.eq(3).is('[data-cid="default0/INBOX.4"]')).toBe(true);
-                expect(nodes.eq(4).is('[data-cid="default0/INBOX.6"]')).toBe(true);
+                expect(items.length).toBe(5);
+                expect(nodes.length).toBe(6); // plus header element
+                expect(items.eq(0).is('[data-cid="thread.default0/INBOX.1"]')).toBe(true);
+                expect(items.eq(1).is('[data-cid="thread.default0/INBOX.2"]')).toBe(true);
+                expect(items.eq(2).is('[data-cid="thread.default0/INBOX.3"]')).toBe(true);
+                expect(items.eq(3).is('[data-cid="thread.default0/INBOX.4"]')).toBe(true);
+                expect(items.eq(4).is('[data-cid="thread.default0/INBOX.6"]')).toBe(true);
             });
 
             it('should update properly (case: append)', function () {
@@ -312,13 +315,16 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 // add 7
                 this.collection.reset([createItem(3, 0), createItem(5, 1), createItem(6, 2), createItem(7, 3)]);
 
-                var nodes = this.list.$el.children();
+                var nodes = this.list.$el.children(),
+                    items = this.list.getItems();
+
                 expect(this.list.collection.length).toBe(4);
-                expect(nodes.length).toBe(4);
-                expect(nodes.eq(0).is('[data-cid="default0/INBOX.3"]')).toBe(true);
-                expect(nodes.eq(1).is('[data-cid="default0/INBOX.5"]')).toBe(true);
-                expect(nodes.eq(2).is('[data-cid="default0/INBOX.6"]')).toBe(true);
-                expect(nodes.eq(3).is('[data-cid="default0/INBOX.7"]')).toBe(true);
+                expect(items.length).toBe(4);
+                expect(nodes.length).toBe(4); // reset removes header element
+                expect(items.eq(0).is('[data-cid="thread.default0/INBOX.3"]')).toBe(true);
+                expect(items.eq(1).is('[data-cid="thread.default0/INBOX.5"]')).toBe(true);
+                expect(items.eq(2).is('[data-cid="thread.default0/INBOX.6"]')).toBe(true);
+                expect(items.eq(3).is('[data-cid="thread.default0/INBOX.7"]')).toBe(true);
             });
 
             it('should update properly (case: mixed)', function () {
@@ -326,14 +332,17 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 // add 1, add 2, remove 3, add 4, remove 5, add 7
                 this.collection.set([createItem(1, 0), createItem(2, 1), createItem(4, 2), createItem(6, 3), createItem(7, 4)]);
 
-                var nodes = this.list.$el.children();
+                var nodes = this.list.$el.children(),
+                    items = this.list.getItems();
+
                 expect(this.list.collection.length).toBe(5);
-                expect(nodes.length).toBe(5);
-                expect(nodes.eq(0).is('[data-cid="default0/INBOX.1"]')).toBe(true);
-                expect(nodes.eq(1).is('[data-cid="default0/INBOX.2"]')).toBe(true);
-                expect(nodes.eq(2).is('[data-cid="default0/INBOX.4"]')).toBe(true);
-                expect(nodes.eq(3).is('[data-cid="default0/INBOX.6"]')).toBe(true);
-                expect(nodes.eq(4).is('[data-cid="default0/INBOX.7"]')).toBe(true);
+                expect(items.length).toBe(5);
+                expect(nodes.length).toBe(6); // plus header element
+                expect(items.eq(0).is('[data-cid="thread.default0/INBOX.1"]')).toBe(true);
+                expect(items.eq(1).is('[data-cid="thread.default0/INBOX.2"]')).toBe(true);
+                expect(items.eq(2).is('[data-cid="thread.default0/INBOX.4"]')).toBe(true);
+                expect(items.eq(3).is('[data-cid="thread.default0/INBOX.6"]')).toBe(true);
+                expect(items.eq(4).is('[data-cid="thread.default0/INBOX.7"]')).toBe(true);
             });
         });
 
@@ -377,8 +386,12 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 this.list.$el.css({ height: '500px', overflow: 'auto' });
             });
 
-            it('should contain correct number of items', function () {
-                expect(this.list.$el.children().length).toBe(N);
+            it('should contain correct number of items (collection)', function () {
+                expect(this.list.collection.length).toBe(N);
+            });
+
+            it('should contain correct number of items (DOM)', function () {
+                expect(this.list.getItems().length).toBe(N);
             });
 
             it('should have an outer height greater than zero', function () {
@@ -462,41 +475,41 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
 
             it('should indicate item as seen', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.icon-unread.icon-circle').length).toBe(0);
+                expect(first.find('.icon-unread.fa-envelope').length).toBe(0);
             });
 
             it('should indicate item as unseen', function () {
                 var first = this.list.$el.children().first();
                 this.collection.at(0).set('flags', 0);
-                expect(first.find('.icon-unread.icon-circle').length).toBe(1);
+                expect(first.find('.icon-unread.fa-envelope').length).toBe(1);
             });
 
             it('should show proper color label', function () {
                 var first = this.list.$el.children().first();
                 expect(first.find('.flag.icon-bookmark').length).toBe(0);
                 this.collection.at(0).set('color_label', 1);
-                expect(first.find('.flag.flag_1.icon-bookmark').length).toBe(1);
+                expect(first.find('.flag.flag_1.fa-bookmark').length).toBe(1);
             });
 
             it('should show attachment icon', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.icon-paper-clip').length).toBe(0);
+                expect(first.find('.fa-paperclip').length).toBe(0);
                 this.collection.at(0).set('attachment', true);
-                expect(first.find('.icon-paper-clip').length).toBe(1);
+                expect(first.find('.fa-paperclip').length).toBe(1);
             });
 
             it('should indicate that this mail has been answered', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.icon-answered.icon-reply').length).toBe(0);
+                expect(first.find('.icon-answered.fa-reply').length).toBe(0);
                 this.collection.at(0).set('flags', 33); // 32 = seen, 1 = answered
-                expect(first.find('.icon-answered.icon-reply').length).toBe(1);
+                expect(first.find('.icon-answered.fa-reply').length).toBe(1);
             });
 
             it('should indicate that this mail has been fowarded', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.icon-forwarded.icon-mail-forward').length).toBe(0);
+                expect(first.find('.icon-forwarded.fa-mail-forward').length).toBe(0);
                 this.collection.at(0).set('flags', 32 | 256); // 32 = seen, 256 = forwarded
-                expect(first.find('.icon-forwarded.icon-mail-forward').length).toBe(1);
+                expect(first.find('.icon-forwarded.fa-mail-forward').length).toBe(1);
             });
 
             it('should indicate high priority', function () {
@@ -544,7 +557,8 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (listView, api) {
                 expect(this.list.$el.find('[data-thread="' + cid + '"]').length).toBe(0);
             });
 
-            it('should open thread list on cursor right', function () {
+            // thread summary has been removed!
+            xit('should open thread list on cursor right', function () {
 
                 var cid = this.collection.at(0).cid,
                     type = Modernizr.touch ? 'tap' : 'mousedown', e,

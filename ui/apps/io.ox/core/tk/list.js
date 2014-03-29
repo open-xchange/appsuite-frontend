@@ -130,6 +130,7 @@ define('io.ox/core/tk/list',
             this.$el.append(
                 this.collection.map(this.renderListItem, this)
             );
+            this.trigger('reset', this.collection, this.firstReset);
             if (this.firstReset) {
                 this.trigger('first-reset', this.collection);
                 this.firstReset = false;
