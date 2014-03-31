@@ -277,6 +277,8 @@ define('io.ox/core/tk/list',
                 'role': 'listbox',
                 'tabindex': 1
             });
+            // fix evil CSS transition issue with phantomJS
+            if (_.device('phantomjs')) this.$el.addClass('no-transition');
             return this;
         },
 
