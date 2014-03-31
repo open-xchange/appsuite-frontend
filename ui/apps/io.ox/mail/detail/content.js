@@ -131,11 +131,6 @@ define('io.ox/mail/detail/content',
         return text;
     };
 
-    var explandBlockquote = function (e) {
-        e.preventDefault();
-        $(this).hide().prev().slideDown('fast');
-    };
-
     var mailTo = function (e) {
         e.preventDefault();
         var node = $(this),
@@ -237,7 +232,7 @@ define('io.ox/mail/detail/content',
         process: function (baton) {
             baton.source = baton.source
                 // remove leading white-space
-                .replace(/^<div[^>]+>(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+/g, '')
+                .replace(/^(<div[^>]+>)(\s|&nbsp;|\0x20|<br\/?>|<p[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/p>|<div[^>]*>(\s|<br\/?>|&nbsp;|&#160;|\0x20)*<\/div>)+/g, '$1')
                 // remove closing <html> tag
                 .replace(/\s*<\/html>\s*$/g, '')
                 // remove tailing white-space
@@ -398,6 +393,11 @@ define('io.ox/mail/detail/content',
         });
         return str;
     }
+
+    var explandBlockquote = function (e) {
+        e.preventDefault();
+        $(this).hide().prev().slideDown('fast');
+    };
 
     ext.point('io.ox/mail/detail/content').extend({
         id: 'auto-collapse',
