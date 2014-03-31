@@ -403,10 +403,14 @@ define('io.ox/core/tk/autocomplete',
                 if (val.length >= o.minLength) {
                     if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
                         lastValue = val;
-                        scrollpane.empty();
+                        //scrollpane.empty();
                         o.container.busy();
                         o.source(val)
                             .then(o.reduce)
+                            .then(function (data) {
+                                scrollpane.empty();
+                                return data;
+                            })
                             .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
                     }
                 } else {
