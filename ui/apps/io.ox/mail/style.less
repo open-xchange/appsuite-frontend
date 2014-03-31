@@ -76,7 +76,6 @@
             display: inline-block;
             line-height: @toolbar-line-height;
             padding: @toolbar-vertical-padding 14px;
-            color: @link-color;
             float: left;
             outline: 0;
             i { text-decoration: none; }
@@ -172,7 +171,12 @@
 
     &.unread {
         .date { opacity: 1; .fontWeight(bold); }
-        .subject { color: @link-color; }
+        .subject {
+            color: @link-color;
+            html.high-contrast & {
+                color: @hc-link-color;
+            }
+        }
     }
 
     &.unread.selected {
@@ -313,8 +317,19 @@
         float: right;
     }
 
-    .date { opacity: 0.50; }
-    .size { color: @link-color; }
+    .date {
+
+        opacity: 0.50;
+
+        html.high-contrast & {
+            opacity: 1;
+        }
+
+    }
+
+    .size {
+        color: @link-color;
+    }
 
     &.visible-selection.has-focus .list-item.selected .size {
         color: #fff;
@@ -379,6 +394,7 @@
     }
 
     .thread-size {
+
         min-width: 2em;
         padding: 0 0.5em 0 0.5em;
         margin-left: 7px;
@@ -391,6 +407,11 @@
         border: 1px solid rgba(0, 0, 0, 0.10);
         .fontWeight(normal);
         .border-radius(3px);
+
+        html.high-contrast & {
+            color: #767676; //HC
+        }
+
     }
 
     &.visible-selection.has-focus .selected .thread-size {
@@ -753,7 +774,12 @@ textarea.inplace-editor {
     background-color: #eee;
 
     .selection-message { display: table; }
-    .selection-message div { color: #aaa; }
+    .selection-message div {
+        color: #aaa;
+        html.high-contrast & {
+            color: @black;
+        }
+    }
     .thread-view-control { display: none; }
 
     &.selection-one {
@@ -887,6 +913,9 @@ textarea.inplace-editor {
             position: absolute;
             left: 0px;
             top: 2px;
+            html.high-contrast & {
+                color: @hc-link-color;
+            }
         }
     }
 
@@ -969,6 +998,10 @@ textarea.inplace-editor {
         color: #888;
         .fontWeight(300);
         white-space: nowrap;
+
+        html.high-contrast & {
+            color: #767676;
+        }
     }
 
     .recipients {
@@ -1153,7 +1186,7 @@ textarea.inplace-editor {
 
         a {
             word-break: break-word; // fix long links
-            color: #08c; // not @linkColor!
+            color: #007dbc; // not @linkColor!
             text-decoration: underline;
             &:hover { color: #08c; }
         }
