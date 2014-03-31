@@ -384,6 +384,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 this.collection.reset(_.range(N).map(createItem));
                 // set fixed height and overflow
                 this.list.$el.css({ height: '500px', overflow: 'auto' });
+                console.log('...'); // NEED THIS FOR SUCCESS MESSAGE ;-) TEMP FIX!
             });
 
             it('should contain correct number of items (collection)', function () {

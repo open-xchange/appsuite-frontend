@@ -15,7 +15,7 @@ define('io.ox/core/tk/list-selection', [], function () {
 
     'use strict';
 
-    var SELECTABLE = '.selectable';
+    var SELECTABLE = '.selectable', isTouch = _.device('touch');
 
     function Selection(view) {
 
@@ -26,12 +26,12 @@ define('io.ox/core/tk/list-selection', [], function () {
         this.view.$el
             // normal click/keybard navigation
             .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-            .on(Modernizr.touch ? 'click' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
+            .on(isTouch ? 'click' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
             // help accessing the list via keyboard if selection is empty
             .on('focus', function () {
                 self.select(0);
             })
-            .on(Modernizr.touch ? 'click' : 'click', SELECTABLE, function (e) {
+            .on('click', SELECTABLE, function (e) {
                 if (!self.isMultiple(e)) self.triggerAction(e);
             })
             // double clikc
@@ -41,7 +41,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             // avoid context menu
             .on('contextmenu', function (e) { e.preventDefault(); });
 
-        if (Modernizr.touch) {
+        if (isTouch) {
             this.view.$el
                 .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
                 .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
@@ -345,14 +345,14 @@ define('io.ox/core/tk/list-selection', [], function () {
             // consider mousedown only if unselected and not in multiple-mode
             if (e.type === 'mousedown' && !this.isMultiple(e) && $(e.currentTarget).is('.selected')) return;
             // ignore clicks in multiple-mode
-            if (e.type === 'click' && this.isMultiple(e)) return;
+            if (e.type === 'click' && this.isMultiple(e) && !isTouch) return;
 
             var items = this.getItems(),
                 current = $(e.currentTarget),
                 index = items.index(current) || 0,
                 previous = this.get();
 
-            if (Modernizr.touch && this.resetSwipe(items)) return;
+            if (isTouch && this.resetSwipe(items)) return;
             if (e.isDefaultPrevented()) return;
             if (!this.isMultiple(e)) this.resetCheckmark(items);
             this.resetTabIndex(items);
