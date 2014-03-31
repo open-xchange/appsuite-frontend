@@ -69,6 +69,7 @@ OxUiModuleGenerator.prototype.app = function app() {
   this.bulkCopy('grunt/concat.js', 'grunt/tasks/concat.js');
   this.bulkCopy('grunt/copy.js', 'grunt/tasks/copy.js');
   this.bulkCopy('grunt/dist.js', 'grunt/tasks/dist.js');
+  this.bulkCopy('grunt/install.js', 'grunt/tasks/install.js');
   this.bulkCopy('grunt/jshint.js', 'grunt/tasks/jshint.js');
   this.bulkCopy('grunt/jsonlint.js', 'grunt/tasks/jsonlint.js');
   this.bulkCopy('grunt/karma.js', 'grunt/tasks/karma.js');
