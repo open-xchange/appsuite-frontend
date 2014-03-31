@@ -1,0 +1,343 @@
+Source: open-xchange-appsuite
+Section: non-free/web
+Priority: optional
+Maintainer: Viktor Pracht <viktor.pracht@open-xchange.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.2
+Homepage: http://open-xchange.com
+Vcs-Git: https://git.open-xchange.com/git/wd/frontend/web
+Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
+
+Package: open-xchange-appsuite
+Architecture: all
+Depends: ${misc:Depends}, apache2
+Description: OX App Suite HTML5 client
+
+Package: open-xchange-appsuite-manifest
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-core, nodejs (>= 0.6.0) | open-xchange-halo, open-xchange-appsuite-l10n-en-us | open-xchange-appsuite-l10n
+Replaces: open-xchange-documents-ui (<< 7.2.1-0)
+Conflicts: open-xchange-documents-ui (<< 7.2.1-0)
+Description: Manifest and apps included in the OX App Suite HTML5 client
+
+Package: open-xchange-appsuite-dev
+Architecture: all
+Depends: ${misc:Depends}, nodejs (>= 0.6.0)
+Description: SDK for the OX App Suite HTML5 client
+
+Package: open-xchange-appsuite-help-common
+Architecture: all
+Depends: ${misc:Depends}
+Description: Language-independent files of online help for OX App Suite
+
+Package: open-xchange-appsuite-help-de-de
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (de_DE)
+
+Package: open-xchange-appsuite-help-en-gb
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (en_GB)
+
+Package: open-xchange-appsuite-help-en-us
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (en_US)
+
+Package: open-xchange-appsuite-help-es-es
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (es_ES)
+
+Package: open-xchange-appsuite-help-es-mx
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (es_MX)
+
+Package: open-xchange-appsuite-help-fr-fr
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (fr_FR)
+
+Package: open-xchange-appsuite-help-it-it
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (it_IT)
+
+Package: open-xchange-appsuite-help-ja-jp
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (ja_JP)
+
+Package: open-xchange-appsuite-help-nl-nl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (nl_NL)
+
+Package: open-xchange-appsuite-help-pl-pl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (pl_PL)
+
+Package: open-xchange-appsuite-help-zh-cn
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (zh_CN)
+
+Package: open-xchange-appsuite-help-zh-tw
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (zh_TW)
+
+Package: open-xchange-appsuite-help-drive-common
+Architecture: all
+Depends: ${misc:Depends}
+Description: Language-independent files of online help for OX Drive
+
+Package: open-xchange-appsuite-help-drive-de-de
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (de_DE)
+
+Package: open-xchange-appsuite-help-drive-en-gb
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (en_GB)
+
+Package: open-xchange-appsuite-help-drive-en-us
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (en_US)
+
+Package: open-xchange-appsuite-help-drive-es-es
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (es_ES)
+
+Package: open-xchange-appsuite-help-drive-es-mx
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (es_MX)
+
+Package: open-xchange-appsuite-help-drive-fr-fr
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (fr_FR)
+
+Package: open-xchange-appsuite-help-drive-it-it
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (it_IT)
+
+Package: open-xchange-appsuite-help-drive-ja-jp
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (ja_JP)
+
+Package: open-xchange-appsuite-help-drive-nl-nl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (nl_NL)
+
+Package: open-xchange-appsuite-help-drive-pl-pl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (pl_PL)
+
+Package: open-xchange-appsuite-help-drive-zh-cn
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (zh_CN)
+
+Package: open-xchange-appsuite-help-drive-zh-tw
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-drive-common
+Provides: open-xchange-appsuite-help-drive
+Description: Online help for OX Drive (zh_TW)
+
+
+Package: open-xchange-appsuite-l10n-cs-cz
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-cs-cz
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-cs-cz (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (cs_CZ)
+
+Package: open-xchange-appsuite-l10n-da-dk
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-da-dk
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-da-dk (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (da_DK)
+
+Package: open-xchange-appsuite-l10n-de-de
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-de-de
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-de-de (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (de_DE)
+
+Package: open-xchange-appsuite-l10n-en-gb
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-en-gb
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-en-gb (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (en_GB)
+
+Package: open-xchange-appsuite-l10n-en-us
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-en-us
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-en-us (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (en_US)
+
+Package: open-xchange-appsuite-l10n-es-es
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-es-es
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-es-es (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (es_ES)
+
+Package: open-xchange-appsuite-l10n-es-mx
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-es-mx
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-es-mx (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (es_MX)
+
+Package: open-xchange-appsuite-l10n-fi-fi
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-fi-fi
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-fi-fi (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (fi_FI)
+
+Package: open-xchange-appsuite-l10n-fr-ca
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-fr-ca
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-fr-ca (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (fr_CA)
+
+Package: open-xchange-appsuite-l10n-fr-fr
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-fr-fr
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-fr-fr (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (fr_FR)
+
+Package: open-xchange-appsuite-l10n-hu-hu
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-hu-hu
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-hu-hu (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (hu_HU)
+
+Package: open-xchange-appsuite-l10n-it-it
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-it-it
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-it-it (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (it_IT)
+
+Package: open-xchange-appsuite-l10n-ja-jp
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-ja-jp
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-ja-jp (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (ja_JP)
+
+Package: open-xchange-appsuite-l10n-lv-lv
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-lv-lv
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-lv-lv (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (lv_LV)
+
+Package: open-xchange-appsuite-l10n-nl-nl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-nl-nl
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-nl-nl (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (nl_NL)
+
+Package: open-xchange-appsuite-l10n-pl-pl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-pl-pl
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-pl-pl (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (pl_PL)
+
+Package: open-xchange-appsuite-l10n-pt-br
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-pt-br
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-pt-br (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (pt_BR)
+
+Package: open-xchange-appsuite-l10n-ro-ro
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-ro-ro
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-ro-ro (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (ro_RO)
+
+Package: open-xchange-appsuite-l10n-ru-ru
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-ru-ru
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-ru-ru (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (ru_RU)
+
+Package: open-xchange-appsuite-l10n-sk-sk
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-sk-sk
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-sk-sk (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (sk_SK)
+
+Package: open-xchange-appsuite-l10n-sv-se
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-sv-se
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-sv-se (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (sv_SE)
+
+Package: open-xchange-appsuite-l10n-zh-cn
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-zh-cn
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-zh-cn (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (zh_CN)
+
+Package: open-xchange-appsuite-l10n-zh-tw
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-l10n-zh-tw
+Provides: open-xchange-appsuite-l10n
+Breaks: open-xchange-l10n-zh-tw (<< 7.0.1)
+Description: Translation of the OX App Suite HTML5 client (zh_TW)
+
