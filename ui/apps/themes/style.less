@@ -571,7 +571,7 @@ div.hopscotch-bubble {
         padding: 0 12px;
 
         .badge {
-            color: #aaa;
+            color: @badge-bg;
             background-color: @notification-icon-background;
         }
 
@@ -1042,7 +1042,7 @@ div.hopscotch-bubble {
             color: @toolbar-button-color;
             &.accent-color {
                 background-color: @toolbar-button-accent;
-                color: #FFF;
+                color: @white;
                 border: 2px solid @toolbar-button-accent;
                 width: 29px;
                 border-radius: 5px;
@@ -1833,10 +1833,6 @@ a.button {
     .fontWeight(300);
 }
 
-.email-address, .blue {
-    color: @accent-1-bright;
-}
-
 .person, .person-link {
     color: @person-link-color;
     word-break: normal;
@@ -2333,21 +2329,6 @@ ul.io-ox-inline-links + header {
             text-decoration: none;
         }
     }
-}
-
-/* input fields */
-input.nice-input {
-    color: @text-color;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 0.10em 0.5em 0.10em 0.5em;
-    border-radius: 0.25em;
-    outline: 0;
-}
-
-.boxshadow input.nice-input:focus {
-    border-color: transparent;
-    .box-shadow(0 0 5px 1px @accent-1);
 }
 
 /* auto complete */
@@ -3728,65 +3709,934 @@ wbr:after { content: "\00200B" }
     left:90%;
 }
 
-/* High contrast */
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* High contrast */
 html.high-contrast {
 
     @border-color: #ccc;
+    @topbar-launcher-color:             #fff;
+    @topbar-launcher-color-hover:       #fff;
+    @topbar-launcher-color-active:      #fff;
+    @topbar-launcher-background-hover:  #333;
+    @topbar-launcher-background-active: #333;
+    @topbar-icon-color:                 #fff;
+    @badge-bg:                          #fff;
+    @link-color:                        #397bb3; // HC
+    @foldertree-sidepanel-background:   #fff; //HC
+    @border-color:                      @black;
+
+    #io-ox-top-logo-small {
+        display: none; // HC
+    }
 
     #io-ox-topbar {
 
-        color: black;
-        background-color: #fff;
-        background-image: none;
-        border-bottom: 1px solid @border-color;
+        color: #000; // HC
+        background-color: #fff; // HC
+        background-image: none; // HC
+        border-bottom: 1px solid @border-color; // HC
 
-        .launcher > a, i.fa.launcher-icon {
+        .launcher-dropdown, .launcher {
+
+            color: @topbar-launcher-color;
+            -webkit-tap-highlight-color: transparent;
+
+            & > a {
+                color: #333; // HC
+            }
+
+            & > a.closelink:focus {
+                background-color: #08c;
+                i.fa {
+                    color: @topbar-launcher-color-hover;
+                }
+            }
+
+            & > a:focus {
+                color: @topbar-launcher-color-hover;
+                background-color: #08c;
+            }
+
+        }
+
+        .launcher {
+
+            &.closable:hover {
+                color: @topbar-launcher-color-hover;
+                background-color: @topbar-launcher-background-hover;
+            }
+
+            // IE10 needs this :link class otherwise :active is not removed
+            & > a:link {
+                color: @topbar-launcher-color;
+                background-color: transparent;
+            }
+
+            & > a:hover {
+                i {
+                    color: #fff;
+                }
+                color: #fff; // HC
+                background-color: #000; // HC
+            }
+
+            // don't add a:active otherwise IE10 messes it up
+            & > a:focus {
+                outline: 0;
+                color: @topbar-launcher-color-hover;
+                background-color: #08c;
+            }
+
+            &.upsell {
+                color: darken(@topbar-launcher-color, 20%);
+            }
+
+            &.active-app {
+                color: @topbar-launcher-color-active;
+                background-color: @link-color; // HC
+                & > a {
+                    color: #fff; // HC
+                }
+            }
+
+            &.closable i.fa  {
+                color: #ccc;
+            }
+
+            &.closable i.fa-times:hover {
+                color: @topbar-launcher-color-hover;
+                background-color: @topbar-launcher-background-hover;
+            }
+
+            &.active-app.closable i.fa {
+                color: @link-on-dark;
+            }
+        }
+
+        .launcher-dropdown {
+            li {
+                &.upsell i.fa-lock {
+                    color: #AAA;
+                }
+            }
+
+            a.dropdown-toggle {
+                color: white;
+            }
+        }
+
+        i.fa.launcher-icon {
+            color: #000; // HC
+        }
+
+        @-webkit-keyframes launcherColours {
+            from { color: #fff; }
+              to { color: #555; }
+        }
+
+        @-moz-keyframes launcherColours {
+            from { color: #fff; }
+              to { color: #555; }
+        }
+
+        .launcher a.notifications-icon {
+
+            .badge {
+                color: #fff; // HC
+                background-color: #000; // HC
+            }
+
+            .badge.active {
+                color: white;
+                background-color: @notification-icon-background-active;
+            }
+
+            &:focus .badge, &:active .badge {
+                color: white;
+                background-color: darken(@link-color, 10%);
+            }
+
+            .badge i {
+                /* avoid flicker */
+                width: 8px;
+                text-align: center;
+                display: inline-block;
+            }
+        }
+
+
+        i.fa-refresh {
+
+            @color: rgba(255, 255, 255, 0.30);
+
+            color: @color;
+            .transition(color 0.2s linear);
+
+            /* http://stackoverflow.com/questions/7947385/hovering-over-css-transition-in-safari-lightens-certain-font-color */
+            -webkit-transform: translateZ(0);
+
+            &.fa-spin {
+                color: #fff;
+            }
+
+            &.fa-spin-paused {
+                -webkit-animation-play-state: paused;
+                -moz-animation-play-state: paused;
+                animation-play-state: paused;
+                color: #000; // HC
+            }
+
+            .badge {
+                color: #aaa;
+                background-color: @notification-icon-background;
+            }
+
+            .badge.active {
+                color: white;
+                background-color: @notification-icon-background-active;
+            }
+
+            &:focus .badge, &:active .badge {
+                color: white;
+                background-color: darken(@link-color, 10%);
+            }
+
+            &.minimizedmediaplayer {
+
+                &:focus {
+                    i { color: white; }
+                    background-color: @link-color;
+                    outline-style: none;
+                }
+
+                &.active {
+                    color: white;
+                    background-color: @topbar-launcher-background-hover;
+                }
+
+                &.active:hover, &.active:focus {
+                    background-color: @topbar-launcher-background-hover;
+                }
+            }
+
+        }
+
+    }
+
+    #io-ox-notifications {
+
+        background-color: #000; // HC
+
+        #io-ox-notifications-display {
+
+            .section-title {
+                color: #eee;
+            }
+            .clear-button {
+                color: #fff;
+            }
+
+            .item {
+                color: #fff;
+                background-color: #333;
+
+                &:focus { outline: 1px solid rgba(255,255,255,0.3); background-color: #444; }
+
+                &:hover {
+                    background-color: #444;
+                }
+
+                .empty {
+                    color: #aaa;
+                }
+
+                .content {
+                    color: #aaa;
+                }
+
+                .location {
+                    color: #aaa;
+                }
+
+            }
+
+            .item .blue, div > a {
+                color: #17B2FF;
+            }
+        }
+    }
+
+    #io-ox-notifications-overlay {
+        background-color: transparent;
+        background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    .io-ox-alert {
+
+        background-color: rgba(255, 255, 255, 0.95);
+
+        &:focus {
+            background-color: #fff;
+        }
+
+        .icon {
+            color: #aaa;
+        }
+
+        .close:hover, .close:focus {
+            background-color: rgba(0, 0, 0, 0.10);
+        }
+
+        &.io-ox-alert-info .icon { color: #08c; }
+        &.io-ox-alert-error .icon { color: #a00; }
+        &.io-ox-alert-warning .icon { color: #fc0; }
+        &.io-ox-alert-success .icon { color: @green-light; }
+        &.io-ox-alert-busy .icon { color: #555; }
+    }
+
+    #io-ox-notifications-popups {
+        .alert {
+            .box-shadow(1px 1px 3px -1px rgba(0, 0, 0, 0.80));
+        }
+    }
+
+    .window-blocker {
+        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .window-head {
+        background-color: @window-head-color;
+    }
+
+    .toolbar-button {
+
+        & > a {
+            i {
+                color: #000; // HC
+                &.accent-color {
+                    background-color: @toolbar-button-accent;
+                    color: #FFF;
+                    border: 2px solid @toolbar-button-accent;
+                }
+            }
+            &:hover {
+                background-color: @black; // HC
+                i {
+                    color: @white; // HC
+                    &.accent-color {
+                        background-color: darken(@toolbar-button-accent, 10%);
+                        border-color: darken(@toolbar-button-accent, 10%);
+                    }
+                }
+            }
+            &.disabled {
+                i {
+                    color: #eee;
+                    &.accent-color {
+                        background-color: #fff;
+                        border-color: #fff;
+                    }
+                }
+            }
+        }
+    }
+
+    .window-container.classic .window-head {
+        color: white;
+    }
+
+    .window-title {
+        color: @window-title-color;
+    }
+
+    .window-title .folderview-toggle {
+        color: @link-on-dark;
+    }
+
+    .window-toolbar > a {
+        color: @toolbar-link-color;
+    }
+
+    .window-toolbar > a:hover {
+        color: darken(@toolbar-link-color, 10%);
+    }
+
+    .window-toolbar a.btn-primary,
+    .window-toolbar a.btn-primary:hover {
+        color: white;
+    }
+
+    a.button {
+        color: #fff;
+        background-color: #555;
+        border: 1px solid #333;
+    }
+
+    .window-content {
+        background-color: @background;
+    }
+
+    /* List View */
+    .list-view-control {
+
+        background-color: #fff;
+
+        .toolbar {
+
+            .grid-options > a {
+                color: #555;
+            }
+        }
+
+        .resizebar {
+            background: transparent;
+        }
+    }
+
+    .list-view {
+
+        .list-item .list-item-checkmark {
+
+            .fa-checkmark {
+                color: #ccc;
+            }
+        }
+
+        .list-item.selected {
+            .fa-checkmark {
+                color: #08c;
+            }
+        }
+
+        &.visible-selection .list-item.selected {
+            background-color: #ddd;
+            .fa-checkmark {
+                color: #aaa;
+            }
+        }
+
+        &.visible-selection.has-focus .list-item.selected {
+            color: white;
+            background-color: @selected-background;
+        }
+
+        .list-item.busy-indicator {
+            color: #aaa;
+            background-color: #f5f5f5;
+        }
+
+        // use this for empty list
+        .list-item.busy-indicator:first-child {
+            background-color: transparent;
+        }
+
+     }
+
+    /* vGrid */
+    .vgrid {
+
+        .vgrid-scrollpane {
+
+            & > div {
+
+                &:focus .vgrid-cell.selected {
+
+                    background-color: @selected-background;
+
+                    * {
+                        color: #fff !important;
+                    }
+
+                }
+
+            }
+
+        }
+
+        .vgrid-toolbar {
+
+            background-color: #fff;
+
+            a {
+                i { color: black; display: inline-block; }
+            }
+
+            &.top {
+                border-bottom: 1px solid mix(@text-color, @background, 200%/15);
+            }
+
+            &.bottom {
+                border-top: 1px solid mix(@text-color, @background, 200%/15);
+            }
+
+            .grid-info {
+                .folder-count {
+                    color: #888;
+                }
+            }
+        }
+
+    }
+
+    .vgrid-cell {
+
+        color: @text-color;
+        background-color: @background; /* resolves hw accel anti-aliasing */
+
+        &.hover:hover {
+            background-color: mix(@text-color, @background, 1000%/255);
+        }
+
+        &.vgrid-label {
+            background-color: mix(@text-color, @background, 100%/15);
+            .vertical-gradient(@background, mix(@text-color, @background, 1500%/255));
+
+        }
+
+        &.selected {
+            background-color: #ddd;
+        }
+
+        .swipeDelete {
+            background-color: #DA4F49;
+            color: #FFF;
+            &:active {
+                background-color: darken(#DA4F49, 10%);
+            };
+        }
+
+    }
+
+    .leftside {
+        background-color: @background;
+    }
+
+    .rightside {
+        background-color: @background;
+    }
+
+
+    .bright-text {
+        color: #888;
+    }
+
+    .person, .person-link {
+        color: @person-link-color;
+    }
+
+    .delimiter {
+        color: #ccc;
+    }
+
+    a.attachment-link {
+        color: @mail-attachment-link-color;
+    }
+
+    a.attachment-link:hover {
+        color: @mail-attachment-link-color-hover;
+    }
+
+    a.nolink {
+        color: @text-color;
+    }
+
+    @defaultBorderColor: #ddd;
+
+    .border-top {
+        border-top: 1px solid @defaultBorderColor;
+    }
+
+    .border-right {
+        border-right: 1px solid @defaultBorderColor;
+    }
+
+    .border-bottom {
+        border-bottom: 1px solid @defaultBorderColor;
+    }
+
+    .border-left {
+        border-left: 1px solid @defaultBorderColor;
+    }
+
+    .io-ox-dialog-underlay {
+        background-color: black;
+    }
+
+    .io-ox-dialog-popup {
+
+        background-color: white;
+
+        .content .plain-text {
+            color: @text-color;
+        }
+
+    }
+
+    .io-ox-dialog-pane {
+        background-color: white;
+    }
+
+    .io-ox-dialog-pane .content {
+        color: @text-color;
+    }
+
+    /* model.trigger('invalid:... */
+    .help-block.error {
+        color: red;
+    }
+
+    /* fail handling */
+    .io-ox-fail {
+        color: #888;
+    }
+
+    .io-ox-inline-links > a,
+    .io-ox-inline-links > li.dropdown {
+        color: @inline-link-color;
+    }
+
+    .io-ox-action-link {
+        &.btn-primary { color: white; font-weight: normal; }
+    }
+
+    .io-ox-action-link.disabled {
+        color: #aaa;
+    }
+
+    .io-ox-multi-selection {
+
+        .summary {
+            color: #ccc;
+            &.empty {
+                color: #888;
+            }
+            b {
+                color: #aaa;
+            }
+        }
+
+        .io-ox-inline-links {
+            a {
+                color: @inline-link-color;
+            }
+        }
+    }
+
+    /* side popups */
+    .io-ox-sidepopup {
+        background-color: white;
+        @shadowColor: #ccc;
+    }
+
+    .io-ox-sidepopup-arrow {
+
+        &.left {
+            .border {
+                border-left-color: #eee;
+            }
+            .triangle {
+                border-left-color: #fff;
+            }
+        }
+
+        &.right {
+            .border {
+                border-right-color: #eee;
+            }
+            .triangle {
+                border-right-color: #fff;
+            }
+        }
+    }
+
+    .io-ox-sidepopup-overlay {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .io-ox-sidepopup-close {
+
+        .btn-sidepopup {
+            background-color: #eee;
+            color: #aaa;
+
+            &:hover {
+                background-color: #aaa;
+                color: #eee;
+            }
+        }
+    }
+
+    /* auto complete */
+    .autocomplete-popup {
+        background-color: white;
+
+        .autocomplete-item.selected {
+            background-color: #eee;
+        }
+
+    }
+
+    /* folder tree */
+    .io-ox-foldertree {
+
+        .folder {
+
+            &.selectable.dnd-over, &.selectable:hover {
+                background-color: #efefef;
+            }
+
+            &.selected, &.selected:hover {
+
+                background-color: @foldertree-selected-background;
+
+                * {
+                    color: @foldertree-selected-label-color;
+                }
+            }
+
+            &.disabled {
+                color: #bbb;
+            }
+
+            &:focus {
+
+                &.selected {
+
+                    background-color: @foldertree-selected-focus-background;
+
+                    * {
+                        color: @foldertree-focused-label-color;
+                    }
+                }
+            }
+
+            .folder-label {
+
+                i {
+                    color: @foldertree-passive-label-color;
+                }
+            }
+
+            .folder-pubsub {
+
+                color: rgba(0, 0, 0, 0.30);
+
+                &:hover {
+                    color: rgba(0, 0, 0, 0.50);
+                }
+            }
+
+            &.selected .folder-pubsub:hover {
+                color: rgba(0, 0, 0, 0.50);
+            }
+
+        }
+
+        .folder-arrow {
+            color: #aaa;
+        }
+
+        .folder-counter-badge, .folder-options-badge {
+            background-color: #f0f0f0;
+        }
+
+        .folder-options-badge {
+            color: #888;
+        }
+
+        .folder-counter-badge {
+            color: inherit;
+            background-color: transparent;
+        }
+
+        .section {
+
+            .section-title {
+                color: #ccc;
+            }
+        }
+    }
+
+    //
+    // Generic toolbar
+    //
+    .generic-toolbar {
+
+        background-color: #fff;
+
+        .toolbar-item {
             color: #333;
         }
 
-        .launcher.active-app {
-            background-color: @link-color;
-            & > a { color: #fff; }
+        &.visual-focus .toolbar-item {
+
+            &:hover {
+                color: #555;
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            &:focus {
+                color: #fff;
+                background-color: @toolbar-focus-color;
+            }
+
+            &:focus > i { color: #fff; }
         }
 
-        .launcher a.notifications-icon .badge {
-            color: #fff;
+    }
+
+
+    .toolbar-action i.enabled { color: #888; }
+    .toolbar-action:hover { background-color: rgba(0, 0, 0, 0.20); }
+    a.toolbar-action, .toolbar-action > a {
+        color: lighten(@link-color, 5%);
+        i.accent-color { color: @link-accent-color; }
+    }
+
+    .toolbar-action a:focus {
+        background-color: @toolbar-focus-color;
+        i { color: white; }
+    }
+
+    /* context menu */
+    .context-dropdown {
+        background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    /* Guidance view */
+    .guidance {
+
+        h1.folder-name {
+            color: #ccc;
+        }
+
+        .folder-summary {
+            color: #888;
+        }
+
+    }
+
+    /** DRAG & DROP **/
+    @drag-size: 40px;
+
+    .drag-helper {
+        color: #333;
+        background-color: rgba(240, 240, 240, 0.80);
+    }
+
+    .drag-counter {
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.50);
+    }
+
+    .inplace-dropzone {
+
+        background-color: #fff;
+
+        .dropzone-caption, .dropzone-dragover {
+            color: #888;
+        }
+
+        .dropzone-dragover {
+            color: #ddd;
+        }
+
+        .dropzone-overlay {
+            background-color: white;
+        }
+
+        &.dragover {
+            border-color: #ccc;
         }
     }
 
-    #io-ox-top-logo-small {
-        display: none;
+    /** DROPDOWNS **/
+
+    .dropdown a i.fa-caret-down {
+        color: inherit;
     }
 
-    // .foldertree-sidepanel {
-    //     background-color: #fff;
-    //     background-image: none;
-    // }
+    .dropdown-header {
+        color: #999;
+    }
 
-    // .io-ox-foldertree .folder .folder-label {
-    //     font-weight: normal;
-    // }
+    /** Simplify BOOTSTRAP buttons */
 
-    // .border-right, .border-left, .classic-toolbar, .toolbar.top {
-    //     border-color: @border-color;
-    // }
+    .btn-custom(@color) {
+        background-color: @color;
+        &:hover, &.hover { background-color: darken(@color, 10%); }
+        color: white;
+    }
 
-    // .thread-view-list {
-    //     background-color: #ddd;
-    // }
+    .btn-default {
+        background-color: #eee;
+        &:hover, &.hover { background-color: darken(#eee, 10%); }
+        color: #555;
+        border: 1px solid #ccc;
+        border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
+    }
 
-    // .thread-view.list-view .list-item {
-    //     border: 0px none;
-    //     margin-bottom: 7px;
-    // }
+    .btn-primary { .btn-custom(@btn-primary-background); }
+    .btn-inverse { .btn-custom(@btn-inverse-background-highlight); }
+    .btn-success { .btn-custom(@btn-success-background-highlight); }
+    .btn-warning { .btn-custom(@btn-warning-background-highlight); }
+    .btn-danger  { .btn-custom(@btn-danger-background-highlight); }
 
-    // .list-view .list-item .list-item-checkmark .fa-checkmark {
-    //     color: #333;
-    // }
+    /** BOOTSTRAP FIXES **/
 
-    // .mail-item .thread-size {
-    //     color: #fff;
-    //     background-color: rgba(0, 0, 0, 0.5);
-    // }
+    .breadcrumb.chromeless {
+        background-color: transparent;
+    }
+
+    .dropdown {
+        a b.caret {
+            color:#333;
+        }
+    }
+
+    ul.dropdown-menu li a.disabled {
+        color:#999;
+    }
+
 }
