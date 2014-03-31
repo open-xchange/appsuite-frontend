@@ -241,7 +241,7 @@ define.async('io.ox/mail/accounts/view-form',
                 if (needToValidate(list, differences)) {
                     validationCheck(this.model.attributes).done(function (response, error) {
                         //an undefined response variable implies an error (f.e. category 'USER_INPUT')
-                        var hasError = _.isUndefined(response) || [].concat(error.categories || []).indexOf('ERROR') > -1,
+                        var hasError = _.isUndefined(response) || (error ? [].concat(error.categories || []).indexOf('ERROR') > -1 : false),
                             hasWarning = error && error.warnings;
 
                         if (hasError) {
