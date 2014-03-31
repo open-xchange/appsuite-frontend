@@ -95,6 +95,7 @@ define('io.ox/core/tk/dialogs',
                     lastFocus.focus();
                 }
                 // self destruction
+                self.events.destroy();
                 for (var prop in self) {
                     delete self[prop];
                 }
@@ -138,7 +139,7 @@ define('io.ox/core/tk/dialogs',
                 // trigger action event
                 self.trigger('action ' + action, data, self);
                 // resolve & close?
-                if (!async) {
+                if (!async && self) {
                     deferred.resolveWith(nodes.popup, [action, data, self.getContentNode().get(0)]);
                     close();
                 }
