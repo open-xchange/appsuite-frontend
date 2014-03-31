@@ -92,7 +92,7 @@ define('io.ox/search/view-template',
                     $('<i class="fa fa-search"></i>')
                 )
                 .on('click', function () {
-                    if (!ref.val().trim()) {
+                    if (!ref.val().trim() && mode === 'widget') {
                         //open search app
                         require(['io.ox/search/main'], function (searchapp) {
                             searchapp.run();

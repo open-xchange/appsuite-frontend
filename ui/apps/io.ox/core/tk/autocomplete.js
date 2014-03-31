@@ -216,7 +216,7 @@ define('io.ox/core/tk/autocomplete',
                         node.appendTo(scrollpane);
                     });
                 } else {
-                    var index = 0, regular, childs;
+                    var count = 0, regular, childs;
 
                     //apply style
                     o.container
@@ -230,21 +230,20 @@ define('io.ox/core/tk/autocomplete',
                     _(list).each(function (facet) {
                         regular = !(facet.field_facet) && !!facet.display_name;
                         childs = facet.values.length > 0;
-                        //delimiter
-                        if (index !== 0 && childs && regular) {
-                            $('<hr class="unselectable">')
+                        //facet
+                        count++;
+                        if (facet.display_name && childs && regular) {
+                            $('<div class="autocomplete-item group unselectable">')
+                                .text(facet.display_name)
+                                .data({
+                                    index: count,
+                                    id: facet.id,
+                                    label: facet.display_name,
+                                    type: 'group'
+                                })
+                                //delimiter
                                 .appendTo(scrollpane);
                         }
-                        //facet
-                        $('<div class="autocomplete-item group unselectable">')
-                            .text(facet.display_name)
-                            .data({
-                                index: index++,
-                                id: facet.id,
-                                label: facet.display_name,
-                                type: 'group'
-                            })
-                            .appendTo(scrollpane);
                         //values
                         _(facet.values).each(function (value) {
                             value.facet = facet.id;

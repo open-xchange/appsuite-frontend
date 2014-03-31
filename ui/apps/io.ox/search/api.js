@@ -28,7 +28,9 @@ define('io.ox/search/api',
                 method: 'PUT',
                 params: {
                     action: 'autocomplete',
-                    module: ''
+                    module: '',
+                    //max. number of values for each facet
+                    limit: 3
                 },
                 data: {
                     prefix: '',

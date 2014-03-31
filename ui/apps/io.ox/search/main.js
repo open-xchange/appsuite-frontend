@@ -29,7 +29,7 @@ define('io.ox/search/main',
         index: 100,
         id: 'default',
         config: function (data) {
-            data.defaultApp =  settings.get('settings/search/default', 'io.ox/mail');
+            data.defaultApp =  settings.get('search/default', 'io.ox/mail');
         }
     });
 
@@ -37,7 +37,7 @@ define('io.ox/search/main',
         index: 200,
         id: 'custom',
         config: function (data) {
-            data.custom =  settings.get('settings/search/custom/time', ['mail']);
+            data.custom =  settings.get('search/custom/time', ['mail']);
         }
     });
 
@@ -46,7 +46,7 @@ define('io.ox/search/main',
         id: 'mandatory',
         config: function (data) {
             data.mandatory = data.mandatory || {};
-            data.mandatory.folder = settings.get('settings/search/mandatory/folder', ['mail', 'infostore']);
+            data.mandatory.folder = settings.get('search/mandatory/folder', ['mail', 'infostore']);
         }
     });
 
@@ -117,11 +117,13 @@ define('io.ox/search/main',
             ox.ui.apps.add(app);
     });
     app.busy = function () {
-        return win.nodes.body.busy();
+        ox.busy(true);
+        return win.nodes.main.busy();
     };
 
     app.idle = function () {
-        return win.nodes.body.idle();
+        ox.idle();
+        return win.nodes.main.idle();
     };
 
     //reduced version of app.quit to ensure app/window is reusable
@@ -235,7 +237,7 @@ define('io.ox/search/main',
                         }
                     },
                     start = Date.now();
-
+                run();
                 app.busy();
                 return model.getFacets()
                         .then(function (facets) {

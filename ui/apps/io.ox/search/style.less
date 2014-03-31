@@ -30,34 +30,38 @@
 }
 
 
-//global: autocomplete items
+//autocomplete popup
 .autocomplete-search {
-    //reset height to default
-    height: auto;
     min-width: 300px;
-    max-height: 500px;
+    max-height: 600px;
 
-    .label {
-        font-style: italic;
-        color: rgba(128, 128, 128, 0.71)
+    //adjust autocomplete defaults
+    &.bottom-placement {
+        border-bottom: 2px solid #fff;
     }
-
-    //divider/group
-    .unselectable {
-        margin: 0;
-        color: rgba(128, 128, 128, 0.71);
+    .scrollable-pane:after {
+        content: ''; /* make sure margins/paddings are applied properly */
     }
 
     .autocomplete-item {
-        margin-bottom: 0;
+        color: #333;
+        margin: 2px;
         padding: 3px 3px;
+
         &.indent {
             padding-left: 20px;
         }
-        //globale description
+        //description
         i {
             font-style: normal;
             color: rgba(0,0,0,.5);
+        }
+        //groups
+        &.group {
+            border-top: 1px solid rgba(128, 128, 128, 0.25);
+        }
+        &.unselectable {
+            color: rgba(128, 128, 128, 0.71);
         }
     }
 }
@@ -151,7 +155,7 @@
 
     //section: info
     .info {
-        margin: 0 14px 4px 14px;
+        margin: 0 14px 4px 15px;
         padding: 10px;
         border-left: 3px solid #eee;
         width: 500px;
