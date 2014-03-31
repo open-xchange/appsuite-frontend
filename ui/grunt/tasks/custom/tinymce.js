@@ -48,7 +48,7 @@ module.exports = function (grunt) {
             }
         };
 
-    grunt.config('curl', {
+    grunt.config.extend('curl', {
 
         tinymceMain: {
             src: 'http://download.moxiecode.com/tinymce/tinymce_' + version + '_jquery.zip',
@@ -71,7 +71,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.config('unzip', {
+    grunt.config.extend('unzip', {
         tinymceMain: {
             router: function (filepath) {
                 return extractPart(filepath, 'tinymce/jscripts/tiny_mce');

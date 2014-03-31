@@ -15,7 +15,7 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('modernizr', {
+    grunt.config.extend('modernizr', {
         dist: {
             // [REQUIRED] Path to the build you're using for development.
             devFile : 'node_modules/grunt-modernizr/lib/modernizr-dev.js',

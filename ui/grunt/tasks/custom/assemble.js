@@ -15,7 +15,7 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('assemble', {
+    grunt.config.extend('assemble', {
 
         options: {
             version: '<%= pkg.version %>-<%= pkg.revision %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),

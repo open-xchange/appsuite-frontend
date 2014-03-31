@@ -15,7 +15,7 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('jscs', {
+    grunt.config.extend('jscs', {
 
         options: {
             config: '.jscs.json',

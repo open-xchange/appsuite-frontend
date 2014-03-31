@@ -27,7 +27,7 @@ module.exports = function (grunt) {
         return config[key];
     }
 
-    grunt.config('obs_upload', {
+    grunt.config.extend('obs_upload', {
         package: {
             options: {
                 url: obsConfig('url'),
