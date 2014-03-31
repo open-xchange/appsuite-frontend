@@ -16,7 +16,6 @@ define('io.ox/core/settings/pane',
      'io.ox/backbone/basicModel',
      'io.ox/backbone/views',
      'io.ox/backbone/forms',
-     'io.ox/core/http',
      'io.ox/core/api/apps',
      'io.ox/core/capabilities',
      'io.ox/core/notifications',
@@ -24,7 +23,7 @@ define('io.ox/core/settings/pane',
      'settings!io.ox/core',
      'settings!io.ox/core/settingOptions',
      'gettext!io.ox/core'
-    ], function (ext, BasicModel, views, forms, http, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
+    ], function (ext, BasicModel, views, forms, appAPI, capabilities, notifications, userSettings, settings, settingOptions, gt) {
 
     'use strict';
 
@@ -38,6 +37,10 @@ define('io.ox/core/settings/pane',
         draw: function () {
             var model = settings.createModel(BasicModel);
             model.on('change', function (model) {
+
+                if ('highcontrast' in model.changed) {
+                    $('html').toggleClass('high-contrast', model.changed.highcontrast);
+                }
 
                 settings.saveAndYell().then(
                     function success() {
@@ -170,6 +173,15 @@ define('io.ox/core/settings/pane',
                 selectOptions: availableThemes
             }));
         }
+
+        point.extend(new forms.CheckBoxField({
+            id: 'highcontrast',
+            index: 800,
+            labelCssClass: 'col-sm-4',
+            controlCssClass: 'col-sm-4',
+            attribute: 'highcontrast',
+            label: gt('High contrast theme')
+        }));
 
     }());
 

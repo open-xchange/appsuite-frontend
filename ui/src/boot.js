@@ -292,6 +292,8 @@ $(window).load(function () {
 
                 var theme = _.url.hash('theme') || settings.get('theme') || 'default';
 
+                $('html').toggleClass('high-contrast', settings.get('highcontrast', false));
+
                 debug('boot.js: loadCore > load config ...');
                 debug('boot.js: loadCore > require "main" & set theme', theme);
 
