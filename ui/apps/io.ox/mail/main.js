@@ -24,6 +24,7 @@ define('io.ox/mail/main',
      'io.ox/core/notifications',
      'io.ox/mail/navbarViews',
      'io.ox/core/commons-folderview',
+     'io.ox/core/pageController',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
@@ -31,7 +32,7 @@ define('io.ox/mail/main',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, FolderView, gt, settings) {
+    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, FolderView, PageController, gt, settings) {
 
     'use strict';
 
@@ -46,17 +47,26 @@ define('io.ox/mail/main',
         'pages-mobile': function (app) {
             if (_.device('!small')) return;
             var c = app.getWindow().nodes.main;
-            var toolbar = $('<div class="mobile-toolbar">');
+            var navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">');
+            app.navbar = navbar;
+            app.toolbar = toolbar;
+
+            app.pages = new PageController(app);
 
             app.getWindow()
-                .nodes.body.addClass('classic-toolbar-visible').append(toolbar);
+                .nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
             // create 4 pages
             app.pages.addPage({
                 name: 'folderTree',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    el: toolbar,
                     app: app
+                }),
+                toolbar: new Bars.ToolbarView({
+                    el: toolbar,
+                    app: app,
+                    page: 'folderView'
                 })
             });
 
@@ -65,8 +75,12 @@ define('io.ox/mail/main',
                 container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    el: toolbar,
                     app: app
+                }),
+                toolbar: new Bars.ToolbarView({
+                    el: toolbar,
+                    app: app,
+                    page: 'listView'
                 })
             });
 
@@ -74,8 +88,12 @@ define('io.ox/mail/main',
                 name: 'threadView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    el: toolbar,
                     app: app
+                }),
+                toolbar: new Bars.ToolbarView({
+                    el: toolbar,
+                    app: app,
+                    page: 'threadView'
                 })
             });
 
@@ -83,24 +101,28 @@ define('io.ox/mail/main',
                 name: 'detailView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    el: toolbar,
                     app: app
+                }),
+                toolbar: new Bars.ToolbarView({
+                    el: toolbar,
+                    app: app,
+                    page: 'detailView'
                 })
             });
 
-            app.toolbar = new Bars.ToolbarView({app: app});
-            window.wurst = app;
+            window.test = app;
         },
         /*
          * Init all nav- and toolbar labels for mobile
          */
-        'bars-mobile': function (app) {
+        'navbars-mobile': function (app) {
 
             if (!_.device('small')) return;
 
             app.pages.getNavbar('listView')
                 .setLeft(gt('Folders'))
-                .setRight(gt('Edit'));
+                .setRight(gt('Edit'))
+                .on('actionRight');
 
             app.pages.getNavbar('folderTree')
                 .setTitle(gt('Folders'))
@@ -121,10 +143,33 @@ define('io.ox/mail/main',
 
         },
 
+        'toolbars-mobile': function () {
+            if (!_.device('small')) return;
+
+            app.pages.getNavbar('listView').on('leftAction', function () {
+                app.pages.goBack();
+            });
+            app.pages.getNavbar('threadView').on('leftAction', function () {
+                app.pages.goBack();
+            });
+            app.pages.getNavbar('detailView').on('leftAction', function () {
+                app.pages.goBack();
+            });
+
+            // checkbox toggle
+            app.pages.getNavbar('listView').on('rightAction', function () {
+                app.props.set('checkboxes', !app.props.get('checkboxes'));
+            });
+
+        },
+
         'pages-desktop': function (app) {
             if (_.device('small')) return;
-            // create 2 pages
 
+            // add page controller
+            app.pages = new PageController(app);
+
+            // create 2 pages
             // legacy compatibility
             app.getWindow().nodes.main.addClass('vsplit');
 
@@ -182,7 +227,7 @@ define('io.ox/mail/main',
             if (_.device('!small')) return;
 
             app.pages.getNavbar('folderTree')
-                .setRightAction(function () {
+                .on('actionRight', function () {
 
                     if (!app.props.get('mobileFolderSelectMode')) {
 
@@ -518,10 +563,13 @@ define('io.ox/mail/main',
                 },
                 'selection:multiple': function () {
                     //react('multiple');
+                    console.log('multi');
                 },
                 'selection:action': function (list) {
                     // make sure we are not in multi-selection
-                    if (app.listView.selection.get().length === 1) {
+                    if (app.props.get('checkboxes')) {
+                        console.log('multiselect');
+                    } else if (app.listView.selection.get().length === 1) {
                         // check for thread
                         var cid = list[0].substr(7),
                             isThread = this.collection.get(cid).get('threadSize') > 1;
@@ -730,6 +778,15 @@ define('io.ox/mail/main',
         'before-delete': function (app) {
             api.on('beforedelete', function () {
                 app.listView.selection.dodge();
+            });
+        },
+
+        'before-delete-mobile': function (app) {
+            if (!_.device('small')) return;
+            api.on('beforedelete', function () {
+                if (app.pages.getCurrentPage().name === 'detailView') {
+                    app.pages.goBack();
+                }
             });
         },
 

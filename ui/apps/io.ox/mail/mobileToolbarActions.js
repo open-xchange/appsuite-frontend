@@ -8,45 +8,38 @@
  *
  * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/mail/toolbar',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
-     'io.ox/core/tk/flag-picker',
-     'io.ox/mail/api',
-     'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/tk/upload',
-     'io.ox/core/dropzone',
-     'io.ox/core/notifications',
-     'gettext!io.ox/mail',
-     'io.ox/mail/actions',
-     'less!io.ox/mail/style',
-     'io.ox/mail/folderview-extensions'
-    ], function (ext, links, actions, flagPicker, api, Dropdown, upload, dropzone, notifications, gt) {
+define('io.ox/mail/mobileToolbarActions',
+   ['io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/mail/api',
+    'gettext!io.ox/mail'],
+    function (ext, links, api, gt) {
 
     'use strict';
 
-    // define links for classic toolbar
-    var point = ext.point('io.ox/mail/classic-toolbar/links');
+    // define links for each page
+
+    var pointFolderView = ext.point('io.ox/mail/mobile/toolbar/folderView'),
+        pointListView = ext.point('io.ox/mail/mobile/toolbar/listView'),
+        //pointThreadView = ext.point('io.ox/mail/mobile/toolbar/threadView'),
+        pointDetailView = ext.point('io.ox/mail/mobile/toolbar/detailView');
 
     var meta = {
-        //
-        // --- HI ----
-        //
+
         'compose': {
             prio: 'hi',
             mobile: 'hi',
             label: gt('Compose'),
-            title: gt('Compose new email'),
+            icon: 'fa fa-edit',
             drawDisabled: true,
             ref: 'io.ox/mail/actions/compose'
         },
         'reply': {
             prio: 'hi',
-            mobile: 'lo',
+            mobile: 'hi',
             icon: 'fa fa-reply',
             label: gt('Reply to sender'),
             drawDisabled: true,
@@ -54,7 +47,7 @@ define('io.ox/mail/toolbar',
         },
         'reply-all': {
             prio: 'hi',
-            mobile: 'lo',
+            mobile: 'hi',
             icon: 'fa fa-reply-all',
             label: gt('Reply to all recipients'),
             drawDisabled: true,
@@ -62,7 +55,7 @@ define('io.ox/mail/toolbar',
         },
         'forward': {
             prio: 'hi',
-            mobile: 'lo',
+            mobile: 'hi',
             icon: 'fa fa-mail-forward',
             label: gt('Forward'),
             drawDisabled: true,
@@ -70,7 +63,7 @@ define('io.ox/mail/toolbar',
         },
         'delete': {
             prio: 'hi',
-            mobile: 'lo',
+            mobile: 'hi',
             icon: 'fa fa-trash-o',
             label: gt('Delete'),
             drawDisabled: true,
@@ -83,8 +76,8 @@ define('io.ox/mail/toolbar',
             label: gt('Set color'),
             drawDisabled: true,
             ref: 'io.ox/mail/actions/color',
-            customize: function (baton) {
-                flagPicker.attach(this, { data: baton.data });
+            customize: function () {
+                //flagPicker.attach(this, { data: baton.data });
             }
         },
         'edit': {
@@ -162,74 +155,29 @@ define('io.ox/mail/toolbar',
         }
     };
 
-    // local dummy action
-
-    new actions.Action('io.ox/mail/actions/color', {
-        requires: 'some',
-        action: $.noop
-    });
-
-    // transform into extensions
-
     var index = 0;
 
-    _(meta).each(function (extension, id) {
+    function addLink(point, id) {
+        var extension = meta[id];
         extension.id = id;
         extension.index = (index += 100);
         point.extend(new links.Link(extension));
-    });
-
-    ext.point('io.ox/mail/classic-toolbar').extend(new links.InlineLinks({
-        attributes: {},
-        classes: '',
-        forcelimit: true, // always use drop-down
-        index: 200,
-        id: 'toolbar-links',
-        ref: 'io.ox/mail/classic-toolbar/links'
-    }));
-
-    // local mediator
-    function updateContactPicture() {
-        // only show this option if preview pane is right (vertical/compact)
-        var li = this.$el.find('[data-name="contactPictures"]').parent(),
-            layout = this.model.get('layout');
-        if (layout === 'vertical' || layout === 'compact') li.show(); else li.hide();
     }
 
-    // view dropdown
-    ext.point('io.ox/mail/classic-toolbar').extend({
-        id: 'view-dropdown',
-        index: 10000,
-        draw: function (baton) {
+    // build links for each toolbar
 
-            if (_.device('small')) return;
+    addLink(pointFolderView, 'compose');
 
-            //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
-            var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
-            .header(gt('Layout'))
-            .option('layout', 'vertical', gt('Vertical'))
-            .option('layout', 'compact', gt('Compact'))
-            .option('layout', 'horizontal', gt('Horizontal'))
-            .option('layout', 'list', gt('List'))
-            .divider()
-            .header(gt('Options'))
-            .option('folderview', true, gt('Folder view'))
-            .option('checkboxes', true, gt('Checkboxes'))
-            .option('contactPictures', true, gt('Contact pictures'))
-            .listenTo(baton.app.props, 'change:layout', updateContactPicture);
+    addLink(pointListView, 'compose');
 
-            this.append(
-                dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
-            );
-
-            updateContactPicture.call(dropdown);
-        }
-    });
-
-    // classic toolbar
-    var toolbar = $('<ul class="classic-toolbar" role="menu">');
+    addLink(pointDetailView, 'compose');
+    addLink(pointDetailView, 'reply');
+    addLink(pointDetailView, 'reply-all');
+    addLink(pointDetailView, 'forward');
+    addLink(pointDetailView, 'delete');
 
     var updateToolbar = _.debounce(function (list) {
+
         if (!list) return;
         // remember if this list is based on a single thread
         var isThread = list.length === 1 && /^thread\./.test(list[0]);
@@ -238,28 +186,29 @@ define('io.ox/mail/toolbar',
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
         // draw toolbar
-        var baton = ext.Baton({ $el: toolbar, data: list, isThread: isThread, app: this });
-        console.log('this', this);
-        ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), baton);
+        var baton = ext.Baton({data: list, isThread: isThread, app: this });
+        console.log(baton);
+        // handle updated baton to pageController
+        this.pages.getCurrentPage().toolbar.setBaton(baton);
+
     }, 10);
 
+
     ext.point('io.ox/mail/mediator').extend({
-        id: 'toolbar',
-        index: 10000,
+        id: 'toolbar-mobile',
+        index: 10100,
         setup: function (app) {
-            if (_.device('small')) return;
-            app.getWindow().nodes.body.addClass('classic-toolbar-visible').prepend(
-               toolbar = $('<ul class="classic-toolbar" role="menu">')
-            );
+            if (!_.device('small')) return;
+            console.log('setting updateaction for mobile tooblar');
             app.updateToolbar = updateToolbar;
         }
     });
 
     ext.point('io.ox/mail/mediator').extend({
-        id: 'update-toolbar',
-        index: 10200,
+        id: 'update-toolbar-mobile',
+        index: 10300,
         setup: function (app) {
-            if (_.device('small')) return;
+            if (!_.device('small')) return;
             app.updateToolbar();
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.listView.on('selection:change change', function () {
@@ -267,5 +216,4 @@ define('io.ox/mail/toolbar',
             });
         }
     });
-
 });

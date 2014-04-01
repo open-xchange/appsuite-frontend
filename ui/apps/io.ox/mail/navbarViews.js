@@ -12,14 +12,13 @@
  */
 
 
-define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
-    'gettext!io.ox/mail'], function (ext) {
+define('io.ox/mail/navbarViews',
+    ['io.ox/core/extensions',
+    'gettext!io.ox/mail',
+    'io.ox/mail/mobileToolbarActions'], function (ext) {
 
 
     'use strict';
-
-    //var pNav = ext.point('io.ox/mail/mobile/navbar');
-        //pTool = ext.point('io.ox/mail/mobile/toolbar');
 
     ext.point('io.ox/mail/mobile/navbar').extend({
         id: 'btn-left',
@@ -33,10 +32,7 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
                     $('<a>').append(
                         $('<i class="fa fa-chevron-left">'),
                         baton.left
-                    ).on('tap', function (e) {
-                        e.preventDefault();
-                        baton.app.pages.goBack();
-                    })
+                    )
                 )
             );
         }
@@ -62,10 +58,7 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
                 $('<div class="navbar-action right">').append(
                     $('<a>').append(
                         baton.right
-                    ).on('tap', function (e) {
-                        e.preventDefault();
-                        baton.rightAction(e);
-                    })
+                    )
                 )
             );
         }
@@ -77,8 +70,8 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
      * Holds some shared
      */
     var BarView = Backbone.View.extend({
-        tagName: 'div',
-        className: 'toolbar-content',
+
+
         show: function () {
             this.$el.show();
             return this;
@@ -97,25 +90,30 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
      */
     var NavbarView = BarView.extend({
 
+        tagName: 'div',
+
+        className: 'toolbar-content',
+
+        events: {
+            'tap .navbar-action.right': 'onRightAction',
+            'tap .navbar-action.left': 'onLeftAction'
+        },
+
         initialize: function (opt) {
-            this.el = opt.el;
             this.app = opt.app;
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
-
         },
 
         render: function () {
 
-            this.$el.empty().show();
+            this.$el.empty();
 
             ext.point('io.ox/mail/mobile/navbar').invoke('draw', this, {
                 left: this.left,
                 right: this.right,
-                title: this.title,
-                rightAction: this.rightAction || $.noop,
-                app: this.app
+                title: this.title
             });
             return this;
         },
@@ -140,22 +138,45 @@ define('io.ox/mail/navbarViews', ['io.ox/core/extensions',
         // TODO change to event based
         setRightAction: function (fn) {
             this.rightAction = fn;
+        },
+
+        onRightAction: function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            this.trigger('rightAction');
+        },
+
+        onLeftAction: function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            this.trigger('leftAction');
         }
     });
 
 
     /*
      * Toolbars
-     * Will be blaced at the bottom of a page to
+     * Will be placed at the bottom of a page to
      * hold one ore more action icons/links
      */
     var ToolbarView = BarView.extend({
-        initialize: function () {
+        initialize: function (opt) {
+            this.el = opt.el;
+            this.app = opt.app;
+            this.page = opt.page;
+            this.baton = opt.baton || ext.Baton({});
         },
         render: function () {
+            this.$el.empty().show();
 
-            ext.point('io.ox/mail/mobile/toolbar').invoke('draw', this);
+            ext.point('io.ox/mail/mobile/toolbar/' + this.page).invoke('draw', this.$el, this.baton);
             return this;
+        },
+        setBaton: function (baton) {
+            this.baton = baton;
+            this.render();
         }
     });
 

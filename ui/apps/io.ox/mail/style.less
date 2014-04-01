@@ -26,7 +26,7 @@
 @unread-toggle-width: 40px;
 
 
-.mobile-toolbar {
+.mobile-navbar {
     text-align: center;
     font-size: 16px;
     .navbar-action {
@@ -50,6 +50,27 @@
     }
 }
 
+.mobile-toolbar {
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    height: @toolbar-height;
+    z-index: 10;
+    margin: 0;
+    padding: 0 4px 0 5px;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    a {
+        display: inline-block;
+        font-size: 20px;
+        line-height: @toolbar-height;
+        width: 40px;
+        height: @toolbar-height;
+        text-align: center;
+        margin: 0 5px;
+    }
+}
+
 @toolbar-line-height: 19px;
 @toolbar-vertical-padding: 10px;
 @toolbar-height: @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
@@ -57,7 +78,7 @@
 .classic-toolbar-visible .window-content { top: @toolbar-height; }
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
 
-.classic-toolbar, .inline-toolbar, .mobile-toolbar {
+.classic-toolbar, .inline-toolbar, .mobile-navbar {
     position: absolute;
     top: 0;
     width: 100%;

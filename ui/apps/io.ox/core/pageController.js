@@ -16,13 +16,14 @@ define('io.ox/core/pageController',
 
     'use strict';
 
-    var PageController = function () {
+    var PageController = function (app) {
 
         var pages = {},
             current,
             order = [],
             lastPage = [],
-            self = this;
+            self = this,
+            app = app;
 
         function createPage(opt) {
             var defaults = {
@@ -35,7 +36,9 @@ define('io.ox/core/pageController',
             // store page
             pages[opt.name] = {
                 $el: $(opt.tag).addClass(opt.classes),
-                navbar: opt.navbar
+                navbar: opt.navbar,
+                toolbar: opt.toolbar,
+                name: opt.name
             };
 
             // pages must be created in the correct order
@@ -117,9 +120,8 @@ define('io.ox/core/pageController',
                     });
             }, 1);
 
-            // make new toolbar visible
-            pages[opt.from].navbar.hide();
-            pages[to].navbar.render();
+            showNavbar(to);
+            pages[to].toolbar.render();
 
         };
 
@@ -161,6 +163,18 @@ define('io.ox/core/pageController',
             return pages[page].navbar;
         };
 
+        this.getAll = function () {
+            return pages;
+        };
+
+        this.getToolbar = function (page) {
+            if (!pages[page]) {
+                console.error('PageController: Page ' + page + ' does not exist.');
+                return;
+            }
+            return pages[page].toolbar;
+        };
+
         this.getCurrentPage = function () {
             return pages[current];
         };
@@ -168,12 +182,18 @@ define('io.ox/core/pageController',
         this.setCurrentPage = function (page) {
             if (current) pages[current].$el.removeClass('current');
             pages[page].$el.addClass('current');
-            pages[page].navbar.render();
+            showNavbar(page);
+            pages[page].toolbar.render();
             current = page;
         };
 
         this.getPages = function () {
             return pages;
+        };
+
+        var showNavbar = function (page) {
+            var b = pages[page].navbar;
+            app.navbar.empty().append(b.render().$el);
         };
 
     };

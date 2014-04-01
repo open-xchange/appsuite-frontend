@@ -60,7 +60,7 @@ define('io.ox/core/extPatterns/links',
                 // has icon?
                 if (icons) a.addClass('no-underline');
                 // use tooltip?
-                if ((icons && self.label) || self.title) {
+                if (!_.device('smartphone') && (icons && self.label) || self.title) {
                     a.attr({
                         'data-toggle': 'tooltip',
                         'data-placement': 'bottom',
