@@ -376,8 +376,8 @@ define('io.ox/calendar/month/view',
                     .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
                         a.get('private_flag') ? $('<span class="private-flag"><i class="fa fa-lock"></i></span>'): '',
-                        $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))),
-                        $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0'))
+                        a.get('title') ? $('<div>').addClass('title').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
+                        a.get('location') ? $('<div>').addClass('location').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
                     )
                 )
                 .attr({

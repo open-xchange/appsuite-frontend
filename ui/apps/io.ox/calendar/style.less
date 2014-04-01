@@ -30,7 +30,7 @@
             .fontWeight(300);
             .cw {
                 font-size: 14px;
-                color: #888;
+                color: @hc-gray;
             }
         }
 
@@ -126,9 +126,8 @@
 
     .appointment {
 
-        .location {
-            color: #ccc;
-            color: rgba(255, 255, 255, 0.6);
+        .location, .title {
+            color: @white;
         }
 
         &.opac {
@@ -138,72 +137,88 @@
 
         &.reserved {
 
-            background-color: @appointment-reserved;
+            @r: @appointment-reserved;
+            background-color: @r;
 
             &.hover {
-                background-color: darken(@appointment-reserved, @appointment-hover-pct);
+                background-color: darken(@r, @appointment-hover-pct);
             }
 
             &.unconfirmed {
-                background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
+                background-color: hsla(hue(@r), saturation(@r), lightness(@r), @appointment-unconfirmed-alpha);
             }
 
             &.declined {
-                background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-declined-alpha);
+                background-color: hsla(hue(@r), saturation(@r), lightness(@r), @appointment-declined-alpha);
+            }
+
+            html.high-contrast & .location, html.high-contrast & .title {
+                color: @black;
             }
 
         }
 
         &.temporary {
 
-            background-color: @appointment-temporary;
+            @t: @appointment-temporary;
+            background-color: @t;
 
             &.hover {
-                background-color: darken(@appointment-temporary, @appointment-hover-pct);
+                background-color: darken(@t, @appointment-hover-pct);
             }
 
             &.unconfirmed {
-                background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-unconfirmed-alpha);
+                background-color: hsla(hue(@t), saturation(@t), lightness(@t), @appointment-unconfirmed-alpha);
             }
 
             &.declined {
-                background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-declined-alpha);
+                background-color: hsla(hue(@t), saturation(@t), lightness(@t), @appointment-declined-alpha);
             }
 
-        }
+            html.high-contrast & .location, html.high-contrast & .title {
+                color: @black;
+            }
+
+       }
 
         &.absent {
 
-            background-color: @appointment-absent;
+            @a: @appointment-absent;
+            background-color: @a;
 
             &.hover {
-                background-color: darken(@appointment-absent, @appointment-hover-pct);
+                background-color: darken(@a, @appointment-hover-pct);
             }
 
             &.unconfirmed {
-                background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-unconfirmed-alpha);
+                background-color: hsla(hue(@a), saturation(@a), lightness(@a), @appointment-unconfirmed-alpha);
             }
 
             &.declined {
-                background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-declined-alpha);
+                background-color: hsla(hue(@a), saturation(@a), lightness(@a), @appointment-declined-alpha);
             }
 
         }
 
         &.free {
 
-            background-color: @appointment-free;
+            @f: @appointment-free;
+            background-color: @f;
 
             &.hover {
-                background-color: darken(@appointment-free, @appointment-hover-pct);
+                background-color: darken(@f, @appointment-hover-pct);
             }
 
             &.unconfirmed {
-                background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
+                background-color: hsla(hue(@f), saturation(@f), lightness(@f), @appointment-unconfirmed-alpha);
             }
 
             &.declined {
-                background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-declined-alpha);
+                background-color: hsla(hue(@f), saturation(@f), lightness(@f), @appointment-declined-alpha);
+            }
+
+            html.high-contrast & .location, html.high-contrast & .title {
+                color: @black;
             }
 
         }
@@ -219,6 +234,11 @@
             &.disabled {
                 cursor: normal;
             }
+
+            html.high-contrast & .location, html.high-contrast & .title {
+                color: @white;
+            }
+
         }
 
         &.declined .appointment-content * {
@@ -427,36 +447,50 @@
         }
 
         .shown_as {
+
             &.reserved {
                 color: @appointment-reserved;
             }
+
             &.temporary {
                 color: @appointment-temporary;
             }
+
             &.absent {
                 color: @appointment-absent;
             }
+
             &.free {
                 color: @appointment-free;
             }
+
         }
 
     }
 
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
+
         .io-ox-inline-links:first-child {
+
             margin: 0;
             padding: 15px 0;
+
             span.io-ox-action-link.dropdown {
                 float: right;
             }
+
         }
+
         .io-ox-inline-links {
+
             &.embedded {
                 text-align: left;
             }
+
         }
+
     }
+
 }
 
 .csscolumns .calendar-detail .participant {
@@ -564,6 +598,6 @@
     margin-bottom: 14px;
     label {
         font-weight: 300;
-        color: #777;
+        color: @hc-gray;
     }
 }

@@ -15,16 +15,17 @@
 /* High contrast */
 html.high-contrast {
 
-    @topbar-launcher-color:             #fff;
-    @topbar-launcher-color-hover:       #fff;
-    @topbar-launcher-color-active:      #fff;
-    @topbar-launcher-background-hover:  #333;
-    @topbar-launcher-background-active: #333;
-    @topbar-icon-color:                 #fff;
-    @badge-bg:                          #fff;
-    @foldertree-sidepanel-background:   #fff; //HC
-    @hc-border-color:                   @black;
-    @notification-icon-background-active: @link-color;
+    @topbar-launcher-color:                 #fff;
+    @topbar-launcher-color-hover:           #fff;
+    @topbar-launcher-color-active:          #fff;
+    @topbar-launcher-background-hover:      #333;
+    @topbar-launcher-background-active:     #333;
+    @topbar-icon-color:                     #fff;
+    @badge-bg:                              #fff;
+    @foldertree-sidepanel-background:       #fff;
+    @hc-border-color:                       @black;
+    @link-color:                            @hc-link-color;
+    @notification-icon-background-active:   @link-color;
 
     a {
         color: @hc-link-color;
@@ -1837,7 +1838,7 @@ a.button {
                 color: #888;
 
                 html.high-contrast & {
-                    color: #767676;
+                    color: @hc-gray;
                 }
             }
 
@@ -2076,7 +2077,7 @@ a.button {
     .fontWeight(300);
 
     html.high-contrast & {
-        color: #767676;
+        color: @hc-gray;
     }
 
 }
@@ -3395,7 +3396,7 @@ a.toolbar-action, .toolbar-action > a {
     color: #999;
 
     html.high-contrast & {
-        color: #767676; // HC
+        color: @hc-gray; // HC
     }
 }
 
