@@ -127,7 +127,7 @@ if (sinon) {
             });
             fakeServer.respondWith("GET", /api\/apps\/manifests\?action=config/, function (xhr) {
                 var configData = {
-                    languages: [{ de_DE: 'Deutsch' }, { en_US: 'English (US)' }]
+                    languages: [['de_DE', 'Deutsch'], ['en_US', 'English (US)']]
                 };
                 xhr.respond(200, {"Content-Type": "text/javascript;charset=UTF-8"}, JSON.stringify({
                     data: configData
