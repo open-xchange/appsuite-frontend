@@ -72,7 +72,6 @@
       $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
 
       activeElement = $(document.activeElement);
-      console.log('activeElement', activeElement);
 
       if (e.isDefaultPrevented()) return
 
