@@ -14,7 +14,7 @@
 define('io.ox/mail/reader/main',
     ['io.ox/mail/threadview',
      'io.ox/mail/util'
-    ], function (ThreadView, util) {
+    ], function (threadView, util) {
 
     'use strict';
 
@@ -25,7 +25,7 @@ define('io.ox/mail/reader/main',
          * Setup thread view
          */
         'thread-view': function (app) {
-            app.threadView = new ThreadView();
+            app.threadView = new threadView.Desktop();
             app.getWindow().nodes.main
                 .addClass('mail-reader')
                 .append(app.threadView.render().$el);
