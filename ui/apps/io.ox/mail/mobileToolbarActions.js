@@ -24,7 +24,8 @@ define('io.ox/mail/mobileToolbarActions',
 
     var pointFolderView = ext.point('io.ox/mail/mobile/toolbar/folderView'),
         pointListView = ext.point('io.ox/mail/mobile/toolbar/listView'),
-        //pointThreadView = ext.point('io.ox/mail/mobile/toolbar/threadView'),
+        pointListViewMultiSelect = ext.point('io.ox/mail/mobile/toolbar/listView/multiselect'),
+        pointThreadView = ext.point('io.ox/mail/mobile/toolbar/threadView'),
         pointDetailView = ext.point('io.ox/mail/mobile/toolbar/detailView');
 
     var meta = {
@@ -157,24 +158,27 @@ define('io.ox/mail/mobileToolbarActions',
 
     var index = 0;
 
-    function addLink(point, id) {
-        var extension = meta[id];
-        extension.id = id;
-        extension.index = (index += 100);
-        point.extend(new links.Link(extension));
+    function addLink(point, ids) {
+        _(ids).each(function (id) {
+            var extension = meta[id];
+            extension.id = id;
+            extension.index = (index += 100);
+            point.extend(new links.Link(extension));
+        });
     }
 
     // build links for each toolbar
 
-    addLink(pointFolderView, 'compose');
+    addLink(pointFolderView, ['compose']);
 
-    addLink(pointListView, 'compose');
+    addLink(pointListView, ['compose']);
 
-    addLink(pointDetailView, 'compose');
-    addLink(pointDetailView, 'reply');
-    addLink(pointDetailView, 'reply-all');
-    addLink(pointDetailView, 'forward');
-    addLink(pointDetailView, 'delete');
+    addLink(pointThreadView, ['compose']);
+
+    addLink(pointDetailView, ['compose', 'reply', 'reply-all', 'forward', 'delete']);
+
+    //multiselect in listview
+    addLink(pointListViewMultiSelect, ['forward', 'delete']);
 
     var updateToolbar = _.debounce(function (list) {
 
@@ -187,9 +191,10 @@ define('io.ox/mail/mobileToolbarActions',
         list = list.length === 1 ? list[0] : list;
         // draw toolbar
         var baton = ext.Baton({data: list, isThread: isThread, app: this });
-        console.log(baton);
+
         // handle updated baton to pageController
         this.pages.getCurrentPage().toolbar.setBaton(baton);
+        this.pages.getCurrentPage().secondaryToolbar.setBaton(baton);
 
     }, 10);
 
@@ -199,7 +204,6 @@ define('io.ox/mail/mobileToolbarActions',
         index: 10100,
         setup: function (app) {
             if (!_.device('small')) return;
-            console.log('setting updateaction for mobile tooblar');
             app.updateToolbar = updateToolbar;
         }
     });
@@ -216,4 +220,18 @@ define('io.ox/mail/mobileToolbarActions',
             });
         }
     });
+
+    ext.point('io.ox/mail/mediator').extend({
+        id: 'change-mode-toolbar-mobile',
+        index: 10400,
+        setup: function (app) {
+            if (!_.device('small')) return;
+
+            app.props.on('change:checkboxes', function (model, state) {
+                var page = app.pages.getCurrentPage();
+                app.pages.toggleSecondaryToolbar(page.name, state);
+            });
+        }
+    });
+
 });

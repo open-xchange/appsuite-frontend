@@ -143,15 +143,21 @@ define('io.ox/mail/navbarViews',
         onRightAction: function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-
             this.trigger('rightAction');
         },
 
         onLeftAction: function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-
             this.trigger('leftAction');
+        },
+        show: function (elem) {
+            this.$el.find(elem).show();
+            return this;
+        },
+        hide: function (elem) {
+            this.$el.find(elem).hide();
+            return this;
         }
     });
 
@@ -162,21 +168,21 @@ define('io.ox/mail/navbarViews',
      * hold one ore more action icons/links
      */
     var ToolbarView = BarView.extend({
+
         initialize: function (opt) {
-            this.el = opt.el;
             this.app = opt.app;
             this.page = opt.page;
             this.baton = opt.baton || ext.Baton({});
         },
         render: function () {
-            this.$el.empty().show();
-
+            this.$el.empty();
             ext.point('io.ox/mail/mobile/toolbar/' + this.page).invoke('draw', this.$el, this.baton);
             return this;
         },
         setBaton: function (baton) {
             this.baton = baton;
             this.render();
+            return this;
         }
     });
 

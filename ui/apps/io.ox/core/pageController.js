@@ -38,6 +38,7 @@ define('io.ox/core/pageController',
                 $el: $(opt.tag).addClass(opt.classes),
                 navbar: opt.navbar,
                 toolbar: opt.toolbar,
+                secondaryToolbar: opt.secondaryToolbar,
                 name: opt.name
             };
 
@@ -121,7 +122,7 @@ define('io.ox/core/pageController',
             }, 1);
 
             showNavbar(to);
-            pages[to].toolbar.render();
+            showToolbar(to);
 
         };
 
@@ -183,7 +184,7 @@ define('io.ox/core/pageController',
             if (current) pages[current].$el.removeClass('current');
             pages[page].$el.addClass('current');
             showNavbar(page);
-            pages[page].toolbar.render();
+            showToolbar(page);
             current = page;
         };
 
@@ -191,9 +192,24 @@ define('io.ox/core/pageController',
             return pages;
         };
 
+        this.toggleSecondaryToolbar = function (page, state)  {
+            showToolbar(page, state);
+        };
+
         var showNavbar = function (page) {
-            var b = pages[page].navbar;
-            app.navbar.empty().append(b.render().$el);
+            var bar = pages[page].navbar;
+            app.navbar.empty().append(bar.render().$el);
+        };
+
+        var showToolbar = function (page, secondary) {
+            var bar;
+            if (secondary && !!pages[page].secondaryToolbar) {
+                bar = pages[page].secondaryToolbar;
+            } else {
+                bar = pages[page].toolbar;
+            }
+
+            app.toolbar.empty().append(bar.render().$el);
         };
 
     };

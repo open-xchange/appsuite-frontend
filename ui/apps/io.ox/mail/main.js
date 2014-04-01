@@ -64,7 +64,6 @@ define('io.ox/mail/main',
                     app: app
                 }),
                 toolbar: new Bars.ToolbarView({
-                    el: toolbar,
                     app: app,
                     page: 'folderView'
                 })
@@ -78,9 +77,12 @@ define('io.ox/mail/main',
                     app: app
                 }),
                 toolbar: new Bars.ToolbarView({
-                    el: toolbar,
                     app: app,
                     page: 'listView'
+                }),
+                secondaryToolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'listView/multiselect'
                 })
             });
 
@@ -91,7 +93,6 @@ define('io.ox/mail/main',
                     app: app
                 }),
                 toolbar: new Bars.ToolbarView({
-                    el: toolbar,
                     app: app,
                     page: 'threadView'
                 })
@@ -104,7 +105,6 @@ define('io.ox/mail/main',
                     app: app
                 }),
                 toolbar: new Bars.ToolbarView({
-                    el: toolbar,
                     app: app,
                     page: 'detailView'
                 })
@@ -563,13 +563,15 @@ define('io.ox/mail/main',
                     //react('one', list);
                 },
                 'selection:multiple': function () {
-                    //react('multiple');
-                    console.log('multi');
+
+                    // TODO: change page title to counter
+                    //app.pages.getCurrentPage().navbar.setTitle(app.listView.selection.get().length);
+
                 },
                 'selection:action': function (list) {
                     // make sure we are not in multi-selection
                     if (app.props.get('checkboxes')) {
-                        console.log('multiselect');
+                        // todo
                     } else if (app.listView.selection.get().length === 1) {
                         // check for thread
                         var cid = list[0].substr(7),
@@ -868,9 +870,13 @@ define('io.ox/mail/main',
             app.props.on('change:checkboxes', function (model, value) {
                 app.listView.toggleCheckboxes(value);
                 if (value) {
-                    app.pages.getNavbar('listView').setRight(gt('Cancel'));
+                    app.pages.getNavbar('listView')
+                        .setRight(gt('Cancel'))
+                        .hide('.left');
                 } else {
-                    app.pages.getNavbar('listView').setRight(gt('Edit'));
+                    app.pages.getNavbar('listView')
+                        .setRight(gt('Edit'))
+                        .show('.left');
                 }
             });
         },
