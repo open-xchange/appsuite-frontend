@@ -299,7 +299,7 @@ define('io.ox/mail/settings/signatures/register',
                             .append(radioCustom = $('<input type="radio" name="mobileSignature">')
                                 .prop('checked', type === 'custom')
                                 .on('change', radioChange))
-                            .append(signatureText = $('<textarea class="span12">')
+                            .append(signatureText = $('<textarea class="form-control col-xs-12" rows="5">')
                                 .val(settings.get('mobileSignature'))
                                 .on('change', textChange)));
                 } else {
