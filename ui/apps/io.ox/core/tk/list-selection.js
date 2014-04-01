@@ -21,23 +21,24 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         this.view = view;
 
-        var self = this;
-
         this.view.$el
             // normal click/keybard navigation
             .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
             .on(isTouch ? 'click' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
-            // help accessing the list via keyboard if selection is empty
-            .on('focus', function () {
-                self.select(0);
-            })
-            .on('click', SELECTABLE, function (e) {
-                if (!self.isMultiple(e)) self.triggerAction(e);
-            })
+            // help accessing the list via keyboard if focus is outside
+            .on('focus', $.proxy(function () {
+                var items = this.getItems(),
+                    first = items.filter('[tabindex="1"]'),
+                    index = items.index(first);
+                if (index > -1) this.select(index); else this.select(0);
+            }, this))
+            .on('click', SELECTABLE, $.proxy(function (e) {
+                if (!this.isMultiple(e)) this.triggerAction(e);
+            }, this))
             // double clikc
-            .on('dblclick', SELECTABLE, function (e) {
-                self.triggerDouble(e);
-            })
+            .on('dblclick', SELECTABLE, $.proxy(function (e) {
+                this.triggerDouble(e);
+            }, this))
             // avoid context menu
             .on('contextmenu', function (e) { e.preventDefault(); });
 
@@ -163,8 +164,9 @@ define('io.ox/core/tk/list-selection', [], function () {
             return e && (e.metaKey || e.ctrlKey || this.isCheckmark(e));
         },
 
-        resetTabIndex: function (items) {
-            items.filter('[tabindex="1"]').attr('tabindex', '-1');
+        resetTabIndex: function (items, skip) {
+            items = items.filter('[tabindex="1"]');
+            items.not(skip).attr('tabindex', '-1');
         },
 
         resetCheckmark: function (items) {
@@ -215,7 +217,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             items = items || this.getItems();
             if (index >= items.length) return;
             this.resetCheckmark(items);
-            this.resetTabIndex(items);
+            this.resetTabIndex(items, items.eq(index));
             this.pick(index, items);
             this.triggerChange();
         },
@@ -284,11 +286,11 @@ define('io.ox/core/tk/list-selection', [], function () {
             // prevent default to avoid unwanted scrolling
             e.preventDefault();
 
-            this.resetTabIndex(items);
-            this.resetCheckmark(items);
-
             // jump to top/bottom OR range select / single select
             index = this.isMultiple(e) ? (e.which === 38 ? 0 : -1) : index;
+
+            this.resetTabIndex(items, items.eq(index));
+            this.resetCheckmark(items);
             this.pick(index, items, e);
             this.triggerChange();
         },
@@ -355,7 +357,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             if (isTouch && this.resetSwipe(items)) return;
             if (e.isDefaultPrevented()) return;
             if (!this.isMultiple(e)) this.resetCheckmark(items);
-            this.resetTabIndex(items);
+            this.resetTabIndex(items, items.eq(index));
 
             // range select / single select
             this.pick(index, items, e);
@@ -387,6 +389,10 @@ define('io.ox/core/tk/list-selection', [], function () {
                 cid = node.attr('data-cid');
             // propagate event
             this.view.trigger('selection:delete', [cid]);
+        },
+
+        onFocus: function () {
+
         }
     });
 

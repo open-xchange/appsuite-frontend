@@ -56,12 +56,12 @@ define('io.ox/core/tk/list',
 
         onItemFocus: function () {
             this.$el.removeAttr('tabindex');
-            if (this.ignoreFocus !== true) this.$el.addClass('has-focus');
+            this.$el.addClass('has-focus');
         },
 
         onItemBlur: function () {
             this.$el.attr('tabindex', 1);
-            if (this.ignoreFocus !== true) this.$el.removeClass('has-focus');
+            this.$el.removeClass('has-focus');
         },
 
         onItemKeydown: function (e) {
@@ -191,14 +191,10 @@ define('io.ox/core/tk/list',
             this.model = new Backbone.Model();
             this.isBusy = false;
             this.complete = false;
-            this.ignoreFocus = !!options.ignoreFocus;
             this.firstReset = true;
 
             // enable drag & drop
             dnd.enable({ draggable: true, container: this.$el, selection: this.selection });
-
-            // permenent visual focus
-            if (this.ignoreFocus) this.$el.addClass('has-focus');
 
             // don't know why but listenTo doesn't work here
             this.model.on('change', _.debounce(this.onModelChange, 10), this);

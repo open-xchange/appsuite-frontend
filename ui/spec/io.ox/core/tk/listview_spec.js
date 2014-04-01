@@ -405,15 +405,15 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             it('should load new data on scroll', function () {
                 // add paginate function
                 var list = this.list;
-                list.paginate = function () { return _.wait(200); };
+                list.paginate = function () { return _.wait(500); };
                 // trigger scroll
                 list.$el.scrollTop(2000);
-                var done = new Done();
-                waitsFor(done);
-                setTimeout(function () {
-                    done.yep();
+                waitsFor(function () {
+                    return list.getBusyIndicator().length === 1;
+                }, 400);
+                runs(function () {
                     expect(list.getBusyIndicator().length).toBe(1);
-                }, 100);
+                });
             });
         });
 
@@ -530,66 +530,62 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             });
         });
 
-        // TODO: move the following code to mail specific spec
-        describe('mail threading', function () {
+        // rather mail specific but good to test update behavior
+        describe('mail threads', function () {
 
             beforeEach(function () {
                 // create thread
-                var item = createItem(1, 0), data = item.thread[0];
-                item.thread = _.range(1, 11).map(function (index) {
+                var item = createItem(2, 1), data = item.thread[0], N = 11;
+                item.thread = _.range(1, N).map(function (index) {
                     return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
                 });
-                this.collection.reset([item, createItem(11, 1), createItem(12, 2)]);
+                this.collection.reset([createItem(1, 0), item, createItem(N + 1, 2)]);
             });
 
             it('should have one thread size indicator', function () {
-                var first = this.list.$el.children().first();
-                expect(first.find('.thread-size').length).toBe(1);
+                var items = this.list.getItems();
+                expect(items.find('.thread-size').length).toBe(1);
             });
 
             it('should show correct thread size', function () {
-                var first = this.list.$el.children().first();
-                expect(first.find('.thread-size .number').text()).toBe('10');
+                var items = this.list.getItems();
+                expect(items.eq(1).find('.thread-size .number').text()).toBe('10');
             });
 
-            it('should not show thread list', function () {
-                var cid = this.collection.at(0).cid;
-                expect(this.list.$el.find('[data-thread="' + cid + '"]').length).toBe(0);
+            it('should update correctly (increase)', function () {
+                // update thread
+                var item = createItem(2, 1), data = item.thread[0], N = 12;
+                item.thread = _.range(1, N).map(function (index) {
+                    return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
+                });
+                this.collection.reset([createItem(1, 0), item, createItem(N + 1, 2)]);
+                var items = this.list.getItems();
+                expect(items.length).toBe(3);
+                expect(items.eq(1).find('.thread-size .number').text()).toBe('11');
             });
 
-            // thread summary has been removed!
-            xit('should open thread list on cursor right', function () {
+            it('should update correctly (decrease)', function () {
+                // update thread
+                var item = createItem(2, 1), data = item.thread[0], N = 10;
+                item.thread = _.range(1, N).map(function (index) {
+                    return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
+                });
+                this.collection.reset([createItem(1, 0), item, createItem(N + 1, 2)]);
+                var items = this.list.getItems();
+                expect(items.length).toBe(3);
+                expect(items.eq(1).find('.thread-size .number').text()).toBe('9');
+            });
 
-                var cid = this.collection.at(0).cid,
-                    type = Modernizr.touch ? 'tap' : 'mousedown', e,
-                    thread;
-
-                // select first item
-                e = $.Event(type);
-                this.list.$el.children().first().trigger(type);
-                // cursor right
-                e = $.Event('keydown', { which: 39 });
-                $(document.activeElement).trigger(e);
-
-                thread = this.list.$el.find('[data-thread="' + cid + '"]');
-                expect(thread.length).toBe(1);
-                expect(thread.find('.list-item.selectable').length).toBe(10);
-
-                // cursor down
-                e = $.Event('keydown', { which: 40 });
-                $(document.activeElement).trigger(e);
-
-                // check selection
-                expect(this.list.selection.get()).toEqual(['default0/INBOX.1']);
-                expect(thread.find('.list-item.selectable').eq(0).is('.selected')).toBe(true);
-
-                // cursor down
-                e = $.Event('keydown', { which: 40 });
-                $(document.activeElement).trigger(e);
-
-                // check selection
-                expect(this.list.selection.get()).toEqual(['default0/INBOX.2']);
-                expect(thread.find('.list-item.selectable').eq(1).is('.selected')).toBe(true);
+            it('should update correctly (change position)', function () {
+                // update thread
+                var item = createItem(1, 0), data = item.thread[0], N = 12;
+                item.thread = _.range(1, N).map(function (index) {
+                    return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
+                });
+                this.collection.reset([item, createItem(N, 1), createItem(N + 1, 2)]);
+                var items = this.list.getItems();
+                expect(items.length).toBe(3);
+                expect(items.eq(0).find('.thread-size .number').text()).toBe('11');
             });
         });
     });
