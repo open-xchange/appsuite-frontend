@@ -392,7 +392,8 @@ define('io.ox/core/extPatterns/links',
         var label = options.label, args = $.makeArray(arguments), node;
 
         // label: Use baton or String or DOM node
-        label = baton.label || (_.isString(label) ? $.txt(label) : label);
+        label = baton.label || label;
+        label = _.isString(label) ? $.txt(label) : label;
 
         // build dropdown
         this.append(
