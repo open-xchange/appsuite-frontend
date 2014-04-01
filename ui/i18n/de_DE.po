@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-03-27 09:27+0100\n"
+"PO-Revision-Date: 2014-04-01 13:38+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -362,6 +362,8 @@ msgid ""
 "Account settings could not be saved. Please take a look at the annotations "
 "in the form."
 msgstr ""
+"Account-Einstellungen konnten nicht gespeichert werden. Bitte lesen Sie die "
+"Anmerkungen im Popup-Fenster."
 
 #: apps/io.ox/core/extPatterns/links.js:340 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:349 apps/io.ox/mail/detail/view.js:86
@@ -581,10 +583,9 @@ msgid "All day"
 msgstr "Ganztägig"
 
 #: apps/io.ox/search/view-template.js:399 module:io.ox/core
-#, fuzzy
 #| msgid "Add folder"
 msgid "All folders"
-msgstr "Ordner hinzufügen"
+msgstr "Alle Ordner"
 
 #: apps/io.ox/mail/settings/pane.js:281 module:io.ox/mail
 msgid "Allow html formatted emails"
@@ -2853,7 +2854,7 @@ msgstr "E-Mails weiterleiten als"
 
 #: apps/io.ox/search/view-template.js:467 module:io.ox/core
 msgid "Found %1$s items in %2$s seconds"
-msgstr ""
+msgstr "%1$s Objekte in %2$s Sekunden gefunden"
 
 #: apps/io.ox/calendar/edit/template.js:275 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
@@ -3040,7 +3041,7 @@ msgstr "Hoch"
 
 #: apps/io.ox/core/settings/pane.js:183 module:io.ox/core
 msgid "High contrast theme"
-msgstr ""
+msgstr "Hoher Kontrast"
 
 #: apps/io.ox/mail/util.js:382 module:io.ox/core apps/io.ox/tasks/util.js:341
 #: module:io.ox/tasks
@@ -3361,7 +3362,6 @@ msgid "Keep"
 msgstr "Behalten"
 
 #: apps/io.ox/mail/autoforward/settings/model.js:90 module:io.ox/mail
-#, fuzzy
 msgid "Keep a copy of the message"
 msgstr "Kopie der Nachricht behalten"
 
@@ -3991,10 +3991,9 @@ msgid "No files have been changed recently"
 msgstr "Es wurden kürzlich keine Dateien geändert."
 
 #: apps/io.ox/search/items/view-template.js:82 module:io.ox/core
-#, fuzzy
 #| msgid "No picture found."
 msgid "No items found"
-msgstr "Kein Bild gefunden"
+msgstr "Keine Objekte gefunden"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:234 module:io.ox/core
 msgid "No lost requests"
