@@ -239,7 +239,6 @@ define('io.ox/mail/toolbar',
         list = list.length === 1 ? list[0] : list;
         // draw toolbar
         var baton = ext.Baton({ $el: toolbar, data: list, isThread: isThread, app: this });
-        console.log('this', this);
         ext.point('io.ox/mail/classic-toolbar').invoke('draw', toolbar.empty(), baton);
     }, 10);
 

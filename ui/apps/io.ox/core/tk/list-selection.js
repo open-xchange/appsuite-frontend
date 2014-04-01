@@ -46,7 +46,7 @@ define('io.ox/core/tk/list-selection', [], function () {
             this.view.$el
                 .on('swipeleft', SELECTABLE, $.proxy(this.onSwipeLeft, this))
                 .on('swiperight', SELECTABLE, $.proxy(this.onSwipeRight, this))
-                .on('click', '.swipe-left-content', $.proxy(this.onTapRemove, this));
+                .on('tap', '.swipe-left-content', $.proxy(this.onTapRemove, this));
         }
     }
 

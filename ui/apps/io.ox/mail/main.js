@@ -307,6 +307,7 @@ define('io.ox/mail/main',
         'list-view-checkboxes-mobile': function (app) {
             // always hide checkboxes on small devices initially
             if (_.device('!small')) return;
+            app.props.set('checkboxes', false);
             app.listView.toggleCheckboxes(false);
         },
 
@@ -852,10 +853,28 @@ define('io.ox/mail/main',
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
+            if (_.device('small')) return;
             app.props.on('change:checkboxes', function (model, value) {
                 app.listView.toggleCheckboxes(value);
             });
         },
+
+        /*
+         * Respond to change:checkboxes on mobiles
+         * Set "edit" to "cancel" on button
+         */
+        'change:checkboxes-mobile': function (app) {
+            if (_.device('!small')) return;
+            app.props.on('change:checkboxes', function (model, value) {
+                app.listView.toggleCheckboxes(value);
+                if (value) {
+                    app.pages.getNavbar('listView').setRight(gt('Cancel'));
+                } else {
+                    app.pages.getNavbar('listView').setRight(gt('Edit'));
+                }
+            });
+        },
+
 
         /*
          * Respond to change:contactPictures
