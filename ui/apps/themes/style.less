@@ -28,6 +28,9 @@ html.high-contrast {
 
     a {
         color: @hc-link-color;
+        &.btn {
+            color: @white;
+        }
     }
 
 }
@@ -412,7 +415,7 @@ div.hopscotch-bubble {
             padding: 12px;
 
             html.high-contrast & {
-                color: @black;
+                color: @hc-border-color;
             }
 
             &:hover {
@@ -2939,6 +2942,10 @@ ul.io-ox-inline-links + header {
 
     &.border-right {
         border: 0 none;
+
+        html.high-contrast & {
+            border-right: 1px solid @hc-border-color;
+        }
     }
 
     .resizebar {
