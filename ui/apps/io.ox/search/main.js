@@ -57,10 +57,7 @@ define('io.ox/search/main',
             //active app : app searched in
             data.mapping = {
                 //name mapping
-                //'io.ox/files' : 'io.ox/infostore',
-
-                //TODO: when supported enable drive again
-                'io.ox/files' : data.defaultApp,
+                'io.ox/files' : 'io.ox/drive',
                 //fallback/default mapping
                 'io.ox/portal' : data.defaultApp,
                 'io.ox/search' : data.defaultApp,
@@ -83,17 +80,18 @@ define('io.ox/search/main',
     }
 
     //TODO: use custom node for autocomplete (autocomplete items appended here)
-    var app = ox.ui.createApp({
-            name: 'io.ox/search',
-            title: 'Search',
-            closable: true
-        }),
         //init window
-        win = ox.ui.createWindow({
+    var win = ox.ui.createWindow({
             name: 'io.ox/search',
             title: 'Search',
             toolbar: true,
             search: false
+        }),
+        app = ox.ui.createApp({
+            name: 'io.ox/search',
+            title: 'Search',
+            closable: true,
+            window: win
         }),
         yell = function (error) {
             notifications.yell('error', error.error_desc);
@@ -105,11 +103,12 @@ define('io.ox/search/main',
     //hide/show topbar search field
     win.on('show', function () {
         $('#io-ox-search-topbar')
-            .hide()
+            .addClass('hidden')
             .find('.search-field.widget').val('');
     });
     win.on('hide', function () {
-        $('#io-ox-search-topbar').show();
+        $('#io-ox-search-topbar')
+            .removeClass('hidden');
     });
     //ensure launchbar entry
     win.on('show', function () {
@@ -117,13 +116,17 @@ define('io.ox/search/main',
             ox.ui.apps.add(app);
     });
     app.busy = function () {
-        ox.busy(true);
-        return win.nodes.main.busy();
+        app.view.$el.find('.btn-search>.fa')
+            .prop('disabled', true)
+            .removeClass('fa-search')
+            .addClass('fa-refresh fa-spin');
     };
 
     app.idle = function () {
-        ox.idle();
-        return win.nodes.main.idle();
+        app.view.$el.find('.btn-search>.fa')
+            .prop('disabled', false)
+            .removeClass('fa-refresh fa-spin')
+            .addClass('fa-search');
     };
 
     //reduced version of app.quit to ensure app/window is reusable
@@ -145,6 +148,8 @@ define('io.ox/search/main',
 
         // mark as not running
         app.trigger('quit');
+        //reset
+        model.setModule('');
     };
     //define launcher callback
     app.setLauncher(function (options) {
@@ -245,14 +250,26 @@ define('io.ox/search/main',
                             opt.data.facets = facets;
                         })
                         .then(function () {
+                            //TODO: better solution needed
+                            var dummy = {
+                                    num_found: -1,
+                                    results: [],
+                                    size: 0,
+                                    start: 0
+                                },
+                                folderOnly = opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder';
+
                             //call server
-                            return api.query(opt);
+                            return folderOnly ? $.Deferred().resolve(dummy) : api.query(opt);
                         })
                         .then(function (result) {
                             //update model
                             model.setItems(result, start);
                             run();
-                        }, yell);
+                        }, function (result) {
+                            yell(result);
+                            app.idle();
+                        });
             }
         }
     });
@@ -283,7 +300,7 @@ define('io.ox/search/main',
             app.view = SearchView.factory
                         .create(app, model)
                         .render();
-            return model.get('mode') === 'widget' ? app.view.$el.find('input, button') : app.view.$el;
+            return model.get('mode') === 'widget' ? app.view.$el.find('.launcher-container') : app.view.$el;
         }
     };
 });

@@ -74,9 +74,14 @@ define('io.ox/search/model',
         model: {
             defaults: defaults,
             getApp: function () {
-                var app;
-                //ensure app
-                this.set('app', this.get('app') || _.url.hash('app'));
+                var app,
+                    current = ox.ui.App.getCurrentApp().get('name');
+
+                //target app changed?
+                if (current !== 'io.ox/search') {
+                    this.setModule(current);
+                }
+
                 app = this.get('app');
                 //ensure options
                 if (!options.mappings)

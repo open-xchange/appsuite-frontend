@@ -18,7 +18,8 @@ define('io.ox/mail/listview',
      'io.ox/mail/api',
      'io.ox/core/api/account',
      'io.ox/core/tk/list',
-     'io.ox/mail/view-options'
+     'io.ox/mail/view-options',
+     'less!io.ox/mail/style'
     ], function (extensions, ext, util, api, account, ListView) {
 
     'use strict';

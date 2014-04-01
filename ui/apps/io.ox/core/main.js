@@ -604,23 +604,8 @@ define('io.ox/core/main',
         });
 
         ext.point('io.ox/core/topbar/right').extend({
-            id: 'notifications',
-            index: 100,
-            draw: function () {
-                var self = this;
-                if (ox.online) {
-                    // we don't need this right from the start,
-                    // so let's delay this for responsiveness!
-                    // only requests are delayed by 2s, the badge is drawn normally
-                    self.prepend(notifications.attach(addLauncher, 2000));
-                    tabManager();
-                }
-            }
-        });
-
-        ext.point('io.ox/core/topbar/right').extend({
             id: 'search',
-            index: 150,
+            index: 100,
             draw: function () {
                 if (capabilities.has('search')) {
                     var placeholder = $('<span>'),
@@ -637,7 +622,7 @@ define('io.ox/core/main',
                     );
                     //add search field placeholder
                     self.append(
-                        addLauncher('right', placeholder, $.noop(), gt('Refresh'))
+                        addLauncher('right', placeholder, $.noop(), gt('Search'))
                         .attr('id', 'io-ox-search-topbar')
                         .addClass('io-ox-search')
                     );
@@ -646,6 +631,21 @@ define('io.ox/core/main',
                     require(['io.ox/search/main'], function (searchapp) {
                         placeholder.replaceWith(searchapp.init());
                     });
+                }
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'notifications',
+            index: 150,
+            draw: function () {
+                var self = this;
+                if (ox.online) {
+                    // we don't need this right from the start,
+                    // so let's delay this for responsiveness!
+                    // only requests are delayed by 2s, the badge is drawn normally
+                    self.prepend(notifications.attach(addLauncher, 2000));
+                    tabManager();
                 }
             }
         });

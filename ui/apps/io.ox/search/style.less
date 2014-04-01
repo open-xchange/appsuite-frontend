@@ -12,24 +12,6 @@
  */
 
 
-//topbar search-field vs. icon
-#io-ox-search-topbar.launcher {
-    display: inline-block;
-    max-width: 17em;
-}
-#io-ox-search-topbar-icon.launcher {
-    display: none;
-}
-@media all and (max-width: 800px), all and (max-device-width: 800px) {
-    #io-ox-search-topbar.launcher {
-        display: none;
-    }
-    #io-ox-search-topbar-icon.launcher {
-        display: inline-block;
-    }
-}
-
-
 //autocomplete popup
 .autocomplete-search {
     min-width: 300px;
@@ -66,9 +48,76 @@
     }
 }
 
+.autocomplete-search.dropdown-replacement {
+    max-height: default;
+    //border: 1px solid green;
+
+    max-width: 500px;
+    margin: 0 14px;
+    width: auto;
+    margin-bottom: 10px;
+
+
+    //adjust autocomplete defaults
+    &.bottom-placement {
+        border-bottom: 2px solid #fff;
+    }
+    .scrollable-pane:after {
+        content: ''; /* make sure margins/paddings are applied properly */
+    }
+
+    .autocomplete-item {
+        color: #333;
+        margin: 2px;
+        padding: 3px 3px;
+
+        background-color: #eee;
+        padding: 10px 14px;
+
+        &.indent {
+            padding: 10px 14px;
+        }
+        //description
+        i {
+            font-style: normal;
+            color: rgba(0,0,0,.5);
+        }
+        //groups
+        &.group {
+            background-color: white;
+            font-size: 18px;
+            border: none;
+        }
+        &.unselectable {
+            color: rgba(128, 128, 128, 0.71);
+        }
+    }
+}
+
+
+
+
+
+//topbar search-field vs. icon
+#io-ox-search-topbar.launcher {
+    display: inline-block;
+    max-width: 17em;
+}
+#io-ox-search-topbar-icon.launcher {
+    display: none;
+}
+@media all and (max-width: 800px), all and (max-device-width: 800px) {
+    #io-ox-search-topbar.launcher {
+        display: none;
+    }
+    #io-ox-search-topbar-icon.launcher {
+        display: inline-block;
+    }
+}
 
 //hide/adjust default window parts
 .io-ox-search-window {
+    overflow: auto;
     //hide head
     .window-head {
         display: none;
@@ -92,24 +141,14 @@
 //app and lauchner parent class
 .io-ox-search {
 
-    //submit button
-    .btn-search {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
-
-    //submit button: widget
-    &>.btn-search {
-        height: 24px;
-        line-height: 12px;
-        vertical-align: baseline;
-    }
-
     //section: app
     .apps {
-        display: flex;
         margin-bottom: 14px;
+        min-height: 28px;
         list-style-type: none;
+        li {
+            display: block;
+        }
         .app {
             text-align: center;
             cursor: pointer;
@@ -117,7 +156,7 @@
             padding: 4px 16px;
             margin-right: 16px;
             color: #0C68B3;
-            flex: 0 0 auto;
+            float: left; //TODO: Safari
             &.active {
                 background-color: #0E75C2;
                 color: white
@@ -132,43 +171,66 @@
     .query {
         display: flex;
         margin-bottom: 14px;
+        //overwrite
+        clear: both;
+        max-width: 500px
     }
-    .search-field {
-        width: 180px;
-        padding: 4px 8px;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        &.widget {
-            height: 24px;
+
+        .search-field {
+            width: 180px;
+            padding: 4px 8px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            &.widget {
+                height: 24px;
+            }
+            &.window {
+                height: 30px;
+                flex: 0 1 auto;
+                width: 500px;
+                border-right: 0;
+            }
+            &.form-control {
+                //override 'block'
+                display: inline-block;
+            }
         }
-        &.window {
-            height: 30px;
-            flex: 0 1 auto;
-            width: 500px;
-            border-right: 0;
+
+        //submit button
+        .btn-search {
+            border-top-left-radius: 0;
+            min-width: 38px;
+            border-bottom-left-radius: 0;
         }
-        &.form-control {
-            //override 'block'
-            display: inline-block;
+
+        //submit button: widget
+        .launcher-container {
+            display: inline-flex; //TODO: FF problem
+            .btn-search {
+                height: 24px;
+                line-height: 12px;
+                vertical-align: baseline;
+            }
         }
-    }
+
 
     //section: info
     .info {
+        clear: both;
         margin: 0 14px 4px 15px;
-        padding: 10px;
-        border-left: 3px solid #eee;
-        width: 500px;
         background-color: #f4f8fa;
         border-color: #5bc0de;
+        padding: 10px;
+        border-left: 3px solid #eee;
+        max-width: 500px
     }
 
 
     //section: facets
     .facets {
-        margin-bottom: 14px;
+        margin-bottom: 10px;
         .facet {
-            float: left;
+            margin-bottom: 4px;
             list-style-type: none;
             padding: 6px 10px;
             margin-right: 10px;
@@ -201,18 +263,8 @@
 
 
         }
-        &:after {
-            clear: both;
-        }
     }
 
     //section: results
     //handled in /items/*
-
-    //learned from http://css-tricks.com/snippets/css/clear-fix/
-    .group:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
 }

@@ -33,7 +33,7 @@ define('io.ox/search/view-template',
             default: 2,
             standard: 3
         },
-        dropdown = function (baton) {
+        dropdown = function (baton, container) {
             var ref,
                 app = baton.app,
                 model = baton.model,
@@ -49,18 +49,23 @@ define('io.ox/search/view-template',
                 .addClass('search-field form-control ' + mode)
                 .autocomplete({
                     api: app.apiproxy,
-                    minLength: 3,
+                    minLength: 0,
                     mode: 'search',
-                    parentSelector: '.io-ox-search',
+                    parentSelector: container  ? '' : '.io-ox-search',
                     model: model,
-                    //TODO: would be nice to have this move to control
+                    container: container,
+                    //TODO: would be nice to move to control
                     source: function (val) {
+                        //show dropdown immediately (busy by autocomplete tk)
+                        ref.open();
                         return app.apiproxy.search(val);
                     },
                     draw: function (value) {
                         $(this)
                             .data(value)
                             .html(value.display_name);
+                        if (container)
+                            container.css('width', 'auto');
                     },
                     stringify: function () {
                         //keep input value when item selected
@@ -92,7 +97,9 @@ define('io.ox/search/view-template',
                     $('<i class="fa fa-search"></i>')
                 )
                 .on('click', function () {
-                    if (!ref.val().trim() && mode === 'widget') {
+                    var dropdown = $('.autocomplete-search').length;
+                    //open full size search app 'shortcut'
+                    if (!dropdown && mode === 'widget') {
                         //open search app
                         require(['io.ox/search/main'], function (searchapp) {
                             searchapp.run();
@@ -115,7 +122,8 @@ define('io.ox/search/view-template',
         index: 200,
         row: '0',
         draw: function (baton) {
-            dropdown.call(this, baton);
+            var row = $('<div class="launcher-container">').appendTo(this);
+            dropdown.call(row, baton);
         }
     });
 
@@ -127,14 +135,14 @@ define('io.ox/search/view-template',
         draw: function (baton) {
             var id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
-                node = $('<ol class="col-sm-12 apps">');
+                node = $('<ul class="col-sm-12 apps clearfix">');
             //add links for supported apps
             _(appAPI.getFavorites()).each(function (app) {
-                if (!opt.mapping[app.id]) {
+                if (!opt.mapping[app.id] || app.id === 'io.ox/files') {
                     node.append(
                         $('<li>').append(
                             $('<a href="#">')
-                                .addClass('app')
+                                .addClass('app pull-left')
                                 .attr('data-app', app.id)
                                 .text(gt.pgettext('app', app.title))
                         )
@@ -174,7 +182,7 @@ define('io.ox/search/view-template',
             this.draw.call(baton.$, baton);
         },
         draw: function (baton) {
-            var $list = $('<ol class="col-sm-12 facets group">'),
+            var $list = $('<ul class="col-sm-12 facets group clearfix">'),
                 model = baton.model,
                 list = model.get('poollist'),
                 $facet;
@@ -185,7 +193,7 @@ define('io.ox/search/view-template',
 
                 //create facet node
                 $list.append(
-                    $facet = $('<li>').addClass('facet')
+                    $facet = $('<li>').addClass('facet pull-left')
                 );
 
                 //general stuff
@@ -208,7 +216,7 @@ define('io.ox/search/view-template',
         draw: function (baton) {
             $('.io-ox-search .facet').delegate('.option', 'click', function (e) {
                 var link = $(e.target).closest('a'),
-                    list = link.closest('ol'),
+                    list = link.closest('ul'),
                     option = link.attr('data-action') || link.attr('data-custom') || link.attr('data-option'),
                     facet = list.attr('data-facet'),
                     value = list.attr('data-value'),
@@ -297,7 +305,7 @@ define('io.ox/search/view-template',
                 current = value._compact.option, option,
                 icon, menu;
             if (filters.length) {
-                menu = $('<ol class="dropdown-menu" role="menu">')
+                menu = $('<ul class="dropdown-menu" role="menu">')
                         .attr({
                             'data-facet': facet.id,
                             'data-value': value.id
@@ -405,7 +413,7 @@ define('io.ox/search/view-template',
         index: '300',
         draw: function (value, baton) {
             var action = $('<i class="fa fa-chevron-down action">').on('click', optionsDialog),
-                menu = $('<ol class="dropdown-menu" role="menu">')
+                menu = $('<ul class="dropdown-menu" role="menu">')
                     .attr({
                         'data-facet': 'folder',
                         'data-value': 'custom'
@@ -452,24 +460,27 @@ define('io.ox/search/view-template',
         }
     });
 
-
-    point.extend({
-        id: 'info',
-        index: 300,
-        draw: function (baton) {
-            var items = baton.model.get('items'),
-                timespend = Math.round((Date.now() - items.timestamp) / 100) / 10;
-            if (items.timestamp) {
-                this.append(
-                    $('<div>')
-                    .addClass('col-sm-12 info')
-                    .append(
-                        gt('Found %1$s items in %2$s seconds', items.length, timespend)
-                    )
-                );
-            }
-        }
-    });
+    // point.extend({
+    //     id: 'info',
+    //     index: 300,
+    //     draw: function (baton) {
+    //         var items = baton.model.get('items'),
+    //             timespend = Math.round((Date.now() - items.timestamp) / 100) / 10;
+    //         if (items.timestamp) {
+    //             this.append(
+    //                 $('<div>')
+    //                 .addClass('info')
+    //                 .append(
+    //                         $('<span>')
+    //                         .addClass('info-item')
+    //                         .append(
+    //                             gt('Found %1$s items in %2$s seconds', items.length, timespend)
+    //                         )
+    //                     )
+    //             );
+    //         }
+    //     }
+    // });
 
 
     // mobile botton toolbar
@@ -478,9 +489,8 @@ define('io.ox/search/view-template',
         index: 2500,
         draw: function (baton) {
             // must be on a non overflow container to work with position:fixed
-            var node = $.extend(baton.app.attributes.window.nodes.body),
-                toolbar;
-            node.append(toolbar = $('<div class="app-bottom-toolbar">'));
+            var node = baton.app.getWindow().nodes.body;
+            node.append($('<div class="app-bottom-toolbar">'));
         }
     });
 

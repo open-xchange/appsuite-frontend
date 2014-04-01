@@ -25,7 +25,7 @@ define('io.ox/search/items/view-template',
         row: '0',
         draw: function (baton) {
 
-            var node = $('<ul class="col-sm-12 result list-view">'),
+            var node = $('<ul class="col-xs-12 col-sm-12 result list-view">'),
                 items = baton.model.get('items'),
                 module = baton.model.getModule();
 

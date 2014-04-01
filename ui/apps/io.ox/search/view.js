@@ -44,10 +44,12 @@ define('io.ox/search/view',
                 return this;
             },
             redraw: function () {
-                var mode = this.baton.model.get('mode');
+                var mode = this.baton.model.get('mode'),
+                    node = $('<span>');
                 if (mode !== 'widget') {
+                    this.render(node);
                     this.$el.empty();
-                    this.render();
+                    this.$el.append(node.children());
                 }
                 return this;
             }

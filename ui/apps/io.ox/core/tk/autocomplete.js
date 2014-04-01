@@ -451,6 +451,8 @@ define('io.ox/core/tk/autocomplete',
             }
         }
 
+        this.open = open;
+
         return this;
     };
 
