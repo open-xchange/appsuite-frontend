@@ -227,10 +227,15 @@ define('io.ox/mail/settings/pane',
                     $('<legend>').addClass('sectiontitle').text(gt('Forward emails as')),
                     new mini.RadioView({ list: optionsForwardEmailAs, name: 'forwardMessageAs', model: mailSettings}).render().$el
                 ),
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').text(gt('Format emails as')),
-                    new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: mailSettings}).render().$el
-                ),
+
+                (function () {
+                    if (_.device('smartphone || tablet')) return $();
+                    return $('<fieldset>').append(
+                        $('<legend>').addClass('sectiontitle').text(gt('Format emails as')),
+                        new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: mailSettings}).render().$el
+                    );
+                })(),
+
                 $('<div>').addClass('settings sectiondelimiter'),
                 $('<fieldset>').append(
                     $('<div>').addClass('form-group expertmode').append(
