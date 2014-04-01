@@ -288,22 +288,20 @@ define('io.ox/core/api/account',
     // make sure account's personal is set
     var ensureDisplayName = (function () {
 
-        var defer = null;
+        var defer,
+            wasEmpty;
 
         return function (account) {
-
             // no account given or account already has "personal"
-            if (!account || account.personal) {
+            if (!account || (account.personal && account.personal.trim() !== '') && wasEmpty !== true) {
                 return $.Deferred().resolve(account);
             }
 
-            if (defer === null) {
-                // load personal once
-                defer = api.getDefaultDisplayName();
-            }
+            defer = api.getDefaultDisplayName();
 
             return defer.then(function (personal) {
                 account.personal = personal;
+                wasEmpty = true;
                 return account;
             });
         };
