@@ -91,7 +91,7 @@ define('io.ox/portal/settings/pane',
     function drawAddButton() {
         this.append(
             $('<div class="btn-group-portal pull-right">').append(
-                $('<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" tabindex="1">').append(
+                $('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true" tabindex="1">').append(
                     $.txt(gt('Add widget')), $.txt(' '),
                     $('<span class="caret">')
                 ),

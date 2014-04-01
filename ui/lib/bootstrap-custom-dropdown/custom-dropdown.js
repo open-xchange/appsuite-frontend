@@ -34,10 +34,10 @@
     $(element).on('click.bs.dropdown', this.toggle)
   }
   var phone = _.device('smartphone');
+  var activeElement = null;
 
   Dropdown.prototype.toggle = function (e) {
     var $this = $(this)
-
     if ($this.is('.disabled, :disabled')) return
 
     var $parent  = getParent($this)
@@ -70,6 +70,9 @@
 
       var relatedTarget = { relatedTarget: this }
       $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
+
+      activeElement = $(document.activeElement);
+      console.log('activeElement', activeElement);
 
       if (e.isDefaultPrevented()) return
 
@@ -134,6 +137,9 @@
       if (!$parent.hasClass('open')) return
       $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
       if (e.isDefaultPrevented()) return
+      if (activeElement) {
+        activeElement.focus();
+      }
       $parent.removeClass('open').trigger('hidden.bs.dropdown', relatedTarget)
     })
   }
