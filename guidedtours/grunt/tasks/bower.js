@@ -10,19 +10,12 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('jshint', {
+    grunt.config('bower', {
 
-        options: {
-            jshintrc: true
-        },
-        specs: {
-            src: ['spec/**/*_spec.js']
-        },
-        all: {
-            src: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js']
-        }
+        options: { copy: false },
+        install: {}
 
     });
 
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-bower-task');
 };

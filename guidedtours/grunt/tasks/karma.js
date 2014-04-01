@@ -10,19 +10,27 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('jshint', {
+    grunt.config('karma', {
 
         options: {
-            jshintrc: true
+            configFile: 'karma.conf.js',
+            builddir: 'build/'
         },
-        specs: {
-            src: ['spec/**/*_spec.js']
+        unit: {
+            background: true,
+            autoWatch: false
         },
-        all: {
-            src: ['Gruntfile.js', 'grunt/tasks/*.js', 'apps/**/*.js']
+        //continuous integration mode: run tests once in PhantomJS browser.
+        continuous: {
+            singleRun: true,
+            browsers: ['PhantomJS'],
+            reporters: ['junit']
         }
 
     });
 
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    // testing stuff
+    grunt.registerTask('test', ['karma:unit:start']);
+
+    grunt.loadNpmTasks('grunt-karma');
 };
