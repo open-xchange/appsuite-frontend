@@ -34,7 +34,7 @@ module.exports = function (grunt) {
         dist_custom: {
             files: [
                 {
-                    src: ['help/**/*', 'help-drive/**/*', 'bin/touch-appsuite', 'readme.txt', 'apps/themes/.htaccess'],
+                    src: ['bin/touch-appsuite', 'readme.txt', 'apps/themes/.htaccess'],
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
                 },
                 {
