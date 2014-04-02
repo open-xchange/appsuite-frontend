@@ -58,7 +58,7 @@ msgstr "В последнее время было изменено %1$d файл
 msgid "%1$d messages in this conversation"
 msgstr "Последние обсуждения"
 
-#: apps/io.ox/mail/main.js:502 module:io.ox/mail
+#: apps/io.ox/mail/main.js:548 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages selected"
 msgstr "<b>%1$d</b> выбран(о)"
@@ -77,8 +77,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1051 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1227
+#: apps/io.ox/core/desktop.js:1044 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1220
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -509,7 +509,8 @@ msgstr "Добавить в календарь"
 #: apps/io.ox/contacts/actions.js:761 module:io.ox/contacts
 #: apps/io.ox/files/actions.js:882 module:io.ox/files
 #: apps/io.ox/files/actions.js:1276 apps/io.ox/mail/actions.js:1133
-#: module:io.ox/mail apps/io.ox/mail/toolbar.js:159
+#: module:io.ox/mail apps/io.ox/mail/mobileToolbarActions.js:153
+#: apps/io.ox/mail/toolbar.js:159
 msgid "Add to portal"
 msgstr "Добавить в портал"
 
@@ -601,11 +602,11 @@ msgstr "Весь день"
 msgid "All folders"
 msgstr "Добавить папку"
 
-#: apps/io.ox/mail/settings/pane.js:281 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:286 module:io.ox/mail
 msgid "Allow html formatted emails"
 msgstr "Разрешить HTML в сообщениях"
 
-#: apps/io.ox/mail/settings/pane.js:286 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
 msgid "Allow pre-loading of externally linked images"
 msgstr "Разрешить загрузку изображений из сети"
 
@@ -654,11 +655,11 @@ msgstr "Любой получатель"
 msgid "Append vCard"
 msgstr "Добавить vCard"
 
-#: apps/io.ox/core/desktop.js:974 module:io.ox/core
+#: apps/io.ox/core/desktop.js:967 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "Панель приложений"
 
-#: apps/io.ox/mail/main.js:834 module:io.ox/mail
+#: apps/io.ox/mail/main.js:916 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Ошибку следует исправить, иначе работа приложения может быть нарушена."
 
@@ -767,7 +768,7 @@ msgstr "Вы действительно хотите удалить твит?"
 msgid "Ascending"
 msgstr "По возрастанию"
 
-#: apps/io.ox/mail/settings/pane.js:301 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:306 module:io.ox/mail
 #, fuzzy
 msgid "Ask for return receipt"
 msgstr "Запросить уведомление о доставке"
@@ -835,7 +836,7 @@ msgstr "Автор"
 msgid "Auto Forward"
 msgstr "Автопересылка"
 
-#: apps/io.ox/mail/settings/pane.js:258 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:263 module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Автосохранение черновиков"
 
@@ -870,7 +871,7 @@ msgid ""
 msgstr "Автоматически удалять уведомление после его принятия или отказа."
 
 #. It's a label for an inputfield with a number
-#: apps/io.ox/mail/settings/pane.js:238 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:243 module:io.ox/mail
 msgid "Automatically wrap plain text after character:"
 msgstr ""
 
@@ -883,7 +884,7 @@ msgid "B"
 msgstr "Б"
 
 #: apps/io.ox/core/commons.js:666 module:io.ox/core
-#: apps/io.ox/mail/main.js:112 module:io.ox/mail apps/io.ox/mail/main.js:116
+#: apps/io.ox/mail/main.js:134 module:io.ox/mail apps/io.ox/mail/main.js:138
 #: apps/io.ox/mail/threadview.js:37
 msgid "Back"
 msgstr "Назад"
@@ -1019,7 +1020,7 @@ msgstr "Календарь"
 #: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/distrib/main.js:184
 #: apps/io.ox/contacts/edit/main.js:249
 #: apps/io.ox/core/commons-folderview.js:557 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1634 apps/io.ox/core/export/export.js:104
+#: apps/io.ox/core/desktop.js:1627 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
 #: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:401
@@ -1044,8 +1045,8 @@ msgstr "Календарь"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: module:io.ox/settings/settings apps/io.ox/mail/main.js:190
-#: apps/io.ox/mail/write/inline-images.js:80
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:235
+#: apps/io.ox/mail/main.js:874 apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
@@ -1132,7 +1133,7 @@ msgstr "Изменить пароль и выйти"
 msgid "Change status"
 msgstr "Изменить статус"
 
-#: apps/io.ox/mail/settings/pane.js:338 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:343 module:io.ox/mail
 msgid "Change subscription"
 msgstr "Изменить подписку"
 
@@ -1300,7 +1301,7 @@ msgstr "Свернуть"
 msgid "Color"
 msgstr "Цвет"
 
-#: apps/io.ox/mail/settings/pane.js:296 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:301 module:io.ox/mail
 msgid "Color quoted lines"
 msgstr "Выделить цитаты"
 
@@ -1352,8 +1353,9 @@ msgstr "Компании"
 msgid "Company"
 msgstr "Компания"
 
-#: apps/io.ox/mail/settings/pane.js:212 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:42 apps/io.ox/mail/write/main.js:201
+#: apps/io.ox/mail/mobileToolbarActions.js:36 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:212 apps/io.ox/mail/toolbar.js:42
+#: apps/io.ox/mail/write/main.js:201
 msgid "Compose"
 msgstr "Составить"
 
@@ -1443,7 +1445,7 @@ msgstr "Обсуждения"
 #: module:io.ox/files apps/io.ox/files/actions.js:916
 #: apps/io.ox/files/actions.js:1296 apps/io.ox/mail/actions.js:336
 #: module:io.ox/mail apps/io.ox/mail/actions.js:1087
-#: apps/io.ox/mail/toolbar.js:123
+#: apps/io.ox/mail/mobileToolbarActions.js:117 apps/io.ox/mail/toolbar.js:123
 msgid "Copy"
 msgstr "Копировать"
 
@@ -1470,7 +1472,7 @@ msgstr "Копировать в описание"
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "Стоимость должна быть в диапазоне от -%1$d до %1$d."
 
-#: apps/io.ox/core/desktop.js:212 module:io.ox/core
+#: apps/io.ox/core/desktop.js:211 module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr "Не удалось получить стандартную папку для этого приложения."
 
@@ -1727,7 +1729,7 @@ msgstr "Режим календаря по умолчанию"
 msgid "Default reminder"
 msgstr "Стандартное напоминание"
 
-#: apps/io.ox/mail/settings/pane.js:248 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:253 module:io.ox/mail
 msgid "Default sender address"
 msgstr "Адрес отправителя по умолчанию"
 
@@ -1750,6 +1752,7 @@ msgstr "Отложено"
 #: apps/io.ox/files/actions.js:836 apps/io.ox/files/actions.js:1237
 #: apps/io.ox/mail/actions.js:90 module:io.ox/mail
 #: apps/io.ox/mail/actions.js:112 apps/io.ox/mail/actions.js:986
+#: apps/io.ox/mail/mobileToolbarActions.js:69
 #: apps/io.ox/mail/settings/signatures/register.js:272
 #: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:489
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
@@ -1861,7 +1864,7 @@ msgstr "Отклонить"
 msgid "Discard changes"
 msgstr "Отклонить изменения"
 
-#: apps/io.ox/mail/settings/pane.js:278 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:283 module:io.ox/mail
 msgid "Display"
 msgstr "Вид"
 
@@ -1873,7 +1876,7 @@ msgstr "Краткое имя"
 msgid "Display area"
 msgstr "Область просмотра"
 
-#: apps/io.ox/mail/settings/pane.js:291 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:296 module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
 msgstr "Показывать значки настроения в текстовых сообщениях"
 
@@ -2151,8 +2154,8 @@ msgstr "ЭБ"
 #: apps/io.ox/mail/actions.js:976 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
-#: apps/io.ox/mail/main.js:103 apps/io.ox/mail/main.js:108
-#: apps/io.ox/mail/main.js:193
+#: apps/io.ox/mail/main.js:124 apps/io.ox/mail/main.js:130
+#: apps/io.ox/mail/main.js:238 apps/io.ox/mail/main.js:878
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2193,7 +2196,8 @@ msgstr "Изменить встречу"
 msgid "Edit description"
 msgstr "Изменить описание"
 
-#: apps/io.ox/mail/toolbar.js:93 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:87 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:93
 #, fuzzy
 msgid "Edit draft"
 msgstr "Изменить контакт"
@@ -2618,7 +2622,7 @@ msgstr "Не удалось сохранить список рассылки"
 msgid "Failed to sign in"
 msgstr "Ошибка входа"
 
-#: apps/io.ox/core/desktop.js:1733 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1726 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -2805,7 +2809,7 @@ msgid "Folder-specific actions"
 msgstr "Действия папки"
 
 #: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
-#: apps/io.ox/mail/main.js:102 module:io.ox/mail apps/io.ox/mail/main.js:106
+#: apps/io.ox/mail/main.js:123 module:io.ox/mail apps/io.ox/mail/main.js:128
 msgid "Folders"
 msgstr "Папки"
 
@@ -2840,12 +2844,13 @@ msgstr "Забыли пароль?"
 msgid "Format"
 msgstr "Формат"
 
-#: apps/io.ox/mail/settings/pane.js:231 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:234 module:io.ox/mail
 msgid "Format emails as"
 msgstr "Форматировать как"
 
 #: apps/io.ox/mail/actions.js:966 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:67 apps/io.ox/mail/write/main.js:659
+#: apps/io.ox/mail/mobileToolbarActions.js:61 apps/io.ox/mail/toolbar.js:67
+#: apps/io.ox/mail/write/main.js:659
 msgid "Forward"
 msgstr "Переслать"
 
@@ -3090,7 +3095,7 @@ msgstr "Как это работает?"
 msgid "How the settings are organized"
 msgstr "Категории настроек"
 
-#: apps/io.ox/mail/settings/pane.js:336 module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js:341 module:io.ox/mail
 msgid "IMAP folder subscription"
 msgstr "Подписка папки IMAP"
 
@@ -3504,7 +3509,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Почта"
 
-#: apps/io.ox/mail/main.js:241 module:io.ox/mail
+#: apps/io.ox/mail/main.js:286 module:io.ox/mail
 msgid "Mail Details"
 msgstr "Свойства почты"
 
@@ -3652,7 +3657,8 @@ msgstr "Отметить как список рассылки"
 msgid "Mark as done"
 msgstr "Отметить как спам"
 
-#: apps/io.ox/mail/toolbar.js:109 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:103 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:109
 #, fuzzy
 msgid "Mark as read"
 msgstr "Прочитано"
@@ -3661,7 +3667,8 @@ msgstr "Прочитано"
 msgid "Mark as spam"
 msgstr "Отметить как спам"
 
-#: apps/io.ox/mail/toolbar.js:102 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:96 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:102
 #, fuzzy
 msgid "Mark as unread"
 msgstr "Непрочитанное"
@@ -3804,9 +3811,10 @@ msgstr "Больше"
 #: apps/io.ox/files/actions.js:627 module:io.ox/files
 #: apps/io.ox/files/actions.js:906 apps/io.ox/files/actions.js:1284
 #: apps/io.ox/mail/actions.js:335 module:io.ox/mail
-#: apps/io.ox/mail/actions.js:1078 apps/io.ox/mail/toolbar.js:116
-#: apps/io.ox/tasks/actions.js:194 module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:195 apps/io.ox/tasks/actions.js:560
+#: apps/io.ox/mail/actions.js:1078 apps/io.ox/mail/mobileToolbarActions.js:110
+#: apps/io.ox/mail/toolbar.js:116 apps/io.ox/tasks/actions.js:194
+#: module:io.ox/tasks apps/io.ox/tasks/actions.js:195
+#: apps/io.ox/tasks/actions.js:560
 msgid "Move"
 msgstr "Переместить"
 
@@ -4017,7 +4025,7 @@ msgstr "Нет входящих сообщений."
 msgid "No matching templates on this Server"
 msgstr "Нет подходящих шаблонов на сервере"
 
-#: apps/io.ox/mail/main.js:489 module:io.ox/mail
+#: apps/io.ox/mail/main.js:535 module:io.ox/mail
 #, fuzzy
 msgid "No message selected"
 msgstr "Элементы не выбраны."
@@ -4807,8 +4815,8 @@ msgstr "Основная учетная запись"
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:729
 #: apps/io.ox/core/print.js:108 module:io.ox/core
 #: apps/io.ox/mail/actions.js:1096 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:130 apps/io.ox/tasks/actions.js:578
-#: module:io.ox/tasks
+#: apps/io.ox/mail/mobileToolbarActions.js:124 apps/io.ox/mail/toolbar.js:130
+#: apps/io.ox/tasks/actions.js:578 module:io.ox/tasks
 msgid "Print"
 msgstr "Печать"
 
@@ -5070,7 +5078,7 @@ msgstr "Напомнить еще раз"
 #: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:486 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1124 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:152
+#: apps/io.ox/mail/mobileToolbarActions.js:146 apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
 msgstr "Напоминание"
 
@@ -5137,12 +5145,14 @@ msgstr "Ответить всем"
 msgid "Reply to"
 msgstr "Ответить"
 
-#: apps/io.ox/mail/toolbar.js:59 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:53 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:59
 #, fuzzy
 msgid "Reply to all recipients"
 msgstr "Все получатели"
 
-#: apps/io.ox/mail/toolbar.js:51 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:45 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:51
 #, fuzzy
 msgid "Reply to sender"
 msgstr "Ответить"
@@ -5266,7 +5276,7 @@ msgid "Save as draft"
 msgstr "Сохранить черновик"
 
 #: apps/io.ox/mail/actions.js:1105 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:137
+#: apps/io.ox/mail/mobileToolbarActions.js:131 apps/io.ox/mail/toolbar.js:137
 msgid "Save as file"
 msgstr "Сохранить как файл"
 
@@ -5312,8 +5322,8 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Планирование"
 
-#: apps/io.ox/core/desktop.js:1513 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1514 apps/io.ox/core/desktop.js:1571
+#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1507 apps/io.ox/core/desktop.js:1564
 #: apps/io.ox/core/main.js:635 apps/io.ox/search/main.js:156
 #: module:io.ox/search apps/io.ox/search/main.js:172
 #: apps/io.ox/search/view-template.js:46
@@ -5321,7 +5331,7 @@ msgstr "Планирование"
 msgid "Search"
 msgstr "Поиск"
 
-#: apps/io.ox/core/desktop.js:1505 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1498 module:io.ox/core
 msgid "Search for items"
 msgstr "Поиск объектов"
 
@@ -5477,7 +5487,8 @@ msgstr "Версия сервера"
 msgid "Set as default"
 msgstr "Использовать по умолчанию"
 
-#: apps/io.ox/mail/toolbar.js:83 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:77 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:83
 msgid "Set color"
 msgstr ""
 
@@ -6405,7 +6416,7 @@ msgstr "Пользователь обладает правами админис�
 msgid "Theme"
 msgstr "Тема"
 
-#: apps/io.ox/core/desktop.js:631 module:io.ox/core
+#: apps/io.ox/core/desktop.js:624 module:io.ox/core
 msgid "There are unsaved changes."
 msgstr "Есть несохраненные изменения."
 
@@ -6632,7 +6643,7 @@ msgstr ""
 "Превышена допустимая скорость отправки твитов, поэтому этот компонент был "
 "отключен."
 
-#: apps/io.ox/mail/main.js:115 module:io.ox/mail
+#: apps/io.ox/mail/main.js:137 module:io.ox/mail
 #, fuzzy
 #| msgid "Thread view"
 msgid "Thread"
@@ -6946,7 +6957,7 @@ msgstr "Переключить флажки"
 msgid "Toggle folder"
 msgstr "Перейти в папку"
 
-#: apps/io.ox/core/desktop.js:1563 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1556 module:io.ox/core
 msgid "Toggle search"
 msgstr "Включить режим поиска"
 
@@ -7240,8 +7251,9 @@ msgstr "Просмотр слайд-шоу"
 
 #. source in terms of source code
 #. source in terms of source code
+#. source in terms of source code
 #: apps/io.ox/mail/actions.js:1115 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:145
+#: apps/io.ox/mail/mobileToolbarActions.js:139 apps/io.ox/mail/toolbar.js:145
 msgid "View source"
 msgstr "Показать код"
 
