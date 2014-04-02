@@ -67,7 +67,7 @@ define(['io.ox/core/extensions',
             $popup.find('input[name="transport_secure"]').length.should.be.equal(1);
             $popup.find('input[name="transport_server"]').length.should.be.equal(1);
             $popup.find('input[name="transport_port"]').length.should.be.equal(1);
-            $popup.find('input[name="mail-common-selectfirst"]').length.should.be.equal(1);
+            // $popup.find('input[name="mail-common-selectfirst"]').length.should.be.equal(1);
             $popup.find('input[name="transport_login"]').length.should.be.equal(1);
             $popup.find('input[name="transport_password"]').length.should.be.equal(1);
 
