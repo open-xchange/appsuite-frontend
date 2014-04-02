@@ -286,27 +286,18 @@ define('io.ox/core/api/account',
     };
 
     // make sure account's personal is set
-    var ensureDisplayName = (function () {
+    var ensureDisplayName = function (account) {
 
-        var defer,
-            wasEmpty = {};
-
-        return function (account) {
-            // no account given or account already has "personal"
-            if (!account || (account.personal && account.personal.trim() !== '' && wasEmpty[account.id] !== true)) {
-                return $.Deferred().resolve(account);
-            }
-
-            defer = api.getDefaultDisplayName();
-
-            return defer.then(function (personal) {
-                account.personal = personal;
-                wasEmpty[account.id] = true;
-                return account;
-            });
-        };
-
-    }());
+                // no account given or account already has "personal"
+        if (!account || (account.personal && $.trim(account.personal) !== '')) {
+            return $.Deferred().resolve(account);
+        }
+        
+        return api.getDefaultDisplayName().then(function (personal) {
+            account.personal = personal;
+            return account;
+        });
+    };
 
     api.trimAddress = function (address) {
         address = $.trim(address);
