@@ -225,8 +225,6 @@ body.down #io-ox-login-container .alert.alert-info {
     text-shadow: 0 1px 3px #1E405A;
 }
 
-#io-ox-login-form {overflow: hidden}//firefox workaround for busy animation width (see Bug 31858)
-
 #io-ox-login-form-container {
     height: 40%;
     margin: 0;
@@ -404,9 +402,8 @@ body.down #io-ox-login-container .alert.alert-info {
 .io-ox-busy:before {
     position: absolute;
     top: 50%;
-    margin-top: -10px;
-    width: 100%;
-    text-align: center;
+    left: 50%;
+    margin: -10px 0 0 -10px;
     /* icon-refresh */
     font-size: 20px;
     font-family: 'FontAwesome';
