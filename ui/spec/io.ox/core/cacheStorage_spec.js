@@ -21,21 +21,8 @@ define(['io.ox/core/extensions',
     'use strict';
 
     // test objects
-    var TIMEOUT = ox.testTimeout,
-        testKey = 'testkey',
+    var testKey = 'testkey',
         testValue = 'ABC';
-
-    // helpers
-    function Done() {
-        var f = function () {
-            return f.value;
-        };
-        f.value = false;
-        f.yep = function () {
-            f.value = true;
-        };
-        return f;
-    }
 
     /*
      * Suite: Cache Test
@@ -48,154 +35,121 @@ define(['io.ox/core/extensions',
         describe('Caching Storagelayer: ' + testStorage.getStorageLayerName(), function () {
 
             it('check storagelayer', function () {
-                expect(testStorage.isUsable()).toBeTruthy();
+                expect(testStorage.isUsable()).to.be.ok;
             });
 
             var testStorageInst = testStorage.getInstance('TEST');
 
-            it('clear the cache', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not get keys', TIMEOUT);
-
+            it('clear the cache', function (done) {
                 testStorageInst.clear().done(function (check) {
-                    loaded.yep();
-                    expect(check).not.toBeDefined();
+                    expect(check).to.be.undefined;
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
-            it('check for empty cache', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not get keys', TIMEOUT);
-
+            it('check for empty cache', function (done) {
                 testStorageInst.keys().done(function (keys) {
-                    loaded.yep();
-                    expect(keys).toEqual([]);
+                    expect(keys).to.be.empty;
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
-            it('get a no existent cache key ', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+            it('get a no existent cache key ', function (done) {
                 testStorageInst.get('notexistingkey').done(function (data) {
-                    loaded.yep();
-                    expect(data).toBeNull();
+                    expect(data).to.be.null;
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
-            it('set a cache key ', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not set key', TIMEOUT);
-
+            it('set a cache key ', function (done) {
                 testStorageInst.set(testKey, testValue).done(function (key) {
                     // set is deferred internally, so we defer too
                     _.defer(function () {
-                        loaded.yep();
-                        expect(key).toEqual(testKey);
+                        expect(key).to.equal(testKey);
+                        done();
                     });
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
-            it('get a cache key ', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not set key', TIMEOUT);
-
+            it('get a cache key ', function (done) {
                 testStorageInst.get(testKey).done(function (data) {
-                    loaded.yep();
-                    expect(data).toEqual(testValue);
+                    expect(data).to.equal(testValue);
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
-            it('get all keys ', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not get keys', TIMEOUT);
-
+            it('get all keys ', function (done) {
                 testStorageInst.keys().done(function (keys) {
-                    loaded.yep();
-                    expect(keys).toEqual([testKey]);
+                    expect(keys).to.deep.equal([testKey]);
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
-            it('check key existence ', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not check key', TIMEOUT);
-
+            it('check key existence ', function (done) {
                 testStorageInst.get(testKey).done(function (check) {
-                    loaded.yep();
-                    expect(check).not.toBeNull();
+                    expect(check).not.to.be.null;
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
-            it('check key removal ', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not check key', TIMEOUT);
-
+            it('check key removal ', function (done) {
                 testStorageInst.remove(testKey).done(function () {
-                    loaded.yep();
-                    expect(true).toBeTruthy();
+                    expect(true).to.be.ok;
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
-            it('check for key really removed ', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not check key', TIMEOUT);
-
+            it('check for key really removed ', function (done) {
                 testStorageInst.get(testKey).done(function (check) {
-                    loaded.yep();
-                    expect(check).toBeNull();
+                    expect(check).to.be.null;
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).not.to.be.undefined;
+                    done();
                 });
             });
 
-            it('check for cache clearing ', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not check key', TIMEOUT);
-
+            it('check for cache clearing ', function (done) {
                 testStorageInst.clear().done(function () {
-                    loaded.yep();
-                    expect(true).toBeTruthy();
+                    expect(true).to.be.ok;
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
-            it('check for cleared cache ', function () {
-                var loaded = new Done();
-                waitsFor(loaded, 'Could not check key', TIMEOUT);
-
+            it('check for cleared cache ', function (done) {
                 testStorageInst.keys().done(function (allKeys) {
-                    loaded.yep();
-                    expect(allKeys).toEqual([]);
+                    expect(allKeys).to.be.empty;
+                    done();
                 }).fail(function (e) {
-                    loaded.yep();
-                    expect(e).not.toBeDefined();
+                    expect(e).to.be.undefined;
+                    done();
                 });
             });
 
@@ -206,16 +160,22 @@ define(['io.ox/core/extensions',
                     this.cache3 = testStorage.getInstance('TEST3');
                 });
 
-                it('should initialize an empty cache', function () {
-                    expect(this.cache1.keys()).toResolveWith([]);
-                    expect(this.cache2.keys()).toResolveWith([]);
-                    expect(this.cache3.keys()).toResolveWith([]);
+                it('should initialize an empty cache', function (done) {
+                    $.when.apply([
+                        this.cache1.keys(),
+                        this.cache2.keys(),
+                        this.cache3.keys()
+                    ]).then(function (keys1, keys2, keys3) {
+                        expect(keys1).to.be.empty;
+                        expect(keys2).to.be.empty;
+                        expect(keys3).to.be.empty;
+                        done();
+                    });
                 });
 
                 describe('and test data', function () {
-                    beforeEach(function () {
-                        var done = $.Deferred(),
-                            cache1 = this.cache1,
+                    beforeEach(function (done) {
+                        var cache1 = this.cache1,
                             cache2 = this.cache2,
                             cache3 = this.cache3;
 
@@ -226,18 +186,13 @@ define(['io.ox/core/extensions',
                         .then(function () {
                             return cache3.set('testKey3', 'testValue');
                         })
-                        .then(function (result) {
-                            done.resolve(result);
+                        .then(function () {
+                            done();
                         });
-
-                        waitsFor(function () {
-                            return done.state() === 'resolved';
-                        }, 'Store and fetch cache values', TIMEOUT);
                     });
 
-                    it('should correctly store values in each cache', function () {
-                        var done = $.Deferred(),
-                            cache1 = this.cache1,
+                    it('should correctly store values in each cache', function (done) {
+                        var cache1 = this.cache1,
                             cache2 = this.cache2,
                             cache3 = this.cache3;
 
@@ -255,46 +210,32 @@ define(['io.ox/core/extensions',
                             });
                         })
                         .then(function (result) {
-                            done.resolve(result);
-                        });
-
-                        waitsFor(function () {
-                            return done.state() === 'resolved';
-                        }, 'Store and fetch cache values', TIMEOUT);
-
-                        runs(function () {
-                            expect(done).toResolveWith({
+                            expect(result).to.deep.equal({
                                 cache1: ['testKey1'],
                                 cache2: ['testKey2'],
                                 cache3: ['testKey3']
                             });
+                            done();
                         });
                     });
 
-                    it('should clear cache1 correctly', function () {
-                        var done,
-                            cache1 = this.cache1;
+                    it('should clear cache1 correctly', function (done) {
+                        var cache1 = this.cache1;
 
-                        done = cache1.clear().then(function () {
+                        cache1.clear().then(function () {
                             return cache1.keys();
-                        });
-
-                        waitsFor(function () {
-                            return done.state() === 'resolved';
-                        }, 'Clear cache and get keys', TIMEOUT);
-
-                        runs(function () {
-                            expect(done).toResolveWith([]);
+                        }).then(function (keys) {
+                            expect(keys).to.be.empty;
+                            done();
                         });
                     });
 
-                    it('should not affect other caches when clearing cache', function () {
-                        var done,
-                            cache1 = this.cache1,
+                    it('should not affect other caches when clearing cache', function (done) {
+                        var cache1 = this.cache1,
                             cache2 = this.cache2,
                             cache3 = this.cache3;
 
-                        done = cache1.clear().then(function () {
+                        cache1.clear().then(function () {
                             return cache1.keys().then(function (r1) {
                                 return { cache1: r1 };
                             });
@@ -306,18 +247,13 @@ define(['io.ox/core/extensions',
                             return cache3.keys().then(function (r3) {
                                 return _.extend({ cache3: r3 }, result);
                             });
-                        });
-
-                        waitsFor(function () {
-                            return done.state() === 'resolved';
-                        }, 'Clear cache and get keys', TIMEOUT);
-
-                        runs(function () {
-                            expect(done).toResolveWith({
+                        }).then(function (result) {
+                            expect(result).to.deep.equal({
                                 cache1: [],
                                 cache2: ['testKey2'],
                                 cache3: ['testKey3']
                             });
+                            done();
                         });
                     });
                 });
