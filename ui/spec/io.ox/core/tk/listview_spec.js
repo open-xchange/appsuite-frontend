@@ -22,6 +22,8 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
         return f;
     }
 
+    var expect = chai.expect;
+
     describe('The ListView.', function () {
 
         beforeEach(function () {
@@ -45,14 +47,15 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             it('should be empty and have proper markup', function () {
 
                 // we need at least one occurrence (the other one might come from mail app)
-                expect($('.list-view', document).length).toBeGreaterThan(0);
+                expect($('.list-view', document).length).to.be.above(0);
 
                 // check overall markup
                 var node = this.list.$el;
-                expect(node.children().length).toBe(0);
-                expect(node.is('ul')).toBe(true);
-                expect(node.attr('role')).toBe('listbox');
-                expect(node.attr('tabindex')).toBe('1');
+                expect(node.children().length, 'children').to.equal(0);
+                expect(node.is('ul'), '<ul> tag').to.be.true;
+                expect(node.attr('role'), 'role').to.equal('listbox');
+                expect(node.attr('tabindex'), 'tabindex').to.equal('1');
+                expect(node.hasClass('no-transition'), 'no transition').to.be.true;
             });
         });
 
@@ -67,31 +70,31 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             it('should have one list item with proper markup', function () {
                 var items = this.list.$el.children(),
                     model = this.collection.at(0);
-                expect(items.length).toBe(1);
-                expect(items.is('li')).toBe(true);
-                expect(items.hasClass('list-item')).toBe(true);
-                expect(items.attr('role')).toBe('option');
-                expect(items.attr('data-cid')).toBe('thread.' + model.cid);
+                expect(items.length).to.equal(1);
+                expect(items.is('li')).to.be.true;
+                expect(items.hasClass('list-item')).to.be.true;
+                expect(items.attr('role')).to.equal('option');
+                expect(items.attr('data-cid')).to.equal('thread.' + model.cid);
             });
 
             it('should have one list item', function () {
-                expect(this.list.$el.children().length).toBe(1);
+                expect(this.list.$el.children().length).to.equal(1);
             });
 
             it('should be empty again if item gets removed', function () {
                 this.collection.remove(this.collection.at(0));
-                expect(this.list.$el.children().length).toBe(0);
+                expect(this.list.$el.children().length).to.equal(0);
             });
 
             it('should be empty again if collection is reset', function () {
                 this.collection.reset();
-                expect(this.list.$el.children().length).toBe(0);
+                expect(this.list.$el.children().length).to.equal(0);
             });
 
             it('should contain proper data', function () {
                 var node = this.list.$el.children().first();
-                expect(node.find('.from').text()).toBe('Matthias Biggeleben');
-                expect(node.find('.subject').text()).toBe('A simple text email');
+                expect(node.find('.from').text()).to.equal('Matthias Biggeleben');
+                expect(node.find('.subject').text()).to.equal('A simple text email');
             });
         });
 
@@ -106,23 +109,23 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             });
 
             it('should have one deleted item', function () {
-                expect(this.collection.length).toBe(3);
-                expect(this.list.$el.children().length).toBe(3);
-                expect(this.list.$el.children('.deleted').length).toBe(1);
+                expect(this.collection.length).to.equal(3);
+                expect(this.list.$el.children().length).to.equal(3);
+                expect(this.list.$el.children('.deleted').length).to.equal(1);
             });
 
             it('should have one unread item', function () {
-                expect(this.list.$el.find('.icon-unread.fa-envelope').length).toBe(1);
+                expect(this.list.$el.find('.icon-unread.fa-envelope').length).to.equal(1);
             });
 
             it('should have one item with attachments', function () {
-                expect(this.list.$el.find('.fa-paperclip').length).toBe(1);
+                expect(this.list.$el.find('.fa-paperclip').length).to.equal(1);
             });
 
             it('should reflect unread updates via model change', function () {
                 // set first mail to unread
                 this.collection.at(0).set('flags', 0);
-                expect(this.list.$el.find('.icon-unread.fa-envelope').length).toBe(2);
+                expect(this.list.$el.find('.icon-unread.fa-envelope').length).to.equal(2);
             });
 
             it('should reflect unread updates via collection change', function () {
@@ -130,13 +133,13 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 this.collection.add([
                     JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":0,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"1","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"1","folder_id":"default0/INBOX","flags":0,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}')
                 ], { merge: true });
-                expect(this.list.$el.find('.icon-unread.fa-envelope').length).toBe(2);
+                expect(this.list.$el.find('.icon-unread.fa-envelope').length).to.equal(2);
             });
 
             it('should reflect an item removal', function () {
                 // remove second item
                 this.collection.remove(this.collection.at(1));
-                expect(this.list.$el.children().length).toBe(2);
+                expect(this.list.$el.children().length).to.equal(2);
             });
         });
 
@@ -152,19 +155,19 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             });
 
             it('should contain items with .selectable class only', function () {
-                expect(this.list.$el.children('.selectable').length).toBe(3);
+                expect(this.list.$el.children('.selectable').length).to.equal(3);
             });
 
             it('should contain no item with .selected class ', function () {
-                expect(this.list.$el.children('.selected').length).toBe(0);
+                expect(this.list.$el.children('.selected').length).to.equal(0);
             });
 
             it('should contain items with tabindex=-1 only', function () {
-                expect(this.list.$el.children('[tabindex="-1"]').length).toBe(3);
+                expect(this.list.$el.children('[tabindex="-1"]').length).to.equal(3);
             });
 
             it('should have an empty selection', function () {
-                expect(this.list.selection.get()).toEqual([]);
+                expect(this.list.selection.get()).to.be.empty;
             });
 
             it('should handle keyboard events correctly', function () {
@@ -175,39 +178,39 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 e = $.Event('keydown', { which: 40 });
                 this.list.$el.focus().trigger(e);
 
-                expect(this.list.selection.get().length).toBe(1);
-                expect(nodes.eq(0).is('[tabindex="1"]')).toBe(true);
-                expect(nodes.filter('.selected').length).toBe(1);
-                expect(nodes.filter('[tabindex="-1"]').length).toBe(2);
+                expect(this.list.selection.get().length).to.equal(1);
+                expect(nodes.eq(0).is('[tabindex="1"]')).to.be.true;
+                expect(nodes.filter('.selected').length).to.equal(1);
+                expect(nodes.filter('[tabindex="-1"]').length).to.equal(2);
 
                 // if list item has focus, outer node should have class "has-focus"
-                expect(this.list.$el.hasClass('has-focus')).toBe(true);
+                expect(this.list.$el.hasClass('has-focus')).to.be.true;
 
                 // cursor down again
                 e = $.Event('keydown', { which: 40 });
                 $(document.activeElement).trigger(e);
 
-                expect(nodes.eq(1).is('[tabindex="1"]')).toBe(true);
+                expect(nodes.eq(1).is('[tabindex="1"]')).to.be.true;
 
                 // cursor down again
                 e = $.Event('keydown', { which: 40 });
                 $(document.activeElement).trigger(e);
-                expect(nodes.eq(2).is('[tabindex="1"]')).toBe(true);
+                expect(nodes.eq(2).is('[tabindex="1"]')).to.be.true;
 
                 // cursor down again to check boundary
                 e = $.Event('keydown', { which: 40 });
                 $(document.activeElement).trigger(e);
-                expect(nodes.eq(2).is('[tabindex="1"]')).toBe(true);
+                expect(nodes.eq(2).is('[tabindex="1"]')).to.be.true;
 
                 // cmd + cursor up
                 e = $.Event('keydown', { which: 38, metaKey: true });
                 $(document.activeElement).trigger(e);
-                expect(nodes.eq(0).is('[tabindex="1"]')).toBe(true);
+                expect(nodes.eq(0).is('[tabindex="1"]')).to.be.true;
 
                 // cursor up again to check boundary
                 e = $.Event('keydown', { which: 38 });
                 $(document.activeElement).trigger(e);
-                expect(nodes.eq(0).is('[tabindex="1"]')).toBe(true);
+                expect(nodes.eq(0).is('[tabindex="1"]')).to.be.true;
             });
 
             it('should handle click events correctly', function () {
@@ -216,43 +219,43 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                     nodes = this.list.$el.children(), e;
 
                 // start with empty selection
-                expect(this.list.selection.get().length).toBe(0);
+                expect(this.list.selection.get().length).to.equal(0);
 
                 // click on first item
                 e = $.Event(type);
                 nodes.eq(0).trigger(e);
-                expect(this.list.selection.get().length).toBe(1);
-                expect(nodes.eq(0).is('.selected')).toBe(true);
+                expect(this.list.selection.get().length).to.equal(1);
+                expect(nodes.eq(0).is('.selected')).to.be.true;
 
                 // click on second item
                 e = $.Event(type);
                 nodes.eq(1).trigger(e);
-                expect(this.list.selection.get().length).toBe(1);
-                expect(nodes.eq(1).is('.selected')).toBe(true);
+                expect(this.list.selection.get().length).to.equal(1);
+                expect(nodes.eq(1).is('.selected')).to.be.true;
 
                 // click on first item and shift click on third
                 e = $.Event(type);
                 nodes.eq(0).trigger(e);
                 e = $.Event(type, { shiftKey: true });
                 nodes.eq(2).trigger(e);
-                expect(this.list.selection.get().length).toBe(3);
-                expect(nodes.filter('.selected').length).toBe(3);
+                expect(this.list.selection.get().length).to.equal(3);
+                expect(nodes.filter('.selected').length).to.equal(3);
 
                 // click on second item with cmd/ctrl click
                 e = $.Event(type, { metaKey: true });
                 nodes.eq(1).trigger(e);
-                expect(this.list.selection.get().length).toBe(2);
-                expect(nodes.eq(0).is('.selected')).toBe(true);
-                expect(nodes.eq(1).is('.selected')).toBe(false);
-                expect(nodes.eq(2).is('.selected')).toBe(true);
+                expect(this.list.selection.get().length).to.equal(2);
+                expect(nodes.eq(0).is('.selected')).to.be.true;
+                expect(nodes.eq(1).is('.selected')).to.equal(false);
+                expect(nodes.eq(2).is('.selected')).to.be.true;
 
                 // invert selection by another click
                 e = $.Event(type);
                 nodes.eq(1).trigger(e);
-                expect(this.list.selection.get().length).toBe(1);
-                expect(nodes.eq(0).is('.selected')).toBe(false);
-                expect(nodes.eq(1).is('.selected')).toBe(true);
-                expect(nodes.eq(2).is('.selected')).toBe(false);
+                expect(this.list.selection.get().length).to.equal(1);
+                expect(nodes.eq(0).is('.selected')).to.equal(false);
+                expect(nodes.eq(1).is('.selected')).to.be.true;
+                expect(nodes.eq(2).is('.selected')).to.equal(false);
             });
         });
 
@@ -275,11 +278,11 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             });
 
             it('is exptected that models have an index attribute', function () {
-                expect(this.collection.at(0).has('index')).toBe(true);
+                expect(this.collection.at(0).has('index')).to.be.true;
             });
 
             it('should have three mails', function () {
-                expect(this.list.getItems().length).toBe(3);
+                expect(this.list.getItems().length).to.equal(3);
             });
 
             it('should update properly (case: empty)', function () {
@@ -287,9 +290,9 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 // remove all
                 this.collection.set([]);
 
-                expect(this.list.collection.length).toBe(0);
-                expect(this.list.getItems().length).toBe(0); // all list items were removed
-                expect(this.list.$el.children().length).toBe(1); // header element still there
+                expect(this.list.collection.length).to.equal(0);
+                expect(this.list.getItems().length).to.equal(0); // all list items were removed
+                expect(this.list.$el.children().length).to.equal(1); // header element still there
             });
 
             it('should update properly (case: prepend)', function () {
@@ -300,14 +303,14 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 var nodes = this.list.$el.children(),
                     items = this.list.getItems();
 
-                expect(this.list.collection.length).toBe(5);
-                expect(items.length).toBe(5);
-                expect(nodes.length).toBe(6); // plus header element
-                expect(items.eq(0).is('[data-cid="thread.default0/INBOX.1"]')).toBe(true);
-                expect(items.eq(1).is('[data-cid="thread.default0/INBOX.2"]')).toBe(true);
-                expect(items.eq(2).is('[data-cid="thread.default0/INBOX.3"]')).toBe(true);
-                expect(items.eq(3).is('[data-cid="thread.default0/INBOX.4"]')).toBe(true);
-                expect(items.eq(4).is('[data-cid="thread.default0/INBOX.6"]')).toBe(true);
+                expect(this.list.collection.length).to.equal(5);
+                expect(items.length).to.equal(5);
+                expect(nodes.length).to.equal(6); // plus header element
+                expect(items.eq(0).is('[data-cid="thread.default0/INBOX.1"]')).to.be.true;
+                expect(items.eq(1).is('[data-cid="thread.default0/INBOX.2"]')).to.be.true;
+                expect(items.eq(2).is('[data-cid="thread.default0/INBOX.3"]')).to.be.true;
+                expect(items.eq(3).is('[data-cid="thread.default0/INBOX.4"]')).to.be.true;
+                expect(items.eq(4).is('[data-cid="thread.default0/INBOX.6"]')).to.be.true;
             });
 
             it('should update properly (case: append)', function () {
@@ -318,13 +321,13 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 var nodes = this.list.$el.children(),
                     items = this.list.getItems();
 
-                expect(this.list.collection.length).toBe(4);
-                expect(items.length).toBe(4);
-                expect(nodes.length).toBe(4); // reset removes header element
-                expect(items.eq(0).is('[data-cid="thread.default0/INBOX.3"]')).toBe(true);
-                expect(items.eq(1).is('[data-cid="thread.default0/INBOX.5"]')).toBe(true);
-                expect(items.eq(2).is('[data-cid="thread.default0/INBOX.6"]')).toBe(true);
-                expect(items.eq(3).is('[data-cid="thread.default0/INBOX.7"]')).toBe(true);
+                expect(this.list.collection.length).to.equal(4);
+                expect(items.length).to.equal(4);
+                expect(nodes.length).to.equal(4); // reset removes header element
+                expect(items.eq(0).is('[data-cid="thread.default0/INBOX.3"]')).to.be.true;
+                expect(items.eq(1).is('[data-cid="thread.default0/INBOX.5"]')).to.be.true;
+                expect(items.eq(2).is('[data-cid="thread.default0/INBOX.6"]')).to.be.true;
+                expect(items.eq(3).is('[data-cid="thread.default0/INBOX.7"]')).to.be.true;
             });
 
             it('should update properly (case: mixed)', function () {
@@ -335,14 +338,14 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 var nodes = this.list.$el.children(),
                     items = this.list.getItems();
 
-                expect(this.list.collection.length).toBe(5);
-                expect(items.length).toBe(5);
-                expect(nodes.length).toBe(6); // plus header element
-                expect(items.eq(0).is('[data-cid="thread.default0/INBOX.1"]')).toBe(true);
-                expect(items.eq(1).is('[data-cid="thread.default0/INBOX.2"]')).toBe(true);
-                expect(items.eq(2).is('[data-cid="thread.default0/INBOX.4"]')).toBe(true);
-                expect(items.eq(3).is('[data-cid="thread.default0/INBOX.6"]')).toBe(true);
-                expect(items.eq(4).is('[data-cid="thread.default0/INBOX.7"]')).toBe(true);
+                expect(this.list.collection.length).to.equal(5);
+                expect(items.length).to.equal(5);
+                expect(nodes.length).to.equal(6); // plus header element
+                expect(items.eq(0).is('[data-cid="thread.default0/INBOX.1"]')).to.be.true;
+                expect(items.eq(1).is('[data-cid="thread.default0/INBOX.2"]')).to.be.true;
+                expect(items.eq(2).is('[data-cid="thread.default0/INBOX.4"]')).to.be.true;
+                expect(items.eq(3).is('[data-cid="thread.default0/INBOX.6"]')).to.be.true;
+                expect(items.eq(4).is('[data-cid="thread.default0/INBOX.7"]')).to.be.true;
             });
         });
 
@@ -358,20 +361,20 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             });
 
             it('should have no busy indicator', function () {
-                expect(this.list.getBusyIndicator().length).toBe(0);
+                expect(this.list.getBusyIndicator().length).to.equal(0);
             });
 
             it('should have one busy indicator', function () {
                 this.list.busy();
                 this.list.busy(); // check for duplicate
-                expect(this.list.getBusyIndicator().length).toBe(1);
+                expect(this.list.getBusyIndicator().length).to.equal(1);
             });
 
             it('should add and remove the busy indicator properly', function () {
                 this.list.busy();
-                expect(this.list.getBusyIndicator().length).toBe(1);
+                expect(this.list.getBusyIndicator().length).to.equal(1);
                 this.list.idle(); // check for duplicate
-                expect(this.list.getBusyIndicator().length).toBe(0);
+                expect(this.list.getBusyIndicator().length).to.equal(0);
             });
         });
 
@@ -387,19 +390,19 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             });
 
             it('should contain correct number of items (collection)', function () {
-                expect(this.list.collection.length).toBe(N);
+                expect(this.list.collection.length).to.equal(N);
             });
 
             it('should contain correct number of items (DOM)', function () {
-                expect(this.list.getItems().length).toBe(N);
+                expect(this.list.getItems().length).to.equal(N);
             });
 
             it('should have an outer height greater than zero', function () {
-                expect(this.list.$el.height()).toBeGreaterThan(0);
+                expect(this.list.$el.height()).to.be.above(0);
             });
 
             it('should have items with a height greater than zero', function () {
-                expect(this.list.$el.children().height()).toBeGreaterThan(0);
+                expect(this.list.$el.children().height()).to.be.above(0);
             });
 
             it('should load new data on scroll', function () {
@@ -412,7 +415,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                     return list.getBusyIndicator().length === 1;
                 }, 400);
                 runs(function () {
-                    expect(list.getBusyIndicator().length).toBe(1);
+                    expect(list.getBusyIndicator().length).to.equal(1);
                 });
             });
         });
@@ -434,7 +437,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                     // re-add
                     this.collection.set(_.range(1, 100).map(createItem));
 
-                    expect(this.list.getItems().eq(INDEX).offset().top).toBe(top);
+                    expect(this.list.getItems().eq(INDEX).offset().top).to.equal(top);
                 });
             });
         });
@@ -460,73 +463,73 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
 
             it('should indicate the missing subject', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.subject').text()).not.toBe('');
+                expect(first.find('.subject').text()).not.to.equal('');
             });
 
             it('should indicate the missing sender', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.from').text()).not.toBe('');
+                expect(first.find('.from').text()).not.to.equal('');
             });
 
             it('should have no received_date', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('time').length).toBe(0);
+                expect(first.find('time').length).to.equal(0);
             });
 
             it('should indicate item as seen', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.icon-unread.fa-envelope').length).toBe(0);
+                expect(first.find('.icon-unread.fa-envelope').length).to.equal(0);
             });
 
             it('should indicate item as unseen', function () {
                 var first = this.list.$el.children().first();
                 this.collection.at(0).set('flags', 0);
-                expect(first.find('.icon-unread.fa-envelope').length).toBe(1);
+                expect(first.find('.icon-unread.fa-envelope').length).to.equal(1);
             });
 
             it('should show proper color label', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.flag.icon-bookmark').length).toBe(0);
+                expect(first.find('.flag.icon-bookmark').length).to.equal(0);
                 this.collection.at(0).set('color_label', 1);
-                expect(first.find('.flag.flag_1.fa-bookmark').length).toBe(1);
+                expect(first.find('.flag.flag_1.fa-bookmark').length).to.equal(1);
             });
 
             it('should show attachment icon', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.fa-paperclip').length).toBe(0);
+                expect(first.find('.fa-paperclip').length).to.equal(0);
                 this.collection.at(0).set('attachment', true);
-                expect(first.find('.fa-paperclip').length).toBe(1);
+                expect(first.find('.fa-paperclip').length).to.equal(1);
             });
 
             it('should indicate that this mail has been answered', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.icon-answered.fa-reply').length).toBe(0);
+                expect(first.find('.icon-answered.fa-reply').length).to.equal(0);
                 this.collection.at(0).set('flags', 33); // 32 = seen, 1 = answered
-                expect(first.find('.icon-answered.fa-reply').length).toBe(1);
+                expect(first.find('.icon-answered.fa-reply').length).to.equal(1);
             });
 
             it('should indicate that this mail has been fowarded', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.icon-forwarded.fa-mail-forward').length).toBe(0);
+                expect(first.find('.icon-forwarded.fa-mail-forward').length).to.equal(0);
                 this.collection.at(0).set('flags', 32 | 256); // 32 = seen, 256 = forwarded
-                expect(first.find('.icon-forwarded.fa-mail-forward').length).toBe(1);
+                expect(first.find('.icon-forwarded.fa-mail-forward').length).to.equal(1);
             });
 
             it('should indicate high priority', function () {
                 var first = this.list.$el.children().first();
                 this.collection.at(0).set('priority', 1); // 1 = high, 3 = normal, 5 = low
-                expect(first.find('.priority .high').length).toBe(1);
+                expect(first.find('.priority .high').length).to.equal(1);
             });
 
             it('should indicate low priority', function () {
                 var first = this.list.$el.children().first();
                 this.collection.at(0).set('priority', 5); // 1 = high, 3 = normal, 5 = low
-                expect(first.find('.priority .low').length).toBe(1);
+                expect(first.find('.priority .low').length).to.equal(1);
             });
 
             it('should have no thread size indicator', function () {
                 var first = this.list.$el.children().first();
-                expect(first.find('.thread-size').length).toBe(0);
+                expect(first.find('.thread-size').length).to.equal(0);
             });
         });
 
@@ -535,58 +538,104 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
 
             beforeEach(function () {
                 // create thread
-                var item = createItem(2, 1), data = item.thread[0], N = 11;
-                item.thread = _.range(1, N).map(function (index) {
+                var N = 10, item = createItem(2, 1), data = item.thread[0], array;
+                item.thread = _.range(N + 1, 1, -1).map(function (index) {
                     return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
                 });
-                this.collection.reset([createItem(1, 0), item, createItem(N + 1, 2)]);
+                this.collection.reset([createItem(12, 0), item, createItem(1, 2)]);
+            });
+
+            it('should show proper number of list items', function () {
+                var items = this.list.getItems();
+                expect(this.collection.length, 'collection length').to.equal(3);
+                expect(items.length, 'list view items').to.equal(3);
             });
 
             it('should have one thread size indicator', function () {
                 var items = this.list.getItems();
-                expect(items.find('.thread-size').length).toBe(1);
+                expect(items.find('.thread-size').length).to.equal(1);
             });
 
             it('should show correct thread size', function () {
                 var items = this.list.getItems();
-                expect(items.eq(1).find('.thread-size .number').text()).toBe('10');
+                expect(items.eq(1).find('.thread-size .number').text()).to.equal('10');
+            });
+
+            it('should have proper CID', function () {
+                var model = this.collection.at(1);
+                expect(model.cid).to.equal('default0/INBOX.2');
             });
 
             it('should update correctly (increase)', function () {
                 // update thread
-                var item = createItem(2, 1), data = item.thread[0], N = 12;
-                item.thread = _.range(1, N).map(function (index) {
-                    return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
-                });
-                this.collection.reset([createItem(1, 0), item, createItem(N + 1, 2)]);
+                var tmp = this.collection.toJSON(), data = tmp[1].thread[0];
+                tmp[1].thread.unshift(
+                    _.extend({}, data, { id: 13, subject: data.subject + ' #' + 13 })
+                );
+                // fix indexes
+                tmp[1].index = 0;
+                tmp[0].index = 1;
+                // reset
+                this.collection.reset(tmp);
+                // check
                 var items = this.list.getItems();
-                expect(items.length).toBe(3);
-                expect(items.eq(1).find('.thread-size .number').text()).toBe('11');
+                expect(this.collection.length, 'collection length').to.equal(3);
+                expect(items.length, 'list view items').to.equal(3);
+                expect(items.eq(0).find('.thread-size .number').text(), 'thread size').to.equal('11');
+                expect(items.eq(0).attr('data-cid'), 'cid').to.equal('thread.default0/INBOX.2');
             });
+
+            // function createItem(id, index) {
+            //     var obj = JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"' + id + '","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"' + id + '","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}');
+            //     obj.subject = obj.subject + ' #' + id;
+            //     obj.index = index;
+            //     return obj;
+            // }
+
+            // list.collection.reset([]);
+
+            // // create thread
+            // var N = 10, item = createItem(2, 1), data = item.thread[0], array;
+            // item.thread = _.range(N + 1, 1, -1).map(function (index) {
+            //     return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
+            // });
+            // list.collection.reset([createItem(12, 0), item, createItem(1, 2)]);
+
+            // // update thread
+            // var tmp = list.collection.toJSON(), data = tmp[1].thread[0];
+            // tmp[1].thread.unshift(
+            //     _.extend({}, data, { id: 13, subject: data.subject + ' #' + 13 })
+            // );
+            // tmp[1].index = 0;
+            // tmp[0].index = 1;
+            // list.collection.reset(tmp);
 
             it('should update correctly (decrease)', function () {
                 // update thread
-                var item = createItem(2, 1), data = item.thread[0], N = 10;
-                item.thread = _.range(1, N).map(function (index) {
-                    return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
-                });
-                this.collection.reset([createItem(1, 0), item, createItem(N + 1, 2)]);
+                var tmp = this.collection.toJSON(), data = tmp[1].thread[0];
+                tmp[1].thread.shift();
+                tmp[1].thread.shift();
+                // reset
+                this.collection.reset(tmp);
+                // check
                 var items = this.list.getItems();
-                expect(items.length).toBe(3);
-                expect(items.eq(1).find('.thread-size .number').text()).toBe('9');
+                expect(this.collection.length, 'collection length').to.equal(3);
+                expect(items.length, 'list view items').to.equal(3);
+                expect(items.eq(1).find('.thread-size .number').text(), 'thread size').to.equal('8');
+                expect(items.eq(1).attr('data-cid'), 'cid').to.equal('thread.default0/INBOX.2');
             });
 
-            it('should update correctly (change position)', function () {
-                // update thread
-                var item = createItem(1, 0), data = item.thread[0], N = 12;
-                item.thread = _.range(1, N).map(function (index) {
-                    return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
-                });
-                this.collection.reset([item, createItem(N, 1), createItem(N + 1, 2)]);
-                var items = this.list.getItems();
-                expect(items.length).toBe(3);
-                expect(items.eq(0).find('.thread-size .number').text()).toBe('11');
-            });
+            // it('should update correctly (change position)', function () {
+            //     // update thread
+            //     var item = createItem(1, 0), data = item.thread[0], N = 12;
+            //     item.thread = _.range(1, N).map(function (index) {
+            //         return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
+            //     });
+            //     this.collection.reset([item, createItem(N, 1), createItem(N + 1, 2)]);
+            //     var items = this.list.getItems();
+            //     expect(items.length).to.equal(3);
+            //     expect(items.eq(0).find('.thread-size .number').text()).to.equal('11');
+            // });
         });
     });
 });
