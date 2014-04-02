@@ -89,6 +89,18 @@ html.high-contrast {
 
 }
 
+.badge {
+
+    &.badge-success {
+        background-color: @green;
+    }
+
+    &.badge-important {
+        background-color: @blue;
+    }
+
+}
+
 @media (min-width: 768px) {
 
     .form-inline .form-group {
@@ -1809,13 +1821,29 @@ a.button {
         }
 
         &.top {
+
             top: 0;
-            border-bottom: 1px solid mix(@text-color, @background, 200%/15);
+
+            & .dropdown-menu {
+                top: 110%;
+                bottom: auto;
+                right: 0;
+                left: auto;
+            }
+
         }
 
         &.bottom {
+
             bottom: 0;
-            border-top: 1px solid mix(@text-color, @background, 200%/15);
+
+            & .dropdown-menu {
+                top: auto;
+                bottom: 110%;
+                right: 0;
+                left: auto;
+            }
+
         }
 
         .grid-info {
@@ -1852,10 +1880,6 @@ a.button {
         width: 30px;
         height: 34px;
         margin-top: -3px;
-        //margin-bottom: 0;
-        //margin-left: -10px;
-        //padding-top: 5px;
-        //padding-left: 10px;
         display: none;
     }
 
@@ -1873,20 +1897,6 @@ a.button {
 
     &.bottom-toolbar .vgrid-scrollpane {
         bottom: 39px;
-    }
-
-    .vgrid-toolbar.top .dropdown-menu {
-        top: 110%;
-        bottom: auto;
-        right: 0;
-        left: auto;
-    }
-
-    .vgrid-toolbar.bottom .dropdown-menu {
-        top: auto;
-        bottom: 110%;
-        right: 0;
-        left: auto;
     }
 
     &.editable {

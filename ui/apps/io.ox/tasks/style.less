@@ -13,24 +13,32 @@
 
 .vgrid-cell.tasks {
 
-    .vgrid-cell-checkbox { padding-top: 10px; }
+    .vgrid-cell-checkbox {
+        padding-top: 10px;
+    }
 
     .end_date {
+
         color: #777;
         margin-left: 0.5em;
         font-weight: 300;
         display: inline-block;
         float: right;
+
+        html.high-contrast & {
+            color: @black;
+        }
+
     }
 
     .status {
         margin-left: 0.5em;
         float: right;
-        index: 2;
         padding-bottom: 1px;
     }
 
     .priority {
+
         font-size: 16;
         font-weight: bold;
         padding: 0 0.5em 0 0.5em;
@@ -39,10 +47,15 @@
         position: relative;
         overflow:visible;
 
-        i.fa-star { display: inline-block; }
+        i.fa-star {
+            display: inline-block;
+        }
+
     }
 
-    .title { font-weight: 500; }
+    .title {
+        font-weight: 500;
+    }
 
     .private-flag {
         float: left;
@@ -71,9 +84,12 @@
 
 .tasks-detailview {
 
-    .io-ox-inline-links:first-child { margin: 0 0 26px 0; }
+    .io-ox-inline-links:first-child {
+        margin: 0 0 26px 0;
+    }
 
     header {
+
        margin-bottom: 26px;
 
        &:after {
@@ -84,8 +100,9 @@
             line-height: 0;
             height: 0;
         }
+
     }
-    
+
     .note {
     	margin-bottom: 0.5em;
     }
@@ -107,13 +124,16 @@
     }
 
     .attachments-container {
+
         margin-top: 0.8em;
         margin-bottom: 0.5em;
         font-weight: 300;
+
         .dropdown {
             margin-right: 1em;
             display: inline-block;
         }
+
     }
 
     .attachment-item {
@@ -121,17 +141,26 @@
         word-break: break-all;
     }
 
-    .task-details { margin: 1em 0 1em 0; }
+    .task-details {
+        margin: 1em 0 1em 0;
+    }
 
     .detail-label {
+
         cursor: default;
         color: #aaa;
         margin-right: 0.5em;
         text-align: left;
         width: 220px;
+
+        html.high-contrast & {
+            color: @hc-gray;
+        }
     }
 
-    .detail-value { margin-right: 1em; }
+    .detail-value {
+        margin-right: 1em;
+    }
 
     .private-flag {
         font-size: 20pt;
@@ -140,9 +169,11 @@
     }
 
     .priority {
+
         font-weight: bold;
         vertical-align: top;
         white-space: nowrap;
+
         .high, .low, .medium {
             margin-right: 10px;
             font-size: 16px;
@@ -150,34 +181,54 @@
         }
 
     }
+
 }
 
 @media all and (max-width: 480px), all and (max-device-width: 480px) {
 
     .tasks-detailview {
 
-        header { margin-bottom: 13px; }
+        header {
+            margin-bottom: 13px;
+        }
 
-        .detail-label, .detail-value, .participants-table-confirmmessage { display: block; }
+        .detail-label, .detail-value, .participants-table-confirmmessage {
+            display: block;
+        }
 
-        .detail-label { margin-bottom: 0; }
+        .detail-label {
+            margin-bottom: 0;
+        }
 
         .io-ox-inline-links:first-child {
             margin: 0;
             padding: 15px 0;
         }
 
-        .task-details { margin: 1em 0 0 0; }
+        .task-details {
+            margin: 1em 0 0 0;
+        }
 
-        .participants-table-confirmmessage { padding-left: 0; }
+        .participants-table-confirmmessage {
+            padding-left: 0;
+        }
 
-        .attachments-container .dropdown { margin-top: 5px; }
+        .attachments-container .dropdown {
+            margin-top: 5px;
+        }
 
-        .info-panel { width: 100%; } //to push the title under the info panel, prevents long titles to be ripped apart
+        .info-panel {
+            width: 100%; //to push the title under the info panel, prevents long titles to be ripped apart
+        }
 
     }
 
-    div.io-ox-tasks-edit.task-edit-wrapper.container.default-content-padding { padding-bottom: 40px; }
+    div.io-ox-tasks-edit.task-edit-wrapper.container.default-content-padding {
+        padding-bottom: 40px;
+    }
 
-    .task-detail-container { padding: 13px 13px 0 13px; }
+    .task-detail-container {
+        padding: 13px 13px 0 13px;
+    }
+
 }

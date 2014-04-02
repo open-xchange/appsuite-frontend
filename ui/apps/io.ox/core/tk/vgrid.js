@@ -270,9 +270,9 @@ define('io.ox/core/tk/vgrid',
                 }
             },
 
-            topbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' bottom' : ' top'))
+            topbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' bottom border-top' : ' top border-bottom'))
                 .prependTo(node),
-            toolbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' top' : ' bottom'))
+            toolbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' top border-bottom' : ' bottom border-top'))
                 .append(
                     // show checkbox
                     options.showCheckbox === false ?
