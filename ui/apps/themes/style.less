@@ -15,23 +15,14 @@
 /* High contrast */
 html.high-contrast {
 
-    @topbar-launcher-color:                 #fff;
-    @topbar-launcher-color-hover:           #fff;
-    @topbar-launcher-color-active:          #fff;
-    @topbar-launcher-background-hover:      #333;
-    @topbar-launcher-background-active:     #333;
-    @topbar-icon-color:                     #fff;
-    @badge-bg:                              #fff;
-    @foldertree-sidepanel-background:       #fff;
-    @hc-border-color:                       @black;
-    @link-color:                            @hc-link-color;
-    @notification-icon-background-active:   @link-color;
-
     a {
+
         color: @hc-link-color;
+
         &.btn {
             color: @white;
         }
+
     }
 
 }
@@ -336,11 +327,11 @@ div.hopscotch-bubble {
 
 @media (min-width: 481px), (min-device-width: 481px) {//don't break mobile dropdowns
 
-	#topbar-settings-dropdown {//keep settings dropdown inside the window (Bug #30256)
+    #topbar-settings-dropdown {//keep settings dropdown inside the window (Bug #30256)
         top: 40px;
-		right: 20px;
-		left: auto;
-	}
+        right: 20px;
+        left: auto;
+    }
 
 }
 
@@ -416,7 +407,7 @@ div.hopscotch-bubble {
             padding: 12px;
 
             html.high-contrast & {
-                color: @hc-border-color;
+                color: @black;
             }
 
             &:hover {
@@ -816,13 +807,13 @@ div.hopscotch-bubble {
         }
 
         .clear-button {
-        	float: right;
-        	line-height: inherit;
-        	width: 46px;
-        	margin-right: 13px;
-        	padding: 0px;
-        	color: #fff;
-        	font-size: 18px;
+            float: right;
+            line-height: inherit;
+            width: 46px;
+            margin-right: 13px;
+            padding: 0px;
+            color: #fff;
+            font-size: 18px;
         }
 
         .notifications {
@@ -2123,22 +2114,44 @@ a.nolink {
     text-decoration: none;
 }
 
-@defaultBorderColor: #ddd;
-
 .border-top {
+
     border-top: 1px solid @defaultBorderColor;
+
+    html.high-contrast & {
+        border-top: 1px solid @hc-border-color;
+    }
+
 }
 
 .border-right {
+
     border-right: 1px solid @defaultBorderColor;
+
+    html.high-contrast & {
+        border-right: 1px solid @hc-border-color;
+    }
+
 }
 
 .border-bottom {
+
     border-bottom: 1px solid @defaultBorderColor;
+
+    html.high-contrast & {
+        border-bottom: 1px solid @hc-border-color;
+    }
+
 }
 
 .border-left {
+
     border-left: 1px solid @defaultBorderColor;
+
+    html.high-contrast & {
+        border-left: 1px solid @hc-border-color;
+    }
+
 }
 
 input.search-query::-ms-clear {
@@ -2568,6 +2581,7 @@ ul.io-ox-inline-links + header {
     }
 
     .btn-sidepopup {
+
         display: inline-block;
         background-color: #eee;
         color: #aaa;
@@ -2576,12 +2590,25 @@ ul.io-ox-inline-links + header {
         border-radius: 0 0 5px 5px;
         cursor: pointer;
 
+        html.high-contrast & {
+            background-color: @hc-gray;
+            color: @white;
+        }
+
         &:hover {
             background-color: #aaa;
             color: #eee;
             text-decoration: none;
+
+            html.high-contrast & {
+                background-color: @black;
+                color: @white;
+            }
+
         }
+
     }
+
 }
 
 /* auto complete */
@@ -2680,8 +2707,8 @@ ul.io-ox-inline-links + header {
     }
 
     .hidden-folders-icon {
-    	padding: 1px 0px 0px 6px;
-    	position: absolute;
+        padding: 1px 0px 0px 6px;
+        position: absolute;
     }
 
     .folder {
