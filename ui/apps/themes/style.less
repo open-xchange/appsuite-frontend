@@ -314,7 +314,7 @@ div.hopscotch-bubble {
     height: 40px;
     bottom: auto;
     z-index: 2;
-    .vertical-gradient(@toolbar-background-alt, @toolbar-background);
+    background-color: @topbar-background;
 
     .launchers {
         overflow: hidden;
@@ -475,13 +475,13 @@ div.hopscotch-bubble {
 
             &:hover {
 
-                color: @white; // HC
-                background-color: @black; // HC
+                color: @topbar-launcher-color-hover;
+                background-color: @topbar-launcher-background-hover;
 
                 html.high-contrast & {
                     color: @white; // HC
+                    background-color: @black; // HC
                 }
-
             }
 
             // don't add a:active otherwise IE10 messes it up
@@ -698,7 +698,7 @@ div.hopscotch-bubble {
 
         .badge {
 
-            color: @badge-bg;
+            color: @notification-icon-color;
             background-color: @notification-icon-background;
 
             &.active {
@@ -1530,7 +1530,7 @@ a.button {
 /* List View */
 .list-view-control {
 
-    @height-default: 40px;
+    @height-default: 45px;
     @height-small: 35px;
     background-color: #fff;
 
@@ -3102,7 +3102,7 @@ ul.io-ox-inline-links + header {
 //
 .generic-toolbar {
 
-    @height-default: 40px;
+    @height-default: 45px;
     @height-small: 30px;
 
     position: absolute;
