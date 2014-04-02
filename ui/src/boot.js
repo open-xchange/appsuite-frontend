@@ -26,7 +26,7 @@ if (typeof window.console === 'undefined') {
     window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop, info: $.noop };
 }
 
-// not document.ready casue we wait for CSS to be loaded
+// not document.ready cause we wait for CSS to be loaded
 $(window).load(function () {
 
     'use strict';
