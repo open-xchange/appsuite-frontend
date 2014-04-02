@@ -154,7 +154,7 @@ define('io.ox/core/notifications',
 
     NotificationController.prototype = {
 
-        attach: function (addLauncher) {
+        attach: function (addLauncher, delay) {//delay only affects requests, not the drawing of the badge
             //view
             var self = this;
 
@@ -207,7 +207,9 @@ define('io.ox/core/notifications',
 
             // invoke plugins
             ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
-                ext.point('io.ox/core/notifications/register').invoke('register', self, self);
+                setTimeout(function () {
+                    ext.point('io.ox/core/notifications/register').invoke('register', self, self);
+                }, delay || 2000);
             });
 
             function focusNotifications(e) {

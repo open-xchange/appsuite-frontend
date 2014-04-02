@@ -611,10 +611,9 @@ define('io.ox/core/main',
                 if (ox.online) {
                     // we don't need this right from the start,
                     // so let's delay this for responsiveness!
-                    setTimeout(function () {
-                        self.prepend(notifications.attach(addLauncher));
-                        tabManager();
-                    }, 2000);
+                    // only requests are delayed by 2s, the badge is drawn normally
+                    self.prepend(notifications.attach(addLauncher, 2000));
+                    tabManager();
                 }
             }
         });
