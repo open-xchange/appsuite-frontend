@@ -23,12 +23,12 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/api/folder',
+     'io.ox/files/util',
      'gettext!io.ox/files',
-     'io.ox/core/capabilities',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
      'apps/3rd.party/jquery-imageloader/jquery.imageloader.js'
-     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, folderAPI, gt, Caps, Selection, notifications) {
+     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, folderAPI, util, gt, Selection, notifications) {
 
     'use strict';
 
@@ -37,8 +37,7 @@ define('io.ox/files/fluid/perspective',
         dialog = new dialogs.SidePopup({ focus: false }),
         //nodes
         filesContainer, breadcrumb, inlineRight, inline, wrapper, inlineActionWrapper,
-        scrollpane = $('<div class="files-scrollable-pane" role="section">'),
-        regexp = {};
+        scrollpane = $('<div class="files-scrollable-pane" role="section">');
 
     //init
     filesContainer = inlineRight = inline = wrapper = $('');
@@ -87,39 +86,6 @@ define('io.ox/files/fluid/perspective',
 
     function dropZoneOff() {
         if (dropZone) dropZone.remove();
-    }
-
-    function previewMode(file) {
-        var image = '(gif|png|jpe?g|bmp|tiff)',
-            audio = '(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)',
-            office = '(xls|xlb|xlt|ppt|pps|doc|dot|xlsx|xltx|pptx|ppsx|potx|docx|dotx|odc|odb|odf|odg|otg|odi|odp|otp|ods|ots|odt|odm|ott|oth|pdf|rtf)',
-            application = '(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf)',
-            text = '(rtf|plain)';
-
-        //check file extension or mimetype (when type is defined)
-        function is(list, type) {
-            var key = (type || '') + '.' + list;
-            if (regexp[key]) {
-                //use cached
-                return regexp[key].test(type ? file.file_mimetype : file.filename);
-            } else if (type) {
-                //e.g. /^image\/.*(gif|png|jpe?g|bmp|tiff).*$/i
-                return (regexp[key] = new RegExp('^' + type + '\\/.*' + list + '.*$', 'i')).test(file.file_mimetype);
-            } else {
-                //e.g. /^.*\.(gif|png|jpe?g|bmp|tiff)$/i
-                return (regexp[key] = new RegExp('^.*\\.' + list + '$', 'i')).test(file.filename);
-            }
-        }
-
-        //identify mode
-        if (is(image, 'image') || is(image)) {
-            return 'thumbnail';
-        } else if (is(audio, 'audio') || is(audio)) {
-            return 'cover';
-        } else if (Caps.has('document_preview') && (is(application, 'application') || is(text, 'text') || is(office))) {
-            return 'preview';
-        }
-        return false;
     }
 
     function cid_find(str) {
@@ -425,7 +391,7 @@ define('io.ox/files/fluid/perspective',
         draw: function (baton) {
             var file = baton.data,
                 options = _.extend({ version: true, scaletype: 'cover' }, baton.options),
-                mode = previewMode(file),
+                mode = util.previewMode(file),
                 changed = getDateFormated(baton.data.last_modified),
                 //view mode: icon
                 iconImage = drawGenericIcon(file.filename),

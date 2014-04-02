@@ -24,8 +24,9 @@ define('io.ox/files/fluid/view-detail',
      'io.ox/core/api/folder',
      'io.ox/core/tk/attachments',
      'gettext!io.ox/files',
+     'io.ox/files/util',
      'less!io.ox/files/style'
-    ], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, folderAPI, attachments, gt) {
+    ], function (ext, links, actionPerformer, date, actions, filesAPI, preview, userAPI, folderAPI, attachments, gt, util) {
 
     'use strict';
 
@@ -108,7 +109,7 @@ define('io.ox/files/fluid/view-detail',
                     if (!file.filename) {
                         return false;
                     }
-                    return (new preview.Preview(parseArguments(file))).supportsPreview();
+                    return (new preview.Preview(parseArguments(file))).supportsPreview() && util.previewMode(file);
                 }
 
                 var lastWidth = 0, $previewNode, drawResizedPreview;
