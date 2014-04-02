@@ -90,20 +90,7 @@ define('io.ox/mail/accounts/model',
                 } else {
                     return temp;
                 }
-            }}],
-            // pop3 credentials
-            transport_password: {
-                required: function (a, prop, attributes) {
-                    return !!attributes['mail-common-selectfirst'];
-                },
-                msg: gt('This field has to be filled')
-            },
-            transport_login: {
-                required: function (a, prop, attributes) {
-                    return !!attributes['mail-common-selectfirst'];
-                },
-                msg: gt('This field has to be filled')
-            }
+            }}]
         },
 
         isHidden: function () {

@@ -434,15 +434,6 @@ define.async('io.ox/mail/accounts/view-form',
                             )
                         ),
                         $('<div>').addClass('form-group').append(
-                            $('<div>').addClass('col-sm-offset-3 col-sm-8').append(
-                                $('<div>').addClass('checkbox').append(
-                                    $('<label>').addClass('control-label').text(gt('Use username and password')).prepend(
-                                        new mini.CheckboxView({ name: 'mail-common-selectfirst', model: model }).render().$el
-                                    )
-                                )
-                            )
-                        ),
-                        $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'transport_login'}).addClass('control-label col-sm-3').text(gt('Username')),
                             $('<div>').addClass('col-sm-8').append(
                                 new InputView({ name: 'transport_login', model: model, id: 'transport_login' }).render().$el
