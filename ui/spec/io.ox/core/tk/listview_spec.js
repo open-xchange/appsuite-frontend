@@ -566,22 +566,38 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 expect(model.cid).to.equal('default0/INBOX.2');
             });
 
-            it('should update correctly (increase)', function () {
+            it('should update correctly (keep position)', function () {
+                // update thread
+                var tmp = this.collection.toJSON(), data = tmp[1].thread[0];
+                tmp[1].thread = tmp[1].thread.slice(2);
+                // update via set() - not reset()!
+                this.collection.set(tmp);
+                // check
+                var items = this.list.getItems();
+                expect(this.collection.length, 'collection length').to.equal(3);
+                expect(items.length, 'list view items').to.equal(3);
+                expect(items.eq(1).find('.thread-size .number').text(), 'thread size').to.equal('8');
+                expect(items.eq(1).attr('data-cid'), 'cid').to.equal('thread.default0/INBOX.2');
+            });
+
+            it('should update correctly (change position)', function () {
                 // update thread
                 var tmp = this.collection.toJSON(), data = tmp[1].thread[0];
                 tmp[1].thread.unshift(
+                    _.extend({}, data, { id: 15, subject: data.subject + ' #' + 15 }),
+                    _.extend({}, data, { id: 14, subject: data.subject + ' #' + 14 }),
                     _.extend({}, data, { id: 13, subject: data.subject + ' #' + 13 })
                 );
                 // fix indexes
                 tmp[1].index = 0;
                 tmp[0].index = 1;
-                // reset
-                this.collection.reset(tmp);
+                // update via set() - not reset()!
+                this.collection.set(tmp);
                 // check
                 var items = this.list.getItems();
                 expect(this.collection.length, 'collection length').to.equal(3);
                 expect(items.length, 'list view items').to.equal(3);
-                expect(items.eq(0).find('.thread-size .number').text(), 'thread size').to.equal('11');
+                expect(items.eq(0).find('.thread-size .number').text(), 'thread size').to.equal('13');
                 expect(items.eq(0).attr('data-cid'), 'cid').to.equal('thread.default0/INBOX.2');
             });
 
@@ -603,39 +619,20 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
 
             // // update thread
             // var tmp = list.collection.toJSON(), data = tmp[1].thread[0];
+            // tmp[1].thread = tmp[1].thread.slice(2);
+            // // update via set() - not rset()!
+            // list.collection.set(tmp);
+
+            // // update thread
+            // var tmp = list.collection.toJSON(), data = tmp[1].thread[0];
             // tmp[1].thread.unshift(
+            //     _.extend({}, data, { id: 15, subject: data.subject + ' #' + 15 }),
+            //     _.extend({}, data, { id: 14, subject: data.subject + ' #' + 14 }),
             //     _.extend({}, data, { id: 13, subject: data.subject + ' #' + 13 })
             // );
             // tmp[1].index = 0;
             // tmp[0].index = 1;
-            // list.collection.reset(tmp);
-
-            it('should update correctly (decrease)', function () {
-                // update thread
-                var tmp = this.collection.toJSON(), data = tmp[1].thread[0];
-                tmp[1].thread.shift();
-                tmp[1].thread.shift();
-                // reset
-                this.collection.reset(tmp);
-                // check
-                var items = this.list.getItems();
-                expect(this.collection.length, 'collection length').to.equal(3);
-                expect(items.length, 'list view items').to.equal(3);
-                expect(items.eq(1).find('.thread-size .number').text(), 'thread size').to.equal('8');
-                expect(items.eq(1).attr('data-cid'), 'cid').to.equal('thread.default0/INBOX.2');
-            });
-
-            // it('should update correctly (change position)', function () {
-            //     // update thread
-            //     var item = createItem(1, 0), data = item.thread[0], N = 12;
-            //     item.thread = _.range(1, N).map(function (index) {
-            //         return _.extend({}, data, { id: index, subject: data.subject + ' #' + index });
-            //     });
-            //     this.collection.reset([item, createItem(N, 1), createItem(N + 1, 2)]);
-            //     var items = this.list.getItems();
-            //     expect(items.length).to.equal(3);
-            //     expect(items.eq(0).find('.thread-size .number').text()).to.equal('11');
-            // });
+            // list.collection.set(tmp);
         });
     });
 });

@@ -172,11 +172,23 @@ define('io.ox/core/tk/list',
             this.$el.trigger('scroll');
         },
 
+        onSort: function () {
+            // sort all nodes by index
+            var nodes = _(this.getItems()).sortBy(function (node) {
+                return $(node).data('index');
+            });
+            // re-append to apply sorting
+            this.$el.append(nodes);
+        },
+
         // called whenever a model inside the collection changes
         onChange: function (model) {
             var li = this.$el.find('li[data-cid="' + this.getCID(model) + '"]'),
                 data = model.toJSON(),
-                baton = ext.Baton({ data: data, model: model, app: this.app });
+                baton = ext.Baton({ data: data, model: model, app: this.app }),
+                index = model.changed.index;
+            // change position?
+            if (index !== undefined) li.attr('data-index', index);
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1).empty(), baton);
             // propagate events
@@ -215,7 +227,8 @@ define('io.ox/core/tk/list',
                 add: this.onAdd,
                 change: this.onChange,
                 remove: this.onRemove,
-                reset: this.onReset
+                reset: this.onReset,
+                sort: this.onSort
             });
             this.selection.reset();
             return this;
@@ -294,7 +307,7 @@ define('io.ox/core/tk/list',
             var li = this.scaffold.clone(),
                 baton = ext.Baton({ data: model.toJSON(), model: model, app: this.app });
             // add cid and full data
-            li.attr('data-cid', this.getCID(model));
+            li.attr({ 'data-cid': this.getCID(model), 'data-index': model.get('index') });
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1), baton);
             return li;
