@@ -51,9 +51,15 @@ define('io.ox/search/view-template',
                     api: app.apiproxy,
                     minLength: 0,
                     mode: 'search',
-                    parentSelector: container  ? '' : '.io-ox-search',
+                    parentSelector: container  ? '.query' : '.io-ox-search',
                     model: model,
                     container: container,
+                    cbshow: function () {
+                        //reset autocomplete tk styles
+                        if (mode !== 'widget' && container)
+                            $(this).attr('style', '');
+
+                    },
                     //TODO: would be nice to move to control
                     source: function (val) {
                         //show dropdown immediately (busy by autocomplete tk)
@@ -168,8 +174,14 @@ define('io.ox/search/view-template',
         index: 200,
         row: '0',
         draw: function (baton) {
-            var row = $('<div class="col-sm-12 query">').appendTo(this);
-            dropdown.call(row, baton);
+            var row,
+                mobile = this.find('.mobile-dropdown');
+
+            $('<div class="query">').append(
+                row = $('<div class="input-group-custom">')
+            ).appendTo(this);
+
+            dropdown.call(row, baton, mobile.length ? mobile : undefined);
         }
     });
 
@@ -214,7 +226,17 @@ define('io.ox/search/view-template',
         id: 'handler',
         index: 260,
         draw: function (baton) {
-            $('.io-ox-search .facet').delegate('.option', 'click', function (e) {
+            $('body').delegate('.facet-dropdown .option', 'click tap', function (e) {
+                //TODO: remove hack
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+                e.preventDefault();
+                //mobile
+                $(this).closest('.custom-dropdown').toggle();
+                ox.idle();
+
+                $(e.target).closest('.dropdown.open').toggle();
+
                 var link = $(e.target).closest('a'),
                     list = link.closest('ul'),
                     option = link.attr('data-action') || link.attr('data-custom') || link.attr('data-option'),
@@ -279,22 +301,6 @@ define('io.ox/search/view-template',
         }
     });
 
-    function optionsDialog(e) {
-        var node = $(e.target).parent(),
-            menu = node.find('.dropdown-menu'),
-            left = node.offset().left || 0,
-            height = node.outerHeight(),
-            width = node.outerWidth();
-        menu.css({
-                left: (left - 14) + 'px',
-                top: height - 2 + 'px',
-                width: width + 'px',
-                'min-width': width + 'px',
-                'border-radius': '0px'
-            })
-            .toggle();
-    }
-
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'options',
         index: 300,
@@ -305,7 +311,10 @@ define('io.ox/search/view-template',
                 current = value._compact.option, option,
                 icon, menu;
             if (filters.length) {
-                menu = $('<ul class="dropdown-menu" role="menu">')
+
+                var container = $('<span>').addClass('dropdown'); //DIV
+
+                menu = $('<ul class="dropdown-menu facet-dropdown" role="menu">')
                         .attr({
                             'data-facet': facet.id,
                             'data-value': value.id
@@ -325,11 +334,13 @@ define('io.ox/search/view-template',
                     if (current === item.id)
                         option.find('.fa').removeClass('fa-none').addClass('fa-check');
                 });
-                self.append(menu);
                 //set right position for dropdown
-                icon = $('<i class="fa fa-chevron-down action">')
-                        .on('click', optionsDialog);
-                this.append(icon);
+                icon = $('<a role="button" data-toggle="dropdown" data-target="#" target="#">')
+                        .append(
+                            $('<i class="fa fa-chevron-down action">')
+                        );
+
+                container.append(menu, icon).appendTo(self);
             }
         }
     });
@@ -412,14 +423,17 @@ define('io.ox/search/view-template',
         id: 'actions',
         index: '300',
         draw: function (value, baton) {
-            var action = $('<i class="fa fa-chevron-down action">').on('click', optionsDialog),
-                menu = $('<ul class="dropdown-menu" role="menu">')
+            var action = $('<a role="button" data-toggle="dropdown" data-target="#" target="#">')
+                        .append(
+                            $('<i class="fa fa-chevron-down action">')
+                        ),
+                menu = $('<ul class="dropdown-menu facet-dropdown" role="menu">')
                     .attr({
                         'data-facet': 'folder',
                         'data-value': 'custom'
                     });
-
-            this.append(menu, action);
+            var container = $('<span>').addClass('dropdown'); //DIV
+            container.append(menu, action).appendTo(this);
 
             //add fodlers
             util.getFolders(baton.model)
@@ -482,16 +496,27 @@ define('io.ox/search/view-template',
     //     }
     // });
 
-
-    // mobile botton toolbar
+    // inline dropdown
     ext.point('io.ox/search/view/window/mobile').extend({
-        id: 'toolbar',
-        index: 2500,
-        draw: function (baton) {
-            // must be on a non overflow container to work with position:fixed
-            var node = baton.app.getWindow().nodes.body;
-            node.append($('<div class="app-bottom-toolbar">'));
+        id: 'dropdown',
+        index: 100,
+        draw: function () {
+            //when exisiting autocomplete dropdown is rendered into this (autocompelte tk container)
+            $('<div class="mobile-dropdown">')
+                .hide()
+                .appendTo(this);
         }
     });
+
+    // mobile botton toolbar
+    // ext.point('io.ox/search/view/window/mobile').extend({
+    //     id: 'toolbar',
+    //     index: 2500,
+    //     draw: function (baton) {
+    //         // must be on a non overflow container to work with position:fixed
+    //         var node = baton.app.getWindow().nodes.body;
+    //         node.append($('<div class="app-bottom-toolbar">'));
+    //     }
+    // });
 
 });

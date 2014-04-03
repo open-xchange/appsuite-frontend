@@ -33,13 +33,13 @@ define('io.ox/search/view',
                     mode = model.get('mode'),
                     node = node || self.$el;
 
-                //invoke extensions defined by io.ox/search/view-template
-                ext.point('io.ox/search/view/' + mode).invoke('draw', node, self.baton);
-
                 if (_.device('smartphone')) {
                     // create new toolbar on bottom
-                    ext.point('io.ox/search/view/window/mobile').invoke('draw', this, self.baton);
+                    ext.point('io.ox/search/view/window/mobile').invoke('draw', node, self.baton);
                 }
+
+                //invoke extensions defined by io.ox/search/view-template
+                ext.point('io.ox/search/view/' + mode).invoke('draw', node, self.baton);
 
                 return this;
             },

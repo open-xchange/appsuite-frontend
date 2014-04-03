@@ -39,6 +39,8 @@ define('io.ox/core/tk/autocomplete',
             container: $('<div>').addClass('autocomplete-popup'),
             mode: 'participant',
 
+            cbshow: null,
+
             //get data
             source: function (val) {
                 return this.api.search(val).then(function (data) {
@@ -172,7 +174,7 @@ define('io.ox/core/tk/autocomplete',
                             o.container.addClass('bottom-placement').css({ top: myTop, left: myLeft + 4, width: w });
                         }
 
-                        o.container.show();
+                        o.container.show(o.cbshow || $.noop);
 
                         window.container = o.container;
 

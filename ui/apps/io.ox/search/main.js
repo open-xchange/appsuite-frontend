@@ -116,14 +116,20 @@ define('io.ox/search/main',
             ox.ui.apps.add(app);
     });
     app.busy = function () {
-        app.view.$el.find('.btn-search>.fa')
+        var container = app.view.$el.find('.query');
+        container.find('.search-field')
+                 .prop('disabled', true);
+        container.find('.btn-search>.fa')
             .prop('disabled', true)
             .removeClass('fa-search')
             .addClass('fa-refresh fa-spin');
     };
 
     app.idle = function () {
-        app.view.$el.find('.btn-search>.fa')
+        var container = app.view.$el.find('.query');
+        container.find('.search-field')
+                 .prop('disabled', false);
+        container.find('.btn-search>.fa')
             .prop('disabled', false)
             .removeClass('fa-refresh fa-spin')
             .addClass('fa-search');
