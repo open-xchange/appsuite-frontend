@@ -306,7 +306,7 @@ define('io.ox/mail/main',
 
         'list-view-checkboxes-mobile': function (app) {
             // always hide checkboxes on small devices initially
-            if (_.device('!small')) return;
+            if (!_.device('small')) return;
             app.props.set('checkboxes', false);
             app.listView.toggleCheckboxes(false);
         },
@@ -541,6 +541,7 @@ define('io.ox/mail/main',
          * Define function to reflect multiple selection
          */
         'show-multiple': function (app) {
+            if (_.device('small')) return;
             app.showMultiple = function (list) {
                 app.threadView.empty();
                 list = api.threads.resolve(list);
@@ -550,29 +551,47 @@ define('io.ox/mail/main',
             };
         },
 
+         /*
+         * Define function to reflect multiple selection
+         */
+        'show-multiple-mobile': function (app) {
+            if (_.device('!small')) return;
+
+            app.showMultiple = function (list) {
+
+                app.threadView.empty();
+                if (list) {
+                    list = api.threads.resolve(list);
+                    app.pages.getCurrentPage().navbar.setTitle(
+                        //#. This is a short version of "x messages selected", will be used in mobile mail view
+                        gt('%1$d selected', list.length));
+                    // re-render toolbar
+                    app.pages.getCurrentPage().secondaryToolbar.render();
+                } else {
+                    app.folder.getData().done(function (d) {
+                        app.pages.getCurrentPage().navbar.setTitle(d.title);
+                    });
+                }
+            };
+        },
+
         'selection-mobile': function (app) {
 
             if (!_.device('small')) return;
 
-            // fertig
             app.listView.on({
                 'selection:empty': function () {
-                    //react('empty');
+                    if (app.props.get('checkboxes')) app.showMultiple(false);
                 },
-                'selection:one': function () {
-                    //react('one', list);
+                'selection:one': function (list) {
+                    if (app.props.get('checkboxes')) app.showMultiple(list);
                 },
-                'selection:multiple': function () {
-
-                    // TODO: change page title to counter
-                    //app.pages.getCurrentPage().navbar.setTitle(app.listView.selection.get().length);
-
+                'selection:multiple': function (list) {
+                    if (app.props.get('checkboxes')) app.showMultiple(list);
                 },
                 'selection:action': function (list) {
-                    // make sure we are not in multi-selection
-                    if (app.props.get('checkboxes')) {
-                        // todo
-                    } else if (app.listView.selection.get().length === 1) {
+
+                    if (app.listView.selection.get().length === 1 && !app.props.get('checkboxes')) {
                         // check for thread
                         var cid = list[0].substr(7),
                             isThread = this.collection.get(cid).get('threadSize') > 1;
@@ -877,6 +896,13 @@ define('io.ox/mail/main',
                     app.pages.getNavbar('listView')
                         .setRight(gt('Edit'))
                         .show('.left');
+                    // reset navbar title on cancel
+                    app.folder.getData().done(function (d) {
+                        app.pages.getCurrentPage().navbar.setTitle(d.title);
+                    });
+
+                    // reset selection
+                    app.listView.selection.selectNone();
                 }
             });
         },

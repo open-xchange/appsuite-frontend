@@ -147,13 +147,7 @@ define('io.ox/core/pageController',
                 console.error('PageController: Available pages are ' + order.join());
                 return;
             }
-            if (_.device('!small')) {
-                // on desktop return only the node
-                return pages[page].$el;
-            } else {
-                // on mobile we need a page object to work with
-                return pages[page].$el;
-            }
+            return pages[page].$el;
         };
 
         this.getNavbar = function (page) {

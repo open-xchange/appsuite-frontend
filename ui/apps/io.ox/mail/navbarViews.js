@@ -71,7 +71,6 @@ define('io.ox/mail/navbarViews',
      */
     var BarView = Backbone.View.extend({
 
-
         show: function () {
             this.$el.show();
             return this;
@@ -104,6 +103,7 @@ define('io.ox/mail/navbarViews',
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
+            this.hiddenElements = [];
         },
 
         render: function () {
@@ -115,6 +115,10 @@ define('io.ox/mail/navbarViews',
                 right: this.right,
                 title: this.title
             });
+
+            // hide all hidden elements
+            this.$el.find(this.hiddenElements.join()).hide();
+
             return this;
         },
 
@@ -151,12 +155,15 @@ define('io.ox/mail/navbarViews',
             e.stopImmediatePropagation();
             this.trigger('leftAction');
         },
-        show: function (elem) {
-            this.$el.find(elem).show();
+        hide: function (elem) {
+            this.hiddenElements.push(elem);
+            this.hiddenElements = _.uniq(this.hiddenElements);
+            this.render();
             return this;
         },
-        hide: function (elem) {
-            this.$el.find(elem).hide();
+        show: function (elem) {
+            this.hiddenElements = _.without(this.hiddenElements, elem);
+            this.render();
             return this;
         }
     });

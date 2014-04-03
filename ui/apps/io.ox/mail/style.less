@@ -11,6 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
+/* definitions */ $('.mobile-toolbar-action', this)
+@icon-size: 18px;
+@unread-toggle-width: 40px;
+@toolbar-line-height: 24px;
+@toolbar-vertical-padding: 10px;
+@toolbar-height: @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
+
 /* preview panes */
 
 .flag-picker-view {
@@ -22,16 +29,12 @@
     min-height: 50px;
 }
 
-@icon-size: 18px;
-@unread-toggle-width: 40px;
-
-
 .mobile-navbar {
     text-align: center;
-    font-size: 16px;
+    font-size: 15px;
     .navbar-action {
         .ellipsis();
-        max-width: 75px;
+        max-width: 24%;
         top: 10px;
         position: absolute;
         &.left {
@@ -46,7 +49,7 @@
     }
     .navbar-title {
         .ellipsis();
-        margin: 10px 40px;
+        margin: 10px 24%;
     }
 }
 
@@ -60,20 +63,21 @@
     padding: 0 4px 0 5px;
     border-top: 1px solid #ccc;
     width: 100%;
-    a {
+    a.io-ox-action-link.mobile-toolbar-action {
         display: inline-block;
         font-size: 20px;
         line-height: @toolbar-height;
-        width: 40px;
+        width: 19%;
         height: @toolbar-height;
         text-align: center;
-        margin: 0 5px;
+        margin: 0;
+        vertical-align: middle;
+    }
+    .dropdown {
+        display: inline-block;
+        position: static;
     }
 }
-
-@toolbar-line-height: 24px;
-@toolbar-vertical-padding: 10px;
-@toolbar-height: @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
 
 .classic-toolbar-visible .window-content { top: @toolbar-height; }
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
@@ -202,6 +206,26 @@
 
     &.unread.selected {
         .subject { color: #fff; }
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px)  {
+        &.unread.selected {
+            .subject { color: #000; }
+        }
+        &.complete > .list-item:last-child {
+            margin-bottom: @toolbar-height;
+            border-bottom: 0;
+        }
+
+    }
+}
+
+.list-view {
+    @media (max-width: 480px), (max-device-width: 480px)  {
+        &.complete > .list-item:last-child {
+            margin-bottom: @toolbar-height;
+            border-bottom: 0;
+        }
     }
 }
 
@@ -1398,6 +1422,7 @@ h4.mail-attachment-preview {
 
     .mail-detail {
         list-style-type: none;
+        border-bottom: 0;
         .subject {
             font-size: 14px;
             padding: 10px 20px;
@@ -1413,7 +1438,7 @@ h4.mail-attachment-preview {
         }
 
         section.body {
-
+            margin-bottom: @toolbar-height;
             padding: 10px;
         }
         &:not(.expanded) .recipients {

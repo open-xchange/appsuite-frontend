@@ -200,7 +200,7 @@ define('io.ox/core/extPatterns/links',
                 _(items).each(function (item) {
                     var link = item.link;
                     if (item.state === false) {
-                        if (_.isFunction(link.drawDisabled) && !_.device('small')) {
+                        if (_.isFunction(link.drawDisabled)) {
                             link.drawDisabled.call(bootstrapMode ? $('<li>').appendTo(nav) : nav, baton);
                             count++;
                         }
