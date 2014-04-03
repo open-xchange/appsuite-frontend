@@ -29,7 +29,16 @@ module.exports = function (grunt) {
                 filter: 'isFile',
                 dest: grunt.option('dest')
             }]
-        }
+        },
+        local_install_building: {
+            files: [{
+                expand: true,
+                src: ['grunt/**/*', '!grunt/local.conf.json'],
+                cwd: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
+                filter: 'isFile',
+                dest: grunt.option('dest')
+            }]
+         }
     });
 
     grunt.registerTask('install', 'install build directory into a custom location', function () {
@@ -42,6 +51,6 @@ module.exports = function (grunt) {
         if (!grunt.option('dest')) {
             grunt.fail.fatal('Need --dest option to be set');
         }
-        grunt.task.run('copy:local_install_dist');
+        grunt.task.run(['copy:local_install_dist', 'copy:local_install_building']);
     });
 };
