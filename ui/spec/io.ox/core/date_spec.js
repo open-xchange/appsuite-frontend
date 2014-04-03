@@ -17,31 +17,28 @@ function (date, ext) {
 
     'use strict';
 
-    describe.skip('Date', function () {
-        beforeEach(function () {
-            var data = date.getTimeZone('Europe/Berlin').then(function (tz) {
+    describe('Date', function () {
+        beforeEach(function (done) {
+            date.getTimeZone('Europe/Berlin').then(function (tz) {
                 this.D = tz;
-                return tz;
+                done();
             });
 
-            waitsFor(function () {
-                return data.state() === 'resolved';
-            }, 'Could not load timezone', 1000);
         });
 
         it('initializes', function () {
-            expect(D).toBeDefined();
+            expect(D).to.exist;
         });
         describe('TTInfo from UTC', function () {
             function change(toDST) {
                 var args = Array.prototype.slice.call(arguments, 1);
                 args[1]--;
                 var t = Date.UTC.apply(Date, args);
-                expect(Boolean(D.getTTInfo(t - 1).isdst)).toBe(!toDST);
-                expect(Boolean(D.getTTInfo(t).isdst)).toBe(toDST);
+                expect(Boolean(D.getTTInfo(t - 1).isdst)).not.to.equal(toDST);
+                expect(Boolean(D.getTTInfo(t).isdst)).to.equal(toDST);
             }
             it('before first DST is STD', function () {
-                expect(D.getTTInfo(Date.UTC(1800, 5)).isdst).toBeFalsy();
+                expect(D.getTTInfo(Date.UTC(1800, 5)).isdst).not.to.be.ok;
             });
             it('2011-03-27 01:00 UTC changes to DST', function () {
                 change(true, 2011, 3, 27, 1);
@@ -62,12 +59,12 @@ function (date, ext) {
                 var args = Array.prototype.slice.call(arguments, 1);
                 args[1]--;
                 var t = Date.UTC.apply(Date, args);
-                expect(Boolean(D.getTTInfoLocal(t - 1).isdst)).toBe(!toDST);
-                expect(Boolean(D.getTTInfoLocal(t).isdst)).toBe(toDST);
+                expect(Boolean(D.getTTInfoLocal(t - 1).isdst)).not.to.equal(toDST);
+                expect(Boolean(D.getTTInfoLocal(t).isdst)).to.equal(toDST);
             }
             it('before first DST is STD', function () {
                 expect(D.getTTInfoLocal(Date.UTC(1800, 5)).isdst)
-                .toBeFalsy();
+                .not.to.be.ok;
             });
             it('2011-03-27 02:00 CET changes to DST', function () {
                 change(true, 2011, 3, 27, 2);
@@ -86,82 +83,80 @@ function (date, ext) {
         describe('Date arithmetic', function () {
             it('adds UTC time', function () {
                 expect(new D(2012, 2, 25).addUTC(date.DAY))
-                .toEqual(new D(2012, 2, 26, 1));
+                .to.deep.equal(new D(2012, 2, 26, 1));
             });
             it('adds local time', function () {
                 expect(new D(2012, 2, 25).add(date.DAY))
-                .toEqual(new D(2012, 2, 26));
+                .to.deep.equal(new D(2012, 2, 26));
             });
             it('adds months', function () {
                 expect(new D(2012, 2, 1).addMonths(1))
-                .toEqual(new D(2012, 3, 1));
+                .to.deep.equal(new D(2012, 3, 1));
             });
             it('adds years', function () {
                 expect(new D(2012, 2, 1).addYears(1))
-                .toEqual(new D(2013, 2, 1));
+                .to.deep.equal(new D(2013, 2, 1));
             });
             it('rounds weeks', function () {
                 expect(new D(2012, 2, 25, 12, 34).setStartOfWeek())
-                .toEqual(new D(2012, 2, 19));
+                .to.deep.equal(new D(2012, 2, 19));
             });
         });
         describe('should parse', function () {
             beforeEach(function () {
-                var m = /(.*) as (.*)$/.exec(this.description);
+                var m = /(.*) as (.*)$/.exec(this.currentTest.title);
                 if (m[1] && m[2]) {
                     this.parsedDate = D.parse(m[1], m[2]).getTime();
                 }
             });
 
             it('2012-01-01 as yyyy-MM-dd', function () {
-                expect(this.parsedDate).toEqual(D.utc(Date.UTC(2012, 0, 1)));
+                expect(this.parsedDate).to.equal(D.utc(Date.UTC(2012, 0, 1)));
             });
 
             it('29.2.2012 as dd.MM.yyyy', function () {
-                expect(this.parsedDate).toEqual(D.utc(Date.UTC(2012, 1, 29)));
+                expect(this.parsedDate).to.equal(D.utc(Date.UTC(2012, 1, 29)));
             });
 
             it('20120101T123456 as yyyyMMdd\'T\'HHmmss', function () {
-                expect(this.parsedDate).toEqual(D.utc(Date.UTC(2012, 0, 1, 12, 34, 56)));
+                expect(this.parsedDate).to.equal(D.utc(Date.UTC(2012, 0, 1, 12, 34, 56)));
             });
 
             it('12 vorm. as h a', function () {
-                expect(this.parsedDate).toEqual(D.utc(Date.UTC(1970, 0, 1, 0)));
+                expect(this.parsedDate).to.equal(D.utc(Date.UTC(1970, 0, 1, 0)));
             });
 
             it('12 nachm. as h a', function () {
-                expect(this.parsedDate).toEqual(D.utc(Date.UTC(1970, 0, 1, 12)));
+                expect(this.parsedDate).to.equal(D.utc(Date.UTC(1970, 0, 1, 12)));
             });
 
             describe('dates with 2-digit years like', function () {
                 it('13.08.13 as dd.MM.yyyy', function () {
                     var parsedDate = new D(this.parsedDate).format('yyyyMMdd');
 
-                    expect(parsedDate).toEqual('20130813');
+                    expect(parsedDate).to.equal('20130813');
                 });
 
                 describe('from a birthday', function () {
                     it('9.8.0000 as d.M.yyyy', function () {
                         var parsedDate = new D(this.parsedDate).format('yyyyMMdd');
 
-                        expect(parsedDate).toEqual('00010809');
+                        expect(parsedDate).to.equal('00010809');
                     });
                 });
             });
         });
         describe('Formatting', function () {
             it('v in standard time', function () {
-                expect(new D(2012, 0, 1).format('v')).toEqual('CET');
+                expect(new D(2012, 0, 1).format('v')).to.equal('CET');
             });
             it('v in DST', function () {
-                expect(new D(2012, 5, 1).format('v')).toEqual('CEST');
+                expect(new D(2012, 5, 1).format('v')).to.equal('CEST');
             });
         });
         describe('Localized formatting', function () {
             beforeEach(function () {
-                runs(function () {
-                    this.d = new D(2012, 4, 16, 12, 34);
-                });
+                this.d = new D(2012, 4, 16, 12, 34);
             });
             _.each([['day of week',   date.DAYOFWEEK, 'Mi.'      ],
                     ['date',          date.DATE,      '16.5.2012'],
@@ -182,7 +177,7 @@ function (date, ext) {
                     ['date without year', date.DATE_NOYEAR, '16.5.']],
                 function (item) {
                     it(item[0], function () {
-                        expect(this.d.format(item[1])).toEqual(item[2]);
+                        expect(this.d.format(item[1])).to.equal(item[2]);
                     });
                 });
         });
@@ -193,55 +188,55 @@ function (date, ext) {
 
             it('Timezone with same date', function () {
                 var result = this.d.formatInterval(new D(2012, 4, 16, 12, 56), date.TIMEZONE);
-                expect(result).toEqual('CEST');
+                expect(result).to.equal('CEST');
             });
 
             it('Time with same date', function () {
                 var result = this.d.formatInterval(new D(2012, 4, 16, 12, 56), date.TIME);
-                expect(result).toEqual('12:34-12:56');
+                expect(result).to.equal('12:34-12:56');
             });
 
             it('Time with different dates', function () {
                 var result = this.d.formatInterval(new D(2012, 5, 16, 12, 34), date.TIME);
-                expect(result).toEqual('16.5.2012 12:34 - 16.6.2012 12:34');
+                expect(result).to.equal('16.5.2012 12:34 - 16.6.2012 12:34');
             });
 
             it('Date with same date', function () {
                 var result = this.d.formatInterval(new D(2012, 4, 16, 12, 34), date.DATE);
-                expect(result).toEqual('16.5.2012');
+                expect(result).to.equal('16.5.2012');
             });
 
             it('Date with different days', function () {
                 var result = this.d.formatInterval(new D(2012, 4, 17, 12, 34), date.DATE);
-                expect(result).toEqual('16.-17. Mai 2012');
+                expect(result).to.equal('16.-17. Mai 2012');
             });
 
             it('Date with different months', function () {
                 var result = this.d.formatInterval(new D(2012, 5, 16, 12, 34), date.DATE);
-                expect(result).toEqual('16. Mai - 16. Juni 2012');
+                expect(result).to.equal('16. Mai - 16. Juni 2012');
             });
 
             it('Date with different years', function () {
                 var result = this.d.formatInterval(new D(2013, 4, 16, 12, 34), date.DATE);
-                expect(result).toEqual('16. Mai 2012 - 16. Mai 2013');
+                expect(result).to.equal('16. Mai 2012 - 16. Mai 2013');
             });
 
             it('Time with different timezones', function () {
                 var start = new D(Date.UTC(2012, 9, 28, 0, 30));
                 var end = new D(Date.UTC(2012, 9, 28, 1, 30));
                 expect(start.formatInterval(end, date.TIME_TIMEZONE))
-                .toEqual('02:30 CEST - 02:30 CET');
+                .to.equal('02:30 CEST - 02:30 CET');
             });
         });
         describe('constructor', function () {
             it('from a full date', function () {
-                expect(new D(2013, 7, 9).format('yyyyMMdd')).toEqual('20130809');
+                expect(new D(2013, 7, 9).format('yyyyMMdd')).to.equal('20130809');
             });
             it('should interpret 2-digit years as 19xx', function () {
                 //this is, because the date class internally does this
                 //if you want to use our specification of how to treat these numbers,
                 //use date.parse method
-                expect(new D(13, 7, 9).format('yyyyMMdd')).toEqual('19130809');
+                expect(new D(13, 7, 9).format('yyyyMMdd')).to.equal('19130809');
             });
         });
     });
