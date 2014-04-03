@@ -775,7 +775,7 @@ div.hopscotch-bubble {
     z-index: 30;
     top: 40px;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: @notification-pane-background;
     display: none;
     .overflow-x(hidden);
     .overflow-y(auto);
@@ -833,24 +833,27 @@ div.hopscotch-bubble {
 
         .item {
 
-            color: #fff;
-            background-color: #333;
+            color: #ccc;
+            background-color: @notification-pane-item-background;
+            font-size: 13px;
             padding: 13px;
             margin-bottom: 1px;
             cursor: pointer;
+            .fontWeight(300);
 
             &:focus {
-                outline: 1px solid rgba(255,255,255,0.3);
-                background-color: #444;
+                outline: 1px solid rgba(255, 255, 255, 0.50);
+                background-color: rgba(0, 0, 0, 0.30);
             }
 
             &:hover {
-                background-color: #444;
+                background-color: rgba(0, 0, 0, 0.30);
             }
 
             .title {
+                color: #fff;
                 pointer-events: none;
-                font-weight: bold;
+                font-weight: 500;
                 .ellipsis();
             }
 
