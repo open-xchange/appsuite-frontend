@@ -29,13 +29,6 @@ module.exports = function (grunt) {
                 filter: 'isFile',
                 dest: grunt.option('dest')
             }]
-        },
-        local_install_building: {
-            files: [{
-                src: ['grunt/**/*', '!grunt/local.conf.json'],
-                filter: 'isFile',
-                dest: grunt.option('dest')
-            }]
         }
     });
 
@@ -49,6 +42,6 @@ module.exports = function (grunt) {
         if (!grunt.option('dest')) {
             grunt.fail.fatal('Need --dest option to be set');
         }
-        grunt.task.run(['copy:local_install_dist', 'copy:local_install_building']);
+        grunt.task.run('copy:local_install_dist');
     });
 };
