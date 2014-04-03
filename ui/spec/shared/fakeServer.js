@@ -15,6 +15,11 @@
 
     beforeEach(function () {
         this.server = ox.fakeServer.create();
+        this.server.respondUntilResolved = function (def) {
+            while (def.state() !== 'resolved') {
+                this.respond();
+            }
+        };
         this.server.autoRespond = true;
     });
 
