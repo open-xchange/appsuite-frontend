@@ -457,13 +457,12 @@ define('io.ox/mail/main',
          * Selection changes in list view should be reflected in thread view navigation
          */
         'position': function (app) {
-            app.listView.on({
-                'selection:change:index': function () {
-                    if (app.props.get('layout') !== 'list') return;
-                    app.threadView.updatePosition(app.listView.getPosition() + 1);
-                    app.threadView.togglePrevious(app.listView.hasPrevious());
-                    app.threadView.toggleNext(app.listView.hasNext());
-                }
+            app.listView.on('selection:change', function () {
+                if (app.props.get('layout') !== 'list') return;
+                var list = app.listView;
+                app.threadView.updatePosition(list.getPosition() + 1)
+                    .togglePrevious(list.hasPrevious())
+                    .toggleNext(list.hasNext());
             });
         },
 

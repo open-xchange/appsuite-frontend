@@ -22,7 +22,9 @@ define('io.ox/mail/threadview',
      'io.ox/core/tk/list-dnd',
      'io.ox/core/http',
      'gettext!io.ox/mail',
-     'io.ox/mail/listview'], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, http, gt) {
+     'less!io.ox/mail/style',
+     'io.ox/mail/listview'
+     ], function (extensions, ext, api, util, backbone, detail, detailViewMobile, dnd, http, gt) {
 
     'use strict';
 
@@ -31,7 +33,7 @@ define('io.ox/mail/threadview',
         index: 100,
         draw: function () {
             this.$el.append(
-                $('<nav class="back-navigation">').append(
+                $('<nav class="back-navigation generic-toolbar">').append(
                     $('<div class="button">').append(
                         $('<a href="#" class="back" tabindex="1">').append(
                             $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
@@ -141,18 +143,22 @@ define('io.ox/mail/threadview',
 
         updatePosition: function (position) {
             this.$el.find('.position').text(position);
+            return this;
         },
 
         togglePrevious: function (state) {
             this.$el.find('.previous-mail').toggleClass('disabled', !state);
+            return this;
         },
 
         toggleNext: function (state) {
             this.$el.find('.next-mail').toggleClass('disabled', !state);
+            return this;
         },
 
         toggleNavigation: function (state) {
             this.$el.toggleClass('back-navigation-visible', state);
+            return this;
         },
 
         onToggle: _.debounce(function () {
