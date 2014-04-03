@@ -218,7 +218,7 @@ define('io.ox/contacts/util',
 
         getDescription: function (obj) {
             // try some combinations
-            var list = _([obj.company, obj.department, obj.position, obj.city_business, obj.city_home]).compact();
+            var list = _([obj.company, obj.position]).compact();
             return list.length ? list.join(', ') : (obj.email1 || '');
         },
 
