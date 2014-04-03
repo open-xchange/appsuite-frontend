@@ -84,7 +84,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:366 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1681
+#: apps/io.ox/calendar/week/view.js:1683
 #, fuzzy, c-format
 #| msgid "%1$s (Tentative)"
 msgid "%1$s (Tentative)"
@@ -299,7 +299,7 @@ msgstr "Toimituksen kuittaus lähetetty"
 msgid "A severe error occurred!"
 msgstr "Tapahtui vakava virhe!"
 
-#: apps/io.ox/core/main.js:758 module:io.ox/core
+#: apps/io.ox/core/main.js:757 module:io.ox/core
 msgid "About"
 msgstr "Tietoja"
 
@@ -562,7 +562,7 @@ msgstr "Muu osoite"
 msgid "Addresses"
 msgstr "Osoitteet"
 
-#: apps/io.ox/files/util.js:57 module:io.ox/files
+#: apps/io.ox/files/util.js:60 module:io.ox/files
 msgid "Adjust"
 msgstr "Säädä"
 
@@ -597,7 +597,7 @@ msgstr "Kaikki liitteet"
 msgid "All day"
 msgstr "Koko päivän"
 
-#: apps/io.ox/search/view-template.js:399 module:io.ox/core
+#: apps/io.ox/search/view-template.js:407 module:io.ox/core
 #, fuzzy
 #| msgid "Add folder"
 msgid "All folders"
@@ -990,7 +990,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:133 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:831
+#: apps/io.ox/calendar/week/view.js:833
 msgid "CW %1$d"
 msgstr "Vk %1$d"
 
@@ -1035,7 +1035,7 @@ msgstr "Kalenteri"
 #: apps/io.ox/files/actions.js:328 module:io.ox/files
 #: apps/io.ox/files/actions.js:483 apps/io.ox/files/actions.js:538
 #: apps/io.ox/files/actions.js:582 apps/io.ox/files/actions.js:683
-#: apps/io.ox/files/fluid/view-detail.js:211
+#: apps/io.ox/files/fluid/view-detail.js:212
 #: apps/io.ox/files/views/create.js:114
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
@@ -1052,7 +1052,7 @@ msgstr "Kalenteri"
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:357
+#: apps/io.ox/search/view-template.js:365
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:60
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:196
@@ -1187,8 +1187,8 @@ msgstr "Siivoa"
 msgid "Cleaning up... This may take a few seconds."
 msgstr "Siivotaan... Tämä voi kestää muutaman sekunnin."
 
-#: apps/io.ox/calendar/week/view.js:799 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:803
+#: apps/io.ox/calendar/week/view.js:801 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:805
 msgid "Click for whole day appointment"
 msgstr "Valitse koko päivän tapaaminen"
 
@@ -1380,7 +1380,7 @@ msgstr "Uuden sähköpostin laatiminen"
 msgid "Conditions"
 msgstr "Ehdot"
 
-#: apps/io.ox/files/util.js:54 module:io.ox/files
+#: apps/io.ox/files/util.js:57 module:io.ox/files
 msgid "Confirmation"
 msgstr "Vahvistus"
 
@@ -1429,7 +1429,7 @@ msgstr "Yhteystiedot siirretty"
 msgid "Contains"
 msgstr "Sisältää merkkejä"
 
-#: apps/io.ox/core/main.js:1130 module:io.ox/core
+#: apps/io.ox/core/main.js:1129 module:io.ox/core
 msgid "Continue"
 msgstr "Jatka"
 
@@ -1921,7 +1921,7 @@ msgstr "Jakelulista"
 msgid "Distribution list has been saved"
 msgstr "Jakelulista on tallennettu"
 
-#: apps/io.ox/files/util.js:49 module:io.ox/files
+#: apps/io.ox/files/util.js:52 module:io.ox/files
 msgid ""
 "Do you really want to change the file extension from  \".%1$s\" to \".%2$s"
 "\" ?"
@@ -1981,7 +1981,7 @@ msgstr "Haluatko varmasti hylätä muutoksesi?"
 msgid "Do you really want to empty folder \"%s\"?"
 msgstr "Haluatko varmasti tyhjentää kansion \"%s\"?"
 
-#: apps/io.ox/files/util.js:46 module:io.ox/files
+#: apps/io.ox/files/util.js:49 module:io.ox/files
 msgid ""
 "Do you really want to remove the extension \".%1$s\" from your filename?"
 msgstr "Haluatko varmasti poistaa päätteen \"%1$s\" tiedostonimestäsi?"
@@ -2033,7 +2033,7 @@ msgstr "Asiakirjat"
 msgid "Done"
 msgstr "Valmis"
 
-#: apps/io.ox/calendar/week/view.js:651 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:653 module:io.ox/calendar
 #, fuzzy
 #| msgid "Click for whole day appointment"
 msgid "Doubleclick in this row for whole day appointment"
@@ -2438,7 +2438,7 @@ msgstr "Aiheen syöttäminen"
 msgid "Envelope"
 msgstr "Kuori"
 
-#: apps/io.ox/core/notifications.js:430 module:io.ox/core
+#: apps/io.ox/core/notifications.js:432 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -2532,7 +2532,7 @@ msgstr "Joka %1$d vuosi %2$s %3$s %4$d"
 msgid "Every day"
 msgstr "Päivittäin"
 
-#: apps/io.ox/core/main.js:733 module:io.ox/core
+#: apps/io.ox/core/main.js:732 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Poistu"
 
@@ -2693,12 +2693,12 @@ msgstr ""
 msgid "Feeling • Decoration"
 msgstr "Tunne • Koriste"
 
-#: apps/io.ox/files/fluid/view-detail.js:335 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:336 module:io.ox/files
 #: apps/io.ox/mail/detail/links.js:125 module:io.ox/mail
 msgid "File"
 msgstr "Tiedosto"
 
-#: apps/io.ox/files/fluid/perspective.js:190 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:156 module:io.ox/files
 msgid "File Details"
 msgstr "Tiedoston yksityiskohdat"
 
@@ -2722,7 +2722,7 @@ msgstr "Tiedosto: %1$s"
 msgid "Files"
 msgstr "Tiedostot"
 
-#: apps/io.ox/files/fluid/perspective.js:659 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:625 module:io.ox/files
 msgid "Files View"
 msgstr "Tiedostonäkymä"
 
@@ -2759,8 +2759,8 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:247 module:io.ox/core
-#: apps/io.ox/search/view-template.js:350
+#: apps/io.ox/search/view-template.js:255 module:io.ox/core
+#: apps/io.ox/search/view-template.js:358
 msgid "Folder"
 msgstr "Kansio"
 
@@ -2867,10 +2867,6 @@ msgstr "Välitä kaikki saapuva posti tähän osoitteeseen"
 msgid "Forward emails as"
 msgstr "Viestien välitys"
 
-#: apps/io.ox/search/view-template.js:467 module:io.ox/core
-msgid "Found %1$s items in %2$s seconds"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/template.js:275 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js:30 module:io.ox/calendar
 msgid "Free"
@@ -2890,7 +2886,7 @@ msgstr "perjantai"
 msgid "From"
 msgstr "Lähettäjä"
 
-#: apps/io.ox/core/main.js:736 module:io.ox/core apps/io.ox/core/main.js:740
+#: apps/io.ox/core/main.js:735 module:io.ox/core apps/io.ox/core/main.js:739
 #: apps/io.ox/files/actions.js:1205 module:io.ox/files
 msgid "Fullscreen"
 msgstr "Koko näyttö"
@@ -3008,7 +3004,7 @@ msgid "Hello World"
 msgstr "Hello World"
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:701
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:700
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Ohje"
@@ -3815,7 +3811,7 @@ msgstr "Kuukautta"
 #: apps/io.ox/core/extPatterns/links.js:340 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:445
+#: apps/io.ox/search/view-template.js:453
 msgid "More"
 msgstr "Lisää"
 
@@ -3958,12 +3954,12 @@ msgstr "Uusi tilaus"
 msgid "Next"
 msgstr "Seuraava"
 
-#: apps/io.ox/calendar/week/view.js:679 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:681 module:io.ox/calendar
 msgid "Next Day"
 msgstr "Seuraava päivä"
 
 #: apps/io.ox/calendar/util.js:161 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:679
+#: apps/io.ox/calendar/week/view.js:681
 msgid "Next Week"
 msgstr "Seuraava viikko"
 
@@ -4669,7 +4665,7 @@ msgstr "Syötä tunnuksesi"
 msgid "Please enter your password."
 msgstr "Syötä salasanasi"
 
-#: apps/io.ox/files/util.js:38 module:io.ox/files
+#: apps/io.ox/files/util.js:41 module:io.ox/files
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
 "when viewing or editing."
@@ -4705,7 +4701,7 @@ msgstr "Valitse tuotava iCal-tiedosto"
 msgid "Please select a valid image File to insert"
 msgstr "Valitse lisättäväksi käypä kuvatiedosto"
 
-#: apps/io.ox/core/main.js:893 module:io.ox/core apps/io.ox/core/relogin.js:48
+#: apps/io.ox/core/main.js:892 module:io.ox/core apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Uudelleenkirjaudu jatkaaksesi"
 
@@ -4815,11 +4811,11 @@ msgstr "Esikatselu"
 msgid "Previous"
 msgstr "Edellinen"
 
-#: apps/io.ox/calendar/week/view.js:680 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:682 module:io.ox/calendar
 msgid "Previous Day"
 msgstr "Edellinen päivä"
 
-#: apps/io.ox/calendar/week/view.js:680 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:682 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "Edellinen viikko"
 
@@ -5027,7 +5023,7 @@ msgstr "Palauta salasanoja"
 msgid "Recurring tasks need a valid due date."
 msgstr "Toistuvat tehtävät tarvitsevat valmistumispäivämäärän."
 
-#: apps/io.ox/search/model.js:298 module:io.ox/core
+#: apps/io.ox/search/model.js:303 module:io.ox/core
 msgid "Recurring tasks need a valid end date."
 msgstr "Toistuvat tehtävät tarvitsevat valmistumispäivämäärän."
 
@@ -5047,7 +5043,7 @@ msgstr "Punainen"
 msgid "Redirect to"
 msgstr "Uudelleenohjaa kohteeseen"
 
-#: apps/io.ox/core/main.js:641 module:io.ox/core apps/io.ox/core/main.js:662
+#: apps/io.ox/core/main.js:661 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:198 module:io.ox/core/pubsub
 msgid "Refresh"
 msgstr "Päivitä"
@@ -5199,7 +5195,7 @@ msgstr "resurssiryhmä"
 msgid "Resources"
 msgstr "Resurssit"
 
-#: apps/io.ox/core/main.js:1123 module:io.ox/core
+#: apps/io.ox/core/main.js:1122 module:io.ox/core
 msgid "Restore applications"
 msgstr "Keskeneräisiä toimintoja"
 
@@ -5317,7 +5313,7 @@ msgid "Save to Drive"
 msgstr "Tallenna Drivelle"
 
 #: apps/io.ox/contacts/view-detail.js:742 module:io.ox/contacts
-#: apps/io.ox/files/fluid/view-detail.js:176 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:177 module:io.ox/files
 msgid "Saved in"
 msgstr "Tallennettu"
 
@@ -5349,9 +5345,9 @@ msgstr "Suunnittelu"
 
 #: apps/io.ox/core/desktop.js:1506 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1507 apps/io.ox/core/desktop.js:1564
-#: apps/io.ox/core/main.js:635 apps/io.ox/search/main.js:156
-#: module:io.ox/search apps/io.ox/search/main.js:172
-#: apps/io.ox/search/view-template.js:46
+#: apps/io.ox/core/main.js:619 apps/io.ox/core/main.js:625
+#: apps/io.ox/search/main.js:161 module:io.ox/search
+#: apps/io.ox/search/main.js:177 apps/io.ox/search/view-template.js:46
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Etsi"
@@ -5366,7 +5362,7 @@ msgid "Search here"
 msgstr "Etsi tässä"
 
 #. Appears in file icon view during searches
-#: apps/io.ox/files/fluid/perspective.js:370 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:336 module:io.ox/files
 msgid "Searched for: %1$s"
 msgstr "Etsittiin %1$s"
 
@@ -5517,7 +5513,7 @@ msgstr "Aseta oletusarvoksi"
 msgid "Set color"
 msgstr ""
 
-#: apps/io.ox/core/main.js:674 module:io.ox/core apps/io.ox/core/main.js:807
+#: apps/io.ox/core/main.js:673 module:io.ox/core apps/io.ox/core/main.js:806
 msgid "Settings"
 msgstr "Asetukset"
 
@@ -5652,7 +5648,7 @@ msgstr "Näytä stack trace"
 msgid "Show task details"
 msgstr "Näytä yksityiskohdat"
 
-#: apps/io.ox/files/fluid/view-detail.js:347 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:348 module:io.ox/files
 msgid "Show version history"
 msgstr "Näytä versiohistoria"
 
@@ -5671,7 +5667,7 @@ msgstr "Laitanäkymä"
 msgid "Sign in"
 msgstr "Kirjaudu"
 
-#: apps/io.ox/core/main.js:777 module:io.ox/core
+#: apps/io.ox/core/main.js:776 module:io.ox/core
 msgid "Sign out"
 msgstr "Kirjaudu ulos"
 
@@ -6319,7 +6315,7 @@ msgstr "Kansio on saatavilla kohteesta %1$s"
 msgid "The folder path"
 msgstr "Kansiopolku"
 
-#: apps/io.ox/core/main.js:1125 module:io.ox/core
+#: apps/io.ox/core/main.js:1124 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6552,7 +6548,6 @@ msgstr ""
 #: apps/io.ox/mail/accounts/model.js:48 apps/io.ox/mail/accounts/model.js:53
 #: apps/io.ox/mail/accounts/model.js:60 apps/io.ox/mail/accounts/model.js:66
 #: apps/io.ox/mail/accounts/model.js:79 apps/io.ox/mail/accounts/model.js:85
-#: apps/io.ox/mail/accounts/model.js:99 apps/io.ox/mail/accounts/model.js:105
 msgid "This field has to be filled"
 msgstr "Tämä kenttä pitää täyttää"
 
@@ -6612,11 +6607,11 @@ msgid_plural "These files have not been unlocked"
 msgstr[0] "Tämän tiedoston lukitusta ei ole avattu"
 msgstr[1] "Näiden tiedostojen lukitusta ei ole avattu"
 
-#: apps/io.ox/files/fluid/view-detail.js:74 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:75 module:io.ox/files
 msgid "This file is locked by %1$s"
 msgstr "Tiedoston on lukinnut %1$s"
 
-#: apps/io.ox/files/fluid/view-detail.js:72 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:73 module:io.ox/files
 msgid "This file is locked by you"
 msgstr "Tiedosto on sinun lukitsemasi"
 
@@ -6655,7 +6650,7 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Tämä on standardikansio, jota ei voi uudelleennimetä."
 
-#: apps/io.ox/mail/accounts/model.js:128 module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/accounts/model.js:115 module:io.ox/mail/accounts/settings
 msgid "This is not a valid email address"
 msgstr "Tämä ei ole käypä sähköpostiosoite"
 
@@ -7015,7 +7010,7 @@ msgstr ""
 #: apps/io.ox/backbone/forms.js:464 module:io.ox/core
 #: apps/io.ox/calendar/month/perspective.js:424 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:155 apps/io.ox/calendar/util.js:192
-#: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:702
+#: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:704
 #: apps/plugins/portal/birthdays/register.js:83 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:152
 msgid "Today"
@@ -7202,12 +7197,12 @@ msgstr "Päivitä premium versioon"
 msgid "Upgrade to premium edition"
 msgstr "Päivitä premium versioon"
 
-#: apps/io.ox/files/fluid/view-detail.js:200 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:201 module:io.ox/files
 msgid "Upload a new version"
 msgstr "Lataa uusi versio"
 
 #: apps/io.ox/core/tk/attachments.js:580 module:io.ox/core/tk/attachments
-#: apps/io.ox/files/fluid/view-detail.js:209 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:210 module:io.ox/files
 msgid "Upload file"
 msgstr "Lataa tiedosto"
 
@@ -7220,7 +7215,7 @@ msgstr "Lataa uusi tiedosto"
 msgid "Upload new files"
 msgstr "Lataa uusia tiedostoja"
 
-#: apps/io.ox/files/fluid/view-detail.js:223 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:224 module:io.ox/files
 msgid "Upload new version"
 msgstr "Lataa uusi versio"
 
@@ -7232,7 +7227,7 @@ msgstr "Tiedoston lataaminen"
 msgid "Uploading folders is not supported."
 msgstr "Kansioiden lataamista ei tueta."
 
-#: apps/io.ox/files/fluid/view-detail.js:247 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:248 module:io.ox/files
 msgid "Uploading..."
 msgstr "Ladataan..."
 
@@ -7305,11 +7300,11 @@ msgstr "Muistutustoimintojen käyttäminen"
 msgid "Vacation Notice"
 msgstr "Lomailmoitus"
 
-#: apps/io.ox/files/fluid/view-detail.js:215 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:216 module:io.ox/files
 msgid "Version Comment"
 msgstr "Version kommentti"
 
-#: apps/io.ox/files/fluid/view-detail.js:352 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:353 module:io.ox/files
 msgid "Version history"
 msgstr "Versiohistoria"
 
@@ -7444,7 +7439,7 @@ msgstr "Keltainen"
 #: apps/io.ox/calendar/month/perspective.js:136 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:129
 #: apps/io.ox/core/permissions/permissions.js:169 module:io.ox/core
-#: apps/io.ox/files/util.js:56 module:io.ox/files
+#: apps/io.ox/files/util.js:59 module:io.ox/files
 msgid "Yes"
 msgstr "Kyllä"
 
@@ -7622,7 +7617,7 @@ msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
 msgstr[1] "Automaattinen uloskirjautuminen %1$d sekunnin kuluttua"
 
-#: apps/io.ox/core/main.js:834 module:io.ox/core
+#: apps/io.ox/core/main.js:833 module:io.ox/core
 msgid "Your Applications"
 msgstr "Sinun sovelluksesi"
 
@@ -7715,7 +7710,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "Valitsemasi kuva tulee näkyviin tallentamisen jälkeen"
 
-#: apps/io.ox/core/main.js:892 module:io.ox/core apps/io.ox/core/relogin.js:46
+#: apps/io.ox/core/main.js:891 module:io.ox/core apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "Istuntosi on vanhentunut"
 
@@ -8133,7 +8128,7 @@ msgstr "huomenna"
 msgid "tonight"
 msgstr "illalla"
 
-#: apps/io.ox/files/fluid/perspective.js:142 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
 #: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:403
 #: apps/io.ox/mail/util.js:416
 msgid "unknown"
