@@ -850,8 +850,12 @@ define('io.ox/core/tk/folderviews',
             }
 
             // set title
-            var shortTitle = api.getFolderTitle(data.title, 20);
-            label.attr('title', data.title).empty().append(
+            var shortTitle = api.getFolderTitle(data.title, 20),
+                total = data.total !== 0 ? ' - ' + gt('total') + ' ' + data.total : '',
+                unread = data.unread !== 0 ? ' - ' + gt('unread') + ' ' + data.unread : '',
+                labelTitle = options.type === 'mail' ? data.title + total + unread : data.title;
+
+            label.attr('title', labelTitle).empty().append(
                 $('<span class="short-title">').text(_.noI18n(shortTitle)),
                 $('<span class="long-title">').text(_.noI18n(data.title))
             );
