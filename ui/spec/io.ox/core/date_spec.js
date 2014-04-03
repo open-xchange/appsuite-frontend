@@ -17,7 +17,7 @@ function (date, ext) {
 
     'use strict';
 
-    describe('Date', function () {
+    describe.skip('Date', function () {
         beforeEach(function () {
             var data = date.getTimeZone('Europe/Berlin').then(function (tz) {
                 this.D = tz;

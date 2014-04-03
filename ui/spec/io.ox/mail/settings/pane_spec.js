@@ -15,7 +15,7 @@ define(['io.ox/core/extensions',
         'io.ox/mail/settings/pane'
         ], function (ext, gt) {
 
-	describe('mailsettings', function () {
+	describe.skip('mailsettings', function () {
         beforeEach(function () {
 
             $('body', document).append(this.node = $('<div id="mailsettingsNode">'));

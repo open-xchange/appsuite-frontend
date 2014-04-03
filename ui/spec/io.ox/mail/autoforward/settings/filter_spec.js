@@ -42,7 +42,7 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
     multiValues = {},
     model;
 
-    describe('autoforward', function () {
+    describe.skip('autoforward', function () {
 
         beforeEach(function () {
             var def;

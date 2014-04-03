@@ -12,7 +12,7 @@
  */
 define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
 ], function (util, gt, date) {
-    describe('tasks utility', function () {
+    describe.skip('tasks utility', function () {
         var options = {
             testData: {
                 'status': 2,

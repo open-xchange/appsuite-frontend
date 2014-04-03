@@ -17,25 +17,25 @@ define(['io.ox/core/manifests'], function (manifests) {
     describe('The manifests module', function () {
 
         it('should define global ox.manifests object', function () {
-            expect(ox.manifests).toBeDefined();
+            expect(ox.manifests).to.exist;
         });
 
         it('should provide a reset method', function () {
-            expect(manifests.reset).toBeFunction();
+            expect(manifests.reset).to.be.a('function');
         });
 
         it('should provide a manifest manager object', function () {
-            expect(manifests.manager).toBeDefined();
+            expect(manifests.manager).to.exist;
         });
 
         describe('provides the manifest manager which', function () {
             it('should be exported globally as ox.manifests', function () {
-                expect(ox.manifests).toBe(manifests.manager);
+                expect(ox.manifests).to.equal(manifests.manager);
             });
 
             describe('has a "pluginsFor" method that', function () {
                 it('should return an empty list if no extension point is given', function () {
-                    expect(manifests.manager.pluginsFor()).toEqual([]);
+                    expect(manifests.manager.pluginsFor()).to.be.empty;
                 });
 
                 it('should return a list of plugins for a given extension point name', function () {
@@ -45,7 +45,7 @@ define(['io.ox/core/manifests'], function (manifests) {
                         path: 'path/to/plugin1'
                     }];
 
-                    expect(manifests.manager.pluginsFor('testPoint')).toEqual(['path/to/plugin2', 'path/to/plugin1']);
+                    expect(manifests.manager.pluginsFor('testPoint')).to.deep.equal(['path/to/plugin2', 'path/to/plugin1']);
 
                     delete manifests.manager.pluginPoints.testPoint;
                 });

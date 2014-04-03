@@ -79,7 +79,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         days: createDaysObject(1, 31)
     };
 
-    describe('Vacationnotice with one active mail', function () {
+    describe.skip('Vacationnotice with one active mail', function () {
 
         beforeEach(function () {
             this.server.autoRespond = false;
@@ -116,7 +116,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
     });
 
-    describe('Vacationnotice with two active mails', function () {
+    describe.skip('Vacationnotice with two active mails', function () {
 
         beforeEach(function () {
             this.server.autoRespond = false;

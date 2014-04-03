@@ -13,7 +13,7 @@
 
 define(['io.ox/files/carousel'], function (slideshow) {
 
-    describe('Slideshow for files:', function () {
+    describe.skip('Slideshow for files:', function () {
 
         var testFiles = [
             {file_mimetype: 'audio/mp3', filename: 'music.mp3', folder_id: '1', id: '1'},

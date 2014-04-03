@@ -14,7 +14,7 @@ define(['io.ox/core/tk/dialogs'], function (dialogs) {
 
     var dialogTitle = 'This is a dialog title that is completly useless.';
 
-    describe('Modal Dialog', function () {
+    describe.skip('Modal Dialog', function () {
 
         beforeEach(function () {
             $('body', document).append(this.node = $('<div id="testNode">'));

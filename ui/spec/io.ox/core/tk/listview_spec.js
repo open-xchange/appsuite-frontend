@@ -24,7 +24,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
 
     var expect = chai.expect;
 
-    describe('The ListView.', function () {
+    describe.skip('The ListView.', function () {
 
         beforeEach(function () {
 

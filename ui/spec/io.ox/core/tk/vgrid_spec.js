@@ -14,7 +14,7 @@
 define(['io.ox/core/tk/vgrid'], function (VGrid) {
     'use strict';
 
-    describe('The VGrid', function () {
+    describe.skip('The VGrid', function () {
         beforeEach(function () {
             $('body', document).append($('<div id="testNode">'));
             this.node = $('<div>').appendTo($('#testNode', document));

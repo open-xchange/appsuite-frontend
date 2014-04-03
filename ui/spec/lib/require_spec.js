@@ -11,7 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define(function () {
-    describe('require static files', function () {
+    describe.skip('require static files', function () {
         it('should fetch static files via backend', function () {
             var def = require(['apps/file/doesnt/exist.js']);
 

@@ -16,7 +16,7 @@ define([
 ], function (emoji, settings) {
     'use strict';
 
-    describe('Emoji support', function () {
+    describe.skip('Emoji support', function () {
         describe('with fallback collections', function () {
             beforeEach(function () {
                 settings.set('availableCollections', 'unified,softbank,japan_carrier');

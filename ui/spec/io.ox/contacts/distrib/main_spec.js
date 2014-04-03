@@ -65,7 +65,7 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api'], function (main, ap
      * Suite: Distributionlist Test
      */
 
-    describe('Distributionlist edit', function () {
+    describe.skip('Distributionlist edit', function () {
 
         var app = null, appContainer, createForm, inputName, addButton,
         saveButton, displayName;

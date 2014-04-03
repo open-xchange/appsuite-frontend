@@ -17,7 +17,7 @@ define([
 ], function (linkPatterns, ext) {
     'use strict';
 
-    describe('Extension patterns: link patterns', function () {
+    describe.skip('Extension patterns: link patterns', function () {
         function findPattern(suite) {
             if (suite.description && linkPatterns[suite.description]) {
                 return linkPatterns[suite.description];

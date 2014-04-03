@@ -36,7 +36,7 @@ define(['io.ox/core/extensions',
     /*
      * Suite: Cache Test
      */
-    describe('Caching with SimpleCache', function () {
+    describe.skip('Caching with SimpleCache', function () {
 
         var testStorage = new cache.SimpleCache('TEST_SimpleCache');
 

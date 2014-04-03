@@ -25,7 +25,7 @@ define(['io.ox/calendar/main',
         return f;
     }
 
-    describe('calendar app and the corresponding listview ', function () {
+    describe.skip('calendar app and the corresponding listview ', function () {
 
         beforeEach(function () {
             this.server.respondWith('GET', /api\/calendar\?action=all/, function (xhr) {

@@ -36,7 +36,7 @@ define(['io.ox/core/extensions',
     /*
      * Suite: Cache Test
      */
-    describe('Caching with ObjectCache', function () {
+    describe.skip('Caching with ObjectCache', function () {
 
         var testStorage = new cache.ObjectCache('TEST_ObjectCache');
 

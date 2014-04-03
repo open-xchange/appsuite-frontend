@@ -15,7 +15,7 @@ define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
 
     'use strict';
 
-    describe('Contact API', function () {
+    describe.skip('Contact API', function () {
 
         beforeEach(function () {
             this.server.respondWith('GET', /api\/contacts\?action=get/, function (xhr) {

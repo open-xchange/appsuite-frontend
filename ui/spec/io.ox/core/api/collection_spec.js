@@ -34,7 +34,7 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
         );
     }
 
-    describe('Collection loader', function () {
+    describe.skip('Collection loader', function () {
 
         beforeEach(function () {
             this.loader = new CollectionLoader({ LIMIT: 3 });

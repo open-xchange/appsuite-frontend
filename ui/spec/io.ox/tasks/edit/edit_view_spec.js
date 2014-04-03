@@ -33,7 +33,7 @@ define(['io.ox/tasks/edit/main',
             ),
         capabilities = caputil.preset('common').init('io.ox/tasks/edit/main', edit);
 
-    describe('', function () {//outer wrapper (needed because the app must not be started before the capabilities are set)
+    describe.skip('', function () {//outer wrapper (needed because the app must not be started before the capabilities are set)
         beforeEach(function () {
             //set capabilities
             capabilities.enable(['delegate_tasks', 'infostore']);

@@ -80,7 +80,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
 
         resultWithoutFilter = { data: [] };
 
-    describe('Mailfilter filter with rules', function () {
+    describe.skip('Mailfilter filter with rules', function () {
 
         it('should draw the list of tests', function () {
             var def;
@@ -118,7 +118,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
 
     });
 
-    describe('Mailfilter filter without rules', function () {
+    describe.skip('Mailfilter filter without rules', function () {
 
         beforeEach(function () {
             var def;

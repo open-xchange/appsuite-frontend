@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks/defaultTestData.json'], function (detailView, ext, testData) {
-    describe('tasks detailview', function () {
+    describe.skip('tasks detailview', function () {
         describe('content', function () {
             var node;
             beforeEach(function () {

@@ -17,7 +17,7 @@ define(['io.ox/core/api/mailfilter',
 
     'use strict';
 
-    describe('Mailfilter Api', function () {
+    describe.skip('Mailfilter Api', function () {
 
 //         sharedExamplesFor(api);
 

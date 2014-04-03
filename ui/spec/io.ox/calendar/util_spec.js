@@ -13,7 +13,7 @@
  */
 define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
 
-    describe('Util for calendar', function () {
+    describe.skip('Util for calendar', function () {
 
         describe('can convert timestamp to smart dates', function () {
 

@@ -65,7 +65,7 @@ define(['io.ox/files/api',
             });
         };
 
-    describe('files API', function () {
+    describe.skip('files API', function () {
 
         //use shared examples
         sharedExamplesFor(api);

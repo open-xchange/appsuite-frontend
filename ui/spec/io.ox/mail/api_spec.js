@@ -30,10 +30,10 @@ define(['shared/examples/for/api',
         //guarantee same number of arguments for wrapper functions
         describe('has some wrapper methods', function () {
             it('should has same number of arguments for getList', function () {
-                expect(api.getList.length).toBe(apiFactory.getList.length);
+                expect(api.getList.length).to.equal(apiFactory.getList.length);
             });
             it('should has same number of arguments for get', function () {
-                expect(api.get.length).toBe(apiFactory.get.length);
+                expect(api.get.length).to.equal(apiFactory.get.length);
             });
         });
 

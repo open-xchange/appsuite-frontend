@@ -16,7 +16,7 @@ define([
 ], function (emoji, settings) {
     'use strict';
 
-    describe('Emoji support', function () {
+    describe.skip('Emoji support', function () {
         beforeEach(function () {
             settings.set('availableCollections', 'unified');
             settings.set('userCollection', 'unified');

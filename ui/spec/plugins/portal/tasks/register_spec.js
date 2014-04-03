@@ -15,7 +15,7 @@ define(['plugins/portal/tasks/register',
         'io.ox/core/date',
         'fixture!io.ox/tasks/defaultTestData.json'], function (tasksPlugin, ext, date, testData) {
 
-    describe('portal Tasks plugin', function () {
+    describe.skip('portal Tasks plugin', function () {
 
         describe('should', function () {
             beforeEach(function () {

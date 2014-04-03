@@ -43,7 +43,7 @@ define(['io.ox/contacts/util'], function (util) {
     };
     */
 
-    describe('Contact util', function () {
+    describe.skip('Contact util', function () {
 
         it('should return a prepared full contact name for sorting purpose', function () {
             expect(util.getSortName(testPerson)).toEqual('tester, georg');

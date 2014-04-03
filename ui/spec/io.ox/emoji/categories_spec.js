@@ -18,7 +18,7 @@ define([
 
     var pile_unicode = '\ud83d\udca9';
 
-    describe('Emoji support', function () {
+    describe.skip('Emoji support', function () {
         describe('provides collections with categories', function () {
             beforeEach(function () {
                 //prevent settings from being stored on server

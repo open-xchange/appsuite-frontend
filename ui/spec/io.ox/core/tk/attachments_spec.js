@@ -21,7 +21,7 @@ define(['io.ox/core/extensions',
 
     var capabilities = caputil.preset('common').init('io.ox/core/tk/attachments', attachments);
 
-    describe('Attachments Util has a', function () {
+    describe.skip('Attachments Util has a', function () {
 
         describe('FileUploadWidget:', function () {
             describe('when capability "infostore" is disabled', function () {

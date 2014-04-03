@@ -23,7 +23,7 @@ define(['shared/examples/for/api',
         return f;
     }
 
-    describe('basic account API', function () {
+    describe.skip('basic account API', function () {
 
         var options = {
             markedPending: {
@@ -37,7 +37,7 @@ define(['shared/examples/for/api',
         sharedExamplesFor(api, options);
     });
 
-    describe('account API', function () {
+    describe.skip('account API', function () {
 
         var select = $();
 

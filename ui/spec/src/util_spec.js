@@ -13,7 +13,6 @@
 define([], function () {
 
     describe('Global Utilities:', function () {
-        var expect = chai.expect;
 
         describe('all utils', function () {
 
@@ -203,7 +202,7 @@ define([], function () {
             //TODO
         //});
 
-        it('_.mythrottle', function () {
+        it.skip('_.mythrottle', function () {
             var finished,
                 //now = new Date(),
                 counter = 0,
@@ -345,7 +344,7 @@ define([], function () {
                 expect(_.noI18n.fix('')).to.be.a('string');
                 expect(_.noI18n.fix('abed')).to.be.a('string');
             });
-            it('.text should alway return jquery list', function () {
+            it.skip('.text should alway return jquery list', function () {
                 this.expect(_.noI18n.text()).toBeJquery(_.noI18n.text());
                 this.expect(_.noI18n.text('abed', 'troy')).toBeJquery();
             });

@@ -27,9 +27,9 @@ define(['io.ox/mail/detail/content',
                     baton.source = source;
                     extension.process(baton);
                     if (shouldcontain)
-                        expect(baton.source.indexOf('target="_blank"')).toBeGreaterThan(-1);
+                        expect(baton.source.indexOf('target="_blank"')).to.be.above(-1);
                     else
-                        expect(baton.source).toEqual(source);
+                        expect(baton.source).to.equal(source);
                 }
 
                 //target doesn't changed: no valid href

@@ -15,7 +15,7 @@ define(['io.ox/files/main',
         'io.ox/files/api',
         'fixture!io.ox/files/api-all.json'], function (main, api, all) {
 
-    describe('files app', function () {
+    describe.skip('files app', function () {
         var loadapp = $.Deferred(),
             suite = {},
             //init app only once

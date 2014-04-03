@@ -29,7 +29,7 @@ define(['io.ox/core/tk/model'], function (Model) {
     }),
     model;
 
-    describe('Simple model without schema', function () {
+    describe.skip('Simple model without schema', function () {
 
         beforeEach(function () {
             model = new Model({ data: data });
@@ -108,7 +108,7 @@ define(['io.ox/core/tk/model'], function (Model) {
         });
     });
 
-    describe('Model with schema', function () {
+    describe.skip('Model with schema', function () {
 
         beforeEach(function () {
             var ComplexModel = Model.extend({ schema: schema });
@@ -203,7 +203,7 @@ define(['io.ox/core/tk/model'], function (Model) {
         });
     });
 
-    describe('Model with computed properties', function () {
+    describe.skip('Model with computed properties', function () {
 
         beforeEach(function () {
             var CModel = Model

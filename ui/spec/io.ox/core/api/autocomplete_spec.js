@@ -13,7 +13,7 @@
 define(['shared/examples/for/api',
         'io.ox/core/api/autocomplete'], function (sharedExamplesFor, api) {
 
-    return describe('autocomplete API', function () {
+    return describe.skip('autocomplete API', function () {
         var instance = new api({id: 'createDistributionList', contacts: true, distributionlists: false }),
             options = {
 

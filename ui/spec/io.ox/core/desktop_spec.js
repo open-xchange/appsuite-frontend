@@ -14,7 +14,7 @@
 define(['io.ox/core/desktop'], function (desktop) {
     'use strict';
 
-    describe('The appsuite desktop', function () {
+    describe.skip('The appsuite desktop', function () {
 
         describe('provides the Window API which', function () {
 

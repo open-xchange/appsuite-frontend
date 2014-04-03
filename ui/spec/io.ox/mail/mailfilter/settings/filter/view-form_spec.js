@@ -19,7 +19,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/settings/setting
         resultAfterSave = { data: 1},
         model;
 
-    describe('Mailfilter detailview', function () {
+    describe.skip('Mailfilter detailview', function () {
 
         var $container = $('<div id="testNode">'),
             addButton,

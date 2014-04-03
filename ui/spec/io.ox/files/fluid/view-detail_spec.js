@@ -18,7 +18,7 @@ define(['io.ox/files/fluid/view-detail',
     'fixture!io.ox/files/file-versions.json'
     ], function (view, api, ext, file, fileversions) {
 
-    describe('files detail view', function () {
+    describe.skip('files detail view', function () {
         var baton = ext.Baton.ensure({
             data: file
         }),

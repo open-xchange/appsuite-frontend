@@ -158,7 +158,7 @@ define(['io.ox/contacts/main', 'io.ox/core/main', 'io.ox/contacts/api'], functio
      * Suite: Contacts Test
      */
 
-    describe('Contact edit', function () {
+    describe.skip('Contact edit', function () {
 
         var app = null;
 

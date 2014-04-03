@@ -15,7 +15,7 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
 
     'use strict';
 
-    describe('Mail content processing', function () {
+    describe.skip('Mail content processing', function () {
 
         beforeEach(function () {
             //prevent settings from being stored on server

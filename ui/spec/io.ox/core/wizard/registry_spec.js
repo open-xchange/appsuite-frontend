@@ -20,12 +20,12 @@ define([
     describe('The Wizard API', function () {
 
         it('should define a getWizard method', function () {
-            expect(wizard.getWizard).toBeDefined();
+            expect(wizard.getWizard).to.exist;
         });
 
         describe('used by a welcomeWizard example', function () {
             it('should create an instance', function () {
-                expect(welcomeWizard.getInstance()).toBeDefined();
+                expect(welcomeWizard.getInstance()).to.exist;
             });
         });
     });

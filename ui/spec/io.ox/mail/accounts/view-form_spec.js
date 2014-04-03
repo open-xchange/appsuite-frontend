@@ -18,7 +18,7 @@ define(['io.ox/core/extensions',
 
     'use strict';
 
-	describe('mailaccountsettings', function () {
+    describe.skip('mailaccountsettings', function () {
         var $popup,
             $node = $('<div>');
 

@@ -30,7 +30,7 @@ define([
         .value();
     }
 
-    describe('Emoji support', function () {
+    describe.skip('Emoji support', function () {
         describe('with different collections', function () {
             beforeEach(function () {
                 //prevent settings from being stored on server
