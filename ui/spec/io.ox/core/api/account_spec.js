@@ -17,13 +17,7 @@ define(['shared/examples/for/api',
         'fixture!io.ox/mail/write/accounts.json'
        ], function (sharedExamplesFor, api, sender, fixtureUser, fixtureAccounts) {
 
-    function Done(f) {
-        f = function () { return !!f.value; };
-        f.yep = function () { f.value = true; };
-        return f;
-    }
-
-    describe.skip('basic account API', function () {
+    describe('basic account API', function () {
 
         var options = {
             markedPending: {
@@ -37,7 +31,7 @@ define(['shared/examples/for/api',
         sharedExamplesFor(api, options);
     });
 
-    describe.skip('account API', function () {
+    describe('account API', function () {
 
         var select = $();
 
@@ -103,55 +97,48 @@ define(['shared/examples/for/api',
             unified_inbox_enabled: false
         };
 
-        it('sets custom account data', function () {
-
-            var done = new Done();
-            waitsFor(done, 'set data');
+        it('sets custom account data', function (done) {
 
             // clear
             api.cache = {};
-            expect(_(api.cache).size()).toBe(0);
+            expect(_(api.cache).size()).to.equal(0);
             // now add custom data
             api.cache[account0.id] = account0;
             // get all -- NO CLUE why we need that wait; without wait() the server is not yet up
             _.wait(1).then(function () {
                 api.all().done(function (accounts) {
-                    expect(accounts.length).toBe(1);
-                    done.yep();
+                    expect(accounts.length).to.equal(1);
+                    done();
                 });
             });
         });
 
-        it('returns proper account data', function () {
-
-            var done = new Done();
-            waitsFor(done, 'load account');
-
+        it('returns proper account data', function (done) {
             api.get(0).done(function (data) {
-                expect(data.id).toBe(0);
-                expect(data.login).toBe('otto.xentner');
-                done.yep();
+                expect(data.id).to.equal(0);
+                expect(data.login).to.equal('otto.xentner');
+                done();
             });
         });
 
         it('is account', function () {
-            expect(api.isAccount(0)).toBe(true);
-            expect(api.isAccount(1)).toBe(false);
+            expect(api.isAccount(0)).to.equal(true);
+            expect(api.isAccount(1)).to.equal(false);
         });
 
         it('is primary account', function () {
-            expect(api.isPrimary('default0/yeah')).toBe(true);
-            expect(api.isPrimary('default1/nope')).toBe(false);
+            expect(api.isPrimary('default0/yeah')).to.equal(true);
+            expect(api.isPrimary('default1/nope')).to.equal(false);
         });
 
         it('is "inbox" folder', function () {
-            expect(api.is('inbox', 'default0/INBOX')).toBe(true);
-            expect(api.is('inbox', 'default0/XOBNI')).toBe(false);
+            expect(api.is('inbox', 'default0/INBOX')).to.be.true;
+            expect(api.is('inbox', 'default0/XOBNI')).to.be.false;
         });
 
         it('is "sent" folder', function () {
-            expect(api.is('sent', 'default0/INBOX/Gesendete Objekte')).toBe(true);
-            expect(api.is('sent', 'default0/INBOX/nope')).toBe(false);
+            expect(api.is('sent', 'default0/INBOX/Gesendete Objekte')).to.be.true;
+            expect(api.is('sent', 'default0/INBOX/nope')).to.be.false;
         });
 
         it('parses account id', function () {
@@ -159,85 +146,65 @@ define(['shared/examples/for/api',
             var id;
 
             id = api.parseAccountId('default0');
-            expect(id).toBe(0);
+            expect(id).to.equal(0);
 
             id = api.parseAccountId('default01337', true);
-            expect(id).toBe(1337);
+            expect(id).to.equal(1337);
 
             id = api.parseAccountId(0);
-            expect(id).toBe(0);
+            expect(id).to.equal(0);
         });
 
-        it('returns correct primary address', function () {
-
-            var done = new Done();
-            waitsFor(done, 'get primary address');
-
+        it('returns correct primary address', function (done) {
             require(['settings!io.ox/mail']).then(function (settings) {
 
                 // overwrite settings. white-space
                 settings.set('defaultSendAddress', ' otto.xentner@open-xchange.com ');
 
                 api.getPrimaryAddress(0).done(function (address) {
-                    expect(address).toEqual(['Otto Xentner', 'otto.xentner@open-xchange.com']);
-                    done.yep();
+                    expect(address).to.deep.equal(['Otto Xentner', 'otto.xentner@open-xchange.com']);
+                    done();
                 });
             });
         });
 
-        it('returns default display name', function () {
-
-            var done = new Done();
-            waitsFor(done, 'default display_name');
-
+        it('returns default display name', function (done) {
             api.getDefaultDisplayName().done(function (name) {
-                expect(name).toBe('Otto Xentner');
-                done.yep();
+                expect(name).to.equal('Otto Xentner');
+                done();
             });
         });
 
-        it('uses default display_name as fallback (personal)', function () {
-
-            var done = new Done();
-            waitsFor(done, 'default display_name');
-
+        it('uses default display_name as fallback (personal)', function (done) {
             // clear "personal" first
             account0.personal = '';
             api.cache[account0.id] = account0;
 
             api.getDefaultDisplayName().done(function (name) {
                 api.getPrimaryAddress(0).done(function (address) {
-                    done.yep();
-                    expect(address).toEqual([name, 'otto.xentner@open-xchange.com']);
+                    expect(address).to.deep.equal([name, 'otto.xentner@open-xchange.com']);
+                    done();
                 });
             });
         });
 
-        it('returns correct sender addresses', function () {
-
-            var done = new Done();
-            waitsFor(done, 'sender addresses');
-
+        it('returns correct sender addresses', function (done) {
             // add some addresses. with some falsy white-space and upper-case
             account0.addresses = ' otto.xentner@open-xchange.com ,ALL@open-xchange.com, alias@open-xchange.com,another.alias@open-xchange.com ';
             api.cache[0] = account0;
 
             api.getSenderAddresses(0).done(function (addresses) {
-                done.yep();
-                expect(addresses).toEqual([
+                expect(addresses).to.deep.equal([
                     ['Otto Xentner', 'alias@open-xchange.com'],
                     ['Otto Xentner', 'all@open-xchange.com'],
                     ['Otto Xentner', 'another.alias@open-xchange.com'],
                     ['Otto Xentner', 'otto.xentner@open-xchange.com']
                 ]);
+                done();
             });
         });
 
-        it('returns all sender addresses across all accounts', function () {
-
-            var done = new Done();
-            waitsFor(done, 'all sender addresses');
-
+        it('returns all sender addresses across all accounts', function (done) {
             // add second account
             var account1 = _.extend({}, account0, {
                 addresses: ' test@gmail.com,   FOO@gmail.com, yeah@gmail.com',
@@ -258,43 +225,31 @@ define(['shared/examples/for/api',
                     ['Test', 'test@gmail.com'],
                     ['Test', 'yeah@gmail.com']
                 ];
-                expect(addresses).toEqual(expected);
-                done.yep();
+                expect(addresses).to.deep.equal(expected);
+                done();
             });
         });
 
-        it('returns correct primary address for folder_id', function () {
-
-            var done = new Done();
-            waitsFor(done, 'get address');
-
+        it('returns correct primary address for folder_id', function (done) {
             api.getPrimaryAddressFromFolder('default1/INBOX/test').done(function (address) {
-                expect(address).toEqual(['Test', 'foo@gmail.com']);
-                done.yep();
+                expect(address).to.deep.equal(['Test', 'foo@gmail.com']);
+                done();
             });
         });
 
-        it('returns correct primary address for account_id', function () {
-
-            var done = new Done();
-            waitsFor(done, 'get address');
-
+        it('returns correct primary address for account_id', function (done) {
             api.getPrimaryAddressFromFolder(1).done(function (address) {
-                expect(address).toEqual(['Test', 'foo@gmail.com']);
-                done.yep();
+                expect(address).to.deep.equal(['Test', 'foo@gmail.com']);
+                done();
             });
         });
 
         it('returns correct default sender address', function () {
             var defaultAddress = sender.getDefaultSendAddress();
-            expect(defaultAddress).toBe('otto.xentner@open-xchange.com');
+            expect(defaultAddress).to.equal('otto.xentner@open-xchange.com');
         });
 
-        it('creates proper select-box with sender addresses', function () {
-
-            var done = new Done();
-            waitsFor(done, 'get addresses');
-
+        it('creates proper select-box with sender addresses', function (done) {
             $('body').append(
                 select = $('<select class="sender-dropdown" size="1">').css('width', '400px')
             );
@@ -314,21 +269,21 @@ define(['shared/examples/for/api',
             };
 
             sender.drawOptions(select).done(function () {
-                expect(select.children().length).toBe(8);
-                expect(select.find('[default]').length).toBe(1);
-                done.yep();
+                expect(select.children().length).to.equal(8);
+                expect(select.find('[default]').length).to.equal(1);
+                done();
             });
         });
 
         it('sets initial value of select-box correctly', function () {
             // box should automatically select the default value
-            expect(getValue()).toEqual(['Otto Xentner', 'otto.xentner@open-xchange.com']);
+            expect(getValue()).to.deep.equal(['Otto Xentner', 'otto.xentner@open-xchange.com']);
         });
 
         it('sets value of select-box correctly', function () {
             setValue(['Test', 'foo@gmail.com']);
             var index = select.prop('selectedIndex');
-            expect(index).toEqual(5);
+            expect(index).to.equal(5);
         });
 
         it('uses default address if invalid values are set', function () {
@@ -336,54 +291,44 @@ define(['shared/examples/for/api',
             setValue(['Test', 'not-in@the.list']);
             var index = select.prop('selectedIndex'),
                 value = select.val();
-            expect(index).toEqual(4);
-            expect(value).toEqual('"Otto Xentner" <otto.xentner@open-xchange.com>');
+            expect(index).to.equal(4);
+            expect(value).to.equal('"Otto Xentner" <otto.xentner@open-xchange.com>');
         });
 
-        it('selects proper address during initial loading', function () {
-
-            var done = new Done();
-            waitsFor(done, 'async test');
-
+        it('selects proper address during initial loading', function (done) {
             // clear box
             select.empty().removeAttr('data-default');
 
             // set value
             setValue(['Test', 'foo@gmail.com']);
 
-            expect(select.val()).toEqual(null);
-            expect(select.children().length).toEqual(0);
+            expect(select.val()).to.be.null;
+            expect(select.children().length).to.equal(0);
 
             // an invalid value select first item in the list
             setTimeout(function () {
                 sender.drawOptions(select).done(function () {
                     var index = select.prop('selectedIndex');
-                    expect(index).toEqual(5);
-                    done.yep();
+                    expect(index).to.equal(5);
+                    done();
                 });
             }, 100);
         });
 
         // tidy up
 
-        it('resets account data', function () {
-
-            var done = new Done(), self = this;
-            waitsFor(done, 'reset data');
-
+        it('resets account data', function (done) {
             api.cache = {};
+            var mailSettings;
 
             require(['settings!io.ox/mail']).then(function (settings) {
-                self.after(function () {
-                    settings.set('defaultSendAddress');
-                });
-            })
-            .then(function () {
+                mailSettings = settings;
                 return api.all();
             })
             .done(function (accounts) {
-                done.yep();
-                expect(accounts.length).toBe(1);
+                expect(accounts.length).to.equal(1);
+                mailSettings.set('defaultSendAddress');
+                done();
             });
         });
     });
