@@ -17,7 +17,7 @@ define(['io.ox/core/api/mailfilter',
 
     'use strict';
 
-    describe.skip('Mailfilter Api', function () {
+    describe('Mailfilter Api', function () {
 
 //         sharedExamplesFor(api);
 
@@ -87,42 +87,37 @@ define(['io.ox/core/api/mailfilter',
 
         it('should return available filters', function () {
             var result = api.getRules();
-            expect(result).toBeDeferred();
-            expect(result.state()).toBe('pending');
+            expect(result.state()).to.equal('pending');
             this.server.respond();
-            expect(result.state()).toBe('resolved');
+            expect(result.state()).to.equal('resolved');
         });
 
         it('should delete a specified rule', function () {
             var result = api.deleteRule();
-            expect(result).toBeDeferred();
-            expect(result.state()).toBe('pending');
+            expect(result.state()).to.equal('pending');
             this.server.respond();
-            expect(result.state()).toBe('resolved');
+            expect(result.state()).to.equal('resolved');
         });
 
         it('should return the id of the created rule', function () {
             var result = api.create();
-            expect(result).toBeDeferred();
-            expect(result.state()).toBe('pending');
+            expect(result.state()).to.equal('pending');
             this.server.respond();
-            expect(result.state()).toBe('resolved');
+            expect(result.state()).to.equal('resolved');
         });
 
         it('should update a specified rule', function () {
             var result = api.update();
-            expect(result).toBeDeferred();
-            expect(result.state()).toBe('pending');
+            expect(result.state()).to.equal('pending');
             this.server.respond();
-            expect(result.state()).toBe('resolved');
+            expect(result.state()).to.equal('resolved');
         });
 
         it('should reorder the rules', function () {
             var result = api.reorder();
-            expect(result).toBeDeferred();
-            expect(result.state()).toBe('pending');
+            expect(result.state()).to.equal('pending');
             this.server.respond();
-            expect(result.state()).toBe('resolved');
+            expect(result.state()).to.equal('resolved');
         });
 
     });
