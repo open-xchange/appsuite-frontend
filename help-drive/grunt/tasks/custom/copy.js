@@ -23,7 +23,18 @@ module.exports = function (grunt) {
                     dest: 'dist/<%= pkg.name %>-<%= pkg.version %>'
                 }
             ]
-        }
+        },
+        local_install_dist: {
+            files: [
+                {
+                    src: ['help-drive/**/*', '!help-drive/l10n/**/*'],
+                    expand: true,
+                    filter: 'isFile',
+                    cwd: 'dist/<%= pkg.name %>-<%= pkg.version %>',
+                    dest: grunt.option('dest')
+                }
+            ]
+         }
     });
 
     grunt.registerTask('copy_build', [
