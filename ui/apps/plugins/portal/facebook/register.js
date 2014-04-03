@@ -203,6 +203,16 @@ define('plugins/portal/facebook/register',
                         !onOwnWall ? $('<span class="io-ox-facebook-onOwnWall">').html(' &#9654; ') : '',
                         !onOwnWall ? $('<a class="io-ox-facebook-onWall">').attr('href', source.url).text(source.name) : '',
                         $('<div class="wall-post-content">'),
+                        $('<button class="facebook-content-expand btn-link">').hide().text(gt('expand')).on('click', function () {//add expand link for long content
+                            var content = wall_content.find('.wall-post-content');
+                            if (content.css('max-height') !== 'none') {
+                                content.css('max-height', 'none');
+                                $(this).text(gt('collapse'));
+                            } else {
+                                content.css('max-height', '350px');
+                                $(this).text(gt('expand'));
+                            }
+                        }),
                         $('<span class="datetime">').text(new Date(post.created_time * 1000))
                     ));
 
@@ -234,6 +244,11 @@ define('plugins/portal/facebook/register',
                 //make all outgoing links open new tabs/windows
                 wall_content.find('a').attr('target', '_blank');
 
+                wall_content.find('img').one('load', function () {
+                    if (parseInt(wall_content.css('height')) >= 350) {//parseInt cuts of the px part too
+                        wall_content.find('.facebook-content-expand').show();
+                    }
+                });
                 wall_content.appendTo(this);
             }, this);
         },
@@ -400,6 +415,28 @@ define('plugins/portal/facebook/register',
             $('<div class="message">').text(post.attachment.name || post.message).appendTo($(this));
             if (media !== undefined) {
                 $('<a>').attr({href: media.href})
+                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                    .append($('<div>').text(post.attachment.caption))
+                    .appendTo($(this));
+            }
+        }
+    });
+
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
+        id: 'life-event',
+        index: 128,
+        accepts: function (post) {
+            return post.type === 424;
+        },
+        draw: function (post) {
+            var media;
+  
+            $(this).append(
+                    $('<div>').text(post.description),
+                    $('<div class="message">').text(post.message));
+            for (var i = 0; i < post.attachment.media.length; i++) {
+                media = post.attachment.media[i];
+                $('<a class = facebook-image>').attr({href: media.href})
                     .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
                     .append($('<div>').text(post.attachment.caption))
                     .appendTo($(this));
