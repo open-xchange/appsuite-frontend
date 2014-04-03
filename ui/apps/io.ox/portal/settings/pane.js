@@ -18,9 +18,10 @@ define('io.ox/portal/settings/pane',
      'io.ox/core/upsell',
      'io.ox/portal/widgets',
      'gettext!io.ox/portal',
+     'settings!io.ox/portal',
      'apps/3rd.party/jquery-ui.min.js',
      'less!io.ox/portal/style'
-    ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt) {
+    ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings) {
 
     'use strict';
 
@@ -406,7 +407,6 @@ define('io.ox/portal/settings/pane',
         }
     });
 
-    /*
     ext.point(POINT + '/pane').extend({
         index: 500,
         id: 'summaryView',
@@ -435,6 +435,5 @@ define('io.ox/portal/settings/pane',
             );
         }
     });
-    */
     return {};
 });
