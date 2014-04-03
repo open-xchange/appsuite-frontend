@@ -108,11 +108,10 @@ define(['io.ox/core/desktop'], function (desktop) {
                             name: 'io.ox/testApp',
                             launch: launcher
                         }),
-                        callback = this.callback,
-                        def;
+                        callback = this.callback;
 
                     expect(app.get('state')).to.equal('ready');
-                    def = app.launch({callback: callback}).done(function () {
+                    app.launch({callback: callback}).done(function () {
                         expect(ox.ui.apps.models).to.contain(app);
                         expect(app.get('state')).to.equal('running');
                         callback();
