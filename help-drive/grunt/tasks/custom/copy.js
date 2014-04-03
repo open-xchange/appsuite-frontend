@@ -16,7 +16,7 @@ module.exports = function (grunt) {
         dist_help_common: {
             files: [
                 {
-                    src: ['help-drive/**/*' '!help-drive/l10n/**/*'],
+                    src: ['help-drive/**/*', '!help-drive/l10n/**/*'],
                     expand: true,
                     filter: 'isFile',
                     cwd: 'build/',

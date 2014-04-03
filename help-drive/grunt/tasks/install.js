@@ -32,13 +32,11 @@ module.exports = function (grunt) {
         },
         local_install_building: {
             files: [{
-                expand: true,
                 src: ['grunt/**/*', '!grunt/local.conf.json'],
-                cwd: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
                 filter: 'isFile',
                 dest: grunt.option('dest')
             }]
-         }
+        }
     });
 
     grunt.registerTask('install', 'install build directory into a custom location', function () {
