@@ -31,7 +31,7 @@ define('io.ox/core/tk/reminder-util',
                             }
                             return ret;
                         }),
-                    $('<button type="button" tabindex="1" class="btn btn-inverse remindOkBtn" data-action="ok">').text(gt('OK')).attr('aria-label', gt('Close this reminder'))
+                    $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK')).attr('aria-label', gt('Close this reminder'))
                 );
         } else {
             // special link dropdown
@@ -41,7 +41,7 @@ define('io.ox/core/tk/reminder-util',
                     .attr({'data-toggle': 'dropdown', 'focus-id': focusId + '-select'})
                     .text(gt('Remind me again')).addClass('refocus')
                     .append(
-                        $('<i class="fa fa-chevron-down">').css({color: 'white', paddingLeft: '5px', textDecoration: 'none'})
+                        $('<i class="fa fa-chevron-down">').css({ paddingLeft: '5px', textDecoration: 'none' })
                     ),
                     $('<ul role="menu">').addClass('dropdown-menu dropdown-left').css({minWidth: 'auto'}).append(function () {
                         var ret = [];
@@ -53,7 +53,7 @@ define('io.ox/core/tk/reminder-util',
                         return ret;
                     })
                 ),
-                $('<button role= type="button" tabindex="1" class="btn btn-inverse remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
+                $('<button role= type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
                 .attr('aria-label', gt('Close this reminder'))
             ).find('after').css('clear', 'both');
         }

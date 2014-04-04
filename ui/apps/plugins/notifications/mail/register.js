@@ -33,9 +33,9 @@ define('plugins/notifications/mail/register',
                             'aria-label': gt('Press to hide all notifications for new mails.'),
                             'data-action': 'clear',
                             'focus-id': 'mail-notification-clear'})),
-                $('<div class="notifications">'),
+                $('<div class="items">'),
                 $('<div class="open-app">').append(
-                    $('<a role="button" href="#" data-action="open-app" tabindex="1" class="refocus" focus-id="mail-notification-open-app">').text(
+                    $('<a role="button" href="#" data-action="open-app" tabindex="1" class="btn btn-primary btn-sm refocus" focus-id="mail-notification-open-app">').text(
                         baton.more ? gt('Show all %1$d messages in inbox', baton.size) : gt('Show inbox')
                     )
                 )
@@ -111,7 +111,7 @@ define('plugins/notifications/mail/register',
                     // draw mails
                     for (i = 0; i < $i; i++) {
                         baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
-                        ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
+                        ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.items'), baton);
                     }
 
                 });
@@ -120,7 +120,7 @@ define('plugins/notifications/mail/register',
                 // draw mails
                 for (i = 0; i < $i; i++) {
                     baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
-                    ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.notifications'), baton);
+                    ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.items'), baton);
                 }
             }
 

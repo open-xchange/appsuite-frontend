@@ -79,7 +79,7 @@ define('plugins/notifications/calendar/register',
                 $('<div class="location">').text(model.get('location')),
                 $('<div class="organizer">').text(model.get('organizer')),
                 $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="refocus btn btn-inverse" data-action="accept_decline">')
+                    $('<button type="button" tabindex="1" class="refocus btn btn-default" data-action="accept_decline">')
                         .attr('focus-id', 'calendar-invite-' + model.get('cid') + '-accept-decline')
                         .css('margin-right', '14px')
                         .text(gt('Accept / Decline')),
@@ -327,7 +327,7 @@ define('plugins/notifications/calendar/register',
 
     var ReminderNotificationsView = Backbone.View.extend({
 
-        className: 'notifications-rem',
+        className: 'notifications',
         id: 'io-ox-notifications-calendar-reminder',
 
         events: {

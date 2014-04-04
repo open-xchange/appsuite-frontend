@@ -706,7 +706,7 @@ div.hopscotch-bubble {
             background-color: @notification-icon-background;
 
             &.active {
-                color: white;
+                color: @notification-icon-color-active;
                 background-color: @notification-icon-background-active;
             }
 
@@ -780,7 +780,10 @@ div.hopscotch-bubble {
     z-index: 30;
     top: 40px;
     bottom: 0;
+    font-size: 14px;
     background-color: @notification-pane-background;
+    background-clip: padding-box;
+    border-left: 2px solid rgba(0, 0, 0, 0.30);
     display: none;
     .overflow-x(hidden);
     .overflow-y(auto);
@@ -811,54 +814,57 @@ div.hopscotch-bubble {
 
     #io-ox-notifications-display {
 
-        padding: 0 13px 0 13px;
+        padding: 24px 14px;
 
         .section-title {
-            color: #eee;
-            border: none;
             font-family: @light-font-family;
-            font-size: 18px;
-            margin: 0 0 0 13px;
-            line-height: 46px;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 24px;
+            margin: 0 0 7px 0;
+            padding: 0 14px;
+            border: 0;
         }
 
         .clear-button {
             float: right;
             line-height: inherit;
-            width: 46px;
-            margin-right: 13px;
-            padding: 0px;
-            color: #fff;
-            font-size: 18px;
+            padding: 0;
+            color: #ccc;
+            font-size: 14px;
         }
 
         .notifications {
-            margin-bottom: 13px;
+            margin: 14px 0 0 0;
+        }
+
+        .notifications:first-child {
+            margin-top: 0;
         }
 
         .item {
 
-            color: #ccc;
-            background-color: @notification-pane-item-background;
-            font-size: 13px;
-            padding: 13px;
-            margin-bottom: 1px;
+            color: #888;
+            padding: 10px 14px;
             cursor: pointer;
-            .fontWeight(300);
+
+            &:last-child {
+                border-bottom: 0;
+            }
 
             &:focus {
-                outline: 1px solid rgba(255, 255, 255, 0.50);
-                background-color: rgba(0, 0, 0, 0.30);
+                outline: 1px solid rgba(0, 0, 0, 0.30);
+                background-color: rgba(0, 0, 0, 0.05);
             }
 
             &:hover {
-                background-color: rgba(0, 0, 0, 0.30);
+                background-color: rgba(0, 0, 0, 0.05);
             }
 
             .title {
-                color: #fff;
+                color: #333;
                 pointer-events: none;
-                font-weight: 500;
+                font-weight: bold;
                 .ellipsis();
             }
 
@@ -892,14 +898,10 @@ div.hopscotch-bubble {
                 text-align: right;
                 margin: 5px 0 5px 0;
             }
-
         }
 
-        .item .blue, div > a { color: #17B2FF; }
-
         .open-app {
-            text-align: left;
-            padding: 0 13px 0;
+            padding: 7px 14px;
         }
     }
 }
@@ -3118,7 +3120,7 @@ ul.io-ox-inline-links + header {
 
     .generic-toolbar {
         border-color: rgba(0, 0, 0, 0.10);
-        background-color: rgba(0, 0, 0, 0.02);
+        background-color: rgba(0, 0, 0, 0.03);
     }
 }
 
