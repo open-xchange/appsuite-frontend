@@ -438,7 +438,7 @@ define('io.ox/mail/common-extensions',
                 } else {
                     this.append(
                         $('<div class="alert alert-info external-images">').append(
-                            $('<a href="#" class="btn btn-primary btn-small" tabindex="1">').text(gt('Show images')),
+                            $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
                             $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
                         )
                     );
@@ -523,7 +523,7 @@ define('io.ox/mail/common-extensions',
                 this.append(
                     $('<div class="alert alert-info disposition-notification">').append(
                         $('<button type="button" class="close" data-dismiss="alert">&times;</button>'),
-                        $('<a href="#" class="btn btn-primary btn-small" tabindex="1">').text(
+                        $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(
                             //#. Respond to delivery receipt; German "Lesebestätigung senden"
                             gt('Send a return receipt')
                         ),
