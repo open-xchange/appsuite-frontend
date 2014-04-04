@@ -25,7 +25,7 @@ module.exports = function (grunt) {
             files: [{
                 expand: true,
                 src: '**/*',
-                cwd: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
+                cwd: 'dist/',
                 filter: 'isFile',
                 dest: grunt.option('dest')
             }]

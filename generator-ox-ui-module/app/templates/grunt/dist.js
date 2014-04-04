@@ -43,11 +43,7 @@ module.exports = function (grunt) {
                     expand: true,
                     src: ['apps/**/*', 'manifests/**/*', '*', '!*.js'],
                     cwd: 'build/',
-                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
-                },
-                {
-                    src: ['debian/**/*', '*.spec', '!**/*.hbs'],
-                    dest: 'dist/package/'
+                    dest: 'dist/'
                 }
             ]
         }
@@ -60,7 +56,7 @@ module.exports = function (grunt) {
             files: [{
                 src: ['apps/**/*.js'],
                 cwd: 'build/',
-                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
+                dest: 'dist/',
                 filter: function (f) {
                     return !isTranslationModule(f) && grunt.file.isFile(f);
                 },
@@ -73,36 +69,10 @@ module.exports = function (grunt) {
                     expand: true,
                     src: ['apps/**/*.js'],
                     cwd: 'build/',
-                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
+                    dest: 'dist/',
                     filter: isPackagedTranslationModule
                 }
             ]
-        }
-    });
-
-    grunt.config.extend('assemble', {
-        dist: {
-            options: {
-                ext: '',
-                //HACK: setting pages to true, allows some of the files.src entries to be empty
-                pages: true,
-                languages: (function () {
-                    return languages.map(function (Lang) {
-                        return {
-                            Lang: Lang,
-                            lang: Lang.toLowerCase().replace(/_/g, '-')
-                        };
-                    });
-                })()
-            },
-            files: [{
-                src: ['debian/**/*.hbs'],
-                dest: 'dist/package/'
-            },
-            {
-                src: ['*.spec.hbs'],
-                dest: 'dist/'
-            }]
         }
     });
 
