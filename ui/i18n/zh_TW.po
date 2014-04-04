@@ -48,7 +48,7 @@ msgstr[1] "%1$d 周"
 msgid "%1$d files has been changed recently"
 msgstr "最近有 %1$d 個被修改的檔案"
 
-#: apps/io.ox/mail/threadview.js:101 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:103 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages in this conversation"
 msgstr "近期對話"
@@ -56,6 +56,12 @@ msgstr "近期對話"
 #: apps/io.ox/mail/main.js:548 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages selected"
+msgstr "已選擇 <b>%1$d</b> 個元素"
+
+#. This is a short version of "x messages selected", will be used in mobile mail view
+#: apps/io.ox/mail/main.js:566 module:io.ox/mail
+#, fuzzy
+msgid "%1$d selected"
 msgstr "已選擇 <b>%1$d</b> 個元素"
 
 #. Name in mail addresses
@@ -500,8 +506,7 @@ msgstr "新增至行事曆"
 #: apps/io.ox/contacts/actions.js:761 module:io.ox/contacts
 #: apps/io.ox/files/actions.js:882 module:io.ox/files
 #: apps/io.ox/files/actions.js:1276 apps/io.ox/mail/actions.js:1133
-#: module:io.ox/mail apps/io.ox/mail/mobileToolbarActions.js:153
-#: apps/io.ox/mail/toolbar.js:159
+#: module:io.ox/mail apps/io.ox/mail/toolbar.js:159
 msgid "Add to portal"
 msgstr "新增至入口"
 
@@ -509,7 +514,7 @@ msgstr "新增至入口"
 msgid "Add widget"
 msgstr "新增小工具"
 
-#: apps/plugins/portal/facebook/register.js:247 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:262 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:342
 #: apps/plugins/portal/twitter/register.js:368
 msgid "Add your account"
@@ -587,7 +592,7 @@ msgstr "所有附件"
 msgid "All day"
 msgstr "整天"
 
-#: apps/io.ox/search/view-template.js:407 module:io.ox/core
+#: apps/io.ox/search/view-template.js:418 module:io.ox/core
 #, fuzzy
 #| msgid "Add folder"
 msgid "All folders"
@@ -650,7 +655,7 @@ msgstr "附加 vCard"
 msgid "Application Toolbar"
 msgstr "應用程式工具列"
 
-#: apps/io.ox/mail/main.js:916 module:io.ox/mail
+#: apps/io.ox/mail/main.js:941 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此問題解決前應用程式可能暫時無法使用。"
 
@@ -865,7 +870,7 @@ msgstr "B"
 
 #: apps/io.ox/core/commons.js:666 module:io.ox/core
 #: apps/io.ox/mail/main.js:134 module:io.ox/mail apps/io.ox/mail/main.js:138
-#: apps/io.ox/mail/threadview.js:37
+#: apps/io.ox/mail/threadview.js:39
 msgid "Back"
 msgstr "向後"
 
@@ -1024,12 +1029,12 @@ msgstr "日曆"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:235
-#: apps/io.ox/mail/main.js:874 apps/io.ox/mail/write/inline-images.js:80
+#: apps/io.ox/mail/main.js:892 apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:365
+#: apps/io.ox/search/view-template.js:376
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:60
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:196
@@ -1173,7 +1178,7 @@ msgid "Click here for free trial."
 msgstr "點選此處免費試用。"
 
 #: apps/io.ox/portal/main.js:297 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:264 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:279 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:384
 msgid "Click here to add your account"
 msgstr "點擊此處新增帳號"
@@ -1420,7 +1425,7 @@ msgstr "談話"
 #: module:io.ox/files apps/io.ox/files/actions.js:916
 #: apps/io.ox/files/actions.js:1296 apps/io.ox/mail/actions.js:336
 #: module:io.ox/mail apps/io.ox/mail/actions.js:1087
-#: apps/io.ox/mail/mobileToolbarActions.js:117 apps/io.ox/mail/toolbar.js:123
+#: apps/io.ox/mail/mobileToolbarActions.js:104 apps/io.ox/mail/toolbar.js:123
 msgid "Copy"
 msgstr "複製"
 
@@ -1466,7 +1471,7 @@ msgstr "無法載入資料"
 msgid "Could not load new Tweets."
 msgstr "無法載入新推文。"
 
-#: apps/io.ox/core/tk/autocomplete.js:301 module:io.ox/mail
+#: apps/io.ox/core/tk/autocomplete.js:303 module:io.ox/mail
 #: apps/io.ox/core/tk/vgrid.js:847 module:io.ox/core
 msgid "Could not load this list"
 msgstr "無法載入此清單"
@@ -1724,7 +1729,7 @@ msgstr "延遲"
 #: apps/io.ox/files/actions.js:836 apps/io.ox/files/actions.js:1237
 #: apps/io.ox/mail/actions.js:90 module:io.ox/mail
 #: apps/io.ox/mail/actions.js:112 apps/io.ox/mail/actions.js:986
-#: apps/io.ox/mail/mobileToolbarActions.js:69
+#: apps/io.ox/mail/mobileToolbarActions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:272
 #: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:489
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
@@ -2120,7 +2125,7 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
 #: apps/io.ox/mail/main.js:124 apps/io.ox/mail/main.js:130
-#: apps/io.ox/mail/main.js:238 apps/io.ox/mail/main.js:878
+#: apps/io.ox/mail/main.js:238 apps/io.ox/mail/main.js:896
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2159,8 +2164,7 @@ msgstr "編輯約會"
 msgid "Edit description"
 msgstr "編輯描述"
 
-#: apps/io.ox/mail/mobileToolbarActions.js:87 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:93
+#: apps/io.ox/mail/toolbar.js:93 module:io.ox/mail
 msgid "Edit draft"
 msgstr "編輯草稿"
 
@@ -2553,8 +2557,8 @@ msgid "Face"
 msgstr "臉部"
 
 #: apps/plugins/portal/facebook/register.js:119 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:261
-#: apps/plugins/portal/facebook/register.js:500
+#: apps/plugins/portal/facebook/register.js:276
+#: apps/plugins/portal/facebook/register.js:537
 msgid "Facebook"
 msgstr "Facebook"
 
@@ -2712,8 +2716,8 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:255 module:io.ox/core
-#: apps/io.ox/search/view-template.js:358
+#: apps/io.ox/search/view-template.js:277 module:io.ox/core
+#: apps/io.ox/search/view-template.js:369
 msgid "Folder"
 msgstr "文件夾"
 
@@ -2806,7 +2810,7 @@ msgid "Format emails as"
 msgstr "將電子郵件格式化為 "
 
 #: apps/io.ox/mail/actions.js:966 module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:61 apps/io.ox/mail/toolbar.js:67
+#: apps/io.ox/mail/mobileToolbarActions.js:64 apps/io.ox/mail/toolbar.js:67
 #: apps/io.ox/mail/write/main.js:659
 msgid "Forward"
 msgstr "轉發"
@@ -3381,7 +3385,7 @@ msgstr "亮藍"
 msgid "Light green"
 msgstr "亮綠"
 
-#: apps/plugins/portal/facebook/register.js:385 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:400 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "對連結說讚: %s"
 
@@ -3592,6 +3596,12 @@ msgstr "將全天約會標示為空閒"
 msgid "Mark all mails as read"
 msgstr "將所有郵件標示為已讀"
 
+#: apps/io.ox/mail/mobileToolbarActions.js:137 module:io.ox/mail
+#, fuzzy
+#| msgid "Mark read"
+msgid "Mark as"
+msgstr "標記為已讀"
+
 #: apps/io.ox/contacts/model.js:316 module:io.ox/contacts
 msgid "Mark as distributionlist"
 msgstr "標示為通訊組列表"
@@ -3601,7 +3611,7 @@ msgstr "標示為通訊組列表"
 msgid "Mark as done"
 msgstr "標示為垃圾信"
 
-#: apps/io.ox/mail/mobileToolbarActions.js:103 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:90 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:109
 #, fuzzy
 msgid "Mark as read"
@@ -3611,7 +3621,7 @@ msgstr "標記為已讀"
 msgid "Mark as spam"
 msgstr "標示為垃圾信"
 
-#: apps/io.ox/mail/mobileToolbarActions.js:96 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:82 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:102
 #, fuzzy
 msgid "Mark as unread"
@@ -3743,7 +3753,7 @@ msgstr "月"
 #: apps/io.ox/core/extPatterns/links.js:340 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:453
+#: apps/io.ox/search/view-template.js:467
 msgid "More"
 msgstr "更多"
 
@@ -3755,7 +3765,7 @@ msgstr "更多"
 #: apps/io.ox/files/actions.js:627 module:io.ox/files
 #: apps/io.ox/files/actions.js:906 apps/io.ox/files/actions.js:1284
 #: apps/io.ox/mail/actions.js:335 module:io.ox/mail
-#: apps/io.ox/mail/actions.js:1078 apps/io.ox/mail/mobileToolbarActions.js:110
+#: apps/io.ox/mail/actions.js:1078 apps/io.ox/mail/mobileToolbarActions.js:97
 #: apps/io.ox/mail/toolbar.js:116 apps/io.ox/tasks/actions.js:194
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:195
 #: apps/io.ox/tasks/actions.js:560
@@ -3969,7 +3979,7 @@ msgstr "您的收件匣中沒有郵件"
 msgid "No matching templates on this Server"
 msgstr "伺服器上沒有符合的範本"
 
-#: apps/io.ox/mail/main.js:535 module:io.ox/mail
+#: apps/io.ox/mail/main.js:534 module:io.ox/mail
 #, fuzzy
 msgid "No message selected"
 msgstr "無選擇任何元素"
@@ -4181,7 +4191,7 @@ msgstr "在瀏覽器開啟"
 msgid "Open on LinkedIn"
 msgstr "LinkedIn"
 
-#: apps/io.ox/mail/threadview.js:76 module:io.ox/mail
+#: apps/io.ox/mail/threadview.js:78 module:io.ox/mail
 #, fuzzy
 #| msgid "All messages"
 msgid "Open/close all messages"
@@ -4750,8 +4760,8 @@ msgstr "主要帳號"
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:729
 #: apps/io.ox/core/print.js:108 module:io.ox/core
 #: apps/io.ox/mail/actions.js:1096 module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:124 apps/io.ox/mail/toolbar.js:130
-#: apps/io.ox/tasks/actions.js:578 module:io.ox/tasks
+#: apps/io.ox/mail/toolbar.js:130 apps/io.ox/tasks/actions.js:578
+#: module:io.ox/tasks
 msgid "Print"
 msgstr "列印"
 
@@ -5013,7 +5023,7 @@ msgstr "再次提醒我"
 #: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/invitations/register.js:486 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1124 module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:146 apps/io.ox/mail/toolbar.js:152
+#: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
 msgstr "提醒"
 
@@ -5080,13 +5090,13 @@ msgstr "全部回復"
 msgid "Reply to"
 msgstr "回復給"
 
-#: apps/io.ox/mail/mobileToolbarActions.js:53 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:55 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:59
 #, fuzzy
 msgid "Reply to all recipients"
 msgstr "所有收件人"
 
-#: apps/io.ox/mail/mobileToolbarActions.js:45 module:io.ox/mail
+#: apps/io.ox/mail/mobileToolbarActions.js:46 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:51
 #, fuzzy
 msgid "Reply to sender"
@@ -5119,7 +5129,7 @@ msgid "Restore applications"
 msgstr "還原應用程式"
 
 #: apps/io.ox/core/commons.js:801 module:io.ox/core
-#: apps/io.ox/core/tk/autocomplete.js:304 module:io.ox/mail
+#: apps/io.ox/core/tk/autocomplete.js:306 module:io.ox/mail
 msgid "Retry"
 msgstr "蟲試"
 
@@ -5211,7 +5221,7 @@ msgid "Save as draft"
 msgstr "保存為草稿"
 
 #: apps/io.ox/mail/actions.js:1105 module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:131 apps/io.ox/mail/toolbar.js:137
+#: apps/io.ox/mail/toolbar.js:137
 msgid "Save as file"
 msgstr "另存新檔"
 
@@ -5259,8 +5269,8 @@ msgstr "行程"
 #: apps/io.ox/core/desktop.js:1506 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1507 apps/io.ox/core/desktop.js:1564
 #: apps/io.ox/core/main.js:619 apps/io.ox/core/main.js:625
-#: apps/io.ox/search/main.js:161 module:io.ox/search
-#: apps/io.ox/search/main.js:177 apps/io.ox/search/view-template.js:46
+#: apps/io.ox/search/main.js:167 module:io.ox/search
+#: apps/io.ox/search/main.js:183 apps/io.ox/search/view-template.js:46
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "搜索"
@@ -5421,8 +5431,7 @@ msgstr "伺服器版本"
 msgid "Set as default"
 msgstr "設為預設值"
 
-#: apps/io.ox/mail/mobileToolbarActions.js:77 module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:83
+#: apps/io.ox/mail/toolbar.js:83 module:io.ox/mail
 #, fuzzy
 msgid "Set color"
 msgstr "文字顏色"
@@ -5496,7 +5505,7 @@ msgid "Show appointment details"
 msgstr "顯示約會"
 
 #: apps/plugins/portal/facebook/register.js:28 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:226
+#: apps/plugins/portal/facebook/register.js:236
 msgid "Show comments"
 msgstr "顯示注釋"
 
@@ -7105,9 +7114,8 @@ msgstr "檢視幻燈片"
 
 #. source in terms of source code
 #. source in terms of source code
-#. source in terms of source code
 #: apps/io.ox/mail/actions.js:1115 module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:139 apps/io.ox/mail/toolbar.js:145
+#: apps/io.ox/mail/toolbar.js:145
 msgid "View source"
 msgstr "檢視原始碼"
 
@@ -7537,6 +7545,12 @@ msgstr "關閉"
 msgid "close for %1$s"
 msgstr "關閉 %1$s"
 
+#: apps/plugins/portal/facebook/register.js:210 module:plugins/portal
+#, fuzzy
+#| msgid "Collapse form"
+msgid "collapse"
+msgstr "摺疊表單"
+
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js:129 module:io.ox/core
 msgid "create objects"
@@ -7677,6 +7691,11 @@ msgstr "每月"
 #: module:io.ox/calendar/edit/main
 msgid "every week"
 msgstr "每周"
+
+#: apps/plugins/portal/facebook/register.js:206 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:213
+msgid "expand"
+msgstr ""
 
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday

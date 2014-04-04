@@ -175,7 +175,6 @@ msgstr ""
 #: module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1124
 #: module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:146
 #: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
 msgstr ""
@@ -264,7 +263,7 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/main.js:235
-#: apps/io.ox/mail/main.js:874
+#: apps/io.ox/mail/main.js:892
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338
 #: apps/io.ox/mail/write/view-main.js:617
@@ -273,7 +272,7 @@ msgstr ""
 #: apps/io.ox/portal/main.js:491
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:365
+#: apps/io.ox/search/view-template.js:376
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts
 #: apps/io.ox/tasks/actions.js:60
@@ -393,7 +392,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/actions.js:112
 #: apps/io.ox/mail/actions.js:986
-#: apps/io.ox/mail/mobileToolbarActions.js:69
+#: apps/io.ox/mail/mobileToolbarActions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:272
 #: apps/io.ox/mail/toolbar.js:75
 #: apps/io.ox/portal/main.js:489
@@ -444,7 +443,7 @@ msgstr[1] ""
 #: apps/io.ox/mail/actions.js:335
 #: module:io.ox/mail
 #: apps/io.ox/mail/actions.js:1078
-#: apps/io.ox/mail/mobileToolbarActions.js:110
+#: apps/io.ox/mail/mobileToolbarActions.js:97
 #: apps/io.ox/mail/toolbar.js:116
 #: apps/io.ox/tasks/actions.js:194
 #: module:io.ox/tasks
@@ -500,7 +499,6 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/mail/actions.js:1096
 #: module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:124
 #: apps/io.ox/mail/toolbar.js:130
 #: apps/io.ox/tasks/actions.js:578
 #: module:io.ox/tasks
@@ -522,7 +520,7 @@ msgstr ""
 #: apps/io.ox/mail/main.js:124
 #: apps/io.ox/mail/main.js:130
 #: apps/io.ox/mail/main.js:238
-#: apps/io.ox/mail/main.js:878
+#: apps/io.ox/mail/main.js:896
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312
 #: module:io.ox/portal
@@ -1985,9 +1983,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:126
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:255
+#: apps/io.ox/search/view-template.js:277
 #: module:io.ox/core
-#: apps/io.ox/search/view-template.js:358
+#: apps/io.ox/search/view-template.js:369
 msgid "Folder"
 msgstr ""
 
@@ -2085,7 +2083,7 @@ msgstr ""
 #: apps/io.ox/mail/actions.js:336
 #: module:io.ox/mail
 #: apps/io.ox/mail/actions.js:1087
-#: apps/io.ox/mail/mobileToolbarActions.js:117
+#: apps/io.ox/mail/mobileToolbarActions.js:104
 #: apps/io.ox/mail/toolbar.js:123
 msgid "Copy"
 msgstr ""
@@ -2154,7 +2152,6 @@ msgstr ""
 #: apps/io.ox/files/actions.js:1276
 #: apps/io.ox/mail/actions.js:1133
 #: module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:153
 #: apps/io.ox/mail/toolbar.js:159
 msgid "Add to portal"
 msgstr ""
@@ -3308,13 +3305,13 @@ msgstr ""
 #: apps/io.ox/mail/main.js:134
 #: module:io.ox/mail
 #: apps/io.ox/mail/main.js:138
-#: apps/io.ox/mail/threadview.js:37
+#: apps/io.ox/mail/threadview.js:39
 msgid "Back"
 msgstr ""
 
 #: apps/io.ox/core/commons.js:801
 #: module:io.ox/core
-#: apps/io.ox/core/tk/autocomplete.js:304
+#: apps/io.ox/core/tk/autocomplete.js:306
 #: module:io.ox/mail
 msgid "Retry"
 msgstr ""
@@ -3358,9 +3355,9 @@ msgstr ""
 #: apps/io.ox/core/desktop.js:1564
 #: apps/io.ox/core/main.js:619
 #: apps/io.ox/core/main.js:625
-#: apps/io.ox/search/main.js:161
+#: apps/io.ox/search/main.js:167
 #: module:io.ox/search
-#: apps/io.ox/search/main.js:177
+#: apps/io.ox/search/main.js:183
 #: apps/io.ox/search/view-template.js:46
 #: apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
@@ -3438,7 +3435,7 @@ msgstr ""
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:453
+#: apps/io.ox/search/view-template.js:467
 msgid "More"
 msgstr ""
 
@@ -4543,7 +4540,7 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: apps/io.ox/core/tk/autocomplete.js:301
+#: apps/io.ox/core/tk/autocomplete.js:303
 #: module:io.ox/mail
 #: apps/io.ox/core/tk/vgrid.js:847
 #: module:io.ox/core
@@ -5764,7 +5761,7 @@ msgstr ""
 
 #: apps/io.ox/mail/actions.js:966
 #: module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:61
+#: apps/io.ox/mail/mobileToolbarActions.js:64
 #: apps/io.ox/mail/toolbar.js:67
 #: apps/io.ox/mail/write/main.js:659
 msgid "Forward"
@@ -5803,17 +5800,14 @@ msgstr ""
 
 #: apps/io.ox/mail/actions.js:1105
 #: module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:131
 #: apps/io.ox/mail/toolbar.js:137
 msgid "Save as file"
 msgstr ""
 
 #. source in terms of source code
 #. source in terms of source code
-#. source in terms of source code
 #: apps/io.ox/mail/actions.js:1115
 #: module:io.ox/mail
-#: apps/io.ox/mail/mobileToolbarActions.js:139
 #: apps/io.ox/mail/toolbar.js:145
 msgid "View source"
 msgstr ""
@@ -6321,7 +6315,7 @@ msgstr ""
 msgid "Mail Details"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:535
+#: apps/io.ox/mail/main.js:534
 #: module:io.ox/mail
 msgid "No message selected"
 msgstr ""
@@ -6331,7 +6325,13 @@ msgstr ""
 msgid "%1$d messages selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:916
+#. This is a short version of "x messages selected", will be used in mobile mail view
+#: apps/io.ox/mail/main.js:566
+#: module:io.ox/mail
+msgid "%1$d selected"
+msgstr ""
+
+#: apps/io.ox/mail/main.js:941
 #: module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -6344,40 +6344,33 @@ msgstr ""
 msgid "Compose"
 msgstr ""
 
-#: apps/io.ox/mail/mobileToolbarActions.js:45
+#: apps/io.ox/mail/mobileToolbarActions.js:46
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:51
 msgid "Reply to sender"
 msgstr ""
 
-#: apps/io.ox/mail/mobileToolbarActions.js:53
+#: apps/io.ox/mail/mobileToolbarActions.js:55
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:59
 msgid "Reply to all recipients"
 msgstr ""
 
-#: apps/io.ox/mail/mobileToolbarActions.js:77
-#: module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:83
-msgid "Set color"
-msgstr ""
-
-#: apps/io.ox/mail/mobileToolbarActions.js:87
-#: module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js:93
-msgid "Edit draft"
-msgstr ""
-
-#: apps/io.ox/mail/mobileToolbarActions.js:96
+#: apps/io.ox/mail/mobileToolbarActions.js:82
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:102
 msgid "Mark as unread"
 msgstr ""
 
-#: apps/io.ox/mail/mobileToolbarActions.js:103
+#: apps/io.ox/mail/mobileToolbarActions.js:90
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:109
 msgid "Mark as read"
+msgstr ""
+
+#: apps/io.ox/mail/mobileToolbarActions.js:137
+#: module:io.ox/mail
+msgid "Mark as"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js:39
@@ -6634,12 +6627,12 @@ msgstr ""
 msgid "Mails per hour (%)"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js:76
+#: apps/io.ox/mail/threadview.js:78
 #: module:io.ox/mail
 msgid "Open/close all messages"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js:101
+#: apps/io.ox/mail/threadview.js:103
 #: module:io.ox/mail
 msgid "%1$d messages in this conversation"
 msgstr ""
@@ -6647,6 +6640,16 @@ msgstr ""
 #: apps/io.ox/mail/toolbar.js:43
 #: module:io.ox/mail
 msgid "Compose new email"
+msgstr ""
+
+#: apps/io.ox/mail/toolbar.js:83
+#: module:io.ox/mail
+msgid "Set color"
+msgstr ""
+
+#: apps/io.ox/mail/toolbar.js:93
+#: module:io.ox/mail
+msgid "Edit draft"
 msgstr ""
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
@@ -7120,7 +7123,7 @@ msgstr ""
 
 #: apps/io.ox/portal/main.js:297
 #: module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:264
+#: apps/plugins/portal/facebook/register.js:279
 #: module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:384
 msgid "Click here to add your account"
@@ -7216,7 +7219,7 @@ msgstr ""
 msgid "Recurring tasks need a valid end date."
 msgstr ""
 
-#: apps/io.ox/search/view-template.js:407
+#: apps/io.ox/search/view-template.js:418
 #: module:io.ox/core
 msgid "All folders"
 msgstr ""
@@ -8743,7 +8746,7 @@ msgstr ""
 
 #: apps/plugins/portal/facebook/register.js:28
 #: module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:226
+#: apps/plugins/portal/facebook/register.js:236
 msgid "Show comments"
 msgstr ""
 
@@ -8773,8 +8776,8 @@ msgstr ""
 
 #: apps/plugins/portal/facebook/register.js:119
 #: module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:261
-#: apps/plugins/portal/facebook/register.js:500
+#: apps/plugins/portal/facebook/register.js:276
+#: apps/plugins/portal/facebook/register.js:537
 msgid "Facebook"
 msgstr ""
 
@@ -8783,14 +8786,25 @@ msgstr ""
 msgid "Press [enter] to jump to the facebook stream."
 msgstr ""
 
-#: apps/plugins/portal/facebook/register.js:247
+#: apps/plugins/portal/facebook/register.js:206
+#: module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:213
+msgid "expand"
+msgstr ""
+
+#: apps/plugins/portal/facebook/register.js:210
+#: module:plugins/portal
+msgid "collapse"
+msgstr ""
+
+#: apps/plugins/portal/facebook/register.js:262
 #: module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:342
 #: apps/plugins/portal/twitter/register.js:368
 msgid "Add your account"
 msgstr ""
 
-#: apps/plugins/portal/facebook/register.js:385
+#: apps/plugins/portal/facebook/register.js:400
 #: module:plugins/portal
 msgid "Liked a link: %s"
 msgstr ""
