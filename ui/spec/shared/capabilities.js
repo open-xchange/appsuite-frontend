@@ -27,30 +27,24 @@ define('spec/shared/capabilities',
                     var def = $.Deferred(),
                         capabilities = requirejs('io.ox/core/capabilities');
 
-                    runs(function () {
-                        //remove existing stubs
-                        capabilities.has.restore && capabilities.has.restore();
-                        //create stub
-                        sinon.stub(capabilities, 'has', function (arg) {
-                            return data.length && _.contains(data, arg);
-                        });
-                        //reload consuming modules
-                        ox.testUtils.modules.reload('io.ox/core/capabilities')
-                            .then(function () {
-                                //require original
-                                require(references.ids, function () {
-                                    //reset common methods of used references
-                                    _.each(arguments, function (arg, index) {
-                                        $.extend(references.vars[index], arg || {});
-                                    });
-                                    def.resolve();
-                                }, def.reject);
+                    //remove existing stubs
+                    capabilities.has.restore && capabilities.has.restore();
+                    //create stub
+                    sinon.stub(capabilities, 'has', function (arg) {
+                        return data.length && _.contains(data, arg);
+                    });
+                    //reload consuming modules
+                    ox.testUtils.modules.reload('io.ox/core/capabilities')
+                        .then(function () {
+                            //require original
+                            require(references.ids, function () {
+                                //reset common methods of used references
+                                _.each(arguments, function (arg, index) {
+                                    $.extend(references.vars[index], arg || {});
+                                });
+                                def.resolve();
                             }, def.reject);
-                    });
-
-                    waitsFor(function () {
-                        return def.state() === 'resolved';
-                    });
+                        }, def.reject);
 
                     return def.then(function () {
                         return data;
