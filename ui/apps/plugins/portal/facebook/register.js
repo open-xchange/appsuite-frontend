@@ -37,8 +37,11 @@ define('plugins/portal/facebook/register',
                 $('<a class="profile-picture">').attr('href', from.url).append(
                     $('<img class="picture">').attr('src', from.pic_square)),
                 $('<div class="wall-comment-content">').append(
-                    $('<a class="from">').text(from.name).attr('href', from.url)).append(
-                        $('<div class="wall-comment-text">').text(comment.text)))
+                    $('<a class="from">').text(from.name).attr('href', from.url),
+                    $('<div class="wall-comment-text">').text(comment.text),
+                    $('<span class="datetime">').text(new date.Local(comment.time * 1000)),
+                    addLikeInfo({user_likes: comment.user_likes, like_count: comment.likes}))
+                )
                 .hide()
                 .appendTo($(node));
         };
@@ -222,11 +225,11 @@ define('plugins/portal/facebook/register',
                         $('<div class="wall-post-content">'),
                         $('<button class="facebook-content-expand btn-link">').hide().text(gt('expand')).on('click', function () {//add expand link for long content
                             var content = wall_content.find('.wall-post-content');
-                            if (content.css('max-height') !== 'none') {
-                                content.css('max-height', 'none');
+                            if (content.css('max-height') !== content.prop('scrollHeight') + 'px') {
+                                content.animate({'max-height': content.prop('scrollHeight') + 'px'}, 'fast');//sliding animation
                                 $(this).text(gt('collapse'));
                             } else {
-                                content.css('max-height', '350px');
+                                content.animate({'max-height': '350px'}, 'fast');//sliding animation
                                 $(this).text(gt('expand'));
                             }
                         }),
