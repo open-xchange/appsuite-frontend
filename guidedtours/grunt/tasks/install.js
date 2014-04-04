@@ -33,7 +33,16 @@ module.exports = function (grunt) {
                 })),
                 cwd: 'dist/',
                 filter: 'isFile',
-                dest: grunt.option('dest')
+                dest: grunt.option('prefix')
+            }]
+        },
+        local_install_static: {
+            files: [{
+                expand: true,
+                src: ['appsuite/apps/**/*'],
+                cwd: 'dist/',
+                filter: 'isFile',
+                dest: grunt.option('htdocs')
             }]
         }
     });
@@ -46,11 +55,18 @@ module.exports = function (grunt) {
         grunt.task.run('copy:local_install_build');
     });
     grunt.registerTask('install:dist', 'install dist directory into a custom location', function () {
-        if (!grunt.option('dest')) {
-            grunt.fail.fatal('Need --dest option to be set');
+        if (!grunt.option('prefix')) {
+            grunt.fail.fatal('Need --prefix option to be set');
         }
-        grunt.log.writeln('Installing into:', grunt.option('dest'));
+        grunt.log.writeln('Installing into:', grunt.option('prefix'));
         grunt.task.run('copy:local_install_dist');
+    });
+    grunt.registerTask('install:static', 'install static files into a custom location', function () {
+        if (!grunt.option('htdocs')) {
+            grunt.fail.fatal('Need --htdocs option to be set');
+        }
+        grunt.log.writeln('Installing into:', grunt.option('htdocs'));
+        grunt.task.run('copy:local_install_static');
     });
 
     languages.forEach(function (Lang) {

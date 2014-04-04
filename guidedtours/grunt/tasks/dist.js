@@ -43,7 +43,11 @@ module.exports = function (grunt) {
                     expand: true,
                     src: ['apps/**/*', 'manifests/**/*', '*', '!*.js'],
                     cwd: 'build/',
-                    dest: 'dist/'
+                    dest: 'dist/appsuite/'
+                },
+                {
+                    src: ['conf/**/*'],
+                    dest: 'dist/etc/'
                 }
             ]
         }
@@ -56,7 +60,7 @@ module.exports = function (grunt) {
             files: [{
                 src: ['apps/**/*.js'],
                 cwd: 'build/',
-                dest: 'dist/',
+                dest: 'dist/appsuite/',
                 filter: function (f) {
                     return !isTranslationModule(f) && grunt.file.isFile(f);
                 },
@@ -69,7 +73,7 @@ module.exports = function (grunt) {
                     expand: true,
                     src: ['apps/**/*.js'],
                     cwd: 'build/',
-                    dest: 'dist/',
+                    dest: 'dist/appsuite/',
                     filter: isPackagedTranslationModule
                 }
             ]
