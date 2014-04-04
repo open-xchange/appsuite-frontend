@@ -133,7 +133,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         reload: function (params) {
 
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
-            params.limit = '0,' + this.collection.length;
+            params.limit = '0,' + (this.collection.length || this.LIMIT);
 
             return process.call(this, params, this.collection, 'set');
         }

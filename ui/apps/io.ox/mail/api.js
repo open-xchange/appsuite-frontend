@@ -934,7 +934,6 @@ define('io.ox/mail/api',
      */
     api.move = function (list, targetFolderId) {
 
-        var response;
         var collection = pool.get('detail');
 
         api.trigger('beforedelete', list);
@@ -945,7 +944,7 @@ define('io.ox/mail/api',
         });
 
         // start update on server
-        return update(list, { folder_id: targetFolderId }).then(function () {
+        return update(list, { folder_id: targetFolderId }).then(function (response) {
             var errorText, i = 0, $i = response.length;
             for (; i < $i; i++) { // look if anything went wrong
                 if (response[i].error) {
@@ -1795,7 +1794,7 @@ define('io.ox/mail/api',
         if (thread.length === 0) thread = list.slice(0, 1); // don't remove all if all marked as deleted
 
         // we use the last item to generate the cid. More robust because unlikely to change.
-        var last = _(obj.thread).last();
+        var last = _(thread).last();
 
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID

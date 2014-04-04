@@ -17,7 +17,7 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
 
     var expect = chai.expect;
 
-    describe.skip('The Threadview.', function () {
+    describe.only('The Threadview.', function () {
 
         beforeEach(function () {
             this.view = new threadview.Desktop();
@@ -76,7 +76,7 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
             });
         });
 
-        describe('Display thread.', function () {
+        xdescribe('Display thread.', function () {
 
             beforeEach(function () {
 
@@ -247,6 +247,34 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
                     expect(items.eq(0).find('.from').text()).to.equal('Otto Xentner');
                     expect(items.eq(1).find('.from').text()).to.equal('Otto Xentner');
                 });
+            });
+        });
+
+        describe('Respond to removal of the one and only message.', function () {
+
+            beforeEach(function () {
+
+                var mail_A = _.extend({}, fixture.template, fixture.mail_A);
+                mail_A.thread = [_.extend({}, mail_A)];
+
+                api.threads.clear();
+                api.processThreadMessage(mail_A);
+                this.view.show('default0/INBOX.1');
+
+                // delete message
+                var model = api.pool.get('detail').get('default0/INBOX.1');
+                api.pool.get('detail').remove(model);
+            });
+
+            it('should have 0 list items', function () {
+                expect(this.view.collection.length, 'collection').to.equal(0);
+                expect(this.view.getItems().length, 'items').to.equal(0);
+            });
+
+            it('should not show anything', function () {
+                var node = this.view.$el.find('.thread-view-list');
+                expect(node.length, 'exists').to.equal(1);
+                expect(node.is(':visible'), 'invisible').to.be.false;
             });
         });
     });

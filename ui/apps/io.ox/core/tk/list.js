@@ -168,8 +168,10 @@ define('io.ox/core/tk/list',
             this.selection.remove(this.getCID(model), li);
             li.remove();
 
-            // simulate scroll event because the list might need to paginate
-            this.$el.trigger('scroll');
+            // simulate scroll event because the list might need to paginate.
+            // Unless it's the last one! If we did scroll for the last one, we would
+            // trigger a paginate call that probably overtakes the delete request
+            if (li.length > 1) this.$el.trigger('scroll');
         },
 
         onSort: function () {

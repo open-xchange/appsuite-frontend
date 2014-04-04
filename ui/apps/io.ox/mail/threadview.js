@@ -131,7 +131,10 @@ define('io.ox/mail/threadview',
 
             var baton = new ext.Baton({ view: this }),
                 node = this.$el.find('.thread-view-list > h1').empty();
-            ext.point('io.ox/mail/thread-view/header').invoke('draw', node, baton);
+
+            if (this.collection.length > 0) {
+                ext.point('io.ox/mail/thread-view/header').invoke('draw', node, baton);
+            }
 
             this.$el.find('.thread-view').toggleClass('multiple-messages', this.collection.length > 1);
 
@@ -280,7 +283,13 @@ define('io.ox/mail/threadview',
             }
 
             li.remove();
-            this.updateHeader();
+
+            // clear view if this was the last message
+            if (li.length === 1) this.empty(); else this.updateHeader();
+        },
+
+        onPoolRemove: function (model) {
+            this.collection.remove(model);
         },
 
         onChangeModel: function () {
@@ -328,6 +337,10 @@ define('io.ox/mail/threadview',
                 add: this.onAdd,
                 remove: this.onRemove,
                 reset: this.onReset
+            });
+
+            this.listenTo(api.pool.get('detail'), {
+                remove: this.onPoolRemove
             });
 
             this.$ul = $();
