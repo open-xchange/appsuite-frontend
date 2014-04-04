@@ -106,21 +106,6 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.config.extend('compress', {
-        source: {
-            options: {
-                archive: 'dist/<%= pkg.name %>_<%= pkg.version %>.orig.tar.gz',
-                pretty: true
-            },
-            files: [{
-                expand: true,
-                src: ['<%= pkg.name %>-<%= pkg.version %>/**/*', '<%= pkg.name %>-<%= pkg.version %>/**/.*'],
-                cwd: 'dist/'
-            }]
-        }
-    });
-
-    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('assemble');
 };
