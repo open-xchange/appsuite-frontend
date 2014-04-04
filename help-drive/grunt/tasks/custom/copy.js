@@ -80,6 +80,7 @@ module.exports = function (grunt) {
             if (!grunt.option('dest')) {
                 grunt.fail.fatal('Need --dest option to be set');
             }
+            grunt.log.writeln('Installing into:', grunt.option('dest'));
             grunt.task.run('copy:local_install_' + Lang);
         });
     });
