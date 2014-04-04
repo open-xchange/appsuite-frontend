@@ -16,7 +16,7 @@ define([
 ], function (emoji, settings) {
     'use strict';
 
-    describe.skip('Emoji support', function () {
+    describe('Emoji support', function () {
         describe('with fallback collections', function () {
             beforeEach(function () {
                 settings.set('availableCollections', 'unified,softbank,japan_carrier');
@@ -26,7 +26,7 @@ define([
             });
 
             it('should get CSS for unicode emoji', function () {
-                expect(this.emoji.cssFor('\u2600')).toBe('emoji-unified emoji2600');
+                expect(this.emoji.cssFor('\u2600')).to.equal('emoji-unified emoji2600');
             });
         });
     });

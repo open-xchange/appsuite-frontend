@@ -18,7 +18,7 @@ define([
 
     var pile_unicode = '\ud83d\udca9';
 
-    describe.skip('Emoji support', function () {
+    describe('Emoji support', function () {
         describe('provides collections with categories', function () {
             beforeEach(function () {
                 //prevent settings from being stored on server
@@ -36,54 +36,54 @@ define([
             it('should contain some category names', function () {
                 var categories = _(this.emoji.getCategories()).pluck('name');
 
-                expect(categories).toContain('Nature');
-                expect(categories).toContain('People');
-                expect(categories).toContain('Symbols');
-                expect(categories).toContain('Objects');
-                expect(categories).toContain('Places');
+                expect(categories).to.contain('Nature');
+                expect(categories).to.contain('People');
+                expect(categories).to.contain('Symbols');
+                expect(categories).to.contain('Objects');
+                expect(categories).to.contain('Places');
             });
 
             it('should contain metadata for a category', function () {
                 var data = this.emoji.getCategories()[0];
 
-                expect(data.iconClass).toBeDefined();
-                expect(data.name).toBeDefined();
-                expect(data.title).toBeDefined();
+                expect(data.iconClass).to.exist;
+                expect(data.name).to.exist;
+                expect(data.title).to.exist;
             });
 
             it('should provide all icons for a specific category', function () {
                 var peopleIcons = this.emoji.iconsForCategory('People'),
                     pile = _(peopleIcons).where({unicode: pile_unicode})[0];
 
-                expect(this.emoji.icons.length > peopleIcons.length).toBeTruthy();
-                expect(peopleIcons.length).toBe(167);
-                expect(pile).toBeDefined();
-                expect(pile.desc).toBe('pile of poo');
+                expect(this.emoji.icons.length).to.be.above(peopleIcons.length);
+                expect(peopleIcons.length).to.equal(167);
+                expect(pile).to.exist;
+                expect(pile.desc).to.equal('pile of poo');
             });
 
             it('should have a default category', function () {
                 var defaultCategory = this.emoji.getDefaultCategory();
 
-                expect(defaultCategory).toBe('People');
+                expect(defaultCategory).to.equal('People');
             });
 
             it('should provide a method to test existance of a category', function () {
-                expect(this.emoji.hasCategory('People')).toBeTruthy();
-                expect(this.emoji.hasCategory('nonsense')).toBeFalsy();
+                expect(this.emoji.hasCategory('People'), 'has category People').to.be.true;
+                expect(this.emoji.hasCategory('nonsense'), 'has category nonsense').to.be.false;
             });
 
             describe('and meta category for recently used icons', function () {
                 it('should contain a recenty category', function () {
-                    expect(this.emoji.getRecently()).toBeDefined();
+                    expect(this.emoji.getRecently()).to.exist;
                 });
 
                 it('should be possible to reset recenty used icons', function () {
                     //add item to recently used list
                     this.emoji.recent(pile_unicode);
-                    expect(_(this.emoji.iconsForCategory('recently')).pluck('desc')).toContain('pile of poo');
+                    expect(_(this.emoji.iconsForCategory('recently')).pluck('desc')).to.contain('pile of poo');
 
                     this.emoji.resetRecents();
-                    expect(this.emoji.iconsForCategory('recently').length).toBe(0);
+                    expect(this.emoji.iconsForCategory('recently')).to.be.empty;
                 });
 
                 it('should store a maximum of 40 recently used icons', function () {
@@ -95,7 +95,7 @@ define([
                             emoji.recent(icon.unicode);
                         });
 
-                    expect(this.emoji.iconsForCategory('recently').length).toBe(35);
+                    expect(this.emoji.iconsForCategory('recently')).to.have.length(35);
 
                     _(this.emoji.icons)
                         .chain()
@@ -104,7 +104,7 @@ define([
                             emoji.recent(icon.unicode);
                         });
 
-                    expect(this.emoji.iconsForCategory('recently').length).toBe(40);
+                    expect(this.emoji.iconsForCategory('recently')).to.have.length(40);
                 });
 
                 it('should sort the recently used icons (most used first)', function () {
@@ -114,15 +114,15 @@ define([
                     this.emoji.recent(pile_unicode);
                     this.emoji.recent('\u2600');
 
-                    expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).toEqual(['\u2600', pile_unicode]);
+                    expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).to.deep.equal(['\u2600', pile_unicode]);
 
                     this.emoji.recent(pile_unicode);
-                    expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).toEqual(['\u2600', pile_unicode]);
+                    expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).to.deep.equal(['\u2600', pile_unicode]);
 
                     for (var i = 0; i < 10; i++) {
                         this.emoji.recent(pile_unicode);
                     }
-                    expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).toEqual([pile_unicode, '\u2600']);
+                    expect(_(this.emoji.iconsForCategory('recently')).pluck('unicode')).to.deep.equal([pile_unicode, '\u2600']);
                 });
             });
         });
