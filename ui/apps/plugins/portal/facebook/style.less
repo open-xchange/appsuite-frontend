@@ -17,19 +17,20 @@
         position: relative;
         min-height: 55px;
         margin: 0 0 20px 65px;
-
-        a.profile-picture {
+        
+        >a.profile-picture {
             position: absolute;
             top: 2px;
             left: -65px;
-
-            img.picture { .picture(50px, 50px); }
         }
+
+        a.profile-picture img.picture { .picture(50px, 50px); }
+
         .wall-post-content {
             max-height: 350px;
             overflow: hidden;
     	}
-    	.facebook-content-expand {
+    	.facebook-content-expand, .comment-toggle{
     		border: none;
     		padding-left: 0px;
     	}

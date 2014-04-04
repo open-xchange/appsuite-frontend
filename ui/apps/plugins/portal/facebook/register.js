@@ -16,9 +16,10 @@ define('plugins/portal/facebook/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
      'io.ox/keychain/api',
+     'io.ox/core/date',
      'gettext!plugins/portal',
      'less!plugins/portal/facebook/style'
-    ], function (ext, proxy, keychain, gt) {
+    ], function (ext, proxy, keychain, date, gt) {
 
     'use strict';
 
@@ -29,13 +30,15 @@ define('plugins/portal/facebook/register',
             .parent().find('.wall-comment').toggle('fast');
     };
 
-    var createCommentIterator = function (id, node) {
+    var createCommentIterator = function (profiles, node) {
         return function (comment) {
+            var from = getProfile(profiles, comment.fromid);
             $('<div class="wall-comment">').append(
-                $('<img class="picture">').attr('src', 'https://graph.facebook.com/' + comment.from.id + '/picture'),
+                $('<a class="profile-picture">').attr('href', from.url).append(
+                    $('<img class="picture">').attr('src', from.pic_square)),
                 $('<div class="wall-comment-content">').append(
-                    $('<a class="from">').text(comment.from.name).attr('href', 'http://www.facebook.com/profile.php?id=' + comment.from.id)).append(
-                        $('<div class="wall-comment-text">').text(comment.message)))
+                    $('<a class="from">').text(from.name).attr('href', from.url)).append(
+                        $('<div class="wall-comment-text">').text(comment.text)))
                 .hide()
                 .appendTo($(node));
         };
@@ -54,8 +57,9 @@ define('plugins/portal/facebook/register',
         return proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: 'SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
-                    profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)'
+                    newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
+                    profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
+                    comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
                 })
             })
             .pipe(JSON.parse);
@@ -72,7 +76,7 @@ define('plugins/portal/facebook/register',
 
         content.addClass('pointer');
         var wall = resultsets.data[0].fql_result_set,
-            profiles = resultsets.data[1].fql_result_set;
+            profiles = resultsets.data[2].fql_result_set;
 
         if (!wall || wall.length === 0) {
             content.append(
@@ -163,8 +167,9 @@ define('plugins/portal/facebook/register',
             return proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: 'SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
-                    profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)'
+                    newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
+                    profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
+                    comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
                 })
             })
             .pipe(JSON.parse)
@@ -176,7 +181,8 @@ define('plugins/portal/facebook/register',
         draw: function (baton) {
             var resultsets = baton.data,
                 wall = resultsets.data[0].fql_result_set,
-                profiles = resultsets.data[1].fql_result_set;
+                profiles = resultsets.data[2].fql_result_set,
+                comments = resultsets.data[1].fql_result_set;
 
             if (!wall) {
                 this.remove();
@@ -213,7 +219,7 @@ define('plugins/portal/facebook/register',
                                 $(this).text(gt('expand'));
                             }
                         }),
-                        $('<span class="datetime">').text(new Date(post.created_time * 1000))
+                        $('<span class="datetime">').text(new date.Local(post.created_time * 1000))
                     ));
 
                 ext.point('io.ox/plugins/portal/facebook/renderer').each(function (renderer) {
@@ -230,15 +236,17 @@ define('plugins/portal/facebook/register',
                 }
 
                 //comments
-                if (post.comments && post.comments.data) {
+                if (post.comments && post.comments.comment_list.length > 0) {
                     //toggle comments on/off
-                    $('<a class="comment-toggle">')
+                    $('<button class="btn-link comment-toggle">')
                         .text(gt('Show comments'))
                         .on('click', fnToggle)
                         .data('unfolded', false)
                         .appendTo(wall_content);
                     //render comments
-                    _(post.comments.data).each(createCommentIterator(post.id, wall_content));
+                    _(_(comments).filter(function (comment) {
+                        return comment.post_id === post.post_id;
+                    })).each(createCommentIterator(profiles, wall_content));
                 }
 
                 //make all outgoing links open new tabs/windows
@@ -292,14 +300,13 @@ define('plugins/portal/facebook/register',
             return (post.type === 247);
         },
         draw: function (post) {
-            var media = post.attachment.media[0];
-            this.append(
-                $('<a>', {'class': 'posted-image', 'href': media.href}).append(
-                    $('<img>', {'class': 'posted-image', 'src': media.src, alt: media.alt, title: media.alt}),
-                    $('<div>').text(post.description || ''),
-                    $('<div>').text(post.message || '')
-                )
-            );
+            var self = $(this);
+            _(post.attachment.media).each(function (media) {
+                $('<a class = facebook-image>').attr({href: media.href})
+                    .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
+                    .append($('<div>').text(post.attachment.caption))
+                    .appendTo(self);
+            });
         }
     });
 
@@ -410,15 +417,14 @@ define('plugins/portal/facebook/register',
             return post.type === 80 && post.attachment.fb_object_type === 'photo';
         },
         draw: function (post) {
-            var media = post.attachment.media[0];
-
             $('<div class="message">').text(post.attachment.name || post.message).appendTo($(this));
-            if (media !== undefined) {
-                $('<a>').attr({href: media.href})
+            var self = $(this);
+            _(post.attachment.media).each(function (media) {
+                $('<a class = facebook-image>').attr({href: media.href})
                     .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
                     .append($('<div>').text(post.attachment.caption))
-                    .appendTo($(this));
-            }
+                    .appendTo(self);
+            });
         }
     });
 
@@ -429,18 +435,16 @@ define('plugins/portal/facebook/register',
             return post.type === 424;
         },
         draw: function (post) {
-            var media;
-  
             $(this).append(
                     $('<div>').text(post.description),
                     $('<div class="message">').text(post.message));
-            for (var i = 0; i < post.attachment.media.length; i++) {
-                media = post.attachment.media[i];
+            var self = $(this);
+            _(post.attachment.media).each(function (media) {
                 $('<a class = facebook-image>').attr({href: media.href})
                     .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
                     .append($('<div>').text(post.attachment.caption))
-                    .appendTo($(this));
-            }
+                    .appendTo(self);
+            });
         }
     });
 
