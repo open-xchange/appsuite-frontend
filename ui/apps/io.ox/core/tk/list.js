@@ -345,6 +345,7 @@ define('io.ox/core/tk/list',
         },
 
         hasNext: function () {
+            if (!this.collection) return false;
             var index = this.getPosition() + 1;
             return index < this.collection.length || !this.complete;
         },
@@ -354,6 +355,7 @@ define('io.ox/core/tk/list',
         },
 
         hasPrevious: function () {
+            if (!this.collection) return false;
             var index = this.getPosition() - 1;
             return index >= 0;
         },

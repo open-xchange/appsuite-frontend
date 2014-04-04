@@ -133,11 +133,7 @@ define('io.ox/mail/threadview',
                 node = this.$el.find('.thread-view-list > h1').empty();
             ext.point('io.ox/mail/thread-view/header').invoke('draw', node, baton);
 
-
-            if (this.collection.length > 1)
-                this.$el.find('.thread-view').addClass('multiple-messages');
-            else
-                this.$el.find('.thread-view').removeClass('multiple-messages');
+            this.$el.find('.thread-view').toggleClass('multiple-messages', this.collection.length > 1);
 
         }, 10),
 
@@ -207,13 +203,15 @@ define('io.ox/mail/threadview',
             cid = String(cid).replace(/^thread\.(.+)$/, '$1');
             // no change?
             if (this.model && this.model.cid === cid) return;
+            // get new model
+            var model = api.pool.get('detail').get(cid);
+            if (!model) return;
             // stop listening
             if (this.model) this.stopListening(this.model);
-            // get model
-            this.model = api.pool.get('detail').get(cid);
-            if (!this.model) return;
+            // use new model
+            this.model = model;
             // listen for changes
-            this.listenTo(this.model, 'change:thread', this.onChange);
+            this.listenTo(this.model, 'change:thread', this.onChangeModel);
             // reset collection
             this.collection.reset([], { silent: true });
             this.reset();
@@ -285,7 +283,7 @@ define('io.ox/mail/threadview',
             this.updateHeader();
         },
 
-        onChange: function () {
+        onChangeModel: function () {
             this.reset();
         },
 
@@ -328,7 +326,6 @@ define('io.ox/mail/threadview',
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
-                change: this.onChange,
                 remove: this.onRemove,
                 reset: this.onReset
             });
@@ -410,7 +407,6 @@ define('io.ox/mail/threadview',
 
             this.listenTo(this.collection, {
                 add: this.onAdd,
-                change: this.onChange,
                 remove: this.onRemove,
                 reset: this.onReset
             });

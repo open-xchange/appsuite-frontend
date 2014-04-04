@@ -442,6 +442,66 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             });
         });
 
+        xdescribe('traversing', function () {
+
+            beforeEach(function () {
+                // three undeleted, seen mails
+                this.collection.reset([
+                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"1","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"1","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}'),
+                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":true,"account_name":"E-Mail","id":"2","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"2","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}'),
+                    JSON.parse('{"to":[["\\"Matthias Biggeleben\\"","matthias.biggeleben@open-xchange.com"]],"flags":32,"account_id":0,"subject":"A simple text email","color_label":0,"unreadCount":1,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"account_name":"E-Mail","id":"3","folder_id":"default0/INBOX","priority":3,"thread":[{"to":[["\\"Matthias Biggeleben\\\"","matthias.biggeleben@open-xchange.com"]],"id":"3","folder_id":"default0/INBOX","flags":32,"account_id":0,"priority":3,"subject":"A simple text email","color_label":0,"received_date":1384339346000,"from":[["Matthias Biggeleben","matthias.biggeleben@open-xchange.com"]],"attachment":false,"cc":[],"account_name":"E-Mail"}],"cc":[]}')
+                ]);
+            });
+
+            it('should return correct position', function () {
+                expect(this.list.selection.getPosition()).to.equal(0);
+            });
+
+            it('should indicate no previous item', function () {
+                expect(this.list.selection.hasPrevious()).to.be.false;
+            });
+
+            it('should indicate next item', function () {
+                expect(this.list.selection.hasNext()).to.be.true;
+            });
+
+            it('should move to next item', function () {
+                this.list.selection.next();
+                expect(this.list.selection.getPosition(), 'position').to.equal(1);
+                expect(this.list.selection.hasNext(), 'next').to.be.true;
+            });
+
+            it('should should indicate previous item', function () {
+                this.list.selection.next();
+                expect(this.list.selection.hasPrevious()).to.be.true;
+            });
+
+            it('should should indicate no next item', function () {
+                this.list.selection.next();
+                this.list.selection.next();
+                expect(this.list.selection.getPosition(), 'position').to.equal(2);
+                expect(this.list.selection.hasPrevious(), 'previous').to.be.true;
+                expect(this.list.selection.hasNext(), 'next').to.be.false;
+            });
+
+            it('should move around correctly', function () {
+                expect(this.list.selection.getPosition(), 'position #1').to.equal(0);
+                this.list.selection.previous();
+                this.list.selection.previous();
+                expect(this.list.selection.getPosition(), 'position #2').to.equal(0);
+                this.list.selection.next();
+                expect(this.list.selection.getPosition(), 'position #3').to.equal(1);
+                this.list.selection.next();
+                expect(this.list.selection.getPosition(), 'position #4').to.equal(2);
+                this.list.selection.next();
+                expect(this.list.selection.getPosition(), 'position #5').to.equal(2);
+                this.list.selection.previous();
+                expect(this.list.selection.getPosition(), 'position #6').to.equal(1);
+                this.list.selection.previous();
+                expect(this.list.selection.getPosition(), 'position #7').to.equal(0);
+            });
+        });
+
         // TODO: move the following code to mail specific spec
         describe('mail specific robustness', function () {
 

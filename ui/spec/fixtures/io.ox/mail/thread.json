@@ -1,0 +1,48 @@
+{
+    "template": {
+        "to": [["\"Matthias Biggeleben\"", "matthias.biggeleben@open-xchange.com"]],
+        "flags": 32,
+        "account_id": 0,
+        "subject": "A simple text email",
+        "color_label": 0,
+        "unreadCount": 1,
+        "received_date": 1384339346000,
+        "from": [["Matthias Biggeleben", "matthias.biggeleben@open-xchange.com"]],
+        "attachment": false,
+        "account_name": "E-Mail",
+        "id": "1",
+        "folder_id": "default0/INBOX",
+        "priority": 3,
+        "cc": []
+    },
+    "mail_D": {
+        "from": [["Foo foo", "foo@open-xchange.com"]],
+        "id": 4,
+        "subject": "AW: RE: A simple text email",
+        "to": [["\"Matthias Biggeleben\"", "matthias.biggeleben@open-xchange.com"], ["\"Otto Xentner\"", "otto.xentner@open-xchange.com"]]
+    },
+    "mail_C_alt": {
+        "from": [["\"Alternative\"", "alternative@open-xchange.com"]],
+        "id": 1003,
+        "subject": "AW: RE: A simple text email",
+        "to": [["\"Matthias Biggeleben\"", "matthias.biggeleben@open-xchange.com"], ["Foo foo", "foo@open-xchange.com"]]
+    },
+    "mail_C": {
+        "from": [["\"Otto Xentner\"", "otto.xentner@open-xchange.com"]],
+        "id": 3,
+        "subject": "AW: RE: A simple text email",
+        "to": [["\"Matthias Biggeleben\"", "matthias.biggeleben@open-xchange.com"], ["Foo foo", "foo@open-xchange.com"]]
+    },
+    "mail_B": {
+        "from": [["Matthias Biggeleben", "matthias.biggeleben@open-xchange.com"]],
+        "id": 2,
+        "subject": "RE: A simple text email",
+        "to": [["\"Otto Xentner\"", "otto.xentner@open-xchange.com"], ["Foo foo", "foo@open-xchange.com"]]
+    },
+    "mail_A": {
+        "from": [["\"Otto Xentner\"", "otto.xentner@open-xchange.com"]],
+        "id": 1,
+        "subject": "A simple text email",
+        "to": [["\"Matthias Biggeleben\"", "matthias.biggeleben@open-xchange.com"], ["Foo foo", "foo@open-xchange.com"]]
+    }
+}

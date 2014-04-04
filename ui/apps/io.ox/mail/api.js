@@ -1687,6 +1687,10 @@ define('io.ox/mail/api',
                 .map(collection.get, collection)
                 .compact()
                 .invoke('toJSON')
+                .map(function injectIndex(obj, index) {
+                    obj.index = index;
+                    return obj;
+                })
                 .value();
         },
 
@@ -1709,6 +1713,11 @@ define('io.ox/mail/api',
                     return thread.length > 0 && thread;
                 })
                 .flatten().compact().value();
+        },
+
+        clear: function () {
+            this.hash = {};
+            this.reverse = {};
         },
 
         add: function (obj) {
@@ -1772,32 +1781,45 @@ define('io.ox/mail/api',
         }
     });
 
-    api.collectionLoader.each = function (obj) {
-        // lacks thread property
-        if (!obj.thread) obj.thread = [obj];
+    function filterDeleted(item) {
+        return !util.isDeleted(item);
+    }
+
+    api.processThreadMessage = function (obj) {
+
+        // get thread
+        var thread = obj.thread || [obj], list;
+
         // remove deleted mails
-        var list = obj.thread;
-        obj.thread = _(list).filter(function (item) {
-            return !util.isDeleted(item);
-        });
-        // all deleted?
-        if (obj.thread.length === 0) obj.thread = list.slice(0, 1);
-        // store thread size
-        obj.threadSize = obj.thread.length;
+        thread = _(list = thread).filter(filterDeleted);
+        if (thread.length === 0) thread = list.slice(0, 1); // don't remove all if all marked as deleted
+
         // we use the last item to generate the cid. More robust because unlikely to change.
         var last = _(obj.thread).last();
-        // add to pool
-        api.pool.add('detail', _.extend({}, obj));
-        api.pool.add('detail', obj.thread.slice(1));
-        // replace by plain cids
-        obj.thread = _(obj.thread).map(_.cid);
-        // use last item's id and folder_id
-        if (obj.threadSize > 1) {
-            obj.id = last.id;
-            obj.folder_id = last.folder_id;
-        }
-        // add to thread hash
+
+        // Use last item's id and folder_id.
+        // As we got obj by reference, such changes affect the CID
+        // in the collection which is wanted behavior.
+        obj.id = last.id;
+        obj.folder_id = last.folder_id;
+
+        // only store plain composite keys instead of full objects
+        obj.thread = _(thread).map(_.cid);
+        obj.threadSize = thread.length;
+
+        // also copy thread property to 'last' item to detect model changes
+        last.thread = _(thread).map(_.cid);
+
+        // add to thread hash - this must be done before the pool so that this
+        // hash is up to date if the pool starts propagating changes.
         api.threads.add(obj);
+
+        // add full models to pool
+        api.pool.add('detail', thread);
+    };
+
+    api.collectionLoader.each = function (obj) {
+        api.processThreadMessage(obj);
     };
 
     return api;
