@@ -3001,26 +3001,10 @@ ul.io-ox-inline-links + header {
 .foldertree-sidepanel {
 
     left: @window-head-width;
-
-    @c1: lighten(@foldertree-sidepanel-background, 8%);
-    @c2: @foldertree-sidepanel-background;
-
-    background: @c2;
-    background: -moz-radial-gradient(center, ellipse cover, @c1 20%, @c2 100%);
-    background: -webkit-radial-gradient(center, ellipse cover, @c1 20%, @c2 100%);
-    background: -ms-radial-gradient(center, ellipse cover, @c1 20%, @c2 100%);
-    background: radial-gradient(ellipse at center, @c1 20%, @c2 100%);
+    background-color: @foldertree-sidepanel-background;
 
     html.high-contrast & {
         background: none; // HC
-    }
-
-    &.border-right {
-        border: 0 none;
-
-        html.high-contrast & {
-            border-right: 1px solid @hc-border-color;
-        }
     }
 
     .resizebar {
@@ -3039,6 +3023,10 @@ ul.io-ox-inline-links + header {
     .foldertree-container {
 
         overflow: auto;
+
+        &.bottom-toolbar {
+            bottom: 45px;
+        }
 
         .io-ox-foldertree {
 

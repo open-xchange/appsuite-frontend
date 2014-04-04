@@ -43,7 +43,7 @@ define('io.ox/core/commons-folderview',
 
                 this.prepend(
                     // sidepanel
-                    baton.$.sidepanel = $('<div class="abs border-right foldertree-sidepanel">')
+                    baton.$.sidepanel = $('<div class="abs foldertree-sidepanel">')
                     .attr({
                         'role': 'navigation',
                         'aria-label': gt('Folders')

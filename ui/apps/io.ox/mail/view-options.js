@@ -129,7 +129,10 @@ define('io.ox/mail/view-options',
                 .on('click', { app: baton.app, state: true }, toggleFolderView)
             );
 
-            baton.app.getWindow().nodes.sidepanel.find('.foldertree-sidepanel').append(
+            var side = baton.app.getWindow().nodes.sidepanel;
+
+            side.find('.foldertree-container').addClass('bottom-toolbar');
+            side.find('.foldertree-sidepanel').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
                     $('<a href="#" class="toolbar-item" tabindex="1">')
                     .attr('title', gt('Close folder view'))
