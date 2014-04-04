@@ -14,10 +14,11 @@
 define('waitsFor', function () {
     'use strict';
 
-    function waitFor(testCallback) {
-        if (!!testCallback()) return $.when();
-        _.delay(waitFor, 1, testCallback);
-        return $.Deferred();
+    function waitFor(testCallback, def) {
+        def = def || $.Deferred();
+        if (!!testCallback()) return def.resolve();
+        _.defer(waitFor, testCallback, def);
+        return def;
     }
 
     return waitFor;
