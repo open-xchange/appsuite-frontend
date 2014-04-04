@@ -46,4 +46,34 @@ module.exports = function (grunt) {
         grunt.log.writeln('Installing into:', grunt.option('dest'));
         grunt.task.run('copy:local_install_dist');
     });
+
+    var languages = grunt.file.expand('i18n/*.po').map(function (fileName) {
+        return fileName.match(/([a-zA-Z]+_[a-zA-Z]+).po$/)[1];
+    });
+
+    languages.forEach(function (Lang) {
+        var lang = Lang.toLowerCase().replace(/_/g, '-'),
+            config = {};
+
+        config['local_install_' + Lang] = {
+            files: [{
+                src: ['**/*' + Lang + '*'],
+                expand: true,
+                filter: 'isFile',
+                cwd: 'dist/',
+                dest: grunt.option('dest')
+            }]
+        };
+
+        grunt.config.extend('copy', config);
+        grunt.registerTask('install:' + Lang, 'install language directory into a custom location', function () {
+            if (!grunt.option('dest')) {
+                grunt.fail.fatal('Need --dest option to be set');
+            }
+            grunt.log.writeln('Installing into:', grunt.option('dest'));
+            grunt.task.run('copy:local_install_' + Lang);
+        });
+    });
+
+    grunt.loadNpmTasks('grunt-contrib-copy');
 };

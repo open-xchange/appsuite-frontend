@@ -45,7 +45,7 @@ module.exports = function (grunt) {
 
     // steps to build the ui (ready for development)
     grunt.registerTask('build', ['lint', 'copy_build', 'newer:concat', 'newer:less', 'compile_po']);
-    // create a package ready version of the ui (aka what jenkins does)
+    // create a distribution ready version of the ui
     grunt.registerTask('dist', ['clean', 'bower', 'build', 'uglify', 'copy_dist']);
     // run development setup
     grunt.registerTask('dev', ['connect', 'test', 'watch']);
