@@ -10,12 +10,13 @@ endif
 
 PKGNAME = open-xchange-appsuite-help
 ROOT = $(CURDIR)/debian/$(PKGNAME)
+PREFIX = /var/www/appsuite/
 
 override_dh_auto_install:
-	ant -Dbasedir=build -DdestDir=$(ROOT)-common -DpackageName=$(PKGNAME) -f build/build.xml build
+	ant -Dbasedir=build -DdestDir=$(ROOT)-common -DpackageName=$(PKGNAME) -Dprefix=$(PREFIX) -f build/build.xml build
 	for LANG in de_DE en_GB en_US es_ES es_MX fr_FR it_IT ja_JP nl_NL pl_PL zh_CN zh_TW; do \
 		PACKAGE_EXTENSION=$$(echo $${LANG} | tr '[:upper:]_' '[:lower:]-'); \
-		ant -Dbasedir=build -DdestDir=$(ROOT)-$${PACKAGE_EXTENSION} -DpackageName=$(PKGNAME) -DinstallTarget=$${LANG} -f build/build.xml build; \
+		ant -Dbasedir=build -DdestDir=$(ROOT)-$${PACKAGE_EXTENSION} -DpackageName=$(PKGNAME) -Dprefix=$(PREFIX) -DinstallTarget=$${LANG} -f build/build.xml build; \
 	done
 
 override_dh_auto_clean:
