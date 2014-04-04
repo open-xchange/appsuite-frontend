@@ -13,7 +13,7 @@ URL:            http://open-xchange.com
 Packager:       Julian Baeume <julian.baeume@open-xchange.com>
 License:        CC-BY-NC-SA
 Summary:        OX App Suite online help
-Source:         %{name}_%{version}.orig.tar.gz
+Source:         %{name}_%{version}.orig.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 
 %if 0%{?rhel_version} || 0%{?fedora_version}
@@ -21,6 +21,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 %else
 %define docroot /srv/www/htdocs/appsuite
 %endif
+
+%description
+OX App Suite help files
 
 %package        common
 Group:          Applications/Productivity
@@ -145,8 +148,9 @@ Online help for OX App Suite (zh_TW)
 
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
-for LANG in de_DE en_GB en_US es_ES es_MX fr_FR it_IT ja_JP nl_NL pl_PL zh_CN zh_TW; do \
-    ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dlanguage=${LANG} -f build/build.xml clean build; \
+ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -f build/build.xml build
+for LANG in de_DE en_GB en_US es_ES es_MX fr_FR it_IT ja_JP nl_NL pl_PL zh_CN zh_TW; do
+    ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -Dlanguage=${LANG} -f build/build.xml clean build
 done
 
 %clean
