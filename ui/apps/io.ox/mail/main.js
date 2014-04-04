@@ -63,7 +63,8 @@ define('io.ox/mail/main',
 
             app.getWindow()
                 .nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
-            // create 4 pages
+
+            // create 4 pages with toolbars and navbars
             app.pages.addPage({
                 name: 'folderTree',
                 container: c,
@@ -150,6 +151,7 @@ define('io.ox/mail/main',
         'toolbars-mobile': function () {
             if (!_.device('small')) return;
 
+            // tell each page's back button what to do
             app.pages.getNavbar('listView').on('leftAction', function () {
                 app.pages.goBack();
             });
@@ -275,7 +277,6 @@ define('io.ox/mail/main',
                     app.toggleFolders();
                 });
 
-
             var view = new FolderView(app, {
                 type: 'mail',
                 container: app.pages.getPage('folderTree')
@@ -283,21 +284,12 @@ define('io.ox/mail/main',
             view.handleFolderChange();
             view.load();
 
+            // bind action for edit button
             app.bindFolderChange();
 
             // make folder visible by default
             app.toggleFolderView(true);
 
-        },
-
-        /*
-         * Edit mode for mobile devices in folderview
-         */
-        'folder-view-editMode': function () {
-            if (!_.device('small')) return;
-            app.props.on('change:mobileFolderSelectMode', function () {
-                console.log('folder edit mode action');
-            });
         },
 
         /*
@@ -543,6 +535,7 @@ define('io.ox/mail/main',
         'show-mail-mobile': function (app) {
             if (!_.device('small')) return;
             app.showMail = function (cid) {
+                // render mail view and append it to detailview's page
                 app.pages.getPage('detailView').empty().append(app.threadView.renderMail(cid));
             };
         },

@@ -449,20 +449,6 @@ define('io.ox/mail/threadview',
             // strip 'thread.' prefix
             cid = String(cid).replace(/^thread\.(.+)$/, '$1');
 
-            /*
-            // no change?
-            if (this.model && this.model.cid === cid) return;
-            // stop listening
-            if (this.model) this.stopListening(this.model);
-            // get model
-            this.model = api.pool.get('detail').get(cid);
-            if (!this.model) return;
-            // listen for changes
-            this.listenTo(this.model, 'change:thread', this.onChange);
-            // reset collection
-            this.collection.reset([], { silent: true });
-            this.reset();
-            */
             var model = api.pool.get('detail').get(cid);
             if (!model) return;
 

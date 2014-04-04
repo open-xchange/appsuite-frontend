@@ -197,6 +197,8 @@ define('io.ox/mail/mobileToolbarActions',
             app.updateToolbar();
             // update toolbar on selection change as well as any model change (seen/unseen flag)
             app.listView.on('selection:change change', function () {
+                // don't update in folderview
+                if (app.pages.getCurrentPage().name = 'folderView') return;
                 app.updateToolbar(app.listView.selection.get());
             });
         }
