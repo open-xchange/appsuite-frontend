@@ -273,7 +273,8 @@ define('io.ox/mail/threadview',
 
         onRemove: function (model) {
 
-            var li = this.$ul.find('li[data-cid="' + model.cid + '"]'),
+            var children = this.getItems(),
+                li = children.filter('[data-cid="' + model.cid + '"]'),
                 top = this.$ul.scrollTop();
 
             if (li.length === 0) return;
@@ -285,7 +286,7 @@ define('io.ox/mail/threadview',
             li.remove();
 
             // clear view if this was the last message
-            if (li.length === 1) this.empty(); else this.updateHeader();
+            if (children.length === 1) this.empty(); else this.updateHeader();
         },
 
         onPoolRemove: function (model) {
