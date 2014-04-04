@@ -158,66 +158,79 @@ done
 
 %files common
 %defattr(-,root,root)
+%dir %{docroot}
 %{docroot}/help
 %exclude %{docroot}/help/l10n
 
 %files de-de
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/de_DE
 
 %files en-gb
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/en_GB
 
 %files en-us
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/en_US
 
 %files es-es
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/es_ES
 
 %files es-mx
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/es_MX
 
 %files fr-fr
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/fr_FR
 
 %files it-it
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/it_IT
 
 %files ja-jp
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/ja_JP
 
 %files nl-nl
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/nl_NL
 
 %files pl-pl
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/pl_PL
 
 %files zh-cn
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/zh_CN
 
 %files zh-tw
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help/l10n
 %{docroot}/help/l10n/zh_TW
 

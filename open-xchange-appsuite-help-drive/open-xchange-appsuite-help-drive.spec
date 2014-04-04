@@ -25,119 +25,119 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 %description
 OX App Suite drive help files
 
-%package        help-drive-common
-Group:          Applications/Productivity
-Summary:        Language-independent files of online help for OX Drive
+%package       common
+Group:         Applications/Productivity
+Summary:       Language-independent files of online help for OX Drive
 
-%description    help-drive-common
+%description   common
 Language-independent files of online help for OX Drive
 
-%package       help-drive-de-de
+%package       de-de
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (de_DE)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-de-de
+%description   de-de
 Online help for OX Drive (de_DE)
 
-%package       help-drive-en-gb
+%package       en-gb
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (en_GB)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-en-gb
+%description   en-gb
 Online help for OX Drive (en_GB)
 
-%package       help-drive-en-us
+%package       en-us
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (en_US)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-en-us
+%description   en-us
 Online help for OX Drive (en_US)
 
-%package       help-drive-es-es
+%package       es-es
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (es_ES)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-es-es
+%description   es-es
 Online help for OX Drive (es_ES)
 
-%package       help-drive-es-mx
+%package       es-mx
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (es_MX)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-es-mx
+%description   es-mx
 Online help for OX Drive (es_MX)
 
-%package       help-drive-fr-fr
+%package       fr-fr
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (fr_FR)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-fr-fr
+%description   fr-fr
 Online help for OX Drive (fr_FR)
 
-%package       help-drive-it-it
+%package       it-it
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (it_IT)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-it-it
+%description   it-it
 Online help for OX Drive (it_IT)
 
-%package       help-drive-ja-jp
+%package       ja-jp
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (ja_JP)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-ja-jp
+%description   ja-jp
 Online help for OX Drive (ja_JP)
 
-%package       help-drive-nl-nl
+%package       nl-nl
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (nl_NL)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-nl-nl
+%description   nl-nl
 Online help for OX Drive (nl_NL)
 
-%package       help-drive-pl-pl
+%package       pl-pl
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (pl_PL)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-pl-pl
+%description   pl-pl
 Online help for OX Drive (pl_PL)
 
-%package       help-drive-zh-cn
+%package       zh-cn
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (zh_CN)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-zh-cn
+%description   zh-cn
 Online help for OX Drive (zh_CN)
 
-%package       help-drive-zh-tw
+%package       zh-tw
 Group:         Applications/Productivity
 Summary:       Online help for OX Drive (zh_TW)
 Provides:      open-xchange-appsuite-help-drive
 Requires:      open-xchange-appsuite-help-drive-common
 
-%description   help-drive-zh-tw
+%description   zh-tw
 Online help for OX Drive (zh_TW)
 
 %prep
@@ -156,68 +156,81 @@ done
 %clean
 %{__rm} -rf %{buildroot}
 
-%files help-drive-common
+%files common
 %defattr(-,root,root)
+%dir %{docroot}
 %{docroot}/help-drive
 %exclude %{docroot}/help-drive/l10n
 
-%files help-drive-de-de
+%files de-de
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/de_DE
 
-%files help-drive-en-gb
+%files en-gb
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/en_GB
 
-%files help-drive-en-us
+%files en-us
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/en_US
 
-%files help-drive-es-es
+%files es-es
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/es_ES
 
-%files help-drive-es-mx
+%files es-mx
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/es_MX
 
-%files help-drive-fr-fr
+%files fr-fr
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/fr_FR
 
-%files help-drive-it-it
+%files it-it
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/it_IT
 
-%files help-drive-ja-jp
+%files ja-jp
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/ja_JP
 
-%files help-drive-nl-nl
+%files nl-nl
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/nl_NL
 
-%files help-drive-pl-pl
+%files pl-pl
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/pl_PL
 
-%files help-drive-zh-cn
+%files zh-cn
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/zh_CN
 
-%files help-drive-zh-tw
+%files zh-tw
 %defattr(-,root,root)
+%dir %{docroot}
 %dir %{docroot}/help-drive/l10n
 %{docroot}/help-drive/l10n/zh_TW
 
