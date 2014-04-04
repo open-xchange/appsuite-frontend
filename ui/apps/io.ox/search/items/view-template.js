@@ -25,12 +25,17 @@ define('io.ox/search/items/view-template',
         row: '0',
         draw: function (baton) {
 
-            var node = $('<ul class="col-xs-12 col-sm-12 result list-view">'),
-                items = baton.model.get('items'),
-                module = baton.model.getModule();
+            var items = baton.model.get('items'),
+                module = baton.model.getModule(),
+                row, cell;
+
+        //create containers
+            row = $('<div class="row result">').append(
+                cell = $('<ul class="col-xs-12 list-unstyled">') //list-view
+            );
 
             // app-specific classes
-            if (module === 'mail') node.addClass('mail-item');
+            if (module === 'mail') cell.addClass('mail-item');
 
             items.each(function (model) {
 
@@ -73,18 +78,18 @@ define('io.ox/search/items/view-template',
                     );
                     break;
                 }
-                node.append(tmp);
+                cell.append(tmp);
             });
 
             if (items.timestamp && !items.length) {
-                node.append(
+                cell.append(
                     $('<div class="item">').append(
                         $('<div class="line2">').text(gt('No items found'))
                     )
                 );
             }
 
-            this.append(node);
+            this.append(row);
         }
     });
 });

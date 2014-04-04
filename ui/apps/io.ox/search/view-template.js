@@ -54,6 +54,7 @@ define('io.ox/search/view-template',
                     parentSelector: container  ? '.query' : '.io-ox-search',
                     model: model,
                     container: container,
+                    delay: 150,
                     cbshow: function () {
                         //reset autocomplete tk styles
                         if (mode !== 'widget' && container)
@@ -91,6 +92,10 @@ define('io.ox/search/view-template',
                     //valid_ usually val.length >= 3
                     if (valid)
                         $(ref).val('');
+                })
+                .on('click', function () {
+                    //draw dropdown on focus
+                    ref.trigger('keyup', true);
                 });
 
             $(this).append(ref);
@@ -141,31 +146,44 @@ define('io.ox/search/view-template',
         draw: function (baton) {
             var id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
-                node = $('<ul class="col-sm-12 apps clearfix">');
-            //add links for supported apps
+                row, cell;
+
+            //create containers
+            row = $('<div class="row">').append(
+                cell = $('<ul class="col-xs-12 list-unstyled">')
+            );
+
+            //create dropdown menu entries
             _(appAPI.getFavorites()).each(function (app) {
                 if (!opt.mapping[app.id] || app.id === 'io.ox/files') {
-                    node.append(
-                        $('<li>').append(
-                            $('<a href="#">')
-                                .addClass('app pull-left')
-                                .attr('data-app', app.id)
-                                .text(gt.pgettext('app', app.title))
-                        )
+                    cell.append(
+                        $('<li role="presentation" class="application">')
+                            .append(
+                                $('<div class="btn-group">')
+                                .append(
+                                    $('<button type="button" class="btn btn-link">')
+                                        .attr('data-app', (opt.mapping[app.id] || app.id))
+                                        .addClass('pull-left')
+                                        .text(gt.pgettext('app', app.title))
+                                )
+                            )
                     );
                 }
             });
+
             //mark as active
             if (id !== '') {
-                node.find('[data-app="' + id + '"]').addClass('active');
+                cell.find('[data-app="' + id + '"]')
+                .removeClass('btn-link')
+                .addClass('btn-primary');
             }
             //register click handler
-            node.find('li').on('click', function (e) {
+            cell.find('li').on('click', function (e) {
                 var node = $(e.target);
                 baton.model.setModule(node.attr('data-app'));
             });
 
-            this.append(node);
+            this.append(row);
         }
     });
 
@@ -177,8 +195,8 @@ define('io.ox/search/view-template',
             var row,
                 mobile = this.find('.mobile-dropdown');
 
-            $('<div class="query">').append(
-                row = $('<div class="input-group-custom">')
+            $('<div class="row query">').append(
+                row = $('<div class="col-xs-12 input-group-custom">')
             ).appendTo(this);
 
             dropdown.call(row, baton, mobile.length ? mobile : undefined);
@@ -194,30 +212,37 @@ define('io.ox/search/view-template',
             this.draw.call(baton.$, baton);
         },
         draw: function (baton) {
-            var $list = $('<ul class="col-sm-12 facets group clearfix">'),
-                model = baton.model,
+            var model = baton.model,
                 list = model.get('poollist'),
-                $facet;
+                facet, row, cell, button;
+
+            row = $('<div class="row facets">').append(
+                cell = $('<ul class="col-sm-12 list-unstyled facets">')
+            );
 
             _.each(list, function (item) {
                 //get active value
                 var value = model.get('pool')[item.facet].values[item.value];
 
                 //create facet node
-                $list.append(
-                    $facet = $('<li>').addClass('facet pull-left')
+                cell.append(
+                    facet = $('<li role="presentation" class="facet btn-group">')
+                                .addClass('fac!et pull-left')
+                                .append(
+                                    button = $('<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">')
+                                )
                 );
 
                 //general stuff
                 ext.point('io.ox/search/view/window/facet')
-                    .invoke('draw', $facet, value, baton);
+                    .invoke('draw', button, value, baton);
 
                 //additional actions per id/type
                 ext.point('io.ox/search/view/window/facet/' + value.facet)
-                    .invoke('draw', $facet, value, baton);
+                    .invoke('draw', facet, value, baton);
             });
 
-            this.append($list);
+            this.append(row);
         }
     });
 
@@ -269,51 +294,56 @@ define('io.ox/search/view-template',
         id: 'type',
         index: 100,
         draw: function (value) {
-            var label,
-                options = value.options,
-                option = value._compact.option;
-
+            var options = value.options,
+                id = value._compact.option,
+                type, current;
+            //get type label
             if (value.facet === 'folder')
-                label = gt('Folder');
+                type = gt('Folder');
             else if (options) {
-                var current = _.find(options, function (item) {
-                    return item.id === option;
+                current = _.find(options, function (item) {
+                    return item.id === id;
                 });
-
-                label = current && current.display_name;
+                type = current && current.display_name;
             }
-
-            if (label) {
+            //append type
+            if (type) {
                 this.prepend(
                     $('<span>')
-                        .addClass('name')
-                        .text(label + ':')
+                        .addClass('type')
+                        .text(type)
                 );
             }
         }
     });
 
     ext.point('io.ox/search/view/window/facet').extend({
-        id: 'value',
+        id: 'name',
         index: 200,
         draw: function (value) {
-            this.append(value.display_name);
+            this.append(
+                $('<span>')
+                    .addClass('name')
+                    .html(value.display_name)
+            );
         }
     });
 
     ext.point('io.ox/search/view/window/facet').extend({
-        id: 'options',
+        id: 'dropdown',
         index: 300,
         draw: function (value, baton) {
             var facet = baton.model.getFacet(value.facet),
                 filters = facet ? facet.values[0].options || [] : [],
-                self = this,
                 current = value._compact.option, option,
-                icon, menu;
+                parent = this.parent(),
+                menu;
+
             if (filters.length) {
+                //add caret
+                this.append($('<span class="caret">'));
 
-                var container = $('<span>').addClass('dropdown'); //DIV
-
+                //creste menu
                 menu = $('<ul class="dropdown-menu facet-dropdown" role="menu">')
                         .attr({
                             'data-facet': facet.id,
@@ -334,13 +364,8 @@ define('io.ox/search/view-template',
                     if (current === item.id)
                         option.find('.fa').removeClass('fa-none').addClass('fa-check');
                 });
-                //set right position for dropdown
-                icon = $('<a role="button" data-toggle="dropdown" data-target="#" target="#">')
-                        .append(
-                            $('<i class="fa fa-chevron-down action">')
-                        );
-
-                container.append(menu, icon).appendTo(self);
+                //add menu
+                parent.append(menu);
             }
         }
     });
@@ -353,8 +378,12 @@ define('io.ox/search/view-template',
            //remove action for non mandatory facets
             if (!isMandatory && value.facet !== 'folder') {
                 this.append(
-                    $('<i class="fa fa-times action">')
-                    .on('click', function () {
+                    $('<span class="remove">')
+                    .append(
+                        $('<i class="fa fa-times action">')
+                    )
+                    .on('click', function (e) {
+                        e.stopPropagation();
                         baton.model.remove(value.facet, value.id);
                     })
                 );
@@ -420,20 +449,19 @@ define('io.ox/search/view-template',
     });
 
     ext.point('io.ox/search/view/window/facet/folder').extend({
-        id: 'actions',
+        id: 'dropdown',
         index: '300',
         draw: function (value, baton) {
-            var action = $('<a role="button" data-toggle="dropdown" data-target="#" target="#">')
-                        .append(
-                            $('<i class="fa fa-chevron-down action">')
-                        ),
+
+
+            var button = this.find('button'),
                 menu = $('<ul class="dropdown-menu facet-dropdown" role="menu">')
                     .attr({
                         'data-facet': 'folder',
                         'data-value': 'custom'
                     });
-            var container = $('<span>').addClass('dropdown'); //DIV
-            container.append(menu, action).appendTo(this);
+
+            button.append($('<span class="caret">'));
 
             //add fodlers
             util.getFolders(baton.model)
@@ -448,7 +476,6 @@ define('io.ox/search/view-template',
                             $('<li role="presentation">').append(
                                 $('<a role="menuitem" tabindex="-1" href="#">')
                                     .append(
-                                        //$('<i class="fa fa-fw fa-none">'),
                                         $('<span>').text(folder.title)
                                     )
                                     .addClass('option')
@@ -458,12 +485,16 @@ define('io.ox/search/view-template',
                         );
                     });
 
+                    //add divider
+                    menu.append(
+                        $('<li role="presentation" class="divider">')
+                    );
+
                     //add option to open dialog
                     menu.append(
                         $('<li role="presentation">').append(
                              $('<a role="menuitem" tabindex="-1" href="#">')
                                 .append(
-                                    //$('<i class="fa fa-fw fa-none">'),
                                     $('<span>').text(gt('More') + '...')
                                 )
                                 .addClass('option more')
@@ -471,6 +502,9 @@ define('io.ox/search/view-template',
                         )
                     );
                 });
+
+            //add to dom
+            this.append(menu).appendTo(this);
         }
     });
 
@@ -502,21 +536,92 @@ define('io.ox/search/view-template',
         index: 100,
         draw: function () {
             //when exisiting autocomplete dropdown is rendered into this (autocompelte tk container)
-            $('<div class="mobile-dropdown">')
+            $('<div class="mobile-dropdown row">')
                 .hide()
                 .appendTo(this);
         }
     });
 
-    // mobile botton toolbar
-    // ext.point('io.ox/search/view/window/mobile').extend({
-    //     id: 'toolbar',
-    //     index: 2500,
-    //     draw: function (baton) {
-    //         // must be on a non overflow container to work with position:fixed
-    //         var node = baton.app.getWindow().nodes.body;
-    //         node.append($('<div class="app-bottom-toolbar">'));
-    //     }
-    // });
+    ext.point('io.ox/search/view/window/mobile').extend({
+        id: 'app',
+        index: 100,
+        draw: function () {
+            //overwirte app
+            point.replace({
+                id: 'apps',
+                index: 100,
+                row: '0',
+                draw: function (baton) {
+
+                    var id = baton.model.getApp(),
+                        opt = baton.model.getOptions(),
+                        row, cell,
+                        items = [],
+                        titles = {};
+
+                    //create containers
+                    row = $('<div class="row ">').append(
+                        cell = $('<div class="btn-group col-xs-12">')
+                    );
+
+
+                    //create dropdown menu entries
+                    _(appAPI.getFavorites()).each(function (app) {
+                        if (!opt.mapping[app.id] || app.id === 'io.ox/files') {
+                            var title = titles[app.id] = gt.pgettext('app', app.title);
+                            items.push(
+                                $('<li role="presentation">')
+                                .append(
+                                    $('<a role="menuitem" tabindex="-1" href="#">')
+                                        .attr({
+                                            'title': title,
+                                            'data-app': app.id
+                                        })
+                                        .append(
+                                            $('<i class="fa fa-fw"></i>'),
+                                            $('<span>').text(
+                                                title
+                                            )
+                                        )
+                                )
+                            );
+                        }
+                    });
+
+                    //create button and append dropdown menue
+                    cell.append(
+                        $('<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">')
+                            .append(
+                                $('<span class="name">'),
+                                $('<span class="caret">')
+                            ),
+                        $('<ul class="dropdown-menu app-dropdown" role="menu">').append(items)
+                    );
+
+                    //current app
+                    if (id !== '') {
+                        //add icon
+                        cell.find('[data-app="' + id + '"]')
+                            .find('.fa')
+                            .removeClass('fa-none')
+                            .addClass('fa-check');
+                        //add name
+                        cell.find('.name').text(titles[id]);
+                    }
+
+                    //delegate handler
+                    $('body').delegate('.app-dropdown a', 'click', function (e) {
+                        var cell = $(e.target),
+                            next = cell.closest('a').attr('data-app');
+
+                        if (next && next !== id)
+                            baton.model.setModule(id);
+                    });
+
+                    this.append(row);
+                }
+            });
+        }
+    });
 
 });

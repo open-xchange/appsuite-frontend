@@ -223,6 +223,7 @@ define('io.ox/core/tk/autocomplete',
                     //apply style
                     o.container
                         .addClass('autocomplete-search');
+                    scrollpane.addClass('col-xs-12');
 
                     //ignore hidden facets
                     list = _(list).filter(function (facet) {
@@ -235,7 +236,8 @@ define('io.ox/core/tk/autocomplete',
                         //facet
                         count++;
                         if (facet.display_name && childs && regular) {
-                            $('<div class="autocomplete-item group unselectable">')
+                            $('<div class="autocomplete-item unselectable">')
+                                .addClass(count > 1 ? 'group' : '')
                                 .text(facet.display_name)
                                 .data({
                                     index: count,
