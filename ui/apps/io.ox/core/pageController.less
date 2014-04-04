@@ -34,12 +34,19 @@
  *   Animation stuff
  */
 .io-ox-core-animation {
+    @duration: 350ms;
 
     &.in, &.out{
-        -webkit-animation-duration: 350ms;
+                animation-duration: @duration;
+        -webkit-animation-duration: @duration;
+                animation-fill-mode: both;
         -webkit-animation-fill-mode: both;
         -webkit-animation-timing-function: cubic-bezier(.1, .7, .1, 1);
                 animation-timing-function: cubic-bezier(.1, .7, .1, 1);
+        -webkit-backface-visibility: hidden;
+        -webkit-perspective: 1000;
+                backface-visibility: hidden;
+                perspective: 1000;
 
     }
 

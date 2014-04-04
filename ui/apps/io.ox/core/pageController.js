@@ -192,18 +192,23 @@ define('io.ox/core/pageController',
 
         var showNavbar = function (page) {
             var bar = pages[page].navbar;
-            app.navbar.empty().append(bar.render().$el);
+            if (bar) {
+                app.navbar.empty().append(bar.render().$el);
+            }
         };
 
         var showToolbar = function (page, secondary) {
             var bar;
             if (secondary && !!pages[page].secondaryToolbar) {
                 bar = pages[page].secondaryToolbar;
-            } else {
+            } else if (pages[page].toolbar) {
                 bar = pages[page].toolbar;
             }
-
-            app.toolbar.empty().append(bar.render().$el);
+            if (bar) {
+                app.toolbar.empty().show().append(bar.render().$el);
+            } else {
+                app.toolbar.empty().hide();
+            }
         };
 
     };

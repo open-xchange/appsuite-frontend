@@ -9,6 +9,7 @@
  * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
 define('io.ox/mail/main',
@@ -43,7 +44,13 @@ define('io.ox/mail/main',
     });
 
     app.mediator({
-
+        /*
+         * Init pages for mobile use
+         * Each View will get a single page with own
+         * toolbars and navbars. A PageController instance
+         * will handle the page changes and also maintain
+         * the state of the toolbars and navbars
+         */
         'pages-mobile': function (app) {
             if (_.device('!small')) return;
             var c = app.getWindow().nodes.main;
@@ -62,10 +69,6 @@ define('io.ox/mail/main',
                 container: c,
                 navbar: new Bars.NavbarView({
                     app: app
-                }),
-                toolbar: new Bars.ToolbarView({
-                    app: app,
-                    page: 'folderView'
                 })
             });
 
@@ -109,8 +112,6 @@ define('io.ox/mail/main',
                     page: 'detailView'
                 })
             });
-
-            window.test = app;
         },
         /*
          * Init all nav- and toolbar labels for mobile
@@ -121,8 +122,10 @@ define('io.ox/mail/main',
 
             app.pages.getNavbar('listView')
                 .setLeft(gt('Folders'))
-                .setRight(gt('Edit'))
-                .on('actionRight');
+                .setRight(
+                    //#. Used as a button label to enter the "edit mode"
+                    gt('Edit')
+                );
 
             app.pages.getNavbar('folderTree')
                 .setTitle(gt('Folders'))
@@ -131,7 +134,10 @@ define('io.ox/mail/main',
 
             app.pages.getNavbar('detailView')
                 .setTitle('') // no title
-                .setLeft(gt('Back'));
+                .setLeft(
+                    //#. Used as button label for a navigation action, like the browser back button
+                    gt('Back')
+                );
 
             app.pages.getNavbar('threadView')
                 .setTitle(gt('Thread'))
@@ -139,8 +145,6 @@ define('io.ox/mail/main',
 
             // TODO restore last folder as starting point
             app.pages.showPage('listView');
-
-
         },
 
         'toolbars-mobile': function () {
@@ -219,6 +223,47 @@ define('io.ox/mail/main',
             });
         },
 
+        'toggle-folder-editmode': function (app) {
+            if (_.device('!small')) return;
+            var toggleFolders =  function () {
+                var state = app.props.get('mobileFolderSelectMode'),
+                    page = app.pages.getPage('folderTree');
+
+                if (state) {
+                    app.props.set('mobileFolderSelectMode', false);
+                    app.pages.getNavbar('folderTree').setRight(gt('Edit'));
+                    page.removeClass('mobile-edit-mode');
+
+                } else {
+                    app.props.set('mobileFolderSelectMode', true);
+                    app.pages.getNavbar('folderTree').setRight(gt('Cancel'));
+                    page.addClass('mobile-edit-mode');
+
+                }
+            };
+
+            app.toggleFolders = toggleFolders;
+
+        },
+
+        'folder-view-mobile-listener': function () {
+            if (_.device('!small')) return;
+
+            app.bindFolderChange = function () {
+                // always change folder on click
+                // No way to use tap here since folderselection really messes up the event chain
+                app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
+                    if (app.props.get('mobileFolderSelectMode') === true) {
+                        console.log('e', e);
+                        $(e.currentTarget).trigger('contextmenu'); // open menu
+                        return; // do not change page in edit mode
+                    }
+                    if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
+                    // go to listview
+                    app.pages.changePage('listView');
+                });
+            };
+        },
         /*
          * Folder view support
          */
@@ -227,36 +272,22 @@ define('io.ox/mail/main',
             if (_.device('!small')) return;
 
             app.pages.getNavbar('folderTree')
-                .on('actionRight', function () {
-
-                    if (!app.props.get('mobileFolderSelectMode')) {
-
-                        app.props.set('mobileFolderSelectMode', true);
-                        app.pages.getNavbar('folderTree').setRight(gt('Cancel'));
-                    } else {
-                        app.props.set('mobileFolderSelectMode', false);
-                        app.pages.getNavbar('folderTree').setRight(gt('Edit'));
-                    }
+                .on('rightAction', function () {
+                    app.toggleFolders();
                 });
 
 
-            var view = new FolderView(app, { type: 'mail', container: app.pages.getPage('folderTree') });
+            var view = new FolderView(app, {
+                type: 'mail',
+                container: app.pages.getPage('folderTree')
+            });
             view.handleFolderChange();
             view.load();
 
+            app.bindFolderChange();
 
             // make folder visible by default
             app.toggleFolderView(true);
-
-
-            // always change folder on click
-            // No way to use tap here since folderselection really messes up the event chain
-            app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
-                if (app.props.get('mobileFolderSelectMode') === true) return; // do not change page in edit mode
-                if ($(e.target).hasClass('fa')) return; // if folder expand, do not change page
-
-                app.pages.changePage('listView');
-            });
 
         },
 
@@ -562,7 +593,7 @@ define('io.ox/mail/main',
                 if (list) {
                     list = api.threads.resolve(list);
                     app.pages.getCurrentPage().navbar.setTitle(
-                        //#. This is a short version of "x messages selected", will be used in mobile mail view
+                        //#. This is a short version of "x messages selected", will be used in mobile mail list view
                         gt('%1$d selected', list.length));
                     // re-render toolbar
                     app.pages.getCurrentPage().secondaryToolbar.render();
@@ -804,10 +835,12 @@ define('io.ox/mail/main',
 
         'before-delete-mobile': function (app) {
             if (!_.device('small')) return;
+            // if a mail will be deleted in detail view, go back one page
             api.on('beforedelete', function () {
                 if (app.pages.getCurrentPage().name === 'detailView') {
                     app.pages.goBack();
                 }
+                app.listView.selection.selectNone();
             });
         },
 
@@ -881,7 +914,7 @@ define('io.ox/mail/main',
 
         /*
          * Respond to change:checkboxes on mobiles
-         * Set "edit" to "cancel" on button
+         * Change "edit" to "cancel" on button
          */
         'change:checkboxes-mobile': function (app) {
             if (_.device('!small')) return;

@@ -2964,6 +2964,36 @@ ul.io-ox-inline-links + header {
 
 }
 
+/* tweaks for mobile mail edit mode */
+.io-ox-core-page {
+    .io-ox-foldertree {
+        .folder.selected {
+            .folder-options {
+                display: none;
+            }
+        }
+    }
+}
+.mobile-edit-mode {
+    .foldertree-sidepanel {
+        .foldertree-container {
+            .io-ox-foldertree {
+                .folder.selected, .folder{
+                    .folder-label *{
+                        color: @link-color;
+                        text-decoration: underline;
+                    }
+                }
+                .folder:focus.selected {
+                    .folder-label *{
+                        color: #fff;
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 /* DARK VARIANT */
