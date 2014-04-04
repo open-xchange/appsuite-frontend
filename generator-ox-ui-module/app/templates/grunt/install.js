@@ -10,6 +10,10 @@
 
 module.exports = function (grunt) {
 
+    var languages = grunt.file.expand('i18n/*.po').map(function (fileName) {
+        return fileName.match(/([a-zA-Z]+_[a-zA-Z]+).po$/)[1];
+    });
+
     // Copy build version or dist version into some arbitrary directory
     grunt.config.extend('copy', {
         local_install_build: {
@@ -24,7 +28,9 @@ module.exports = function (grunt) {
         local_install_dist: {
             files: [{
                 expand: true,
-                src: '**/*',
+                src: ['**/*'].concat(languages.map(function (Lang) {
+                    return '!**/*' + Lang + '*';
+                })),
                 cwd: 'dist/',
                 filter: 'isFile',
                 dest: grunt.option('dest')
@@ -47,13 +53,8 @@ module.exports = function (grunt) {
         grunt.task.run('copy:local_install_dist');
     });
 
-    var languages = grunt.file.expand('i18n/*.po').map(function (fileName) {
-        return fileName.match(/([a-zA-Z]+_[a-zA-Z]+).po$/)[1];
-    });
-
     languages.forEach(function (Lang) {
-        var lang = Lang.toLowerCase().replace(/_/g, '-'),
-            config = {};
+        var config = {};
 
         config['local_install_' + Lang] = {
             files: [{
