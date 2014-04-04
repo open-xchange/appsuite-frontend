@@ -54,6 +54,7 @@ define('io.ox/contacts/distrib/main',
 
             if (initdata) {
                 model = contactModel.factory.create({
+                    display_name: initdata.display_name ? initdata.display_name : '',
                     folder_id: folderId,
                     mark_as_distributionlist: true,
                     distribution_list: initdata.distribution_list,
