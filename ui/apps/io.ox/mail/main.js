@@ -254,7 +254,6 @@ define('io.ox/mail/main',
                 // No way to use tap here since folderselection really messes up the event chain
                 app.pages.getPage('folderTree').on('click', '.folder.selectable', function (e) {
                     if (app.props.get('mobileFolderSelectMode') === true) {
-                        console.log('e', e);
                         $(e.currentTarget).trigger('contextmenu'); // open menu
                         return; // do not change page in edit mode
                     }
