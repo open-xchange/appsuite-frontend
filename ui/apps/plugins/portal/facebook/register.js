@@ -43,6 +43,17 @@ define('plugins/portal/facebook/register',
                 .appendTo($(node));
         };
     };
+    var addLikeInfo = function (likeInfo) {
+        if (likeInfo.like_count === 0) {
+            return '';
+        } else {
+            return $('<span class="likeinfo">').append(
+                       $('<span class="youlike">').text(likeInfo.user_likes ? gt('You like this') : ''),
+                       $('<i class="fa fa-thumbs-o-up">'),
+                       $('<span class="count">').text(likeInfo.like_count)
+                   );
+        }
+    };
 
     var getProfile = function (profiles, actor_id) {
         return _.find(profiles, function (profile) { return profile.id === actor_id; });
@@ -59,7 +70,7 @@ define('plugins/portal/facebook/register',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
                     newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
                     profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
-                    comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
+                    comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, user_likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
                 })
             })
             .pipe(JSON.parse);
@@ -169,7 +180,7 @@ define('plugins/portal/facebook/register',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
                     newsfeed: 'SELECT post_id, actor_id, message, type, description, like_info, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = \'newsfeed\') AND is_hidden = 0',
                     profiles: 'SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed) OR id IN (SELECT fromid FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed))',
-                    comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
+                    comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, user_likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
                 })
             })
             .pipe(JSON.parse)
@@ -219,7 +230,8 @@ define('plugins/portal/facebook/register',
                                 $(this).text(gt('expand'));
                             }
                         }),
-                        $('<span class="datetime">').text(new date.Local(post.created_time * 1000))
+                        $('<span class="datetime">').text(new date.Local(post.created_time * 1000)),
+                        addLikeInfo(post.like_info)
                     ));
 
                 ext.point('io.ox/plugins/portal/facebook/renderer').each(function (renderer) {
@@ -301,6 +313,7 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             var self = $(this);
+            $('<div class="message">').text(post.message || post.attachment.name).appendTo($(this));
             _(post.attachment.media).each(function (media) {
                 $('<a class = facebook-image>').attr({href: media.href})
                     .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
