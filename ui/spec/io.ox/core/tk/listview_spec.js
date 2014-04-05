@@ -11,20 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
+define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView, api, waitsFor) {
 
     'use strict';
 
-    // jasmin helper
-    function Done() {
-        var f = function () { return !!f.value; };
-        f.yep = function () { f.value = true; };
-        return f;
-    }
-
-    var expect = chai.expect;
-
-    describe.skip('The ListView.', function () {
+    describe('The ListView.', function () {
 
         beforeEach(function () {
 
@@ -47,11 +38,11 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             it('should be empty and have proper markup', function () {
 
                 // we need at least one occurrence (the other one might come from mail app)
-                expect($('.list-view', document).length).to.be.above(0);
+                expect($('.list-view', document)).to.have.length.above(0);
 
                 // check overall markup
                 var node = this.list.$el;
-                expect(node.children().length, 'children').to.equal(0);
+                expect(node.children(), 'children').to.have.length(0);
                 expect(node.is('ul'), '<ul> tag').to.be.true;
                 expect(node.attr('role'), 'role').to.equal('listbox');
                 expect(node.attr('tabindex'), 'tabindex').to.equal('1');
@@ -405,7 +396,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 expect(this.list.$el.children().height()).to.be.above(0);
             });
 
-            it('should load new data on scroll', function () {
+            it('should load new data on scroll', function (done) {
                 // add paginate function
                 var list = this.list;
                 list.paginate = function () { return _.wait(500); };
@@ -413,9 +404,9 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
                 list.$el.scrollTop(2000);
                 waitsFor(function () {
                     return list.getBusyIndicator().length === 1;
-                }, 400);
-                runs(function () {
+                }).then(function () {
                     expect(list.getBusyIndicator().length).to.equal(1);
+                    done();
                 });
             });
         });
@@ -442,7 +433,7 @@ define(['io.ox/mail/listview', 'io.ox/mail/api'], function (ListView, api) {
             });
         });
 
-        xdescribe('traversing', function () {
+        describe.skip('traversing', function () {
 
             beforeEach(function () {
                 // three undeleted, seen mails

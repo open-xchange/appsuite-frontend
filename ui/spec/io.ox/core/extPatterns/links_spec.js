@@ -13,20 +13,21 @@
 
 define([
     'io.ox/core/extPatterns/links',
-    'io.ox/core/extensions'
-], function (linkPatterns, ext) {
+    'io.ox/core/extensions',
+    'waitsFor'
+], function (linkPatterns, ext, waitsFor) {
     'use strict';
 
-    describe.skip('Extension patterns: link patterns', function () {
+    describe('Extension patterns: link patterns', function () {
         function findPattern(suite) {
-            if (suite.description && linkPatterns[suite.description]) {
-                return linkPatterns[suite.description];
+            if (suite.title && linkPatterns[suite.title]) {
+                return linkPatterns[suite.title];
             }
 
-            return findPattern(suite.parentSuite);
+            return findPattern(suite.parent);
         }
         beforeEach(function () {
-            this.pattern = findPattern(this.suite);
+            this.pattern = findPattern(this.currentTest.parent);
             this.point = ext.point('spec/io.ox/core/extPatterns').extend(new this.pattern({
                 index: 100,
                 id: 'default',
@@ -51,21 +52,21 @@ define([
                 ext.point('spec/io.ox/core/extPatterns/default').clear();
             });
 
-            it('paints an empty unordered list without any link extensions', function () {
+            it('paints an empty unordered list without any link extensions', function (done) {
                 var node = $('<div class="testNode">').appendTo($('body', document));
                 this.baton = {id: 1};
 
                 this.point.invoke('draw', node, this.baton);
                 waitsFor(function () {
                     return node.find('ul').hasClass('empty');
-                }, 'draw method of extension point', ox.testTimeout);
-                runs(function () {
-                    expect(node.find('ul').is(':empty')).toBeTruthy();
+                }).then(function () {
+                    expect(node.find('ul').is(':empty')).to.be.true;
                     node.remove();
+                    done();
                 });
             });
 
-            it('work with one link extensions', function () {
+            it('work with one link extensions', function (done) {
                 var node = $('<div class="testNode">').appendTo($('body', document));
                 this.baton = {id: 1};
 
@@ -78,14 +79,14 @@ define([
                 this.point.invoke('draw', node, this.baton);
                 waitsFor(function () {
                     return !node.find('ul').hasClass('empty');
-                }, 'draw method of extension point with links', ox.testTimeout);
-                runs(function () {
-                    expect(node.find('li', 'ul').length).toBe(1);
+                }).then(function () {
+                    expect(node.find('li', 'ul')).to.have.length(1);
                     node.remove();
+                    done();
                 });
             });
 
-            it('work with a few link extensions', function () {
+            it('work with a few link extensions', function (done) {
                 var node = $('<div class="testNode">').appendTo($('body', document));
                 this.baton = {id: 1};
 
@@ -110,10 +111,10 @@ define([
                 this.point.invoke('draw', node, this.baton);
                 waitsFor(function () {
                     return !node.find('ul').hasClass('empty');
-                }, 'draw method of extension point', ox.testTimeout);
-                runs(function () {
-                    expect(node.find('li', 'ul').length).toBe(3);
+                }).then(function () {
+                    expect(node.find('li', 'ul')).to.have.length(3);
                     node.remove();
+                    done();
                 });
             });
         });

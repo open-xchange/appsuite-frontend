@@ -21,7 +21,7 @@ define(['io.ox/core/extensions',
 
     var capabilities = caputil.preset('common').init('io.ox/core/tk/attachments', attachments);
 
-    describe.skip('Attachments Util has a', function () {
+    describe('Attachments Util has a', function () {
 
         describe('FileUploadWidget:', function () {
             describe('when capability "infostore" is disabled', function () {
@@ -30,11 +30,11 @@ define(['io.ox/core/extensions',
                 });
                 it('and ox.drive is enabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: true});
-                    expect(node.find('[data-action="addinternal"]').length).toBeFalsy();
+                    expect(node.find('[data-action="addinternal"]')).to.have.length(0);
                 });
                 it('and ox.drive is disabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: false});
-                    expect(node.find('[data-action="addinternal"]').length).toBeFalsy();
+                    expect(node.find('[data-action="addinternal"]')).to.have.length(0);
                 });
             });
             describe('when capability "infostore" is enabled', function () {
@@ -43,11 +43,11 @@ define(['io.ox/core/extensions',
                 });
                 it('and ox.drive is enabled "Files" button should be shown', function () {
                     var node = attachments.fileUploadWidget({drive: true});
-                    expect(node.find('[data-action="addinternal"]').length).toBeTruthy();
+                    expect(node.find('[data-action="addinternal"]')).to.have.length(1);
                 });
                 it('and ox.drive is disabled "Files" button should be hidden', function () {
                     var node = attachments.fileUploadWidget({drive: false});
-                    expect(node.find('[data-action="addinternal"]').length).toBeFalsy();
+                    expect(node.find('[data-action="addinternal"]')).to.have.length(0);
                 });
             });
         });
@@ -85,8 +85,11 @@ define(['io.ox/core/extensions',
                 this.baton = new ext.Baton();
             });
 
-            afterEach(function () {
-                expect(this.def).toResolveWith('done');
+            afterEach(function (done) {
+                this.def.done(function (result) {
+                    expect(result).to.equal('done');
+                    done();
+                });
             });
 
             describe('list with one file added', function () {
@@ -107,8 +110,8 @@ define(['io.ox/core/extensions',
                     .then(function () {
                         self.baton.fileList.clear();
                         var result = self.baton.fileList.get();
-                        chai.expect(result).to.be.an('array');
-                        chai.expect(result).to.be.empty;
+                        expect(result).to.be.an('array');
+                        expect(result).to.be.empty;
 
                         return 'done';
                     });
@@ -120,8 +123,8 @@ define(['io.ox/core/extensions',
                     this.def = this.setup.then(getList(this.baton))
                     .then(function () {
                         var result = self.baton.fileList.get();
-                        chai.expect(result).to.be.an('array');
-                        chai.expect(result).to.have.deep.property('[0]', attachmentFile);
+                        expect(result).to.be.an('array');
+                        expect(result).to.have.deep.property('[0]', attachmentFile);
 
                         return 'done';
                     });
@@ -140,10 +143,10 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.have.property('reason');
-                            expect(result.reason).toBe('quota');
-                            chai.expect(result.error).to.be.a('string');
+                            expect(result).to.have.property('added');
+                            expect(result).to.have.property('reason');
+                            expect(result.reason).to.equal('quota');
+                            expect(result.error).to.be.a('string');
 
                             return 'done';
                         });
@@ -157,10 +160,10 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.have.property('reason');
-                            expect(result.reason).toBe('filesize');
-                            chai.expect(result.error).to.be.a('string');
+                            expect(result).to.have.property('added');
+                            expect(result).to.have.property('reason');
+                            expect(result.reason).to.equal('filesize');
+                            expect(result.error).to.be.a('string');
 
                             return 'done';
                         });
@@ -174,9 +177,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -190,9 +193,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -206,9 +209,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -222,9 +225,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -238,9 +241,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -254,9 +257,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -272,10 +275,10 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.have.property('reason');
-                            expect(result.reason).toBe('quota');
-                            chai.expect(result.error).to.be.a('string');
+                            expect(result).to.have.property('added');
+                            expect(result).to.have.property('reason');
+                            expect(result.reason).to.equal('quota');
+                            expect(result.error).to.be.a('string');
 
                             return 'done';
                         });
@@ -288,9 +291,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -303,9 +306,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -318,9 +321,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
@@ -333,9 +336,9 @@ define(['io.ox/core/extensions',
                         })
                         .then(createList(this.baton, attachmentFile, true))
                         .then(function (result) {
-                            chai.expect(result).to.have.property('added');
-                            chai.expect(result).to.not.have.property('reason');
-                            chai.expect(result).to.not.have.property('error');
+                            expect(result).to.have.property('added');
+                            expect(result).to.not.have.property('reason');
+                            expect(result).to.not.have.property('error');
 
                             return 'done';
                         });
