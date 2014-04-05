@@ -55,13 +55,13 @@ msgstr "%1$d arquivos foram alterados recentemente"
 msgid "%1$d messages in this conversation"
 msgstr "Conversas recentes"
 
-#: apps/io.ox/mail/main.js:548 module:io.ox/mail
+#: apps/io.ox/mail/main.js:577 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages selected"
 msgstr "<b>%1$d</b> elementos selecionados"
 
-#. This is a short version of "x messages selected", will be used in mobile mail view
-#: apps/io.ox/mail/main.js:566 module:io.ox/mail
+#. This is a short version of "x messages selected", will be used in mobile mail list view
+#: apps/io.ox/mail/main.js:595 module:io.ox/mail
 #, fuzzy
 msgid "%1$d selected"
 msgstr "<b>%1$d</b> elementos selecionados"
@@ -516,7 +516,7 @@ msgstr "Adicionar ao portal"
 msgid "Add widget"
 msgstr "Adicionar widget"
 
-#: apps/plugins/portal/facebook/register.js:262 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:285 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:342
 #: apps/plugins/portal/twitter/register.js:368
 msgid "Add your account"
@@ -657,7 +657,7 @@ msgstr "Anexar vCard"
 msgid "Application Toolbar"
 msgstr "Barra de Ferramentas do Aplicativo"
 
-#: apps/io.ox/mail/main.js:941 module:io.ox/mail
+#: apps/io.ox/mail/main.js:972 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "O aplicativo pode não funcionar como esperado até este problema ser "
@@ -881,8 +881,9 @@ msgstr "Tempo médio: %1$s ms"
 msgid "B"
 msgstr "B"
 
+#. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/core/commons.js:666 module:io.ox/core
-#: apps/io.ox/mail/main.js:134 module:io.ox/mail apps/io.ox/mail/main.js:138
+#: apps/io.ox/mail/main.js:140 module:io.ox/mail apps/io.ox/mail/main.js:145
 #: apps/io.ox/mail/threadview.js:39
 msgid "Back"
 msgstr "Voltar"
@@ -1017,7 +1018,7 @@ msgstr "Calendário"
 #: apps/io.ox/calendar/week/perspective.js:94
 #: apps/io.ox/calendar/week/perspective.js:137
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/distrib/main.js:184
+#: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/distrib/main.js:185
 #: apps/io.ox/contacts/edit/main.js:249
 #: apps/io.ox/core/commons-folderview.js:557 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1627 apps/io.ox/core/export/export.js:104
@@ -1045,8 +1046,8 @@ msgstr "Calendário"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: module:io.ox/settings/settings apps/io.ox/mail/main.js:235
-#: apps/io.ox/mail/main.js:892 apps/io.ox/mail/write/inline-images.js:80
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:241
+#: apps/io.ox/mail/main.js:923 apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
@@ -1197,7 +1198,7 @@ msgid "Click here for free trial."
 msgstr "Clique aqui para teste gratuito."
 
 #: apps/io.ox/portal/main.js:297 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:279 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:302 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:384
 msgid "Click here to add your account"
 msgstr "Clique aqui para adicionar sua conta"
@@ -1224,7 +1225,7 @@ msgstr "Clique em uma frase para escolher quando repetir o compromisso."
 msgid "Click on the links to change the values."
 msgstr "Clique nos links para alterar os valores."
 
-#: apps/plugins/portal/facebook/register.js:98 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:116 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:144
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -1275,7 +1276,7 @@ msgstr "Fechar"
 msgid "Close all"
 msgstr "Fechar tudo"
 
-#: apps/io.ox/mail/view-options.js:135 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:138 module:io.ox/mail
 #, fuzzy
 #| msgid "Folder view"
 msgid "Close folder view"
@@ -1521,7 +1522,7 @@ msgstr "Não foi possível carregar dados do compromisso."
 msgid "Couldn't load contact data."
 msgstr "Não foi possível carregar dados do contato."
 
-#: apps/io.ox/core/tk/folderviews.js:1066 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:1070 module:io.ox/core
 msgid "Couldn't load folders."
 msgstr "Não foi possível carregar as pastas."
 
@@ -1847,7 +1848,7 @@ msgstr "Desabilitar widget"
 #: apps/io.ox/calendar/edit/main.js:50 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/template.js:96
 #: apps/io.ox/contacts/distrib/create-dist-view.js:56 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:183
+#: apps/io.ox/contacts/distrib/main.js:184
 #: apps/io.ox/contacts/edit/main.js:248
 #: apps/io.ox/contacts/edit/view-form.js:183
 #: apps/io.ox/contacts/settings/pane.js:102 apps/io.ox/editor/main.js:344
@@ -1905,7 +1906,7 @@ msgid "Distance"
 msgstr "Distância"
 
 #: apps/io.ox/contacts/distrib/main.js:38 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:156
+#: apps/io.ox/contacts/distrib/main.js:157
 msgid "Distribution List"
 msgstr "Lista de Distribuição"
 
@@ -1915,7 +1916,7 @@ msgstr "Lista de Distribuição"
 msgid "Distribution list"
 msgstr "Lista de distribuição"
 
-#: apps/io.ox/contacts/distrib/main.js:78 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:79 module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "A lista de distribuição foi salva"
 
@@ -1970,7 +1971,7 @@ msgid "Do you really want to discard this mail?"
 msgstr "Deseja realmente descartar este e-mail?"
 
 #: apps/io.ox/calendar/edit/main.js:49 module:io.ox/calendar/edit/main
-#: apps/io.ox/contacts/distrib/main.js:182 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:183 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:343
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:159 module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
@@ -2147,6 +2148,7 @@ msgstr "Configurações de e-mail"
 msgid "EB"
 msgstr "EB"
 
+#. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
 #: apps/io.ox/contacts/actions.js:745 module:io.ox/contacts
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
@@ -2154,8 +2156,8 @@ msgstr "EB"
 #: apps/io.ox/mail/actions.js:976 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
-#: apps/io.ox/mail/main.js:124 apps/io.ox/mail/main.js:130
-#: apps/io.ox/mail/main.js:238 apps/io.ox/mail/main.js:896
+#: apps/io.ox/mail/main.js:128 apps/io.ox/mail/main.js:134
+#: apps/io.ox/mail/main.js:236 apps/io.ox/mail/main.js:927
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2598,13 +2600,13 @@ msgstr "Participantes externos"
 msgid "Face"
 msgstr "Face"
 
-#: apps/plugins/portal/facebook/register.js:119 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:276
-#: apps/plugins/portal/facebook/register.js:537
+#: apps/plugins/portal/facebook/register.js:137 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:299
+#: apps/plugins/portal/facebook/register.js:557
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:107 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:125 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Facebook reportou um erro:"
 
@@ -2621,7 +2623,7 @@ msgstr "Falha ao conectar."
 msgid "Failed to recover accounts"
 msgstr "Falha ao recuperar contas"
 
-#: apps/io.ox/contacts/distrib/main.js:73 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:74 module:io.ox/contacts
 msgid "Failed to save distribution list."
 msgstr "Falha ao salvar lista de distribuição."
 
@@ -2819,7 +2821,7 @@ msgid "Folder-specific actions"
 msgstr "Ações específicas de pasta"
 
 #: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
-#: apps/io.ox/mail/main.js:123 module:io.ox/mail apps/io.ox/mail/main.js:128
+#: apps/io.ox/mail/main.js:125 module:io.ox/mail apps/io.ox/mail/main.js:132
 msgid "Folders"
 msgstr "Pastas"
 
@@ -3019,7 +3021,7 @@ msgstr "Ajuda"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "Oi!<br><br>%1$s compartilha uma publicação com você:<br>%2$s"
 
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 #, fuzzy
 msgid "Hidden folders"
 msgstr "Adicionar pasta"
@@ -3033,7 +3035,7 @@ msgstr "Ocultar"
 msgid "Hide QR code"
 msgstr "Ocultar código QR"
 
-#: apps/plugins/portal/facebook/register.js:28 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 msgid "Hide comments"
 msgstr "Ocultar comentários"
 
@@ -3452,7 +3454,7 @@ msgstr "Azul claro"
 msgid "Light green"
 msgstr "Verde claro"
 
-#: apps/plugins/portal/facebook/register.js:400 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:423 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "Curtiu um link: %s"
 
@@ -3524,7 +3526,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "E-mail"
 
-#: apps/io.ox/mail/main.js:286 module:io.ox/mail
+#: apps/io.ox/mail/main.js:308 module:io.ox/mail
 msgid "Mail Details"
 msgstr "Detalhes de e-mail"
 
@@ -3894,7 +3896,7 @@ msgstr "Nunca"
 msgid "New Folder"
 msgstr "Nova pasta"
 
-#: apps/io.ox/mail/api.js:1661 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1660 module:io.ox/mail
 msgid "New Mail"
 msgstr "Novo e-mail"
 
@@ -4044,7 +4046,7 @@ msgstr "Nenhum e-mail na sua caixa de entrada"
 msgid "No matching templates on this Server"
 msgstr "Sem modelos correspondentes neste servidor"
 
-#: apps/io.ox/mail/main.js:534 module:io.ox/mail
+#: apps/io.ox/mail/main.js:563 module:io.ox/mail
 #, fuzzy
 msgid "No message selected"
 msgstr "Nenhum elemento selecionado"
@@ -4098,7 +4100,7 @@ msgstr "Sem assunto"
 msgid "No title."
 msgstr "Nenhum título."
 
-#: apps/plugins/portal/facebook/register.js:79 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:97 module:plugins/portal
 msgid "No wall posts yet."
 msgstr "Nenhuma publicação no mural ainda."
 
@@ -4755,7 +4757,7 @@ msgstr "CEP"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "Pressione [enter] para ir à lista de Aniversários."
 
-#: apps/plugins/portal/facebook/register.js:152 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:170 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "Pressione [enter] para ir ao facebook."
 
@@ -4871,7 +4873,7 @@ msgstr "Política de privacidade"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:143 module:io.ox/contacts
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js:354 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "Privada"
@@ -4908,7 +4910,7 @@ msgstr "O progresso deve ser um número válido entre 0 e 100"
 msgid "Properties"
 msgstr "Propriedades"
 
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 msgid "Public"
 msgstr "Pública"
 
@@ -5326,7 +5328,7 @@ msgstr "Salvar para drive"
 msgid "Saved in"
 msgstr "Salvo em"
 
-#: apps/io.ox/mail/api.js:1325 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1324 module:io.ox/mail
 #, fuzzy
 msgid "Saved mail attachment"
 msgstr "Enviar como anexo"
@@ -5546,7 +5548,7 @@ msgstr "Compartilhar este arquivo"
 msgid "Share this folder"
 msgstr "Compartilhar esta pasta"
 
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 msgid "Shared"
 msgstr "Compartilhada"
 
@@ -5584,8 +5586,8 @@ msgstr "Exibir todos os meus compromissos de todos os calendários"
 msgid "Show appointment details"
 msgstr "Exibir compromisso"
 
-#: apps/plugins/portal/facebook/register.js:28 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:236
+#: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:257
 msgid "Show comments"
 msgstr "Exibir comentários"
 
@@ -5742,7 +5744,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "Alguns campos contêm dados inválidos"
 
-#: apps/plugins/portal/facebook/register.js:102 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:120 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:148
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -6609,7 +6611,7 @@ msgstr "Esta pasta não tem publicações"
 msgid "This folder has no subscriptions"
 msgstr "Esta pasta não tem inscrições"
 
-#: apps/io.ox/core/tk/folderviews.js:897 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:901 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "Esta pasta tem publicações e/ou inscrições"
 
@@ -6681,7 +6683,7 @@ msgstr ""
 "Este widget está atualmente desconectado, pois o twitter excedeu seu limite "
 "de taxa."
 
-#: apps/io.ox/mail/main.js:137 module:io.ox/mail
+#: apps/io.ox/mail/main.js:144 module:io.ox/mail
 #, fuzzy
 #| msgid "Thread view"
 msgid "Thread"
@@ -7564,6 +7566,12 @@ msgstr "Você aceitou provisoriamente o compromisso"
 msgid "You have to enter a username and password to subscribe."
 msgstr "Você tem que inserir um nome de usuário e senha para se inscrever."
 
+#: apps/plugins/portal/facebook/register.js:54 module:plugins/portal
+#, fuzzy
+#| msgid "You declined this task"
+msgid "You like this"
+msgstr "Você recusou esta tarefa"
+
 #. %n in the lowest version of Android
 #: apps/io.ox/core/login-i18n.js:37 module:io.ox/core/login
 msgid "You need to use Android %n or higher."
@@ -7574,7 +7582,7 @@ msgstr "Você precisa usar Android %n ou superior."
 msgid "You need to use iOS %n or higher."
 msgstr "Você precisa usar iOS %n ou superior."
 
-#: apps/io.ox/core/tk/folderviews.js:920 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:924 module:io.ox/core
 msgid "You share this folder with other users"
 msgstr "Você compartilha esta pasta com outros usuários"
 
@@ -7745,7 +7753,7 @@ msgstr "fechar"
 msgid "close for %1$s"
 msgstr "fechar para %1$s"
 
-#: apps/plugins/portal/facebook/register.js:210 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:230 module:plugins/portal
 #, fuzzy
 #| msgid "Collapse form"
 msgid "collapse"
@@ -7892,8 +7900,8 @@ msgstr "todo mês"
 msgid "every week"
 msgstr "a cada semana"
 
-#: apps/plugins/portal/facebook/register.js:206 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:213
+#: apps/plugins/portal/facebook/register.js:226 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:233
 msgid "expand"
 msgstr ""
 
@@ -8110,6 +8118,10 @@ msgstr "amanhã"
 msgid "tonight"
 msgstr "hoje a noite"
 
+#: apps/io.ox/core/tk/folderviews.js:854 module:io.ox/core
+msgid "total"
+msgstr ""
+
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
 #: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:403
 #: apps/io.ox/mail/util.js:416
@@ -8119,6 +8131,12 @@ msgstr "desconhecido"
 #: apps/plugins/portal/quota/register.js:123 module:plugins/portal
 msgid "unlimited"
 msgstr "ilimitado"
+
+#: apps/io.ox/core/tk/folderviews.js:855 module:io.ox/core
+#, fuzzy
+#| msgid "Unread"
+msgid "unread"
+msgstr "Não lido"
 
 #: apps/io.ox/core/import/import.js:95 module:io.ox/core
 msgid "vCard"

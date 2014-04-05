@@ -56,13 +56,13 @@ msgstr "%1$d bestanden zijn recent aangepast"
 msgid "%1$d messages in this conversation"
 msgstr "Recente conversaties"
 
-#: apps/io.ox/mail/main.js:548 module:io.ox/mail
+#: apps/io.ox/mail/main.js:577 module:io.ox/mail
 #, fuzzy
 msgid "%1$d messages selected"
 msgstr "<b>%1$d</b> elementen geselecteerd"
 
-#. This is a short version of "x messages selected", will be used in mobile mail view
-#: apps/io.ox/mail/main.js:566 module:io.ox/mail
+#. This is a short version of "x messages selected", will be used in mobile mail list view
+#: apps/io.ox/mail/main.js:595 module:io.ox/mail
 #, fuzzy
 msgid "%1$d selected"
 msgstr "<b>%1$d</b> elementen geselecteerd"
@@ -521,7 +521,7 @@ msgstr "Toevoegen aan het portaal"
 msgid "Add widget"
 msgstr "Widget toevoegen"
 
-#: apps/plugins/portal/facebook/register.js:262 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:285 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:342
 #: apps/plugins/portal/twitter/register.js:368
 msgid "Add your account"
@@ -663,7 +663,7 @@ msgstr "vCard toevoegen"
 msgid "Application Toolbar"
 msgstr "Applicaties Werkbalk"
 
-#: apps/io.ox/mail/main.js:941 module:io.ox/mail
+#: apps/io.ox/mail/main.js:972 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "De applicatie werkt waarschijnlijk niet als u verwacht voordat dit probleem "
@@ -887,8 +887,9 @@ msgstr "Gemiddelde tijd: %1$s ms"
 msgid "B"
 msgstr "B"
 
+#. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/core/commons.js:666 module:io.ox/core
-#: apps/io.ox/mail/main.js:134 module:io.ox/mail apps/io.ox/mail/main.js:138
+#: apps/io.ox/mail/main.js:140 module:io.ox/mail apps/io.ox/mail/main.js:145
 #: apps/io.ox/mail/threadview.js:39
 msgid "Back"
 msgstr "Terug"
@@ -1023,7 +1024,7 @@ msgstr "Agenda"
 #: apps/io.ox/calendar/week/perspective.js:94
 #: apps/io.ox/calendar/week/perspective.js:137
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/distrib/main.js:184
+#: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/distrib/main.js:185
 #: apps/io.ox/contacts/edit/main.js:249
 #: apps/io.ox/core/commons-folderview.js:557 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1627 apps/io.ox/core/export/export.js:104
@@ -1051,8 +1052,8 @@ msgstr "Agenda"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: module:io.ox/settings/settings apps/io.ox/mail/main.js:235
-#: apps/io.ox/mail/main.js:892 apps/io.ox/mail/write/inline-images.js:80
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:241
+#: apps/io.ox/mail/main.js:923 apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
@@ -1202,7 +1203,7 @@ msgid "Click here for free trial."
 msgstr "Klik hier om het gratis te proberen."
 
 #: apps/io.ox/portal/main.js:297 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:279 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:302 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:384
 msgid "Click here to add your account"
 msgstr "Klik hier om uw account toe te voegen"
@@ -1229,7 +1230,7 @@ msgstr "Klik op een zin om de interval-periode aan te passen."
 msgid "Click on the links to change the values."
 msgstr "Klik op de linkjes om de waarden aan te passen."
 
-#: apps/plugins/portal/facebook/register.js:98 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:116 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:144
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -1280,7 +1281,7 @@ msgstr "Sluiten"
 msgid "Close all"
 msgstr "Alles sluiten"
 
-#: apps/io.ox/mail/view-options.js:135 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:138 module:io.ox/mail
 #, fuzzy
 #| msgid "Folder view"
 msgid "Close folder view"
@@ -1529,7 +1530,7 @@ msgstr "Kan afspraak-gegevens niet laden."
 msgid "Couldn't load contact data."
 msgstr "Kan contact-gegevens niet laden"
 
-#: apps/io.ox/core/tk/folderviews.js:1066 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:1070 module:io.ox/core
 msgid "Couldn't load folders."
 msgstr "Kan mappen niet laden"
 
@@ -1855,7 +1856,7 @@ msgstr "De widget uitschakelen"
 #: apps/io.ox/calendar/edit/main.js:50 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/template.js:96
 #: apps/io.ox/contacts/distrib/create-dist-view.js:56 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:183
+#: apps/io.ox/contacts/distrib/main.js:184
 #: apps/io.ox/contacts/edit/main.js:248
 #: apps/io.ox/contacts/edit/view-form.js:183
 #: apps/io.ox/contacts/settings/pane.js:102 apps/io.ox/editor/main.js:344
@@ -1913,7 +1914,7 @@ msgid "Distance"
 msgstr "Afstand"
 
 #: apps/io.ox/contacts/distrib/main.js:38 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:156
+#: apps/io.ox/contacts/distrib/main.js:157
 msgid "Distribution List"
 msgstr "Distributielijst"
 
@@ -1923,7 +1924,7 @@ msgstr "Distributielijst"
 msgid "Distribution list"
 msgstr "Distributielijst"
 
-#: apps/io.ox/contacts/distrib/main.js:78 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:79 module:io.ox/contacts
 msgid "Distribution list has been saved"
 msgstr "De distributielijst is opgeslagen"
 
@@ -1979,7 +1980,7 @@ msgid "Do you really want to discard this mail?"
 msgstr "Weet u zeker dat u het opstellen van deze mail wilt afbreken?"
 
 #: apps/io.ox/calendar/edit/main.js:49 module:io.ox/calendar/edit/main
-#: apps/io.ox/contacts/distrib/main.js:182 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:183 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:343
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:159 module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
@@ -2164,6 +2165,7 @@ msgstr "E-mailinstellingen"
 msgid "EB"
 msgstr "EB"
 
+#. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
 #: apps/io.ox/contacts/actions.js:745 module:io.ox/contacts
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
@@ -2171,8 +2173,8 @@ msgstr "EB"
 #: apps/io.ox/mail/actions.js:976 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
-#: apps/io.ox/mail/main.js:124 apps/io.ox/mail/main.js:130
-#: apps/io.ox/mail/main.js:238 apps/io.ox/mail/main.js:896
+#: apps/io.ox/mail/main.js:128 apps/io.ox/mail/main.js:134
+#: apps/io.ox/mail/main.js:236 apps/io.ox/mail/main.js:927
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2616,13 +2618,13 @@ msgstr "Externe deelnemers"
 msgid "Face"
 msgstr "Gezicht"
 
-#: apps/plugins/portal/facebook/register.js:119 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:276
-#: apps/plugins/portal/facebook/register.js:537
+#: apps/plugins/portal/facebook/register.js:137 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:299
+#: apps/plugins/portal/facebook/register.js:557
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:107 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:125 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Facebook rapporteert een fout:"
 
@@ -2639,7 +2641,7 @@ msgstr "Verbinding mislukt"
 msgid "Failed to recover accounts"
 msgstr "Herstellen van accounts is mislukt"
 
-#: apps/io.ox/contacts/distrib/main.js:73 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/main.js:74 module:io.ox/contacts
 msgid "Failed to save distribution list."
 msgstr "Het opslaan van de distributielijst is mislukt."
 
@@ -2836,7 +2838,7 @@ msgid "Folder-specific actions"
 msgstr "Mapspecifieke actie"
 
 #: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
-#: apps/io.ox/mail/main.js:123 module:io.ox/mail apps/io.ox/mail/main.js:128
+#: apps/io.ox/mail/main.js:125 module:io.ox/mail apps/io.ox/mail/main.js:132
 msgid "Folders"
 msgstr "Map"
 
@@ -3037,7 +3039,7 @@ msgstr "Hulp"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "Hallo!<br><br>%1$s deelt een publicatie met u:<br>%2$s"
 
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 #, fuzzy
 msgid "Hidden folders"
 msgstr "Toevoegen map"
@@ -3051,7 +3053,7 @@ msgstr "Verbergen"
 msgid "Hide QR code"
 msgstr "QR-code verbergen"
 
-#: apps/plugins/portal/facebook/register.js:28 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
 msgid "Hide comments"
 msgstr "Verberg commentaar"
 
@@ -3469,7 +3471,7 @@ msgstr "Licht-blauw"
 msgid "Light green"
 msgstr "Licht-groen"
 
-#: apps/plugins/portal/facebook/register.js:400 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:423 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "Liked een link: %s"
 
@@ -3541,7 +3543,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "E-mail"
 
-#: apps/io.ox/mail/main.js:286 module:io.ox/mail
+#: apps/io.ox/mail/main.js:308 module:io.ox/mail
 msgid "Mail Details"
 msgstr "E-mail details"
 
@@ -3914,7 +3916,7 @@ msgstr "Nooit"
 msgid "New Folder"
 msgstr "Nieuwe Map"
 
-#: apps/io.ox/mail/api.js:1661 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1660 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nieuwe e-mail"
 
@@ -4064,7 +4066,7 @@ msgstr "Geen e-mailberichten in uw Postvak IN"
 msgid "No matching templates on this Server"
 msgstr "Geen passende sjablonen op deze Server"
 
-#: apps/io.ox/mail/main.js:534 module:io.ox/mail
+#: apps/io.ox/mail/main.js:563 module:io.ox/mail
 #, fuzzy
 msgid "No message selected"
 msgstr "Geen elementen geselecteerd"
@@ -4120,7 +4122,7 @@ msgstr "Geen onderwerp"
 msgid "No title."
 msgstr "Geen titel."
 
-#: apps/plugins/portal/facebook/register.js:79 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:97 module:plugins/portal
 msgid "No wall posts yet."
 msgstr "Nog geen wall-posts."
 
@@ -4771,7 +4773,7 @@ msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr ""
 "Druk op [enter] om te springen naar een volledige lijst van Verjaardagen."
 
-#: apps/plugins/portal/facebook/register.js:152 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:170 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "Druk op [enter] om naar de Facebook stream te springen."
 
@@ -4886,7 +4888,7 @@ msgstr "Privacy-verklaring"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:143 module:io.ox/contacts
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js:354 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "Privé"
@@ -4923,7 +4925,7 @@ msgstr "Voortgang moet een getal tussen 0 en 100 zijn"
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 msgid "Public"
 msgstr "Publiek"
 
@@ -5343,7 +5345,7 @@ msgstr "Opslaan naar Drive"
 msgid "Saved in"
 msgstr "Opgeslagen in"
 
-#: apps/io.ox/mail/api.js:1325 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1324 module:io.ox/mail
 #, fuzzy
 msgid "Saved mail attachment"
 msgstr "Bijlage verwijderen"
@@ -5563,7 +5565,7 @@ msgstr "Deel dit bestand"
 msgid "Share this folder"
 msgstr "Deel deze map"
 
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 msgid "Shared"
 msgstr "Gedeeld"
 
@@ -5603,8 +5605,8 @@ msgstr "Toon al mijn afspraken uit alle agenda's"
 msgid "Show appointment details"
 msgstr "Toon afspraak"
 
-#: apps/plugins/portal/facebook/register.js:28 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:236
+#: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:257
 msgid "Show comments"
 msgstr "Toon commentaar"
 
@@ -5763,7 +5765,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "Sommige velden bevatten ongeldige gegevens"
 
-#: apps/plugins/portal/facebook/register.js:102 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:120 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:148
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -6634,7 +6636,7 @@ msgstr "Deze map heeft geen publicaties"
 msgid "This folder has no subscriptions"
 msgstr "Deze map heeft geen abonnementen"
 
-#: apps/io.ox/core/tk/folderviews.js:897 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:901 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "Deze map heeft publicaties en/of abonnementen"
 
@@ -6707,7 +6709,7 @@ msgstr ""
 "Deze widget is momenteel niet beschikbaar omdat de twitter snelheid is "
 "overschreden."
 
-#: apps/io.ox/mail/main.js:137 module:io.ox/mail
+#: apps/io.ox/mail/main.js:144 module:io.ox/mail
 #, fuzzy
 #| msgid "Thread view"
 msgid "Thread"
@@ -7597,6 +7599,12 @@ msgstr "U heeft de afspraak voorlopig geaccepteerd"
 msgid "You have to enter a username and password to subscribe."
 msgstr "U moet een gebruikersnaam en wachtwoord ingeven om te abonneren."
 
+#: apps/plugins/portal/facebook/register.js:54 module:plugins/portal
+#, fuzzy
+#| msgid "You declined this task"
+msgid "You like this"
+msgstr "U heeft deze taak afgewezen"
+
 #. %n in the lowest version of Android
 #: apps/io.ox/core/login-i18n.js:37 module:io.ox/core/login
 msgid "You need to use Android %n or higher."
@@ -7607,7 +7615,7 @@ msgstr "U moet minimaal Android %n of hoger gebruiken."
 msgid "You need to use iOS %n or higher."
 msgstr "U moet minimaal iOS %n of hoger gebruiken."
 
-#: apps/io.ox/core/tk/folderviews.js:920 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:924 module:io.ox/core
 msgid "You share this folder with other users"
 msgstr "U deelt deze map met andere gebruikers"
 
@@ -7773,7 +7781,7 @@ msgstr "sluiten"
 msgid "close for %1$s"
 msgstr "sluiten voor %1$s"
 
-#: apps/plugins/portal/facebook/register.js:210 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:230 module:plugins/portal
 #, fuzzy
 #| msgid "Collapse form"
 msgid "collapse"
@@ -7920,8 +7928,8 @@ msgstr "elke maand"
 msgid "every week"
 msgstr "elke week"
 
-#: apps/plugins/portal/facebook/register.js:206 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:213
+#: apps/plugins/portal/facebook/register.js:226 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:233
 msgid "expand"
 msgstr ""
 
@@ -8138,6 +8146,10 @@ msgstr "morgen"
 msgid "tonight"
 msgstr "vanavond"
 
+#: apps/io.ox/core/tk/folderviews.js:854 module:io.ox/core
+msgid "total"
+msgstr ""
+
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
 #: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:403
 #: apps/io.ox/mail/util.js:416
@@ -8147,6 +8159,12 @@ msgstr "onbekend"
 #: apps/plugins/portal/quota/register.js:123 module:plugins/portal
 msgid "unlimited"
 msgstr "ongelimiteerd"
+
+#: apps/io.ox/core/tk/folderviews.js:855 module:io.ox/core
+#, fuzzy
+#| msgid "Unread"
+msgid "unread"
+msgstr "Ongelezen"
 
 #: apps/io.ox/core/import/import.js:95 module:io.ox/core
 msgid "vCard"
