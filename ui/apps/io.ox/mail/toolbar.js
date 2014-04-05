@@ -235,6 +235,7 @@ define('io.ox/mail/toolbar',
         var isThread = list.length === 1 && /^thread\./.test(list[0]);
         // resolve thread
         list = api.threads.resolve(list);
+        if (list.length === 0) isThread = false;
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
         // draw toolbar
