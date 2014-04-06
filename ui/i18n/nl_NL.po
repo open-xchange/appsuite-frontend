@@ -599,7 +599,7 @@ msgstr "Alle bijlagen"
 msgid "All day"
 msgstr "Gehele dag"
 
-#: apps/io.ox/search/view-template.js:418 module:io.ox/core
+#: apps/io.ox/search/view-template.js:447 module:io.ox/core
 #, fuzzy
 #| msgid "Add folder"
 msgid "All folders"
@@ -1058,7 +1058,7 @@ msgstr "Agenda"
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:376
+#: apps/io.ox/search/view-template.js:405
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:60
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:196
@@ -1501,7 +1501,7 @@ msgstr "Kan gegevens niet laden"
 msgid "Could not load new Tweets."
 msgstr "Kan geen nieuwe Tweets laden."
 
-#: apps/io.ox/core/tk/autocomplete.js:303 module:io.ox/mail
+#: apps/io.ox/core/tk/autocomplete.js:305 module:io.ox/mail
 #: apps/io.ox/core/tk/vgrid.js:847 module:io.ox/core
 msgid "Could not load this list"
 msgstr "Kan deze lijst niet laden."
@@ -2784,8 +2784,8 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:277 module:io.ox/core
-#: apps/io.ox/search/view-template.js:369
+#: apps/io.ox/search/view-template.js:302 module:io.ox/core
+#: apps/io.ox/search/view-template.js:398
 msgid "Folder"
 msgstr "Map"
 
@@ -3840,7 +3840,7 @@ msgstr "Maanden"
 #: apps/io.ox/core/extPatterns/links.js:340 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:467
+#: apps/io.ox/search/view-template.js:498
 msgid "More"
 msgstr "Meer"
 
@@ -4044,7 +4044,7 @@ msgstr "Geen bestand geselecteerd voor uploaden."
 msgid "No files have been changed recently"
 msgstr "Er zijn geen recente aanpassingen"
 
-#: apps/io.ox/search/items/view-template.js:82 module:io.ox/core
+#: apps/io.ox/search/items/view-template.js:87 module:io.ox/core
 #, fuzzy
 #| msgid "No RSS feeds found."
 msgid "No items found"
@@ -5231,7 +5231,7 @@ msgid "Restore applications"
 msgstr "Applicaties herstellen"
 
 #: apps/io.ox/core/commons.js:801 module:io.ox/core
-#: apps/io.ox/core/tk/autocomplete.js:306 module:io.ox/mail
+#: apps/io.ox/core/tk/autocomplete.js:308 module:io.ox/mail
 msgid "Retry"
 msgstr "Opnieuw proberen"
 
