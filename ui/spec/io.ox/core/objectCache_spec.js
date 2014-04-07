@@ -18,25 +18,10 @@ define(['io.ox/core/extensions',
 
     'use strict';
 
-    // test objects
-    var TIMEOUT = ox.testTimeout;
-
-    // helpers
-    function Done() {
-        var f = function () {
-            return f.value;
-        };
-        f.value = false;
-        f.yep = function () {
-            f.value = true;
-        };
-        return f;
-    }
-
     /*
      * Suite: Cache Test
      */
-    describe.skip('Caching with ObjectCache', function () {
+    describe('Caching with ObjectCache', function () {
 
         var testStorage = new cache.ObjectCache('TEST_ObjectCache');
 
@@ -53,331 +38,259 @@ define(['io.ox/core/extensions',
         var testDataB = {'folder_id': 'A', 'id': 'ABE', 'TEST': '1'};
         var testDataC = {'folder_id': 'A', 'id': 'ABF', 'TEST': '1'};
 
-        it('clearing cache', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('clearing cache', function (done) {
             testStorage.clear().done(function (check) {
-                loaded.yep();
-                expect(check).not.toBeDefined();
+                expect(check).not.to.exist;
+                done();
             })
             .fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('getting not existing key', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('getting not existing key', function (done) {
             testStorage.get('notexistent').done(function (data) {
-                loaded.yep();
-                expect(data).toBeNull();
+                expect(data).to.be.null;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('adding data ', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('adding data ', function (done) {
             testStorage.add(testData1, currentTimeStamp).done(function (data) {
-                loaded.yep();
-                expect(data).toEqual(testKey);
+                expect(data).to.equal(testKey);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('adding old data ', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('adding old data ', function (done) {
             testStorage.add(testData2, olderTimeStamp).done(function (data) {
-                loaded.yep();
-                expect(data).toEqual(testKey);
+                expect(data).to.equal(testKey);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('getting data to test for old data replacement', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('getting data to test for old data replacement', function (done) {
             testStorage.get(testKey).done(function (data) {
-                loaded.yep();
-                expect(data).toEqual(testData1);
+                expect(data).to.deep.equal(testData1);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('adding new data ', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('adding new data ', function (done) {
             testStorage.add(testData3, newerTimeStamp).done(function (data) {
-                loaded.yep();
-                expect(data).toEqual(testKey);
+                expect(data).to.equal(testKey);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('getting data to test for new data replacement', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('getting data to test for new data replacement', function (done) {
             testStorage.get(testKey).done(function (data) {
-                loaded.yep();
-                expect(data).toEqual(testData3);
+                expect(data).to.deep.equal(testData3);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('adding array of new data ', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('adding array of new data ', function (done) {
             testStorage.add([testData1, testDataA, testDataB, testDataC], currentTimeStamp).done(function (data) {
-                loaded.yep();
-                expect(data).toEqual([ 'A.ABC', 'A.ABD', 'A.ABE', 'A.ABF' ]);
+                expect(data).to.deep.equal([ 'A.ABC', 'A.ABD', 'A.ABE', 'A.ABF' ]);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking for key existence', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking for key existence', function (done) {
             testStorage.get(testKey).done(function (check) {
-                loaded.yep();
-                expect(check).not.toBeNull();
+                expect(check).not.to.be.null;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking for key existence on nonexisting key', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking for key existence on nonexisting key', function (done) {
             testStorage.get('fdfsgagsdg').done(function (check) {
-                loaded.yep();
-                expect(check).toBeNull();
+                expect(check).to.be.null;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking for array of key existence', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking for array of key existence', function (done) {
             testStorage.get(['A.ABC', 'A.ABD']).done(function (check) {
-                loaded.yep();
-                expect(check).not.toBeNull();
+                expect(check).not.to.be.null;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking for object existence', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking for object existence', function (done) {
             testStorage.get(testData1).done(function (check) {
-                loaded.yep();
-                expect(check).not.toBeNull();
+                expect(check).not.to.be.null;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking for array of object existence', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking for array of object existence', function (done) {
             testStorage.get([testData1, testDataA]).done(function (check) {
-                loaded.yep();
-                expect(check).not.toBeNull();
+                expect(check).not.to.be.null;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking for array of mixed object/key existence', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking for array of mixed object/key existence', function (done) {
             testStorage.get([testData1, 'A.ABE']).done(function (check) {
-                loaded.yep();
-                expect(check).not.toBeNull();
+                expect(check).not.to.be.null;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking for array of mixed object/key existence with nonexistent key', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking for array of mixed object/key existence with nonexistent key', function (done) {
             testStorage.get([testData1, 'A.ABX']).done(function (check) {
-                loaded.yep();
-                expect(check).toBeNull();
+                expect(check).to.be.null;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking cachesize before removing', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking cachesize before removing', function (done) {
             testStorage.size().done(function (size) {
-                loaded.yep();
-                expect(size).toEqual(4);
+                expect(size, 'size').to.equal(4);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('removing by single key', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('removing by single key', function (done) {
             testStorage.remove(testKey).done(function () {
-                loaded.yep();
-                expect(true).toBeTruthy();
+                expect(true, 'item removed').to.be.true;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking cachesize after removing', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking cachesize after removing', function (done) {
             testStorage.size().done(function (size) {
-                loaded.yep();
-                expect(size).toEqual(3);
+                expect(size).to.equal(3);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('removing by object', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('removing by object', function (done) {
             testStorage.remove(testDataA).done(function () {
-                loaded.yep();
-                expect(true).toBeTruthy();
+                expect(true, 'item removed').to.be.true;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking cachesize after removing', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking cachesize after removing', function (done) {
             testStorage.size().done(function (size) {
-                loaded.yep();
-                expect(size).toEqual(2);
+                expect(size).to.equal(2);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('removing by array of keys', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('removing by array of keys', function (done) {
             testStorage.remove(['A.ABE', 'A.ABF']).done(function () {
-                loaded.yep();
-                expect(true).toBeTruthy();
+                expect(true, 'items removed').to.be.true;
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('checking cachesize after removing', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('checking cachesize after removing', function (done) {
             testStorage.size().done(function (size) {
-                loaded.yep();
-                expect(size).toEqual(0);
+                expect(size).to.equal(0);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('merging objects', function () {
-            var loaded = new Done();
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('merging objects', function (done) {
             testStorage.add(testData1).pipe(function () {
                 return testStorage.merge(testData2).pipe(function () {
                     return testStorage.get(testData1);
                 });
             }).done(function (value) {
-                loaded.yep();
-                expect(value).toEqual(testData2);
+                expect(value).to.deep.equal(testData2);
+                done();
             }).fail(function (e) {
-                loaded.yep();
-                expect(e).not.toBeDefined();
+                expect(e).not.to.exist;
+                done();
             });
         });
 
-        it('should be indifferent about key types', function () {
-            var loaded = new Done(),
-                c = new cache.ObjectCache('my_cooltest', true, function (o) { return String(o.id); });
-            waitsFor(loaded, 'Could not get key', TIMEOUT);
-
+        it('should be indifferent about key types', function (done) {
+            var c = new cache.ObjectCache('my_cooltest', true, function (o) { return String(o.id); });
             $.when(
                 // add objects (with id … values are strings)
                 c.add({id: '100'}),
                 c.add({id: '102'})
             ).then(function () {
-                return c.size().done(function (r) {
-                    expect(r).toBe(2);
-                });
+                return c.size();
+            }).then(function (r) {
+                expect(r).to.equal(2);
             }).then(function () {
                 // remove ids … (common use-case, values are numbers)
-                c.remove([100]).then(function () {
-                    c.size().done(function (r) {
-                        expect(r).toBe(1);
-                        loaded.yep();
-                    });
-                });
+                return c.remove([100]);
+            }).then(function () {
+                return c.size();
+            }).done(function (r) {
+                expect(r).to.equal(1);
+                done();
             });
         });
     });
