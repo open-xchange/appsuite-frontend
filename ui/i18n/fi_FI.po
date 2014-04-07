@@ -35,7 +35,7 @@ msgstr "Portaali"
 #: apps/io.ox/mail/settings/pane.js:33
 msgctxt "app"
 msgid "Mail"
-msgstr "Posti"
+msgstr "Sähköposti"
 
 #: apps/io.ox/core/main.js:164 apps/io.ox/launchpad/main.js:31
 msgctxt "app"
@@ -387,7 +387,7 @@ msgstr "Tallenna"
 #: apps/io.ox/tasks/edit/view-template.js:75
 #: apps/plugins/portal/userSettings/register.js:42
 msgid "Discard"
-msgstr "Peruuta"
+msgstr "Hylkää"
 
 #: apps/io.ox/core/tk/vgrid.js:281 apps/io.ox/core/tk/vgrid.js:388
 #: apps/io.ox/core/tk/vgrid.js:400
@@ -578,11 +578,11 @@ msgstr "Keskustelunäkymä"
 
 #: apps/io.ox/mail/settings/pane.js:61
 msgid "Enabled for inbox only"
-msgstr "Käytössä vain INBOX kansiolle"
+msgstr "Käytössä vain Saapuneet kansiolle"
 
 #: apps/io.ox/mail/settings/pane.js:62
 msgid "Enabled for all mail folders"
-msgstr "Käytössä kaikille postikansioille"
+msgstr "Käytössä kaikille viestikansioille"
 
 #: apps/io.ox/mail/settings/pane.js:63
 msgid "Disabled"
@@ -759,7 +759,7 @@ msgstr "Välitä"
 
 #: apps/io.ox/mail/write/main.js:751
 msgid "Mail"
-msgstr "Posti"
+msgstr "Sähköposti"
 
 #: apps/io.ox/calendar/week/perspective.js:66
 #: apps/io.ox/calendar/week/perspective.js:198
@@ -780,11 +780,11 @@ msgstr "Sähköposti lähetetty"
 
 #: apps/io.ox/mail/write/main.js:1206
 msgid "Mail has no recipient."
-msgstr "Postilla ei ole vastaanottajia."
+msgstr "Viestillä ei ole vastaanottajia."
 
 #: apps/io.ox/mail/write/main.js:1213
 msgid "Mail has empty subject. Send it anyway?"
-msgstr "Postissa on tyhjä aihe. Lähetä silti?"
+msgstr "Viestin aihe on tyhjä. Lähetä silti?"
 
 #: apps/io.ox/mail/write/main.js:1214
 msgid "Yes, send without subject"
@@ -796,11 +796,11 @@ msgstr "Lisää aihe"
 
 #: apps/io.ox/mail/write/main.js:1271
 msgid "Mail saved as draft"
-msgstr "Posti tallennettu luonnoksena"
+msgstr "Viesti tallennettu luonnoksena"
 
 #: apps/io.ox/mail/write/main.js:1345
 msgid "Do you really want to discard this mail?"
-msgstr "Haluatko varmasti hylätä tämän postin?"
+msgstr "Haluatko varmasti hylätä tämän viestin?"
 
 #: apps/io.ox/mail/write/main.js:1347
 msgid "Save as draft"
@@ -968,11 +968,11 @@ msgstr "Poista vastaanottajien listalta"
 
 #: apps/io.ox/mail/main.js:104
 msgid "Mail Details"
-msgstr "Postin yksityiskohdat"
+msgstr "Viestin yksityiskohdat"
 
 #: apps/io.ox/mail/main.js:203
 msgid "Show all mails. Note: Mails are no longer grouped by conversation."
-msgstr "Näytä kaikki postit. Huom: Postit eivät enää ole ryhmiteltynä keskusteluittain."
+msgstr "Näytä kaikki viestit. Huom: Viestit eivät enää ole ryhmiteltynä keskusteluittain."
 
 #: apps/io.ox/mail/main.js:288
 msgid "Conversations"
@@ -1014,27 +1014,27 @@ msgstr "Lajitteluvaihtoehdot"
 msgid "%1$d mail"
 msgid_plural "%1$d mails"
 msgstr[0] "%1$d posti"
-msgstr[1] "%1$d postia"
+msgstr[1] "%1$d viestiä"
 
 #: apps/io.ox/mail/main.js:746 apps/io.ox/mail/main.js:773
 msgid "Couldn't load that email."
-msgstr "Postia ei voitu ladata."
+msgstr "Viestiä ei voitu ladata."
 
 #: apps/io.ox/mail/main.js:771
 msgid "The requested email no longer exists"
-msgstr "Pyydettyä postia ei enää ole"
+msgstr "Pyydettyä viestiä ei enää ole"
 
 #: apps/io.ox/mail/main.js:797
 msgid "No mails found for \"%s\""
-msgstr "Ei postia \"%s\":lle"
+msgstr "Ei viestejä \"%s\":lle"
 
 #: apps/io.ox/mail/main.js:798
 msgid "No mails in this folder"
-msgstr "Ei postia tässä kansiossa"
+msgstr "Ei viestejä tässä kansiossa"
 
 #: apps/io.ox/mail/main.js:817
 msgid "Mail has been imported"
-msgstr "Posti tuotu"
+msgstr "Viesti tuotu"
 
 #: apps/io.ox/mail/main.js:875
 msgid "Recipient"
@@ -1047,7 +1047,7 @@ msgstr "Kopio"
 
 #: apps/io.ox/mail/main.js:875
 msgid "Mail text"
-msgstr "Postin teksti"
+msgstr "Viestin teksti"
 
 #: apps/io.ox/mail/main.js:941
 msgid "Application may not work as expected until this problem is solved."
@@ -1055,19 +1055,19 @@ msgstr "Sovellus ei välttämättä toimi odotetusti ennnen tämän ongelman kor
 
 #: apps/io.ox/mail/guidance/main.js:59
 msgid "No mails"
-msgstr "Ei posteja"
+msgstr "Ei viestejä"
 
 #: apps/io.ox/mail/guidance/main.js:63
 msgid "%1$s mail"
 msgid_plural "%1$s mails"
-msgstr[0] "%1$s posti"
-msgstr[1] "%1$s postia"
+msgstr[0] "%1$s viesti"
+msgstr[1] "%1$s viestiä"
 
 #: apps/io.ox/mail/guidance/main.js:68
 msgid "%1$s mail, %2$s unread"
 msgid_plural "%1$s mails, %2$s unread"
-msgstr[0] "%1$s post, %2$s lukematonta"
-msgstr[1] "%1$s postia, %2$s lukematonta"
+msgstr[0] "%1$s viesti, %2$s lukematonta"
+msgstr[1] "%1$s viestiä, %2$s lukematonta"
 
 #: apps/io.ox/mail/guidance/main.js:82
 msgid "Folder actions"
@@ -1330,17 +1330,17 @@ msgstr[1] "Liitteet tallennettu"
 #: apps/io.ox/mail/actions.js:74
 msgid "Do you want to permanently delete this mail?"
 msgid_plural "Do you want to permanently delete these mails?"
-msgstr[0] "Haluatko lopullisesti poistaa tämän postin?"
-msgstr[1] "Haluatko lopullisesti poistaa nämä postit?"
+msgstr[0] "Haluatko lopullisesti poistaa tämän viestin?"
+msgstr[1] "Haluatko lopullisesti poistaa nämä viestit?"
 
 #: apps/io.ox/mail/actions.js:103
 msgid "Mail quota exceeded"
-msgstr "Postikiintiö ylitetty"
+msgstr "Viestiikiintiö ylitetty"
 
 #: apps/io.ox/mail/actions.js:106
 msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
-msgstr "Postikiintiön ollessa ylitettynä, et voi siirtää sähköposteja roskakansioon."
+msgstr "Viestikiintiön ollessa ylitettynä, et voi siirtää viestejä roskakansioon."
 
 #: apps/io.ox/core/about/about.js:66 apps/io.ox/core/commons-folderview.js:529
 #: apps/io.ox/core/permissions/permissions.js:455
@@ -1357,7 +1357,7 @@ msgstr "Sulje"
 
 #: apps/io.ox/mail/actions.js:194
 msgid "Mail source"
-msgstr "Postilähde"
+msgstr "Viestilähde"
 
 #: apps/io.ox/calendar/actions.js:406 apps/io.ox/calendar/actions.js:454
 #: apps/io.ox/calendar/actions.js:590 apps/io.ox/contacts/actions.js:192
@@ -1372,11 +1372,11 @@ msgstr "Siirrä"
 
 #: apps/io.ox/mail/actions.js:307
 msgid "Mails have been moved"
-msgstr "Postit on siirretty"
+msgstr "Viestit on siirretty"
 
 #: apps/io.ox/mail/actions.js:307
 msgid "Mail has been moved"
-msgstr "Posti on siirretty"
+msgstr "Viesti on siirretty"
 
 #: apps/io.ox/contacts/actions.js:193 apps/io.ox/contacts/actions.js:781
 #: apps/io.ox/files/actions.js:636 apps/io.ox/files/actions.js:921
@@ -1387,11 +1387,11 @@ msgstr "Kopioi"
 
 #: apps/io.ox/mail/actions.js:308
 msgid "Mails have been copied"
-msgstr "Postit on kopioitu"
+msgstr "Viestit on kopioitu"
 
 #: apps/io.ox/mail/actions.js:308
 msgid "Mail has been copied"
-msgstr "Posti on kopioitu"
+msgstr "Viesti on kopioitu"
 
 #: apps/io.ox/mail/actions.js:552
 msgid "Failed to add. Maybe the vCard attachment is invalid."
@@ -1403,7 +1403,7 @@ msgstr "Tapaaminen on lisätty kalenteriisi"
 
 #: apps/io.ox/mail/actions.js:667
 msgid "This mail has been added to the portal"
-msgstr "Tämä posti on lisätty portaaliin"
+msgstr "Tämä viesti on lisätty portaaliin"
 
 #: apps/io.ox/mail/actions.js:836
 msgid "Create reminder"
@@ -1551,7 +1551,7 @@ msgstr "Kutsu tapaamiseen"
 
 #: apps/io.ox/mail/actions.js:1170
 msgid "Drop here to import this mail"
-msgstr "Tiputa tähän tuodaksesi tämän postin"
+msgstr "Tiputa tähän tuodaksesi tämä viesti"
 
 #: apps/io.ox/contacts/edit/main.js:265 apps/io.ox/mail/detail/links.js:112
 msgid "Contact"
@@ -1593,7 +1593,7 @@ msgstr "Kansio"
 
 #: apps/io.ox/mail/detail/content.js:172
 msgid "This mail has no content"
-msgstr "Tässä postissa ei ole sisältöä"
+msgstr "Tässä viestissä ei ole sisältöä"
 
 #: apps/io.ox/backbone/forms.js:592 apps/io.ox/mail/detail/content.js:359
 #: apps/io.ox/mail/detail/content.js:362
@@ -1861,7 +1861,7 @@ msgstr "Käytössä"
 
 #: apps/io.ox/mail/folderview-extensions.js:88
 msgid "Mark all mails as read"
-msgstr "Merkitse kaikki postit luetuiksi"
+msgstr "Merkitse kaikki viestit luetuiksi"
 
 #: apps/io.ox/mail/folderview-extensions.js:99
 msgid "Cleaning up... This may take a few seconds."
@@ -2889,7 +2889,7 @@ msgstr "Luo tehtävä"
 
 #: apps/io.ox/tasks/edit/main.js:155
 msgid "Discard changes"
-msgstr "Peru muutokset"
+msgstr "Hylkää muutokset"
 
 #: apps/io.ox/calendar/edit/template.js:77
 #: apps/io.ox/tasks/edit/view-template.js:40
@@ -5092,7 +5092,7 @@ msgstr "Automaattinen uloskirjautuminen"
 
 #: apps/io.ox/core/commons.js:52
 msgid "<b>%1$d</b> elements selected"
-msgstr "<b>%1$d</b> alkiota valittu"
+msgstr "<b>%1$d</b> valittua kohdetta"
 
 #: apps/io.ox/core/commons.js:165
 msgid "Selection Details"
@@ -5140,7 +5140,7 @@ msgstr "Kansioiden lataamista ei tueta."
 
 #: apps/io.ox/core/tk/upload.js:106
 msgid "Mail was not imported, only .eml files are supported."
-msgstr "Postia ei voitu tuoda. Vain .eml tiedostot ovat tuettuja."
+msgstr "Viestiä ei voitu tuoda. Vain .eml tiedostot ovat tuettuja."
 
 #: apps/io.ox/core/tk/attachments.js:329 apps/io.ox/core/tk/upload.js:249
 msgid ""
@@ -5669,13 +5669,13 @@ msgstr "Sinun sovelluksesi"
 
 #: apps/io.ox/core/main.js:1089
 msgid "Restore applications"
-msgstr "Palauta sovellukset"
+msgstr "Keskeneräisiä toimintoja"
 
 #: apps/io.ox/core/main.js:1091
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
-msgstr "Seuraavat sovellukset voidaan palauttaa Poista palautuspiste, jos et halua palauttaa."
+msgstr "Haluatko jatkaa seuraavia kesken jääneitä toimintoja? Mikäli et halua jatkaa, klikkaa roskakori-kuvaketta."
 
 #: apps/io.ox/core/main.js:1096
 msgid "Continue"
@@ -5942,7 +5942,7 @@ msgstr "Sähköpostiasetusten avaaminen"
 msgid ""
 "To open the E-Mail settings, click the Gearwheel icon on the upper right "
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
-msgstr "Avataksesi sähköpostiasetukset, napsauta hammaspyöräkuvaketta valikkopalkin oikeassa reunassa. Valitse Asetukset. Napsauta sähköpostia vasemmasta reunasta."
+msgstr "Avataksesi sähköpostiasetukset, napsauta hammaspyöräkuvaketta valikkopalkin oikeassa reunassa. Valitse Asetukset. Napsauta postia vasemmasta reunasta."
 
 #: apps/io.ox/tours/main.js:332
 msgid "Creating a new contact"
@@ -6065,7 +6065,7 @@ msgid ""
 "The List view shows a sidebar with appointments and a display area with the "
 "data of the selected appointment. This view corresponds to the view in E-"
 "Mail and Contacts."
-msgstr "Listanäkymä esittää tapaamiset sivupalkissa ja lisäksi näyttöalueen, jossa on valitun tapaamisen tiedot. Tämä näkymä vastaa sähköposti ja yhteystieto-osioiden näkymiä."
+msgstr "Listanäkymä esittää tapaamiset sivupalkissa ja lisäksi näyttöalueen, jossa on valitun tapaamisen tiedot. Tämä näkymä vastaa posti ja yhteystieto-osioiden näkymiä."
 
 #: apps/io.ox/tours/main.js:458
 msgid "The calendar views"
@@ -6085,7 +6085,7 @@ msgstr "Valitaksesi joko kuvake tai listanäkymän, napsauta kuvaketta työkalup
 msgid ""
 "The List view shows a sidebar with files and a display area with the data of "
 "the selected file. This view corresponds to the views in E-Mail and Contacts."
-msgstr "Listanäkymä esittää tiedostot sivupalkissa ja lisäksi näyttöalueen, jossa on valitun tiedoston tietoja. Tämä näkymä vastaa sähköposti ja yhteystieto-osioiden näkymiä."
+msgstr "Listanäkymä esittää tiedostot sivupalkissa ja lisäksi näyttöalueen, jossa on valitun tiedoston tietoja. Tämä näkymä vastaa posti ja yhteystieto-osioiden näkymiä."
 
 #: apps/io.ox/tours/main.js:487 apps/io.ox/tours/main.js:515
 msgid "The Icons view"
@@ -6252,7 +6252,7 @@ msgstr "Asetusten järjestys"
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
 "Basic settings, E-Mail or My contact data."
-msgstr "Asetukset on ryhmitelty aiheittain. Valitse vasemmalta aihe, esimerkiksi Perusasetukset, Sähköposti tai Omat yhteystietoni."
+msgstr "Asetukset on ryhmitelty aiheittain. Valitse vasemmalta aihe, esimerkiksi Perusasetukset, Posti tai Omat yhteystietoni."
 
 #: apps/io.ox/tours/main.js:668
 msgid "Editing settings"
@@ -6616,7 +6616,7 @@ msgstr "Lisää jakelulista"
 
 #: apps/io.ox/contacts/actions.js:721
 msgid "Send mail"
-msgstr "Lähetä posti"
+msgstr "Lähetä viesti"
 
 #: apps/io.ox/contacts/actions.js:729
 msgid "Send as vCard"
@@ -6993,7 +6993,7 @@ msgstr "Aikavyöhyke"
 
 #: apps/plugins/notifications/mail/register.js:29
 msgid "New Mails"
-msgstr "Uudet postit"
+msgstr "Uudet viestit"
 
 #: apps/plugins/notifications/mail/register.js:33
 msgid "Press to hide all notifications for new mails."
@@ -7001,11 +7001,11 @@ msgstr "Paina pillottaaksesi ilmoitukset uusista posteista."
 
 #: apps/plugins/notifications/mail/register.js:40
 msgid "Show all %1$d messages in inbox"
-msgstr "Näytä kaikki inbox laatikon %1$d viestiä"
+msgstr "Näytä kaikki saapuneet laatikon %1$d viestiä"
 
 #: apps/plugins/notifications/mail/register.js:40
 msgid "Show inbox"
-msgstr "Näytä inbox"
+msgstr "Näytä saapuneet"
 
 #: apps/plugins/notifications/mail/register.js:57
 msgid "New Mail from %1$s %2$s. Press [enter] to open"
@@ -7091,7 +7091,7 @@ msgstr "Tuoreimmat keskustelut"
 
 #: apps/plugins/halo/mail/register.js:70
 msgid "Received mails"
-msgstr "Saapuneet postit"
+msgstr "Saapuneet viestit"
 
 #: apps/plugins/halo/mail/register.js:72
 msgid "Cannot find any messages this contact sent to you."
@@ -7099,7 +7099,7 @@ msgstr "Tähän yhteystietoon liittyviä saapuneita viestejä ei ole."
 
 #: apps/plugins/halo/mail/register.js:77
 msgid "Sent mails"
-msgstr "Lähetetyt postit"
+msgstr "Lähetetyt viestit"
 
 #: apps/plugins/halo/mail/register.js:79
 msgid "Cannot find any messages you sent to this contact."
@@ -7200,7 +7200,7 @@ msgstr "Ilmainen koeversio tästä napsauttamalla."
 #: apps/plugins/portal/mail/register.js:32
 #: apps/plugins/portal/mail/register.js:159
 msgid "Inbox"
-msgstr "Inbox"
+msgstr "Saapuneet"
 
 #: apps/plugins/portal/mail/register.js:80
 msgid "You have no unread messages"
@@ -7216,7 +7216,7 @@ msgstr "Sinulla on %1$s lukematonta viestiä"
 
 #: apps/plugins/portal/mail/register.js:142
 msgid "No mails in your inbox"
-msgstr "Ei viestejä inbox laatikossasi"
+msgstr "Ei viestejä saapuneet laatikossasi"
 
 #: apps/plugins/portal/helloworld/register.js:70
 msgid "Hello World"
@@ -7335,11 +7335,11 @@ msgstr "Tiedostokiintiö"
 
 #: apps/plugins/portal/quota/register.js:43
 msgid "Mail quota"
-msgstr "Postikiintiö"
+msgstr "Viestikiintiö"
 
 #: apps/plugins/portal/quota/register.js:51
 msgid "Mail count quota"
-msgstr "Postien kappalemäärän kiintiö"
+msgstr "Viestien kappalemäärän kiintiö"
 
 #: apps/plugins/portal/quota/register.js:124
 msgid "unlimited"
