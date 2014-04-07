@@ -42,7 +42,7 @@ module.exports = function (grunt) {
                 src: ['appsuite/apps/**/*'],
                 cwd: 'dist/',
                 filter: 'isFile',
-                dest: grunt.option('htdocs')
+                dest: grunt.option('htdoc')
             }]
         }
     });
@@ -62,10 +62,10 @@ module.exports = function (grunt) {
         grunt.task.run('copy:local_install_dist');
     });
     grunt.registerTask('install:static', 'install static files into a custom location', function () {
-        if (!grunt.option('htdocs')) {
-            grunt.fail.fatal('Need --htdocs option to be set');
+        if (!grunt.option('htdoc')) {
+            grunt.fail.fatal('Need --htdoc option to be set');
         }
-        grunt.log.writeln('Installing into:', grunt.option('htdocs'));
+        grunt.log.writeln('Installing into:', grunt.option('htdoc'));
         grunt.task.run('copy:local_install_static');
     });
 
