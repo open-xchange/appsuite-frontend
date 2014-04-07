@@ -27,7 +27,7 @@ The default version of the guided tours for the typical applications.
 
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
-ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dprefix=/opt/open-xchange/ -f build/build.xml build
+ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -f build/build.xml build
 
 %clean
 %{__rm} -rf %{buildroot}
