@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-01 13:38+0100\n"
+"PO-Revision-Date: 2014-04-07 11:21+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -61,10 +61,9 @@ msgstr "%1$d Nachrichten markiert"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js:595 module:io.ox/mail
-#, fuzzy
 #| msgid "%1$d messages selected"
 msgid "%1$d selected"
-msgstr "%1$d Nachrichten markiert"
+msgstr "%1$d markiert"
 
 #. Name in mail addresses
 #. %1$s is the first name
@@ -3653,10 +3652,9 @@ msgid "Mark all mails as read"
 msgstr "Alle E-Mails als 'Gelesen' markieren"
 
 #: apps/io.ox/mail/mobileToolbarActions.js:137 module:io.ox/mail
-#, fuzzy
 #| msgid "Mark read"
 msgid "Mark as"
-msgstr "Als gelesen markieren"
+msgstr "Markieren als"
 
 #: apps/io.ox/contacts/model.js:316 module:io.ox/contacts
 msgid "Mark as distributionlist"
@@ -7539,7 +7537,7 @@ msgstr ""
 #, fuzzy
 #| msgid "You declined this task"
 msgid "You like this"
-msgstr "Sie haben diese Aufgabe abgelehnt"
+msgstr "Dir gefällt das"
 
 #. %n in the lowest version of Android
 #: apps/io.ox/core/login-i18n.js:37 module:io.ox/core/login
@@ -7721,10 +7719,9 @@ msgid "close for %1$s"
 msgstr "schließen für %1$s"
 
 #: apps/plugins/portal/facebook/register.js:230 module:plugins/portal
-#, fuzzy
 #| msgid "Collapse form"
 msgid "collapse"
-msgstr "Formular ausblenden"
+msgstr "einklappen"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js:129 module:io.ox/core
@@ -7869,7 +7866,7 @@ msgstr "jede Woche"
 #: apps/plugins/portal/facebook/register.js:226 module:plugins/portal
 #: apps/plugins/portal/facebook/register.js:233
 msgid "expand"
-msgstr ""
+msgstr "ausklappen"
 
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
@@ -8083,7 +8080,7 @@ msgstr "heute Abend"
 
 #: apps/io.ox/core/tk/folderviews.js:854 module:io.ox/core
 msgid "total"
-msgstr ""
+msgstr "gesamt"
 
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
 #: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:403
@@ -8096,10 +8093,9 @@ msgid "unlimited"
 msgstr "unbegrenzt"
 
 #: apps/io.ox/core/tk/folderviews.js:855 module:io.ox/core
-#, fuzzy
 #| msgid "Unread"
 msgid "unread"
-msgstr "Ungelesen"
+msgstr "ungelesen"
 
 #: apps/io.ox/core/import/import.js:95 module:io.ox/core
 msgid "vCard"
