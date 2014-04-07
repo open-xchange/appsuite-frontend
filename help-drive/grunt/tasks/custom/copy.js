@@ -35,10 +35,10 @@ module.exports = function (grunt) {
                 }
             ]
         },
-        local_install_dist: {
+        local_install_dynamic: {
             files: [
                 {
-                    src: ['**/*', '!appsuite/help-drive/l10n/**/*'],
+                    src: [],
                     expand: true,
                     filter: 'isFile',
                     cwd: 'dist/',

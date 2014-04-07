@@ -3,7 +3,7 @@
 module.exports = function (grunt) {
 
    grunt.config.extend('copy', {
-       local_install_dist: {
+       local_install_dynamic: {
             files: [{
                 expand: true,
                 src: ['**/*'],
