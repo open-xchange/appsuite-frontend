@@ -11,33 +11,31 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define(['io.ox/core/cache/indexeddb'], function (indexeddb) {
-    //FIXME: indexeddb does return undefined, if browser doesn’t support it
-    if (!indexeddb)
-        return;
     describe('The IndexedDB', function () {
-        beforeEach(function () {
-            var def = $.Deferred();
-            def = indexeddb.clear();
-            waitsFor(function () {
-                return def.state() !== 'pending';
-            }, 'Clear the cache', 1000);
+        //FIXME: indexeddb does return undefined, if browser doesn’t support it
+        if (!indexeddb)
+            return;
+        beforeEach(function (done) {
+            indexeddb.clear().done(done);
         });
         afterEach(function () {
             indexeddb.clear();
         });
 
         describe('clear method', function () {
-            it('should clear all databases', function () {
+            it('should clear all databases', function (done) {
                 var cache1 = indexeddb.getInstance('appsuite.test.cache1');
 
-                var def = cache1.set('testKey', 'testValue').then(function () {
+                cache1.set('testKey', 'testValue').then(function () {
                     //wait until key is stored
                     return indexeddb.clear();
                 }).then(function () {
                     return cache1.get('testKey');
+                }).then(function (result) {
+                    expect(result).not.to.exist;
+                    done();
                 });
 
-                expect(def).not.toResolveWith('testValue');
             });
         });
     });
