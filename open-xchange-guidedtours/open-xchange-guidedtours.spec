@@ -27,15 +27,21 @@ The default version of the guided tours for the typical applications.
 
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
-ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dprefix=/opt/open-xchange/appsuite/ -f build/build.xml build
+ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dprefix=/opt/open-xchange/ -f build/build.xml build
 
 %clean
 %{__rm} -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
+%dir /opt/open-xchange
+%dir /opt/open-xchange/appsuite
+%dir /opt/open-xchange/appsuite/apps
+%dir /opt/open-xchange/appsuite/apps/io.ox
+/opt/open-xchange/appsuite/apps/io.ox/tours.??_??.js
 %dir /opt/open-xchange/appsuite/apps/io.ox/tours
 /opt/open-xchange/appsuite/apps/io.ox/tours
+%dir /opt/open-xchange/appsuite/manifests
 /opt/open-xchange/appsuite/manifests/open-xchange-guidedtours.json
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/settings
