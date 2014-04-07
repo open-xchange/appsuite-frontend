@@ -32,5 +32,23 @@ module.exports = function (grunt) {
     // testing stuff
     grunt.registerTask('test', ['karma:unit:start']);
 
+    grunt.registerTask('runSpecs', 'Run the tests, if test server is running', function () {
+        var done = this.async();
+
+        var net = require('net');
+        var server = net.createServer();
+        server.on('error', function () {
+            grunt.verbose.writeln('Karma server running, running specs');
+            grunt.task.run('karma:unit:run');
+            done();
+        });
+        server.listen(9876, function () {
+            grunt.verbose.warn('No karma server running, skipping specs');
+            server.close();
+            done();
+        });
+
+    });
+
     grunt.loadNpmTasks('grunt-karma');
 };
