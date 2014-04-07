@@ -24,6 +24,17 @@ module.exports = function (grunt) {
                 }
             ]
         },
+        local_install_static: {
+            files: [
+                {
+                    src: ['**/*', '!help-drive/l10n/**/*'],
+                    expand: true,
+                    filter: 'isFile',
+                    cwd: 'dist/appsuite',
+                    dest: grunt.option('htdoc')
+                }
+            ]
+        },
         local_install_dist: {
             files: [
                 {
@@ -31,7 +42,7 @@ module.exports = function (grunt) {
                     expand: true,
                     filter: 'isFile',
                     cwd: 'dist/appsuite',
-                    dest: grunt.option('htdoc')
+                    dest: grunt.option('prefix')
                 }
             ]
          }

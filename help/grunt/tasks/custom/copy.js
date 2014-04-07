@@ -31,6 +31,17 @@ module.exports = function (grunt) {
                     expand: true,
                     filter: 'isFile',
                     cwd: 'dist/appsuite',
+                    dest: grunt.option('prefix')
+                }
+            ]
+        },
+        local_install_static: {
+            files: [
+                {
+                    src: ['**/*', '!help/l10n/**/*'],
+                    expand: true,
+                    filter: 'isFile',
+                    cwd: 'dist/appsuite',
                     dest: grunt.option('htdoc')
                 }
             ]
