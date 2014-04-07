@@ -46,7 +46,8 @@ define(['io.ox/mail/listview', 'io.ox/mail/api', 'waitsFor'], function (ListView
                 expect(node.is('ul'), '<ul> tag').to.be.true;
                 expect(node.attr('role'), 'role').to.equal('listbox');
                 expect(node.attr('tabindex'), 'tabindex').to.equal('1');
-                expect(node.hasClass('no-transition'), 'no transition').to.be.true;
+                // no-transition class is only set for phantomjs
+                expect(node.hasClass('no-transition'), 'no transition').to.equal(_.device('phantomjs'));
             });
         });
 
