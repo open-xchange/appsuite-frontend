@@ -520,7 +520,7 @@ define('io.ox/core/extPatterns/links',
                             .tooltip()
                             .on('click', { baton: baton, extension: links[0] }, actionClick);
                         } else {
-                            a.addClass('disabled').on('click', preventDefault);
+                            a.addClass('disabled').removeAttr('tabindex').attr({ 'aria-disabled': true }).on('click', preventDefault);
                         }
                     }
                 });
