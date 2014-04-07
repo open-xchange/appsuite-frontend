@@ -27,10 +27,10 @@ module.exports = function (grunt) {
         local_install_static: {
             files: [
                 {
-                    src: ['**/*', '!help-drive/l10n/**/*'],
+                    src: ['**/*', '!appsuite/help-drive/l10n/**/*'],
                     expand: true,
                     filter: 'isFile',
-                    cwd: 'dist/appsuite',
+                    cwd: 'dist/',
                     dest: grunt.option('htdoc')
                 }
             ]
@@ -38,10 +38,10 @@ module.exports = function (grunt) {
         local_install_dist: {
             files: [
                 {
-                    src: ['help-drive/**/*', '!help-drive/l10n/**/*'],
+                    src: ['**/*', '!appsuite/help-drive/l10n/**/*'],
                     expand: true,
                     filter: 'isFile',
-                    cwd: 'dist/appsuite',
+                    cwd: 'dist/',
                     dest: grunt.option('prefix')
                 }
             ]
@@ -66,21 +66,21 @@ module.exports = function (grunt) {
         config['dist_help_' + Lang] = {
             files: [
                 {
-                    src: ['help-drive/l10n/' + Lang + '/**/*'],
+                    src: ['appsuite/help-drive/l10n/' + Lang + '/**/*'],
                     expand: true,
                     filter: 'isFile',
                     cwd: 'build/',
-                    dest: 'dist/appsuite/'
+                    dest: 'dist/'
                 }
             ]
         };
         config['local_install_' + Lang] = {
             files: [
                 {
-                    src: ['help-drive/l10n/' + Lang + '/**/*'],
+                    src: ['appsuite/help-drive/l10n/' + Lang + '/**/*'],
                     expand: true,
                     filter: 'isFile',
-                    cwd: 'dist/appsuite/',
+                    cwd: 'dist/',
                     dest: grunt.option('htdoc')
                 }
             ]
