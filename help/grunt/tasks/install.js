@@ -29,7 +29,9 @@ module.exports = function (grunt) {
             files: [{
                 expand: true,
                 src: ['**/*'].concat(languages.map(function (Lang) {
-                    return '!**/*' + Lang + '*';
+                    //return '' in case --no-languages is used, so language files
+                    //will also be copied by this task
+                    return grunt.option('languages') ? '!**/*' + Lang + '*' : '';
                 })),
                 cwd: 'dist/',
                 filter: 'isFile',
