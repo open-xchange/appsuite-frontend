@@ -23,7 +23,7 @@ define(['io.ox/contacts/util'], function (util) {
         email1: 'georg1@tester.com',
         email2: 'georg@2tester.com',
         email3: 'georg3@tester.com',
-        company: 'conpany',
+        company: 'company',
         department: 'department',
         position: 'position',
         city_business: 'city_business',
@@ -43,65 +43,65 @@ define(['io.ox/contacts/util'], function (util) {
     };
     */
 
-    describe.skip('Contact util', function () {
+    describe('Contact util', function () {
 
         it('should return a prepared full contact name for sorting purpose', function () {
-            expect(util.getSortName(testPerson)).toEqual('tester, georg');
-            expect(util.getSortName({})).toEqual('');
+            expect(util.getSortName(testPerson)).to.equal('tester, georg');
+            expect(util.getSortName({})).to.be.empty;
         });
 
         it('should return a object containing the format ', function () {
-            expect(util.getFullNameFormat(testPerson)).toEqual({ format : '%2$s, %1$s', params : [ 'Georg', 'Tester' ] });
+            expect(util.getFullNameFormat(testPerson)).to.deep.equal({ format : '%2$s, %1$s', params : [ 'Georg', 'Tester' ] });
         });
 
         it('should return the prepared full name ', function () {
-            expect(util.getFullName(testPerson)).toEqual('Tester, Georg');
-            expect(util.getFullName({})).toEqual('');
+            expect(util.getFullName(testPerson)).to.equal('Tester, Georg');
+            expect(util.getFullName({})).to.be.empty;
         });
 
         it('should return the display name if available otherwise combine first and last name ', function () {
-            expect(util.getDisplayName(testPerson)).toEqual('Dr. Tester, Georg');
-            expect(util.getDisplayName(testPersonWOPic)).toEqual('Tester, Georg');
+            expect(util.getDisplayName(testPerson)).to.equal('Dr. Tester, Georg');
+            expect(util.getDisplayName(testPersonWOPic)).to.equal('Tester, Georg');
         });
 
         it('should return a object containing the format ', function () {
-            expect(util.getMailFullNameFormat(testPerson)).toEqual({ format : '%1$s %2$s', params : [ 'Georg', 'Tester' ] });
+            expect(util.getMailFullNameFormat(testPerson)).to.deep.equal({ format : '%1$s %2$s', params : [ 'Georg', 'Tester' ] });
         });
 
         it('should return the display name if available otherwise combine first and last name ', function () {
-            expect(util.getMailFullName(testPerson)).toEqual('Georg Tester');
+            expect(util.getMailFullName(testPerson)).to.equal('Georg Tester');
         });
 
         it('should return a object containing the format ', function () {
-            expect(util.getMailFormat(testPerson)).toEqual({ format : '%1$s', params : [ 'georg1@tester.com' ] });
+            expect(util.getMailFormat(testPerson)).to.deep.equal({ format : '%1$s', params : [ 'georg1@tester.com' ] });
         });
 
         it('should return the first available mail address ', function () {
-            expect(util.getMail(testPerson)).toEqual('georg1@tester.com');
+            expect(util.getMail(testPerson)).to.equal('georg1@tester.com');
         });
 
-        it('should return a descriptiv string for the contact', function () {
-            expect(util.getDescription(testPerson)).toEqual('conpany, department, position, city_business, city_home');
+        it.skip('should return a descriptiv string for the contact', function () {
+            expect(util.getDescription(testPerson)).to.equal('company, department, position, city_business, city_home');
         });
 
         it('should return a combined string of position and company', function () {
-            expect(util.getJob(testPerson)).toEqual('position, conpany');
+            expect(util.getJob(testPerson)).to.equal('position, company');
         });
 
         it('should return the mailfield ID of a selected E-Mail', function () {
-            expect(util.calcMailField(testPerson, testPerson.email2)).toEqual(2);
-            expect(util.calcMailField(testPerson, testPerson.email1)).toEqual(1);
-            expect(util.calcMailField(testPerson, testPerson.email3)).toEqual(3);
+            expect(util.calcMailField(testPerson, testPerson.email2)).to.equal(2);
+            expect(util.calcMailField(testPerson, testPerson.email1)).to.equal(1);
+            expect(util.calcMailField(testPerson, testPerson.email3)).to.equal(3);
         });
-        
+
         it('should correctly convert birthdays to Gregorian calendar', function () {
             expect(util.julianToGregorian(-62122809600000))//May 29 Year 1
-                .toEqual(-62122636800000);//May 31 Year 1
+                .to.equal(-62122636800000);//May 31 Year 1
         });
 
         it('should correctly convert birthdays to Julian calendar', function () {
             expect(util.gregorianToJulian(-62122636800000))//May 31 Year 1
-                .toEqual(-62122809600000);//May 29 Year 1
+                .to.equal(-62122809600000);//May 29 Year 1
         });
     });
 });

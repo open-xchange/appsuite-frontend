@@ -15,7 +15,7 @@ define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
 
     'use strict';
 
-    describe.skip('Contact API', function () {
+    describe('Contact API', function () {
 
         beforeEach(function () {
             this.server.respondWith('GET', /api\/contacts\?action=get/, function (xhr) {
@@ -31,66 +31,69 @@ define(['io.ox/contacts/api', 'io.ox/contacts/util'], function (api, util) {
 
         it('should return proper image path for internal users', function () {
             var url = api.pictureHalo({ internal_userid: 1, folder_id: 6, id: 1337 });
-            expect(url).toBe(ox.apiRoot + '/halo/contact/picture?internal_userid=1');
+            expect(url).to.equal(ox.apiRoot + '/halo/contact/picture?internal_userid=1');
         });
 
         it('should return proper image path for contacts', function () {
             var url = api.pictureHalo({ folder_id: 6, id: 1337 });
-            expect(url).toBe(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
+            expect(url).to.equal(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
         });
 
         it('should return proper image path for contacts while ignoring internal_userid = 0', function () {
             var url = api.pictureHalo({ folder_id: 6, id: 1337, internal_userid: 0 });
-            expect(url).toBe(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
+            expect(url).to.equal(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337');
         });
 
         it('should consider width, height, and scaleType', function () {
             var url = api.pictureHalo({ folder_id: 6, id: 1337, width: 48, height: 48, scaleType: 'cover' });
-            expect(url).toBe(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337&width=48&height=48&scaleType=cover');
+            expect(url).to.equal(ox.apiRoot + '/halo/contact/picture?folder=6&id=1337&width=48&height=48&scaleType=cover');
         });
 
         it('should return proper image path for recipients', function () {
             var url = api.pictureHalo({ email: 'test@open-xchange.com' });
-            expect(url).toBe(ox.apiRoot + '/halo/contact/picture?email=test%40open-xchange.com');
+            expect(url).to.equal(ox.apiRoot + '/halo/contact/picture?email=test%40open-xchange.com');
         });
 
         it('should return proper image path for distribution lists', function () {
             var url = api.pictureHalo({ mark_as_distributionlist: true, folder_id: 6, id: 1337 });
-            expect(url).toBe(ox.base + '/apps/themes/default/dummypicture_group.png');
+            expect(url).to.equal(ox.base + '/apps/themes/default/dummypicture_group.png');
         });
 
         it('should return proper image path for resources', function () {
             var url = api.pictureHalo({ mailaddress: 'beamer@open-xchange.com', description: '', id: 1337 });
-            expect(url).toBe(ox.base + '/apps/themes/default/dummypicture_resource.png');
+            expect(url).to.equal(ox.base + '/apps/themes/default/dummypicture_resource.png');
         });
 
         it('should return proper image path for groups', function () {
             var url = api.pictureHalo({ members: [], id: 1337 });
-            expect(url).toBe(ox.base + '/apps/themes/default/dummypicture_group.png');
+            expect(url).to.equal(ox.base + '/apps/themes/default/dummypicture_group.png');
         });
 
-        it('GET should convert birthday to Julian calendar', function () {
-            var result = api.get({folder: 6, id: 1337});
-            expect(result).toResolve();
-            result.done(function (data) {
-                expect(data.birthday).toBe(-62122636800000);
+        it('GET should convert birthday to Julian calendar', function (done) {
+            api.get({folder: 6, id: 1337}).done(function (data) {
+                expect(data.birthday).to.equal(-62122636800000);
+                done();
             });
         });
 
-        it('CREATE should convert birthday to Gregorian calendar', function () {
-            var spy = sinon.spy(util, 'gregorianToJulian'),
-                result = api.create({folder: 6, birthday: -62122636800000});
-            expect(result).toResolve();
-            expect(spy.called).toBeTruthy();
-            util.gregorianToJulian.restore();
+        it('CREATE should convert birthday to Gregorian calendar', function (done) {
+            var spy = sinon.spy(util, 'gregorianToJulian');
+
+            api.create({folder: 6, birthday: -62122636800000}).done(function () {
+                expect(spy.called).to.be.true;
+                spy.restore();
+                done();
+            });
         });
 
-        it('UPDATE should convert birthday to Gregorian calendar', function () {
-            var spy = sinon.spy(util, 'gregorianToJulian'),
-                result = api.update({folder: 6, id: 1338, data: {birthday: -62122636800000}});
-            expect(result).toResolve();
-            expect(spy.called).toBeTruthy();
-            util.gregorianToJulian.restore();
+        it('UPDATE should convert birthday to Gregorian calendar', function (done) {
+            var spy = sinon.spy(util, 'gregorianToJulian');
+
+            api.update({folder: 6, id: 1338, data: {birthday: -62122636800000}}).done(function () {
+                expect(spy.called).to.be.true;
+                spy.restore();
+                done();
+            });
         });
     });
 });

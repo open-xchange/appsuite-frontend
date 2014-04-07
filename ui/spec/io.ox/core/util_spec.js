@@ -14,123 +14,123 @@
 
 define(['io.ox/core/util'], function (util) {
 
-    describe.skip('core/util.js', function () {
+    describe('core/util.js', function () {
 
         describe('unified display name', function () {
 
             it('returns empty string when called with null object', function () {
-                expect(util.unescapeDisplayName()).toEqual('');
+                expect(util.unescapeDisplayName()).to.be.empty;
             });
 
             it('should remove trailing white-space', function () {
-                expect(util.unescapeDisplayName(' Hello World  ')).toEqual('Hello World');
+                expect(util.unescapeDisplayName(' Hello World  ')).to.equal('Hello World');
             });
 
             it('should remove surrounding brackets', function () {
-                expect(util.unescapeDisplayName('""Hello World""')).toEqual('Hello World');
+                expect(util.unescapeDisplayName('""Hello World""')).to.equal('Hello World');
             });
 
             it('should remove escaped brackets', function () {
-                expect(util.unescapeDisplayName('\"Hello World\"')).toEqual('Hello World');
+                expect(util.unescapeDisplayName('\"Hello World\"')).to.equal('Hello World');
             });
 
             it('should not remove brackets that are not surrounding', function () {
-                expect(util.unescapeDisplayName('Hello "World"')).toEqual('Hello "World"');
+                expect(util.unescapeDisplayName('Hello "World"')).to.equal('Hello "World"');
             });
 
             it('should remove escaping backslashes before brackets', function () {
-                expect(util.unescapeDisplayName('"Say \"Hello\""')).toEqual('Say "Hello"');
+                expect(util.unescapeDisplayName('"Say \"Hello\""')).to.equal('Say "Hello"');
             });
         });
 
         describe('isValidMailAddress()', function () {
 
             it('handles domain part properly', function () {
-                expect(util.isValidMailAddress('name@domain.com')).toBe(true);
-                expect(util.isValidMailAddress('name@host')).toBe(true);
-                expect(util.isValidMailAddress('name@1337')).toBe(true);
-                expect(util.isValidMailAddress('name@[1.2.3.4]')).toBe(true);
-                expect(util.isValidMailAddress('name@[1.2.3.4.5]')).toBe(false);
-                expect(util.isValidMailAddress('name@[1.2.3.A]')).toBe(false);
-                expect(util.isValidMailAddress('name@[1.2.3.4444]')).toBe(false);
-                expect(util.isValidMailAddress('name@[IPv6:2001:db8:1ff::a0b:dbd0]')).toBe(true);
-                expect(util.isValidMailAddress('name@[2001:db8:1ff::a0b:dbd0]')).toBe(false);
+                expect(util.isValidMailAddress('name@domain.com')).to.be.true;
+                expect(util.isValidMailAddress('name@host')).to.be.true;
+                expect(util.isValidMailAddress('name@1337')).to.be.true;
+                expect(util.isValidMailAddress('name@[1.2.3.4]')).to.be.true;
+                expect(util.isValidMailAddress('name@[1.2.3.4.5]')).to.be.false;
+                expect(util.isValidMailAddress('name@[1.2.3.A]')).to.be.false;
+                expect(util.isValidMailAddress('name@[1.2.3.4444]')).to.be.false;
+                expect(util.isValidMailAddress('name@[IPv6:2001:db8:1ff::a0b:dbd0]')).to.be.true;
+                expect(util.isValidMailAddress('name@[2001:db8:1ff::a0b:dbd0]')).to.be.false;
             });
 
             it('handles partial addresses properly', function () {
-                expect(util.isValidMailAddress('@domain.com')).toBe(false);
-                expect(util.isValidMailAddress('name@')).toBe(false);
-                expect(util.isValidMailAddress('@')).toBe(false);
+                expect(util.isValidMailAddress('@domain.com')).to.be.false;
+                expect(util.isValidMailAddress('name@')).to.be.false;
+                expect(util.isValidMailAddress('@')).to.be.false;
             });
 
             it('handles local part properly', function () {
-                expect(util.isValidMailAddress('name@abc@domain.com')).toBe(false);
-                expect(util.isValidMailAddress('first.last@domain.com')).toBe(true);
-                expect(util.isValidMailAddress('first,last@domain.com')).toBe(false);
-                expect(util.isValidMailAddress('first last@domain.com')).toBe(false);
-                expect(util.isValidMailAddress('first\\last@domain.com')).toBe(false);
-                expect(util.isValidMailAddress('first"last@domain.com')).toBe(false);
-                expect(util.isValidMailAddress('first..last@domain.com')).toBe(false);
-                expect(util.isValidMailAddress('.first.last@domain.com')).toBe(false);
-                expect(util.isValidMailAddress('"quoted"@domain.com')).toBe(true);
-                expect(util.isValidMailAddress('"another@"@domain.com')).toBe(true);
-                expect(util.isValidMailAddress('"but"not"@domain.com')).toBe(false);
+                expect(util.isValidMailAddress('name@abc@domain.com')).to.be.false;
+                expect(util.isValidMailAddress('first.last@domain.com')).to.be.true;
+                expect(util.isValidMailAddress('first,last@domain.com')).to.be.false;
+                expect(util.isValidMailAddress('first last@domain.com')).to.be.false;
+                expect(util.isValidMailAddress('first\\last@domain.com')).to.be.false;
+                expect(util.isValidMailAddress('first"last@domain.com')).to.be.false;
+                expect(util.isValidMailAddress('first..last@domain.com')).to.be.false;
+                expect(util.isValidMailAddress('.first.last@domain.com')).to.be.false;
+                expect(util.isValidMailAddress('"quoted"@domain.com')).to.be.true;
+                expect(util.isValidMailAddress('"another@"@domain.com')).to.be.true;
+                expect(util.isValidMailAddress('"but"not"@domain.com')).to.be.false;
             });
         });
 
         describe('isValidPhoneNumber()', function () {
 
             it('handles empty strings properly', function () {
-                expect(util.isValidPhoneNumber('')).toBe(true);
-                expect(util.isValidPhoneNumber(' ')).toBe(true);
+                expect(util.isValidPhoneNumber('')).to.be.true;
+                expect(util.isValidPhoneNumber(' ')).to.be.true;
             });
 
             it('handles too short numbers properly', function () {
-                expect(util.isValidPhoneNumber('+1')).toBe(false);
-                expect(util.isValidPhoneNumber('+49')).toBe(false);
+                expect(util.isValidPhoneNumber('+1')).to.be.false;
+                expect(util.isValidPhoneNumber('+49')).to.be.false;
             });
 
             it('handles numbers properly', function () {
-                expect(util.isValidPhoneNumber('01234567')).toBe(true);
-                expect(util.isValidPhoneNumber('0123 4567')).toBe(true);
-                expect(util.isValidPhoneNumber('+491234567')).toBe(true);
-                expect(util.isValidPhoneNumber('0123+4567')).toBe(false);
-                expect(util.isValidPhoneNumber('+49 (0) 1234567')).toBe(true);
-                expect(util.isValidPhoneNumber('+49 0 1234567')).toBe(true);
-                expect(util.isValidPhoneNumber('+49-0-1234567')).toBe(true);
-                expect(util.isValidPhoneNumber('+49-0-1234567#1')).toBe(true);
-                expect(util.isValidPhoneNumber('+49-0-1234567,1,2')).toBe(true);
-                expect(util.isValidPhoneNumber('+49.0.1234567')).toBe(true);
-                expect(util.isValidPhoneNumber('+49 0 / 1234567')).toBe(true);
-                expect(util.isValidPhoneNumber('+49 0 / 123456 - 7')).toBe(true);
-                expect(util.isValidPhoneNumber('+49 0 / 123456 - ABC')).toBe(false);
-                expect(util.isValidPhoneNumber('+49 0::1234567')).toBe(false);
-                expect(util.isValidPhoneNumber('+49 0 1234 [567]')).toBe(false);
-                expect(util.isValidPhoneNumber('++49 0 1234567')).toBe(false);
-                expect(util.isValidPhoneNumber('+49_0_1234567')).toBe(false);
-                expect(util.isValidPhoneNumber('+49 0 1234567 \\ 23')).toBe(false);
+                expect(util.isValidPhoneNumber('01234567')).to.be.true;
+                expect(util.isValidPhoneNumber('0123 4567')).to.be.true;
+                expect(util.isValidPhoneNumber('+491234567')).to.be.true;
+                expect(util.isValidPhoneNumber('0123+4567')).to.be.false;
+                expect(util.isValidPhoneNumber('+49 (0) 1234567')).to.be.true;
+                expect(util.isValidPhoneNumber('+49 0 1234567')).to.be.true;
+                expect(util.isValidPhoneNumber('+49-0-1234567')).to.be.true;
+                expect(util.isValidPhoneNumber('+49-0-1234567#1')).to.be.true;
+                expect(util.isValidPhoneNumber('+49-0-1234567,1,2')).to.be.true;
+                expect(util.isValidPhoneNumber('+49.0.1234567')).to.be.true;
+                expect(util.isValidPhoneNumber('+49 0 / 1234567')).to.be.true;
+                expect(util.isValidPhoneNumber('+49 0 / 123456 - 7')).to.be.true;
+                expect(util.isValidPhoneNumber('+49 0 / 123456 - ABC')).to.be.false;
+                expect(util.isValidPhoneNumber('+49 0::1234567')).to.be.false;
+                expect(util.isValidPhoneNumber('+49 0 1234 [567]')).to.be.false;
+                expect(util.isValidPhoneNumber('++49 0 1234567')).to.be.false;
+                expect(util.isValidPhoneNumber('+49_0_1234567')).to.be.false;
+                expect(util.isValidPhoneNumber('+49 0 1234567 \\ 23')).to.be.false;
             });
         });
 
         describe('breakableHTML()', function () {
 
             it('doesnt change white space', function () {
-                expect(util.breakableHTML('')).toBe('');
-                expect(util.breakableHTML(' ')).toBe(' ');
+                expect(util.breakableHTML('')).to.be.empty;
+                expect(util.breakableHTML(' ')).to.equal(' ');
             });
 
             it('doesnt change short strings', function () {
-                expect(util.breakableHTML('Hello World')).toBe('Hello World');
+                expect(util.breakableHTML('Hello World')).to.equal('Hello World');
             });
 
             it('escapes HTML', function () {
-                expect(util.breakableHTML('Hello<br>World')).toBe('Hello&lt;br&gt;World');
+                expect(util.breakableHTML('Hello<br>World')).to.equal('Hello&lt;br&gt;World');
             });
 
             it('breaks longs strings properly', function () {
-                expect(util.breakableHTML('com.openexchange.session.contextId=1337')).toBe('com.<wbr>openexchange.<wbr>session.<wbr>contextId=<wbr>1337<wbr>');
-                expect(util.breakableHTML('com.openexchange 01234567890123456789 01234567890123456789')).toBe('com.openexchange 01234567890123456789 01234567890123456789');
-                expect(util.breakableHTML('com.openexchange.0123456789012345678901234567890123456789')).toBe('com.<wbr>openexchange.<wbr>012345678901234567890123456789<wbr>0123456789');
+                expect(util.breakableHTML('com.openexchange.session.contextId=1337')).to.equal('com.<wbr>openexchange.<wbr>session.<wbr>contextId=<wbr>1337<wbr>');
+                expect(util.breakableHTML('com.openexchange 01234567890123456789 01234567890123456789')).to.equal('com.openexchange 01234567890123456789 01234567890123456789');
+                expect(util.breakableHTML('com.openexchange.0123456789012345678901234567890123456789')).to.equal('com.<wbr>openexchange.<wbr>012345678901234567890123456789<wbr>0123456789');
             });
         });
     });
