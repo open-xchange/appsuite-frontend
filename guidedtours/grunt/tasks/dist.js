@@ -46,7 +46,9 @@ module.exports = function (grunt) {
                     dest: 'dist/appsuite/'
                 },
                 {
-                    src: ['conf/**/*'],
+                    expand: true,
+                    src: ['**/*'],
+                    cwd: 'conf/',
                     dest: 'dist/etc/'
                 }
             ]
