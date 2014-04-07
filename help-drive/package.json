@@ -24,7 +24,6 @@
     "jshint": "Open-Xchange-Frontend/jshint",
     "appserver": "~0.1.0",
     "underscore": "~1.5.2",
-    "grunt-contrib-compress": "~0.7.0",
     "grunt-contrib-connect": "~0.7.0"
   }
 }

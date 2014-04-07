@@ -20,7 +20,7 @@ module.exports = function (grunt) {
                     expand: true,
                     filter: 'isFile',
                     cwd: 'build/',
-                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>'
+                    dest: 'dist/appsuite/'
                 }
             ]
         },
@@ -30,8 +30,8 @@ module.exports = function (grunt) {
                     src: ['**/*', '!help/l10n/**/*'],
                     expand: true,
                     filter: 'isFile',
-                    cwd: 'dist/<%= pkg.name %>-<%= pkg.version %>',
-                    dest: grunt.option('dest')
+                    cwd: 'dist/appsuite',
+                    dest: grunt.option('htdoc')
                 }
             ]
         }
@@ -59,7 +59,7 @@ module.exports = function (grunt) {
                     expand: true,
                     filter: 'isFile',
                     cwd: 'build/',
-                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>'
+                    dest: 'dist/appsuite'
                 }
             ]
         };
@@ -69,18 +69,18 @@ module.exports = function (grunt) {
                     src: ['help/l10n/' + Lang + '/**/*'],
                     expand: true,
                     filter: 'isFile',
-                    cwd: 'dist/<%= pkg.name %>-<%= pkg.version %>',
-                    dest: grunt.option('dest')
+                    cwd: 'dist/appsuite',
+                    dest: grunt.option('htdoc')
                 }
             ]
         };
 
         grunt.config.extend('copy', config);
         grunt.registerTask('install:' + Lang, 'install language directory into a custom location', function () {
-            if (!grunt.option('dest')) {
-                grunt.fail.fatal('Need --dest option to be set');
+            if (!grunt.option('htdoc')) {
+                grunt.fail.fatal('Need --htdoc option to be set');
             }
-            grunt.log.writeln('Installing into:', grunt.option('dest'));
+            grunt.log.writeln('Installing into:', grunt.option('htdoc'));
             grunt.task.run('copy:local_install_' + Lang);
         });
     });
