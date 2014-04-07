@@ -11,8 +11,7 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-
-//autocomplete popup
+//autocomplete tk
 .autocomplete-search {
     min-width: 300px;
     max-height: 600px;
@@ -22,7 +21,8 @@
         border-bottom: 2px solid #fff;
     }
     .scrollable-pane:after {
-        content: ''; /* make sure margins/paddings are applied properly */
+        //make sure margins/paddings are applied properly
+        content: '';
     }
 
     .autocomplete-item {
@@ -30,15 +30,14 @@
         margin: 2px;
         padding: 3px 3px;
 
-        &.indent {
-            padding-left: 20px;
-        }
-        //description
+        //description: added by backend
         i {
             font-style: normal;
             color: rgba(0,0,0,.5);
         }
-        //groups
+        &.indent {
+            padding-left: 20px;
+        }
         &.group {
             border-top: 1px solid rgba(128, 128, 128, 0.25);
         }
@@ -48,6 +47,7 @@
     }
 }
 
+//autocomplete tk: dropdown drawn inline on mobile
 .autocomplete-search.mobile-dropdown {
 
     width: auto;
@@ -60,17 +60,30 @@
     &.bottom-placement {
         border-bottom: 2px solid #fff;
     }
-    .scrollable-pane:after {
-        content: ''; /* make sure margins/paddings are applied properly */
+
+    //scrollable pane
+    .dropdown-menu-inline {
+        background-color: rgba(128, 128, 128, 0.11);
+        //sytyle from bootstrap dropdown-menu
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 4px;
+        -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        background-clip: padding-box;
+    }
+    .dropdown-menu-inline:after {
+        //make sure margins/paddings are applied properly
+        content: '';
     }
 
     .autocomplete-item {
         color: #333;
         margin: 2px;
-        padding: 3px 3px;
 
         //background-color: #eee;
-        padding: 10px 0;
+        padding: 10px 0 0 10px;
 
         &.indent {
             padding: 10px 14px;
@@ -82,7 +95,7 @@
         }
         //groups
         &.group {
-            background-color: white;
+            //background-color: white;
             font-size: 18px;
             border: none;
         }
@@ -92,24 +105,33 @@
     }
 }
 
-
-
-
-
 //topbar search-field vs. icon
 #io-ox-search-topbar.launcher {
     display: inline-block;
     max-width: 17em;
+    height: 40px;
 }
 #io-ox-search-topbar-icon.launcher {
     display: none;
 }
-@media all and (max-width: 800px), all and (max-device-width: 800px) {
+@media all and (max-width: 768px), all and (max-device-width: 768px) {
     #io-ox-search-topbar.launcher {
         display: none;
     }
     #io-ox-search-topbar-icon.launcher {
         display: inline-block;
+    }
+    //block buttons on mobile
+    .io-ox-search.window-content .facet {
+        width: 100%;
+        button {
+            text-align: left;
+            width: 100%;
+            .remove {
+                float: right;
+                padding-left: 10px;
+            }
+        }
     }
 }
 
@@ -120,212 +142,100 @@
     .window-head {
         display: none;
     }
-    //remove reserved space for head
     .window-body {
         left: 0;
     }
     //scrollable
     .window-content {
-        padding: 13px 0 13px 13px;
+        padding: 14px;
         overflow: auto;
     }
 }
 
-//app content padding
-.io-ox-search.window-content {
-    padding: 14px;
-}
-
-//app and lauchner parent class
 .io-ox-search {
 
-    //section: app
-    // .apps {
-    //     margin-bottom: 14px;
-    //     min-height: 28px;
-    //     list-style-type: none;
-    //     li {
-    //         display: block;
-    //     }
-    //     .app {
-    //         text-align: center;
-    //         cursor: pointer;
-    //         max-width: 160px;
-    //         padding: 4px 16px;
-    //         margin-right: 16px;
-    //         color: #0C68B3;
-    //         float: left; //TODO: Safari
-    //         &.active {
-    //             background-color: #0E75C2;
-    //             color: white
-    //         }
-    //         &:hover {
-    //             text-decoration: underline;
-    //         }
-    //     }
-    // }
-
-    .input-group-custom {
-        display: -ms-flex;
-        display: -webkit-flex;
-        display: flex;
-        clear: both;
+    //mode: WIDGET
+    &.widget-content {
+        .input-group {
+            padding-top: 5px;
+        }
     }
 
-        .search-field {
-            width: 180px;
-            padding: 4px 8px;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            &.widget {
-                height: 24px;
-            }
-            &.window {
-                height: 30px;
-                -ms-flex: 1 1 auto;
-                -webkit-flex: 1 1 auto;
-                flex: 1 1 auto;
-                border-right: 0;
-            }
-            &.form-control {
-                //override 'block'
-                display: inline-block;
+    //mode: WINDOW
+    &.window-content {
+
+        .row {
+            margin-bottom: 14px;
+            max-width: 500px;
+        }
+
+        ul, ol {
+            margin-bottom: 0px;
+        }
+
+        .application {
+            display: inline-block;
+            .btn-group {
+                margin-right: 16px;
+                button {
+                    border-radius: 0;
+                }
             }
         }
 
-        //submit button
-        .btn-search {
-            border-top-left-radius: 0;
-            min-width: 38px;
-            border-bottom-left-radius: 0;
-        }
-
-        //submit button: widget
-        .launcher-container {
-            display: inline-flex; //TODO: FF problem
-            .btn-search {
-                height: 24px;
-                line-height: 12px;
-                vertical-align: baseline;
-            }
-        }
-
-
-    //section: info
-    .info {
-        clear: both;
-        margin: 0 14px 4px 15px;
-        background-color: #f4f8fa;
-        border-color: #5bc0de;
-        padding: 10px;
-        border-left: 3px solid #eee;
-    }
-
-
-    //section: facets
-    // .facets {
-    //     margin-bottom: 10px;
-
-    //     .facet {
-    //         margin-bottom: 4px;
-    //         list-style-type: none;
-    //         padding: 6px 10px;
-    //         margin-right: 10px;
-    //         background-color: #E9E9E9;
-    //         color: #161616;
-    //         .user-select(none);
-    //         cursor: default;
-    //         .action {
-    //             padding-left: 10px;
-    //             cursor: pointer;
-    //         }
-    //         .name, i {
-    //             color: rgba(0,0,0,.5);
-    //         }
-    //         .dropdown-menu li .fa {
-    //             width: 2em;
-    //             text-align: left;
-    //         }
-    //         i, .more{
-    //             font-style: normal;
-    //             color: rgba(0,0,0,.5);
-    //         }
-    //         a {
-    //             overflow: hidden;
-    //             text-overflow: ellipsis;
-    //         }
-    //     }
-    // }
-
-    ul, ol {
-        margin-bottom: 0px;
-    }
-
-
-    .row {
-        margin-bottom: 14px;
-        max-width: 500px;
-    }
-
-    .facets {
-        //8px + 6px (facet)
-        margin-bottom: 8px;
-
-        li.facet {
-            margin-right: 16px;
+        .facets {
+            //6px + 8px facet (used when facets are stacked)
             margin-bottom: 6px;
-            button {
-                background-color: #E6E6E6;
-                border: transparent;
+            li.facet {
+                margin-right: 8px;
+                margin-bottom: 8px;
+                button {
+                    background-color: #E6E6E6;
+                    border: transparent;
+                }
             }
         }
 
-    }
-
-
-    .application {
-        display: inline-block;
-        .btn-group {
-            margin-right: 16px;
-            button {
-                border-radius: 0;
+        //app/facet dropdowns
+        .dropdown-toggle {
+            border-radius: 0;
+            .type {
+                color: rgba(0,0,0,.5);
+                &:after {
+                    //divider
+                    content: ':\00a0';
+                }
             }
-        }
-    }
-
-
-    //
-    .dropdown-toggle {
-        border-radius: 0;
-
-        .type {
-            color: rgba(0,0,0,.5);
-            &:after {
-                //divider
-                content: ':\00a0';
+            .name:after {
+                content: '\00a0';
+            }
+            //action icons
+            .caret {
+                //10px minus caret border
+                margin-left: 6px;
+            }
+            .remove {
+                margin-left: 10px;
             }
         }
 
-        .name:after {
-            content: '\00a0';
+        //reduce space between button and dropdown
+        .dropdown-menu {
+            margin-top: 0px;
         }
 
-        //action icons
-        .caret {
-            //10px minus caret border
-            margin-left: 6px;
-        }
-        .remove {
-            margin-left: 10px;
+        .results {
+            //handled in /items/*
         }
     }
-
-    //reduce space between button and dropdown
-    .dropdown-menu {
-        margin-top: 0px;
-    }
-
-
-    //section: results
-    //handled in /items/*
 }
+
+//info currently disabled
+// .io-ox-search.info {
+//     clear: both;
+//     margin: 0 14px 4px 15px;
+//     background-color: #f4f8fa;
+//     border-color: #5bc0de;
+//     padding: 10px;
+//     border-left: 3px solid #eee;
+// }

@@ -83,8 +83,10 @@ define('io.ox/search/items/view-template',
 
             if (items.timestamp && !items.length) {
                 cell.append(
-                    $('<div class="item">').append(
-                        $('<div class="line2">').text(gt('No items found'))
+                    $('<list class="item">').append(
+                        $('<div class="list-item-row">').append(
+                            $('<div class="">').text(gt('No items found'))
+                        )
                     )
                 );
             }

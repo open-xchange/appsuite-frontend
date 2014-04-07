@@ -412,7 +412,6 @@ div.hopscotch-bubble {
 
         font-size: @topbar-font-size;
         color: @topbar-launcher-color;
-        line-height: 40px;
         white-space: nowrap;
         display: inline-block;
         -webkit-tap-highlight-color: transparent;
@@ -421,6 +420,7 @@ div.hopscotch-bubble {
 
             color: @topbar-launcher-color;
             padding: 12px;
+            line-height: 40px;
 
             html.high-contrast & {
                 color: @black;
@@ -470,8 +470,10 @@ div.hopscotch-bubble {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        vertical-align: top;
 
         & > a {
+
             // IE10 needs this :link class otherwise :active is not removed
             &:link {
                 color: @topbar-launcher-color;

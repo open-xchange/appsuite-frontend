@@ -39,92 +39,91 @@ define('io.ox/search/view-template',
                 model = baton.model,
                 mode = model.get('mode');
 
-            ref = $('<input>')
-                .attr({
-                    type: 'text',
-                    tabindex: 1,
-                    placeholder: gt('Search') + ' ...',
-                    autofocus: mode === 'widget' ? false : true
-                })
-                .addClass('search-field form-control ' + mode)
-                .autocomplete({
-                    api: app.apiproxy,
-                    minLength: 0,
-                    mode: 'search',
-                    parentSelector: container  ? '.query' : '.io-ox-search',
-                    model: model,
-                    container: container,
-                    delay: 150,
-                    cbshow: function () {
-                        //reset autocomplete tk styles
-                        if (mode !== 'widget' && container)
-                            $(this).attr('style', '');
-
-                    },
-                    //TODO: would be nice to move to control
-                    source: function (val) {
-                        //show dropdown immediately (busy by autocomplete tk)
-                        ref.open();
-                        return app.apiproxy.search(val);
-                    },
-                    draw: function (value) {
-                        $(this)
-                            .data(value)
-                            .html(value.display_name);
-                        if (container)
-                            container.css('width', 'auto');
-                    },
-                    stringify: function () {
-                        //keep input value when item selected
-                        return $(ref).val();
-                    },
-                    click: function (e) {
-                        //apply selected filter
-                        var node = $(e.target).closest('.autocomplete-item'),
-                            value = node.data();
-                        if (mode === 'widget') {
-                            model.remove();
-                        }
-                        model.add(value.facet, value.id);
-                    }
-                })
-                .on('selected', function (e, val, valid) {
-                    //valid_ usually val.length >= 3
-                    if (valid)
-                        $(ref).val('');
-                })
-                .on('click', function () {
-                    //draw dropdown on focus
-                    ref.trigger('keyup', true);
-                });
-
-            $(this).append(ref);
-
-            //submit
             this.append(
-                $('<button type="button" class="btn btn-default btn-search">')
-                .addClass(mode !== 'widget' ? 'btn-primary' : '')
-                .append(
-                    $('<i class="fa fa-search"></i>')
+                $('<div class="input-group">').append(
+                    ref = $('<input type="text" class="form-control" tabindex="1">')
+                    .attr({
+                        placeholder: gt('Search') + ' ...',
+                        autofocus: mode === 'widget' ? false : true
+                    })
+                    .addClass('search-field')// + mode)
+                    .autocomplete({
+                        api: app.apiproxy,
+                        minLength: 0,
+                        mode: 'search',
+                        delay: 150,
+                        parentSelector: container  ? '.query' : '.io-ox-search',
+                        model: model,
+                        container: container,
+                        cbshow: function () {
+                            //reset autocomplete tk styles
+                            if (mode !== 'widget' && container)
+                                $(this).attr('style', '');
+
+                        },
+                        //TODO: would be nice to move to control
+                        source: function (val) {
+                            //show dropdown immediately (busy by autocomplete tk)
+                            ref.open();
+                            return app.apiproxy.search(val);
+                        },
+                        draw: function (value) {
+                            $(this)
+                                .data(value)
+                                .html(value.display_name);
+                            if (container)
+                                container.css('width', '100%');
+                        },
+                        stringify: function () {
+                            //keep input value when item selected
+                            return ref.val();
+                        },
+                        click: function (e) {
+                            //apply selected filter
+                            var node = $(e.target).closest('.autocomplete-item'),
+                                value = node.data();
+                            if (mode === 'widget') {
+                                model.remove();
+                            }
+                            model.add(value.facet, value.id);
+                        }
+                    })
+                    .on('selected', function (e, val, valid) {
+                        //valid_ usually val.length >= 3
+                        if (valid)
+                            ref.val('');
+                    })
+                    .on('click', function () {
+                        //draw dropdown on focus
+                        ref.trigger('keyup', true);
+                    }),
+                    $('<span class="input-group-btn">').append(
+                        //submit
+                        $('<button type="button" class="btn btn-default btn-search">')
+                        .addClass(mode !== 'widget' ? 'btn-primary' : '')
+                        .append(
+                            $('<i class="fa fa-search"></i>')
+                        )
+                        .on('click', function () {
+                            var dropdown = $('.autocomplete-search').length;
+                            //open full size search app 'shortcut'
+                            if (!dropdown && mode === 'widget') {
+                                //open search app
+                                require(['io.ox/search/main'], function (searchapp) {
+                                    searchapp.run();
+                                });
+                            } else {
+                                //construct enter event to
+                                var e = $.Event('keydown');
+                                e.which = 13;
+                                $(ref).trigger(e);
+                            }
+                        })
+                    )
                 )
-                .on('click', function () {
-                    var dropdown = $('.autocomplete-search').length;
-                    //open full size search app 'shortcut'
-                    if (!dropdown && mode === 'widget') {
-                        //open search app
-                        require(['io.ox/search/main'], function (searchapp) {
-                            searchapp.run();
-                        });
-                    } else {
-                        //construct enter event to
-                        var e = $.Event('keydown');
-                        e.which = 13;
-                        $(ref).trigger(e);
-                    }
-                })
             );
 
-            return $(this);
+            return this;
         };
 
     //widget mode
@@ -133,8 +132,7 @@ define('io.ox/search/view-template',
         index: 200,
         row: '0',
         draw: function (baton) {
-            var row = $('<div class="launcher-container">').appendTo(this);
-            dropdown.call(row, baton);
+            dropdown.call(this, baton);
         }
     });
 
@@ -196,7 +194,7 @@ define('io.ox/search/view-template',
                 mobile = this.find('.mobile-dropdown');
 
             $('<div class="row query">').append(
-                row = $('<div class="col-xs-12 input-group-custom">')
+                row = $('<div class="col-xs-12">')
             ).appendTo(this);
 
             dropdown.call(row, baton, mobile.length ? mobile : undefined);
@@ -217,7 +215,7 @@ define('io.ox/search/view-template',
                 facet, row, cell, button;
 
             row = $('<div class="row facets">').append(
-                cell = $('<ul class="col-sm-12 list-unstyled facets">')
+                cell = $('<ul class="col-xs-12 list-unstyled facets">')
             );
 
             _.each(list, function (item) {
@@ -227,9 +225,9 @@ define('io.ox/search/view-template',
                 //create facet node
                 cell.append(
                     facet = $('<li role="presentation" class="facet btn-group">')
-                                .addClass('fac!et pull-left')
+                                // .addClass('fac!et pull-left')
                                 .append(
-                                    button = $('<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">')
+                                    button = $('<button type="button" class="btn btn-default dropdown-toggle">')
                                 )
                 );
 
@@ -340,6 +338,7 @@ define('io.ox/search/view-template',
                 menu;
 
             if (filters.length) {
+                this.attr('data-toggle', 'dropdown');
                 //add caret
                 this.append($('<span class="caret">'));
 
@@ -455,12 +454,15 @@ define('io.ox/search/view-template',
 
 
             var button = this.find('button'),
+                current = value.custom,
+                option,
                 menu = $('<ul class="dropdown-menu facet-dropdown" role="menu">')
                     .attr({
                         'data-facet': 'folder',
                         'data-value': 'custom'
                     });
 
+            button.attr('data-toggle', 'dropdown');
             button.append($('<span class="caret">'));
 
             //add fodlers
@@ -473,16 +475,19 @@ define('io.ox/search/view-template',
                     //add option
                     _.each(list, function (folder) {
                         menu.append(
-                            $('<li role="presentation">').append(
-                                $('<a role="menuitem" tabindex="-1" href="#">')
-                                    .append(
-                                        $('<span>').text(folder.title)
-                                    )
-                                    .addClass('option')
-                                    .attr('data-custom', folder.id)
-                                    .attr('title', folder.title)
+                            option = $('<li role="presentation">').append(
+                                        $('<a role="menuitem" tabindex="-1" href="#">')
+                                            .append(
+                                                    $('<i class="fa fa-fw fa-none">'),
+                                                    $('<span>').text(folder.title)
+                                            )
+                                            .addClass('option')
+                                            .attr('data-custom', folder.id)
+                                            .attr('title', folder.title)
                             )
                         );
+                        if (current === folder.id)
+                            option.find('.fa').removeClass('fa-none').addClass('fa-check');
                     });
 
                     //add divider
@@ -495,6 +500,7 @@ define('io.ox/search/view-template',
                         $('<li role="presentation">').append(
                              $('<a role="menuitem" tabindex="-1" href="#">')
                                 .append(
+                                    $('<i class="fa fa-fw fa-none">'),
                                     $('<span>').text(gt('More') + '...')
                                 )
                                 .addClass('option more')
@@ -508,35 +514,13 @@ define('io.ox/search/view-template',
         }
     });
 
-    // point.extend({
-    //     id: 'info',
-    //     index: 300,
-    //     draw: function (baton) {
-    //         var items = baton.model.get('items'),
-    //             timespend = Math.round((Date.now() - items.timestamp) / 100) / 10;
-    //         if (items.timestamp) {
-    //             this.append(
-    //                 $('<div>')
-    //                 .addClass('info')
-    //                 .append(
-    //                         $('<span>')
-    //                         .addClass('info-item')
-    //                         .append(
-    //                             gt('Found %1$s items in %2$s seconds', items.length, timespend)
-    //                         )
-    //                     )
-    //             );
-    //         }
-    //     }
-    // });
-
     // inline dropdown
     ext.point('io.ox/search/view/window/mobile').extend({
         id: 'dropdown',
         index: 100,
         draw: function () {
             //when exisiting autocomplete dropdown is rendered into this (autocompelte tk container)
-            $('<div class="mobile-dropdown row">')
+            $('<div class="mobile-dropdown col-xs-12">')
                 .hide()
                 .appendTo(this);
         }
@@ -623,5 +607,27 @@ define('io.ox/search/view-template',
             });
         }
     });
+
+    // point.extend({
+    //     id: 'info',
+    //     index: 300,
+    //     draw: function (baton) {
+    //         var items = baton.model.get('items'),
+    //             timespend = Math.round((Date.now() - items.timestamp) / 100) / 10;
+    //         if (items.timestamp) {
+    //             this.append(
+    //                 $('<div>')
+    //                 .addClass('info')
+    //                 .append(
+    //                         $('<span>')
+    //                         .addClass('info-item')
+    //                         .append(
+    //                             gt('Found %1$s items in %2$s seconds', items.length, timespend)
+    //                         )
+    //                     )
+    //             );
+    //         }
+    //     }
+    // });
 
 });

@@ -306,7 +306,7 @@ define('io.ox/search/main',
             app.view = SearchView.factory
                         .create(app, model)
                         .render();
-            return model.get('mode') === 'widget' ? app.view.$el.find('.launcher-container') : app.view.$el;
+            return model.get('mode') === 'widget' ? app.view.$el.find('.input-group') : app.view.$el;
         }
     };
 });

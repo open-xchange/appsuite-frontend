@@ -624,7 +624,7 @@ define('io.ox/core/main',
                     self.append(
                         addLauncher('right', placeholder, $.noop(), gt('Search'))
                         .attr('id', 'io-ox-search-topbar')
-                        .addClass('io-ox-search')
+                        .addClass('io-ox-search widget-content')
                     );
 
                     //replace placeholder with concrete search field

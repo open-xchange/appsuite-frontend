@@ -223,7 +223,7 @@ define('io.ox/core/tk/autocomplete',
                     //apply style
                     o.container
                         .addClass('autocomplete-search');
-                    scrollpane.addClass('col-xs-12');
+                    scrollpane.addClass('dropdown-menu-inline');
 
                     //ignore hidden facets
                     list = _(list).filter(function (facet) {
