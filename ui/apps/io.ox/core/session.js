@@ -153,7 +153,8 @@ define('io.ox/core/session',
                                 client: that.client(),
                                 version: that.version(),
                                 timeout: TIMEOUTS.LOGIN,
-                                multiple: JSON.stringify(multiple)
+                                multiple: JSON.stringify(multiple),
+                                rampup: false
                             }
                         })
                         .done(function (data) {
@@ -183,6 +184,17 @@ define('io.ox/core/session',
                 return def;
             };
         }()),
+
+        rampup: function () {
+            return http.GET({
+                module: 'login',
+                appendColumns: false,
+                params: {
+                    action: 'rampup',
+                    client: that.client()
+                }
+            });
+        },
 
         store: function () {
             var def = $.Deferred();
