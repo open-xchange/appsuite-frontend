@@ -595,7 +595,7 @@ msgstr "Tutti gli allegati"
 msgid "All day"
 msgstr "Tutto il giorno"
 
-#: apps/io.ox/search/view-template.js:447 module:io.ox/core
+#: apps/io.ox/search/view-template.js:446 module:io.ox/core
 #, fuzzy
 #| msgid "Add folder"
 msgid "All folders"
@@ -1055,7 +1055,7 @@ msgstr "Calendario"
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:405
+#: apps/io.ox/search/view-template.js:404
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:60
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:196
@@ -2764,8 +2764,8 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:302 module:io.ox/core
-#: apps/io.ox/search/view-template.js:398
+#: apps/io.ox/search/view-template.js:300 module:io.ox/core
+#: apps/io.ox/search/view-template.js:397
 msgid "Folder"
 msgstr "Cartella"
 
@@ -3819,7 +3819,7 @@ msgstr "Mesi"
 #: apps/io.ox/core/extPatterns/links.js:340 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:498
+#: apps/io.ox/search/view-template.js:504
 msgid "More"
 msgstr "Altro"
 
@@ -4023,7 +4023,7 @@ msgstr "Nessun file selezionato per il caricamento."
 msgid "No files have been changed recently"
 msgstr "Nessun file è stato modificato di recente"
 
-#: apps/io.ox/search/items/view-template.js:87 module:io.ox/core
+#: apps/io.ox/search/items/view-template.js:88 module:io.ox/core
 #, fuzzy
 #| msgid "No RSS feeds found."
 msgid "No items found"

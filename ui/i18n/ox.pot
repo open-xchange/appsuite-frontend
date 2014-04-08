@@ -272,7 +272,7 @@ msgstr ""
 #: apps/io.ox/portal/main.js:491
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:405
+#: apps/io.ox/search/view-template.js:404
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts
 #: apps/io.ox/tasks/actions.js:60
@@ -1984,9 +1984,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:126
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:302
+#: apps/io.ox/search/view-template.js:300
 #: module:io.ox/core
-#: apps/io.ox/search/view-template.js:398
+#: apps/io.ox/search/view-template.js:397
 msgid "Folder"
 msgstr ""
 
@@ -3437,7 +3437,7 @@ msgstr ""
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:498
+#: apps/io.ox/search/view-template.js:504
 msgid "More"
 msgstr ""
 
@@ -7221,7 +7221,7 @@ msgstr ""
 msgid "Click to open."
 msgstr ""
 
-#: apps/io.ox/search/items/view-template.js:87
+#: apps/io.ox/search/items/view-template.js:88
 #: module:io.ox/core
 msgid "No items found"
 msgstr ""
@@ -7231,7 +7231,7 @@ msgstr ""
 msgid "Recurring tasks need a valid end date."
 msgstr ""
 
-#: apps/io.ox/search/view-template.js:447
+#: apps/io.ox/search/view-template.js:446
 #: module:io.ox/core
 msgid "All folders"
 msgstr ""
