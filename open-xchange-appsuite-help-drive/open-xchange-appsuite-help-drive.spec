@@ -17,9 +17,9 @@ Source:         %{name}_%{version}.orig.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
 
 %if 0%{?rhel_version} || 0%{?fedora_version}
-%define docroot /var/www/html/appsuite
+%define docroot /var/www/html/
 %else
-%define docroot /srv/www/htdocs/appsuite
+%define docroot /srv/www/htdocs/
 %endif
 
 %description
@@ -148,9 +148,9 @@ Online help for OX Drive (zh_TW)
 
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
-ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dprefix=%{docroot} -f build/build.xml build
+ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -Dlanguages=false -f build/build.xml build
 for LANG in de_DE en_GB en_US es_ES es_MX fr_FR it_IT ja_JP nl_NL pl_PL zh_CN zh_TW; do
-    ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dprefix=%{docroot} -DinstallTarget=${LANG} -f build/build.xml clean build
+    ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DinstallTarget=${LANG} -f build/build.xml clean build
 done
 
 %clean
@@ -158,80 +158,80 @@ done
 
 %files common
 %defattr(-,root,root)
-%dir %{docroot}
-%{docroot}/help-drive
-%exclude %{docroot}/help-drive/l10n
+%dir %{docroot}/appsuite
+%{docroot}/appsuite/help-drive
+%exclude %{docroot}/appsuite/help-drive/l10n
 
 %files de-de
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/de_DE
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/de_DE
 
 %files en-gb
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/en_GB
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/en_GB
 
 %files en-us
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/en_US
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/en_US
 
 %files es-es
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/es_ES
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/es_ES
 
 %files es-mx
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/es_MX
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/es_MX
 
 %files fr-fr
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/fr_FR
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/fr_FR
 
 %files it-it
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/it_IT
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/it_IT
 
 %files ja-jp
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/ja_JP
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/ja_JP
 
 %files nl-nl
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/nl_NL
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/nl_NL
 
 %files pl-pl
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/pl_PL
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/pl_PL
 
 %files zh-cn
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/zh_CN
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/zh_CN
 
 %files zh-tw
 %defattr(-,root,root)
-%dir %{docroot}
-%dir %{docroot}/help-drive/l10n
-%{docroot}/help-drive/l10n/zh_TW
+%dir %{docroot}/appsuite
+%dir %{docroot}/appsuite/help-drive/l10n
+%{docroot}/appsuite/help-drive/l10n/zh_TW
 
 %changelog
