@@ -198,8 +198,10 @@ define('io.ox/mail/main',
             count = _(all).reduce(function (sum, obj) {
                 return sum + (obj.thread ? obj.thread.length : 1);
             }, 0);
-            if (this.prop('limit') && count < this.prop('limit')) return $();
-            if (isThread && count < this.option('max')) return $();
+            if (this.prop('limit')) {
+                if (all.length < this.prop('limit')) return $();
+            }
+            else if (isThread && count < this.option('max')) return $();
             // show tail
             return $('<div class="vgrid-cell tail">').append(
                 $('<a href="#" tabindex="-1">').text(
