@@ -1255,8 +1255,13 @@ define('io.ox/mail/api',
                         id = base.last(),
                         folder = base.without(id).join(api.separator);
                     api.get({ folder_id: folder, id: id }).then(function () {
-                        $.when(api.caches.list.add(data), api.caches.get.add(data))
-                        .done(function () {
+                        $.when(accountAPI.getUnifiedMailboxName(), api.caches.list.add(data), api.caches.get.add(data))
+                        .done(function (isUnified) {
+                            if (isUnified !== null) {
+                                folderAPI.update();
+                            } else {
+                                folderAPI.reload(folder);
+                            }
                             api.trigger('refresh.list');
                         });
                     });
