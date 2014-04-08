@@ -1296,6 +1296,10 @@ div.hopscotch-bubble {
                 color: #eee;
                 cursor: default;
 
+                html.high-contrast & {
+                    color: @hc-gray; // HC
+                }
+
                 &.accent-color {
                     background-color: #fff;
                     border-color: #fff;
@@ -2103,7 +2107,13 @@ a.button {
 }
 
 .delimiter {
+
     color: #ccc;
+
+    html.high-contrast & {
+        color: @black;
+    }
+
 }
 
 .default-content-padding {

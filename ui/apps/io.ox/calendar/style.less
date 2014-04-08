@@ -14,11 +14,13 @@
 .week-view, .month-view {
 
     .toolbar {
+
         height: @calendar-toolbar-height;
         text-align: center;
         padding-top: @calendar-toolbar-top-padding;
 
         .info {
+
             text-align: left;
             width: 30%;
             position: absolute;
@@ -28,10 +30,12 @@
             color: #333;
             .ellipsis();
             .fontWeight(300);
+
             .cw {
                 font-size: 14px;
                 color: @hc-gray;
             }
+
         }
 
         .showall {
@@ -87,8 +91,11 @@
                     font-weight: bold;
                     color: @weekview-today;
                 }
+
             }
+
         }
+
     }
 
     /* Mobile */
@@ -280,7 +287,13 @@
         }
 
         .location {
+
             color: #888;
+
+            html.high-contrast & {
+                color: @black;
+            }
+
         }
 
         .shown_as.label {
@@ -372,7 +385,8 @@
         }
 
         &.declined {
-            text-decoration: line-through; color: #913F3F;
+            text-decoration: line-through;
+            color: #913F3F;
         }
 
         &.tentative {
@@ -385,6 +399,7 @@
 
 /* Detail view */
 .calendar-detail {
+
     font-weight: 300;
 
     .io-ox-inline-links:first-child {
@@ -392,15 +407,31 @@
     }
 
     .interval {
+
         color: #555;
         white-space: nowrap;
         float: right;
-        &>span { margin-left: 5px; }
+
+        .label-default {
+            margin-left: 5px;
+
+            html.high-contrast & {
+                background-color: @black;
+            }
+
+        }
+
     }
 
     .day {
+
         font-size: 1.1em;
         color: #888;
+
+        html.high-contrast & {
+            color: @black;
+        }
+
     }
 
     .private-flag {
@@ -415,8 +446,14 @@
     }
 
     .location {
+
         color: #888;
         margin-bottom: 1em;
+
+        html.high-contrast & {
+            color: @black;
+        }
+
     }
 
     .note {
@@ -594,10 +631,13 @@
 }
 
 .show-all-checkbox {
+
     padding-right: 14px;
     margin-bottom: 14px;
+
     label {
         font-weight: 300;
         color: @hc-gray;
     }
+
 }

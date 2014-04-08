@@ -338,6 +338,9 @@
         float: left;
         margin: 0px 14px 0 0;
         .picture(40px, 40px);
+        html.high-contrast & {
+            display: none;
+        }
     }
 
     .selected .contact-picture {
@@ -769,6 +772,9 @@ textarea.inplace-editor {
 
     .contact-picture {
         display: inline-block;
+        html.high-contrast & {
+            display: none;
+        }
     }
 
     .from {

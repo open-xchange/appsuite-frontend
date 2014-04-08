@@ -13,6 +13,12 @@
  */
 
 .participants-mini-view {
+
+    @participant-unconfirmed:   #428BCA; /* blue */
+    @participant-accepted:      #799952; /* green */
+    @participant-declined:      #913F3F; /* red */
+    @participant-tentative:     #cc8800; /* orange */
+
 	.io-ox-label {
         font-size: 0.9em;
         padding: 1em 0 0.25em 0em;
@@ -31,27 +37,49 @@
         margin-left: 4px;
 
         &.unconfirmed {
-            color: #428BCA; /* blue */
+            color: @participant-unconfirmed;
         }
 
         &.accepted {
-            color: #8EB360; /* green */
+
+            color: @participant-accepted;
+
             i {
-                opacity: 0.25;
+
+                opacity: 0.35;
+
+                html.high-contrast & {
+                    opacity: 1;
+                }
+
             }
+
         }
+
         &.declined {
-            color: #913F3F; /* red */
+            color: @participant-declined;
         }
+
         &.tentative {
-            color: #c80; /* orange */
+
+            color: @participant-tentative;
+
             i {
+
                 opacity: 0.50;
+
+                html.high-contrast & {
+                    opacity: 1;
+                }
+
             }
+
         }
+
     }
 
     .summary {
+
         float: right;
         display: inline-block;
 
@@ -61,19 +89,23 @@
         }
 
         .countgroup {
+
             margin-right: 0.5em;
             cursor: pointer;
 
             &.badge {
-                background-color: #fff;
-                color: #000;
+                background-color: @white;
+                color: @black;
                 border: 1px solid #888;
                 margin: 0;
             }
+
         }
+
     }
 
     .participant-list {
+
         -webkit-column-width: 250px;
         -webkit-column-gap: 20px;
         -moz-column-width: 250px;
@@ -82,6 +114,7 @@
         column-gap: 20px;
 
         .participant {
+
             line-height: 2em;
             position: relative; //needed so icons position correctly if participants are displayed in 2 columns
             width: 250px;
@@ -89,6 +122,7 @@
             cursor: pointer;
 
             .person {
+
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -96,21 +130,32 @@
                 display: inline-block;
 
                 &.accepted {
-                    color: #799952;  /* green */
+
+                    color: @participant-accepted;
+
+                    html.high-contrast & {
+                        color: @hc-green;
+                    }
+
                 }
 
                 &.declined {
-                    text-decoration: line-through; color: #913F3F;
+                    text-decoration: line-through;
+                    color: @participant-declined;
                 }
+
             }
 
             .comment {
-                color: #888;
+                color: @hc-gray;
                 white-space: normal;
                 padding-left: 1em;
                 line-height: 1.2em;
                 margin-bottom: 0.5em;
             }
+
         }
+
     }
+
 }
