@@ -3,13 +3,13 @@
 module.exports = function (grunt) {
 
    grunt.config.extend('copy', {
-       local_install_dynamic: {
+       local_install_static: {
             files: [{
                 expand: true,
-                src: ['**/*'],
+                src: [],
                 cwd: 'dist/',
                 filter: 'isFile',
-                dest: grunt.option('prefix')
+                dest: grunt.option('htdoc')
             }]
         }
     });
