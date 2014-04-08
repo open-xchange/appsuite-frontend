@@ -15,6 +15,7 @@ define('io.ox/search/items/view-template',
     ['gettext!io.ox/core',
      'io.ox/core/extensions',
      'io.ox/mail/listview',
+     'io.ox/tasks/listview',
      'io.ox/contacts/listview',
      'io.ox/calendar/listview',
      'io.ox/files/listview'
@@ -65,10 +66,8 @@ define('io.ox/search/items/view-template',
                     ext.point('io.ox/calendar/listview/item').invoke('draw', tmp, baton);
                     break;
                 case 'tasks':
-                    tmp.append(
-                        $('<div class="line1">').text(item.title),
-                        $('<div class="line2">').text(item.folder_id)
-                    );
+                    tmp.addClass('task-item');
+                    ext.point('io.ox/tasks/listview/item').invoke('draw', tmp, baton);
                     break;
                 case 'files':
                     tmp.addClass('file-item');

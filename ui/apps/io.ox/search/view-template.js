@@ -40,87 +40,87 @@ define('io.ox/search/view-template',
                 mode = model.get('mode');
 
             this.append(
-                $('<div class="input-group">').append(
-                    ref = $('<input type="text" class="form-control" tabindex="1">')
-                    .attr({
-                        placeholder: gt('Search') + ' ...',
-                        autofocus: mode === 'widget' ? false : true
-                    })
-                    .addClass('search-field ' + mode === 'widget' ? 'input-group-sm' : '')
-                    .autocomplete({
-                        api: app.apiproxy,
-                        minLength: 0,
-                        mode: 'search',
-                        delay: 150,
-                        parentSelector: container  ? '.query' : '.io-ox-search',
-                        model: model,
-                        container: container,
-                        cbshow: function () {
-                            //reset autocomplete tk styles
-                            if (mode !== 'widget' && container)
-                                $(this).attr('style', '');
+                $('<div class="input-group">')
+                    .addClass(mode === 'widget' ? 'input-group-sm' : '')
+                    .append(
+                        ref = $('<input type="text" class="form-control search-field" tabindex="1">')
+                        .attr({
+                            placeholder: gt('Search') + ' ...'
+                            //autofocus: mode === 'widget'
+                        })
+                        .autocomplete({
+                            api: app.apiproxy,
+                            minLength: 0,
+                            mode: 'search',
+                            delay: 150,
+                            parentSelector: container  ? '.query' : '.io-ox-search',
+                            model: model,
+                            container: container,
+                            cbshow: function () {
+                                //reset autocomplete tk styles
+                                if (mode !== 'widget' && container)
+                                    $(this).attr('style', '');
 
-                        },
-                        //TODO: would be nice to move to control
-                        source: function (val) {
-                            //show dropdown immediately (busy by autocomplete tk)
-                            ref.open();
-                            return app.apiproxy.search(val);
-                        },
-                        draw: function (value) {
-                            $(this)
-                                .data(value)
-                                .html(value.display_name);
-                            if (container)
-                                container.css('width', '100%');
-                        },
-                        stringify: function () {
-                            //keep input value when item selected
-                            return ref.val();
-                        },
-                        click: function (e) {
-                            //apply selected filter
-                            var node = $(e.target).closest('.autocomplete-item'),
-                                value = node.data();
-                            if (mode === 'widget') {
-                                model.remove();
-                            }
-                            model.add(value.facet, value.id);
-                        }
-                    })
-                    .on('selected', function (e, val, valid) {
-                        //valid_ usually val.length >= 3
-                        if (valid)
-                            ref.val('');
-                    })
-                    .on('click', function () {
-                        //draw dropdown on focus
-                        ref.trigger('keyup', true);
-                    }),
-                    $('<span class="input-group-btn">').append(
-                        //submit
-                        $('<button type="button" class="btn btn-default btn-search">')
-                        .addClass(mode !== 'widget' ? 'btn-primary' : '')
-                        .append(
-                            $('<i class="fa fa-search"></i>')
-                        )
-                        .on('click', function () {
-                            var dropdown = $('.autocomplete-search').length;
-                            //open full size search app 'shortcut'
-                            if (!dropdown && mode === 'widget') {
-                                //open search app
-                                require(['io.ox/search/main'], function (searchapp) {
-                                    searchapp.run();
-                                });
-                            } else {
-                                //construct enter event to
-                                var e = $.Event('keydown');
-                                e.which = 13;
-                                $(ref).trigger(e);
+                            },
+                            //TODO: would be nice to move to control
+                            source: function (val) {
+                                //show dropdown immediately (busy by autocomplete tk)
+                                ref.open();
+                                return app.apiproxy.search(val);
+                            },
+                            draw: function (value) {
+                                $(this)
+                                    .data(value)
+                                    .html(value.display_name);
+                                if (container)
+                                    container.css('width', '100%');
+                            },
+                            stringify: function () {
+                                //keep input value when item selected
+                                return ref.val();
+                            },
+                            click: function (e) {
+                                //apply selected filter
+                                var node = $(e.target).closest('.autocomplete-item'),
+                                    value = node.data();
+                                if (mode === 'widget') {
+                                    model.remove();
+                                }
+                                model.add(value.facet, value.id);
                             }
                         })
+                        .on('selected', function (e, val, valid) {
+                            //valid_ usually val.length >= 3
+                            if (valid)
+                                ref.val('');
+                        })
+                        .on('focus', function () {
+                            //draw dropdown on focus
+                            ref.trigger('keyup', true);
+                        }),
+                        $('<span class="input-group-btn">').append(
+                            //submit
+                            $('<button type="button" class="btn btn-default btn-search">')
+                            .append(
+                                $('<i class="fa fa-search"></i>')
+                            )
+                            .on('click', function () {
+                                var dropdown = $('.autocomplete-search').length;
+                                //open full size search app 'shortcut'
+                                if (!dropdown && mode === 'widget') {
+                                    //open search app
+                                    require(['io.ox/search/main'], function (searchapp) {
+                                        searchapp.run();
+                                    });
+                                } else {
+                                    //construct enter event to
+                                    var e = $.Event('keydown');
+                                    e.which = 13;
+                                    $(ref).trigger(e);
+                                }
+                            })
+                        )
                     )
-                )
             );
 
             return this;
@@ -343,7 +343,7 @@ define('io.ox/search/view-template',
                 this.append($('<span class="caret">'));
 
                 //creste menu
-                menu = $('<ul class="dropdown-menu facet-dropdown" role="menu">')
+                menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
                         .attr({
                             'data-facet': facet.id,
                             'data-value': value.id
@@ -456,7 +456,7 @@ define('io.ox/search/view-template',
             var button = this.find('button'),
                 current = value.custom,
                 option,
-                menu = $('<ul class="dropdown-menu facet-dropdown" role="menu">')
+                menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
                     .attr({
                         'data-facet': 'folder',
                         'data-value': 'custom'
@@ -579,7 +579,7 @@ define('io.ox/search/view-template',
                                 $('<span class="name">'),
                                 $('<span class="caret">')
                             ),
-                        $('<ul class="dropdown-menu app-dropdown" role="menu">').append(items)
+                        $('<ul class="dropdown dropdown-menu app-dropdown" role="menu">').append(items)
                     );
 
                     //current app
