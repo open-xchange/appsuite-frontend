@@ -125,6 +125,21 @@ define('io.ox/tasks/model',
     });
 
     ext.point('io.ox/tasks/model/validation').extend({
+        id: 'more than 2 decimal places',
+        validate: function (attributes) {
+            var tCosts = attributes.target_costs,
+                aCosts = attributes.actual_costs;
+
+            if (tCosts && (tCosts.substr(tCosts.indexOf('.')).length > 3 || tCosts.substr(tCosts.indexOf(',')).length > 3)) {
+                this.add('target_costs', gt('Costs must only have two decimal places.'));
+            }
+            if (aCosts && (aCosts.substr(aCosts.indexOf('.')).length > 3 || aCosts.substr(aCosts.indexOf(',')).length > 3)) {
+                this.add('actual_costs', gt('Costs must only have two decimal places.'));
+            }
+        }
+    });
+
+    ext.point('io.ox/tasks/model/validation').extend({
         id: 'progress-not-between-0-and-100',
         validate: function (attributes) {
             if (attributes.percent_completed && (attributes.percent_completed < 0 || attributes.percent_completed > 100)) {
