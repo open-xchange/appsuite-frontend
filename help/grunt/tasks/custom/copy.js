@@ -66,11 +66,11 @@ module.exports = function (grunt) {
         config['dist_help_' + Lang] = {
             files: [
                 {
-                    src: ['appsuite/help/l10n/' + Lang + '/**/*'],
+                    src: ['help/l10n/' + Lang + '/**/*'],
                     expand: true,
                     filter: 'isFile',
                     cwd: 'build/',
-                    dest: 'dist/'
+                    dest: 'dist/appsuite/'
                 }
             ]
         };
