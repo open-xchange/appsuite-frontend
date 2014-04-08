@@ -53,7 +53,7 @@ define('io.ox/core/tk/reminder-util',
                         return ret;
                     })
                 ),
-                $('<button role= type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
+                $('<button type="button" tabindex="1" class="btn btn-primary btn-sm remindOkBtn refocus" focus-id="' + focusId + '-button" data-action="ok">').text(gt('OK'))
                 .attr('aria-label', gt('Close this reminder'))
             ).find('after').css('clear', 'both');
         }
