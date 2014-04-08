@@ -160,7 +160,6 @@ done
 %defattr(-,root,root)
 %dir %{docroot}/appsuite
 %{docroot}/appsuite/help
-%exclude %{docroot}/appsuite/help/l10n
 
 %files de-de
 %defattr(-,root,root)
