@@ -85,7 +85,7 @@ define(['io.ox/contacts/util'], function (util) {
         });
 
         it('should return a combined string of position and company', function () {
-            expect(util.getJob(testPerson)).to.equal('position, company');
+            expect(util.getJob(testPerson)).to.equal('company, position');
         });
 
         it('should return the mailfield ID of a selected E-Mail', function () {
