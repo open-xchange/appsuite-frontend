@@ -29,7 +29,7 @@ define('io.ox/search/main',
         index: 100,
         id: 'default',
         config: function (data) {
-            data.defaultApp =  settings.get('search/default', 'io.ox/files');
+            data.defaultApp =  settings.get('search/default', 'io.ox/mail');
         }
     });
 
