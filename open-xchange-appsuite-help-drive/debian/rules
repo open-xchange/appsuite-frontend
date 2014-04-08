@@ -8,8 +8,8 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
 	FLAGS += debug=1
 endif
 
-PKGNAME = open-xchange-appsuite-help-drive
-ROOT = $(CURDIR)/debian/$(PKGNAME)
+PKGNAME := open-xchange-appsuite-help-drive
+ROOT := $(CURDIR)/debian/$(PKGNAME)
 
 override_dh_auto_install:
 	ant -Dbasedir=build -DdestDir=$(ROOT)-common -DpackageName=$(PKGNAME) -Dlanguages=false -f build/build.xml build

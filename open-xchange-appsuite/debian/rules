@@ -8,54 +8,19 @@ ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
 	FLAGS += debug=1
 endif
 
-BACKEND := debian/open-xchange-appsuite-manifest/opt/open-xchange/appsuite
-FRONTEND := debian/open-xchange-appsuite/var/www/appsuite
+PKGNAME := open-xchange-appsuite
+ROOT := $(CURDIR)/debian/$(PKGNAME)
 
 override_dh_auto_install:
-	mkdir -p $(FRONTEND)
-	mkdir -p $(BACKEND)
-	cp -r apps $(FRONTEND)
-	cp -r manifests $(FRONTEND)
-	cp core $(FRONTEND)
-	cp signin $(FRONTEND)
-	cp *.* $(FRONTEND)
-	cp .htaccess $(FRONTEND)
-	cp -r help $(FRONTEND)
-	cp -r help-drive $(FRONTEND)
-	for i in i18n/*.properties; do \
-	    j=$${i#i18n/}; pkgname=$${j%.properties}; \
-	    mkdir -p debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
-	    cp $$i debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
+	ant -Dbasedir=build -DdestDir=$(ROOT) -DpackageName=$(PKGNAME) -Dlanguages=false -f build/build.xml build
+	for LANG in cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do \
+		PACKAGE_EXTENSION=$$(echo $${LANG} | tr '[:upper:]_' '[:lower:]-'); \
+		ant -Dbasedir=build -DdestDir=$(ROOT)-l10n-$${PACKAGE_EXTENSION} -DpackageName=$(PKGNAME) -DinstallTarget=$${LANG} -Dnoclean=true -f build/build.xml build; \
 	done
-	for i in help/l10n/*; do \
-	    lang=$${i#help/l10n/}; \
-	    pkgname=open-xchange-appsuite-help-`echo $$lang | awk '{print tolower($$0)}' | sed "s/_/-/"`; \
-	    mkdir -p "debian/$$pkgname/var/www/appsuite/help/l10n"; \
-	    mv "$(FRONTEND)/help/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help/l10n/"; \
-	done
-	for i in help-drive/l10n/*; do \
-	    lang=$${i#help-drive/l10n/}; \
-	    pkgname=open-xchange-appsuite-help-drive-`echo $$lang | awk '{print tolower($$0)}' | sed "s/_/-/"`; \
-	    mkdir -p "debian/$$pkgname/var/www/appsuite/help-drive/l10n"; \
-	    mv "$(FRONTEND)/help-drive/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help-drive/l10n"; \
-	done
-	cp -r $(FRONTEND)/apps $(BACKEND)/
-	cp $(FRONTEND)/*.* $(BACKEND)/
-	cp $(FRONTEND)/core $(BACKEND)/
-	cp $(FRONTEND)/signin $(BACKEND)/
-	cp -r $(FRONTEND)/manifests $(BACKEND)/
-	mkdir -p debian/open-xchange-appsuite/opt/open-xchange/sbin
-	sed -e "s:## cd ##:cd /var/www/appsuite:" bin/touch-appsuite > \
-	    debian/open-xchange-appsuite/opt/open-xchange/sbin/touch-appsuite
-	chmod +x debian/open-xchange-appsuite/opt/open-xchange/sbin/touch-appsuite
-	mkdir -p debian/open-xchange-appsuite-help-common/var/www/appsuite/
-	mv $(FRONTEND)/help debian/open-xchange-appsuite-help-common/var/www/appsuite/
-	mkdir -p debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
-	mv $(FRONTEND)/help-drive debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
+	mv $(ROOT)/opt $(ROOT)-manifest/
 
 override_dh_auto_clean:
-	rm -rf $(FRONTEND) $(BACKEND) debian/open-xchange-appsuite-l10n-*/opt/open-xchange/appsuite \
-	debian/open-xchange-appsuite-help-*/var/www/appsuite
+	ant -Dbasedir=build -f build/build.xml clean
 
 %:
 	dh $@
