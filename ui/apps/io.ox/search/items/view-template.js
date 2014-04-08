@@ -15,6 +15,7 @@ define('io.ox/search/items/view-template',
     ['gettext!io.ox/core',
      'io.ox/core/extensions',
      'io.ox/mail/listview',
+     'io.ox/contacts/listview',
      'io.ox/calendar/listview',
      'io.ox/files/listview'
     ], function (gt, ext) {
@@ -56,10 +57,8 @@ define('io.ox/search/items/view-template',
                     ext.point('io.ox/mail/listview/item/default').invoke('draw', tmp, baton);
                     break;
                 case 'contacts':
-                    tmp.append(
-                        $('<div class="line1">').text(item.display_name),
-                        $('<div class="line2">').text(item.email1)
-                    );
+                    tmp.addClass('contact-item');
+                    ext.point('io.ox/contacts/listview/item').invoke('draw', tmp, baton);
                     break;
                 case 'calendar':
                     tmp.addClass('calendar-item');
