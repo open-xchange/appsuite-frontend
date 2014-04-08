@@ -90,7 +90,7 @@ define('io.ox/mail/actions',
                         .addPrimaryButton('delete', gt('Delete'), 'delete', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .on('delete', function () {
-                            api.remove(list).fail(notifications.yell);
+                            api.remove(list, all).fail(notifications.yell);
                         })
                         .show(function () {
                             this.find('[role="document"]').focus();
