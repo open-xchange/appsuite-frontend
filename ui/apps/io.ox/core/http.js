@@ -799,6 +799,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 });
         }
 
+        // to avoid bugs based on passing objects by reference
+        function clone(data) {
+            return JSON.parse(JSON.stringify(data));
+        }
+
         function send(r) {
 
             var hash = null;
@@ -809,26 +814,35 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 // get hash value - we just use stringify here (xhr contains payload for unique PUT requests)
                 try { hash = JSON.stringify(r.xhr); } catch (e) { }
 
-                if (hash && requests[hash] !== undefined) {
+                if (hash && _.isArray(requests[hash])) {
                     // enqueue callbacks
-                    requests[hash].then(r.def.resolve, r.def.reject)
-                        .then(
-                            function success() {
-                                that.trigger('stop done', r.xhr);
-                                r = null;
-                            },
-                            function fail() {
-                                that.trigger('stop fail', r.xhr);
-                                r  = null;
-                            }
-                        );
-                    hash = null;
+                    requests[hash].push(r);
+                    r = hash = null;
                 } else {
                     // create new request
-                    requests[hash] = r.def.always(function () {
+                    r.def.then(
+                        function success() {
+                            if (!requests[hash].length) return;
+                            var args = _(arguments).map(clone);
+                            _(requests[hash]).each(function (r) {
+                                r.def.resolve.apply(r.def, args);
+                                that.trigger('stop done', r.xhr);
+                            });
+                        },
+                        function fail() {
+                            var args = _(arguments).map(clone);
+                            if (!requests[hash].length) return;
+                            _(requests[hash]).each(function (r) {
+                                r.def.reject.apply(r.def, args);
+                                that.trigger('stop fail', r.xhr);
+                            });
+                        }
+                    )
+                    .always(function () {
                         delete requests[hash];
                         hash = null;
                     });
+                    requests[hash] = [];
                     lowLevelSend(r);
                     r = null;
                 }

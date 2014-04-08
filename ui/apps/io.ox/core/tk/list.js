@@ -88,20 +88,14 @@ define('io.ox/core/tk/list',
 
         }, 50),
 
+        onComplete: function () {
+            this.toggleComplete(true);
+        },
+
         // load more data (wraps paginate call)
         processPaginate: function () {
             if (this.isBusy || this.complete) return;
-            var length = this.collection.length;
-            (this.busy().paginate() || $.when()).then(
-                // success
-                function checkIfComplete() {
-                    // if collection hasn't grown we assume that it's complete
-                    if (this.collection.length <= length) this.toggleComplete(true);
-                    this.idle();
-                }.bind(this),
-                // fails
-                this.idle
-            );
+            this.paginate();
         },
 
         // support for custom cid attributes
@@ -113,8 +107,7 @@ define('io.ox/core/tk/list',
         // called when the view model changes (not collection models)
         onModelChange: function () {
             this.empty();
-            this.busy();
-            (this.load() || $.when()).always(this.idle);
+            this.load();
         },
 
         empty: function () {
@@ -226,11 +219,21 @@ define('io.ox/core/tk/list',
             this.collection = collection;
             this.toggleComplete(false);
             this.listenTo(collection, {
-                add: this.onAdd,
-                change: this.onChange,
-                remove: this.onRemove,
-                reset: this.onReset,
-                sort: this.onSort
+                // backbone
+                'add': this.onAdd,
+                'change': this.onChange,
+                'remove': this.onRemove,
+                'reset': this.onReset,
+                'sort': this.onSort,
+                // load
+                'before:load': this.busy,
+                'load': this.idle,
+                'load:fail': this.idle,
+                // paginate
+                'before:paginate': this.busy,
+                'paginate': this.idle,
+                'paginate:fail': this.idle,
+                'complete': this.onComplete
             });
             this.selection.reset();
             return this;
@@ -261,19 +264,17 @@ define('io.ox/core/tk/list',
 
             this.load = function () {
                 // load data
-                return loader.load(this.model.toJSON())
-                .done(function (collection) {
-                    this.setCollection(collection);
-                    this.onReset();
-                }.bind(this));
+                loader.load(this.model.toJSON());
+                this.setCollection(loader.collection);
+                this.onReset();
             };
 
             this.paginate = function () {
-                return loader.paginate(this.model.toJSON());
+                loader.paginate(this.model.toJSON());
             };
 
             this.reload = function () {
-                return loader.reload(this.model.toJSON());
+                loader.reload(this.model.toJSON());
             };
         },
 

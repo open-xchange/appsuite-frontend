@@ -27,7 +27,7 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
         );
     }
 
-    describe('Collection loader', function () {
+    describe.only('Collection loader', function () {
 
         beforeEach(function () {
             this.loader = new CollectionLoader({ LIMIT: 3 });
@@ -80,27 +80,26 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
                 expect(this.loader.getCollection()).to.be.an.instanceof(Backbone.Collection);
             });
 
-            it('has a load method that returns a deferred object', function () {
-                var def = this.loader.load();
-                expect(def.promise).to.be.a('function');
-                expect(def.done).to.be.a('function');
+            it('has a load method that returns a collection', function () {
+                var collection = this.loader.load();
+                expect(collection).to.be.an.instanceof(Backbone.Collection);
             });
 
             it('has a load method that loads initial data', function (done) {
-                this.loader.load().done(function (collection) {
-                    expect(collection).to.be.an.instanceof(Backbone.Collection);
-                    expect(collection.pluck('id')).to.deep.equal([10, 20, 30]);
-                    expect(collection.pluck('index')).to.deep.equal([0, 1, 2]);
+                var collection = this.loader.load();
+                collection.once('load', function () {
+                    expect(this.pluck('id')).to.deep.equal([10, 20, 30]);
+                    expect(this.pluck('index')).to.deep.equal([0, 1, 2]);
                     done();
                 });
             });
 
             it('has a paginate method that loads more data', function (done) {
                 var loader = this.loader;
-                this.loader.load().done(function () {
-                    loader.paginate().done(function (collection) {
-                        expect(collection.pluck('id')).to.deep.equal([10, 20, 30, 40, 50, 60]);
-                        expect(collection.pluck('index')).to.deep.equal([0, 1, 2, 3, 4, 5]);
+                loader.load().once('load', function () {
+                    loader.paginate().once('paginate', function () {
+                        expect(this.pluck('id')).to.deep.equal([10, 20, 30, 40, 50, 60]);
+                        expect(this.pluck('index')).to.deep.equal([0, 1, 2, 3, 4, 5]);
                         done();
                     });
                 });
@@ -108,11 +107,11 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
 
             it('has a reload method that reloads data', function (done) {
                 var loader = this.loader;
-                this.loader.load().done(function () {
+                loader.load().once('load', function () {
                     loader.fetch = fetchAlternative;
-                    loader.reload().done(function (collection) {
-                        expect(collection.pluck('id')).to.deep.equal([70, 20, 40, 50, 80]);
-                        expect(collection.pluck('index')).to.deep.equal([0, 1, 2, 3, 4]);
+                    loader.reload().once('reload', function () {
+                        expect(this.pluck('id')).to.deep.equal([70, 20, 40, 50, 80]);
+                        expect(this.pluck('index')).to.deep.equal([0, 1, 2, 3, 4]);
                         done();
                     });
                 });

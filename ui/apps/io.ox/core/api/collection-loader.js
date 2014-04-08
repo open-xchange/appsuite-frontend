@@ -15,14 +15,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
     'use strict';
 
-    function process(params, collection, method) {
-
-        return this.fetch(params)
-            .done(this.addIndex.bind(this, method === 'add' ? collection.length : 0, params))
-            .then(function (data) {
-                return collection[method](data);
-            });
-    }
+    var methods = { 'load': 'reset', 'paginate': 'add', 'reload': 'set' };
 
     function toHash(array) {
         var hash = {};
@@ -41,6 +34,78 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         this.pool = new Pool(this.module);
         this.ignore = toHash(String(this.ignore).split(' '));
         this.collection = null;
+        this.loading = false;
+
+        function apply(collection, type, data) {
+            var method = methods[type];
+            collection[method](data);
+            if (type === 'paginate' && data.length === 0) collection.trigger('complete');
+            collection.trigger(type);
+        }
+
+        function fail(collection, type, e) {
+            collection.trigger(type + ':fail', e);
+        }
+
+        function process(params, type) {
+            // get offset
+            var offset = type === 'paginate' ? this.collection.length : 0;
+            // trigger proper event
+            this.collection.trigger('before:' + type);
+            // fetch data
+            return this.fetch(params)
+                .done(this.addIndex.bind(this, offset, params))
+                .always(this.done.bind(this))
+                .then(
+                    _.lfo(apply, this.collection, type),
+                    _.lfo(fail, this.collection, type)
+                );
+        }
+
+        this.load = function (params) {
+
+            params = this.getQueryParams(params || {});
+            params.limit = '0,' + this.LIMIT;
+            var collection = this.collection = this.getCollection(params);
+            this.loading = false;
+
+            if (collection.length > 0) {
+                _.defer(function () {
+                    collection.trigger('reset load');
+                });
+                return collection;
+            }
+
+            _.defer(process.bind(this), params, 'load');
+            return collection;
+        };
+
+        this.paginate = function (params) {
+
+            var collection = this.collection;
+            if (this.loading) return collection;
+
+            var offset = collection.length;
+            params = this.getQueryParams(_.extend({ offset: offset }, params));
+            params.limit = offset + ',' + (offset + this.LIMIT);
+            this.loading = true;
+
+            _.defer(process.bind(this), params, 'paginate');
+            return collection;
+        };
+
+        this.reload = function (params) {
+
+            var collection = this.collection;
+            if (this.loading) return collection;
+
+            params = this.getQueryParams(_.extend({ offset: 0 }, params));
+            params.limit = '0,' + (collection.length || this.LIMIT);
+            this.loading = true;
+
+            _.defer(process.bind(this), params, 'reload');
+            return collection;
+        };
     }
 
     function ignore(key) {
@@ -107,35 +172,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             return {};
         },
 
-        load: function (params) {
-
-            params = this.getQueryParams(params || {});
-            params.limit = '0,' + this.LIMIT;
-            this.collection = this.getCollection(params);
-
-            if (this.collection.length > 0) {
-                this.collection.trigger('reset');
-                return $.Deferred().resolve(this.collection);
-            }
-
-            return process.call(this, params, this.collection.reset(), 'reset');
-        },
-
-        paginate: function (params) {
-
-            var offset = this.collection.length;
-            params = this.getQueryParams(_.extend({ offset: offset }, params));
-            params.limit = offset + ',' + (offset + this.LIMIT);
-
-            return process.call(this, params, this.collection, 'add');
-        },
-
-        reload: function (params) {
-
-            params = this.getQueryParams(_.extend({ offset: 0 }, params));
-            params.limit = '0,' + (this.collection.length || this.LIMIT);
-
-            return process.call(this, params, this.collection, 'set');
+        done: function () {
+            this.loading = false;
         }
     });
 

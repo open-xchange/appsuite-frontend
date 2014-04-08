@@ -305,10 +305,11 @@ define('io.ox/core/main',
     (function () {
 
         var interval = parseInt(settings.get('refreshInterval', 300000), 10),
-            next = _.now() + interval;
+            next = _.now() + interval,
+            REFRESH_THROTTLE = 10000; // only trigger every 10 seconds
 
         ext.point('io.ox/core/refresh').extend({
-            action: function () {
+            action: _.throttle(function () {
                 if (ox.online && ox.session !== '') {
                     try {
                         // trigger global event
@@ -317,7 +318,7 @@ define('io.ox/core/main',
                         console.error('io.ox/core/refresh:default', e.message, e);
                     }
                 }
-            }
+            }, REFRESH_THROTTLE)
         });
 
         refresh = function () {
