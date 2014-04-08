@@ -27,23 +27,25 @@ define('plugins/portal/facebook/register',
         var self = $(this);
         self.data('unfolded', !self.data('unfolded'))
             .text(self.data('unfolded') ? gt('Hide comments') : gt('Show comments'))
-            .parent().find('.wall-comment').toggle('fast');
+            .parent().find('.wall-comment, .comment-link').toggle('fast');
     };
 
     var createCommentIterator = function (profiles, node) {
         return function (comment) {
-            var from = getProfile(profiles, comment.fromid);
-            $('<div class="wall-comment">').append(
-                $('<a class="profile-picture">').attr('href', from.url).append(
-                    $('<img class="picture">').attr('src', from.pic_square)),
-                $('<div class="wall-comment-content">').append(
-                    $('<a class="from">').text(from.name).attr('href', from.url),
-                    $('<div class="wall-comment-text">').text(comment.text),
-                    $('<span class="datetime">').text(new date.Local(comment.time * 1000)),
-                    addLikeInfo({user_likes: comment.user_likes, like_count: comment.likes}))
-                )
-                .hide()
-                .appendTo($(node));
+            var from = getProfile(profiles, comment.fromid),
+                comment = $('<div class="wall-comment">').append(
+                    $('<a class="profile-picture">').attr('href', from.url).append(
+                        $('<img class="picture">').attr('src', from.pic_square)),
+                    $('<div class="wall-comment-content">').append(
+                        $('<a class="from">').text(from.name).attr('href', from.url),
+                        $('<div class="wall-comment-text">').text(comment.text),
+                        $('<span class="datetime">').text(new date.Local(comment.time * 1000)),
+                        addLikeInfo({user_likes: comment.user_likes, like_count: comment.likes}))
+                    )
+                    .appendTo($(node));
+            if ($(node).find('.wall-comment:visible').length === 0) {//only hide if comments are hidden
+                comment.hide();
+            }
         };
     };
     var addLikeInfo = function (likeInfo) {
@@ -56,6 +58,26 @@ define('plugins/portal/facebook/register',
                        $('<span class="count">').text(likeInfo.like_count)
                    );
         }
+    };
+
+    var addCommentlink = function (postComments, nextIndex, profiles, wall_content) {
+        var link = $('<button tabindex=1 class="comment-link btn-link", nextIndex=' + nextIndex + '>').text(gt('Show more comments')).hide().click(function (){
+            link.detach();//remove link from dom but don't delete it yet
+            var tempIndex = parseInt(link.attr('nextIndex'));
+            //render next 25 comments
+            _(postComments.slice(tempIndex, tempIndex + 25)).each(createCommentIterator(profiles, wall_content));
+            if (postComments[tempIndex + 25]) {
+                //add link again
+                link.attr('nextIndex', tempIndex + 25);
+                wall_content.append(link);
+            } else {
+                //link not needed anymore
+                link.off();
+                link = null;
+            }
+            
+        });
+        wall_content.append(link);
     };
 
     var getProfile = function (profiles, actor_id) {
@@ -258,10 +280,14 @@ define('plugins/portal/facebook/register',
                         .on('click', fnToggle)
                         .data('unfolded', false)
                         .appendTo(wall_content);
-                    //render comments
-                    _(_(comments).filter(function (comment) {
-                        return comment.post_id === post.post_id;
-                    })).each(createCommentIterator(profiles, wall_content));
+                    var postComments = _(comments).filter(function (comment) {
+                            return comment.post_id === post.post_id;
+                        });
+                    //render comments in blocks of 25
+                    _(postComments.slice(0, 25)).each(createCommentIterator(profiles, wall_content));
+                    if (postComments.length > 25) {
+                        addCommentlink(postComments, 25, profiles, wall_content);
+                    }
                 }
 
                 //make all outgoing links open new tabs/windows
