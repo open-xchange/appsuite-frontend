@@ -224,10 +224,6 @@
         }
     }
 
-    &.unread.selected {
-        .subject { color: #fff; }
-    }
-
     @media (max-width: 480px), (max-device-width: 480px)  {
         &.unread.selected {
             .subject { color: #000; }
@@ -399,8 +395,10 @@
         color: @link-color;
     }
 
-    &.visible-selection.has-focus .list-item.selected .size {
-        color: #fff;
+    &.visible-selection.has-focus .list-item.selected {
+        .subject, .size {
+            color: #fff;
+        }
     }
 
     .actions {
