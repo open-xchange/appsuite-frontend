@@ -100,7 +100,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             if (this.loading) return collection;
 
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
-            params.limit = '0,' + (collection.length || this.LIMIT);
+            params.limit = '0,' + Math.max(collection.length, this.LIMIT);
             this.loading = true;
 
             _.defer(process.bind(this), params, 'reload');
