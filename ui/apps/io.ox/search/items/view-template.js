@@ -14,7 +14,9 @@
 define('io.ox/search/items/view-template',
     ['gettext!io.ox/core',
      'io.ox/core/extensions',
-     'io.ox/mail/listview'
+     'io.ox/mail/listview',
+     'io.ox/calendar/listview',
+     'io.ox/files/listview'
     ], function (gt, ext) {
 
     'use strict';
@@ -55,27 +57,23 @@ define('io.ox/search/items/view-template',
                     break;
                 case 'contacts':
                     tmp.append(
-                        $('<div class="line1">').text(/*'(' + item.id + ') ' + */item.display_name),
+                        $('<div class="line1">').text(item.display_name),
                         $('<div class="line2">').text(item.email1)
                     );
                     break;
+                case 'calendar':
+                    tmp.addClass('calendar-item');
+                    ext.point('io.ox/calendar/listview/item').invoke('draw', tmp, baton);
+                    break;
                 case 'tasks':
                     tmp.append(
-                        $('<div class="line1">').text(/*'(' + item.id + ') ' + */item.title),
-                        $('<div class="line2">').text('folder: ' + item.folder_id)
+                        $('<div class="line1">').text(item.title),
+                        $('<div class="line2">').text(item.folder_id)
                     );
                     break;
-                case 'infostore':
-                    tmp.append(
-                        $('<div class="line1">').text('please define in search/view-template.js'),
-                        $('<div class="line2">').text('')
-                    );
-                    break;
-                case 'calendar':
-                    tmp.append(
-                        $('<div class="line1">').text(/*'(' + item.id + ') ' + */item.title),
-                        $('<div class="line2">').text('folder: ' + item.folder_id)
-                    );
+                case 'files':
+                    tmp.addClass('file-item');
+                    ext.point('io.ox/files/listview/item').invoke('draw', tmp, baton);
                     break;
                 }
                 cell.append(tmp);

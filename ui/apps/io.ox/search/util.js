@@ -25,22 +25,23 @@ define('io.ox/search/util',
             var hash = {},
                 req = [],
                 mapping = {},
+                module = model.getModule(),
                 app,
                 id;
 
             //standard folders for mail
-            if (model.getModule() === 'mail') {
+            if (module === 'mail') {
                 _.each(accountAPI.getStandardFolders(), function (id) {
                     mapping[id] = 'standard';
                 });
             }
 
             //default folder
-            id = folderAPI.getDefaultFolder(model.getModule());
+            id = folderAPI.getDefaultFolder(module);
             mapping[id] = 'default';
 
             //current folder
-            app = model.getApp() + '/main';
+            app = model.getApp(true) + '/main';
             if (require.defined(app)) {
                 id = require(app).getApp().folder.get() || undefined;
                 mapping[id] = 'current';
@@ -68,7 +69,8 @@ define('io.ox/search/util',
 
         },
         getFirstChoice: function (model) {
-            var id = model.getFolder() || folderAPI.getDefaultFolder(model.getModule());
+            var module = model.getModule(),
+                id = model.getFolder() || folderAPI.getDefaultFolder(module);
             return  folderAPI.get({folder: id})
                     .then(function (folder) {
                         return {

@@ -46,7 +46,7 @@ define('io.ox/search/view-template',
                         placeholder: gt('Search') + ' ...',
                         autofocus: mode === 'widget' ? false : true
                     })
-                    .addClass('search-field')// + mode)
+                    .addClass('search-field ' + mode === 'widget' ? 'input-group-sm' : '')
                     .autocomplete({
                         api: app.apiproxy,
                         minLength: 0,
@@ -147,7 +147,7 @@ define('io.ox/search/view-template',
                 row, cell;
 
             //create containers
-            row = $('<div class="row">').append(
+            row = $('<div class="row applications">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled">')
             );
 
@@ -405,11 +405,11 @@ define('io.ox/search/view-template',
             dialog.getBody().css({ height: '250px' });
 
             //use foldertree or folderlist
-            var TreeConstructor = ['mail', 'drive'].indexOf(type) > 0 ? views.FolderTree : views.FolderList;
-
+            var TreeConstructor = ['mail', 'files'].indexOf(type) > 0 ? views.FolderTree : views.FolderList;
             var tree = new TreeConstructor(dialog.getBody(), {
-                    type: type,
+                    type: type === 'files' ? 'infostore' : type,
                     tabindex: 0,
+                    rootFolderId: type === 'files' ? '9' : '1',
                     customize: function (data) {
                         if (data.id === id) {
                             this.removeClass('selectable').addClass('disabled');
@@ -443,7 +443,7 @@ define('io.ox/search/view-template',
         index: '200',
         draw: function (value) {
             if (!value.display_name)
-                this.html('<i>' + gt('All folders') + '</i>');
+                this.find('.name').html('<i>' + gt('All folders') + '</i>');
         }
     });
 

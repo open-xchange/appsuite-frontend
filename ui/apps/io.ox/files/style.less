@@ -814,3 +814,32 @@ ul.breadcrumb li.prefix {
 }
 
  .io-ox-files-main .io-ox-dialog-popup .modal-body { overflow-x: hidden; }
+
+//io.ox/files/listview, io.ox/files/common-extensions
+.file-item {
+
+    .filename {
+        .ellipsis();
+        .fontWeight(500);
+    }
+
+    .date {
+        .fontWeight(300);
+        display: inline-block;
+        margin-left: 0.5em;
+        float: right;
+        opacity: 0.50;
+        html.high-contrast & {
+            opacity: 1;
+        }
+    }
+
+    .locked {
+        float: right;
+        color: rgb(204, 0, 0);
+    }
+
+    .size {
+        color: rgb(119, 119, 119);
+    }
+}

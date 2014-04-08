@@ -167,10 +167,14 @@
         .row {
             margin-bottom: 14px;
             max-width: 500px;
+
+            &.applications {
+                max-width: none;
+            }
         }
 
         ul, ol {
-            margin-bottom: 0px;
+            margin-bottom: 0;
         }
 
         .application {
@@ -179,6 +183,14 @@
                 margin-right: 16px;
                 button {
                     border-radius: 0;
+                }
+            }
+        }
+        //remove right margin from last application
+        .applications {
+            li:last-child {
+                .btn-group {
+                    margin-right: 0;
                 }
             }
         }
@@ -221,7 +233,7 @@
 
         //reduce space between button and dropdown
         .dropdown-menu {
-            margin-top: 0px;
+            margin-top: 0;
         }
 
         .results {

@@ -29,7 +29,7 @@ define('io.ox/search/main',
         index: 100,
         id: 'default',
         config: function (data) {
-            data.defaultApp =  settings.get('search/default', 'io.ox/mail');
+            data.defaultApp =  settings.get('search/default', 'io.ox/files');
         }
     });
 
@@ -46,7 +46,7 @@ define('io.ox/search/main',
         id: 'mandatory',
         config: function (data) {
             data.mandatory = data.mandatory || {};
-            data.mandatory.folder = settings.get('search/mandatory/folder', ['mail', 'infostore']);
+            data.mandatory.folder = settings.get('search/mandatory/folder', ['mail', 'files']);
         }
     });
 
@@ -57,8 +57,6 @@ define('io.ox/search/main',
             //active app : app searched in
             data.mapping = {
                 //name mapping
-                'io.ox/files' : 'io.ox/drive',
-                //fallback/default mapping
                 'io.ox/portal' : data.defaultApp,
                 'io.ox/search' : data.defaultApp,
                 'io.ox/settings' : data.defaultApp
@@ -253,7 +251,10 @@ define('io.ox/search/main',
                 return model.getFacets()
                         .then(function (facets) {
                             //extend options
-                            opt.data.facets = facets;
+                            opt.data.facets = _.filter(facets, function (facet) {
+                                //TODO: remove hack to ingore folder facet when empty
+                                return !('value' in facet) || (facet.value !== 'custom');
+                            });
                         })
                         .then(function () {
                             //TODO: better solution needed
@@ -263,8 +264,7 @@ define('io.ox/search/main',
                                     size: 0,
                                     start: 0
                                 },
-                                folderOnly = opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder';
-
+                                folderOnly = !opt.data.facets.length || (opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder');
                             //call server
                             return folderOnly ? $.Deferred().resolve(dummy) : api.query(opt);
                         })

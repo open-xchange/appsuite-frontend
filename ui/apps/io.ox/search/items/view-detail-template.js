@@ -43,7 +43,7 @@ define('io.ox/search/items/view-detail-template',
                 }
             });
 
-            ext.point('io.ox/search/items/infostore').extend({
+            ext.point('io.ox/search/items/files').extend({
                 draw: function (baton) {
                     var popup = this.busy();
                     require(['io.ox/files/fluid/view-detail'], function (view) {
