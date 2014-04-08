@@ -431,10 +431,16 @@ div.hopscotch-bubble {
             }
 
             &:focus {
+
                 outline: 0;
                 color: @topbar-launcher-color-hover;
                 background-color: @topbar-launcher-background-hover;
                 text-decoration: none;
+
+                html.high-contrast & {
+                    color: @black;
+                }
+
             }
 
             &.closelink {
@@ -820,6 +826,7 @@ div.hopscotch-bubble {
         padding: 24px 14px;
 
         .section-title {
+
             font-family: @light-font-family;
             font-weight: 300;
             font-size: 16px;
@@ -827,6 +834,11 @@ div.hopscotch-bubble {
             margin: 0 0 7px 0;
             padding: 0 14px;
             border: 0;
+
+            html.high-contrast & {
+                color: @white;
+            }
+
         }
 
         .clear-button {
@@ -869,6 +881,10 @@ div.hopscotch-bubble {
                 pointer-events: none;
                 font-weight: bold;
                 .ellipsis();
+
+                html.high-contrast & {
+                    color: @white;
+                }
             }
 
             .subject {
@@ -2067,6 +2083,10 @@ a.button {
     left: 320px;
     background-color: @background;
     overflow: auto;
+}
+
+.rightside-navbar {
+    display: none;
 }
 
 .atb, .abs {
@@ -3770,7 +3790,11 @@ input.flat-input {
     }
 
     .vsplit-reverse {
-        .rightside-navbar, .rightside { display:none; }
+
+        .rightside-navbar, .rightside {
+            display:none;
+        }
+
     }
 
     .input-medium.search-query {

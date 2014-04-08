@@ -244,6 +244,10 @@
 
             .gray {
                 color: rgba(0, 0, 0, 0.5);
+
+                html.high-contrast & {
+                    color: @black;
+                }
             }
 
             &:focus {
@@ -341,18 +345,6 @@
 
     }
 
-    .photo-stream h2 .disable-widget {
-
-        .fa-times {
-            color: rgba(0, 0, 0, 0.50);
-        }
-
-        &:hover .fa-times {
-            color: rgba(0, 0, 0, 0.80);
-        }
-
-    }
-
     .widget > h2 {
 
         cursor: default;
@@ -363,7 +355,7 @@
 
     }
 
-    .photo-stream, .preview {
+    .widget.photo-stream, .widget.preview {
 
         .content {
             top: 0;
@@ -377,6 +369,7 @@
         }
 
         h2 {
+
             position: absolute;
             bottom: 0; right: 0; left: 0;
             margin: 0;
@@ -385,6 +378,34 @@
             color: #fff;
             background-color: rgba(0, 0, 0, 0.30);
             border-top: 1px solid rgba(0, 0, 0, 0.50);
+
+            html.high-contrast & {
+
+                background-color: @black;
+                color: @white;
+
+               .fa-times {
+                    color: @white;
+                }
+
+                &:hover .fa-times {
+                    color: @hc-gray;
+                }
+
+            }
+
+            .disable-widget {
+
+                .fa-times {
+                    color: rgba(0, 0, 0, 0.50);
+                }
+
+                &:hover .fa-times {
+                    color: rgba(0, 0, 0, 0.80);
+                }
+
+            }
+
         }
 
     }
