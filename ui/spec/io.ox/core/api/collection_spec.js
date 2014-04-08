@@ -27,7 +27,7 @@ define(['io.ox/core/api/collection-loader'], function (CollectionLoader) {
         );
     }
 
-    describe.only('Collection loader', function () {
+    describe('Collection loader', function () {
 
         beforeEach(function () {
             this.loader = new CollectionLoader({ LIMIT: 3 });
