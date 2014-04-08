@@ -38,24 +38,30 @@ define('io.ox/contacts/view-detail',
     };
 
     function getDescription(data) {
+
         function single(index, value, translated) {
             var params = new Array(index);
             params[index - 1] = translated ? value : _.noI18n(value);
             return { format: _.noI18n('%' + index + '$s'), params: params };
         }
+
         if (api.looksLikeDistributionList(data)) {
             return single(7, gt('Distribution list'), true);
         }
+
         if (api.looksLikeResource(data)) {
             return single(7, gt('Resource'), true);
         }
+
         if (data.position || data.profession) {
             return {
                 format: join(', ', data.position ? '%1$s' : '', data.profession ? '%2$s' : ''),
                 params: [_.noI18n(data.position), _.noI18n(data.profession)]
             };
         }
+
         return util.getMailFormat(data);
+
     }
 
     function createText(format, classes) {
@@ -141,9 +147,9 @@ define('io.ox/contacts/view-detail',
                 $('<div class="next-to-picture">').append(
                     // right side
                     $('<i class="fa fa-lock private-flag">').attr('title', gt('Private')).hide(),
-                    $('<h1 class="header-name">').append(name),
+                    name.length ? $('<h1 class="header-name">').append(name) : [],
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
-                    $('<h2 class="header-job">').append(job),
+                    job.length ? $('<h2 class="header-job">').append(job) : [],
                     $('<section class="attachments-container clear-both">')
                         .append($('<span class="attachments-in-progress">').busy())
                         .hide()
@@ -334,16 +340,6 @@ define('io.ox/contacts/view-detail',
         };
     }
 
-    function getMailAddresses(data) {
-        return _([data.email1, data.email2, data.email3])
-            .chain()
-            .map(function (address) {
-                return $.trim(address).toLowerCase();
-            })
-            .uniq()
-            .value();
-    }
-
     function phone(data, id, label) {
         var number = $.trim(data[id]);
         if (!number) return null;
@@ -512,8 +508,13 @@ define('io.ox/contacts/view-detail',
             draw: function (baton) {
 
                 var data = baton.data,
-                    fullname = util.getFullName(baton.data),
-                    addresses = getMailAddresses(data);
+                    fullname = util.getFullName(data),
+                    addresses = _([data.email1, data.email2, data.email3])
+                        .chain()
+                        .map(function (address) {
+                            return $.trim(address).toLowerCase();
+                        })
+                        .value();
 
                 this.append(
                     block(gt('Mail and Messaging'),
