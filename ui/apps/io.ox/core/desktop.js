@@ -962,6 +962,7 @@ define('io.ox/core/desktop',
                     id: 'default',
                     draw: function () {
                         return $('<nav class="window-toolbar">')
+                            .addClass('f6-target')
                             .attr({
                                 'role': 'navigation',
                                 'aria-label': gt('Application Toolbar')

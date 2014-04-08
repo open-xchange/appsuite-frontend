@@ -41,7 +41,7 @@ define('io.ox/calendar/list/perspective',
             self = this,
             vsplit = commons.vsplit(this.main, app),
             left = vsplit.left.addClass('border-right'),
-            right = vsplit.right.addClass('default-content-padding calendar-detail-pane')
+            right = vsplit.right.addClass('default-content-padding calendar-detail-pane f6-target')
             .attr({
                 'tabindex': 1,
                 'role': 'complementary',
