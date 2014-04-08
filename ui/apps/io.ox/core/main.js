@@ -644,7 +644,7 @@ define('io.ox/core/main',
                     // we don't need this right from the start,
                     // so let's delay this for responsiveness!
                     // only requests are delayed by 2s, the badge is drawn normally
-                    self.prepend(notifications.attach(addLauncher, 2000));
+                    self.append(notifications.attach(addLauncher, 2000));
                     tabManager();
                 }
             }
