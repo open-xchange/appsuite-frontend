@@ -170,7 +170,8 @@ define('io.ox/core/tk/list',
         onSort: function () {
             // sort all nodes by index
             var nodes = _(this.getItems()).sortBy(function (node) {
-                return $(node).data('index');
+                var index = $(node).attr('data-index'); // don't use data() here
+                return parseInt(index, 10);
             });
             // re-append to apply sorting
             this.$el.append(nodes);
