@@ -13,33 +13,40 @@
 
 //autocomplete tk
 .autocomplete-search {
+
     min-width: 300px;
     max-height: 600px;
 
-    //adjust autocomplete defaults
-    &.bottom-placement {
-        border-bottom: 2px solid #fff;
+    .scrollable-pane {
+        padding: 5px 0;
     }
+
     .scrollable-pane:after {
         //make sure margins/paddings are applied properly
         content: '';
     }
 
     .autocomplete-item {
-        color: #333;
-        margin: 2px;
-        padding: 3px 3px;
+
+        padding: 2px 10px;
 
         //description: added by backend
         i {
             font-style: normal;
-            color: rgba(0,0,0,.5);
+            color: rgba(0, 0, 0, 0.5);
         }
         &.indent {
-            padding-left: 20px;
+            padding-left: 24px;
         }
-        &.group {
+        &.dropdown-header {
+            padding-top: 9px;
+            margin-top: 9px;
             border-top: 1px solid rgba(128, 128, 128, 0.25);
+            max-width: inherit; // reset bootstrap
+        }
+        &.dropdown-header:first-child {
+            margin-top: 0;
+            border-top: 0;
         }
         &.unselectable {
             color: rgba(128, 128, 128, 0.71);
@@ -180,7 +187,6 @@
         .application {
             display: inline-block;
             .btn-group {
-                margin-right: 16px;
                 button {
                     border-radius: 0;
                 }

@@ -174,7 +174,8 @@ define('io.ox/core/tk/autocomplete',
                             o.container.addClass('bottom-placement').css({ top: myTop, left: myLeft + 4, width: w });
                         }
 
-                        o.container.show(0, o.cbshow || $.noop);
+                        o.container.show();
+                        if (_.isFunction(o.cbshow)) o.cbshow();
 
                         window.container = o.container;
 
@@ -236,8 +237,7 @@ define('io.ox/core/tk/autocomplete',
                         //facet
                         count++;
                         if (facet.display_name && childs && regular) {
-                            $('<div class="autocomplete-item unselectable">')
-                                .addClass(count > 1 ? 'group' : '')
+                            $('<div class="autocomplete-item unselectable dropdown-header">')
                                 .text(facet.display_name)
                                 .data({
                                     index: count,
