@@ -157,7 +157,7 @@ define('io.ox/files/fluid/perspective',
                     });
                 el = popup.closest('.io-ox-sidepopup');
             });
-            _.defer(function () { el.focus(); }); // Focus SidePopup
+            _.defer(function () { if (el) { el.focus(); } }); // Focus SidePopup
         });
     }
     // mobile multiselect helpers
