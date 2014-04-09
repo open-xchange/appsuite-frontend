@@ -189,20 +189,13 @@ define('io.ox/contacts/util',
 
         getMail: function (obj) {
             // get the first mail address
-            return (obj.email1 || obj.email2 || obj.email3 || obj.mail || '').toLowerCase();
-        },
-
-        getDescription: function (obj) {
-            // try some combinations
-            var list = _([obj.company, obj.department, obj.position, obj.city_business, obj.city_home]).compact();
-            return list.length ? list.join(', ') : (obj.email1 || '');
+            return obj ? (obj.email1 || obj.email2 || obj.email3 || obj.mail || '').toLowerCase() : '';
         },
 
         getJob: function (obj) {
             // combine position and company
-            return obj.position && obj.company ?
-                obj.position + ', ' + obj.company :
-                obj.position || obj.company || '';
+            var list = _([obj.company, obj.position]).compact();
+            return list.length ? list.join(', ') : (obj.email1 || '');
         },
 
         nameSort: function (a, b) {
