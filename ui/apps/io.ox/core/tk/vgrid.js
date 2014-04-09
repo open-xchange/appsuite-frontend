@@ -193,6 +193,24 @@ define('io.ox/core/tk/vgrid',
         this.reset();
     };
 
+    var onResize = function (e) {
+        e.preventDefault();
+        var left = $(this).closest('.leftside'),
+            right = left.siblings('.rightside'),
+            base = e.pageX - left.width(),
+            limitX = $(document).width() - 250;
+        $(document).on({
+            'mousemove.resize': function (e) {
+                var width = Math.max(250, Math.min(e.pageX, limitX) - base);
+                left.css('width', width);
+                right.css('left', width);
+            },
+            'mouseup.resize': function () {
+                $(this).off('mousemove.resize mouseup.resize');
+            }
+        });
+    };
+
     var VGrid = function (target, options) {
 
         options = _.extend({
@@ -350,6 +368,13 @@ define('io.ox/core/tk/vgrid',
                 var load = loadData[currentMode] || loadData.all;
                 return load.call(self, subset);
             });
+
+        // make resizalbe (unless touch device)
+        if (!_.device('touch')) {
+            node.append(
+                $('<div class="resizebar">').on('mousedown', onResize)
+            );
+        }
 
         // add label class
         template.node.addClass('selectable');
@@ -1226,6 +1251,7 @@ define('io.ox/core/tk/vgrid',
                 node.detach();
             });
             pool = [];
+            if (!initialized) return; // no need to update if not yet initialized
             init();
             this.repaint();
         };

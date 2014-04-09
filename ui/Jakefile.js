@@ -280,12 +280,9 @@ var htmlFilter = _.compose(versionFilter, utils.includeFilter);
 
 utils.concat('core', ['html/index.html'], { filter: htmlFilter });
 utils.concat('signin', ['html/signin.html'], { filter: htmlFilter });
-utils.concat('core.appcache', ['html/core.appcache'], { filter: versionFilter });
-utils.concat('signin.appcache', ['html/signin.appcache'], { filter: versionFilter });
 
 task('force');
-_.each(['core', 'signin', 'core.appcache', 'signin.appcache'],
-       function (name) { file(utils.dest(name), ['force']); });
+_.each(['core', 'signin'], function (name) { file(utils.dest(name), ['force']); });
 
 //js
 

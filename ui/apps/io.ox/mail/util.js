@@ -386,7 +386,8 @@ define('io.ox/mail/util',
         getAccountName: function (data) {
             // primary account?
             var id = window.unescape(data ? data.id : '');
-            return (/^default0/).test(id) ? gt('Primary account') : (data ? data.account_name : 'N/A');
+            if ((/^default0/).test(id)) return gt('Primary account');
+            return (data && data.account_name) || 'N/A';
         },
 
         getTime: function (timestamp, options) {
