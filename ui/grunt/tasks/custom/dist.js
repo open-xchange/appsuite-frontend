@@ -34,14 +34,18 @@ module.exports = function (grunt) {
         dist_custom: {
             files: [
                 {
-                    src: ['bin/touch-appsuite', 'readme.txt', 'apps/themes/.htaccess'],
-                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
+                    src: ['bin/touch-appsuite'],
+                    dest: 'dist/'
+                },
+                {
+                    src: ['readme.txt', 'apps/themes/.htaccess'],
+                    dest: 'dist/appsuite/'
                 },
                 {
                     expand: true,
                     src: ['.htaccess'],
                     cwd: 'html/',
-                    dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/'
+                    dest: 'dist/appsuite/'
                 }
             ]
         }
@@ -52,7 +56,7 @@ module.exports = function (grunt) {
             files: [{
                 src: ['*.js'],
                 cwd: 'build/',
-                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
+                dest: 'dist/appsuite/',
                 filter: function (f) {
                     return !isTranslationModule(f) && grunt.file.isFile(f);
                 },
@@ -88,14 +92,14 @@ module.exports = function (grunt) {
             files: [{
                 expand: true,
                 src: ['i18n/**/*.po'],
-                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>',
+                dest: 'dist/etc/languages/appsuite/',
                 filter: isPackagedLanguage,
                 flatten: true,
                 rename: function (dest, src) {
                     var path = require('path');
                     var lang = src.toLowerCase().replace(/_/g, '-');
                     lang = lang.replace(/\.po$/, '');
-                    return path.join(dest, 'i18n', '<%= pkg.name %>-l10n-' + lang + '.properties');
+                    return path.join(dest, '<%= pkg.name %>-l10n-' + lang + '.properties');
                 }
             }]
         }

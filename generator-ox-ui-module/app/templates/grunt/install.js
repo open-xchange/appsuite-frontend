@@ -31,7 +31,7 @@ module.exports = function (grunt) {
                 src: ['**/*'].concat(languages.map(function (Lang) {
                     //return '' in case --no-languages is used, so language files
                     //will also be copied by this task
-                    return grunt.option('no-languages') || false ? '!**/*' + Lang + '*' : '';
+                    return grunt.option('no-languages') || false ? '!**/*.' + Lang + '.*' : '';
                 })).filter(function (Lang) {
                     return Lang.length > 0;
                 }),
@@ -43,7 +43,10 @@ module.exports = function (grunt) {
         local_install_static: {
             files: [{
                 expand: true,
-                src: ['appsuite/**/*'],
+                src: ['appsuite/**/*', '!appsuite/manifests/**/*'].concat(languages.map(function (Lang) {
+                    //ignore language files for static packages
+                    return '!**/*.' + Lang + '.*';
+                })),
                 cwd: 'dist/',
                 filter: 'isFile',
                 dest: grunt.option('htdoc')
