@@ -200,12 +200,15 @@ define('io.ox/settings/main',
                     return;
                 }
             }
+
+            // try to get a translated title
+            var title = declaration['title_' + ox.language] || gt(declaration.title || '');
+
             ext.point('io.ox/settings/pane').extend(_.extend({
                 id: id,
-                title: gt(declaration.title || ''),
                 ref: 'io.ox/configjump/' + id,
                 loadSettingPane: false
-            }, declaration));
+            }, declaration, { title: title }));
 
             ext.point('io.ox/configjump/' + id + '/settings/detail').extend({
                 id: 'iframe',

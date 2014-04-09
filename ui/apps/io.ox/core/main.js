@@ -742,22 +742,24 @@ define('io.ox/core/main',
             }
         });
 
-        ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'logout',
-            index: 1000,
-            draw: function () {
-                this.append(
-                    $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
-                    $('<li>').append(
-                        $('<a href="#" data-action="logout" role="menuitem" tabindex="1">').text(gt('Sign out'))
-                    )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        logout();
-                    })
-                );
-            }
-        });
+        if (settings.get('features/dedicatedLogoutButton', false) === false) {
+            ext.point('io.ox/core/topbar/right/dropdown').extend({
+                id: 'logout',
+                index: 1000,
+                draw: function () {
+                    this.append(
+                        $('<li class="divider" aria-hidden="true" role="presentation"></li>'),
+                        $('<li>').append(
+                            $('<a href="#" data-action="logout" role="menuitem" tabindex="1">').text(gt('Sign out'))
+                        )
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            logout();
+                        })
+                    );
+                }
+            });
+        }
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'dropdown',
@@ -783,6 +785,20 @@ define('io.ox/core/main',
                 a.dropdown();
             }
         });
+
+        if (settings.get('features/dedicatedLogoutButton', false) === true) {
+            ext.point('io.ox/core/topbar/right').extend({
+                id: 'logout-button',
+                index: 2000,
+                draw: function () {
+                    this.append(
+                        addLauncher('right', $('<i class="icon-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                            logout();
+                        },  gt('Sign out'))
+                    );
+                }
+            });
+        }
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'logo',
