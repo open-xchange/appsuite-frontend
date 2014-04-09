@@ -348,13 +348,15 @@ define('io.ox/calendar/list/perspective',
         grid.prop('folder', app.folder.get());
         app.on('folder:change', function () {
             self.updateGridOptions();
-            grid.refresh(true);
         });
 
-        //jump to newly created items
+        // jump to newly created items
         api.on('create', function (e, data) {
             grid.selection.set(data);
         });
+
+        // refresh grid on all update events
+        api.on('update', grid.refresh);
 
         // to show an appointment without it being in the grid, needed for direct links
         app.on('show:appointment', showAppointment);
