@@ -234,8 +234,42 @@ define('io.ox/search/main',
                             return data;
                         }, yell);
             },
-            query: function () {
-                var opt = {
+            query: (function () {
+
+                function filterFacets(opt, facets) {
+                    // extend options
+                    opt.data.facets = _.filter(facets, function (facet) {
+                        // TODO: remove hack to ingore folder facet when empty
+                        return !('value' in facet) || (facet.value !== 'custom');
+                    });
+                }
+
+                function getResults(opt) {
+                    // TODO: better solution needed
+                    var dummy = {
+                            num_found: -1,
+                            results: [],
+                            size: 0,
+                            start: 0
+                        },
+                        folderOnly = !opt.data.facets.length || (opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder');
+                    //call server
+                    return folderOnly ? $.Deferred().resolve(dummy) : api.query(opt);
+                }
+
+                function drawResults(result) {
+                    var start = Date.now();
+                    model.setItems(result, start);
+                    run();
+                }
+
+                function fail(result) {
+                    yell(result);
+                    app.idle();
+                }
+
+                return function () {
+                    var opt = {
                         params: {
                             //translate app to module param
                             module: model.getModule()
@@ -244,39 +278,15 @@ define('io.ox/search/main',
                             start: model.get('start'),
                             size: model.get('size')
                         }
-                    },
-                    start = Date.now();
-                run();
-                app.busy();
-                return model.getFacets()
-                        .then(function (facets) {
-                            //extend options
-                            opt.data.facets = _.filter(facets, function (facet) {
-                                //TODO: remove hack to ingore folder facet when empty
-                                return !('value' in facet) || (facet.value !== 'custom');
-                            });
-                        })
-                        .then(function () {
-                            //TODO: better solution needed
-                            var dummy = {
-                                    num_found: -1,
-                                    results: [],
-                                    size: 0,
-                                    start: 0
-                                },
-                                folderOnly = !opt.data.facets.length || (opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder');
-                            //call server
-                            return folderOnly ? $.Deferred().resolve(dummy) : api.query(opt);
-                        })
-                        .then(function (result) {
-                            //update model
-                            model.setItems(result, start);
-                            run();
-                        }, function (result) {
-                            yell(result);
-                            app.idle();
-                        });
-            }
+                    };
+                    run();
+                    app.busy();
+                    return model.getFacets()
+                        .done(filterFacets.bind(this, opt))
+                        .then(getResults.bind(this, opt))
+                        .then(_.lfo(drawResults), _.lfo(fail));
+                };
+            }())
         }
     });
 
