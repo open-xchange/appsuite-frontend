@@ -1698,6 +1698,11 @@ define('io.ox/mail/api',
                 .value();
         },
 
+        // get 'head' data, for example, to show details of most recent message in list view
+        head: function (data) {
+            return data.head || data;
+        },
+
         // propagate changed within a thread to root model
         touch: function (cid) {
             cid = _.isString(cid) ? cid : _.cid(cid);
@@ -1801,11 +1806,13 @@ define('io.ox/mail/api',
         // we use the last item to generate the cid. More robust because unlikely to change.
         var last = _(thread).last();
 
+        // store data of most recent message as head
+        obj.head = _.extend({}, obj);
+
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID
         // in the collection which is wanted behavior.
-        obj.id = last.id;
-        obj.folder_id = last.folder_id;
+        _.extend(obj, last);
 
         // only store plain composite keys instead of full objects
         obj.thread = _(thread).map(_.cid);

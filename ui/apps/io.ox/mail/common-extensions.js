@@ -33,7 +33,8 @@ define('io.ox/mail/common-extensions',
     var extensions = {
 
         picture: function (baton) {
-            var from = baton.data.from,
+            var data = api.threads.head(baton.data),
+                from = data.from,
                 size = _.device('retina') ? 80 : 40;
             this.append(
                 contactsAPI.pictureHalo(
@@ -44,7 +45,7 @@ define('io.ox/mail/common-extensions',
         },
 
         date: function (baton, options) {
-            var data = baton.data, t = data.received_date, d;
+            var data = api.threads.head(baton.data), t = data.received_date, d;
             if (!_.isNumber(t)) return;
             d = new date.Local(t);
             this.append(
@@ -63,7 +64,7 @@ define('io.ox/mail/common-extensions',
         },
 
         from: function (baton) {
-            var data = baton.data,
+            var data = api.threads.head(baton.data),
                 field = data.threadSize === 1 && account.is('sent|drafts', data.folder_id) ? 'to' : 'from';
             this.append(
                 $('<div class="from">').append(
@@ -73,14 +74,15 @@ define('io.ox/mail/common-extensions',
         },
 
         size: function (baton) {
-            if (!_.isNumber(baton.data.size)) return;
+            var data = api.threads.head(baton.data);
+            if (!_.isNumber(data.size)) return;
             this.append(
-                $('<span class="size">').text(strings.fileSize(baton.data.size, 1))
+                $('<span class="size">').text(strings.fileSize(data.size, 1))
             );
         },
 
         unreadClass: function (baton) {
-            var data = baton.data,
+            var data = api.threads.head(baton.data),
                 unread = util.isUnseen(data);
             this.closest('.list-item').toggleClass('unread', unread);
         },
@@ -126,9 +128,10 @@ define('io.ox/mail/common-extensions',
         },
 
         priority: function (baton) {
+            var data = api.threads.head(baton.data);
             this.append(
                 $('<span class="priority" aria-hidden="true">').append(
-                    util.getPriority(baton.data)
+                    util.getPriority(data)
                 )
             );
         },
@@ -156,8 +159,9 @@ define('io.ox/mail/common-extensions',
 
         subject: function (baton) {
 
-            var keepFirstPrefix = baton.data.threadSize === 1,
-                subject = util.getSubject(baton.data, keepFirstPrefix);
+            var data = api.threads.head(baton.data),
+                keepFirstPrefix = baton.data.threadSize === 1,
+                subject = util.getSubject(data, keepFirstPrefix);
 
             this.append(
                 $('<div class="subject">').append(
