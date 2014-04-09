@@ -78,8 +78,8 @@ msgstr "%1$s %2$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1044 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1220
+#: apps/io.ox/core/desktop.js:1045 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1221
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -137,7 +137,7 @@ msgstr "%2$s 的 %1$s"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:411
+#: apps/io.ox/contacts/view-detail.js:407
 #, fuzzy
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr ""
@@ -297,7 +297,7 @@ msgstr "已发送一个送达回执"
 msgid "A severe error occurred!"
 msgstr "发生一个严重错误！"
 
-#: apps/io.ox/core/main.js:757 module:io.ox/core
+#: apps/io.ox/core/main.js:758 module:io.ox/core
 msgid "About"
 msgstr "关于"
 
@@ -514,7 +514,7 @@ msgstr "添加到门户"
 msgid "Add widget"
 msgstr "添加迷你程序"
 
-#: apps/plugins/portal/facebook/register.js:285 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:311 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:342
 #: apps/plugins/portal/twitter/register.js:368
 msgid "Add your account"
@@ -582,7 +582,7 @@ msgstr "Drive 设置"
 msgid "All Emoji"
 msgstr "所有表情符号"
 
-#: apps/io.ox/contacts/view-detail.js:182 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:188 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:417 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/view-detail.js:225 module:io.ox/tasks
 msgid "All attachments"
@@ -651,7 +651,7 @@ msgstr "任何收件人"
 msgid "Append vCard"
 msgstr "追加 vcard"
 
-#: apps/io.ox/core/desktop.js:967 module:io.ox/core
+#: apps/io.ox/core/desktop.js:968 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "应用程序工具条"
 
@@ -832,7 +832,7 @@ msgstr "自动保存电子邮件草稿"
 msgid "Automatic opening of notification area"
 msgstr "自动打开通知区域"
 
-#: apps/io.ox/core/main.js:398 module:io.ox/core
+#: apps/io.ox/core/main.js:399 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:271
 msgid "Automatic sign out"
 msgstr "自动注销"
@@ -935,7 +935,7 @@ msgstr "分支"
 msgid "Browser"
 msgstr "浏览器"
 
-#: apps/io.ox/contacts/view-detail.js:565 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:566 module:io.ox/contacts
 msgid "Business Address"
 msgstr "业务地址"
 
@@ -1004,10 +1004,10 @@ msgstr "日历"
 #: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/distrib/main.js:185
 #: apps/io.ox/contacts/edit/main.js:249
 #: apps/io.ox/core/commons-folderview.js:557 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1627 apps/io.ox/core/export/export.js:104
+#: apps/io.ox/core/desktop.js:1628 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
-#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:401
+#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:402
 #: apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:398 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
@@ -1179,7 +1179,7 @@ msgid "Click here for free trial."
 msgstr "点击此处获得免费使用。"
 
 #: apps/io.ox/portal/main.js:297 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:302 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:328 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:384
 msgid "Click here to add your account"
 msgstr "点击此处添加户口"
@@ -1204,7 +1204,7 @@ msgstr "点击一个句子以选择何时重复约会。"
 msgid "Click on the links to change the values."
 msgstr "点击连结已更改值。"
 
-#: apps/plugins/portal/facebook/register.js:116 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:138 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:144
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -1288,7 +1288,7 @@ msgstr "颜色引用线"
 
 #: apps/io.ox/calendar/acceptdeny.js:90 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:110 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:241 apps/io.ox/contacts/view-detail.js:441
+#: apps/io.ox/contacts/model.js:241 apps/io.ox/contacts/view-detail.js:437
 msgid "Comment"
 msgstr "注释"
 
@@ -1381,7 +1381,7 @@ msgstr "冲突："
 msgid "Contact"
 msgstr "联系人"
 
-#: apps/io.ox/contacts/view-detail.js:778 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:779 module:io.ox/contacts
 msgid "Contact Details"
 msgstr "联系人详情"
 
@@ -1407,7 +1407,7 @@ msgstr "联系人已移动"
 msgid "Contains"
 msgstr "包含"
 
-#: apps/io.ox/core/main.js:1129 module:io.ox/core
+#: apps/io.ox/core/main.js:1130 module:io.ox/core
 msgid "Continue"
 msgstr "继续"
 
@@ -1443,7 +1443,7 @@ msgstr[1] "复制"
 msgid "Copy (CC) to"
 msgstr "复写副本（CC）到"
 
-#: apps/io.ox/contacts/view-detail.js:681 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:682 module:io.ox/contacts
 msgid "Copy to description"
 msgstr "复制到描述"
 
@@ -1452,11 +1452,16 @@ msgstr "复制到描述"
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "支出必须在 -%1$d 到 %1$d 之间。"
 
+#: apps/io.ox/tasks/model.js:134 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:137
+msgid "Costs must only have two decimal places."
+msgstr ""
+
 #: apps/io.ox/core/desktop.js:211 module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr "不能获得此应用程序的默认文件夹。"
 
-#: apps/io.ox/contacts/view-detail.js:188 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:194 module:io.ox/contacts
 msgid "Could not load attachments for this contact."
 msgstr "不能加载此联系人的附件。"
 
@@ -1885,9 +1890,10 @@ msgstr "距离"
 msgid "Distribution List"
 msgstr "通讯组列表"
 
-#: apps/io.ox/contacts/main.js:178 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:314 apps/io.ox/contacts/view-detail.js:47
-#: apps/io.ox/participants/views.js:176 module:io.ox/calendar/edit/main
+#: apps/io.ox/contacts/common-extensions.js:41 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:178 apps/io.ox/contacts/model.js:314
+#: apps/io.ox/contacts/view-detail.js:49 apps/io.ox/participants/views.js:176
+#: module:io.ox/calendar/edit/main
 msgid "Distribution list"
 msgstr "通讯组列表"
 
@@ -2495,7 +2501,7 @@ msgstr "每 %1$d 年 %4$d 月的第 %2$s 个 %3$s"
 msgid "Every day"
 msgstr "每天"
 
-#: apps/io.ox/core/main.js:732 module:io.ox/core
+#: apps/io.ox/core/main.js:733 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "离开全屏幕"
 
@@ -2558,13 +2564,13 @@ msgstr "外部参与者"
 msgid "Face"
 msgstr "脸部"
 
-#: apps/plugins/portal/facebook/register.js:137 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:299
-#: apps/plugins/portal/facebook/register.js:557
+#: apps/plugins/portal/facebook/register.js:159 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:325
+#: apps/plugins/portal/facebook/register.js:583
 msgid "Facebook"
 msgstr "脸书"
 
-#: apps/plugins/portal/facebook/register.js:125 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:147 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "脸书报告一个错误："
 
@@ -2589,7 +2595,7 @@ msgstr "保存通讯组列表失败。"
 msgid "Failed to sign in"
 msgstr "登陆失败"
 
-#: apps/io.ox/core/desktop.js:1726 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1727 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -2844,7 +2850,7 @@ msgstr "星期五"
 msgid "From"
 msgstr "从"
 
-#: apps/io.ox/core/main.js:735 module:io.ox/core apps/io.ox/core/main.js:739
+#: apps/io.ox/core/main.js:736 module:io.ox/core apps/io.ox/core/main.js:740
 #: apps/io.ox/files/actions.js:1205 module:io.ox/files
 msgid "Fullscreen"
 msgstr "全屏幕"
@@ -2962,7 +2968,7 @@ msgid "Hello World"
 msgstr "您好世界"
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:700
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:701
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "帮助"
@@ -2982,7 +2988,7 @@ msgstr "添加文件夹"
 msgid "Hide"
 msgstr "隐藏"
 
-#: apps/io.ox/contacts/view-detail.js:710 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:711 module:io.ox/contacts
 msgid "Hide QR code"
 msgstr "隐藏 QR 码"
 
@@ -3025,7 +3031,7 @@ msgstr "高优先级"
 msgid "Hobby"
 msgstr "兴趣"
 
-#: apps/io.ox/contacts/view-detail.js:583 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:584 module:io.ox/contacts
 msgid "Home Address"
 msgstr "住宅地址"
 
@@ -3281,7 +3287,7 @@ msgstr "一月"
 msgid "Japanese Carrier"
 msgstr "日本手机服务商"
 
-#: apps/io.ox/contacts/view-detail.js:497 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:493 module:io.ox/contacts
 msgid "Job"
 msgstr "工作"
 
@@ -3389,7 +3395,7 @@ msgstr "浅蓝色"
 msgid "Light green"
 msgstr "浅绿色"
 
-#: apps/plugins/portal/facebook/register.js:423 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:449 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "赞一个链接：%s"
 
@@ -3470,7 +3476,7 @@ msgstr "邮件信息"
 msgid "Mail Filter"
 msgstr "邮件过滤器"
 
-#: apps/io.ox/contacts/view-detail.js:519 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:520 module:io.ox/contacts
 msgid "Mail and Messaging"
 msgstr "邮件和即时通讯"
 
@@ -3675,7 +3681,7 @@ msgstr "高优先级"
 msgid "Messaging"
 msgstr "消息"
 
-#: apps/io.ox/contacts/view-detail.js:391 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:387 module:io.ox/contacts
 msgid "Messenger"
 msgstr "即时通讯软件"
 
@@ -3698,7 +3704,7 @@ msgid "Minutes"
 msgstr "分钟"
 
 #. section name for contact fields in detail view
-#: apps/io.ox/contacts/view-detail.js:620 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:621 module:io.ox/contacts
 msgid "Miscellaneous"
 msgstr "杂项"
 
@@ -3800,7 +3806,7 @@ msgstr "我的密码"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:460
+#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -3833,7 +3839,7 @@ msgstr "从来没有"
 msgid "New Folder"
 msgstr "新文件夹"
 
-#: apps/io.ox/mail/api.js:1660 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1665 module:io.ox/mail
 msgid "New Mail"
 msgstr "新邮件"
 
@@ -3961,7 +3967,7 @@ msgstr "没有选择要上载的文件。"
 msgid "No files have been changed recently"
 msgstr "最近没有文件更改"
 
-#: apps/io.ox/search/items/view-template.js:88 module:io.ox/core
+#: apps/io.ox/search/items/view-template.js:84 module:io.ox/core
 #, fuzzy
 #| msgid "No RSS feeds found."
 msgid "No items found"
@@ -4037,7 +4043,7 @@ msgstr "无主题"
 msgid "No title."
 msgstr "无标题。"
 
-#: apps/plugins/portal/facebook/register.js:97 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:119 module:plugins/portal
 msgid "No wall posts yet."
 msgstr "墙上还没有留言。"
 
@@ -4318,7 +4324,7 @@ msgstr "橙色"
 msgid "Organizer"
 msgstr "组织器"
 
-#: apps/io.ox/contacts/view-detail.js:601 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:602 module:io.ox/contacts
 msgid "Other Address"
 msgstr "其他地址"
 
@@ -4428,7 +4434,7 @@ msgstr "永久移除已删除的电子邮件"
 msgid "Permissions"
 msgstr "权限"
 
-#: apps/io.ox/contacts/view-detail.js:458 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:454 module:io.ox/contacts
 msgid "Personal"
 msgstr "个人"
 
@@ -4488,7 +4494,7 @@ msgid "Phone list"
 msgstr "电话列表"
 
 #: apps/io.ox/contacts/main.js:361 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:539
+#: apps/io.ox/contacts/view-detail.js:540
 msgid "Phone numbers"
 msgstr "电话号码"
 
@@ -4637,7 +4643,7 @@ msgstr "请选择一个有效 iCal 文件作汇入"
 msgid "Please select a valid image File to insert"
 msgstr "请选择一个有效图像文件作插入"
 
-#: apps/io.ox/core/main.js:892 module:io.ox/core apps/io.ox/core/relogin.js:48
+#: apps/io.ox/core/main.js:893 module:io.ox/core apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "请再登入继续"
 
@@ -4677,7 +4683,7 @@ msgstr "邮寄编号"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "按下 [enter] 以跳到完整生日列表。"
 
-#: apps/plugins/portal/facebook/register.js:170 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:192 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "按下 [enter] 以跳到脸书 stream。"
 
@@ -4790,7 +4796,7 @@ msgstr "隐私通告"
 #: apps/io.ox/calendar/edit/template.js:289 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
-#: apps/io.ox/contacts/view-detail.js:143 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
 #: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js:354 module:io.ox/tasks/edit
 msgid "Private"
@@ -4805,7 +4811,8 @@ msgstr "处理连续规则"
 msgid "Profession"
 msgstr "专业"
 
-#: apps/io.ox/tasks/print.js:36 module:io.ox/tasks
+#: apps/io.ox/tasks/common-extensions.js:69 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:36
 msgid "Progress"
 msgstr "进度 %"
 
@@ -4819,7 +4826,7 @@ msgstr "进度 %1$s %"
 msgid "Progress in %"
 msgstr "进度 %"
 
-#: apps/io.ox/tasks/model.js:131 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:146 module:io.ox/tasks
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "进度必须是 0 到 100 之间的有效数值"
 
@@ -4952,7 +4959,7 @@ msgstr "还原"
 msgid "Recover passwords"
 msgstr "还原密码"
 
-#: apps/io.ox/tasks/model.js:149 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:164 module:io.ox/tasks
 #, fuzzy
 msgid "Recurring tasks need a valid due date."
 msgstr "重复任务需要一个有效结束日期。"
@@ -4961,7 +4968,7 @@ msgstr "重复任务需要一个有效结束日期。"
 msgid "Recurring tasks need a valid end date."
 msgstr "重复任务需要一个有效结束日期。"
 
-#: apps/io.ox/tasks/model.js:140 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:155 module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
 msgstr "重复任务需要一个有效开始日期。"
 
@@ -4977,7 +4984,7 @@ msgstr "红色"
 msgid "Redirect to"
 msgstr "转送到"
 
-#: apps/io.ox/core/main.js:661 module:io.ox/core
+#: apps/io.ox/core/main.js:662 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:198 module:io.ox/core/pubsub
 msgid "Refresh"
 msgstr "刷新"
@@ -5114,7 +5121,7 @@ msgstr "已保留"
 msgid "Reset this list"
 msgstr "重设此操作"
 
-#: apps/io.ox/contacts/view-detail.js:50 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:53 module:io.ox/contacts
 #: apps/io.ox/participants/views.js:152 module:io.ox/calendar/edit/main
 msgid "Resource"
 msgstr "资源"
@@ -5127,7 +5134,7 @@ msgstr "资源组"
 msgid "Resources"
 msgstr "资源"
 
-#: apps/io.ox/core/main.js:1122 module:io.ox/core
+#: apps/io.ox/core/main.js:1123 module:io.ox/core
 msgid "Restore applications"
 msgstr "复原应用"
 
@@ -5241,12 +5248,12 @@ msgstr "删除附件"
 msgid "Save to Drive"
 msgstr "保存到 Drive"
 
-#: apps/io.ox/contacts/view-detail.js:742 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:743 module:io.ox/contacts
 #: apps/io.ox/files/fluid/view-detail.js:177 module:io.ox/files
 msgid "Saved in"
 msgstr "保存在"
 
-#: apps/io.ox/mail/api.js:1324 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1329 module:io.ox/mail
 #, fuzzy
 msgid "Saved mail attachment"
 msgstr "删除附件"
@@ -5269,16 +5276,16 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "排程"
 
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1507 apps/io.ox/core/desktop.js:1564
-#: apps/io.ox/core/main.js:619 apps/io.ox/core/main.js:625
-#: apps/io.ox/search/main.js:167 module:io.ox/search
-#: apps/io.ox/search/main.js:183 apps/io.ox/search/view-template.js:46
+#: apps/io.ox/core/desktop.js:1507 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1508 apps/io.ox/core/desktop.js:1565
+#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/search/main.js:165 module:io.ox/search
+#: apps/io.ox/search/main.js:181 apps/io.ox/search/view-template.js:48
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "搜索"
 
-#: apps/io.ox/core/desktop.js:1498 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1499 module:io.ox/core
 msgid "Search for items"
 msgstr "搜寻项目"
 
@@ -5439,7 +5446,7 @@ msgstr "保存为默认"
 msgid "Set color"
 msgstr "文本颜色"
 
-#: apps/io.ox/core/main.js:673 module:io.ox/core apps/io.ox/core/main.js:806
+#: apps/io.ox/core/main.js:674 module:io.ox/core apps/io.ox/core/main.js:807
 msgid "Settings"
 msgstr "设置"
 
@@ -5485,8 +5492,8 @@ msgstr "购物车"
 msgid "Show"
 msgstr "显示为"
 
-#: apps/io.ox/contacts/view-detail.js:725 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:730
+#: apps/io.ox/contacts/view-detail.js:726 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:731
 msgid "Show QR code"
 msgstr "显示 QR 码"
 
@@ -5508,7 +5515,7 @@ msgid "Show appointment details"
 msgstr "显示约会"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:257
+#: apps/plugins/portal/facebook/register.js:279
 msgid "Show comments"
 msgstr "显示注释"
 
@@ -5550,6 +5557,12 @@ msgstr "显示内部链接"
 msgid "Show legal information"
 msgstr "显示法律信息"
 
+#: apps/plugins/portal/facebook/register.js:64 module:plugins/portal
+#, fuzzy
+#| msgid "Show comments"
+msgid "Show more comments"
+msgstr "显示注释"
+
 #: apps/io.ox/mail/detail/content.js:417 module:io.ox/mail
 #, fuzzy
 msgid "Show quoted text"
@@ -5589,11 +5602,11 @@ msgstr "边栏"
 msgid "Sign in"
 msgstr "登入"
 
-#: apps/io.ox/core/main.js:776 module:io.ox/core
+#: apps/io.ox/core/main.js:777 module:io.ox/core
 msgid "Sign out"
 msgstr "登出"
 
-#: apps/io.ox/core/main.js:402 module:io.ox/core
+#: apps/io.ox/core/main.js:403 module:io.ox/core
 msgid "Sign out now"
 msgstr "现在登出"
 
@@ -5664,7 +5677,7 @@ msgstr "软银"
 msgid "Some fields contain invalid data"
 msgstr "有些输入字段包含无效数据"
 
-#: apps/plugins/portal/facebook/register.js:120 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:142 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:148
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -6200,7 +6213,7 @@ msgstr "文件夹于 %1$s 可用"
 msgid "The folder path"
 msgstr "文件夹路径"
 
-#: apps/io.ox/core/main.js:1124 module:io.ox/core
+#: apps/io.ox/core/main.js:1125 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6519,7 +6532,7 @@ msgid "This is not a valid user or group."
 msgstr "这不是有效的用户或组。"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:193 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:242
+#: apps/io.ox/contacts/view-detail.js:248
 msgid "This list has no contacts yet"
 msgstr "本列表还没有成员"
 
@@ -6831,7 +6844,7 @@ msgstr "切换选择框"
 msgid "Toggle folder"
 msgstr "切换文件夹"
 
-#: apps/io.ox/core/desktop.js:1556 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1557 module:io.ox/core
 msgid "Toggle search"
 msgstr "切换搜寻"
 
@@ -7379,7 +7392,7 @@ msgstr "您已经暂时的接受约会吗。"
 msgid "You have to enter a username and password to subscribe."
 msgstr "您必须输入一个用户名称和密码以订阅。"
 
-#: apps/plugins/portal/facebook/register.js:54 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:56 module:plugins/portal
 #, fuzzy
 #| msgid "You declined this task"
 msgid "You like this"
@@ -7407,13 +7420,13 @@ msgstr "您暂时接受此约会"
 msgid "You tentatively accepted this task"
 msgstr "您暂时接受此任务"
 
-#: apps/io.ox/core/main.js:379 module:io.ox/core
+#: apps/io.ox/core/main.js:380 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "您会在 %1$d 秒后自动注销"
 msgstr[1] "您会在 %1$d 秒后自动注销"
 
-#: apps/io.ox/core/main.js:833 module:io.ox/core
+#: apps/io.ox/core/main.js:834 module:io.ox/core
 msgid "Your Applications"
 msgstr "您的应用程序"
 
@@ -7500,7 +7513,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "您选择的图像将会在保存后显示"
 
-#: apps/io.ox/core/main.js:891 module:io.ox/core apps/io.ox/core/relogin.js:46
+#: apps/io.ox/core/main.js:892 module:io.ox/core apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "会话已过期"
 
@@ -7556,11 +7569,11 @@ msgid "close"
 msgstr "关闭"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:512 module:io.ox/core
+#: apps/io.ox/core/main.js:513 module:io.ox/core
 msgid "close for %1$s"
 msgstr "按 %1$s 关闭"
 
-#: apps/plugins/portal/facebook/register.js:230 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:252 module:plugins/portal
 #, fuzzy
 #| msgid "Collapse form"
 msgid "collapse"
@@ -7707,8 +7720,8 @@ msgstr "每月"
 msgid "every week"
 msgstr "每周"
 
-#: apps/plugins/portal/facebook/register.js:226 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:233
+#: apps/plugins/portal/facebook/register.js:248 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:255
 msgid "expand"
 msgstr ""
 

@@ -76,8 +76,8 @@ msgstr "%2$s %1$s"
 #. Title of the browser window
 #. %1$s is the name of the page, e.g. OX App Suite
 #. %2$s is the title of the active app, e.g. Calendar
-#: apps/io.ox/core/desktop.js:1044 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1220
+#: apps/io.ox/core/desktop.js:1045 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1221
 msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -133,7 +133,7 @@ msgstr "%2$s 中の %1$s"
 #. %4$s is the state
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:411
+#: apps/io.ox/contacts/view-detail.js:407
 #, fuzzy
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr ""
@@ -291,7 +291,7 @@ msgstr "開封通知が送信されました。"
 msgid "A severe error occurred!"
 msgstr "深刻なエラーが発生しました。"
 
-#: apps/io.ox/core/main.js:757 module:io.ox/core
+#: apps/io.ox/core/main.js:758 module:io.ox/core
 msgid "About"
 msgstr "バージョン情報"
 
@@ -508,7 +508,7 @@ msgstr "ポータルに追加"
 msgid "Add widget"
 msgstr "ウィジェットを追加"
 
-#: apps/plugins/portal/facebook/register.js:285 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:311 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:342
 #: apps/plugins/portal/twitter/register.js:368
 msgid "Add your account"
@@ -576,7 +576,7 @@ msgstr "Drive の設定"
 msgid "All Emoji"
 msgstr "全絵文字"
 
-#: apps/io.ox/contacts/view-detail.js:182 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:188 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:417 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/view-detail.js:225 module:io.ox/tasks
 msgid "All attachments"
@@ -645,7 +645,7 @@ msgstr "すべての宛先"
 msgid "Append vCard"
 msgstr "vCard を添付"
 
-#: apps/io.ox/core/desktop.js:967 module:io.ox/core
+#: apps/io.ox/core/desktop.js:968 module:io.ox/core
 msgid "Application Toolbar"
 msgstr "アプリケーション ツールバー"
 
@@ -828,7 +828,7 @@ msgstr "下書きの自動保存"
 msgid "Automatic opening of notification area"
 msgstr "通知エリアを自動的に表示"
 
-#: apps/io.ox/core/main.js:398 module:io.ox/core
+#: apps/io.ox/core/main.js:399 module:io.ox/core
 #: apps/io.ox/core/settings/pane.js:271
 msgid "Automatic sign out"
 msgstr "自動的にサイン アウト"
@@ -933,7 +933,7 @@ msgstr "支店"
 msgid "Browser"
 msgstr "ブラウザ"
 
-#: apps/io.ox/contacts/view-detail.js:565 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:566 module:io.ox/contacts
 msgid "Business Address"
 msgstr "勤務先住所"
 
@@ -1004,10 +1004,10 @@ msgstr "予定表"
 #: apps/io.ox/contacts/actions.js:150 apps/io.ox/contacts/distrib/main.js:185
 #: apps/io.ox/contacts/edit/main.js:249
 #: apps/io.ox/core/commons-folderview.js:557 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1627 apps/io.ox/core/export/export.js:104
+#: apps/io.ox/core/desktop.js:1628 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
-#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:401
+#: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:402
 #: apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:398 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
@@ -1178,7 +1178,7 @@ msgid "Click here for free trial."
 msgstr "無償トライアル版はここをクリック"
 
 #: apps/io.ox/portal/main.js:297 module:io.ox/portal
-#: apps/plugins/portal/facebook/register.js:302 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:328 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:384
 msgid "Click here to add your account"
 msgstr "ここをクリックしてアカウントを追加"
@@ -1205,7 +1205,7 @@ msgstr "繰り返しのタイプを選択するには、文をクリックしま
 msgid "Click on the links to change the values."
 msgstr "値を変更するには、リンクをクリックします。"
 
-#: apps/plugins/portal/facebook/register.js:116 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:138 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:144
 #: apps/plugins/portal/twitter/register.js:233
 msgid "Click to authorize your account again"
@@ -1290,7 +1290,7 @@ msgstr "カラーの引用ラインを使用"
 
 #: apps/io.ox/calendar/acceptdeny.js:90 module:io.ox/calendar
 #: apps/io.ox/contacts/edit/view-form.js:110 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:241 apps/io.ox/contacts/view-detail.js:441
+#: apps/io.ox/contacts/model.js:241 apps/io.ox/contacts/view-detail.js:437
 msgid "Comment"
 msgstr "コメント"
 
@@ -1383,7 +1383,7 @@ msgstr "競合:"
 msgid "Contact"
 msgstr "連絡先"
 
-#: apps/io.ox/contacts/view-detail.js:778 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:779 module:io.ox/contacts
 msgid "Contact Details"
 msgstr "連絡先の詳細"
 
@@ -1409,7 +1409,7 @@ msgstr "連絡先を移動しました。"
 msgid "Contains"
 msgstr "次の文字列を含む"
 
-#: apps/io.ox/core/main.js:1129 module:io.ox/core
+#: apps/io.ox/core/main.js:1130 module:io.ox/core
 msgid "Continue"
 msgstr "続行"
 
@@ -1444,7 +1444,7 @@ msgstr[0] "コピー"
 msgid "Copy (CC) to"
 msgstr "CC:"
 
-#: apps/io.ox/contacts/view-detail.js:681 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:682 module:io.ox/contacts
 msgid "Copy to description"
 msgstr "説明にコピー"
 
@@ -1453,11 +1453,16 @@ msgstr "説明にコピー"
 msgid "Costs must be between -%1$d and %1$d."
 msgstr "コストは -%1$d から %1$d までの数字でなければなりません。"
 
+#: apps/io.ox/tasks/model.js:134 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:137
+msgid "Costs must only have two decimal places."
+msgstr ""
+
 #: apps/io.ox/core/desktop.js:211 module:io.ox/core
 msgid "Could not get a default folder for this application."
 msgstr "このアプリケーションの既定のフォルダを取得できませんでした。"
 
-#: apps/io.ox/contacts/view-detail.js:188 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:194 module:io.ox/contacts
 msgid "Could not load attachments for this contact."
 msgstr "この連絡先の添付ファイルを読み込めませんでした。"
 
@@ -1890,9 +1895,10 @@ msgstr "距離"
 msgid "Distribution List"
 msgstr "配布リスト"
 
-#: apps/io.ox/contacts/main.js:178 module:io.ox/contacts
-#: apps/io.ox/contacts/model.js:314 apps/io.ox/contacts/view-detail.js:47
-#: apps/io.ox/participants/views.js:176 module:io.ox/calendar/edit/main
+#: apps/io.ox/contacts/common-extensions.js:41 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:178 apps/io.ox/contacts/model.js:314
+#: apps/io.ox/contacts/view-detail.js:49 apps/io.ox/participants/views.js:176
+#: module:io.ox/calendar/edit/main
 msgid "Distribution list"
 msgstr "配布リスト"
 
@@ -2514,7 +2520,7 @@ msgstr "%1$d 年ごとの %4$d の %2$s %3$s"
 msgid "Every day"
 msgstr "毎日"
 
-#: apps/io.ox/core/main.js:732 module:io.ox/core
+#: apps/io.ox/core/main.js:733 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "全画面表示を終了"
 
@@ -2577,13 +2583,13 @@ msgstr "外部出席者"
 msgid "Face"
 msgstr "顔"
 
-#: apps/plugins/portal/facebook/register.js:137 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:299
-#: apps/plugins/portal/facebook/register.js:557
+#: apps/plugins/portal/facebook/register.js:159 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:325
+#: apps/plugins/portal/facebook/register.js:583
 msgid "Facebook"
 msgstr "Facebook"
 
-#: apps/plugins/portal/facebook/register.js:125 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:147 module:plugins/portal
 msgid "Facebook reported an error:"
 msgstr "Facebook が次のエラーを報告しました:"
 
@@ -2609,7 +2615,7 @@ msgstr "配布リストの保存に失敗しました。"
 msgid "Failed to sign in"
 msgstr "再サイン インに失敗しました。"
 
-#: apps/io.ox/core/desktop.js:1726 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1727 module:io.ox/core
 msgid ""
 "Failed to start application. Maybe you have connection problems. Please try "
 "again."
@@ -2870,7 +2876,7 @@ msgstr "金曜日"
 msgid "From"
 msgstr "差出人"
 
-#: apps/io.ox/core/main.js:735 module:io.ox/core apps/io.ox/core/main.js:739
+#: apps/io.ox/core/main.js:736 module:io.ox/core apps/io.ox/core/main.js:740
 #: apps/io.ox/files/actions.js:1205 module:io.ox/files
 msgid "Fullscreen"
 msgstr "全画面表示"
@@ -2988,7 +2994,7 @@ msgid "Hello World"
 msgstr "Hello World"
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:700
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:701
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "ヘルプ"
@@ -3008,7 +3014,7 @@ msgstr "フォルダを追加"
 msgid "Hide"
 msgstr "隠す"
 
-#: apps/io.ox/contacts/view-detail.js:710 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:711 module:io.ox/contacts
 msgid "Hide QR code"
 msgstr "QR コードを隠す"
 
@@ -3051,7 +3057,7 @@ msgstr "優先度 (高)"
 msgid "Hobby"
 msgstr "趣味"
 
-#: apps/io.ox/contacts/view-detail.js:583 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:584 module:io.ox/contacts
 msgid "Home Address"
 msgstr "自宅住所"
 
@@ -3320,7 +3326,7 @@ msgstr "1 月"
 msgid "Japanese Carrier"
 msgstr "日本の通信事業者"
 
-#: apps/io.ox/contacts/view-detail.js:497 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:493 module:io.ox/contacts
 msgid "Job"
 msgstr "職業"
 
@@ -3429,7 +3435,7 @@ msgstr "薄い青"
 msgid "Light green"
 msgstr "薄い緑"
 
-#: apps/plugins/portal/facebook/register.js:423 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:449 module:plugins/portal
 msgid "Liked a link: %s"
 msgstr "次のリンクは「いいね！」に登録されています: %s"
 
@@ -3510,7 +3516,7 @@ msgstr "メールの詳細"
 msgid "Mail Filter"
 msgstr "メール フィルタ"
 
-#: apps/io.ox/contacts/view-detail.js:519 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:520 module:io.ox/contacts
 msgid "Mail and Messaging"
 msgstr "メールとメッセージング"
 
@@ -3716,7 +3722,7 @@ msgstr "優先度 (高)"
 msgid "Messaging"
 msgstr "メッセージング"
 
-#: apps/io.ox/contacts/view-detail.js:391 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:387 module:io.ox/contacts
 msgid "Messenger"
 msgstr "メッセンジャー"
 
@@ -3739,7 +3745,7 @@ msgid "Minutes"
 msgstr "分"
 
 #. section name for contact fields in detail view
-#: apps/io.ox/contacts/view-detail.js:620 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:621 module:io.ox/contacts
 msgid "Miscellaneous"
 msgstr "その他"
 
@@ -3841,7 +3847,7 @@ msgstr "マイ パスワード"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:460
+#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -3874,7 +3880,7 @@ msgstr "期限なし"
 msgid "New Folder"
 msgstr "新規フォルダ"
 
-#: apps/io.ox/mail/api.js:1660 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1665 module:io.ox/mail
 msgid "New Mail"
 msgstr "新規メール"
 
@@ -4002,7 +4008,7 @@ msgstr "アップロードするファイルは選択されていません。"
 msgid "No files have been changed recently"
 msgstr "最近変更されたファイルはありません。"
 
-#: apps/io.ox/search/items/view-template.js:88 module:io.ox/core
+#: apps/io.ox/search/items/view-template.js:84 module:io.ox/core
 #, fuzzy
 #| msgid "No RSS feeds found."
 msgid "No items found"
@@ -4078,7 +4084,7 @@ msgstr "件名なし"
 msgid "No title."
 msgstr "タイトルなし"
 
-#: apps/plugins/portal/facebook/register.js:97 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:119 module:plugins/portal
 msgid "No wall posts yet."
 msgstr "ウォール ポストは今のところありません。"
 
@@ -4359,7 +4365,7 @@ msgstr "オレンジ"
 msgid "Organizer"
 msgstr "開催者"
 
-#: apps/io.ox/contacts/view-detail.js:601 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:602 module:io.ox/contacts
 msgid "Other Address"
 msgstr "その他の住所"
 
@@ -4475,7 +4481,7 @@ msgstr "削除済みのメールを完全に削除"
 msgid "Permissions"
 msgstr "権限"
 
-#: apps/io.ox/contacts/view-detail.js:458 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:454 module:io.ox/contacts
 msgid "Personal"
 msgstr "個人用"
 
@@ -4535,7 +4541,7 @@ msgid "Phone list"
 msgstr "電話リスト"
 
 #: apps/io.ox/contacts/main.js:361 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:539
+#: apps/io.ox/contacts/view-detail.js:540
 msgid "Phone numbers"
 msgstr "電話番号"
 
@@ -4687,7 +4693,7 @@ msgstr "インポートする有効な iCal ファイルを選択してくださ
 msgid "Please select a valid image File to insert"
 msgstr "挿入する画像ファイルを選択してください。"
 
-#: apps/io.ox/core/main.js:892 module:io.ox/core apps/io.ox/core/relogin.js:48
+#: apps/io.ox/core/main.js:893 module:io.ox/core apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "続行するには、再度サイン インしてください。"
 
@@ -4727,7 +4733,7 @@ msgstr "郵便番号"
 msgid "Press [enter] to jump to complete list of Birthdays."
 msgstr "すべての誕生日のリストにアクセスするには、Enter キーを押してください。"
 
-#: apps/plugins/portal/facebook/register.js:170 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:192 module:plugins/portal
 msgid "Press [enter] to jump to the facebook stream."
 msgstr "Facebook ストリームにアクセスするには、Enter キーを押してください。"
 
@@ -4840,7 +4846,7 @@ msgstr "プライバシーに関する注意"
 #: apps/io.ox/calendar/edit/template.js:289 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
-#: apps/io.ox/contacts/view-detail.js:143 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
 #: apps/io.ox/core/tk/folderviews.js:946 module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js:354 module:io.ox/tasks/edit
 msgid "Private"
@@ -4855,7 +4861,8 @@ msgstr "次のルールも処理"
 msgid "Profession"
 msgstr "職業"
 
-#: apps/io.ox/tasks/print.js:36 module:io.ox/tasks
+#: apps/io.ox/tasks/common-extensions.js:69 module:io.ox/tasks
+#: apps/io.ox/tasks/print.js:36
 msgid "Progress"
 msgstr "達成率"
 
@@ -4869,7 +4876,7 @@ msgstr "達成率 %1$s %"
 msgid "Progress in %"
 msgstr "達成率 (%)"
 
-#: apps/io.ox/tasks/model.js:131 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:146 module:io.ox/tasks
 msgid "Progress must be a valid number between 0 and 100"
 msgstr "達成率は 0 から 100 までの数字でなければなりません。"
 
@@ -5002,7 +5009,7 @@ msgstr "復元"
 msgid "Recover passwords"
 msgstr "パスワードを復元"
 
-#: apps/io.ox/tasks/model.js:149 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:164 module:io.ox/tasks
 #, fuzzy
 msgid "Recurring tasks need a valid due date."
 msgstr "定期的な仕事には、有効な終了日が必要です。"
@@ -5011,7 +5018,7 @@ msgstr "定期的な仕事には、有効な終了日が必要です。"
 msgid "Recurring tasks need a valid end date."
 msgstr "定期的な仕事には、有効な終了日が必要です。"
 
-#: apps/io.ox/tasks/model.js:140 module:io.ox/tasks
+#: apps/io.ox/tasks/model.js:155 module:io.ox/tasks
 msgid "Recurring tasks need a valid start date."
 msgstr "定期的な仕事には、有効な開始日が必要です。"
 
@@ -5027,7 +5034,7 @@ msgstr "赤"
 msgid "Redirect to"
 msgstr "次へ転送"
 
-#: apps/io.ox/core/main.js:661 module:io.ox/core
+#: apps/io.ox/core/main.js:662 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:198 module:io.ox/core/pubsub
 msgid "Refresh"
 msgstr "最新の状態に更新"
@@ -5164,7 +5171,7 @@ msgstr "予定あり"
 msgid "Reset this list"
 msgstr "このリストをリセット"
 
-#: apps/io.ox/contacts/view-detail.js:50 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:53 module:io.ox/contacts
 #: apps/io.ox/participants/views.js:152 module:io.ox/calendar/edit/main
 msgid "Resource"
 msgstr "設備"
@@ -5177,7 +5184,7 @@ msgstr "設備グループ"
 msgid "Resources"
 msgstr "設備"
 
-#: apps/io.ox/core/main.js:1122 module:io.ox/core
+#: apps/io.ox/core/main.js:1123 module:io.ox/core
 msgid "Restore applications"
 msgstr "アプリケーションを復元"
 
@@ -5290,12 +5297,12 @@ msgstr "添付ファイルを保存"
 msgid "Save to Drive"
 msgstr "Drive に保存"
 
-#: apps/io.ox/contacts/view-detail.js:742 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:743 module:io.ox/contacts
 #: apps/io.ox/files/fluid/view-detail.js:177 module:io.ox/files
 msgid "Saved in"
 msgstr "保存先:"
 
-#: apps/io.ox/mail/api.js:1324 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1329 module:io.ox/mail
 #, fuzzy
 msgid "Saved mail attachment"
 msgstr "添付ファイルを保存"
@@ -5317,16 +5324,16 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "スケジューリング"
 
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1507 apps/io.ox/core/desktop.js:1564
-#: apps/io.ox/core/main.js:619 apps/io.ox/core/main.js:625
-#: apps/io.ox/search/main.js:167 module:io.ox/search
-#: apps/io.ox/search/main.js:183 apps/io.ox/search/view-template.js:46
+#: apps/io.ox/core/desktop.js:1507 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1508 apps/io.ox/core/desktop.js:1565
+#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/search/main.js:165 module:io.ox/search
+#: apps/io.ox/search/main.js:181 apps/io.ox/search/view-template.js:48
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "検索"
 
-#: apps/io.ox/core/desktop.js:1498 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1499 module:io.ox/core
 msgid "Search for items"
 msgstr "アイテムを検索"
 
@@ -5487,7 +5494,7 @@ msgstr "既定として設定"
 msgid "Set color"
 msgstr "テキストの色"
 
-#: apps/io.ox/core/main.js:673 module:io.ox/core apps/io.ox/core/main.js:806
+#: apps/io.ox/core/main.js:674 module:io.ox/core apps/io.ox/core/main.js:807
 msgid "Settings"
 msgstr "設定"
 
@@ -5533,8 +5540,8 @@ msgstr "ショッピング カート"
 msgid "Show"
 msgstr "表示"
 
-#: apps/io.ox/contacts/view-detail.js:725 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:730
+#: apps/io.ox/contacts/view-detail.js:726 module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js:731
 msgid "Show QR code"
 msgstr "QR コードを表示"
 
@@ -5556,7 +5563,7 @@ msgid "Show appointment details"
 msgstr "アポイントを表示"
 
 #: apps/plugins/portal/facebook/register.js:29 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:257
+#: apps/plugins/portal/facebook/register.js:279
 msgid "Show comments"
 msgstr "コメントを表示"
 
@@ -5598,6 +5605,12 @@ msgstr "内部リンクを表示"
 msgid "Show legal information"
 msgstr "法的情報を表示"
 
+#: apps/plugins/portal/facebook/register.js:64 module:plugins/portal
+#, fuzzy
+#| msgid "Show comments"
+msgid "Show more comments"
+msgstr "コメントを表示"
+
 #: apps/io.ox/mail/detail/content.js:417 module:io.ox/mail
 #, fuzzy
 msgid "Show quoted text"
@@ -5637,11 +5650,11 @@ msgstr "サイド バー"
 msgid "Sign in"
 msgstr "サイン イン"
 
-#: apps/io.ox/core/main.js:776 module:io.ox/core
+#: apps/io.ox/core/main.js:777 module:io.ox/core
 msgid "Sign out"
 msgstr "サイン アウト"
 
-#: apps/io.ox/core/main.js:402 module:io.ox/core
+#: apps/io.ox/core/main.js:403 module:io.ox/core
 msgid "Sign out now"
 msgstr "サイン アウトしてください。"
 
@@ -5714,7 +5727,7 @@ msgstr "SoftBank"
 msgid "Some fields contain invalid data"
 msgstr "無効なデータが一部のフィールドに入力されています。"
 
-#: apps/plugins/portal/facebook/register.js:120 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:142 module:plugins/portal
 #: apps/plugins/portal/linkedIn/register.js:148
 #: apps/plugins/portal/twitter/register.js:237
 msgid "Something went wrong reauthorizing the %s account."
@@ -6261,7 +6274,7 @@ msgstr "このフォルダは %1$s にあります。"
 msgid "The folder path"
 msgstr "フォルダ パス"
 
-#: apps/io.ox/core/main.js:1124 module:io.ox/core
+#: apps/io.ox/core/main.js:1125 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6595,7 +6608,7 @@ msgid "This is not a valid user or group."
 msgstr "これは、有効なユーザ/グループではありません。"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:193 module:io.ox/contacts
-#: apps/io.ox/contacts/view-detail.js:242
+#: apps/io.ox/contacts/view-detail.js:248
 msgid "This list has no contacts yet"
 msgstr "このリストにはメンバが今のところ追加されていません。"
 
@@ -6955,7 +6968,7 @@ msgstr "チェックボックスを表示"
 msgid "Toggle folder"
 msgstr "フォルダを表示"
 
-#: apps/io.ox/core/desktop.js:1556 module:io.ox/core
+#: apps/io.ox/core/desktop.js:1557 module:io.ox/core
 msgid "Toggle search"
 msgstr "検索フィールドを表示"
 
@@ -7516,7 +7529,7 @@ msgstr "アポイントを仮承諾しました。"
 msgid "You have to enter a username and password to subscribe."
 msgstr "登録するには、ユーザ名とパスワードを入力してください。"
 
-#: apps/plugins/portal/facebook/register.js:54 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:56 module:plugins/portal
 #, fuzzy
 #| msgid "You declined this task"
 msgid "You like this"
@@ -7544,12 +7557,12 @@ msgstr "この出席依頼を仮承諾しました"
 msgid "You tentatively accepted this task"
 msgstr "この仕事を仮承諾しました。"
 
-#: apps/io.ox/core/main.js:379 module:io.ox/core
+#: apps/io.ox/core/main.js:380 module:io.ox/core
 msgid "You will be automatically signed out in %1$d second"
 msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "%1$d 秒後に自動的にサイン アウトされます。"
 
-#: apps/io.ox/core/main.js:833 module:io.ox/core
+#: apps/io.ox/core/main.js:834 module:io.ox/core
 msgid "Your Applications"
 msgstr "マイ アプリケーション"
 
@@ -7640,7 +7653,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "選択された写真は保存後に表示されます。"
 
-#: apps/io.ox/core/main.js:891 module:io.ox/core apps/io.ox/core/relogin.js:46
+#: apps/io.ox/core/main.js:892 module:io.ox/core apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "セッションが期限切れです。"
 
@@ -7695,11 +7708,11 @@ msgid "close"
 msgstr "閉じる"
 
 #. %1$s is app title/name
-#: apps/io.ox/core/main.js:512 module:io.ox/core
+#: apps/io.ox/core/main.js:513 module:io.ox/core
 msgid "close for %1$s"
 msgstr "%1$s を閉じる"
 
-#: apps/plugins/portal/facebook/register.js:230 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:252 module:plugins/portal
 #, fuzzy
 #| msgid "Collapse form"
 msgid "collapse"
@@ -7843,8 +7856,8 @@ msgstr "毎月"
 msgid "every week"
 msgstr "毎週"
 
-#: apps/plugins/portal/facebook/register.js:226 module:plugins/portal
-#: apps/plugins/portal/facebook/register.js:233
+#: apps/plugins/portal/facebook/register.js:248 module:plugins/portal
+#: apps/plugins/portal/facebook/register.js:255
 msgid "expand"
 msgstr ""
 
