@@ -27,13 +27,18 @@ define('io.ox/search/util',
                 mapping = {},
                 module = model.getModule(),
                 app,
-                id;
+                id,
+                accounts = {};
+
+            //infostore hack
+            module = module === 'files' ? 'infostore' : module;
 
             //standard folders for mail
             if (module === 'mail') {
                 _.each(accountAPI.getStandardFolders(), function (id) {
                     mapping[id] = 'standard';
                 });
+                req.push(accountAPI.all());
             }
 
             //default folder
@@ -55,9 +60,21 @@ define('io.ox/search/util',
                 }
             });
 
+            //TODO move account/default folder dingeling into accountAPI
             return $.when.apply($, req)
                     .then(function () {
-                        return _.map(arguments, function (folder) {
+                        var args = Array.prototype.slice.apply(arguments);
+
+                        //store account data
+                        if (_.isArray(args[0])) {
+                            var list = args.shift();
+                            _.each(list, function (account) {
+                                accounts[account.id] = account;
+                            });
+                        }
+
+                        //simplifiy
+                        return _.map(args, function (folder) {
                             return {
                                 id: folder.id,
                                 title: folder.title, //folderAPI.getFolderTitle(folder.title, 15),
@@ -65,6 +82,16 @@ define('io.ox/search/util',
                                 data: folder
                             };
                         });
+                    })
+                    .then(function (list) {
+                        var qualified = {}, id;
+                        _.each(list, function (item) {
+                            id = accountAPI.parseAccountId(item.id);
+                            qualified[id] = qualified[id] || {list: []};
+                            qualified[id].list.push(item);
+                            qualified[id].name = (accounts[id] || {}).displayName;
+                        });
+                        return qualified;
                     });
 
         },

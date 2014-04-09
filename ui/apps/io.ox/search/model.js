@@ -123,8 +123,8 @@ define('io.ox/search/model',
                         pool[facet] = pool[facet] || item;
                         //add value
 
-                        //we have to create custom ids here to support 'global'
-                        if (facet === 'global') {
+                        //we have to create custom ids here to support 'globals'
+                        if (facet === 'global' || facet === value) {
                             //pseudo uuid
                             value = Date.now();
                             itemvalue.id = value;

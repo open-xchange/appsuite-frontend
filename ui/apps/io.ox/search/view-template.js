@@ -405,7 +405,7 @@ define('io.ox/search/view-template',
             dialog.getBody().css({ height: '250px' });
 
             //use foldertree or folderlist
-            var TreeConstructor = ['mail', 'files'].indexOf(type) > 0 ? views.FolderTree : views.FolderList;
+            var TreeConstructor = ['mail', 'files'].indexOf(type) >= 0  ? views.FolderTree : views.FolderList;
             var tree = new TreeConstructor(dialog.getBody(), {
                     type: type === 'files' ? 'infostore' : type,
                     tabindex: 0,
@@ -467,34 +467,47 @@ define('io.ox/search/view-template',
 
             //add fodlers
             util.getFolders(baton.model)
-                .then(function (list) {
-                    //sort by type
-                    list.sort(function (a, b) {
-                        return SORT[a.type] - SORT[b.type];
-                    });
-                    //add option
-                    _.each(list, function (folder) {
+                .then(function (accounts) {
+
+
+                    //split into accounts
+                    _.each(accounts, function (account) {
+                        //sort by type
+                        account.list.sort(function (a, b) {
+                            return SORT[a.type] - SORT[b.type];
+                        });
+
+
+                        //account name as dropdown header
+                        if (accounts.length > 1) {
+                            menu.append(
+                                $('<li role="presentation" class="dropdown-header">')
+                                    .append(account.name)
+                            );
+                        }
+                        //add option
+                        _.each(account.list, function (folder) {
+                            menu.append(
+                                option = $('<li role="presentation">').append(
+                                            $('<a role="menuitem" tabindex="-1" href="#">')
+                                                .append(
+                                                        $('<i class="fa fa-fw fa-none">'),
+                                                        $('<span>').text(folder.title)
+                                                )
+                                                .addClass('option')
+                                                .attr('data-custom', folder.id)
+                                                .attr('title', folder.title)
+                                )
+                            );
+                            if (current === folder.id)
+                                option.find('.fa').removeClass('fa-none').addClass('fa-check');
+                        });
+
+                        //add divider
                         menu.append(
-                            option = $('<li role="presentation">').append(
-                                        $('<a role="menuitem" tabindex="-1" href="#">')
-                                            .append(
-                                                    $('<i class="fa fa-fw fa-none">'),
-                                                    $('<span>').text(folder.title)
-                                            )
-                                            .addClass('option')
-                                            .attr('data-custom', folder.id)
-                                            .attr('title', folder.title)
-                            )
+                            $('<li role="presentation" class="divider">')
                         );
-                        if (current === folder.id)
-                            option.find('.fa').removeClass('fa-none').addClass('fa-check');
                     });
-
-                    //add divider
-                    menu.append(
-                        $('<li role="presentation" class="divider">')
-                    );
-
                     //add option to open dialog
                     menu.append(
                         $('<li role="presentation">').append(
