@@ -174,7 +174,7 @@ define('io.ox/core/tk/autocomplete',
                             o.container.addClass('bottom-placement').css({ top: myTop, left: myLeft + 4, width: w });
                         }
 
-                        o.container.show(o.cbshow || $.noop);
+                        o.container.show(0, o.cbshow || $.noop);
 
                         window.container = o.container;
 
