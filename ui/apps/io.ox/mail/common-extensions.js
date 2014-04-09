@@ -140,14 +140,16 @@ define('io.ox/mail/common-extensions',
 
         answered: function (baton) {
             var data = baton.data,
-                thread = api.threads.get(data) || data,
+                cid = _.cid(data),
+                thread = api.threads.get(cid),
                 isAnswered = util.isAnswered(thread, data);
             if (isAnswered) this.append('<i class="icon-answered fa fa-reply" aria-hidden="true">');
         },
 
         forwarded: function (baton) {
             var data = baton.data,
-                thread = api.threads.get(data) || data,
+                cid = _.cid(data),
+                thread = api.threads.get(cid),
                 isForwarded = util.isForwarded(thread, data);
             if (isForwarded) this.append('<i class="icon-forwarded fa fa-mail-forward" aria-hidden="true">');
         },
