@@ -211,8 +211,8 @@
     // do media queries here
     // TODO define sizes to match pads and phones
     var queries = {
-        small: '(max-width: 480px)',
-        medium: '(min-width: 481px) and (max-width: 1024px)',
+        small: '(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape)',
+        medium: '(min-width: 481px) and (max-width: 1024px) and (orientation: portrait), (min-height: 481px) and (max-height: 1024px) and (orientation: landscape)',
         large: '(min-width: 1025px)',
         landscape: '(orientation: landscape)',
         portrait: '(orientation: portrait)',
@@ -224,6 +224,11 @@
     function queryScreen() {
         for (var q in queries) {
              display[q] = matchMedia(queries[q]).matches;
+        }
+        if (display.large) {
+            display.small = display.medium = false;
+        } else if (display.medium) {
+            display.small = false;
         }
     }
 

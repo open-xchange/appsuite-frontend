@@ -705,6 +705,10 @@
     .message {
         padding: 20px 60px 20px 70px;
         min-height: 30px;
+        & > div {
+            max-height: 300px;
+            overflow: auto;
+        }
     }
 
     .icon {
@@ -1460,6 +1464,19 @@ a.button {
 }
 
 /* ---- */
+
+.vsplit .resizebar {
+    background: 0 0;
+    width: 5px;
+    height: 100%;
+    position: relative;
+    z-index: 10000;
+    float: right;
+    cursor: e-resize;
+    cursor: ew-resize;
+    cursor: col-resize;
+    right: -3px;
+}
 
 .leftside {
     position: absolute;
