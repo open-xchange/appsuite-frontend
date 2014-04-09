@@ -17,7 +17,7 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
 
     var expect = chai.expect;
 
-    describe('The Threadview.', function () {
+    describe.only('The Threadview.', function () {
 
         beforeEach(function () {
             this.view = new threadview.Desktop();
@@ -149,6 +149,13 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
                 expect(items.eq(0).find('.from').text()).to.equal('Otto Xentner');
                 expect(items.eq(1).find('.from').text()).to.equal('Matthias Biggeleben');
                 expect(items.eq(2).find('.from').text()).to.equal('Otto Xentner');
+            });
+
+            it('should not mix up first and last messages', function () {
+                var items = this.view.getItems();
+                expect(items.eq(0).find('.date').text()).to.equal('13.11.2013 22:42');
+                expect(items.eq(1).find('.date').text()).to.equal('13.11.2013 16:42');
+                expect(items.eq(2).find('.date').text()).to.equal('13.11.2013 10:42');
             });
 
             describe('Add a message', function () {
