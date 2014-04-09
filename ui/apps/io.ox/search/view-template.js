@@ -41,7 +41,6 @@ define('io.ox/search/view-template',
 
             this.append(
                 $('<div class="input-group">')
-                    .addClass(mode === 'widget' ? 'input-group-sm' : '')
                     .append(
                         ref = $('<input type="text" class="form-control search-field" tabindex="1">')
                         .attr({
@@ -86,16 +85,11 @@ define('io.ox/search/view-template',
                                 if (mode === 'widget') {
                                     model.remove();
                                 }
+                                ref.val('');
                                 model.add(value.facet, value.id);
                             }
                         })
-                        .on('selected', function (e, val, valid) {
-                            //valid_ usually val.length >= 3
-                            if (valid)
-                                ref.val('');
-                        })
                         .on('focus', function () {
-                            //draw dropdown on focus
                             ref.trigger('keyup', true);
                         }),
                         $('<span class="input-group-btn">').append(
@@ -410,6 +404,8 @@ define('io.ox/search/view-template',
                     type: type === 'files' ? 'infostore' : type,
                     tabindex: 0,
                     rootFolderId: type === 'files' ? '9' : '1',
+                    dialogmode: true,
+                    targetmode: true,
                     customize: function (data) {
                         if (data.id === id) {
                             this.removeClass('selectable').addClass('disabled');

@@ -43,11 +43,46 @@ define('io.ox/search/view',
 
                 return this;
             },
+            idle: function () {
+                var container = this.$el.find('.query');
+                //input
+                container.find('.search-field')
+                 .prop('disabled', false);
+                //button
+                container.find('.btn-search>.fa')
+                    .prop('disabled', false);
+                //busy node
+                this.$el.find('.result').find('.busy').remove();
+            },
+            busy: function () {
+                var container = this.$el.find('.query'),
+                    result = this.$el.find('.result');
+                //input
+                container.find('.search-field')
+                        .prop('disabled', true);
+                //button
+                container.find('.btn-search>.fa')
+                    .prop('disabled', true);
+                //result row
+                result.empty();
+                result.append(
+                    $('<div class="col-xs-12 busy">')
+                        .css('min-height', '50px')
+                        .busy()
+                );
+                return this;
+            },
             redraw: function () {
                 var mode = this.baton.model.get('mode'),
                     node = $('<span>');
                 if (mode !== 'widget') {
+                    //draw into dummy node
                     this.render(node);
+                    //TODO: keep search string the ugly way
+                    node.find('.search-field').val(
+                        this.$el.find('.search-field').val()
+                    );
+                    //replace
                     this.$el.empty();
                     this.$el.append(node.children());
                 }

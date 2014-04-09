@@ -113,24 +113,13 @@ define('io.ox/search/main',
         if (!ox.ui.apps.get(app))
             ox.ui.apps.add(app);
     });
+
     app.busy = function () {
-        var container = app.view.$el.find('.query');
-        container.find('.search-field')
-                 .prop('disabled', true);
-        container.find('.btn-search>.fa')
-            .prop('disabled', true)
-            .removeClass('fa-search')
-            .addClass('fa-refresh fa-spin');
+        app.view.busy();
     };
 
     app.idle = function () {
-        var container = app.view.$el.find('.query');
-        container.find('.search-field')
-                 .prop('disabled', false);
-        container.find('.btn-search>.fa')
-            .prop('disabled', false)
-            .removeClass('fa-refresh fa-spin')
-            .addClass('fa-search');
+        app.view.idle();
     };
 
     //reduced version of app.quit to ensure app/window is reusable
@@ -246,21 +235,18 @@ define('io.ox/search/main',
 
                 function getResults(opt) {
                     // TODO: better solution needed
-                    var dummy = {
-                            num_found: -1,
-                            results: [],
-                            size: 0,
-                            start: 0
-                        },
-                        folderOnly = !opt.data.facets.length || (opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder');
+                    var folderOnly = !opt.data.facets.length || (opt.data.facets.length === 1 && opt.data.facets[0].facet === 'folder');
                     //call server
-                    return folderOnly ? $.Deferred().resolve(dummy) : api.query(opt);
+                    return folderOnly ? $.Deferred().resolve(undefined) : api.query(opt);
                 }
 
                 function drawResults(result) {
                     var start = Date.now();
-                    model.setItems(result, start);
-                    run();
+                    if (result) {
+                        model.setItems(result, start);
+                        run();
+                    }
+                    app.idle();
                 }
 
                 function fail(result) {

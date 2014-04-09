@@ -176,28 +176,23 @@
             margin-bottom: 14px;
             max-width: 500px;
 
-            &.applications {
-                max-width: none;
-            }
         }
 
         ul, ol {
             margin-bottom: 0;
         }
 
-        .application {
-            display: inline-block;
-            .btn-group {
-                button {
-                    border-radius: 0;
-                }
-            }
-        }
-        //remove right margin from last application
+
         .applications {
-            li:last-child {
+            margin-bottom: 6px;
+
+            .application {
+                display: inline-block;
+                margin-bottom: 8px;
                 .btn-group {
-                    margin-right: 0;
+                    button {
+                        border-radius: 0;
+                    }
                 }
             }
         }
@@ -211,6 +206,9 @@
                 button {
                     background-color: #E6E6E6;
                     border: transparent;
+                    //inherited from btn-group
+                    -webkit-box-shadow: none;
+                    box-shadow: none;
                 }
             }
         }
