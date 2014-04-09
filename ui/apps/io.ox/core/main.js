@@ -823,7 +823,7 @@ define('io.ox/core/main',
                 index: 2000,
                 draw: function () {
                     this.append(
-                        addLauncher('right', $('<i class="icon-off launcher-icon">').attr('aria-hidden', 'true'), function () {
+                        addLauncher('right', $('<i class="fa fa-power-off launcher-icon">').attr('aria-hidden', 'true'), function () {
                             logout();
                         },  gt('Sign out'))
                     );

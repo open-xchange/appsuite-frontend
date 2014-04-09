@@ -132,7 +132,7 @@ define('io.ox/portal/settings/pane',
             }
         } else {
             if (_.device('small')) {
-                var iconClass = (type === 'edit' ? 'fa fa-pencil' : 'icon-off');
+                var iconClass = (type === 'edit' ? 'fa fa-pencil' : 'fa fa-power-off');
                 return $(target).append($('<i>').addClass(iconClass).css('font-size', '20px'));
             } else {
                 return target.text(text);
