@@ -61,7 +61,7 @@ define('plugins/portal/facebook/register',
     };
 
     var addCommentlink = function (postComments, nextIndex, profiles, wall_content) {
-        var link = $('<button tabindex=1 class="comment-link btn-link", nextIndex=' + nextIndex + '>').text(gt('Show more comments')).hide().click(function (){
+        var link = $('<button tabindex=1 class="comment-link btn-link", nextIndex=' + nextIndex + '>').text(gt('Show more comments')).hide().click(function () {
             link.detach();//remove link from dom but don't delete it yet
             var tempIndex = parseInt(link.attr('nextIndex'));
             //render next 25 comments
