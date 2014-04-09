@@ -278,23 +278,17 @@ define('io.ox/contacts/actions',
         }
     });
 
-    /**
-     * check for containing contacts
-     * @param  {object|array}
-     * @return {deferred} returns boolean
-     */
-    function hasContacts(data) {
-        return api.getList(data)
-                .pipe(function (list) {
-                    //ignore distribution lists
-                    return (_.where(list, {mark_as_distributionlist: false})).length > 0;
-                });
-    }
-
     new Action('io.ox/contacts/actions/print', {
         requires: function (e) {
-            //apply async check only if sync checks pass
-            return e.collection.has('some', 'read') && _.device('!small') ? hasContacts(e.context) : false;
+            if (_.device('small')) return false;
+            // check if collection has min 1 contact
+            return api.getList(e.context)
+                .then(function (list) {
+                    //ignore distribution lists
+                    return e.collection.has('some', 'read') && (_.filter([].concat(list), function (el) {
+                        return !el.mark_as_distributionlist;
+                    })).length > 0;
+                });
         },
         multiple: function (list) {
             print.request('io.ox/contacts/print', list);
