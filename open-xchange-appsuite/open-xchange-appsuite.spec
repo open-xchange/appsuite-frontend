@@ -46,7 +46,7 @@ This package contains the manifest for installation on the backend.
 
 %package       l10n-cs-cz
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (cs_CZ)
 Requires:      open-xchange-l10n-cs-cz
 Provides:      open-xchange-appsuite-l10n
 
@@ -55,7 +55,7 @@ Translation of the OX App Suite HTML5 client (cs_CZ)
 
 %package       l10n-da-dk
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (da_DK)
 Requires:      open-xchange-l10n-da-dk
 Provides:      open-xchange-appsuite-l10n
 
@@ -64,7 +64,7 @@ Translation of the OX App Suite HTML5 client (da_DK)
 
 %package       l10n-de-de
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (de_DE)
 Requires:      open-xchange-l10n-de-de
 Provides:      open-xchange-appsuite-l10n
 
@@ -73,7 +73,7 @@ Translation of the OX App Suite HTML5 client (de_DE)
 
 %package       l10n-en-gb
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (en_GB)
 Requires:      open-xchange-l10n-en-gb
 Provides:      open-xchange-appsuite-l10n
 
@@ -82,7 +82,7 @@ Translation of the OX App Suite HTML5 client (en_GB)
 
 %package       l10n-en-us
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (en_US)
 Requires:      open-xchange-l10n-en-us
 Provides:      open-xchange-appsuite-l10n
 
@@ -91,7 +91,7 @@ Translation of the OX App Suite HTML5 client (en_US)
 
 %package       l10n-es-es
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (es_ES)
 Requires:      open-xchange-l10n-es-es
 Provides:      open-xchange-appsuite-l10n
 
@@ -100,7 +100,7 @@ Translation of the OX App Suite HTML5 client (es_ES)
 
 %package       l10n-es-mx
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (es_MX)
 Requires:      open-xchange-l10n-es-mx
 Provides:      open-xchange-appsuite-l10n
 
@@ -109,7 +109,7 @@ Translation of the OX App Suite HTML5 client (es_MX)
 
 %package       l10n-fi-fi
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (fi_FI)
 Requires:      open-xchange-l10n-fi-fi
 Provides:      open-xchange-appsuite-l10n
 
@@ -118,7 +118,7 @@ Translation of the OX App Suite HTML5 client (fi_FI)
 
 %package       l10n-fr-ca
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (fr_CA)
 Requires:      open-xchange-l10n-fr-ca
 Provides:      open-xchange-appsuite-l10n
 
@@ -127,7 +127,7 @@ Translation of the OX App Suite HTML5 client (fr_CA)
 
 %package       l10n-fr-fr
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (fr_FR)
 Requires:      open-xchange-l10n-fr-fr
 Provides:      open-xchange-appsuite-l10n
 
@@ -136,7 +136,7 @@ Translation of the OX App Suite HTML5 client (fr_FR)
 
 %package       l10n-hu-hu
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (hu_HU)
 Requires:      open-xchange-l10n-hu-hu
 Provides:      open-xchange-appsuite-l10n
 
@@ -145,7 +145,7 @@ Translation of the OX App Suite HTML5 client (hu_HU)
 
 %package       l10n-it-it
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (it_IT)
 Requires:      open-xchange-l10n-it-it
 Provides:      open-xchange-appsuite-l10n
 
@@ -154,7 +154,7 @@ Translation of the OX App Suite HTML5 client (it_IT)
 
 %package       l10n-ja-jp
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (ja_JP)
 Requires:      open-xchange-l10n-ja-jp
 Provides:      open-xchange-appsuite-l10n
 
@@ -163,7 +163,7 @@ Translation of the OX App Suite HTML5 client (ja_JP)
 
 %package       l10n-lv-lv
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (lv_LV)
 Requires:      open-xchange-l10n-lv-lv
 Provides:      open-xchange-appsuite-l10n
 
@@ -172,7 +172,7 @@ Translation of the OX App Suite HTML5 client (lv_LV)
 
 %package       l10n-nl-nl
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (nl_NL)
 Requires:      open-xchange-l10n-nl-nl
 Provides:      open-xchange-appsuite-l10n
 
@@ -181,7 +181,7 @@ Translation of the OX App Suite HTML5 client (nl_NL)
 
 %package       l10n-pl-pl
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (pl_PL)
 Requires:      open-xchange-l10n-pl-pl
 Provides:      open-xchange-appsuite-l10n
 
@@ -190,7 +190,7 @@ Translation of the OX App Suite HTML5 client (pl_PL)
 
 %package       l10n-pt-br
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (pt_BR)
 Requires:      open-xchange-l10n-pt-br
 Provides:      open-xchange-appsuite-l10n
 
@@ -199,7 +199,7 @@ Translation of the OX App Suite HTML5 client (pt_BR)
 
 %package       l10n-ro-ro
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (ro_RO)
 Requires:      open-xchange-l10n-ro-ro
 Provides:      open-xchange-appsuite-l10n
 
@@ -208,7 +208,7 @@ Translation of the OX App Suite HTML5 client (ro_RO)
 
 %package       l10n-ru-ru
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (ru_RU)
 Requires:      open-xchange-l10n-ru-ru
 Provides:      open-xchange-appsuite-l10n
 
@@ -217,7 +217,7 @@ Translation of the OX App Suite HTML5 client (ru_RU)
 
 %package       l10n-sk-sk
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (sk_SK)
 Requires:      open-xchange-l10n-sk-sk
 Provides:      open-xchange-appsuite-l10n
 
@@ -226,7 +226,7 @@ Translation of the OX App Suite HTML5 client (sk_SK)
 
 %package       l10n-sv-se
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (sv_SE)
 Requires:      open-xchange-l10n-sv-se
 Provides:      open-xchange-appsuite-l10n
 
@@ -235,7 +235,7 @@ Translation of the OX App Suite HTML5 client (sv_SE)
 
 %package       l10n-zh-cn
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (zh_CN)
 Requires:      open-xchange-l10n-zh-cn
 Provides:      open-xchange-appsuite-l10n
 
@@ -244,7 +244,7 @@ Translation of the OX App Suite HTML5 client (zh_CN)
 
 %package       l10n-zh-tw
 Group:         Applications/Productivity
-Summary:       Translation of the OX App Suite HTML5 client (## Lang ##)
+Summary:       Translation of the OX App Suite HTML5 client (zh_TW)
 Requires:      open-xchange-l10n-zh-tw
 Provides:      open-xchange-appsuite-l10n
 
