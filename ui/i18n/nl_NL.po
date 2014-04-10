@@ -294,7 +294,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elementen geselecteerd"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:496 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:498 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "Een ontvangstbevestigingsverzoek is verzonden"
@@ -430,13 +430,13 @@ msgstr "Versleutelcode toevoegen"
 msgid "Add condition"
 msgstr "Voorwaarde toevoegen"
 
-#: apps/io.ox/contacts/actions.js:695 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:689 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js:98
 #: apps/io.ox/contacts/distrib/create-dist-view.js:100
 msgid "Add contact"
 msgstr "Contactpersoon toevoegen"
 
-#: apps/io.ox/contacts/actions.js:702 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:696 module:io.ox/contacts
 msgid "Add distribution list"
 msgstr "Distributielijst toevoegen"
 
@@ -501,7 +501,7 @@ msgstr "Ondertekening toevoegen"
 msgid "Add subject"
 msgstr "Onderwerp toevoegen"
 
-#: apps/io.ox/contacts/actions.js:782 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:776 module:io.ox/contacts
 #: apps/io.ox/mail/actions.js:1143 module:io.ox/mail
 msgid "Add to address book"
 msgstr "Aan adresboek toevoegen"
@@ -510,7 +510,7 @@ msgstr "Aan adresboek toevoegen"
 msgid "Add to calendar"
 msgstr "Aan agenda toevoegen"
 
-#: apps/io.ox/contacts/actions.js:761 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:755 module:io.ox/contacts
 #: apps/io.ox/files/actions.js:882 module:io.ox/files
 #: apps/io.ox/files/actions.js:1276 apps/io.ox/mail/actions.js:1133
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js:159
@@ -599,7 +599,7 @@ msgstr "Alle bijlagen"
 msgid "All day"
 msgstr "Gehele dag"
 
-#: apps/io.ox/search/view-template.js:446 module:io.ox/core
+#: apps/io.ox/search/view-template.js:442 module:io.ox/core
 #, fuzzy
 #| msgid "Add folder"
 msgid "All folders"
@@ -812,7 +812,7 @@ msgstr[1] "Bijlagen zijn opgeslagen"
 msgid "Attachments"
 msgstr "Bijlagen"
 
-#: apps/io.ox/contacts/actions.js:625 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:619 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:572 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/actions.js:423 module:io.ox/tasks
 msgid "Attachments have been saved!"
@@ -888,7 +888,7 @@ msgid "B"
 msgstr "B"
 
 #. Used as button label for a navigation action, like the browser back button
-#: apps/io.ox/core/commons.js:666 module:io.ox/core
+#: apps/io.ox/core/commons.js:668 module:io.ox/core
 #: apps/io.ox/mail/main.js:140 module:io.ox/mail apps/io.ox/mail/main.js:145
 #: apps/io.ox/mail/threadview.js:39
 msgid "Back"
@@ -904,7 +904,7 @@ msgstr "Terug naar afspraak"
 msgid "Basic settings"
 msgstr "Basisinstellingen"
 
-#: apps/io.ox/mail/common-extensions.js:230 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:232 module:io.ox/mail
 msgid "Bcc"
 msgstr "Bcc"
 
@@ -1058,7 +1058,7 @@ msgstr "Agenda"
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:404
+#: apps/io.ox/search/view-template.js:398
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:60
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:196
@@ -1436,7 +1436,7 @@ msgstr "Contacten zijn verplaatst"
 msgid "Contains"
 msgstr "Bevat"
 
-#: apps/io.ox/core/main.js:1130 module:io.ox/core
+#: apps/io.ox/core/main.js:1146 module:io.ox/core
 msgid "Continue"
 msgstr "Verder"
 
@@ -1451,7 +1451,7 @@ msgid "Conversations"
 msgstr "Conversaties"
 
 #: apps/io.ox/contacts/actions.js:193 module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:775 apps/io.ox/files/actions.js:628
+#: apps/io.ox/contacts/actions.js:769 apps/io.ox/files/actions.js:628
 #: module:io.ox/files apps/io.ox/files/actions.js:916
 #: apps/io.ox/files/actions.js:1296 apps/io.ox/mail/actions.js:336
 #: module:io.ox/mail apps/io.ox/mail/actions.js:1087
@@ -1459,7 +1459,7 @@ msgstr "Conversaties"
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: apps/io.ox/mail/common-extensions.js:219 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:221 module:io.ox/mail
 #: apps/io.ox/mail/print.js:72
 msgctxt "CC"
 msgid "Copy"
@@ -1507,7 +1507,7 @@ msgid "Could not load new Tweets."
 msgstr "Kan geen nieuwe Tweets laden."
 
 #: apps/io.ox/core/tk/autocomplete.js:305 module:io.ox/mail
-#: apps/io.ox/core/tk/vgrid.js:847 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:872 module:io.ox/core
 msgid "Could not load this list"
 msgstr "Kan deze lijst niet laden."
 
@@ -1759,7 +1759,7 @@ msgstr "Uitgesteld"
 #: apps/io.ox/calendar/actions.js:622
 #: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:754 apps/io.ox/contacts/main.js:107
+#: apps/io.ox/contacts/actions.js:748 apps/io.ox/contacts/main.js:107
 #: apps/io.ox/core/commons-folderview.js:383 module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:593 apps/io.ox/files/actions.js:327
 #: module:io.ox/files apps/io.ox/files/actions.js:682
@@ -2057,7 +2057,7 @@ msgstr "Voltooid"
 msgid "Doubleclick in this row for whole day appointment"
 msgstr "Klik voor een dagafspraak"
 
-#: apps/io.ox/contacts/actions.js:811 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:805 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:459 module:io.ox/core/tk/attachments
 #: apps/io.ox/files/actions.js:827 module:io.ox/files
 #: apps/io.ox/files/actions.js:966 apps/io.ox/files/actions.js:1228
@@ -2173,7 +2173,7 @@ msgstr "EB"
 
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
-#: apps/io.ox/contacts/actions.js:745 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:739 module:io.ox/contacts
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:819 module:io.ox/files
 #: apps/io.ox/mail/actions.js:976 module:io.ox/mail
@@ -2346,7 +2346,7 @@ msgid "Employee type"
 msgstr "Type werknemer"
 
 #. list is empty / no items
-#: apps/io.ox/core/tk/vgrid.js:728 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:753 module:io.ox/core
 msgctxt "vgrid"
 msgid "Empty"
 msgstr "Leeg"
@@ -2602,7 +2602,7 @@ msgstr "Externe e-mailaccounts"
 msgid "External contact"
 msgstr "Extern contact"
 
-#: apps/io.ox/mail/common-extensions.js:442 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:444 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -2790,8 +2790,8 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:300 module:io.ox/core
-#: apps/io.ox/search/view-template.js:397
+#: apps/io.ox/search/view-template.js:294 module:io.ox/core
+#: apps/io.ox/search/view-template.js:391
 msgid "Folder"
 msgstr "Map"
 
@@ -3317,7 +3317,7 @@ msgstr "Instant Messenger 2"
 msgid "Invalid data"
 msgstr "Ongeldige gegevens"
 
-#: apps/io.ox/contacts/actions.js:737 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:731 module:io.ox/contacts
 #: apps/io.ox/mail/actions.js:1058 module:io.ox/mail
 msgid "Invite to appointment"
 msgstr "Uitnodigen voor een afspraak"
@@ -3346,7 +3346,7 @@ msgstr "Is exact"
 msgid "Is smaller than"
 msgstr "Is kleinder dan"
 
-#: apps/io.ox/core/commons.js:659 module:io.ox/core
+#: apps/io.ox/core/commons.js:661 module:io.ox/core
 msgid "Items"
 msgstr "Items"
 
@@ -3846,14 +3846,14 @@ msgstr "Maanden"
 #: apps/io.ox/core/extPatterns/links.js:340 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:504
+#: apps/io.ox/search/view-template.js:513
 msgid "More"
 msgstr "Meer"
 
 #: apps/io.ox/calendar/actions.js:415 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:603
 #: apps/io.ox/contacts/actions.js:192 module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:768
+#: apps/io.ox/contacts/actions.js:762
 #: apps/io.ox/core/commons-folderview.js:612 module:io.ox/core
 #: apps/io.ox/files/actions.js:627 module:io.ox/files
 #: apps/io.ox/files/actions.js:906 apps/io.ox/files/actions.js:1284
@@ -4083,7 +4083,7 @@ msgstr "Geen kennisgevingen"
 
 # (Reinout)
 # Elma: links wordt veel vaker gebruikt?
-#: apps/io.ox/contacts/actions.js:582 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:576 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:508 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/actions.js:380 module:io.ox/tasks
 msgid "No preview available"
@@ -4279,7 +4279,7 @@ msgstr "Open een externe link"
 msgid "Open folder view"
 msgstr "Mappenoverzicht"
 
-#: apps/io.ox/contacts/actions.js:804 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:798 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:452 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1171 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:600 module:io.ox/tasks
@@ -4738,7 +4738,7 @@ msgstr "Selecteer een geldig iCal bestand voor import"
 msgid "Please select a valid image File to insert"
 msgstr "Selecteer een geldig afbeeldingsbestand om te plaatsen"
 
-#: apps/io.ox/core/main.js:893 module:io.ox/core apps/io.ox/core/relogin.js:48
+#: apps/io.ox/core/main.js:909 module:io.ox/core apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Meld opnieuw aan om door te gaan"
 
@@ -4838,7 +4838,7 @@ msgstr "Klik hier om alle taakuitnodigen te verbergen."
 msgid "Press to hide all task reminders."
 msgstr "Klik hier om alle taakherinneringen te verbergen."
 
-#: apps/io.ox/contacts/actions.js:797 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:791 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:445 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/attachmentsUtil.js:93 apps/io.ox/mail/actions.js:1164
 #: module:io.ox/mail apps/io.ox/tasks/actions.js:593 module:io.ox/tasks
@@ -4862,8 +4862,8 @@ msgid "Primary account"
 msgstr "Primair account"
 
 #: apps/io.ox/calendar/actions.js:569 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:612 apps/io.ox/contacts/actions.js:325
-#: module:io.ox/contacts apps/io.ox/contacts/actions.js:729
+#: apps/io.ox/calendar/actions.js:612 apps/io.ox/contacts/actions.js:319
+#: module:io.ox/contacts apps/io.ox/contacts/actions.js:723
 #: apps/io.ox/core/print.js:108 module:io.ox/core
 #: apps/io.ox/mail/actions.js:1096 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:130 apps/io.ox/tasks/actions.js:578
@@ -5233,11 +5233,11 @@ msgstr "Brongroep"
 msgid "Resources"
 msgstr "Bronnen"
 
-#: apps/io.ox/core/main.js:1123 module:io.ox/core
+#: apps/io.ox/core/main.js:1139 module:io.ox/core
 msgid "Restore applications"
 msgstr "Applicaties herstellen"
 
-#: apps/io.ox/core/commons.js:801 module:io.ox/core
+#: apps/io.ox/core/commons.js:803 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:308 module:io.ox/mail
 msgid "Retry"
 msgstr "Opnieuw proberen"
@@ -5339,7 +5339,7 @@ msgstr "Opslaan als"
 msgid "Save attachment"
 msgstr "Bijlage verwijderen"
 
-#: apps/io.ox/contacts/actions.js:818 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:812 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:466 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1185 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:614 module:io.ox/tasks
@@ -5378,8 +5378,8 @@ msgstr "Planning"
 #: apps/io.ox/core/desktop.js:1507 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1508 apps/io.ox/core/desktop.js:1565
 #: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
-#: apps/io.ox/search/main.js:165 module:io.ox/search
-#: apps/io.ox/search/main.js:181 apps/io.ox/search/view-template.js:48
+#: apps/io.ox/search/main.js:154 module:io.ox/search
+#: apps/io.ox/search/main.js:170 apps/io.ox/search/view-template.js:47
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Zoeken"
@@ -5411,8 +5411,8 @@ msgstr "Alle mappen doorzocht"
 msgid "Searching for objects"
 msgstr "Zoeken naar objecten"
 
-#: apps/io.ox/core/tk/vgrid.js:281 module:io.ox/core
-#: apps/io.ox/core/tk/vgrid.js:399 apps/io.ox/core/tk/vgrid.js:411
+#: apps/io.ox/core/tk/vgrid.js:299 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:424 apps/io.ox/core/tk/vgrid.js:436
 #: apps/io.ox/mail/settings/signatures/register.js:210 module:io.ox/mail
 #: apps/io.ox/mail/view-options.js:98
 msgid "Select all"
@@ -5424,7 +5424,7 @@ msgstr "Selecteer alles"
 msgid "Select folder"
 msgstr "Selecteer map"
 
-#: apps/io.ox/core/tk/vgrid.js:399 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:424 module:io.ox/core
 msgid "Select none"
 msgstr "Selecteer niets"
 
@@ -5443,7 +5443,7 @@ msgid "Send"
 msgstr "Verzenden"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:528 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:530 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Verzend een ontvangstbevestiging"
@@ -5453,7 +5453,7 @@ msgstr "Verzend een ontvangstbevestiging"
 msgid "Send as internal link"
 msgstr "Verstuur als interne link"
 
-#: apps/io.ox/contacts/actions.js:722 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:716 module:io.ox/contacts
 msgid "Send as vCard"
 msgstr "Versturen als vCard"
 
@@ -5466,7 +5466,7 @@ msgstr "Verzenden via e-mailbericht"
 msgid "Send feedback"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:714 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:708 module:io.ox/contacts
 msgid "Send mail"
 msgstr "E-mailbericht verzenden"
 
@@ -5543,7 +5543,7 @@ msgstr "Als standaard instellen"
 msgid "Set color"
 msgstr ""
 
-#: apps/io.ox/core/main.js:674 module:io.ox/core apps/io.ox/core/main.js:807
+#: apps/io.ox/core/main.js:674 module:io.ox/core apps/io.ox/core/main.js:809
 msgid "Settings"
 msgstr "Instellingen"
 
@@ -5638,7 +5638,7 @@ msgstr "Toon voltooide taken"
 msgid "Show hidden files and folders"
 msgstr "Verborgen bestanden en mappen tonen"
 
-#: apps/io.ox/mail/common-extensions.js:441 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:443 module:io.ox/mail
 msgid "Show images"
 msgstr "Afbeeldingen tonen"
 
@@ -5701,7 +5701,7 @@ msgstr "Zijbalk"
 msgid "Sign in"
 msgstr "Aanmelden"
 
-#: apps/io.ox/core/main.js:777 module:io.ox/core
+#: apps/io.ox/core/main.js:778 module:io.ox/core apps/io.ox/core/main.js:828
 msgid "Sign out"
 msgstr "Afmelden"
 
@@ -5750,7 +5750,7 @@ msgstr "Grote"
 msgid "Size (bytes)"
 msgstr "Grootte (bytes)"
 
-#: apps/io.ox/contacts/actions.js:790 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:784 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:438 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1157 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:586 module:io.ox/tasks
@@ -6335,7 +6335,7 @@ msgstr "De map is beschikbaar vanaf %1$s"
 msgid "The folder path"
 msgstr "Het pad naar een map"
 
-#: apps/io.ox/core/main.js:1125 module:io.ox/core
+#: apps/io.ox/core/main.js:1141 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6381,7 +6381,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "De gegeven bestandsnaam is langer dan de toegestane lengte."
 
-#: apps/io.ox/mail/common-extensions.js:531 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:533 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -6539,7 +6539,7 @@ msgstr ""
 msgid "This contact is private and cannot be shared"
 msgstr "Deze contactpersoon is privé en kan niet worden gedeeld"
 
-#: apps/io.ox/contacts/actions.js:476 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:470 module:io.ox/contacts
 msgid "This distribution list has been added to the portal"
 msgstr "Deze distributielijst is toegevoegd aan het portaal"
 
@@ -6763,7 +6763,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titel"
 
-#: apps/io.ox/mail/common-extensions.js:208 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:210 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:71
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7039,7 +7039,7 @@ msgstr ""
 msgid "Today"
 msgstr "Vandaag"
 
-#: apps/io.ox/core/tk/vgrid.js:287 module:io.ox/core
+#: apps/io.ox/core/tk/vgrid.js:305 module:io.ox/core
 msgid "Toggle checkboxes"
 msgstr "Selectievlak omschakelen"
 
@@ -7359,7 +7359,7 @@ msgstr "Bron tonen"
 msgid "Waiting"
 msgstr "Wachten"
 
-#: apps/io.ox/mail/common-extensions.js:469 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:471 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Waarschuwing: Dit bericht kan e-mailzwendel zijn!"
 
@@ -7646,7 +7646,7 @@ msgid_plural "You will be automatically signed out in %1$d seconds"
 msgstr[0] "U wordt over %1$d seconde automatisch afgemeld"
 msgstr[1] "U wordt over %1$d seconden automatisch afgemeld"
 
-#: apps/io.ox/core/main.js:834 module:io.ox/core
+#: apps/io.ox/core/main.js:850 module:io.ox/core
 msgid "Your Applications"
 msgstr "Uw Applicaties"
 
@@ -7734,7 +7734,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "De foto die u geselecteerd hebt zal na opslag worden weergegeven"
 
-#: apps/io.ox/core/main.js:892 module:io.ox/core apps/io.ox/core/relogin.js:46
+#: apps/io.ox/core/main.js:908 module:io.ox/core apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "Uw sessie is verlopen"
 
@@ -7768,12 +7768,12 @@ msgid "and"
 msgstr "en"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:245 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:247 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:339 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:341 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
@@ -8164,8 +8164,8 @@ msgid "total"
 msgstr ""
 
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
-#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:403
-#: apps/io.ox/mail/util.js:416
+#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:404
+#: apps/io.ox/mail/util.js:417
 msgid "unknown"
 msgstr "onbekend"
 
