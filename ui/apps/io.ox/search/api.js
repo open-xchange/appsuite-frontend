@@ -15,7 +15,8 @@ define('io.ox/search/api',
     ['io.ox/core/http',
      'io.ox/core/cache',
      'io.ox/core/api/factory',
-    ], function (http, cache, apiFactory) {
+     'settings!io.ox/contacts'
+    ], function (http, cache, apiFactory, settings) {
 
     'use strict';
 
@@ -30,7 +31,8 @@ define('io.ox/search/api',
                     action: 'autocomplete',
                     module: '',
                     //max. number of values for each facet
-                    limit: 3
+                    limit: 3,
+                    admin: ''
                 },
                 data: {
                     prefix: '',
@@ -42,7 +44,8 @@ define('io.ox/search/api',
                 method: 'PUT',
                 params: {
                     action: 'query',
-                    module: ''
+                    module: '',
+                    admin: ''
                 },
                 data: {
                     facets: [],
@@ -55,7 +58,10 @@ define('io.ox/search/api',
 
     //get default options
     function getDefault(key) {
-        return _.copy(api.options.requests[key], true);
+        var  obj = _.copy(api.options.requests[key], true);
+        //filter admin contacts
+        _.extend(obj.params, {admin: settings.get('showAdmin', false)});
+        return obj;
     }
 
     /**

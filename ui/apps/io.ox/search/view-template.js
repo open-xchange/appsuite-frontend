@@ -45,7 +45,6 @@ define('io.ox/search/view-template',
                         ref = $('<input type="text" class="form-control search-field" tabindex="1">')
                         .attr({
                             placeholder: gt('Search') + ' ...'
-                            //autofocus: mode === 'widget'
                         })
                         .autocomplete({
                             api: app.apiproxy,
@@ -89,12 +88,30 @@ define('io.ox/search/view-template',
                                 model.add(value.facet, value.id);
                             }
                         })
-                        .on('focus', function () {
-                            ref.trigger('keyup', true);
+                        .on('focus focus:custom', function (e, isRetry) {
+                            //simulate tab keyup event
+                            ref.trigger({
+                                    type: 'keyup',
+                                    which: 9
+                                }, isRetry);
+
+                        })
+                        .on('keyup', function (e, isRetry) {
+                            //adjust original event instead of throwing a new one cause
+                            //handler (fnKeyUp) is debounced and we have set the isRetry flag
+
+                            //isRetry argument is used for custom events thrown via trigger
+
+                            //tab used to focus
+                            //use e.data for orign event
+                            if (e.which === 9  && _.isUndefined(isRetry)) {
+                                e.data = {isRetry: true};
+                            }
                         }),
                         $('<span class="input-group-btn">').append(
                             //submit
                             $('<button type="button" class="btn btn-default btn-search">')
+                            .attr('aria-label', gt('Search'))
                             .append(
                                 $('<i class="fa fa-search"></i>')
                             )
@@ -465,9 +482,14 @@ define('io.ox/search/view-template',
             util.getFolders(baton.model)
                 .then(function (accounts) {
 
+                    //handle each account
+                    _.each(accounts, function (account, key) {
 
-                    //split into accounts
-                    _.each(accounts, function (account) {
+                        //reduce list for non primary accounts
+                        if (key !== '0') {
+                            account.list  = account.list.slice(0, 2);
+                        }
+
                         //sort by type
                         account.list.sort(function (a, b) {
                             return SORT[a.type] - SORT[b.type];
@@ -475,7 +497,7 @@ define('io.ox/search/view-template',
 
 
                         //account name as dropdown header
-                        if (accounts.length > 1) {
+                        if (Object.keys(accounts).length > 1) {
                             menu.append(
                                 $('<li role="presentation" class="dropdown-header">')
                                     .append(account.name)

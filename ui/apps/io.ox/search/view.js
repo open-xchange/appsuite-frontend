@@ -87,6 +87,11 @@ define('io.ox/search/view',
                     this.$el.append(node.children());
                 }
                 return this;
+            },
+            focus: function (isRetry) {
+                var searchfield = this.$el.find('.search-field');
+                //set focus and trigger autocomplete
+                searchfield.trigger('focus:custom', isRetry);
             }
         });
 

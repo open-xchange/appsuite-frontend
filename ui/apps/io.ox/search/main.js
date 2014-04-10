@@ -289,8 +289,10 @@ define('io.ox/search/main',
             //reuse
             app.launch();
             app.view.redraw();
+            app.view.focus(_.isEmpty(model.get('pool')));
         } else {
             app.launch.call(app);
+            app.view.focus(_.isEmpty(model.get('pool')));
         }
         app.idle();
     };
