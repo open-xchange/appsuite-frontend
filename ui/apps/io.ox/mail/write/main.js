@@ -451,7 +451,8 @@ define('io.ox/mail/write/main',
 
         app.setFrom = function (data) {
             var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
-                select = view.leftside.find('.sender-dropdown');
+                select = view.leftside.find('.sender-dropdown'),
+                filteredAccountId;
 
             // from is already set in the mail, prefer this
             if (data.from && data.from.length === 1) {
@@ -459,7 +460,9 @@ define('io.ox/mail/write/main',
                 return;
             }
 
-            accountAPI.getPrimaryAddressFromFolder(data.account_id || folder_id).done(function (from) {
+            filteredAccountId = accountAPI.isUnified(data.account_id) ? accountAPI.parseAccountId(data.msgref) : data.account_id;
+
+            accountAPI.getPrimaryAddressFromFolder(filteredAccountId || folder_id).done(function (from) {
                 sender.set(select, from);
             });
         };
