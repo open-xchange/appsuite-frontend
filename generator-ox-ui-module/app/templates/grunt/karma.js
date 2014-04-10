@@ -32,7 +32,7 @@ module.exports = function (grunt) {
     // testing stuff
     grunt.registerTask('test', ['karma:unit:start']);
 
-    grunt.registerTask('runSpecs', 'Run the tests, if test server is running', function () {
+    grunt.registerTask('testrun', 'Run the tests, if test server is running', function () {
         var done = this.async();
 
         var net = require('net');
