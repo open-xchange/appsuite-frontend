@@ -260,6 +260,9 @@ Translation of the OX App Suite HTML5 client (zh_TW)
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
 ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -Dlanguages=false -f build/build.xml build
+APPSUITE=/opt/open-xchange/appsuite/
+find "%{buildroot}$APPSUITE" -type d | sed -e 's,%{buildroot},%dir ,' > open-xchange-appsuite-manifest.files
+find "%{buildroot}$APPSUITE" \( -type f -o -type l \) | sed -e 's,%{buildroot},,' >> open-xchange-appsuite-manifest.files
 for LANG in cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do
     ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DinstallTarget=${LANG} -Dnoclean=true -f build/build.xml build
 done
@@ -292,19 +295,18 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/sbin
 /opt/open-xchange/sbin/touch-appsuite
 
-%files manifest
+%files manifest -f open-xchange-appsuite-manifest.files
 %defattr(-,root,root)
 %dir /opt/open-xchange
-%dir /opt/open-xchange/appsuite
-/opt/open-xchange/appsuite
 
 %files l10n-cs-cz
 %defattr(-,root,root)
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.cs_CZ.js
 /opt/open-xchange/appsuite/apps/*/*/*.cs_CZ.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.cs_CZ.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.cs_CZ.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-cs-cz.properties
 
 %files l10n-da-dk
@@ -312,8 +314,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.da_DK.js
 /opt/open-xchange/appsuite/apps/*/*/*.da_DK.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.da_DK.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.da_DK.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-da-dk.properties
 
 %files l10n-de-de
@@ -321,8 +324,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.de_DE.js
 /opt/open-xchange/appsuite/apps/*/*/*.de_DE.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.de_DE.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.de_DE.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-de-de.properties
 
 %files l10n-en-gb
@@ -330,8 +334,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.en_GB.js
 /opt/open-xchange/appsuite/apps/*/*/*.en_GB.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.en_GB.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.en_GB.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-en-gb.properties
 
 %files l10n-en-us
@@ -339,8 +344,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.en_US.js
 /opt/open-xchange/appsuite/apps/*/*/*.en_US.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.en_US.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.en_US.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-en-us.properties
 
 %files l10n-es-es
@@ -348,8 +354,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.es_ES.js
 /opt/open-xchange/appsuite/apps/*/*/*.es_ES.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.es_ES.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.es_ES.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-es-es.properties
 
 %files l10n-es-mx
@@ -357,8 +364,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.es_MX.js
 /opt/open-xchange/appsuite/apps/*/*/*.es_MX.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.es_MX.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.es_MX.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-es-mx.properties
 
 %files l10n-fi-fi
@@ -366,8 +374,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.fi_FI.js
 /opt/open-xchange/appsuite/apps/*/*/*.fi_FI.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.fi_FI.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.fi_FI.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-fi-fi.properties
 
 %files l10n-fr-ca
@@ -375,8 +384,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.fr_CA.js
 /opt/open-xchange/appsuite/apps/*/*/*.fr_CA.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.fr_CA.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.fr_CA.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-fr-ca.properties
 
 %files l10n-fr-fr
@@ -384,8 +394,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.fr_FR.js
 /opt/open-xchange/appsuite/apps/*/*/*.fr_FR.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.fr_FR.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.fr_FR.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-fr-fr.properties
 
 %files l10n-hu-hu
@@ -393,8 +404,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.hu_HU.js
 /opt/open-xchange/appsuite/apps/*/*/*.hu_HU.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.hu_HU.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.hu_HU.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-hu-hu.properties
 
 %files l10n-it-it
@@ -402,8 +414,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.it_IT.js
 /opt/open-xchange/appsuite/apps/*/*/*.it_IT.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.it_IT.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.it_IT.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-it-it.properties
 
 %files l10n-ja-jp
@@ -411,8 +424,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.ja_JP.js
 /opt/open-xchange/appsuite/apps/*/*/*.ja_JP.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.ja_JP.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.ja_JP.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-ja-jp.properties
 
 %files l10n-lv-lv
@@ -420,8 +434,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.lv_LV.js
 /opt/open-xchange/appsuite/apps/*/*/*.lv_LV.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.lv_LV.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.lv_LV.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-lv-lv.properties
 
 %files l10n-nl-nl
@@ -429,8 +444,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.nl_NL.js
 /opt/open-xchange/appsuite/apps/*/*/*.nl_NL.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.nl_NL.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.nl_NL.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-nl-nl.properties
 
 %files l10n-pl-pl
@@ -438,8 +454,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.pl_PL.js
 /opt/open-xchange/appsuite/apps/*/*/*.pl_PL.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.pl_PL.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.pl_PL.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-pl-pl.properties
 
 %files l10n-pt-br
@@ -447,8 +464,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.pt_BR.js
 /opt/open-xchange/appsuite/apps/*/*/*.pt_BR.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.pt_BR.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.pt_BR.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-pt-br.properties
 
 %files l10n-ro-ro
@@ -456,8 +474,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.ro_RO.js
 /opt/open-xchange/appsuite/apps/*/*/*.ro_RO.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.ro_RO.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.ro_RO.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-ro-ro.properties
 
 %files l10n-ru-ru
@@ -465,8 +484,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.ru_RU.js
 /opt/open-xchange/appsuite/apps/*/*/*.ru_RU.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.ru_RU.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.ru_RU.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-ru-ru.properties
 
 %files l10n-sk-sk
@@ -474,8 +494,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.sk_SK.js
 /opt/open-xchange/appsuite/apps/*/*/*.sk_SK.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.sk_SK.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.sk_SK.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-sk-sk.properties
 
 %files l10n-sv-se
@@ -483,8 +504,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.sv_SE.js
 /opt/open-xchange/appsuite/apps/*/*/*.sv_SE.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.sv_SE.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.sv_SE.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-sv-se.properties
 
 %files l10n-zh-cn
@@ -492,8 +514,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.zh_CN.js
 /opt/open-xchange/appsuite/apps/*/*/*.zh_CN.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.zh_CN.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.zh_CN.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-cn.properties
 
 %files l10n-zh-tw
@@ -501,8 +524,9 @@ if [ -x %{update} ]; then %{update}; fi
 %dir /opt/open-xchange/etc
 %dir /opt/open-xchange/etc/languages
 %dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.zh_TW.js
 /opt/open-xchange/appsuite/apps/*/*/*.zh_TW.js
-/opt/open-xchange/appsuite/apps/*/*/*/*.zh_TW.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.zh_TW.js*
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-zh-tw.properties
 
 %changelog
