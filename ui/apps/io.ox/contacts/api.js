@@ -72,7 +72,7 @@ define('io.ox/contacts/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5',
                 extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
@@ -224,6 +224,14 @@ define('io.ox/contacts/api',
                 }
                 return response;
             },
+            list: function (data) {
+                _(data).each(function (obj) {
+                    // remove from cache if get cache is outdated
+                    api.caches.get.dedust(obj, 'last_modified');
+                });
+                api.trigger('list:ready');
+                return data;
+            },
             get: convertResponseToGregorian,
             search: convertResponseToGregorian,
             advancedsearch: convertResponseToGregorian
@@ -329,7 +337,7 @@ define('io.ox/contacts/api',
 
         if (_.isEmpty(o.data)) {
             if (attachmentHandlingNeeded) {
-                return $.when().pipe(function () {
+                return $.when().then(function () {
                     api.addToUploadList(_.ecid(o));//to make the detailview show the busy animation
                     api.trigger('update:' + _.ecid(o));
                     return { folder_id: o.folder, id: o.id };
@@ -395,7 +403,7 @@ define('io.ox/contacts/api',
                 api.caches.list.clear(),
                 fetchCache.clear()
             )
-            .pipe(function () {
+            .then(function () {
                 api.trigger('refresh.list');
                 api.trigger('update:image', { // TODO needs a switch for created by hand or by test
                     id: o.id,
@@ -417,7 +425,7 @@ define('io.ox/contacts/api',
                 data: form,
                 fixPost: true
             })
-            .pipe(filter);
+            .then(filter);
         } else {
             return http.FORM({
                 module: 'contacts',
@@ -426,7 +434,7 @@ define('io.ox/contacts/api',
                 data: changes,
                 params: {id: o.id, folder: o.folder_id, timestamp: _.then() }
             })
-            .pipe(filter);
+            .then(filter);
         }
     };
 
@@ -451,7 +459,7 @@ define('io.ox/contacts/api',
                     return { folder: data.folder_id, id: data.id };
                 })
             })
-            .pipe(function () {
+            .then(function () {
                 return $.when(
                     api.caches.all.clear(),
                     api.caches.list.remove(list),
@@ -770,7 +778,7 @@ define('io.ox/contacts/api',
         });
         // resume & trigger refresh
         return http.resume()
-            .pipe(function (result) {
+            .then(function (result) {
 
                 var def = $.Deferred();
 
