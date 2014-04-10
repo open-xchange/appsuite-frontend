@@ -17,7 +17,7 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
 
     var expect = chai.expect;
 
-    describe.only('The Threadview.', function () {
+    describe('The Threadview.', function () {
 
         beforeEach(function () {
             this.view = new threadview.Desktop();
