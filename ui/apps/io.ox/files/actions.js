@@ -37,7 +37,7 @@ define('io.ox/files/actions',
             return e.baton.app.folder.getData().then(function (data) {
                 //hide for virtual folders (other files root, public files root)
                 var virtual = _.contains(['14', '15'], data.id);
-                return folderAPI.can('create', data) && !virtual;
+                return folderAPI.can('create', data) && !virtual && !folderAPI.is('trash', data);//no new files in trash folders
             });
         },
         action: function (baton) {
@@ -76,7 +76,9 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/publish', {
         requires: function (e) {
-            return e.collection.has('one') && !_.isEmpty(e.baton.data.filename);
+            return e.baton.app.folder.getData().then(function (data) {
+                return e.collection.has('one') && !_.isEmpty(e.baton.data.filename) && !folderAPI.is('trash', data);
+            });
         },
         action: function (baton) {
             require(['io.ox/core/pubsub/publications'], function (publications) {
@@ -120,7 +122,9 @@ define('io.ox/files/actions',
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write');
+                return e.baton.app.folder.getData().then(function (data) {
+                   return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write') && !folderAPI.is('trash', data);
+                });
             },
             action: function (baton) {
                 if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) return;
@@ -130,7 +134,9 @@ define('io.ox/files/actions',
 
         new Action('io.ox/files/actions/editor-new', {
             requires: function (e) {
-                return e.baton.openedBy !== 'io.ox/mail/write';
+                return e.baton.app.folder.getData().then(function (data) {
+                    return e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data);
+                });
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
@@ -205,7 +211,9 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/sendlink', {
         capabilities: 'webmail !alone',
         requires: function (e) {
-            return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') &&  (e.baton.openedBy !== 'io.ox/mail/write');//hide in mail write preview
+            return e.baton.app.folder.getData().then(function (data) {
+                return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data);//hide in mail write preview
+            });
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -230,10 +238,12 @@ define('io.ox/files/actions',
         capabilities: 'webmail',
         requires: function (e) {
             var list = _.getArray(e.context);
-            return e.collection.has('some') && !_.isEmpty(e.baton.data) && (e.baton.openedBy !== 'io.ox/mail/write') &&//hide in mail write preview
-                _(list).reduce(function (memo, obj) {
-                    return memo || obj.file_size > 0;
-                }, false);
+            return e.baton.app.folder.getData().then(function (data) {
+                return e.collection.has('some') && !_.isEmpty(e.baton.data) && (e.baton.openedBy !== 'io.ox/mail/write') && !folderAPI.is('trash', data) &&//hide in mail write preview
+                    _(list).reduce(function (memo, obj) {
+                        return memo || obj.file_size > 0;
+                    }, false);
+            });
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -252,7 +262,9 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/showlink', {
         capabilities: '!alone',
         requires: function (e) {
-            return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some');
+            return e.baton.app.folder.getData().then(function (data) {
+                return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && !folderAPI.is('trash', data);
+            });
         },
         multiple: function (list) {
 
@@ -630,7 +642,9 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
         requires: function (e) {
-            return e.collection.has('one') && !_.isEmpty(e.baton.data);
+            return e.baton.app.folder.getData().then(function (data) {
+                return e.collection.has('one') && !_.isEmpty(e.baton.data)&& !folderAPI.is('trash', data);
+            });
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
@@ -1020,7 +1034,7 @@ define('io.ox/files/actions',
     new Action('io.ox/files/icons/share', {
         requires: function (e) {
             return e.baton.app.folder.getData().then(function (data) {
-                return capabilities.has('publication') && folderAPI.can('publish', data);
+                return capabilities.has('publication') && folderAPI.can('publish', data) && !folderAPI.is('trash', data);
             });
         },
         action: function (baton) {

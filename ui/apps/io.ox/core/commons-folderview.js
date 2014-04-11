@@ -290,7 +290,7 @@ define('io.ox/core/commons-folderview',
             index: 150,
             draw: function (baton) {
 
-                if (!capabilities.has('publication') || !api.can('publish', baton.data)) return;
+                if (!capabilities.has('publication') || !api.can('publish', baton.data) || !api.is('trash', baton.data)) return;
 
                 this.append(
                     $('<li>').append(
@@ -314,7 +314,7 @@ define('io.ox/core/commons-folderview',
             index: 200,
             draw: function (baton) {
 
-                if (!capabilities.has('subscription') || !api.can('subscribe', baton.data)) return;
+                if (!capabilities.has('subscription') || !api.can('subscribe', baton.data || !api.is('trash', baton.data))) return;
 
                 this.append(
                     $('<li>').append(

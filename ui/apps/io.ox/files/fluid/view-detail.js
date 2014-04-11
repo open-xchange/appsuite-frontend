@@ -438,6 +438,7 @@ define('io.ox/files/fluid/view-detail',
         if (!baton) return $('<div>');
 
         baton = ext.Baton.ensure(baton);
+        baton.app = app;
 
         if (app) { //save the appname so the extensions know what opened them (to disable some options for example)
             baton.openedBy = app.getName();

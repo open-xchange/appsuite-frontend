@@ -767,6 +767,8 @@ define('io.ox/core/api/folder',
                         return data.type === 3;
                     case 'system':
                         return data.type === 5;
+                    case 'trash':
+                        return data.type === 16;
                     case 'mail':
                         return data.module === 'mail';
                     case 'messaging':

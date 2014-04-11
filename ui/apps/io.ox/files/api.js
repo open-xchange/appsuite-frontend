@@ -963,6 +963,33 @@ define('io.ox/files/api',
         return lockToggle(list, 'lock');
     };
 
+    /**
+     * deletes all files from a specific folder
+     * @param  {string} folder_id
+     * @fires  api#refresh.all
+     * @return {deferred}
+     */
+    api.clear = function (folder_id) {
+        // new clear
+        return http.PUT({
+            module: 'folders',
+            appendColumns: false,
+            params: {
+                action: 'clear',
+                tree: '1'
+            },
+            data: [folder_id]
+        })
+        .then(function () {
+            return api.caches.all.grepRemove(folder_id + api.DELIM);
+        })
+        .done(function () {
+            folderAPI.reload(folder_id);
+            folderAPI.sync();
+            api.trigger('refresh.all');
+        });
+    };
+
     return api;
 
 });

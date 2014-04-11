@@ -16,11 +16,13 @@ define('io.ox/files/main',
     ['io.ox/core/commons',
      'gettext!io.ox/files',
      'settings!io.ox/files',
+     'io.ox/core/extensions',
      'io.ox/core/api/folder',
      'io.ox/core/extPatterns/actions',
      'io.ox/files/actions',
+     'io.ox/files/folderview-extensions',
      'less!io.ox/files/style'
-    ], function (commons, gt, settings, folderAPI, actions) {
+    ], function (commons, gt, settings, ext, folderAPI, actions) {
 
     'use strict';
 
@@ -55,6 +57,15 @@ define('io.ox/files/main',
         app.settings = settings;
 
         commons.wirePerspectiveEvents(app);
+        
+        app.on('folder:change', function (id, data) {
+            if(folderAPI.is('trash', data)) {//no new files in trash folders
+                ext.point('io.ox/files/links/toolbar').disable('default');//that's the plus sign
+            } else {
+                ext.point('io.ox/files/links/toolbar').enable('default');//that's the plus sign
+            }
+           win.updateToolbar();
+        });
 
         // folder tree
         commons.addFolderView(app, { type: 'infostore', rootFolderId: settings.get('rootFolderId') });
