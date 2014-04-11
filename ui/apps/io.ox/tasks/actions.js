@@ -17,8 +17,9 @@ define('io.ox/tasks/actions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
-     'io.ox/core/print'
-    ], function (ext, util, links, gt, notifications, print) {
+     'io.ox/core/print',
+     'io.ox/core/extPatterns/actions'
+    ], function (ext, util, links, gt, notifications, print, actions) {
 
     'use strict';
 
@@ -522,6 +523,94 @@ define('io.ox/tasks/actions',
             );
         }
     }));
+
+    // delete tasks
+    ext.point('io.ox/tasks/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 10,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-trash-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/tasks/actions/delete', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // tasks done
+    ext.point('io.ox/tasks/mobileMultiSelect/toolbar').extend({
+        id: 'done',
+        index: 20,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-check-square-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/tasks/actions/done', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // tasks undone
+    ext.point('io.ox/tasks/mobileMultiSelect/toolbar').extend({
+        id: 'unDone',
+        index: 30,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-square-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/tasks/actions/undone', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // tasks move
+    ext.point('io.ox/tasks/mobileMultiSelect/toolbar').extend({
+        id: 'move',
+        index: 40,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-sign-in">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/tasks/actions/move', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'done',

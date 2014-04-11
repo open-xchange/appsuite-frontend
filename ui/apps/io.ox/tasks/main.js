@@ -133,7 +133,7 @@ define('io.ox/tasks/main',
         grid = new VGrid(left, {
             settings: settings,
             swipeRightHandler: swipeRightHandler,
-            showToggle: _.device('smartphone') ? false: true,
+            showToggle: true,
         });
 
         grid.addTemplate(template.main);
