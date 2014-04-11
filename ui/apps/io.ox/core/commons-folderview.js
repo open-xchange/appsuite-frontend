@@ -896,6 +896,7 @@ define('io.ox/core/commons-folderview',
         };
 
         this.init = function (views) {
+
             // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
             var open = app.settings.get('folderview/open', {});
             if (open && open[_.display()]) open = open[_.display()];
@@ -1027,12 +1028,14 @@ define('io.ox/core/commons-folderview',
 
         this.load = function () {
 
-            toggle();
             app.showFolderView = _.device('smartphone') ? fnShowSml : fnShow;
             app.hideFolderView = _.device('smartphone') ? fnHideSml : fnHide;
             app.toggleFolderView = toggle;
 
             loadTree = toggleTree = $.noop;
+
+            toggle();
+
             return require(['io.ox/core/tk/folderviews']).then(this.init.bind(this));
         };
 
@@ -1118,11 +1121,10 @@ define('io.ox/core/commons-folderview',
         };
 
         this.start = function () {
-            if (options.visible === true) {
-                applyInitialWidth();
-                toggleTree();
-                app.getWindow().on('open', initResize);
-            }
+            if (options.visible !== true) return;
+            applyInitialWidth();
+            toggleTree();
+            app.getWindow().on('open', initResize);
         };
     }
 
