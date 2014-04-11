@@ -801,6 +801,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
 
         // to avoid bugs based on passing objects by reference
         function clone(data) {
+            if (!data) return data; // null, undefined, empty string, numeric zero
             return JSON.parse(JSON.stringify(data));
         }
 
