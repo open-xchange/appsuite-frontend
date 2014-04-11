@@ -127,8 +127,8 @@ define('io.ox/tasks/model',
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'more than 2 decimal places',
         validate: function (attributes) {
-            var tCosts = attributes.target_costs,
-                aCosts = attributes.actual_costs;
+            var tCosts = String(attributes.target_costs),
+                aCosts = String(attributes.actual_costs);
 
             if (tCosts && (tCosts.substr(tCosts.indexOf('.')).length > 3 || tCosts.substr(tCosts.indexOf(',')).length > 3)) {
                 this.add('target_costs', gt('Costs must only have two decimal places.'));
