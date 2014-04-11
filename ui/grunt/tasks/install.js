@@ -31,7 +31,7 @@ module.exports = function (grunt) {
                 src: ['**/*'].concat(languages.map(function (Lang) {
                     //return '' in case --no-languages is used, so language files
                     //will also be copied by this task
-                    return grunt.option('no-languages') || false ? '!**/*.' + Lang + '.*' : '';
+                    return grunt.option('no-languages') || false ? '!**/*.' + Lang + '.js' : '';
                 })).filter(function (Lang) {
                     return Lang.length > 0;
                 }),
@@ -45,7 +45,7 @@ module.exports = function (grunt) {
                 expand: true,
                 src: ['appsuite/**/*', '!appsuite/manifests/**/*'].concat(languages.map(function (Lang) {
                     //ignore language files for static packages
-                    return '!**/*.' + Lang + '.*';
+                    return '!**/*.' + Lang + '.js';
                 })),
                 cwd: 'dist/',
                 filter: 'isFile',
@@ -94,7 +94,7 @@ module.exports = function (grunt) {
 
         config['local_install_' + Lang] = {
             files: [{
-                src: ['**/*.' + Lang + '.*'],
+                src: ['**/*.' + Lang + '.js'],
                 expand: true,
                 filter: 'isFile',
                 cwd: 'dist/',
