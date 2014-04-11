@@ -490,7 +490,7 @@ msgstr "添加參與者/資源"
 msgid "Add signature"
 msgstr "新增簽名"
 
-#: apps/io.ox/mail/write/main.js:1218 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1221 module:io.ox/mail
 msgid "Add subject"
 msgstr "新增主題"
 
@@ -555,7 +555,7 @@ msgstr "地址（住家）"
 msgid "Address Other"
 msgstr "位址（其他）"
 
-#: apps/io.ox/contacts/main.js:361 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:367 module:io.ox/contacts
 msgid "Addresses"
 msgstr "地址"
 
@@ -592,7 +592,7 @@ msgstr "所有附件"
 msgid "All day"
 msgstr "整天"
 
-#: apps/io.ox/search/view-template.js:442 module:io.ox/core
+#: apps/io.ox/search/view-template.js:459 module:io.ox/core
 #, fuzzy
 #| msgid "Add folder"
 msgid "All folders"
@@ -620,7 +620,7 @@ msgstr "發生錯誤。請稍後重試"
 
 #: apps/io.ox/calendar/week/perspective.js:66 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:198
-#: apps/io.ox/mail/write/main.js:980 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:983 module:io.ox/mail
 msgid "An error occurred. Please try again."
 msgstr "發生錯誤。請稍後重試。"
 
@@ -1031,11 +1031,11 @@ msgstr "日曆"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:241
 #: apps/io.ox/mail/main.js:923 apps/io.ox/mail/write/inline-images.js:80
-#: apps/io.ox/mail/write/main.js:1338 apps/io.ox/mail/write/view-main.js:617
+#: apps/io.ox/mail/write/main.js:1341 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:398
+#: apps/io.ox/search/view-template.js:415
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:60
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:196
@@ -1346,7 +1346,7 @@ msgid "Compose new email"
 msgstr "撰寫新郵件"
 
 #: apps/io.ox/mail/actions.js:911 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:656
+#: apps/io.ox/mail/write/main.js:659
 msgid "Compose new mail"
 msgstr "撰寫新郵件"
 
@@ -1500,7 +1500,7 @@ msgstr "無法儲存設定，必須有最少一個擁有管理員權力的使用
 msgid "Couldn't load appointment data."
 msgstr "無法載入約會資料。"
 
-#: apps/io.ox/contacts/main.js:272 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:278 module:io.ox/contacts
 msgid "Couldn't load contact data."
 msgstr "無法載入聯絡人資料。"
 
@@ -1837,7 +1837,7 @@ msgstr "停用小工具"
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/settings/signatures/register.js:107 module:io.ox/mail
 #: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1336 apps/io.ox/mail/write/view-main.js:65
+#: apps/io.ox/mail/write/main.js:1339 apps/io.ox/mail/write/view-main.js:65
 #: apps/io.ox/tasks/edit/view-template.js:81 module:io.ox/tasks/edit
 #: apps/plugins/portal/userSettings/register.js:44 module:io.ox/core
 msgid "Discard"
@@ -1946,7 +1946,7 @@ msgstr[1] "確定要刪除此工作嗎？"
 msgid "Do you really want to delete this widget?"
 msgstr "確定要刪除此小工具嗎？"
 
-#: apps/io.ox/mail/write/main.js:1335 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1338 module:io.ox/mail
 msgid "Do you really want to discard this mail?"
 msgstr "您真的想放棄此郵件嗎？"
 
@@ -2724,8 +2724,8 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:294 module:io.ox/core
-#: apps/io.ox/search/view-template.js:391
+#: apps/io.ox/search/view-template.js:311 module:io.ox/core
+#: apps/io.ox/search/view-template.js:408
 msgid "Folder"
 msgstr "文件夾"
 
@@ -2819,7 +2819,7 @@ msgstr "將電子郵件格式化為 "
 
 #: apps/io.ox/mail/actions.js:966 module:io.ox/mail
 #: apps/io.ox/mail/mobileToolbarActions.js:64 apps/io.ox/mail/toolbar.js:67
-#: apps/io.ox/mail/write/main.js:659
+#: apps/io.ox/mail/write/main.js:662
 msgid "Forward"
 msgstr "轉發"
 
@@ -3454,7 +3454,7 @@ msgstr "低優先順序"
 msgid "MB"
 msgstr "MB"
 
-#: apps/io.ox/mail/write/main.js:749 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:752 module:io.ox/mail
 msgid "Mail"
 msgstr "郵件"
 
@@ -3500,11 +3500,11 @@ msgstr "已匯入郵件"
 msgid "Mail has been moved"
 msgstr "已移動郵件"
 
-#: apps/io.ox/mail/write/main.js:1216 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1219 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "這封信沒有主旨，要傳送嗎？"
 
-#: apps/io.ox/mail/write/main.js:1209 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1212 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "郵件沒有收件者。"
 
@@ -3524,7 +3524,7 @@ msgstr "郵件提醒"
 msgid "Mail reminder for"
 msgstr "郵件提醒給"
 
-#: apps/io.ox/mail/write/main.js:1272 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1275 module:io.ox/mail
 msgid "Mail saved as draft"
 msgstr "已將郵件保存草稿"
 
@@ -3761,7 +3761,7 @@ msgstr "月"
 #: apps/io.ox/core/extPatterns/links.js:340 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:513
+#: apps/io.ox/search/view-template.js:535
 msgid "More"
 msgstr "更多"
 
@@ -3815,7 +3815,7 @@ msgstr "姓名"
 msgid "Name already taken"
 msgstr "名稱已使用"
 
-#: apps/io.ox/contacts/main.js:361 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:367 module:io.ox/contacts
 msgid "Names and email addresses"
 msgstr "姓名與電子郵件位址"
 
@@ -4029,7 +4029,7 @@ msgstr "無慢速請求"
 #. %2$s mail subject
 #: apps/io.ox/mail/util.js:369 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:107 module:io.ox/core/mail
-#: apps/io.ox/mail/write/main.js:749 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:752 module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:59
 #, c-format
@@ -4492,7 +4492,7 @@ msgstr "電話（私人）"
 msgid "Phone list"
 msgstr "電話清單"
 
-#: apps/io.ox/contacts/main.js:361 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:367 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:540
 msgid "Phone numbers"
 msgstr "電話號碼"
@@ -5082,7 +5082,7 @@ msgid "Repeat new password"
 msgstr "重複輸入新密碼"
 
 #: apps/io.ox/mail/actions.js:945 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:658 apps/plugins/portal/twitter/util.js:230
+#: apps/io.ox/mail/write/main.js:661 apps/plugins/portal/twitter/util.js:230
 #: module:plugins/portal apps/plugins/portal/twitter/util.js:234
 msgid "Reply"
 msgstr "回復"
@@ -5091,7 +5091,7 @@ msgstr "回復"
 msgid "Reply All"
 msgstr "全部回覆"
 
-#: apps/io.ox/mail/write/main.js:657 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:660 module:io.ox/mail
 msgid "Reply all"
 msgstr "全部回復"
 
@@ -5225,7 +5225,7 @@ msgstr "保存"
 msgid "Save as distribution list"
 msgstr "儲存為通訊組列表"
 
-#: apps/io.ox/mail/write/main.js:1337 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1340 module:io.ox/mail
 msgid "Save as draft"
 msgstr "保存為草稿"
 
@@ -5280,6 +5280,7 @@ msgstr "行程"
 #: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:154 module:io.ox/search
 #: apps/io.ox/search/main.js:170 apps/io.ox/search/view-template.js:47
+#: apps/io.ox/search/view-template.js:114
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "搜索"
@@ -6166,7 +6167,7 @@ msgstr ""
 msgid "The due date cannot be before start date. Adjust start date?"
 msgstr "到期日無法在起始日之前，調整起始日？"
 
-#: apps/io.ox/mail/write/main.js:1151 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1154 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "已寄出郵件"
 
@@ -7246,7 +7247,7 @@ msgstr "黃色"
 msgid "Yes"
 msgstr "是"
 
-#: apps/io.ox/mail/write/main.js:1217 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1220 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "是，請寄出"
 

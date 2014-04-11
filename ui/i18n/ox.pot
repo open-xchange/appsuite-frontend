@@ -265,14 +265,14 @@ msgstr ""
 #: apps/io.ox/mail/main.js:241
 #: apps/io.ox/mail/main.js:923
 #: apps/io.ox/mail/write/inline-images.js:80
-#: apps/io.ox/mail/write/main.js:1338
+#: apps/io.ox/mail/write/main.js:1341
 #: apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82
 #: module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:398
+#: apps/io.ox/search/view-template.js:415
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts
 #: apps/io.ox/tasks/actions.js:60
@@ -590,7 +590,7 @@ msgstr ""
 #: apps/io.ox/mail/settings/signatures/register.js:107
 #: module:io.ox/mail
 #: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1336
+#: apps/io.ox/mail/write/main.js:1339
 #: apps/io.ox/mail/write/view-main.js:65
 #: apps/io.ox/tasks/edit/view-template.js:81
 #: module:io.ox/tasks/edit
@@ -1984,9 +1984,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:126
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:294
+#: apps/io.ox/search/view-template.js:311
 #: module:io.ox/core
-#: apps/io.ox/search/view-template.js:391
+#: apps/io.ox/search/view-template.js:408
 msgid "Folder"
 msgstr ""
 
@@ -2008,7 +2008,7 @@ msgstr ""
 #: apps/io.ox/calendar/week/perspective.js:66
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:198
-#: apps/io.ox/mail/write/main.js:980
+#: apps/io.ox/mail/write/main.js:983
 #: module:io.ox/mail
 msgid "An error occurred. Please try again."
 msgstr ""
@@ -2405,23 +2405,23 @@ msgstr ""
 msgid "Edit to set a name."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:272
+#: apps/io.ox/contacts/main.js:278
 #: module:io.ox/contacts
 msgid "Couldn't load contact data."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:361
+#: apps/io.ox/contacts/main.js:367
 #: module:io.ox/contacts
 msgid "Names and email addresses"
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:361
+#: apps/io.ox/contacts/main.js:367
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:540
 msgid "Phone numbers"
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:361
+#: apps/io.ox/contacts/main.js:367
 #: module:io.ox/contacts
 msgid "Addresses"
 msgstr ""
@@ -3362,6 +3362,7 @@ msgstr ""
 #: module:io.ox/search
 #: apps/io.ox/search/main.js:170
 #: apps/io.ox/search/view-template.js:47
+#: apps/io.ox/search/view-template.js:114
 #: apps/plugins/portal/flickr/register.js:215
 #: module:plugins/portal
 msgid "Search"
@@ -3438,7 +3439,7 @@ msgstr ""
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:513
+#: apps/io.ox/search/view-template.js:535
 msgid "More"
 msgstr ""
 
@@ -5755,13 +5756,13 @@ msgstr ""
 
 #: apps/io.ox/mail/actions.js:911
 #: module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:656
+#: apps/io.ox/mail/write/main.js:659
 msgid "Compose new mail"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js:945
 #: module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:658
+#: apps/io.ox/mail/write/main.js:661
 #: apps/plugins/portal/twitter/util.js:230
 #: module:plugins/portal
 #: apps/plugins/portal/twitter/util.js:234
@@ -5777,7 +5778,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/mobileToolbarActions.js:64
 #: apps/io.ox/mail/toolbar.js:67
-#: apps/io.ox/mail/write/main.js:659
+#: apps/io.ox/mail/write/main.js:662
 msgid "Forward"
 msgstr ""
 
@@ -6724,7 +6725,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:107
 #: module:io.ox/core/mail
-#: apps/io.ox/mail/write/main.js:749
+#: apps/io.ox/mail/write/main.js:752
 #: module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js:56
 #: module:plugins/notifications
@@ -6881,52 +6882,52 @@ msgstr ""
 msgid "Drop the file anywhere to add attachment"
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:657
+#: apps/io.ox/mail/write/main.js:660
 #: module:io.ox/mail
 msgid "Reply all"
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:749
+#: apps/io.ox/mail/write/main.js:752
 #: module:io.ox/mail
 msgid "Mail"
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:1151
+#: apps/io.ox/mail/write/main.js:1154
 #: module:io.ox/mail
 msgid "The email has been sent"
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:1209
+#: apps/io.ox/mail/write/main.js:1212
 #: module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:1216
+#: apps/io.ox/mail/write/main.js:1219
 #: module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:1217
+#: apps/io.ox/mail/write/main.js:1220
 #: module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:1218
+#: apps/io.ox/mail/write/main.js:1221
 #: module:io.ox/mail
 msgid "Add subject"
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:1272
+#: apps/io.ox/mail/write/main.js:1275
 #: module:io.ox/mail
 msgid "Mail saved as draft"
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:1335
+#: apps/io.ox/mail/write/main.js:1338
 #: module:io.ox/mail
 msgid "Do you really want to discard this mail?"
 msgstr ""
 
-#: apps/io.ox/mail/write/main.js:1337
+#: apps/io.ox/mail/write/main.js:1340
 #: module:io.ox/mail
 msgid "Save as draft"
 msgstr ""
@@ -7233,7 +7234,7 @@ msgstr ""
 msgid "Recurring tasks need a valid end date."
 msgstr ""
 
-#: apps/io.ox/search/view-template.js:442
+#: apps/io.ox/search/view-template.js:459
 #: module:io.ox/core
 msgid "All folders"
 msgstr ""
