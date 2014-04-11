@@ -17,5 +17,7 @@
             <arg value="--trace"/>
         </exec>
     </target>
-    
+
+    <target name="clean"/>
+
 </project>
