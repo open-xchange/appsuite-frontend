@@ -135,6 +135,9 @@
         button {
             text-align: left;
             width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
             .remove {
                 float: right;
                 padding-left: 10px;
@@ -227,12 +230,25 @@
                 content: '\00a0';
             }
             //action icons
-            .caret {
-                //10px minus caret border
-                margin-left: 6px;
+            .caret-container {
+                float: right;
+                .caret {
+                    //10px minus caret border
+                    margin-left: 6px;
+                }
             }
             .remove {
                 margin-left: 10px;
+                float: right;
+            }
+            label {
+                font-weight: initial;
+                overflow: hidden;
+                display: block;
+                text-overflow: ellipsis;
+                //overwrite bootstrap label defaults
+                padding-top: 0;
+                margin-bottom: 0;
             }
         }
 

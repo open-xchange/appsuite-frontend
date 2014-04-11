@@ -70,8 +70,10 @@ define('io.ox/search/view-template',
                                 $(this)
                                     .data(value)
                                     .html(value.display_name);
-                                if (container)
-                                    container.css('width', '100%');
+                                if (container) {
+                                    //reset calculated style from autocomplete tk
+                                    container.attr('style', 'width: 100%;');
+                                }
                             },
                             stringify: function () {
                                 //keep input value when item selected
@@ -239,6 +241,7 @@ define('io.ox/search/view-template',
                                 // .addClass('fac!et pull-left')
                                 .append(
                                     button = $('<button type="button" class="btn btn-default dropdown-toggle">')
+                                        .append($('<label>'))
                                 )
                 );
 
@@ -317,7 +320,7 @@ define('io.ox/search/view-template',
             }
             //append type
             if (type) {
-                this.prepend(
+                this.find('label').prepend(
                     $('<span>')
                         .addClass('type')
                         .text(type)
@@ -330,7 +333,7 @@ define('io.ox/search/view-template',
         id: 'name',
         index: 200,
         draw: function (value) {
-            this.append(
+            this.find('label').append(
                 $('<span>')
                     .addClass('name')
                     .html(value.display_name)
@@ -351,7 +354,11 @@ define('io.ox/search/view-template',
             if (filters.length) {
                 this.attr('data-toggle', 'dropdown');
                 //add caret
-                this.append($('<span class="caret">'));
+                this.prepend(
+                    $('<div class="caret-container">').append(
+                        $('<span class="caret">')
+                    )
+                );
 
                 //creste menu
                 menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
@@ -387,7 +394,7 @@ define('io.ox/search/view-template',
             var isMandatory = baton.model.isMandatory(value.facet);
            //remove action for non mandatory facets
             if (!isMandatory && value.facet !== 'folder') {
-                this.append(
+                this.prepend(
                     $('<span class="remove">')
                     .append(
                         $('<i class="fa fa-times action">')
@@ -476,7 +483,11 @@ define('io.ox/search/view-template',
                     });
 
             button.attr('data-toggle', 'dropdown');
-            button.append($('<span class="caret">'));
+            button.prepend(
+                $('<div class="caret-container">').append(
+                    $('<span class="caret">')
+                )
+            );
 
             //add fodlers
             util.getFolders(baton.model)
@@ -630,7 +641,7 @@ define('io.ox/search/view-template',
                             next = cell.closest('a').attr('data-app');
 
                         if (next && next !== id)
-                            baton.model.setModule(id);
+                            baton.model.setModule(next);
                     });
 
                     this.append(row);
