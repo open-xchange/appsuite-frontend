@@ -24,8 +24,9 @@ define('io.ox/tasks/edit/view-template',
      'io.ox/core/tk/attachments',
      'io.ox/tasks/api',
      'io.ox/core/extensions',
-     'io.ox/tasks/util'
-    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil) {
+     'io.ox/tasks/util',
+     'settings!io.ox/tasks'
+    ], function (gt, views, date, notifications, forms, calendarUtil, util, RecurrenceView, pViews, attachments, api, ext, taskUtil, settings) {
 
     'use strict';
 
@@ -639,9 +640,13 @@ define('io.ox/tasks/edit/view-template',
             var self = this;
             this.nodes = {};
             this.nodes.select = $('<select tabindex="1">').addClass('currency form-control').attr('id', 'task-edit-currency');
-            _(this.selectOptions).each(function (label, value) {
+
+            self.nodes.select.append(//add empty currency
+                    $('<option>', {value: ''})
+                );
+            _(this.selectOptions).each(function (value) {
                 self.nodes.select.append(
-                    $('<option>', {value: value}).text(label)
+                    $('<option>', {value: value}).text(_.noI18n(value))
                 );
             });
             this.$el.append($('<label for="task-edit-currency">').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
@@ -651,20 +656,7 @@ define('io.ox/tasks/edit/view-template',
             });
         },
         attribute: 'currency',
-        selectOptions: {
-            '': undefined,
-            CAD: _.noI18n('CAD'),
-            CHF: _.noI18n('CHF'),
-            DKK: _.noI18n('DKK'),
-            EUR: _.noI18n('EUR'),
-            GBP: _.noI18n('GBP'),
-            PLN: _.noI18n('PLN'),
-            RUB: _.noI18n('RUB'),
-            SEK: _.noI18n('SEK'),
-            USD: _.noI18n('USD'),
-            JPY: _.noI18n('JPY'),
-            RMB: _.noI18n('RMB')
-        },
+        selectOptions: settings.get('currencies', ['CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'JPY', 'PLN', 'RMB', 'RUB', 'SEK', 'USD']),
         label: gt('Currency')
     }), {
         row: '16'
