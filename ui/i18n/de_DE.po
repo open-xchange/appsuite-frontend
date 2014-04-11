@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-08 10:28+0100\n"
+"PO-Revision-Date: 2014-04-11 11:14+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1460,7 +1460,7 @@ msgstr "Kosten müssen zwischen -%1$d und %1$d liegen."
 #: apps/io.ox/tasks/model.js:134 module:io.ox/tasks
 #: apps/io.ox/tasks/model.js:137
 msgid "Costs must only have two decimal places."
-msgstr ""
+msgstr "Die Kosten dürfen nur zwei Dezimalstellen haben."
 
 #: apps/io.ox/core/desktop.js:211 module:io.ox/core
 msgid "Could not get a default folder for this application."
@@ -5306,7 +5306,6 @@ msgid "Saved in"
 msgstr "Gespeichert unter"
 
 #: apps/io.ox/mail/api.js:1329 module:io.ox/mail
-#, fuzzy
 msgid "Saved mail attachment"
 msgstr "E-Mail-Anlage gespeichert"
 
@@ -5605,10 +5604,9 @@ msgid "Show legal information"
 msgstr "Rechtliche Informationen anzeigen"
 
 #: apps/plugins/portal/facebook/register.js:64 module:plugins/portal
-#, fuzzy
 #| msgid "Show comments"
 msgid "Show more comments"
-msgstr "Kommentar anzeigen"
+msgstr "Weitere Kommentare anzeigen"
 
 #: apps/io.ox/mail/detail/content.js:417 module:io.ox/mail
 msgid "Show quoted text"
@@ -7546,7 +7544,6 @@ msgstr ""
 "Zum Abonnieren müssen Sie einen Benutzernamen und ein Passwort eingeben."
 
 #: apps/plugins/portal/facebook/register.js:56 module:plugins/portal
-#, fuzzy
 #| msgid "You declined this task"
 msgid "You like this"
 msgstr "Dir gefällt das"
