@@ -265,9 +265,9 @@ define('io.ox/core/tk/list',
 
             this.load = function () {
                 // load data
+                this.empty();
                 loader.load(this.model.toJSON());
                 this.setCollection(loader.collection);
-                this.onReset();
             };
 
             this.paginate = function () {
