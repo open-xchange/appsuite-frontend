@@ -63,7 +63,6 @@ define('io.ox/tasks/common-extensions',
         },
 
         progress: function (baton) {
-            debugger;
             this.append(
                 $('<div class="prog">').append(
                     gt('Progress') + ': ' + (baton.data.percent_completed || 0) + '%'
