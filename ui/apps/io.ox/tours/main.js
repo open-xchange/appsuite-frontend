@@ -67,7 +67,18 @@ define('io.ox/tours/main',
         priority: 1,
         tour: {
             id: 'Switching from OX6',
-            steps: [{
+            steps: [
+            {
+                title: gt.format(gt('Welcome to %s'), ox.serverConfig.productName),
+                placement: 'bottom',
+                target: 'io-ox-topbar',
+                content: gt('This guided tour will briefly introduce you to the product. Get more detailed information in the tours for the single apps or in the online help.'),
+                xOffset: 'center',
+                arrowOffset: 'center',
+                width: 380,
+                padding: 45
+            },
+            {
                 title: gt('Launching an app'),
                 placement: 'bottom',
                 target: function () { return $('.launcher[data-app-name="io.ox/mail"]')[0]; },
