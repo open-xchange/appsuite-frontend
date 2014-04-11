@@ -20,4 +20,6 @@
 
     <target name="clean"/>
 
+    <target name="setVersion"/>
+
 </project>
