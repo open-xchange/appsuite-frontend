@@ -24,6 +24,7 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 };
 
             it('last week', function () {
+                //FIXME: this test seems to break on sundays (lol)
                 data.start_date = testDate.add(-7 * date.DAY).getTime();
                 expect(util.getSmartDate(data, true)).to.equal('Letzte Woche');
             });
