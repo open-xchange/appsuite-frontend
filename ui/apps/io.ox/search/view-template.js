@@ -510,22 +510,20 @@ define('io.ox/search/view-template',
                         //account name as dropdown header
                         if (Object.keys(accounts).length > 1) {
                             menu.append(
-                                $('<li role="presentation" class="dropdown-header">')
-                                    .append(account.name)
+                                $('<li role="presentation" class="dropdown-header">').append(account.name)
                             );
                         }
                         //add option
                         _.each(account.list, function (folder) {
                             menu.append(
                                 option = $('<li role="presentation">').append(
-                                            $('<a role="menuitem" tabindex="-1" href="#">')
-                                                .append(
-                                                        $('<i class="fa fa-fw fa-none">'),
-                                                        $('<span>').text(folder.title)
-                                                )
-                                                .addClass('option')
-                                                .attr('data-custom', folder.id)
-                                                .attr('title', folder.title)
+                                    $('<a href="#" role="menuitem" class="option" tabindex="-1">')
+                                        .append(
+                                            $('<i class="fa fa-fw fa-none">'),
+                                            $('<span>').text(folder.title)
+                                        )
+                                        .attr('data-custom', folder.id)
+                                        .attr('title', folder.title)
                                 )
                             );
                             if (current === folder.id)
@@ -540,12 +538,11 @@ define('io.ox/search/view-template',
                     //add option to open dialog
                     menu.append(
                         $('<li role="presentation">').append(
-                             $('<a role="menuitem" tabindex="-1" href="#">')
+                             $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
                                 .append(
                                     $('<i class="fa fa-fw fa-none">'),
                                     $('<span>').text(gt('More') + '...')
                                 )
-                                .addClass('option more')
                                 .attr('data-action', 'dialog')
                         )
                     );
