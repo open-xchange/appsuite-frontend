@@ -144,7 +144,7 @@ define('io.ox/contacts/api',
                 columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
                 extendColumns: 'io.ox/contacts/api/list',
                 sort: '607', // magic sort field - ignores asc/desc
-                getData: function (query, opt) {
+                getData: function (originalQuery, opt) {
                     var queryFields = {
                             names: ('display_name first_name last_name yomiFirstName yomiLastName company yomiCompany ' +
                             'email1 email2 email3').split(' '),
@@ -159,18 +159,23 @@ define('io.ox/contacts/api',
                         },
                         filter = ['or'],
                         data,
-                        defaultBehaviour = true;
+                        defaultBehaviour = true,
+                        includes_display_name = false,
+                        words = [],
+                        query = '';
 
                     opt = opt || {};
-                    //add wildcards to front and back if none is specified
-                    if ((query.indexOf('*') + query.indexOf('?')) < -1) {
-                        query = '*' + query + '*';
+
+                    // add wildcards to front and back if none is specified
+                    if ((originalQuery.indexOf('*') + originalQuery.indexOf('?')) < -1) {
+                        query = '*' + originalQuery + '*';
                     }
 
                     _(opt).each(function (value, key) {
                         if (_(queryFields).chain().keys().contains(key).value() && value === 'on') {
                             _(queryFields[key]).each(function (name) {
-                                filter.push(['=', {'field': name}, query]);
+                                filter.push(['=', { 'field': name }, query]);
+                                if (name === 'display_name') includes_display_name = true;
                             });
                             defaultBehaviour = false;
                         }
@@ -181,9 +186,21 @@ define('io.ox/contacts/api',
                             filter.push(['=', {'field': name}, query]);
                         });
                     }
+
+                    // client-side display_name fix
+                    if (originalQuery.indexOf('*') === -1 && includes_display_name) {
+                        words = String(originalQuery).trim().split(/\s+/);
+                        if (words.length > 1) {
+                            filter.push(
+                                ['and'].concat(_(words).map(function (word) {
+                                    return ['=', { 'field': 'display_name' }, '*' + word + '*'];
+                                }))
+                            );
+                        }
+                    }
+
                     data = { 'filter': filter };
-                    ext.point('io.ox/contacts/api/search')
-                        .invoke('getData', data, query, opt);
+                    ext.point('io.ox/contacts/api/search').invoke('getData', data, query, opt);
                     return data;
                 }
             }
