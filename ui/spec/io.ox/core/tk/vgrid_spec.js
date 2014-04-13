@@ -11,10 +11,10 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 
-define(['io.ox/core/tk/vgrid'], function (VGrid) {
+define(['io.ox/core/tk/vgrid', 'waitsFor'], function (VGrid, waitsFor) {
     'use strict';
 
-    describe.skip('The VGrid', function () {
+    describe('The VGrid', function () {
         beforeEach(function () {
             $('body', document).append($('<div id="testNode">'));
             this.node = $('<div>').appendTo($('#testNode', document));
@@ -47,7 +47,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
             test.vgrid.setListRequest(test.api.getList);
         }
 
-        describe('showing an empty folder', function () {
+        describe('showing an empty folder', function (done) {
             it('should display a hint about empty folder', function () {
                 this.testData = [];
                 wireGridAndApiFor(this);
@@ -64,7 +64,7 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                     //the test message to appear
                     //TODO: is this a bug or a feature?
                     return this.node.text().indexOf('Non-empty Testmessage') >= 0;
-                }, 'no test message was added', 1000);
+                }.bind(this)).done(done);
             });
         });
 
@@ -90,58 +90,54 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                 });
             });
 
-            it('should display a template for it', function () {
+            it('should display a template for it', function (done) {
                 this.vgrid.paint();
 
                 waitsFor(function () {
                     return this.node.text().indexOf('lonely item') >= 0;
-                }, 'test data was not painted in time', 1000);
+                }.bind(this)).done(done);
             });
 
-            it('should select one item with "select all" checkbox', function () {
+            it('should select one item with "select all" checkbox', function (done) {
                 this.vgrid.paint();
 
                 waitsFor(function () {
                     return this.node.text().indexOf('lonely item') >= 0;
-                }, 'test data was not painted in time', 1000);
-
-                runs(function () {
+                }.bind(this)).then(function () {
                     var checkbox = this.vgrid.getToolbar().find('input', 'label.select-all');
                     checkbox.prop('checked', false);
 
                     checkbox.click();
 
-                    expect(this.vgrid.selection.get()).toEqual(this.testData);
-                });
+                    expect(this.vgrid.selection.get()).to.deep.equal(this.testData);
+                    done();
+                }.bind(this));
             });
 
-            it('should deselect one item when "select all" checkbox is unchecked', function () {
+            it('should deselect one item when "select all" checkbox is unchecked', function (done) {
                 this.vgrid.paint();
 
                 waitsFor(function () {
                     return this.node.text().indexOf('lonely item') >= 0;
-                }, 'test data was not painted in time', 1000);
-
-                runs(function () {
+                }.bind(this)).then(function () {
                     var checkbox = this.vgrid.getToolbar().find('input', 'label.select-all');
                     //ensure item is selected
                     this.vgrid.selection.selectAll();
-                    expect(this.vgrid.selection.get()).toEqual(this.testData);
+                    expect(this.vgrid.selection.get()).to.deep.equal(this.testData);
 
                     checkbox.click();
 
-                    expect(this.vgrid.selection.get()).toEqual([]);
-                });
+                    expect(this.vgrid.selection.get()).to.be.empty;
+                    done();
+                }.bind(this));
             });
 
-            it('should select one item when the checkbox is checked', function () {
+            it('should select one item when the checkbox is checked', function (done) {
                 this.vgrid.paint();
 
                 waitsFor(function () {
                     return this.node.text().indexOf('lonely item') >= 0;
-                }, 'test data was not painted in time', 1000);
-
-                runs(function () {
+                }.bind(this)).then(function () {
                     var checkbox = this.node.find('.testData').find('input:checkbox:visible');
 
                     //ensure nothing is selected
@@ -149,8 +145,9 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
 
                     checkbox.click();
 
-                    expect(this.vgrid.selection.get()).toEqual(this.testData);
-                });
+                    expect(this.vgrid.selection.get()).to.deep.equal(this.testData);
+                    done();
+                }.bind(this));
             });
         });
 
@@ -178,27 +175,24 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                 });
             });
 
-            it('should render 15 items', function () {
+            it('should render 15 items', function (done) {
                 this.vgrid.paint();
 
                 waitsFor(function () {
                     return this.node.text().indexOf('item no.') >= 0;
-                }, 'test data was not painted in time', 1000);
-
-                runs(function () {
-                    expect(this.node.find('.testData').length).toBe(15);
-                });
+                }.bind(this)).then(function () {
+                    expect(this.node.find('.testData')).to.have.length(15);
+                    done();
+                }.bind(this));
             });
 
             describe('and select all checkbox visible', function () {
-                it('when clicking through the list, it should select only one item', function () {
+                it('when clicking through the list, it should select only one item', function (done) {
                     this.vgrid.paint();
                     this.vgrid.setEditable(true);
                     waitsFor(function () {
                         return this.node.text().indexOf('item no.') >= 0;
-                    }, 'test data was not painted in time', 1000);
-
-                    runs(function () {
+                    }.bind(this)).then(function () {
                         var testDataNode = this.node.find('.testData'),
                             checkboxes = testDataNode.find('input:visible'),
                             vgrid = this.vgrid,
@@ -211,23 +205,22 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                             vgrid.focus();
                             checkbox.click();
 
-                            expect(selection.get().length).toBe(1);
+                            expect(selection.get()).to.have.length(1);
 
                             vgrid.focus();
                             checkbox.click();
-                            expect(selection.get().length).toBe(0);
+                            expect(selection.get()).to.have.length(0);
                         });
-                    });
+                        done();
+                    }.bind(this));
                 });
 
-                it('when selecting all items of the list, it should also check select all', function () {
+                it('when selecting all items of the list, it should also check select all', function (done) {
                     this.vgrid.paint();
                     this.vgrid.setEditable(true);
                     waitsFor(function () {
                         return this.node.text().indexOf('item no.') >= 0;
-                    }, 'test data was not painted in time', 1000);
-
-                    runs(function () {
+                    }.bind(this)).then(function () {
                         var testDataNode = this.node.find('.testData'),
                             checkboxes = testDataNode.find('input:visible'),
                             vgrid = this.vgrid,
@@ -235,19 +228,20 @@ define(['io.ox/core/tk/vgrid'], function (VGrid) {
                             selectAll = vgrid.getToolbar().find('input', 'label.select-all');
 
                         selection.clear();
-                        expect(selectAll.prop('checked')).toBeFalsy();
+                        expect(selectAll.prop('checked')).to.be.false;
                         checkboxes.each(function (index, checkbox) {
                             vgrid.focus();
                             $(checkbox).click();
-                            expect(selection.get().length).toBe(index + 1);
+                            expect(selection.get()).to.have.length(index + 1);
                             if (index < 14) {
                                 //expect it to be true, once all items are selected
-                                expect(selectAll.prop('checked')).toBeFalsy();
+                                expect(selectAll.prop('checked')).be.false;
                             }
                         });
-                        expect(selection.get()).toEqual(this.testData);
-                        expect(selectAll.prop('checked')).toBeTruthy();
-                    });
+                        expect(selection.get()).to.deep.equal(this.testData);
+                        expect(selectAll.prop('checked')).to.be.true;
+                        done();
+                    }.bind(this));
                 });
             });
         });
