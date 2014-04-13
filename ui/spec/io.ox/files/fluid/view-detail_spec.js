@@ -14,26 +14,34 @@
 define(['io.ox/files/fluid/view-detail',
     'io.ox/files/api',
     'io.ox/core/extensions',
+    'waitsFor',
     'fixture!io.ox/files/file.json',
     'fixture!io.ox/files/file-versions.json'
-    ], function (view, api, ext, file, fileversions) {
+    ], function (view, api, ext, waitsFor, file, fileversions) {
 
+    //skip these tests, because something fishy is going on, here.
+    //all tests have functional dependency on each other, should be refactored
+    //so each test can be run independently (makes the result more predictable)
     describe.skip('files detail view', function () {
         var baton = ext.Baton.ensure({
-            data: file
-        }),
+                data: file
+            }),
             app = {
                 getName: function () {
                     return 'testapp';
                 },
                 folder: {
-                    set: '0815'
+                    set: '0815',
+                    getData: function () {
+                        return $.Deferred().resolve(file);
+                    }
                 }
             },
             //use different id for each mod
             modified = function (data) {
                 var bat = $.extend(true, {}, baton, {
-                    data: data
+                    data: data,
+                    app: app
                 });
                 _.each(data, function (value, key) {
                     if (!value) delete bat.data[key];
@@ -52,35 +60,34 @@ define(['io.ox/files/fluid/view-detail',
         describe('needs a baton that', function () {
             it('has to be defined', function () {
                 var node = view.draw();
-                expect(node).toBeJquery();
-                expect(node.is(':empty')).toBeTruthy;
+                expect(node.is(':empty')).to.be.true;
             });
             it('stores name of opening app', function () {
                 view.draw(baton, app);
-                expect(baton.openedBy).toEqual('testapp');
+                expect(baton.openedBy).to.equal('testapp');
                 delete baton.openedBy;
             });
         });
-        describe('creates a DOM structure', function () {
+        describe('creates a DOM structure', function (done) {
             beforeEach(function () {
                 var node = this.node = view.draw(baton);
                 waitsFor(function () {
                     return node.find('ul.io-ox-inline-links').children().length > 0;
-                }, 'menu to render', 1000);
+                }).done(done);
             });
             describe('with a container that', function () {
                 it('has class file-details', function () {
-                    expect(this.node.hasClass('file-details')).toBeTruthy;
+                    expect(this.node.hasClass('file-details')).to.be.true;
                 });
                 it('use folder-id and file id as data-cid', function () {
-                    expect(this.node.attr('data-cid')).toEqual(baton.data.folder_id + '.' + baton.data.id);
+                    expect(this.node.attr('data-cid')).to.equal(baton.data.folder_id + '.' + baton.data.id);
                 });
             });
             describe('with action menu that', function () {
                 describe('always', function () {
                     it('has some actions', function () {
                         var actions = this.node.find('ul.io-ox-inline-links');
-                        expect(actions.children().length).toBeGreaterThan(0);
+                        expect(actions.children()).to.have.length.above(0);
                     });
                     it('has a show internal link action if filename is defined', function () {
                         //FIXME
@@ -100,12 +107,12 @@ define(['io.ox/files/fluid/view-detail',
                             });
                         });
                         it('has a open action', function () {
-                            expect(this.node.find('[data-action="open"]').length).toBeTruthy();
-                            expect(this.mod.find('[data-action="open"]').length).toBeFalsy();
+                            expect(this.node.find('[data-action="open"]')).to.have.length.above(0);
+                            expect(this.mod.find('[data-action="open"]')).to.have.length(0);
                         });
                         it('has a download action', function () {
-                            expect(this.node.find('[data-action="download"]').length).toBeTruthy();
-                            expect(this.mod.find('[data-action="download"]').length).toBeFalsy();
+                            expect(this.node.find('[data-action="download"]')).to.have.length.above(0);
+                            expect(this.mod.find('[data-action="download"]')).to.have.length(0);
                         });
                     });
                     describe('filename is defined)', function () {
@@ -115,8 +122,8 @@ define(['io.ox/files/fluid/view-detail',
                             });
                         });
                         it('has a publish action if filename is defined', function () {
-                            expect(this.node.find('[data-action="publish"]').length).toBeTruthy();
-                            expect(this.mod.find('[data-action="publish"]').length).toBeFalsy();
+                            expect(this.node.find('[data-action="publish"]')).to.have.length.above(0);
+                            expect(this.mod.find('[data-action="publish"]')).to.have.length(0);
                         });
                     });
                     describe('filetype is supported)', function () {
@@ -127,8 +134,8 @@ define(['io.ox/files/fluid/view-detail',
                         });
 
                         it('has a edit action ', function () {
-                            expect(this.node.find('[data-action="editor"]').length).toBeTruthy();
-                            expect(this.mod.find('[data-action="editor"]').length).toBeFalsy();
+                            expect(this.node.find('[data-action="editor"]')).to.have.length.above(0);
+                            expect(this.mod.find('[data-action="editor"]')).to.have.length(0);
                         });
                     });
                     describe('file is not locked)', function () {
@@ -141,15 +148,15 @@ define(['io.ox/files/fluid/view-detail',
                         });
 
                         it('has a rename action', function () {
-                            expect(this.node.find('[data-action="rename"]').length).toBeTruthy();
+                            expect(this.node.find('[data-action="rename"]')).to.have.length.above(0);
                         });
                         it('has a edit-description action', function () {
-                            expect(this.node.find('[data-action="edit-description"]').length).toBeTruthy();
+                            expect(this.node.find('[data-action="edit-description"]')).to.have.length.above(0);
                         });
                         it('has a move action', function () {
                             //TODO: stub read/delete grants
                             //expect(this.node.find('[data-action="move"]').length).toBeTruthy();
-                            expect(this.mod.find('[data-action="move"]').length).toBeFalsy();
+                            expect(this.mod.find('[data-action="move"]')).to.have.length(0);
                         });
                     });
                     describe('file is locked by myself)', function () {
@@ -161,10 +168,10 @@ define(['io.ox/files/fluid/view-detail',
                             });
                         });
                         it('has a rename action', function () {
-                            expect(this.mod.find('[data-action="rename"]').length).toBeTruthy();
+                            expect(this.mod.find('[data-action="rename"]')).to.have.length.above(0);
                         });
                         it('has a unlock action', function () {
-                            expect(this.node.find('[data-action="unlock"]').length).toBeFalsy();
+                            expect(this.node.find('[data-action="unlock"]')).to.have.length(0);
                             //FIXME
                             //expect(this.mod.find('[data-action="unlock"]').length).toBeTruthy();
                         });
@@ -178,13 +185,13 @@ define(['io.ox/files/fluid/view-detail',
                         });
 
                         it('has a rename action', function () {
-                            expect(this.mod.find('[data-action="rename"]').length).toBeFalsy();
+                            expect(this.mod.find('[data-action="rename"]')).to.have.length(0);
                         });
                         it('has a edit description action', function () {
-                            expect(this.mod.find('[data-action="edit-description"]').length).toBeFalsy();
+                            expect(this.mod.find('[data-action="edit-description"]')).to.have.length(0);
                         });
                         it('has a unlock action', function () {
-                            expect(this.mod.find('[data-action="unlock"]').length).toBeFalsy();
+                            expect(this.mod.find('[data-action="unlock"]')).to.have.length(0);
                         });
                     });
                     describe('file is unlocked)', function () {
@@ -197,10 +204,10 @@ define(['io.ox/files/fluid/view-detail',
                         it('has a lock action', function () {
                             //FIXME
                             //expect(this.node.find('[data-action="lock"]').length).toBeTruthy();
-                            expect(this.mod.find('[data-action="lock"]').length).toBeFalsy();
+                            expect(this.mod.find('[data-action="lock"]')).to.have.length(0);
                         });
                         it('has a edit-description action if file isn not locked', function () {
-                            expect(this.node.find('[data-action="edit-description"]').length).toBeTruthy();
+                            expect(this.node.find('[data-action="edit-description"]')).to.have.length.above(0);
                         });
                     });
                 });
@@ -223,29 +230,29 @@ define(['io.ox/files/fluid/view-detail',
                         id: 4716,
                         number_of_versions: 0
                     });
-                    expect(this.node.find('table.versiontable').length).toBeTruthy();
-                    expect(mod.find('table.versiontable').length).toBeFalsy();
+                    expect(this.node.find('table.versiontable')).to.have.length.above(0);
+                    expect(mod.find('table.versiontable')).to.have.length(0);
                 });
                 it('that can be collapsed', function () {
-                    expect(this.mod.find('.versiontable').attr('style')).toBeFalsy();
+                    expect(this.mod.find('.versiontable').attr('style')).to.empty;
                     this.mod.find('[data-action="history"]').trigger('click');
-                    expect(this.mod.find('.versiontable').attr('style').trim()).toBe('display: table;');
+                    expect(this.mod.find('.versiontable').attr('style').trim()).to.equal('display: table;');
                 });
                 it('that is initially collapsed', function () {
                     //TODO: initially hidden via css class; refactor
                 });
                 it('that shows all versions', function () {
-                    expect(this.mod.find('.versiontable').find('tbody>tr').length).toBe(3);
+                    expect(this.mod.find('.versiontable').find('tbody>tr')).to.have.length(3);
                 });
                 it('that highlights current version by adding class "info"', function () {
-                    expect(this.mod.find('.versiontable').find('.info .versionLabel').text()).toBe('2');
+                    expect(this.mod.find('.versiontable').find('.info .versionLabel').text()).to.equal('2');
                 });
             });
             it('that shows additional info about the folder', function () {
-                expect(this.node.find('ul.breadcrumb').length).toBe(1);
+                expect(this.node.find('ul.breadcrumb')).to.have.length(1);
             });
             it('that allows uploading a new file version', function () {
-                expect(this.node.find('input.file-input').length).toBe(1);
+                expect(this.node.find('input.file-input')).to.have.length(1);
             });
         });
     });
