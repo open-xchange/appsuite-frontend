@@ -89,7 +89,7 @@ define('io.ox/search/util',
                             id = accountAPI.parseAccountId(item.id);
                             qualified[id] = qualified[id] || {list: []};
                             qualified[id].list.push(item);
-                            qualified[id].name = (accounts[id] || {}).displayName;
+                            qualified[id].name = (accounts[id] || {}).name;
                         });
                         return qualified;
                     });
