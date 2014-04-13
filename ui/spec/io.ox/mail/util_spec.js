@@ -18,15 +18,11 @@ define(['io.ox/mail/util',
 
     var capabilities = caputil.preset('common').init('io.ox/mail/util', util);
 
-    describe.skip('Utilities for mail:', function () {
+    describe('Utilities for mail:', function () {
         describe('has some capability depending msisdn methods that', function () {
-            beforeEach(function () {
-                var def;
-                runs(function () {
-                    def = capabilities.reset();
-                });
-                waitsFor(function () {
-                    return def.state() === 'resolved';
+            beforeEach(function (done) {
+                capabilities.reset().done(function () {
+                    done();
                 });
             });
             describe('work with disabled capability and', function () {
@@ -35,9 +31,9 @@ define(['io.ox/mail/util',
                 });
 
                 it('should correctly identify channel "email" or "phone"', function () {
-                    expect(util.getChannel('017012345678')).toEqual('phone');
-                    expect(util.getChannel('+17012345678')).toEqual('phone');
-                    expect(util.getChannel('(01701) 23456-78')).toEqual('phone');
+                    expect(util.getChannel('017012345678')).to.equal('phone');
+                    expect(util.getChannel('+17012345678')).to.equal('phone');
+                    expect(util.getChannel('(01701) 23456-78')).to.equal('phone');
                 });
                 it('should correctly remove "' + util.getChannelSuffixes().msisdn +  '" typesuffix from data', function () {
                     var suffix = util.getChannelSuffixes().msisdn,
@@ -51,9 +47,9 @@ define(['io.ox/mail/util',
                             ]
                         };
                     expect(util.removeChannelSuffix('017012345678' + suffix + ',asdadjaldk,017012345678' + suffix + ',asduhadsasd'))
-                    .toEqual('017012345678,asdadjaldk,017012345678,asduhadsasd');
+                    .to.deep.equal('017012345678,asdadjaldk,017012345678,asduhadsasd');
                     expect(util.removeChannelSuffix(mail))
-                    .toEqual({
+                    .to.deep.equal({
                             from: [
                                 ['017012345678', '017012345678']
                             ],
@@ -71,7 +67,7 @@ define(['io.ox/mail/util',
                         ]
                     };
                     expect(util.removeChannelSuffix(mail))
-                        .toEqual({from: [], to: [['017012345678', '017012345678']]});
+                        .to.deep.equal({from: [], to: [['017012345678', '017012345678']]});
                 });
             });
             describe('work with enabled capability and', function () {
@@ -80,9 +76,9 @@ define(['io.ox/mail/util',
                 });
 
                 it('should correctly identify channel "email" or "phone"', function () {
-                    expect(util.getChannel('017012345678')).toEqual('email');
-                    expect(util.getChannel('+17012345678')).toEqual('email');
-                    expect(util.getChannel('(01701) 23456-78')).toEqual('email');
+                    expect(util.getChannel('017012345678')).to.equal('email');
+                    expect(util.getChannel('+17012345678')).to.equal('email');
+                    expect(util.getChannel('(01701) 23456-78')).to.equal('email');
                 });
             });
         });
@@ -91,31 +87,31 @@ define(['io.ox/mail/util',
             it('should correctly identify channel "email" or "phone"', function () {
 
                 //without considering activated capability
-                expect(util.getChannel(util.getChannelSuffixes().msisdn)).toEqual('phone');
-                expect(util.getChannel('017012345678' + util.getChannelSuffixes().msisdn)).toEqual('phone');
-                expect(util.getChannel('horst.matuschek@' + util.getChannelSuffixes().msisdn)).toEqual('phone');
+                expect(util.getChannel(util.getChannelSuffixes().msisdn)).to.equal('phone');
+                expect(util.getChannel('017012345678' + util.getChannelSuffixes().msisdn)).to.equal('phone');
+                expect(util.getChannel('horst.matuschek@' + util.getChannelSuffixes().msisdn)).to.equal('phone');
 
-                expect(util.getChannel('017012345678', false)).toEqual('phone');
-                expect(util.getChannel('+17012345678', false)).toEqual('phone');
-                expect(util.getChannel('(01701) 23456-78', false)).toEqual('phone');
-                expect(util.getChannel('office (01701) 23456-78', false)).toEqual('email');
+                expect(util.getChannel('017012345678', false)).to.equal('phone');
+                expect(util.getChannel('+17012345678', false)).to.equal('phone');
+                expect(util.getChannel('(01701) 23456-78', false)).to.equal('phone');
+                expect(util.getChannel('office (01701) 23456-78', false)).to.equal('email');
             });
             it('should correctly remove inalid chars from phone numbers', function () {
-                expect(util.cleanupPhone('+17012345678')).toEqual('+17012345678');
-                expect(util.cleanupPhone('(01701) 23456-78')).toEqual('017012345678');
-                expect(util.cleanupPhone('01701/2345678')).toEqual('017012345678');
+                expect(util.cleanupPhone('+17012345678')).to.equal('+17012345678');
+                expect(util.cleanupPhone('(01701) 23456-78')).to.equal('017012345678');
+                expect(util.cleanupPhone('01701/2345678')).to.equal('017012345678');
             });
         });
 
         describe('parse recepient', function () {
             it('should work with plain mail address strings', function () {
                 var result = util.parseRecipient('julian.baeume@open-xchange.com');
-                expect(result).toEqual(['julian.baeume', 'julian.baeume@open-xchange.com']);
+                expect(result).to.deep.equal(['julian.baeume', 'julian.baeume@open-xchange.com']);
             });
 
             it('should work with display name and mail address strings', function () {
                 var result = util.parseRecipient('"Julian Bäume" <julian.baeume@open-xchange.com>');
-                expect(result).toEqual(['Julian Bäume', 'julian.baeume@open-xchange.com']);
+                expect(result).to.deep.equal(['Julian Bäume', 'julian.baeume@open-xchange.com']);
             });
         });
 
@@ -123,7 +119,6 @@ define(['io.ox/mail/util',
             var name = 'pierce hawthorne',
                 email = 'pierce.hawthorne@greendalecommunitycollege.com';
             it('should return empty string if data is invalid or empty', function () {
-                var expect = chai.expect;
                 //not array
                 expect(util.getDisplayName(email)).to.be.empty;
                 expect(util.getDisplayName('')).to.be.empty;
@@ -136,16 +131,16 @@ define(['io.ox/mail/util',
             });
             it('should return email if name is not set', function () {
                 //fallback
-                expect(util.getDisplayName(['', email])).toEqual(email);
-                expect(util.getDisplayName([undefined, email])).toEqual(email);
-                expect(util.getDisplayName([null, email])).toEqual(email);
+                expect(util.getDisplayName(['', email])).to.equal(email);
+                expect(util.getDisplayName([undefined, email])).to.equal(email);
+                expect(util.getDisplayName([null, email])).to.equal(email);
             });
             it('should return the unescaped name', function () {
                 //workin
-                expect(util.getDisplayName([name, email])).toEqual(name);
-                expect(util.getDisplayName([name, ''])).toEqual(name);
-                expect(util.getDisplayName([name, undefined])).toEqual(name);
-                expect(util.getDisplayName([name, null])).toEqual(name);
+                expect(util.getDisplayName([name, email])).to.equal(name);
+                expect(util.getDisplayName([name, ''])).to.equal(name);
+                expect(util.getDisplayName([name, undefined])).to.equal(name);
+                expect(util.getDisplayName([name, null])).to.equal(name);
             });
 
         });
@@ -153,14 +148,15 @@ define(['io.ox/mail/util',
         describe('from check', function () {
             it('should return false on invalid date', function () {
                 //invalid
-                expect(util.hasFrom('')).toBeFalsy();
-                expect(util.hasFrom(null)).toBeFalsy();
-                expect(util.hasFrom(undefined)).toBeFalsy();
-                expect(util.hasFrom({})).toBeFalsy();
-                expect(util.hasFrom([])).toBeFalsy();
-                expect(util.hasFrom({ from: [[undefined, '']]})).toBeFalsy();
+                //FIXME: API seems "wrong" to me. hasFrom should return boolean, always.
+                expect(util.hasFrom('')).to.be.empty;
+                expect(util.hasFrom(null)).to.be.null;
+                expect(util.hasFrom(undefined)).to.be.undefined;
+                expect(util.hasFrom({})).to.be.empty;
+                expect(util.hasFrom([])).to.be.empty;
+                expect(util.hasFrom({ from: [[undefined, '']]})).to.be.false;
                 //valid
-                expect(util.hasFrom({ from: [[undefined, 'some email']]})).toBeTruthy();
+                expect(util.hasFrom({ from: [[undefined, 'some email']]})).to.be.true;
             });
 
         });
@@ -168,17 +164,16 @@ define(['io.ox/mail/util',
         describe('from getter', function () {
             it('should return jquery span node', function () {
                 var result = util.getFrom('');
-                expect(result).toBeJquery();
-                expect(result.is('span')).toBeTruthy();
+                expect(result.is('span')).to.be.true;
             });
         });
 
         describe('format sender', function () {
             it('should return a nicely formated string', function () {
-                expect(util.formatSender('""""name""""', 'address', false)).toEqual('name <address>');
-                expect(util.formatSender('""""name""""', 'address')).toEqual('"name" <address>');
-                expect(util.formatSender(undefined, 'address')).toEqual('address');
-                expect(util.formatSender('', 'address')).toEqual('address');
+                expect(util.formatSender('""""name""""', 'address', false)).to.equal('name <address>');
+                expect(util.formatSender('""""name""""', 'address')).to.equal('"name" <address>');
+                expect(util.formatSender(undefined, 'address')).to.equal('address');
+                expect(util.formatSender('', 'address')).to.equal('address');
             });
         });
 
@@ -186,16 +181,14 @@ define(['io.ox/mail/util',
             it('should return a jquery node', function () {
                 var result;
                 result = util.getPriority(undefined);
-                expect(result).toBeJquery();
-                expect(result.is('span')).toBeTruthy();
+                expect(result.is('span')).to.be.true;
 
                 result = util.getPriority({priority: 3});
-                expect(result).toBeEmptyJquery();
+                expect(result).to.have.length(0);
             });
         });
 
         describe('getAccountName', function () {
-            var expect = chai.expect;
             var account_name = 'Pierce Hawthorne';
             it('should return a fallback string for invalid date', function () {
                 expect(util.getAccountName(undefined)).to.be.equal('N/A');
@@ -211,7 +204,6 @@ define(['io.ox/mail/util',
         });
 
         describe('timestamp functions', function () {
-            var expect = chai.expect;
             it('should return "unknown" for invalid date', function () {
                 expect(util.getTime(undefined), 'getTime').to.be.equal('unbekannt');
                 expect(util.getDateTime(undefined), 'getDateTime').to.be.equal('unbekannt');
@@ -225,8 +217,7 @@ define(['io.ox/mail/util',
         });
 
         describe('some of the check functions', function () {
-            //TODO: use chai-all plugin
-            var expect = chai.expect;
+
             it('should return "undefined" for invalid date', function () {
                 //invalid: returns undefined
                 expect(util.isUnseen(undefined), 'isUnseen').is.undefined;

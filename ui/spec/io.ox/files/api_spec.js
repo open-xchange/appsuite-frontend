@@ -18,7 +18,6 @@ define(['io.ox/files/api',
     ], function (api, sharedExamplesFor, wrapper, unlocked, fileversions) {
 
     var jexpect = this.expect,
-        expect = chai.expect,
         sinon = wrapper.create(),
         locked = $.extend({}, unlocked, {
             id: '4710',
