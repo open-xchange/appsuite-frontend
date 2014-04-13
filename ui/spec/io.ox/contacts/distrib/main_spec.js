@@ -11,7 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api'], function (main, api) {
+define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api', 'waitsFor'], function (main, api, waitsFor) {
 
     'use strict';
 
@@ -45,27 +45,13 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api'], function (main, ap
             'data': {
                 'id': 510778
             }
-        },
-
-        TIMEOUT = ox.testTimeout;
-
-    // helpers
-    function Done() {
-        var f = function () {
-            return f.value;
         };
-        f.value = false;
-        f.yep = function () {
-            f.value = true;
-        };
-        return f;
-    }
 
     /*
      * Suite: Distributionlist Test
      */
 
-    describe.skip('Distributionlist edit', function () {
+    describe('Distributionlist edit', function () {
 
         var app = null, appContainer, createForm, inputName, addButton,
         saveButton, displayName;
@@ -77,26 +63,21 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api'], function (main, ap
         });
 
         it('should provide a getApp function ', function () {
-            expect(main.getApp).toBeTruthy();
+            expect(main.getApp).to.be.a('function');
         });
 
         it('should provide a launch function ', function () {
             var app = main.getApp();
-            expect(app.launch).toBeTruthy();
+            expect(app.launch).to.be.a('function');
         });
 
-        it('opens distributionlist app ', function () {
-
-            var loaded = new Done();
-
-            waitsFor(loaded, 'Could not load app', TIMEOUT);
-
+        it('opens distributionlist app ', function (done) {
             main.getApp().launch().done(function () {
 
                 app = this;
                 app.create(1);
-                loaded.yep();
-                expect(app).toBeTruthy();
+                expect(app).to.exist;
+                done();
             });
         });
 
@@ -105,17 +86,17 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api'], function (main, ap
             appContainer = app.getWindow().nodes.body;
         });
 
-        it('checks if the createform is opend ', function () {
+        it('checks if the createform is opend ', function (done) {
             waitsFor(function () {
                 createForm = appContainer.find('.window-content .create-distributionlist');
                 if (createForm[0]) {
                     return true;
                 }
-            }, 'looks for the createform', TIMEOUT);
+            }).done(done);
 
         });
 
-        it('looks for the form components ', function () {
+        it('looks for the form components ', function (done) {
             waitsFor(function () {
                 inputName = createForm.find('input.add-participant');
                 saveButton = createForm.find('button.btn.btn-primary');
@@ -125,32 +106,27 @@ define(['io.ox/contacts/distrib/main', 'io.ox/contacts/api'], function (main, ap
                 if (inputName[0] && addButton[0] && saveButton[0] && displayName[0]) {
                     return true;
                 }
-            }, 'looks for the createform components', TIMEOUT);
+            }).done(done);
 
         });
 
         it('fills the namefield ', function () {
-            runs(function () {
-                displayName.val(listname).trigger('change');
-            });
+            displayName.val(listname).trigger('change');
         });
 
         it('fills the array with the test data ', function () {
-            runs(function () {
-                _.each(testObjects, function (val) {
-                    fillAndTrigger({
-                        inputName: inputName,
-                        addButton: addButton,
-                        fillForm: val.fillForm
-                    });
+            _.each(testObjects, function (val) {
+                fillAndTrigger({
+                    inputName: inputName,
+                    addButton: addButton,
+                    fillForm: val.fillForm
                 });
             });
         });
 
         it('hits the savebutton', function () {
-            runs(function () {
-                saveButton.trigger('click');
-            });
+            saveButton.trigger('click');
+            //FIXME: check for something to happen?
         });
 
     });
