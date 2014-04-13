@@ -127,7 +127,7 @@ msgstr "Blau"
 #: apps/io.ox/mail/view-detail.js:476 apps/io.ox/mail/view-detail.js:483
 #: apps/io.ox/portal/settings/pane.js:157
 msgid "Green"
-msgstr "Green"
+msgstr "Grün"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:80
 #: apps/io.ox/mail/view-detail.js:477 apps/io.ox/mail/view-detail.js:484
