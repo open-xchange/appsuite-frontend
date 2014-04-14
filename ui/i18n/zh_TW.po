@@ -3765,7 +3765,7 @@ msgstr "月"
 #: apps/io.ox/core/extPatterns/links.js:340 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:349
 #: apps/io.ox/mail/write/view-main.js:772 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:546
+#: apps/io.ox/search/view-template.js:544
 msgid "More"
 msgstr "更多"
 
