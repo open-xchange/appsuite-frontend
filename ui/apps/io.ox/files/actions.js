@@ -123,7 +123,7 @@ define('io.ox/files/actions',
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
                 return e.baton.app.folder.getData().then(function (data) {
-                   return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write') && !folderAPI.is('trash', data);
+                    return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write') && !folderAPI.is('trash', data);
                 });
             },
             action: function (baton) {
@@ -643,7 +643,7 @@ define('io.ox/files/actions',
         capabilities: 'portal',
         requires: function (e) {
             return e.baton.app.folder.getData().then(function (data) {
-                return e.collection.has('one') && !_.isEmpty(e.baton.data)&& !folderAPI.is('trash', data);
+                return e.collection.has('one') && !_.isEmpty(e.baton.data) && !folderAPI.is('trash', data);
             });
         },
         action: function (baton) {

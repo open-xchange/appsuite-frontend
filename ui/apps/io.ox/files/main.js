@@ -59,12 +59,12 @@ define('io.ox/files/main',
         commons.wirePerspectiveEvents(app);
         
         app.on('folder:change', function (id, data) {
-            if(folderAPI.is('trash', data)) {//no new files in trash folders
+            if (folderAPI.is('trash', data)) {//no new files in trash folders
                 ext.point('io.ox/files/links/toolbar').disable('default');//that's the plus sign
             } else {
                 ext.point('io.ox/files/links/toolbar').enable('default');//that's the plus sign
             }
-           win.updateToolbar();
+            win.updateToolbar();
         });
 
         // folder tree

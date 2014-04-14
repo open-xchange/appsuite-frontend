@@ -17,7 +17,7 @@ define('io.ox/files/folderview-extensions',
      'io.ox/files/api',
      'io.ox/core/notifications',
      'gettext!io.ox/mail'
-    ], function (ext, folderAPI, filesAPI, notifications,gt) {
+    ], function (ext, folderAPI, filesAPI, notifications, gt) {
 
     'use strict';
 
@@ -40,7 +40,7 @@ define('io.ox/files/folderview-extensions',
                 .done(function (action) {
                     if (action === 'delete') {
                         notifications.yell('info', gt('Emptying folder... This may take a few seconds.'));
-                        filesAPI.clear(id).done (function () {
+                        filesAPI.clear(id).done(function () {
                             notifications.yell('success', gt('The folder has been emptied.'));
                         });
                     }
