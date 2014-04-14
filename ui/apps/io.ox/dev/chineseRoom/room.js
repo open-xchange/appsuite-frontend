@@ -131,6 +131,10 @@ define('io.ox/dev/chineseRoom/room',
             console.log('Reset!');
         });
 
+        this.group.on('error:notMember', function () {
+            console.log('Not a member!');
+        });
+
     }
 
     var rooms = {};

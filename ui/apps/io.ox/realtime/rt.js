@@ -402,22 +402,9 @@ define.async('io.ox/realtime/rt',
 
     function received(stanza) {
         if (api.debug) {
-            console.log('Received  Stanza');
+            console.log('Received  Stanza', stanza);
         }
-        if (stanza.get('', 'error')) {
-            if (api.debug) {
-                console.log('Received Stanza contained an error');
-            }
-            var error = stanza.get('', 'error');
-            if (error.data && error.data.code === 1005) {
-                ox.trigger('relogin:required');
-            } else if (error.data && error.data.code === 1006) {
-                if (api.debug) {
-                    console.log('Got error 1006, so resetting sequence');
-                }
-                resetSequence(-1);
-            }
-        } else if (stanza.get('atmosphere', 'received')) {
+        if (stanza.get('atmosphere', 'received')) {
             _(stanza.getAll('atmosphere', 'received')).each(function (receipt) {
                 var sequenceNumber = Number(receipt.data);
                 receivedAcknowledgement(sequenceNumber);
@@ -463,11 +450,33 @@ define.async('io.ox/realtime/rt',
                     return; // Discard, as we have already seen this stanza
                 }
                 if (!outOfOrder) {
-                    if (api.debug) {
-                        console.log('RECEIVED', stanza.seq, stanza);
+                    if (stanza.get('', 'error')) {
+                        if (api.debug) {
+                            console.log('Received Stanza contained an error', stanza);
+                        }
+                        var error = stanza.get('', 'error');
+                        if (error.data && error.data.code === 1005) {
+                            ox.trigger('relogin:required');
+                        } else if (error.data && error.data.code === 1006) {
+                            if (api.debug) {
+                                console.log('Got error 1006, so resetting sequence');
+                            }
+                            resetSequence(-1);
+                        } else {
+                            api.trigger('error', stanza);
+                            api.trigger('error:' + stanza.selector, stanza);
+                            if (error.data && error.data.code) {
+                                api.trigger('error:code:' + error.data.code, stanza);
+                            }
+                        }
+                    } else {
+                        if (api.debug) {
+                            console.log('RECEIVED', stanza.seq, stanza);
+                        }
+                        api.trigger('receive', stanza);
+                        api.trigger('receive:' + stanza.selector, stanza);
+                        api.trigger('receive:from:' + stanza.from, stanza);
                     }
-                    api.trigger('receive', stanza);
-                    api.trigger('receive:' + stanza.selector, stanza);
                     if (stanza.seq !== -1) {
                         serverSequenceThreshhold = stanza.seq;
                     }
