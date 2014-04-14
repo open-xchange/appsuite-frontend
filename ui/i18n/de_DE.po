@@ -6607,6 +6607,9 @@ msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
 msgstr ""
+"Diese Tour gibt Ihnen eine kurze Einführung in das Produkt. Weitere "
+"Informationen finden Sie in den Guided Tours für die einzelnen Apps und in "
+"der Online-Hilfe."
 
 #: apps/io.ox/core/tk/folderviews.js:634 module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
