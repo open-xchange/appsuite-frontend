@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-11 11:14+0100\n"
+"PO-Revision-Date: 2014-04-14 10:24+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3241,9 +3241,8 @@ msgstr "Inliegend"
 
 #. %1$s inline menu title for better accessibility
 #: apps/io.ox/core/extPatterns/links.js:313 module:io.ox/core
-#, fuzzy
 msgid "Inline menu %1$s"
-msgstr "Inliegend"
+msgstr "Inline-Menü %1$s"
 
 #: apps/io.ox/mail/write/inline-images.js:79 module:io.ox/mail
 msgid "Insert"
