@@ -53,8 +53,9 @@ define('plugins/portal/mail/register',
             var LIMIT = _.device('small') ? 5 : 10;
             // we fetch more that we want to show because usually a lot is deleted
             return accountAPI.getUnifiedMailboxName().then(function (mailboxName) {
-                var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder();
-                return api.getAll({ folder:  folderName, limit: LIMIT * 5 }, false).pipe(function (mails) {
+                var folderName = mailboxName ? mailboxName + '/INBOX' : api.getDefaultFolder(),
+                    useCache = !!baton.cache;
+                return api.getAll({ folder:  folderName, limit: LIMIT * 5 }, useCache).pipe(function (mails) {
                     // ignore deleted mails
                     mails = _(mails).filter(function (obj) {
                         return !util.isDeleted(obj);
@@ -62,6 +63,7 @@ define('plugins/portal/mail/register',
                     // fetch detailed data for smaller subset
                     return api.getList(mails.slice(0, LIMIT)).done(function (data) {
                         baton.data = data;
+                        baton.cache = false;
                     });
                 });
             });
@@ -94,15 +96,18 @@ define('plugins/portal/mail/register',
 
         preview: function (baton) {
             var $content = $('<ul class="content list-unstyled">');
-            var updater = function () {
+
+            // need debounce here, otherwise we get tons of refresh calls
+            var updater = _.debounce(function () {
                 require(['io.ox/portal/main'], function (portal) {
                     var portalApp = portal.getApp(),
-                    portalModel = portalApp.getWidgetCollection()._byId.mail_0;
-                    if (portalModel) {
-                        portalApp.refreshWidget(portalModel, 0);
+                        model = portalApp.getWidgetCollection()._byId.mail_0;
+                    if (model) {
+                        model.get('baton').cache = true;
+                        portalApp.refreshWidget(model, 0);
                     }
                 });
-            };
+            }, 10);
 
             var list = baton.data;
 
@@ -121,7 +126,7 @@ define('plugins/portal/mail/register',
                         // store tracked ecids for unregistering
                         trackedMails.push(ecid);
                         // track updates for the mail
-                        api.on('update:' + ecid + '.portalTitle', updater);
+                        api.on('update:' + ecid + '.portalTile', updater);
 
                         var received = new date.Local(mail.received_date).format(date.DATE);
                         return $('<li class="item" tabindex="1">')
