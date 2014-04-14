@@ -170,6 +170,7 @@ define('io.ox/realtime/groups',
             rt.off('reset', relayResetEvent);
             rt.off('highLoad', relayHighLoadEvent);
             delete groups[id];
+            this.events.destroy();
             destroyed = true;
         };
 
