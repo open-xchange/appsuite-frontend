@@ -1091,6 +1091,10 @@ define('io.ox/mail/write/main',
             blockReuse(mail.data.sendtype);
             prepareMailForSending(mail);
 
+            if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+            }
+
             //convert to target emoji send encoding
             if (convert && emoji.sendEncoding() !== 'unified') {
                 //convert to send encoding (NOOP, if target encoding is 'unified')
