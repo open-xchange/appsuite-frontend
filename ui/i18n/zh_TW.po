@@ -490,7 +490,7 @@ msgstr "添加參與者/資源"
 msgid "Add signature"
 msgstr "新增簽名"
 
-#: apps/io.ox/mail/write/main.js:1221 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1225 module:io.ox/mail
 msgid "Add subject"
 msgstr "新增主題"
 
@@ -679,7 +679,7 @@ msgid "Apply rule if any condition is met."
 msgstr "符合任何條件時套用規則"
 
 #: apps/io.ox/calendar/acceptdeny.js:163 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:163 apps/io.ox/calendar/edit/main.js:350
+#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:350
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/week/perspective.js:136
 #: apps/io.ox/mail/detail/links.js:125 module:io.ox/mail
 msgid "Appointment"
@@ -691,13 +691,13 @@ msgstr "約會"
 msgid "Appointment Details"
 msgstr "約會詳情"
 
-#: apps/io.ox/calendar/actions.js:401 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:400 module:io.ox/calendar
 msgid "Appointment has been copied"
 msgid_plural "Appointments have been copied"
 msgstr[0] "約會已複製"
 msgstr[1] "約會已複製"
 
-#: apps/io.ox/calendar/actions.js:400 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:399 module:io.ox/calendar
 msgid "Appointment has been moved"
 msgid_plural "Appointments have been moved"
 msgstr[0] "約會已移動"
@@ -993,9 +993,9 @@ msgid "Calendar"
 msgstr "日曆"
 
 #: apps/io.ox/calendar/acceptdeny.js:96 module:io.ox/calendar
-#: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:164
-#: apps/io.ox/calendar/actions.js:273 apps/io.ox/calendar/actions.js:285
-#: apps/io.ox/calendar/actions.js:416 apps/io.ox/calendar/edit/main.js:51
+#: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:163
+#: apps/io.ox/calendar/actions.js:272 apps/io.ox/calendar/actions.js:284
+#: apps/io.ox/calendar/actions.js:415 apps/io.ox/calendar/edit/main.js:51
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:160
 #: apps/io.ox/calendar/month/perspective.js:117
 #: apps/io.ox/calendar/week/perspective.js:94
@@ -1031,7 +1031,7 @@ msgstr "日曆"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:241
 #: apps/io.ox/mail/main.js:923 apps/io.ox/mail/write/inline-images.js:80
-#: apps/io.ox/mail/write/main.js:1341 apps/io.ox/mail/write/view-main.js:617
+#: apps/io.ox/mail/write/main.js:1345 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
@@ -1112,7 +1112,7 @@ msgstr "更改密碼"
 msgid "Change password and sign out"
 msgstr "更改密碼並登出"
 
-#: apps/io.ox/calendar/actions.js:594 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:593 module:io.ox/calendar
 msgid "Change status"
 msgstr "更改狀態"
 
@@ -1662,7 +1662,7 @@ msgid "Date of birth"
 msgstr "出生日期"
 
 #: apps/io.ox/backbone/mini-views/date.js:25 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:511 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:510 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:75 module:io.ox/calendar/freebusy
 msgid "Day"
 msgstr "日"
@@ -1724,8 +1724,8 @@ msgstr "延遲"
 
 #. Really delete portal widget - in contrast to "just disable"
 #. Really delete portal widget - in contrast to "just disable"
-#: apps/io.ox/calendar/actions.js:284 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:622
+#: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:621
 #: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:748 apps/io.ox/contacts/main.js:107
@@ -1756,7 +1756,7 @@ msgstr "刪除"
 msgid "Delete account"
 msgstr "刪除帳號"
 
-#: apps/io.ox/calendar/actions.js:271 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "刪除約會"
 
@@ -1764,7 +1764,7 @@ msgstr "刪除約會"
 msgid "Delete version"
 msgstr "刪除版本"
 
-#: apps/io.ox/calendar/actions.js:272 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:271 module:io.ox/calendar
 msgid "Delete whole series"
 msgstr "刪除整個系列"
 
@@ -1837,7 +1837,7 @@ msgstr "停用小工具"
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/settings/signatures/register.js:107 module:io.ox/mail
 #: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1339 apps/io.ox/mail/write/view-main.js:65
+#: apps/io.ox/mail/write/main.js:1343 apps/io.ox/mail/write/view-main.js:65
 #: apps/io.ox/tasks/edit/view-template.js:82 module:io.ox/tasks/edit
 #: apps/plugins/portal/userSettings/register.js:44 module:io.ox/core
 msgid "Discard"
@@ -1946,7 +1946,7 @@ msgstr[1] "確定要刪除此工作嗎？"
 msgid "Do you really want to delete this widget?"
 msgstr "確定要刪除此小工具嗎？"
 
-#: apps/io.ox/mail/write/main.js:1338 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1342 module:io.ox/mail
 msgid "Do you really want to discard this mail?"
 msgstr "您真的想放棄此郵件嗎？"
 
@@ -1977,17 +1977,17 @@ msgid ""
 "series?"
 msgstr "您是否想編輯整個系列或單個系列約會？"
 
-#: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:269 module:io.ox/calendar
 msgid ""
 "Do you want to delete the whole series or just one appointment within the "
 "series?"
 msgstr "您是否想刪除整個系列或單個系列中的約會？"
 
-#: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:282 module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
 msgstr "您是否想刪除此約會？"
 
-#: apps/io.ox/calendar/actions.js:159 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:158 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:133
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
@@ -2126,7 +2126,7 @@ msgid "EB"
 msgstr "EB"
 
 #. Used as a button label to enter the "edit mode"
-#: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:584 module:io.ox/calendar
 #: apps/io.ox/contacts/actions.js:739 module:io.ox/contacts
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:833 module:io.ox/files
@@ -3242,7 +3242,7 @@ msgstr "無效資料"
 msgid "Invite to appointment"
 msgstr "約會敲請"
 
-#: apps/io.ox/calendar/actions.js:647 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:646 module:io.ox/calendar
 msgid "Invite to new appointment"
 msgstr "邀請至新約會"
 
@@ -3417,7 +3417,7 @@ msgstr "LinkedIn 回報錯誤:"
 msgid "Links"
 msgstr "鏈結"
 
-#: apps/io.ox/calendar/actions.js:539 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:538 module:io.ox/calendar
 #: apps/io.ox/files/actions.js:766 module:io.ox/files
 #: apps/io.ox/files/actions.js:1347 apps/io.ox/mail/toolbar.js:213
 #: module:io.ox/mail
@@ -3504,11 +3504,11 @@ msgstr "已匯入郵件"
 msgid "Mail has been moved"
 msgstr "已移動郵件"
 
-#: apps/io.ox/mail/write/main.js:1219 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1223 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "這封信沒有主旨，要傳送嗎？"
 
-#: apps/io.ox/mail/write/main.js:1212 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1216 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "郵件沒有收件者。"
 
@@ -3528,7 +3528,7 @@ msgstr "郵件提醒"
 msgid "Mail reminder for"
 msgstr "郵件提醒給"
 
-#: apps/io.ox/mail/write/main.js:1275 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1279 module:io.ox/mail
 msgid "Mail saved as draft"
 msgstr "已將郵件保存草稿"
 
@@ -3737,7 +3737,7 @@ msgid "Monday"
 msgstr "星期一"
 
 #: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:532 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:531 module:io.ox/calendar
 msgid "Month"
 msgstr "月"
 
@@ -3769,8 +3769,8 @@ msgstr "月"
 msgid "More"
 msgstr "更多"
 
-#: apps/io.ox/calendar/actions.js:415 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:603
+#: apps/io.ox/calendar/actions.js:414 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:463 apps/io.ox/calendar/actions.js:602
 #: apps/io.ox/contacts/actions.js:192 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:762
 #: apps/io.ox/core/commons-folderview.js:612 module:io.ox/core
@@ -3856,7 +3856,7 @@ msgstr "來自 %1$s %2$s 的新郵件。按 Enter 以開啟。"
 msgid "New Mails"
 msgstr "新增郵件"
 
-#: apps/io.ox/calendar/actions.js:494 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:493 module:io.ox/calendar
 #: apps/io.ox/calendar/settings/pane.js:176
 msgid "New appointment"
 msgstr "新約會"
@@ -4767,8 +4767,8 @@ msgstr "上週"
 msgid "Primary account"
 msgstr "主要帳號"
 
-#: apps/io.ox/calendar/actions.js:569 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:612 apps/io.ox/contacts/actions.js:319
+#: apps/io.ox/calendar/actions.js:568 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:611 apps/io.ox/contacts/actions.js:319
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:723
 #: apps/io.ox/core/print.js:108 module:io.ox/core
 #: apps/io.ox/mail/actions.js:1096 module:io.ox/mail
@@ -5224,12 +5224,12 @@ msgstr "星期六"
 msgid "Save"
 msgstr "保存"
 
-#: apps/io.ox/calendar/actions.js:656 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:655 module:io.ox/calendar
 #: apps/io.ox/mail/actions.js:1067 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "儲存為通訊組列表"
 
-#: apps/io.ox/mail/write/main.js:1340 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1344 module:io.ox/mail
 msgid "Save as draft"
 msgstr "保存為草稿"
 
@@ -5268,7 +5268,7 @@ msgid_plural "Saving attachments to Drive"
 msgstr[0] "將附件保存到 Drive"
 msgstr[1] "將附件保存到 Drive"
 
-#: apps/io.ox/calendar/actions.js:554 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:553 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 msgid "Scheduling"
 msgstr "行程"
@@ -5376,7 +5376,7 @@ msgstr "寄送電子郵件"
 msgid "Send mail"
 msgstr "寄送郵件"
 
-#: apps/io.ox/calendar/actions.js:638 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:637 module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "傳送郵件給所有參與者"
 
@@ -5425,7 +5425,7 @@ msgstr "九月"
 #. Use singular in this context
 #. Use singular in this context
 #: apps/io.ox/calendar/acceptdeny.js:162 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:162
+#: apps/io.ox/calendar/actions.js:161
 #: apps/io.ox/calendar/week/perspective.js:135
 msgid "Series"
 msgstr "系列"
@@ -6171,7 +6171,7 @@ msgstr ""
 msgid "The due date cannot be before start date. Adjust start date?"
 msgstr "到期日無法在起始日之前，調整起始日？"
 
-#: apps/io.ox/mail/write/main.js:1154 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1158 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "已寄出郵件"
 
@@ -7173,7 +7173,7 @@ msgstr "天氣‧季節"
 msgid "Wednesday"
 msgstr "星期三"
 
-#: apps/io.ox/calendar/actions.js:525 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:524 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:77 module:io.ox/calendar/freebusy
 msgid "Week"
 msgstr "周"
@@ -7201,7 +7201,7 @@ msgstr ""
 msgid "Whole day"
 msgstr "全天"
 
-#: apps/io.ox/calendar/actions.js:518 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:517 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:76 module:io.ox/calendar/freebusy
 msgid "Workweek"
 msgstr "工作周"
@@ -7259,7 +7259,7 @@ msgstr "黃色"
 msgid "Yes"
 msgstr "是"
 
-#: apps/io.ox/mail/write/main.js:1220 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1224 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "是，請寄出"
 

@@ -484,7 +484,7 @@ msgstr "出席者/設備を追加"
 msgid "Add signature"
 msgstr "署名を追加"
 
-#: apps/io.ox/mail/write/main.js:1221 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1225 module:io.ox/mail
 msgid "Add subject"
 msgstr "件名を追加"
 
@@ -675,7 +675,7 @@ msgid "Apply rule if any condition is met."
 msgstr "いずれかの条件を満たす場合にルールを適用"
 
 #: apps/io.ox/calendar/acceptdeny.js:163 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:163 apps/io.ox/calendar/edit/main.js:350
+#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:350
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/week/perspective.js:136
 #: apps/io.ox/mail/detail/links.js:125 module:io.ox/mail
 msgid "Appointment"
@@ -687,12 +687,12 @@ msgstr "アポイント"
 msgid "Appointment Details"
 msgstr "アポイントの詳細"
 
-#: apps/io.ox/calendar/actions.js:401 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:400 module:io.ox/calendar
 msgid "Appointment has been copied"
 msgid_plural "Appointments have been copied"
 msgstr[0] "アポイントをコピーしました。"
 
-#: apps/io.ox/calendar/actions.js:400 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:399 module:io.ox/calendar
 msgid "Appointment has been moved"
 msgid_plural "Appointments have been moved"
 msgstr[0] "アポイントを移動しました。"
@@ -993,9 +993,9 @@ msgid "Calendar"
 msgstr "予定表"
 
 #: apps/io.ox/calendar/acceptdeny.js:96 module:io.ox/calendar
-#: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:164
-#: apps/io.ox/calendar/actions.js:273 apps/io.ox/calendar/actions.js:285
-#: apps/io.ox/calendar/actions.js:416 apps/io.ox/calendar/edit/main.js:51
+#: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:163
+#: apps/io.ox/calendar/actions.js:272 apps/io.ox/calendar/actions.js:284
+#: apps/io.ox/calendar/actions.js:415 apps/io.ox/calendar/edit/main.js:51
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:160
 #: apps/io.ox/calendar/month/perspective.js:117
 #: apps/io.ox/calendar/week/perspective.js:94
@@ -1031,7 +1031,7 @@ msgstr "予定表"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:241
 #: apps/io.ox/mail/main.js:923 apps/io.ox/mail/write/inline-images.js:80
-#: apps/io.ox/mail/write/main.js:1341 apps/io.ox/mail/write/view-main.js:617
+#: apps/io.ox/mail/write/main.js:1345 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
@@ -1111,7 +1111,7 @@ msgstr "パスワードを変更"
 msgid "Change password and sign out"
 msgstr "パスワードを変更し、サインアウトしてください。"
 
-#: apps/io.ox/calendar/actions.js:594 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:593 module:io.ox/calendar
 msgid "Change status"
 msgstr "ステータスを変更"
 
@@ -1665,7 +1665,7 @@ msgid "Date of birth"
 msgstr "生年月日"
 
 #: apps/io.ox/backbone/mini-views/date.js:25 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:511 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:510 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:75 module:io.ox/calendar/freebusy
 msgid "Day"
 msgstr "日"
@@ -1727,8 +1727,8 @@ msgstr "延期"
 
 #. Really delete portal widget - in contrast to "just disable"
 #. Really delete portal widget - in contrast to "just disable"
-#: apps/io.ox/calendar/actions.js:284 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:622
+#: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:621
 #: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:748 apps/io.ox/contacts/main.js:107
@@ -1759,7 +1759,7 @@ msgstr "削除"
 msgid "Delete account"
 msgstr "アカウントを削除"
 
-#: apps/io.ox/calendar/actions.js:271 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "このアポイントを削除"
 
@@ -1767,7 +1767,7 @@ msgstr "このアポイントを削除"
 msgid "Delete version"
 msgstr "バージョンを削除"
 
-#: apps/io.ox/calendar/actions.js:272 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:271 module:io.ox/calendar
 msgid "Delete whole series"
 msgstr "アポイント全体を削除"
 
@@ -1842,7 +1842,7 @@ msgstr "ウィジェットを無効化"
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/settings/signatures/register.js:107 module:io.ox/mail
 #: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1339 apps/io.ox/mail/write/view-main.js:65
+#: apps/io.ox/mail/write/main.js:1343 apps/io.ox/mail/write/view-main.js:65
 #: apps/io.ox/tasks/edit/view-template.js:82 module:io.ox/tasks/edit
 #: apps/plugins/portal/userSettings/register.js:44 module:io.ox/core
 msgid "Discard"
@@ -1949,7 +1949,7 @@ msgstr[0] "この仕事を削除しますか？"
 msgid "Do you really want to delete this widget?"
 msgstr "このウィジェットを削除しますか？"
 
-#: apps/io.ox/mail/write/main.js:1338 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1342 module:io.ox/mail
 msgid "Do you really want to discard this mail?"
 msgstr "このメールを破棄しますか？"
 
@@ -1982,7 +1982,7 @@ msgstr ""
 "定期的なアポイント全体を編集しますか、それともこのアポイントのみを編集します"
 "か？"
 
-#: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:269 module:io.ox/calendar
 msgid ""
 "Do you want to delete the whole series or just one appointment within the "
 "series?"
@@ -1990,11 +1990,11 @@ msgstr ""
 "定期的なアポイント全体を削除しますか、それともこのアポイントのみを削除します"
 "か？"
 
-#: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:282 module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
 msgstr "このアポイントを削除しますか？"
 
-#: apps/io.ox/calendar/actions.js:159 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:158 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:133
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
@@ -2142,7 +2142,7 @@ msgid "EB"
 msgstr "EB"
 
 #. Used as a button label to enter the "edit mode"
-#: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:584 module:io.ox/calendar
 #: apps/io.ox/contacts/actions.js:739 module:io.ox/contacts
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:833 module:io.ox/files
@@ -3283,7 +3283,7 @@ msgstr "日付が無効です。"
 msgid "Invite to appointment"
 msgstr "アポイントへの出席を依頼"
 
-#: apps/io.ox/calendar/actions.js:647 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:646 module:io.ox/calendar
 msgid "Invite to new appointment"
 msgstr "新規アポイントへの出席を依頼"
 
@@ -3459,7 +3459,7 @@ msgstr "LinkedIn が次のエラーを報告しました:"
 msgid "Links"
 msgstr "リンク"
 
-#: apps/io.ox/calendar/actions.js:539 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:538 module:io.ox/calendar
 #: apps/io.ox/files/actions.js:766 module:io.ox/files
 #: apps/io.ox/files/actions.js:1347 apps/io.ox/mail/toolbar.js:213
 #: module:io.ox/mail
@@ -3546,11 +3546,11 @@ msgstr "メールをインポートしました。"
 msgid "Mail has been moved"
 msgstr "メールを移動しました。"
 
-#: apps/io.ox/mail/write/main.js:1219 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1223 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "メールに件名がありません。このまま送信しますか？"
 
-#: apps/io.ox/mail/write/main.js:1212 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1216 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "メールには宛先がありません。"
 
@@ -3570,7 +3570,7 @@ msgstr "メール通知"
 msgid "Mail reminder for"
 msgstr "件名"
 
-#: apps/io.ox/mail/write/main.js:1275 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1279 module:io.ox/mail
 msgid "Mail saved as draft"
 msgstr "メールの下書きを保存しました。"
 
@@ -3780,7 +3780,7 @@ msgid "Monday"
 msgstr "月曜日"
 
 #: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:532 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:531 module:io.ox/calendar
 msgid "Month"
 msgstr "月"
 
@@ -3812,8 +3812,8 @@ msgstr "月"
 msgid "More"
 msgstr "さらに表示"
 
-#: apps/io.ox/calendar/actions.js:415 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:603
+#: apps/io.ox/calendar/actions.js:414 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:463 apps/io.ox/calendar/actions.js:602
 #: apps/io.ox/contacts/actions.js:192 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:762
 #: apps/io.ox/core/commons-folderview.js:612 module:io.ox/core
@@ -3899,7 +3899,7 @@ msgstr "新規メール: %1$s %2$s Enter キーで開きます。"
 msgid "New Mails"
 msgstr "新規メール"
 
-#: apps/io.ox/calendar/actions.js:494 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:493 module:io.ox/calendar
 #: apps/io.ox/calendar/settings/pane.js:176
 msgid "New appointment"
 msgstr "新規アポイント"
@@ -4818,8 +4818,8 @@ msgstr "先週"
 msgid "Primary account"
 msgstr "既定のアカウント"
 
-#: apps/io.ox/calendar/actions.js:569 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:612 apps/io.ox/contacts/actions.js:319
+#: apps/io.ox/calendar/actions.js:568 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:611 apps/io.ox/contacts/actions.js:319
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:723
 #: apps/io.ox/core/print.js:108 module:io.ox/core
 #: apps/io.ox/mail/actions.js:1096 module:io.ox/mail
@@ -5275,12 +5275,12 @@ msgstr "土曜日"
 msgid "Save"
 msgstr "保存"
 
-#: apps/io.ox/calendar/actions.js:656 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:655 module:io.ox/calendar
 #: apps/io.ox/mail/actions.js:1067 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "配布リストとして保存"
 
-#: apps/io.ox/mail/write/main.js:1340 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1344 module:io.ox/mail
 msgid "Save as draft"
 msgstr "下書きを保存"
 
@@ -5317,7 +5317,7 @@ msgid "Saving attachment to Drive"
 msgid_plural "Saving attachments to Drive"
 msgstr[0] "Drive に添付ファイルを保存"
 
-#: apps/io.ox/calendar/actions.js:554 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:553 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 msgid "Scheduling"
 msgstr "スケジューリング"
@@ -5425,7 +5425,7 @@ msgstr "メールを送信"
 msgid "Send mail"
 msgstr "メールを送信"
 
-#: apps/io.ox/calendar/actions.js:638 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:637 module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "すべての出席者にメールを送信"
 
@@ -5474,7 +5474,7 @@ msgstr "9 月"
 #. Use singular in this context
 #. Use singular in this context
 #: apps/io.ox/calendar/acceptdeny.js:162 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:162
+#: apps/io.ox/calendar/actions.js:161
 #: apps/io.ox/calendar/week/perspective.js:135
 msgid "Series"
 msgstr "アポイント全体"
@@ -6232,7 +6232,7 @@ msgstr ""
 msgid "The due date cannot be before start date. Adjust start date?"
 msgstr "期限を開始日の前に設定できません。開始日を変更しますか？"
 
-#: apps/io.ox/mail/write/main.js:1154 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1158 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "メールを送信しました。"
 
@@ -7310,7 +7310,7 @@ msgstr "天気・季節"
 msgid "Wednesday"
 msgstr "水曜日"
 
-#: apps/io.ox/calendar/actions.js:525 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:524 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:77 module:io.ox/calendar/freebusy
 msgid "Week"
 msgstr "週"
@@ -7338,7 +7338,7 @@ msgstr ""
 msgid "Whole day"
 msgstr "終日"
 
-#: apps/io.ox/calendar/actions.js:518 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:517 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:76 module:io.ox/calendar/freebusy
 msgid "Workweek"
 msgstr "稼働日"
@@ -7396,7 +7396,7 @@ msgstr "黄"
 msgid "Yes"
 msgstr "はい"
 
-#: apps/io.ox/mail/write/main.js:1220 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1224 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "件名なしで送信"
 
