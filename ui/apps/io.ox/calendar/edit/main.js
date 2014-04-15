@@ -148,6 +148,7 @@ define('io.ox/calendar/edit/main',
                                             center: false,
                                             container: self.getWindowNode()
                                         })
+                                        .header(conflictView.drawHeader())
                                         .append(conflictView.drawList(con).addClass('additional-info'));
                                     if (hardConflict) {
                                         dialog.prepend(

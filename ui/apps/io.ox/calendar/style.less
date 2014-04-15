@@ -564,69 +564,59 @@
 }
 
 .itip-actions {
-
     text-align: right;
-    margin: 1em 0 0 1em;
+    margin: 14px 0 0 14px;
     white-space: nowrap;
     display: inline-block;
-
-    &.block {
-        text-align: right;
-        margin: 1em 0 0 0;
-        white-space: nowrap;
-        display: block;
-    }
-
 }
 
-.io-ox-calendar-itip-analysis {
+.itip-item {
+    padding: 20px;
+    min-height: 80px;
+    background-color: #F5F5F5; // same color as .well
+}
 
-    .well {
-        padding: 20px;
+.itip-item + .itip-item {
+    border-top: 1px solid #aaa;
+}
+
+.itip-annotations, .itip-changes, .itip-conflicts {
+    margin: 14px 0;
+}
+
+.itip-controls {
+    text-align: right;
+    margin-top: 14px;
+    min-height: 30px;
+    &:empty {
+        min-height: initial;
     }
+}
 
+.itip-reminder {
+    text-align: left;
+    display: inline-block;
+}
+
+.itip-details {
+    .confirmation-status {
+        margin: 7px 0;
+        &.accepted { color: @green; }
+        &.declined { color: @red; }
+        &.tentative { color: @orange; }
+    }
+}
+
+.itip-conflicts {
+    .vgrid-cell {
+        padding: 10px 0;
+        background-color: transparent;
+        border-bottom: 1px solid #ccc;
+        &:first-child { border-top: 1px solid #ccc; }
+        &:last-child { border-bottom: 1px solid #ccc; }
+    }
     .date {
         margin-right: 14px;
-    }
-
-    &.auto-height {
-        min-height: 0;
-    }
-
-    .confirmation-status {
-
-        margin: 0.5em 0 0.5em 0;
-
-        &.accepted {
-            color: @green;
-        }
-
-        &.declined {
-            color: @red;
-        }
-
-        &.tentative {
-            color: @orange;
-        }
-
-    }
-
-    .change {
-
-        .appointment, .task {
-            background-color: white;
-        }
-
-    }
-
-    .changes {
-
-        margin: 1em 0;
-        font-size: 11pt;
-
-        .original, .recurrencePosition, .updated {
-            font-weight: bold;
-        }
     }
 }
 
