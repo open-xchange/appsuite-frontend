@@ -169,7 +169,7 @@ define('io.ox/mail/detail/content',
             if (baton.source !== '') return;
             // stop any further processing
             baton.stopPropagation();
-            baton.source = '<div class="alert alert-info">' + gt('This mail has no content') + '</div>';
+            baton.source = '<div class="no-content">' + gt('This mail has no content') + '</div>';
         }
     });
 
@@ -409,7 +409,7 @@ define('io.ox/mail/detail/content',
             // blockquotes (top-level only)
             this.find('blockquote').not(this.find('blockquote blockquote')).each(function () {
                 var text = getText(this);
-                if (text.length > 300) text = text.substr(0, 300) + '\u2026'; // ellipsis
+                if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
                 $(this).addClass('collapsed-blockquote').after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
