@@ -491,7 +491,7 @@ msgstr "Añadir participante/recurso"
 msgid "Add signature"
 msgstr "Añadir firma"
 
-#: apps/io.ox/mail/write/main.js:1221 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1225 module:io.ox/mail
 msgid "Add subject"
 msgstr "Añadir asunto"
 
@@ -682,7 +682,7 @@ msgid "Apply rule if any condition is met."
 msgstr "Aplicar regla si se cumple alguna condición"
 
 #: apps/io.ox/calendar/acceptdeny.js:163 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:163 apps/io.ox/calendar/edit/main.js:350
+#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:350
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/week/perspective.js:136
 #: apps/io.ox/mail/detail/links.js:125 module:io.ox/mail
 msgid "Appointment"
@@ -694,13 +694,13 @@ msgstr "Cita"
 msgid "Appointment Details"
 msgstr "Detalles de la cita"
 
-#: apps/io.ox/calendar/actions.js:401 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:400 module:io.ox/calendar
 msgid "Appointment has been copied"
 msgid_plural "Appointments have been copied"
 msgstr[0] "La cita ha sido copiada"
 msgstr[1] "Las citas han sido copiadas"
 
-#: apps/io.ox/calendar/actions.js:400 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:399 module:io.ox/calendar
 msgid "Appointment has been moved"
 msgid_plural "Appointments have been moved"
 msgstr[0] "La cita ha sido movida"
@@ -1009,9 +1009,9 @@ msgid "Calendar"
 msgstr "Calendario"
 
 #: apps/io.ox/calendar/acceptdeny.js:96 module:io.ox/calendar
-#: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:164
-#: apps/io.ox/calendar/actions.js:273 apps/io.ox/calendar/actions.js:285
-#: apps/io.ox/calendar/actions.js:416 apps/io.ox/calendar/edit/main.js:51
+#: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:163
+#: apps/io.ox/calendar/actions.js:272 apps/io.ox/calendar/actions.js:284
+#: apps/io.ox/calendar/actions.js:415 apps/io.ox/calendar/edit/main.js:51
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:160
 #: apps/io.ox/calendar/month/perspective.js:117
 #: apps/io.ox/calendar/week/perspective.js:94
@@ -1047,7 +1047,7 @@ msgstr "Calendario"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:241
 #: apps/io.ox/mail/main.js:923 apps/io.ox/mail/write/inline-images.js:80
-#: apps/io.ox/mail/write/main.js:1341 apps/io.ox/mail/write/view-main.js:617
+#: apps/io.ox/mail/write/main.js:1345 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
@@ -1128,7 +1128,7 @@ msgstr "Cambiar contraseña"
 msgid "Change password and sign out"
 msgstr "Cambiar contraseña y cerrar la sesión"
 
-#: apps/io.ox/calendar/actions.js:594 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:593 module:io.ox/calendar
 msgid "Change status"
 msgstr "Cambiar estado"
 
@@ -1682,7 +1682,7 @@ msgid "Date of birth"
 msgstr "Fecha de nacimiento"
 
 #: apps/io.ox/backbone/mini-views/date.js:25 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:511 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:510 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:75 module:io.ox/calendar/freebusy
 msgid "Day"
 msgstr "Día"
@@ -1744,8 +1744,8 @@ msgstr "Retrasada"
 
 #. Really delete portal widget - in contrast to "just disable"
 #. Really delete portal widget - in contrast to "just disable"
-#: apps/io.ox/calendar/actions.js:284 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:622
+#: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:621
 #: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:748 apps/io.ox/contacts/main.js:107
@@ -1776,7 +1776,7 @@ msgstr "Borrar"
 msgid "Delete account"
 msgstr "Borrar cuenta"
 
-#: apps/io.ox/calendar/actions.js:271 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Borrar cita"
 
@@ -1784,7 +1784,7 @@ msgstr "Borrar cita"
 msgid "Delete version"
 msgstr "Borrar versión"
 
-#: apps/io.ox/calendar/actions.js:272 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:271 module:io.ox/calendar
 msgid "Delete whole series"
 msgstr "Borrar series completas"
 
@@ -1859,7 +1859,7 @@ msgstr "Desactivar widget"
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/settings/signatures/register.js:107 module:io.ox/mail
 #: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1339 apps/io.ox/mail/write/view-main.js:65
+#: apps/io.ox/mail/write/main.js:1343 apps/io.ox/mail/write/view-main.js:65
 #: apps/io.ox/tasks/edit/view-template.js:82 module:io.ox/tasks/edit
 #: apps/plugins/portal/userSettings/register.js:44 module:io.ox/core
 msgid "Discard"
@@ -1969,7 +1969,7 @@ msgstr[1] "¿Está seguro de querer borrar estas tareas?"
 msgid "Do you really want to delete this widget?"
 msgstr "¿Está seguro de querer borrar este widget?"
 
-#: apps/io.ox/mail/write/main.js:1338 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1342 module:io.ox/mail
 msgid "Do you really want to discard this mail?"
 msgstr "¿De verdad quiere descartar este correo?"
 
@@ -2002,17 +2002,17 @@ msgid ""
 msgstr ""
 "¿Quieres editar la serie completa o simplemente una cita dentro de ella?"
 
-#: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:269 module:io.ox/calendar
 msgid ""
 "Do you want to delete the whole series or just one appointment within the "
 "series?"
 msgstr "¿Quiere borrar la serie completa o citas individuales dentro de ella?"
 
-#: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:282 module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
 msgstr "¿Quiere borrar esta cita?"
 
-#: apps/io.ox/calendar/actions.js:159 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:158 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:133
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
@@ -2154,7 +2154,7 @@ msgid "EB"
 msgstr "EB"
 
 #. Used as a button label to enter the "edit mode"
-#: apps/io.ox/calendar/actions.js:585 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:584 module:io.ox/calendar
 #: apps/io.ox/contacts/actions.js:739 module:io.ox/contacts
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:833 module:io.ox/files
@@ -3308,7 +3308,7 @@ msgstr "Datos no válidos"
 msgid "Invite to appointment"
 msgstr "Invitar a la cita"
 
-#: apps/io.ox/calendar/actions.js:647 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:646 module:io.ox/calendar
 msgid "Invite to new appointment"
 msgstr "Invitar a nueva cita"
 
@@ -3484,7 +3484,7 @@ msgstr "LinkedIn ha informado de un error:"
 msgid "Links"
 msgstr "Enlaces"
 
-#: apps/io.ox/calendar/actions.js:539 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:538 module:io.ox/calendar
 #: apps/io.ox/files/actions.js:766 module:io.ox/files
 #: apps/io.ox/files/actions.js:1347 apps/io.ox/mail/toolbar.js:213
 #: module:io.ox/mail
@@ -3571,11 +3571,11 @@ msgstr "El correo ha sido importado"
 msgid "Mail has been moved"
 msgstr "Los correos se han movido"
 
-#: apps/io.ox/mail/write/main.js:1219 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1223 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "El correo tiene el asunto vacío. ¿Desea enviarlo de todos modos?"
 
-#: apps/io.ox/mail/write/main.js:1212 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1216 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "El correo no tiene destinatario."
 
@@ -3595,7 +3595,7 @@ msgstr "Recordatorio por correo electrónico"
 msgid "Mail reminder for"
 msgstr "Recordatorio por correo electrónico para"
 
-#: apps/io.ox/mail/write/main.js:1275 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1279 module:io.ox/mail
 msgid "Mail saved as draft"
 msgstr "Correo guardado como borrador"
 
@@ -3804,7 +3804,7 @@ msgid "Monday"
 msgstr "lunes"
 
 #: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:532 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:531 module:io.ox/calendar
 msgid "Month"
 msgstr "Mes"
 
@@ -3836,8 +3836,8 @@ msgstr "Meses"
 msgid "More"
 msgstr "Más"
 
-#: apps/io.ox/calendar/actions.js:415 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:464 apps/io.ox/calendar/actions.js:603
+#: apps/io.ox/calendar/actions.js:414 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:463 apps/io.ox/calendar/actions.js:602
 #: apps/io.ox/contacts/actions.js:192 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:762
 #: apps/io.ox/core/commons-folderview.js:612 module:io.ox/core
@@ -3923,7 +3923,7 @@ msgstr "Nuevo correo de %1$s %2$s. Presione [intro] para abrirlo"
 msgid "New Mails"
 msgstr "Nuevos correos electrónicos"
 
-#: apps/io.ox/calendar/actions.js:494 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:493 module:io.ox/calendar
 #: apps/io.ox/calendar/settings/pane.js:176
 msgid "New appointment"
 msgstr "Nueva cita"
@@ -4854,8 +4854,8 @@ msgstr "Semana anterior"
 msgid "Primary account"
 msgstr "Cuenta principal"
 
-#: apps/io.ox/calendar/actions.js:569 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:612 apps/io.ox/contacts/actions.js:319
+#: apps/io.ox/calendar/actions.js:568 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:611 apps/io.ox/contacts/actions.js:319
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:723
 #: apps/io.ox/core/print.js:108 module:io.ox/core
 #: apps/io.ox/mail/actions.js:1096 module:io.ox/mail
@@ -5311,12 +5311,12 @@ msgstr "sábado"
 msgid "Save"
 msgstr "Guardar"
 
-#: apps/io.ox/calendar/actions.js:656 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:655 module:io.ox/calendar
 #: apps/io.ox/mail/actions.js:1067 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Guardar como lista de distribución"
 
-#: apps/io.ox/mail/write/main.js:1340 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1344 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Guardar como borrador"
 
@@ -5355,7 +5355,7 @@ msgid_plural "Saving attachments to Drive"
 msgstr[0] "Guardando adjunto en Drive"
 msgstr[1] "Guardando adjuntos en Drive"
 
-#: apps/io.ox/calendar/actions.js:554 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:553 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 msgid "Scheduling"
 msgstr "Planificación"
@@ -5463,7 +5463,7 @@ msgstr "Segundo campo"
 msgid "Send mail"
 msgstr "Enviar correo"
 
-#: apps/io.ox/calendar/actions.js:638 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:637 module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Enviar correo electrónico a todos los participantes"
 
@@ -5512,7 +5512,7 @@ msgstr "septiembre"
 #. Use singular in this context
 #. Use singular in this context
 #: apps/io.ox/calendar/acceptdeny.js:162 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:162
+#: apps/io.ox/calendar/actions.js:161
 #: apps/io.ox/calendar/week/perspective.js:135
 msgid "Series"
 msgstr "Serie"
@@ -6274,7 +6274,7 @@ msgstr ""
 "La fecha de vencimiento no puede ser anterior a la fecha de inicio. ¿Ajustar "
 "la fecha de inicio?"
 
-#: apps/io.ox/mail/write/main.js:1154 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1158 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "El correo se ha enviado"
 
@@ -7377,7 +7377,7 @@ msgstr "Tiempo • Estación"
 msgid "Wednesday"
 msgstr "miércoles"
 
-#: apps/io.ox/calendar/actions.js:525 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:524 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:77 module:io.ox/calendar/freebusy
 msgid "Week"
 msgstr "Semana"
@@ -7405,7 +7405,7 @@ msgstr ""
 msgid "Whole day"
 msgstr "Todo el día"
 
-#: apps/io.ox/calendar/actions.js:518 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:517 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:76 module:io.ox/calendar/freebusy
 msgid "Workweek"
 msgstr "Semana laboral"
@@ -7463,7 +7463,7 @@ msgstr "Amarillo"
 msgid "Yes"
 msgstr "Sí"
 
-#: apps/io.ox/mail/write/main.js:1220 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1224 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Sí, enviarlo sin asunto"
 
