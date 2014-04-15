@@ -84,7 +84,7 @@ define('io.ox/core/pubsub/subscriptions',
                                 function refreshFail(error) {
                                     popup.idle();
                                     popup.getBody().find('.control-group:not(:first)').addClass('error');
-                                    showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
+                                    showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error_html || error.error));
                                     api.subscriptions.destroy(id);
                                     self.model = self.model.clone();
                                     if (newFolder) {
@@ -183,8 +183,9 @@ define('io.ox/core/pubsub/subscriptions',
         node.find('div.alert').remove();
         node.prepend($('<div class="alert alert-error alert-block">').append(
             $('<strong>').text(label),
-            $.txt(' ' + msg),
-            $('<button type="button" data-dismiss="alert" class="btn close">').text('x'))
+            $.txt(' '),
+            $('<span>').html(msg),
+            $('<button type="button" data-dismiss="alert" class="btn btn-default close">').text('x'))
         );
 
     }

@@ -74,7 +74,7 @@ define('io.ox/core/cache',
                 persistentCache = storages[opt.persistent],
                 fluentCache = storages[opt.fluent],
                 // use persistent storage?
-                persist = (ox.secretCookie === true && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' && persistent === true ?
+                persist = (persistent === true && ox.secretCookie === true && ox.serverConfig.persistence !== false && persistentCache.isUsable() && _.url.hash('persistence') !== 'false' ?
                         function () {
                             return ox.user !== '';
                         } :

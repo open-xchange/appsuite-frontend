@@ -193,6 +193,24 @@ define('io.ox/core/tk/vgrid',
         this.reset();
     };
 
+    var onResize = function (e) {
+        e.preventDefault();
+        var left = $(this).closest('.leftside'),
+            right = left.siblings('.rightside'),
+            base = e.pageX - left.width(),
+            limitX = $(document).width() - 250;
+        $(document).on({
+            'mousemove.resize': function (e) {
+                var width = Math.max(250, Math.min(e.pageX, limitX) - base);
+                left.css('width', width);
+                right.css('left', width);
+            },
+            'mouseup.resize': function () {
+                $(this).off('mousemove.resize mouseup.resize');
+            }
+        });
+    };
+
     var VGrid = function (target, options) {
 
         options = _.extend({
@@ -351,6 +369,13 @@ define('io.ox/core/tk/vgrid',
                 return load.call(self, subset);
             });
 
+        // make resizalbe (unless touch device)
+        if (!_.device('touch')) {
+            node.append(
+                $('<div class="resizebar">').on('mousedown', onResize)
+            );
+        }
+
         // add label class
         template.node.addClass('selectable');
         label.node.addClass('vgrid-label').attr({ 'aria-hidden': 'true' });
@@ -358,6 +383,17 @@ define('io.ox/core/tk/vgrid',
         // fix mobile safari bug (all content other than position=static is cut off)
         if (_.device('iOS && Safari')) {
             container.css('webkitTransform', 'translate3d(0, 0, 0)');
+        }
+
+        // IE focus fix for bug 31617.
+        // "The focus event does not bubble in Internet Explorer"
+        // http://api.jquery.com/focus/
+        if (_.device('IE')) {
+            container.on('click', function () {
+                var top = scrollpane.scrollTop();
+                container.focus();
+                scrollpane.scrollTop(top);
+            });
         }
 
         // add event hub
@@ -1216,6 +1252,7 @@ define('io.ox/core/tk/vgrid',
                 node.detach();
             });
             pool = [];
+            if (!initialized) return; // no need to update if not yet initialized
             init();
             this.repaint();
         };

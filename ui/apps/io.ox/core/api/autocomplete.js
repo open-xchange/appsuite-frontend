@@ -18,8 +18,9 @@ define('io.ox/core/api/autocomplete',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/api/resource',
-     'io.ox/core/api/group'
-    ], function (http, capabilities, mailAPI, contactsAPI, util, resourceAPI, groupAPI) {
+     'io.ox/core/api/group',
+     'settings!io.ox/contacts'
+    ], function (http, capabilities, mailAPI, contactsAPI, util, resourceAPI, groupAPI, settings) {
 
     'use strict';
 
@@ -72,6 +73,7 @@ define('io.ox/core/api/autocomplete',
 
             var self = this,
                 options = {
+                    admin: settings.get('showAdmin', false),
                     emailAutoComplete: false
                 };
 
