@@ -65,7 +65,8 @@ define('io.ox/mail/common-extensions',
 
         from: function (baton) {
             var data = api.threads.head(baton.data),
-                field = data.threadSize === 1 && account.is('sent|drafts', data.folder_id) ? 'to' : 'from';
+                single = !data.threadSize || data.threadSize === 1,
+                field = single && account.is('sent|drafts', data.folder_id) ? 'to' : 'from';
             this.append(
                 $('<div class="from">').append(
                     util.getFrom(data, field)
@@ -517,10 +518,8 @@ define('io.ox/mail/common-extensions',
 
                 // skip? (cancaled or already returned)
                 if (skip[model.cid]) return;
-                // has proper attribute?
+                // has proper attribute? (only available if message was unseen on fetch)
                 if (!model.get('disp_notification_to')) return;
-                // is unseen or was unseen?
-                if (!util.isUnseen(model.get('flags')) && !model.get('unread')) return;
                 // user does not ignore this feature?
                 if (!settings.get('sendDispositionNotification', false)) return;
                 // is not in drafts folder?
@@ -533,8 +532,9 @@ define('io.ox/mail/common-extensions',
                             //#. Respond to delivery receipt; German "Lesebestätigung senden"
                             gt('Send a return receipt')
                         ),
-                        $.txt(_.noI18n('\u00A0\u00A0 ')),
-                        $.txt(gt('The sender wants to get notified when you have read this email'))
+                        $('<div class="comment">').text(
+                            gt('The sender wants to get notified when you have read this email')
+                        )
                     )
                 );
             }
