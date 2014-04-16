@@ -74,7 +74,7 @@ module.exports = function(config) {
     proxies:  {},
 
     junitReporter: {
-        outputFile: 'tmp/test-results.xml'
+        outputFile: 'reports/test-results.xml'
     }
   });
 }
