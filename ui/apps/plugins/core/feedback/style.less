@@ -12,6 +12,7 @@
  */
 
 .star-wrapper {
+
     margin-top: 3px;
 	font-size: 18px;//don't make the stars too small since those are buttons as well
 
@@ -19,9 +20,11 @@
         cursor: pointer;
         color: #ccc;//light grey
     }
+
     .active-star {
     	color: #fd0;//gold
     }
+
 }
 
 .feedback-note {
@@ -29,11 +32,13 @@
     box-sizing: border-box;
     margin-bottom: 0px;
 }
+
 .feedback-button {
+
 	padding-top: 2px;
 	text-align: center;
-	background-color: #aaaaaa;//grey
-	border: 1px solid #aaaaaa;//grey
+	background-color: #aaa; //grey
+	border: 1px solid #aaa; //grey
 	border-bottom-color: transparent;
     height: 26px;
     width: 90px;
@@ -46,7 +51,12 @@
     -webkit-border-radius: 4px 4px 0 0;
 	-moz-border-radius: 4px 4px 0 0;
 	border-radius: 4px 4px 0 0;
+
+    html.high-contrast & {
+        background-color: @hc-gray; //grey
+    }
 }
+
 .feedback-label {
 	color: #888;
 }
@@ -61,6 +71,7 @@
     -ms-transform:rotate(-90deg); /* IE 9 */
     -webkit-transform:rotate(-90deg); /* Safari and Chrome */
 }
+
 .leftside-button {//text rotation
 	left: -37px;
     transform:rotate(90deg);
