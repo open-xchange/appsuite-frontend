@@ -17,11 +17,12 @@ define('io.ox/contacts/api',
      'io.ox/core/api/factory',
      'io.ox/core/notifications',
      'io.ox/core/cache',
+     'io.ox/core/api/user',
      'io.ox/contacts/util',
      'l10n/ja_JP/io.ox/collation',
      'settings!io.ox/contacts',
      'io.ox/core/date'
-    ], function (ext, http, apiFactory, notifications, cache, util, collation, settings, date) {
+    ], function (ext, http, apiFactory, notifications, cache, userApi, util, collation, settings, date) {
 
     'use strict';
 
@@ -239,6 +240,16 @@ define('io.ox/contacts/api',
     });
 
     /**
+     * clear userapi cache
+     * @returns defered
+     */
+    function clearUserApiCache(data) {
+      return $.when(userApi.caches.get.remove({ id: data.user_id }),
+              userApi.caches.all.clear(),
+              userApi.caches.list.remove({ id: data.user_id }));
+    }
+
+    /**
      * fix backend WAT
      * @param  {object} data
      * @param  {string} id (data object property)
@@ -369,7 +380,7 @@ define('io.ox/contacts/api',
                         api.caches.get.add(data),
                         api.caches.all.grepRemove(o.folder + api.DELIM),
                         api.caches.list.remove({ id: o.id, folder: o.folder }),
-                        fetchCache.clear()
+                        data.user_id ? clearUserApiCache(data) : ''
                     )
                     .done(function () {
                         if (attachmentHandlingNeeded) {
