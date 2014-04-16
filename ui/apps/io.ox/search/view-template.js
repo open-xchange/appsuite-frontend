@@ -240,7 +240,7 @@ define('io.ox/search/view-template',
                     facet = $('<li role="presentation" class="facet btn-group">')
                                 // .addClass('fac!et pull-left')
                                 .append(
-                                    button = $('<button type="button" class="btn btn-default dropdown-toggle">')
+                                    button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">')
                                         .append($('<label>'))
                                 )
                 );
@@ -473,7 +473,7 @@ define('io.ox/search/view-template',
         draw: function (value, baton) {
 
 
-            var button = this.find('button'),
+            var button = this.find('a[type="button"]'),
                 current = value.custom,
                 option,
                 menu = $('<ul class="dropdown dropdown-menu facet-dropdown" role="menu">')
@@ -616,7 +616,7 @@ define('io.ox/search/view-template',
 
                     //create button and append dropdown menue
                     cell.append(
-                        $('<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">')
+                        $('<a href="#" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">')
                             .append(
                                 $('<span class="name">'),
                                 $('<span class="caret">')
