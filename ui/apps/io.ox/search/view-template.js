@@ -241,8 +241,9 @@ define('io.ox/search/view-template',
                                 // .addClass('fac!et pull-left')
                                 .append(
                                     // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                                    button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">')
-                                        .append($('<label>'))
+                                    button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
+                                        e.preventDefault();
+                                    }).append($('<label>'))
                                 )
                 );
 
