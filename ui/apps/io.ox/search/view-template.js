@@ -240,6 +240,7 @@ define('io.ox/search/view-template',
                     facet = $('<li role="presentation" class="facet btn-group">')
                                 // .addClass('fac!et pull-left')
                                 .append(
+                                    // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
                                     button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">')
                                         .append($('<label>'))
                                 )
