@@ -59,7 +59,7 @@ define('io.ox/tasks/main',
             name: 'io.ox/tasks',
             title: 'Tasks',
             toolbar: true,
-            search: true
+            search: false
         });
 
         win.addClass('io-ox-tasks-main');
@@ -139,17 +139,6 @@ define('io.ox/tasks/main',
         grid.addTemplate(template.main);
 
         commons.wireGridAndAPI(grid, api);
-        commons.wireGridAndSearch(grid, win, api);
-
-        var notify = function (response) {
-            //show 'In order to accomplish the search, x or more characters are required.'
-            if (response && response.code && response.code === 'TSK-0051') {
-                require(['io.ox/core/notifications'], function (notifications) {
-                    notifications.yell('error', response.error);
-                });
-            }
-            return this;
-        };
 
         //custom requests
         var allRequest = function () {
@@ -188,41 +177,10 @@ define('io.ox/tasks/main',
 
                     return listcopy;
                 });
-            },
-            searchAllRequest = function () {
-                var datacopy,
-                done = grid.prop('done'),
-                sort = grid.prop('sort'),
-                order = grid.prop('order'),
-                column;
-                if (sort !== 'state') {
-                    column = sort;
-                } else {
-                    column = 202;
-                }
-                return api.search({pattern: win.search.query, folder: this.prop('folder')}, {sort: column, order: order}).pipe(function (data) {
-                    if (sort !== 'state') {
-                        datacopy = _.copy(data, true);
-                    } else {
-                        datacopy = util.sortTasks(data, order);
-                    }
-
-                    if (!done) {
-                        datacopy = _(datacopy).filter(function (obj) {
-                            return obj.status !== 3;
-                        });
-                    }
-                    return datacopy;
-                }, notify);
             };
 
         grid.setAllRequest(allRequest);
         grid.setListRequest(listRequest);
-
-        // search: all request
-        grid.setAllRequest('search', searchAllRequest);
-        // search: list request
-        grid.setListRequest('search', listRequest);
 
         var showTask, drawTask, drawFail;
 
