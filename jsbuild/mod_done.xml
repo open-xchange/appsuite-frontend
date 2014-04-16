@@ -65,6 +65,7 @@
 	        <if>
 		        <istrue value="${build-dev.mode.force}" />
 		        <then>
+			        <mod_utils.echo message="Reset done state to fals ... FORCE was detected." />
 	        		<var name="@{is-done}" value="false" />
 		        </then>
 		    </if>
@@ -127,12 +128,14 @@
     </macrodef>
     
     <!-- =======================================================================
-         clean the DB so all done states are gone and we can start new and fresh .-)
+         clean the DB for the given ID.
 	  -->
     <macrodef name="mod_done.clean-db">
+        <attribute name="done-id"   />
     	<sequential>
-    	
-    	<delete dir="${mod_done.path.db}" />
+
+    	<mod_done.-impl-name-done-file done-id="@{done-id}" done-file="local.file" />
+    	<delete file="${local.file}" />
 
         </sequential>
     </macrodef>
