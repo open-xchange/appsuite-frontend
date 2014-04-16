@@ -36,7 +36,7 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
 
         it('should detect empty email', function () {
             var result = process('');
-            expect(result.content.html()).to.equal('<div class="alert alert-info">Diese E-Mail hat keinen Inhalt</div>');
+            expect(result.content.html()).to.equal('<div class="no-content">Diese E-Mail hat keinen Inhalt</div>');
         });
 
         it('should process basic html', function () {
