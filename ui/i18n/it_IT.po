@@ -290,7 +290,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elementi selezionati"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:502 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "Una notifica di consegna di consegna è stata inviata"
@@ -314,10 +314,9 @@ msgid "Absent"
 msgstr "Assente"
 
 #: apps/io.ox/calendar/acceptdeny.js:99 module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js:29 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:27 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:29
 #: apps/io.ox/calendar/invitations/register.js:31
-#: apps/io.ox/calendar/invitations/register.js:33
-#: apps/io.ox/calendar/invitations/register.js:501
 msgid "Accept"
 msgstr "Accetta"
 
@@ -326,8 +325,8 @@ msgstr "Accetta"
 msgid "Accept / Decline"
 msgstr "Accetta / Rifiuta"
 
-#: apps/io.ox/calendar/invitations/register.js:30 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:34
+#: apps/io.ox/calendar/invitations/register.js:28 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:32
 msgid "Accept changes"
 msgstr "Accetta le modifiche"
 
@@ -458,7 +457,7 @@ msgstr "Aggiungi un nuovo account"
 msgid "Add new folder for this subscription"
 msgstr "Aggiungi una nuova cartella per questa sottoscrizione"
 
-#: apps/io.ox/calendar/invitations/register.js:32 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:30 module:io.ox/calendar/main
 msgid "Add new participant"
 msgstr "Aggiungi un nuovo partecipante"
 
@@ -523,7 +522,7 @@ msgstr "Aggiungi un widget"
 msgid "Add your account"
 msgstr "Aggiungi il tuo account"
 
-#: apps/io.ox/calendar/invitations/register.js:60 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:58 module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "Il nuovo partecipante è stato aggiunto"
 
@@ -684,7 +683,7 @@ msgid "Apply rule if any condition is met."
 msgstr "Applica la regola se qualsiasi condizione viene verificata."
 
 #: apps/io.ox/calendar/acceptdeny.js:163 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:350
+#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:351
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/week/perspective.js:136
 #: apps/io.ox/mail/detail/links.js:125 module:io.ox/mail
 msgid "Appointment"
@@ -901,7 +900,7 @@ msgstr "Torna all'appuntamento"
 msgid "Basic settings"
 msgstr "Impostazioni di base"
 
-#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:237 module:io.ox/mail
 msgid "Bcc"
 msgstr "Ccn"
 
@@ -1016,7 +1015,7 @@ msgstr "Calendario"
 #: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:163
 #: apps/io.ox/calendar/actions.js:272 apps/io.ox/calendar/actions.js:284
 #: apps/io.ox/calendar/actions.js:415 apps/io.ox/calendar/edit/main.js:51
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:160
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:161
 #: apps/io.ox/calendar/month/perspective.js:117
 #: apps/io.ox/calendar/week/perspective.js:94
 #: apps/io.ox/calendar/week/perspective.js:137
@@ -1149,7 +1148,7 @@ msgstr "Cambia la vista"
 msgid "Changed due date"
 msgstr "Data di scadenza modificata"
 
-#: apps/io.ox/calendar/invitations/register.js:58 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:56 module:io.ox/calendar/main
 msgid "Changes have been saved"
 msgstr "Le modifiche sono state salvate"
 
@@ -1390,7 +1389,7 @@ msgstr "Conferma"
 msgid "Conflicts detected"
 msgstr "Conflitti rilevati"
 
-#: apps/io.ox/calendar/edit/main.js:155 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:156 module:io.ox/calendar/edit/main
 msgid "Conflicts with resources cannot be ignored"
 msgstr "Conflitti con risorse non possono essere ignorati"
 
@@ -1452,7 +1451,7 @@ msgstr "Conversazioni"
 msgid "Copy"
 msgstr "Copia"
 
-#: apps/io.ox/mail/common-extensions.js:225 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:226 module:io.ox/mail
 #: apps/io.ox/mail/print.js:72
 msgctxt "CC"
 msgid "Copy"
@@ -1568,8 +1567,8 @@ msgstr "Nazione"
 msgid "Create"
 msgstr "Crea"
 
-#: apps/io.ox/calendar/edit/main.js:176 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:324
+#: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:325
 msgid "Create appointment"
 msgstr "Crea appuntamento"
 
@@ -1706,8 +1705,7 @@ msgid "December"
 msgstr "Dicembre"
 
 #: apps/io.ox/calendar/acceptdeny.js:97 module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js:38 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:505
+#: apps/io.ox/calendar/invitations/register.js:36 module:io.ox/calendar/main
 msgid "Decline"
 msgstr "Rifiuta"
 
@@ -1750,7 +1748,7 @@ msgstr "Rinviata"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:621
-#: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:33 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:748 apps/io.ox/contacts/main.js:107
 #: apps/io.ox/core/commons-folderview.js:383 module:io.ox/core
@@ -2195,8 +2193,8 @@ msgstr ""
 "Modificare un'impostazione a destra. Nella maggior parte dei casi, le "
 "modifiche sono attivate immediatamente."
 
-#: apps/io.ox/calendar/edit/main.js:176 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:322
+#: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:323
 msgid "Edit appointment"
 msgstr "Modifica appuntamento"
 
@@ -2586,7 +2584,7 @@ msgstr "Account esterni di posta elettronica"
 msgid "External contact"
 msgstr "Contatto esterno"
 
-#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:449 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr ""
@@ -2647,7 +2645,7 @@ msgstr ""
 "Avvio dell'applicazione non riuscito. Forse hai dei problemi di connessione. "
 "Prova ancora."
 
-#: apps/io.ox/calendar/invitations/register.js:588 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:496 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
@@ -2655,7 +2653,7 @@ msgstr ""
 "Aggiornamento dello stato di conferma non riuscito; è probabile che "
 "l'appuntamento sia stato eliminato."
 
-#: apps/io.ox/calendar/invitations/register.js:589 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:497 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
@@ -3148,11 +3146,11 @@ msgstr ""
 "Se non si desidera visualizzare più un riquadro, fare clic sulla croce in "
 "altro a destra."
 
-#: apps/io.ox/calendar/invitations/register.js:39 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:37 module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Ignora"
 
-#: apps/io.ox/calendar/edit/main.js:158 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:159 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:116 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:93
 msgid "Ignore conflicts"
@@ -5072,7 +5070,7 @@ msgstr "Intervallo di aggiornamento"
 msgid "Regex"
 msgstr "Espressione regolare"
 
-#: apps/io.ox/calendar/invitations/register.js:36 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:34 module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Rifiuta le modifiche"
 
@@ -5105,7 +5103,7 @@ msgstr "Ricordami in seguito"
 
 #: apps/io.ox/calendar/acceptdeny.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/invitations/register.js:486 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:564 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1124 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
@@ -5419,7 +5417,7 @@ msgid "Send"
 msgstr "Invia"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:534 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:533 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Invia una notifica di consegna"
@@ -5584,7 +5582,7 @@ msgstr "Mostra tutti gli elementi"
 msgid "Show all my appointments from all calendars"
 msgstr "Mostra i miei appuntamenti da tutti i calendari"
 
-#: apps/io.ox/calendar/invitations/register.js:659 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:126 module:io.ox/calendar/main
 #, fuzzy
 msgid "Show appointment details"
 msgstr "Mostra appuntamento"
@@ -5594,7 +5592,7 @@ msgstr "Mostra appuntamento"
 msgid "Show comments"
 msgstr "Mostra i commenti"
 
-#: apps/io.ox/calendar/invitations/register.js:349 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:413 module:io.ox/calendar/main
 msgid "Show conflicts"
 msgstr "Mostra conflitti"
 
@@ -5615,7 +5613,7 @@ msgstr "Mostra le attività completate"
 msgid "Show hidden files and folders"
 msgstr "Mostra i file e le cartelle nascoste"
 
-#: apps/io.ox/mail/common-extensions.js:447 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
 msgid "Show images"
 msgstr "Mostra le immagini"
 
@@ -5653,7 +5651,7 @@ msgstr "Mostra il corpo della richiesta"
 msgid "Show stack trace"
 msgstr "Mostra tracciamento degli errori"
 
-#: apps/io.ox/calendar/invitations/register.js:660 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:127 module:io.ox/calendar/main
 #, fuzzy
 msgid "Show task details"
 msgstr "Mostra i dettagli"
@@ -6019,8 +6017,7 @@ msgid "Temporary"
 msgstr "Temporaneo"
 
 #: apps/io.ox/calendar/acceptdeny.js:98 module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js:37 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:503
+#: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 msgid "Tentative"
 msgstr "Provvisorio"
 
@@ -6118,11 +6115,11 @@ msgstr "La quota consentita è stata raggiunta."
 msgid "The appointment has been added to your calendar"
 msgstr "L'appuntamento è stato aggiunto al tuo calendario"
 
-#: apps/io.ox/calendar/invitations/register.js:63 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:61 module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "L'appuntamento è stato eliminato"
 
-#: apps/io.ox/calendar/invitations/register.js:62 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:60 module:io.ox/calendar/main
 msgid "The appointment has been updated"
 msgstr "L'appuntamento è stato aggiornato"
 
@@ -6238,7 +6235,7 @@ msgstr ""
 "Le viste del calendario visualizzano un foglio del calendario con gli "
 "appuntamenti."
 
-#: apps/io.ox/calendar/invitations/register.js:64 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:62 module:io.ox/calendar/main
 msgid "The changes have been rejected"
 msgstr "Le modifiche sono state rifiutate"
 
@@ -6360,7 +6357,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "Il nome file fornito supera la lunghezza consentita."
 
-#: apps/io.ox/mail/common-extensions.js:537 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:536 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -6478,7 +6475,7 @@ msgstr "Tema"
 msgid "There are unsaved changes."
 msgstr "Ci sono modifiche non salvate."
 
-#: apps/io.ox/calendar/invitations/register.js:342 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:406 module:io.ox/calendar/main
 msgid "There is already %1$d appointment in this timeframe."
 msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Hai già %1$d appuntamento in questo arco temporale."
@@ -6528,11 +6525,11 @@ msgstr ""
 "Questo indirizzo di posta elettronica non può essere utilizzato per gli "
 "appuntamenti"
 
-#: apps/io.ox/calendar/invitations/register.js:656 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:123 module:io.ox/calendar/main
 msgid "This email contains a task"
 msgstr "Questo messaggio contiene un'attività"
 
-#: apps/io.ox/calendar/invitations/register.js:655 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "Questo messaggio contiene un appuntamento"
 
@@ -6750,7 +6747,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Titolo"
 
-#: apps/io.ox/mail/common-extensions.js:214 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:215 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:71
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7345,7 +7342,7 @@ msgstr "Visualizza il sorgente"
 msgid "Waiting"
 msgstr "In attesa"
 
-#: apps/io.ox/mail/common-extensions.js:475 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:476 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr ""
 "Avviso: questo messaggio di posta potrebbe essere un tentativo di frode"
@@ -7484,7 +7481,7 @@ msgstr ""
 "Stai utilizzando %1$s dei %2$s di spazio disco disponibile. Lo spazio "
 "rimanente è %3$s."
 
-#: apps/io.ox/calendar/invitations/register.js:423 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "Sei l'organizzatore"
 
@@ -7507,11 +7504,11 @@ msgstr ""
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Puoi salvare rapidamente le tue modifiche con Ctrl+Invio."
 
-#: apps/io.ox/calendar/invitations/register.js:438 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:165 module:io.ox/calendar/main
 msgid "You declined this appointment"
 msgstr "Hai rifiutato questo appuntamento"
 
-#: apps/io.ox/calendar/invitations/register.js:439 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
 msgid "You declined this task"
 msgstr "Hai rifiutato questa attività"
 
@@ -7550,18 +7547,18 @@ msgstr "Hai %1$d messaggi non letti"
 msgid "You have 1 unread message"
 msgstr "Hai un messaggio non letto"
 
-#: apps/io.ox/calendar/invitations/register.js:57 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:55 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:57
 #: apps/io.ox/calendar/invitations/register.js:59
-#: apps/io.ox/calendar/invitations/register.js:61
-#: apps/io.ox/calendar/invitations/register.js:70
+#: apps/io.ox/calendar/invitations/register.js:68
 msgid "You have accepted the appointment"
 msgstr "Hai accettato l'appuntamento"
 
-#: apps/io.ox/calendar/invitations/register.js:432 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:159 module:io.ox/calendar/main
 msgid "You have accepted this appointment"
 msgstr "Hai accettato questo appuntamento"
 
-#: apps/io.ox/calendar/invitations/register.js:433 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
 msgid "You have accepted this task"
 msgstr "Hai accettato questa attività"
 
@@ -7569,8 +7566,8 @@ msgstr "Hai accettato questa attività"
 msgid "You have been automatically signed out"
 msgstr "Sei stato disconnesso automaticamente"
 
-#: apps/io.ox/calendar/invitations/register.js:66 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:71
+#: apps/io.ox/calendar/invitations/register.js:64 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:69
 msgid "You have declined the appointment"
 msgstr "Hai rifiutato l'appuntamento"
 
@@ -7591,8 +7588,8 @@ msgstr "Hai nuovamente autorizzato questo account %s."
 msgid "You have reauthorized this account."
 msgstr "Hai autorizzato nuovamente questo account."
 
-#: apps/io.ox/calendar/invitations/register.js:65 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:72
+#: apps/io.ox/calendar/invitations/register.js:63 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:70
 msgid "You have tentatively accepted the appointment"
 msgstr "Hai accettato provvisoriamente questo appuntamento"
 
@@ -7620,11 +7617,11 @@ msgstr "Devi utilizzare iOS %n o successivo."
 msgid "You share this folder with other users"
 msgstr "Condividi questa cartella con altri utenti"
 
-#: apps/io.ox/calendar/invitations/register.js:444 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:171 module:io.ox/calendar/main
 msgid "You tentatively accepted this invitation"
 msgstr "Hai accettato provvisoriamente questo invito"
 
-#: apps/io.ox/calendar/invitations/register.js:445 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:172 module:io.ox/calendar/main
 msgid "You tentatively accepted this task"
 msgstr "Hai accettato provvisoriamente questa attività"
 
@@ -7756,12 +7753,12 @@ msgid "and"
 msgstr "e"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:251 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:345 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:346 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 

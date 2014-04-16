@@ -287,7 +287,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "已选定 <b>%1$d</b> 个元素"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:502 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "已发送一个送达回执"
@@ -311,10 +311,9 @@ msgid "Absent"
 msgstr "缺乏"
 
 #: apps/io.ox/calendar/acceptdeny.js:99 module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js:29 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:27 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:29
 #: apps/io.ox/calendar/invitations/register.js:31
-#: apps/io.ox/calendar/invitations/register.js:33
-#: apps/io.ox/calendar/invitations/register.js:501
 msgid "Accept"
 msgstr "接受"
 
@@ -323,8 +322,8 @@ msgstr "接受"
 msgid "Accept / Decline"
 msgstr "接受 / 拒绝"
 
-#: apps/io.ox/calendar/invitations/register.js:30 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:34
+#: apps/io.ox/calendar/invitations/register.js:28 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:32
 msgid "Accept changes"
 msgstr "接受更改"
 
@@ -455,7 +454,7 @@ msgstr "添加新户口"
 msgid "Add new folder for this subscription"
 msgstr "为此订阅添加新文件夹"
 
-#: apps/io.ox/calendar/invitations/register.js:32 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:30 module:io.ox/calendar/main
 msgid "Add new participant"
 msgstr "添加新参与者"
 
@@ -520,7 +519,7 @@ msgstr "添加迷你程序"
 msgid "Add your account"
 msgstr "添加您的帐户"
 
-#: apps/io.ox/calendar/invitations/register.js:60 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:58 module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "添加新参与者"
 
@@ -679,7 +678,7 @@ msgid "Apply rule if any condition is met."
 msgstr "如果达到其中一个条件套用规则。"
 
 #: apps/io.ox/calendar/acceptdeny.js:163 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:350
+#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:351
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/week/perspective.js:136
 #: apps/io.ox/mail/detail/links.js:125 module:io.ox/mail
 msgid "Appointment"
@@ -885,7 +884,7 @@ msgstr "回到约会"
 msgid "Basic settings"
 msgstr "基本设置"
 
-#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:237 module:io.ox/mail
 msgid "Bcc"
 msgstr "密件抄送"
 
@@ -996,7 +995,7 @@ msgstr "日历"
 #: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:163
 #: apps/io.ox/calendar/actions.js:272 apps/io.ox/calendar/actions.js:284
 #: apps/io.ox/calendar/actions.js:415 apps/io.ox/calendar/edit/main.js:51
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:160
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:161
 #: apps/io.ox/calendar/month/perspective.js:117
 #: apps/io.ox/calendar/week/perspective.js:94
 #: apps/io.ox/calendar/week/perspective.js:137
@@ -1129,7 +1128,7 @@ msgstr "更改视图"
 msgid "Changed due date"
 msgstr "已更改完成日期"
 
-#: apps/io.ox/calendar/invitations/register.js:58 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:56 module:io.ox/calendar/main
 msgid "Changes have been saved"
 msgstr "已保存更改"
 
@@ -1368,7 +1367,7 @@ msgstr "确认"
 msgid "Conflicts detected"
 msgstr "检测到冲突"
 
-#: apps/io.ox/calendar/edit/main.js:155 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:156 module:io.ox/calendar/edit/main
 msgid "Conflicts with resources cannot be ignored"
 msgstr "不能无视与资源的冲突"
 
@@ -1430,7 +1429,7 @@ msgstr "谈话"
 msgid "Copy"
 msgstr "复制"
 
-#: apps/io.ox/mail/common-extensions.js:225 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:226 module:io.ox/mail
 #: apps/io.ox/mail/print.js:72
 msgctxt "CC"
 msgid "Copy"
@@ -1544,8 +1543,8 @@ msgstr "国家/地区"
 msgid "Create"
 msgstr "创建"
 
-#: apps/io.ox/calendar/edit/main.js:176 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:324
+#: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:325
 msgid "Create appointment"
 msgstr "创建约会"
 
@@ -1682,8 +1681,7 @@ msgid "December"
 msgstr "十二月"
 
 #: apps/io.ox/calendar/acceptdeny.js:97 module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js:38 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:505
+#: apps/io.ox/calendar/invitations/register.js:36 module:io.ox/calendar/main
 msgid "Decline"
 msgstr "拒绝"
 
@@ -1726,7 +1724,7 @@ msgstr "延迟"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:621
-#: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:33 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:748 apps/io.ox/contacts/main.js:107
 #: apps/io.ox/core/commons-folderview.js:383 module:io.ox/core
@@ -2164,8 +2162,8 @@ msgid ""
 "activated immediately."
 msgstr "编辑一个在右边的设定。在大部分情况下，变更会立刻激活。"
 
-#: apps/io.ox/calendar/edit/main.js:176 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:322
+#: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:323
 msgid "Edit appointment"
 msgstr "编辑约会"
 
@@ -2548,7 +2546,7 @@ msgstr "外部电子邮件户口"
 msgid "External contact"
 msgstr "外部联系人"
 
-#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:449 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "为保护您的隐私，从外部链接的图像的预加载已被阻止！"
@@ -2605,13 +2603,13 @@ msgid ""
 "again."
 msgstr "起动应用失败。也许您有连接问题，请重试。"
 
-#: apps/io.ox/calendar/invitations/register.js:588 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:496 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
 msgstr "更新确认状态失败；最可能是约会已删除。"
 
-#: apps/io.ox/calendar/invitations/register.js:589 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:497 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
@@ -3096,11 +3094,11 @@ msgid ""
 "side."
 msgstr "如果您不在需要显示一个方块，请单击在右上方的交叉。"
 
-#: apps/io.ox/calendar/invitations/register.js:39 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:37 module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "忽视"
 
-#: apps/io.ox/calendar/edit/main.js:158 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:159 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:116 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:93
 msgid "Ignore conflicts"
@@ -5002,7 +5000,7 @@ msgstr "刷新间隔"
 msgid "Regex"
 msgstr "正则表达式"
 
-#: apps/io.ox/calendar/invitations/register.js:36 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:34 module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "驳回更改"
 
@@ -5035,7 +5033,7 @@ msgstr "再次提醒我"
 
 #: apps/io.ox/calendar/acceptdeny.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/invitations/register.js:486 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:564 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1124 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
@@ -5349,7 +5347,7 @@ msgid "Send"
 msgstr "发送"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:534 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:533 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "发送一个送达回执"
@@ -5514,7 +5512,7 @@ msgstr "显示所有项目"
 msgid "Show all my appointments from all calendars"
 msgstr "从所有日历显示我所有的约会"
 
-#: apps/io.ox/calendar/invitations/register.js:659 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:126 module:io.ox/calendar/main
 #, fuzzy
 msgid "Show appointment details"
 msgstr "显示约会"
@@ -5524,7 +5522,7 @@ msgstr "显示约会"
 msgid "Show comments"
 msgstr "显示注释"
 
-#: apps/io.ox/calendar/invitations/register.js:349 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:413 module:io.ox/calendar/main
 msgid "Show conflicts"
 msgstr "显示冲突"
 
@@ -5545,7 +5543,7 @@ msgstr "显示已完成任务"
 msgid "Show hidden files and folders"
 msgstr "显示隐藏文件和文件夹"
 
-#: apps/io.ox/mail/common-extensions.js:447 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
 msgid "Show images"
 msgstr "显示图像"
 
@@ -5583,7 +5581,7 @@ msgstr "显示请求内文"
 msgid "Show stack trace"
 msgstr "显示堆叠痕迹"
 
-#: apps/io.ox/calendar/invitations/register.js:660 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:127 module:io.ox/calendar/main
 #, fuzzy
 msgid "Show task details"
 msgstr "显示详情"
@@ -5945,8 +5943,7 @@ msgid "Temporary"
 msgstr "临时"
 
 #: apps/io.ox/calendar/acceptdeny.js:98 module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js:37 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:503
+#: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 msgid "Tentative"
 msgstr "暂定"
 
@@ -6038,11 +6035,11 @@ msgstr "已到达允许额度。"
 msgid "The appointment has been added to your calendar"
 msgstr "此约会已添加到您的日历"
 
-#: apps/io.ox/calendar/invitations/register.js:63 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:61 module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "约会已删除"
 
-#: apps/io.ox/calendar/invitations/register.js:62 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:60 module:io.ox/calendar/main
 msgid "The appointment has been updated"
 msgstr "约会已更新"
 
@@ -6151,7 +6148,7 @@ msgstr "日历视图"
 msgid "The calendar views display a calendar sheet with the appointments."
 msgstr "日历视图显示一个有约会的日历表。"
 
-#: apps/io.ox/calendar/invitations/register.js:64 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:62 module:io.ox/calendar/main
 msgid "The changes have been rejected"
 msgstr "更改被驳回"
 
@@ -6258,7 +6255,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "提供的文件名称超过允许长度。"
 
-#: apps/io.ox/mail/common-extensions.js:537 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:536 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr "此发送人想在您阅读此电子邮件时获得一个通知"
@@ -6366,7 +6363,7 @@ msgstr "主题"
 msgid "There are unsaved changes."
 msgstr "找到未保存更改。"
 
-#: apps/io.ox/calendar/invitations/register.js:342 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:406 module:io.ox/calendar/main
 msgid "There is already %1$d appointment in this timeframe."
 msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "您已经在此时段有一个 %1$d 约会。"
@@ -6410,11 +6407,11 @@ msgstr "此通讯组列表已添加到门户"
 msgid "This email address cannot be used for appointments"
 msgstr "此电子邮件地址不能用作约会"
 
-#: apps/io.ox/calendar/invitations/register.js:656 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:123 module:io.ox/calendar/main
 msgid "This email contains a task"
 msgstr "此邮件包含一个任务"
 
-#: apps/io.ox/calendar/invitations/register.js:655 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "此邮件包含一个约会"
 
@@ -6618,7 +6615,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "标题"
 
-#: apps/io.ox/mail/common-extensions.js:214 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:215 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:71
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7159,7 +7156,7 @@ msgstr "检视来源"
 msgid "Waiting"
 msgstr "等待中"
 
-#: apps/io.ox/mail/common-extensions.js:475 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:476 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告：该邮件可能存在邮件欺诈！"
 
@@ -7293,7 +7290,7 @@ msgid ""
 "%3$s left."
 msgstr "您当前正使用 %2$s 可用磁盘空间的 %1$s。您剩下 %3$s。"
 
-#: apps/io.ox/calendar/invitations/register.js:423 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "您是组织者"
 
@@ -7312,11 +7309,11 @@ msgstr "您可以从您的计算机拖放文件，以上载一个新文件或一
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "您可以使用 Ctrl+Enter 快速保存更改。"
 
-#: apps/io.ox/calendar/invitations/register.js:438 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:165 module:io.ox/calendar/main
 msgid "You declined this appointment"
 msgstr "您已经拒绝了约会"
 
-#: apps/io.ox/calendar/invitations/register.js:439 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
 msgid "You declined this task"
 msgstr "您拒绝了此任务"
 
@@ -7355,18 +7352,18 @@ msgstr "您有 %1$d 条未读消息"
 msgid "You have 1 unread message"
 msgstr "您一条未读消息"
 
-#: apps/io.ox/calendar/invitations/register.js:57 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:55 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:57
 #: apps/io.ox/calendar/invitations/register.js:59
-#: apps/io.ox/calendar/invitations/register.js:61
-#: apps/io.ox/calendar/invitations/register.js:70
+#: apps/io.ox/calendar/invitations/register.js:68
 msgid "You have accepted the appointment"
 msgstr "您已接受此约会"
 
-#: apps/io.ox/calendar/invitations/register.js:432 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:159 module:io.ox/calendar/main
 msgid "You have accepted this appointment"
 msgstr "您已接受此约会"
 
-#: apps/io.ox/calendar/invitations/register.js:433 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
 msgid "You have accepted this task"
 msgstr "您已接受此任务"
 
@@ -7374,8 +7371,8 @@ msgstr "您已接受此任务"
 msgid "You have been automatically signed out"
 msgstr "您已被自动注销"
 
-#: apps/io.ox/calendar/invitations/register.js:66 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:71
+#: apps/io.ox/calendar/invitations/register.js:64 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:69
 msgid "You have declined the appointment"
 msgstr "您已经拒绝了约会"
 
@@ -7396,8 +7393,8 @@ msgstr "您已重认证此 %s 户口。"
 msgid "You have reauthorized this account."
 msgstr "您已重认证此户口。"
 
-#: apps/io.ox/calendar/invitations/register.js:65 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:72
+#: apps/io.ox/calendar/invitations/register.js:63 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:70
 msgid "You have tentatively accepted the appointment"
 msgstr "您已经暂时的接受约会吗。"
 
@@ -7425,11 +7422,11 @@ msgstr "您需要使用 %n 或更新版本。"
 msgid "You share this folder with other users"
 msgstr "您和其他用户分享此文件夹"
 
-#: apps/io.ox/calendar/invitations/register.js:444 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:171 module:io.ox/calendar/main
 msgid "You tentatively accepted this invitation"
 msgstr "您暂时接受此约会"
 
-#: apps/io.ox/calendar/invitations/register.js:445 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:172 module:io.ox/calendar/main
 msgid "You tentatively accepted this task"
 msgstr "您暂时接受此任务"
 
@@ -7560,12 +7557,12 @@ msgid "and"
 msgstr "与"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:251 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:345 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:346 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 

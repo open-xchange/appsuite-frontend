@@ -289,7 +289,7 @@ msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> elem kijelölve"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:502 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:503 module:io.ox/mail
 #, fuzzy
 msgid "A return receipt has been sent"
 msgstr "A tértivevény elküldve"
@@ -313,10 +313,9 @@ msgid "Absent"
 msgstr "Hiányzik"
 
 #: apps/io.ox/calendar/acceptdeny.js:99 module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js:29 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:27 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:29
 #: apps/io.ox/calendar/invitations/register.js:31
-#: apps/io.ox/calendar/invitations/register.js:33
-#: apps/io.ox/calendar/invitations/register.js:501
 msgid "Accept"
 msgstr "Elfogadás"
 
@@ -325,8 +324,8 @@ msgstr "Elfogadás"
 msgid "Accept / Decline"
 msgstr "Elfogadás/visszautasítás"
 
-#: apps/io.ox/calendar/invitations/register.js:30 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:34
+#: apps/io.ox/calendar/invitations/register.js:28 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:32
 msgid "Accept changes"
 msgstr "Változások elfogadása"
 
@@ -457,7 +456,7 @@ msgstr "Új fiók hozzáadása"
 msgid "Add new folder for this subscription"
 msgstr "Új mappa hozzáadása ehhez a feliratkozáshoz"
 
-#: apps/io.ox/calendar/invitations/register.js:32 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:30 module:io.ox/calendar/main
 msgid "Add new participant"
 msgstr "Új résztvevő hozzáadása"
 
@@ -522,7 +521,7 @@ msgstr "Widget hozzáadása"
 msgid "Add your account"
 msgstr "Fiók hozzáadása"
 
-#: apps/io.ox/calendar/invitations/register.js:60 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:58 module:io.ox/calendar/main
 msgid "Added the new participant"
 msgstr "Az új résztvevő hozzáadva"
 
@@ -683,7 +682,7 @@ msgid "Apply rule if any condition is met."
 msgstr "Szabály alkalmazása, ha bármely feltétel teljesül."
 
 #: apps/io.ox/calendar/acceptdeny.js:163 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:350
+#: apps/io.ox/calendar/actions.js:162 apps/io.ox/calendar/edit/main.js:351
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/week/perspective.js:136
 #: apps/io.ox/mail/detail/links.js:125 module:io.ox/mail
 msgid "Appointment"
@@ -901,7 +900,7 @@ msgstr "Vissza a találkozóhoz"
 msgid "Basic settings"
 msgstr "Alapbeállítások"
 
-#: apps/io.ox/mail/common-extensions.js:236 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:237 module:io.ox/mail
 msgid "Bcc"
 msgstr "Rejtett másolat"
 
@@ -1016,7 +1015,7 @@ msgstr "Naptár"
 #: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:163
 #: apps/io.ox/calendar/actions.js:272 apps/io.ox/calendar/actions.js:284
 #: apps/io.ox/calendar/actions.js:415 apps/io.ox/calendar/edit/main.js:51
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:160
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:161
 #: apps/io.ox/calendar/month/perspective.js:117
 #: apps/io.ox/calendar/week/perspective.js:94
 #: apps/io.ox/calendar/week/perspective.js:137
@@ -1149,7 +1148,7 @@ msgstr "Nézet megváltoztatása"
 msgid "Changed due date"
 msgstr "Esedékesség dátuma módosítva"
 
-#: apps/io.ox/calendar/invitations/register.js:58 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:56 module:io.ox/calendar/main
 msgid "Changes have been saved"
 msgstr "A változtatások mentésre kerültek"
 
@@ -1391,7 +1390,7 @@ msgstr "Megerősítés"
 msgid "Conflicts detected"
 msgstr "Ütközés történt"
 
-#: apps/io.ox/calendar/edit/main.js:155 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:156 module:io.ox/calendar/edit/main
 msgid "Conflicts with resources cannot be ignored"
 msgstr "Az erőforrásokkal történő ütközés nem hagyható figyelmen kívül"
 
@@ -1453,7 +1452,7 @@ msgstr "Társalgások"
 msgid "Copy"
 msgstr "Másolás"
 
-#: apps/io.ox/mail/common-extensions.js:225 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:226 module:io.ox/mail
 #: apps/io.ox/mail/print.js:72
 msgctxt "CC"
 msgid "Copy"
@@ -1569,8 +1568,8 @@ msgstr "Ország"
 msgid "Create"
 msgstr "Létrehozás"
 
-#: apps/io.ox/calendar/edit/main.js:176 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:324
+#: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:325
 msgid "Create appointment"
 msgstr "Találkozó létrehozása"
 
@@ -1707,8 +1706,7 @@ msgid "December"
 msgstr "December"
 
 #: apps/io.ox/calendar/acceptdeny.js:97 module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js:38 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:505
+#: apps/io.ox/calendar/invitations/register.js:36 module:io.ox/calendar/main
 msgid "Decline"
 msgstr "Visszautasítás"
 
@@ -1751,7 +1749,7 @@ msgstr "Elhalasztott"
 #. Really delete portal widget - in contrast to "just disable"
 #: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:621
-#: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:33 module:io.ox/calendar/main
 #: apps/io.ox/contacts/actions.js:53 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:748 apps/io.ox/contacts/main.js:107
 #: apps/io.ox/core/commons-folderview.js:383 module:io.ox/core
@@ -2200,8 +2198,8 @@ msgstr ""
 "A beállítások a jobb oldalon szerkeszthetők. A legtöbb esetben a módosítások "
 "azonnal érvényre jutnak."
 
-#: apps/io.ox/calendar/edit/main.js:176 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:322
+#: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:323
 msgid "Edit appointment"
 msgstr "Találkozó szerkesztése"
 
@@ -2591,7 +2589,7 @@ msgstr "Külső e-mail fiókok"
 msgid "External contact"
 msgstr "Külső névjegy"
 
-#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:449 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "A lehetséges levélszemét miatt a külső képek betöltése le lett tiltva!"
@@ -2650,14 +2648,14 @@ msgstr ""
 "Az alkalmazás indítása sikertelen. Ezt kapcsolatproblémák okozhatják. "
 "Próbálja újra."
 
-#: apps/io.ox/calendar/invitations/register.js:588 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:496 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
 msgstr ""
 "Nem frissíthető a megerősítési állapot: valószínűleg a találkozót törölték."
 
-#: apps/io.ox/calendar/invitations/register.js:589 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:497 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
@@ -3148,11 +3146,11 @@ msgid ""
 msgstr ""
 "Az elem bezárásához kattintson a jobb felső részben található keresztre."
 
-#: apps/io.ox/calendar/invitations/register.js:39 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:37 module:io.ox/calendar/main
 msgid "Ignore"
 msgstr "Mellőzés"
 
-#: apps/io.ox/calendar/edit/main.js:158 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:159 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:116 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:93
 msgid "Ignore conflicts"
@@ -5071,7 +5069,7 @@ msgstr "Frissítési időköz"
 msgid "Regex"
 msgstr "Regex"
 
-#: apps/io.ox/calendar/invitations/register.js:36 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:34 module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Változások elvetése"
 
@@ -5104,7 +5102,7 @@ msgstr "Emlékeztessen újra"
 
 #: apps/io.ox/calendar/acceptdeny.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/invitations/register.js:486 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:564 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1124 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
@@ -5418,7 +5416,7 @@ msgid "Send"
 msgstr "Küldés"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:534 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:533 module:io.ox/mail
 #, fuzzy
 msgid "Send a return receipt"
 msgstr "Tértivevény küldése"
@@ -5583,7 +5581,7 @@ msgstr "Az összes elem megjelenítése"
 msgid "Show all my appointments from all calendars"
 msgstr "Összes saját találkozó megjelenítése az összes naptárból"
 
-#: apps/io.ox/calendar/invitations/register.js:659 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:126 module:io.ox/calendar/main
 #, fuzzy
 msgid "Show appointment details"
 msgstr "Találkozó megjelenítése"
@@ -5593,7 +5591,7 @@ msgstr "Találkozó megjelenítése"
 msgid "Show comments"
 msgstr "Megjegyzések megjelenítése"
 
-#: apps/io.ox/calendar/invitations/register.js:349 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:413 module:io.ox/calendar/main
 msgid "Show conflicts"
 msgstr "Ütközések megjelenítése"
 
@@ -5614,7 +5612,7 @@ msgstr "Kész feladatok megjelenítése"
 msgid "Show hidden files and folders"
 msgstr "Rejtett fájlok és mappák megjelenítése"
 
-#: apps/io.ox/mail/common-extensions.js:447 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:448 module:io.ox/mail
 msgid "Show images"
 msgstr "Képek megjelenítése"
 
@@ -5652,7 +5650,7 @@ msgstr "Kéréstörzs megjelenítése"
 msgid "Show stack trace"
 msgstr "Veremkiíratás megjelenítése"
 
-#: apps/io.ox/calendar/invitations/register.js:660 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:127 module:io.ox/calendar/main
 #, fuzzy
 msgid "Show task details"
 msgstr "Részletek megjelenítése"
@@ -6017,8 +6015,7 @@ msgid "Temporary"
 msgstr "ideiglenes"
 
 #: apps/io.ox/calendar/acceptdeny.js:98 module:io.ox/calendar
-#: apps/io.ox/calendar/invitations/register.js:37 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:503
+#: apps/io.ox/calendar/invitations/register.js:35 module:io.ox/calendar/main
 msgid "Tentative"
 msgstr "Feltételes"
 
@@ -6116,11 +6113,11 @@ msgstr "Az engedélyezett kvóta elérve."
 msgid "The appointment has been added to your calendar"
 msgstr "A találkozó hozzáadva a naptárához"
 
-#: apps/io.ox/calendar/invitations/register.js:63 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:61 module:io.ox/calendar/main
 msgid "The appointment has been deleted"
 msgstr "A találkozó törölve"
 
-#: apps/io.ox/calendar/invitations/register.js:62 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:60 module:io.ox/calendar/main
 msgid "The appointment has been updated"
 msgstr "A találkozó frissítve"
 
@@ -6231,7 +6228,7 @@ msgstr "Naptárnézetek"
 msgid "The calendar views display a calendar sheet with the appointments."
 msgstr "A naptárnézetek jelenítik meg a naptárakat a találkozókkal."
 
-#: apps/io.ox/calendar/invitations/register.js:64 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:62 module:io.ox/calendar/main
 msgid "The changes have been rejected"
 msgstr "A változtatások elutasítva"
 
@@ -6351,7 +6348,7 @@ msgstr ""
 msgid "The provided filename exceeds the allowed length."
 msgstr "A megadott fájlnév hossza meghaladja az engedélyezett méretet."
 
-#: apps/io.ox/mail/common-extensions.js:537 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:536 module:io.ox/mail
 #, fuzzy
 msgid "The sender wants to get notified when you have read this email"
 msgstr ""
@@ -6468,7 +6465,7 @@ msgstr "Téma"
 msgid "There are unsaved changes."
 msgstr "Mentetlen beállítások vannak."
 
-#: apps/io.ox/calendar/invitations/register.js:342 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:406 module:io.ox/calendar/main
 msgid "There is already %1$d appointment in this timeframe."
 msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Ebben az időszakban már van %1$d találkozója."
@@ -6514,11 +6511,11 @@ msgstr "Ez a disztribúciós lista hozzáadva a portálhoz"
 msgid "This email address cannot be used for appointments"
 msgstr "Az e-mail cím nem használható találkozókhoz"
 
-#: apps/io.ox/calendar/invitations/register.js:656 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:123 module:io.ox/calendar/main
 msgid "This email contains a task"
 msgstr "A levél feladatot tartalmaz"
 
-#: apps/io.ox/calendar/invitations/register.js:655 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "A levél találkozót tartalmaz"
 
@@ -6731,7 +6728,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Megszólítás"
 
-#: apps/io.ox/mail/common-extensions.js:214 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:215 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:71
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -7323,7 +7320,7 @@ msgstr "Forrás megtekintése"
 msgid "Waiting"
 msgstr "Várakozás"
 
-#: apps/io.ox/mail/common-extensions.js:475 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:476 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Figyelem: Ez az üzenet egy adathalász vagy becsapós e-mail lehet"
 
@@ -7461,7 +7458,7 @@ msgstr ""
 "Jelenleg az elérhető %2$s lemezterületből ennyit használ: %1$s. Szabad hely: "
 "%3$s."
 
-#: apps/io.ox/calendar/invitations/register.js:423 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "Ön a szervező"
 
@@ -7483,11 +7480,11 @@ msgstr ""
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Változtatásait gyorsan elmentheti a Ctrl+Enter megnyomásával."
 
-#: apps/io.ox/calendar/invitations/register.js:438 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:165 module:io.ox/calendar/main
 msgid "You declined this appointment"
 msgstr "Elutasította ezt a találkozót"
 
-#: apps/io.ox/calendar/invitations/register.js:439 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
 msgid "You declined this task"
 msgstr "Elutasította ezt a feladatot"
 
@@ -7526,18 +7523,18 @@ msgstr "%1$d olvasatlan üzenete van"
 msgid "You have 1 unread message"
 msgstr "1 olvasatlan üzenete van"
 
-#: apps/io.ox/calendar/invitations/register.js:57 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:55 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:57
 #: apps/io.ox/calendar/invitations/register.js:59
-#: apps/io.ox/calendar/invitations/register.js:61
-#: apps/io.ox/calendar/invitations/register.js:70
+#: apps/io.ox/calendar/invitations/register.js:68
 msgid "You have accepted the appointment"
 msgstr "Elfogadta a találkozót"
 
-#: apps/io.ox/calendar/invitations/register.js:432 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:159 module:io.ox/calendar/main
 msgid "You have accepted this appointment"
 msgstr "Elfogadta ezt a találkozót"
 
-#: apps/io.ox/calendar/invitations/register.js:433 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
 msgid "You have accepted this task"
 msgstr "Elfogadta ezt a feladatot"
 
@@ -7545,8 +7542,8 @@ msgstr "Elfogadta ezt a feladatot"
 msgid "You have been automatically signed out"
 msgstr "Automatikusan ki lett jelentkeztetve"
 
-#: apps/io.ox/calendar/invitations/register.js:66 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:71
+#: apps/io.ox/calendar/invitations/register.js:64 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:69
 msgid "You have declined the appointment"
 msgstr "Elutasította a találkozót"
 
@@ -7567,8 +7564,8 @@ msgstr "Újra felhatalmazta ezt a %s fiókot."
 msgid "You have reauthorized this account."
 msgstr "Újra felhatalmazta ezt a fiókot."
 
-#: apps/io.ox/calendar/invitations/register.js:65 module:io.ox/calendar/main
-#: apps/io.ox/calendar/invitations/register.js:72
+#: apps/io.ox/calendar/invitations/register.js:63 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:70
 msgid "You have tentatively accepted the appointment"
 msgstr "Feltételesen elfogadta a találkozót"
 
@@ -7596,11 +7593,11 @@ msgstr "Az iOS %n vagy újabb verziója szükséges."
 msgid "You share this folder with other users"
 msgstr "Ezt a mappát megosztja más felhasználókkal"
 
-#: apps/io.ox/calendar/invitations/register.js:444 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:171 module:io.ox/calendar/main
 msgid "You tentatively accepted this invitation"
 msgstr "Ezt a meghívást feltételesen elfogadta"
 
-#: apps/io.ox/calendar/invitations/register.js:445 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:172 module:io.ox/calendar/main
 msgid "You tentatively accepted this task"
 msgstr "Ezt a feladatot feltételesen elfogadta"
 
@@ -7731,12 +7728,12 @@ msgid "and"
 msgstr "és"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:251 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:252 module:io.ox/mail
 msgid "and %1$d others"
 msgstr ""
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:345 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:346 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr ""
 
