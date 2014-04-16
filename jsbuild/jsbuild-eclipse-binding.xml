@@ -48,36 +48,31 @@
 	<mod_done.init  out-path="${JSBUILD_HOME}/cache" />
 	<mod_grunt.init />
 
-	<!-- =================================================================================
-      -->
-    <target name="init">
-		<property name="global.PROJECT_PATH" value="${basedir}" />
-		<mod_grunt.prepare-gruntenv-in-project prjpath="${global.PROJECT_PATH}" />
-	</target>
+	<property name="global.PROJECT_PATH" value="${basedir}" />
 
 	<!-- =================================================================================
       -->
-    <target name   ="clean"
-    		depends="init">
+    <target name="clean">
         <echo message="clean : '${global.PROJECT_PATH}' ..." />
+		<mod_grunt.prepare-gruntenv-in-project prjpath="${global.PROJECT_PATH}" force="true" />
         <mod_grunt.clean prjpath="${global.PROJECT_PATH}" />
         <mod_utils.slow-down />
     </target>
 
     <!-- =================================================================================
       -->
-    <target name   ="build-full"
-    		depends="init">
+    <target name="build-full">
         <echo message="build full : '${global.PROJECT_PATH}' ..." />
+		<mod_grunt.prepare-gruntenv-in-project prjpath="${global.PROJECT_PATH}" />
         <mod_grunt.build-full prjpath="${global.PROJECT_PATH}" />
         <mod_utils.slow-down />
     </target>
 
     <!-- =================================================================================
       -->
-    <target name   ="build-incremental"
-    		depends="init">
+    <target name="build-incremental">
     	<echo message="build incremental : '${global.PROJECT_PATH}' ..." />
+		<mod_grunt.prepare-gruntenv-in-project prjpath="${global.PROJECT_PATH}" />
         <mod_grunt.build-incremental prjpath="${global.PROJECT_PATH}" />
         <mod_utils.slow-down />
     </target>

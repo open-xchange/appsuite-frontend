@@ -103,7 +103,7 @@
     </macrodef>
 
 	<!-- =================================================================================
-	     clean the given path ... but make sure it exists und all circumstances.
+	     clean the given path ... but make sure it exists under all circumstances.
 	     - if path not exists ... it will be created new.
 	     - if path exists .. it will be removed and recreated.
 	  -->
@@ -112,8 +112,19 @@
         <attribute name="path" />
         
         <sequential>
-			<delete dir="@{path}" />
-			<mkdir  dir="@{path}" />
+
+			<if>
+			<available file="@{path}" type="dir" />
+			<then>        
+        		<delete includeemptydirs="true">
+					<fileset dir="@{path}" includes="**/*" />
+				</delete>
+			</then>
+			<else>
+				<mkdir dir="@{path}" />
+			</else>
+			</if>
+        
         </sequential>
     </macrodef>
 
