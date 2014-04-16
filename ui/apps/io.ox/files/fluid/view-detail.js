@@ -445,15 +445,15 @@ define('io.ox/files/fluid/view-detail',
         }
 
         var node = $.createViewContainer(baton.data, filesAPI);
-        node.on('redraw', createRedraw(node)).addClass('file-details view');
+        node.on('redraw', createRedraw(node, app)).addClass('file-details view');
         ext.point(POINT).invoke('draw', node, baton, app);
 
         return node;
     };
 
-    var createRedraw = function (node) {
+    var createRedraw = function (node, app) {
         return function (e, data) {
-            var replacement = draw(data);
+            var replacement = draw(data, app);
             if ('former_id' in data) replacement.attr('former-id', data.former_id);
             node.replaceWith(replacement);
         };
