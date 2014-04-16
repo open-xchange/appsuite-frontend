@@ -91,6 +91,19 @@ define('io.ox/core/commons',
             };
         }()),
 
+        simpleMultiSelection: function (node, selection) {
+
+            if (selection.length <= 1) return;
+
+            node.idle().empty().append(
+                $('<div class="io-ox-center multi-selection-message">').append(
+                    $('<div>').text(
+                        gt('%1$d messages selected', selection.length)
+                    )
+                )
+            );
+        },
+
         mobileMultiSelection: (function () {
             var points = {};
 
@@ -146,7 +159,7 @@ define('io.ox/core/commons',
             };
         }()),
 
-        wireGridAndSelectionChange: function (grid, id, draw, node, api) {
+        wireGridAndSelectionChange: function (grid, id, draw, node, api, simple) {
             var last = '', label;
             grid.selection.on('change', function (e, selection) {
 
@@ -179,7 +192,11 @@ define('io.ox/core/commons',
                         // multi selection
                         if (draw.cancel) draw.cancel();
                         node.css('height', '100%');
-                        commons.multiSelection(id, node, this.unique(this.unfold()), api, grid); //grid is needed to apply busy animations correctly
+                        if (simple) {
+                            commons.simpleMultiSelection(node, this.unique(this.unfold()));
+                        } else {
+                            commons.multiSelection(id, node, this.unique(this.unfold()), api, grid); //grid is needed to apply busy animations correctly
+                        }
                     } else {
                         // empty
                         if (draw.cancel) draw.cancel();

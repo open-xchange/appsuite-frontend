@@ -834,17 +834,10 @@ textarea.inplace-editor {
 
     background-color: #eee;
 
-    .selection-message { display: table; }
-    .selection-message div {
-        color: #aaa;
-        html.high-contrast & {
-            color: @black;
-        }
-    }
     .thread-view-control { display: none; }
 
     &.selection-one {
-        .selection-message { display: none; }
+        .multi-selection-message { display: none; }
         .thread-view-control { display: block; }
     }
 

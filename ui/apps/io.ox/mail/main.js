@@ -453,7 +453,7 @@ define('io.ox/mail/main',
          */
         'selection-message': function (app) {
             app.right.append(
-                $('<div class="io-ox-center selection-message"><div></div></div>')
+                $('<div class="io-ox-center multi-selection-message"><div></div></div>')
             );
         },
 
@@ -559,7 +559,7 @@ define('io.ox/mail/main',
         'show-empty': function (app) {
             app.showEmpty = function () {
                 app.threadView.empty();
-                app.right.find('.selection-message div').text(
+                app.right.find('.multi-selection-message div').text(
                     gt('No message selected')
                 );
             };
@@ -573,7 +573,7 @@ define('io.ox/mail/main',
             app.showMultiple = function (list) {
                 app.threadView.empty();
                 list = api.threads.resolve(list);
-                app.right.find('.selection-message div').text(
+                app.right.find('.multi-selection-message div').text(
                     gt('%1$d messages selected', list.length)
                 );
             };
