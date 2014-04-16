@@ -86,7 +86,6 @@ define('io.ox/calendar/list/perspective',
         };
 
         commons.wireGridAndAPI(grid, api);
-        commons.wireGridAndSearch(grid, win, api);
 
         // add grid options
         grid.prop('order', 'asc')
@@ -116,19 +115,6 @@ define('io.ox/calendar/list/perspective',
         // special search: list request
         grid.setListRequest('search', function (ids) {
             return $.Deferred().resolve(ids);
-        });
-
-        // hide grid toolbar options on search
-        grid.on('change:mode', function (e, cur) {
-            if (optDropdown && cur) {
-                optDropdown[cur === 'search' ? 'hide' : 'show']();
-            }
-            if (cur === 'search') {
-                $(grid.getContainer()).addClass('search-view');
-            } else {
-                $(grid.getContainer()).removeClass('search-view');
-
-            }
         });
 
         var directAppointment;//directly linked appointments are stored here
@@ -252,12 +238,8 @@ define('io.ox/calendar/list/perspective',
         var generateAllRequest = function (dates) {
             //var timeframe = util.getDateInterval({start_date: dates.start, end_date: dates.end});
             var endDate = new date.Local(dates.end).format(date.DATE);
-            grid.setEmptyMessage(function (mode) {
-                if (mode === 'search') {
-                    return gt.format(gt('No appointments found for "%s"'), win.search.query);
-                } else {
-                    return gt.format(gt('No appointments found until %s'), endDate);
-                }
+            grid.setEmptyMessage(function () {
+                return gt.format(gt('No appointments found until %s'), endDate);
             });
             return function () {
                 var prop = grid.prop(),

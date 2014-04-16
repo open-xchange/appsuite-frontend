@@ -54,8 +54,7 @@ define('io.ox/calendar/main',
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            toolbar: true,
-            search: true
+            toolbar: true
         }));
 
         app.settings = settings;
@@ -110,18 +109,7 @@ define('io.ox/calendar/main',
                 ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);
             });
 
-        win.on('search:open', function () {
-                lastPerspective = win.currentPerspective;
-                if (lastPerspective && lastPerspective !== 'list') {
-                    ox.ui.Perspective.show(app, 'list');
-                }
-            })
-            .on('search:close', function () {
-                if (lastPerspective && lastPerspective !== 'list') {
-                    ox.ui.Perspective.show(app, lastPerspective);
-                }
-            })
-            .on('change:perspective', function (e, name, long) {
+        win.on('change:perspective', function (e, name, long) {
                 // save current perspective to settings
                 settings.set('viewView', long).save();
                 if (name !== 'list') {
