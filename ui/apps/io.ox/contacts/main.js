@@ -109,7 +109,12 @@ define('io.ox/contacts/main',
                 var grid = app.getGrid();
                 grid.setEditable(value);
             });
-        }
+        },
+
+        /*
+         * Folerview toolbar
+         */
+        'folderview-toolbar': commons.mediateFolderView
     });
 
     // launcher

@@ -109,7 +109,12 @@ define('io.ox/tasks/main',
                 var grid = app.getGrid();
                 grid.setEditable(value);
             });
-        }
+        },
+
+        /*
+         * Folerview toolbar
+         */
+        'folderview-toolbar': commons.mediateFolderView
     });
 
     // application object
@@ -220,7 +225,7 @@ define('io.ox/tasks/main',
         grid = new VGrid(left, {
             settings: settings,
             swipeRightHandler: swipeRightHandler,
-            showToggle: true,
+            showToggle: false
         });
 
         grid.addTemplate(template.main);

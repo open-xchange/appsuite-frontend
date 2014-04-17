@@ -691,7 +691,60 @@ define('io.ox/core/commons',
                 //
                 return sides;
             };
-        }())
+        }()),
+
+        mediateFolderView: function (app) {
+
+            function toggleFolderView(e) {
+                e.preventDefault();
+                e.data.app.toggleFolderView(e.data.state);
+            }
+
+            function onFolderViewOpen(app) {
+                app.getWindow().nodes.main.find('.vgrid').removeClass('bottom-toolbar');
+            }
+
+            function onFolderViewClose(app) {
+                app.getWindow().nodes.main.find('.vgrid').addClass('bottom-toolbar');
+            }
+
+            // create extension point for second toolbar
+            ext.point(app.get('name') + '/vgrid/second-toolbar').extend({
+                id: 'default',
+                index: 100,
+                draw: function () {
+                    this.addClass('visual-focus').append(
+                        $('<a href="#" class="toolbar-item" tabindex="1">')
+                        .attr('title', gt('Open folder view'))
+                        .append($('<i class="fa fa-angle-double-right">'))
+                        .on('click', { app: app, state: true }, toggleFolderView)
+                    );
+                }
+            });
+
+            var side = app.getWindow().nodes.sidepanel;
+
+            side.find('.foldertree-container').addClass('bottom-toolbar');
+            side.find('.foldertree-sidepanel').append(
+                $('<div class="generic-toolbar bottom visual-focus">').append(
+                    $('<a href="#" class="toolbar-item" tabindex="1">')
+                    .attr('title', gt('Close folder view'))
+                    .append($('<i class="fa fa-angle-double-left">'))
+                    .on('click', { app: app, state: false }, toggleFolderView)
+                )
+            );
+
+            app.on({
+                'folderview:open': onFolderViewOpen.bind(null, app),
+                'folderview:close': onFolderViewClose.bind(null, app)
+            });
+
+            var grid = app.getGrid(), topbar = grid.getTopbar();
+            ext.point(app.get('name') + '/vgrid/second-toolbar').invoke('draw', topbar, ext.Baton({ grid: grid }));
+            onFolderViewClose(app);
+
+            if (app.folderViewIsVisible()) _.defer(onFolderViewOpen, app);
+        }
     };
 
     /*
