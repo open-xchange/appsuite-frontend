@@ -555,7 +555,6 @@ define('io.ox/mail/write/view-main',
                     } else {
                         //IE
                         if ($input.val()) {
-                            console.log('test2');
                             var file = {
                                 name: $input.val().match(/[^\/\\]+$/).toString(),
                                 group: 'input',
@@ -584,10 +583,9 @@ define('io.ox/mail/write/view-main',
                 require(['io.ox/files/filepicker']).done(function (Picker) {
                     var picker = new Picker({
                         point: POINT,                   // prefix for custom ext. point
-                        filter: function (file) {
-                            console.log(file);
+                        filter: function () {           // filter function
                             return true;
-                        },                  // filter function
+                        },
                         primaryButtonText: gt('Add'),
                         cancelButtonText: gt('Cancel'),
                         header: gt('Add files'),

@@ -24,7 +24,6 @@ define('io.ox/files/filepicker',
     'use strict';
 
     var FilePicker = function (options) {
-        console.log(options);
 
         options = _.extend({
             filter: function () { return true; },
