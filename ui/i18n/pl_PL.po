@@ -620,7 +620,7 @@ msgstr "Pozwól na wstępne wczytywanie połączonych obrazów zewnętrznych"
 msgid "An error occurred"
 msgstr "Wystąpił błąd"
 
-#: apps/io.ox/portal/main.js:343 module:io.ox/portal
+#: apps/io.ox/portal/main.js:344 module:io.ox/portal
 msgid "An error occurred."
 msgstr "Wystąpił błąd."
 
@@ -1064,7 +1064,7 @@ msgstr "Kalendarz"
 #: apps/io.ox/mail/main.js:923 apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1345 apps/io.ox/mail/write/view-main.js:617
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:491 module:io.ox/portal
+#: apps/io.ox/portal/main.js:496 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/search/view-template.js:422
 #: apps/io.ox/settings/accounts/settings/pane.js:161
@@ -1210,7 +1210,7 @@ msgstr "Kliknij, aby zaplanować spotkanie całodniowe"
 msgid "Click here for free trial."
 msgstr "Kliknij tutaj, aby zamówić pełną wersję."
 
-#: apps/io.ox/portal/main.js:297 module:io.ox/portal
+#: apps/io.ox/portal/main.js:298 module:io.ox/portal
 #: apps/plugins/portal/facebook/register.js:328 module:plugins/portal
 #: apps/plugins/portal/twitter/register.js:384
 msgid "Click here to add your account"
@@ -1260,7 +1260,7 @@ msgstr "Kliknij, aby spróbować ponownie"
 msgid "Click to retry later."
 msgstr "Kliknij, aby spróbować ponownie później."
 
-#: apps/io.ox/portal/main.js:346 module:io.ox/portal
+#: apps/io.ox/portal/main.js:347 module:io.ox/portal
 msgid "Click to try again."
 msgstr "Kliknij, aby spróbować ponownie."
 
@@ -1667,7 +1667,7 @@ msgstr "Tworzenie zadania"
 msgid "Currency"
 msgstr "Waluta"
 
-#: apps/io.ox/portal/main.js:85 module:io.ox/portal
+#: apps/io.ox/portal/main.js:86 module:io.ox/portal
 msgid "Customize this page"
 msgstr "Dopasuj tę stronę"
 
@@ -1774,7 +1774,7 @@ msgstr "Odroczone"
 #: apps/io.ox/mail/actions.js:112 apps/io.ox/mail/actions.js:986
 #: apps/io.ox/mail/mobileToolbarActions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:272
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:489
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:494
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -1805,7 +1805,7 @@ msgstr "Usuń wersję"
 msgid "Delete whole series"
 msgstr "Usuń cały cykl"
 
-#: apps/io.ox/portal/main.js:485 module:io.ox/portal
+#: apps/io.ox/portal/main.js:490 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "Usuń widget"
@@ -1859,8 +1859,8 @@ msgstr "Łącze bezpośrednie: %1$s"
 msgid "Disable"
 msgstr "Wyłącz"
 
-#: apps/io.ox/portal/main.js:142 module:io.ox/portal
-#: apps/io.ox/portal/main.js:143 apps/io.ox/portal/main.js:383
+#: apps/io.ox/portal/main.js:143 module:io.ox/portal
+#: apps/io.ox/portal/main.js:144 apps/io.ox/portal/main.js:384
 msgid "Disable widget"
 msgstr "Wyłącz widget"
 
@@ -1983,7 +1983,7 @@ msgstr[0] "Czy na pewno chcesz usunąć to zadanie?"
 msgstr[1] "Czy na pewno chcesz usunąć te zadania?"
 msgstr[2] "Czy na pewno chcesz usunąć te zadania?"
 
-#: apps/io.ox/portal/main.js:486 module:io.ox/portal
+#: apps/io.ox/portal/main.js:491 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "Czy na pewno chcesz usunąć ten widget?"
@@ -2968,11 +2968,11 @@ msgstr "Wprowadzenie"
 msgid "Give feedback"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:37 module:io.ox/portal
+#: apps/io.ox/portal/main.js:38 module:io.ox/portal
 msgid "Good evening, %s"
 msgstr "Witamy serdecznie"
 
-#: apps/io.ox/portal/main.js:35 module:io.ox/portal
+#: apps/io.ox/portal/main.js:36 module:io.ox/portal
 msgid "Good morning, %s"
 msgstr "Witamy serdecznie"
 
@@ -3025,7 +3025,7 @@ msgstr "Widok halo"
 msgid "Header"
 msgstr "Nagłówek"
 
-#: apps/io.ox/portal/main.js:39 module:io.ox/portal
+#: apps/io.ox/portal/main.js:40 module:io.ox/portal
 msgid "Hello %s"
 msgstr "Witamy"
 
@@ -3388,7 +3388,7 @@ msgstr "Czerwiec"
 
 #. Just disable portal widget - in contrast to delete
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:495 module:io.ox/portal
+#: apps/io.ox/portal/main.js:500 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "Tylko wyłącz widget"
@@ -4750,7 +4750,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "Portal"
 
-#: apps/io.ox/portal/main.js:455 module:io.ox/portal
+#: apps/io.ox/portal/main.js:456 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "Widżety portalu"
 
@@ -5726,7 +5726,7 @@ msgid "Signatures"
 msgstr "Podpisy"
 
 #. Portal. Logged in as user
-#: apps/io.ox/portal/main.js:65 module:io.ox/portal
+#: apps/io.ox/portal/main.js:66 module:io.ox/portal
 msgid "Signed in as %1$s"
 msgstr "Zalogowano jako %1$s"
 
