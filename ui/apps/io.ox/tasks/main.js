@@ -22,44 +22,131 @@ define('io.ox/tasks/main',
      'io.ox/tasks/util',
      'io.ox/tasks/view-detail',
      'settings!io.ox/tasks',
-     'io.ox/core/api/folder'
+     'io.ox/core/api/folder',
+     'io.ox/tasks/toolbar'
     ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI) {
 
     'use strict';
 
     // application object
+    var app = ox.ui.createApp({
+        name: 'io.ox/tasks',
+        title: 'Tasks'
+    });
+
+    // a bit too global vars
+    var grid, taskToolbarOptions;
+
+    app.mediator({
+
+        /*
+         * Folder view support
+         */
+        'folder-view': function (app) {
+            // folder tree
+            commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
+            app.getWindow().nodes.sidepanel.addClass('border-right');
+        },
+
+        /*
+         * Default application properties
+         */
+        'props': function (app) {
+            // introduce shared properties
+            app.props = new Backbone.Model({
+                'checkboxes': app.settings.get('showCheckboxes', true)
+            });
+        },
+
+        'vgrid-checkboxes': function (app) {
+            // always hide checkboxes on small devices initially
+            if (_.device('small')) return;
+            var grid = app.getGrid();
+            grid.setEditable(app.props.get('checkboxes'));
+        },
+
+        /*
+         * Set folderview property
+         */
+        'prop-folderview': function (app) {
+            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+        },
+
+        /*
+         * Store view options
+         */
+        'store-view-options': function (app) {
+            app.props.on('change', _.debounce(function () {
+                var data = app.props.toJSON();
+                app.settings
+                    .set('showCheckboxes', data.checkboxes)
+                    .save();
+            }, 500));
+        },
+
+        /*
+         * Respond to folder view changes
+         */
+        'change:folderview': function (app) {
+            if (_.device('small')) return;
+            app.props.on('change:folderview', function (model, value) {
+                app.toggleFolderView(value);
+            });
+            app.on('folderview:close', function () {
+                app.props.set('folderview', false);
+            });
+            app.on('folderview:open', function () {
+                app.props.set('folderview', true);
+            });
+        },
+
+        /*
+         * Respond to change:checkboxes
+         */
+        'change:checkboxes': function (app) {
+            if (_.device('small')) return;
+            app.props.on('change:checkboxes', function (model, value) {
+                var grid = app.getGrid();
+                grid.setEditable(value);
+            });
+        }
+    });
+
+    // application object
     var app = ox.ui.createApp({ name: 'io.ox/tasks', title: 'Tasks' }),
-        // app window
-        win,
-        // grid
-        grid,
-        // nodes
-        left,
-        right,
-        //VGridToolbarOptions
-        taskToolbarOptions = function (e) {
-            e.preventDefault();
-            var option = $(this).attr('data-option'),
-                grid = e.data.grid;
-            if (option === 'asc' || option === 'desc') {
-                grid.prop('order', option).refresh();
-            } else if (option !== 'done') {
-                grid.prop('sort', option).refresh();
-            } else if (option === 'done') {
-                grid.prop(option, !grid.prop(option)).refresh();
-            }
-        };
+
+    // VGridToolbarOptions
+    taskToolbarOptions = function (e) {
+        e.preventDefault();
+        var option = $(this).attr('data-option'),
+            grid = e.data.grid;
+        if (option === 'asc' || option === 'desc') {
+            grid.prop('order', option).refresh();
+        } else if (option !== 'done') {
+            grid.prop('sort', option).refresh();
+        } else if (option === 'done') {
+            grid.prop(option, !grid.prop(option)).refresh();
+        }
+    };
 
     // launcher
     app.setLauncher(function (options) {
-        var showSwipeButton = false,
+
+        var // app window
+            win,
+            // grid
+            grid,
+            // nodes
+            left,
+            right,
+            showSwipeButton = false,
             hasDeletePermission;
+
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/tasks',
             title: 'Tasks',
-            toolbar: true,
-            search: false
+            chromeless: _.device('!small')
         });
 
         win.addClass('io-ox-tasks-main');
@@ -200,7 +287,10 @@ define('io.ox/tasks/main',
         };
 
         drawTask = function (data) {
-            right.idle().empty().append(viewDetail.draw(data));
+            var baton = ext.Baton({ data: data });
+            // since we use a classic toolbar on non-small devices, we disable inline links in this case
+            if (_.device('!small')) baton.disable('io.ox/tasks/detail-inline', 'inline-links');
+            right.idle().empty().append(viewDetail.draw(baton));
         };
 
         drawFail = function (obj) {
@@ -211,7 +301,7 @@ define('io.ox/tasks/main',
             );
         };
 
-        commons.wireGridAndSelectionChange(grid, 'io.ox/tasks', showTask, right, api);
+        commons.wireGridAndSelectionChange(grid, 'io.ox/tasks', showTask, right, api, true);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
@@ -272,7 +362,10 @@ define('io.ox/tasks/main',
 
         //ready for show
         commons.addFolderSupport(app, grid, 'tasks', options.folder)
-            .done(commons.showWindow(win, grid));
+            .always(function () {
+                app.mediate();
+                win.show();
+            });
     });
 
     //extension points

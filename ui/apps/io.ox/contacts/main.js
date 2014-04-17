@@ -333,7 +333,7 @@ define('io.ox/contacts/main',
 
         drawContact = function (data) {
             var baton = ext.Baton({ data: data, app: app });
-            baton.disable('io.ox/contacts/detail', 'inline-actions');
+            if (_.device('!small')) baton.disable('io.ox/contacts/detail', 'inline-actions');
             if (grid.getMode() === 'all') baton.disable('io.ox/contacts/detail', 'breadcrumb');
             right.idle().empty().append(viewDetail.draw(baton));
         };

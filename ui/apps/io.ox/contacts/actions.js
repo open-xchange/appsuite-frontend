@@ -95,7 +95,6 @@ define('io.ox/contacts/actions',
         action: function (baton) {
             var folder = baton.folder || baton.app.folder.get();
             require(['io.ox/contacts/edit/main'], function (m) {
-                console.log('Sooo', folder);
                 m.getApp({ folder_id: folder }).launch()
                     .done(function (data) {
                         if (data) baton.app.getGrid().selection.set(data);

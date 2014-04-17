@@ -18,8 +18,9 @@ define('io.ox/tasks/actions',
      'gettext!io.ox/tasks',
      'io.ox/core/notifications',
      'io.ox/core/print',
-     'io.ox/core/extPatterns/actions'
-    ], function (ext, util, links, gt, notifications, print, actions) {
+     'io.ox/core/extPatterns/actions',
+     'io.ox/tasks/common-extensions'
+    ], function (ext, util, links, gt, notifications, print, actions, extensions) {
 
     'use strict';
 
@@ -465,62 +466,14 @@ define('io.ox/tasks/actions',
         mobile: 'lo',
         ref: 'io.ox/tasks/actions/placeholder',
         draw: function (baton) {
-            var data = baton.data;
-            this.append(
-                $('<span class="dropdown io-ox-action-link">').append(
-                    // link
-                    $('<a href="#" data-action="change-due-date" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
-                    .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
-                    // drop down
-                    $('<ul class="dropdown-menu pull-right" role="menu">').append(
-                        util.buildDropdownMenu({bootstrapDropdown: true, daysOnly: true})
-                    )
-                    .on('click', 'li>a:not([data-action="close-menu"])', { task: data }, function (e) {
-                        e.preventDefault();
-                        var finderId = $(e.target).val();
-                        ox.load(['io.ox/tasks/api']).done(function (api) {
-                            var endDate = util.computePopupTime(finderId).endDate,
-                                modifications = {
-                                    end_date: endDate,
-                                    id: e.data.task.id,
-                                    folder_id: e.data.task.folder_id || e.data.task.folder
-                                };
 
-                            //check if startDate is still valid with new endDate, if not, show dialog
-                            if (e.data.task.start_date && e.data.task.start_date > endDate) {
-                                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                                    var popup = new dialogs.ModalDialog()
-                                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                                        .addPrimaryButton('change', gt('Adjust start date'), 'changechange', {tabIndex: '1'});
-                                    //text
-                                    popup.getBody().append(
-                                        $('<h4>').text(gt('Inconsistent dates')),
-                                        $('<div>').text(
-                                            //#. If the user changes the duedate of a task, it may be before the start date, which is not allowed
-                                            //#. If this happens the user gets the option to change the start date so it matches the due date
-                                            gt('The due date cannot be before start date. Adjust start date?')
-                                        )
-                                    );
-                                    popup.show().done(function (action) {
-                                        if (action === 'cancel') {
-                                            notifications.yell('info', gt('Canceled'));
-                                        } else {
-                                            modifications.start_date = modifications.end_date;
-                                            api.update(modifications).done(function () {
-                                                notifications.yell('success', gt('Changed due date'));
-                                            });
-                                        }
-                                    });
-                                });
-                            } else {
-                                api.update(modifications).done(function () {
-                                    notifications.yell('success', gt('Changed due date'));
-                                });
-                            }
-                        });
-                    })
-                )
+            var link = $('<a href="#">').text(gt('Change due date'));
+
+            this.append(
+                $('<span class="io-ox-action-link">').append(link)
             );
+
+            extensions.dueDate.call(link, baton);
         }
     }));
 
