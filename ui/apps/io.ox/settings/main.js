@@ -15,8 +15,6 @@ define('io.ox/settings/main',
     ['io.ox/core/tk/vgrid',
      'io.ox/core/api/apps',
      'io.ox/core/extensions',
-     'io.ox/core/tk/forms',
-     'io.ox/core/tk/view',
      'io.ox/core/commons',
      'gettext!io.ox/core',
      'settings!io.ox/settings/configjump',
@@ -24,7 +22,7 @@ define('io.ox/settings/main',
      'io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/settings/downloads/pane',
      'less!io.ox/settings/style'
-    ], function (VGrid, appsAPI, ext, forms, View, commons, gt, configJumpSettings, advancedModeSettings) {
+    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, advancedModeSettings) {
 
     'use strict';
 

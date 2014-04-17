@@ -13,14 +13,13 @@
  */
 
 define.async('io.ox/mail/accounts/view-form',
-    ['io.ox/core/tk/view',
-     'io.ox/core/notifications',
+    ['io.ox/core/notifications',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
      'gettext!io.ox/settings/settings',
      'io.ox/core/extensions',
      'io.ox/backbone/mini-views'
-    ], function (View, notifications, accountAPI, settings, gt, ext, mini) {
+    ], function (notifications, accountAPI, settings, gt, ext, mini) {
 
     'use strict';
 
