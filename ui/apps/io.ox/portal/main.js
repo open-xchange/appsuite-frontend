@@ -201,6 +201,9 @@ define('io.ox/portal/main',
                 }
             } else if ('color' in model.changed) {
                 util.setColor(app.getWidgetNode(model), model.get('color'));
+            } else if ('title' in model.changed) {
+                //change name
+                app.getWidgetNode(model).find('.title').text(model.get('title'));
             } else if (this.wasElementDeleted(model)) {
                 // element was removed, no need to refresh it.
                 return;
