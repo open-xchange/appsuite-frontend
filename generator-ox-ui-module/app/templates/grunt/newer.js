@@ -48,7 +48,7 @@ module.exports = function (grunt) {
 
     grunt.config.extend('newer', {
         options: {
-            override: function(detail, include) {
+            override: function (detail, include) {
                 if (detail.task === 'less') {
                     // call include with `true` if there are newer imports
                     checkForNewerImports(detail.path, detail.time, detail.target, include);
