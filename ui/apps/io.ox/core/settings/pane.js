@@ -174,9 +174,9 @@ define('io.ox/core/settings/pane',
             }));
         }
 
-        point.extend(new forms.CheckBoxField({
+        point.extend(new forms.CheckControlGroup({
             id: 'highcontrast',
-            index: 800,
+            index: 401,
             labelCssClass: 'col-sm-4',
             controlCssClass: 'col-sm-4',
             attribute: 'highcontrast',

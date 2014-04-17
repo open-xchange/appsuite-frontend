@@ -191,6 +191,33 @@ define('io.ox/backbone/forms',
         }, options);
     }
 
+
+    function CheckControlGroup(options) {
+        _.extend(this, new ControlGroup(options), {
+            buildElement: function () {
+                var self = this;
+                if (this.nodes.element) {
+                    return this.nodes.element;
+                }
+                this.nodes.element = $('<label class="checkbox">')
+                    .addClass(this.labelClassName || '')
+                    .append(
+                        this.nodes.checkbox = $('<input tabindex="1" type="checkbox">'),
+                        this.label
+                    );
+                if (this.model.get(this.attribute)) {
+                    this.nodes.checkbox.prop('checked', true);
+                }
+                this.nodes.checkbox.prop('checked', this.model.get(this.attribute));
+                this.nodes.checkbox.on('change', function () {
+                    self.model.set(self.attribute, self.nodes.checkbox.prop('checked'), {validate: true});
+                });
+                this.nodes.label.empty();
+                return this.nodes.element;
+            }
+        }, options);
+    }
+
     function addErrorHandling(options, object) {
         if (!object.modelEvents) {
             object.modelEvents = {};
@@ -664,6 +691,7 @@ define('io.ox/backbone/forms',
         Header: Header,
         InputField: InputField,
         CheckBoxField: CheckBoxField,
+        CheckControlGroup: CheckControlGroup,
         SelectBoxField: SelectBoxField,
         SectionLegend: SectionLegend,
         DatePicker: DatePicker
