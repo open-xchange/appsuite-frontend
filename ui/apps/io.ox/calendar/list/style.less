@@ -11,7 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-.list-view {
+.calendar-list-view {
 
     .search-view {
 
@@ -22,31 +22,26 @@
                 .date {
                     display: block;
                 }
-
             }
-
         }
-
     }
 
     .vgrid.editable .vgrid-cell {
-        padding-left: 35px;
+        padding-left: 48px;
     }
 
     .vgrid-cell {
 
         &.calendar {
 
-            height: 55px; /* = 3 rows */
-            padding-top: 7px;
-            padding-bottom: 7px;
+            height: 60px; /* = 3 rows */
 
             .vgrid-cell-checkbox {
                 padding-top: 9px;
             }
 
             .contentContainer {
-                padding-left: 5px;
+                padding-left: 10px;
             }
 
             .private {
@@ -73,11 +68,10 @@
 
             .time {
 
-                width: 22%;
+                width: 60px;
                 height: 100%;
                 border-right: 3px solid #ccc;
                 float: left;
-                text-align: right;
 
                 .fragment {
                     text-overflow: clip;
@@ -89,7 +83,6 @@
             .date {
                 display: none;
             }
-
         }
 
         .custom_shown_as {
@@ -109,9 +102,6 @@
             &.free {
                 border-color: @appointment-free;
             }
-
         }
-
     }
-
 }
