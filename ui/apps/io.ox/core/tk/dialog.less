@@ -22,9 +22,10 @@
 }
 
 .add-infostore-file .modal-body {
+
     padding: 0;
 
-    &>div {
+    &>* {
         display: inline-block;
         width: 50%;
         height: 380px;
@@ -32,38 +33,55 @@
         overflow: auto;
     }
 
-    .io-ox-foldertree { padding: 0; }
+    .io-ox-foldertree {
+        padding: 0;
+    }
 
     .io-ox-fileselection {
+
         outline: none;
 
-        .file {
+        li.file {
+
             cursor: pointer;
-            line-height: 34px;
+            line-height: 35px;
 
-            .labelwrapper {
-                display: inline-block;
-                vertical-align: top;
-                padding: 7px;
+            label {
+                margin-top: 7px;
+                margin-left: 5px;
+                float: left;
+            }
 
-                label { min-height: 0; }
+            .name {
+                .ellipsis();
             }
 
             &.selected, &.selected:hover {
+
                 background-color: @foldertree-selected-background;
 
-                * { color: @foldertree-selected-label-color; }
+                * {
+                    color: @foldertree-selected-label-color;
+                }
             }
         }
 
         &:focus .file {
-            &.selected {
+
+            &.selected, &.selected:hover {
+
                 background-color: @foldertree-selected-focus-background;
 
-                * { color: @foldertree-focused-label-color; }
+                * {
+                    color: @foldertree-focused-label-color;
+                }
+
             }
+
         }
+
     }
+
 }
 
 /* ios momentum scrolling, breakes mobile chrome if applied to all devices */
