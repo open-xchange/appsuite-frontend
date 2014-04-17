@@ -137,7 +137,7 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
             return $('<div>').addClass('control-group mailfilter').append(
                 $('<div>').addClass('controls'),
                 $('<label>').addClass('checkbox').text(gt('Process subsequent rules')).append(
-                    $('<input type="checkbox" tabindex="1   ">').attr({'data-action': 'check-for-stop', 'checked': value})
+                    $('<input type="checkbox" tabindex="1">').attr({'data-action': 'check-for-stop', 'checked': value})
                 )
             );
         }
