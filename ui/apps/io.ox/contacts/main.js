@@ -447,7 +447,6 @@ define('io.ox/contacts/main',
         // go!
         commons.addFolderSupport(app, grid, 'contacts', options.folder)
             .always(function () {
-                console.log('YEAH!');
                 app.mediate();
                 win.show();
             });
