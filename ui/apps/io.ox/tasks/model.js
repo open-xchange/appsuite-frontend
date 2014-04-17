@@ -98,7 +98,7 @@ define('io.ox/tasks/model',
     ext.point('io.ox/tasks/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
-            if (attributes.start_date && attributes.end_date && attributes.end_date <= attributes.start_date) {
+            if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {//start_date = end_date is valid
                 //this.add('start_date', gt('The start date must be before the end date.')); // see Bug 27742
                 this.add('end_date', gt('The start date must be before the due date.'));
             }
