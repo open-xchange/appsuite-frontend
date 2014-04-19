@@ -11,20 +11,26 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 define(['io.ox/core/extensions',
+        'waitsFor',
         'gettext!io.ox/mail',
         'io.ox/mail/settings/pane'
-        ], function (ext, gt) {
+        ], function (ext, waitsFor, gt) {
 
-	describe.skip('mailsettings', function () {
-        beforeEach(function () {
+    describe.skip('mailsettings', function () {
+        beforeEach(function (done) {
 
             $('body', document).append(this.node = $('<div id="mailsettingsNode">'));
             ext.point('io.ox/mail/settings/detail').invoke('draw', this.node);
+            waitsFor(function () {
+                return this.node.find('h1').length === 1;
+            }.bind(this)).then(function () {
+                done();
+            });
 
         });
 
         afterEach(function () {
-            $('#mailsettingsNode', document).remove();
+            this.node.remove();
         });
 
         it('should draw the form', function () {

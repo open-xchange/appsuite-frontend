@@ -42,28 +42,18 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
     multiValues = {},
     model;
 
-    describe.skip('autoforward', function () {
+    describe('autoforward', function () {
 
-        beforeEach(function () {
-            var def;
+        beforeEach(function (done) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list&flag=autoforward/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFlag));
             });
             $('body', document).append(this.node = $('<div id="autoforwardtestNode">'));
 
-            def = filter.editAutoForward(this.node, multiValues, 'tester@open-xchange.com');
-
-            waitsFor(function () {
-
-                if (def.state() === 'resolved') {
-                    def.done(function (filtermodel) {
-                        model = filtermodel;
-                    });
-                    return true;
-                }
-
-            }, 'setup mailfilter edit view', ox.testTimeout);
-
+            filter.editAutoForward(this.node, multiValues, 'tester@open-xchange.com').done(function (filtermodel) {
+                model = filtermodel;
+                done();
+            });
         });
 
         afterEach(function () {
@@ -71,15 +61,15 @@ define(['io.ox/mail/autoforward/settings/filter', 'gettext!io.ox/mail'], functio
         });
 
         it('should draw the form', function () {
-            expect(this.node.find('input[name="forwardmail"]').length).toBe(1);
-            expect(this.node.find('input[name="forwardmail"]').val()).toBe('tester@open-xchange.com');
-            expect(this.node.find('input[name="keep"]').length).toBe(1);
-            expect(this.node.find('input[name="keep"]').prop('checked')).toBe(true);
-            expect(this.node.find('input[name="active"]').length).toBe(1);
-            expect(this.node.find('input[name="active"]').prop('checked')).toBe(false);
+            expect(this.node.find('input[name="forwardmail"]')).to.have.length(1);
+            expect(this.node.find('input[name="forwardmail"]').val()).to.equal('tester@open-xchange.com');
+            expect(this.node.find('input[name="keep"]')).to.have.length(1);
+            expect(this.node.find('input[name="keep"]').prop('checked')).to.be.true;
+            expect(this.node.find('input[name="active"]')).to.have.length(1);
+            expect(this.node.find('input[name="active"]').prop('checked')).to.be.false;
         });
 
-        xit('should create the filtermodel', function () {
+        it.skip('should create the filtermodel', function () {
             //FIXME: behaviour seems to be changed, model.attributes.userMainEmail seems to be an empty object
             model.attributes.should.deep.equal(filtermodel);
         });
