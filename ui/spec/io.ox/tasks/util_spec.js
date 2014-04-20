@@ -12,7 +12,7 @@
  */
 define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
 ], function (util, gt, date) {
-    describe.skip('tasks utility', function () {
+    describe('tasks utility', function () {
         var options = {
             testData: {
                 'status': 2,
@@ -42,27 +42,27 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
 
             it('should work on a copy', function () {
                 util.interpretTask(options.testData);
-                expect(options.testData).not.toHaveKey('badge');
+                expect(options.testData).not.to.contain.key('badge');
             });
 
             it('should add badge', function () {
                 var result = util.interpretTask(options.testData);
-                expect(result).toHaveKey('badge');
+                expect(result).to.contain.key('badge');
             });
 
             it('should change status to a string', function () {
                 var result = util.interpretTask(options.testData);
-                expect(result.status).toEqual(jasmine.any(String));
+                expect(result.status).to.be.a('String');
             });
 
             it('should add \u2014 if title is empty', function () {
                 var result = util.interpretTask(options.testData);
-                expect(result.title).toEqual('\u2014');
+                expect(result.title).to.equal('\u2014');
             });
 
             it('should add badges if detail parameter is set', function () {
                 var result = util.interpretTask(options.testData, true);
-                expect(result.badge).toEqual('badge');
+                expect(result.badge).to.equal('badge');
             });
         });
 
@@ -70,76 +70,98 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
             var stub;
             it('should return an array', function () {
                 var result = util.buildOptionArray();
-                expect(result).toEqual(jasmine.any(Array));
+                expect(result).to.be.an('Array');
             });
 
             it('should only contain full days if parameter is set', function () {
-                var result = util.buildOptionArray({daysOnly: true});
-                expect(result).not.toContain([5, gt('in 5 minutes')]);
-                result = util.buildOptionArray();
-                expect(result).toContain([5, gt('in 5 minutes')]);
+                var result = _.object(util.buildOptionArray({daysOnly: true}));
+                expect(result[5]).not.to.exist;
+                result = _.object(util.buildOptionArray());
+                expect(result[5]).to.equal(gt('in 5 minutes'));
             });
 
             it('should not contain past daytimes', function () {
                 var myDate = new date.Local(),
-                    result;
+                    result, stub;
 
                 myDate.setHours(7);
                 //super special UI time hack
                 stub = sinon.stub(date, 'Local');
                 stub.returns(myDate);
 
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['d0', gt('this morning')]);
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.key('d0');
+                expect(result).to.include.key('5');
+
                 myDate.setHours(13);
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['d1', gt('by noon')]);
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.key('d1');
+                expect(result).to.include.key('5');
+
                 myDate.setHours(16);
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['d2', gt('this afternoon')]);
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.key('d2');
+                expect(result).to.include.key('5');
+
+
                 myDate.setHours(19);
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['d3', gt('tonight')]);
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.key('d3');
+                expect(result).to.include.key('5');
+
                 myDate.setHours(23);
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['d4', gt('late in the evening')]);
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.key('d4');
+                expect(result).to.include.key('5');
+
+                stub.restore();
             });
 
             it('should set weekdays correctly', function () {
-                var myDate = new date.Local(),//stub is still working in this test
-                    result;
+                var myDate = new date.Local(),
+                    result, stub;
+
+                //super special UI time hack
+                stub = sinon.stub(date, 'Local');
+                stub.returns(myDate);
 
                 //today and tomorrow are special and should not be included in standard next ...day
                 myDate.setDate(myDate.getDate() - myDate.getDay());//sunday
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['w0', gt('next Sunday')]);
-                expect(result).not.toContain(['w1', gt('next Monday')]);
-                myDate.setDate(myDate.getDate() + 1);//monday
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['w1', gt('next Monday')]);
-                expect(result).not.toContain(['w2', gt('next Tuesday')]);
-                myDate.setDate(myDate.getDate() + 1);//tuesday
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['w2', gt('next Tuesday')]);
-                expect(result).not.toContain(['w3', gt('next Wednesday')]);
-                myDate.setDate(myDate.getDate() + 1);//wednesday
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['w3', gt('next Wednesday')]);
-                expect(result).not.toContain(['w4', gt('next Thursday')]);
-                myDate.setDate(myDate.getDate() + 1);//thursday
-                result = util.buildOptionArray({time: myDate});
-                expect(result).not.toContain(['w4', gt('next Thursday')]);
-                expect(result).not.toContain(['w4', gt('next Friday')]);
-                myDate.setDate(myDate.getDate() + 1);//friday
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['w4', gt('next Friday')]);
-                expect(result).not.toContain(['w4', gt('next Saturday')]);
-                myDate.setDate(myDate.getDate() + 1);//saturday
-                result = util.buildOptionArray();
-                expect(result).not.toContain(['w4', gt('next Saturday')]);
-                expect(result).not.toContain(['w0', gt('next Sunday')]);
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.keys(['w0', 'w1']);
+                expect(result).to.include.keys(['w2', 'w3', 'w4', 'w5', 'w6']);
 
-                //this.after(function () {stub.restore();});
+                myDate.setDate(myDate.getDate() + 1);//monday
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.keys(['w1', 'w2']);
+                expect(result).to.include.keys(['w0', 'w3', 'w4', 'w5', 'w6']);
+
+                myDate.setDate(myDate.getDate() + 1);//tuesday
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.keys(['w2', 'w3']);
+                expect(result).to.include.keys(['w0', 'w1', 'w4', 'w5', 'w6']);
+
+                myDate.setDate(myDate.getDate() + 1);//wednesday
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.keys(['w3', 'w4']);
+                expect(result).to.include.keys(['w0', 'w1', 'w2', 'w5', 'w6']);
+
+                myDate.setDate(myDate.getDate() + 1);//thursday
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.keys(['w4', 'w5']);
+                expect(result).to.include.keys(['w0', 'w1', 'w2', 'w3', 'w6']);
+
+                myDate.setDate(myDate.getDate() + 1);//friday
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.keys(['w5', 'w6']);
+                expect(result).to.include.keys(['w0', 'w1', 'w2', 'w3', 'w4']);
+
+                myDate.setDate(myDate.getDate() + 1);//saturday
+                result = _.object(util.buildOptionArray());
+                expect(result).not.to.include.keys(['w6', 'w0']);
+                expect(result).to.include.keys(['w1', 'w2', 'w3', 'w4', 'w5']);
+
+                stub.restore();
             });
         });
 
@@ -147,14 +169,14 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
 
             it('should return an array', function () {
                 var result = util.buildDropdownMenu();
-                expect(result).toEqual(jasmine.any(Array));
+                expect(result).to.be.an('Array');
             });
 
             it('should return correct nodeTypes', function () {
                 var result = util.buildDropdownMenu();
-                expect(result[0].is('option')).toBeTruthy();
+                expect(result[0].is('option')).be.true;
                 result = util.buildDropdownMenu({bootstrapDropdown: true});
-                expect(result[0].is('li')).toBeTruthy();
+                expect(result[0].is('li')).to.be.true;
             });
         });
         describe('computePopupTime', function () {
@@ -162,33 +184,33 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/date'
             it('should only return full days', function () {
                 var result = new date.Local(util.computePopupTime('t').endDate);
 
-                expect(result.getHours()).toEqual(0);
-                expect(result.getMinutes()).toEqual(0);
-                expect(result.getSeconds()).toEqual(0);
-                expect(result.getMilliseconds()).toEqual(0);
+                expect(result.getHours()).to.equal(0);
+                expect(result.getMinutes()).to.equal(0);
+                expect(result.getSeconds()).to.equal(0);
+                expect(result.getMilliseconds()).to.equal(0);
             });
         });
         describe('sortTasks', function () {
 
             it('should work on a copy', function () {
                 util.sortTasks(options.testDataArray);
-                expect(options.testDataArray[0]).toEqual({'status': 3, 'title': 'Top Test'});
+                expect(options.testDataArray[0]).to.deep.equal({'status': 3, 'title': 'Top Test'});
             });
 
             it('should sort overdue tasks to first position', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[0]).toEqual({'status': 1, 'title': 'Test Title', 'end_date': 1384999200000 });
+                expect(result[0]).to.deep.equal({'status': 1, 'title': 'Test Title', 'end_date': 1384999200000 });
             });
 
             it('should sort done tasks to last position', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[3]).toEqual({'status': 3, 'title': 'Top Test'});
+                expect(result[3]).to.deep.equal({'status': 3, 'title': 'Top Test'});
             });
 
             it('should sort same dates alphabetically', function () {
                 var result = util.sortTasks(options.testDataArray);
-                expect(result[1]).toEqual({'end_date': 1895104800000, 'status': 1, 'title': 'Abc'});
-                expect(result[2]).toEqual({'end_date': 1895104800000, 'status': 1, 'title': 'Blabla'});
+                expect(result[1]).to.deep.equal({'end_date': 1895104800000, 'status': 1, 'title': 'Abc'});
+                expect(result[2]).to.deep.equal({'end_date': 1895104800000, 'status': 1, 'title': 'Blabla'});
             });
         });
     });

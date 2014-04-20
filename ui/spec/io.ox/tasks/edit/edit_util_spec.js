@@ -19,14 +19,14 @@ define(['io.ox/tasks/edit/util',
 
     var extensionPoints = ext.point('io.ox/tasks/edit/view').list();
 
-    describe.skip('task edit util', function () {
+    describe('task edit util', function () {
         describe('splitExtensionsByRow', function () {
             it('should seperate rows', function () {
                 var rows = {};
                 util.splitExtensionsByRow(extensionPoints, rows, true);
                 _(rows).each(function (content, key) {
                     _(content).each(function (obj) {
-                        expect(obj.row).toEqual(key);
+                        expect(obj.row).to.equal(key);
                     });
                 });
             });
@@ -34,12 +34,11 @@ define(['io.ox/tasks/edit/util',
                 var rows = {};
                 extensionPoints.push({text: 'I have no row!'});
                 util.splitExtensionsByRow(extensionPoints, rows, true);
-                expect(rows).toHaveKey('rest');
-                expect(rows.rest.length).toEqual(1);
-                expect(rows.rest[0].text).toEqual('I have no row!');
-                this.after(function () {
-                    extensionPoints.pop();
-                });
+                expect(rows).to.include.key('rest');
+                expect(rows.rest).to.have.length(1);
+                expect(rows.rest[0].text).to.equal('I have no row!');
+
+                extensionPoints.pop();
             });
             it('should ignore tabcontent if parameter is given', function () {
                 var rows = {},
@@ -50,7 +49,7 @@ define(['io.ox/tasks/edit/util',
                         length++;
                     });
                 });
-                expect(extensionPoints.length).toBeGreaterOrEqualTo(length);
+                expect(extensionPoints).to.have.length(length);
             });
             it('should sort all content if parameter is given', function () {
                 var rows = {},
@@ -61,43 +60,43 @@ define(['io.ox/tasks/edit/util',
                         length++;
                     });
                 });
-                expect(extensionPoints.length).toEqual(length);
+                expect(extensionPoints).to.have.length(length);
             });
         });
         describe('buildProgress', function () {
             it('should create correct nodes', function () {
                 var progress = util.buildProgress('0');
 
-                expect(_(progress).size()).toEqual(2);
-                expect($(progress.progress).val()).toEqual('0');
-                expect(progress.wrapper.children().length).toEqual(2);
-                expect($(progress.wrapper.children()[0]).is('input')).toBeTruthy();
-                expect($(progress.wrapper).find('button').length).toEqual(2);
+                expect(_(progress).size()).to.equal(2);
+                expect($(progress.progress).val()).to.equal('0');
+                expect(progress.wrapper.children()).to.have.length(2);
+                expect($(progress.wrapper.children()[0]).is('input')).to.be.true;
+                expect($(progress.wrapper).find('button')).to.have.length(2);
             });
             it('should keep value between 0 and 100', function () {
                 var progress = util.buildProgress('0');
 
-                expect($(progress.progress).val()).toEqual('0');
+                expect($(progress.progress).val()).to.equal('0');
 
                 $(progress.progress).val('100');
                 $(progress.wrapper.children()[2]).click();//update inputfield
-                expect($(progress.progress).val()).toEqual('100');
+                expect($(progress.progress).val()).to.equal('100');
 
                 $(progress.progress).val('400');
                 $(progress.wrapper).find('button')[1].click();//update inputfield
-                expect($(progress.progress).val()).toEqual('100');
+                expect($(progress.progress).val()).to.equal('100');
 
                 $(progress.progress).val('-45');
                 $(progress.wrapper).find('button')[0].click();//update inputfield
-                expect($(progress.progress).val()).toEqual('0');
+                expect($(progress.progress).val()).to.equal('0');
             });
-            it(' + button should trigger change event', function () {
+            it.skip(' + button should trigger change event', function () {
                 var progress = util.buildProgress('0');
 
                 expect(progress.progress).toTrigger('change');
                 $(progress.wrapper).find('button')[1].click();//update inputfield
             });
-            it(' - button should trigger change event', function () {
+            it.skip(' - button should trigger change event', function () {
                 var progress = util.buildProgress('100');
 
                 expect(progress.progress).toTrigger('change');
@@ -114,13 +113,12 @@ define(['io.ox/tasks/edit/util',
                 util.splitExtensionsByRow(extensionPoints, rows, true);
                 fluidRow = util.buildExtensionRow(node, rows[1], baton);
 
-                expect(fluidRow.is('div')).toBeTruthy();
-                expect(fluidRow.hasClass('row')).toBeTruthy();
+                expect(fluidRow.is('div')).to.be.true;
+                expect(fluidRow.hasClass('row')).to.be.true;
                 //expect(fluidRow.hasClass('task-edit-row')).toBeTruthy();
-                expect(fluidRow.children().length).toEqual(1);
-                this.after(function () {
-                    node.remove();
-                });
+                expect(fluidRow.children()).to.have.length(1);
+
+                node.remove();
             });
         });
         describe('buildRow', function () {
@@ -133,13 +131,12 @@ define(['io.ox/tasks/edit/util',
                 util.buildRow(parent, nodes, widths, false);
                 row = $(parent.children()[0]);
 
-                expect(row.is('div')).toBeTruthy();
-                expect(row.hasClass('row')).toBeTruthy();
+                expect(row.is('div')).to.be.true;
+                expect(row.hasClass('row')).to.be.true;
                 //expect(row.hasClass('task-edit-row')).toBeTruthy();
-                expect(row.children().length).toEqual(4);
-                this.after(function () {
-                    parent.remove();
-                });
+                expect(row.children()).to.have.length(4);
+
+                parent.remove();
             });
             it('should wrap items', function () {
                 var parent = $('<div>'),
@@ -150,14 +147,13 @@ define(['io.ox/tasks/edit/util',
                 util.buildRow(parent, nodes, widths, false);
                 row = $(parent.children()[0]);
 
-                expect(row.children().length).toEqual(4);
-                expect($(row.children()[0]).is('div')).toBeTruthy();
-                expect($(row.children()[1]).is('div')).toBeTruthy();
-                expect($(row.children()[2]).is('div')).toBeTruthy();
-                expect($(row.children()[3]).is('div')).toBeTruthy();
-                this.after(function () {
-                    parent.remove();
-                });
+                expect(row.children()).to.have.length(4);
+                expect($(row.children()[0]).is('div')).to.be.true;
+                expect($(row.children()[1]).is('div')).to.be.true;
+                expect($(row.children()[2]).is('div')).to.be.true;
+                expect($(row.children()[3]).is('div')).to.be.true;
+
+                parent.remove();
             });
             it('should set correct widths and offsets', function () {
                 var parent = $('<div>'),
@@ -168,16 +164,14 @@ define(['io.ox/tasks/edit/util',
                 util.buildRow(parent, nodes, widths, false);
                 row = $(parent.children()[0]);
 
-                expect(row.children().length).toEqual(4);
-                expect($(row.children()[0]).hasClass('span1')).toBeTruthy();
-                expect($(row.children()[1]).hasClass('span2')).toBeTruthy();
-                expect($(row.children()[2]).hasClass('span6')).toBeTruthy();
-                expect($(row.children()[3]).hasClass('span1')).toBeTruthy();
-                expect($(row.children()[3]).hasClass('offset2')).toBeTruthy();
+                expect(row.children()).to.have.length(4);
+                expect($(row.children()[0]).hasClass('span1')).to.be.true;
+                expect($(row.children()[1]).hasClass('span2')).to.be.true;
+                expect($(row.children()[2]).hasClass('span6')).to.be.true;
+                expect($(row.children()[3]).hasClass('span1')).to.be.true;
+                expect($(row.children()[3]).hasClass('offset2')).to.be.true;
 
-                this.after(function () {
-                    parent.remove();
-                });
+                parent.remove();
             });
             it('should fill grid cells is parameter is set', function () {
                 var parent = $('<div>'),
@@ -188,11 +182,9 @@ define(['io.ox/tasks/edit/util',
                 util.buildRow(parent, nodes, widths, true);
                 row = $(parent.children()[0]);
 
-                expect(row.children().length).toEqual(4);
+                expect(row.children()).to.have.length(4);
 
-                this.after(function () {
-                    parent.remove();
-                });
+                parent.remove();
             });
         });
     });
