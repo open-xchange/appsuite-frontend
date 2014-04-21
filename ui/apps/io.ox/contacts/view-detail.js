@@ -125,7 +125,7 @@ define('io.ox/contacts/view-detail',
             if (api.looksLikeDistributionList(baton.data)) return;
             this.append(
                 api.pictureHalo(
-                    $('<div class="picture">'),
+                    $('<div class="picture" aria-hidden="true">'),
                     $.extend(baton.data, { width: 64, height: 64, scaleType: 'cover' })
                 )
             );
