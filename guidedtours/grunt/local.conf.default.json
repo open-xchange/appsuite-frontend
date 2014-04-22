@@ -1,0 +1,11 @@
+{
+    "appserver": {
+        "protocol": "http",
+        "livereload": true,
+        "server": "",
+        "verbose": [],
+        "prefixes": ["build/", "build/apps"],
+        "manifests": ["build/manifests/"]
+    },
+    "debug": false
+}

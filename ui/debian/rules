@@ -20,24 +20,10 @@ override_dh_auto_install:
 	cp signin $(FRONTEND)
 	cp *.* $(FRONTEND)
 	cp .htaccess $(FRONTEND)
-	cp -r help $(FRONTEND)
-	cp -r help-drive $(FRONTEND)
 	for i in i18n/*.properties; do \
 	    j=$${i#i18n/}; pkgname=$${j%.properties}; \
 	    mkdir -p debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
 	    cp $$i debian/$$pkgname/opt/open-xchange/etc/languages/appsuite/; \
-	done
-	for i in help/l10n/*; do \
-	    lang=$${i#help/l10n/}; \
-	    pkgname=open-xchange-appsuite-help-`echo $$lang | awk '{print tolower($$0)}' | sed "s/_/-/"`; \
-	    mkdir -p "debian/$$pkgname/var/www/appsuite/help/l10n"; \
-	    mv "$(FRONTEND)/help/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help/l10n/"; \
-	done
-	for i in help-drive/l10n/*; do \
-	    lang=$${i#help-drive/l10n/}; \
-	    pkgname=open-xchange-appsuite-help-drive-`echo $$lang | awk '{print tolower($$0)}' | sed "s/_/-/"`; \
-	    mkdir -p "debian/$$pkgname/var/www/appsuite/help-drive/l10n"; \
-	    mv "$(FRONTEND)/help-drive/l10n/$$lang" "debian/$$pkgname/var/www/appsuite/help-drive/l10n"; \
 	done
 	cp -r $(FRONTEND)/apps $(BACKEND)/
 	cp $(FRONTEND)/*.* $(BACKEND)/
@@ -48,14 +34,9 @@ override_dh_auto_install:
 	sed -e "s:## cd ##:cd /var/www/appsuite:" bin/touch-appsuite > \
 	    debian/open-xchange-appsuite/opt/open-xchange/sbin/touch-appsuite
 	chmod +x debian/open-xchange-appsuite/opt/open-xchange/sbin/touch-appsuite
-	mkdir -p debian/open-xchange-appsuite-help-common/var/www/appsuite/
-	mv $(FRONTEND)/help debian/open-xchange-appsuite-help-common/var/www/appsuite/
-	mkdir -p debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
-	mv $(FRONTEND)/help-drive debian/open-xchange-appsuite-help-drive-common/var/www/appsuite/
 
 override_dh_auto_clean:
-	rm -rf $(FRONTEND) $(BACKEND) debian/open-xchange-appsuite-l10n-*/opt/open-xchange/appsuite \
-	debian/open-xchange-appsuite-help-*/var/www/appsuite
+	rm -rf $(FRONTEND) $(BACKEND) debian/open-xchange-appsuite-l10n-*/opt/open-xchange/appsuite
 
 %:
 	dh $@

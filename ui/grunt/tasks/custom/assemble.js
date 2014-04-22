@@ -18,9 +18,8 @@ module.exports = function (grunt) {
     grunt.config.extend('assemble', {
 
         options: {
-            version: '<%= pkg.version %>-<%= pkg.revision %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),
+            version: '<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),
             enable_debug: '<%= String(local.debug) %>',
-            revision: '<%= pkg.revision %>',
             base: 'v=<%= assemble.options.version %>'
         },
         base: {

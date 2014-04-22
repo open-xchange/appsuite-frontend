@@ -10,6 +10,10 @@
 
 module.exports = function (grunt) {
 
+    var languages = grunt.file.expand('i18n/*.po').map(function (fileName) {
+        return fileName.match(/([a-zA-Z]+_[a-zA-Z]+).po$/)[1];
+    });
+
     // Copy build version or dist version into some arbitrary directory
     grunt.config.extend('copy', {
         local_install_build: {
@@ -21,13 +25,31 @@ module.exports = function (grunt) {
                 dest: grunt.option('dest')
             }]
         },
-        local_install_dist: {
+        local_install_dynamic: {
             files: [{
                 expand: true,
-                src: '**/*',
-                cwd: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
+                src: ['**/*'].concat(languages.map(function (Lang) {
+                    //return '' in case --no-languages is used, so language files
+                    //will also be copied by this task
+                    return grunt.option('no-languages') || false ? '!**/*.' + Lang + '.js' : '';
+                })).filter(function (Lang) {
+                    return Lang.length > 0;
+                }),
+                cwd: 'dist/',
                 filter: 'isFile',
-                dest: grunt.option('dest')
+                dest: grunt.option('prefix')
+            }]
+        },
+        local_install_static: {
+            files: [{
+                expand: true,
+                src: ['appsuite/**/*', '!appsuite/manifests/**/*'].concat(languages.map(function (Lang) {
+                    //ignore language files for static packages
+                    return '!**/*.' + Lang + '.js';
+                })),
+                cwd: 'dist/',
+                filter: 'isFile',
+                dest: grunt.option('htdoc')
             }]
         }
     });
@@ -36,12 +58,59 @@ module.exports = function (grunt) {
         if (!grunt.option('dest')) {
             grunt.fail.fatal('Need --dest option to be set');
         }
+        grunt.log.writeln('Installing into:', grunt.option('dest'));
         grunt.task.run('copy:local_install_build');
     });
     grunt.registerTask('install:dist', 'install dist directory into a custom location', function () {
-        if (!grunt.option('dest')) {
-            grunt.fail.fatal('Need --dest option to be set');
+        var tasks = [],
+            dynamicConfig = grunt.config('copy.local_install_dynamic.files')[0],
+            staticConfig = grunt.config('copy.local_install_static.files')[0];
+        if (grunt.file.expand(staticConfig, staticConfig.src).length) {
+            tasks.push('install:static');
         }
-        grunt.task.run('copy:local_install_dist');
+
+        if (grunt.file.expand(dynamicConfig, dynamicConfig.src).length) {
+            tasks.push('install:dynamic');
+        }
+        grunt.task.run(tasks);
     });
+    grunt.registerTask('install:dynamic', 'install files for dynamic usage into a custom location', function () {
+        if (!grunt.option('prefix')) {
+            grunt.fail.fatal('Need --prefix option to be set');
+        }
+        grunt.log.writeln('Installing into:', grunt.option('prefix'));
+        grunt.task.run('copy:local_install_dynamic');
+    });
+    grunt.registerTask('install:static', 'install files for static usage into a custom location', function () {
+        if (!grunt.option('htdoc')) {
+            grunt.fail.fatal('Need --htdoc option to be set');
+        }
+        grunt.log.writeln('Installing into:', grunt.option('htdoc'));
+        grunt.task.run('copy:local_install_static');
+    });
+
+    languages.forEach(function (Lang) {
+        var config = {};
+
+        config['local_install_' + Lang] = {
+            files: [{
+                src: ['**/*.' + Lang + '.js'],
+                expand: true,
+                filter: 'isFile',
+                cwd: 'dist/',
+                dest: grunt.option('prefix')
+            }]
+        };
+
+        grunt.config.extend('copy', config);
+        grunt.registerTask('install:' + Lang, 'install language directory into a custom location', function () {
+            if (!grunt.option('prefix')) {
+                grunt.fail.fatal('Need --prefix option to be set');
+            }
+            grunt.log.writeln('Installing into:', grunt.option('prefix'));
+            grunt.task.run('copy:local_install_' + Lang);
+        });
+    });
+
+    grunt.loadNpmTasks('grunt-contrib-copy');
 };
