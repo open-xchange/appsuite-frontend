@@ -190,6 +190,23 @@ define('io.ox/contacts/edit/view-form',
             }));
         }
 
+        point.basicExtend({
+            id: 'autoExpand',
+            index: 'last',
+            draw: function (baton) {
+                baton.parentView.on('restore', function () {
+                    var diff = _.chain(baton.model.changed)
+                        .keys().without('id', 'folder', 'display_name')
+                        .difference(meta.alwaysVisible)
+                        .value()
+                        .length;
+                    if (diff > 0) {
+                        toggle.call(this.$el);
+                    }
+                });
+            }
+        });
+
         /*
          * extension point for mobile toolbar on the bottom of the page
          */
@@ -209,7 +226,9 @@ define('io.ox/contacts/edit/view-form',
 
         function toggle(e) {
 
-            e.preventDefault();
+            if (e) {
+                e.preventDefault();
+            }
 
             var node = $(this).closest('.edit-contact');
 
