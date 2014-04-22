@@ -517,8 +517,10 @@ define('io.ox/core/extPatterns/links',
                                 'data-placement': 'right',
                                 'data-container': 'body'
                             })
-                            .tooltip()
                             .on('click', { baton: baton, extension: links[0] }, actionClick);
+                            if (!_.device('touch')) {
+                                a.tooltip();
+                            }
                         } else {
                             a.addClass('disabled').removeAttr('tabindex').attr({ 'aria-disabled': true }).on('click', preventDefault);
                         }
