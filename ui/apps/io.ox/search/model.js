@@ -62,7 +62,7 @@ define('io.ox/search/model',
                 filter: {}
             }]
         },
-        options: {},
+        options: options,
         //current folder
         start: 0,
         size: 100

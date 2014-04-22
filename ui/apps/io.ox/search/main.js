@@ -198,7 +198,19 @@ define('io.ox/search/main',
                         })
                         .then(function () {
                             //call server
-                            return api.autocomplete($.extend(standard, options));
+                            return api.autocomplete($.extend({}, standard, options));
+                        })
+                        .then(undefined, function (error) {
+                            //fallback when app doesn't support search
+                            if (error.code === 'SVL-0010') {
+                                var app = model.getApp();
+                                //add temporary mapping (default app)
+                                model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
+                                return api.autocomplete($.extend(
+                                                            standard, options, { params: {module: model.getModule()} }
+                                                        ));
+                            }
+                            return error;
                         })
                         .then(function (obj) {
                             //TODO: remove when backend is ready
