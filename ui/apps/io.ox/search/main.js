@@ -59,7 +59,10 @@ define('io.ox/search/main',
                 //name mapping
                 'io.ox/portal' : data.defaultApp,
                 'io.ox/search' : data.defaultApp,
-                'io.ox/settings' : data.defaultApp
+                'io.ox/settings' : data.defaultApp,
+                'io.ox/office/text' : 'io.ox/files',
+                'io.ox/office/spreadsheet' : 'io.ox/files',
+                'io.ox/messenger' : data.defaultApp
             };
         }
     });
