@@ -125,12 +125,9 @@ define('io.ox/mail/statistics',
                 function success(data) {
 
                     var days = [0, 0, 0, 0, 0, 0, 0],
-                        tempDays = date.locale.days,//get localized dates
+                        tempDays = date.locale.daysShort,//get localized dates
                         weekdays = tempDays.slice(date.locale.weekStart, tempDays.length).concat(tempDays.slice(0, date.locale.weekStart));//adjust weekstart
 
-                    weekdays = _(weekdays).map(function (val) {
-                        return val.substr(0, 2);
-                    });
                     _(data).each(function (obj) {
                         var day = new Date(obj.received_date).getUTCDay();
                         days[day]++;
