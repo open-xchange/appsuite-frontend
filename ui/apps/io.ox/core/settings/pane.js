@@ -73,7 +73,7 @@ define('io.ox/core/settings/pane',
             this.addClass('settings-container').append(
                 $('<h1>').text(gt('Basic settings'))
             );
-            new SettingView({model: model}).render().$el.appendTo(this);
+            new SettingView({model: model}).render().$el.attr('role', 'form').appendTo(this);
         }
     });
 
