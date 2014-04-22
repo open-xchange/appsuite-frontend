@@ -29,7 +29,7 @@ define('io.ox/contacts/edit/main',
     // multi instance pattern
     function createInstance(data) {
 
-        var app, getDirtyStatus, container;
+        var app, getDirtyStatus, container, editView;
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
@@ -63,7 +63,7 @@ define('io.ox/contacts/edit/main',
                         var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
                         app.setTitle(appTitle || gt('Create contact'));
                         app.contact = contact;
-                        var editView = new view.ContactEditView({ model: contact });
+                        editView = new view.ContactEditView({ model: contact });
                         container.append(
                             editView.render().$el.addClass('default-content-padding')
                         );
@@ -280,6 +280,7 @@ define('io.ox/contacts/edit/main',
         app.failRestore = function (point) {
             if (_.isUndefined(point.id)) {
                 this.contact.set(point);
+                editView.trigger('restore');
             } else {
                 this.contact.set(point);
                 this.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
