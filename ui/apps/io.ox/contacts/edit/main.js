@@ -280,12 +280,12 @@ define('io.ox/contacts/edit/main',
         app.failRestore = function (point) {
             if (_.isUndefined(point.id)) {
                 this.contact.set(point);
-                editView.trigger('restore');
             } else {
                 this.contact.set(point);
                 this.cid = 'io.ox/contacts/contact:edit.' + _.cid(data);
                 //this.setTitle(point.title || gt('Edit Contact'));
             }
+            editView.trigger('restore');
             return $.when();
         };
 
