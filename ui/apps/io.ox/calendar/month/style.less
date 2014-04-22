@@ -67,13 +67,13 @@
                 font-size: 11px;
                 line-height: 1.0em;
                 text-align: right;
-                color: #888;
+                color: @hc-gray;
                 .ellipsis();
 
                 .month-name {
                     font-family: @light-font-family;
                     font-size: 18px;
-                    color: @link-color;
+                    color: @appointment-reserved;
                 }
 
                 .cw {
@@ -103,6 +103,7 @@
                 &.borderleft {}
 
                 .number {
+
                     position: absolute;
                     color: #aaa;
                     text-align: right;
@@ -117,6 +118,11 @@
                     .transition(background-color 0.2s linear);
                     .user-select(none);
                     cursor: default;
+
+                    html.high-contrast & {
+                        color: @black;
+                    }
+
                 }
 
                 &.today {
@@ -168,6 +174,16 @@
 
                         background-color: @monthview-appointment-out;
 
+                        html.high-contrast & {
+
+                            background-color: @hc-gray;
+
+                            .title, .location {
+                                color: @white;
+                            }
+
+                        }
+
                         &.hover {
                             background-color: darken(@monthview-appointment-out, @appointment-hover-pct);
                         }
@@ -191,7 +207,7 @@
         margin-bottom: 1px;
         white-space: nowrap;
         cursor: pointer;
-        background-color: #08c;
+        background-color: @appointment-reserved;
         opacity: 1;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
@@ -219,33 +235,46 @@
 
     /* Mobile */
     @media all and (max-device-width: 480px)  {
+
         .toolbar {
+
             .info {
                 top: 10px;
                 left: 10px;
                 .ellipsis();
                 width: 45%;
             }
+
         }
+
         .footer-container {
+
             .footer {
+
                 .weekday {
-                    .box-sizing(border-box);
                     width: 100/7%;
                     font-size: 15px;
                 }
+
             }
+
         }
 
         .scrollpane {
+
             -webkit-user-select: none;
             top: @calendar-toolbar-height + 26;
 
             .week {
+
                 height: 20%; // 5 weeks only
                 border-bottom: 1px solid #ccc;
 
                 .day {
+
+                    width: 100/7%;
+                    border-width: 0;
+                    -webkit-user-select: auto;
 
                     &:active {
                         .transition(none);
@@ -270,16 +299,20 @@
                     }
 
                     &.out {
+
                         .number {
                             background-color: transparent;
                             color: rgba(1,1,1,.2);
+
                             .transition(background-color 0.2s linear);
                         }
                         .list {
                             color: lighten(@link-color, 50%);
                             .transition(color 0.2s linear);
                         }
+
                         background-color: #fff;
+
                     }
 
                     .list {
@@ -289,12 +322,13 @@
                         color: @link-color;
                         .transition(color 0.2s linear);
                     }
-                    width: 100/7%;
-                    .box-sizing(border-box);
-                    border-width: 0;
-                    -webkit-user-select: auto;
+
                 }
+
             }
+
         }
+
     }
+
 }

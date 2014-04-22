@@ -18,28 +18,21 @@ define(['io.ox/core/extensions',
 
     'use strict';
 
-    describe.skip('mailaccountsettings', function () {
+    describe('mailaccountsettings', function () {
         var $popup,
             $node = $('<div>');
 
-        beforeEach(function () {
+        beforeEach(function (done) {
 
             this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureUser.current));
             });
 
-            var def;
-            def = require(['io.ox/mail/accounts/settings']).done(function (view) {
-            });
-
-            waitsFor(function () {
-                return def.state() === 'resolved';
-            }, 'loaded', ox.testTimeout);
-
-            runs(function () {
+            require(['io.ox/mail/accounts/settings']).then(function () {
                 ext.point('io.ox/settings/accounts/mail/settings/detail').invoke('draw', $node, {data: { 'primary_address': '' }});
 
                 $popup = $('body').find('.io-ox-dialog-popup');
+                done();
             });
 
         });

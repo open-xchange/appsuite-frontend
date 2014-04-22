@@ -39,7 +39,8 @@ define('io.ox/tasks/view-detail',
 
             var node = $.createViewContainer(data, api)
                 .on('redraw', function (e, tmp) {
-                    node.replaceWith(self.draw(tmp));
+                    baton.data = tmp;
+                    node.replaceWith(self.draw(baton));
                 })
                 .addClass('tasks-detailview');
             baton.interpretedData = task;
@@ -77,7 +78,7 @@ define('io.ox/tasks/view-detail',
             ext.point('io.ox/tasks/detail-view/infopanel').invoke('draw', infoPanel, task);
         }
     });
-    
+
     ext.point('io.ox/tasks/detail-view').extend({
         index: 200,
         id: 'attachments',

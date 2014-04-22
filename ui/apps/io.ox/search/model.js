@@ -62,7 +62,7 @@ define('io.ox/search/model',
                 filter: {}
             }]
         },
-        options: {},
+        options: options,
         //current folder
         start: 0,
         size: 100
@@ -84,7 +84,7 @@ define('io.ox/search/model',
 
                 app = this.get('app');
                 //ensure options
-                if (!options.mappings)
+                if (!options.mapping)
                     ext.point('io.ox/search/main').invoke('config',  $(), options);
                 //return module param for api calls
                 return (options.mapping[app] || options.mapping[app + '/edit'] || app);

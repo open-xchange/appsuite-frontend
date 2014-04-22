@@ -22,39 +22,121 @@ define('io.ox/contacts/main',
      'io.ox/core/extensions',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/commons',
+     'io.ox/contacts/toolbar',
      'gettext!io.ox/contacts',
      'settings!io.ox/contacts',
      'io.ox/core/api/folder',
      'less!io.ox/contacts/style'
-    ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, gt, settings, folderAPI) {
+    ], function (util, api, VGrid, hints, viewDetail, dropdownOptions, ext, actions, commons, toolbar, gt, settings, folderAPI) {
 
     'use strict';
 
     // application object
     var app = ox.ui.createApp({
-            name: 'io.ox/contacts',
-            title: 'Address Book'
-        }),
-        // app window
-        win,
-        // grid
-        grid,
-        // nodes
-        left,
-        thumbs,
-        gridContainer,
-        right,
-        fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        name: 'io.ox/contacts',
+        title: 'Address Book'
+    });
+
+    app.mediator({
+
+        /*
+         * Folder view support
+         */
+        'folder-view': function (app) {
+            // folder tree
+            commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
+            app.getWindow().nodes.sidepanel.addClass('border-right');
+        },
+
+        /*
+         * Default application properties
+         */
+        'props': function (app) {
+            // introduce shared properties
+            app.props = new Backbone.Model({
+                'checkboxes': app.settings.get('showCheckboxes', true)
+            });
+        },
+
+        'vgrid-checkboxes': function (app) {
+            // always hide checkboxes on small devices initially
+            if (_.device('small')) return;
+            var grid = app.getGrid();
+            grid.setEditable(app.props.get('checkboxes'));
+        },
+
+        /*
+         * Set folderview property
+         */
+        'prop-folderview': function (app) {
+            app.props.set('folderview', _.device('small') ? false : app.settings.get('folderview/visible/' + _.display(), true));
+        },
+
+        /*
+         * Store view options
+         */
+        'store-view-options': function (app) {
+            app.props.on('change', _.debounce(function () {
+                var data = app.props.toJSON();
+                app.settings
+                    .set('showCheckboxes', data.checkboxes)
+                    .save();
+            }, 500));
+        },
+
+        /*
+         * Respond to folder view changes
+         */
+        'change:folderview': function (app) {
+            if (_.device('small')) return;
+            app.props.on('change:folderview', function (model, value) {
+                app.toggleFolderView(value);
+            });
+            app.on('folderview:close', function () {
+                app.props.set('folderview', false);
+            });
+            app.on('folderview:open', function () {
+                app.props.set('folderview', true);
+            });
+        },
+
+        /*
+         * Respond to change:checkboxes
+         */
+        'change:checkboxes': function (app) {
+            if (_.device('small')) return;
+            app.props.on('change:checkboxes', function (model, value) {
+                var grid = app.getGrid();
+                grid.setEditable(value);
+            });
+        },
+
+        /*
+         * Folerview toolbar
+         */
+        'folderview-toolbar': commons.mediateFolderView
+    });
 
     // launcher
     app.setLauncher(function (options) {
 
-        var showSwipeButton = false,
+        // app window
+        var win,
+            // grid
+            grid,
+            // nodes
+            left,
+            thumbs,
+            gridContainer,
+            right,
+            fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+            showSwipeButton = false,
             hasDeletePermission;
+
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/contacts',
-            search: true
+            chromeless: _.device('!small')
         });
 
         app.setWindow(win);
@@ -90,9 +172,6 @@ define('io.ox/contacts/main',
                 .on('click', '.thumb-index', thumbClick)
                 .on('touchmove', thumbMove)
         );
-
-        // folder tree
-        commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
 
         ext.point('io.ox/contacts/swipeDelete').extend({
             index: 666,
@@ -144,7 +223,7 @@ define('io.ox/contacts/main',
         grid = new VGrid(gridContainer, {
             settings: settings,
             swipeRightHandler: swipeRightHandler,
-            showToggle: true
+            showToggle: false
         });
 
         // helper to remove button from grid
@@ -229,15 +308,7 @@ define('io.ox/contacts/main',
         };
 
         commons.wireGridAndAPI(grid, api);
-        commons.wireGridAndSearch(grid, win, api);
 
-        //
-        grid.setAllRequest('search', function () {
-            var options = win.search.getOptions();
-            options.folder = grid.prop('folder');
-            options.order = grid.prop('order');
-            return api.advancedsearch(win.search.query, options);
-        });
         // LFO callback
         var showContact, drawContact, drawFail, reDrawContact;
 
@@ -267,9 +338,8 @@ define('io.ox/contacts/main',
 
         drawContact = function (data) {
             var baton = ext.Baton({ data: data, app: app });
-            if (grid.getMode() === 'all') {
-                baton.disable('io.ox/contacts/detail', 'breadcrumb');
-            }
+            if (_.device('!small')) baton.disable('io.ox/contacts/detail', 'inline-actions');
+            if (grid.getMode() === 'all') baton.disable('io.ox/contacts/detail', 'breadcrumb');
             right.idle().empty().append(viewDetail.draw(baton));
         };
 
@@ -350,50 +420,7 @@ define('io.ox/contacts/main',
             }
         });
 
-        // extend search form
-
-        ext.point('io.ox/contacts/search/defaults').extend({
-            names: true,
-            phones: false,
-            addresses: false
-        });
-
-        ext.point('io.ox/contacts/search/checkboxes').extend({
-            names: true,
-            phones: true,
-            addresses: true
-        });
-
-        var translations = { names: gt('Names and email addresses'), phones: gt('Phone numbers'), addresses: gt('Addresses')},
-            checkboxes = ext.point('io.ox/contacts/search/checkboxes').options(),
-            defaults = ext.point('io.ox/contacts/search/defaults').options(),
-            data = {}, button;
-
-        //normalise data
-        _(checkboxes).each(function (flag, name) {
-            if (flag === true) {
-                data[name] = {
-                    name: name,
-                    label: translations[name] || name,
-                    checked: defaults[name] || false
-                };
-            }
-        });
-
-        //add dropdown button
-        button = $('<button type="button" data-action="search-options" class="btn btn-default search-options" aria-hidden="true">')
-                .append('<i class="fa fa-cog">');
-        win.nodes.search.find('.form-search > .input-group > .input-group-btn').prepend(button);
-
-        //add dropdown menue
-        dropdownOptions({
-            id: 'contacts.search',
-            anchor: button,
-            defaults: data,
-            settings: settings
-        });
-
-        commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right);
+        commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, right, api, true);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
@@ -424,7 +451,10 @@ define('io.ox/contacts/main',
 
         // go!
         commons.addFolderSupport(app, grid, 'contacts', options.folder)
-            .done(commons.showWindow(win, grid));
+            .always(function () {
+                app.mediate();
+                win.show();
+            });
     });
 
     return {

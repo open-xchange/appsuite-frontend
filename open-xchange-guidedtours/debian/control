@@ -1,0 +1,16 @@
+Source: open-xchange-guidedtours
+Section: non-free/web
+Priority: optional
+Maintainer: Julian Baeume <julian.baeume@open-xchange.com>
+Build-Depends: debhelper (>= 8.0.0), cdbs (>= 0.4.53), ant (>= 1.7.0), ant-optional (>= 1.7.0), default-jdk, nodejs (>= 0.10.0)
+Standards-Version: 3.9.2
+Homepage: http://open-xchange.com
+Vcs-Git: https://git.open-xchange.com/git/wd/frontend/web
+Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
+
+Package: open-xchange-guidedtours
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-manifest
+Description: The default version of the guided tours for the typical applications.
+Replaces: open-xchange-manifest (<< 7.4.2)
+Breaks: open-xchange-manifest (<< 7.4.2)

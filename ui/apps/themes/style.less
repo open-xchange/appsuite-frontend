@@ -1659,7 +1659,7 @@ a.button {
     }
 
     &.scrollpane {
-        overflow-y: auto;
+        .overflow-y(auto);
     }
 
     .list-item, .list-header {
@@ -1837,8 +1837,9 @@ a.button {
             }
 
         }
-
     }
+
+    @toolbar-height: 45px;
 
     .vgrid-toolbar {
 
@@ -1846,8 +1847,8 @@ a.button {
         display: none;
         right: 0;
         left: 0;
-        line-height: 40px - 1;
-        padding: 0 13px 0 13px;
+        height: @toolbar-height;
+        line-height: @toolbar-height - 1;
         background-color: #fff;
         z-index: 2;
 
@@ -1900,22 +1901,23 @@ a.button {
         }
 
         .advanced-mode {
-            margin: 10px 0px 10px 0;
+            margin: 10px;
             line-height: 20px;
         }
 
         .grid-options.dropdown {
             position: absolute;
-            right: 13px;
+            right: 18px;
             top: 0;
         }
     }
 
     .select-all {
         float: left;
-        width: 30px;
-        height: 34px;
-        margin-top: -3px;
+        width: 40px;
+        height: 44px;
+        line-height: 40px;
+        padding-left: 18px;
         display: none;
     }
 
@@ -1928,11 +1930,11 @@ a.button {
     }
 
     &.top-toolbar .vgrid-scrollpane {
-        top: 40px;
+        top: @toolbar-height;
     }
 
     &.bottom-toolbar .vgrid-scrollpane {
-        bottom: 39px;
+        bottom: @toolbar-height;
     }
 
     &.editable {
@@ -1942,7 +1944,7 @@ a.button {
         }
 
         .vgrid-cell {
-            padding-left: 43px; /* width + padding of .vgrid-cell-checkbox */
+            padding-left: 48px; /* width + padding of .vgrid-cell-checkbox */
         }
 
     }
@@ -1956,7 +1958,7 @@ a.button {
     right: 0;
     left: 0;
     font-size: @vgrid-font-size;
-    padding: 10px 13px 10px 13px;
+    padding: 10px 18px;
     color: @text-color;
     background-color: @background; /* resolves hw accel anti-aliasing */
 
@@ -2033,7 +2035,7 @@ a.button {
         width: 30px;
         display: none;
         cursor: pointer;
-        padding: 7px 0 0 13px;
+        padding: 7px 0 0 18px;
 
         label {
             display: inline;
@@ -2394,8 +2396,7 @@ span.hint {
     clear: both;
     .user-select(none);
     min-height: 20px;
-
-    li {
+    & > li {
         display: inline-block;
         white-space: nowrap;
         margin-right: 22px;
@@ -2464,6 +2465,16 @@ ul.io-ox-inline-links + header {
 
 .io-ox-action-link:last-child {
     margin-right: 0;
+}
+
+.multi-selection-message {
+    display: table;
+    div {
+        color: #aaa;
+        html.high-contrast & {
+            color: @black;
+        }
+    }
 }
 
 .io-ox-multi-selection {

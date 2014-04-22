@@ -10,18 +10,23 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
- 
-.bar-darkgrey {
-    background-color: #555 !important;
-    background-image: -webkit-linear-gradient(top, #777, #333) !important;
+
+.progress-bar {
+    &.bar-weak {
+        background-color: @red;
+    }
+    &.bar-good {
+        background-color: @orange;
+    }
+    &.bar-strong {
+        background-color: @green-light;
+    }
+    &.bar-legendary {
+        background-color: #f80;//golden orange
+        background-image: -webkit-radial-gradient(#fd0, #f80) !important;
+    }
 }
 
-.bar-epic {
-    background-color: #808 !important;//purple
-    background-image: -webkit-linear-gradient(top, #a2a, #606) !important;
-}
-
-.bar-legendary {
-    background-color: #f80 !important;//golden orange
-	background-image: -webkit-radial-gradient(#fd0, #f80) !important;
+.password-change-label, .password-hint-container {
+    margin-top: 8px;
 }

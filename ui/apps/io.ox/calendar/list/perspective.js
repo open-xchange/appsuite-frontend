@@ -13,7 +13,6 @@
 
 define('io.ox/calendar/list/perspective',
     ['io.ox/calendar/api',
-     'io.ox/core/tk/vgrid',
      'io.ox/calendar/list/view-grid-template',
      'io.ox/calendar/view-detail',
      'io.ox/core/commons',
@@ -23,7 +22,7 @@ define('io.ox/calendar/list/perspective',
      'io.ox/core/extPatterns/actions',
      'settings!io.ox/calendar',
      'gettext!io.ox/calendar'
-    ], function (api, VGrid, tmpl, viewDetail, commons, ext, date, util, actions, settings, gt) {
+    ], function (api, tmpl, viewDetail, commons, ext, date, util, actions, settings, gt) {
 
     'use strict';
 
@@ -39,42 +38,26 @@ define('io.ox/calendar/list/perspective',
 
         var win = app.getWindow(),
             self = this,
-            vsplit = commons.vsplit(this.main, app),
-            left = vsplit.left.addClass('border-right'),
-            right = vsplit.right.addClass('default-content-padding calendar-detail-pane f6-target')
+            left,
+            right,
+            grid,
+            findRecurrence = false,
+            optDropdown = null,
+            months = 1; // how many months do we display
+
+        this.main.addClass('calendar-list-view').append(
+            app.left.addClass('border-right'),
+            app.right.addClass('default-content-padding calendar-detail-pane f6-target')
             .attr({
                 'tabindex': 1,
                 'role': 'complementary',
                 'aria-label': gt('Appointment Details')
             })
-            .scrollable(),
-            gridOptions = {
-                settings: settings,
-                showToggle: _.device('smartphone') ? false: true
-            },
-            grid,
-            findRecurrence = false,
-            optDropdown = null,
-            months = 1; // how many months do we display
-        this.main.addClass('list-view');
+        );
 
-        // show "load more" link
-        gridOptions.tail = function () {
-
-            // no tail for search
-            if (this.getMode() === 'search') return $();
-
-            var link = $('<div class="vgrid-cell tail">').append(
-                //#. Label for a button which shows more upcoming
-                //#. appointments in a listview by extending the search
-                //#. by one month in the future
-                $('<a href="#" tabindex="1">').text(gt('Expand timeframe by one month'))
-            );
-            return link;
-        };
-
-        grid = new VGrid(left, gridOptions);
-        this.grid = grid;
+        left = app.left;
+        right = app.right.scrollable();
+        this.grid = grid = app.getGrid();
 
         if (_.url.hash('id') && _.url.hash('id').split(',').length === 1) {// use only for single items
             findRecurrence = _.url.hash('id').split('.').length === 2;//check if recurrencePosition is missing
@@ -86,7 +69,6 @@ define('io.ox/calendar/list/perspective',
         };
 
         commons.wireGridAndAPI(grid, api);
-        commons.wireGridAndSearch(grid, win, api);
 
         // add grid options
         grid.prop('order', 'asc')
@@ -116,19 +98,6 @@ define('io.ox/calendar/list/perspective',
         // special search: list request
         grid.setListRequest('search', function (ids) {
             return $.Deferred().resolve(ids);
-        });
-
-        // hide grid toolbar options on search
-        grid.on('change:mode', function (e, cur) {
-            if (optDropdown && cur) {
-                optDropdown[cur === 'search' ? 'hide' : 'show']();
-            }
-            if (cur === 'search') {
-                $(grid.getContainer()).addClass('search-view');
-            } else {
-                $(grid.getContainer()).removeClass('search-view');
-
-            }
         });
 
         var directAppointment;//directly linked appointments are stored here
@@ -174,7 +143,9 @@ define('io.ox/calendar/list/perspective',
         };
 
         function drawAppointment(data) {
-            right.idle().empty().append(viewDetail.draw(data));
+            var baton = ext.Baton({ data: data });
+            baton.disable('io.ox/calendar/detail', 'inline-actions');
+            right.idle().empty().append(viewDetail.draw(baton));
         }
 
         function drawFail(obj) {
@@ -252,12 +223,8 @@ define('io.ox/calendar/list/perspective',
         var generateAllRequest = function (dates) {
             //var timeframe = util.getDateInterval({start_date: dates.start, end_date: dates.end});
             var endDate = new date.Local(dates.end).format(date.DATE);
-            grid.setEmptyMessage(function (mode) {
-                if (mode === 'search') {
-                    return gt.format(gt('No appointments found for "%s"'), win.search.query);
-                } else {
-                    return gt.format(gt('No appointments found until %s'), endDate);
-                }
+            grid.setEmptyMessage(function () {
+                return gt.format(gt('No appointments found until %s'), endDate);
             });
             return function () {
                 var prop = grid.prop(),

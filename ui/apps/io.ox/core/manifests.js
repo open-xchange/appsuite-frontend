@@ -107,7 +107,9 @@ define.async('io.ox/core/manifests',
 
     function isDisabled(manifest) {
         return (manifest.requires && manifest.upsell !== true) &&
-               !capabilities.has(manifest.requires);
+               !capabilities.has(manifest.requires) ||
+               //remove the next line, to disable temporary deactivation for com.voiceworks plugins
+               (!manifest.requires && manifest.path.indexOf('com.voiceworks') === 0);
     }
 
     function process(manifest) {

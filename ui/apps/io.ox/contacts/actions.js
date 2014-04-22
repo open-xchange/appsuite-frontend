@@ -93,11 +93,11 @@ define('io.ox/contacts/actions',
             return e.collection.has('create');
         },
         action: function (baton) {
+            var folder = baton.folder || baton.app.folder.get();
             require(['io.ox/contacts/edit/main'], function (m) {
-                baton.data.folder_id = baton.folder;
-                m.getApp(baton.data).launch()
+                m.getApp({ folder_id: folder }).launch()
                     .done(function (data) {
-                        baton.app.getGrid().selection.set(data);
+                        if (data) baton.app.getGrid().selection.set(data);
                     });
             });
         }

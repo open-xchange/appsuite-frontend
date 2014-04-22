@@ -389,6 +389,7 @@ define('io.ox/mail/detail/content',
             str = value ? value + ' ' : '';
         // loop over child nodes for recursion
         _(node.childNodes).each(function (child) {
+            if (child.tagName === 'STYLE') return;
             str += getText(child);
         });
         return str;

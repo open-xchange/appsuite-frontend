@@ -35,6 +35,8 @@ define('io.ox/filter/folder', [
             return fileSettings.get('showHidden', false) !== true;
         },
         isVisible: function (folder) {
+            // filter only in drive app
+            if (folder.module && folder.module !== 'infostore') return true;
             var title = (folder.data ? folder.data.title : folder.title) || '';
             return title.indexOf('.') !== 0;
         }

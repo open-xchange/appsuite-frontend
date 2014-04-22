@@ -289,16 +289,31 @@ define('io.ox/core/commons-folderview',
             id: 'publications',
             index: 150,
             draw: function (baton) {
+                if (!api.can('publish', baton.data) || api.is('trash', baton.data)) return;
 
-                if (!capabilities.has('publication') || !api.can('publish', baton.data) || !api.is('trash', baton.data)) return;
-
-                this.append(
-                    $('<li>').append(
-                        $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
-                        .text(gt('Share this folder'))
-                        .on('click', { baton: baton }, publish)
-                    )
+                var tempLink, node, self = this;
+                node = $('<li>').append(
+                    tempLink = $('<a href="#" data-action="publications" role="menuitem" tabindex="1">')
+                    .text(gt('Share this folder'))
                 );
+
+                if (capabilities.has('publication')) {
+                    tempLink.on('click', { baton: baton }, publish);
+                    this.append(node);
+                } else {
+                    require(['io.ox/core/upsell'], function (upsell) {
+                        if (upsell.enabled(['publication'])) {
+                            tempLink.on('click', function () {
+                                upsell.trigger({
+                                    type: 'inline-action',
+                                    id: POINT + '/sidepanel/context-menu/publications',
+                                    missing: upsell.missing(['publication'])
+                                });
+                            });
+                            self.append(node);
+                        }
+                    });
+                }
             }
         });
 
@@ -314,15 +329,30 @@ define('io.ox/core/commons-folderview',
             index: 200,
             draw: function (baton) {
 
-                if (!capabilities.has('subscription') || !api.can('subscribe', baton.data || !api.is('trash', baton.data))) return;
+                if (!api.can('subscribe', baton.data || api.is('trash', baton.data))) return;
 
-                this.append(
-                    $('<li>').append(
-                        $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
-                        .text(gt('New subscription'))
-                        .on('click', { folder: baton.data.folder_id, module: baton.data.module, app: baton.app }, subscribe)
-                    )
+                var tempLink, node, self = this;
+                node = $('<li>').append(
+                    tempLink = $('<a href="#" data-action="subscriptions" role="menuitem" tabindex="1">')
+                    .text(gt('New subscription'))
                 );
+                if (capabilities.has('subscription')) {
+                    tempLink.on('click', { folder: baton.data.folder_id, module: baton.data.module, app: baton.app }, subscribe);
+                    this.append(node);
+                } else {
+                    require(['io.ox/core/upsell'], function (upsell) {
+                        if (upsell.enabled(['subscription'])) {
+                            tempLink.on('click', function () {
+                                upsell.trigger({
+                                    type: 'inline-action',
+                                    id: POINT + '/sidepanel/context-menu/publications',
+                                    missing: upsell.missing(['subscription'])
+                                });
+                            });
+                            self.append(node);
+                        }
+                    });
+                }
             }
         });
 

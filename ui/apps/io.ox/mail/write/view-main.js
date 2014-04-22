@@ -555,7 +555,6 @@ define('io.ox/mail/write/view-main',
                     } else {
                         //IE
                         if ($input.val()) {
-                            console.log('test2');
                             var file = {
                                 name: $input.val().match(/[^\/\\]+$/).toString(),
                                 group: 'input',
@@ -571,102 +570,29 @@ define('io.ox/mail/write/view-main',
                         }
                     }
                 };
+
             $inputWrap.on('change.fileupload', function () {
                 //use bubbled event to add fileupload-new again (workaround to add multiple files with IE)
                 $(this).find('div[data-provides="fileupload"]').addClass('fileupload-new').removeClass('fileupload-exists');
             });
+
             $input.on('change', changeHandler);
 
             $inputWrap.find('button[data-action="addinternal"]').click(function (e) {
                 e.preventDefault();
-
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews', 'io.ox/core/cache', 'io.ox/files/api', 'io.ox/core/tk/selection']).done(function (dialogs, folderviews, cache, filesAPI, Selection) {
-
-                    var folderCache = new cache.SimpleCache('folder-all'),
-                        subFolderCache = new cache.SimpleCache('subfolder-all'),
-                        storage = {
-                            folderCache: folderCache,
-                            subFolderCache: subFolderCache
+                require(['io.ox/files/filepicker']).done(function (Picker) {
+                    var picker = new Picker({
+                        point: POINT,                   // prefix for custom ext. point
+                        filter: function () {           // filter function
+                            return true;
                         },
-                        container = $('<div>'),
-                        filesPane = $('<div>').addClass('io-ox-fileselection').attr({ tabindex: 0}),
-                        tree = new folderviews.ApplicationFolderTree(container, {
-                            type: 'infostore',
-                            tabindex: 0,
-                            rootFolderId: '9',
-                            all: true,
-                            storage: storage
-                        }),
-                        pane = new dialogs.ModalDialog({
-                            width: window.innerWidth * 0.8,
-                            height: 350,
-                            addclass: 'add-infostore-file'
-                        }),
-                        self = this;
-
-                    Selection.extend(this, filesPane, {});
-
-                    this.selection.keyboard(filesPane, true);
-                    this.selection.setEditable(true, '.labelwrapper');
-
-                    pane.header($('<h4>').text(gt('Add files')))
-                        .build(function () {
-                            this.getContentNode().append(container, filesPane);
-                        })
-                        .addPrimaryButton('save', gt('Add'), 'save', {tabIndex: '1'})
-                        .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
-                        .show(function () {
-                            tree.paint().done(function () {
-                                tree.selection.updateIndex().selectFirst();
-                                pane.getBody().find('.io-ox-foldertree').focus();
-                            });
-                        })
-                        .done(function (action) {
-                            if (action === 'save') {
-                                var result = [];
-                                filesPane.find('input:checked').each(function (index, el) {
-                                    result.push($(el).data('fileData'));
-                                });
-                                app.addFiles(result, 'infostore');
-                            }
-                            tree.destroy().done(function () {
-                                tree = pane = null;
-                            });
-                        });
-
-                    // add dbl-click option like native file-chooser
-                    filesPane.on('dblclick', '.file', function () {
-                        var data = $('input', this).data('fileData');
-                        if (data) {
-                            app.addFiles([data], 'infostore');
-                            pane.close();
-                        }
+                        primaryButtonText: gt('Add'),
+                        cancelButtonText: gt('Cancel'),
+                        header: gt('Add files'),
+                        multiselect: true
                     });
-
-                    // on foldertree change update file selection
-                    tree.selection.on('select', function (e, folderId) {
-                        filesPane.empty();
-                        filesAPI.getAll({ folder: folderId }, false).then(function (files) {
-                            filesPane.append(
-                                _(files).map(function (file) {
-                                    var title = (file.filename || file.title);
-                                    var $div = $('<div class="file selectable">').attr('data-obj-id', _.cid(file)).append(
-                                        $('<div class="labelwrapper">').append(
-                                            $('<label class="checkbox">').attr('title', title).append(
-                                                $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
-                                                .val(file.id).data('fileData', file)
-                                            )
-                                        ),
-                                        $('<span>').text(' ' + title)
-                                    );
-                                    ext.point(POINT + '/filelist/filePicker/customizer').invoke('customize', $div, file);
-                                    return $div;
-                                })
-                            );
-                            self.selection.clear();
-                            self.selection.init(files);
-                            self.selection.selectFirst();
-                        });
+                    picker.done(function (files) {
+                        app.addFiles(files, 'infostore');
                     });
                 });
             });

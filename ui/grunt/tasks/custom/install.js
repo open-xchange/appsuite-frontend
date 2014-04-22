@@ -5,7 +5,7 @@
  * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ * © 2013 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
  * @author Julian Bäume <julian.baeume@open-xchange.com>
@@ -15,38 +15,22 @@
 
 module.exports = function (grunt) {
 
-    // Copy files into some arbitrary directory
-    grunt.config.extend('copy', {
-        local_install_help: {
-            files: [{
-                expand: true,
-                src: 'help/**/*',
-                cwd: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
-                filter: 'isFile',
-                dest: grunt.option('dest')
-            }]
-        },
-        local_install_help_drive: {
-            files: [{
-                expand: true,
-                src: 'help-drive/**/*',
-                cwd: 'dist/<%= pkg.name %>-<%= pkg.version %>/',
-                filter: 'isFile',
-                dest: grunt.option('dest')
-            }]
-        }
-    });
+    var staticSrc = grunt.config('copy.local_install_static.files.0.src');
+    staticSrc.push('appsuite/**/.htaccess');
+    grunt.config('copy.local_install_static.files.0.src', staticSrc);
 
-    grunt.registerTask('install:help', 'install help directory into a custom location', function () {
-        if (!grunt.option('dest')) {
-            grunt.fail.fatal('Need --dest option to be set');
-        }
-        grunt.task.run('copy:local_install_help');
-    });
-    grunt.registerTask('install:help-drive', 'install drive help directory into a custom location', function () {
-        if (!grunt.option('dest')) {
-            grunt.fail.fatal('Need --dest option to be set');
-        }
-        grunt.task.run('copy:local_install_help_drive');
+    //exclude language properties files from main install target
+    var dynamicSrc = grunt.config('copy.local_install_dynamic.files.0.src');
+    dynamicSrc.push('!etc/languages/**/*');
+    grunt.config('copy.local_install_dynamic.files.0.src', dynamicSrc);
+
+    // add language properties file to each language package
+    grunt.file.expand('i18n/*.po').map(function (fileName) {
+        return fileName.match(/([a-zA-Z]+_[a-zA-Z]+).po$/)[1];
+    }).forEach(function (Lang) {
+        var lang = Lang.toLowerCase().replace(/_/g, '-');
+        var langSrc = grunt.config('copy.local_install_' + Lang + '.files.0.src');
+        langSrc.push('etc/languages/appsuite/*-' + lang + '.properties');
+        grunt.config('copy.local_install_' + Lang + '.files.0.src', langSrc);
     });
 };

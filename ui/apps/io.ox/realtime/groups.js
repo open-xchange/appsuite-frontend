@@ -27,6 +27,14 @@ define('io.ox/realtime/groups',
             self.trigger('receive', m);
         });
 
+        rt.on('error:' + selector, function (e, m) {
+            var error = m.get('', 'error');
+            if (error.data && error.data.code === 1008) {
+                self.trigger('error:notMember');
+            }
+            self.trigger('error', error);
+        });
+
         function relayEvent(name) {
             return function () {
                 self.trigger(name);
@@ -131,18 +139,21 @@ define('io.ox/realtime/groups',
         this.sendWithoutSequence = function (message) {
             checkState();
             message.to = id;
+            message.selector = selector;
             return capture(rt.sendWithoutSequence(message));
         };
 
         this.send = function (message) {
             checkState();
             message.to = id;
+            message.selector = selector;
             return capture(rt.send(message));
         };
 
         this.query = function (message) {
             checkState();
             message.to = id;
+            message.selector = selector;
             return capture(rt.query(message));
         };
 
@@ -153,11 +164,13 @@ define('io.ox/realtime/groups',
             }
             _(pendingDeferreds).invoke('reject');
             rt.off('receive:' + selector);
+            rt.off('error:' + selector);
             rt.off('offline', relayOfflineEvent);
             rt.off('online', relayOnlineEvent);
             rt.off('reset', relayResetEvent);
             rt.off('highLoad', relayHighLoadEvent);
             delete groups[id];
+            this.events.destroy();
             destroyed = true;
         };
 

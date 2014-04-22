@@ -79,7 +79,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
         days: createDaysObject(1, 31)
     };
 
-    describe.skip('Vacationnotice with one active mail', function () {
+    describe('Vacationnotice with one active mail', function () {
 
         beforeEach(function () {
             this.server.autoRespond = false;
@@ -98,11 +98,11 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
-            expect(this.node.find('input[name="subject"]').length).toBe(1);
-            expect(this.node.find('textarea[name="text"]').length).toBe(1);
-            expect(this.node.find('select').length).toBe(1);
-            expect(this.node.find('option').length).toBe(31);
-            expect(this.node.find('input[type="checkbox"]').length).toBe(2);
+            expect(this.node.find('input[name="subject"]')).to.have.length(1);
+            expect(this.node.find('textarea[name="text"]')).to.have.length(1);
+            expect(this.node.find('select')).to.have.length(1);
+            expect(this.node.find('option')).to.have.length(31);
+            expect(this.node.find('input[type="checkbox"]')).to.have.length(2);
 
         });
 
@@ -110,13 +110,13 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
-            expect(this.node.find('input[type="checkbox"]:checked').length).toBe(1);
+            expect(this.node.find('input[type="checkbox"]:checked')).to.have.length(1);
 
         });
 
     });
 
-    describe.skip('Vacationnotice with two active mails', function () {
+    describe('Vacationnotice with two active mails', function () {
 
         beforeEach(function () {
             this.server.autoRespond = false;
@@ -135,7 +135,7 @@ define(['io.ox/mail/vacationnotice/settings/filter'], function (filter) {
 
             filter.editVacationtNotice(this.node, multiValues, 'tester@open-xchange.com');
             this.server.respond();
-            expect(this.node.find('input[type="checkbox"]:checked').length).toBe(2);
+            expect(this.node.find('input[type="checkbox"]:checked')).to.have.length(2);
 
         });
 

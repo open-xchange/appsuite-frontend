@@ -30,15 +30,15 @@ define(['io.ox/tasks/view-detail', 'io.ox/core/extensions', 'fixture!io.ox/tasks
             it('should draw the whole content', function () {
                 var baton = ext.Baton({data: testData.testData});
                 node = detailView.draw(baton);
-                expect(node.find('.title').length).toBe(1);
-                expect(node.find('.priority').length).toBe(1);
-                expect(node.find('.end-date').length).toBe(1);
-                expect(node.find('.alarm-date').length).toBe(1);
-                expect(node.find('.task-progress').length).toBe(1);
-                expect(node.find('.state').length).toBe(1);
-                expect(node.find('.note').length).toBe(1);
+                expect(node.find('.title')).to.have.length(1);
+                expect(node.find('.priority')).to.have.length(1);
+                expect(node.find('.end-date')).to.have.length(1);
+                expect(node.find('.alarm-date')).to.have.length(1);
+                expect(node.find('.task-progress')).to.have.length(1);
+                expect(node.find('.state')).to.have.length(1);
+                expect(node.find('.note')).to.have.length(1);
                 //recurrence/datecompleted, start_date, target_duration, actual_duration, target_costs, actual_costs, trip_meter, billing_information, companies
-                expect(node.find('.task-details').children().length).toBe(18);
+                expect(node.find('.task-details').children()).to.have.length(18);
             });
 
             it('should draw every participant', function () {//find out why this fails in phantom, chrome is fine

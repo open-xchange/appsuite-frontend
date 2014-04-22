@@ -110,16 +110,12 @@
             display: inline-block;
             line-height: @toolbar-line-height;
             padding: @toolbar-vertical-padding 14px;
+            text-decoration: none;
             float: left;
             outline: 0;
 
-            i {
-                text-decoration: none;
-            }
-
-            &:focus {
-                background-color: #eee;
-            }
+            i { text-decoration: none; }
+            &:focus { background-color: #eee; }
         }
     }
 
@@ -834,17 +830,10 @@ textarea.inplace-editor {
 
     background-color: #eee;
 
-    .selection-message { display: table; }
-    .selection-message div {
-        color: #aaa;
-        html.high-contrast & {
-            color: @black;
-        }
-    }
     .thread-view-control { display: none; }
 
     &.selection-one {
-        .selection-message { display: none; }
+        .multi-selection-message { display: none; }
         .thread-view-control { display: block; }
     }
 

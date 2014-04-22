@@ -68,50 +68,52 @@ define('plugins/portal/userSettings/register',
 
         require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/notifications'], function (dialogs, http, notifications) {
 
-            var oldPass, newPass, newPass2, strengthBar, strengthLabel, strengthBarWrapper, passwordHintContainer,
+            var oldPass, oldScore, newPass, newPass2, strengthBar, strengthLabel, strengthBarWrapper,
                 minLength = settings.get('password/minLength', 4),
                 maxLength = settings.get('password/maxLength', 0),
                 pwStrengths = [
-                    {label: gt('Password strength: Too short'), color: 'bar-darkgrey', barLength: '20%',
-                              //#. %1$s is the minimum password length
-                              //#, c-format
-                        hint: gt('Minimum password length is %1$d.', minLength)},//darkgrey
-                    {label: gt('Password strength: Wrong length'), color: 'bar-darkgrey', barLength: '20%',
-                              //#. %1$s is the minimum password length
-                              //#. %2$s is the maximum password length
-                              //#, c-format
-                        hint: gt('Password length must be between %1$d and %2$d characters.', minLength, maxLength)},//darkgrey
-                    {label: gt('Password strength: Very weak'), color: 'bar-darkgrey', barLength: '20%',
-                     hint: gt('Your password is more secure if it also contains capital letters, numbers, and special characters like $, _, %')},//darkgrey
-                    {label: gt('Password strength: Weak'), color: 'bar-danger', barLength: '40%',
-                     hint: gt('Your password is more secure if it also contains capital letters, numbers, and special characters like $, _, %')},//red
-                    {label: gt('Password strength: Good'), color: 'bar-success', barLength: '60%',
-                     hint: gt('Your password is more secure if it also contains capital letters, numbers, and special characters like $, _, %')},//green
-                    {label: gt('Password strength: Strong'), color: 'bar-info', barLength: '80%'},//blue
-                    {label: gt('Password strength: Very strong'), color: 'bar-epic', barLength: '100%'},//purple
-                    {label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%'},//Orange
+                    {label: gt('Password strength: Too short'), color: 'bar-weak', barLength: '20%'},//red
+                    {label: gt('Password strength: Wrong length'), color: 'bar-weak', barLength: '20%'},//red
+                    {label: gt('Password strength: Very weak'), color: 'bar-weak', barLength: '20%'},//red
+                    {label: gt('Password strength: Weak'), color: 'bar-weak', barLength: '40%'},//red
+                    {label: gt('Password strength: Good'), color: 'bar-good', barLength: '60%'},//orange
+                    {label: gt('Password strength: Strong'), color: 'bar-strong', barLength: '80%'},//green
+                    {label: gt('Password strength: Very strong'), color: 'bar-strong', barLength: '100%'},//green
+                    {label: gt('Password strength: Legendary!'), color: 'bar-legendary', barLength: '100%'},//golden
                 ];
 
-            new dialogs.ModalDialog({ async: true, width: 400 })
+            new dialogs.ModalDialog({ async: true, width: 500 })
             .header($('<h4>').text(gt('Change password')))
             .build(function () {
+                var hintText = gt('Your password is more secure if it also contains capital letters, numbers, and special characters like $, _, %');
+                if (maxLength) {
+                               //#. %1$s is the minimum password length
+                               //#. %2$s is the maximum password length
+                               //#, c-format
+                    hintText = gt('Password length must be between %1$d and %2$d characters.', minLength, maxLength) + '<br>' + hintText;
+                } else {
+                    //#. %1$s is the minimum password length
+                    //#, c-format
+         hintText = gt('Minimum password length is %1$d.', minLength) + '<br>' + hintText;
+                }
                 this.getContentNode().append(
-                    $('<label>').text(gt('Your current password')),
+                    $('<label class="password-change-label">').text(gt('Your current password')),
                     oldPass = $('<input type="password" class="form-control current-password">'),
-                    $('<label>').text(gt('New password')),
+                    $('<label class="password-change-label">').text(gt('New password')),
                     newPass = $('<input type="password" class="form-control new-password">').on('keyup', updateStrength),
-                    $('<label>').text(gt('Repeat new password')),
+                    $('<label class="password-change-label">').text(gt('Repeat new password')),
                     newPass2 = $('<input type="password" class="form-control repeat-new-password">'),
-                    strengthLabel = $('<label class="password-strength-label">').hide(),//hide till new pw is inserted
-                    strengthBarWrapper = $('<div class="progress">').append(
-                        strengthBar = $('<div class="progress-bar password-strength-bar">')).hide(),//hide till new pw is inserted
-                    passwordHintContainer = $('<div class=password-hint-container>').hide(),
+                    strengthBarWrapper = $('<div>').append(
+                            strengthLabel = $('<label class="password-change-label">'),
+                            $('<div class="progress">').append(
+                                    strengthBar = $('<div class="progress-bar password-strength-bar">'))).hide(),//hide till new pw is inserted
+                    $('<div class=password-hint-container>').append(hintText),
                     $('<div class="alert alert-info">')
                     .css('margin', '14px 0')
                     .text(
                         gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
                     )
-                );
+                ).css('max-height', '500px');
             })
             .addPrimaryButton('change', gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
@@ -162,30 +164,37 @@ define('plugins/portal/userSettings/register',
                     if (score === 6 && pw.length > 99) {
                         score = 7;//really legendary
                     }
-                    return pwStrengths[Math.min(score, maxScore)];
+
+                    score = Math.min(score, maxScore);
+                    if (oldScore !== score) {
+                        notifications.yell('screenreader', pwStrengths[score].label);
+                    }
+                    oldScore = score;
+                    return pwStrengths[score];
                 } else if (maxLength === 0) {
+                    if (oldScore !== 0) {
+                        notifications.yell('screenreader', pwStrengths[0].label);
+                    }
+                    oldScore = 0;
                     return pwStrengths[0];// to short with no maxlength
                 } else {
+                    if (oldScore !== 1) {
+                        notifications.yell('screenreader', pwStrengths[1].label);
+                    }
+                    oldScore = 1;
                     return pwStrengths[1];// to short or to long
                 }
             }
 
             function updateStrength() {//tests the password and draws the bar
                 if (newPass.val() === '') {
-                    strengthLabel.hide();
-                    strengthBarWrapper.hide();
-                    passwordHintContainer.text('').hide();
+                    strengthBarWrapper.slideUp();
                 } else {
                     var result = strengthtest(newPass.val());
-                    strengthLabel.text(result.label).show();
-                    strengthBar.removeClass('bar-darkgrey bar-danger bar-success bar-info bar-epic bar-legendary')//cleanup
+                    strengthLabel.text(result.label);
+                    strengthBar.removeClass('bar-weak bar-good bar-strong bar-legendary')//cleanup
                         .addClass(result.color).css('width', result.barLength);
-                    strengthBarWrapper.show();
-                    if (result.hint) {
-                        passwordHintContainer.text(result.hint).show();
-                    } else {
-                        passwordHintContainer.text('').hide();
-                    }
+                    strengthBarWrapper.slideDown();
                 }
             }
         });

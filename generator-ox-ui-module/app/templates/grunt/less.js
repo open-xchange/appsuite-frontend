@@ -15,8 +15,8 @@ module.exports = function (grunt) {
         var theme = {};
         theme[themeName] = {
             options: {
-                compress: true,
-                cleancss: true,
+                compress: !grunt.config('local.debug'),
+                cleancss: !grunt.config('local.debug'),
                 ieCompat: false,
                 syncImport: true,
                 strictMath: false,

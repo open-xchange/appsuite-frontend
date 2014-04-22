@@ -220,7 +220,7 @@ define('io.ox/core/tk/vgrid',
             draggable: true,
             dragType: '',
             selectFirst: true,
-            toolbarPlacement: 'bottom',
+            toolbarPlacement: 'top',
             secondToolbar: false,
             swipeLeftHandler: false,
             swipeRightHandler: false,
@@ -288,9 +288,9 @@ define('io.ox/core/tk/vgrid',
                 }
             },
 
-            topbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' bottom border-top' : ' top border-bottom'))
+            topbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'bottom border-top' : 'top border-bottom'))
                 .prependTo(node),
-            toolbar = $('<div>').addClass('vgrid-toolbar' + (options.toolbarPlacement === 'top' ? ' top border-bottom' : ' bottom border-top'))
+            toolbar = $('<div>').addClass('vgrid-toolbar generic-toolbar ' + (options.toolbarPlacement === 'top' ? 'top border-bottom' : 'bottom border-top'))
                 .append(
                     // show checkbox
                     options.showCheckbox === false ?
@@ -401,48 +401,6 @@ define('io.ox/core/tk/vgrid',
 
         // selection
         Selection.extend(this, scrollpane, { draggable: options.draggable, dragType: options.dragType });
-
-        // second toolbar
-        if (_.device('!small')) {
-            // create extension point for second toolbar
-            ext.point('io.ox/core/vgrid/secondToolbar').extend({
-                index: 100,
-                id: 'secondToolbar',
-                draw: function (baton) {
-                    // select all/none
-                    var link,
-                        sel = baton.grid.selection,
-                        fnShowAll = function () {
-                            var checked = link.prop('checked');
-                            sel[checked ? 'clear' : 'selectAll']();
-                            setLink(!checked);
-                        },
-                        setLink = function (all) {
-                            all = all || false;
-                            link
-                                .prop('checked', all)
-                                .text(all ? gt('Select none') : gt('Select all'))
-                                .attr('aria-checked', all ? 'true' : 'false');
-                        };
-
-                    // fix link if selection is empty
-                    sel.on('empty', function () {
-                        setLink(false);
-                    });
-
-                    // draw link
-                    this.append(
-                        $('<div class="grid-info">').append(
-                            link = $('<a href="#" tabindex="1" role="checkbox" aria-label="' + gt('Select all') + '">').on('click', fnShowAll)
-                        )
-                    );
-                    setLink(false);
-                }
-            });
-        }
-
-        // draw second toolbar
-        ext.point('io.ox/core/vgrid/secondToolbar').invoke('draw', topbar, new ext.Baton({ grid: self, options: options }));
 
         // swipe delegate
         if (_.device('touch')) {

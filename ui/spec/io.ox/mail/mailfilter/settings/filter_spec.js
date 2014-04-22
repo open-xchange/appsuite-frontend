@@ -80,57 +80,48 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
 
         resultWithoutFilter = { data: [] };
 
-    describe.skip('Mailfilter filter with rules', function () {
+    describe('Mailfilter filter with rules', function () {
 
-        it('should draw the list of tests', function () {
-            var def;
-
+        it('should draw the list of tests', function (done) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithFilter));
             });
             $('body', document).append(this.node = $('<div id="filtertestNode">'));
 
-            def = filters.editMailfilter(this.node);
-
-            waitsFor(function () {
-                return def.state() === 'resolved';
-            }, 'paint edit mailfilter dialog', ox.testTimeout);
-
-            runs(function () {
-                expect(this.node.find('h1').length).toBe(1);
-                expect(this.node.find('.btn-primary[data-action="add"]').length).toBe(1);
-                expect(this.node.find('li[data-id="0"]').length).toBe(1);
-                expect(this.node.find('li[data-id="0"]').hasClass('editable')).toBe(true);
-                expect(this.node.find('li[data-id="1"]').length).toBe(1);
-                expect(this.node.find('li[data-id="1"]').hasClass('editable')).toBe(false);
-                expect(this.node.find('li[data-id="2"]').hasClass('disabled')).toBe(true);
-                expect(this.node.find('li[data-id="3"]').hasClass('editable')).toBe(false);
-                expect(this.node.find('li a.drag-handle').length).toBe(4);
-                expect(this.node.find('li .widget-title').length).toBe(4);
-                expect(this.node.find('li [data-action="edit"]').length).toBe(2);
-                expect(this.node.find('li [data-action="edit-vacation"]').length).toBe(1);
-                expect(this.node.find('li [data-action="toggle"]').length).toBe(3);
-                expect(this.node.find('li [data-action="delete"]').length).toBe(3);
+            filters.editMailfilter(this.node).then(function () {
+                expect(this.node.find('h1')).to.have.length(1);
+                expect(this.node.find('.btn-primary[data-action="add"]')).to.have.length(1);
+                expect(this.node.find('li[data-id="0"]')).to.have.length(1);
+                expect(this.node.find('li[data-id="0"]').hasClass('editable')).to.be.true;
+                expect(this.node.find('li[data-id="1"]')).to.have.length(1);
+                expect(this.node.find('li[data-id="1"]').hasClass('editable')).to.be.false;
+                expect(this.node.find('li[data-id="2"]').hasClass('disabled')).to.be.true;
+                expect(this.node.find('li[data-id="3"]').hasClass('editable')).to.be.false;
+                expect(this.node.find('li a.drag-handle')).to.have.length(4);
+                expect(this.node.find('li .widget-title')).to.have.length(4);
+                expect(this.node.find('li [data-action="edit"]')).to.have.length(2);
+                expect(this.node.find('li [data-action="edit-vacation"]')).to.have.length(1);
+                expect(this.node.find('li [data-action="toggle"]')).to.have.length(3);
+                expect(this.node.find('li [data-action="delete"]')).to.have.length(3);
 
                 this.node.remove();
-            });
+                done();
+            }.bind(this));
         });
 
     });
 
-    describe.skip('Mailfilter filter without rules', function () {
+    describe('Mailfilter filter without rules', function () {
 
-        beforeEach(function () {
-            var def;
+        beforeEach(function (done) {
             this.server.respondWith('GET', /api\/mailfilter\?action=list/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(resultWithoutFilter));
             });
             $('body', document).append(this.node = $('<div id="filtertestNode">'));
 
-            def = filters.editMailfilter(this.node);
-            waitsFor(function () {
-                return def.state() === 'resolved';
-            }, 'paint edit mailfilter dialog', ox.testTimeout);
+            filters.editMailfilter(this.node).then(function () {
+                done();
+            });
         });
 
         afterEach(function () {
@@ -139,10 +130,10 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
 
         it('should draw the empty list', function () {
 
-            expect(this.node.find('h1').length).toBe(1);
-            expect(this.node.find('.btn-primary[data-action="add"]').length).toBe(1);
-            expect(this.node.find('h1').length).toBe(1);
-            expect(this.node.find('ol div').text()).toBe(gt('There is no rule defined'));
+            expect(this.node.find('h1')).to.have.length(1);
+            expect(this.node.find('.btn-primary[data-action="add"]')).to.have.length(1);
+            expect(this.node.find('h1')).to.have.length(1);
+            expect(this.node.find('ol div').text()).to.equal(gt('There is no rule defined'));
 
         });
 
@@ -154,7 +145,7 @@ define(['io.ox/mail/mailfilter/settings/filter', 'gettext!io.ox/mail'], function
             addButton.click();
 
             $popup = $('body').find('.io-ox-mailfilter-edit').closest('.io-ox-dialog-popup');
-            expect($popup.length).toBe(1);
+            expect($popup).to.have.length(1);
             $popup.remove();
         });
 

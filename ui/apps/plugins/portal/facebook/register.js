@@ -262,6 +262,7 @@ define('plugins/portal/facebook/register',
                 ext.point('io.ox/plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && !foundHandler) {
+                        content_container.attr('renderer', renderer.id);//for better identifing the contenttype later on
                         //console.log(profile.name, ' Renderer: ', renderer.id, post); //this is too useful to delete it, just uncomment it
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
@@ -498,16 +499,18 @@ define('plugins/portal/facebook/register',
         accepts: function (post) {
             return post.type === 80 &&
                 post.attachment.caption !== 'www.youtube.com' &&
-                post.attachment.media[0];
+                (post.attachment.media[0] || post.attachment.href);
         },
         draw: function (post) {
-            var media = post.attachment.media[0];
+            var media = post.attachment.media[0],
+                link = post.attachment.href;
             this.append(
                 $('<div>').text(post.description || post.message || ''),
-                $('<a>', {href: media.href}).append(
+                media ? $('<a>', {href: media.href}).append(
                     $('<img class="wall-img-left">', {src: media.src}),
                     $('<span class="caption">').text(post.attachment.description)
-                )
+                ) : '',
+                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
             );
         }
     });
@@ -540,7 +543,7 @@ define('plugins/portal/facebook/register',
             $('<div class="message">').text(post.message).appendTo($(this));
             if (post.attachment && post.attachment.media && post.attachment.media[0]) {
                 var media = post.attachment.media[0];
-                $('<a class="app-story">').attr('href', media.href).append(
+                $('<a class="app-story">').attr('href', media.href || post.attachment.href).append(
                     $('<img class="wall-img-left">').attr('src', media.src),
                     $('<span class="caption title">').text(post.attachment.name),
                     $('<br>'),

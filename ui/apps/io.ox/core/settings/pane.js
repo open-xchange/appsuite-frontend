@@ -73,7 +73,7 @@ define('io.ox/core/settings/pane',
             this.addClass('settings-container').append(
                 $('<h1>').text(gt('Basic settings'))
             );
-            new SettingView({model: model}).render().$el.appendTo(this);
+            new SettingView({model: model}).render().$el.attr('role', 'form').appendTo(this);
         }
     });
 
@@ -174,9 +174,9 @@ define('io.ox/core/settings/pane',
             }));
         }
 
-        point.extend(new forms.CheckBoxField({
+        point.extend(new forms.CheckControlGroup({
             id: 'highcontrast',
-            index: 800,
+            index: 401,
             labelCssClass: 'col-sm-4',
             controlCssClass: 'col-sm-4',
             attribute: 'highcontrast',
@@ -210,7 +210,7 @@ define('io.ox/core/settings/pane',
     // Auto Start App
 
     (function () {
-        if (settings.isConfigurable('autoStart') && _.device('!smartphone')) {
+        if (settings.isConfigurable('autoStart')) {
             var options = {};
             _(appAPI.getFavorites()).each(function (app) {
                 options[app.path] = gt.pgettext('app', app.title);

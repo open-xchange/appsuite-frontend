@@ -38,7 +38,7 @@ define('io.ox/mail/common-extensions',
                 size = _.device('retina') ? 80 : 40;
             this.append(
                 contactsAPI.pictureHalo(
-                    $('<div class="contact-picture">'),
+                    $('<div class="contact-picture" aria-hidden="true">'),
                     { email: from && from[0] && from[0][1], width: size, height: size, scaleType: 'cover' }
                 )
             );
@@ -374,7 +374,7 @@ define('io.ox/mail/common-extensions',
                 if (!list.length) return;
 
                 this.append(
-                    $ul = $('<ul class="attachment-preview" role="presention" aria-hidden="true">').append(
+                    $ul = $('<ul class="attachment-preview" role="presentation" aria-hidden="true">').append(
                         _(list).map(function (attachment) {
                             // consider retina displays
                             var size = _.device('retina') ? 240 : 120,

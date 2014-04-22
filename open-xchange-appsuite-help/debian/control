@@ -1,0 +1,86 @@
+Source: open-xchange-appsuite-help
+Section: non-free/web
+Priority: optional
+Maintainer: Julian Baeume <julian.baeume@open-xchange.com>
+Build-Depends: debhelper (>= 8.0.0), ant (>= 1.7.0), ant-optional (>= 1.7.0), default-jdk, nodejs (>= 0.10.0)
+Standards-Version: 3.9.2
+Homepage: http://open-xchange.com
+Vcs-Git: https://git.open-xchange.com/git/wd/frontend/web
+Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
+
+Package: open-xchange-appsuite-help-common
+Architecture: all
+Depends: ${misc:Depends}
+Description: Language-independent files of online help for OX App Suite
+
+Package: open-xchange-appsuite-help-de-de
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (de_DE)
+
+Package: open-xchange-appsuite-help-en-gb
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (en_GB)
+
+Package: open-xchange-appsuite-help-en-us
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (en_US)
+
+Package: open-xchange-appsuite-help-es-es
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (es_ES)
+
+Package: open-xchange-appsuite-help-es-mx
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (es_MX)
+
+Package: open-xchange-appsuite-help-fr-fr
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (fr_FR)
+
+Package: open-xchange-appsuite-help-it-it
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (it_IT)
+
+Package: open-xchange-appsuite-help-ja-jp
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (ja_JP)
+
+Package: open-xchange-appsuite-help-nl-nl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (nl_NL)
+
+Package: open-xchange-appsuite-help-pl-pl
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (pl_PL)
+
+Package: open-xchange-appsuite-help-zh-cn
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (zh_CN)
+
+Package: open-xchange-appsuite-help-zh-tw
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-appsuite-help-common
+Provides: open-xchange-appsuite-help
+Description: Online help for OX App Suite (zh_TW)

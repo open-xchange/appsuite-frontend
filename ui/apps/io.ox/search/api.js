@@ -31,11 +31,11 @@ define('io.ox/search/api',
                     action: 'autocomplete',
                     module: '',
                     //max. number of values for each facet
-                    limit: 3,
-                    admin: ''
+                    limit: 3
                 },
                 data: {
                     prefix: '',
+                    options: {},
                     facets: []
                 }
             },
@@ -44,11 +44,11 @@ define('io.ox/search/api',
                 method: 'PUT',
                 params: {
                     action: 'query',
-                    module: '',
-                    admin: ''
+                    module: ''
                 },
                 data: {
                     facets: [],
+                    options: {},
                     start: 0,
                     size: 100
                 }
@@ -60,7 +60,7 @@ define('io.ox/search/api',
     function getDefault(key) {
         var  obj = _.copy(api.options.requests[key], true);
         //filter admin contacts
-        _.extend(obj.params, {admin: settings.get('showAdmin', false)});
+        _.extend(obj.data.options, {admin: settings.get('showAdmin', false)});
         return obj;
     }
 

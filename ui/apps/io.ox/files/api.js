@@ -15,14 +15,16 @@
 
 define('io.ox/files/api',
     ['io.ox/core/http',
+     'io.ox/core/extensions',
      'io.ox/core/api/factory',
      'io.ox/core/api/folder',
      'settings!io.ox/core',
      'io.ox/core/cache',
      'io.ox/core/date',
      'io.ox/files/mediasupport',
-     'gettext!io.ox/files'
-    ], function (http, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, gt) {
+     'gettext!io.ox/files',
+     'io.ox/filter/files'
+    ], function (http, ext, apiFactory, folderAPI, coreConfig, cache, date, mediasupport, gt) {
 
     'use strict';
 
@@ -209,6 +211,20 @@ define('io.ox/files/api',
 
     var allColumns = '20,23,1,5,700,702,703,704,705,707,3';
 
+    var processFiles = function (data) {
+        return _(data).filter(function (file) {
+            return ext.point('io.ox/files/filter').filter(function (p) {
+                    return p.invoke('isEnabled', this, file) !== false;
+                })
+                .map(function (p) {
+                    return p.invoke('isVisible', this, file);
+                })
+                .reduce(function (acc, isVisible) {
+                    return acc && isVisible;
+                }, true);
+        });
+    };
+
     // generate basic API
     var api = apiFactory({
         module: 'files',
@@ -243,6 +259,7 @@ define('io.ox/files/api',
         },
         pipe: {
             all: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     fixContentType(obj);
                     // remove from cache if get cache is outdated
@@ -256,18 +273,21 @@ define('io.ox/files/api',
                 return data;
             },
             allPost: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     api.tracker.updateFile(obj);
                 });
                 return data;
             },
             list: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     fixContentType(obj);
                 });
                 return data;
             },
             listPost: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     if (obj) api.tracker.updateFile(obj);
                 });
@@ -278,6 +298,7 @@ define('io.ox/files/api',
                 return fixContentType(data);
             },
             search: function (data) {
+                data = processFiles(data);
                 _(data).each(function (obj) {
                     fixContentType(obj);
                     api.tracker.updateFile(obj);

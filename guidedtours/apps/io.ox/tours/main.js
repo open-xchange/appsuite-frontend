@@ -67,8 +67,7 @@ define('io.ox/tours/main',
         priority: 1,
         tour: {
             id: 'Switching from OX6',
-            steps: [
-            {
+            steps: [{
                 title: gt.format(gt('Welcome to %s'), ox.serverConfig.productName),
                 placement: 'bottom',
                 target: 'io-ox-topbar',

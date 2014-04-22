@@ -290,7 +290,14 @@ define('io.ox/core/desktop',
          * setup all mediator extensions
          */
         mediate: function () {
-            return ext.point(this.getName() + '/mediator').invoke('setup', null, this);
+            var self = this;
+            return ext.point(this.getName() + '/mediator').each(function (extension) {
+                try {
+                    if (extension.setup) extension.setup(self);
+                } catch (e) {
+                    console.error('mediate', extension.id, e.message, e);
+                }
+            });
         },
         /**
          * Registers an event handler at a global browser object (e.g. the

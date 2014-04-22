@@ -25,7 +25,7 @@ module.exports = function (grunt) {
                 sourceMapPrefix: 1
             },
             files: {
-                'dist/<%= pkg.name %>-<%= pkg.version %>/boot.js': ['build/boot.js']
+                'dist/appsuite/boot.js': ['build/boot.js']
             }
         }
     });
