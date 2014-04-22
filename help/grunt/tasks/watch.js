@@ -75,7 +75,7 @@ module.exports = function (grunt) {
         },
         karma: {
             files: ['spec/**/*.js'],
-            tasks: ['newer:jshint:specs', 'newer:copy:specs', 'karma:unit:run']
+            tasks: ['newer:jshint:specs', 'newer:copy:specs', 'testrun']
         },
         configs: {
             options: { reload: true },
@@ -93,7 +93,7 @@ module.exports = function (grunt) {
                 'bower.json',
                 'package.json'
             ],
-            tasks: ['default', 'send_livereload', 'karma:unit:run'],
+            tasks: ['default', 'send_livereload', 'testrun'],
             options: {}
         }
     });

@@ -9,13 +9,14 @@
 'use strict';
 
 module.exports = function (grunt) {
+    var path = require('path');
     ['default'].concat(grunt.file.expand({cwd: 'apps/themes/'}, '*/definitions.less')).forEach(function (file) {
         var themeName = file.replace(/\/definitions.less$/, '');
         var theme = {};
         theme[themeName] = {
             options: {
-                compress: true,
-                cleancss: true,
+                compress: !grunt.config('local.debug'),
+                cleancss: !grunt.config('local.debug'),
                 ieCompat: false,
                 syncImport: true,
                 strictMath: false,
@@ -43,6 +44,7 @@ module.exports = function (grunt) {
                     src: ['apps/themes/style.less'],
                     expand: true,
                     rename: function (dest) { return dest; },
+                    cwd: (grunt.option('coreDir') || grunt.config('local.coreDir') || ''),
                     dest: 'build/apps/themes/' + themeName + '/common.css'
                 },
                 {
@@ -65,6 +67,13 @@ module.exports = function (grunt) {
                     expand: true,
                     ext: '.css',
                     cwd: 'apps/',
+                    dest: 'build/apps/themes/' + themeName + '/'
+                },
+                {
+                    src: ['**/*.less', '!themes/**/*.less', '!themes/*.less'],
+                    expand: true,
+                    ext: '.css',
+                    cwd: path.join((grunt.option('coreDir') || grunt.config('local.coreDir') || ''), 'apps/'),
                     dest: 'build/apps/themes/' + themeName + '/'
                 }
             ]
