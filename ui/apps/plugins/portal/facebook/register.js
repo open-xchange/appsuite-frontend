@@ -295,7 +295,7 @@ define('plugins/portal/facebook/register',
                 wall_content.find('a').attr('target', '_blank');
 
                 wall_content.find('img').one('load', function () {
-                    if (parseInt(wall_content.css('height')) >= 350) {//parseInt cuts of the px part too
+                    if (parseInt(wall_content.find('.wall-post-content').css('height')) >= 350) {//parseInt cuts of the px part too
                         wall_content.find('.facebook-content-expand').show();
                     }
                 });
@@ -507,7 +507,7 @@ define('plugins/portal/facebook/register',
             this.append(
                 $('<div>').text(post.description || post.message || ''),
                 media ? $('<a>', {href: media.href}).append(
-                    $('<img class="wall-img-left">', {src: media.src}),
+                    $('<img class="wall-img-left">').attr({src: media.src}),
                     $('<span class="caption">').text(post.attachment.description)
                 ) : '',
                 (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
@@ -549,6 +549,26 @@ define('plugins/portal/facebook/register',
                     $('<br>'),
                     $('<span class="caption">').text(post.attachment.description)).appendTo($(this));
             }
+        }
+    });
+
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
+        id: 'friend-timeline-post-to-other-friend',//really strange type
+        index: 196,
+        accepts: function (post) {
+            return post.type === 295;
+        },
+        draw: function (post) {
+            var media = post.attachment.media[0],
+                link = post.attachment.href;
+            this.append(
+                $('<div>').text(post.description || post.message || ''),
+                media ? $('<a>', {href: media.href}).append(
+                    $('<img class="wall-img-left">').attr({src: media.src}),
+                    $('<span class="caption">').text(post.attachment.description)
+                ) : '',
+                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
+            );
         }
     });
 
