@@ -378,7 +378,7 @@ define('io.ox/mail/write/main',
 
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
-                return require([editorSrc]).pipe(function (Editor) {
+                return require([editorSrc]).then(function (Editor) {
                     return (editorHash[mode] = new Editor(view.textarea))
                         .done(function () {
                             app.setEditor(editorHash[mode]);
