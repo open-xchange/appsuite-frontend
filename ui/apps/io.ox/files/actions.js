@@ -77,9 +77,17 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/publish', {
         capabilities: 'publication',
         requires: function (e) {
-            return e.baton.app.folder.getData().then(function (data) {
-                return e.collection.has('one') && !_.isEmpty(e.baton.data.filename) && !folderAPI.is('trash', data);
-            });
+            var check = function (data) {
+                    data = data || {};
+                    return e.collection.has('one') && !_.isEmpty(e.baton.data.filename) && !folderAPI.is('trash', data);
+                };
+            if (e.baton.app){
+                return e.baton.app.folder.getData().then(check);
+            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+            } else {//continue without foldercheck
+                return check();
+            }
         },
         action: function (baton) {
             require(['io.ox/core/pubsub/publications'], function (publications) {
@@ -123,9 +131,17 @@ define('io.ox/files/actions',
 
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
-                return e.baton.app.folder.getData().then(function (data) {
-                    return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write') && !folderAPI.is('trash', data);
-                });
+                var check = function (data) {
+                        data = data || {};
+                        return e.collection.has('one') && (/\.(txt|js|css|md|tmpl|html?)$/i).test(e.context.filename) && (e.baton.openedBy !== 'io.ox/mail/write') && !folderAPI.is('trash', data);
+                    };
+                if (e.baton.app){
+                    return e.baton.app.folder.getData().then(check);
+                } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                    return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                } else {//continue without foldercheck
+                    return check();
+                }
             },
             action: function (baton) {
                 if (ox.ui.App.reuse('io.ox/editor:edit.' + _.cid(baton.data))) return;
@@ -135,9 +151,17 @@ define('io.ox/files/actions',
 
         new Action('io.ox/files/actions/editor-new', {
             requires: function (e) {
-                return e.baton.app.folder.getData().then(function (data) {
-                    return e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data);
-                });
+                var check = function (data) {
+                        data = data || {};
+                        return e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data);
+                    };
+                if (e.baton.app){
+                    return e.baton.app.folder.getData().then(check);
+                } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                    return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+                } else {//continue without foldercheck
+                    return check();
+                }
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
@@ -212,9 +236,17 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/sendlink', {
         capabilities: 'webmail !alone',
         requires: function (e) {
-            return e.baton.app.folder.getData().then(function (data) {
-                return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data);//hide in mail write preview
-            });
+            var check = function (data) {
+                    data = data || {};
+                    return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data);
+                };
+            if (e.baton.app){
+                return e.baton.app.folder.getData().then(check);
+            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+            } else {//continue without foldercheck
+                return check();
+            }
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -238,13 +270,21 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/send', {
         capabilities: 'webmail',
         requires: function (e) {
-            var list = _.getArray(e.context);
-            return e.baton.app.folder.getData().then(function (data) {
-                return e.collection.has('some') && !_.isEmpty(e.baton.data) && (e.baton.openedBy !== 'io.ox/mail/write') && !folderAPI.is('trash', data) &&//hide in mail write preview
+            var check = function (data) {
+                    data = data || {};
+                    var list = _.getArray(e.context);
+                    return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && e.baton.openedBy !== 'io.ox/mail/write' && !folderAPI.is('trash', data) &&//hide in mail write preview
                     _(list).reduce(function (memo, obj) {
                         return memo || obj.file_size > 0;
                     }, false);
-            });
+                };
+            if (e.baton.app){
+                return e.baton.app.folder.getData().then(check);
+            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+            } else {//continue without foldercheck
+                return check();
+            }
         },
         multiple: function (list) {
             require(['io.ox/mail/write/main'], function (m) {
@@ -263,9 +303,17 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/showlink', {
         capabilities: '!alone',
         requires: function (e) {
-            return e.baton.app.folder.getData().then(function (data) {
-                return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && !folderAPI.is('trash', data);
-            });
+            var check = function (data) {
+                    data = data || {};
+                    return _.device('!small') && !_.isEmpty(e.baton.data) && e.collection.has('some') && !folderAPI.is('trash', data);
+                };
+            if (e.baton.app){
+                return e.baton.app.folder.getData().then(check);
+            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+            } else {//continue without foldercheck
+                return check();
+            }
         },
         multiple: function (list) {
 
@@ -643,9 +691,17 @@ define('io.ox/files/actions',
     new Action('io.ox/files/actions/add-to-portal', {
         capabilities: 'portal',
         requires: function (e) {
-            return e.baton.app.folder.getData().then(function (data) {
-                return e.collection.has('one') && !_.isEmpty(e.baton.data) && !folderAPI.is('trash', data);
-            });
+            var check = function (data) {
+                    data = data || {};
+                    return e.collection.has('one') && !_.isEmpty(e.baton.data) && !folderAPI.is('trash', data);
+                };
+            if (e.baton.app){
+                return e.baton.app.folder.getData().then(check);
+            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+            } else {//continue without foldercheck
+                return check();
+            }
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
@@ -1035,9 +1091,17 @@ define('io.ox/files/actions',
     new Action('io.ox/files/icons/share', {
         capabilities: 'publication',
         requires: function (e) {
-            return e.baton.app.folder.getData().then(function (data) {
+            var check = function (data) {
+                data = data || {};
                 return folderAPI.can('publish', data) && !folderAPI.is('trash', data);
-            });
+            };
+            if (e.baton.app){
+                return e.baton.app.folder.getData().then(check);
+            } else if (e.baton.data.folder_id) {//no app given, maybe the item itself has a folder
+                return folderAPI.get({folder: e.baton.data.folder_id}).then(check);
+            } else {//continue without foldercheck
+                return check();
+            }
         },
         action: function (baton) {
             require(['io.ox/core/pubsub/publications'], function (publications) {
