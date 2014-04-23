@@ -17,26 +17,6 @@ define(['io.ox/core/desktop'], function (desktop) {
     describe('The appsuite desktop', function () {
 
         describe('provides the Window API which', function () {
-
-            describe('has a search object that', function () {
-                beforeEach(function () {
-                    this.window = ox.ui.createWindow({
-                        search: true
-                    });
-                });
-
-                it('should provide the query string through a getQuery method', function () {
-                    this.window.search.open();
-                    this.window.search.setQuery('foo');
-                    expect(this.window.search.getQuery()).to.equal('foo');
-                });
-
-                it('should not trim trailing whitespace', function () {
-                    this.window.search.open();
-                    this.window.search.setQuery('foo ');
-                    expect(this.window.search.getQuery({trim: false})).to.equal('foo ');
-                });
-            });
         });
 
         describe('provides the App API which', function () {
