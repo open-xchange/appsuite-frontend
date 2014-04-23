@@ -238,7 +238,7 @@ define('io.ox/core/tk/autocomplete',
                         count++;
                         if (facet.display_name && childs && regular) {
                             $('<div class="autocomplete-item unselectable dropdown-header">')
-                                .text(facet.display_name)
+                                .html(facet.display_name)
                                 .data({
                                     index: count,
                                     id: facet.id,
