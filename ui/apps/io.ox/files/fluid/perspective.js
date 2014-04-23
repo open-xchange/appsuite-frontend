@@ -409,7 +409,7 @@ define('io.ox/files/fluid/perspective',
                                 alt: '',
                                 'data-src': url
                             })
-                            .addClass('img-polaroid lazy')
+                            .addClass('img-thumbnail lazy')
                             .one({
                                 load: function () {
                                     //list/tile view
@@ -780,7 +780,7 @@ define('io.ox/files/fluid/perspective',
                     }
                 });
                 //requesting data-src and setting to src after load finised (icon view only)
-                $('img.img-polaroid.lazy').imageloader({
+                $('img.img-thumbnail.lazy').imageloader({
                     timeout: 60000
                 });
 
@@ -980,7 +980,7 @@ define('io.ox/files/fluid/perspective',
                         // draw file ...
                         drawFile(obj)
                         // ... and reset lazy loader
-                        .find('img.img-polaroid.lazy').imageloader({ timeout: 60000 }).end()
+                        .find('img.img-thumbnail.lazy').imageloader({ timeout: 60000 }).end()
                     );
                 }
             });

@@ -75,8 +75,7 @@
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
 
-    .ico-polaroid {
-        padding: 14px;
+    .ico-thumbnail {
         background-color: #fff;
         border: 1px solid #ccc;
         border: 1px solid rgba(0,0,0,.2);
@@ -93,6 +92,11 @@
     }
 
     .files-container {
+
+        .img-thumbnail {
+            //overwrite bootstrap style
+            border-radius: 0;
+        }
 
         text-decoration: none;
         &:focus {
@@ -300,7 +304,7 @@
                     background-position: center;
 
                     .fa {
-                        .ico-polaroid;
+                        .ico-thumbnail;
                         line-height: 100px;
                         font-size: 48px;
                         width: 75px;
@@ -372,7 +376,7 @@
                 height: @tile;
                 margin: 2px;
 
-                .img-polaroid {
+                .img-thumbnail {
                     border: 1px solid black;
                     padding: 0 0 0 0;
                 }
