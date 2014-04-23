@@ -39,31 +39,12 @@ define('io.ox/core/settings/downloads/pane',
                         $('<p>').append(
                             $('<i class="fa fa-download">'),
                             $.txt(' '),
-                            $('<a>', { href: href, target: '_blank' }).addClass('action').text(gt('Download installation file (for Windows)'))
+                            $('<a>', { href: href, target: '_blank' }).addClass('action').text(gt('Download install file (for Windows)'))
                         ),
                         $('<p>').text(
-                            gt('When executing the downloaded file, an installation wizard will be launched. ' +
-                            'Follow the instructions and install the updater. ' +
-                            'Installs latest versions of Windows® client software. The Updater automatically informs about new updates. ' +
-                            'You can download the updates from within the Updater.')
-                        )
-                    ),
-                    $('<section>').append(
-                        $('<h2>').text(gt('Connector for Microsoft Outlook®')),
-                        $('<p>').text(
-                            gt('Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
-                        )
-                    ),
-                    $('<section>').append(
-                        $('<h2>').text(gt('Notifier')),
-                        $('<p>').text(
-                            gt('Informs about the current status of E-Mails and appointments without having to display the user interface or another Windows® client.')
-                        )
-                    ),
-                    $('<section>').append(
-                        $('<h2>').text(gt('Drive Client')),
-                        $('<p>').text(
-                            gt('Data synchronization with your local (Windows) machine. Drive Client lets you configure the folders to be synchronized.')
+                            gt('The updater provides a simple installation wizard. Follow the instructions to install the application. ' +
+                            'The updater will inform you of any updates for the Connector for Microsoft Outlook, Notifier and Drive. ' +
+                            'You can download the updates from within the updater.')
                         )
                     )
                 );
