@@ -325,7 +325,7 @@ define('io.ox/search/view-template',
                 this.find('label').prepend(
                     $('<span>')
                         .addClass('type')
-                        .text(type)
+                        .html(type)
                 );
             }
         }
@@ -374,7 +374,7 @@ define('io.ox/search/view-template',
                                      $('<a role="menuitem" tabindex="-1" href="#">')
                                         .append(
                                             $('<i class="fa fa-fw fa-none">'),
-                                            $('<span>').text(item.display_name)
+                                            $('<span>').html(item.display_name)
                                         )
                                         .addClass('option')
                                         .attr('data-option', item.id)
