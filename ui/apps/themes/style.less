@@ -1403,22 +1403,21 @@ a.button {
     }
 
     &.tail {
-
         border-bottom: 0px none;
-        padding-top: 1em;
-        padding-bottom: 1em;
-
+        text-align: center;
+        padding: 1em;
         * {
             white-space: normal;
             line-height: 1.1em;
         }
-
     }
 
     .title {
         //show whitespace to visually match backend sort order
         white-space: pre;
     }
+
+    .editable &.tail { padding: 1em; }
 
     .vgrid-cell-checkbox {
 
