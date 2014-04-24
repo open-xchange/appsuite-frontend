@@ -310,7 +310,7 @@ define('io.ox/files/mediaplayer',
 
             this.playlist.empty();
             this.drawItems();
-            if (_.device('!touch')) { this.playlist.sortable({ axis: 'y', distance: 30 }); }
+            if (_.device('!touch')) { this.playlist.sortable({ containment: this.playlist, axis: 'y', distance: 30 }); }
             this.play(this.list[0]);
             _.defer(function () { $('#io-ox-mediaplayer').focus(); });
         },
