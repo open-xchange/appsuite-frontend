@@ -807,14 +807,17 @@ div.hopscotch-bubble {
 
     @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
         width: 100%;
-        background-color: #222;
-        &.active { display:block; }
+        &.active {
+            display:block;
+        }
     }
 
     @media (min-width: 481px) {
         width: 350px;
         right: -350px;
-         &.active { right: 0; }
+         &.active {
+            right: 0;
+        }
     }
 
     &.active {
