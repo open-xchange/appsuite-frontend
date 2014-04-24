@@ -109,7 +109,7 @@ define('io.ox/search/view-template',
 
                             //isRetry argument is used for custom events thrown via trigger
                             //use e.data for orign event
-                            if (_.isUndefined(isRetry) && (custom && tabToFocus)) {
+                            if (_.isUndefined(isRetry) && (focusedDown || tabToFocus)) {
                                 e.data = {isRetry: true};
                             }
                         }),
