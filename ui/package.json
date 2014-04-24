@@ -20,6 +20,7 @@
     "grunt-newer": "^0.7.0",
     "grunt-require-gettext": "^0.3.6",
     "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
+    "underscore": "^1.6.0",
     "grunt-bump": "0.0.13"
   },
   "devDependencies": {
@@ -36,7 +37,6 @@
     "q": "~1.0.0",
     "sinon": "~1.7.3",
     "time-grunt": "^0.3.1",
-    "underscore": "~1.6.0",
     "karma-chrome-launcher": "^0.1.2",
     "karma-chai": "^0.1.0",
     "karma-spec-reporter": "0.0.12",
