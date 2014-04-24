@@ -643,7 +643,7 @@ define('io.ox/core/tk/folderviews',
                     )
                     .build(function () {
                         this.getContentNode().append(
-                            $('<div class="row">').append(
+                            $('<form role="form">').append(
                                 $('<input class="form-control">', { type: 'text' })
                                 .val(folder.title)
                                 .attr('placeholder', gt('Folder name'))
