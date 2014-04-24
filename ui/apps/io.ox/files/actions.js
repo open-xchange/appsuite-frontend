@@ -98,10 +98,9 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/audioplayer', {
         requires: function (e) {
-            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'audio');
+            return _.device('!android') && e.collection.has('some') && checkMedia(e, 'audio');
         },
         action: function (baton) {
-            baton.app = baton.grid.getApp();
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
                     baton: baton,
@@ -113,10 +112,9 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
-            return _.device('!android') && e.collection.has('multiple') && checkMedia(e, 'video');
+            return _.device('!android') && e.collection.has('some') && checkMedia(e, 'video');
         },
         action: function (baton) {
-            baton.app = baton.grid.getApp();
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
                 mediaplayer.init({
                     baton: baton,
@@ -1162,7 +1160,7 @@ define('io.ox/files/actions',
     }
 
     function checkMedia(e, type) {
-        if (!e.collection.has('multiple') && !settings.get(type + 'Enabled')) {
+        if (!e.collection.has('some') && !settings.get(type + 'Enabled')) {
             return false;
         }
 
@@ -1174,6 +1172,7 @@ define('io.ox/files/actions',
 
         if (_.isUndefined(e.baton.allIds)) {
             e.baton.allIds = e.baton.data;
+            list = [e.baton.allIds];
         }
 
         //identify incomplete items
