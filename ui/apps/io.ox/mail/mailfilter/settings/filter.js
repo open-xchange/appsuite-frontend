@@ -401,9 +401,9 @@ define('io.ox/mail/mailfilter/settings/filter',
                     },
 
                     makeSortable: function () {
-
-                        this.$el.find('ol').sortable({
-                            containment: this.el,
+                        var list = this.$el.find('ol');
+                        list.sortable({
+                            containment: list,
                             axis: 'y',
                             handle: '.drag-handle',
                             scroll: true,
