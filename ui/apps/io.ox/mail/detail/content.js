@@ -274,11 +274,12 @@ define('io.ox/mail/detail/content',
             if (!baton.isHTML) return;
             // images with attribute width/height
             this.find('img[width], img[height]').each(function () {
-                var node = $(this), w = node.attr('width'), h = node.attr('height');
+                var node = $(this), w = node.attr('width'), h = node.attr('height'),
+                    pat = /%/;
                 node.removeAttr('width height');
                 // just set width; max-width=100% should still apply
-                if (w) { node.css({ width: w + 'px' }); }
-                if (h) { node.css({ height: h + 'px'}); }
+                if (w) { node.css({ width: pat.test(w) ? w : w + 'px'}); }
+                if (h) { node.css({ height: pat.test(h) ? h : h + 'px'}); }
             });
         }
     });
