@@ -58,5 +58,7 @@ module.exports = function (grunt) {
     grunt.loadTasks('grunt/tasks');
     // load custom tasks
     // those can be used to override configuration from grunt/tasks/*.js
-    grunt.loadTasks('grunt/tasks/custom');
+    if (grunt.file.isDir('grunt/tasks/custom/')) {
+        grunt.loadTasks('grunt/tasks/custom');
+    }
 };
