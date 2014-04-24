@@ -502,6 +502,8 @@ define('io.ox/mail/api',
         .done(function () {
             // update unread counter and folder item counter
             folderAPI.reload(ids);
+            //trigger delete to update notification area
+            api.trigger('deleted-mails', ids);
         });
     };
 
