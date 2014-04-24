@@ -3435,32 +3435,6 @@ msgctxt "window title"
 msgid "%1$s %2$s"
 msgstr ""
 
-#: apps/io.ox/core/desktop.js:1506
-#: module:io.ox/core
-msgid "Search for items"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:1514
-#: module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515
-#: apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620
-#: apps/io.ox/core/main.js:626
-#: apps/io.ox/search/main.js:157
-#: module:io.ox/search
-#: apps/io.ox/search/main.js:173
-#: apps/io.ox/search/view-template.js:47
-#: apps/io.ox/search/view-template.js:116
-#: apps/plugins/portal/flickr/register.js:215
-#: module:plugins/portal
-msgid "Search"
-msgstr ""
-
-#: apps/io.ox/core/desktop.js:1564
-#: module:io.ox/core
-msgid "Toggle search"
-msgstr ""
-
 #: apps/io.ox/core/desktop.js:1734
 #: module:io.ox/core
 msgid "Failed to start application. Maybe you have connection problems. Please try again."
@@ -3782,6 +3756,19 @@ msgstr ""
 #: apps/io.ox/core/main.js:513
 #: module:io.ox/core
 msgid "close for %1$s"
+msgstr ""
+
+#: apps/io.ox/core/main.js:620
+#: module:io.ox/core
+#: apps/io.ox/core/main.js:626
+#: apps/io.ox/search/main.js:157
+#: module:io.ox/search
+#: apps/io.ox/search/main.js:173
+#: apps/io.ox/search/view-template.js:47
+#: apps/io.ox/search/view-template.js:116
+#: apps/plugins/portal/flickr/register.js:215
+#: module:plugins/portal
+msgid "Search"
 msgstr ""
 
 #: apps/io.ox/core/main.js:662

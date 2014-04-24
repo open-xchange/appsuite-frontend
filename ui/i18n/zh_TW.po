@@ -5012,19 +5012,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "行程"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "搜索"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "搜尋項目"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6245,10 +6239,6 @@ msgstr "切換選取盒"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "切換文件夾"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "切換搜尋"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -9773,6 +9763,9 @@ msgstr "每年"
 #~ msgid "Saving latest changes ..."
 #~ msgstr "正在儲存最新修改..."
 
+#~ msgid "Search for items"
+#~ msgstr "搜尋項目"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "搜尋於"
@@ -10287,6 +10280,9 @@ msgstr "每年"
 #~ "To view further information, click on a file. The information are "
 #~ "displayed in a pop-up window."
 #~ msgstr "要檢視更多資訊，點選檔案。資訊將會顯示於彈出的視窗中。"
+
+#~ msgid "Toggle search"
+#~ msgstr "切換搜尋"
 
 #~ msgid "Touchselect on/off"
 #~ msgstr "觸控選擇 開/關"

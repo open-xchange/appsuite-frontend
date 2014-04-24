@@ -5042,19 +5042,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Planlægning"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Søg"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Søg efter elementer"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6301,10 +6295,6 @@ msgstr "Skift afkrydsningsfelter"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Vælg mappe til/fra"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Slå søgning til/fra"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -8235,6 +8225,9 @@ msgstr "årsligt"
 #~ msgid "Save in file store"
 #~ msgstr "Gem i fillager"
 
+#~ msgid "Search for items"
+#~ msgstr "Søg efter elementer"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "Søgte i"
@@ -8701,6 +8694,9 @@ msgstr "årsligt"
 #~ msgstr ""
 #~ "For at se flere informationer, klik på en fil. Informationer bliver vist "
 #~ "i et popop-vindue."
+
+#~ msgid "Toggle search"
+#~ msgstr "Slå søgning til/fra"
 
 #~ msgid "Touchselect on/off"
 #~ msgstr "Pegevalg til/fra"

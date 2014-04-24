@@ -5060,19 +5060,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Планирование"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Поиск"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Поиск объектов"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6322,10 +6316,6 @@ msgstr "Переключить флажки"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Перейти в папку"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Включить режим поиска"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -8368,6 +8358,9 @@ msgstr "каждый год"
 #~ msgid "Saving latest changes ..."
 #~ msgstr "Сохранение изменений..."
 
+#~ msgid "Search for items"
+#~ msgstr "Поиск объектов"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "Поиск выполнен в"
@@ -8856,6 +8849,9 @@ msgstr "каждый год"
 #~ msgstr ""
 #~ "Выберите файл для просмотра дополнительной информации (откроется в новом "
 #~ "окне)."
+
+#~ msgid "Toggle search"
+#~ msgstr "Включить режим поиска"
 
 #~ msgid "Touchselect on/off"
 #~ msgstr "Сенсорный выбор вкл/выкл"

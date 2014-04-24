@@ -5040,19 +5040,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Planung"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Suchen"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Nach Objekten suchen"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6298,10 +6292,6 @@ msgstr "Kontrollfelder an/aus"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Ordner an/aus"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Suche an/aus"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -9121,6 +9111,9 @@ msgstr "jährlich"
 #~ msgid "Saving latest changes ..."
 #~ msgstr "Neueste Änderungen werden gespeichert..."
 
+#~ msgid "Search for items"
+#~ msgstr "Nach Objekten suchen"
+
 #~ msgid "Search in"
 #~ msgstr "Suchen in"
 
@@ -9754,6 +9747,9 @@ msgstr "jährlich"
 #~ msgstr ""
 #~ "Um weitere Informationen anzuzeigen, klicken Sie auf eine Datei. Ein "
 #~ "Popup-Fenster zeigt die Informationen."
+
+#~ msgid "Toggle search"
+#~ msgstr "Suche an/aus"
 
 #~ msgid "Top and bottom borders"
 #~ msgstr "Oberer und unterer Rand"

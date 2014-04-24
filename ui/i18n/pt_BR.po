@@ -5067,19 +5067,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Agendamento"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Pesquisar"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Pesquisar por itens"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6336,10 +6330,6 @@ msgstr "Alternar caixas de seleção"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Alternar pasta"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Alternar pesquisa"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -10724,6 +10714,9 @@ msgstr "anualmente"
 #~ msgid "Schedule an all-day event"
 #~ msgstr "Agendar um evento de dia inteiro"
 
+#~ msgid "Search for items"
+#~ msgstr "Pesquisar por itens"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "Pesquisado em"
@@ -11738,6 +11731,9 @@ msgstr "anualmente"
 
 #~ msgid "To:"
 #~ msgstr "Para:"
+
+#~ msgid "Toggle search"
+#~ msgstr "Alternar pesquisa"
 
 #~ msgid "Togo"
 #~ msgstr "Togo"

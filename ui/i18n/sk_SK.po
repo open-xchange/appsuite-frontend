@@ -5077,19 +5077,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Plánovanie"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Hľadať"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Hľadať položky"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6345,10 +6339,6 @@ msgstr "Zmeniť označenie políčok"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Prepnúť priečinok"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Prepnúť vyhľadávanie"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -11347,6 +11337,9 @@ msgstr "ročne"
 #~ msgid "Schedule an all-day event"
 #~ msgstr "Naplánovať celodennú udalosť"
 
+#~ msgid "Search for items"
+#~ msgstr "Hľadať položky"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "Vyhľadané v"
@@ -12451,6 +12444,9 @@ msgstr "ročne"
 
 #~ msgid "To:"
 #~ msgstr "Komu:"
+
+#~ msgid "Toggle search"
+#~ msgstr "Prepnúť vyhľadávanie"
 
 #~ msgid "Togo"
 #~ msgstr "Togo"

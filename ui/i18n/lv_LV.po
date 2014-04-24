@@ -5083,19 +5083,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Plānošana"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Meklēšana"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Vienību meklēšana"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6356,10 +6350,6 @@ msgstr "Pārslēgt iezīmes"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Pārslēgt mapi"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Pārslēgt meklēšanu"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -11371,6 +11361,9 @@ msgstr "ik-gada"
 #~ msgid "Schedule an all-day event"
 #~ msgstr "Ieplānot visas dienas notikumu"
 
+#~ msgid "Search for items"
+#~ msgstr "Vienību meklēšana"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "Meklēts iekš"
@@ -12498,6 +12491,9 @@ msgstr "ik-gada"
 
 #~ msgid "To:"
 #~ msgstr "Saņēmējs:"
+
+#~ msgid "Toggle search"
+#~ msgstr "Pārslēgt meklēšanu"
 
 #~ msgid "Togo"
 #~ msgstr "Togo"

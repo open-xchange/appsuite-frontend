@@ -5050,19 +5050,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Scheduling"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Search"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Search for items"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6309,10 +6303,6 @@ msgstr "Toggle checkboxes"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Toggle folder"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Toggle search"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -8287,6 +8277,9 @@ msgstr "yearly"
 #~ msgid "Saving latest changes ..."
 #~ msgstr "Saving latest changes ..."
 
+#~ msgid "Search for items"
+#~ msgstr "Search for items"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "Searched in"
@@ -8768,6 +8761,9 @@ msgstr "yearly"
 #~ msgstr ""
 #~ "To view additional information, click on a file. The information is "
 #~ "displayed in a pop-up window."
+
+#~ msgid "Toggle search"
+#~ msgstr "Toggle search"
 
 #~ msgid "Touchselect on/off"
 #~ msgstr "Touchselect on/off"

@@ -5090,19 +5090,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Programare"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Caută"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Căutare elemente"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6371,10 +6365,6 @@ msgstr "Comutare casete de selectare"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Comutare dosar"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Comutare căutare"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -11418,6 +11408,9 @@ msgstr "anual"
 #~ msgid "Schedule an all-day event"
 #~ msgstr "Programează un eveniment pe durata întregii zile"
 
+#~ msgid "Search for items"
+#~ msgstr "Căutare elemente"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "Căutat în"
@@ -12552,6 +12545,9 @@ msgstr "anual"
 
 #~ msgid "To:"
 #~ msgstr "Către:"
+
+#~ msgid "Toggle search"
+#~ msgstr "Comutare căutare"
 
 #~ msgid "Togo"
 #~ msgstr "Togo"

@@ -5090,19 +5090,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Planification"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Chercher"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Chercher des éléments"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6368,10 +6362,6 @@ msgstr "Inverser les cases à cocher"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Dossier oui/non"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Recherche oui/non"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -8726,6 +8716,9 @@ msgstr "annuel"
 #~ msgid "Saving latest changes ..."
 #~ msgstr "Enregistrement des dernières modifications en cours…"
 
+#~ msgid "Search for items"
+#~ msgstr "Chercher des éléments"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "Cherché dans"
@@ -9307,6 +9300,9 @@ msgstr "annuel"
 #~ msgstr ""
 #~ "Pour afficher plus d'informations, cliquez sur un fichier. Les "
 #~ "informations le concernant s'affichent dans une nouvelle fenêtre."
+
+#~ msgid "Toggle search"
+#~ msgstr "Recherche oui/non"
 
 #~ msgid "Touchselect on/off"
 #~ msgstr "Sélection par toucher activée/désactivée"

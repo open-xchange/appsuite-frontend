@@ -5079,19 +5079,13 @@ msgctxt "app"
 msgid "Scheduling"
 msgstr "Planowanie"
 
-#: apps/io.ox/core/desktop.js:1514 module:io.ox/core
-#: apps/io.ox/core/desktop.js:1515 apps/io.ox/core/desktop.js:1572
-#: apps/io.ox/core/main.js:620 apps/io.ox/core/main.js:626
+#: apps/io.ox/core/main.js:620 module:io.ox/core apps/io.ox/core/main.js:626
 #: apps/io.ox/search/main.js:157 module:io.ox/search
 #: apps/io.ox/search/main.js:173 apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:116
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Szukaj"
-
-#: apps/io.ox/core/desktop.js:1506 module:io.ox/core
-msgid "Search for items"
-msgstr "Znajdź elementy"
 
 #: apps/io.ox/calendar/edit/view-addparticipants.js:183
 #: module:io.ox/calendar/edit/main
@@ -6364,10 +6358,6 @@ msgstr "Przełącz pola wyboru"
 #: apps/io.ox/core/commons-folderview.js:1133
 msgid "Toggle folder"
 msgstr "Przełącz folder"
-
-#: apps/io.ox/core/desktop.js:1564 module:io.ox/core
-msgid "Toggle search"
-msgstr "Przełącz wyszukiwanie"
 
 #: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:194
@@ -8367,6 +8357,9 @@ msgstr "co rok"
 #~ msgid "Save in file store"
 #~ msgstr "Zapisz w magazynie plików"
 
+#~ msgid "Search for items"
+#~ msgstr "Znajdź elementy"
+
 #, fuzzy
 #~ msgid "Search in"
 #~ msgstr "Wyszukiwano w"
@@ -8871,6 +8864,9 @@ msgstr "co rok"
 #~ msgstr ""
 #~ "Aby wyświetlić więcej informacji, kliknij plik. Informacje pojawią się w "
 #~ "wyskakującym okienku."
+
+#~ msgid "Toggle search"
+#~ msgstr "Przełącz wyszukiwanie"
 
 #~ msgid "Touchselect on/off"
 #~ msgstr "Włącz/wyłącz zaznaczanie dotykiem"
