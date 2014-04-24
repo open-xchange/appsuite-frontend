@@ -211,7 +211,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                             })
                             .addClass('widget-settings-view draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
                             .append(
-                                $('<a>').addClass('drag-handle').append(
+                                $('<a>').addClass('drag-handle ' + (this.model.collection.length <= 1 ? 'hidden' : '')).append(
                                     $('<i class="fa fa-bars">')
                                 ).attr({
                                     href: '#',
