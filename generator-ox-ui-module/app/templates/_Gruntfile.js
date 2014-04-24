@@ -46,13 +46,13 @@ module.exports = function (grunt) {
     // steps to build the ui (ready for development)
     grunt.registerTask('build', ['lint', 'copy_build', 'newer:concat', 'newer:less', 'compile_po']);
     // create a distribution ready version of the ui
-    grunt.registerTask('dist', ['clean', 'bower', 'build', 'uglify', 'copy_dist']);
+    grunt.registerTask('dist', ['clean', 'checkDependencies:build', 'bower', 'build', 'uglify', 'copy_dist']);
     // run development setup
     grunt.registerTask('dev', ['connect', 'test', 'watch']);
     // run a clean development setup
     grunt.registerTask('cleanDev', ['clean', 'default', 'connect', 'test', 'watch']);
     // default task
-    grunt.registerTask('default', ['checkDependencies', 'bower', 'build']);
+    grunt.registerTask('default', ['checkDependencies:dev', 'bower', 'build']);
 
     // load installed grunt tasks from specified folder
     grunt.loadTasks('grunt/tasks');
