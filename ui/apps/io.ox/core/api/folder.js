@@ -797,6 +797,15 @@ define('io.ox/core/api/folder',
                             }
                         }
                         return false;
+                    case 'insideDefaultfolder':
+                        // get default folder
+                        var folders = mailSettings.get('folder');
+                        for (id in folders) {
+                            if (data.id.indexOf(folders[id]) === 0) {//folder starts with defaultfolder id
+                                return true;
+                            }
+                        }
+                        return false;
                     case 'published':
                         return !!data['com.openexchange.publish.publicationFlag'];
                     case 'subscribed':

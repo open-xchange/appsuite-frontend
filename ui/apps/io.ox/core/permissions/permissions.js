@@ -359,8 +359,9 @@ define('io.ox/core/permissions/permissions',
                         dialog.getFooter().hide();
                     }
 
-                    // mail folders show up with "null"
-                    var owner = data.created_by || ox.user_id;
+                    // mail folders show up with "null" so test if its inside our defaultfolders (prevent shared folders from showing wrong owner)
+                    // shared folder only have admins, no owner, because it's not possible to determine the right one
+                    var owner = data.created_by || api.is('insideDefaultfolder', data) ? ox.user_id : null;
 
                     collection.on('reset', function () {
                         var node = dialog.getContentNode().empty();
