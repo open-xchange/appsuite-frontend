@@ -453,7 +453,10 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/add-to-portal', {
         capabilities: 'portal',
         requires: function (e) {
-            return e.collection.has('one') && !!e.context.mark_as_distributionlist && !addedToPortal(e.context);
+            if (!e.collection.has('one')) return false;
+            return api.get(e.context).then(function (data) {
+                return !!data.mark_as_distributionlist && !addedToPortal(data);
+            });
         },
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
