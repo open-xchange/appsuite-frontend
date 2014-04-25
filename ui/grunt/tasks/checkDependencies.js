@@ -10,9 +10,16 @@
 
 module.exports = function (grunt) {
 
-    grunt.config('checkDependencies', {
+    grunt.config.extend('checkDependencies', {
 
-        this: {
+        build: {
+            options: {
+                //don't check for devDependencies in build environments
+                scopeList: ['dependencies', 'peerDependencies', 'optionalDependencies'],
+                npmInstall: false
+            }
+        },
+        dev: {
             options: {
                 npmInstall: true
             }
