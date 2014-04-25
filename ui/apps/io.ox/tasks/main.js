@@ -44,7 +44,7 @@ define('io.ox/tasks/main',
          */
         'folder-view': function (app) {
             // folder tree
-            commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
+            commons.addFolderView(app, { type: 'tasks', view: 'FolderList' });
             app.getWindow().nodes.sidepanel.addClass('border-right');
         },
 
@@ -112,7 +112,7 @@ define('io.ox/tasks/main',
         },
 
         /*
-         * Folerview toolbar
+         * Folderview toolbar
          */
         'folderview-toolbar': commons.mediateFolderView
     });
