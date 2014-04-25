@@ -109,6 +109,48 @@ define('io.ox/core/main',
         }
     });
 
+    ext.point('io.ox/core/logout').extend({
+        id: 'clearCache',
+        logout: function (baton) {
+            var clear = function () {
+                return ox.cache.clear();
+            };
+            if (baton.autologout && baton.autologout === true) {
+                return clear();
+            } else {
+                return ox.ui.App.canRestore().then(
+                    function success(canRestore) {
+                        if (canRestore && !ox.online) {
+                            return ox.load(['io.ox/core/tk/dialogs']).then(function (dialogs) {
+                                var def = $.Deferred();
+                                new dialogs.ModalDialog()
+                                    .text(gt('Unsaved documents will be lost. Do you want to sign out now?'))
+                                    .addPrimaryButton('Yes', gt('Yes'))
+                                    .addButton('No', gt('No'))
+                                    .show()
+                                    .then(function (action) {
+                                        if (action === 'No') {
+                                            return def.reject();
+                                        } else {
+                                            clear().then(function () {
+                                                def.resolve();
+                                            });
+                                        }
+                                    });
+                                return def;
+                            });
+                        } else {
+                            return clear();
+                        }
+                    },
+                    function fail() {
+                        return clear();
+                    }
+                );
+            }
+        }
+    });
+
     //
     // handle online/offline mode
     //
@@ -1116,13 +1158,23 @@ define('io.ox/core/main',
                     // draw savepoints to allow the user removing them
                     ox.ui.App.getSavePoints().done(function (list) {
                         _(list).each(function (item) {
+                            var info = item.description || item.module,
+                                versionInfo = $();
+                            if (item.version !== ox.version) {
+                                var version = item.version || '';
+                                version = version.split('.').slice(0, -2).join('.');
+                                if (version) {
+                                    versionInfo = $('<span>').addClass('oldversion').text(gt.noI18n('(' + version + ')'));
+                                }
+                            }
                             this.append(
                                 $('<li class="restore-item">').append(
                                     $('<a href="#" role="button" class="remove">').data(item).append(
                                         $('<i class="icon-trash">')
                                     ),
                                     item.icon ? $('<i class="' + item.icon + '">') : $(),
-                                    $('<span>').text(gt.noI18n(item.description || item.module))
+                                    $('<span>').text(gt.noI18n(info)),
+                                    versionInfo
                                 )
                             );
                         }, dialog.find('.content'));

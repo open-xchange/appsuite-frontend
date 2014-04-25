@@ -774,11 +774,14 @@ define('io.ox/mail/write/main',
             }
 
             var mailto, tmp, params, def = $.Deferred();
-
             // triggerd by mailto?
             if (data === undefined && (mailto = _.url.hash('mailto'))) {
                 tmp = mailto.split(/\?/, 2);
                 params = _.deserialize(tmp[1]);
+                // Bug: 31345
+                for (var key in params) {
+                    params[key.toLowerCase()] = params[key];
+                }
                 tmp = tmp[0].split(/\:/, 2);
                 // save data
                 data = {
@@ -1087,6 +1090,10 @@ define('io.ox/mail/write/main',
 
             blockReuse(mail.data.sendtype);
             prepareMailForSending(mail);
+
+            if (mail.data.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
+                mail.data.sendtype = mailAPI.SENDTYPE.DRAFT;
+            }
 
             //convert to target emoji send encoding
             if (convert && emoji.sendEncoding() !== 'unified') {

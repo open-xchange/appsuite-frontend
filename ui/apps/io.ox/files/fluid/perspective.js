@@ -28,7 +28,7 @@ define('io.ox/files/fluid/perspective',
      'io.ox/core/tk/selection',
      'io.ox/core/notifications',
      'apps/io.ox/core/tk/jquery.imageloader.js'
-     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, folderAPI, gt, Caps, Selection, notifications) {
+     ], function (viewDetail, ext, commons, dialogs, api, date, upload, dnd, shortcuts, actions, folderAPI, gt, capabilities, Selection, notifications) {
 
     'use strict';
 
@@ -90,16 +90,16 @@ define('io.ox/files/fluid/perspective',
         if (dropZone) dropZone.remove();
     }
 
+    var regIsImage = /^(image\/(gif|png|jpe?g|bmp|tiff))$/i,
+        regIsAudio = /^audio\/(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)$/i,
+        regIsOffice = /^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i,
+        regIsText = /^text\/.*(rtf|plain).*$/i;
+
     function previewMode(file) {
-        if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
-            return 'thumbnail';
-        } else if ((/^audio\/(mpeg|m4a|m4b|mp3|ogg|oga|opus|x-m4a)$/i).test(file.file_mimetype)) {
-            return 'cover';
-        } else if (Caps.has('document_preview') &&
-                (/^application\/.*(ms-word|ms-excel|ms-powerpoint|msword|msexcel|mspowerpoint|openxmlformats|opendocument|pdf|rtf).*$/i).test(file.file_mimetype) ||
-                (/^text\/.*(rtf|plain).*$/i).test(file.file_mimetype)) {
-            return 'preview';
-        }
+        if (regIsImage.test(file.file_mimetype)) return 'thumbnail';
+        if (regIsAudio.test(file.file_mimetype)) return 'cover';
+        if (capabilities.has('document_preview') &&
+            (regIsOffice.test(file.file_mimetype) || regIsText.test(file.file_mimetype))) return 'preview';
         return false;
     }
 

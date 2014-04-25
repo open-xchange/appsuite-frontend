@@ -617,7 +617,23 @@ define('io.ox/mail/main',
                     delete openThreads[index];
                     icon(cid, 'right');
                     api.getList(thread).done(function (list) {
-                        grid.selection.remove(list.slice(1));
+                        var items = list.slice(1),
+                            selected = grid.selection.get(),
+                            hash = {}, valid = [];
+
+                        //hash thread-summary-items
+                        _.each(items, function (item) {
+                            hash[_.cid(item)] = true;
+                        });
+                        //remove thread-summary-item from current selection
+                        valid = _.filter(selected, function (item) {
+                            return !hash[_.cid(item)];
+                        });
+                        //use latest thread mail when no valid targets exists
+                        valid = valid.length ? valid : valid.concat(list[0]);
+
+                        grid.selection.set(valid);
+                        grid.selection.remove(items);
                         refresh();
                     });
                 }
