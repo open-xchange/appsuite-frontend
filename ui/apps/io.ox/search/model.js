@@ -174,7 +174,7 @@ define('io.ox/search/model',
                 //update opt reference in pool list
                 if (isCustom) {
                     //update pool item itself
-                    $.extend(this.get('pool')[facet].values[value], data);
+                    $.extend(this.get('pool')[facet].values.custom, data);
                 } else {
                     //update poollist
                     for (var i = list.length - 1; i >= 0; i--) {

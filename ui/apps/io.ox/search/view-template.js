@@ -418,7 +418,7 @@ define('io.ox/search/view-template',
     function folderDialog(facet, baton) {
         require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
             var label = gt('Folder'),
-                id = facet.values[0].id,
+                id = facet.values[0].custom,
                 type = baton.model.getModule();
 
             var dialog = new dialogs.ModalDialog()
@@ -444,9 +444,11 @@ define('io.ox/search/view-template',
 
             dialog.show(function () {
                 tree.paint().done(function () {
-                    tree.select(id).done(function () {
-                        dialog.getBody().focus();
-                    });
+                    if (id) {
+                        tree.select(id).done(function () {
+                            dialog.getBody().focus();
+                        });
+                    }
                 });
             })
             .done(function (action) {
