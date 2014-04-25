@@ -149,22 +149,23 @@ define('io.ox/core/tk/list',
 
         onRemove: function (model) {
 
-            var li = this.$el.find('li[data-cid="' + this.getCID(model) + '"]'),
+            var children = this.getItems(),
+                cid = this.getCID(model),
+                li = children.filter('[data-cid="' + cid + '"]'),
                 top = this.$el.scrollTop();
 
             if (li.length === 0) return;
 
-            if (li.position().top < top) {
-                this.$el.scrollTop(top - li.outerHeight(true));
-            }
+            // keep scroll position
+            if (li.position().top < top) this.$el.scrollTop(top - li.outerHeight(true));
 
-            this.selection.remove(this.getCID(model), li);
+            this.selection.remove(cid, li);
             li.remove();
 
             // simulate scroll event because the list might need to paginate.
             // Unless it's the last one! If we did scroll for the last one, we would
             // trigger a paginate call that probably overtakes the delete request
-            if (li.length > 1) this.$el.trigger('scroll');
+            if (children.length > 1) this.$el.trigger('scroll');
         },
 
         onSort: function () {
