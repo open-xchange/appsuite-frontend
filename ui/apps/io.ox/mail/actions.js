@@ -174,7 +174,17 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel', 'one') && isDraftMail(e.context);
         },
         action: function (baton) {
+            var data = baton.data,
+                check = false;
+            _.each(ox.ui.apps.models, function (app) {
+                if (app.refId === data.id) {
+                    check = true;
+                    app.launch();
+                }
+            });
+            if (check === true) return;
             require(['io.ox/mail/write/main'], function (m) {
+                if (m.reuse('edit', data)) return;
                 m.getApp().launch().done(function () {
                     this.edit(baton.data);
                 });

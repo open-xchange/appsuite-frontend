@@ -97,7 +97,9 @@ define('io.ox/mail/write/main',
         timer = function () {
             // only auto-save if something changed (see Bug #26927)
             if (app.dirty()) {
-                app.saveDraft();
+                app.saveDraft().done(function (data) {
+                    app.refId = data.id;
+                });
             } else {
                 delay();
             }
