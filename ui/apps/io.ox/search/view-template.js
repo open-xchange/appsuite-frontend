@@ -428,8 +428,8 @@ define('io.ox/search/view-template',
             dialog.getBody().css({ height: '250px' });
 
             //use foldertree or folderlist
-            var TreeConstructor = ['mail', 'files'].indexOf(type) >= 0  ? views.FolderTree : views.FolderList;
-            var tree = new TreeConstructor(dialog.getBody(), {
+            var TreeConstructor = ['mail', 'files'].indexOf(type) >= 0  ? views.FolderTree : views.FolderList,
+                tree = new TreeConstructor(dialog.getBody(), {
                     type: type === 'files' ? 'infostore' : type,
                     tabindex: 0,
                     rootFolderId: type === 'files' ? '9' : '1',
@@ -455,7 +455,7 @@ define('io.ox/search/view-template',
                 if (action === 'ok') {
                     var target = _(tree.selection.get()).first(),
                         //TODO: better way tp get label?!
-                        label = $(arguments[2]).find('[data-obj-id="' + target + '"]').attr('aria-label');
+                        label = $(arguments[2]).find('[data-obj-id="' + target + '"]').find('.short-title').text();
                     baton.model.update(facet.id, id, {custom: target, display_name: label});
                 }
                 tree.destroy().done(function () {
