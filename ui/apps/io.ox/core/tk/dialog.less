@@ -21,68 +21,79 @@
     }
 }
 
-.add-infostore-file .modal-body {
+.add-infostore-file {
 
-    padding: 0;
+    .modal-body {
 
-    &>* {
-        display: inline-block;
-        width: 50%;
-        height: 380px;
-        vertical-align: top;
-        overflow: auto;
-    }
-
-    .io-ox-foldertree {
         padding: 0;
+
+        &>div, &>ul {
+            display: inline-block;
+            width: 50%;
+            height: 380px;
+            vertical-align: top;
+            overflow: auto;
+            margin: 0;
+        }
+
+        .io-ox-foldertree {
+            padding: 0;
+        }
+
+        .io-ox-fileselection {
+
+            outline: none;
+
+            li.file {
+
+                cursor: pointer;
+                line-height: 30px;
+                .user-select(none);
+
+                label {
+                    margin-top: 5px;
+                    margin-left: 5px;
+                    float: left;
+                }
+
+                .name {
+                    .ellipsis();
+                }
+
+                &.selected, &.selected:hover {
+
+                    background-color: @foldertree-selected-background;
+
+                    * {
+                        color: @foldertree-selected-label-color;
+                    }
+                }
+            }
+
+            &:focus .file {
+
+                &.selected, &.selected:hover {
+
+                    background-color: @foldertree-selected-focus-background;
+
+                    * {
+                        color: @foldertree-focused-label-color;
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
-    .io-ox-fileselection {
-
-        outline: none;
-
-        li.file {
-
-            cursor: pointer;
-            line-height: 35px;
-
-            label {
-                margin-top: 7px;
-                margin-left: 5px;
-                float: left;
-            }
-
-            .name {
-                .ellipsis();
-            }
-
-            &.selected, &.selected:hover {
-
-                background-color: @foldertree-selected-background;
-
-                * {
-                    color: @foldertree-selected-label-color;
-                }
-            }
-        }
-
-        &:focus .file {
-
-            &.selected, &.selected:hover {
-
-                background-color: @foldertree-selected-focus-background;
-
-                * {
-                    color: @foldertree-focused-label-color;
-                }
-
-            }
-
-        }
-
+    .modal-footer {
+        margin-top: 0;
     }
 
 }
+
 
 /* ios momentum scrolling, breakes mobile chrome if applied to all devices */
 .ios {

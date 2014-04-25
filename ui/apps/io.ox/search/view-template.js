@@ -90,8 +90,9 @@ define('io.ox/search/view-template',
                                 model.add(value.facet, value.id);
                             }
                         })
-                        .on('focus focus:custom', function (e, isRetry) {
+                        .on('focus focus:custom click', function (e, isRetry) {
                             //simulate tab keyup event
+                            //hint: 'click' supports click on already focused
                             ref.trigger({
                                     type: 'keyup',
                                     which: 9
@@ -102,11 +103,13 @@ define('io.ox/search/view-template',
                             //adjust original event instead of throwing a new one cause
                             //handler (fnKeyUp) is debounced and we have set the isRetry flag
 
-                            //isRetry argument is used for custom events thrown via trigger
+                            var focusedDown = !ref.isOpen() && e.which === 40,
+                                //tab used to focus
+                                tabToFocus = e.which === 9;
 
-                            //tab used to focus
+                            //isRetry argument is used for custom events thrown via trigger
                             //use e.data for orign event
-                            if (e.which === 9  && _.isUndefined(isRetry)) {
+                            if (_.isUndefined(isRetry) && (focusedDown || tabToFocus)) {
                                 e.data = {isRetry: true};
                             }
                         }),

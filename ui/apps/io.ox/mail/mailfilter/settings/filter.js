@@ -211,7 +211,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                             })
                             .addClass('widget-settings-view draggable ' + getEditableState() + ' ' + (self.model.get('active') ? 'active' : 'disabled'))
                             .append(
-                                $('<a>').addClass('drag-handle').append(
+                                $('<a>').addClass('drag-handle ' + (this.model.collection.length <= 1 ? 'hidden' : '')).append(
                                     $('<i class="fa fa-bars">')
                                 ).attr({
                                     href: '#',
@@ -401,9 +401,9 @@ define('io.ox/mail/mailfilter/settings/filter',
                     },
 
                     makeSortable: function () {
-
-                        this.$el.find('ol').sortable({
-                            containment: this.el,
+                        var list = this.$el.find('ol');
+                        list.sortable({
+                            containment: list,
                             axis: 'y',
                             handle: '.drag-handle',
                             scroll: true,

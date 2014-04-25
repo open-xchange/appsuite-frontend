@@ -62,7 +62,11 @@ define('io.ox/files/mediaplayer',
         init: function (config) {
             _.extend(this.config, config);
             this.app = config.baton.app;
-            this.win = this.app.getWindow();
+            if (this.app) {
+                this.win = this.app.getWindow();
+            } else {
+                this.win = {nodes: { outer: $('.window-container:visible').first()}};//get active window by hand
+            }
             this.lastActiveElement = $(document.activeElement);
 
             this.restore();
@@ -279,7 +283,10 @@ define('io.ox/files/mediaplayer',
         },
 
         show: function () {
-            this.win.busy().nodes.outer.append(
+            if (this.app) {
+                this.win.busy();
+            }
+            this.win.nodes.outer.append(
                 this.container.append(
                     $('<div id="io-ox-mediaplayer" class="atb mediaplayer_inner" tabindex="1">').append(
                         $('<div class="mediaplayer_buttons pull-right">').append(
@@ -294,7 +301,9 @@ define('io.ox/files/mediaplayer',
                     )
                 )
             );
-            this.win.idle();
+            if (this.app) {
+                this.win.idle();
+            }
             if (this.config.videoSupport) {
                 this.trackdisplay.remove();
                 this.container
@@ -310,7 +319,7 @@ define('io.ox/files/mediaplayer',
 
             this.playlist.empty();
             this.drawItems();
-            if (_.device('!touch')) { this.playlist.sortable({ axis: 'y', distance: 30 }); }
+            if (_.device('!touch')) { this.playlist.sortable({ containment: this.playlist, axis: 'y', distance: 30 }); }
             this.play(this.list[0]);
             _.defer(function () { $('#io-ox-mediaplayer').focus(); });
         },

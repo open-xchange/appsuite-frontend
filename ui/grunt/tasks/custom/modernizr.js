@@ -48,7 +48,7 @@ module.exports = function (grunt) {
             uglify : true,
 
             // Define any tests you want to implicitly include.
-            tests : ['file_api', 'json', 'emoji', 'unicode', 'draganddrop', 'touch', 'indexeddb', 'indexedDB', 'localstorage', 'websqldatabase', 'applicationcache', 'canvas', 'csstransforms3d', 'inputtypes'],
+            tests : ['audio', 'video', 'file_api', 'json', 'emoji', 'unicode', 'draganddrop', 'touch', 'indexeddb', 'indexedDB', 'localstorage', 'websqldatabase', 'applicationcache', 'canvas', 'csstransforms3d', 'inputtypes'],
 
             // By default, this task will crawl your project for references to Modernizr tests.
             // Set to false to disable.
@@ -64,6 +64,14 @@ module.exports = function (grunt) {
 
             // Have custom Modernizr tests? Add paths to their location here.
             customTests : []
+        }
+    });
+
+    grunt.config.extend('watch', {
+        modernizr: {
+            files: 'lib/modernizr.js',
+            tasks: ['default', 'send_livereload', 'testrun'],
+            options: {}
         }
     });
 

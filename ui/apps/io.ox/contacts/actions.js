@@ -705,6 +705,7 @@ define('io.ox/contacts/actions',
         id: 'send',
         index: INDEX += 100,
         prio: 'hi',
+        mobile: 'lo',
         label: gt('Send mail'),
         ref: 'io.ox/contacts/actions/send'
     }));
@@ -713,6 +714,7 @@ define('io.ox/contacts/actions',
         id: 'vcard',
         index: INDEX += 100,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Send as vCard'),
         ref: 'io.ox/contacts/actions/vcard'
     }));
@@ -728,6 +730,7 @@ define('io.ox/contacts/actions',
         id: 'invite',
         index: INDEX += 100,
         prio: 'hi',
+        mobile: 'lo',
         label: gt('Invite to appointment'),
         ref: 'io.ox/contacts/actions/invite'
     }));
@@ -736,6 +739,7 @@ define('io.ox/contacts/actions',
         id: 'edit',
         index: INDEX += 100,
         prio: 'hi',
+        mobile: 'lo',
         label: gt('Edit'),
         ref: 'io.ox/contacts/actions/update'
     }));
@@ -744,6 +748,7 @@ define('io.ox/contacts/actions',
         id: 'delete',
         index: INDEX += 100,
         prio: 'hi',
+        mobile: 'lo',
         icon: 'fa fa-trash-o',
         label: gt('Delete'),
         ref: 'io.ox/contacts/actions/delete'
@@ -752,6 +757,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'add-to-portal',
         index: INDEX += 100,
+        mobile: 'lo',
         label: gt('Add to portal'),
         ref: 'io.ox/contacts/actions/add-to-portal'
     }));
@@ -759,6 +765,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'move',
         index: INDEX += 100,
+        mobile: 'lo',
         label: gt('Move'),
         ref: 'io.ox/contacts/actions/move'
     }));
@@ -766,6 +773,7 @@ define('io.ox/contacts/actions',
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'copy',
         index: INDEX += 100,
+        mobile: 'lo',
         label: gt('Copy'),
         ref: 'io.ox/contacts/actions/copy'
     }));

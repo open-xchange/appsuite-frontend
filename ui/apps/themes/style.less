@@ -807,14 +807,17 @@ div.hopscotch-bubble {
 
     @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
         width: 100%;
-        background-color: #222;
-        &.active { display:block; }
+        &.active {
+            display:block;
+        }
     }
 
     @media (min-width: 481px) {
         width: 350px;
         right: -350px;
-         &.active { right: 0; }
+         &.active {
+            right: 0;
+        }
     }
 
     &.active {
@@ -3804,10 +3807,16 @@ input.flat-input {
     }
 
     .vsplit .rightside-navbar {
-        position: absolute; top: 0; left: 50%; width: 50%; height: 45px;
-        background-color: #eee; border-bottom: 1px solid #ccc;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 41px;
+        background-color: @white;
+        border-bottom: 1px solid #ccc;
         padding: 5px 13px 5px 13px;
         z-index: 2;
+        line-height: 2em;
     }
 
     .vsplit-reverse {

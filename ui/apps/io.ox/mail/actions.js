@@ -201,8 +201,18 @@ define('io.ox/mail/actions',
             return data && isDraftMail(data);
         },
         action: function (baton) {
-            var data = baton.first();
+            var data = baton.first(),
+                check = false;
+            _.each(ox.ui.apps.models, function (app) {
+                if (app.refId === data.id) {
+                    check = true;
+                    app.launch();
+                }
+            });
+            if (check === true) return;
+            
             require(['io.ox/mail/write/main'], function (m) {
+                if (m.reuse('edit', data)) return;
                 m.getApp().launch().done(function () {
                     this.edit(data);
                 });

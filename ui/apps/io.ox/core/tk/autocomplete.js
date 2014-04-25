@@ -459,6 +459,10 @@ define('io.ox/core/tk/autocomplete',
             }
         }
 
+        this.isOpen = function () {
+            return isOpen;
+        };
+
         this.open = open;
 
         return this;

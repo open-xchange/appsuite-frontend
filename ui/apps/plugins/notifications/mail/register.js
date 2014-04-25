@@ -147,7 +147,7 @@ define('plugins/notifications/mail/register',
                     var detailPopup = new dialogs.SidePopup({ arrow: false, side: 'right' })
                         .setTarget(overlay.empty())
                         .on('close', function () {
-                            api.off('delete', cleanUp);
+                            api.off('deleted-mails', cleanUp);
                             if (_.device('smartphone') && overlay.children().length > 0) {
                                 overlay.addClass('active');
                             } else if (_.device('smartphone')) {
@@ -169,7 +169,7 @@ define('plugins/notifications/mail/register',
                                 }
 
                                 // if mail gets deleted we must close the sidepopup or it will show a blank page
-                                api.on('delete', { popup: detailPopup }, cleanUp);
+                                api.on('deleted-mails', { popup: detailPopup }, cleanUp);
                             });
                         });
                 });
@@ -276,7 +276,7 @@ define('plugins/notifications/mail/register',
                 }
             });
 
-            api.on('delete update:set-seen', function (e, param) {
+            api.on('deleted-mails update:set-seen', function (e, param) {//mail has a special delete event
                 if (_.isArray(param)) removeMails(e, param); else removeFolder(e, param);
                 if (notifications.collection.length === 0) api.newMailTitle(false);
             });

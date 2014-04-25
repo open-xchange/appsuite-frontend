@@ -247,7 +247,7 @@ define('io.ox/portal/settings/pane',
                 .append(
                     data.protectedWidget && data.protectedWidget === true ? $() :
                     $('<a>')
-                    .addClass('drag-handle')
+                    .addClass('drag-handle ' + (baton.model.collection.length <= 1 ? 'hidden' : ''))
                     .attr({
                         href: '#',
                         'title': gt('Drag to reorder widget'),
@@ -373,7 +373,7 @@ define('io.ox/portal/settings/pane',
             // make sortable
             list.sortable({
                 axis: 'y',
-                containment: this,
+                containment: list,
                 delay: 150,
                 handle: '.drag-handle',
                 cancel: 'li.protected',
