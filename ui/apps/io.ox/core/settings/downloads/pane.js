@@ -14,15 +14,27 @@
 define('io.ox/core/settings/downloads/pane',
     ['io.ox/core/extensions',
      'io.ox/core/capabilities',
+     'io.ox/core/config',
      'gettext!io.ox/core',
      'settings!io.ox/core',
      'less!io.ox/core/settings/downloads/style'
-    ], function (ext, capabilities, gt, settings) {
+    ], function (ext, capabilities, config, gt, settings) {
 
     'use strict';
 
     // please no download on mobile devices or when disabled via setting
     if (_.device('!desktop') || settings.get('settings/downloadsDisabled')) return;
+
+    //available products (ox6 setting)
+    var list = ((config.get('modules') || {})['com.openexchange.oxupdater'] || {}).products || [],
+        products = {};
+    //build products hash
+    _.each(list, function (product) {
+        var keys = Object.keys(product);
+        _.each(keys, function (key) {
+            products[key] = product[key];
+        });
+    });
 
     /*
      * Default download: Updater
@@ -39,12 +51,37 @@ define('io.ox/core/settings/downloads/pane',
                         $('<p>').append(
                             $('<i class="fa fa-download">'),
                             $.txt(' '),
-                            $('<a>', { href: href, target: '_blank' }).addClass('action').text(gt('Download install file (for Windows)'))
+                            $('<a>', { href: href, target: '_blank' }).addClass('action').text(gt('Download installation file (for Windows)'))
                         ),
                         $('<p>').text(
-                            gt('The updater provides a simple installation wizard. Follow the instructions to install the application. ' +
-                            'The updater will inform you of any updates for the Connector for Microsoft Outlook, Notifier and Drive. ' +
-                            'You can download the updates from within the updater.')
+                            gt('When executing the downloaded file, an installation wizard will be launched. ' +
+                            'Follow the instructions and install the updater. ' +
+                            'Installs latest versions of Windows® client software. The Updater automatically informs about new updates. ' +
+                            'You can download the updates from within the Updater.')
+                        )
+                    ),
+                    $('<section>')
+                        .addClass(products['com.openexchange.outlook.updater.oxtender2'] ? '' : 'hidden')
+                        .append(
+                            $('<h2>').text(gt('Connector for Microsoft Outlook®')),
+                            $('<p>').text(
+                                gt('Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
+                        )
+                    ),
+                    $('<section>')
+                        .addClass(products['com.openexchange.oxnotifier'] ? '' : 'hidden')
+                        .append(
+                            $('<h2>').text(gt('Notifier')),
+                            $('<p>').text(
+                                gt('Informs about the current status of E-Mails and appointments without having to display the user interface or another Windows® client.')
+                        )
+                    ),
+                    $('<section>')
+                        .addClass(products['com.openexchange.updater.drive'] ? '' : 'hidden')
+                        .append(
+                            $('<h2>').text(gt('Drive Client')),
+                            $('<p>').text(
+                                gt('Data synchronization with your local (Windows) machine. Drive Client lets you configure the folders to be synchronized.')
                         )
                     )
                 );
