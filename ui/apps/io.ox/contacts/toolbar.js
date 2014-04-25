@@ -14,15 +14,11 @@
 define('io.ox/contacts/toolbar',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'io.ox/core/extPatterns/actions',
      'io.ox/backbone/mini-views/dropdown',
-     'io.ox/core/tk/upload',
-     'io.ox/core/dropzone',
-     'io.ox/core/notifications',
-     'gettext!io.ox/mail',
+     'gettext!io.ox/contacts',
      'io.ox/contacts/actions',
      'less!io.ox/contacts/style'
-    ], function (ext, links, actions, Dropdown, upload, dropzone, notifications, gt) {
+    ], function (ext, links, Dropdown, gt) {
 
     'use strict';
 
