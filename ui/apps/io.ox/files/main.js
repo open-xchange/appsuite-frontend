@@ -49,15 +49,14 @@ define('io.ox/files/main',
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
             title: 'Drive',
-            toolbar: true,
-            search: true
+            toolbar: true
         }));
 
         win.addClass('io-ox-files-main');
         app.settings = settings;
 
         commons.wirePerspectiveEvents(app);
-        
+
         app.on('folder:change', function (id, data) {
             if (folderAPI.is('trash', data)) {//no new files in trash folders
                 ext.point('io.ox/files/links/toolbar').disable('default');//that's the plus sign

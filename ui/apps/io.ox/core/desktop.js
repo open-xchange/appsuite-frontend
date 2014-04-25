@@ -1466,73 +1466,74 @@ define('io.ox/core/desktop',
             Events.extend(win);
 
             // search?
-            // if (opt.search) {
-            //     // search
-            //     var triggerSearch = function (query) {
-            //             win.trigger('search', query);
-            //         };
+            // deprecatd: enable search via io.ox/find application extension points instead
+            if (opt.search) {
+                // search
+                var triggerSearch = function (query) {
+                        win.trigger('search', query);
+                    };
 
-            //     var searchHandler = {
+                var searchHandler = {
 
-            //         keydown: function (e) {
-            //             if (e.which === 27) {
-            //                 win.search.close();
-            //             } else if (e.which === 13) {
-            //                 searchHandler.change(e);
-            //             }
-            //         },
+                    keydown: function (e) {
+                        if (e.which === 27) {
+                            win.search.close();
+                        } else if (e.which === 13) {
+                            searchHandler.change(e);
+                        }
+                    },
 
-            //         clear: function () {
-            //             win.search.clear();
-            //         },
+                    clear: function () {
+                        win.search.clear();
+                    },
 
-            //         change: function (e) {
-            //             e.stopPropagation();
-            //             win.search.query = win.search.getQuery();
-            //             win.search.options = JSON.stringify(win.search.getOptions());
-            //             var changed = win.search.query !== win.search.previous || win.search.options !== win.search.optionsprev;
-            //             // trigger search?
-            //             if (win.search.query !== '' && changed) {
-            //                 win.search.optionsprev = win.search.options;
-            //                 triggerSearch(win.search.previous = win.search.query);
-            //             }
-            //             else if (win.search.query === '') {
-            //                 win.search.clear();
-            //             }
-            //         }
-            //     };
+                    change: function (e) {
+                        e.stopPropagation();
+                        win.search.query = win.search.getQuery();
+                        win.search.options = JSON.stringify(win.search.getOptions());
+                        var changed = win.search.query !== win.search.previous || win.search.options !== win.search.optionsprev;
+                        // trigger search?
+                        if (win.search.query !== '' && changed) {
+                            win.search.optionsprev = win.search.options;
+                            triggerSearch(win.search.previous = win.search.query);
+                        }
+                        else if (win.search.query === '') {
+                            win.search.clear();
+                        }
+                    }
+                };
 
-            //     $('<form class="form-search form-inline" role="search">')
-            //     .attr('aria-label', gt('Search for items'))
-            //     .append(
-            //         $('<div class="search-query-container input-group">').append(
-            //             // search field
-            //             win.nodes.searchField = $('<input type="text" class="form-control search-query">')
-            //             .attr({ name: 'query',
-            //                 autocomplete: 'off',
-            //                 tabindex: '1',
-            //                 placeholder: gt('Search') + ' ...',
-            //                 'aria-label': gt('Search')
-            //             })
-            //             .on(searchHandler)
-            //             .placeholder(),
-            //             // 'clear' X
-            //             $('<i class="fa fa-times clear-query">').on('click', searchHandler.clear),
-            //             $('<span class="input-group-btn">').append(
-            //                 $('<button type="submit" data-action="search" class="btn btn-default" aria-hidden="true">')
-            //                     .on('click', searchHandler.change)
-            //                     .append($('<i class="fa fa-search">'))
-            //             )
-            //         ),
-            //         //abort button
-            //         $('<a href="#" data-action="remove" tabindex="1">×</a>')
-            //         .addClass('close close-big')
-            //         .on('click', function (e) { e.preventDefault(); win.search.stop(); })
-            //     )
-            //     .on('change', 'input', function () { win.search.previous = ''; })
-            //     .on('submit', false)
-            //     .appendTo(win.nodes.search);
-            // }
+                $('<form class="form-search form-inline" role="search">')
+                .attr('aria-label', gt('Search for items'))
+                .append(
+                    $('<div class="search-query-container input-group">').append(
+                        // search field
+                        win.nodes.searchField = $('<input type="text" class="form-control search-query">')
+                        .attr({ name: 'query',
+                            autocomplete: 'off',
+                            tabindex: '1',
+                            placeholder: gt('Search') + ' ...',
+                            'aria-label': gt('Search')
+                        })
+                        .on(searchHandler)
+                        .placeholder(),
+                        // 'clear' X
+                        $('<i class="fa fa-times clear-query">').on('click', searchHandler.clear),
+                        $('<span class="input-group-btn">').append(
+                            $('<button type="submit" data-action="search" class="btn btn-default" aria-hidden="true">')
+                                .on('click', searchHandler.change)
+                                .append($('<i class="fa fa-search">'))
+                        )
+                    ),
+                    //abort button
+                    $('<a href="#" data-action="remove" tabindex="1">×</a>')
+                    .addClass('close close-big')
+                    .on('click', function (e) { e.preventDefault(); win.search.stop(); })
+                )
+                .on('change', 'input', function () { win.search.previous = ''; })
+                .on('submit', false)
+                .appendTo(win.nodes.search);
+            }
 
             // fix height/position/appearance
             if (opt.chromeless) {
@@ -1548,41 +1549,42 @@ define('io.ox/core/desktop',
                 }));
 
                 // add search
-                // if (opt.search === true) {
+                // deprecatd: enable search via io.ox/find application extension points instead
+                if (opt.search === true) {
 
-                //     new links.Action(opt.name + '/actions/search', {
-                //         action:  function (baton) {
-                //             //hide open sidepopup
-                //             var $sidepopup = $(baton.window.nodes.body).find('.io-ox-sidepopup');
-                //             if ($sidepopup.is(':visible'))
-                //                 $sidepopup.trigger('remove');
-                //             baton.window.search.toggle();
-                //         }
-                //     });
+                    new links.Action(opt.name + '/actions/search', {
+                        action:  function (baton) {
+                            //hide open sidepopup
+                            var $sidepopup = $(baton.window.nodes.body).find('.io-ox-sidepopup');
+                            if ($sidepopup.is(':visible'))
+                                $sidepopup.trigger('remove');
+                            baton.window.search.toggle();
+                        }
+                    });
 
-                //     new links.ActionLink(opt.name + '/links/toolbar/search', {
-                //         label: gt('Toggle search'),
-                //         ref: opt.name + '/actions/search'
-                //     });
+                    new links.ActionLink(opt.name + '/links/toolbar/search', {
+                        label: gt('Toggle search'),
+                        ref: opt.name + '/actions/search'
+                    });
 
-                //     new links.ActionGroup(opt.name + '/links/toolbar', {
-                //         id: 'search',
-                //         index: 300,
-                //         icon: function () {
-                //             return $('<i class="fa fa-search">').attr('aria-label', gt('Search'));
-                //         }
-                //     });
+                    new links.ActionGroup(opt.name + '/links/toolbar', {
+                        id: 'search',
+                        index: 300,
+                        icon: function () {
+                            return $('<i class="fa fa-search">').attr('aria-label', gt('Search'));
+                        }
+                    });
 
-                //     if (opt.searchShortcut) {
-                //         // look for ctrl/cmd + F
-                //         win.nodes.outer.on('keydown', function (e) {
-                //             if (e.which === 70 && e.metaKey) {
-                //                 e.preventDefault();
-                //                 win.search.toggle();
-                //             }
-                //         });
-                //     }
-                // }
+                    if (opt.searchShortcut) {
+                        // look for ctrl/cmd + F
+                        win.nodes.outer.on('keydown', function (e) {
+                            if (e.which === 70 && e.metaKey) {
+                                e.preventDefault();
+                                win.search.toggle();
+                            }
+                        });
+                    }
+                }
 
                 // add fullscreen handler
                 if (opt.fullscreen === true) {
