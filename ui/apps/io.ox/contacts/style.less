@@ -120,8 +120,6 @@
             font-size: 16px;
             line-height: 20px;
             font-weight: 200;
-            float: left;
-            clear: both;
             &.header-company { margin: 14px 0 14px 0; }
             &.header-job {
                 color: #888;
@@ -177,12 +175,20 @@
             border-bottom: 0 none;
         }
 
-        label {
-            color: #aaa;
-            font-weight: 200;
-            display: inline-block;
-            margin: 0 7px 0 0;
-            color: #aaa;
+        dl {
+
+            margin-bottom: 0px;
+
+            dt {
+                width: 150px;
+                text-align: left;
+                color: #aaa;
+                font-weight: 200;
+            }
+
+            dd {
+                margin-left: 160px;
+            }
         }
     }
 
@@ -193,7 +199,7 @@
 
         &:hover { text-decoration: none; }
 
-        caption {
+        p {
             font-size: 12px;
             color: @linkColor;
             margin-top: 10px;
