@@ -62,6 +62,8 @@ define('io.ox/core/session',
                 params: {
                     action: 'autologin',
                     client: that.client(),
+                    rampup: true,
+                    rampUp: true, // remove after backend fix
                     version: that.version()
                 }
             })
@@ -69,7 +71,7 @@ define('io.ox/core/session',
             .then(
                 function (data) {
                     ox.secretCookie = true;
-                    ox.rampup = data.rampUp || ox.rampup || {};
+                    ox.rampup = data.rampUp || data.rampup || ox.rampup || {};
                     return data;
                 },
                 function (data) {
@@ -153,8 +155,7 @@ define('io.ox/core/session',
                                 client: that.client(),
                                 version: that.version(),
                                 timeout: TIMEOUTS.LOGIN,
-                                multiple: JSON.stringify(multiple),
-                                rampUp: false
+                                multiple: JSON.stringify(multiple)
                             }
                         })
                         .done(function (data) {
@@ -190,7 +191,8 @@ define('io.ox/core/session',
                 module: 'login',
                 params: {
                     action: 'rampUp',
-                    rampUp: true
+                    rampup: true,
+                    rampUp: true // remove after backend fix
                 },
                 appendColumns: false,
                 processResponse: false
