@@ -232,10 +232,7 @@ define('io.ox/contacts/api',
                 });
                 api.trigger('list:ready');
                 return data;
-            },
-            get: convertResponseToGregorian,
-            search: convertResponseToGregorian,
-            advancedsearch: convertResponseToGregorian
+            }
         }
     });
 
