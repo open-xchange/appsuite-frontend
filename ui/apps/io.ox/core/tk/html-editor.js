@@ -439,6 +439,8 @@ define.async('io.ox/core/tk/html-editor',
             menubar: false,
             statusbar: false,
 
+            skin: 'ox',
+
             toolbar1: toolbar1,
             toolbar2: toolbar2,
             toolbar3: toolbar3,
@@ -450,7 +452,7 @@ define.async('io.ox/core/tk/html-editor',
 
             browser_spellcheck: true,
 
-            plugins: 'autolink autoresize image link paste textcolor emoji',
+            plugins: 'autolink image link paste textcolor emoji',
 
             language: lookupTinyMCELanguage(),
 
