@@ -133,4 +133,22 @@ define('plugins/portal/xing/activities',
             );
         }
     });
+
+
+    ext.point('io.ox/portal/widget/xing/activityhandler').extend({
+        id: 'singleActivityPost',
+        accepts: function (activity) {
+            return activity.verb === 'post' &&
+                activity.objects.length === 1 &&
+                activity.objects[0].type === 'activity';
+        },
+        handle: function (activity) {
+            var statusActivity = activity.objects[0];
+
+            return $('<div class="xing activityObj">').append(
+                $('<div class="actionDesc">').text(gt('%1$s posted a new activity:', makeName(statusActivity.creator))),
+                $('<div class="actionContent">').text(statusActivity.content)
+            );
+        }
+    });
 });
