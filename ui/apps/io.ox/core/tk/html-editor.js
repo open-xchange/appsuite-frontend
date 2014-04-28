@@ -548,10 +548,12 @@ define.async('io.ox/core/tk/html-editor',
 
         var resizeEditor = _.debounce(function () {
                 if (textarea === null) return;
-                /*var p = textarea.parent(), w = p.width(), h = p.height(),
-                    iframeHeight = h - p.find('td.mceToolbar').outerHeight() - 2;
+                var p = textarea.parent(),
+                    w = p.width(),
+                    h = p.height(),
+                    iframeHeight = h - p.find('.mce-toolbar-grp').outerHeight() - 2;
                 p.find('.mce-tinymce.mce-container.mce-panel').css({ width: w + 'px', height: iframeHeight + 'px' });
-                p.find('iframe').css('height', iframeHeight + 'px');*/
+                p.find('iframe').css('height', iframeHeight + 'px');
                 return;
             }, 100),
 
