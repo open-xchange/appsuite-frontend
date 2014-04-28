@@ -405,7 +405,7 @@ define.async('io.ox/core/tk/html-editor',
             width = $(document).width();
 
         // toolbar default
-        toolbar1 = 'undo redo | styleselect | bold italic | emoji| alignleft aligncenter alignright alignjustify | bullist numlist outdent indent';
+        toolbar1 = 'undo redo | styleselect | bold italic | emoji | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent';
         advanced = 'fontselect fontsizeselect | forecolor backcolor | link image';
         toolbar2 = '';
         toolbar3 = '';
@@ -450,7 +450,7 @@ define.async('io.ox/core/tk/html-editor',
 
             browser_spellcheck: true,
 
-            plugins: 'autolink autoresize image link paste textcolor',  // TODO: 'emoji'
+            plugins: 'autolink autoresize image link paste textcolor emoji',
 
             language: lookupTinyMCELanguage(),
 
@@ -463,14 +463,13 @@ define.async('io.ox/core/tk/html-editor',
             //content_element: textarea.get(0),
 
 
-            /*
-            TODO: Needs rewrite for new tinymce dialogs
-            file_browser_callback : function () {
+            // TODO: Needs rewrite for new tinymce dialogs
+            file_browser_callback : function (field_name, url, type, win) {
+                var self = $('#' + field_name);
                 require(['io.ox/mail/write/inline-images'], function (inlineimages) {
-                    inlineimages.show();
+                    inlineimages.show.apply(self);
                 });
             },
-            */
 
             init_instance_callback: function (editor) {
 

@@ -83,11 +83,9 @@ define('io.ox/mail/write/inline-images',
 
     return {
         show: function () {
-
             var dialog = new dialogs.ModalDialog({async: true}),
-                iframe = $(document).find('iframe'),
-                tinymce_input_src = $(iframe[1].contentDocument).find('input#src'),
                 baton =  new ext.Baton({$: {}}),
+                self = this,
                 form;
 
             dialog.build(function () {
@@ -126,7 +124,7 @@ define('io.ox/mail/write/inline-images',
                         file: file[0].files ? file[0].files[0] : [],
                         form: form
                     }).done(function (data) {
-                        tinymce_input_src
+                        self
                             .val(api.getInsertedImageUrl(data))
                             .trigger('change');
                         popup.close();
