@@ -67,8 +67,9 @@ define('plugins/portal/xing/activities',
         }
     });
 
+
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
-        id: 'singleStatusPost',
+        id: 'singleBookmarkPost',
         accepts: function (activity) {
             return activity.verb === 'post' &&
                 activity.objects.length === 1 &&
@@ -82,6 +83,7 @@ define('plugins/portal/xing/activities',
             );
         }
     });
+
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'singleStatusPost',
@@ -99,6 +101,7 @@ define('plugins/portal/xing/activities',
             );
         }
     });
+
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'friend',
