@@ -8,5 +8,33 @@
 .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { border-width:0 !important; }
 .mce-panel.mce-edit-area { border:1px solid #ccc !important; }
 
-/* Dialogues overrides */
+/* Dialogue overrides */
 .mce-close { display:none; }
+.mce-window-head .mce-title {
+    font-size: 18px;
+    font-weight: 500;
+}
+.mce-floatpanel.mce-window {
+    -webkit-box-shadow: 0 5px 25px -5px #000000;
+    box-shadow: 0 5px 25px -5px #000000;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -ms-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px
+}
+.mce-window .mce-btn { border-color: #acacac; }
+.mce-window .mce-btn:not(.mce-open) {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+}
+.mce-window .mce-btn.mce-primary {
+    border-color: #428bca;
+}
+.mce-colorbutton:hover .mce-open {
+    border-left-color: transparent;
+    border-right-color: transparent;
+}
+.mce-window-head,.mce-foot { border-color: #e5e5e5; }
