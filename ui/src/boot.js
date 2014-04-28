@@ -624,7 +624,11 @@ $(window).load(function () {
                 ox.session = hash.session;
 
                 // set store cookie?
-                (hash.store === 'true' ? session.store() : $.when()).always(function () {
+                $.when(
+                    session.rampup(),
+                    hash.store === 'true' ? session.store() : $.when()
+                )
+                .always(function () {
 
                     var ref = hash.ref;
                     ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;

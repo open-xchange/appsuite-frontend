@@ -154,7 +154,7 @@ define('io.ox/core/session',
                                 version: that.version(),
                                 timeout: TIMEOUTS.LOGIN,
                                 multiple: JSON.stringify(multiple),
-                                rampup: false
+                                rampUp: false
                             }
                         })
                         .done(function (data) {
@@ -188,11 +188,15 @@ define('io.ox/core/session',
         rampup: function () {
             return http.GET({
                 module: 'login',
-                appendColumns: false,
                 params: {
-                    action: 'rampup',
-                    client: that.client()
-                }
+                    action: 'rampUp',
+                    rampUp: true
+                },
+                appendColumns: false,
+                processResponse: false
+            })
+            .then(function (data) {
+                return (ox.rampup = data.rampUp || data.rampup || ox.rampup || {});
             });
         },
 
