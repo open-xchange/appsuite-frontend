@@ -50,7 +50,7 @@ define('io.ox/calendar/main',
 
             var gridOptions = {
                 settings: settings,
-                showToggle: false
+                showToggle: _.device('small')
             };
 
             // show "load more" link

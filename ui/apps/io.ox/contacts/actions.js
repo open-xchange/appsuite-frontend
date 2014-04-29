@@ -647,10 +647,33 @@ define('io.ox/contacts/actions',
             );
         }
     });
+
+    // invite contact(s)
+    ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
+        id: 'invite',
+        index: 20,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-calendar-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/contacts/actions/invite', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
     // delete contact(s)
     ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
         id: 'delete',
-        index: 20,
+        index: 30,
         draw: function (data) {
             var baton = new ext.Baton({data: data.data});
             $(this).append($('<div class="toolbar-button">')
@@ -661,6 +684,28 @@ define('io.ox/contacts/actions',
                                 e.preventDefault();
                                 e.stopPropagation();
                                 actions.invoke('io.ox/contacts/actions/delete', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // delete contact(s)
+    ext.point('io.ox/contacts/mobileMultiSelect/toolbar').extend({
+        id: 'vcard',
+        index: 30,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-share-square-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/contacts/actions/vcard', null, baton);
                                 e.data.grid.selection.clear();
                             })
                     )
