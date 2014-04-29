@@ -1809,7 +1809,7 @@ define('io.ox/mail/api',
         var last = _(thread).last();
 
         // store data of most recent message as head
-        obj.head = _.extend({}, obj);
+        obj.head = _.extend({ threadSize: thread.length }, obj);
 
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID
