@@ -405,16 +405,12 @@ define.async('io.ox/core/tk/html-editor',
             width = $(document).width();
 
         // toolbar default
-        toolbar1 = 'undo redo | styleselect | bold italic | emoji | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent';
-        advanced = 'fontselect fontsizeselect | forecolor backcolor | link image';
+        toolbar1 = 'undo redo | bold italic | emoji | bullist numlist outdent indent';
+        advanced = 'styleselect fontselect fontsizeselect | forecolor backcolor | link image';
         toolbar2 = '';
         toolbar3 = '';
 
-        if (width > 1110) { // yep, need a bit more than 1024, incl. emoji
-            toolbar1 += ',|,' + advanced;
-        } else {
-            toolbar2 = advanced;
-        }
+        toolbar1 += ' | ' + advanced;
 
         // consider custom configurations
         toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', toolbar1);
@@ -423,9 +419,9 @@ define.async('io.ox/core/tk/html-editor',
 
         // remove unsupported stuff
         if (!capabilities.has('emoji')) {
-            toolbar1 = toolbar1.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
-            toolbar2 = toolbar2.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
-            toolbar3 = toolbar3.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
+            toolbar1 = toolbar1.replace(/( \| )?emoji( \| )?/g, ' | ');
+            toolbar2 = toolbar2.replace(/( \| )?emoji( \| )?/g, ' | ');
+            toolbar3 = toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
         }
 
         textarea = $(textarea);
@@ -547,15 +543,16 @@ define.async('io.ox/core/tk/html-editor',
         }
 
         var resizeEditor = _.debounce(function () {
-                if (textarea === null) return;
+            if (textarea === null) return;
                 var p = textarea.parent(),
-                    w = p.width(),
                     h = p.height(),
-                    iframeHeight = h - p.find('.mce-toolbar-grp').outerHeight() - 2;
-                p.find('.mce-tinymce.mce-container.mce-panel').css({ width: w + 'px', height: iframeHeight + 'px' });
-                p.find('iframe').css('height', iframeHeight + 'px');
+                    toolbar = p.find('.mce-toolbar-grp').outerHeight(),
+                    iframeHeight = h - toolbar - 2;
+                p.find('.mce-tinymce.mce-container.mce-panel').css({ height: iframeHeight });
+                p.find('iframe').css('height', iframeHeight);
+
                 return;
-            }, 100),
+            }, 50),
 
             trimIn = function (str) {
                 return trimEnd(str);
@@ -788,11 +785,11 @@ define.async('io.ox/core/tk/html-editor',
             textarea.parents('.window-content').find('.mce-tinymce').show();
             textarea.hide();
             resizeEditor();
-            $(window).on('resize', resizeEditor);
+            $(window).on('resize.tinymce', resizeEditor);
         };
 
         this.handleHide = function () {
-            $(window).off('resize', resizeEditor);
+            $(window).off('resize.tinymce', resizeEditor);
         };
 
         this.getContainer = function () {
