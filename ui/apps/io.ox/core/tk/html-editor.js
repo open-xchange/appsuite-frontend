@@ -505,14 +505,6 @@ define.async('io.ox/core/tk/html-editor',
                     });
                 }
             },
-
-            // better paste
-            paste_auto_cleanup_on_paste: true,
-            paste_remove_styles: true,
-            paste_remove_styles_if_webkit: true,
-            paste_strip_class_attributes: 'mso', // 'all' kills emoji support!
-            paste_block_drop: false,
-
             // post processing (string-based)
             paste_preprocess: paste_preprocess,
             // post processing (DOM-based)
