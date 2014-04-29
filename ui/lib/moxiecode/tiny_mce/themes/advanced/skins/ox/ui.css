@@ -212,3 +212,33 @@
 .oxSkin span.mce_pagebreak {background-position:0 -40px}
 .oxSkin span.mce_restoredraft {background-position:-20px -40px}
 .oxSkin span.mce_spellchecker {background-position:-540px -20px}
+
+/* custom */
+
+.mceWrapper .mceTop,
+.mceWrapper .mceRight,
+.mceWrapper .mceBottom,
+.mceWrapper .mceLeft,
+.mceWrapper .mceClose { display: none; }
+
+.clearlooks2 div.mceMiddle { clip: rect(auto auto auto auto); }
+.clearlooks2 div.mceMiddle span { top: 10px; left: 0; }
+
+.clearlooks2[role="dialog"] {
+    padding: 10px 7px;
+    background-color: white;
+    -ms-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0px 5px 25px -5px #000;
+    -moz-box-shadow: 0px 5px 25px -5px #000000;
+    -ms-box-shadow: 0px 5px 25px -5px #000000;
+    box-shadow: 0px 5px 25px -5px #000;
+    overflow: hidden !important;
+}
+
+div.clearlooks2_modalBlocker {
+    background-color: black;
+    opacity: 0.30;
+}

@@ -115,3 +115,30 @@ h3 {font-size:14px;}
 #colorpicker #namedcolors a {display:block; float:left; width:10px; height:10px; margin:1px 1px 0 0; overflow:hidden;}
 #colorpicker #colornamecontainer {margin-top:5px;}
 #colorpicker #picker_panel fieldset {margin:auto;width:325px;}
+
+/* theme fixes */
+
+html, body { background-color: white; }
+
+#insert, #cancel {
+    font-size: 12px;
+    font-weight: normal;
+    background-image: none;
+    -ms-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#insert {
+    background-color: #08C;
+    border: 1px solid #069;
+    color: white;
+    float: right;
+}
+
+#cancel {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    float: left;
+}
