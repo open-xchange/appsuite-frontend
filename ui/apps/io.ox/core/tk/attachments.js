@@ -538,7 +538,7 @@ define('io.ox/core/tk/attachments',
 
     new links.Action('io.ox/core/tk/attachment/actions/open-attachment', {
         id: 'open',
-        requires: 'some',
+        requires: 'one',
         multiple: function (list) {
             _(list).each(function (data) {
                 var url = attachmentAPI.getUrl(data, 'open');
