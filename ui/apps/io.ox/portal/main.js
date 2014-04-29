@@ -15,6 +15,7 @@
 define('io.ox/portal/main',
     ['io.ox/core/extensions',
      'io.ox/core/api/user',
+     'io.ox/contacts/api',
      'io.ox/core/date',
      'io.ox/core/tk/dialogs',
      'io.ox/portal/widgets',
@@ -23,7 +24,7 @@ define('io.ox/portal/main',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.less'
-    ], function (ext, userAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
+    ], function (ext, userAPI, contactAPI, date, dialogs, widgets, util, settingsPane, gt, settings) {
 
     'use strict';
 
@@ -462,6 +463,10 @@ define('io.ox/portal/main',
 
         app.updateTitle();
         _.tick(1, 'hour', app.updateTitle);
+        //change name if username changes
+        userAPI.get(ox.user_id).done(function (userData) {
+            contactAPI.on('update:' + _.ecid({folder_id: userData.folder_id, id: userData.contact_id}), app.updateTitle);
+        });
 
         win.show(function () {
             // draw scaffolds now for responsiveness
