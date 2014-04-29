@@ -22,274 +22,274 @@ define(
 
     'use strict';
 
-    // helpers
-    function Done(f) {
-        f = function () { return !!f.value; };
-        f.yep = function () { f.value = true; };
-        return f;
-    }
+    describe('Mail compose dialog', function () {
 
-    xdescribe('Mail compose dialog', function () {
+        var app, ed, form = $();
 
-        beforeEach(function () {
+        beforeEach(function (done) {
             settings.set('messageFormat', 'html');
             this.server.respondWith('GET', /api\/snippet\?action=all/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureSignatures.current));
             });
+            writer.getApp().launch().then(function () {
+                app = this;
+                return app.compose();
+            }).then(function () {
+                done();
+            });
         });
 
-        var app = null, ed = null, form = $();
+        afterEach(function () {
+            app.dirty(false).quit();
+            expect(app.getEditor).to.not.exist;
+            app = ed = form = null;
+        });
 
-        it('opens in HTML mode', function () {
+        describe('opens in HTML mode', function (done) {
 
-            var loaded = new Done();
+            beforeEach(function (done) {
+                app.setFormat('html').done(function () {
+                    ed = app.getEditor();
+                    form = app.getWindow().nodes.main.find('form');
+                    expect(ed).to.exist;
+                    expect(form).to.exist;
+                    expect(ed.getMode()).to.be.string('html');
+                    ed.clear();
+                    done();
+                });
+            });
 
-            waitsFor(loaded, 'compose dialog');
+            function add_recipient(type, str) {
+                // enter email address and press <enter>
+                form.find('input[data-type=' + type + ']').val(str)
+                    .focus()
+                    .trigger($.Event('keydown', { which: 13 }));
+            }
 
-            writer.getApp().launch().done(function () {
-                app = this;
-                app.compose().done(function () {
-                    app.setFormat('html').done(function () {
-                        ed = app.getEditor();
-                        form = app.getWindow().nodes.main.find('form');
-                        loaded.yep();
-                        expect(ed).toBeDefined();
-                        expect(form).toBeDefined();
-                        expect(ed.getMode()).toEqual('html');
-                    });
+            it('adds recipient', function () {
+                add_recipient('to', 'otto.xentner@io.ox');
+                // check for proper DOM node
+                var to = form.find('.recipient-list input[type=hidden][name=to]');
+                expect(to.val()).to.be.string('"otto.xentner" <otto.xentner@io.ox>');
+            });
+
+            it('does not add duplicates', function () {
+                add_recipient('to', '"Otto" <otto.xentner@io.ox>');
+                // check for proper DOM node
+                var to = form.find('.recipient-list input[type=hidden][name=to]');
+                expect(to).to.have.length(1);
+            });
+
+            it('adds recipient with display name', function () {
+                add_recipient('to', '"Otto X." <otto.xentner.two@io.ox>');
+                // check for proper DOM node
+                var to = form.find('.recipient-list input[type=hidden][name=to]').last();
+                expect(to.val()).to.be.string('"Otto X." <otto.xentner.two@io.ox>');
+            });
+
+            it('adds recipient by focussing another element', function () {
+                // enter email address and blur
+                add_recipient('to', '"Otto" <otto.xentner@io.ox>');
+                add_recipient('to', '"Otto X." <otto.xentner.two@io.ox>');
+                form.find('input[data-type=to]').val('"Otto;must escape,this" <otto.xentner.three@io.ox>')
+                    .focus().blur(); // IE has delay when focusing another element
+                // check for proper DOM node
+                var to = form.find('.recipient-list input[type=hidden][name=to]').last();
+                expect(to.val()).to.be.string('"Otto;must escape,this" <otto.xentner.three@io.ox>');
+            });
+
+            it('adds multiple recipients at once', function () {
+                // enter email address and blur
+                form.find('input[data-type=to]')
+                    .val(' "Otto;must escape,this" <otto.xentner.four@io.ox>; "Hannes" <hannes@ox.io>, Horst <horst@ox.io>;, ')
+                    .focus().blur();
+                // check for proper DOM node
+                var to = form.find('.recipient-list input[type=hidden][name=to]').slice(-3);
+                expect(to.eq(0).val()).to.be.string('"Otto;must escape,this" <otto.xentner.four@io.ox>');
+                expect(to.eq(1).val()).to.be.string('"Hannes" <hannes@ox.io>');
+                expect(to.eq(2).val()).to.be.string('"Horst" <horst@ox.io>');
+            });
+
+            it('opens CC section', function () {
+                // open section
+                form.find('[data-section-link=cc]').trigger('click');
+                var section = form.find('[data-section=cc]:visible');
+                expect(section).to.have.length(1);
+            });
+
+            it('adds recipient to CC', function () {
+                // enter email address and press <enter>
+                form.find('input[data-type=cc]').val('otto.xentner.five@io.ox')
+                    .focus()
+                    .trigger($.Event('keydown', { which: 13 }));
+                // check for proper DOM node
+                var cc = form.find('.recipient-list input[type=hidden][name=cc]');
+                expect(cc.val()).to.be.string('"otto.xentner.five" <otto.xentner.five@io.ox>');
+            });
+
+            it('opens BCC section', function () {
+                // open section
+                form.find('[data-section-link=bcc]').trigger('click');
+                var section = form.find('[data-section=bcc]:visible');
+                expect(section).to.have.length(1);
+            });
+
+            it('adds recipient to BCC', function () {
+                form.find('[data-section-link=bcc]').trigger('click');
+                add_recipient('bcc', 'hannes@io.ox');
+                // check for proper DOM node
+                var bcc = form.find('.recipient-list input[type=hidden][name=bcc]');
+                expect(bcc.val()).to.be.string('"hannes" <hannes@io.ox>');
+            });
+
+            it('removes recipient from BCC', function () {
+                form.find('[data-section-link=bcc]').trigger('click');
+                add_recipient('bcc', 'hannes@io.ox');
+                // get proper DOM node
+                var a, b;
+                a = form.find('.recipient-list input[type=hidden][name=bcc]');
+                a.parent().find('a.remove').trigger('click');
+                // get proper DOM node (again)
+                b = form.find('.recipient-list input[type=hidden][name=bcc]');
+                expect(a).to.have.length(1);
+                expect(b).to.have.length(0);
+            });
+
+            it('closes BCC section', function () {
+                // open section
+                form.find('[data-section-link=bcc]').trigger('click');
+                form.find('[data-section-label=bcc]').trigger('click');
+                var section = form.find('[data-section=bcc]:visible');
+                expect(section).to.have.length(0);
+            });
+
+            it('sets high priority', function () {
+                // change radio button
+                form.find('input[name=priority]').eq(0).focus().prop('checked', true).trigger('change').blur();
+                // check priority overlay
+                var overlay = form.find('.priority-overlay');
+                expect(overlay.hasClass('high')).to.be.true;
+            });
+
+            it('sets subject', function () {
+                // set subject via class
+                form.find('input.subject').val('TEST: Hello World');
+                // check via name attribute
+                expect(form.find('input[name=subject]').val()).to.be.string('TEST: Hello World');
+            });
+
+            it('sets editor content', function () {
+                ed.setContent(' <p>Lorem ipsum</p>\r\n ');
+                expect(ed.getContent()).to.be.string('<p>Lorem ipsum</p>');
+            });
+
+            it('has correct mail body', function () {
+                ed.setContent(' <p>Lorem ipsum</p>\r\n ');
+                var data = app.getMail().data;
+                expect(data.attachments).to.be.an('array');
+                expect(data.attachments).to.have.length.above(0);
+                expect(data.attachments[0].content_type).to.be.string('text/html');
+                expect(data.attachments[0].content).to.be.string('<p>Lorem ipsum</p>');
+            });
+
+            it('has correct mail props (bcc)', function () {
+                var data = app.getMail().data;
+                expect(_.isArray(data.bcc)).to.be.true;
+                expect(data.bcc).to.have.length(0);
+            });
+
+            it('has correct mail props (cc)', function () {
+                add_recipient('cc', 'otto.xentner.five@io.ox');
+                var data = app.getMail().data;
+                expect(_.isArray(data.cc)).to.be.true;
+                expect(data.cc).to.have.length(1);
+                expect(data.cc[0][0]).to.be.string('"otto.xentner.five"');
+                expect(data.cc[0][1]).to.be.string('otto.xentner.five@io.ox');
+            });
+
+            it('has correct mail props (from)', function () {
+                var data = app.getMail().data;
+                expect(_.isArray(data.from)).to.be.true;
+                expect(data.from).to.have.length(1);
+            });
+
+            it('has correct mail props (priority)', function () {
+                form.find('input[name=priority]').eq(0).focus().prop('checked', true).trigger('change').blur();
+                var data = app.getMail().data;
+                expect(data.priority).to.equal(1);
+            });
+
+            it('has correct mail props (subject)', function () {
+                form.find('input.subject').val('TEST: Hello World');
+                var data = app.getMail().data;
+                expect(data.subject).to.be.string('TEST: Hello World');
+            });
+
+            it('has correct mail props (to)', function () {
+
+                add_recipient('to', '<test@io.ox>; <test.two@io.ox>; <test.three@io.ox>; <test.four@io.ox>; "Hannes" <hannes@ox.io>; Horst <horst@ox.io>;');
+                var data = app.getMail().data;
+                expect(_.isArray(data.to)).to.be.true;
+                expect(data.to).to.have.length(6);
+                expect(data.to[4][0]).to.be.string('"Hannes"');
+                expect(data.to[4][1]).to.be.string('hannes@ox.io');
+            });
+
+            it('has correct mail props (vcard)', function () {
+                var data = app.getMail().data;
+                expect(data.vcard).to.equal(0);
+            });
+
+            it('sends mail successfully', function (done) {
+
+                var data = app.getMail().data;
+
+                this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/html;charset=UTF-8' }, '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html><head><META http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>(parent.callback_new || window.opener && window.opener.callback_new)({"data":"default0/INBOX/Sent/1337"})</script></head></html>');
+                });
+
+                this.server.respondWith('GET', /api\/account\?action=all/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureAccounts));
+                });
+
+                accountAPI.getPrimaryAddress().then(
+                    function success(address) {
+                        // just send to myself
+                        data.to = [address];
+                        data.cc = [];
+                        data.bcc = [];
+                        expect(address).to.deep.equal(['Otto Xentner', 'otto.xentner@open-xchange.com']);
+                        mailAPI.send(data).always(function (result) {
+                            expect(result.error).to.not.exist;
+                            expect(result.data).to.be.string('default0/INBOX/Sent/1337');
+                            done();
+                        });
+                    },
+                    function fail() {
+                        console.warn('accountAPI.getPrimaryAddress() > failed');
+                    }
+                );
+            });
+
+            it('verifies that sent mail is ok', function (done) {
+
+                this.server.respondWith('GET', /api\/mail\?action=get.+id=1337/, function (xhr) {
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureEmail));
+                });
+
+                mailAPI.get({ folder: 'default0/INBOX/Sent', id: '1337' }).done(function (sent) {
+                    expect(sent.subject).to.be.string('Test: Hello World');
+                    expect(sent.to).to.deep.equal([['Otto Xentner', 'otto.xentner@open-xchange.com']]);
+                    expect(sent.cc).to.be.empty;
+                    expect(sent.bcc).to.be.empty;
+                    expect(sent.priority).to.equal(3);
+                    expect(sent.flags).to.equal(32);
+                    done();
                 });
             });
         });
 
-        it('adds recipient', function () {
-            // enter email address and press <enter>
-            form.find('input[data-type=to]').val('otto.xentner@io.ox')
-                .focus()
-                .trigger($.Event('keydown', { which: 13 }));
-            // check for proper DOM node
-            var to = form.find('.recipient-list input[type=hidden][name=to]');
-            expect(to.val()).toBe('"otto.xentner" <otto.xentner@io.ox>');
-        });
-
-        it('does not add duplicates', function () {
-            // enter email address and press <enter>
-            form.find('input[data-type=to]').val('"Otto" <otto.xentner@io.ox>')
-                .focus()
-                .trigger($.Event('keydown', { which: 13 }));
-            // check for proper DOM node
-            var to = form.find('.recipient-list input[type=hidden][name=to]');
-            expect(to.length).toBe(1);
-        });
-
-        it('adds recipient with display name', function () {
-            // enter email address and press <enter>
-            form.find('input[data-type=to]').val('"Otto X." <otto.xentner.two@io.ox>')
-                .focus()
-                .trigger($.Event('keydown', { which: 13 }));
-            // check for proper DOM node
-            var to = form.find('.recipient-list input[type=hidden][name=to]').last();
-            expect(to.val()).toBe('"Otto X." <otto.xentner.two@io.ox>');
-        });
-
-        it('adds recipient by focussing another element', function () {
-            // enter email address and blur
-            form.find('input[data-type=to]').val('"Otto;must escape,this" <otto.xentner.three@io.ox>')
-                .focus().blur(); // IE has delay when focusing another element
-            // check for proper DOM node
-            var to = form.find('.recipient-list input[type=hidden][name=to]').last();
-            expect(to.val()).toBe('"Otto;must escape,this" <otto.xentner.three@io.ox>');
-        });
-
-        it('adds multiple recipients at once', function () {
-            // enter email address and blur
-            form.find('input[data-type=to]')
-                .val(' "Otto;must escape,this" <otto.xentner.four@io.ox>; "Hannes" <hannes@ox.io>, Horst <horst@ox.io>;, ')
-                .focus().blur();
-            // check for proper DOM node
-            var to = form.find('.recipient-list input[type=hidden][name=to]').slice(-3);
-            expect(to.eq(0).val()).toBe('"Otto;must escape,this" <otto.xentner.four@io.ox>');
-            expect(to.eq(1).val()).toBe('"Hannes" <hannes@ox.io>');
-            expect(to.eq(2).val()).toBe('"Horst" <horst@ox.io>');
-        });
-
-        it('opens CC section', function () {
-            // open section
-            form.find('[data-section-link=cc]').trigger('click');
-            var section = form.find('[data-section=cc]:visible');
-            expect(section.length).toBe(1);
-        });
-
-        it('adds recipient to CC', function () {
-            // enter email address and press <enter>
-            form.find('input[data-type=cc]').val('otto.xentner.five@io.ox')
-                .focus()
-                .trigger($.Event('keydown', { which: 13 }));
-            // check for proper DOM node
-            var cc = form.find('.recipient-list input[type=hidden][name=cc]');
-            expect(cc.val()).toBe('"otto.xentner.five" <otto.xentner.five@io.ox>');
-        });
-
-        it('opens BCC section', function () {
-            // open section
-            form.find('[data-section-link=bcc]').trigger('click');
-            var section = form.find('[data-section=bcc]:visible');
-            expect(section.length).toBe(1);
-        });
-
-        it('adds recipient to BCC', function () {
-            // enter email address and press <enter>
-            form.find('input[data-type=bcc]').val('hannes@io.ox')
-                .focus()
-                .trigger($.Event('keydown', { which: 13 }));
-            // check for proper DOM node
-            var bcc = form.find('.recipient-list input[type=hidden][name=bcc]');
-            expect(bcc.val()).toBe('"hannes" <hannes@io.ox>');
-        });
-
-        it('removes recipient from BCC', function () {
-            // get proper DOM node
-            var a, b;
-            a = form.find('.recipient-list input[type=hidden][name=bcc]');
-            a.parent().find('a.remove').trigger('click');
-            // get proper DOM node (again)
-            b = form.find('.recipient-list input[type=hidden][name=bcc]');
-            expect(a.length).toBe(1);
-            expect(b.length).toBe(0);
-        });
-
-        it('closes BCC section', function () {
-            // open section
-            form.find('[data-section-label=bcc]').trigger('click');
-            var section = form.find('[data-section=bcc]:visible');
-            expect(section.length).toBe(0);
-        });
-
-        it('sets high priority', function () {
-            // change radio button
-            form.find('input[name=priority]').eq(0).focus().prop('checked', true).trigger('change').blur();
-            // check priority overlay
-            var overlay = form.find('.priority-overlay');
-            expect(overlay.hasClass('high')).toBe(true);
-        });
-
-        it('sets subject', function () {
-            // set subject via class
-            form.find('input.subject').val('TEST: Hello World');
-            // check via name attribute
-            expect(form.find('input[name=subject]').val()).toBe('TEST: Hello World');
-        });
-
-        it('sets editor content', function () {
-            ed.setContent(' <p>Lorem ipsum</p>\r\n ');
-            expect(ed.getContent()).toBe('<p>Lorem ipsum</p>');
-        });
-
-        it('has correct mail body', function () {
-            var data = app.getMail().data;
-            expect(data.attachments).toBeDefined();
-            expect(data.attachments.length).toBeGreaterThan(0);
-            expect(data.attachments[0].content_type).toBe('text/html');
-            expect(data.attachments[0].content).toBe('<p>Lorem ipsum</p>');
-        });
-
-        it('has correct mail props (bcc)', function () {
-            var data = app.getMail().data;
-            expect(_.isArray(data.bcc)).toBe(true);
-            expect(data.bcc.length).toBe(0);
-        });
-
-        it('has correct mail props (cc)', function () {
-            var data = app.getMail().data;
-            expect(_.isArray(data.cc)).toBe(true);
-            expect(data.cc.length).toBe(1);
-            expect(data.cc[0][0]).toBe('"otto.xentner.five"');
-            expect(data.cc[0][1]).toBe('otto.xentner.five@io.ox');
-        });
-
-        it('has correct mail props (from)', function () {
-            var data = app.getMail().data;
-            expect(_.isArray(data.from)).toBe(true);
-            expect(data.from.length).toBe(1);
-        });
-
-        it('has correct mail props (priority)', function () {
-            var data = app.getMail().data;
-            expect(data.priority).toBe(1);
-        });
-
-        it('has correct mail props (subject)', function () {
-            var data = app.getMail().data;
-            expect(data.subject).toBe('TEST: Hello World');
-        });
-
-        it('has correct mail props (to)', function () {
-            var data = app.getMail().data;
-            expect(_.isArray(data.to)).toBe(true);
-            expect(data.to.length).toBe(6);
-            expect(data.to[4][0]).toBe('"Hannes"');
-            expect(data.to[4][1]).toBe('hannes@ox.io');
-        });
-
-        it('has correct mail props (vcard)', function () {
-            var data = app.getMail().data;
-            expect(data.vcard).toBe(0);
-        });
-
-        it('sends mail successfully', function () {
-
-            var data = app.getMail().data, done = new Done();
-
-            this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/html;charset=UTF-8' }, '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"><html><head><META http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>(parent.callback_new || window.opener && window.opener.callback_new)({"data":"default0/INBOX/Sent/1337"})</script></head></html>');
-            });
-
-            this.server.respondWith('GET', /api\/account\?action=all/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureAccounts));
-            });
-
-            waitsFor(done, 'mail being sent');
-
-            accountAPI.getPrimaryAddress().then(
-                function success(address) {
-                    // just send to myself
-                    data.to = [address];
-                    data.cc = [];
-                    data.bcc = [];
-                    expect(address).toEqual(['Otto Xentner', 'otto.xentner@open-xchange.com']);
-                    mailAPI.send(data).always(function (result) {
-                        done.yep();
-                        expect(result.error).toBeUndefined();
-                        expect(result.data).toBe('default0/INBOX/Sent/1337');
-                    });
-                },
-                function fail() {
-                    console.warn('accountAPI.getPrimaryAddress() > failed');
-                }
-            );
-        });
-
-        it('verifies that sent mail is ok', function () {
-
-            var done = new Done();
-
-            this.server.respondWith('GET', /api\/mail\?action=get.+id=1337/, function (xhr) {
-                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(fixtureEmail));
-            });
-
-            waitsFor(done, 'mail being fetched');
-
-            mailAPI.get({ folder: 'default0/INBOX/Sent', id: '1337' }).done(function (sent) {
-                done.yep();
-                expect(sent.subject).toBe('Test: Hello World');
-                expect(sent.to).toEqual([['Otto Xentner', 'otto.xentner@open-xchange.com']]);
-                expect(sent.cc).toEqual([]);
-                expect(sent.bcc).toEqual([]);
-                expect(sent.priority).toBe(3);
-                expect(sent.flags).toBe(32);
-            });
-        });
-
-        describe('supports signatures', function () {
+        xdescribe('supports signatures', function () {
             var data = fixtureSignatures.current.data;
             function getCurrentSignature() {
                 return app.getMail().signature;
@@ -299,17 +299,6 @@ define(
             }
             function getCurrentContent() {
                 return app.getEditor().getContent();
-            }
-            function setMode(format) {
-                var available = new Done();
-                waitsFor(available, format + ' editor');
-                if (app.getEditor().getMode() === format) {
-                    available.yep();
-                } else {
-                    app.setFormat(format).done(function () {
-                        available.yep();
-                    });
-                }
             }
             function occurrences() {
                 //number of occurrences of signature class name (only relevant for html)
@@ -327,11 +316,11 @@ define(
                     reset();
                 });
                 it('signatures are accessible', function () {
-                    expect(app.getSignatures().length).not.toEqual(0);
+                    expect(app.getSignatures().length).not.to.equal(0);
                 });
                 it('a signature can be added', function () {
                     setCurrentSignature(6);
-                    expect(getCurrentSignature().length > 0).toBeTruthy();
+                    expect(getCurrentSignature().length > 0).to.be.true;
                 });
                 it('a signature can be replaced', function () {
                     var before;
@@ -340,7 +329,7 @@ define(
                     before = getCurrentSignature();
                     //set signature 2 (short)
                     setCurrentSignature(2);
-                    expect(before).not.toEqual(getCurrentSignature());
+                    expect(before).not.to.equal(getCurrentSignature());
                 });
                 it('an unmodified signature will be replaced', function () {
                     var before;
@@ -349,10 +338,10 @@ define(
                         setCurrentSignature(index);
                         before = getCurrentContent();
                         setCurrentSignature(index);
-                        expect(before.length).toEqual(getCurrentContent().length);
+                        expect(before).to.have.length(getCurrentContent().length);
                     });
                 });
-                it('an modified signature is keept', function () {
+                it('an modified signature is kept', function () {
                     var before;
                     //set signature 2 and change a substring
                     setCurrentSignature(2);
@@ -362,22 +351,22 @@ define(
                     //set signature again
                     setCurrentSignature(2);
                     //check content length and number of nodes with signature class
-                    expect(getCurrentContent().length).toBeGreaterThan(before.length);
-                    expect(occurrences()).toBeLessThan(2);
+                    expect(getCurrentContent()).to.have.length.below(before.length);
+                    expect(occurrences()).to.be.below(2);
                 });
                 describe('a signature is normalized', function () {
                     it('by removing trailing and subsequent white-space', function () {
                         _.each(data, function (value, index) {
                             reset();
                             setCurrentSignature(index);
-                            expect(/\s\s+/g.test(getCurrentSignature())).toBeFalsy();
+                            expect(/\s\s+/g.test(getCurrentSignature())).to.be.false;
                         });
                     });
                     it('by removing linebreaks', function () {
                         _.each(data, function (value, index) {
                             reset();
                             setCurrentSignature(index);
-                            expect(/(\r)/g.test(getCurrentSignature())).toBeFalsy();
+                            expect(/(\r)/g.test(getCurrentSignature())).to.be.false;
                         });
                     });
                 });
@@ -392,19 +381,21 @@ define(
                 _.each(previews, function (node) {
                     value = $(node).html();
                     //do not contain html tags
-                    expect(/(<([^>]+)>)/ig.test(value)).toBeFalsy();
+                    expect(/(<([^>]+)>)/ig.test(value)).to.be.false;
                     //remove ASCII art (intended to remove separators like '________')
-                    expect(/([\-=+*°._!?\/\^]{4,})/g.test(value)).toBeFalsy();
+                    expect(/([\-=+*°._!?\/\^]{4,})/g.test(value)).to.be.false;
                     //remove subsequent white-space
-                    expect(/\s\s+/g.test(value)).toBeFalsy();
+                    expect(/\s\s+/g.test(value)).to.be.false;
                     //is trimmed (but a whitespace is added manually later: 5adae2b772e9d9fcc1110997dc30f1f71a4daeb6)
-                    expect(value).toEqual(' ' + value.trim());
+                    expect(value).to.equal(' ' + value.trim());
                 });
             });
 
             describe('in html mode:', function () {
-                beforeEach(function () {
-                    setMode('html');
+                beforeEach(function (done) {
+                    app.setFormat('html').done(function () {
+                        done();
+                    });
                 });
 
                 //independent test with same expection for both modes
@@ -430,43 +421,45 @@ define(
                         //above
                         settings.set('defaultSignature', '326');
                         app.setBody('this is quoted text');
-                        expect(countLeadingBlanks()).toEqual(1);
+                        expect(countLeadingBlanks()).to.equal(1);
                         //below
                         settings.set('defaultSignature', '294');
                         app.setBody('this is quoted text');
-                        expect(countLeadingBlanks()).toEqual(1);
+                        expect(countLeadingBlanks()).to.equal(1);
                         //none
                         settings.set('defaultSignature', undefined);
                         app.setBody('this is quoted text');
-                        expect(countLeadingBlanks()).toEqual(1);
+                        expect(countLeadingBlanks()).to.equal(1);
                     });
                     it('for mails from scratch', function () {
                         //above: scratch
                         settings.set('defaultSignature', '326');
                         app.setBody('');
-                        expect(countLeadingBlanks()).toEqual(1);
+                        expect(countLeadingBlanks()).to.equal(1);
                         //below: scratch
                         settings.set('defaultSignature', '294');
                         app.setBody('');
-                        expect(countLeadingBlanks()).toEqual(1);
+                        expect(countLeadingBlanks()).to.equal(1);
                         //none: scratch
                         settings.set('defaultSignature', undefined);
                         app.setBody('');
-                        expect(countLeadingBlanks()).toEqual(0);
+                        expect(countLeadingBlanks()).to.equal(0);
                     });
                 });
 
                 describe('a signature is normalized', function () {
                     it('by keeping html tags when html editor is used', function () {
                         app.setSignature({data: {index: 5}});
-                        expect(/(<([^>]+)>)/ig.test(getCurrentSignature())).toBeTruthy();
+                        expect(/(<([^>]+)>)/ig.test(getCurrentSignature())).to.be.true;
                     });
                 });
             });
 
             describe('in text mode:', function () {
-                beforeEach(function () {
-                    setMode('text');
+                beforeEach(function (done) {
+                    app.setFormat('text').done(function () {
+                        done();
+                    });
                 });
 
                 //independent test with same expection for both modes
@@ -493,46 +486,39 @@ define(
                         //above
                         settings.set('defaultSignature', '326');
                         app.setBody('this is quoted text');
-                        expect(countLeadingBlanks()).toEqual(2);
+                        expect(countLeadingBlanks()).to.equal(2);
                         //below
                         settings.set('defaultSignature', '294');
                         app.setBody('this is quoted text');
-                        expect(countLeadingBlanks()).toEqual(2);
+                        expect(countLeadingBlanks()).to.equal(2);
                         //none
                         settings.set('defaultSignature', undefined);
                         app.setBody('this is quoted text');
-                        expect(countLeadingBlanks()).toEqual(2);
+                        expect(countLeadingBlanks()).to.equal(2);
                     });
                     it('for mails from scratch', function () {
                         //above: scratch
                         settings.set('defaultSignature', '326');
                         app.setBody('');
-                        expect(countLeadingBlanks()).toEqual(2);
+                        expect(countLeadingBlanks()).to.equal(2);
                         //below: scratch
                         settings.set('defaultSignature', '294');
                         app.setBody('');
-                        expect(countLeadingBlanks()).toEqual(2);
+                        expect(countLeadingBlanks()).to.equal(2);
                         //none: scratch
                         settings.set('defaultSignature', undefined);
                         app.setBody('');
-                        expect(countLeadingBlanks()).toEqual(1);
+                        expect(countLeadingBlanks()).to.equal(1);
                     });
                 });
 
                 describe('a signature is normalized', function () {
                     it('by removing html tags when text editor is used', function () {
                         app.setSignature({data: {index: 5}});
-                        expect(/(<([^>]+)>)/ig.test(getCurrentSignature())).toBeFalsy();
+                        expect(/(<([^>]+)>)/ig.test(getCurrentSignature())).to.be.false;
                     });
                 });
             });
-        });
-
-        it('closes compose dialog', function () {
-            // mark app as clean so no save as draft question will pop up
-            app.dirty(false).quit();
-            expect(app.getEditor).toBeUndefined();
-            app = ed = form = null;
         });
     });
 });

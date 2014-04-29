@@ -11,10 +11,9 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(['io.ox/mail/write/main'], function (main) {
-    var view = main.getApp().getView(),
-        expect = chai.expect;
+    var view = main.getApp().getView();
 
-    xdescribe('mail write view', function () {
+    describe('mail write view', function () {
 
         describe('define some methods to manipulate DOM', function () {
             it('for general purposes', function () {
