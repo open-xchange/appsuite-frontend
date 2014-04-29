@@ -767,7 +767,8 @@ define('io.ox/core/main',
             }
         });
 
-        if (settings.get('features/dedicatedLogoutButton', false) === false) {
+        var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
+        if (!dedicatedLogoutButton) {
             ext.point('io.ox/core/topbar/right/dropdown').extend({
                 id: 'logout',
                 index: 1000,
@@ -817,7 +818,7 @@ define('io.ox/core/main',
             }
         });
 
-        if (settings.get('features/dedicatedLogoutButton', false) === true) {
+        if (dedicatedLogoutButton) {
             ext.point('io.ox/core/topbar/right').extend({
                 id: 'logout-button',
                 index: 2000,
