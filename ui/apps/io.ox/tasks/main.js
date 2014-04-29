@@ -114,7 +114,10 @@ define('io.ox/tasks/main',
         /*
          * Folderview toolbar
          */
-        'folderview-toolbar': commons.mediateFolderView
+        'folderview-toolbar': function (app) {
+            if (_.device('small')) return;
+            commons.mediateFolderView(app);
+        }
     });
 
     // application object
