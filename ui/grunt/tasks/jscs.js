@@ -15,6 +15,13 @@
 
 module.exports = function (grunt) {
 
+    try {
+        require('grunt-jscs-checker/tasks/jscs-checker');
+    } catch (e) {
+        grunt.verbose.warn('Skipping jscs optional tasks');
+        return;
+    }
+
     grunt.config.extend('jscs', {
 
         options: {

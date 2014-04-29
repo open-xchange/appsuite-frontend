@@ -15,6 +15,13 @@
 
 module.exports = function (grunt) {
 
+    try {
+        require('grunt-modernizr/tasks/modernizr');
+    } catch (e) {
+        grunt.verbose.warn('Skipping modernizr optional tasks');
+        return;
+    }
+
     grunt.config.extend('modernizr', {
         dist: {
             // [REQUIRED] Path to the build you're using for development.

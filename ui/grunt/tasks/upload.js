@@ -14,6 +14,13 @@
 'use strict';
 
 module.exports = function (grunt) {
+    try {
+	require('q');
+    } catch (e) {
+        grunt.verbose.warn('Skipping upload optional tasks');
+        return;
+    }
+
     var url = require('url'),
         fs = require('fs'),
         Q = require('q');
