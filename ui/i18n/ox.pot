@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Open-Xchange 7\n"
+"Project-Id-Version: open-xchange-appsuite\n"
 "PO-Revision-Date: DATE\n"
 "Last-Translator: NAME <EMAIL>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -197,6 +197,8 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/model.js:241
 #: apps/io.ox/contacts/view-detail.js:437
+#: apps/plugins/portal/xing/actions.js:67
+#: module:plugins/portal
 msgid "Comment"
 msgstr ""
 
@@ -271,7 +273,7 @@ msgstr ""
 #: apps/io.ox/mail/write/view-main.js:590
 #: apps/io.ox/oauth/settings.js:82
 #: module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:499
+#: apps/io.ox/portal/main.js:504
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
 #: apps/io.ox/search/view-template.js:427
@@ -290,6 +292,7 @@ msgstr ""
 #: apps/plugins/portal/twitter/util.js:123
 #: apps/plugins/portal/twitter/util.js:452
 #: apps/plugins/portal/userSettings/register.js:119
+#: apps/plugins/portal/xing/register.js:113
 msgid "Cancel"
 msgstr ""
 
@@ -313,6 +316,8 @@ msgstr ""
 #: module:io.ox/calendar/main
 #: apps/io.ox/calendar/invitations/register.js:29
 #: apps/io.ox/calendar/invitations/register.js:31
+#: apps/plugins/portal/xing/register.js:114
+#: module:plugins/portal
 msgid "Accept"
 msgstr ""
 
@@ -379,9 +384,9 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:753
-#: apps/io.ox/contacts/main.js:186
-#: apps/io.ox/contacts/toolbar.js:68
+#: apps/io.ox/contacts/actions.js:756
+#: apps/io.ox/contacts/main.js:189
+#: apps/io.ox/contacts/toolbar.js:64
 #: apps/io.ox/core/commons-folderview.js:413
 #: module:io.ox/core
 #: apps/io.ox/core/tk/folderviews.js:593
@@ -396,7 +401,7 @@ msgstr ""
 #: apps/io.ox/mail/mobileToolbarActions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:272
 #: apps/io.ox/mail/toolbar.js:75
-#: apps/io.ox/portal/main.js:497
+#: apps/io.ox/portal/main.js:502
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -407,11 +412,12 @@ msgstr ""
 #: apps/io.ox/tasks/actions.js:61
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/actions.js:593
-#: apps/io.ox/tasks/main.js:193
+#: apps/io.ox/tasks/main.js:196
 #: apps/io.ox/tasks/toolbar.js:83
 #: apps/plugins/portal/twitter/util.js:318
 #: module:plugins/portal
 #: apps/plugins/portal/twitter/util.js:451
+#: apps/plugins/portal/xing/actions.js:113
 msgid "Delete"
 msgstr ""
 
@@ -437,8 +443,8 @@ msgstr[1] ""
 #: module:io.ox/mail
 #: apps/io.ox/contacts/actions.js:192
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:769
-#: apps/io.ox/contacts/toolbar.js:91
+#: apps/io.ox/contacts/actions.js:772
+#: apps/io.ox/contacts/toolbar.js:87
 #: apps/io.ox/core/commons-folderview.js:642
 #: module:io.ox/core
 #: apps/io.ox/files/actions.js:686
@@ -503,8 +509,8 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/contacts/actions.js:319
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:725
-#: apps/io.ox/contacts/toolbar.js:84
+#: apps/io.ox/contacts/actions.js:728
+#: apps/io.ox/contacts/toolbar.js:80
 #: apps/io.ox/core/print.js:108
 #: module:io.ox/core
 #: apps/io.ox/mail/actions.js:1106
@@ -520,9 +526,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:49
 #: module:io.ox/mail
-#: apps/io.ox/contacts/actions.js:743
+#: apps/io.ox/contacts/actions.js:746
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:61
+#: apps/io.ox/contacts/toolbar.js:57
 #: apps/io.ox/core/pubsub/settings/pane.js:207
 #: module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:888
@@ -1026,7 +1032,7 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:356
 #: apps/io.ox/core/permissions/permissions.js:399
-#: apps/io.ox/core/tk/dialogs.js:538
+#: apps/io.ox/core/tk/dialogs.js:539
 #: apps/io.ox/editor/main.js:132
 #: module:io.ox/editor
 #: apps/io.ox/editor/main.js:154
@@ -1074,7 +1080,7 @@ msgstr ""
 #: apps/io.ox/mail/write/view-main.js:878
 #: apps/io.ox/tasks/edit/view-template.js:105
 #: module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:391
+#: apps/io.ox/tasks/main.js:394
 #: module:io.ox/tasks
 msgid "Subject"
 msgstr ""
@@ -1445,7 +1451,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/list/perspective.js:193
 #: module:io.ox/calendar
-#: apps/io.ox/tasks/main.js:384
+#: apps/io.ox/tasks/main.js:387
 #: module:io.ox/tasks
 msgid "Sort options"
 msgstr ""
@@ -1454,7 +1460,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:45
 #: module:io.ox/mail
-#: apps/io.ox/tasks/main.js:394
+#: apps/io.ox/tasks/main.js:397
 #: module:io.ox/tasks
 msgid "Ascending"
 msgstr ""
@@ -1463,7 +1469,7 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46
 #: module:io.ox/mail
-#: apps/io.ox/tasks/main.js:395
+#: apps/io.ox/tasks/main.js:398
 #: module:io.ox/tasks
 msgid "Descending"
 msgstr ""
@@ -1481,7 +1487,7 @@ msgstr ""
 msgid "Expand timeframe by one month"
 msgstr ""
 
-#: apps/io.ox/calendar/main.js:218
+#: apps/io.ox/calendar/main.js:221
 #: module:io.ox/calendar
 msgid "Show all my appointments from all calendars"
 msgstr ""
@@ -1778,7 +1784,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js:41
 #: module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:41
+#: apps/io.ox/contacts/toolbar.js:37
+#: module:io.ox/contacts
 #: apps/io.ox/tasks/toolbar.js:43
 msgid "New"
 msgstr ""
@@ -1787,7 +1794,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:272
 #: module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:389
+#: apps/io.ox/tasks/main.js:392
 #: module:io.ox/tasks
 msgid "Status"
 msgstr ""
@@ -1798,7 +1805,8 @@ msgstr ""
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js:111
 #: module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:139
+#: apps/io.ox/contacts/toolbar.js:135
+#: module:io.ox/contacts
 #: apps/io.ox/mail/toolbar.js:208
 #: apps/io.ox/tasks/toolbar.js:132
 msgid "View"
@@ -1806,7 +1814,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js:112
 #: module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:140
+#: apps/io.ox/contacts/toolbar.js:136
+#: module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:119
 #: module:io.ox/mail/emoji
 #: apps/io.ox/mail/toolbar.js:215
@@ -1817,7 +1826,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js:113
 #: module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:141
+#: apps/io.ox/contacts/toolbar.js:137
+#: module:io.ox/contacts
 #: apps/io.ox/core/tk/folderviews.js:478
 #: module:io.ox/core
 #: apps/io.ox/mail/toolbar.js:216
@@ -1827,7 +1837,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js:114
 #: module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js:142
+#: apps/io.ox/contacts/toolbar.js:138
+#: module:io.ox/contacts
 #: apps/io.ox/mail/toolbar.js:217
 #: apps/io.ox/tasks/toolbar.js:135
 msgid "Checkboxes"
@@ -2144,14 +2155,14 @@ msgstr ""
 
 #: apps/io.ox/contacts/actions.js:193
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:777
-#: apps/io.ox/contacts/toolbar.js:99
-#: module:io.ox/mail
+#: apps/io.ox/contacts/actions.js:780
+#: apps/io.ox/contacts/toolbar.js:95
 #: apps/io.ox/files/actions.js:687
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:985
 #: apps/io.ox/files/actions.js:1375
 #: apps/io.ox/mail/actions.js:346
+#: module:io.ox/mail
 #: apps/io.ox/mail/actions.js:1097
 #: apps/io.ox/mail/mobileToolbarActions.js:104
 #: apps/io.ox/mail/toolbar.js:123
@@ -2163,12 +2174,12 @@ msgstr ""
 msgid "Contacts have been copied"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:470
+#: apps/io.ox/contacts/actions.js:473
 #: module:io.ox/contacts
 msgid "This distribution list has been added to the portal"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:576
+#: apps/io.ox/contacts/actions.js:579
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:508
 #: module:io.ox/core/tk/attachments
@@ -2177,7 +2188,7 @@ msgstr ""
 msgid "No preview available"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:619
+#: apps/io.ox/contacts/actions.js:622
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:572
 #: module:io.ox/core/tk/attachments
@@ -2186,60 +2197,58 @@ msgstr ""
 msgid "Attachments have been saved!"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:689
+#: apps/io.ox/contacts/actions.js:692
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js:98
 #: apps/io.ox/contacts/distrib/create-dist-view.js:100
 msgid "Add contact"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:696
+#: apps/io.ox/contacts/actions.js:699
 #: module:io.ox/contacts
 msgid "Add distribution list"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:709
+#: apps/io.ox/contacts/actions.js:712
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:48
-#: module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js:44
 msgid "Send mail"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:718
+#: apps/io.ox/contacts/actions.js:721
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:77
-#: module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js:73
 msgid "Send as vCard"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:734
+#: apps/io.ox/contacts/actions.js:737
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:55
-#: module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js:51
 #: apps/io.ox/mail/actions.js:1068
+#: module:io.ox/mail
 msgid "Invite to appointment"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:761
+#: apps/io.ox/contacts/actions.js:764
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:107
-#: module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js:103
 #: apps/io.ox/files/actions.js:951
 #: module:io.ox/files
 #: apps/io.ox/files/actions.js:1355
 #: apps/io.ox/mail/actions.js:1143
+#: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:159
 msgid "Add to portal"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:784
+#: apps/io.ox/contacts/actions.js:787
 #: module:io.ox/contacts
 #: apps/io.ox/mail/actions.js:1153
 #: module:io.ox/mail
 msgid "Add to address book"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:792
+#: apps/io.ox/contacts/actions.js:795
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:438
 #: module:io.ox/core/tk/attachments
@@ -2250,7 +2259,7 @@ msgstr ""
 msgid "Slideshow"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:799
+#: apps/io.ox/contacts/actions.js:802
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:445
 #: module:io.ox/core/tk/attachments
@@ -2262,7 +2271,7 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:806
+#: apps/io.ox/contacts/actions.js:809
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:452
 #: module:io.ox/core/tk/attachments
@@ -2273,7 +2282,7 @@ msgstr ""
 msgid "Open in browser"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:813
+#: apps/io.ox/contacts/actions.js:816
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:459
 #: module:io.ox/core/tk/attachments
@@ -2290,7 +2299,7 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-#: apps/io.ox/contacts/actions.js:820
+#: apps/io.ox/contacts/actions.js:823
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:466
 #: module:io.ox/core/tk/attachments
@@ -2303,7 +2312,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/common-extensions.js:41
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:257
+#: apps/io.ox/contacts/main.js:260
 #: apps/io.ox/contacts/model.js:314
 #: apps/io.ox/contacts/view-detail.js:49
 #: apps/io.ox/participants/views.js:176
@@ -2416,6 +2425,8 @@ msgstr ""
 
 #: apps/io.ox/contacts/edit/view-form.js:107
 #: module:io.ox/contacts
+#: apps/plugins/halo/xing/register.js:147
+#: module:plugins/portal
 msgid "Business address"
 msgstr ""
 
@@ -2446,9 +2457,17 @@ msgstr ""
 #. %3$s is the city
 #. %4$s is the state
 #. %5$s is the country
+#. Format of addresses
+#. %1$s is the street
+#. %2$s is the postal code
+#. %3$s is the city
+#. %4$s is the state
+#. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
+#: apps/plugins/halo/xing/register.js:67
+#: module:plugins/portal
 msgid ""
 "%1$s"
 "%2$s %3$s"
@@ -2468,17 +2487,17 @@ msgstr ""
 msgid "Compact view"
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:273
+#: apps/io.ox/contacts/main.js:276
 #: module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:274
+#: apps/io.ox/contacts/main.js:277
 #: module:io.ox/contacts
 msgid "Edit to set a name."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:348
+#: apps/io.ox/contacts/main.js:351
 #: module:io.ox/contacts
 msgid "Couldn't load contact data."
 msgstr ""
@@ -2490,6 +2509,8 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:224
 #: module:io.ox/contacts
+#: apps/plugins/portal/xing/register.js:91
+#: module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:83
 #: module:io.ox/wizards/firstStart
 msgid "First name"
@@ -2497,6 +2518,8 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:225
 #: module:io.ox/contacts
+#: apps/plugins/portal/xing/register.js:95
+#: module:plugins/portal
 #: apps/plugins/wizards/mandatory/main.js:89
 #: module:io.ox/wizards/firstStart
 msgid "Last name"
@@ -3013,8 +3036,8 @@ msgstr ""
 msgid "Couldn't load your contact data."
 msgstr ""
 
-#: apps/io.ox/contacts/toolbar.js:54
-#: module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js:50
+#: module:io.ox/contacts
 msgid "Invite"
 msgstr ""
 
@@ -3151,7 +3174,7 @@ msgstr ""
 #: apps/io.ox/core/permissions/permissions.js:458
 #: apps/io.ox/core/pubsub/publications.js:105
 #: module:io.ox/core/pubsub
-#: apps/io.ox/core/tk/dialogs.js:538
+#: apps/io.ox/core/tk/dialogs.js:539
 #: apps/io.ox/core/wizard/registry.js:60
 #: module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:157
@@ -3793,7 +3816,7 @@ msgstr ""
 
 #: apps/io.ox/core/main.js:674
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:809
+#: apps/io.ox/core/main.js:810
 msgid "Settings"
 msgstr ""
 
@@ -3815,40 +3838,40 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: apps/io.ox/core/main.js:778
+#: apps/io.ox/core/main.js:779
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:828
+#: apps/io.ox/core/main.js:829
 msgid "Sign out"
 msgstr ""
 
-#: apps/io.ox/core/main.js:850
+#: apps/io.ox/core/main.js:851
 #: module:io.ox/core
 msgid "Your Applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:908
+#: apps/io.ox/core/main.js:909
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr ""
 
-#: apps/io.ox/core/main.js:909
+#: apps/io.ox/core/main.js:910
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1139
+#: apps/io.ox/core/main.js:1140
 #: module:io.ox/core
 msgid "Restore applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1141
+#: apps/io.ox/core/main.js:1142
 #: module:io.ox/core
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
-#: apps/io.ox/core/main.js:1146
+#: apps/io.ox/core/main.js:1147
 #: module:io.ox/core
 msgid "Continue"
 msgstr ""
@@ -4052,6 +4075,8 @@ msgstr ""
 
 #: apps/io.ox/core/pubsub/publications.js:113
 #: module:io.ox/core/pubsub
+#: apps/plugins/portal/xing/actions.js:200
+#: module:plugins/portal
 msgid "Share"
 msgstr ""
 
@@ -4453,6 +4478,8 @@ msgstr ""
 
 #: apps/io.ox/core/settings/pane.js:103
 #: module:io.ox/core
+#: apps/plugins/portal/xing/register.js:99
+#: module:plugins/portal
 msgid "Language"
 msgstr ""
 
@@ -4662,7 +4689,7 @@ msgstr ""
 msgid "Could not load this list"
 msgstr ""
 
-#: apps/io.ox/core/tk/dialogs.js:731
+#: apps/io.ox/core/tk/dialogs.js:732
 #: module:io.ox/core
 msgid "Close all"
 msgstr ""
@@ -7071,7 +7098,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:344
 #: module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:392
+#: apps/io.ox/tasks/main.js:395
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:103
 msgid "Priority"
@@ -7212,7 +7239,7 @@ msgstr ""
 #: apps/io.ox/portal/main.js:143
 #: module:io.ox/portal
 #: apps/io.ox/portal/main.js:144
-#: apps/io.ox/portal/main.js:387
+#: apps/io.ox/portal/main.js:388
 msgid "Disable widget"
 msgstr ""
 
@@ -7234,18 +7261,18 @@ msgstr ""
 msgid "Click to try again."
 msgstr ""
 
-#: apps/io.ox/portal/main.js:459
+#: apps/io.ox/portal/main.js:464
 #: module:io.ox/portal
 msgid "Portal Widgets"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:493
+#: apps/io.ox/portal/main.js:498
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:494
+#: apps/io.ox/portal/main.js:499
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
@@ -7253,7 +7280,7 @@ msgstr ""
 
 #. Just disable portal widget - in contrast to delete
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:503
+#: apps/io.ox/portal/main.js:508
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
@@ -7505,7 +7532,7 @@ msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js:181
 #: module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:390
+#: apps/io.ox/tasks/main.js:393
 #: module:io.ox/tasks
 msgid "Due date"
 msgstr ""
@@ -7639,17 +7666,17 @@ msgstr ""
 msgid "Companies"
 msgstr ""
 
-#: apps/io.ox/tasks/main.js:170
+#: apps/io.ox/tasks/main.js:173
 #: module:io.ox/tasks
 msgid "Task Details"
 msgstr ""
 
-#: apps/io.ox/tasks/main.js:303
+#: apps/io.ox/tasks/main.js:306
 #: module:io.ox/tasks
 msgid "Couldn't load that task."
 msgstr ""
 
-#: apps/io.ox/tasks/main.js:397
+#: apps/io.ox/tasks/main.js:400
 #: module:io.ox/tasks
 msgid "Show done tasks"
 msgstr ""
@@ -8009,6 +8036,106 @@ msgstr ""
 #: apps/plugins/halo/mail/register.js:79
 #: module:plugins/halo
 msgid "Cannot find any messages you sent to this contact."
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:33
+#: module:plugins/portal
+#: apps/plugins/portal/xing/register.js:47
+#: apps/plugins/portal/xing/register.js:50
+msgid "XING"
+msgstr ""
+
+#. what follows is a set of job/status descriptions used by XING
+#: apps/plugins/halo/xing/register.js:36
+#: module:plugins/portal
+msgid "Entrepreneur"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:37
+#: module:plugins/portal
+msgid "Freelancer"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:38
+#: module:plugins/portal
+msgid "Employee"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:39
+#: module:plugins/portal
+msgid "Executive"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:40
+#: module:plugins/portal
+msgid "Recruiter"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:41
+#: module:plugins/portal
+msgid "Public servant"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:42
+#: module:plugins/portal
+msgid "Student"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:43
+#: module:plugins/portal
+msgid "Unemployed"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:44
+#: module:plugins/portal
+msgid "Retired"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:76
+#: module:plugins/portal
+msgid "You are not directly linked to %s. Here are people who are linked to %s:"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:100
+#: module:plugins/portal
+msgid "Your shared contacts:"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:138
+#: module:plugins/portal
+msgid "Birthdate"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:156
+#: module:plugins/portal
+msgid "Private address"
+msgstr ""
+
+#. %1$s is the employee position or status, e.g. student
+#. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
+#: apps/plugins/halo/xing/register.js:172
+#: module:plugins/portal
+msgid "%1$s at %2$s"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:182
+#: module:plugins/portal
+msgid "Employment"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:230
+#: module:plugins/portal
+msgid "Sorry, could not connect to %s right now."
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:247
+#: module:plugins/portal
+msgid "Here is what %s knows about %s:"
+msgstr ""
+
+#: apps/plugins/halo/xing/register.js:261
+#: module:plugins/portal
+msgid "Sorry, there is no data available for you on %s."
 msgstr ""
 
 #. %1$s is the name of the platform
@@ -8808,6 +8935,174 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js:222
 #: module:io.ox/core
 msgid "My password"
+msgstr ""
+
+#: apps/plugins/portal/xing/actions.js:54
+#: module:plugins/portal
+#: apps/plugins/portal/xing/actions.js:102
+#: apps/plugins/portal/xing/actions.js:150
+#: apps/plugins/portal/xing/actions.js:190
+msgid "There was a problem with XING, the error message was: \"%s\""
+msgstr ""
+
+#: apps/plugins/portal/xing/actions.js:59
+#: module:plugins/portal
+msgid "Comment was posted on XING successfully"
+msgstr ""
+
+#: apps/plugins/portal/xing/actions.js:71
+#: module:plugins/portal
+msgid "Submit comment"
+msgstr ""
+
+#: apps/plugins/portal/xing/actions.js:106
+#: module:plugins/portal
+msgid "The %s was deleted successfully"
+msgstr ""
+
+#: apps/plugins/portal/xing/actions.js:139
+#: module:plugins/portal
+msgid "Un-liked comment"
+msgstr ""
+
+#: apps/plugins/portal/xing/actions.js:146
+#: module:plugins/portal
+msgid "Liked comment"
+msgstr ""
+
+#: apps/plugins/portal/xing/actions.js:161
+#: module:plugins/portal
+msgid "Un-like"
+msgstr ""
+
+#: apps/plugins/portal/xing/actions.js:166
+#: module:plugins/portal
+msgid "Like"
+msgstr ""
+
+#: apps/plugins/portal/xing/actions.js:193
+#: module:plugins/portal
+msgid "Shared activity"
+msgstr ""
+
+#: apps/plugins/portal/xing/activities.js:59
+#: module:plugins/portal
+msgid "%1$s recommends this link:"
+msgstr ""
+
+#: apps/plugins/portal/xing/activities.js:80
+#: module:plugins/portal
+msgid "%1$s posted a link:"
+msgstr ""
+
+#: apps/plugins/portal/xing/activities.js:97
+#: module:plugins/portal
+msgid "%1$s changed their status:"
+msgstr ""
+
+#: apps/plugins/portal/xing/activities.js:115
+#: module:plugins/portal
+msgid "%1$s has a new contact:"
+msgstr ""
+
+#: apps/plugins/portal/xing/activities.js:128
+#: module:plugins/portal
+msgid "%1$s has new contacts:"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:65
+#: module:plugins/portal
+msgid "Reauthorized your %s account successfully"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:68
+#: module:plugins/portal
+#: apps/plugins/portal/xing/register.js:129
+#: apps/plugins/portal/xing/register.js:308
+#: apps/plugins/portal/xing/register.js:330
+msgid "There was a problem with %s, the error message was: \"%s\""
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:85
+#: module:plugins/portal
+msgid "Please select which of the following data we may use to create your %s account:"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:87
+#: module:plugins/portal
+msgid "E-mail address"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:132
+#: module:plugins/portal
+msgid "Your %s account was created. Expect a confirmation e-mail from %s soon."
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:133
+#: module:plugins/portal
+msgid "The next step is allowing this system to access your %s account for you."
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:155
+#: module:plugins/portal
+msgid "Post a status update"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:166
+#: module:plugins/portal
+msgid "Your status update could not be posted on %s, the error message was: \"%s\""
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:170
+#: module:plugins/portal
+msgid "Your status update was posted on %s successfully"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:247
+#: module:plugins/portal
+msgid "Do you already have a %s account?"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:249
+#: module:plugins/portal
+msgid "Allow us to use your %s account here"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:251
+#: module:plugins/portal
+msgid "Do you want to create a %s account?"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:252
+#: module:plugins/portal
+msgid "Create a %s account using the data stored here"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:280
+#: module:plugins/portal
+msgid "Your %s newsfeed"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:311
+#: module:plugins/portal
+msgid "Invitation sent"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:333
+#: module:plugins/portal
+msgid "Contact request sent"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:341
+#: module:plugins/portal
+#: apps/plugins/portal/xing/register.js:348
+msgid "Invite to %s"
+msgstr ""
+
+#: apps/plugins/portal/xing/register.js:355
+#: module:plugins/portal
+#: apps/plugins/portal/xing/register.js:362
+msgid "Add on %s"
 msgstr ""
 
 #: apps/plugins/wizards/mandatory/main.js:32
