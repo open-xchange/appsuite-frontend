@@ -95,6 +95,7 @@ module.exports = function (grunt) {
                          'apps/io.ox/core/api/account.js',
                          'apps/io.ox/filter/folder.js',
                          // core
+                         'apps/plugins/halo/register.js',
                          'apps/io.ox/core/main.js'
                     ],
                     dest: 'build/boot.js',
