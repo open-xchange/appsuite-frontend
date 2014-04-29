@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-14 10:24+0100\n"
+"PO-Revision-Date: 2014-04-29 09:18+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1347,7 +1347,7 @@ msgstr "Konflikt:"
 
 #: apps/io.ox/core/settings/downloads/pane.js:66 module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
-msgstr ""
+msgstr "Konnektor für Microsoft Outlook®"
 
 #: apps/io.ox/contacts/edit/main.js:272 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
@@ -1585,6 +1585,8 @@ msgid ""
 "Data synchronization with your local (Windows) machine. Drive Client lets "
 "you configure the folders to be synchronized."
 msgstr ""
+"Datensynchronisation mit Ihrem lokalen (Windows-)Rechner. Der Drive Client "
+"erlaubt die Konfiguration der zu synchronisierenden Ordner."
 
 #: apps/io.ox/backbone/forms.js:512 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:118
@@ -2999,6 +3001,8 @@ msgid ""
 "Informs about the current status of E-Mails and appointments without having "
 "to display the user interface or another Windows® client."
 msgstr ""
+"Informiert über den aktuellen Stand der E-Mails und Termine, ohne dafür die "
+"Benutzeroberfläche oder einen anderen Windows®-Client anzeigen zu müssen."
 
 #: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
 msgid "Inline"
@@ -3049,7 +3053,7 @@ msgstr "Ungültige Daten"
 
 #: apps/io.ox/contacts/toolbar.js:54 module:io.ox/mail
 msgid "Invite"
-msgstr ""
+msgstr "Einladen"
 
 #: apps/io.ox/contacts/actions.js:734 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:55 module:io.ox/mail
@@ -5575,6 +5579,9 @@ msgid ""
 "Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, "
 "Shared and System Folders to Microsoft Outlook® clients."
 msgstr ""
+"Synchronisation von E-Mails, Terminen, Kontakten und Aufgaben sowie "
+"öffentlichen, freigegebenen und System-Ordnern mit Microsoft Outlook®-"
+"Clients."
 
 #: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "TAX ID"
