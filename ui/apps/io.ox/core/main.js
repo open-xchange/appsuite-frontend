@@ -875,10 +875,30 @@ define('io.ox/core/main',
         ext.point('io.ox/core/topbar/favorites').extend({
             id: 'default',
             draw: function () {
-                var favorites = appAPI.getAllFavorites();
-                favorites.sort(function (a, b) {
-                    return ext.indexSorter(a, b);
-                });
+
+                var favorites = appAPI.getAllFavorites(),
+                    topbar = settings.get('topbar/order'),
+                    hash = {};
+
+                // use custom order?
+                if (topbar) {
+                    // get hash of exisiting favorites
+                    _(favorites).each(function (obj) { hash[obj.id] = obj; });
+                    // get proper order
+                    favorites = _(topbar.split(','))
+                        .chain()
+                        .map(function (id) {
+                            return hash[id];
+                        })
+                        .compact()
+                        .value();
+                } else {
+                    // sort by index
+                    favorites.sort(function (a, b) {
+                        return ext.indexSorter(a, b);
+                    });
+                }
+
                 _(favorites).each(function (obj) {
                     if (upsell.visible(obj.requires)) {
                         ox.ui.apps.add(new ox.ui.AppPlaceholder({
