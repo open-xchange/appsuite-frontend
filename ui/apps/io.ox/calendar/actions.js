@@ -644,6 +644,15 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
         prio: 'hi',
+        mobile: 'hi',
+        id: 'delete',
+        label: gt('Delete'),
+        ref: 'io.ox/calendar/detail/actions/delete'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 400,
+        prio: 'lo',
         mobile: 'lo',
         id: 'move',
         label: gt('Move'),
@@ -651,22 +660,11 @@ define('io.ox/calendar/actions',
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 400,
-        prio: 'hi',
+        index: 500,
+        prio: 'lo',
         id: 'print',
-        icon: 'fa fa-print',
         label: gt('Print'),
         ref: 'io.ox/calendar/detail/actions/print-appointment'
-    }));
-
-    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 500,
-        prio: 'hi',
-        mobile: 'hi',
-        id: 'delete',
-        icon: 'fa fa-trash-o',
-        label: gt('Delete'),
-        ref: 'io.ox/calendar/detail/actions/delete'
     }));
 
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({

@@ -332,7 +332,7 @@ define('io.ox/core/extPatterns/links',
                 // remove unimportant links on smartphone (prio='none')
                 if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
 
-                if ((!multiple || options.forcelimit) && (isSmall || all.length > 5) && lo.length > 1) {
+                if (lo.length > 1 && (!multiple || options.forcelimit)) {
                     nav.append(
                         $('<li class="dropdown">').append(
                             $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
