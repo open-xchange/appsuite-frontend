@@ -19,8 +19,9 @@ define('io.ox/calendar/actions',
      'io.ox/core/notifications',
      'io.ox/core/print',
      'settings!io.ox/core',
+     'io.ox/core/extPatterns/actions',
      'gettext!io.ox/calendar'
-    ], function (ext, links, api, util, notifications, print, coreSettings, gt) {
+    ], function (ext, links, api, util, notifications, print, coreSettings, actions, gt) {
 
     'use strict';
 
@@ -477,8 +478,54 @@ define('io.ox/calendar/actions',
         }
     });
 
-    // Links - toolbar
 
+    // Mobile multi select extension points
+    // delete appointment(s)
+    ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 10,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-trash-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/calendar/detail/actions/delete', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // move appointment(s)
+    ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({
+        id: 'move',
+        index: 20,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-sign-in">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/calendar/detail/actions/move', null, baton);
+                                // need to clear the selection after aciton is invoked
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // Links - toolbar
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'default',
         index: 100,
@@ -615,7 +662,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 500,
         prio: 'hi',
-        mobile: 'lo',
+        mobile: 'hi',
         id: 'delete',
         icon: 'fa fa-trash-o',
         label: gt('Delete'),

@@ -14,6 +14,32 @@
 
 module.exports = function (grunt) {
 
+    grunt.config.extend('copy', {
+        tinymce: {
+            files: [
+                {
+                    expand: true,
+                    src: ['**/*', '!**/*_src.js', '!**/*.txt'],
+                    cwd: 'lib/tiny_mce/',
+                    dest: 'build/apps/3rd.party/tiny_mce/'
+                },
+                {
+                    expand: true,
+                    src: ['**/*'],
+                    cwd: 'lib/tiny_mce_custom/',
+                    dest: 'build/apps/3rd.party/tiny_mce/'
+                }
+            ]
+        }
+    });
+
+    try {
+        require('grunt-curl/tasks/curl');
+    } catch (e) {
+        grunt.verbose.warn('Skipping tinymce optional tasks');
+        return;
+    }
+
     var version = '3.5.10',
         languages = ['ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'ch', 'cn', 'cs', 'ct', 'cy', 'da', 'de', 'dv', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'gl', 'gu', 'he', 'hi', 'hr', 'hu', 'hy', 'ia', 'id', 'is', 'it', 'ja', 'ka', 'kb', 'kk', 'kl', 'km', 'ko', 'lb', 'lt', 'lv', 'mk', 'ml', 'mn', 'ms', 'my', 'nb', 'nl', 'nn', 'no', 'pl', 'ps', 'pt', 'ro', 'ru', 'sc', 'se', 'si', 'sk', 'sl', 'sq', 'sr', 'sv', 'sy', 'ta', 'te', 'th', 'tn', 'tr', 'tt', 'tw', 'uk', 'ur', 'vi', 'zh', 'zh-cn', 'zh-tw', 'zu'],
         plugins = ['advimage', 'autolink', 'inlinepopups', 'paste'],
@@ -85,25 +111,6 @@ module.exports = function (grunt) {
             },
             src: 'tmp/tinymce_language_pack.zip',
             dest: 'lib/tiny_mce/'
-        }
-    });
-
-    grunt.config.extend('copy', {
-        tinymce: {
-            files: [
-                {
-                    expand: true,
-                    src: ['**/*', '!**/*_src.js', '!**/*.txt'],
-                    cwd: 'lib/tiny_mce/',
-                    dest: 'build/apps/3rd.party/tiny_mce/'
-                },
-                {
-                    expand: true,
-                    src: ['**/*'],
-                    cwd: 'lib/tiny_mce_custom/',
-                    dest: 'build/apps/3rd.party/tiny_mce/'
-                }
-            ]
         }
     });
 

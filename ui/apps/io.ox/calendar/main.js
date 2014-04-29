@@ -50,7 +50,7 @@ define('io.ox/calendar/main',
 
             var gridOptions = {
                 settings: settings,
-                showToggle: false
+                showToggle: _.device('small')
             };
 
             // show "load more" link
@@ -146,7 +146,10 @@ define('io.ox/calendar/main',
         /*
          * Folerview toolbar
          */
-        'folderview-toolbar': commons.mediateFolderView
+        'folderview-toolbar': function (app) {
+            if (_.device('small')) return;
+            commons.mediateFolderView(app);
+        }
     });
 
     // launcher

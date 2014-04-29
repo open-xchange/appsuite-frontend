@@ -380,6 +380,7 @@ define('io.ox/contacts/api',
                         api.caches.get.add(data),
                         api.caches.all.grepRemove(o.folder + api.DELIM),
                         api.caches.list.remove({ id: o.id, folder: o.folder }),
+                        fetchCache.clear(),
                         data.user_id ? clearUserApiCache(data) : ''
                     )
                     .done(function () {
