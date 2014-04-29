@@ -41,8 +41,6 @@ module.exports = function (grunt) {
                          'src/browser.js',
                          'src/plugins.js',
                          'src/jquery.plugins.js',
-                         'apps/io.ox/core/gettext.js',
-                         'src/boot.js',
                          // add bootstrap JavaScript
                          'bower_components/bootstrap/js/transition.js',
                          'bower_components/bootstrap/js/alert.js',
@@ -60,7 +58,44 @@ module.exports = function (grunt) {
                          //'bower_components/bootstrap-accessibility-plugin/plugins/js/bootstrap-accessibility.js',
                          'bower_components/bootstrap-typeahead/bootstrap3-typeahead.js',
                          'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
-                         'lib/bootstrap-combobox.js'
+                         'lib/bootstrap-combobox.js',
+                         // add mandatory UI sources
+                         'apps/io.ox/core/http.js',
+                         'apps/io.ox/core/session.js',
+                         'apps/io.ox/core/cache.js',
+                         'apps/io.ox/core/extensions.js',
+                         'apps/io.ox/core/manifests.js',
+                         'apps/io.ox/core/capabilities.js',
+                         'apps/io.ox/core/settings.js',
+                         'apps/io.ox/core/gettext.js',
+                         'src/boot.js',
+                         // 2nd wave
+                         'apps/io.ox/core/event.js',
+                         'apps/io.ox/core/cache/indexeddb.js',
+                         'apps/io.ox/core/cache/localstorage.js',
+                         'apps/io.ox/core/cache/simple.js',
+                         'apps/io.ox/core/desktop.js',
+                         'apps/io.ox/core/api/apps.js',
+                         'apps/io.ox/core/extPatterns/stage.js',
+                         'apps/io.ox/core/date.js',
+                         'apps/io.ox/core/notifications.js',
+                         'apps/io.ox/core/commons.js',
+                         'apps/io.ox/core/upsell.js',
+                         'apps/io.ox/core/ping.js',
+                         'apps/io.ox/core/relogin.js',
+                         // 3rd wave
+                         'apps/io.ox/core/extPatterns/links.js',
+                         'apps/io.ox/core/adaptiveLoader.js',
+                         'apps/io.ox/core/commons-folderview.js',
+                         'apps/io.ox/core/api/folder.js',
+                         'apps/io.ox/core/tk/dialogs.js',
+                         // 4th wave
+                         'apps/io.ox/core/collection.js',
+                         'apps/io.ox/core/extPatterns/actions.js',
+                         'apps/io.ox/core/api/account.js',
+                         'apps/io.ox/filter/folder.js',
+                         // core
+                         'apps/io.ox/core/main.js'
                     ],
                     dest: 'build/boot.js',
                     nonull: true

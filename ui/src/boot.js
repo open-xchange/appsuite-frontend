@@ -955,10 +955,11 @@ $(window).load(function () {
 
     debug('boot.js: require([...], loadSuccess, loadFail);');
 
-    require([
-        'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
-        'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities',
-        'themes', 'io.ox/core/settings'
-    ], loadSuccess, loadFail
-    );
+    var dependencies =
+        'io.ox/core/http io.ox/core/session io.ox/core/cache io.ox/core/extensions ' +
+        'gettext io.ox/core/manifests io.ox/core/capabilities themes io.ox/core/settings';
+
+    // load sources
+    require(dependencies.split(' '), loadSuccess, loadFail);
+
 });

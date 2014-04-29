@@ -63,7 +63,6 @@ define('io.ox/core/session',
                     action: 'autologin',
                     client: that.client(),
                     rampup: true,
-                    rampUp: true, // remove after backend fix
                     version: that.version()
                 }
             })
@@ -71,7 +70,7 @@ define('io.ox/core/session',
             .then(
                 function (data) {
                     ox.secretCookie = true;
-                    ox.rampup = data.rampUp || data.rampup || ox.rampup || {};
+                    ox.rampup = data.rampup || ox.rampup || {};
                     return data;
                 },
                 function (data) {
@@ -159,8 +158,6 @@ define('io.ox/core/session',
                             }
                         })
                         .done(function (data) {
-                            // copy rampup data
-                            ox.rampup = data.rampUp || ox.rampup || {};
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
                             set(data, forceLanguage);
@@ -190,15 +187,14 @@ define('io.ox/core/session',
             return http.GET({
                 module: 'login',
                 params: {
-                    action: 'rampUp',
-                    rampup: true,
-                    rampUp: true // remove after backend fix
+                    action: 'rampup',
+                    rampup: true
                 },
                 appendColumns: false,
                 processResponse: false
             })
             .then(function (data) {
-                return (ox.rampup = data.rampUp || data.rampup || ox.rampup || {});
+                return (ox.rampup = data.rampup || ox.rampup || {});
             });
         },
 
