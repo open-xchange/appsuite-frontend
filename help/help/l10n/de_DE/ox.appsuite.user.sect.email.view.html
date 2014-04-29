@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Kapitel 5. E-Mail">
-<link rel="prev" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Die Bestandteile von E-Mail">
+<link rel="prev" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Die E-Mail Bestandteile">
 <link rel="next" href="ox.appsuite.user.sect.email.attachments.html" title="5.3. E-Mail-Anlage ansehen oder speichern">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../../apps/io.ox/core/bootstrap/css/bootstrap.min.css"​/> 
@@ -24,9 +24,10 @@
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="ox.appsuite.user.sect.email.view"></a>5.2. E-Mails anzeigen</h2></div></div></div>
-<a class="indexterm" name="idm140057999467360"></a><a class="indexterm" name="idm140057999465744"></a><div class="concept">
+<a class="indexterm" name="idm140083934930736"></a><a class="indexterm" name="idm140083934929120"></a><div class="concept">
 <a name="ox.appsuite.user.concept.email.view"></a><p>Standardmäßig wird der Inhalt des Posteingangs angezeigt. Andere
-      E-Mail-Ordner können Sie mit Hilfe des Ordnerbaums öffnen.</p>
+      E-Mail-Ordner können Sie mit Hilfe des Ordnerbaums öffnen. Um Wartezeiten zu verringern, wird ab einer bestimmten Anzahl nur ein Teil 
+      der E-Mails eines Ordners vom Server geladen. Wenn Sie zum Ende der Liste blättern, wird der nächste Teil geladen.</p>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.email.view"></a><p class="title"><b>So zeigen Sie eine E-Mail an:</b></p>
@@ -35,47 +36,45 @@
 <li class="step">
 <p>Um eine bestimmte E-Mail schneller zu finden, verwenden Sie die folgenden Methoden: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Um E-Mails mit Hilfe eines Suchbegriffs zu finden, verwenden Sie die <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.html#ox.appsuite.user.task.search" title="So suchen Sie nach Objekten:">Suchfunktion</a>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Um die Liste der E-Mails zu sortieren, klicken Sie unterhalb der Seitenleiste auf das Symbol
-                    <span class="guibutton"><strong>Sortieren</strong></span>
-                  <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.sort1"></a><img src="../../images/appsuite_user_icon_sort.png"></span> . Wählen Sie im Menü ein Sortierkriterium.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Um in der Liste nur ungelesene E-Mails anzuzeigen, klicken Sie unterhalb der Seitenleiste auf das Symbol
-                    <span class="guibutton"><strong>Sortieren</strong></span>
-                  <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.sort2"></a><img src="../../images/appsuite_user_icon_sort.png"></span> . Aktivieren Sie im Menü <span class="guibutton"><strong>Nur ungelesene</strong></span>.</p></li>
-</ul></div>
-</li>
-<li class="step"><p>Klicken Sie in der Seitenleiste auf eine E-Mail. Der Inhalt der E-Mail wird im Anzeigebereich angezeigt. Wenn die
-            E-Mail einen E-Mail-Thread enthält, sehen Sie die aktuelle E-Mail ganz oben, die ursprüngliche E-Mail ganz
-            unten.</p></li>
-<li class="step">
-<p>Wenn die E-Mail einen E-Mail-Thread enthält, können Sie folgende Funktionen verwenden: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Um in der Seitenleiste alle vorangegangenen E-Mails des E-Mail-Threads anzuzeigen, klicken Sie auf das
-                  Symbol <span class="guibutton"><strong>Thread</strong></span>
-                  <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.thread01"></a><img src="../../images/appsuite_user_icon_thread.png"></span>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Um den Inhalt einer vorangegangenen E-Mail anzuzeigen, klicken Sie in der Seitenleiste auf die
-                  vorangegangene E-Mail.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Um den vollständigen Inhalt des E-Mail-Threads anzuzeigen, klicken Sie in der Seitenleiste auf die aktuelle
-                  E-Mail.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Um in der Seitenleiste die vorangegangenen E-Mails auszublenden, klicken Sie erneut auf das Symbol
-                    <span class="guibutton"><strong>Thread</strong></span>
-                  <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.thread02"></a><img src="../../images/appsuite_user_icon_thread.png"></span>.</p></li>
-</ul></div>
-</li>
-<li class="step">
-<p>Wenn die E-Mail Zitate aus einer früheren E-Mail enthält, können Sie folgende Funktion verwenden:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>Um das vollständige Zitat anzuzeigen, klicken Sie links neben dem Zitat auf die senkrechte Linie oder auf
-                    <span class="guibutton"><strong>Weitere anzeigen</strong></span>.</p></li></ul></div>
-</li>
-<li class="step">
-<p>Um eine andere E-Mail anzuzeigen, verwenden Sie eine der folgenden Methoden: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Klicken Sie in der Seitenleiste auf eine andere E-Mail.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Blättern Sie mit Hilfe der Cursortasten durch die Liste.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Um E-Mails mit Hilfe eines Suchbegriffs zu finden, verwenden Sie die <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.objects.html#ox.appsuite.user.task.search" title="So suchen Sie in der aktuellen App nach Objekten:">Suchfunktion</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Um die Liste der E-Mails zu sortieren, klicken Sie oberhalb der Liste auf 
+                    <span class="guibutton"><strong>Sortieren nach</strong></span>. Wählen Sie im Menü ein Sortierkriterium.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
+<li class="step"><p>Um alle E-Mails einer Konversation zu einem Listeneintrag zusammenzufassen, aktivieren 
+            Sie in <span class="guibutton"><strong>Sortieren nach</strong></span> das Kontrollfeld <span class="guibutton"><strong>Konversationen</strong></span>.</p></li>
+<li class="step">
+<p>Klicken Sie in der Liste auf eine E-Mail. Der Inhalt der E-Mail wird der Detailansicht angezeigt. Bei E-Mail 
+            Konversation werden alle E-Mails dieser Konversation untereinander angezeigt.</p>
+<p>Wenn Sie in der Werkzeugleiste in <span class="guibutton"><strong>Ansicht</strong></span> die Einstellung <span class="guibutton"><strong>Liste</strong></span>
+          gewählt haben, wird die Liste ersetzt durch die Detailansicht der angeklickten E-Mail. In diesem Fall sind oberhalb
+          der Detailansicht die folgenden Funktionen verfügbar:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Um zur Liste zurück zu kehren, klicken Sie auf die Schaltfläche oder das Symbol <span class="guibutton"><strong>Zurück</strong></span>
+                <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.back"></a><img src="../../images/appsuite_user_icon_view_back.png"></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Um die nächste E-Mail anzuzeigen, klicken Sie auf das Symbol <span class="guibutton"><strong>Nächste anzeigen</strong></span>
+                <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.next"></a><img src="../../images/appsuite_user_icon_view_next.png"></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Um die vorherige E-Mail anzuzeigen, klicken Sie auf das Symbol <span class="guibutton"><strong>Vorherige anzeigen</strong></span>
+                <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.previous"></a><img src="../../images/appsuite_user_icon_view_previous.png"></span>.</p></li>
+</ul></div>
+<p>
+          </p>
+<p>Wenn Sie in der Werkzeugleiste in <span class="guibutton"><strong>Ansicht</strong></span> die Einstellung <span class="guibutton"><strong>Vertikal</strong></span>
+            oder <span class="guibutton"><strong>Kompakt</strong></span> gewählt haben, können Sie eine E-Mail in einem eigenen Fenster öffnen, indem Sie 
+            die E-Mail in der Liste doppelklicken.</p>
+</li>
+<li class="step">
+<p>Wenn eine Konversation angezeigt wird, können Sie in der Detailansicht eine einzelne E-Mail öffnen oder schließen, 
+            indem Sie auf eine freie Stelle zwischen Absender und Datum des Empfangs klicken.</p>
+<p>Um alle E-Mails der Konversation zu öffnen oder zu schließen, klicken 
+            Sie rechts oben in der Detailansicht auf das Symbol <span class="guibutton"><strong>Alle Nachrichten öffnen/schließen</strong></span>
+              <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.threadopen"></a><img src="../../images/appsuite_user_icon_thread_open.png"></span> .</p>
+</li>
+<li class="step"><p>Wenn die E-Mail ein Zitat aus einer früheren E-Mail enthält, können Sie das Zitat anzeigen, indem
+              Sie auf das Symbol <span class="guibutton"><strong>Zitierten Text anzeigen</strong></span>
+              <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.showquoted"></a><img src="../../images/appsuite_user_icon_email_quote.png"></span> klicken.</p></li>
 </ol></div>
 </div>
 </div>
