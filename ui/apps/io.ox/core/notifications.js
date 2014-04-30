@@ -491,7 +491,7 @@ define('io.ox/core/notifications',
                         );
                     }
 
-                    if (!reuse) $('body').append(node);
+                    if (!reuse) $('#io-ox-core').append(node);
 
                     // put at end of stack not to run into opening click
                     setTimeout(function () {
