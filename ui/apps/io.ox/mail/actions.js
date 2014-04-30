@@ -210,7 +210,7 @@ define('io.ox/mail/actions',
                 }
             });
             if (check === true) return;
-            
+
             require(['io.ox/mail/write/main'], function (m) {
                 if (m.reuse('edit', data)) return;
                 m.getApp().launch().done(function () {
@@ -1206,77 +1206,4 @@ define('io.ox/mail/actions',
             app.queues.importEML.offer(file, { folder: app.folder.get() });
         }
     });
-
-    // Mobile multi select extension points
-    // action markunread
-    ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
-        id: 'unread',
-        index: 10,
-        draw: function (data) {
-            var selection = data.data,
-                allUnread = true;
-            // what do we want to do?
-            // if all selected mails are unread, show "read" action and vice versa
-            for (var i = 0; i < selection.length; i++) {
-                if (!api.tracker.isUnseen(selection[i])) {
-                    allUnread = false;
-                }
-            }
-
-            var baton = new ext.Baton({data: data.data});
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i>')
-                            .addClass((allUnread ? 'fa-envelope' : 'fa-envelope-o'))
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                actions.invoke('io.ox/mail/actions/' + (allUnread ? 'markread' : 'markunread'), null, baton);
-                            })
-                    )
-                )
-            );
-        }
-    });
-
-    // action delete
-    ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
-        id: 'delete',
-        index: 20,
-        draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="fa fa-trash-o">').on('tap', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            actions.invoke('io.ox/mail/actions/delete', null, baton);
-                        })
-                    )
-                )
-            );
-        }
-    });
-    // action move
-    ext.point('io.ox/mail/mobileMultiSelect/toolbar').extend({
-        id: 'move',
-        index: 30,
-        draw: function (data) {
-            var baton = new ext.Baton({data: data.data});
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="fa fa-sign-in">').on('tap', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            actions.invoke('io.ox/mail/actions/move', null, baton);
-                        })
-                    )
-                )
-            );
-        }
-    });
-
 });
