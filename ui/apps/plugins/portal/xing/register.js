@@ -48,7 +48,8 @@ define('plugins/portal/xing/register',
         title = gt('XING'),
         reauthorizeAccount,
         MAX_ITEMS_PREVIEW = 3,
-        XING_NAME = gt('XING');
+        XING_NAME = gt('XING'),
+        point = ext.point('io.ox/portal/widget/xing');
 
     isAlreadyOnXing = function (emailArray) {
         return api.find_by_emails(emailArray).then(function (data) {
@@ -240,7 +241,7 @@ define('plugins/portal/xing/register',
     /*
      * Portal extension points: Here's where it all starts
      */
-    ext.point('io.ox/portal/widget/xing').extend({
+    point.extend({
         title: title,
 
         isEnabled: function () {
@@ -293,6 +294,18 @@ define('plugins/portal/xing/register',
                     makeNewsfeed(baton.data.network_activities)
                 )
             );
+        },
+
+        error: function (error, baton) {
+            if (!point.invoke('requiresCustomSetUp')) {
+                return;
+            }
+            var node = baton.model.node,
+                title = node.find('.title').parent(),
+                decoration = $('<div>').addClass('decoration').append(title);
+
+            node.empty().append(decoration);
+            point.invoke('performCustomSetUp', node, baton);
         }
     });
 
