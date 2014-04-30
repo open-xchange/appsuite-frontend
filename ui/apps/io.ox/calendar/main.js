@@ -30,7 +30,7 @@ define('io.ox/calendar/main',
     var app = ox.ui.createApp({
         name: 'io.ox/calendar',
         title: 'Calendar'
-    });
+    }), win;
 
     app.mediator({
 
@@ -38,7 +38,7 @@ define('io.ox/calendar/main',
          * Early List view vsplit - we need that to get a Vgrid instance
          */
         'list-vsplit': function (app) {
-            var vsplit = commons.vsplit($('<div>'), app);
+            var vsplit = commons.vsplit(win, app);
             app.left = vsplit.left;
             app.right = vsplit.right;
         },
@@ -156,8 +156,7 @@ define('io.ox/calendar/main',
     app.setLauncher(function (options) {
 
         // app window
-        var win,
-            lastPerspective = settings.get('viewView', 'week:workweek');
+        var lastPerspective = settings.get('viewView', 'week:workweek');
 
         if (_.device('smartphone')) {
             // map different views here
