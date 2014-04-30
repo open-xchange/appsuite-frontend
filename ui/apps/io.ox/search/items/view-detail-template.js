@@ -12,9 +12,7 @@
  */
 
 define('io.ox/search/items/view-detail-template',
-    ['gettext!io.ox/core',
-     'io.ox/core/extensions'
-    ], function (gt, ext) {
+    ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
