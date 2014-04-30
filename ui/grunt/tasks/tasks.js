@@ -27,6 +27,8 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['lint', 'copy_build', 'assemble_build', 'newer:concat', 'newer:less', 'compile_po']);
     // create a package ready version of the ui (aka what jenkins does)
     grunt.registerTask('dist', ['clean', 'checkDependencies:build', 'bower', 'build', 'uglify', 'copy_dist', 'create_i18n_properties']);
+    // build before starting dev stuff
+    grunt.registerTask('dev', ['default', 'connect', 'test', 'watch']);
     // default task
     grunt.registerTask('default', ['checkDependencies:dev', 'bower', 'build', 'force_update']);
 };
