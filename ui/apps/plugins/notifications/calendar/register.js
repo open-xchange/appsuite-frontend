@@ -15,14 +15,9 @@
 define('plugins/notifications/calendar/register',
     ['io.ox/calendar/api',
      'io.ox/core/api/reminder',
-     'io.ox/calendar/util',
      'io.ox/core/extensions',
-     'io.ox/core/api/folder',
-     'io.ox/core/api/user',
-     'io.ox/core/tk/reminder-util',
-     'settings!io.ox/calendar',
      'gettext!plugins/notifications'
-    ], function (calAPI, reminderAPI, util, ext, folderAPI, userAPI, reminderUtil, settings, gt) {
+    ], function (calAPI, reminderAPI, ext, gt) {
 
     'use strict';
 
@@ -97,11 +92,14 @@ define('plugins/notifications/calendar/register',
         draw: function (baton) {
             //build selectoptions
             var minutes = [5, 10, 15, 45],
-                options = [];
+                options = [],
+                self = this;
             for (var i = 0; i < minutes.length; i++) {
                 options.push([minutes[i], gt.format(gt.npgettext('in', 'in %d minute', 'in %d minutes', minutes[i]), minutes[i])]);
             }
-            reminderUtil.draw(this, baton.model, options);
+            require(['io.ox/core/tk/reminder-util'], function (reminderUtil) {
+                reminderUtil.draw(self, baton.model, options);
+            });
         }
     });
 
@@ -167,17 +165,19 @@ define('plugins/notifications/calendar/register',
         onClickAccept: function (e) {
             e.stopPropagation();
             var o = calAPI.reduce(this.model.get('data'));
-            folderAPI.get({ folder: o.folder }).done(function (folder) {
-                o.data = {
-                    alarm: parseInt(settings.get('defaultReminder', 15), 10), // default reminder
-                    confirmmessage: '',
-                    confirmation: 1
-                };
-                // add current user id in shared or public folder
-                if (folderAPI.is('shared', folder)) {
-                    o.data.id = folder.created_by;
-                }
-                calAPI.confirm(o);
+                require(['io.ox/core/api/folder', 'settings!io.ox/calendar'], function (folderAPI, settings) {
+                    folderAPI.get({ folder: o.folder }).done(function (folder) {
+                    o.data = {
+                        alarm: parseInt(settings.get('defaultReminder', 15), 10), // default reminder
+                        confirmmessage: '',
+                        confirmation: 1
+                    };
+                    // add current user id in shared or public folder
+                    if (folderAPI.is('shared', folder)) {
+                        o.data.id = folder.created_by;
+                    }
+                    calAPI.confirm(o);
+                });
             });
         },
 
@@ -267,13 +267,15 @@ define('plugins/notifications/calendar/register',
                     //get updated data
                     calAPI.get(reminder.get('caldata')).done(function (calObj) {
                         if (!calObj.alarm) {//alarmtime was removed in the meantime, so no reminder to add
-                            self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
-                            //fill in new data
-                            reminder.set('caldata', calObj);
-                            reminder.set('title', calObj.title);
-                            reminder.set('location', calObj.location);
-                            reminder.set('time', util.getTimeInterval(calObj));
-                            self.collection.add(reminder);
+                            require(['io.ox/calendar/util'], function (util) {
+                                self.collection.hidden = _.without(self.collection.hidden, reminder.get('cid'));
+                                //fill in new data
+                                reminder.set('caldata', calObj);
+                                reminder.set('title', calObj.title);
+                                reminder.set('location', calObj.location);
+                                reminder.set('time', util.getTimeInterval(calObj));
+                                self.collection.add(reminder);
+                            });
                         }
                     });
 
@@ -413,39 +415,41 @@ define('plugins/notifications/calendar/register',
                                 recurrence_position: remObj.recurrence_position
                             };
                             calAPI.get(obj).done(function (data) {
-
-                                var inObj = {
-                                    cid: _.cid(remObj),
-                                    title: data.title,
-                                    location: data.location,
-                                    time: util.getTimeInterval(data),
-                                    date: util.getDateInterval(data),
-                                    remdata: remObj,
-                                    caldata: data
-                                };
-
-                                // ignore appointments that are over
-                                var isOver = data.end_date < now;
-
-                                if (!isOver) {
-                                    _(ReminderNotifications.collection.models).each(function (reminderModel) {//remove outdated versions of the model
-                                        if (reminderModel.get('cid') === inObj.cid) {
-                                            ReminderNotifications.collection.remove(reminderModel);
+                                require(['io.ox/calendar/util'], function (util) {
+    
+                                    var inObj = {
+                                        cid: _.cid(remObj),
+                                        title: data.title,
+                                        location: data.location,
+                                        time: util.getTimeInterval(data),
+                                        date: util.getDateInterval(data),
+                                        remdata: remObj,
+                                        caldata: data
+                                    };
+    
+                                    // ignore appointments that are over
+                                    var isOver = data.end_date < now;
+    
+                                    if (!isOver) {
+                                        _(ReminderNotifications.collection.models).each(function (reminderModel) {//remove outdated versions of the model
+                                            if (reminderModel.get('cid') === inObj.cid) {
+                                                ReminderNotifications.collection.remove(reminderModel);
+                                            }
+                                        });
+    
+                                        // do not add user suppressed ('remind me later') reminders
+                                        if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
+                                            ReminderNotifications.collection.add(new Backbone.Model(inObj));
                                         }
-                                    });
-
-                                    // do not add user suppressed ('remind me later') reminders
-                                    if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
-                                        ReminderNotifications.collection.add(new Backbone.Model(inObj));
                                     }
-                                }
-
-                                counter--;
-
-                                if (counter === 0) {
-                                    //all data processed. Update Collection
-                                    ReminderNotifications.collection.trigger('add');
-                                }
+    
+                                    counter--;
+    
+                                    if (counter === 0) {
+                                        //all data processed. Update Collection
+                                        ReminderNotifications.collection.trigger('add');
+                                    }
+                                });
                             });
                         }
                     });
@@ -472,41 +476,46 @@ define('plugins/notifications/calendar/register',
             calAPI
                 .on('new-invites', function (e, invites) {
                     var tmp = [];
-
-                    $.when.apply($,
-                        _(invites).map(function (invite) {
-                            //test if this invites are hidden
-                            if (hiddenCalInvitationItems[_.ecid(invite)]) {
-                                return undefined;
-                            }
-                            var inObj = {
-                                cid: _.cid(invite),
-                                title: invite.title,
-                                location: invite.location || '',
-                                date: util.getDateInterval(invite),
-                                time: util.getTimeInterval(invite),
-                                data: invite
-                            };
-                            // TODO: ignore organizerId until we know better
-                            var def = $.Deferred();
-                            userAPI.get({ id: invite.organizerId || invite.created_by })
-                                .done(function (user) {
-                                    inObj.organizer = user.display_name;
-                                    tmp.push(inObj);
-                                    def.resolve();
+                    if (invites.length > 0) {
+                        require(['io.ox/calendar/util', 'io.ox/core/api/user'], function (util, userAPI) {
+                            $.when.apply($,
+                                _(invites).map(function (invite) {
+                                    //test if this invites are hidden
+                                    if (hiddenCalInvitationItems[_.ecid(invite)]) {
+                                        return undefined;
+                                    }
+                                    var inObj = {
+                                        cid: _.cid(invite),
+                                        title: invite.title,
+                                        location: invite.location || '',
+                                        date: util.getDateInterval(invite),
+                                        time: util.getTimeInterval(invite),
+                                        data: invite
+                                    };
+                                    // TODO: ignore organizerId until we know better
+                                    var def = $.Deferred();
+                                    userAPI.get({ id: invite.organizerId || invite.created_by })
+                                        .done(function (user) {
+                                            inObj.organizer = user.display_name;
+                                            tmp.push(inObj);
+                                            def.resolve();
+                                        })
+                                        .fail(function () {
+                                            // no organizer
+                                            inObj.organizer = invite.organizer || false;
+                                            tmp.push(inObj);
+                                            def.resolve();
+                                        });
+                                    return def;
                                 })
-                                .fail(function () {
-                                    // no organizer
-                                    inObj.organizer = invite.organizer || false;
-                                    tmp.push(inObj);
-                                    def.resolve();
-                                });
-                            return def;
-                        })
-                    )
-                    .done(function () {
+                            )
+                            .done(function () {
+                                InviteNotifications.collection.reset(tmp);
+                            });
+                        });
+                    } else {
                         InviteNotifications.collection.reset(tmp);
-                    });
+                    }
 
                 })
                 .on('mark:invite:confirmed', removeInvites)
