@@ -448,7 +448,7 @@ define.async('io.ox/core/tk/html-editor',
 
             browser_spellcheck: true,
 
-            plugins: 'autolink image link paste textcolor emoji',
+            plugins: 'autolink oximage link paste textcolor emoji',
 
             language: lookupTinyMCELanguage(),
 
@@ -459,15 +459,6 @@ define.async('io.ox/core/tk/html-editor',
 
             // need this to work in karma/phantomjs // TODO: still needed?
             //content_element: textarea.get(0),
-
-
-            // TODO: Needs rewrite for new tinymce dialogs
-            file_browser_callback : function (field_name, url, type, win) {
-                var self = $('#' + field_name);
-                require(['io.ox/mail/write/inline-images'], function (inlineimages) {
-                    inlineimages.show.apply(self);
-                });
-            },
 
             init_instance_callback: function (editor) {
 

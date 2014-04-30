@@ -85,7 +85,7 @@ define('io.ox/mail/write/inline-images',
         show: function () {
             var dialog = new dialogs.ModalDialog({async: true}),
                 baton =  new ext.Baton({$: {}}),
-                self = this,
+                def = $.Deferred(),
                 form;
 
             dialog.build(function () {
@@ -110,28 +110,25 @@ define('io.ox/mail/write/inline-images',
                         }
                         popup.idle();
                     };
+
                 popup.busy();
-                if (file.val() === '') {
-                    notifications.yell('error', gt('Please select a file to insert'));
-                    popup.idle();
-                    return;
-                } else if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
+
+                if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
                     notifications.yell('error', gt('Please select a valid image File to insert'));
                     popup.idle();
-                    return;
+                    def.reject();
                 } else {
-                    api.inlineImage({
+                    return api.inlineImage({
                         file: file[0].files ? file[0].files[0] : [],
                         form: form
-                    }).done(function (data) {
-                        self
-                            .val(api.getInsertedImageUrl(data))
-                            .trigger('change');
+                    }).then(function (data) {
                         popup.close();
+                        def.resolve(api.getInsertedImageUrl(data));
                     }).fail(failHandler);
                 }
             })
             .show();
+            return def;
         }
     };
 
