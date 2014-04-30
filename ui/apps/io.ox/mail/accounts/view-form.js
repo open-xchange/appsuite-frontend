@@ -63,13 +63,8 @@ define.async('io.ox/mail/accounts/view-form',
 
         validationCheck = function (data) {
 
-            data = _.extend({
-                unified_inbox_enabled: false,
-                transport_credentials: false
-            }, data);
-
+            data = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, data);
             data.name = data.personal = data.primary_address;
-
             return accountAPI.validate(data);
         },
 

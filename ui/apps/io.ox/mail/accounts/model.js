@@ -122,13 +122,8 @@ define('io.ox/mail/accounts/model',
 
         validationCheck: function (data, options) {
 
-            data = _.extend({
-                unified_inbox_enabled: false,
-                transport_credentials: false
-            }, data);
-
+            data = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, data);
             data.name = data.personal = data.primary_address;
-
             return AccountAPI.validate(data, options);
         },
 
@@ -165,13 +160,8 @@ define('io.ox/mail/accounts/model',
             } else {
                 if (obj) {
 
-                    obj = _.extend({
-                        unified_inbox_enabled: false,
-                        transport_credentials: false
-                    }, obj);
-
+                    obj = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, obj);
                     obj.name = obj.personal = obj.primary_address;
-//                    obj.name = obj.primary_address;
 
                     this.attributes = obj;
                     this.attributes.spam_handler = 'NoSpamHandler';

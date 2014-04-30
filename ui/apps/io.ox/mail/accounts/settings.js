@@ -217,13 +217,18 @@ define('io.ox/mail/accounts/settings',
         },
 
         autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def) {
+
             api.autoconfig({
                 'email': newMailaddress,
                 'password': newPassword
-            }).done(function (data) {
+            })
+            .done(function (data) {
                 if (data.login) {
                     data.primary_address = newMailaddress;
                     data.password = newPassword;
+                    // make sure not to set the SMTP credentials
+                    delete data.transport_login;
+                    delete data.transport_password;
                     validateMailaccount(data, popup, def);
                 } else {
                     var data = {};
