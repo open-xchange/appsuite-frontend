@@ -15,13 +15,12 @@ define('io.ox/search/main',
     ['gettext!io.ox/search',
      'settings!io.ox/core',
      'io.ox/core/extensions',
-     'io.ox/core/tk/dialogs',
      'io.ox/search/model',
      'io.ox/search/view',
      'io.ox/search/api',
      'io.ox/core/notifications',
      'less!io.ox/search/style'
-    ], function (gt, settings, ext, dialogs, SearchModel, SearchView, api, notifications) {
+    ], function (gt, settings, ext, SearchModel, SearchView, api, notifications) {
 
     'use strict';
 
@@ -97,7 +96,7 @@ define('io.ox/search/main',
         yell = function (error) {
             notifications.yell('error', error.error_desc);
         },
-        sidepopup = new dialogs.SidePopup({tabTrap: true}),
+        sidepopup,
         win, model, run;
 
 
@@ -174,7 +173,11 @@ define('io.ox/search/main',
 
         // return deferred
         win.show(function () {
-            sidepopup.delegate(app.view.$el, '.item', openSidePopup);
+            //detail view sidepopo
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                sidepopup = new dialogs.SidePopup({tabTrap: true})
+                            .delegate(app.view.$el, '.item', openSidePopup);
+            });
         });
     });
 
