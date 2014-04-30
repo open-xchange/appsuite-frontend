@@ -458,7 +458,8 @@ define('io.ox/calendar/actions',
         id: 'move',
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return e.collection.has('some', 'delete') && isBossy;
+                var isSeries = e.baton.data.recurrence_type > 0;
+                return e.collection.has('some', 'delete') && isBossy && !isSeries;
             });
         },
         multiple: copyMove('move', gt('Move'))
@@ -656,6 +657,7 @@ define('io.ox/calendar/actions',
         mobile: 'lo',
         id: 'move',
         label: gt('Move'),
+        drawDisabled: true,
         ref: 'io.ox/calendar/detail/actions/move'
     }));
 
