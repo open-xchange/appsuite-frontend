@@ -32,10 +32,11 @@ define('plugins/portal/xing/register',
      'io.ox/core/extPatterns/links',
      'io.ox/keychain/api',
      'io.ox/backbone/forms',
+     'io.ox/core/date',
      'gettext!plugins/portal',
      'less!plugins/portal/xing/xing'
     ], function (ext, eventActions, activityParsers, api, userApi,
-        notifications, dialogs, links, keychain, forms, gt) {
+        notifications, dialogs, links, keychain, forms, date, gt) {
 
     'use strict';
 
@@ -190,8 +191,10 @@ define('plugins/portal/xing/register',
 
             var activityNode = $('<div>').addClass('activity').appendTo(node),
                 reactionNode = $('<div>').addClass('reactions'),
+                dateNode = $('<div>').addClass('date'),
                 foundHandler = false,
                 id;
+
             if (id = activity.ids[0]) {
                 activityNode.attr('data-activity-id', id);
             }
@@ -206,6 +209,13 @@ define('plugins/portal/xing/register',
             });
 
             if (foundHandler) {
+                // Date
+                if (activity.created_at) {
+                    var creationDate = new date.Local(activity.created_at);
+                    dateNode.text(creationDate.format(date.DATE_TIME)).appendTo(activityNode);
+                }
+
+                //reactions like comment, share, like
                 _(activity.possible_actions).each(function (reaction) {
                     ext.point('io.ox/portal/widget/xing/reaction').each(function (handler) {
                         if (handler.accepts(reaction)) {
@@ -216,6 +226,8 @@ define('plugins/portal/xing/register',
                     });
                 });
                 reactionNode.appendTo(activityNode);
+
+
             } else {
                 console.log('Could not find a handler for the following activity', JSON.stringify(activity));
             }

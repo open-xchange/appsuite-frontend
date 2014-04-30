@@ -79,7 +79,9 @@ define('plugins/portal/xing/activities',
             var linkActivity = activity.objects[0];
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s posted a link:', makeName(linkActivity.creator))),
-                $('<div class="actionContent">').text(linkActivity.url)
+                $('<div class="actionContent">').append(
+                    $('<a>').attr({'href': linkActivity.url, 'target': '_blank'}).text(linkActivity.description || linkActivity.url)
+                )
             );
         }
     });
