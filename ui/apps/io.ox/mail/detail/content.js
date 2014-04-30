@@ -506,7 +506,7 @@ define('io.ox/mail/detail/content',
                     }
                     // only do this for absolute elements
                     if (farthest.found) {
-                        content.css('overflow-x', 'scroll');
+                        content.css('overflow-x', 'auto');
                         if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
                     }
                     content = null;
