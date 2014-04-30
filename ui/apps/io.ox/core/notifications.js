@@ -360,7 +360,7 @@ define('io.ox/core/notifications',
                     info: 10000,
                     success: 4000,
                     warning: 10000,
-                    screenreader: 0,
+                    screenreader: 100,
                 },
 
                 icons = {
@@ -442,9 +442,15 @@ define('io.ox/core/notifications',
                 if (validType.test(o.type)) {
 
                     active = false;
-                    clearTimeout(timer);
 
-                    timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+                    if (o.type !== 'screenreader') {//screenreader notifications should not remove standard ones, so special remove here
+                        clearTimeout(timer);
+                        timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+                    } else {
+                        setTimeout(function () {
+                            $('.io-ox-alert-screenreader').remove();
+                        }, o.duration || durations[o.type] || 100);
+                    }
 
                     var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
                         reuse = false,
@@ -454,7 +460,7 @@ define('io.ox/core/notifications',
                     // reuse existing alert?
                     var node = $('.io-ox-alert');
 
-                    if (node.length) {
+                    if (node.length && o.type !== 'screenreader') {//screenreader should not reuse existing notifications, this would only remove them for other users
                         node.empty();
                         reuse = true;
                         className += ' appear';
