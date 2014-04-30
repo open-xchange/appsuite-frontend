@@ -112,7 +112,7 @@ define([
                 waitsFor(function () {
                     return !node.find('ul').hasClass('empty');
                 }).then(function () {
-                    expect(node.find('li', 'ul')).to.have.length(3);
+                    expect(node.find('li', 'ul')).to.have.length(4);
                     node.remove();
                     done();
                 });
