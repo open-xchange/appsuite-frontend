@@ -62,10 +62,10 @@ define('plugins/portal/xing/register',
         var account = keychain.getStandardAccount('xing');
 
         keychain.submodules.xing.reauthorize(account).done(function () {
-            notifications.yell('success', gt('Reauthorized your %s account successfully', XING_NAME));
+            notifications.yell('success', gt('Successfully reauthorized your %s account', XING_NAME));
             ox.trigger('refresh^');
         }).fail(function (response) {
-            notifications.yell('error', gt('There was a problem with %s, the error message was: "%s"', XING_NAME, response.error));
+            notifications.yell('error', gt('There was a problem with %s. The error message was: "%s"', XING_NAME, response.error));
         });
     };
 
@@ -84,7 +84,7 @@ define('plugins/portal/xing/register',
                     menu = $('<div>').addClass('io-ox-xing submitted-data').append(
                         $('<p>').text(gt('Please select which of the following data we may use to create your %s account:', XING_NAME)),
                         $('<label>').append(
-                            $.txt(gt('E-mail address')),
+                            $.txt(gt('Mail address')),
                             email = $('<input>').attr({type: 'text', name: 'email'})
                         ),
                         $('<label>').append(
@@ -126,10 +126,10 @@ define('plugins/portal/xing/register',
                     language: language.val()
                 })
                 .fail(function (response) {
-                    notifications.yell('error', gt('There was a problem with %s, the error message was: "%s"', XING_NAME, response.error));
+                    notifications.yell('error', gt('There was a problem with %s. The error message was: "%s"', XING_NAME, response.error));
                 })
                 .done(function () {
-                    notifications.yell('success', gt('Your %s account was created. Expect a confirmation e-mail from %s soon.', XING_NAME, XING_NAME));
+                    notifications.yell('success', gt('Your %s account has been created. Expect a confirmation mail from %s soon.', XING_NAME, XING_NAME));
                     notifications.yell('success', gt('The next step is allowing this system to access your %s account for you.', XING_NAME));
                     addXingAccount(event);
                 });
@@ -163,11 +163,11 @@ define('plugins/portal/xing/register',
                 message: input.val()
 
             }).fail(function (response) {
-                notifications.yell('error', gt('Your status update could not be posted on %s, the error message was: "%s"', XING_NAME, response.error));
+                notifications.yell('error', gt('Your status update could not be posted on %s. The error message was: "%s"', XING_NAME, response.error));
 
             }).done(function () {
                 container.remove();
-                notifications.yell('success', gt('Your status update was posted on %s successfully', XING_NAME));
+                notifications.yell('success', gt('Your status update has been successfully posted on %s', XING_NAME));
 
             });
         });
@@ -305,7 +305,7 @@ define('plugins/portal/xing/register',
                 email: contact.email1 || contact.email2 || contact.email3
             })
             .fail(function (response) {
-                notifications.yell('error', gt('There was a problem with %s, the error message was: "%s"', XING_NAME, response.error));
+                notifications.yell('error', gt('There was a problem with %s. The error message was: "%s"', XING_NAME, response.error));
             })
             .done(function () {
                 notifications.yell('success', gt('Invitation sent'));
@@ -327,7 +327,7 @@ define('plugins/portal/xing/register',
                 email: contact.email1 || contact.email2 || contact.email3
             })
             .fail(function (response) {
-                notifications.yell('error', gt('There was a problem with %s, the error message was: "%s"', XING_NAME, response.error));
+                notifications.yell('error', gt('There was a problem with %s. The error message was: "%s"', XING_NAME, response.error));
             })
             .done(function () {
                 notifications.yell('success', gt('Contact request sent'));

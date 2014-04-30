@@ -135,7 +135,7 @@ define('plugins/halo/xing/register',
 
             node.append(
                 $('<div>').addClass('birthdate extended-profile-block').append(
-                    $('<legend>').addClass('header').text(gt('Birthdate')),
+                    $('<legend>').addClass('header').text(gt('Date of birth')),
                     $('<p>').text(birthday.format(date.DATE))
                 )
             );

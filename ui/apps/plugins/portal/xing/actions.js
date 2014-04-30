@@ -56,7 +56,7 @@ define('plugins/portal/xing/actions',
                 .done(function () {
                     container.toggle();
                     textarea.val('');
-                    notifications.yell('success', gt('Comment was posted on XING successfully'));
+                    notifications.yell('success', gt('Comment has been successfully posted on XING'));
                     ox.trigger('refresh^');
                 });
             };
@@ -88,22 +88,26 @@ define('plugins/portal/xing/actions',
             handler = function () {
                 var container = $('.activity[data-activity-id="' + id + '"]'),
                     type = activity.type,
+                    successMessage,
                     def = $.Deferred();
 
                 if (type === 'activity') {
                     def = api.deleteActivity({ activity_id: id });
+                    successMessage = gt('The activity has been deleted successfully');
                 } else if (type === 'comment') {
                     def = api.deleteComment({ comment_id: id });
+                    successMessage = gt('The comment has been deleted successfully');
                 } else {
                     console.log('We currently do not know how to handle deleting data of type="' + type + '". Please let us know about it. Here is more data:', JSON.stringify(activity));
                 }
 
                 def.fail(function (response) {
-                    notifications.yell('error', gt('There was a problem with XING, the error message was: "%s"', response.error));
+                    notifications.yell('error', gt('There was a problem with XING. The error message was: "%s"', response.error));
                 })
                 .done(function () {
                     container.remove();
-                    notifications.yell('success', gt('The %s was deleted successfully', type));
+                    //#. %s may be either 'comment' or 'activity'
+                    notifications.yell('success', successMessage);
                     ox.trigger('refresh^');
                 });
             };
@@ -136,6 +140,7 @@ define('plugins/portal/xing/actions',
                         activity_id: actId,
                         comment_id: comId
                     });
+                    //#. As on Facebook, XING allows a stop pointing out they liked a comment. An 'undo' for the like action, if you will.
                     message = gt('Un-liked comment');
 
                 } else {
@@ -143,6 +148,7 @@ define('plugins/portal/xing/actions',
                         activity_id: actId,
                         comment_id: comId
                     });
+                    //#. As on Facebook, XING allows a user to point out that they like a comment
                     message = gt('Liked comment');
                 }
 
