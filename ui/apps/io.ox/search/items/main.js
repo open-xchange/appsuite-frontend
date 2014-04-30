@@ -12,17 +12,33 @@
  */
 
 define('io.ox/search/items/main',
-        ['io.ox/search/items/model',
-         'io.ox/search/items/collection',
-         'io.ox/search/items/view-template',
-         'io.ox/search/items/view-detail-template',
-         'less!io.ox/search/items/style'], function (Model, Collection) {
+        ['io.ox/search/items/collection',
+         'io.ox/search/items/view'], function (Collection, View) {
 
     'use strict';
 
     return {
-        Model: Model,
-        Collection: Collection
+        //init controller
+        create: function() {
+            var collection = new Collection(),
+                view = new View({collection: collection});
+
+            //event listener
+            collection.on('reset set', function () {
+                collection.trigger('changed:collection');
+            });
+
+            return _.extend({}, collection, {
+                        render: view.render,
+                        empty: function () {
+                            delete this.timestamp;
+                            if (collection.length)
+                                this.reset();
+                            return collection;
+                        }
+                    });
+
+        }
     };
 
 });

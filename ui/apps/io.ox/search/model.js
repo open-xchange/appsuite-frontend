@@ -19,7 +19,7 @@ define('io.ox/search/model',
      'io.ox/backbone/validation',
      'io.ox/core/extensions',
      'gettext!io.ox/core'
-    ], function (api, items, ModelFactory, util, Validations, ext, gt) {
+    ], function (api, collection, ModelFactory, util, Validations, ext, gt) {
 
     'use strict';
 
@@ -29,7 +29,7 @@ define('io.ox/search/model',
      */
 
     var options = {},
-        items = new items.Collection(),
+        items = collection.create(),
         defaults, factory;
 
     //fetch settings/options
@@ -270,16 +270,14 @@ define('io.ox/search/model',
                     });
 
                 //set collection
-                items.reset();
-                items.add(list);
+                items.reset(list);
                 items.timestamp = timestamp || Date.now();
             },
             getOptions: function () {
                 return  _.copy(options);
             },
             reset: function () {
-                items.reset();
-                delete items.timestamp;
+                items.empty();
                 this.set({
                     query: '',
                     autocomplete: [],

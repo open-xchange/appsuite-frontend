@@ -11,19 +11,18 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-define('io.ox/search/items/model',
-    ['io.ox/backbone/basicModel'], function (BasicModel) {
+define('io.ox/search/items/view',
+        ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
-    return BasicModel.extend({
-            model: {
-                defaults: {
-                    id: '',
-                    folder: '',
-                    application: '',
-                    data: {}
-                }
-            }
-        });
+    return Backbone.View.extend({
+
+        render: function (baton) {
+            require(['io.ox/search/items/view-template'], function () {
+                ext.point('io.ox/search/view/items').invoke('draw', baton.$, baton);
+            });
+        }
+
+    });
 });

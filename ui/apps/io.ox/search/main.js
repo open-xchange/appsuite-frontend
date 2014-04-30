@@ -163,6 +163,11 @@ define('io.ox/search/main',
         app.view = SearchView.factory
                     .create(app, model, win.nodes.main);
 
+        //register model item
+        model.get('items').on('changed:collection', function () {
+            this.render(app.view.getBaton());
+        });
+
         //update model
         model.set({
             mode: 'window',
