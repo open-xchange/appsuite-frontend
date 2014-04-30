@@ -205,12 +205,12 @@ define('io.ox/core/notifications',
                 }
             });
 
-            // invoke plugins
-            ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
-                setTimeout(function () {
+            // load and invoke plugins with delay
+            setTimeout(function () {
+                ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
                     ext.point('io.ox/core/notifications/register').invoke('register', self, self);
-                }, delay || 2000);
-            });
+                });
+            }, delay || 2000);
 
             function focusNotifications(e) {
                 if (e.which === 13) { //enter
