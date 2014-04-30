@@ -205,8 +205,7 @@ define('io.ox/search/model',
                         simple = _.copy(value, true);
                     }
 
-                    //
-                    if (!!value) {
+                    if (value && (value.custom || value.id !== 'custom')) {
                         active.push({
                             facet: facet.id,
                             value: value.custom || value.id,
