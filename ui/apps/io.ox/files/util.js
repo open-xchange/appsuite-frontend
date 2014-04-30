@@ -36,7 +36,7 @@ define('io.ox/files/util',
             var def = $.Deferred(),
                 extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) :  '',
                 extForm = _.last(formFilename.split('.')),
-                $hint = $('<div class="row muted inset">').append(
+                $hint = $('<div class="muted inset">').append(
                             $('<small style="padding-top: 8px">').text(
                                 gt('Please note, changing or removing the file extension will cause problems when viewing or editing.')
                             )
