@@ -56,6 +56,41 @@ define('io.ox/search/api',
         }
     });
 
+    var columns = {
+        mail: {
+            columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+            extendColumns: 'io.ox/mail/api/list'
+        },
+        files: {
+            columns: '20,23,1,5,700,702,703,704,707,3',
+            extendColumns: 'io.ox/files/api/list'
+        },
+        tasks: {
+            columns: '1,20,101,200,202,203,220,300,301,309',
+            extendColumns: 'io.ox/tasks/api/list',
+        },
+        contacts: {
+            columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5',
+            extendColumns: 'io.ox/contacts/api/list'
+        },
+        calendar: {
+            columns: '1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
+            extendColumns: 'io.ox/calendar/api/list'
+        }
+    };
+
+    function getColumns (options) {
+        var module = options.params.module,
+            data = columns[module],
+            obj = {
+                params: {
+                    columns: apiFactory.extendColumns(data.extendColumns, module, data.columns)
+                }
+            };
+        //filter admin contacts
+        return obj;
+    }
+
     //get default options
     function getDefault(key) {
         var  obj = _.copy(api.options.requests[key], true);
@@ -80,7 +115,7 @@ define('io.ox/search/api',
      * @return {deferred}   returns results
      */
     api.query = function (options) {
-        var opt = $.extend(true, {}, getDefault('query'), options);
+        var opt = $.extend(true, {}, getDefault('query'), getColumns(options), options);
         return http[opt.method](opt);
     };
 
