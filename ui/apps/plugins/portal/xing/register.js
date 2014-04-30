@@ -53,7 +53,6 @@ define('plugins/portal/xing/register',
 
     isAlreadyOnXing = function (emailArray) {
         return api.find_by_emails(emailArray).then(function (data) {
-            console.log('Information found about this user:', emailArray, data);
             return _(data.results.items).some(function (inquiry) {
                 return !!inquiry.user;
             });
@@ -106,9 +105,13 @@ define('plugins/portal/xing/register',
                     )
                 );
                 userApi.getCurrentUser().done(function (userData) {
+                    var locale = userData.attributes.locale,
+                        lang = locale.indexOf('_') > -1 ? locale.split('_')[0] : locale;
+
                     email.val(userData.attributes.email1 || userData.attributes.email2 || userData.attributes.email3);
                     firstname.val(userData.attributes.first_name);
                     lastname.val(userData.attributes.last_name);
+                    language.val(lang);
                 });
             })
 
@@ -117,9 +120,8 @@ define('plugins/portal/xing/register',
 
             .show()
 
-            .done(function (action, data, node) {
+            .done(function (action) {
                 if (action === 'cancel') return;
-                console.log('Submitting to XING', action, data, node);
                 api.createProfile({
                     tandc_check: true,
                     email: email.val(),
