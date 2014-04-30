@@ -66,7 +66,26 @@ define('io.ox/files/carousel',
             fullScreen: false,
             baton: null,
             step: 3,
-            attachmentMode: false
+            attachmentMode: false,
+            useSelectionAsStart: false
+        },
+        /**
+         * returns index of a possible startitem in the current selection or 0
+         * @param baton baton with data of current selection
+         * @param list list of images in this folder
+         */
+        findStartItem: function (baton, list) {
+            var startIndex = 0,
+                idsList = _(list).map(_.ecid),
+                idsSelection = _([].concat(baton.data)).map(_.ecid);
+
+            if (idsList && idsSelection) {
+                var item = _.intersection(idsList, idsSelection)[0];
+                if (item) {
+                    startIndex = _(idsList).indexOf(item);
+                }
+            }
+            return startIndex;
         },
 
         init: function (config) {
@@ -83,7 +102,12 @@ define('io.ox/files/carousel',
                 this.win = this.app.getWindow();
             }
             this.list = this.filterImagesList(config.baton.allIds);
-            this.pos = _.extend({}, this.defaults); // get a fresh copy
+            if (config.useSelectionAsStart) {
+                var index = this.findStartItem (config.baton, this.list);
+                this.pos = _.defaults({cur: index}, this.defaults );
+            } else {
+                this.pos = _.extend({}, this.defaults); // get a fresh copy
+            }
             this.firstStart = true; // should have a better name
 
             // no automatic animation
@@ -109,9 +133,15 @@ define('io.ox/files/carousel',
 
             pos.first = parseInt(this.inner.find('.item:first').attr('data-index'), 10);
             pos.last = parseInt(this.inner.find('.item:last').attr('data-index'), 10);
-            // Hide left control on start
-            this.prevControl.hide();
-            if (this.list.length > 1) {
+            // Hide controls if we are at one end of the list
+            if (pos.cur === pos.first) {
+                this.prevControl.hide();
+            } else {
+                this.prevControl.show();
+            }
+            if (pos.cur === pos.last) {
+                this.nextControl.show();
+            } else {
                 this.nextControl.show();
             }
             // before transition
@@ -185,7 +215,7 @@ define('io.ox/files/carousel',
             $(this).replaceWith($('<i>').addClass('fa fa-picture-o file-type-ppt'));
         },
 
-        getItems: function () {
+        getItems: function (loadBoth) {//if we start in the middle of our slideshow we need to preload both directions
 
             var self = this;
             var pos = this.pos,
@@ -193,7 +223,10 @@ define('io.ox/files/carousel',
                 start = pos.start,
                 end   = pos.end;
 
-            if (pos.direction === 'next') {
+            if (loadBoth) {
+                start = Math.max(pos.cur - this.config.step, 0);
+                end = Math.min(pos.cur + this.config.step, this.list.length);
+            } else if (pos.direction === 'next') {
                 start = pos.cur;
                 end = Math.min(start + this.config.step, this.list.length);
             } else {
@@ -222,7 +255,7 @@ define('io.ox/files/carousel',
                 self = null;
             }
 
-            if (this.firstStart) {
+            if (this.firstStart && this.pos.cur === index) {//support starting the slideshow in the middle
                 item.addClass('active');
                 this.firstStart = false;
             }
@@ -290,7 +323,7 @@ define('io.ox/files/carousel',
             );
             if (this.list.length === 1) this.nextControl.hide();
             win.idle();
-            this.getItems();
+            this.getItems(this.pos.cur !== 0);//if we start in the middle we need to preload both directions
         },
 
         close: function () {

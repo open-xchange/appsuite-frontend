@@ -1121,7 +1121,8 @@ define('io.ox/files/actions',
                 carousel.init({
                     fullScreen: false,
                     baton: baton,
-                    attachmentMode: false
+                    attachmentMode: false,
+                    useSelectionAsStart: true//tries to start with first displayable item in the current selection
                 });
             });
         }
@@ -1139,7 +1140,8 @@ define('io.ox/files/actions',
                 carousel.init({
                     fullScreen: true,
                     baton: baton,
-                    attachmentMode: false
+                    attachmentMode: false,
+                    useSelectionAsStart: true//tries to start with first displayable item in the current selection
                 });
             });
         }
