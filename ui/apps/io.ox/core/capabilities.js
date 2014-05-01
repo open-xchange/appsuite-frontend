@@ -72,23 +72,23 @@ define('io.ox/core/capabilities', function () {
 
     // use ref? to get cap parameter
     var hash = _.url.hash('ref') ? _.deserialize(_.url.hash('ref')) : _.url.hash();
+    var cap = hash.cap ? hash.cap.split(/\s*[, ]\s*/) : [];
+    if (ox.cap) cap = cap.concat(ox.cap.split(/\s*[, ]\s*/));
 
-    if (hash.cap) {
-        _(hash.cap.split(/\s*[, ]\s*/)).each(function (id) {
-            if (id[0] === '-') {
-                id = id.substr(1);
-                disabled[id] = true;
-                console.info('Disabled feature', id);
-            } else {
-                capabilities[id] = added[id] = {
-                    attributes: {},
-                    backendSupport: false,
-                    id: id
-                };
-                console.info('Enabled feature', id);
-            }
-        });
-    }
+    _(cap).each(function (id) {
+        if (id[0] === '-') {
+            id = id.substr(1);
+            disabled[id] = true;
+            console.info('Disabled feature', id);
+        } else {
+            capabilities[id] = added[id] = {
+                attributes: {},
+                backendSupport: false,
+                id: id
+            };
+            console.info('Enabled feature', id);
+        }
+    });
 
     // disable via hash?
     if (hash.disableFeature) {
