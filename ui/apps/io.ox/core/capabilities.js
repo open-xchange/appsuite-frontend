@@ -70,10 +70,13 @@ define('io.ox/core/capabilities', function () {
 
     api.reset();
 
-    // use ref? to get cap parameter
+    // custom cap
+    var cap = [];
+    // via local.conf?
+    if (ox.cap) cap = ox.cap.split(/\s*[, ]\s*/);
+    // via URL parameter
     var hash = _.url.hash('ref') ? _.deserialize(_.url.hash('ref')) : _.url.hash();
-    var cap = hash.cap ? hash.cap.split(/\s*[, ]\s*/) : [];
-    if (ox.cap) cap = cap.concat(ox.cap.split(/\s*[, ]\s*/));
+    if (hash.cap) cap = cap.concat(hash.cap.split(/\s*[, ]\s*/));
 
     _(cap).each(function (id) {
         if (id[0] === '-') {
@@ -86,6 +89,7 @@ define('io.ox/core/capabilities', function () {
                 backendSupport: false,
                 id: id
             };
+            delete disabled[id];
             console.info('Enabled feature', id);
         }
     });
