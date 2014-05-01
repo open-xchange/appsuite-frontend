@@ -3637,30 +3637,6 @@ a.toolbar-action, .toolbar-action > a {
     margin-top: 6px;
 }
 
-/** Simplify BOOTSTRAP buttons */
-.btn-custom(@color) {
-    background-color: @color;
-    &:hover, &.hover { background-color: darken(@color, 10%); }
-    border: 1px solid @color;
-    color: white;
-}
-
-.btn-default {
-    background-image: none;
-    background-color: #eee;
-    text-shadow: none;
-    &:hover, &.hover { background-color: darken(#eee, 10%); }
-    color: #555;
-    border: 1px solid #ccc;
-    border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
-}
-
-.btn-primary { .btn-custom(@btn-primary-background); }
-.btn-inverse { .btn-custom(@btn-inverse-background-highlight); }
-.btn-success { .btn-custom(@btn-success-background-highlight); }
-.btn-warning { .btn-custom(@btn-warning-background-highlight); }
-.btn-danger  { .btn-custom(@btn-danger-background-highlight); }
-
 /** BOOTSTRAP FIXES **/
 
 .label.pointer {
