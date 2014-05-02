@@ -672,7 +672,7 @@ define('io.ox/mail/main',
                         toggle(index, cid);
                     }
                 }
-                if (sel.length > 1 && key === 46) { // delete
+                if (sel.length >= 1 && key === 46) { // delete
                     actions.invoke('io.ox/mail/actions/delete', null, sel);
                 }
             });
