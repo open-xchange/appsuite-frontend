@@ -268,7 +268,7 @@ $(window).load(function () {
             $(this).busy();
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
-            require(['settings!io.ox/core'], function (settings) {
+            require(['settings!io.ox/core', 'precore.js'], function (settings) {
 
                 // greedy prefetch for mail app
                 // need to get this request out as soon as possible
