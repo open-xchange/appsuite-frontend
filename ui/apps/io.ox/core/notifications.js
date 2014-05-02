@@ -381,12 +381,15 @@ define('io.ox/core/notifications',
                         return;
                     }
 
-                    $('.io-ox-alert')
+                    var nodes =  $('.io-ox-alert')
                         .trigger('notification:removed')
-                        .on('transitionend webkitTransitionEnd', function () {
-                            $(this).remove();
-                        })
                         .removeClass('appear');
+
+                    // has been event-based (transitionend webkitTransitionEnd) but sometimes
+                    // such events are not triggered causing invisible but blocking overlays
+                    setTimeout(function () {
+                        nodes.remove(); nodes = null;
+                    }, 300);
                 },
 
                 click = function (e) {
