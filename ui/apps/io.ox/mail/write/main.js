@@ -50,7 +50,8 @@ define('io.ox/mail/write/main',
             var self = this;
             self.busy();
             baton.app.saveDraft()
-                .done(function () {
+                .done(function (data) {
+                    baton.app.refId = data.id;
                     self.idle();
                 });
         }
