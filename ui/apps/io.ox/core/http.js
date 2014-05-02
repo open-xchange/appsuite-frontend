@@ -1080,11 +1080,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 if (typeof item === 'object') {
                     tmp[i] = { id: item.id };
                     // look for folder(_id) - e.g. groups/users don't have one
-                    if (item.folder || item.folder_id) {
+                    if ('folder' in item || 'folder_id' in item) {
                         tmp[i].folder = item.folder || item.folder_id;
                     }
                     // calendar support:
-                    if (item.recurrence_position) {
+                    if ('recurrence_position' in item) {
                         tmp[i].recurrence_position = item.recurrence_position;
                     }
                 } else {
@@ -1102,7 +1102,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
          * @return {deferred} resolve returns array
          */
         fixList: function (ids, deferred) {
-
             return deferred.then(function (data) {
                 // simplify
                 ids = that.simplify(ids);
