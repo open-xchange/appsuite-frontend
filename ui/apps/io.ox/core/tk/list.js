@@ -299,18 +299,20 @@ define('io.ox/core/tk/list',
         redraw: function () {
             var point = ext.point(this.ref + '/item'),
                 collection = this.collection,
-                app = this.app;
+                view = this;
             this.getItems().each(function (index) {
                 if (index >= collection.length) return;
                 var model = collection.at(index),
-                    baton = ext.Baton({ data: model.toJSON(), model: model, app: app });
+                    data = view.map(model),
+                    baton = ext.Baton({ data: data, model: model, app: view.app });
                 point.invoke('draw', $(this).children().eq(1).empty(), baton);
             });
         },
 
         renderListItem: function (model) {
             var li = this.scaffold.clone(),
-                baton = ext.Baton({ data: model.toJSON(), model: model, app: this.app });
+                data = this.map(model),
+                baton = ext.Baton({ data: data, model: model, app: this.app });
             // add cid and full data
             li.attr({ 'data-cid': this.getCID(model), 'data-index': model.get('index') });
             // draw via extensions

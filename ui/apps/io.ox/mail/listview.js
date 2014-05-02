@@ -256,6 +256,11 @@ define('io.ox/mail/listview',
             return !util.isDeleted(data);
         },
 
+        map: function (model) {
+            // use head data for list view
+            return api.threads.head(model.toJSON());
+        },
+
         // support for custom cid attributes
         // needed to identify threads
         getCID: function (model) {
