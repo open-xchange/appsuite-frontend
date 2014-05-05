@@ -1641,6 +1641,7 @@ define('io.ox/core/desktop',
                         });
                         $blocker
                             .append(button);
+                        button.focus();
                     }
                 }, 5000);
             }, 1000);
@@ -1660,7 +1661,7 @@ define('io.ox/core/desktop',
         }
 
         function clearViaLauncher(blockerTimer) {
-//            launched is a deferred used for a delayed clear
+            // launched is a deferred used for a delayed clear
             launched.always(function () {
                 clear(blockerTimer);
             });
