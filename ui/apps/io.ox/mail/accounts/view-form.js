@@ -100,11 +100,16 @@ define.async('io.ox/mail/accounts/view-form',
 
                 ext.point(POINT + '/pane').invoke('draw', self.$el.find('.io-ox-account-settings'));
 
-                var pop3nodes = self.$el.find('.form-group.pop3');
+                var pop3nodes = self.$el.find('.form-group.pop3'),
+                    dropdown = self.$el.find('#mail_protocol');
 
                 //check if pop3 refresh rate needs to be displayed
                 if (self.model.get('mail_protocol') !== 'pop3') {
                     pop3nodes.hide();
+                }
+
+                if (self.model.get('id')) {
+                    dropdown.prop('disabled', true);
                 }
 
                 function syncLogin(model, value) {
