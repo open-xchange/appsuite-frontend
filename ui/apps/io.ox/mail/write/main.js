@@ -490,15 +490,20 @@ define('io.ox/mail/write/main',
 
         app.setBody = function (str) {
             var content = trimContent(str),
-                dsID, ds;
+                dsID, ds, isPhone = _.device('smartphone');
             //get default signature
-            dsID = _.device('smartphone') ?
+            dsID = isPhone ?
                 (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) :
                 settings.get('defaultSignature');
             ds = _.find(view.signatures, function (o, i) {
                     o.index = i;
                     return o.id === dsID;
                 });
+            if (isPhone) {
+                ds.misc = {
+                    insertion: 'below'
+                };
+            }
             //set content
             app.getEditor().setContent(content);
             //fix misc property and set signature
