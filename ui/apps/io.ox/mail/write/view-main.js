@@ -80,9 +80,6 @@ define('io.ox/mail/write/view-main',
             // disable the button
             ext.point(POINT + '/toolbar').disable('draft');
 
-            // reorder button
-            ext.point(POINT + '/toolbar').replace({id: 'discard', index: 50});
-
             //invoke other buttons with new container
             ext.point(POINT + '/toolbar').invoke(
                 'draw', toolbar, ext.Baton({ app: this.app })
