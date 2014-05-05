@@ -19,9 +19,10 @@ define('io.ox/mail/detail/view',
      'io.ox/core/api/collection-pool',
      'io.ox/mail/detail/content',
      'io.ox/core/extPatterns/links',
+     'io.ox/core/emoji/util',
      'gettext!io.ox/mail',
      'less!io.ox/mail/style'
-    ], function (extensions, ext, api, util, Pool, content, links, gt) {
+    ], function (extensions, ext, api, util, Pool, content, links, emoji, gt) {
 
     'use strict';
 
@@ -186,8 +187,16 @@ define('io.ox/mail/detail/view',
         id: 'content',
         index: 1000,
         draw: function (baton) {
-            var data = content.get(baton.data);
-            this.idle().append(data.content);
+            var data = content.get(baton.data),
+                node = data.content;
+            if (!data.processedEmoji && data.type === 'text/html') {
+                emoji.processEmoji(node.html(), function (text, lib) {
+                    baton.processedEmoji = !lib.loaded;
+                    if (baton.processedEmoji) return;
+                    node.empty().append(text);
+                });
+            }
+            this.idle().append(node);
         }
     });
 
