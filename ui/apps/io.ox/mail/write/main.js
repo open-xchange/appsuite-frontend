@@ -877,6 +877,7 @@ define('io.ox/mail/write/main',
                                     if (_.device('ios')) {
                                         view.textarea.trigger('blur');
                                     }
+                                    view.textarea.focus();
                                 }
                             });
                         })
@@ -917,15 +918,16 @@ define('io.ox/mail/write/main',
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
+                        if (_.device('smartphone')) {
+                            // trigger keyup to resize the textarea
+                            view.textarea.trigger('keyup');
+                        }
                         var ed = app.getEditor();
                         ed.setCaretPosition(0);
                         win.idle();
                         focus('to');
                         def.resolve();
-                        if (_.device('smartphone')) {
-                            // trigger keyup to resize the textarea
-                            view.textarea.trigger('keyup');
-                        }
+
                     });
                 })
                 .fail(function (e) {
