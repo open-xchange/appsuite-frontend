@@ -327,12 +327,14 @@ define('io.ox/core/extPatterns/links',
                 // add toggle unless multi-selection
                 var all = nav.children(),
                     lo = all.children().filter('[data-prio="lo"]').parent(),
+                    links = lo.find('a'),
+                    allDisabled = links.length === links.filter('.disabled').length,
                     isSmall = _.device('small');
 
                 // remove unimportant links on smartphone (prio='none')
                 if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
 
-                if (lo.length > 1 && (!multiple || options.forcelimit)) {
+                if (lo.length > 1 && !allDisabled && (!multiple || options.forcelimit)) {
                     nav.append(
                         $('<li class="dropdown">').append(
                             $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
@@ -352,10 +354,10 @@ define('io.ox/core/extPatterns/links',
                     );
                     injectDividers(nav.find('ul'));
                 }
+                // hide if all links are disabled
+                if (allDisabled) lo.hide();
+                if (options.customizeNode) options.customizeNode(nav);
                 all = lo = null;
-                if (options.customizeNode) {
-                    options.customizeNode(nav);
-                }
             });
         };
     };
