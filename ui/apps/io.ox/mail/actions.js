@@ -385,11 +385,20 @@ define('io.ox/mail/actions',
         capabilities: 'spam',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'some')) return false;
             // is spam?
             return _(e.baton.array()).reduce(function (memo, obj) {
-                return memo || (!account.is('spam', obj.folder_id) && !util.isSpam(obj));
-            }, false);
+                // already false?
+                if (memo === false) return false;
+                // is not primary account?
+                if (!account.isPrimary(obj.folder_id)) return false;
+                // is spam folder?
+                if (account.is('spam', obj.folder_id)) return false;
+                // is marked as spam already?
+                if (util.isSpam(obj)) return false;
+                // else
+                return true;
+            }, true);
         },
         multiple: function (list) {
             api.markSpam(list);
@@ -400,11 +409,16 @@ define('io.ox/mail/actions',
         capabilities: 'spam',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'some')) return false;
             // is spam?
             return _(e.baton.array()).reduce(function (memo, obj) {
-                return memo || account.is('spam', obj.folder_id) || util.isSpam(obj);
-            }, false);
+                // already false?
+                if (memo === false) return false;
+                // is not primary account?
+                if (!account.isPrimary(obj.folder_id)) return false;
+                // else
+                return account.is('spam', obj.folder_id) || util.isSpam(obj);
+            }, true);
         },
         multiple: function (list) {
             api.noSpam(list);
