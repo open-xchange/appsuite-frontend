@@ -334,6 +334,24 @@ define('io.ox/mail/main',
         },
 
         /*
+         * Scroll-o-mat
+         * Scroll to top if new unseen messages arrive
+         */
+        'auto-scroll': function (app) {
+            app.listView.on('add', function (model, index) {
+                // only for top position
+                if (index !== 0) return;
+                // only for unseen messages
+                if (!util.isUnseen(model.toJSON())) return;
+                // only scroll to top if scroll position is below 50% of outer height
+                var height = app.listView.$el.height() / 2;
+                if (app.listView.$el.scrollTop() > height) return;
+                // scroll to top
+                app.listView.$el.scrollTop(0);
+            });
+        },
+
+        /*
          * Get folder-based view options
          */
         'get-view-options': function (app) {

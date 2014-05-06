@@ -145,6 +145,9 @@ define('io.ox/core/tk/list',
             if (li.position().top <= 0) {
                 this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
             }
+
+            // forward event
+            this.trigger('add', model, index);
         },
 
         onRemove: function (model) {
@@ -166,6 +169,9 @@ define('io.ox/core/tk/list',
             // Unless it's the last one! If we did scroll for the last one, we would
             // trigger a paginate call that probably overtakes the delete request
             if (children.length > 1) this.$el.trigger('scroll');
+
+            // forward event
+            this.trigger('remove', model);
         },
 
         onSort: function () {
@@ -188,7 +194,7 @@ define('io.ox/core/tk/list',
             if (index !== undefined) li.attr('data-index', index);
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1).empty(), baton);
-            // propagate events
+            // forward event
             this.trigger('change', model);
         },
 
