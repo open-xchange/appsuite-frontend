@@ -550,7 +550,9 @@ define.async('io.ox/core/tk/html-editor',
             },
 
             set = function (str) {
-                ed.setContent(String(emoji.processEmoji(str)));
+                emoji.processEmoji(str, function (text) {
+                    ed.setContent(text);
+                });
             },
 
             clear = function () {
