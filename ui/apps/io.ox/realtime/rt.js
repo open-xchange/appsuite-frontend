@@ -582,14 +582,18 @@ define.async('io.ox/realtime/rt',
         if (api.debug) {
             console.log('Relogin was successful, resuming operation');
         }
+        enroled = false;
         start();
+        enrol();
     });
 
     ox.on('change:session', function () {
         if (api.debug) {
             console.log('Got a new sessionID. Resuming operation.');
         }
+        enroled = false;
         start();
+        enrol();
     });
 
     ox.on('connection:down connection:offline', function () {
