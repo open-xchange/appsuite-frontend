@@ -48,7 +48,8 @@ define('io.ox/core/api/apps',
 
     // TODO: Make favorites dynamic
     var allFavorites = ['io.ox/portal', 'io.ox/mail', 'io.ox/contacts',
-                        'io.ox/calendar', 'io.ox/tasks', 'io.ox/files'];
+                        'io.ox/calendar', 'io.ox/tasks', 'io.ox/files',
+                        'io.ox/office/portal'];
     _(allFavorites).each(function (id) {
         var app = appData.apps[id];
         if (app && capabilities.has(app.requires)) {
