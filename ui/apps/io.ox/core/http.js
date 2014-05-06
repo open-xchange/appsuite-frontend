@@ -586,8 +586,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         if (isError) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
-                isAutoLogin = o.module === 'login' && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
-            if (isSessionError && !isAutoLogin) {
+                isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
+            if (isSessionError && !isLogin) {
                 // login dialog
                 ox.session = '';
                 ox.trigger('relogin:required', o, deferred, response);
