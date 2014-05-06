@@ -14,13 +14,17 @@
 
 define('io.ox/files/carousel',
     ['io.ox/core/commons',
+     'io.ox/core/capabilities',
      'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/core/api/folder',
      'less!io.ox/files/carousel'
-    ], function (commons, gt, api, folderAPI) {
+    ], function (commons, capabilities, gt, api, folderAPI) {
 
     'use strict';
+
+    var regIsImage = /\.(gif|tiff|jpe?g|gmp|png)$/i,
+        regIsDocument = /\.(pdf|docx?|xslx?|pptx?)$/i;
 
     var carouselSlider = {
 
@@ -201,8 +205,9 @@ define('io.ox/files/carousel',
         },
 
         filterImagesList: function (list) {
-            return $.grep(list, function (o) {
-                return (/\.(gif|tiff|jpe?g|gmp|png)$/i).test(o.filename);
+            var supportsDocuments = capabilities.has('document_preview');
+            return _(list).filter(function (o) {
+                return regIsImage.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
             });
         },
 
@@ -212,7 +217,12 @@ define('io.ox/files/carousel',
         },
 
         imgError: function () {
+            $(this).parent().idle();
             $(this).replaceWith($('<i>').addClass('fa fa-picture-o file-type-ppt'));
+        },
+
+        imgLoad: function () {
+            $(this).parent().idle();
         },
 
         getItems: function (loadBoth) {//if we start in the middle of our slideshow we need to preload both directions
@@ -262,8 +272,9 @@ define('io.ox/files/carousel',
 
             if (item.children().length === 0) {
                 if (!this.config.attachmentMode) {
-                    item.append(
+                    item.busy().append(
                         $('<img>', { alt: '', src: this.urlFor(file) })
+                            .on('load', this.imgLoad)
                             .on('error', this.imgError), /* error doesn't seem to bubble */
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
@@ -271,8 +282,9 @@ define('io.ox/files/carousel',
                         )
                     );
                 } else {
-                    item.append(
-                        $('<img>', { alt: '', src: file.url })
+                    item.busy().append(
+                        $('<img>', { alt: '', src: this.urlFor(file) })
+                            .on('load', this.imgLoad)
                             .on('error', this.imgError), /* error doesn't seem to bubble */
                         $('<div class="carousel-caption">').append($('<h4>').text(gt.noI18n(file.filename)))
                     );

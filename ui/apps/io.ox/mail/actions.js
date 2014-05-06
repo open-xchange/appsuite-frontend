@@ -494,12 +494,14 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             require(['io.ox/files/carousel'], function (slideshow) {
-                var files = _(list).map(function (file) {
-                    return {
-                        url: api.getUrl(file, 'view'),
-                        filename: file.filename
-                    };
-                });
+                var regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i,
+                    files = _(list).map(function (file) {
+                        // get URL
+                        var url = api.getUrl(file, 'view');
+                        // non-image files need special format parameter
+                        if (!regIsImage.test(file.filename)) url += '&format=preview_image&session=' + ox.session;
+                        return { url: url, filename: file.filename };
+                    });
                 slideshow.init({
                     fullScreen: false,
                     baton: {allIds: files},

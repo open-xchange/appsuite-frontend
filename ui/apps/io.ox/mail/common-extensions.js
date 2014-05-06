@@ -24,9 +24,10 @@ define('io.ox/mail/common-extensions',
      'io.ox/contacts/api',
      'io.ox/core/api/collection-pool',
      'io.ox/core/tk/flag-picker',
+     'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, settings, gt) {
+    ], function (ext, links, actions, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
@@ -360,14 +361,18 @@ define('io.ox/mail/common-extensions',
 
         attachmentPreview: (function () {
 
-            var regSupportsPreview = /\.(gif|bmp|tiff|jpe?g|gmp|png|pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
+            var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
                 regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
 
             return function (baton) {
 
                 var attachments = baton.attachments,
+                    supportsDocumentPreview = capabilities.has('document_preview'),
                     list = _(attachments).filter(function (attachment) {
-                        return attachment.disp === 'attachment' && regSupportsPreview.test(attachment.filename);
+                        if (attachment.disp !== 'attachment') return false;
+                        if (regIsImage.test(attachment.filename)) return true;
+                        if (supportsDocumentPreview && regIsDocument.test(attachment.filename)) return true;
+                        return false;
                     }),
                     $ul;
 
