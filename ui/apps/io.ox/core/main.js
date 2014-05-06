@@ -268,21 +268,27 @@ define('io.ox/core/main',
             if (count === 0 && timer === null) {
                 if (useSpinner) {
                     refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
-                    refreshIcon.addClass('fa-spin-paused').removeClass('fa-spin');
+                    if (refreshIcon.hasClass('fa-spin')) {
+                        refreshIcon.addClass('fa-spin-paused').removeClass('fa-spin');
+                    }
                 } else {
                     $('#io-ox-refresh-icon').removeClass('io-ox-progress');
                 }
             }
         }
 
-        http.on('start', function () {
+        http.on('start', function (e, xhr, options) {
             if (count === 0) {
                 if (timer === null) {
-                    if (useSpinner) {
-                        refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
-                        refreshIcon.addClass('fa-spin').removeClass('fa-spin-paused');
-                    } else {
-                        $('#io-ox-refresh-icon').addClass('io-ox-progress');
+                    if (!options.silent) {
+                        if (useSpinner) {
+                            refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
+                            if (!refreshIcon.hasClass('fa-spin')) {
+                                refreshIcon.addClass('fa-spin').removeClass('fa-spin-paused');
+                            }
+                        } else {
+                            $('#io-ox-refresh-icon').addClass('io-ox-progress');
+                        }
                     }
                 }
                 clearTimeout(timer);

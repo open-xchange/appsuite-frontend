@@ -913,7 +913,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 }
                 r = o = null;
             }
-            that.trigger('start', r.xhr);
+            that.trigger('start', r.xhr, o);
             if (slow && Number(_.url.hash('slow'))) {
                 // simulate slow connection
                 setTimeout(cont, 250 * Number(_.url.hash('slow')) + (Math.random() * 500 >> 0));
