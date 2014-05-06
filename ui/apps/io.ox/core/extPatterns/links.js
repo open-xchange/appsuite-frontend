@@ -420,12 +420,23 @@ define('io.ox/core/extPatterns/links',
         return node;
     };
 
-    var DropdownLinks = function (options) {
+    // full dropdown; <div> <a> + <ul> + inks </div>
+    var Dropdown = function (options) {
         var o = _.extend(this, options);
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
             return drawDropDown.call(this, o, baton);
         };
+    };
+
+    // just the dropdown - <ul> + links; not the container
+    var DropdownLinks = function (options, baton, wrap) {
+        options = options || {};
+        baton.$el = $('<ul class="dropdown-menu" role="menu">');
+        var wrap = options.wrap === undefined ? true : !!options.wrap;
+        drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap)
+            .done(function () { injectDividers(baton.$el); });
+        return baton.$el;
     };
 
     var drawButtonGroup = function (options, baton) {
@@ -559,6 +570,7 @@ define('io.ox/core/extPatterns/links',
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
         InlineButtonGroup: InlineButtonGroup,
+        Dropdown: Dropdown,
         DropdownLinks: DropdownLinks,
         ButtonGroup: ButtonGroup,
         ActionGroup: ActionGroup

@@ -177,7 +177,7 @@ define('io.ox/calendar/toolbar',
 
     function prepareUpdateToolbar(app) {
         var perspective = app.getWindow().getPerspective(),
-            list = perspective === 'list' ? app.getGrid().selection.get() : {};
+            list = perspective && perspective.name === 'list' ? app.getGrid().selection.get() : {};
         app.updateToolbar(list);
     }
 

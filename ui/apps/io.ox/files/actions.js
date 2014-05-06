@@ -1277,16 +1277,6 @@ define('io.ox/files/actions',
     }));
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 400,
-        prio: 'hi',
-        mobile: 'lo',
-        cssClasses: 'io-ox-action-link fullscreen',
-        id: 'slideshow-fullscreen',
-        label: gt('Fullscreen'),
-        ref: 'io.ox/files/icons/slideshow-fullscreen'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
         index: 500,
         id: 'mediaplayer-audio',
         label: gt('Play audio files'),

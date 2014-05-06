@@ -79,7 +79,7 @@ define('io.ox/mail/detail/view',
         draw: extensions.unreadToggle
     });
 
-    ext.point('io.ox/mail/detail/header').extend(new links.DropdownLinks({
+    ext.point('io.ox/mail/detail/header').extend(new links.Dropdown({
         id: 'actions',
         index: INDEX_header += 100,
         classes: 'actions pull-right',

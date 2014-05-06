@@ -133,7 +133,7 @@ define('io.ox/mail/mobileToolbarActions',
     addAction(pointListViewMultiSelect, ['delete', 'forward', 'move']);
 
     // add submenu as text link to toolbar in multiselect
-    pointListViewMultiSelect.extend(new links.DropdownLinks({
+    pointListViewMultiSelect.extend(new links.Dropdown({
         index: 50,
         label: $('<span>').text(
             //.# Will be used as menu heading in mail module which then shows the sub-actions "mark as read" and "mark as unread"

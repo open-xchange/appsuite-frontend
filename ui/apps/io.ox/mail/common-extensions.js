@@ -182,7 +182,7 @@ define('io.ox/mail/common-extensions',
 
             // var drawAllDropDown = function (node, label, data) {
             //     // use extension pattern
-            //     new links.DropdownLinks({
+            //     new links.Dropdown({
             //         label: label,
             //         classes: 'all-link',
             //         ref: 'io.ox/mail/all/actions'
@@ -266,7 +266,7 @@ define('io.ox/mail/common-extensions',
 
             var drawAttachmentDropDown = function (node, label, data) {
                 // use extension pattern
-                var dd = new links.DropdownLinks({
+                var dd = new links.Dropdown({
                         label: label,
                         classes: 'attachment-link',
                         ref: 'io.ox/mail/attachment/links'
