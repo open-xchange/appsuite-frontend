@@ -443,6 +443,11 @@ define('io.ox/files/fluid/perspective',
                         $('<span class="text size">').text(gt.noI18n(_.filesize(file.file_size || 0, {digits: 1, zerochar: ''})))
                     )
                 );
+            if (_.device('smartphone')) {
+                this.removeClass('selectable').find('.checkbox')
+                    .attr('data-obj-id', _.cid(file))
+                    .addClass('selectable');
+            }
         }
     });
 
@@ -622,14 +627,25 @@ define('io.ox/files/fluid/perspective',
                 });
             });
 
-            //register click handler
-            scrollpane.on(_.device('smartphone') ? 'tap' : 'click', '.selectable', function (e, data) {
-                var cid = _.cid($(this).attr('data-obj-id')),
-                    special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
-                    valid = !filesContainer.hasClass('view-list') || $(e.target).hasClass('not-selectable') || data === 'automated';
-                if (valid & !special)
-                    preview.call(self, e, cid);
-            });
+            if (_.device('!smartphone')) {
+                scrollpane.on('click', '.selectable', function (e, data) {
+                    var cid = _.cid($(this).attr('data-obj-id')),
+                        special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
+                        valid = !filesContainer.hasClass('view-list') || $(e.target).hasClass('not-selectable') || data === 'automated';
+                    if (valid && !special)
+                        preview.call(self, e, cid);
+                });
+            } else {
+                scrollpane.on('click', '.file-cell', function (e, data) {
+                    var cid = _.cid($(this).attr('data-obj-id')),
+                        //special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
+                        valid = e.target.type !== 'checkbox' || data === 'automated';
+                    console.log('-->', valid, cid, e);
+                    if (valid)
+                        preview.call(self, e, cid);
+                });
+            }
+
 
             //register dialog handler
             dialog.on('close', function () {
