@@ -488,6 +488,14 @@ define('io.ox/mail/write/main',
             }
         };
 
+        // only used on mobile to add blank lines above reply text
+        var addBlankLineSimple = function (number) {
+            var blankline = '\n';
+            for (var i = 0; i < number; i++) {
+                app.getEditor().prependContent(blankline);
+            }
+        };
+
         app.setBody = function (str) {
             var content = trimContent(str),
                 dsID, ds, isPhone = _.device('smartphone');
@@ -877,7 +885,10 @@ define('io.ox/mail/write/main',
                                     if (_.device('ios')) {
                                         view.textarea.trigger('blur');
                                     }
+                                    // add some blank lines to textarea
+                                    addBlankLineSimple(1);
                                     view.textarea.focus();
+                                    app.getWindow().nodes.main.scrollTop(0);
                                 }
                             });
                         })

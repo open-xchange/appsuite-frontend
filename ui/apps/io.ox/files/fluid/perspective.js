@@ -178,25 +178,31 @@ define('io.ox/files/fluid/perspective',
         return node;
     }
 
-    function toggleToolbar(selected, selection) {
-        // get current toolbar buttons
-        var buttons = $('.window-toolbar .toolbar-button'),
-            container = $('#multi-select-toolbar');
-        if (container.length < 1) {
-            // create one
-            container = $('<div>', { id: 'multi-select-toolbar' });
+    function toggleToolbar(selected, selection, baton) {
+        var context = $(baton.app.getWindow().nodes.outer),  // get current app's window container as context
+            buttons = $('.window-toolbar .toolbar-button', context),
+            toolbar = $('.window-toolbar', context),
+            toolbarID = 'multi-select-toolbar',
+            container;
+
+        if ($('#' + toolbarID).length > 0) {
+            // reuse old toolbar
+            container = $('#' + toolbarID);
         } else {
-            container.empty();
+            // or creaet a new one
+            container = $('<div>', {id: toolbarID});
         }
         _.defer(function () {
             if (selected.length > 0) {
                 buttons.hide();
-                $('.window-toolbar').append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
+                $('#' + toolbarID).remove();
+                toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
             } else {
                 // selection empty
+                $('#' + toolbarID).remove();
                 buttons.show();
             }
-        });
+        }, 10);
     }
     // END mobile multiselect helpers
 
@@ -235,7 +241,7 @@ define('io.ox/files/fluid/perspective',
 
                     if (_.device('smartphone') && baton.options.mode === 'list') {
                         // use custom multiselect toolbar
-                        toggleToolbar(selected, self);
+                        toggleToolbar(selected, self, baton);
                     }
 
                     // set url
