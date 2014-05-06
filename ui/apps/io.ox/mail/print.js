@@ -43,6 +43,15 @@ define('io.ox/mail/print',
         }).join('\u00A0\u2022 ');
     }
 
+    function getAttachments(data) {
+        return _(util.getAttachments(data) || []).map(function (attachment, i) {
+            return {
+                title: attachment.filename || ('Attachment #' + i),
+                size: attachment.size ? _.filesize(attachment.size || 0) : 0
+            };
+        });
+    }
+
     function process(data) {
         return {
             from: getList(data, 'from'),
@@ -51,7 +60,8 @@ define('io.ox/mail/print',
             subject: data.subject,
             date: util.getFullDate(data.received_date || data.sent_date),
             sort_date: -(data.received_date || data.sent_date),
-            content: getContent(data)
+            content: getContent(data),
+            attachments: getAttachments(data)
         };
     }
 
