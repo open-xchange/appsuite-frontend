@@ -27,7 +27,7 @@ define('io.ox/core/pubsub/settings/register',
         ref: 'io.ox/core/pubsub'
     });
 
-    if (!capabilities.has('publication') & !capabilities.has('subscription'))
+    if (!capabilities.has('publication') && !capabilities.has('subscription'))
         point.disable(id);
     else if (!capabilities.has('publication'))
         point.replace({
