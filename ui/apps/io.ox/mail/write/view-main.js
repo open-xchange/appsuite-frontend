@@ -18,7 +18,6 @@ define('io.ox/mail/write/view-main',
      'io.ox/mail/actions',
      'io.ox/mail/api',
      'io.ox/core/tk/view',
-     'io.ox/core/tk/model',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/mail/util',
@@ -33,7 +32,7 @@ define('io.ox/mail/write/view-main',
      'io.ox/core/tk/attachments',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, util, notifications, sender, attachments, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, contactsAPI, contactsUtil, mailUtil, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, util, notifications, sender, attachments, settings, gt) {
 
     'use strict';
 

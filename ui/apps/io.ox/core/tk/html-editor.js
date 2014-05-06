@@ -1,3 +1,4 @@
+/* jshint unused: false */
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -378,7 +379,7 @@ define.async('io.ox/core/tk/html-editor',
     function lookupTinyMCELanguage() {
         var tinymce_lang,
         lookup_lang = ox.language,
-        tinymce_langpacks = ['ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'ch', 'cn', 'cs', 'cy', 'da', 'de', 'dv', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'gl', 'gu', 'he', 'hi', 'hr', 'hu', 'hy', 'ia', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'kl', 'km', 'ko', 'lb', 'lt', 'lv', 'mk', 'ml', 'mn', 'ms', 'my', 'nb', 'nl', 'nn', 'no', 'pl', 'ps', 'pt', 'ro', 'ru', 'sc', 'se', 'si', 'sk', 'sl', 'sq', 'sr', 'sv', 'sy', 'ta', 'te', 'th', 'tn', 'tr', 'tt', 'tw', 'uk', 'ur', 'vi', 'zh', 'zu'],
+        tinymce_langpacks = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
 
         tinymce_special = {
             zh_CN: 'zh-cn',
@@ -404,19 +405,12 @@ define.async('io.ox/core/tk/html-editor',
             width = $(document).width();
 
         // toolbar default
-        toolbar1 = 'undo,redo,|,bold,italic,underline,strikethrough' +
-            ',|,emoji,|,bullist,numlist,outdent,indent' +
-            ',|,justifyleft,justifycenter,justifyright';
-        advanced = 'formatselect,fontselect,fontsizeselect' +
-            ',|,forecolor,backcolor,image';
+        toolbar1 = 'undo redo | bold italic | emoji | bullist numlist outdent indent';
+        advanced = 'styleselect fontselect fontsizeselect | forecolor backcolor | link image';
         toolbar2 = '';
         toolbar3 = '';
 
-        if (width > 1110) { // yep, need a bit more than 1024, incl. emoji
-            toolbar1 += ',|,' + advanced;
-        } else {
-            toolbar2 = advanced;
-        }
+        toolbar1 += ' | ' + advanced;
 
         // consider custom configurations
         toolbar1 = settings.get('tinyMCE/theme_advanced_buttons1', toolbar1);
@@ -425,34 +419,51 @@ define.async('io.ox/core/tk/html-editor',
 
         // remove unsupported stuff
         if (!capabilities.has('emoji')) {
-            toolbar1 = toolbar1.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
-            toolbar2 = toolbar2.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
-            toolbar3 = toolbar3.replace(/(,\|,)?emoji(,\|,)?/g, ',|,');
+            toolbar1 = toolbar1.replace(/( \| )?emoji( \| )?/g, ' | ');
+            toolbar2 = toolbar2.replace(/( \| )?emoji( \| )?/g, ' | ');
+            toolbar3 = toolbar3.replace(/( \| )?emoji( \| )?/g, ' | ');
         }
 
         textarea = $(textarea);
         textarea.tinymce({
 
-            gecko_spellcheck: true,
-            language: lookupTinyMCELanguage(),
-            plugins: 'autolink,paste,inlinepopups,emoji',
+            script_url: ox.base + '/apps/3rd.party/tinymce/tinymce.min.js',
+
+            // CSS for Editor content (See /apps/io.ox/core/tk/html-editor.less)
+            content_css: ox.base + '/apps/themes/' + require('settings!io.ox/core').get('theme') + '/io.ox/core/tk/html-editor.css',
+
+            menubar: false,
+            statusbar: false,
+
+            skin: 'ox',
+
+            toolbar1: toolbar1,
+            toolbar2: toolbar2,
+            toolbar3: toolbar3,
+
             relative_urls: false,
             remove_script_host: false,
-            object_resizing: 0,
-            script_url: ox.base + '/apps/3rd.party/tiny_mce/tiny_mce.js',
-            skin: 'ox',
-            theme: 'advanced',
 
-            // need this to work in karma/phantomjs
-            content_element: textarea.get(0),
-            file_browser_callback : function () {
-                require(['io.ox/mail/write/inline-images'], function (inlineimages) {
-                    inlineimages.show();
-                });
-            },
-            init_instance_callback: function () {
-                // get internal editor reference
-                ed = textarea.tinymce();
+            entity_encoding: 'raw',
+
+            browser_spellcheck: true,
+
+            plugins: 'autolink oximage link paste textcolor emoji',
+
+            language: lookupTinyMCELanguage(),
+
+            /*
+            TODO: needed for emoji ?
+            object_resizing: 0,
+            */
+
+            // need this to work in karma/phantomjs // TODO: still needed?
+            //content_element: textarea.get(0),
+
+            init_instance_callback: function (editor) {
+
+                ed = editor;
+
                 if ($('#' + ed.id + '_ifr')) {
                     $('#' + ed.id + '_ifr').attr('tabindex', '5');
                 }
@@ -485,40 +496,13 @@ define.async('io.ox/core/tk/html-editor',
                     });
                 }
             },
-
-            theme_advanced_buttons1: toolbar1,
-            theme_advanced_buttons2: toolbar2,
-            theme_advanced_buttons3: toolbar3,
-            theme_advanced_toolbar_location: settings.get('tinyMCE/theme_advanced_toolbar_location', 'top'),
-            theme_advanced_toolbar_align: settings.get('tinyMCE/theme_advanced_toolbar_align', 'left'),
-            theme_advanced_statusbar_location: 'none',
-
-            // formats
-            theme_advanced_blockformats: 'h1,h2,h3,h4,p',
-
-            // colors
-            theme_advanced_more_colors: false,
-            theme_advanced_default_foreground_color: '#000000',
-            theme_advanced_default_background_color: '#FFFFFF',
-
-            // for performance
-            entity_encoding: 'raw',
-            verify_html: false,
-
-            // better paste
-            paste_auto_cleanup_on_paste: true,
-            paste_remove_styles: true,
-            paste_remove_styles_if_webkit: true,
-            paste_strip_class_attributes: 'mso', // 'all' kills emoji support!
-            paste_block_drop: false,
-
             // post processing (string-based)
             paste_preprocess: paste_preprocess,
             // post processing (DOM-based)
             paste_postprocess: paste_postprocess,
 
             setup: function (ed) {
-                ed.onKeyDown.add(function (ed, e) {
+                ed.on('keydown', function (e) {
                     // pressed enter?
                     if ((e.keyCode || e.which) === 13) {
                         try {
@@ -542,12 +526,16 @@ define.async('io.ox/core/tk/html-editor',
         }
 
         var resizeEditor = _.debounce(function () {
-                if (textarea === null) return;
-                var p = textarea.parent(), w = p.width(), h = p.height(),
-                    iframeHeight = h - p.find('td.mceToolbar').outerHeight() - 2;
-                p.find('table.mceLayout').css({ width: w + 'px', height: iframeHeight + 'px' });
-                p.find('iframe').css('height', iframeHeight + 'px');
-            }, 100),
+            if (textarea === null) return;
+                var p = textarea.parent(),
+                    h = p.height(),
+                    toolbar = p.find('.mce-toolbar-grp').outerHeight(),
+                    iframeHeight = h - toolbar - 2;
+                p.find('.mce-tinymce.mce-container.mce-panel').css({ height: iframeHeight });
+                p.find('iframe').css('height', iframeHeight);
+
+                return;
+            }, 50),
 
             trimIn = function (str) {
                 return trimEnd(str);
@@ -562,7 +550,9 @@ define.async('io.ox/core/tk/html-editor',
             },
 
             set = function (str) {
-                ed.setContent(String(emoji.processEmoji(str)));
+                emoji.processEmoji(str, function (text) {
+                    ed.setContent(text);
+                });
             },
 
             clear = function () {
@@ -776,14 +766,15 @@ define.async('io.ox/core/tk/html-editor',
 
         this.handleShow = function () {
             textarea.parents('.window-content').find('.editor-print-margin').hide();
-            textarea.prop('disabled', false).idle().next().show();
+            textarea.prop('disabled', false).idle();
+            textarea.parents('.window-content').find('.mce-tinymce').show();
             textarea.hide();
             resizeEditor();
-            $(window).on('resize', resizeEditor);
+            $(window).on('resize.tinymce', resizeEditor);
         };
 
         this.handleHide = function () {
-            $(window).off('resize', resizeEditor);
+            $(window).off('resize.tinymce', resizeEditor);
         };
 
         this.getContainer = function () {
@@ -805,7 +796,7 @@ define.async('io.ox/core/tk/html-editor',
     }
 
     // $.getScript adds cache busting query
-    return $.ajax({ url: ox.base + '/apps/3rd.party/tiny_mce/jquery.tinymce.js', cache: true, dataType: 'script' }).then(function () {
+    return $.ajax({ url: ox.base + '/apps/3rd.party/tinymce/jquery.tinymce.min.js', cache: true, dataType: 'script' }).then(function () {
         // publish editor class
         return Editor;
     });
