@@ -40,7 +40,7 @@ define('io.ox/core/tk/dialogs',
                 async: false,
                 maximize: false,
                 top: '50%',
-                container: $('body'),
+                container: $('#io-ox-core'),
                 tabTrap: true,
                 focus: true
             }, options),
@@ -381,7 +381,7 @@ define('io.ox/core/tk/dialogs',
                         'max-width': dim.width,
                         top: o.top || 0
                     });
-                    var height = $(window).height() - 170 - o.top;
+                    var height = $('#io-ox-core').height() - 170 - o.top;//not window here, or we might overlap ads or sth
                     nodes.body.css({
                         'height': height,
                         'max-height': height
@@ -438,8 +438,9 @@ define('io.ox/core/tk/dialogs',
 
                 _.each(nodes.buttons, function (buttonNode) {
                     nodes.footer.rowfluid.prepend(buttonNode.addClass('btn-medium'));
-                    buttonNode.wrap('<div class="col-md-3">');
+                    buttonNode.wrap('<div class="col-xs-6 col-md-3">');
                 });
+                nodes.body.css('margin-bottom', Math.ceil(nodes.buttons.length / 2) * 40);
             }
 
             this.trigger('beforeshow');

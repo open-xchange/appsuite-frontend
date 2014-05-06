@@ -268,7 +268,7 @@ $(window).load(function () {
             $(this).busy();
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
-            require(['settings!io.ox/core'], function (settings) {
+            require(['settings!io.ox/core', 'precore.js'], function (settings) {
 
                 // greedy prefetch for mail app
                 // need to get this request out as soon as possible
@@ -624,7 +624,11 @@ $(window).load(function () {
                 ox.session = hash.session;
 
                 // set store cookie?
-                (hash.store === 'true' ? session.store() : $.when()).always(function () {
+                $.when(
+                    session.rampup(),
+                    hash.store === 'true' ? session.store() : $.when()
+                )
+                .always(function () {
 
                     var ref = hash.ref;
                     ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
@@ -951,10 +955,11 @@ $(window).load(function () {
 
     debug('boot.js: require([...], loadSuccess, loadFail);');
 
-    require([
-        'io.ox/core/http', 'io.ox/core/session', 'io.ox/core/cache', 'io.ox/core/extensions',
-        'gettext', 'io.ox/core/manifests', 'io.ox/core/capabilities',
-        'themes', 'io.ox/core/settings'
-    ], loadSuccess, loadFail
-    );
+    var dependencies =
+        'io.ox/core/http io.ox/core/session io.ox/core/cache io.ox/core/extensions ' +
+        'gettext io.ox/core/manifests io.ox/core/capabilities themes io.ox/core/settings';
+
+    // load sources
+    require(dependencies.split(' '), loadSuccess, loadFail);
+
 });

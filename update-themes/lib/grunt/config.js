@@ -12,13 +12,18 @@ module.exports = function (grunt) {
         grunt.config(k, require('underscore').extend({}, grunt.config(k), v));
     };
 
-    grunt.config('clean', {
-        theming: ['apps/themes/**/*.css']
+    grunt.config.extend('clean', {
+        default: {}
     });
 
+    grunt.config.extend('less', {
+        default: {}
+    });
     grunt.file.expand({cwd: 'apps/themes/'}, '*/definitions.less').forEach(function (file) {
         var themeName = file.replace(/\/definitions.less$/, '');
+        grunt.verbose.writeln('found theme', themeName);
         var theme = {};
+        var cleanConfig = {};
         theme[themeName] = {
             options: {
                 compress: true,
@@ -29,9 +34,9 @@ module.exports = function (grunt) {
                 strictUnits: false,
                 relativeUrls: false,
                 paths: [
-                    'apps/themes',
                     path.join(scriptBase, 'bower_components/bootstrap/less'),
-                    path.join(scriptBase, 'font-awesome/less')
+                    path.join(scriptBase, 'font-awesome/less'),
+                    'apps/themes'
                 ],
                 imports: {
                     reference: [
@@ -46,16 +51,18 @@ module.exports = function (grunt) {
             },
             files: [
                 {
-                    src: ['apps/themes/style.less'],
+                    src: [
+                        path.join(scriptBase, 'bower_components/bootstrap/less/bootstrap.less'),
+                        path.join(scriptBase, 'bower_components/bootstrap-datepicker/less/datepicker3.less'),
+                        path.join(scriptBase, 'bower_components/font-awesome/less/font-awesome.less'),
+                        'apps/themes/style.less'
+                    ],
                     expand: true,
                     rename: function (dest) { return dest; },
                     dest: 'apps/themes/' + themeName + '/common.css'
                 },
                 {
                     src: [
-                        path.join(scriptBase, 'bower_components/bootstrap/less/bootstrap.less'),
-                        path.join(scriptBase, 'bower_components/bootstrap-datepicker/less/datepicker3.less'),
-                        path.join(scriptBase, 'bower_components/font-awesome/less/font-awesome.less'),
                         'apps/themes/' + themeName + '/style.less'
                     ],
                     expand: true,
@@ -75,7 +82,9 @@ module.exports = function (grunt) {
                 }
             ]
         };
+        cleanConfig[themeName] = ['apps/themes/' + themeName + '/**/*.css'];
         grunt.config.extend('less', theme);
+        grunt.config.extend('clean', cleanConfig);
     });
 
     grunt.registerTask('default', ['clean', 'less']);

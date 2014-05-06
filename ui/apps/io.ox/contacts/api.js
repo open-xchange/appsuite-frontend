@@ -216,6 +216,7 @@ define('io.ox/contacts/api',
                 }
                 // move contacts with empty sort_name to end of array
                 // would be nice if backend does this
+                console.log('aha', response);
                 var i = 0, item, count = 0;
                 while ((item = response[i++])) {
                     if (item.sort_name === '') count++;
@@ -380,6 +381,7 @@ define('io.ox/contacts/api',
                         api.caches.get.add(data),
                         api.caches.all.grepRemove(o.folder + api.DELIM),
                         api.caches.list.remove({ id: o.id, folder: o.folder }),
+                        fetchCache.clear(),
                         data.user_id ? clearUserApiCache(data) : ''
                     )
                     .done(function () {

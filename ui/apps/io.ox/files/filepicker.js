@@ -61,6 +61,9 @@ define('io.ox/files/filepicker',
         this.selection.setMultiple(options.multiselect);
         if (options.multiselect) {
             this.selection.setEditable(true, '.file');
+            filesPane.addClass('multiselect');
+        } else {
+            filesPane.addClass('singleselect');
         }
 
         pane.header($('<h4>').text(options.header))
@@ -103,14 +106,17 @@ define('io.ox/files/filepicker',
             filesAPI.getAll({ folder: folderId }, false).then(function (files) {
                 filesPane.append(
                     _.chain(files).filter(options.filter).map(function (file) {
-                        var title = (file.filename || file.title);
-                        var $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
-                            $('<label class="checkbox-inline">').attr('title', title).append(
-                                $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
-                                    .val(file.id).data('fileData', file)
-                            ),
-                            $('<div class="name">').text(title)
-                        );
+                        var title = (file.filename || file.title),
+                            $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
+                                $('<label class="">')
+                                    .addClass('checkbox-inline' + (!options.multiselect ? ' sr-only' : ''))
+                                    .attr('title', title)
+                                    .append(
+                                        $('<input type="checkbox" class="reflect-selection" tabindex="-1">')
+                                            .val(file.id).data('fileData', file)
+                                    ),
+                                $('<div class="name">').text(title)
+                            );
                         if (options.point) {
                             ext.point(options.point + '/filelist/filePicker/customizer').invoke('customize', $div, file);
                         }

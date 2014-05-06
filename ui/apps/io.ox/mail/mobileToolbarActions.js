@@ -75,6 +75,16 @@ define('io.ox/mail/mobileToolbarActions',
             ref: 'io.ox/mail/actions/delete',
             cssClasses: 'io-ox-action-link mobile-toolbar-action'
         },
+        'move': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Move'),
+            icon: 'fa fa-sign-in',
+            drawDisabled: true,
+            ref: 'io.ox/mail/actions/move',
+            section: 'file-op',
+            cssClasses: 'io-ox-action-link mobile-toolbar-action'
+        },
         'markunread': {
             prio: 'lo',
             mobile: 'lo',
@@ -90,13 +100,6 @@ define('io.ox/mail/mobileToolbarActions',
             label: gt('Mark as read'),
             ref: 'io.ox/mail/actions/markread',
             section: 'flags'
-        },
-        'move': {
-            prio: 'lo',
-            mobile: 'lo',
-            label: gt('Move'),
-            ref: 'io.ox/mail/actions/move',
-            section: 'file-op'
         },
         'copy': {
             prio: 'lo',
@@ -124,10 +127,10 @@ define('io.ox/mail/mobileToolbarActions',
 
     addAction(pointThreadView, ['compose']);
 
-    addAction(pointDetailView, ['compose', 'reply', 'reply-all', 'forward', 'delete']);
+    addAction(pointDetailView, ['move', 'reply', 'reply-all', 'forward', 'delete']);
 
     //multiselect in listview
-    addAction(pointListViewMultiSelect, ['delete', 'forward']);
+    addAction(pointListViewMultiSelect, ['delete', 'forward', 'move']);
 
     // add submenu as text link to toolbar in multiselect
     pointListViewMultiSelect.extend(new links.DropdownLinks({

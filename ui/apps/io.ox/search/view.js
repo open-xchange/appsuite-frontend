@@ -92,6 +92,9 @@ define('io.ox/search/view',
                 var searchfield = this.$el.find('.search-field');
                 //set focus and trigger autocomplete
                 searchfield.trigger('focus:custom', isRetry);
+            },
+            getBaton: function () {
+                return this.baton;
             }
         });
 

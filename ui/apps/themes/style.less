@@ -1361,7 +1361,110 @@ div.hopscotch-bubble {
         top: -3px;
         left: 10px;
     }
+}
 
+//
+// Classic and mobile toolbars
+//
+
+/* definitions */
+@toolbar-line-height: 24px;
+@toolbar-vertical-padding: 10px;
+@toolbar-height: @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
+
+.mobile-navbar {
+    text-align: center;
+    font-size: 15px;
+    .navbar-action {
+        .ellipsis();
+        max-width: 24%;
+        top: 10px;
+        position: absolute;
+        &.left {
+            .fa-chevron-left {
+                margin-right: 2px;
+            }
+            left: 5px;
+        }
+        &.right {
+            right: 5px;
+        }
+    }
+    .navbar-title {
+        .ellipsis();
+        margin: 10px 24%;
+    }
+}
+
+.mobile-toolbar {
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    height: @toolbar-height;
+    z-index: 10;
+    margin: 0;
+    padding: 0 4px 0 5px;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    a.io-ox-action-link.mobile-toolbar-action {
+        display: inline-block;
+        font-size: 20px;
+        line-height: @toolbar-height;
+        width: 19.9%;
+        height: @toolbar-height;
+        text-align: center;
+        margin: 0;
+        vertical-align: middle;
+    }
+    .dropdown {
+        display: inline-block;
+        position: static;
+    }
+}
+
+.classic-toolbar-visible .window-content { top: @toolbar-height; }
+
+.classic-toolbar, .inline-toolbar, .mobile-navbar {
+
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: @toolbar-height;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    margin: 0;
+    padding: 0 4px 0 5px;
+    .user-select(none);
+
+    html.high-contrast & {
+        border-color: @hc-border-color;
+    }
+
+    & > li {
+
+        list-style: none;
+        display: inline-block;
+        padding: 0;
+        float: left; // to support pull-right while keeping items in-order (a11y)
+
+        & > a {
+
+            display: inline-block;
+            line-height: @toolbar-line-height;
+            padding: @toolbar-vertical-padding 14px;
+            text-decoration: none;
+            float: left;
+            outline: 0;
+
+            i { text-decoration: none; }
+            &:focus { background-color: #eee; }
+        }
+    }
+
+    & > li.pull-right {
+        float: right;
+        & > .dropdown-menu { right: 10px; }
+    }
 }
 
 .window-toolbar {
@@ -1913,16 +2016,23 @@ a.button {
             right: 18px;
             top: 0;
         }
+
+        .select-all {
+            float: left;
+            width: 40px;
+            height: 44px;
+            line-height: 40px;
+            padding-left: 18px;
+            display: none;
+        }
+
+        .select-all-toggle {
+            float: left;
+            padding: 0 8px;
+        }
+
     }
 
-    .select-all {
-        float: left;
-        width: 40px;
-        height: 44px;
-        line-height: 40px;
-        padding-left: 18px;
-        display: none;
-    }
 
     &.editable .select-all {
         display: inline-block;
@@ -3177,7 +3287,7 @@ ul.io-ox-inline-links + header {
 
     .generic-toolbar {
         border-color: rgba(0, 0, 0, 0.10);
-        background-color: rgba(0, 0, 0, 0.03);
+        background-color: rgba(0, 0, 0, 0.015);
     }
 }
 
@@ -3527,30 +3637,6 @@ a.toolbar-action, .toolbar-action > a {
     margin-top: 6px;
 }
 
-/** Simplify BOOTSTRAP buttons */
-.btn-custom(@color) {
-    background-color: @color;
-    &:hover, &.hover { background-color: darken(@color, 10%); }
-    border: 1px solid @color;
-    color: white;
-}
-
-.btn-default {
-    background-image: none;
-    background-color: #eee;
-    text-shadow: none;
-    &:hover, &.hover { background-color: darken(#eee, 10%); }
-    color: #555;
-    border: 1px solid #ccc;
-    border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
-}
-
-.btn-primary { .btn-custom(@btn-primary-background); }
-.btn-inverse { .btn-custom(@btn-inverse-background-highlight); }
-.btn-success { .btn-custom(@btn-success-background-highlight); }
-.btn-warning { .btn-custom(@btn-warning-background-highlight); }
-.btn-danger  { .btn-custom(@btn-danger-background-highlight); }
-
 /** BOOTSTRAP FIXES **/
 
 .label.pointer {
@@ -3817,6 +3903,7 @@ input.flat-input {
         padding: 5px 13px 5px 13px;
         z-index: 2;
         line-height: 2em;
+        display: block;
     }
 
     .vsplit-reverse {

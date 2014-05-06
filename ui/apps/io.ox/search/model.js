@@ -19,7 +19,7 @@ define('io.ox/search/model',
      'io.ox/backbone/validation',
      'io.ox/core/extensions',
      'gettext!io.ox/core'
-    ], function (api, items, ModelFactory, util, Validations, ext, gt) {
+    ], function (api, collection, ModelFactory, util, Validations, ext, gt) {
 
     'use strict';
 
@@ -29,7 +29,7 @@ define('io.ox/search/model',
      */
 
     var options = {},
-        items = new items.Collection(),
+        items = collection.create(),
         defaults, factory;
 
     //fetch settings/options
@@ -174,7 +174,7 @@ define('io.ox/search/model',
                 //update opt reference in pool list
                 if (isCustom) {
                     //update pool item itself
-                    $.extend(this.get('pool')[facet].values[value], data);
+                    $.extend(this.get('pool')[facet].values.custom, data);
                 } else {
                     //update poollist
                     for (var i = list.length - 1; i >= 0; i--) {
@@ -205,8 +205,7 @@ define('io.ox/search/model',
                         simple = _.copy(value, true);
                     }
 
-                    //
-                    if (!!value) {
+                    if (value && (value.custom || value.id !== 'custom')) {
                         active.push({
                             facet: facet.id,
                             value: value.custom || value.id,
@@ -270,16 +269,14 @@ define('io.ox/search/model',
                     });
 
                 //set collection
-                items.reset();
-                items.add(list);
+                items.reset(list);
                 items.timestamp = timestamp || Date.now();
             },
             getOptions: function () {
                 return  _.copy(options);
             },
             reset: function () {
-                items.reset();
-                delete items.timestamp;
+                items.empty();
                 this.set({
                     query: '',
                     autocomplete: [],

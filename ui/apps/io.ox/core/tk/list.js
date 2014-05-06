@@ -149,22 +149,23 @@ define('io.ox/core/tk/list',
 
         onRemove: function (model) {
 
-            var li = this.$el.find('li[data-cid="' + this.getCID(model) + '"]'),
+            var children = this.getItems(),
+                cid = this.getCID(model),
+                li = children.filter('[data-cid="' + cid + '"]'),
                 top = this.$el.scrollTop();
 
             if (li.length === 0) return;
 
-            if (li.position().top < top) {
-                this.$el.scrollTop(top - li.outerHeight(true));
-            }
+            // keep scroll position
+            if (li.position().top < top) this.$el.scrollTop(top - li.outerHeight(true));
 
-            this.selection.remove(this.getCID(model), li);
+            this.selection.remove(cid, li);
             li.remove();
 
             // simulate scroll event because the list might need to paginate.
             // Unless it's the last one! If we did scroll for the last one, we would
             // trigger a paginate call that probably overtakes the delete request
-            if (li.length > 1) this.$el.trigger('scroll');
+            if (children.length > 1) this.$el.trigger('scroll');
         },
 
         onSort: function () {
@@ -298,18 +299,20 @@ define('io.ox/core/tk/list',
         redraw: function () {
             var point = ext.point(this.ref + '/item'),
                 collection = this.collection,
-                app = this.app;
+                view = this;
             this.getItems().each(function (index) {
                 if (index >= collection.length) return;
                 var model = collection.at(index),
-                    baton = ext.Baton({ data: model.toJSON(), model: model, app: app });
+                    data = view.map(model),
+                    baton = ext.Baton({ data: data, model: model, app: view.app });
                 point.invoke('draw', $(this).children().eq(1).empty(), baton);
             });
         },
 
         renderListItem: function (model) {
             var li = this.scaffold.clone(),
-                baton = ext.Baton({ data: model.toJSON(), model: model, app: this.app });
+                data = this.map(model),
+                baton = ext.Baton({ data: data, model: model, app: this.app });
             // add cid and full data
             li.attr({ 'data-cid': this.getCID(model), 'data-index': model.get('index') });
             // draw via extensions

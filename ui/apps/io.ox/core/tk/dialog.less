@@ -84,6 +84,10 @@
 
             }
 
+            &.singleselect li.file .name {
+                padding-left: 0.5em;
+            }
+
         }
 
     }
@@ -101,6 +105,7 @@
 }
 
 .mobile-dialog.io-ox-dialog-popup {
+
     overflow-y: scroll;
     max-height: 95%;
     width: 95%;
@@ -109,14 +114,23 @@
     .border-radius(0);
 
     .modal-footer {
+
         .row {
-            [class*="col-"] { margin-left: 0; }
+
+            [class*="col-"] {
+                margin-left: 0;
+            }
+
             .btn {
                 width: 100%;
                 margin: 2px 0;
             }
-            .col-md-3 { width: inherit; }
+
         }
+
     }
-    h3 { font-size: 20px; }
+
+    h3 {
+        font-size: 20px;
+    }
 }

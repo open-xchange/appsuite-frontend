@@ -379,7 +379,8 @@ define('io.ox/portal/main',
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
                 $title = node.find('h2 .title').text(_.noI18n(title)),
-                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value();
+                requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, true).value(),
+                requiresCustomSetUp = point.invoke('requiresCustomSetUp').reduce(reduceBool, true).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
             node.attr('aria-label', title);
@@ -387,9 +388,13 @@ define('io.ox/portal/main',
                 'aria-label': title + ', ' + gt('Disable widget'),
             });
             // setup?
-            if (requiresSetUp) {
+            if (requiresSetUp || requiresCustomSetUp) {
                 node.find('.decoration').removeClass('pending');
-                app.drawDefaultSetup(baton);
+                if (requiresSetUp) {
+                    app.drawDefaultSetup(baton);
+                } else {
+                    point.invoke('performCustomSetUp', node, baton);
+                }
             } else {
                 // add link?
                 if (point.prop('action') !== undefined) {

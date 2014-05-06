@@ -13,5 +13,9 @@
     "grunt": "^0.4.4",
     "assemble-less": "^0.7.0",
     "underscore": "^1.6.0"
+  },
+  "optionalDependencies": {
+    "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
+    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.2.1"
   }
 }

@@ -62,6 +62,7 @@ define('io.ox/core/session',
                 params: {
                     action: 'autologin',
                     client: that.client(),
+                    rampup: true,
                     version: that.version()
                 }
             })
@@ -69,7 +70,7 @@ define('io.ox/core/session',
             .then(
                 function (data) {
                     ox.secretCookie = true;
-                    ox.rampup = data.rampUp || ox.rampup || {};
+                    ox.rampup = data.rampup || ox.rampup || {};
                     return data;
                 },
                 function (data) {
@@ -153,13 +154,10 @@ define('io.ox/core/session',
                                 client: that.client(),
                                 version: that.version(),
                                 timeout: TIMEOUTS.LOGIN,
-                                multiple: JSON.stringify(multiple),
-                                rampup: false
+                                multiple: JSON.stringify(multiple)
                             }
                         })
                         .done(function (data) {
-                            // copy rampup data
-                            ox.rampup = data.rampUp || ox.rampup || {};
                             // store session
                             // we pass forceLanguage (might be undefined); fallback is data.locale
                             set(data, forceLanguage);
@@ -188,11 +186,15 @@ define('io.ox/core/session',
         rampup: function () {
             return http.GET({
                 module: 'login',
-                appendColumns: false,
                 params: {
                     action: 'rampup',
-                    client: that.client()
-                }
+                    rampup: true
+                },
+                appendColumns: false,
+                processResponse: false
+            })
+            .then(function (data) {
+                return (ox.rampup = data.rampup || ox.rampup || {});
             });
         },
 

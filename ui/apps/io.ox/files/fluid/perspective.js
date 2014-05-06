@@ -181,24 +181,19 @@ define('io.ox/files/fluid/perspective',
     function toggleToolbar(selected, selection) {
         // get current toolbar buttons
         var buttons = $('.window-toolbar .toolbar-button'),
-            toolbar = $('.window-toolbar'),
-            toolbarID = 'multi-select-toolbar',
-            container;
-        if ($('#' + toolbarID).length > 0) {
-            // reuse old toolbar
-            container = $('#' + toolbarID);
+            container = $('#multi-select-toolbar');
+        if (container.length < 1) {
+            // create one
+            container = $('<div>', { id: 'multi-select-toolbar' });
         } else {
-            // or create a new one
-            container = $('<div>', {id: toolbarID});
+            container.empty();
         }
         _.defer(function () {
             if (selected.length > 0) {
                 buttons.hide();
-                $('#multi-select-toolbar').remove();
-                toolbar.append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
+                $('.window-toolbar').append(container.append(drawMobileMultiselect('io.ox/files', selected, selection)));
             } else {
                 // selection empty
-                $('#multi-select-toolbar').remove();
                 buttons.show();
             }
         });
@@ -458,7 +453,6 @@ define('io.ox/files/fluid/perspective',
     });
 
     // Mobile multi select extension points
-    // action
 
     // move
     ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
@@ -479,63 +473,7 @@ define('io.ox/files/fluid/perspective',
         }
     });
 
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'delete',
-        index: 20,
-        draw: function (data) {
-            //var baton = new ext.Baton({data: data.data});
-            $(this).append($('<div class="toolbar-button">')
-                .append($('<a href="#" data-action="io.ox/files/actions/delete">')
-                    .append(
-                        $('<i class="fa fa-trash-o">')
-                    )
-                )
-            );
-            actions.updateCustomControls($(this), data.data,  {cssDisable: true, eventType: 'tap'});
-        }
-    });
-
-    // selection clear button
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'selectionclear',
-        index: 50,
-        draw: function (data) {
-            $(this).append($('<div class="toolbar-button" style="float:right">')
-                .append($('<a href="#">')
-                    .append(
-                        $('<i class="fa fa-times">').on('tap', function (e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            data.selection.clear();
-                        })
-                    )
-                )
-            );
-        }
-    });
-
-    // Mobile multi select extension points
-    // action
-
-    // move
-    ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
-        id: 'move',
-        index: 10,
-        draw: function (data) {
-            //var baton = new ext.Baton({data: data.data}),
-            var btn;
-            $(this).append($('<div class="toolbar-button">')
-                .append(btn = $('<a href="#" data-action="io.ox/files/actions/move">')
-                    .append(
-                        $('<i class="fa fa-sign-in">')
-                    )
-                )
-            );
-            actions.updateCustomControls($(this), data.data, {cssDisable: true, eventType: 'tap'});
-
-        }
-    });
-
+    // delete
     ext.point('io.ox/files/mobileMultiSelect/toolbar').extend({
         id: 'delete',
         index: 20,

@@ -30,7 +30,7 @@ define('io.ox/calendar/main',
     var app = ox.ui.createApp({
         name: 'io.ox/calendar',
         title: 'Calendar'
-    });
+    }), win;
 
     app.mediator({
 
@@ -50,7 +50,7 @@ define('io.ox/calendar/main',
 
             var gridOptions = {
                 settings: settings,
-                showToggle: false
+                showToggle: _.device('small')
             };
 
             // show "load more" link
@@ -86,6 +86,7 @@ define('io.ox/calendar/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
+                'layout': settings.get('viewView', 'week:workweek'),
                 'checkboxes': app.settings.get('showCheckboxes', true)
             });
         },
@@ -111,6 +112,7 @@ define('io.ox/calendar/main',
             app.props.on('change', _.debounce(function () {
                 var data = app.props.toJSON();
                 app.settings
+                    .set('layout', data.checkboxes)
                     .set('showCheckboxes', data.checkboxes)
                     .save();
             }, 500));
@@ -146,38 +148,28 @@ define('io.ox/calendar/main',
         /*
          * Folerview toolbar
          */
-        'folderview-toolbar': commons.mediateFolderView
+        'folderview-toolbar': function (app) {
+            if (_.device('small')) return;
+            commons.mediateFolderView(app);
+        },
+
+        /*
+         * Respond to layout change
+         */
+        'change:layout': function (app) {
+            app.props.on('change:layout', function (model, value) {
+                ox.ui.Perspective.show(app, value);
+            });
+        }
     });
 
     // launcher
     app.setLauncher(function (options) {
 
-        // app window
-        var win,
-            lastPerspective = settings.get('viewView', 'week:workweek');
-
-        if (_.device('smartphone')) {
-            // map different views here
-            switch (lastPerspective) {
-            case 'week:workweek':
-                lastPerspective = 'month';
-                break;
-            case 'week:week':
-                lastPerspective = 'month';
-                break;
-            case 'calendar':
-                lastPerspective = 'month';
-                break;
-            }
-        } else {
-            // corrupt data fix
-            if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
-        }
-
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            toolbar: true
+            chromeless: _.device('!small')
         }));
 
         app.settings = settings;
@@ -232,12 +224,34 @@ define('io.ox/calendar/main',
                 win.show();
             })
             .done(function () {
+
+                // app window
+                var lastPerspective = app.props.get('layout');
+
+                if (_.device('smartphone')) {
+                    // map different views here
+                    switch (lastPerspective) {
+                    case 'week:workweek':
+                        lastPerspective = 'month';
+                        break;
+                    case 'week:week':
+                        lastPerspective = 'month';
+                        break;
+                    case 'calendar':
+                        lastPerspective = 'month';
+                        break;
+                    }
+                } else {
+                    // corrupt data fix
+                    if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
+                }
+
                 ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);
             });
 
-        win.on('change:perspective', function (e, name, long) {
+        win.on('change:perspective', function (e, name, id) {
             // save current perspective to settings
-            settings.set('viewView', long).save();
+            app.props.set('layout', id);
         });
 
     });

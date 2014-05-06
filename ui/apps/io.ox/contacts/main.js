@@ -114,7 +114,10 @@ define('io.ox/contacts/main',
         /*
          * Folerview toolbar
          */
-        'folderview-toolbar': commons.mediateFolderView
+        'folderview-toolbar': function (app) {
+            if (_.device('small')) return;
+            commons.mediateFolderView(app);
+        }
     });
 
     // launcher
@@ -223,7 +226,7 @@ define('io.ox/contacts/main',
         grid = new VGrid(gridContainer, {
             settings: settings,
             swipeRightHandler: swipeRightHandler,
-            showToggle: false
+            showToggle: _.device('small')
         });
 
         // helper to remove button from grid

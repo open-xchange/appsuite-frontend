@@ -345,9 +345,11 @@ define('io.ox/mail/api',
             },
             get: function (data, options) {
                 // inject view (text/html/noimg). need this to generate proper cache keys.
-                data.view = options.view;
-                // was unseen?
-                if (data.unseen) folderAPI.decUnread(data);
+                // data might be plain string, e.g. for mail source
+                if (_.isObject(data)) {
+                    data.view = options.view;
+                    if (data.unseen) folderAPI.decUnread(data);
+                }
                 return data;
             }
         },
@@ -1809,7 +1811,7 @@ define('io.ox/mail/api',
         var last = _(thread).last();
 
         // store data of most recent message as head
-        obj.head = _.extend({}, obj);
+        obj.head = _.extend({ threadSize: thread.length }, obj);
 
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID

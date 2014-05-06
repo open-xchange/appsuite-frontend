@@ -901,7 +901,6 @@ define('io.ox/files/actions',
         id: 'delete',
         index: index += 100,
         prio: 'hi',
-        icon: 'fa fa-trash-o',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
     }));
@@ -1122,7 +1121,8 @@ define('io.ox/files/actions',
                 carousel.init({
                     fullScreen: false,
                     baton: baton,
-                    attachmentMode: false
+                    attachmentMode: false,
+                    useSelectionAsStart: true//tries to start with first displayable item in the current selection
                 });
             });
         }
@@ -1140,7 +1140,8 @@ define('io.ox/files/actions',
                 carousel.init({
                     fullScreen: true,
                     baton: baton,
-                    attachmentMode: false
+                    attachmentMode: false,
+                    useSelectionAsStart: true//tries to start with first displayable item in the current selection
                 });
             });
         }

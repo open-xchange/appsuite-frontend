@@ -32,6 +32,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 name = node.attr('data-name'),
                 value = node.data('value'),
                 toggle = node.data('toggle');
+            if (value === undefined) return; // ignore plain links
             this.model.set(name, toggle === true ? !this.model.get(name) : value);
         },
 
@@ -57,6 +58,16 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                         $('<i class="fa fa-fw">').addClass(this.model.get(name) === value ? 'fa-check' : 'fa-none'),
                         $('<span>').text(text)
                     )
+                )
+            );
+            return this;
+        },
+
+        link: function (name, text, callback) {
+            this.$ul.append(
+                $('<li>').append(
+                    $('<a href="#">', { href: '#', 'data-name': name })
+                    .text(text).on('click', callback)
                 )
             );
             return this;

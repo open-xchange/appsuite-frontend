@@ -33,7 +33,11 @@
         eval('//@ sourceURL=' + name + '.js\n' + code);
     }
 
-    if (_.device('desktop') && !_.device('Safari') && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+    // needs to be reviewed: "force websql for mobile" (July 2013)
+    // plus: don't know why Safari is explicitly excluded as it doesn't support indexedDB at all
+    // for example, IDBVersionChangeEvent is always undefined for Safari
+    if (_.device('desktop && !safari') && window.IDBVersionChangeEvent !== undefined && Modernizr.indexeddb && window.indexedDB) {
+
         // IndexedDB
         (function () {
 
@@ -127,36 +131,15 @@
             };
 
         })();
-    } /*else if (Modernizr.localstorage && !_.device('desktop')) {
-        (function () {
-            var queue = null;
-            fileCache.retrieve = function (name) {
-                var found = localStorage.getItem(name);
-                if (found && found.version === ox.version) {
-                    return $.Deferred().resolve(found.text);
-                }
-            };
-            fileCache.cache = function (name, contents) {
-                if (queue) {
-                    queue.items.push({k: name, c: {text: contents, version: ox.version}});
-                } else {
-                    queue = {
-                        items: []
-                    };
-                    setTimeout(function () {
-                        _(queue.items).each(function (e) {
-                            localStorage.setItem(e.k, e.c);
-                        });
-                        queue = null;
-                    }, 5000);
-                }
-            };
-        }());
-    }*/ else if (Modernizr.websqldatabase && !_.device('Safari && desktop') && (_.browser.ios < 7)) {
+    }
+    else if (Modernizr.websqldatabase) {
+
         // Web SQL
         (function () {
+
             var initialization = $.Deferred();
             var db = openDatabase('filecache', '1.0', 'caches files for OX', 4 * 1024 * 1024);
+
             db.transaction(function (tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS version (version TEXT)');
                 tx.executeSql('SELECT 1 FROM version WHERE version = ?', [ox.version], function (tx, result) {
@@ -167,9 +150,9 @@
                         tx.executeSql('INSERT INTO version VALUES (?)', [ox.version]);
                     }
                     initialization.resolve();
-
                 });
             });
+
             fileCache.retrieve = function (name) {
                 var def = $.Deferred();
                 initialization.done(function () {

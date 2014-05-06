@@ -19,8 +19,9 @@ define('io.ox/calendar/actions',
      'io.ox/core/notifications',
      'io.ox/core/print',
      'settings!io.ox/core',
+     'io.ox/core/extPatterns/actions',
      'gettext!io.ox/calendar'
-    ], function (ext, links, api, util, notifications, print, coreSettings, gt) {
+    ], function (ext, links, api, util, notifications, print, coreSettings, actions, gt) {
 
     'use strict';
 
@@ -457,7 +458,8 @@ define('io.ox/calendar/actions',
         id: 'move',
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                return e.collection.has('some', 'delete') && isBossy;
+                var isSeries = e.baton.data.recurrence_type > 0;
+                return e.collection.has('some', 'delete') && isBossy && !isSeries;
             });
         },
         multiple: copyMove('move', gt('Move'))
@@ -477,8 +479,54 @@ define('io.ox/calendar/actions',
         }
     });
 
-    // Links - toolbar
 
+    // Mobile multi select extension points
+    // delete appointment(s)
+    ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({
+        id: 'delete',
+        index: 10,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-trash-o">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/calendar/detail/actions/delete', null, baton);
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // move appointment(s)
+    ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({
+        id: 'move',
+        index: 20,
+        draw: function (data) {
+            var baton = new ext.Baton({data: data.data});
+            $(this).append($('<div class="toolbar-button">')
+                .append($('<a href="#">')
+                    .append(
+                        $('<i class="fa fa-sign-in">')
+                            .on('click', {grid: data.grid}, function (e) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                actions.invoke('io.ox/calendar/detail/actions/move', null, baton);
+                                // need to clear the selection after aciton is invoked
+                                e.data.grid.selection.clear();
+                            })
+                    )
+                )
+            );
+        }
+    });
+
+    // Links - toolbar
     new ActionGroup(POINT + '/links/toolbar', {
         id: 'default',
         index: 100,
@@ -597,29 +645,28 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 300,
         prio: 'hi',
-        mobile: 'lo',
-        id: 'move',
-        label: gt('Move'),
-        ref: 'io.ox/calendar/detail/actions/move'
+        mobile: 'hi',
+        id: 'delete',
+        label: gt('Delete'),
+        ref: 'io.ox/calendar/detail/actions/delete'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 400,
-        prio: 'hi',
-        id: 'print',
-        icon: 'fa fa-print',
-        label: gt('Print'),
-        ref: 'io.ox/calendar/detail/actions/print-appointment'
+        prio: 'lo',
+        mobile: 'lo',
+        id: 'move',
+        label: gt('Move'),
+        drawDisabled: true,
+        ref: 'io.ox/calendar/detail/actions/move'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 500,
-        prio: 'hi',
-        mobile: 'lo',
-        id: 'delete',
-        icon: 'fa fa-trash-o',
-        label: gt('Delete'),
-        ref: 'io.ox/calendar/detail/actions/delete'
+        prio: 'lo',
+        id: 'print',
+        label: gt('Print'),
+        ref: 'io.ox/calendar/detail/actions/print-appointment'
     }));
 
     ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({

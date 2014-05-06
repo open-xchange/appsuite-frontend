@@ -24,37 +24,29 @@
   <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.files.webdav.win7"></a>9.6.4. Setting up WebDAV under Windows 7</h3></div></div></div>
-<a class="indexterm" name="idm140072560390992"></a><a class="indexterm" name="idm140072560389600"></a><p><a name="ox.appsuite.user.concept.files.webdav.win7"></a>In order to set up WebDAV access under Windows 7, use one of the following options:</p>
+<a class="indexterm" name="idm139661403487312"></a><a class="indexterm" name="idm139661403485920"></a><p><a name="ox.appsuite.user.concept.files.webdav.win7"></a>In order to set up WebDAV access under Windows 7, use one of the following options:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Use the OX Updater. Information can be found in the OX Updater user documentation.</p></li>
-<li class="listitem"><p>First, install the Microsoft <a class="link" href="ox.appsuite.user.sect.files.webdav.winvista.html#ox.appsuite.user.task.webdav.msupdate" title="How to install the Microsoft Software Update for WebDAV:">Software Update</a> for web folders. Then, set up the 
-            <a class="link" href="ox.appsuite.user.sect.files.webdav.win7.html#ox.appsuite.user.task.webdav.win7" title="How to set up WebDAV access under Windows 7:">WebDav access</a>.</p></li>
+<li class="listitem"><p>Then, manually set up the <a class="link" href="ox.appsuite.user.sect.files.webdav.win7.html#ox.appsuite.user.task.webdav.win7" title="How to manually set up WebDAV access under Windows 7:">WebDav access</a>.</p></li>
 </ul></div>
-<p>
-      </p>
+<p><span class="phrase"><strong>Note:</strong></span> Depending on the Windows 7 setup, there can be delays when accessing WebDAV folders. If this is the case, follow the instructions in this article: <code class="uri">http://support.microsoft.com/kb/2445570</code>.</p>
 <div class="task">
-<a name="ox.appsuite.user.task.webdav.win7"></a><p class="title"><b>How to set up WebDAV access under Windows 7:</b></p>
+<a name="ox.appsuite.user.task.webdav.win7"></a><p class="title"><b>How to manually set up WebDAV access under Windows 7:</b></p>
+<div class="taskprerequisites">
+          <p><span class="phrase"><strong>Prerequisite:</strong></span> The registry key <span class="guilabel"><strong>BasicAuthLevel</strong></span> has to be set to <span class="guilabel"><strong>2</strong></span> in the Windows registry database. Further information can be found in the Microsoft articles <a class="ulink" href="http://support.microsoft.com/kb/928692" target="_top">http://support.microsoft.com/kb/928692</a> and <a class="ulink" href="https://support.microsoft.com/kb/841215" target="_top">https://support.microsoft.com/kb/841215</a>. </p>
+        </div>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>In the navigation area of the Windows Explorer select the entry <span class="guibutton"><strong>Computer</strong></span>.</p></li>
-<li class="step"><p>In the icon bar click on <span class="guibutton"><strong>Connect drive</strong></span>. The <span class="guilabel"><strong>Connect drive</strong></span> 
-	    window opens.</p></li>
-<li class="step"><p>Click on <span class="guibutton"><strong>Connect to a Web site that you can use to store your documents</strong></span>. The 
-              <span class="guilabel"><strong>Add network address</strong></span> window opens. Click on <span class="guibutton"><strong>Next</strong></span>.</p></li>
+<li class="step"><p>In the icon bar click on <span class="guibutton"><strong>Connect drive</strong></span>. The <span class="guilabel"><strong>Connect drive</strong></span> window opens.</p></li>
+<li class="step"><p>Click on <span class="guibutton"><strong>Connect to a Web site that you can use to store your documents</strong></span>. The <span class="guilabel"><strong>Add network address</strong></span> window opens. Click on <span class="guibutton"><strong>Next</strong></span>.</p></li>
 <li class="step"><p>Select <span class="guibutton"><strong>Select custom network address</strong></span>. Click on <span class="guibutton"><strong>Next</strong></span>.</p></li>
-<li class="step"><p>In the <span class="guilabel"><strong>Internet or network address</strong></span> input field enter the following address:
-              https://&lt;address&gt;/servlet/webdav.infostore where &lt;address&gt; needs to be replaced by the Groupware server's ip address or url.
-              Click on <span class="guibutton"><strong>Next</strong></span>.</p></li>
-<li class="step"><p>Enter your username and password. Use your login data for the groupware server. Click on <span class="guibutton"><strong>OK</strong></span>.</p></li>
+<li class="step"><p>In the <span class="guilabel"><strong>Add network path</strong></span> dialog window enter the following address: https://&lt;address&gt;/servlet/webdav.infostore where  &lt;address&gt; needs to be replaced by the Groupware server's ip address or url. <span class="guibutton"><strong>Click on Next</strong></span>.</p></li>
+<li class="step"><p>Enter your username and password for accessing the Groupware Server. Click on <span class="guibutton"><strong>OK</strong></span>.</p></li>
 <li class="step"><p>On the next page you can assign a name to the network address. Click on <span class="guibutton"><strong>Next</strong></span>.</p></li>
 <li class="step"><p>Click on <span class="guibutton"><strong>Finish</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p class="order.result"><span class="phrase"><strong>Result:</strong></span> Below <span class="guibutton"><strong>Computer</strong></span> you can access your
-            <span class="phrase">
-              <span class="guilabel"><strong>Drive</strong></span>
-            </span>
-            
-             app files.</p>
+          <p class="order.result"><span class="phrase"><strong>Result:</strong></span> Below <span class="guibutton"><strong>Computer </strong></span> you can access your <span class="phrase"><span class="guilabel"><strong>Drive</strong></span></span> app files.</p>
         </div>
 </div>
 </div>

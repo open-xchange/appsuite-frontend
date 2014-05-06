@@ -1,0 +1,132 @@
+.halo.io-ox-xing {
+    clear: both;
+
+    .intro {
+
+    }
+
+    .padding {
+        margin-top: 1.5em; //matches the widget title padding
+    }
+
+    .mini-profile, .extended-profile {
+        display: table-cell;
+        vertical-align: top;
+
+    }
+
+    .mini-profile, .connection {
+        width: 64px;
+        height: 80px;
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .mini-profile {
+        text-align: center;
+        margin: 0 14px;
+
+        .pic, .permalink {
+            display: block;
+            overfow: ellipsis;
+        }
+        .pic {
+            .picture(64px, 64px);
+        }
+    }
+
+    .extended-profile {
+
+        .extended-profile-block {
+            display: table-cell;
+            vertical-align: top;
+            padding-left: 28px;
+
+            .header {
+                /* from .contact-detail .block legend which should become a mixin */
+                font-family: 'Helvetica Neue', OpenSans, Helvetica, Arial, sans-serif;
+                font-size: 16px;
+                line-height: 20px;
+                font-weight: 200;
+                margin-bottom: 14px;
+                border-bottom: 0 none;
+            }
+        }
+    }
+
+    .shared-contacts .mini-profile {
+        padding-right: 28px;
+    }
+
+    .connection {
+        color: rgba(0,0,0,0.25);
+    }
+}
+
+.content.io-ox-xing {
+    .setup-questions {
+        text-align: center;
+        vertical-align: middle;
+    }
+    .setup-action {
+        display: block;
+        margin-bottom: 13px;
+    }
+
+}
+/* This is the preview pane */
+.content.io-ox-xing.preview {
+
+    .activity {
+        display: block;
+        margin: 7px 0;
+
+        .possible-action, .date {
+            display: none;
+        }
+    }
+
+}
+
+
+/* The registration popup */
+.io-ox-xing.submitted-data {
+    label {
+        display: block;
+        position: relative;
+
+        input, select {
+            position: absolute;
+            left: 160px;
+        }
+    }
+
+}
+/* The side pop-up */
+.content.io-ox-xing.fullview {
+
+    .activity {
+        display: block;
+        margin: 26px 0;
+
+        .possible-action {
+            display: inline-block;
+            cursor: pointer;
+            margin-right: 13px;
+
+            .fa {
+                margin-right: 3px;
+            }
+        }
+
+        .date {
+            font-size: 80%;
+        }
+    }
+
+    .comment .btn {
+        display: block;
+    }
+
+}

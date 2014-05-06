@@ -13,81 +13,191 @@
 
 define('io.ox/search/items/view-template',
     ['gettext!io.ox/core',
-     'io.ox/core/extensions',
-     'io.ox/mail/listview',
-     'io.ox/tasks/listview',
-     'io.ox/contacts/listview',
-     'io.ox/calendar/listview',
-     'io.ox/files/listview'
-    ], function (gt, ext) {
+     'io.ox/core/extensions'], function (gt, ext) {
 
     'use strict';
 
-    ext.point('io.ox/search/view/window').extend({
+    var config = {
+            dependencies: {},
+            points: {},
+            classes: {},
+        };
+
+    ext.point('io.ox/search/main/items').extend({
+        id: 'dependencies',
+        config: function (config) {
+            var defaults = {
+                mail: 'io.ox/mail/listview',
+                tasks: 'io.ox/tasks/listview',
+                contacts: 'io.ox/contacts/listview',
+                calendar: 'io.ox/calendar/listview',
+                files: 'io.ox/files/listview'
+            };
+            $.extend(config.dependencies, defaults);
+        }
+    });
+
+    ext.point('io.ox/search/main/items').extend({
+        id: 'points',
+        config: function (config) {
+            var defaults = {
+                mail: 'io.ox/mail/listview/item/default',
+                tasks: 'io.ox/tasks/listview/item',
+                contacts: 'io.ox/contacts/listview/item',
+                calendar: 'io.ox/calendar/listview/item',
+                files: 'io.ox/files/listview/item'
+            };
+            $.extend(config.points, defaults);
+        }
+    });
+
+    ext.point('io.ox/search/main/items').extend({
+        id: 'classes',
+        config: function (config) {
+            var defaults = {
+                tasks: 'task-item',
+                contacts: 'contact-item',
+                calendar: 'calendar-item',
+                files: 'file-item'
+            };
+            $.extend(config.classes, defaults);
+        }
+    });
+
+    //fetch config
+    ext.point('io.ox/search/main/items').invoke('config', $, config);
+
+    ext.point('io.ox/search/view/items').extend({
         id: 'results',
-        index: 400,
+        index: 100,
         row: '0',
         draw: function (baton) {
 
-            var items = baton.model.get('items'),
+            var self = this,
+                items = baton.model.get('items'),
                 module = baton.model.getModule(),
+                nodes = [],
                 row, cell;
 
-        //create containers
+            //create containers
             row = $('<div class="row result">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled">') //list-view
             );
 
-            // app-specific classes
-            if (module === 'mail') cell.addClass('mail-item');
 
-            items.each(function (model) {
+            //require list view extensions points
+            var dep = [config.dependencies[module]].concat('less!io.ox/search/items/style');
+            require(dep, function () {
 
-                var tmp = $('<li class="item">'),
-                    item = model.get('data'),
-                    baton = new ext.Baton({ data: item });
+                items.each(function (model) {
 
-                tmp.attr({
-                    'data-id': model.get('id'),
-                    'data-folder': model.get('folder'),
-                    'data-app': model.get('application'),
+                    var node = $('<li class="item">'),
+                        item = model.get('data'),
+                        baton = new ext.Baton({ data: item });
+
+                    node.attr({
+                        'data-id': model.get('id'),
+                        'data-folder': model.get('folder'),
+                        'data-app': model.get('application'),
+                    });
+
+                    //add app specific classes
+                    if (module === 'mail') cell.addClass('mail-item');
+                    node.addClass(config.classes[module] || '');
+
+                    //draw item
+                    ext.point(config.points[module]).invoke('draw', node, baton);
+                    nodes.push(node);
                 });
 
-                switch (module) {
-                case 'mail':
-                    ext.point('io.ox/mail/listview/item/default').invoke('draw', tmp, baton);
-                    break;
-                case 'contacts':
-                    tmp.addClass('contact-item');
-                    ext.point('io.ox/contacts/listview/item').invoke('draw', tmp, baton);
-                    break;
-                case 'calendar':
-                    tmp.addClass('calendar-item');
-                    ext.point('io.ox/calendar/listview/item').invoke('draw', tmp, baton);
-                    break;
-                case 'tasks':
-                    tmp.addClass('task-item');
-                    ext.point('io.ox/tasks/listview/item').invoke('draw', tmp, baton);
-                    break;
-                case 'files':
-                    tmp.addClass('file-item');
-                    ext.point('io.ox/files/listview/item').invoke('draw', tmp, baton);
-                    break;
-                }
-                cell.append(tmp);
-            });
-
-            if (items.timestamp && !items.length) {
-                cell.append(
-                    $('<list class="item">').append(
-                        $('<div class="list-item-row">').append(
-                            $('<div class="">').text(gt('No items found'))
+                //empty result
+                if (items.timestamp && !items.length) {
+                    nodes.push(
+                        $('<list class="item">').append(
+                            $('<div class="list-item-row">').append(
+                                $('<div class="">').text(gt('No items found'))
+                            )
                         )
-                    )
-                );
-            }
+                    );
+                }
 
-            this.append(row);
+                //append to dom
+                cell.append(nodes);
+
+            });
+            self.append(row);
         }
     });
+
+    function draw(baton, detail, api) {
+        var popup = this.busy();
+        require([detail, api], function (view, api) {
+            //render data with available data
+            popup.idle().append(view.draw(baton.data));
+            api.get(baton.data).then(function (data) {
+                //render again with get response if needed
+                if (!_.isEqual(baton.data, data)) {
+                    popup.empty().append(view.draw(data));
+                }
+            });
+        });
+    }
+
+    //register sidepanel details views
+    ext.point('io.ox/search/view/items').extend({
+        id: 'sidepanel',
+        index: 200,
+        row: '0',
+        draw: function () {
+
+            ext.point('io.ox/search/items/calendar').extend({
+                draw: function (baton) {
+                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/api');
+                }
+            });
+
+            ext.point('io.ox/search/items/contacts').extend({
+                draw: function (baton) {
+                    draw.call(this, baton, 'io.ox/contacts/view-detail', 'io.ox/contacts/api');
+                }
+            });
+
+            ext.point('io.ox/search/items/tasks').extend({
+                draw: function (baton) {
+                    draw.call(this, baton, 'io.ox/tasks/view-detail', 'io.ox/tasks/api');
+                }
+            });
+
+            ext.point('io.ox/search/items/files').extend({
+                draw: function (baton) {
+                    draw.call(this, baton, 'io.ox/files/fluid/view-detail', 'io.ox/files/api');
+                }
+            });
+
+            //special for mail
+            ext.point('io.ox/search/items/mail').extend({
+                draw: function (baton) {
+                    var popup = this.busy();
+                    require(['io.ox/mail/detail/view', 'io.ox/mail/api'], function (detail, api) {
+                        //render data with available data
+                        var view = new detail.View({ data: baton.data });
+                        popup.idle().append(
+                            view.render().expand().$el.addClass('no-padding')
+                        );
+                        api.get(baton.data).then(function (data) {
+                            //render again with get response
+                            if (!_.isEqual(baton.data, data)) {
+                                var view = new detail.View({ data: data });
+                                popup.idle().empty().append(
+                                    view.render().expand().$el.addClass('no-padding')
+                                );
+                            }
+                        });
+                    });
+                }
+            });
+
+        }
+    });
+
 });

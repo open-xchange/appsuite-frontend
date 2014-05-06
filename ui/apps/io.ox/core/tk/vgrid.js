@@ -295,17 +295,18 @@ define('io.ox/core/tk/vgrid',
                     // show checkbox
                     options.showCheckbox === false ?
                         [] :
-                        $('<label class="select-all">').append(
-                            $('<input type="checkbox" value="true" tabindex="1">').attr('title', gt('Select all'))
-                        )
-                        .on('change', 'input', { grid: this }, fnToggleCheckbox),
+                        $('<label class="select-all">')
+                            .append(
+                                $('<input type="checkbox" value="true" tabindex="1">').attr('title', gt('Select all'))
+                            )
+                            .on('change', 'input', { grid: this }, fnToggleCheckbox),
                     // show toggle
                     options.showToggle === false ?
                         [] :
                         $('<a>', { href: '#', tabindex: 1, role: 'button', 'aria-label': gt('Toggle checkboxes')})
-                        .css('float', 'left')
-                        .append($('<i class="fa fa-th-list">'))
-                        .on('click', { grid: this }, fnToggleEditable)
+                            .addClass('select-all-toggle')
+                            .append($('<i class="fa fa-th-list">'))
+                            .on('click', { grid: this }, fnToggleEditable)
                 )
                 .appendTo(node),
             // item template

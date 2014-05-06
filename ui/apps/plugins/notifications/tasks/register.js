@@ -16,10 +16,8 @@ define('plugins/notifications/tasks/register',
      'gettext!plugins/notifications',
      'io.ox/tasks/api',
      'io.ox/core/api/reminder',
-     'io.ox/tasks/util',
-     'io.ox/core/tk/reminder-util',
      'less!plugins/notifications/tasks/style'
-    ], function (ext, gt, api, reminderAPI, util, reminderUtil) {
+    ], function (ext, gt, api, reminderAPI) {
 
     'use strict';
 
@@ -188,26 +186,33 @@ define('plugins/notifications/tasks/register',
 
             function add(e, tasks, reset) {
                 var items = [];
-                _(tasks).each(function (taskObj) {
-                    if (!hiddenOverDueItems[_.ecid(taskObj)]) {
-                        var task = util.interpretTask(taskObj),
-                            tmp = new Backbone.Model({
-                                id: task.id,
-                                folder_id: task.folder_id,
-                                badge: task.badge,
-                                title: _.noI18n(task.title),
-                                end_date: task.end_date,
-                                status: task.status,
-                                cid: _.cid(task)
-                            });
+                
+                if(tasks.length > 0) {
+                    require(['io.ox/tasks/util'], function (util) {
+                        _(tasks).each(function (taskObj) {
+                            if (!hiddenOverDueItems[_.ecid(taskObj)]) {
+                                var task = util.interpretTask(taskObj),
+                                    tmp = new Backbone.Model({
+                                        id: task.id,
+                                        folder_id: task.folder_id,
+                                        badge: task.badge,
+                                        title: _.noI18n(task.title),
+                                        end_date: task.end_date,
+                                        status: task.status,
+                                        cid: _.cid(task)
+                                    });
+                                if (reset) {
+                                    items.push(tmp);
+                                } else {
+                                    notifications.collection.push(tmp, {merge: true, silent: true});//update data but don't throw events until we are finished(causes many redraws)
+                                }
+                            }
+                        });
                         if (reset) {
-                            items.push(tmp);
-                        } else {
-                            notifications.collection.push(tmp, {merge: true, silent: true});//update data but don't throw events until we are finished(causes many redraws)
+                            notifications.collection.reset(items);
                         }
-                    }
-                });
-                if (reset) {
+                    });
+                } else if (reset) {
                     notifications.collection.reset(items);
                 }
             }
@@ -260,7 +265,10 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-reminder/item').extend({
         draw: function (baton) {
-            reminderUtil.draw(this, baton.model, util.buildOptionArray());
+            var self = this;
+            require(['io.ox/tasks/util', 'io.ox/core/tk/reminder-util'], function (util, reminderUtil) {
+                reminderUtil.draw(self, baton.model, util.buildOptionArray());
+            });
         }
     });
 
@@ -295,12 +303,14 @@ define('plugins/notifications/tasks/register',
                 time = ($(e.target).data('value') || $(e.target).val()).toString(),
                 key = [model.get('folder_id') + '.' + model.get('id')];
             if (time !== '0') {//0 means 'pick a time here' was selected. Do nothing.
-                reminderAPI.remindMeAgain(util.computePopupTime(time).alarmDate, model.get('reminder').id).then(function () {
-                    return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
-                }).done(function () {
-                    api.trigger('update:' + _.ecid(key[0]));//update detailview
+                require(['io.ox/tasks/util'], function (util) {
+                    reminderAPI.remindMeAgain(util.computePopupTime(time).alarmDate, model.get('reminder').id).then(function () {
+                        return $.when(api.caches.get.remove(key), api.caches.list.remove(key));//update Caches
+                    }).done(function () {
+                        api.trigger('update:' + _.ecid(key[0]));//update detailview
+                    });
+                    model.collection.remove(model);
                 });
-                model.collection.remove(model);
             }
         },
 
@@ -405,15 +415,19 @@ define('plugins/notifications/tasks/register',
                 });
 
                 api.getList(taskIds).done(function (tasks) {
-                    _(tasks).each(function (task) {
-                        _(reminders).each(function (reminder) {
-                            if (reminder.target_id === task.id) {
-                                var obj = util.interpretTask(task);
-                                obj.reminder = reminder;
-                                notifications.collection.add(new Backbone.Model(obj));
-                            }
+                    if (tasks && tasks.length > 0) {
+                        require(['io.ox/tasks/util'], function (util) {
+                            _(tasks).each(function (task) {
+                                _(reminders).each(function (reminder) {
+                                    if (reminder.target_id === task.id) {
+                                        var obj = util.interpretTask(task);
+                                        obj.reminder = reminder;
+                                        notifications.collection.add(new Backbone.Model(obj));
+                                    }
+                                });
+                            });
                         });
-                    });
+                    }
                 });
             }).on('remove:reminder', function (e, ids) {//ids of task objects
                 _(ids).each(function (id) {
@@ -458,36 +472,39 @@ define('plugins/notifications/tasks/register',
 
     ext.point('io.ox/core/notifications/task-confirmation/item').extend({
         draw: function (baton) {
-            var task = util.interpretTask(baton.model.toJSON()),
-                endText = '';
-            if (_.noI18n(baton.model.get('end_date'))) {
-                endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
-            }
-                    //#. %1$s task title
-                    //#. %2$s task end date
-                    //#, c-format
-            var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
-            this.attr({role: 'listitem',
-                       'data-cid': _.ecid(baton.model.attributes),
-                       'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
-                       tabindex: 1,
-                       'aria-label': label})
-            .append(
-                $('<div class="title">').text(_.noI18n(task.title)),
-                $('<span class="end_date">').text(_.noI18n(task.end_date)),
-                $('<span class="status">').text(task.status).addClass(task.badge),
-                $('<div class="actions">').append(
-                    $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-inverse" data-action="change_state">')
-                    .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
-                    .text(gt('Accept/Decline')),
-                    $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
-                        .attr({'title': gt('Accept invitation'),
-                               'aria-label': gt('Accept invitation'),
-                               'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)})
-                        .append('<i class="fa fa-check">')
-                )
-            );
-            task = null;
+            var self = this;
+            require(['io.ox/tasks/util'], function (util) {
+                var task = util.interpretTask(baton.model.toJSON()),
+                    endText = '';
+                if (_.noI18n(baton.model.get('end_date'))) {
+                    endText = gt('end date ') + _.noI18n(baton.model.get('end_date'));
+                }
+                        //#. %1$s task title
+                        //#. %2$s task end date
+                        //#, c-format
+                var label = gt('Task invitation. %1$s %2$s %3$s. Press [enter] to open', _.noI18n(baton.model.get('title')), endText);
+                self.attr({role: 'listitem',
+                           'data-cid': _.ecid(baton.model.attributes),
+                           'focus-id': 'task-invitation-' + _.ecid(baton.model.attributes),
+                           tabindex: 1,
+                           'aria-label': label})
+                .append(
+                    $('<div class="title">').text(_.noI18n(task.title)),
+                    $('<span class="end_date">').text(_.noI18n(task.end_date)),
+                    $('<span class="status">').text(task.status).addClass(task.badge),
+                    $('<div class="actions">').append(
+                        $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-inverse" data-action="change_state">')
+                        .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
+                        .text(gt('Accept/Decline')),
+                        $('<button type="button" tabindex="1" class="refocus btn btn-success" data-action="accept">')
+                            .attr({'title': gt('Accept invitation'),
+                                   'aria-label': gt('Accept invitation'),
+                                   'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)})
+                            .append('<i class="fa fa-check">')
+                    )
+                );
+                task = null;
+            });
         }
     });
 

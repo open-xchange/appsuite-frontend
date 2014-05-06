@@ -185,7 +185,6 @@ define('io.ox/editor/main',
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/editor',
                 title: gt('Editor'),
-                search: false,
                 chromeless: true
             }));
 

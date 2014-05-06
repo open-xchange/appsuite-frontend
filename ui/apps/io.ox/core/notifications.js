@@ -205,12 +205,12 @@ define('io.ox/core/notifications',
                 }
             });
 
-            // invoke plugins
-            ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
-                setTimeout(function () {
+            // load and invoke plugins with delay
+            setTimeout(function () {
+                ox.manifests.loadPluginsFor('io.ox/core/notifications').done(function () {
                     ext.point('io.ox/core/notifications/register').invoke('register', self, self);
-                }, delay || 2000);
-            });
+                });
+            }, delay || 2000);
 
             function focusNotifications(e) {
                 if (e.which === 13) { //enter
@@ -360,7 +360,7 @@ define('io.ox/core/notifications',
                     info: 10000,
                     success: 4000,
                     warning: 10000,
-                    screenreader: 0,
+                    screenreader: 100,
                 },
 
                 icons = {
@@ -381,12 +381,15 @@ define('io.ox/core/notifications',
                         return;
                     }
 
-                    $('.io-ox-alert')
+                    var nodes =  $('.io-ox-alert')
                         .trigger('notification:removed')
-                        .on('transitionend webkitTransitionEnd', function () {
-                            $(this).remove();
-                        })
                         .removeClass('appear');
+
+                    // has been event-based (transitionend webkitTransitionEnd) but sometimes
+                    // such events are not triggered causing invisible but blocking overlays
+                    setTimeout(function () {
+                        nodes.remove(); nodes = null;
+                    }, 300);
                 },
 
                 click = function (e) {
@@ -442,9 +445,15 @@ define('io.ox/core/notifications',
                 if (validType.test(o.type)) {
 
                     active = false;
-                    clearTimeout(timer);
 
-                    timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+                    if (o.type !== 'screenreader') {//screenreader notifications should not remove standard ones, so special remove here
+                        clearTimeout(timer);
+                        timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+                    } else {
+                        setTimeout(function () {
+                            $('.io-ox-alert-screenreader').remove();
+                        }, o.duration || durations[o.type] || 100);
+                    }
 
                     var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
                         reuse = false,
@@ -454,7 +463,7 @@ define('io.ox/core/notifications',
                     // reuse existing alert?
                     var node = $('.io-ox-alert');
 
-                    if (node.length) {
+                    if (node.length && o.type !== 'screenreader') {//screenreader should not reuse existing notifications, this would only remove them for other users
                         node.empty();
                         reuse = true;
                         className += ' appear';
@@ -485,7 +494,7 @@ define('io.ox/core/notifications',
                         );
                     }
 
-                    if (!reuse) $('body').append(node);
+                    if (!reuse) $('#io-ox-core').append(node);
 
                     // put at end of stack not to run into opening click
                     setTimeout(function () {

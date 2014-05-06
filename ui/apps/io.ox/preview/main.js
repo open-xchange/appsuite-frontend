@@ -210,7 +210,7 @@ define('io.ox/preview/main',
 
     Renderer.point.extend(new Engine({
         id: 'text',
-        supports: ['txt', 'plain/text', 'asc', 'js', 'md'],
+        supports: ['txt', 'plain/text', 'asc', 'js', 'md', 'json'],
         draw: function (file) {
             var node = this;
             require(['io.ox/core/emoji/util', 'less!io.ox/preview/style'], function (emoji) {
