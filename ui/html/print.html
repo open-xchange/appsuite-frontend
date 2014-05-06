@@ -21,6 +21,13 @@
         </div>
     </header>
     <pre class="content">{{= element.content }}</pre>
+    {{?element.attachments.length}}
+        <ul class="content">
+            {{~ element.attachments :a}}
+                <li>{{=a.title || ''}}{{?a.size}} ({{=a.size || ''}}){{?}}</li>
+            {{~}}
+        </ul>
+    {{?}}
 </section>
 {{~}}
 </script>
@@ -39,6 +46,13 @@
         </div>
     </header>
     <pre class="content">{{= element.content }}</pre>
+    {{?element.attachments.length}}
+        <ul class="content">
+            {{~ element.attachments :a}}
+                <li>{{=a.title || ''}}{{?a.size}} ({{=a.size || ''}}){{?}}</li>
+            {{~}}
+        </ul>
+    {{?}}
 </section>
 {{~}}
 </script>
