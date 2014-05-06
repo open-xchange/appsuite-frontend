@@ -16,7 +16,8 @@ define('io.ox/core/tk/selection',
     ['io.ox/core/event',
      'io.ox/core/extensions',
      'io.ox/core/notifications',
-     'gettext!io.ox/core'
+     'gettext!io.ox/core',
+     'io.ox/core/tk/draghelper'
     ], function (Events, ext, notifications, gt) {
 
     'use strict';
@@ -1040,10 +1041,14 @@ define('io.ox/core/tk/selection',
                     data = cid ? [_.cid(cid)] : [];
                 }
                 // create helper
-                helper = $('<div class="drag-helper">').append(
-                    $('<span class="drag-counter">').text(data.length),
-                    $('<span>').text(options.dragMessage.call(container, data, source))
-                );
+                helper = $('<div class="drag-helper">');
+                ext.point('io.ox/core/tk/draghelper').invoke('draw', helper,
+                    new ext.Baton({
+                        container: container,
+                        data: data,
+                        source: source,
+                        dragMessage: options.dragMessage
+                    }));
                 // get fast access
                 fast = helper[0].style;
                 // initial move

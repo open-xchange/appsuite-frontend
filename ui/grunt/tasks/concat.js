@@ -100,6 +100,7 @@ module.exports = function (grunt) {
                          'apps/io.ox/core/commons-folderview.js',
                          'apps/io.ox/core/api/folder.js',
                          'apps/io.ox/core/tk/dialogs.js',
+                         'apps/io.ox/core/tk/draghelper.js',
                          // 4th wave
                          'apps/io.ox/core/collection.js',
                          'apps/io.ox/core/extPatterns/actions.js',

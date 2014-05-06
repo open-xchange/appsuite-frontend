@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core'], function (ext, gt) {
+define('io.ox/core/tk/list-dnd', [
+    'io.ox/core/extensions',
+    'gettext!io.ox/core',
+    'io.ox/core/tk/draghelper'
+], function (ext, gt) {
 
     'use strict';
 
@@ -162,12 +166,14 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
                     return $(node).attr('data-cid');
                 });
             // create helper
-            helper = $('<div class="drag-helper">').append(
-                $('<span class="drag-counter">').text(data.length),
-                $('<span>').text(
-                    source.attr('data-drag-message') || options.dragMessage.call(container, data, source)
-                )
-            );
+            helper = $('<div class="drag-helper">');
+            ext.point('io.ox/core/tk/draghelper').invoke('draw', helper,
+                new ext.Baton({
+                    container: container,
+                    data: data,
+                    source: source,
+                    dragMessage: options.dragMessage
+                }));
             // get fast access
             fast = helper[0].style;
             // initial move
