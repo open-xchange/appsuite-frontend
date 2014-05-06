@@ -45,7 +45,7 @@ define('io.ox/calendar/list/perspective',
             optDropdown = null,
             months = 1; // how many months do we display
 
-        this.main.addClass('calendar-list-view').append(
+        this.main.addClass('calendar-list-view vsplit').append(
             app.left.addClass('border-right'),
             app.right.addClass('default-content-padding calendar-detail-pane f6-target')
             .attr({
