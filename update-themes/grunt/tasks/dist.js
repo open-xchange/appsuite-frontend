@@ -37,6 +37,7 @@ module.exports = function (grunt) {
                     src: [
                         'bin/update-themes',
                         'lib/**/*',
+                        '!lib/rhino/**/*',
                         'node_modules/grunt/**/*',
                         'node_modules/grunt-contrib-clean/**/*',
                         'node_modules/assemble-less/**/*',
@@ -49,6 +50,12 @@ module.exports = function (grunt) {
                     src: ['update-themes.sh'],
                     cwd: 'bin/',
                     dest: 'dist/appsuite/share'
+                },
+                {
+                    expand: true,
+                    src: ['update-themes/**/*'],
+                    cwd: 'build/',
+                    dest: 'dist/appsuite/share/'
                 }
             ]
         }
