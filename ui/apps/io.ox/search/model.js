@@ -16,10 +16,8 @@ define('io.ox/search/model',
      'io.ox/search/items/main',
      'io.ox/backbone/modelFactory',
      'io.ox/search/util',
-     'io.ox/backbone/validation',
-     'io.ox/core/extensions',
-     'gettext!io.ox/core'
-    ], function (api, collection, ModelFactory, util, Validations, ext, gt) {
+     'io.ox/core/extensions'
+    ], function (api, collection, ModelFactory, util, ext) {
 
     'use strict';
 
@@ -289,15 +287,6 @@ define('io.ox/search/model',
                     silent: true
                 });
                 this.trigger('reset');
-            }
-        }
-    });
-
-    ext.point('io.ox/search/model/validation').extend({
-        id: 'recurrence-needs-end-date',
-        validate: function (attributes) {
-            if (attributes.recurrence_type && (attributes.end_date === undefined || attributes.end_date === null)) {//0 is a valid number so check precisely
-                this.add('end_date', gt('Recurring tasks need a valid end date.'));
             }
         }
     });
