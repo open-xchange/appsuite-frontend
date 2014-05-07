@@ -630,10 +630,6 @@ $(window).load(function () {
                 )
                 .always(function () {
 
-                    var ref = hash.ref;
-                    ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
-                    _.url.redirect(ref ? ref : '#');
-
                     // fetch user config
                     ox.secretCookie = hash.secretCookie === 'true';
                     fetchUserSpecificServerConfig().done(function () {
@@ -664,6 +660,15 @@ $(window).load(function () {
                                 user_id: parseInt(resp.user_id || '0', 10),
                                 context_id: resp.context_id
                             });
+
+                            var redirect = '';
+                            if (hash.ref) {
+                                redirect = '#' + hash.ref;
+                                // _.url.hash('ref', null);
+                            } else {
+                                redirect = location.hash || '#';
+                            }
+
                             // cleanup url
                             _.url.hash({
                                 language: null,
@@ -672,8 +677,12 @@ $(window).load(function () {
                                 user_id: null,
                                 context_id: null,
                                 secretCookie: null,
-                                store: null
+                                store: null,
+                                ref: null
                             });
+
+                            _.url.redirect(redirect);
+
                             // go ...
                             loadCoreFiles().done(function () {
                                 loadCore();
