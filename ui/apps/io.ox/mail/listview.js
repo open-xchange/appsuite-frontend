@@ -28,13 +28,6 @@ define('io.ox/mail/listview',
         id: 'default',
         draw: function (baton) {
 
-            var data = baton.data;
-
-            // ignore deleted mails
-            data.threadSize = _(data.thread).reduce(function (sum, data) {
-                return sum + (util.isDeleted(data) ? 0 : 1);
-            }, 0);
-
             if (!baton.app) {
                 ext.point('io.ox/mail/listview/item/default').invoke('draw', this, baton);
                 return;
