@@ -94,15 +94,15 @@ define('io.ox/realtime/groups',
                 element: 'message',
                 trace: options.trace,
                 selector: selector,
-                payloads: [
+                payloads: _([
                     {
                         element: 'command',
                         namespace: 'group',
                         data: 'join'
                     }
-                ]
+                ]).concat(options.additionalPayloads || [])
             };
-
+            console.log('JOIN: ', stanza);
             if (options.expectWelcomeMessage) {
                 return this.query(stanza);
             } else {
@@ -121,13 +121,13 @@ define('io.ox/realtime/groups',
             var stanza = {
                 element: 'message',
                 trace: options.trace,
-                payloads: [
+                payloads: _([
                     {
                         element: 'command',
                         namespace: 'group',
                         data: 'leave'
                     }
-                ]
+                ]).concat(options.additionalPayloads || [])
             };
             if (options.expectSignOffMessage) {
                 return this.query(stanza);
