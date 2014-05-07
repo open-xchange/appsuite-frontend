@@ -2667,9 +2667,11 @@ ul.io-ox-inline-links + header {
         left: @window-head-width;
     }
 
-    // larger popups for notification overlay
-    .notifications-overlay &.right { left: 39.5%; }
-    .notifications-overlay &.left { right: 39.5%; }
+    @media (min-width: 480px), (min-device-width: 480px) {
+        // larger popups for notification overlay
+        .notifications-overlay &.right { left: 39.5%; }
+        .notifications-overlay &.left { right: 39.5%; }
+    }
 }
 
 
