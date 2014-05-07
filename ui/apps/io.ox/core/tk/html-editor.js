@@ -570,6 +570,9 @@ define.async('io.ox/core/tk/html-editor',
             // trim white-space and clean up pseudo XHTML
             // remove empty paragraphs at the end
             get = function () {
+                // remove tinyMCE resizeHandles
+                $(ed.getBody()).find('.mce-resizehandle').remove();
+
                 // get raw content
                 var content = ed.getContent({ format: 'raw' });
                 // convert emojies
