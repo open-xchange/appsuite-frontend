@@ -40,16 +40,28 @@ module.exports = function (grunt) {
         return;
     }
 
-    var version = '4.0.25',
+    var version = '4.0.26',
         languages = ['ar', 'ar_SA', 'az', 'be', 'bg_BG', 'bn_BD', 'bs', 'ca', 'cs', 'cy', 'da', 'de', 'de_AT', 'dv', 'el', 'en_CA', 'en_GB', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr_FR', 'gd', 'gl', 'he_IL', 'hr', 'hu_HU', 'hy', 'id', 'is_IS', 'it', 'ja', 'ka_GE', 'kk', 'km_KH', 'ko_KR', 'lb', 'lt', 'lv', 'ml', 'ml_IN', 'mn_MN', 'nb_NO', 'nl', 'pl', 'pt_BR', 'pt_PT', 'ro', 'ru', 'si_LK', 'sk', 'sl_SI', 'sr', 'sv_SE', 'ta', 'ta_IN', 'tg', 'th_TH', 'tr_TR', 'tt', 'ug', 'uk', 'uk_UA', 'vi', 'vi_VN', 'zh_CN', 'zh_TW'],
+        plugins = ['autolink', 'oximage', 'link', 'paste', 'textcolor', 'emoji'],
 
         path = require('path'),
+
+        isUsed = function (list, subPath) {
+            var res = false;
+            for (var i = 0; i < list.length && !res; i++) {
+                if (subPath.indexOf(path.sep + list[i]) > -1) {
+                    res = true;
+                }
+            }
+            return res;
+        },
 
         extractPart = function (filepath, trimpath) {
             var fp = path.dirname(filepath);
             if (fp.indexOf(trimpath) > -1) {
                 var subPath = fp.substr(trimpath.length);
-
+                // just extract plugins we need
+                if (subPath.indexOf('plugins' + path.sep) > -1 && !isUsed(plugins, subPath)) return null;
                 return subPath + path.sep + path.basename(filepath);
             } else {
                 return null;
