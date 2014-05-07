@@ -615,10 +615,7 @@ define('io.ox/core/main',
             index: 100,
             draw: function () {
                 if (capabilities.has('search')) {
-                    var placeholder = $('<span>'),
-                        self = this;
-                    //add search icon
-                    self.append(
+                    this.append(
                         addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
                                 require(['io.ox/search/main'], function (searchapp) {
                                     searchapp.run();
@@ -627,20 +624,31 @@ define('io.ox/core/main',
                         .attr('id', 'io-ox-search-topbar-icon')
                         .addClass('io-ox-search')
                     );
-                    //add search field placeholder
-                    self.append(
-                        addLauncher('right', placeholder, $.noop(), gt('Search'))
-                        .attr('id', 'io-ox-search-topbar')
-                        .addClass('io-ox-search widget-content')
-                    );
-
-                    //replace placeholder with concrete search field
-                    require(['io.ox/search/main'], function (searchapp) {
-                        placeholder.replaceWith(searchapp.init());
-                    });
                 }
             }
         });
+
+        // ext.point('io.ox/core/topbar/right').extend({
+        //     id: 'search-input',
+        //     index: 101,
+        //     draw: function () {
+        //         if (capabilities.has('search')) {
+        //             var placeholder = $('<span>'),
+        //                 self = this;
+        //             //add search field placeholder
+        //             self.append(
+        //                 addLauncher('right', placeholder, $.noop(), gt('Search'))
+        //                 .attr('id', 'io-ox-search-topbar')
+        //                 .addClass('io-ox-search widget-content')
+        //             );
+
+        //             //replace placeholder with concrete search field
+        //             require(['io.ox/search/main'], function (searchapp) {
+        //                 placeholder.replaceWith(searchapp.init());
+        //             });
+        //         }
+        //     }
+        // });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
