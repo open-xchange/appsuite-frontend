@@ -466,15 +466,6 @@ define('io.ox/search/view-template',
     }
 
     ext.point('io.ox/search/view/window/facet/folder').extend({
-        id: 'fallback',
-        index: '200',
-        draw: function (value) {
-            if (!value.display_name)
-                this.find('.name').html('<i>' + gt('All folders') + '</i>');
-        }
-    });
-
-    ext.point('io.ox/search/view/window/facet/folder').extend({
         id: 'dropdown',
         index: '300',
         draw: function (value, baton) {
@@ -557,6 +548,39 @@ define('io.ox/search/view-template',
 
             //add to dom
             this.append(menu).appendTo(this);
+        }
+    });
+
+    ext.point('io.ox/search/view/window/facet/folder').extend({
+        id: 'all-folders',
+        index: '400',
+        draw: function (value, baton) {
+            var link;
+            //dropdown entry
+            if (!baton.model.isMandatory('folder')) {
+
+                //add dropdown entry
+                this.find('ul.dropdown').prepend(
+                    $('<li role="presentation">').append(
+                         link = $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
+                                    .append(
+                                        $('<i class="fa fa-fw ">'),
+                                        $('<span>').text(gt('All folders'))
+                                    )
+                                    .attr('data-custom', 'custom')
+                                    .attr('title', gt('All folders'))
+                    )
+                );
+                //is active
+                if (!value.custom || value.custom === 'custom') {
+                    //set display name
+                    this.find('.name')
+                        .text(gt('All folders'));
+                    //set fa-check icon
+                    link.find('i')
+                        .addClass('fa-check');
+                }
+            }
         }
     });
 
