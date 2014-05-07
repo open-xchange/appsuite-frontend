@@ -170,7 +170,7 @@
                 },
                 "minimatch": {
                   "version": "0.2.14",
-                  "from": "minimatch@~0.2.12",
+                  "from": "minimatch@~0.2.11",
                   "dependencies": {
                     "lru-cache": {
                       "version": "2.5.0",
@@ -592,7 +592,7 @@
             },
             "source-map": {
               "version": "0.1.33",
-              "from": "source-map@0.1.x",
+              "from": "source-map@~0.1.7",
               "dependencies": {
                 "amdefine": {
                   "version": "0.1.0",
@@ -604,7 +604,7 @@
         },
         "async": {
           "version": "0.2.10",
-          "from": "async@~0.2.6"
+          "from": "async@~0.2.9"
         }
       }
     },
@@ -626,8 +626,7 @@
         },
         "dateformat": {
           "version": "1.0.2-1.2.3",
-          "from": "dateformat@1.0.2-1.2.3",
-          "resolved": "https://registry.npmjs.org/dateformat/-/dateformat-1.0.2-1.2.3.tgz"
+          "from": "dateformat@1.0.2-1.2.3"
         },
         "eventemitter2": {
           "version": "0.4.13",
@@ -1219,7 +1218,7 @@
                 },
                 "mime": {
                   "version": "1.2.11",
-                  "from": "mime@~1.2.9"
+                  "from": "mime@1.2.x"
                 },
                 "form-data": {
                   "version": "0.1.2",
@@ -1237,7 +1236,7 @@
                     },
                     "async": {
                       "version": "0.2.10",
-                      "from": "async@~0.2.6"
+                      "from": "async@~0.2.9"
                     }
                   }
                 }
@@ -1295,7 +1294,7 @@
               "dependencies": {
                 "inherits": {
                   "version": "2.0.1",
-                  "from": "inherits@2"
+                  "from": "inherits@~2.0.1"
                 },
                 "block-stream": {
                   "version": "0.0.7",
@@ -1477,7 +1476,7 @@
       "dependencies": {
         "chalk": {
           "version": "0.4.0",
-          "from": "chalk@^0.4.0",
+          "from": "chalk@~0.4.0",
           "dependencies": {
             "has-color": {
               "version": "0.1.7",
@@ -1579,7 +1578,7 @@
                   "dependencies": {
                     "inherits": {
                       "version": "2.0.1",
-                      "from": "inherits@~2.0.1"
+                      "from": "inherits@2"
                     },
                     "typedarray": {
                       "version": "0.0.5",
@@ -1633,8 +1632,7 @@
             },
             "pretty-bytes": {
               "version": "0.1.1",
-              "from": "pretty-bytes@^0.1.0",
-              "resolved": "https://registry.npmjs.org/pretty-bytes/-/pretty-bytes-0.1.1.tgz"
+              "from": "pretty-bytes@^0.1.0"
             }
           }
         }
@@ -1676,17 +1674,16 @@
       "dependencies": {
         "async": {
           "version": "0.2.10",
-          "from": "async@~0.2.6"
+          "from": "async@~0.2.9"
         },
         "rimraf": {
           "version": "2.2.6",
-          "from": "rimraf@2.2.6",
-          "resolved": "https://registry.npmjs.org/rimraf/-/rimraf-2.2.6.tgz"
+          "from": "rimraf@2.2.6"
         }
       }
     },
     "grunt-require-gettext": {
-      "version": "0.3.7",
+      "version": "0.3.8",
       "from": "grunt-require-gettext@^0.3.6",
       "dependencies": {
         "pofile": {
