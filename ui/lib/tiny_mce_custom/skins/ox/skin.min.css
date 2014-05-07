@@ -41,3 +41,9 @@
 .mce-window-head,.mce-foot { border-color: #e5e5e5; }
 /* emoji plugin */
 .mce-container *:not(.emoji) { background:transparent; }
+
+.mce-container *:not(.emoji) .mce-menu-item:hover,
+.mce-container *:not(.emoji) .mce-menu-item.mce-selected,
+.mce-container *:not(.emoji) .mce-menu-item:focus {
+    background-color: #0081c2;
+}
