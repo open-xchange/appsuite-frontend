@@ -228,7 +228,7 @@ define('io.ox/search/view-template',
         draw: function (baton) {
             var model = baton.model,
                 list = model.get('poollist'),
-                facet, row, cell, button;
+                row, cell;
 
             row = $('<div class="row facets">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled facets">')
@@ -236,12 +236,13 @@ define('io.ox/search/view-template',
 
             _.each(list, function (item) {
                 //get active value
-                var value = model.get('pool')[item.facet].values[item.value];
+                var facet = model.get('pool')[item.facet],
+                    value = facet.values[item.value],
+                    facetnode, button;
 
                 //create facet node
                 cell.append(
-                    facet = $('<li role="presentation" class="facet btn-group">')
-                                // .addClass('fac!et pull-left')
+                    facetnode = $('<li role="presentation" class="facet btn-group">')
                                 .append(
                                     // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
                                     button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
@@ -252,11 +253,11 @@ define('io.ox/search/view-template',
 
                 //general stuff
                 ext.point('io.ox/search/view/window/facet')
-                    .invoke('draw', button, value, baton);
+                    .invoke('draw', button, value, facet, baton);
 
                 //additional actions per id/type
                 ext.point('io.ox/search/view/window/facet/' + value.facet)
-                    .invoke('draw', facet, value, baton);
+                    .invoke('draw', facetnode, value, baton);
             });
 
             this.append(row);
@@ -306,29 +307,38 @@ define('io.ox/search/view-template',
         }
     });
 
+    function getOptionLabel(options, id) {
+        var current = _.find(options, function (item) {
+                return item.id === id;
+            });
+        return (current || {}).display_name;
+    }
+
+    function is(facet, type) {
+        return (facet.flags || []).indexOf(type) > -1;
+    }
+
     //facet
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'type',
         index: 100,
-        draw: function (value) {
+        draw: function (value, facet) {
             var options = value.options,
                 id = value._compact.option,
-                type, current;
+                type;
             //get type label
             if (value.facet === 'folder')
                 type = gt('Folder');
             else if (options) {
-                current = _.find(options, function (item) {
-                    return item.id === id;
-                });
-                type = current && current.display_name;
+                type = getOptionLabel(options, id);
             }
             //append type
             if (type) {
                 this.find('label').prepend(
                     $('<span>')
                         .addClass('type')
-                        .html(type)
+                        //TYPE 3: use facet label instead of option label
+                        .html(is(facet, 'type3') ? facet.display_name : type)
                 );
             }
         }
@@ -337,11 +347,17 @@ define('io.ox/search/view-template',
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'name',
         index: 200,
-        draw: function (value) {
+        draw: function (value, facet) {
+            var type;
+
+            //TYPE 3: use option label instead of value label
+            if (is(facet, 'type3'))
+                type = getOptionLabel(value.options, value._compact.option);
+
             this.find('label').append(
                 $('<span>')
                     .addClass('name')
-                    .html(value.display_name)
+                    .html(type || value.display_name)
             );
         }
     });
@@ -349,7 +365,7 @@ define('io.ox/search/view-template',
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'dropdown',
         index: 300,
-        draw: function (value, baton) {
+        draw: function (value, facet, baton) {
             var facet = baton.model.getFacet(value.facet),
                 filters = facet ? facet.values[0].options || [] : [],
                 current = value._compact.option, option,
@@ -395,7 +411,7 @@ define('io.ox/search/view-template',
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'remove',
         index: 400,
-        draw: function (value, baton) {
+        draw: function (value, facet, baton) {
             var isMandatory = baton.model.isMandatory(value.facet);
            //remove action for non mandatory facets
             if (!isMandatory && value.facet !== 'folder') {
