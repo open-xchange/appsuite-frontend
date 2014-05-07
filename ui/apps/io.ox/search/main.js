@@ -60,6 +60,7 @@ define('io.ox/search/main',
                 'io.ox/search' : data.defaultApp,
                 'io.ox/settings' : data.defaultApp,
                 'io.ox/office/text' : 'io.ox/files',
+                'io.ox/office/portal' : 'io.ox/files',
                 'io.ox/office/spreadsheet' : 'io.ox/files',
                 'io.ox/messenger' : data.defaultApp
             };
