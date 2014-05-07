@@ -435,7 +435,7 @@ define('io.ox/contacts/view-detail',
                     this.append(
                         $('<fieldset>').append(
                             $('<legend class="sr-only">').text(gt('Comment')),
-                            $('<div class="comment">').text(comment)
+                            _.nltobr(comment, $('<div class="comment">'))
                         )
                     );
                 }
