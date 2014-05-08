@@ -640,7 +640,6 @@ define('io.ox/files/fluid/perspective',
                     var cid = _.cid($(this).attr('data-obj-id')),
                         //special = (e.metaKey || e.ctrlKey || e.shiftKey || e.target.type === 'checkbox' || $(e.target).attr('class') === 'checkbox'),
                         valid = e.target.type !== 'checkbox' || data === 'automated';
-                    console.log('-->', valid, cid, e);
                     if (valid)
                         preview.call(self, e, cid);
                 });
