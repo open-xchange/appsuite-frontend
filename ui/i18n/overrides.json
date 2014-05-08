@@ -1,6 +1,8 @@
 {
     "cs_CZ": "Čeština",
+	"da_DK": "Dansk",
     "de_DE": "Deutsch",
+	"en_US": "English (UK)",
     "en_US": "English (US)",
     "es_ES": "Español",
     "es_MX": "Español (México)",
@@ -14,6 +16,7 @@
     "pl_PL": "Polski",
     "ro_RO": "Română",
     "sk_SK": "Slovenčina",
+	"sv_SE": "Svenska",
     "zh_CN": "简体中文",
     "zh_TW": "繁體中文"
 }
