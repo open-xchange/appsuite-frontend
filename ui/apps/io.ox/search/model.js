@@ -138,8 +138,12 @@ define('io.ox/search/model',
 
                         itemvalue._compact = compact;
                         pool[facet].values[value] = itemvalue;
-                        //add ids to pool list
-                        list.push(compact);
+
+                        //append/prepend ids to pool list
+                        if (facet === 'folder')
+                            list.unshift(compact);
+                        else
+                            list.push(compact);
                     }
                 });
 
