@@ -112,7 +112,7 @@ define('io.ox/calendar/main',
             app.props.on('change', _.debounce(function () {
                 var data = app.props.toJSON();
                 app.settings
-                    .set('layout', data.checkboxes)
+                    .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
                     .save();
             }, 500));
