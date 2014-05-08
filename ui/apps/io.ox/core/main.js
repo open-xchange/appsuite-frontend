@@ -1160,6 +1160,8 @@ define('io.ox/core/main',
 
                 if (baton.canRestore) {
 
+                    baton.restoreHash = _.url.hash();
+
                     var dialog,
                         def = $.Deferred().done(function () {
                             $('#background-loader').busy().fadeIn();
@@ -1178,7 +1180,8 @@ define('io.ox/core/main',
                             ),
                             $('<ul class="list-unstyled content">'),
                             $('<div class="footer">').append(
-                                $('<button type="button" class="btn btn-primary">').text(gt('Continue'))
+                                $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
+                                $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                             )
                         )
                     );
@@ -1208,7 +1211,15 @@ define('io.ox/core/main',
                         }, dialog.find('.content'));
                     });
 
-                    dialog.on('click', '.footer .btn', def.resolve);
+                    dialog.on('click', '.footer .btn.continue', def.resolve);
+                    dialog.on('click', '.footer .btn.cancel', function (e) {
+                        e.preventDefault();
+                        ox.ui.App.removeAllRestorePoints().done(function () {
+                            _.url.hash(baton.restoreHash);
+                            baton.canRestore = false;
+                            def.resolve();
+                        });
+                    });
                     dialog.on('click', '.content .remove', function (e) {
                         e.preventDefault();
                         var node = $(this),
@@ -1219,7 +1230,7 @@ define('io.ox/core/main',
                         ox.ui.App.removeRestorePoint(id).done(function (list) {
                             // continue if list is empty
                             if (list.length === 0) {
-                                _.url.hash({});
+                                _.url.hash(baton.restoreHash);
                                 baton.canRestore = false;
                                 def.resolve();
                             }
