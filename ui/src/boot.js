@@ -661,12 +661,9 @@ $(window).load(function () {
                                 context_id: resp.context_id
                             });
 
-                            var redirect = '';
+                            var redirect = '#';
                             if (hash.ref) {
                                 redirect = '#' + hash.ref;
-                                // _.url.hash('ref', null);
-                            } else {
-                                redirect = location.hash || '#';
                             }
 
                             // cleanup url
@@ -680,7 +677,6 @@ $(window).load(function () {
                                 store: null,
                                 ref: null
                             });
-
                             _.url.redirect(redirect);
 
                             // go ...
