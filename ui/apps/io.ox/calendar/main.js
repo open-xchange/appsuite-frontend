@@ -38,6 +38,7 @@ define('io.ox/calendar/main',
          * Early List view vsplit - we need that to get a Vgrid instance
          */
         'list-vsplit': function (app) {
+            // this causes problems on mobile, the dummy div down here will never be appended
             var vsplit = commons.vsplit($('<div>'), app);
             app.left = vsplit.left;
             app.right = vsplit.right;
@@ -160,6 +161,24 @@ define('io.ox/calendar/main',
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 ox.ui.Perspective.show(app, value);
+            });
+        },
+        /*
+         * This fixes the missing back button for listview's detailview
+         * Can be removed until this App is converted to the Pagecontroller
+         */
+        'mobile-compatibility': function (app) {
+            if (!_.device('smartphone')) return;
+            app.left.one('select', function () {
+                var content = app.getWindow().nodes.body.find('.window-content');
+                $(content).append(app.navbar = $('<div class="rightside-navbar">'));
+                app.navbar.append(
+                    $('<a href="#" tabindex="-1">').append(
+                        $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
+                    ).on('tap', function () {
+                        $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
+                    })
+                );
             });
         }
     });
