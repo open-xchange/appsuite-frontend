@@ -15,9 +15,10 @@ define('io.ox/search/view-template',
     ['gettext!io.ox/core',
      'io.ox/core/extensions',
      'io.ox/core/api/apps',
+     'settings!io.ox/core',
      'io.ox/search/util',
      'io.ox/core/tk/autocomplete'
-    ], function (gt, ext, appAPI, util) {
+    ], function (gt, ext, appAPI, settings, util) {
 
     'use strict';
 
@@ -159,30 +160,37 @@ define('io.ox/search/view-template',
         row: '0',
         draw: function (baton) {
             var id = baton.model.getApp(),
-                opt = baton.model.getOptions(),
-                row, cell;
+                row, cell,
+                //TODO: remove when backend added setting 'io.ox/core/search/apps'
+                appsdefault = [
+                    'io.ox/mail',
+                    'io.ox/contacts',
+                    'io.ox/calendar',
+                    'io.ox/tasks',
+                    'io.ox/files'
+                ],
+                apps = settings.get('search/apps', appsdefault);
 
-            //create containers
+            //create container
             row = $('<div class="row applications">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled">')
             );
 
-            //create dropdown menu entries
-            _(appAPI.getFavorites()).each(function (app) {
-                if (!opt.mapping[app.id] || app.id === 'io.ox/files') {
-                    cell.append(
-                        $('<li role="presentation" class="application">')
+            //create menu entries
+            _(apps).each(function (id) {
+                var title = ox.manifests.apps[id + '/main'].title;
+                cell.append(
+                    $('<li role="presentation" class="application">')
+                        .append(
+                            $('<div class="btn-group">')
                             .append(
-                                $('<div class="btn-group">')
-                                .append(
-                                    $('<button type="button" class="btn btn-link">')
-                                        .attr('data-app', (opt.mapping[app.id] || app.id))
-                                        .addClass('pull-left')
-                                        .text(gt.pgettext('app', app.title))
-                                )
+                                $('<button type="button" class="btn btn-link">')
+                                    .attr('data-app', id)
+                                    .addClass('pull-left')
+                                    .text(gt.pgettext('app', title))
                             )
-                    );
-                }
+                        )
+                );
             });
 
             //mark as active
@@ -629,38 +637,43 @@ define('io.ox/search/view-template',
                 draw: function (baton) {
 
                     var id = baton.model.getApp(),
-                        opt = baton.model.getOptions(),
                         row, cell,
                         items = [],
-                        titles = {};
+                        titles = {},
+                        //TODO: remove when backend added setting 'io.ox/core/search/apps'
+                        appsdefault = [
+                            'io.ox/mail',
+                            'io.ox/contacts',
+                            'io.ox/calendar',
+                            'io.ox/tasks',
+                            'io.ox/files'
+                        ],
+                        apps = settings.get('search/apps', appsdefault);
 
                     //create containers
                     row = $('<div class="row ">').append(
                         cell = $('<div class="btn-group col-xs-12">')
                     );
 
-
                     //create dropdown menu entries
-                    _(appAPI.getFavorites()).each(function (app) {
-                        if (!opt.mapping[app.id] || app.id === 'io.ox/files') {
-                            var title = titles[app.id] = gt.pgettext('app', app.title);
-                            items.push(
-                                $('<li role="presentation">')
-                                .append(
-                                    $('<a role="menuitem" tabindex="-1" href="#">')
-                                        .attr({
-                                            'title': title,
-                                            'data-app': app.id
-                                        })
-                                        .append(
-                                            $('<i class="fa fa-fw"></i>'),
-                                            $('<span>').text(
-                                                title
-                                            )
+                    _(apps).each(function (id) {
+                        var title = titles[id] = ox.manifests.apps[id + '/main'].title;
+                        items.push(
+                            $('<li role="presentation">')
+                            .append(
+                                $('<a role="menuitem" tabindex="-1" href="#">')
+                                    .attr({
+                                        'title': title,
+                                        'data-app': id
+                                    })
+                                    .append(
+                                        $('<i class="fa fa-fw"></i>'),
+                                        $('<span>').text(
+                                            title
                                         )
-                                )
-                            );
-                        }
+                                    )
+                            )
+                        );
                     });
 
                     //create button and append dropdown menue

@@ -33,14 +33,6 @@ define('io.ox/search/main',
     });
 
     ext.point('io.ox/search/main').extend({
-        index: 200,
-        id: 'custom',
-        config: function (data) {
-            data.custom =  settings.get('search/custom/time', ['mail']);
-        }
-    });
-
-    ext.point('io.ox/search/main').extend({
         index: 300,
         id: 'mandatory',
         config: function (data) {
@@ -56,13 +48,14 @@ define('io.ox/search/main',
             //active app : app searched in
             data.mapping = {
                 //name mapping
-                'io.ox/portal' : data.defaultApp,
-                'io.ox/search' : data.defaultApp,
-                'io.ox/settings' : data.defaultApp,
+                'io.ox/mail/write' : 'io.ox/mail',
+                'io.ox/messenger' : data.defaultApp,
                 'io.ox/office/text' : 'io.ox/files',
                 'io.ox/office/portal' : 'io.ox/files',
                 'io.ox/office/spreadsheet' : 'io.ox/files',
-                'io.ox/messenger' : data.defaultApp
+                'io.ox/portal' : data.defaultApp,
+                'io.ox/search' : data.defaultApp,
+                'io.ox/settings' : data.defaultApp
             };
         }
     });
