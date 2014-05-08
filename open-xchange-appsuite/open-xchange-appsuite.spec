@@ -261,7 +261,6 @@ Translation of the OX App Suite HTML5 client (zh_TW)
 export NO_BRP_CHECK_BYTECODE_VERSION=true
 ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -Dlanguages=false -DkeepCache=true -f build/build.xml build
 APPSUITE=/opt/open-xchange/appsuite/
-chmod +x %{buildroot}$APPSUITE/share/update-themes.sh
 find "%{buildroot}$APPSUITE" -type d | sed -e 's,%{buildroot},%dir ,' > open-xchange-appsuite-manifest.files
 find "%{buildroot}$APPSUITE" \( -type f -o -type l \) | sed -e 's,%{buildroot},,' >> open-xchange-appsuite-manifest.files
 for LANG in cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do

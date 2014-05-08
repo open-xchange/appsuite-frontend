@@ -18,7 +18,6 @@ override_dh_auto_install:
 		ant -Dbasedir=build -DdestDir=$(ROOT)-l10n-$${PACKAGE_EXTENSION} -DpackageName=$(PKGNAME) -DinstallTarget=$${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build; \
 	done
 	mv $(ROOT)/opt $(ROOT)-manifest/
-	chmod +x $(ROOT)-manifest/opt/open-xchange/appsuite/share/update-themes.sh
 	mkdir -p $(ROOT)/opt/open-xchange
 	mv $(ROOT)-manifest/opt/open-xchange/sbin $(ROOT)/opt/open-xchange/
 
