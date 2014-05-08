@@ -68,6 +68,33 @@ define('io.ox/search/model',
         size: 100
     };
 
+    //resolve conflicting facets
+    conflicts = function () {
+        var pool = _.extend({}, this.get('pool')),
+            list = [].concat(this.get('poollist')),
+            disabled = {};
+
+        //remove conflicting facets
+        _.each(this.get('pool'), function (facet) {
+            _.each(facet.flags, function (flag) {
+                if (flag.indexOf('conflicts:') === 0) {
+                    var id = flag.split(':')[1];
+                    //remove from pool/list and mark disabled
+                    delete pool[id];
+                    disabled[id] = facet;
+                    list = _.filter(list, function (compact) {
+                        return compact.facet !== id;
+                    });
+                }
+            });
+        });
+
+        //update
+        this.set('pool', pool);
+        this.set('poollist', list);
+        this.set('pooldisabled', disabled);
+    };
+
     factory = new ModelFactory({
         ref: 'io.ox/search/model',
         api: api,
@@ -148,6 +175,9 @@ define('io.ox/search/model',
                     }
                 });
 
+                //resolve conflicts
+                conflicts.call(this);
+
                 if (facet !== 'folder')
                     this.trigger('query');
             },
@@ -169,6 +199,9 @@ define('io.ox/search/model',
                         list.splice(i, 1);
                     }
                 }
+                //resolve conflicts
+                conflicts.call(this);
+
                 this.trigger('query');
             },
             update: function (facet, value, data) {
