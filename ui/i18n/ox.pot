@@ -183,7 +183,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/acceptdeny.js:80
 #: module:io.ox/calendar
-#: apps/io.ox/tasks/actions.js:611
+#: apps/io.ox/tasks/actions.js:617
 #: module:io.ox/tasks
 msgid "Change confirmation status"
 msgstr ""
@@ -268,22 +268,22 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/main.js:241
-#: apps/io.ox/mail/main.js:941
+#: apps/io.ox/mail/main.js:242
+#: apps/io.ox/mail/main.js:949
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1366
 #: apps/io.ox/mail/write/view-main.js:586
 #: apps/io.ox/oauth/settings.js:82
 #: module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:504
+#: apps/io.ox/portal/main.js:510
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:427
+#: apps/io.ox/search/view-template.js:443
 #: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts
 #: apps/io.ox/tasks/actions.js:62
 #: module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:198
+#: apps/io.ox/tasks/actions.js:204
 #: apps/io.ox/tasks/common-extensions.js:95
 #: apps/io.ox/tasks/edit/main.js:161
 #: apps/plugins/core/feedback/register.js:130
@@ -404,7 +404,7 @@ msgstr ""
 #: apps/io.ox/mail/mobileToolbarActions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:272
 #: apps/io.ox/mail/toolbar.js:75
-#: apps/io.ox/portal/main.js:502
+#: apps/io.ox/portal/main.js:508
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -414,7 +414,7 @@ msgstr ""
 #: apps/io.ox/settings/accounts/settings/pane.js:72
 #: apps/io.ox/tasks/actions.js:61
 #: module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:593
+#: apps/io.ox/tasks/actions.js:599
 #: apps/io.ox/tasks/main.js:196
 #: apps/io.ox/tasks/toolbar.js:83
 #: apps/plugins/portal/twitter/util.js:318
@@ -459,10 +459,10 @@ msgstr[1] ""
 #: apps/io.ox/mail/actions.js:1104
 #: apps/io.ox/mail/mobileToolbarActions.js:81
 #: apps/io.ox/mail/toolbar.js:116
-#: apps/io.ox/tasks/actions.js:196
+#: apps/io.ox/tasks/actions.js:202
 #: module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:197
-#: apps/io.ox/tasks/actions.js:602
+#: apps/io.ox/tasks/actions.js:203
+#: apps/io.ox/tasks/actions.js:608
 #: apps/io.ox/tasks/toolbar.js:99
 msgid "Move"
 msgstr ""
@@ -524,7 +524,7 @@ msgstr ""
 #: apps/io.ox/mail/actions.js:1122
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:130
-#: apps/io.ox/tasks/actions.js:620
+#: apps/io.ox/tasks/actions.js:626
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:92
 msgid "Print"
@@ -547,8 +547,8 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
 #: apps/io.ox/mail/main.js:128
 #: apps/io.ox/mail/main.js:134
-#: apps/io.ox/mail/main.js:236
-#: apps/io.ox/mail/main.js:945
+#: apps/io.ox/mail/main.js:237
+#: apps/io.ox/mail/main.js:953
 #: apps/io.ox/mail/settings/signatures/register.js:269
 #: apps/io.ox/portal/settings/pane.js:312
 #: module:io.ox/portal
@@ -557,7 +557,7 @@ msgstr ""
 #: module:io.ox/settings/accounts
 #: apps/io.ox/settings/accounts/settings/pane.js:50
 #: apps/io.ox/settings/accounts/settings/pane.js:52
-#: apps/io.ox/tasks/actions.js:453
+#: apps/io.ox/tasks/actions.js:459
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:51
 msgid "Edit"
@@ -1278,7 +1278,7 @@ msgstr ""
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
 #: module:io.ox/calendar/freebusy
-#: apps/io.ox/core/main.js:707
+#: apps/io.ox/core/main.js:715
 #: module:io.ox/core
 #: apps/io.ox/help/center.js:103
 #: module:io.ox/help
@@ -2094,9 +2094,9 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:127
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:319
+#: apps/io.ox/search/view-template.js:331
 #: module:io.ox/core
-#: apps/io.ox/search/view-template.js:420
+#: apps/io.ox/search/view-template.js:436
 msgid "Folder"
 msgstr ""
 
@@ -2215,7 +2215,7 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:508
 #: module:io.ox/core/tk/attachments
-#: apps/io.ox/tasks/actions.js:382
+#: apps/io.ox/tasks/actions.js:388
 #: module:io.ox/tasks
 msgid "No preview available"
 msgstr ""
@@ -2224,7 +2224,7 @@ msgstr ""
 #: module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:572
 #: module:io.ox/core/tk/attachments
-#: apps/io.ox/tasks/actions.js:425
+#: apps/io.ox/tasks/actions.js:431
 #: module:io.ox/tasks
 msgid "Attachments have been saved!"
 msgstr ""
@@ -2289,7 +2289,7 @@ msgstr ""
 #: module:io.ox/files
 #: apps/io.ox/mail/actions.js:1183
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:628
+#: apps/io.ox/tasks/actions.js:634
 #: module:io.ox/tasks
 msgid "Slideshow"
 msgstr ""
@@ -2301,7 +2301,7 @@ msgstr ""
 #: apps/io.ox/core/tk/attachmentsUtil.js:93
 #: apps/io.ox/mail/actions.js:1190
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:635
+#: apps/io.ox/tasks/actions.js:641
 #: module:io.ox/tasks
 msgid "Preview"
 msgstr ""
@@ -2312,7 +2312,7 @@ msgstr ""
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1197
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:642
+#: apps/io.ox/tasks/actions.js:648
 #: module:io.ox/tasks
 msgid "Open in browser"
 msgstr ""
@@ -2328,7 +2328,7 @@ msgstr ""
 #: apps/io.ox/files/toolbar.js:93
 #: apps/io.ox/mail/actions.js:1204
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:649
+#: apps/io.ox/tasks/actions.js:655
 #: module:io.ox/tasks
 #: apps/plugins/portal/updater/register.js:38
 #: module:plugins/portal
@@ -2341,7 +2341,7 @@ msgstr ""
 #: module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1211
 #: module:io.ox/mail
-#: apps/io.ox/tasks/actions.js:656
+#: apps/io.ox/tasks/actions.js:662
 #: module:io.ox/tasks
 msgid "Save to Drive"
 msgstr ""
@@ -3407,7 +3407,7 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js:101
 #: module:io.ox/core
-#: apps/io.ox/mail/main.js:595
+#: apps/io.ox/mail/main.js:598
 #: module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr ""
@@ -3457,6 +3457,8 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js:731
 #: module:io.ox/core
+#: apps/io.ox/files/main.js:119
+#: module:io.ox/files
 #: apps/io.ox/mail/view-options.js:138
 #: module:io.ox/mail
 msgid "Close folder view"
@@ -3511,11 +3513,10 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/core/desktop.js:1550
 #: apps/io.ox/core/desktop.js:1608
-#: apps/io.ox/core/main.js:626
-#: apps/io.ox/core/main.js:632
-#: apps/io.ox/search/main.js:156
+#: apps/io.ox/core/main.js:623
+#: apps/io.ox/search/main.js:157
 #: module:io.ox/search
-#: apps/io.ox/search/main.js:177
+#: apps/io.ox/search/main.js:178
 #: apps/io.ox/search/view-template.js:47
 #: apps/io.ox/search/view-template.js:119
 #: apps/plugins/portal/flickr/register.js:215
@@ -3574,7 +3575,7 @@ msgstr ""
 #: apps/io.ox/core/extPatterns/links.js:342
 #: module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:351
-#: apps/io.ox/mail/detail/view.js:87
+#: apps/io.ox/mail/detail/view.js:88
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:694
 #: module:io.ox/settings/settings
@@ -3586,7 +3587,7 @@ msgstr ""
 #: apps/io.ox/core/extPatterns/links.js:351
 #: apps/io.ox/mail/write/view-main.js:694
 #: module:io.ox/mail
-#: apps/io.ox/search/view-template.js:542
+#: apps/io.ox/search/view-template.js:558
 msgid "More"
 msgstr ""
 
@@ -3851,69 +3852,69 @@ msgstr ""
 msgid "close for %1$s"
 msgstr ""
 
-#: apps/io.ox/core/main.js:668
+#: apps/io.ox/core/main.js:676
 #: module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:198
 #: module:io.ox/core/pubsub
 msgid "Refresh"
 msgstr ""
 
-#: apps/io.ox/core/main.js:680
+#: apps/io.ox/core/main.js:688
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:816
+#: apps/io.ox/core/main.js:824
 msgid "Settings"
 msgstr ""
 
-#: apps/io.ox/core/main.js:739
+#: apps/io.ox/core/main.js:747
 #: module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr ""
 
-#: apps/io.ox/core/main.js:742
+#: apps/io.ox/core/main.js:750
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:746
+#: apps/io.ox/core/main.js:754
 msgid "Fullscreen"
 msgstr ""
 
-#: apps/io.ox/core/main.js:764
+#: apps/io.ox/core/main.js:772
 #: module:io.ox/core
 msgid "About"
 msgstr ""
 
-#: apps/io.ox/core/main.js:785
+#: apps/io.ox/core/main.js:793
 #: module:io.ox/core
-#: apps/io.ox/core/main.js:835
+#: apps/io.ox/core/main.js:843
 msgid "Sign out"
 msgstr ""
 
-#: apps/io.ox/core/main.js:857
+#: apps/io.ox/core/main.js:865
 #: module:io.ox/core
 msgid "Your Applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:935
+#: apps/io.ox/core/main.js:943
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr ""
 
-#: apps/io.ox/core/main.js:936
+#: apps/io.ox/core/main.js:944
 #: module:io.ox/core
 #: apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1166
+#: apps/io.ox/core/main.js:1174
 #: module:io.ox/core
 msgid "Restore applications"
 msgstr ""
 
-#: apps/io.ox/core/main.js:1168
+#: apps/io.ox/core/main.js:1176
 #: module:io.ox/core
 msgid "The following applications can be restored. Just remove the restore point if you don't want it to be restored."
 msgstr ""
 
-#: apps/io.ox/core/main.js:1173
+#: apps/io.ox/core/main.js:1181
 #: module:io.ox/core
 msgid "Continue"
 msgstr ""
@@ -5057,7 +5058,7 @@ msgstr ""
 #. Task: Done like in "Mark as done"
 #: apps/io.ox/core/wizard/registry.js:50
 #: module:io.ox/core/wizard
-#: apps/io.ox/tasks/actions.js:130
+#: apps/io.ox/tasks/actions.js:136
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js:268
 #: module:io.ox/tasks/edit
@@ -6217,7 +6218,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/plugins/portal/tasks/register.js:25
 #: module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:96
+#: apps/plugins/portal/tasks/register.js:133
 msgid "Tasks"
 msgstr ""
 
@@ -6227,7 +6228,7 @@ msgstr ""
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235
 #: module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:343
+#: apps/io.ox/mail/detail/view.js:344
 msgid "Email from %1$s: %2$s"
 msgstr ""
 
@@ -6526,23 +6527,23 @@ msgstr ""
 msgid "Thread"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:308
+#: apps/io.ox/mail/main.js:309
 #: module:io.ox/mail
 msgid "Mail Details"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:581
+#: apps/io.ox/mail/main.js:584
 #: module:io.ox/mail
 msgid "No message selected"
 msgstr ""
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:613
+#: apps/io.ox/mail/main.js:616
 #: module:io.ox/mail
 msgid "%1$d selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:990
+#: apps/io.ox/mail/main.js:998
 #: module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
@@ -6843,7 +6844,7 @@ msgstr ""
 msgid "Open/close all messages"
 msgstr ""
 
-#: apps/io.ox/mail/threadview.js:103
+#: apps/io.ox/mail/threadview.js:104
 #: module:io.ox/mail
 msgid "%1$d messages in this conversation"
 msgstr ""
@@ -7292,11 +7293,11 @@ msgstr ""
 #: apps/io.ox/portal/main.js:143
 #: module:io.ox/portal
 #: apps/io.ox/portal/main.js:144
-#: apps/io.ox/portal/main.js:388
+#: apps/io.ox/portal/main.js:394
 msgid "Disable widget"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:301
+#: apps/io.ox/portal/main.js:298
 #: module:io.ox/portal
 #: apps/plugins/portal/facebook/register.js:329
 #: module:plugins/portal
@@ -7304,28 +7305,28 @@ msgstr ""
 msgid "Click here to add your account"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:347
+#: apps/io.ox/portal/main.js:353
 #: module:io.ox/portal
 msgid "An error occurred."
 msgstr ""
 
-#: apps/io.ox/portal/main.js:350
+#: apps/io.ox/portal/main.js:356
 #: module:io.ox/portal
 msgid "Click to try again."
 msgstr ""
 
-#: apps/io.ox/portal/main.js:464
+#: apps/io.ox/portal/main.js:470
 #: module:io.ox/portal
 msgid "Portal Widgets"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:498
+#: apps/io.ox/portal/main.js:504
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr ""
 
-#: apps/io.ox/portal/main.js:499
+#: apps/io.ox/portal/main.js:505
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
@@ -7333,7 +7334,7 @@ msgstr ""
 
 #. Just disable portal widget - in contrast to delete
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:508
+#: apps/io.ox/portal/main.js:514
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
@@ -7389,15 +7390,10 @@ msgstr ""
 msgid "No items found"
 msgstr ""
 
-#: apps/io.ox/search/model.js:300
+#: apps/io.ox/search/view-template.js:584
 #: module:io.ox/core
-msgid "Recurring tasks need a valid end date."
-msgstr ""
-
-#: apps/io.ox/search/view-template.js:568
-#: module:io.ox/core
-#: apps/io.ox/search/view-template.js:571
-#: apps/io.ox/search/view-template.js:578
+#: apps/io.ox/search/view-template.js:587
+#: apps/io.ox/search/view-template.js:594
 msgid "All folders"
 msgstr ""
 
@@ -7465,55 +7461,55 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/actions.js:123
+#: apps/io.ox/tasks/actions.js:129
 #: module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:583
+#: apps/io.ox/tasks/actions.js:589
 #: apps/io.ox/tasks/toolbar.js:76
 #: module:io.ox/mail
 msgid "Undone"
 msgstr ""
 
-#: apps/io.ox/tasks/actions.js:159
+#: apps/io.ox/tasks/actions.js:165
 #: module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:233
+#: apps/io.ox/tasks/actions.js:239
 msgid "A severe error occurred!"
 msgstr ""
 
-#: apps/io.ox/tasks/actions.js:161
+#: apps/io.ox/tasks/actions.js:167
 #: module:io.ox/tasks
 msgid "Task was modified before, please reload"
 msgstr ""
 
-#: apps/io.ox/tasks/actions.js:182
+#: apps/io.ox/tasks/actions.js:188
 #: module:io.ox/tasks
 msgid "Tasks have been moved"
 msgstr ""
 
-#: apps/io.ox/tasks/actions.js:228
+#: apps/io.ox/tasks/actions.js:234
 #: module:io.ox/tasks
 msgid "Task moved."
 msgid_plural "Tasks moved."
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/tasks/actions.js:296
+#: apps/io.ox/tasks/actions.js:302
 #: module:io.ox/tasks
 msgid "Print tasks"
 msgstr ""
 
-#: apps/io.ox/tasks/actions.js:443
+#: apps/io.ox/tasks/actions.js:449
 #: module:io.ox/tasks
 msgid "Create new task"
 msgstr ""
 
-#: apps/io.ox/tasks/actions.js:470
+#: apps/io.ox/tasks/actions.js:476
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:60
 #: module:io.ox/mail
 msgid "Change due date"
 msgstr ""
 
-#: apps/io.ox/tasks/actions.js:574
+#: apps/io.ox/tasks/actions.js:580
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js:69
 #: module:io.ox/mail
@@ -8444,7 +8440,7 @@ msgstr ""
 
 #: apps/plugins/portal/facebook/register.js:312
 #: module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:342
+#: apps/plugins/portal/linkedIn/register.js:340
 #: apps/plugins/portal/twitter/register.js:368
 msgid "Add your account"
 msgstr ""
@@ -8531,38 +8527,38 @@ msgstr ""
 msgid "Sorry, we cannot help you here. Your provider needs to obtain a key from LinkedIn with the permission to do read messages."
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:212
+#: apps/plugins/portal/linkedIn/register.js:210
 #: module:plugins/portal
 msgid "Press [enter] to jump to the linkedin stream."
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:231
+#: apps/plugins/portal/linkedIn/register.js:229
 #: module:plugins/portal
 msgid "You have no new messages"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:255
+#: apps/plugins/portal/linkedIn/register.js:253
 #: module:plugins/portal
 msgid "There were not activities in your network"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:269
+#: apps/plugins/portal/linkedIn/register.js:267
 #: module:plugins/portal
 msgid "LinkedIn Network Updates"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:274
+#: apps/plugins/portal/linkedIn/register.js:272
 #: module:plugins/portal
 msgid "Your messages"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:295
+#: apps/plugins/portal/linkedIn/register.js:293
 #: module:plugins/portal
-#: apps/plugins/portal/linkedIn/register.js:325
+#: apps/plugins/portal/linkedIn/register.js:323
 msgid "Recent activities"
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js:349
+#: apps/plugins/portal/linkedIn/register.js:347
 #: module:plugins/portal
 msgid "LinkedIn"
 msgstr ""
@@ -8709,12 +8705,15 @@ msgstr ""
 
 #: apps/plugins/portal/tasks/register.js:58
 #: module:plugins/portal
+#: apps/plugins/portal/tasks/register.js:95
 msgid "You don't have any tasks that are either due soon or overdue."
 msgstr ""
 
 #. Due on date
-#: apps/plugins/portal/tasks/register.js:73
+#. Due on date
+#: apps/plugins/portal/tasks/register.js:68
 #: module:plugins/portal
+#: apps/plugins/portal/tasks/register.js:110
 msgid "Due on %1$s"
 msgstr ""
 
