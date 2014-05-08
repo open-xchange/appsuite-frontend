@@ -177,6 +177,7 @@ define('io.ox/calendar/main',
                         $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
                     ).on('tap', function (e) {
                         e.preventDefault();
+                        app.getGrid().selection.clear();
                         $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
                     })
                 );
