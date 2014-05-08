@@ -1013,7 +1013,8 @@ define('io.ox/mail/api',
                 params: {
                     action: action || '',
                     attachOriginalMessage: attachOriginalMessage,
-                    view: view
+                    view: view,
+                    setFrom: (/reply|replyall|forward/.test(action))
                 },
                 data: _([].concat(obj)).map(function (obj) {
                     return api.reduce(obj);
