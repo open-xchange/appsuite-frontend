@@ -911,16 +911,6 @@ define('io.ox/mail/actions',
         }
     });
 
-    // guidance
-
-    new Action('io.ox/mail/actions/guidance', {
-        action: function (baton) {
-            require(['io.ox/mail/guidance/main']).done(function (guidance) {
-                guidance.sidePopup(baton.app, baton.e);
-            });
-        }
-    });
-
     // toolbar
 
     new links.ActionGroup('io.ox/mail/links/toolbar', {
@@ -936,19 +926,6 @@ define('io.ox/mail/actions',
         id: 'compose',
         label: gt('Compose new mail'),
         ref: 'io.ox/mail/actions/compose'
-    });
-
-    new links.ActionGroup('io.ox/mail/links/toolbar', {
-        id: 'guidance',
-        index: 400,
-        icon: function () {
-            return $('<i class="fa fa-question-circle">');
-        }
-    });
-
-    new links.ActionLink('io.ox/mail/links/toolbar/guidance', {
-        label: gt('Guidance'),
-        ref: 'io.ox/mail/actions/guidance'
     });
 
     // inline links
