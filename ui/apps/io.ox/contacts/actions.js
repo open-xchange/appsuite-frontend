@@ -69,20 +69,24 @@ define('io.ox/contacts/actions',
             return e.collection.has('one') && e.collection.has('modify');
         },
         action: function (baton) {
-            var data = baton.data;
-            if (data.mark_as_distributionlist === true) {
+            var obj = baton.data;
+            //get full object first, because data might be a restored selection resulting in only having id and folder_id.
+            //This would make distribution lists behave as normal contacts
+            api.get(obj).done(function (data) {
+                if (data.mark_as_distributionlist === true) {
                 require(['io.ox/contacts/distrib/main'], function (m) {
                     if (m.reuse('edit', data)) return;
-                    m.getApp(data).launch().done(function () {
-                        this.edit(data);
+                        m.getApp(data).launch().done(function () {
+                            this.edit(data);
+                        });
                     });
-                });
-            } else {
-                require(['io.ox/contacts/edit/main'], function (m) {
-                    if (m.reuse('edit', data)) return;
-                    m.getApp(data).launch();
-                });
-            }
+                } else {
+                    require(['io.ox/contacts/edit/main'], function (m) {
+                        if (m.reuse('edit', data)) return;
+                        m.getApp(data).launch();
+                    });
+                }
+            });
         }
     });
 
