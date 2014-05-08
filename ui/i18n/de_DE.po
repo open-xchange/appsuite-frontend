@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-05-08 12:54+0100\n"
+"PO-Revision-Date: 2014-05-08 12:57+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -270,7 +270,7 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js:162
 #: apps/io.ox/calendar/week/perspective.js:135
 msgid "Series"
-msgstr "Serien"
+msgstr "Serie"
 
 #: apps/io.ox/calendar/acceptdeny.js:163 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:163 apps/io.ox/calendar/edit/main.js:351
