@@ -228,6 +228,7 @@ define('io.ox/search/view-template',
         draw: function (baton) {
             var model = baton.model,
                 list = model.get('poollist'),
+                pool = model.get('pool'),
                 row, cell;
 
             row = $('<div class="row facets">').append(
@@ -236,28 +237,32 @@ define('io.ox/search/view-template',
 
             _.each(list, function (item) {
                 //get active value
-                var facet = model.get('pool')[item.facet],
-                    value = facet.values[item.value],
-                    facetnode, button;
+                var facet = pool[item.facet],
+                    value, facetnode, button;
 
-                //create facet node
-                cell.append(
-                    facetnode = $('<li role="presentation" class="facet btn-group">')
-                                .append(
-                                    // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                                    button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
-                                        e.preventDefault();
-                                    }).append($('<label>'))
-                                )
-                );
+                if (facet) {
+                    value = facet.values[item.value];
 
-                //general stuff
-                ext.point('io.ox/search/view/window/facet')
-                    .invoke('draw', button, value, facet, baton);
 
-                //additional actions per id/type
-                ext.point('io.ox/search/view/window/facet/' + value.facet)
-                    .invoke('draw', facetnode, value, baton);
+                    //create facet node
+                    cell.append(
+                        facetnode = $('<li role="presentation" class="facet btn-group">')
+                                    .append(
+                                        // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
+                                        button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
+                                            e.preventDefault();
+                                        }).append($('<label>'))
+                                    )
+                    );
+
+                    //general stuff
+                    ext.point('io.ox/search/view/window/facet')
+                        .invoke('draw', button, value, facet, baton);
+
+                    //additional actions per id/type
+                    ext.point('io.ox/search/view/window/facet/' + value.facet)
+                        .invoke('draw', facetnode, value, baton);
+                }
             });
 
             this.append(row);
