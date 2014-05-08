@@ -175,7 +175,8 @@ define('io.ox/calendar/main',
                 app.navbar.append(
                     $('<a href="#" tabindex="-1">').append(
                         $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
-                    ).on('tap', function () {
+                    ).on('tap', function (e) {
+                        e.preventDefault();
                         $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
                     })
                 );
