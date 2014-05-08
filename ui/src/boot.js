@@ -305,6 +305,8 @@ $(window).load(function () {
                         function success(core) {
                             // go!
                             debug('boot.js: core.launch()');
+                            //trigger load event so custom dropdown can add event listeners (loading to early causes js errors on mobile devices during login)
+                            $(document).trigger('core-main-loaded');
                             core.launch();
                         },
                         function fail(e) {
