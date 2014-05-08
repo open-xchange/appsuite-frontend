@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-05-08 11:56+0100\n"
+"PO-Revision-Date: 2014-05-08 12:54+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -576,7 +576,7 @@ msgstr "täglich"
 #: apps/io.ox/calendar/edit/recurrence-view.js:254
 #: module:io.ox/calendar/edit/main
 msgid "weekly"
-msgstr "Wöchentlich"
+msgstr "wöchentlich"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:255
 #: module:io.ox/calendar/edit/main
