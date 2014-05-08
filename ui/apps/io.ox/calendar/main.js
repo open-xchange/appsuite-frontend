@@ -84,9 +84,10 @@ define('io.ox/calendar/main',
          * Default application properties
          */
         'props': function (app) {
+            var view = settings.get('viewView', 'week:week');
             // introduce shared properties
             app.props = new Backbone.Model({
-                'layout': settings.get('viewView', 'week:workweek'),
+                'layout': view,
                 'checkboxes': app.settings.get('showCheckboxes', true)
             });
         },
@@ -225,28 +226,17 @@ define('io.ox/calendar/main',
             })
             .done(function () {
 
-                // app window
-                var lastPerspective = app.props.get('layout');
+                // app perspective
+                var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
 
-                if (_.device('smartphone')) {
-                    // map different views here
-                    switch (lastPerspective) {
-                    case 'week:workweek':
-                        lastPerspective = 'month';
-                        break;
-                    case 'week:week':
-                        lastPerspective = 'month';
-                        break;
-                    case 'calendar':
-                        lastPerspective = 'month';
-                        break;
-                    }
+                if (_.device('small') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
+                    lastPerspective = 'week:day';
                 } else {
                     // corrupt data fix
                     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
                 }
 
-                ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);
+                ox.ui.Perspective.show(app, lastPerspective);
             });
 
         win.on('change:perspective', function (e, name, id) {
