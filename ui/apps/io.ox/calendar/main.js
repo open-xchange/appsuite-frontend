@@ -215,9 +215,6 @@ define('io.ox/calendar/main',
             }
         });
 
-        // folder tree
-        commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
-
         // go!
         commons.addFolderSupport(app, null, 'calendar', options.folder || coreConfig.get('folder/calendar'))
             .always(function () {
