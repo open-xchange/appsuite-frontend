@@ -270,7 +270,7 @@ define('io.ox/mail/detail/view',
             this.onChangeContent();
 
             // merge data
-            this.model.set(data);
+            if (data) this.model.set(data);
 
             // process unseen flag
             if (unseen) this.onUnseen();
@@ -295,7 +295,14 @@ define('io.ox/mail/detail/view',
                 $li.find('section.body').addClass('loading');
                 this.trigger('load');
                 // load detailed email data
-                api.get(_.cid(this.cid)).then(this.onLoad.bind(this), this.onLoadFail.bind(this));
+                if (this.loaded) {
+                    this.onLoad();
+                } else {
+                    api.get(_.cid(this.cid)).then(
+                        this.onLoad.bind(this),
+                        this.onLoadFail.bind(this)
+                    );
+                }
             }
 
             return this;
@@ -309,6 +316,7 @@ define('io.ox/mail/detail/view',
 
             this.options = options || {};
             this.model = pool.getDetailModel(options.data);
+            this.loaded = options.loaded || false;
             this.cid = this.model.cid;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
             this.listenTo(this.model, 'change:attachments', this.onChangeContent);

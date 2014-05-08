@@ -256,7 +256,10 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/print', {
         requires: function (e) {
-            return e.collection.has('some', 'read') && _.device('!small');
+            // not on smartphones
+            if (_.device('small')) return false;
+            // need some and either read access or being embedded
+            return e.collection.has('some') && (e.collection.has('read') || !e.collection.has('toplevel'));
         },
         multiple: function (list) {
             print.request('io.ox/mail/print', list);
@@ -672,7 +675,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/add-to-portal', {
         capabilities: 'portal',
-        requires: 'one',
+        requires: 'one toplevel',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
                 //using baton.data.parent if previewing during compose (forward mail as attachment)
@@ -847,7 +850,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
         capabilities: 'tasks',
-        requires: 'one',
+        requires: 'one toplevel',
         action: function (baton) {
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {

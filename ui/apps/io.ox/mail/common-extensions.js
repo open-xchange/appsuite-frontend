@@ -422,6 +422,9 @@ define('io.ox/mail/common-extensions',
             }
 
             return function (baton) {
+
+                if (util.isEmbedded(baton.data)) return;
+
                 this.append(
                     $('<a href="#" class="unread-toggle" tabindex="1"><i class="fa"/></a>')
                     .on('click', { view: baton.view }, toggle)
@@ -445,16 +448,19 @@ define('io.ox/mail/common-extensions',
 
             function draw(model) {
 
-                if (model.get('modified') !== 1) {
+                // nothing to do if message is unchanged
+                // or if message is embedded (since we cannot reload it)
+                if (model.get('modified') !== 1 || util.isEmbedded(model.toJSON())) {
                     this.find('.external-images').remove();
-                } else {
-                    this.append(
-                        $('<div class="alert alert-info external-images">').append(
-                            $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
-                            $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
-                        )
-                    );
+                    return;
                 }
+
+                this.append(
+                    $('<div class="alert alert-info external-images">').append(
+                        $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
+                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
+                    )
+                );
             }
 
             return function (baton) {
