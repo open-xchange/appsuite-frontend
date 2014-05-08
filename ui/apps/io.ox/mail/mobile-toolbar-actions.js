@@ -11,7 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/mail/mobileToolbarActions',
+define('io.ox/mail/mobile-toolbar-actions',
    ['io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/mail/api',

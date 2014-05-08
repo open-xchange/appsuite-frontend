@@ -12,57 +12,11 @@
  */
 
 
-define('io.ox/mail/navbarViews',
+define('io.ox/core/toolbars-mobile',
     ['io.ox/core/extensions',
-    'gettext!io.ox/mail',
-    'io.ox/mail/mobileToolbarActions'], function (ext) {
-
+    'io.ox/mail/mobile-toolbar-actions'], function (ext) {
 
     'use strict';
-
-    ext.point('io.ox/mail/mobile/navbar').extend({
-        id: 'btn-left',
-        index: 100,
-        draw: function (baton) {
-
-            if (!baton.left) return;
-
-            this.$el.append(
-                $('<div class="navbar-action left">').append(
-                    $('<a>').append(
-                        $('<i class="fa fa-chevron-left">'),
-                        baton.left
-                    )
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/mobile/navbar').extend({
-        id: 'header',
-        index: 200,
-        draw: function (baton) {
-            this.$el.append(
-                $('<div class="navbar-title">').text(baton.title)
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/mobile/navbar').extend({
-        id: 'btn-right',
-        index: 300,
-
-        draw: function (baton) {
-            if (!baton.right) return;
-            this.$el.append(
-                $('<div class="navbar-action right">').append(
-                    $('<a>').append(
-                        baton.right
-                    )
-                )
-            );
-        }
-    });
 
     /*
      * Abstract Barview
@@ -192,7 +146,6 @@ define('io.ox/mail/navbarViews',
             return this;
         }
     });
-
 
     return {
         BarView: BarView,
