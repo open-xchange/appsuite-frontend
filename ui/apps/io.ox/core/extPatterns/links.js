@@ -397,9 +397,11 @@ define('io.ox/core/extPatterns/links',
         label = baton.label || label;
         label = _.isString(label) ? $.txt(label) : label;
 
+        node = baton.$el || $('<div>');
+
         // build dropdown
         this.append(
-            node = $('<div class="dropdown">').append(
+            node.addClass('dropdown').append(
                 $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .append(label, $('<i class="fa fa-caret-down">')),
                 $('<ul class="dropdown-menu" role="menu">')

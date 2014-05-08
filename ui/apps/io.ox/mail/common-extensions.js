@@ -271,7 +271,7 @@ define('io.ox/mail/common-extensions',
                         label: label,
                         classes: 'attachment-link',
                         ref: 'io.ox/mail/attachment/links'
-                    }).draw.call(node, ext.Baton({ data: data })),
+                    }).draw.call(node, ext.Baton({ data: data, $el: $('<span>') })),
                     contentType = getContentType(data.content_type),
                     url,
                     filename;
