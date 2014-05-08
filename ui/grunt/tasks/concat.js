@@ -116,7 +116,7 @@ module.exports = function (grunt) {
                          'apps/io.ox/core/tk/list-control.js',
                          'apps/io.ox/mail/threadview.js',
                          'apps/io.ox/core/toolbars-mobile.js',
-                         'apps/io.ox/core/pageController.js',
+                         'apps/io.ox/core/page-controller.js',
                          'apps/io.ox/mail/actions.js',
                          'apps/io.ox/mail/toolbar.js',
                          'apps/io.ox/mail/import.js',

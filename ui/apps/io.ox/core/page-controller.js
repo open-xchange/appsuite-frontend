@@ -11,8 +11,8 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/pageController',
-    ['less!io.ox/core/pageController'], function () {
+define('io.ox/core/page-controller',
+    ['less!io.ox/core/page-controller'], function () {
 
     'use strict';
 
