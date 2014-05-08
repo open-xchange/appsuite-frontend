@@ -39,7 +39,7 @@ define('io.ox/files/main',
          */
         'folder-view': function (app) {
             // folder tree
-            commons.addFolderView(app, { type: 'infostore', rootFolderId: settings.get('rootFolderId') });
+            commons.addFolderView(app, { type: 'infostore', rootFolderId: settings.get('rootFolderId', 9) });
             app.getWindow().nodes.sidepanel.addClass('border-right');
         },
 
