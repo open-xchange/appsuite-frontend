@@ -24,9 +24,19 @@ define('io.ox/mail/listview',
 
     'use strict';
 
+    function fixThreadSize(data) {
+        if ('threadSize' in data) return;
+        data.threadSize = Math.max(1, _(data.thread).reduce(function (sum, data) {
+            return sum + (util.isDeleted(data) ? 0 : 1);
+        }, 0));
+    }
+
     ext.point('io.ox/mail/listview/item').extend({
         id: 'default',
         draw: function (baton) {
+
+            // fix missing threadSize (aparently only used by tests)
+            fixThreadSize(baton.data);
 
             if (!baton.app) {
                 ext.point('io.ox/mail/listview/item/default').invoke('draw', this, baton);

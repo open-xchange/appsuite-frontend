@@ -116,7 +116,7 @@ define('io.ox/mail/common-extensions',
             if (data.threadSize <= 1) return;
 
             this.append(
-                $('<div class="thread-size" aria-hidden="true" data-open="false">').append(
+                $('<div class="thread-size" aria-hidden="true">').append(
                     $('<span class="number">').text(_.noI18n(data.threadSize))
                 )
             );
