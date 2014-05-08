@@ -21,7 +21,8 @@ define('io.ox/mail/detail/view',
      'io.ox/core/extPatterns/links',
      'io.ox/core/emoji/util',
      'gettext!io.ox/mail',
-     'less!io.ox/mail/style'
+     'less!io.ox/mail/style',
+     'io.ox/mail/actions'
     ], function (extensions, ext, api, util, Pool, content, links, emoji, gt) {
 
     'use strict';
