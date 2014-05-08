@@ -28,7 +28,7 @@ define('io.ox/search/model',
 
     var options = {},
         items = collection.create(),
-        defaults, factory;
+        defaults, factory, conflicts;
 
     //fetch settings/options
     ext.point('io.ox/search/main').invoke('config',  $(), options);
@@ -48,6 +48,7 @@ define('io.ox/search/model',
         active: [],
         pool: {},
         poollist: [],
+        pooldisabled: {},
         folder: {
             id: 'folder',
             custom: true,
@@ -240,7 +241,7 @@ define('io.ox/search/model',
             //
             getFacets: function () {
                 var self = this,
-                    missingFolder = !this.get('pool').folder,
+                    missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
                     def = missingFolder && this.isMandatory('folder') ? util.getFirstChoice(this) : $.Deferred().resolve({});
 
                 return def
@@ -286,6 +287,7 @@ define('io.ox/search/model',
                     active: [],
                     pool: {},
                     poollist: [],
+                    pooldisabled: {},
                     start: 0
                 },
                 {
