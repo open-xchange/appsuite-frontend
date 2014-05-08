@@ -52,6 +52,7 @@ define('io.ox/search/model',
             id: 'folder',
             custom: true,
             hidden: true,
+            flags: [],
             values: [{
                 facet: 'folder',
                 id: 'custom',
