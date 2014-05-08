@@ -23,6 +23,7 @@ define('io.ox/mail/detail/links',
     'use strict';
 
     var regMail = /([^\s<;\(\)\[\]]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/i,
+        regUrl = /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?)/i,
         regMailReplace = /([^\s<;\(\)\[\]\|\"]+@([a-z0-9äöüß\-]+\.)+[a-z]{2,})/ig, /* dedicated one to avoid strange side effects */
         regMailComplex = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/, /* "name" <address> */
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&]+)&gt;/g; /* "name" <address> */
@@ -182,6 +183,16 @@ define('io.ox/mail/detail/links',
                     .contents()
                 );
             }
+        }
+        else if (regUrl.test(text) && node.closest('a').length === 0) {
+            // links
+            // escape first
+            text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            node.replaceWith(
+                $('<div>')
+                .html(text.replace(regUrl, '<a href="$1" target="_blank">$1</a>'))
+                .contents()
+            );
         }
         else if (length >= 30 && /\S{30}/.test(text)) {
             // split long character sequences for better wrapping

@@ -174,7 +174,17 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel', 'one') && isDraftMail(e.context);
         },
         action: function (baton) {
+            var data = baton.data,
+                check = false;
+            _.each(ox.ui.apps.models, function (app) {
+                if (app.refId === data.id) {
+                    check = true;
+                    app.launch();
+                }
+            });
+            if (check === true) return;
             require(['io.ox/mail/write/main'], function (m) {
+                if (m.reuse('edit', data)) return;
                 m.getApp().launch().done(function () {
                     this.edit(baton.data);
                 });
@@ -458,7 +468,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/open-attachment', {
         id: 'open',
-        requires: 'some',
+        requires: 'one',
         multiple: function (list) {
             _(list).each(function (data) {
                 var url = api.getUrl(data, 'view');

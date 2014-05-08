@@ -93,8 +93,7 @@ define('io.ox/calendar/actions',
                     // open create dialog with same participants
                     var data = {
                         folder_id: coreSettings.get('folder/calendar'),
-                        participants: baton.data.participants,
-                        title: baton.data.title
+                        participants: baton.data.participants
                     };
                     this.create(data);
                     this.model.toSync = data;

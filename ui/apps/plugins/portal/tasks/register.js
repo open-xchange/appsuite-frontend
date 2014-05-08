@@ -37,10 +37,6 @@ define('plugins/portal/tasks/register',
             });
         },
 
-        action: function () {
-            ox.launch('io.ox/tasks/main');
-        },
-
         load: function (baton) {
             return taskAPI.getAllMyTasks().done(function (data) { // super special getAll method
                 baton.data = data;

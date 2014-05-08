@@ -50,7 +50,8 @@ define('io.ox/mail/write/main',
             var self = this;
             self.busy();
             baton.app.saveDraft()
-                .done(function () {
+                .done(function (data) {
+                    baton.app.refId = data.id;
                     self.idle();
                 });
         }
@@ -97,7 +98,9 @@ define('io.ox/mail/write/main',
         timer = function () {
             // only auto-save if something changed (see Bug #26927)
             if (app.dirty()) {
-                app.saveDraft();
+                app.saveDraft().done(function (data) {
+                    app.refId = data.id;
+                });
             } else {
                 delay();
             }

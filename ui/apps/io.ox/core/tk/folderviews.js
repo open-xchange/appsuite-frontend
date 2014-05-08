@@ -575,29 +575,25 @@ define('io.ox/core/tk/folderviews',
         }
 
         this.removeProcess = function (folder) {
-            api.remove({ folder: folder.id });
+            api.remove({ folder: folder.id }).fail(notifications.yell);
         };
 
         this.remove = function () {
-            var self = this,
-            folder_id = String(this.selection.get());
-            if (folder_id) {
-                $.when(
-                    api.get({ folder: folder_id }),
-                    require(['io.ox/core/tk/dialogs'])
-                ).done(function (folder, dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt('Do you really want to delete folder "%s"?', folder.title))
-                        .addPrimaryButton('delete', gt('Delete'))
-                        .addButton('cancel', gt('Cancel'))
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                self.removeProcess(folder);
-                            }
-                        });
+            var self = this, folder_id = String(this.selection.get());
+            if (!folder_id) return;
+            $.when(
+                api.get({ folder: folder_id }),
+                require(['io.ox/core/tk/dialogs'])
+            ).done(function (folder, dialogs) {
+                new dialogs.ModalDialog()
+                .text(gt('Do you really want to delete folder "%s"?', folder.title))
+                .addPrimaryButton('delete', gt('Delete'))
+                .addButton('cancel', gt('Cancel'))
+                .show()
+                .done(function (action) {
+                    if (action === 'delete') self.removeProcess(folder);
                 });
-            }
+            });
         };
 
         this.renameProcess = function (folder, changes) {
