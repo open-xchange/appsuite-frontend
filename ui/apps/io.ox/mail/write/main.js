@@ -283,24 +283,14 @@ define('io.ox/mail/write/main',
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
+                if (isHTML) text = getParagraph(text);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
-                if (isHTML) {
-                    text = getParagraph(text);
-                    if (signature.misc && signature.misc.insertion === 'below') {
-                        ed.appendContent(text);
-                        ed.scrollTop('bottom');
-                    } else {
-                        ed.prependContent(text);
-                        ed.scrollTop('top');
-                    }
+                if (signature.misc && signature.misc.insertion === 'below') {
+                    ed.appendContent(text);
+                    ed.scrollTop('bottom');
                 } else {
-                    if (signature.misc && signature.misc.insertion === 'below') {
-                        ed.appendContent(text);
-                        ed.scrollTop('bottom');
-                    } else {
-                        ed.prependContent(text);
-                        ed.scrollTop('top');
-                    }
+                    ed.prependContent(text);
+                    ed.scrollTop('top');
                 }
                 currentSignature = text;
             }
@@ -478,13 +468,11 @@ define('io.ox/mail/write/main',
             return str.replace(/[\s\uFEFF\xA0]+$/, '');
         }
 
-        var addBlankLine = function (signature) {
+        var addBlankLine = function () {
             var content = editor.getContent(),
-                blankline = editorMode === 'html' ? '<p><br></p>' : '',
-                pos = signature ? signature.misc && signature.misc.insertion || 'below' : 'below';
-            //required only in html mode with 'above' pos (and if it's not set already)
-            if (!(content === '' && pos === 'below' && editorMode === 'text') && content.indexOf(blankline) !== 0) {
-                app.getEditor().prependContent(blankline);
+                blankline = editorMode === 'html' ? '<p><br></p>' : '\n\n';
+            if (content !== '' && content.indexOf(blankline) !== 0) {
+                editor.setContent(blankline + content);
             }
         };
 
