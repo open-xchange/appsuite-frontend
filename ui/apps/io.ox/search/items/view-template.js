@@ -170,8 +170,6 @@ define('io.ox/search/items/view-template',
 
             ext.point('io.ox/search/items/files').extend({
                 draw: function (baton) {
-                    //TODO: remove after backend fixed Bug 32430
-                    delete baton.data.version;
                     draw.call(this, baton, 'io.ox/files/fluid/view-detail', 'io.ox/files/api');
                 }
             });
