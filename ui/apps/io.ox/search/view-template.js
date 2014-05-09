@@ -452,13 +452,12 @@ define('io.ox/search/view-template',
     //facet type: folder
     function folderDialog(facet, baton) {
         require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
-            var label = gt('Folder'),
-                id = facet.values[0].custom,
+            var id = facet.values[0].custom,
                 type = baton.model.getModule();
 
             var dialog = new dialogs.ModalDialog()
-                .header($('<h4>').text(label))
-                .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
+                .header($('<h4>').text(gt('Folder')))
+                .addPrimaryButton('ok', gt('Select Folder'), 'ok', {'tabIndex': '1'})
                 .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
             dialog.getBody().css({ height: '250px' });
 
