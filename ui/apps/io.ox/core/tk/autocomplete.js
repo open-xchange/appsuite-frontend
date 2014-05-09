@@ -402,7 +402,7 @@ define('io.ox/core/tk/autocomplete',
             // handle key up (debounced)
             fnKeyUp = _.debounce(function (e, isRetry) {
                 //TODO: element destroyed before debounce resolved
-                if (!document.contains(this))
+                if (!document.body.contains(this))
                     return;
                 this.focus();
                 e.stopPropagation();
