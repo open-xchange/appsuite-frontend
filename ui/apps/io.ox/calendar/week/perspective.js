@@ -310,7 +310,7 @@ define('io.ox/calendar/week/perspective',
             var cid = _.url.hash('id'), e;
             if (cid) {
                 e = $.Event('click', { target: this.main });
-                this.setNewStart = true;//marker to make the view open in the correct week
+                this.setNewStart = true; //marker to make the view open in the correct week
                 this.showAppointment(e, _.cid(cid), { arrow: false });
             }
         },

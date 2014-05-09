@@ -378,7 +378,7 @@ define('io.ox/mail/write/main',
 
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
-                return require([editorSrc]).pipe(function (Editor) {
+                return require([editorSrc]).then(function (Editor) {
                     return (editorHash[mode] = new Editor(view.textarea))
                         .done(function () {
                             app.setEditor(editorHash[mode]);
@@ -488,17 +488,30 @@ define('io.ox/mail/write/main',
             }
         };
 
+        // only used on mobile to add blank lines above reply text
+        var addBlankLineSimple = function (number) {
+            var blankline = '\n';
+            for (var i = 0; i < number; i++) {
+                app.getEditor().prependContent(blankline);
+            }
+        };
+
         app.setBody = function (str) {
             var content = trimContent(str),
-                dsID, ds;
+                dsID, ds, isPhone = _.device('smartphone');
             //get default signature
-            dsID = _.device('smartphone') ?
+            dsID = isPhone ?
                 (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) :
                 settings.get('defaultSignature');
             ds = _.find(view.signatures, function (o, i) {
                     o.index = i;
                     return o.id === dsID;
                 });
+            if (isPhone) {
+                ds.misc = {
+                    insertion: 'below'
+                };
+            }
             //set content
             app.getEditor().setContent(content);
             //fix misc property and set signature
@@ -872,6 +885,10 @@ define('io.ox/mail/write/main',
                                     if (_.device('ios')) {
                                         view.textarea.trigger('blur');
                                     }
+                                    // add some blank lines to textarea
+                                    addBlankLineSimple(1);
+                                    view.textarea.focus();
+                                    app.getWindow().nodes.main.scrollTop(0);
                                 }
                             });
                         })
@@ -912,15 +929,16 @@ define('io.ox/mail/write/main',
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
+                        if (_.device('smartphone')) {
+                            // trigger keyup to resize the textarea
+                            view.textarea.trigger('keyup');
+                        }
                         var ed = app.getEditor();
                         ed.setCaretPosition(0);
                         win.idle();
                         focus('to');
                         def.resolve();
-                        if (_.device('smartphone')) {
-                            // trigger keyup to resize the textarea
-                            view.textarea.trigger('keyup');
-                        }
+
                     });
                 })
                 .fail(function (e) {

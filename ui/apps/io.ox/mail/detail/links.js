@@ -78,20 +78,32 @@ define('io.ox/mail/detail/links',
     $(document).on('click', '.deep-link-calendar', function (e) {
         e.preventDefault();
         var data = $(this).data();
-        ox.launch('io.ox/calendar/main', { folder: data.folder, perspective: 'list' }).done(function () {
-            var app = this, folder = data.folder, id = data.id;
-            // switch to proper perspective
-            ox.ui.Perspective.show(app, 'list').done(function () {
-                // set proper folder
-                if (app.folder.get() === folder) {
-                    app.trigger('show:appointment', { id: id, folder_id: folder, recurrence_position: 0 }, true);
-                } else {
-                    app.folder.set(folder).done(function () {
-                        app.trigger('show:appointment', { id: id, folder_id: folder, recurrence_position: 0 }, true);
+        if (data.id) {
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail']).done(function (dialogs, api, view) {
+                new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
+                    popup.busy();
+                    api.get(data).done(function (data) {
+                        popup.idle().append(view.draw(data));
                     });
-                }
+                });
             });
-        });
+
+        } else {
+            ox.launch('io.ox/calendar/main', { folder: data.folder, perspective: 'list' }).done(function () {
+                var app = this, folder = data.folder;
+                // switch to proper perspective
+                ox.ui.Perspective.show(app, 'week:week').done(function (p) {
+                    // set proper folder
+                    if (app.folder.get() === folder) {
+                        p.view.trigger('showAppointment', e, data);
+                    } else {
+                        app.folder.set(folder).done(function () {
+                            p.view.trigger('showAppointment', e, data);
+                        });
+                    }
+                });
+            });
+        }
     });
 
     $(document).on('click', '.deep-link-tasks', function (e) {

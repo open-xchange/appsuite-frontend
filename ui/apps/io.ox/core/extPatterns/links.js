@@ -397,9 +397,11 @@ define('io.ox/core/extPatterns/links',
         label = baton.label || label;
         label = _.isString(label) ? $.txt(label) : label;
 
+        node = baton.$el || $('<div>');
+
         // build dropdown
         this.append(
-            node = $('<div class="dropdown">').append(
+            node.addClass('dropdown').append(
                 $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .append(label, $('<i class="fa fa-caret-down">')),
                 $('<ul class="dropdown-menu" role="menu">')
@@ -420,12 +422,23 @@ define('io.ox/core/extPatterns/links',
         return node;
     };
 
-    var DropdownLinks = function (options) {
+    // full dropdown; <div> <a> + <ul> + inks </div>
+    var Dropdown = function (options) {
         var o = _.extend(this, options);
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
             return drawDropDown.call(this, o, baton);
         };
+    };
+
+    // just the dropdown - <ul> + links; not the container
+    var DropdownLinks = function (options, baton, wrap) {
+        options = options || {};
+        baton.$el = $('<ul class="dropdown-menu" role="menu">');
+        var wrap = options.wrap === undefined ? true : !!options.wrap;
+        drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap)
+            .done(function () { injectDividers(baton.$el); });
+        return baton.$el;
     };
 
     var drawButtonGroup = function (options, baton) {
@@ -559,6 +572,7 @@ define('io.ox/core/extPatterns/links',
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
         InlineButtonGroup: InlineButtonGroup,
+        Dropdown: Dropdown,
         DropdownLinks: DropdownLinks,
         ButtonGroup: ButtonGroup,
         ActionGroup: ActionGroup

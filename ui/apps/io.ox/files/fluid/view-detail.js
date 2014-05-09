@@ -366,7 +366,7 @@ define('io.ox/files/fluid/view-detail',
     });
 
     // dropdown
-    ext.point(POINT + '/version/dropdown').extend(new links.DropdownLinks({
+    ext.point(POINT + '/version/dropdown').extend(new links.Dropdown({
         index: 10,
         label: '',
         ref: 'io.ox/files/versions/links/inline'

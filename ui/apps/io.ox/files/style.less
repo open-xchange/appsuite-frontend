@@ -12,6 +12,12 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+/* App */
+
+.io-ox-files-window .foldertree-sidepanel {
+    left: 0;
+}
+
 .window-content-top {
     display: none;
     position: absolute;
@@ -20,45 +26,6 @@
     width: 100%;
 }
 
-.inline-action-wrapper {
-    &.navbar {
-        min-height: 45px;
-        border-radius: 0;
-        padding-top: 2px;
-        border-top: 0;
-        border-right: 0;
-    }
-	.inline-actions {
-	    .io-ox-inline-links{
-	        margin: 0;
-	    }
-	    .io-ox-inline-links>li {
-	       padding: 2px;
-	       padding-top: 5px;
-	    }
-
-	    a.fullscreen:before {content: "("; color:black;}
-	    a.fullscreen:after {content: ")"; color:black;}
-
-	    a {
-	        &.slideshow,
-	        &.mediaplayer { display: none; }
-	    }
-
-	    a.mediaplayer { margin-left: 1em; }
-
-	    span.slideshow_fullscreen {
-	        display: none;
-	        margin-left: 5px;
-	        margin-right: 5px;
-	    }
-	}
-	.inline-actions-right {
-		padding-top: 5px;
-	}
-}
-
-
 .files-wrapper {
 
     @innerHeight: 110px;
@@ -66,7 +33,7 @@
 
     min-height: 100px;
     position: absolute;
-    top: 50px;//will be adjusted manually if topbar becomes larger
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -86,7 +53,7 @@
 
     .files-scrollable-pane {
         outline: 0;
-        padding: 15px 40px;
+        padding: 15px 20px;
         width: 100%;
         min-height: 200px; // for busy animation
     }
@@ -672,9 +639,6 @@ ul.breadcrumb li.prefix {
             }
         }
     }
-    .inline-action-wrapper&.navbar {
-    	min-height: 0px;
-     }
 
     .files-wrapper  {
         .files-container {
@@ -790,8 +754,8 @@ ul.breadcrumb li.prefix {
                     padding: 0;
                     line-height: 40px;
                 }
-                .col-md-3 {
-                    width: 50%;
+                &>div {
+                    padding: 0;
                 }
             }
         }

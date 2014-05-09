@@ -268,7 +268,7 @@ $(window).load(function () {
             $(this).busy();
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
-            require(['settings!io.ox/core', 'precore.js'], function (settings) {
+            require(['settings!io.ox/core', ox.base + '/precore.js'], function (settings) {
 
                 // greedy prefetch for mail app
                 // need to get this request out as soon as possible
@@ -305,6 +305,8 @@ $(window).load(function () {
                         function success(core) {
                             // go!
                             debug('boot.js: core.launch()');
+                            //trigger load event so custom dropdown can add event listeners (loading to early causes js errors on mobile devices during login)
+                            $(document).trigger('core-main-loaded');
                             core.launch();
                         },
                         function fail(e) {
@@ -630,10 +632,6 @@ $(window).load(function () {
                 )
                 .always(function () {
 
-                    var ref = hash.ref;
-                    ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
-                    _.url.redirect(ref ? ref : '#');
-
                     // fetch user config
                     ox.secretCookie = hash.secretCookie === 'true';
                     fetchUserSpecificServerConfig().done(function () {
@@ -664,6 +662,12 @@ $(window).load(function () {
                                 user_id: parseInt(resp.user_id || '0', 10),
                                 context_id: resp.context_id
                             });
+
+                            var redirect = '#';
+                            if (hash.ref) {
+                                redirect = '#' + hash.ref;
+                            }
+
                             // cleanup url
                             _.url.hash({
                                 language: null,
@@ -672,8 +676,11 @@ $(window).load(function () {
                                 user_id: null,
                                 context_id: null,
                                 secretCookie: null,
-                                store: null
+                                store: null,
+                                ref: null
                             });
+                            _.url.redirect(redirect);
+
                             // go ...
                             loadCoreFiles().done(function () {
                                 loadCore();

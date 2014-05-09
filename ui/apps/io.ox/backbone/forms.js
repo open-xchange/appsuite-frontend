@@ -593,7 +593,7 @@ define('io.ox/backbone/forms',
                 if (!mobileMode && options.display === 'DATETIME') {
                     var hours_typeahead = [],
                         filldate = new date.Local().setHours(0, 0, 0, 0),
-                        interval = parseInt(settings.get('interval'), 10);
+                        interval = parseInt(settings.get('interval'), 10) || 30;
                     for (var i = 0; i < 1440; i += interval) {
                         hours_typeahead.push(filldate.format(date.TIME));
                         filldate.add(interval * date.MINUTE);

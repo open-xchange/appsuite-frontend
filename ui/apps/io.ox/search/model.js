@@ -16,10 +16,8 @@ define('io.ox/search/model',
      'io.ox/search/items/main',
      'io.ox/backbone/modelFactory',
      'io.ox/search/util',
-     'io.ox/backbone/validation',
-     'io.ox/core/extensions',
-     'gettext!io.ox/core'
-    ], function (api, collection, ModelFactory, util, Validations, ext, gt) {
+     'io.ox/core/extensions'
+    ], function (api, collection, ModelFactory, util, ext) {
 
     'use strict';
 
@@ -30,7 +28,7 @@ define('io.ox/search/model',
 
     var options = {},
         items = collection.create(),
-        defaults, factory;
+        defaults, factory, conflicts;
 
     //fetch settings/options
     ext.point('io.ox/search/main').invoke('config',  $(), options);
@@ -50,10 +48,12 @@ define('io.ox/search/model',
         active: [],
         pool: {},
         poollist: [],
+        pooldisabled: {},
         folder: {
             id: 'folder',
             custom: true,
             hidden: true,
+            flags: [],
             values: [{
                 facet: 'folder',
                 id: 'custom',
@@ -66,6 +66,33 @@ define('io.ox/search/model',
         //current folder
         start: 0,
         size: 100
+    };
+
+    //resolve conflicting facets
+    conflicts = function () {
+        var pool = _.extend({}, this.get('pool')),
+            list = [].concat(this.get('poollist')),
+            disabled = {};
+
+        //remove conflicting facets
+        _.each(this.get('pool'), function (facet) {
+            _.each(facet.flags, function (flag) {
+                if (flag.indexOf('conflicts:') === 0) {
+                    var id = flag.split(':')[1];
+                    //remove from pool/list and mark disabled
+                    delete pool[id];
+                    disabled[id] = facet;
+                    list = _.filter(list, function (compact) {
+                        return compact.facet !== id;
+                    });
+                }
+            });
+        });
+
+        //update
+        this.set('pool', pool);
+        this.set('poollist', list);
+        this.set('pooldisabled', disabled);
     };
 
     factory = new ModelFactory({
@@ -139,10 +166,17 @@ define('io.ox/search/model',
 
                         itemvalue._compact = compact;
                         pool[facet].values[value] = itemvalue;
-                        //add ids to pool list
-                        list.push(compact);
+
+                        //append/prepend ids to pool list
+                        if (facet === 'folder')
+                            list.unshift(compact);
+                        else
+                            list.push(compact);
                     }
                 });
+
+                //resolve conflicts
+                conflicts.call(this);
 
                 if (facet !== 'folder')
                     this.trigger('query');
@@ -165,6 +199,9 @@ define('io.ox/search/model',
                         list.splice(i, 1);
                     }
                 }
+                //resolve conflicts
+                conflicts.call(this);
+
                 this.trigger('query');
             },
             update: function (facet, value, data) {
@@ -237,7 +274,7 @@ define('io.ox/search/model',
             //
             getFacets: function () {
                 var self = this,
-                    missingFolder = !this.get('pool').folder,
+                    missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
                     def = missingFolder && this.isMandatory('folder') ? util.getFirstChoice(this) : $.Deferred().resolve({});
 
                 return def
@@ -283,21 +320,13 @@ define('io.ox/search/model',
                     active: [],
                     pool: {},
                     poollist: [],
+                    pooldisabled: {},
                     start: 0
                 },
                 {
                     silent: true
                 });
                 this.trigger('reset');
-            }
-        }
-    });
-
-    ext.point('io.ox/search/model/validation').extend({
-        id: 'recurrence-needs-end-date',
-        validate: function (attributes) {
-            if (attributes.recurrence_type && (attributes.end_date === undefined || attributes.end_date === null)) {//0 is a valid number so check precisely
-                this.add('end_date', gt('Recurring tasks need a valid end date.'));
             }
         }
     });

@@ -392,7 +392,7 @@ define('io.ox/core/tk/attachments',
                 var $node = $('<div>').addClass('attachment-list').appendTo(this);
 
                 function drawAttachment(data, label) {
-                    return new links.DropdownLinks({
+                    return new links.Dropdown({
                         label: label || data.filename,
                         classes: 'attachment-link',
                         ref: 'io.ox/core/tk/attachments/links'

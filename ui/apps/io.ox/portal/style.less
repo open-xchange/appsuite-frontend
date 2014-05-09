@@ -449,27 +449,6 @@
     .content a.solution {
         cursor: pointer;
     }
-
-    .widget.with-summary {
-
-        .summary {
-            display: none;
-        }
-
-        .content {
-            display: block;
-        }
-
-        &.show-summary .summary {
-            display: block;
-        }
-
-        &.show-summary .content {
-            display: none;
-        }
-
-    }
-
 }
 
 .portal-feed {
@@ -694,6 +673,31 @@
 
             }
 
+        }
+
+        .widget.with-summary {//apply summary styles only on smartphone
+    	    &.generic-summary {//remove some padding here
+    		    h2 {
+    		    	height: initial;
+    			   padding: 0;
+    		    }
+    	    }
+
+            .summary {
+                display: none;
+            }
+
+            .content {
+                display: block;
+            }
+
+            &.show-summary .summary {
+                display: block;
+            }
+
+            &.show-summary .content {
+                display: none;
+            }
         }
 
         .photo-stream, .photo-stream .content, .preview, .preview .content {

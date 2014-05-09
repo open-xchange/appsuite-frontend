@@ -49,7 +49,8 @@ define('io.ox/search/util',
             app = model.getApp(true) + '/main';
             if (require.defined(app)) {
                 id = require(app).getApp().folder.get() || undefined;
-                mapping[id] = 'current';
+                if (id)
+                    mapping[id] = 'current';
             }
 
             //request
@@ -98,7 +99,7 @@ define('io.ox/search/util',
         getFirstChoice: function (model) {
             var module = model.getModule(),
                 id = model.getFolder() || folderAPI.getDefaultFolder(module);
-            return  folderAPI.get({folder: id})
+            return folderAPI.get({folder: id})
                     .then(function (folder) {
                         return {
                             custom: folder.id,

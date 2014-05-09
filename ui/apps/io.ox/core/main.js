@@ -268,21 +268,27 @@ define('io.ox/core/main',
             if (count === 0 && timer === null) {
                 if (useSpinner) {
                     refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
-                    refreshIcon.addClass('fa-spin-paused').removeClass('fa-spin');
+                    if (refreshIcon.hasClass('fa-spin')) {
+                        refreshIcon.addClass('fa-spin-paused').removeClass('fa-spin');
+                    }
                 } else {
                     $('#io-ox-refresh-icon').removeClass('io-ox-progress');
                 }
             }
         }
 
-        http.on('start', function () {
+        http.on('start', function (e, xhr, options) {
             if (count === 0) {
                 if (timer === null) {
-                    if (useSpinner) {
-                        refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
-                        refreshIcon.addClass('fa-spin').removeClass('fa-spin-paused');
-                    } else {
-                        $('#io-ox-refresh-icon').addClass('io-ox-progress');
+                    if (!options.silent) {
+                        if (useSpinner) {
+                            refreshIcon = refreshIcon || $('#io-ox-refresh-icon').find('i');
+                            if (!refreshIcon.hasClass('fa-spin')) {
+                                refreshIcon.addClass('fa-spin').removeClass('fa-spin-paused');
+                            }
+                        } else {
+                            $('#io-ox-refresh-icon').addClass('io-ox-progress');
+                        }
                     }
                 }
                 clearTimeout(timer);
@@ -609,10 +615,7 @@ define('io.ox/core/main',
             index: 100,
             draw: function () {
                 if (capabilities.has('search')) {
-                    var placeholder = $('<span>'),
-                        self = this;
-                    //add search icon
-                    self.append(
+                    this.append(
                         addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
                                 require(['io.ox/search/main'], function (searchapp) {
                                     searchapp.run();
@@ -621,20 +624,31 @@ define('io.ox/core/main',
                         .attr('id', 'io-ox-search-topbar-icon')
                         .addClass('io-ox-search')
                     );
-                    //add search field placeholder
-                    self.append(
-                        addLauncher('right', placeholder, $.noop(), gt('Search'))
-                        .attr('id', 'io-ox-search-topbar')
-                        .addClass('io-ox-search widget-content')
-                    );
-
-                    //replace placeholder with concrete search field
-                    require(['io.ox/search/main'], function (searchapp) {
-                        placeholder.replaceWith(searchapp.init());
-                    });
                 }
             }
         });
+
+        // ext.point('io.ox/core/topbar/right').extend({
+        //     id: 'search-input',
+        //     index: 101,
+        //     draw: function () {
+        //         if (capabilities.has('search')) {
+        //             var placeholder = $('<span>'),
+        //                 self = this;
+        //             //add search field placeholder
+        //             self.append(
+        //                 addLauncher('right', placeholder, $.noop(), gt('Search'))
+        //                 .attr('id', 'io-ox-search-topbar')
+        //                 .addClass('io-ox-search widget-content')
+        //             );
+
+        //             //replace placeholder with concrete search field
+        //             require(['io.ox/search/main'], function (searchapp) {
+        //                 placeholder.replaceWith(searchapp.init());
+        //             });
+        //         }
+        //     }
+        // });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
@@ -1146,6 +1160,8 @@ define('io.ox/core/main',
 
                 if (baton.canRestore) {
 
+                    baton.restoreHash = _.url.hash();
+
                     var dialog,
                         def = $.Deferred().done(function () {
                             $('#background-loader').busy().fadeIn();
@@ -1164,7 +1180,8 @@ define('io.ox/core/main',
                             ),
                             $('<ul class="list-unstyled content">'),
                             $('<div class="footer">').append(
-                                $('<button type="button" class="btn btn-primary">').text(gt('Continue'))
+                                $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
+                                $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                             )
                         )
                     );
@@ -1194,7 +1211,15 @@ define('io.ox/core/main',
                         }, dialog.find('.content'));
                     });
 
-                    dialog.on('click', '.footer .btn', def.resolve);
+                    dialog.on('click', '.footer .btn.continue', def.resolve);
+                    dialog.on('click', '.footer .btn.cancel', function (e) {
+                        e.preventDefault();
+                        ox.ui.App.removeAllRestorePoints().done(function () {
+                            _.url.hash(baton.restoreHash);
+                            baton.canRestore = false;
+                            def.resolve();
+                        });
+                    });
                     dialog.on('click', '.content .remove', function (e) {
                         e.preventDefault();
                         var node = $(this),
@@ -1205,7 +1230,7 @@ define('io.ox/core/main',
                         ox.ui.App.removeRestorePoint(id).done(function (list) {
                             // continue if list is empty
                             if (list.length === 0) {
-                                _.url.hash({});
+                                _.url.hash(baton.restoreHash);
                                 baton.canRestore = false;
                                 def.resolve();
                             }

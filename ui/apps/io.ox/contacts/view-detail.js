@@ -81,7 +81,7 @@ define('io.ox/contacts/view-detail',
     }
 
     function buildDropdown(container, label, data) {
-        return new links.DropdownLinks({
+        return new links.Dropdown({
             label: label,
             classes: 'attachment-item',
             ref: 'io.ox/contacts/attachment/links'
@@ -435,7 +435,7 @@ define('io.ox/contacts/view-detail',
                     this.append(
                         $('<fieldset>').append(
                             $('<legend class="sr-only">').text(gt('Comment')),
-                            $('<div class="comment">').text(comment)
+                            _.nltobr(comment, $('<div class="comment">'))
                         )
                     );
                 }

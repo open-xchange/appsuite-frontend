@@ -32,7 +32,7 @@ define('io.ox/core/emoji/view', [
 
     var EmojiView = Backbone.View.extend({
 
-        tagName: 'td',
+        tagName: 'div',
         className: 'mceEmojiPane',
 
         events: {

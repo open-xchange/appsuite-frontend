@@ -19,6 +19,13 @@
                     </div>
                 </header>
                 <pre class="content"><%= element.content %></pre>
+                <% if (element.attachments.length > 0) { %>
+                    <ul class="content">
+                        <% _.each(element.attachments, function(a) { %>
+                            <li><%= a.title + ( a.size ? ' (' + a.size + ')' : '' ) %></li>
+                        <% }); %>
+                    </ul>
+                <% } %>
             </section>
         <% }); %>
         </script>
@@ -37,6 +44,13 @@
                     </div>
                 </header>
                 <pre class="content"><%= element.content %></pre>
+                <% if (element.attachments.length > 0) { %>
+                    <ul class="content">
+                        <% _.each(element.attachments, function(a) { %>
+                            <li><%= a.title + ( a.size ? ' (' + a.size + ')' : '' ) %></li>
+                        <% }); %>
+                    </ul>
+                <% } %>
             </section>
         <% }); %>
         </script>

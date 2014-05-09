@@ -171,7 +171,8 @@ define.async('io.ox/realtime/rt',
             },
             data: stanzas,
             noRetry: true,
-            timeout: TIMEOUT
+            timeout: TIMEOUT,
+            silent: true
         }).done(function (resp) {
             transmitting = false;
             purging = false;
@@ -217,7 +218,8 @@ define.async('io.ox/realtime/rt',
                     action: 'poll',
                     resource: tabId
                 },
-                timeout: TIMEOUT
+                timeout: TIMEOUT,
+                silent: true
             }).done(handleResponse).fail(handleError);
         }
 
@@ -374,7 +376,8 @@ define.async('io.ox/realtime/rt',
                 resource: tabId
             },
             timeout: TIMEOUT,
-            data: {type: 'nextSequence', seq: newSequence}
+            data: {type: 'nextSequence', seq: newSequence},
+            silent: true
         }).done(function () {
             if (api.debug) {
                 console.log('Done resetting the sequence, no longer rejecting all sends.');
@@ -558,7 +561,8 @@ define.async('io.ox/realtime/rt',
                     action: 'enrol',
                     resource: tabId
                 },
-                timeout: TIMEOUT
+                timeout: TIMEOUT,
+                silent: true
             }).done(function (resp) {
                 enroled = true;
                 handleResponse(resp);
@@ -578,14 +582,18 @@ define.async('io.ox/realtime/rt',
         if (api.debug) {
             console.log('Relogin was successful, resuming operation');
         }
+        enroled = false;
         start();
+        enrol();
     });
 
     ox.on('change:session', function () {
         if (api.debug) {
             console.log('Got a new sessionID. Resuming operation.');
         }
+        enroled = false;
         start();
+        enrol();
     });
 
     ox.on('connection:down connection:offline', function () {
@@ -647,7 +655,8 @@ define.async('io.ox/realtime/rt',
                 resource: tabId
             },
             timeout: TIMEOUT,
-            data: options
+            data: options,
+            silent: true
         }).pipe(function (resp) {
             transmitting = false;
             if (api.debug) {

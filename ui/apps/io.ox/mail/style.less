@@ -423,6 +423,7 @@
     .attachment-preview {
 
         margin: 14px 0 0 0;
+        padding: 0;
         list-style: none;
         white-space: nowrap;
         height: 120px;
@@ -668,6 +669,15 @@ textarea.inplace-editor {
     .list-item:last-child {
         margin-bottom: 0;
         border-bottom-color: transparent;
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px)  {
+        .list-item:last-child {
+            .detail-view-header {
+                border-bottom: 0;
+            }
+            margin-bottom: @toolbar-height;
+        }
     }
 
     .list-item:focus {

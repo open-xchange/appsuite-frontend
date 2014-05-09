@@ -32,8 +32,10 @@
     }
 
     .status {
+		//prevent icons from floating around with multiple columns
+        display: inline-block;
+		vertical-align: top;
 
-        position: absolute;
         margin-left: 4px;
 
         &.unconfirmed {
@@ -116,7 +118,6 @@
         .participant {
 
             line-height: 2em;
-            position: relative; //needed so icons position correctly if participants are displayed in 2 columns
             width: 250px;
             margin: 0 20px 0em 0;
             cursor: pointer;

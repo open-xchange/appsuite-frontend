@@ -101,6 +101,38 @@ define('io.ox/core/desktop',
         }
     });
 
+    var apputil = {
+        LIMIT: 60000,
+        length: function (obj) {
+            return JSON.stringify(obj).length;
+        },
+        //crop save point
+        crop: function (list, data, pos) {
+            var length = apputil.length,
+                latest = list[pos],
+                exceeds =  apputil.LIMIT < length(list) - length(latest || '') + length(data);
+
+            if (exceeds) {
+                if (latest) {
+                    //use latest sucessfully saved state
+                    data = latest;
+                } else {
+                    //remove data property
+                    data.point.data = {};
+                }
+                //notify user
+                if (!('exceeded' in data)) {
+                    notifications.yell('warning', gt('Failed to automatically save current stage of work. Please save your work to avoid data loss in case the browser closes unexpectedly.'));
+                    //flag to yell only once
+                    data.exceeded = true;
+                }
+            } else {
+                delete data.exceeded;
+            }
+            return data;
+        }
+    };
+
     ox.ui.App = AbstractApp.extend({
 
         defaults: {
@@ -467,6 +499,8 @@ define('io.ox/core/desktop',
                         data.version = ox.version;
                         data.ua = navigator.userAgent;
                         if (data) {
+                            //consider db limit for jslob
+                            data = apputil.crop(list, data, pos);
                             if (pos > -1) {
                                 // replace
                                 list.splice(pos, 1, data);
@@ -534,6 +568,10 @@ define('io.ox/core/desktop',
             return appCache.add('savepoints', list);
         },
 
+        removeAllRestorePoints: function () {
+            return this.setSavePoints([]);
+        },
+
         removeRestorePoint: function (id) {
             var self =  this;
             return this.getSavePoints().then(function (list) {
@@ -552,18 +590,18 @@ define('io.ox/core/desktop',
 
         restore: function () {
             var self = this;
-            this.getSavePoints().done(function (data) {
-                $.when.apply($,
+            return this.getSavePoints().then(function (data) {
+                return $.when.apply($,
                     _(data).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).pipe(function (m) {
-                            return m.getApp().launch().done(function () {
+                            return m.getApp().launch().then(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
                                 if (this.failRestore) {
                                     // restore
-                                    this.failRestore(obj.point);
+                                    return this.failRestore(obj.point);
                                 }
                             });
                         });

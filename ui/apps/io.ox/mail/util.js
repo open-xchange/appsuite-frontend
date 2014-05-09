@@ -474,6 +474,11 @@ define('io.ox/mail/util',
             return typeof (data || {}).parent !== 'undefined';
         },
 
+        isEmbedded: function (data) {
+            if (!_.isObject(data)) return false;
+            return data.folder_id === undefined && data.filename !== undefined;
+        },
+
         byMyself: function (data) {
             data = data || {};
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;

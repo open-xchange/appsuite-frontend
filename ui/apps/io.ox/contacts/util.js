@@ -130,7 +130,9 @@ define('io.ox/contacts/util',
             if (htmlOutput === true) {
                 copy = {};
                 _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
-                    copy[id] = '<span class="' + id + '">' + _.escape(obj[id]) + '</span>';
+                    if (obj[id]) {
+                        copy[id] = '<span class="' + id + '">' + _.escape(obj[id]) + '</span>';
+                    }
                 });
             }
             fmt = this.getFullNameFormat(copy);

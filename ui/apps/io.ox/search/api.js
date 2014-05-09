@@ -106,7 +106,28 @@ define('io.ox/search/api',
      */
     api.autocomplete = function (options) {
         var opt = $.extend(true, {}, getDefault('autocomplete'), options);
-        return http[opt.method](opt);
+        return http[opt.method](opt)
+                .then(function (data) {
+                    _.each(data.facets, function (facet) {
+                        //TODO: remove when backend is ready
+                        if (['time', 'folder_type', 'type', 'date', 'status', 'file_type', 'file_size', 'contact_type', 'task_status', 'task_type'].indexOf(facet.id) > -1 ) {
+                            facet.options = facet.values;
+                            delete facet.values;
+                        }
+
+                        //preparation to handle type3 facets
+                        if (!facet.values && facet.options) {
+                            facet.values = [];
+                            facet.flags = (facet.flags || []).concat('type3');
+                            _.each(facet.options, function (option) {
+                                var value = _.extend({}, option, {options: facet.options});
+                                delete value.filter;
+                                facet.values.push(value);
+                            });
+                        }
+                    });
+                    return data;
+                });
     };
 
     /**

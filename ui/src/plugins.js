@@ -137,8 +137,11 @@
         // Web SQL
         (function () {
 
-            var initialization = $.Deferred();
-            var db = openDatabase('filecache', '1.0', 'caches files for OX', 4 * 1024 * 1024);
+            var initialization = $.Deferred(),
+                quotaExceeded = false,
+                // initial size - we start with less than 5MB to avoid the prompt
+                size = 4 * 1024 * 1024,
+                db = openDatabase('filecache', '1.0', 'caches files for OX', size);
 
             db.transaction(function (tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS version (version TEXT)');
@@ -156,27 +159,44 @@
             fileCache.retrieve = function (name) {
                 var def = $.Deferred();
                 initialization.done(function () {
-                    db.transaction(function (tx) {
-                        tx.executeSql('SELECT contents FROM files WHERE name = ? and version = ?', [name, ox.version], function (tx, result) {
-                            if (result.rows.length === 0) {
-                                def.reject();
-                            } else {
-                                def.resolve(result.rows.item(0).contents);
-                            }
-                        }, function () {
-                            console.error(arguments);
+                    db.transaction(
+                        function fetch(tx) {
+                            tx.executeSql(
+                                'SELECT contents FROM files WHERE name = ? and version = ?', [name, ox.version],
+                                function fetchSuccess(tx, result) {
+                                    if (result.rows.length === 0) {
+                                        def.reject();
+                                    } else {
+                                        def.resolve(result.rows.item(0).contents);
+                                    }
+                                },
+                                function fetchFail() {
+                                    def.reject();
+                                }
+                            );
+                        },
+                        function transactionFail(e) {
                             def.reject();
-                        });
-                    });
+                        }
+                    );
                 });
                 return def;
             };
 
             fileCache.cache = function (name, contents) {
                 initialization.done(function () {
-                    db.transaction(function (tx) {
-                        tx.executeSql('INSERT OR REPLACE INTO files (name, contents, version) VALUES (?,?,?) ', [name, contents, ox.version]);
-                    });
+                    if (quotaExceeded) return;
+                    db.transaction(
+                        function update(tx) {
+                            if (quotaExceeded) return; // yep, check again; not sure if this could be queued alredy
+                            tx.executeSql('INSERT OR REPLACE INTO files (name, contents, version) VALUES (?,?,?) ', [name, contents, ox.version]);
+                        },
+                        function fail(e) {
+                            // this might be called if current quota is exceeded
+                            // and the user denies more quota
+                            if (e && e.code === 4) quotaExceeded = true;
+                        }
+                    )
                 });
             };
         })();

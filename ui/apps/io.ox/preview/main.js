@@ -201,7 +201,7 @@ define('io.ox/preview/main',
                         needsfix: true
                     };
                 }
-                var view = new detail.View({ data: data });
+                var view = new detail.View({ data: data, loaded: true });
                 self.idle().append(view.render().expand().$el.addClass('no-padding'));
             });
         },

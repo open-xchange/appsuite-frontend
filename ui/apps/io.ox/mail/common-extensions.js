@@ -24,9 +24,10 @@ define('io.ox/mail/common-extensions',
      'io.ox/contacts/api',
      'io.ox/core/api/collection-pool',
      'io.ox/core/tk/flag-picker',
+     'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, settings, gt) {
+    ], function (ext, links, actions, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
@@ -115,7 +116,7 @@ define('io.ox/mail/common-extensions',
             if (data.threadSize <= 1) return;
 
             this.append(
-                $('<div class="thread-size" aria-hidden="true" data-open="false">').append(
+                $('<div class="thread-size" aria-hidden="true">').append(
                     $('<span class="number">').text(_.noI18n(data.threadSize))
                 )
             );
@@ -182,7 +183,7 @@ define('io.ox/mail/common-extensions',
 
             // var drawAllDropDown = function (node, label, data) {
             //     // use extension pattern
-            //     new links.DropdownLinks({
+            //     new links.Dropdown({
             //         label: label,
             //         classes: 'all-link',
             //         ref: 'io.ox/mail/all/actions'
@@ -266,11 +267,11 @@ define('io.ox/mail/common-extensions',
 
             var drawAttachmentDropDown = function (node, label, data) {
                 // use extension pattern
-                var dd = new links.DropdownLinks({
+                var dd = new links.Dropdown({
                         label: label,
                         classes: 'attachment-link',
                         ref: 'io.ox/mail/attachment/links'
-                    }).draw.call(node, ext.Baton({ data: data })),
+                    }).draw.call(node, ext.Baton({ data: data, $el: $('<span>') })),
                     contentType = getContentType(data.content_type),
                     url,
                     filename;
@@ -360,14 +361,18 @@ define('io.ox/mail/common-extensions',
 
         attachmentPreview: (function () {
 
-            var regSupportsPreview = /\.(gif|bmp|tiff|jpe?g|gmp|png|pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
+            var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
                 regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
 
             return function (baton) {
 
                 var attachments = baton.attachments,
+                    supportsDocumentPreview = capabilities.has('document_preview'),
                     list = _(attachments).filter(function (attachment) {
-                        return attachment.disp === 'attachment' && regSupportsPreview.test(attachment.filename);
+                        if (attachment.disp !== 'attachment') return false;
+                        if (regIsImage.test(attachment.filename)) return true;
+                        if (supportsDocumentPreview && regIsDocument.test(attachment.filename)) return true;
+                        return false;
                     }),
                     $ul;
 
@@ -417,6 +422,9 @@ define('io.ox/mail/common-extensions',
             }
 
             return function (baton) {
+
+                if (util.isEmbedded(baton.data)) return;
+
                 this.append(
                     $('<a href="#" class="unread-toggle" tabindex="1"><i class="fa"/></a>')
                     .on('click', { view: baton.view }, toggle)
@@ -440,16 +448,19 @@ define('io.ox/mail/common-extensions',
 
             function draw(model) {
 
-                if (model.get('modified') !== 1) {
+                // nothing to do if message is unchanged
+                // or if message is embedded (since we cannot reload it)
+                if (model.get('modified') !== 1 || util.isEmbedded(model.toJSON())) {
                     this.find('.external-images').remove();
-                } else {
-                    this.append(
-                        $('<div class="alert alert-info external-images">').append(
-                            $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
-                            $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
-                        )
-                    );
+                    return;
                 }
+
+                this.append(
+                    $('<div class="alert alert-info external-images">').append(
+                        $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
+                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
+                    )
+                );
             }
 
             return function (baton) {

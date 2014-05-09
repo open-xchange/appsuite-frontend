@@ -15,8 +15,9 @@ define('io.ox/core/api/user',
     ['io.ox/core/http',
      'io.ox/core/api/factory',
      'io.ox/contacts/util',
-     'io.ox/core/date'
-    ], function (http, apiFactory, util, date) {
+     'io.ox/core/date',
+     'io.ox/contacts/api'
+    ], function (http, apiFactory, util, date, contactsApi) {
 
     'use strict';
 
@@ -112,14 +113,22 @@ define('io.ox/core/api/user',
                             return $.when(
                                 api.caches.get.add(data),
                                 api.caches.all.clear(),
-                                api.caches.list.remove({ id: o.id })
-                                // TODO: What about the contacts cache?
+                                api.caches.list.remove({ id: o.id }),
+                                // update contact caches
+                                contactsApi.caches.get.remove({folder_id: data.folder_id, id: data.contact_id}),//no add here because this userdata not contactdata (similar but not equal)
+                                contactsApi.caches.all.grepRemove(o.folder + contactsApi.DELIM),
+                                contactsApi.caches.list.remove({ id: data.contact_id, folder: o.folder }),
+                                contactsApi.clearFetchCache()
                             )
                             .done(function () {
                                 api.trigger('update:' + _.ecid(data), data);
                                 api.trigger('update', data);
                                 api.trigger('refresh.list');
-                                // TODO: What about the corresponding contact events?
+                                //get new contact and trigger contact events
+                                contactsApi.get({folder_id: data.folder_id, id: data.contact_id}).done(function (contactData) {
+                                    contactsApi.trigger('update:' + _.ecid(contactData), contactData);
+                                    contactsApi.trigger('update', contactData);
+                                });
                             });
                         });
                 });
