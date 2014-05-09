@@ -36,7 +36,7 @@ define('plugins/portal/userSettings/register',
             var usermodel,
                 dialog = new dialogs.ModalDialog({
                     top: 60,
-                    width: 900,
+                    width: 908,
                     center: false,
                     maximize: true
                 })
