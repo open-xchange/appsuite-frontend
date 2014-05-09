@@ -1175,6 +1175,7 @@ define('io.ox/files/actions',
     }
 
     function checkMedia(e, type) {
+
         if (!e.collection.has('some') && !settings.get(type + 'Enabled')) {
             return false;
         }
@@ -1189,6 +1190,8 @@ define('io.ox/files/actions',
             e.baton.allIds = e.baton.data;
             list = [e.baton.allIds];
         }
+
+        if (!_.isArray(list)) return false; // avoid runtime errors
 
         //identify incomplete items
         _(list).each(function (item) {
