@@ -161,7 +161,8 @@ define('io.ox/search/model',
                         var compact = {
                             facet: facet,
                             value: value,
-                            option: option || itemvalue.filter ? '' : itemvalue.options[0].id
+                            // a) type1, b) type3, c) type2
+                            option: itemvalue.filter ? '' : option || itemvalue.options[0].id
                         };
 
                         itemvalue._compact = compact;

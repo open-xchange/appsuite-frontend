@@ -88,7 +88,13 @@ define('io.ox/search/view-template',
                                     model.remove();
                                 }
                                 ref.val('');
-                                model.add(value.facet, value.id);
+
+                                //type3: define used option (type2 default is index 0 of options)
+                                var option = _.find(value.options, function (item) {
+                                    return item.id === value.id;
+                                });
+
+                                model.add(value.facet, value.id, (option || {}).id);
                             }
                         })
                         .on('focus focus:custom click', function (e, isRetry) {
