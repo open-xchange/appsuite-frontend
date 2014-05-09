@@ -433,11 +433,17 @@ define('io.ox/core/extPatterns/links',
 
     // just the dropdown - <ul> + links; not the container
     var DropdownLinks = function (options, baton, wrap) {
-        options = options || {};
+        options = options || {};
         baton.$el = $('<ul class="dropdown-menu" role="menu">');
         var wrap = options.wrap === undefined ? true : !!options.wrap;
         drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap)
-            .done(function () { injectDividers(baton.$el); });
+            .done(function () {
+                //if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
+                if (options.emptyCallback && baton.$el.hasClass('empty')) {
+                    options.emptyCallback();
+                }
+                injectDividers(baton.$el);
+                });
         return baton.$el;
     };
 
