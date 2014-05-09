@@ -187,7 +187,7 @@ define('io.ox/core/tk/list',
         // called whenever a model inside the collection changes
         onChange: function (model) {
             var li = this.$el.find('li[data-cid="' + this.getCID(model) + '"]'),
-                data = model.toJSON(),
+                data = this.map(model),
                 baton = ext.Baton({ data: data, model: model, app: this.app }),
                 index = model.changed.index;
             // change position?
@@ -304,15 +304,14 @@ define('io.ox/core/tk/list',
 
         redraw: function () {
             var point = ext.point(this.ref + '/item'),
-                collection = this.collection,
-                view = this;
+                collection = this.collection;
             this.getItems().each(function (index) {
                 if (index >= collection.length) return;
                 var model = collection.at(index),
-                    data = view.map(model),
-                    baton = ext.Baton({ data: data, model: model, app: view.app });
+                    data = this.map(model),
+                    baton = ext.Baton({ data: data, model: model, app: this.app });
                 point.invoke('draw', $(this).children().eq(1).empty(), baton);
-            });
+            }.bind(this));
         },
 
         renderListItem: function (model) {
