@@ -610,24 +610,6 @@ define('io.ox/core/main',
             tabManager();
         });
 
-        ext.point('io.ox/core/topbar/right').extend({
-            id: 'search',
-            index: 100,
-            draw: function () {
-                if (capabilities.has('search')) {
-                    this.append(
-                        addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
-                                require(['io.ox/search/main'], function (searchapp) {
-                                    searchapp.run();
-                                });
-                            },  gt('Search'))
-                        .attr('id', 'io-ox-search-topbar-icon')
-                        .addClass('io-ox-search')
-                    );
-                }
-            }
-        });
-
         // ext.point('io.ox/core/topbar/right').extend({
         //     id: 'search-input',
         //     index: 101,
@@ -652,7 +634,7 @@ define('io.ox/core/main',
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'notifications',
-            index: 150,
+            index: 100,
             draw: function () {
                 var self = this;
                 if (ox.online) {
@@ -664,6 +646,25 @@ define('io.ox/core/main',
                 }
             }
         });
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'search',
+            index: 150,
+            draw: function () {
+                if (capabilities.has('search')) {
+                    this.append(
+                        addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
+                                require(['io.ox/search/main'], function (searchapp) {
+                                    searchapp.run();
+                                });
+                            },  gt('Search'))
+                        .attr('id', 'io-ox-search-topbar-icon')
+                        .addClass('io-ox-search')
+                    );
+                }
+            }
+        });
+
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'refresh',
