@@ -848,6 +848,7 @@ define('io.ox/mail/main',
          * Select next item in list view if current item gets deleted
          */
         'before-delete': function (app) {
+            if (_.device('small')) return; // fixes scrolling issue on mobiles during delete
             api.on('beforedelete', function () {
                 app.listView.selection.dodge();
             });
