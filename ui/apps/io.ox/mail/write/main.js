@@ -547,8 +547,9 @@ define('io.ox/mail/write/main',
             // look for real attachments
             var items = _.chain(data.attachments || [])
                         .filter(function (attachment) {
-                            //only real attachments
-                            return attachment.disp === 'attachment';
+                            //only real attachments and inline images
+                            return attachment.disp === 'attachment' ||
+                                (attachment.disp === 'inline' && /^image/.test(attachment.content_type));
                         })
                         .map(function (attachment) {
                             // add as linked attachment
