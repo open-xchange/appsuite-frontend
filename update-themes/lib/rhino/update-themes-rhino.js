@@ -44,10 +44,11 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
     newFileInfo.filename = href;
 
     var paths = env.paths || ['.'];
+    paths.push(path);
     var data = '';
     paths.forEach(function (path) {
         try {
-            data += readFile(less.modules.path.join(path, href));
+            data += readFile(less.modules.path.join(path, less.modules.path.basename(href)));
         } catch (e) {
         }
     });
@@ -111,12 +112,12 @@ function recurse(defs, subDir, parent) {
             if (name.indexOf('apps/3rd.party/font-awesome/less/') === 0) continue;
             var input = readFile(file.toString(), 'UTF-8');
             compileLess(input,
-                        subDir(name.slice(5, -4) + 'css'));
+                        subDir(name.slice(5, -4) + 'css'), name);
         }
     }
 }
 
-function compileLess(input, outputFile) {
+function compileLess(input, outputFile, sourceFileName) {
     var fileName = outputFile.toString();
     var themeName = fileName.slice(12, fileName.indexOf('/', 12));
     var importConfig = {
@@ -144,7 +145,8 @@ function compileLess(input, outputFile) {
             scriptBase + 'bower_components/bootstrap/less',
             scriptBase + 'bower_components/font-awesome/less',
             'apps/themes'
-        ]
+        ],
+        filename: '' + sourceFileName
     }).parse(input, function (e, css) {
         if (e) return error(e);
         outputFile.getParentFile().mkdirs();
