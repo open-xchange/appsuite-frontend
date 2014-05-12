@@ -280,7 +280,8 @@ define('io.ox/search/main',
                         },
                         data: {
                             start: model.get('start'),
-                            size: model.get('size')
+                            //workaround: more searchresults?
+                            size: model.get('size') + model.get('extra')
                         }
                     };
                     run();

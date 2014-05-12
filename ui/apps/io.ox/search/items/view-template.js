@@ -88,26 +88,30 @@ define('io.ox/search/items/view-template',
             //require list view extensions points
             var dep = [config.dependencies[module]].concat('less!io.ox/search/items/style');
             require(dep, function () {
+                var last = items.length - baton.model.get('extra');
 
-                items.each(function (model) {
+                items.each(function (model, current) {
 
-                    var node = $('<li class="item">'),
-                        item = model.get('data'),
-                        baton = new ext.Baton({ data: item });
+                    //do not show last item
+                    if (last !== current) {
+                        var node = $('<li class="item">'),
+                            item = model.get('data'),
+                            baton = new ext.Baton({ data: item });
 
-                    node.attr({
-                        'data-id': model.get('id'),
-                        'data-folder': model.get('folder'),
-                        'data-app': model.get('application'),
-                    });
+                        node.attr({
+                            'data-id': model.get('id'),
+                            'data-folder': model.get('folder'),
+                            'data-app': model.get('application'),
+                        });
 
-                    //add app specific classes
-                    if (module === 'mail') cell.addClass('mail-item');
-                    node.addClass(config.classes[module] || '');
+                        //add app specific classes
+                        if (module === 'mail') cell.addClass('mail-item');
+                        node.addClass(config.classes[module] || '');
 
-                    //draw item
-                    ext.point(config.points[module]).invoke('draw', node, baton);
-                    nodes.push(node);
+                        //draw item
+                        ext.point(config.points[module]).invoke('draw', node, baton);
+                        nodes.push(node);
+                    }
                 });
 
                 //empty result

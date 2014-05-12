@@ -65,7 +65,8 @@ define('io.ox/search/model',
         options: options,
         //current folder
         start: 0,
-        size: 100
+        size: 100,
+        extra: 0
     };
 
     //resolve conflicting facets

@@ -233,6 +233,28 @@ define('io.ox/search/view-template',
     });
 
     point.extend({
+        id: 'info',
+        index: 300,
+        draw: function (baton) {
+            var items = baton.model.get('items'),
+                count = items.length - baton.model.get('extra');
+            if (items.length > baton.model.get('size')) {
+                this.append(
+                    $('<div>')
+                    .addClass('info')
+                    .append(
+                            $('<span>')
+                            .addClass('info-item')
+                            .append(
+                                gt('More than the currently displayed %1$s items where found', count)
+                            )
+                        )
+                );
+            }
+        }
+    });
+
+    point.extend({
         id: 'facets',
         index: 250,
         row: '0',
