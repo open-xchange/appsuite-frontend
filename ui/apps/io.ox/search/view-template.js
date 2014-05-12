@@ -166,37 +166,38 @@ define('io.ox/search/view-template',
         row: '0',
         draw: function (baton) {
             var id = baton.model.getApp(),
+                opt = baton.model.getOptions(),
                 row, cell,
-                //TODO: remove when backend added setting 'io.ox/core/search/apps'
-                appsdefault = [
-                    'io.ox/mail',
-                    'io.ox/contacts',
-                    'io.ox/calendar',
-                    'io.ox/tasks',
-                    'io.ox/files'
-                ],
-                apps = settings.get('search/apps', appsdefault);
+                apps = settings.get('search/modules', ['mail', 'contacts', 'calendar', 'tasks', 'files']);
 
             //create container
             row = $('<div class="row applications">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled">')
             );
 
+            //apply mapping (infostore-files-drive chameleon)
+            apps = _.map(apps, function (module) {
+                var id = 'io.ox/' + module;
+                return opt.mapping[id] || id;
+            });
+
             //create menu entries
             _(apps).each(function (id) {
-                var title = ox.manifests.apps[id + '/main'].title;
-                cell.append(
-                    $('<li role="presentation" class="application">')
-                        .append(
-                            $('<div class="btn-group">')
+                var title = (ox.manifests.apps[id + '/main'] || {}).title;
+                if (title) {
+                    cell.append(
+                        $('<li role="presentation" class="application">')
                             .append(
-                                $('<button type="button" class="btn btn-link">')
-                                    .attr('data-app', id)
-                                    .addClass('pull-left')
-                                    .text(gt.pgettext('app', title))
+                                $('<div class="btn-group">')
+                                .append(
+                                    $('<button type="button" class="btn btn-link">')
+                                        .attr('data-app', id)
+                                        .addClass('pull-left')
+                                        .text(gt.pgettext('app', title))
+                                )
                             )
-                        )
-                );
+                    );
+                }
             });
 
             //mark as active

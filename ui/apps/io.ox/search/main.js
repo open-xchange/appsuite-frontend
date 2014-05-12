@@ -50,6 +50,7 @@ define('io.ox/search/main',
                 //name mapping
                 'io.ox/mail/write' : 'io.ox/mail',
                 'io.ox/messenger' : data.defaultApp,
+                'io.ox/drive' : 'io.ox/files',
                 'io.ox/office/text' : 'io.ox/files',
                 'io.ox/office/portal' : 'io.ox/files',
                 'io.ox/office/spreadsheet' : 'io.ox/files',

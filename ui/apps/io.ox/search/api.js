@@ -111,8 +111,10 @@ define('io.ox/search/api',
                     _.each(data.facets, function (facet) {
                         //TODO: remove when backend is ready
                         if (['time', 'folder_type', 'type', 'date', 'status', 'file_type', 'file_size', 'contact_type', 'task_status', 'task_type'].indexOf(facet.id) > -1 ) {
-                            facet.options = facet.values;
-                            delete facet.values;
+                            if (!facet.options) {
+                                facet.options = facet.values;
+                                delete facet.values;
+                            }
                         }
 
                         //preparation to handle type3 facets
