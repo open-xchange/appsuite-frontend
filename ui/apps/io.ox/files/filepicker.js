@@ -30,7 +30,8 @@ define('io.ox/files/filepicker',
             header: gt('Add files'),
             primaryButtonText: gt('Save'),
             cancelButtonText: gt('Cancel'),
-            multiselect: true
+            multiselect: true,
+            width: window.innerWidth * 0.8
         }, options);
 
         var folderCache = new cache.SimpleCache('folder-all'),
@@ -48,7 +49,7 @@ define('io.ox/files/filepicker',
                 }
             }),
             pane = new dialogs.ModalDialog({
-                width: window.innerWidth * 0.8,
+                width: options.width,
                 height: 350,
                 addclass: 'add-infostore-file'
             }),
