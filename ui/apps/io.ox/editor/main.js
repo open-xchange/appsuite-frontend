@@ -340,7 +340,9 @@ define('io.ox/editor/main',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                     .text(gt('Do you really want to discard your changes?'))
-                    .addPrimaryButton('quit', gt('Discard'))
+                    //#. "Discard changes" appears in combination with "Cancel" (this action)
+                    //#. Translation should be distinguishable for the user
+                    .addPrimaryButton('quit', gt.pgettext('dialog', 'Discard changes'))
                     .addButton('cancel', gt('Cancel'))
                     .on('quit', def.resolve)
                     .on('cancel', def.reject)
