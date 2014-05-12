@@ -141,7 +141,16 @@
                 quotaExceeded = false,
                 // initial size - we start with less than 5MB to avoid the prompt
                 size = 4 * 1024 * 1024,
+                db;
+
+            try {
                 db = openDatabase('filecache', '1.0', 'caches files for OX', size);
+            } catch (e) {
+                console.warn('Access to localstorage forbidden. Disabling cache.');
+                fileCache = dummyFileCache;
+                initialization.reject();
+                return;
+            }
 
             db.transaction(function (tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS version (version TEXT)');
