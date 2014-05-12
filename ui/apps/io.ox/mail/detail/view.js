@@ -259,7 +259,7 @@ define('io.ox/mail/detail/view',
             // as an indicator whether this view has been destroyed meanwhile
             if (this.model === null) return;
 
-            var unseen = util.isUnseen(this.model.get('flags'));
+            var unseen = this.model.get('unseen') || util.isUnseen(this.model.get('flags'));
 
             // done
             this.$el.find('section.body').removeClass('loading');
