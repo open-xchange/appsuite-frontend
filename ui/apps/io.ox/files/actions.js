@@ -96,22 +96,6 @@ define('io.ox/files/actions',
         }
     });
 
-    new Action('io.ox/files/actions/audioplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            if (e.collection.has('none')) return false;
-            return checkMedia(e, 'audio');
-        },
-        action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: false
-                });
-            });
-        }
-    });
-
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
             if (_.device('android')) return false;
