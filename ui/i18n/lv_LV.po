@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-23 20:34+0200\n"
+"PO-Revision-Date: 2014-05-10 15:01+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.5\n"
 
 #. File size
 #. %1$d is the number
@@ -99,28 +99,24 @@ msgstr "%1$s (Pagaidu)"
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js:172 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s - %2$s"
 msgid "%1$s at %2$s"
 msgstr "%1$s - %2$s"
 
 #: apps/plugins/portal/xing/activities.js:101 module:plugins/portal
-#, fuzzy
 #| msgid "Change status"
 msgid "%1$s changed their status:"
-msgstr "Izmainīt statusu"
+msgstr "%1$s izmainīja statusu:"
 
 #: apps/plugins/portal/xing/activities.js:120 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s is a new contact"
 msgid "%1$s has a new contact:"
-msgstr "%1$s ir jauns kontakts"
+msgstr "%1$s ir jauns kontakts:"
 
 #: apps/plugins/portal/xing/activities.js:133 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s is a new contact"
 msgid "%1$s has new contacts:"
-msgstr "%1$s ir jauns kontakts"
+msgstr "%1$s ir jauni kontakti:"
 
 #: apps/plugins/portal/linkedIn/register.js:126 module:plugins/portal
 msgid "%1$s is a new contact"
@@ -156,17 +152,16 @@ msgstr "%1$s no %2$s"
 
 #: apps/plugins/portal/xing/activities.js:81 module:plugins/portal
 msgid "%1$s posted a link:"
-msgstr ""
+msgstr "%1$s ievietoja saiti:"
 
 #: apps/plugins/portal/xing/activities.js:151 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s is a new contact"
 msgid "%1$s posted a new activity:"
-msgstr "%1$s ir jauns kontakts"
+msgstr "%1$s ir reģistrējis jaunu aktivitāti:"
 
 #: apps/plugins/portal/xing/activities.js:59 module:plugins/portal
 msgid "%1$s recommends this link:"
-msgstr ""
+msgstr "%1$s iesaka šo saiti:"
 
 #. Format of addresses
 #. %1$s is the street
@@ -525,10 +520,9 @@ msgstr "Pievienot piezīmi"
 
 #: apps/plugins/portal/xing/register.js:382 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:389
-#, fuzzy
 #| msgid "Add action"
 msgid "Add on %s"
-msgstr "Pievienot darbību"
+msgstr "Pievienot %s"
 
 #: apps/io.ox/calendar/freebusy/templates.js:88 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/freebusy/templates.js:90
@@ -653,7 +647,7 @@ msgstr "Atļaut ārēji saistīto attēlu priekš-ielādi"
 
 #: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Allow us to use your %s account here"
-msgstr ""
+msgstr "Atļaut mums šeit izmantot jūsu %s kontu"
 
 #: apps/io.ox/backbone/forms.js:56 module:io.ox/core
 msgid "An error occurred"
@@ -1343,7 +1337,7 @@ msgstr "Komentārs"
 
 #: apps/plugins/portal/xing/actions.js:59 module:plugins/portal
 msgid "Comment has been successfully posted on XING"
-msgstr ""
+msgstr "Komentārs ir veiksmīgi reģistrēts XING vietnē"
 
 #: apps/plugins/portal/reddit/register.js:175 module:io.ox/portal
 msgid "Comments"
@@ -1423,10 +1417,9 @@ msgid "Conflicts:"
 msgstr "Konflikti:"
 
 #: apps/io.ox/core/settings/downloads/pane.js:66 module:io.ox/core
-#, fuzzy
 #| msgid "Connector for Microsoft Outlook"
 msgid "Connector for Microsoft Outlook®"
-msgstr "Pieslēgšanās pie MS Outlook"
+msgstr "Microsoft Outlook® konektors"
 
 #: apps/io.ox/contacts/edit/main.js:272 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
@@ -1442,10 +1435,9 @@ msgid "Contact pictures"
 msgstr "Kontaktu attēli"
 
 #: apps/plugins/portal/xing/register.js:360 module:plugins/portal
-#, fuzzy
 #| msgid "Contact Details"
 msgid "Contact request sent"
-msgstr "Kontakta detaļas"
+msgstr "Kontakta pieprasījums ir nosūtīts"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:136 module:io.ox/contacts
 msgid "Contacts"
@@ -1607,7 +1599,7 @@ msgstr "Izveidot"
 
 #: apps/plugins/portal/xing/register.js:267 module:plugins/portal
 msgid "Create a %s account using the data stored here"
-msgstr ""
+msgstr "Izveidot %s kontu, izmantojot šeit saglabātos datus"
 
 #: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:325
@@ -1676,6 +1668,8 @@ msgid ""
 "Data synchronization with your local (Windows) machine. Drive Client lets "
 "you configure the folders to be synchronized."
 msgstr ""
+"Datu sinhronizācija ar jūsu lokālo (Windoews) datoru. 'Drive' klients ļauj "
+"jums konfigurēt sinhronizējamās mapes."
 
 #: apps/io.ox/backbone/forms.js:512 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:118
@@ -1918,10 +1912,9 @@ msgid "Distribution list has been saved"
 msgstr "Izplatīšanas saraksts ir saglabāts"
 
 #: apps/plugins/portal/xing/register.js:262 module:plugins/portal
-#, fuzzy
 #| msgid "Do you really want to delete this account?"
 msgid "Do you already have a %s account?"
-msgstr "Vai tiešām vēlaties dzēst šo kontu?"
+msgstr "Vai jums jau ir %s konts?"
 
 #: apps/io.ox/files/util.js:52 module:io.ox/files
 msgid ""
@@ -2000,10 +1993,9 @@ msgid ""
 msgstr "Vai vēlaties apstiprināt visu sēriju vai tikai atsevišķu tikšanos?"
 
 #: apps/plugins/portal/xing/register.js:266 module:plugins/portal
-#, fuzzy
 #| msgid "Do you really want to delete this account?"
 msgid "Do you want to create a %s account?"
-msgstr "Vai tiešām vēlaties dzēst šo kontu?"
+msgstr "Vai vēlaties izveidot %s kontu?"
 
 #: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
 msgid ""
@@ -2060,10 +2052,9 @@ msgid "Download"
 msgstr "Lejupielāde"
 
 #: apps/io.ox/core/settings/downloads/pane.js:54 module:io.ox/core
-#, fuzzy
 #| msgid "Download install file (for Windows)"
 msgid "Download installation file (for Windows)"
-msgstr "Lejuplādēt instalēšanas failu (Windows)"
+msgstr "Lejuplādēt instalēšanas failu (Windows) "
 
 #: apps/io.ox/core/settings/downloads/pane.js:101 module:io.ox/core
 #: apps/io.ox/core/settings/downloads/pane.js:110
@@ -2082,11 +2073,10 @@ msgid "Drive"
 msgstr "Drive"
 
 #: apps/io.ox/core/settings/downloads/pane.js:82 module:io.ox/core
-#, fuzzy
 #| msgctxt "help"
 #| msgid "Drive Settings"
 msgid "Drive Client"
-msgstr "Aplikācijas Drive iestatījumi"
+msgstr "'Drive' klients"
 
 #: apps/io.ox/files/guidance/main.js:95 module:io.ox/files
 msgctxt "help"
@@ -2312,10 +2302,9 @@ msgstr ""
 "pasta kvota."
 
 #: apps/plugins/halo/xing/register.js:38 module:plugins/portal
-#, fuzzy
 #| msgid "Employee ID"
 msgid "Employee"
-msgstr "Darbinieka ID"
+msgstr "Darbinieks"
 
 #: apps/io.ox/contacts/model.js:251 module:io.ox/contacts
 msgid "Employee ID"
@@ -2326,10 +2315,9 @@ msgid "Employee type"
 msgstr "Darbinieka tips"
 
 #: apps/plugins/halo/xing/register.js:182 module:plugins/portal
-#, fuzzy
 #| msgid "Employee type"
 msgid "Employment"
-msgstr "Darbinieka tips"
+msgstr "Nodarbinātība"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js:712 module:io.ox/core
@@ -2388,7 +2376,7 @@ msgstr "Ievadiet dokumenta nosaukumu"
 #. what follows is a set of job/status descriptions used by XING
 #: apps/plugins/halo/xing/register.js:36 module:plugins/portal
 msgid "Entrepreneur"
-msgstr ""
+msgstr "Uzņēmējs"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
@@ -2490,10 +2478,9 @@ msgid "Every day"
 msgstr "Katru dienu"
 
 #: apps/plugins/halo/xing/register.js:39 module:plugins/portal
-#, fuzzy
 #| msgid "Active"
 msgid "Executive"
-msgstr "Aktīvs"
+msgstr "Vadītājs"
 
 #: apps/io.ox/core/main.js:747 module:io.ox/core
 msgid "Exit Fullscreen"
@@ -2578,6 +2565,9 @@ msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
 msgstr ""
+"Kļūda pie darba pašreizējā statusa automātiskās saglabāšanas. Lūdzu "
+"saglabājiet veiktās izmaiņas, lai nodrošinātos pret datu zudumu gadījumā, ja "
+"pārlūkprogramma zaudēs savienojumu ar serveri."
 
 #: apps/io.ox/mail/accounts/settings.js:212
 #: module:io.ox/mail/accounts/settings
@@ -2845,7 +2835,7 @@ msgstr "Brīvs"
 
 #: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Freelancer"
-msgstr ""
+msgstr "Pašnodarbinātais"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:366
 #: module:io.ox/calendar/edit/main
@@ -2960,7 +2950,7 @@ msgstr "Palīgs"
 
 #: apps/plugins/halo/xing/register.js:247 module:plugins/portal
 msgid "Here is what %s knows about %s:"
-msgstr ""
+msgstr "Šeit ir tas ko %s zina par %s:"
 
 #: apps/io.ox/core/pubsub/publications.js:344 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/publications.js:345
@@ -3133,7 +3123,6 @@ msgid "Info"
 msgstr "Informācija"
 
 #: apps/io.ox/core/settings/downloads/pane.js:76 module:io.ox/core
-#, fuzzy
 #| msgid ""
 #| "Notifier informs the user about the current status of emails and "
 #| "appointments without having to display the user interface."
@@ -3141,8 +3130,9 @@ msgid ""
 "Informs about the current status of E-Mails and appointments without having "
 "to display the user interface or another Windows® client."
 msgstr ""
-"Paziņotājs informē lietotāju par pašreizējo e-pasta statusu un tikšanās "
-"notikumiem bez klienta aplikācijas aktivizēšanas."
+"Informē lietotāju par pašreizējo e-pasta statusu un tikšanās notikumiem bez "
+"atsevišķas  lietotāja saskarnes vai Windows® klienta aplikācijas "
+"aktivizēšanas."
 
 #: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
 msgid "Inline"
@@ -3192,21 +3182,19 @@ msgid "Invalid data"
 msgstr "Nederīgs datums"
 
 #: apps/plugins/portal/xing/register.js:338 module:plugins/portal
-#, fuzzy
 #| msgid "Invitations"
 msgid "Invitation sent"
-msgstr "Uzaicinājumi"
+msgstr "Uzaicinājums nosūtīts"
 
 #: apps/io.ox/contacts/toolbar.js:67 module:io.ox/contacts
 msgid "Invite"
-msgstr ""
+msgstr "Uzaicināt"
 
 #: apps/plugins/portal/xing/register.js:368 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:375
-#, fuzzy
 #| msgid "Invitations"
 msgid "Invite to %s"
-msgstr "Uzaicinājumi"
+msgstr "Uzaicināt %s"
 
 #: apps/io.ox/contacts/actions.js:782 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:68 apps/io.ox/mail/actions.js:1084
@@ -3366,7 +3354,7 @@ msgstr "Gaiši zaļš"
 
 #: apps/plugins/portal/xing/actions.js:172 module:plugins/portal
 msgid "Like"
-msgstr ""
+msgstr "Patīk"
 
 #: apps/plugins/portal/facebook/register.js:450 module:plugins/portal
 msgid "Liked a link: %s"
@@ -3374,10 +3362,9 @@ msgstr "Patika saite: %1$s"
 
 #. As on Facebook, XING allows a user to point out that they like a comment
 #: apps/plugins/portal/xing/actions.js:152 module:plugins/portal
-#, fuzzy
 #| msgid "Hide comments"
 msgid "Liked comment"
-msgstr "Paslēpt komentārus"
+msgstr "Patīk komentārs"
 
 #: apps/plugins/portal/linkedIn/register.js:347 module:plugins/portal
 msgid "LinkedIn"
@@ -3458,10 +3445,9 @@ msgid "Mail Filter"
 msgstr "Pasta filtrs"
 
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
-#, fuzzy
 #| msgid "Email address"
 msgid "Mail address"
-msgstr "E-pasta adrese"
+msgstr "Pasta adrese"
 
 #: apps/io.ox/contacts/view-detail.js:520 module:io.ox/contacts
 msgid "Mail and Messaging"
@@ -3615,10 +3601,9 @@ msgid "Mark as spam"
 msgstr "Iestatīt kā mēstuli"
 
 #: apps/io.ox/tasks/toolbar.js:77 module:io.ox/mail
-#, fuzzy
 #| msgid "Mark as done"
 msgid "Mark as undone"
-msgstr "Iezīmēt kā paveiktu"
+msgstr "Iezīmēt kā nepabeiktu"
 
 #: apps/io.ox/mail/mobileToolbarActions.js:92 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:102
@@ -3819,10 +3804,9 @@ msgstr "Nekad"
 #: apps/io.ox/contacts/toolbar.js:38 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:39 module:io.ox/files
 #: apps/io.ox/tasks/toolbar.js:43 module:io.ox/mail
-#, fuzzy
 #| msgid "&New"
 msgid "New"
-msgstr "&Jauns"
+msgstr "Jauns"
 
 #: apps/io.ox/core/api/folder.js:545 module:io.ox/core
 #: apps/io.ox/core/pubsub/subscriptions.js:158 module:io.ox/core/pubsub
@@ -3854,10 +3838,9 @@ msgid "New contact"
 msgstr "Jauns kontaksts"
 
 #: apps/io.ox/files/toolbar.js:40 module:io.ox/files
-#, fuzzy
 #| msgid "New folder"
 msgid "New file"
-msgstr "Jauna mape"
+msgstr "Jauns fails"
 
 #: apps/io.ox/core/commons-folderview.js:211 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/add.js:90
@@ -4619,7 +4602,7 @@ msgstr "Lūdzu izvēlieties derīgu attēla failu"
 msgid ""
 "Please select which of the following data we may use to create your %s "
 "account:"
-msgstr ""
+msgstr "Lūdzu norādiet kādus jūsu datus var izmantot %s konta izveidošanai:"
 
 #: apps/io.ox/core/main.js:944 module:io.ox/core apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
@@ -4652,10 +4635,9 @@ msgid "Position"
 msgstr "Pozīcija"
 
 #: apps/plugins/portal/xing/register.js:159 module:plugins/portal
-#, fuzzy
 #| msgid "Adjust start date"
 msgid "Post a status update"
-msgstr "Koriģēt sākuma datumu"
+msgstr "Reģistrēt statusa jauniunājumu"
 
 #: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
 #: apps/io.ox/contacts/model.js:247 apps/io.ox/contacts/model.js:262
@@ -4787,10 +4769,9 @@ msgid "Private"
 msgstr "Privāts"
 
 #: apps/plugins/halo/xing/register.js:156 module:plugins/portal
-#, fuzzy
 #| msgid "Private calendars"
 msgid "Private address"
-msgstr "Privātie kalendāri"
+msgstr "Pivātā adrese"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:139
 #: module:io.ox/settings/settings
@@ -4830,10 +4811,9 @@ msgid "Public"
 msgstr "Publisks"
 
 #: apps/plugins/halo/xing/register.js:41 module:plugins/portal
-#, fuzzy
 #| msgid "Publication"
 msgid "Public servant"
-msgstr "Publikācija"
+msgstr "Publisks kalpotājs"
 
 #: apps/io.ox/core/pubsub/publications.js:348 module:io.ox/core/pubsub
 msgid "Publication"
@@ -4957,7 +4937,7 @@ msgstr "Paroļu atgūšana"
 
 #: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Recruiter"
-msgstr ""
+msgstr "Rekrūteris"
 
 #: apps/io.ox/tasks/model.js:164 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
@@ -5133,7 +5113,7 @@ msgstr "Atjaunot aplikācijas"
 
 #: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Retired"
-msgstr ""
+msgstr "Atvaļināts"
 
 #: apps/io.ox/core/commons.js:873 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:308 module:io.ox/mail
@@ -5459,10 +5439,9 @@ msgid "Shared Appointments"
 msgstr "Kopīgotās Tikšanās"
 
 #: apps/plugins/portal/xing/actions.js:199 module:plugins/portal
-#, fuzzy
 #| msgid "Shared contacts"
 msgid "Shared activity"
-msgstr "Koplietojuma kontakti"
+msgstr "Koplietojuma darbība"
 
 #: apps/io.ox/wizards/upsell.js:133 module:io.ox/wizards
 msgid "Shopping cart"
@@ -5662,13 +5641,12 @@ msgstr "Kļūda pie izmaiņu saglabāšanas."
 
 #: apps/plugins/halo/xing/register.js:230 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
-msgstr ""
+msgstr "Atvainojiet, bet pašreiz nav iespējamas pieslēgties pie %s."
 
 #: apps/plugins/halo/xing/register.js:261 module:plugins/portal
-#, fuzzy
 #| msgid "Sorry, this page is not available at the moment."
 msgid "Sorry, there is no data available for you on %s."
-msgstr "Diemžēl šī lapa pašreiz nav pieejama."
+msgstr "Atvainojiet, bet %s nav jums pieejamu datu."
 
 #: apps/plugins/portal/linkedIn/register.js:155 module:plugins/portal
 msgid ""
@@ -5736,7 +5714,7 @@ msgstr "Iela"
 
 #: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Student"
-msgstr ""
+msgstr "Studnts"
 
 #: apps/io.ox/calendar/edit/template.js:137 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:872 module:io.ox/mail
@@ -5750,10 +5728,9 @@ msgid "Subject"
 msgstr "Tēma"
 
 #: apps/plugins/portal/xing/actions.js:71 module:plugins/portal
-#, fuzzy
 #| msgid "Hide comments"
 msgid "Submit comment"
-msgstr "Paslēpt komentārus"
+msgstr "Reģistrēt komentāru"
 
 #: apps/io.ox/core/pubsub/subscriptions.js:53 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:56
@@ -5778,10 +5755,9 @@ msgid "Subscriptions"
 msgstr "Abonementi"
 
 #: apps/plugins/portal/xing/register.js:66 module:plugins/portal
-#, fuzzy
 #| msgid "You have reauthorized this %s account."
 msgid "Successfully reauthorized your %s account"
-msgstr "Veikta atkārtota %s konta autorizēšana."
+msgstr "Veiksmīgi veikta atkārtota jūsu %s konta autorizēšana"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:92
 #: module:io.ox/settings/accounts
@@ -5810,6 +5786,8 @@ msgid ""
 "Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, "
 "Shared and System Folders to Microsoft Outlook® clients."
 msgstr ""
+"E-pasta, kalendāŗa, kontaktu un uzdevumu sinhrinizācija publiskajās, "
+"koplietojuma un sistēmas mapēs ar Microsoft Outlook® klientiem."
 
 #: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "TAX ID"
@@ -5974,10 +5952,9 @@ msgid "The account must be named"
 msgstr "Kontam ir jānorāda vārds"
 
 #: apps/plugins/portal/xing/actions.js:96 module:plugins/portal
-#, fuzzy
 #| msgid "The appointment has been deleted"
 msgid "The activity has been deleted successfully"
-msgstr "Tikšanās ir izdzēsta"
+msgstr "Darbība ir veiksmīgi izdzēsta"
 
 #: apps/io.ox/files/api.js:359 module:io.ox/files
 msgid "The allowed quota is reached."
@@ -6100,10 +6077,9 @@ msgid "The character \" \" is not allowed."
 msgstr "Simbols \" \" nav atļauts."
 
 #: apps/plugins/portal/xing/actions.js:99 module:plugins/portal
-#, fuzzy
 #| msgid "The appointment has been deleted"
 msgid "The comment has been deleted successfully"
-msgstr "Tikšanās ir izdzēsta"
+msgstr "Komentārs ir veiksmīgi izdzēsts"
 
 #. If the user changes the duedate of a task, it may be before the start date, which is not allowed
 #. If this happens the user gets the option to change the start date so it matches the due date
@@ -6172,6 +6148,7 @@ msgstr "Sekojoši produkti tiks tagad aktivizēti:"
 msgid ""
 "The next step is allowing this system to access your %s account for you."
 msgstr ""
+"Nākošais solis ir atļaut šai sistēmai piekļūt jūsu %s kontam jūsu vārdā."
 
 #. Mail compose. Maximum number of recipients exceeded
 #. %1$s = maximum
@@ -6307,17 +6284,17 @@ msgstr "Nav definēts nosacījums"
 #: apps/plugins/portal/xing/register.js:335
 #: apps/plugins/portal/xing/register.js:357
 msgid "There was a problem with %s. The error message was: \"%s\""
-msgstr ""
+msgstr "Reģistrēta problēma ar %s. Kļūdas paziņojums ir: \"%s\""
 
 #: apps/plugins/portal/xing/actions.js:54 module:plugins/portal
 #: apps/plugins/portal/xing/actions.js:156
 #: apps/plugins/portal/xing/actions.js:196
 msgid "There was a problem with XING, the error message was: \"%s\""
-msgstr ""
+msgstr "Reģistrēta problēma ar XING, kļūdas paziņojums ir: \"%s\""
 
 #: apps/plugins/portal/xing/actions.js:105 module:plugins/portal
 msgid "There was a problem with XING. The error message was: \"%s\""
-msgstr ""
+msgstr "Reģistrēta problēma ar XING. Kļūdas paziņojums ir: \"%s\""
 
 #: apps/io.ox/mail/accounts/settings.js:190
 #: module:io.ox/mail/accounts/settings
@@ -6698,14 +6675,13 @@ msgstr "URL"
 
 #: apps/plugins/portal/xing/actions.js:167 module:plugins/portal
 msgid "Un-like"
-msgstr ""
+msgstr "Atsaukt 'Patīk'"
 
 #. As on Facebook, XING allows a stop pointing out they liked a comment. An 'undo' for the like action, if you will.
 #: apps/plugins/portal/xing/actions.js:144 module:plugins/portal
-#, fuzzy
 #| msgid "Hide comments"
 msgid "Un-liked comment"
-msgstr "Paslēpt komentārus"
+msgstr "Ne-patīk komentārs"
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -6728,7 +6704,7 @@ msgstr "Atsaukts"
 
 #: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Unemployed"
-msgstr ""
+msgstr "Bezdarbnieks"
 
 #. twitter: Stop following this person
 #: apps/plugins/portal/twitter/util.js:374 module:plugins/portal
@@ -6973,7 +6949,7 @@ msgstr "Darba nedēļas skats"
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51
 msgid "XING"
-msgstr ""
+msgstr "XING"
 
 #. Bytes
 #. Kilobytes
@@ -7057,7 +7033,7 @@ msgstr ""
 #: apps/plugins/halo/xing/register.js:76 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
-msgstr ""
+msgstr "Jūs neesat tieši saistīts ar %s. Šeit ir ar %s saistītās personas:"
 
 #: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
 msgid "You are the organizer"
@@ -7214,10 +7190,12 @@ msgstr[2] "Jūs tiksiet automātiski izrakstīts pēc %1$d sekundēm"
 msgid ""
 "Your %s account has been created. Expect a confirmation mail from %s soon."
 msgstr ""
+"Jūsu %s konts ir veiksmīgi izveidots. Jūs drīzumā saņemsiet apstiprinājuma e-"
+"pastu no %s."
 
 #: apps/plugins/portal/xing/register.js:295 module:plugins/portal
 msgid "Your %s newsfeed"
-msgstr ""
+msgstr "Jūsu %s ziņu straumējums"
 
 #: apps/io.ox/core/main.js:865 module:io.ox/core
 msgid "Your Applications"
@@ -7313,19 +7291,20 @@ msgid "Your session is expired"
 msgstr "Jūsu sesijas derīgums ir beidzies"
 
 #: apps/plugins/halo/xing/register.js:100 module:plugins/portal
-#, fuzzy
 #| msgid "Shared contacts"
 msgid "Your shared contacts:"
-msgstr "Koplietojuma kontakti"
+msgstr "Jūsu koplietojuma kontakti:"
 
 #: apps/plugins/portal/xing/register.js:170 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
 msgstr ""
+"Jūsu statusa jauninājums nevar tikt reģistrēts %s. Kļūdas paziņojums ir: \"%s"
+"\""
 
 #: apps/plugins/portal/xing/register.js:174 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
-msgstr ""
+msgstr "Jūsu statusa jauninājums ir veiksmigi reģistrēts %s"
 
 #: apps/plugins/wizards/mandatory/main.js:125 module:io.ox/wizards/firstStart
 msgid "Your timezone"
