@@ -560,8 +560,9 @@ define('io.ox/mail/write/main',
             // look for real attachments
             var items = _.chain(data.attachments || [])
                         .filter(function (attachment) {
-                            //only real attachments
-                            return attachment.disp === 'attachment';
+                            //only real attachments and inline images
+                            return attachment.disp === 'attachment' ||
+                                (attachment.disp === 'inline' && /^image/.test(attachment.content_type));
                         })
                         .map(function (attachment) {
                             // add as linked attachment
@@ -1276,6 +1277,13 @@ define('io.ox/mail/write/main',
             // backend will append vcard for every send operation (which save as draft is)
             old_vcard_flag = mail.data.vcard;
             delete mail.data.vcard;
+
+            // fix inline images
+            mail.data.attachments[0].content = mail.data.attachments[0].content
+                    .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
+                    .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
+                    .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
+                    .replace(/data-mce-src="[^"]+"\s?/, '');
 
             mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {
