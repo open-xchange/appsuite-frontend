@@ -1,0 +1,334 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) 2011 Open-Xchange, Inc.
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+@font-face {
+    font-family: 'OpenSans';
+    src: local('Open Sans Light'),
+         local('OpenSans-Light'),
+         url('../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.eot'),
+         url('../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.woff') format('woff'),
+         url('../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.ttf') format('truetype'),
+         url('../../3rd.party/open-sans-fontface/fonts/Light/OpenSans-Light.svg#OpenSansLight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.eot?v=4.0.3');
+    src: url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'),
+         url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.woff?v=4.0.3') format('woff'),
+         url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.ttf?v=4.0.3') format('truetype'),
+         url('../../3rd.party/font-awesome/fonts/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body {
+    height: 100%;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+}
+
+#io-ox-login-container .alert {
+    padding: 8px 35px 8px 14px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+
+    &.alert-info {
+        color: #fff;
+        background: rgba(0, 0, 0, 0.2);
+        border:1px solid rgba(0, 0, 0, 0.2);
+    }
+}
+
+.css-table { display: table; width: 100%; height: 100%; }
+.css-table-row { display: table-row; }
+.css-table-cell { display: table-cell; vertical-align: middle; }
+
+.unselectable { .user-select(none); }
+
+.selectable-text {
+    .user-select(text);
+    cursor: default;
+}
+
+.clear-title {
+    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 20pt;
+    line-height: 1.15em;
+}
+
+.noscript {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 65000;
+    width: 400px;
+    margin: -50px 0 0 -200px;
+    z-index: 65301;
+}
+
+#background-loader {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 65300;
+    -webkit-transform: translateZ(0); /* activate GPU acceleration */
+}
+
+#io-ox-login-screen, #io-ox-login-screen-decorator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 65102;
+    background-color: white;
+}
+
+#io-ox-login-background {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+#io-ox-login-screen-decorator {
+    background-color: black;
+    z-index: 65101;
+    opacity: 0.25;
+}
+
+#io-ox-login-screen {
+    .no-margin { margin: 0; }
+    a {
+        color: #79bcfc;
+        &:hover, &:focus { color: #fff; }
+    }
+    &.relogin {
+        right: auto;
+        left: 50%;
+        width: 800px;
+        margin-left: -400px;
+        -webkit-box-shadow: 0 0 70px 5px #000;
+        -moz-box-shadow: 0 0 70px 5px #000;
+        box-shadow: 0 0 70px 5px #000;
+    }
+}
+
+.wallpaper {
+    #gradient.radial(rgba(10, 84, 150, 0.99) 0%, #0a1620);
+}
+
+#io-ox-login-form-background { display: none; }
+
+#io-ox-login-form {
+    input:focus {
+        box-shadow: 0 0 15px 2px white;
+        outline: 0;
+    }
+}
+
+#io-ox-login-container-scrollpane {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#io-ox-login-container {
+    color: white;
+    height: 100%;
+    width: 100%;
+    max-width: 680px;
+    z-index: 2;
+    margin: 0 auto 0 auto;
+    padding: 0 30px 0 30px;
+    box-sizing: border-box;
+}
+
+#io-ox-login-header {
+    height: 45%;
+    text-align: right;
+    vertical-align: middle;
+    h1 {
+        font-size: 24pt;
+        color: #fff;
+        margin: 1em 0 1em 0;
+
+        small { color: #6FBBEC; }
+    }
+}
+
+#io-ox-login-header-prefix { color: #79bcfc; }
+
+#io-ox-login-form-container {
+    height: 40%;
+    margin: 0;
+    vertical-align: top;
+}
+
+#io-ox-login-username:invalid:focus {
+    color: #555;
+    border: 1px solid #CCC;
+}
+
+#io-ox-login-store label {
+    font-weight: normal;
+}
+
+#login-box-content td {
+    padding: 0 15px 8px 0;
+}
+
+#io-ox-login-blocker {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: black;
+    opacity: 0.01;
+    filter: alpha(opacity=1);
+    z-index: 65000;
+}
+
+#io-ox-login-feedback {
+    margin-top: 13px;
+    min-height: 3em; /* for busy animation */
+}
+
+#io-ox-login-footer {
+    height: 15%;
+    vertical-align: bottom;
+}
+
+#io-ox-languages {
+    margin-bottom: 0.7em;
+    select { margin-top: 0.6em; }
+    i { font-style: normal; }
+    a { white-space: nowrap; }
+}
+.language-delimiter {
+    color: rgba(255, 255, 255, 0.40);
+}
+
+#io-ox-copyright {
+    color: rgba(0, 0, 0, 0.50);
+    text-align: right;
+    font-weight: 300;
+    margin-bottom: 1em;
+    font-size: 13px;
+}
+
+.io-ox-ui-disabled {
+    cursor: default !important;
+    pointer-events: none;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=30)";
+    filter: alpha(opacity=30);
+    opacity: .3;
+}
+
+@media (max-width: 767px) {
+    #io-ox-login-header {
+        height: 15%;
+        h1 { font-size: 14pt; margin: 2em 0 2em 0; }
+    }
+}
+
+/* mobile stuff */
+@media (max-width: 480px), (max-device-width: 480px) {
+
+    /* 100% divs on relogin page*/
+    .relogin #io-ox-login-form [class*="span"] {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    /* responsive re-login screen */
+    #io-ox-login-screen.relogin {
+        left: 5px;
+        right: 5px;
+        margin-left: 0;
+        width: auto;
+    }
+    /* absolute layout for alert box */
+    body.down #io-ox-login-container .alert {
+        font-size: 16px;
+        position: absolute;
+        top: 40%;
+        left: 10px;
+        right: 10px;
+        width: initial;
+        margin-top: 0;
+    }
+
+    #io-ox-login-container .alert a {
+        font-weight: bold;
+    }
+}
+
+/* support for busy spinner */
+
+@-moz-keyframes spin {
+  0%    { -moz-transform: rotate(0deg);     }
+  100%  { -moz-transform: rotate(359deg);   }
+}
+@-webkit-keyframes spin {
+  0%    { -webkit-transform: rotate(0deg);  }
+  100%  { -webkit-transform: rotate(359deg);}
+}
+@-o-keyframes spin {
+  0%    { -o-transform: rotate(0deg);       }
+  100%  { -o-transform: rotate(359deg);     }
+}
+@-ms-keyframes spin {
+  0%    { -ms-transform: rotate(0deg);      }
+  100%  { -ms-transform: rotate(359deg);    }
+}
+@keyframes spin {
+  0%    { transform: rotate(0deg);          }
+  100%  { transform: rotate(359deg);        }
+}
+
+.io-ox-busy {
+    position: relative;
+
+    &:before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -10px 0 0 -10px;
+        /* icon-refresh */
+        font-size: 20px;
+        font-family: 'FontAwesome';
+        content: '\f021';
+        color: rgba(0, 0, 0, 0.30);
+        /* icon-spin */
+        -moz-animation: spin 1.5s infinite linear;
+        -o-animation: spin 1.5s infinite linear;
+        -webkit-animation: spin 1.5s infinite linear;
+        animation: spin 1.5s infinite linear;
+    }
+}
+.row:before, .row:after {
+    content: " ";
+    display: table;
+}
