@@ -3,15 +3,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-20 22:08+0000\n"
+"PO-Revision-Date: 2014-05-12 21:58+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Lokalize 1.0\n"
 
 #. File size
@@ -100,29 +100,25 @@ msgstr "%1$s (под вопросом)"
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js:172 module:plugins/portal
-#, fuzzy
 #| msgctxt "mail address"
 #| msgid "%1$s %2$s"
 msgid "%1$s at %2$s"
-msgstr "%1$s %2$s"
+msgstr "%1$s, %2$s"
 
 #: apps/plugins/portal/xing/activities.js:101 module:plugins/portal
-#, fuzzy
 #| msgid "Change status"
 msgid "%1$s changed their status:"
-msgstr "Изменить статус"
+msgstr "%1$s изменил(а) свой статус:"
 
 #: apps/plugins/portal/xing/activities.js:120 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s is a new contact"
 msgid "%1$s has a new contact:"
-msgstr "%1$s является новым контактом"
+msgstr "Новый контакт у %1$s:"
 
 #: apps/plugins/portal/xing/activities.js:133 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s is a new contact"
 msgid "%1$s has new contacts:"
-msgstr "%1$s является новым контактом"
+msgstr "Новые контакты у %1$s:"
 
 #: apps/plugins/portal/linkedIn/register.js:126 module:plugins/portal
 msgid "%1$s is a new contact"
@@ -158,17 +154,16 @@ msgstr "%1$s из %2$s"
 
 #: apps/plugins/portal/xing/activities.js:81 module:plugins/portal
 msgid "%1$s posted a link:"
-msgstr ""
+msgstr "%1$s опубликовал(а) ссылку:"
 
 #: apps/plugins/portal/xing/activities.js:151 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s is a new contact"
 msgid "%1$s posted a new activity:"
-msgstr "%1$s является новым контактом"
+msgstr "Новые публикации %1$s:"
 
 #: apps/plugins/portal/xing/activities.js:59 module:plugins/portal
 msgid "%1$s recommends this link:"
-msgstr ""
+msgstr "%1$s рекомендует ссылку:"
 
 #. Format of addresses
 #. %1$s is the street
@@ -526,10 +521,9 @@ msgstr "Добавить примечание"
 
 #: apps/plugins/portal/xing/register.js:382 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:389
-#, fuzzy
 #| msgid "Add action"
 msgid "Add on %s"
-msgstr "Добавить действие"
+msgstr "Добавить в %s"
 
 #: apps/io.ox/calendar/freebusy/templates.js:88 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/freebusy/templates.js:90
@@ -654,7 +648,7 @@ msgstr "Разрешить загрузку изображений из сети
 
 #: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Allow us to use your %s account here"
-msgstr ""
+msgstr "Разрешить использование вашей учетной записи %s"
 
 #: apps/io.ox/backbone/forms.js:56 module:io.ox/core
 msgid "An error occurred"
@@ -1338,7 +1332,7 @@ msgstr "Комментарий"
 
 #: apps/plugins/portal/xing/actions.js:59 module:plugins/portal
 msgid "Comment has been successfully posted on XING"
-msgstr ""
+msgstr "Комментарий опубликован в XING"
 
 #: apps/plugins/portal/reddit/register.js:175 module:io.ox/portal
 msgid "Comments"
@@ -1419,7 +1413,7 @@ msgstr "Конфликты:"
 
 #: apps/io.ox/core/settings/downloads/pane.js:66 module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
-msgstr ""
+msgstr "Microsoft Outlook® Connector"
 
 #: apps/io.ox/contacts/edit/main.js:272 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
@@ -1435,10 +1429,9 @@ msgid "Contact pictures"
 msgstr "Фото контакта"
 
 #: apps/plugins/portal/xing/register.js:360 module:plugins/portal
-#, fuzzy
 #| msgid "Contact Details"
 msgid "Contact request sent"
-msgstr "Контактные данные"
+msgstr "Запрос контакта отправлен"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:136 module:io.ox/contacts
 msgid "Contacts"
@@ -1600,7 +1593,7 @@ msgstr "Создать"
 
 #: apps/plugins/portal/xing/register.js:267 module:plugins/portal
 msgid "Create a %s account using the data stored here"
-msgstr ""
+msgstr "Создать учетную запись  %s на основе определенных здесь данных"
 
 #: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:325
@@ -1654,7 +1647,7 @@ msgstr "Денежная единица"
 
 #: apps/io.ox/portal/main.js:86 module:io.ox/portal
 msgid "Customize this page"
-msgstr "Настроить эту страницу"
+msgstr "Настроить страницу"
 
 #: apps/io.ox/core/import/import.js:213 module:io.ox/core
 msgid "Data imported successfully"
@@ -1669,6 +1662,8 @@ msgid ""
 "Data synchronization with your local (Windows) machine. Drive Client lets "
 "you configure the folders to be synchronized."
 msgstr ""
+"Синхронизация данных с локальной системой Windows. Клиент Drive позволяет "
+"выбрать папки для синхронизации."
 
 #: apps/io.ox/backbone/forms.js:512 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:118
@@ -1911,10 +1906,9 @@ msgid "Distribution list has been saved"
 msgstr "Список рассылки сохранен"
 
 #: apps/plugins/portal/xing/register.js:262 module:plugins/portal
-#, fuzzy
 #| msgid "Do you really want to delete this account?"
 msgid "Do you already have a %s account?"
-msgstr "Вы действительно хотите удалить учетную запись?"
+msgstr "Уже есть учетная запись %s?"
 
 #: apps/io.ox/files/util.js:52 module:io.ox/files
 msgid ""
@@ -1991,10 +1985,9 @@ msgid ""
 msgstr "Подтвердить отдельную встречу или всю серию?"
 
 #: apps/plugins/portal/xing/register.js:266 module:plugins/portal
-#, fuzzy
 #| msgid "Do you really want to delete this account?"
 msgid "Do you want to create a %s account?"
-msgstr "Вы действительно хотите удалить учетную запись?"
+msgstr "Создать учетную запись %s?"
 
 #: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
 msgid ""
@@ -2051,7 +2044,6 @@ msgid "Download"
 msgstr "Загрузить"
 
 #: apps/io.ox/core/settings/downloads/pane.js:54 module:io.ox/core
-#, fuzzy
 #| msgid "Download install file (for Windows)"
 msgid "Download installation file (for Windows)"
 msgstr "Загрузить установочный файл (Windows)"
@@ -2073,11 +2065,10 @@ msgid "Drive"
 msgstr "Drive"
 
 #: apps/io.ox/core/settings/downloads/pane.js:82 module:io.ox/core
-#, fuzzy
 #| msgctxt "help"
 #| msgid "Drive Settings"
 msgid "Drive Client"
-msgstr "Параметры Drive"
+msgstr "Клиент Drive"
 
 #: apps/io.ox/files/guidance/main.js:95 module:io.ox/files
 msgctxt "help"
@@ -2299,10 +2290,9 @@ msgid ""
 msgstr "Если квота превышена, сообщения не могут перемещаться в корзину."
 
 #: apps/plugins/halo/xing/register.js:38 module:plugins/portal
-#, fuzzy
 #| msgid "Employee ID"
 msgid "Employee"
-msgstr "Идентификатор сотрудника"
+msgstr "Сотрудник"
 
 #: apps/io.ox/contacts/model.js:251 module:io.ox/contacts
 msgid "Employee ID"
@@ -2313,10 +2303,9 @@ msgid "Employee type"
 msgstr "Тип сотрудника"
 
 #: apps/plugins/halo/xing/register.js:182 module:plugins/portal
-#, fuzzy
 #| msgid "Employee type"
 msgid "Employment"
-msgstr "Тип сотрудника"
+msgstr "Род занятий"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js:712 module:io.ox/core
@@ -2375,7 +2364,7 @@ msgstr "Введите название документа"
 #. what follows is a set of job/status descriptions used by XING
 #: apps/plugins/halo/xing/register.js:36 module:plugins/portal
 msgid "Entrepreneur"
-msgstr ""
+msgstr "Предприниматель"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
@@ -2478,7 +2467,7 @@ msgstr "Каждый день"
 
 #: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Executive"
-msgstr ""
+msgstr "Руководитель"
 
 #: apps/io.ox/core/main.js:747 module:io.ox/core
 msgid "Exit Fullscreen"
@@ -2562,6 +2551,8 @@ msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
 msgstr ""
+"Не удалось автоматически сохранить текущую версию. Во избежание потери "
+"данных сохраните изменения вручную."
 
 #: apps/io.ox/mail/accounts/settings.js:212
 #: module:io.ox/mail/accounts/settings
@@ -2827,7 +2818,7 @@ msgstr "Свободно"
 
 #: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Freelancer"
-msgstr ""
+msgstr "Фрилансер"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:366
 #: module:io.ox/calendar/edit/main
@@ -2942,7 +2933,7 @@ msgstr "Справка"
 
 #: apps/plugins/halo/xing/register.js:247 module:plugins/portal
 msgid "Here is what %s knows about %s:"
-msgstr ""
+msgstr "Вот что %s знает о %s:"
 
 #: apps/io.ox/core/pubsub/publications.js:344 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/publications.js:345
@@ -3119,6 +3110,8 @@ msgid ""
 "Informs about the current status of E-Mails and appointments without having "
 "to display the user interface or another Windows® client."
 msgstr ""
+"Сообщает о текущем состоянии почты и встреч без доступа к интерфейсу "
+"пользователя и к другому клиенту  Windows®."
 
 #: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
 msgid "Inline"
@@ -3168,21 +3161,19 @@ msgid "Invalid data"
 msgstr "Недопустимые данные"
 
 #: apps/plugins/portal/xing/register.js:338 module:plugins/portal
-#, fuzzy
 #| msgid "Invitations"
 msgid "Invitation sent"
-msgstr "Приглашения"
+msgstr "Приглашение отправлено"
 
 #: apps/io.ox/contacts/toolbar.js:67 module:io.ox/contacts
 msgid "Invite"
-msgstr ""
+msgstr "Пригласить"
 
 #: apps/plugins/portal/xing/register.js:368 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:375
-#, fuzzy
 #| msgid "Invitations"
 msgid "Invite to %s"
-msgstr "Приглашения"
+msgstr "Пригласить на %s"
 
 #: apps/io.ox/contacts/actions.js:782 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:68 apps/io.ox/mail/actions.js:1084
@@ -3342,7 +3333,7 @@ msgstr "Светло-зеленый"
 
 #: apps/plugins/portal/xing/actions.js:172 module:plugins/portal
 msgid "Like"
-msgstr ""
+msgstr "Нравится"
 
 #: apps/plugins/portal/facebook/register.js:450 module:plugins/portal
 msgid "Liked a link: %s"
@@ -3350,10 +3341,9 @@ msgstr "Понравилось: %s"
 
 #. As on Facebook, XING allows a user to point out that they like a comment
 #: apps/plugins/portal/xing/actions.js:152 module:plugins/portal
-#, fuzzy
 #| msgid "Hide comments"
 msgid "Liked comment"
-msgstr "Скрыть комментарии"
+msgstr "Комментарий нравится"
 
 #: apps/plugins/portal/linkedIn/register.js:347 module:plugins/portal
 msgid "LinkedIn"
@@ -3434,10 +3424,9 @@ msgid "Mail Filter"
 msgstr "Фильтр почты"
 
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
-#, fuzzy
 #| msgid "Email address"
 msgid "Mail address"
-msgstr "Email"
+msgstr "Почтовый адрес"
 
 #: apps/io.ox/contacts/view-detail.js:520 module:io.ox/contacts
 msgid "Mail and Messaging"
@@ -3591,10 +3580,9 @@ msgid "Mark as spam"
 msgstr "Отметить как спам"
 
 #: apps/io.ox/tasks/toolbar.js:77 module:io.ox/mail
-#, fuzzy
 #| msgid "Mark as done"
 msgid "Mark as undone"
-msgstr "Отметить как завершенное"
+msgstr "Отметить как незавершенное"
 
 #: apps/io.ox/mail/mobileToolbarActions.js:92 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:102
@@ -3674,7 +3662,7 @@ msgstr "Другое"
 #: apps/io.ox/mail/write/view-main.js:1097 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:1098
 msgid "Mobile"
-msgstr "Телефон (мобильный)"
+msgstr "Мобильный"
 
 #: apps/io.ox/portal/settings/pane.js:426 module:io.ox/portal
 msgid "Mobile device settings:"
@@ -3796,7 +3784,7 @@ msgstr "Никогда"
 #: apps/io.ox/files/toolbar.js:39 module:io.ox/files
 #: apps/io.ox/tasks/toolbar.js:43 module:io.ox/mail
 msgid "New"
-msgstr ""
+msgstr "Создать"
 
 #: apps/io.ox/core/api/folder.js:545 module:io.ox/core
 #: apps/io.ox/core/pubsub/subscriptions.js:158 module:io.ox/core/pubsub
@@ -3828,10 +3816,9 @@ msgid "New contact"
 msgstr "Новый контакт"
 
 #: apps/io.ox/files/toolbar.js:40 module:io.ox/files
-#, fuzzy
 #| msgid "New folder"
 msgid "New file"
-msgstr "Новая папка"
+msgstr "Новый файл"
 
 #: apps/io.ox/core/commons-folderview.js:211 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/add.js:90
@@ -3868,10 +3855,9 @@ msgid "New subscription"
 msgstr "Новая подписка"
 
 #: apps/io.ox/tasks/toolbar.js:44 module:io.ox/mail
-#, fuzzy
 #| msgid "Show task"
 msgid "New task"
-msgstr "Показать задачу"
+msgstr "Новая задача"
 
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
@@ -3917,7 +3903,7 @@ msgstr "Нет дней рождения на протяжении %1$d нед."
 
 #: apps/io.ox/core/commons.js:206 module:io.ox/core
 msgid "No elements selected"
-msgstr "Элементы не выбраны."
+msgstr "Ничего не выбрано"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:230 module:io.ox/core
 msgid "No errors"
@@ -4042,7 +4028,7 @@ msgstr "Примечание"
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
-"Примечание. Номера телефонов одного контакта не определены, поэтому он не "
+"Примечание. Номера телефонов контакта не определены, поэтому он не "
 "показан."
 msgstr[1] ""
 "Примечание. Номера телефонов %1$d контактов не определены, поэтому они не "
@@ -4062,7 +4048,7 @@ msgstr ""
 
 #: apps/io.ox/core/export/export.js:79 module:io.ox/core
 msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Примечание. Формат vCard не может содержать списки рассылок."
+msgstr "Примечание. vCard не может содержать списки рассылок."
 
 #: apps/io.ox/core/pubsub/subscriptions.js:321 module:io.ox/core/pubsub
 msgid ""
@@ -4073,10 +4059,9 @@ msgstr ""
 "папку для этой подписки."
 
 #: apps/io.ox/core/settings/downloads/pane.js:74 module:io.ox/core
-#, fuzzy
 #| msgid "Modified"
 msgid "Notifier"
-msgstr "Изменено"
+msgstr "Уведомления"
 
 #: apps/io.ox/calendar/edit/template.js:435 module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
@@ -4147,7 +4132,7 @@ msgstr "Показывать только обзор виджетов на мо�
 
 #: apps/io.ox/core/pubsub/settings/pane.js:68 module:io.ox/core/pubsub
 msgid "Only showing items related to folder \"%1$s\""
-msgstr "Показаны только объекты для папки «%1$s»."
+msgstr "Показаны только объекты папки «%1$s»."
 
 #: apps/io.ox/files/actions.js:881 module:io.ox/files
 #: apps/io.ox/files/actions.js:1041
@@ -4595,7 +4580,7 @@ msgstr "Выберите файл изображения для вставки"
 msgid ""
 "Please select which of the following data we may use to create your %s "
 "account:"
-msgstr ""
+msgstr "Выберите данные, на основе которых будет создана учетная запись %s:"
 
 #: apps/io.ox/core/main.js:944 module:io.ox/core apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
@@ -4628,10 +4613,9 @@ msgid "Position"
 msgstr "Должность"
 
 #: apps/plugins/portal/xing/register.js:159 module:plugins/portal
-#, fuzzy
 #| msgid "Adjust start date"
 msgid "Post a status update"
-msgstr "Изменить дату начала"
+msgstr "Опубликовать обновление статуса"
 
 #: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
 #: apps/io.ox/contacts/model.js:247 apps/io.ox/contacts/model.js:262
@@ -4763,15 +4747,14 @@ msgid "Private"
 msgstr "Личное"
 
 #: apps/plugins/halo/xing/register.js:156 module:plugins/portal
-#, fuzzy
 #| msgid "Other address"
 msgid "Private address"
-msgstr "Другие адреса"
+msgstr "Частный адрес"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:139
 #: module:io.ox/settings/settings
 msgid "Process subsequent rules"
-msgstr "Обработать последующие правила"
+msgstr "Обработать правила последовательно"
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
 msgid "Profession"
@@ -4806,10 +4789,9 @@ msgid "Public"
 msgstr "Общие"
 
 #: apps/plugins/halo/xing/register.js:41 module:plugins/portal
-#, fuzzy
 #| msgid "Publication"
 msgid "Public servant"
-msgstr "Публикация"
+msgstr "Госслужащий"
 
 #: apps/io.ox/core/pubsub/publications.js:348 module:io.ox/core/pubsub
 msgid "Publication"
@@ -4932,7 +4914,7 @@ msgstr "Восстановить пароли"
 
 #: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Recruiter"
-msgstr ""
+msgstr "Рекрутер"
 
 #: apps/io.ox/tasks/model.js:164 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
@@ -5108,7 +5090,7 @@ msgstr "Восстановить приложения"
 
 #: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Retired"
-msgstr ""
+msgstr "На пенсии"
 
 #: apps/io.ox/core/commons.js:873 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:308 module:io.ox/mail
@@ -5434,10 +5416,9 @@ msgid "Shared Appointments"
 msgstr "Общие встречи"
 
 #: apps/plugins/portal/xing/actions.js:199 module:plugins/portal
-#, fuzzy
 #| msgid "Share this file"
 msgid "Shared activity"
-msgstr "Открыть доступ к файлу"
+msgstr "Общие действия"
 
 #: apps/io.ox/wizards/upsell.js:133 module:io.ox/wizards
 msgid "Shopping cart"
@@ -5637,13 +5618,12 @@ msgstr "Не удалось сохранить изменения."
 
 #: apps/plugins/halo/xing/register.js:230 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
-msgstr ""
+msgstr "Не удалось подключиться к %s."
 
 #: apps/plugins/halo/xing/register.js:261 module:plugins/portal
-#, fuzzy
 #| msgid "Sorry, this page is not available at the moment."
 msgid "Sorry, there is no data available for you on %s."
-msgstr "Извините, страница недоступна."
+msgstr "Для вас нет данных на %s."
 
 #: apps/plugins/portal/linkedIn/register.js:155 module:plugins/portal
 msgid ""
@@ -5709,7 +5689,7 @@ msgstr "Адрес"
 
 #: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Student"
-msgstr ""
+msgstr "Студент"
 
 #: apps/io.ox/calendar/edit/template.js:137 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:872 module:io.ox/mail
@@ -5723,10 +5703,9 @@ msgid "Subject"
 msgstr "Тема"
 
 #: apps/plugins/portal/xing/actions.js:71 module:plugins/portal
-#, fuzzy
 #| msgid "Hide comments"
 msgid "Submit comment"
-msgstr "Скрыть комментарии"
+msgstr "Отправить комментарий"
 
 #: apps/io.ox/core/pubsub/subscriptions.js:53 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:56
@@ -5751,10 +5730,9 @@ msgid "Subscriptions"
 msgstr "Подписки"
 
 #: apps/plugins/portal/xing/register.js:66 module:plugins/portal
-#, fuzzy
 #| msgid "You have reauthorized this %s account."
 msgid "Successfully reauthorized your %s account"
-msgstr "Учетная запись %s повторно авторизована."
+msgstr "Учетная запись %s авторизована повторно."
 
 #: apps/io.ox/settings/accounts/settings/pane.js:92
 #: module:io.ox/settings/accounts
@@ -5783,6 +5761,8 @@ msgid ""
 "Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, "
 "Shared and System Folders to Microsoft Outlook® clients."
 msgstr ""
+"Синхронизация почты, календаря, контактов, задач, а также общих и системных "
+"папок с клиентами Microsoft Outlook®."
 
 #: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "TAX ID"
@@ -5946,10 +5926,9 @@ msgid "The account must be named"
 msgstr "Необходимо выбрать имя учетной записи"
 
 #: apps/plugins/portal/xing/actions.js:96 module:plugins/portal
-#, fuzzy
 #| msgid "The appointment has been deleted"
 msgid "The activity has been deleted successfully"
-msgstr "Встреча удалена"
+msgstr "События удалены"
 
 #: apps/io.ox/files/api.js:359 module:io.ox/files
 msgid "The allowed quota is reached."
@@ -6069,10 +6048,9 @@ msgid "The character \" \" is not allowed."
 msgstr "Использование пробелов не допускается"
 
 #: apps/plugins/portal/xing/actions.js:99 module:plugins/portal
-#, fuzzy
 #| msgid "The appointment has been deleted"
 msgid "The comment has been deleted successfully"
-msgstr "Встреча удалена"
+msgstr "Комментарий удален"
 
 #. If the user changes the duedate of a task, it may be before the start date, which is not allowed
 #. If this happens the user gets the option to change the start date so it matches the due date
@@ -6137,7 +6115,7 @@ msgstr "Будут активированы перечисленные прод�
 #: apps/plugins/portal/xing/register.js:137 module:plugins/portal
 msgid ""
 "The next step is allowing this system to access your %s account for you."
-msgstr ""
+msgstr "Следующий шаг разрешает доступ системы к вашей учетной записи %s."
 
 #. Mail compose. Maximum number of recipients exceeded
 #. %1$s = maximum
@@ -6270,17 +6248,17 @@ msgstr "Нет правил."
 #: apps/plugins/portal/xing/register.js:335
 #: apps/plugins/portal/xing/register.js:357
 msgid "There was a problem with %s. The error message was: \"%s\""
-msgstr ""
+msgstr "Ошибка %s: «%s»"
 
 #: apps/plugins/portal/xing/actions.js:54 module:plugins/portal
 #: apps/plugins/portal/xing/actions.js:156
 #: apps/plugins/portal/xing/actions.js:196
 msgid "There was a problem with XING, the error message was: \"%s\""
-msgstr ""
+msgstr "Ошибка XING: «%s»"
 
 #: apps/plugins/portal/xing/actions.js:105 module:plugins/portal
 msgid "There was a problem with XING. The error message was: \"%s\""
-msgstr ""
+msgstr "Ошибка XING: «%s»"
 
 #: apps/io.ox/mail/accounts/settings.js:190
 #: module:io.ox/mail/accounts/settings
@@ -6661,14 +6639,13 @@ msgstr "URL"
 
 #: apps/plugins/portal/xing/actions.js:167 module:plugins/portal
 msgid "Un-like"
-msgstr ""
+msgstr "Не нравится"
 
 #. As on Facebook, XING allows a stop pointing out they liked a comment. An 'undo' for the like action, if you will.
 #: apps/plugins/portal/xing/actions.js:144 module:plugins/portal
-#, fuzzy
 #| msgid "Hide comments"
 msgid "Un-liked comment"
-msgstr "Скрыть комментарии"
+msgstr "Комментарий не нравится"
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -6691,7 +6668,7 @@ msgstr "Отменено"
 
 #: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Unemployed"
-msgstr ""
+msgstr "Неработающий"
 
 #. twitter: Stop following this person
 #: apps/plugins/portal/twitter/util.js:374 module:plugins/portal
@@ -6934,7 +6911,7 @@ msgstr "Рабочие дни"
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51
 msgid "XING"
-msgstr ""
+msgstr "XING"
 
 #. Bytes
 #. Kilobytes
@@ -7016,7 +6993,7 @@ msgstr "Вы используете %1$s из %2$s (осталось %3$s). "
 #: apps/plugins/halo/xing/register.js:76 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
-msgstr ""
+msgstr "Вы не связаны с %s напрямую. Контакты, связанные с %s: "
 
 #: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
 msgid "You are the organizer"
@@ -7167,11 +7144,11 @@ msgstr[2] "Сеанс будет завершен через %1$d секунд"
 #: apps/plugins/portal/xing/register.js:136 module:plugins/portal
 msgid ""
 "Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr ""
+msgstr "Учетная запись %s создана. Вы получите подтверждение по почте от %s."
 
 #: apps/plugins/portal/xing/register.js:295 module:plugins/portal
 msgid "Your %s newsfeed"
-msgstr ""
+msgstr "Лента новостей %s"
 
 #: apps/io.ox/core/main.js:865 module:io.ox/core
 msgid "Your Applications"
@@ -7264,19 +7241,18 @@ msgid "Your session is expired"
 msgstr "Время сеанса истекло"
 
 #: apps/plugins/halo/xing/register.js:100 module:plugins/portal
-#, fuzzy
 #| msgid "Create contact"
 msgid "Your shared contacts:"
-msgstr "Создать контакт"
+msgstr "Общие контакты:"
 
 #: apps/plugins/portal/xing/register.js:170 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
-msgstr ""
+msgstr "Не удалось опубликовать ваш статус в %s. Ошибка: «%s»"
 
 #: apps/plugins/portal/xing/register.js:174 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
-msgstr ""
+msgstr "Обновление статуса опубликовано в %s"
 
 #: apps/plugins/wizards/mandatory/main.js:125 module:io.ox/wizards/firstStart
 msgid "Your timezone"

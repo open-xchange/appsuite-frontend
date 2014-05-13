@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-21 15:21+1000\n"
+"PO-Revision-Date: 2014-05-12 21:06+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -95,28 +95,24 @@ msgstr "%1$s （暂定）"
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js:172 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s - %2$s"
 msgid "%1$s at %2$s"
 msgstr "%1$s - %2$s"
 
 #: apps/plugins/portal/xing/activities.js:101 module:plugins/portal
-#, fuzzy
 #| msgid "Change status"
 msgid "%1$s changed their status:"
-msgstr "更改状态"
+msgstr "%1$s 更改了他们的状态："
 
 #: apps/plugins/portal/xing/activities.js:120 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s is a new contact"
 msgid "%1$s has a new contact:"
-msgstr "%1$s 为新联系人"
+msgstr "%1$s 有一个新联系人："
 
 #: apps/plugins/portal/xing/activities.js:133 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s is a new contact"
 msgid "%1$s has new contacts:"
-msgstr "%1$s 为新联系人"
+msgstr "%1$s 有新联系人："
 
 #: apps/plugins/portal/linkedIn/register.js:126 module:plugins/portal
 msgid "%1$s is a new contact"
@@ -150,17 +146,16 @@ msgstr "%2$s 的 %1$s"
 
 #: apps/plugins/portal/xing/activities.js:81 module:plugins/portal
 msgid "%1$s posted a link:"
-msgstr ""
+msgstr "%1$s 以链接发送："
 
 #: apps/plugins/portal/xing/activities.js:151 module:plugins/portal
-#, fuzzy
 #| msgid "%1$s is a new contact"
 msgid "%1$s posted a new activity:"
-msgstr "%1$s 为新联系人"
+msgstr "%1$s 发送了一个新活动："
 
 #: apps/plugins/portal/xing/activities.js:59 module:plugins/portal
 msgid "%1$s recommends this link:"
-msgstr ""
+msgstr "%1$s 推荐此链接："
 
 #. Format of addresses
 #. %1$s is the street
@@ -519,10 +514,9 @@ msgstr "添加备注"
 
 #: apps/plugins/portal/xing/register.js:382 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:389
-#, fuzzy
 #| msgid "Add action"
 msgid "Add on %s"
-msgstr "添加动作"
+msgstr "在 %s 上添加"
 
 #: apps/io.ox/calendar/freebusy/templates.js:88 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/freebusy/templates.js:90
@@ -647,7 +641,7 @@ msgstr "允许外部链接图像的预加载"
 
 #: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Allow us to use your %s account here"
-msgstr ""
+msgstr "允许我们在此使用您的 %s 户口"
 
 #: apps/io.ox/backbone/forms.js:56 module:io.ox/core
 msgid "An error occurred"
@@ -1321,7 +1315,7 @@ msgstr "注释"
 
 #: apps/plugins/portal/xing/actions.js:59 module:plugins/portal
 msgid "Comment has been successfully posted on XING"
-msgstr ""
+msgstr "意见已成功在 XING 发送"
 
 #: apps/plugins/portal/reddit/register.js:175 module:io.ox/portal
 msgid "Comments"
@@ -1401,10 +1395,9 @@ msgid "Conflicts:"
 msgstr "冲突："
 
 #: apps/io.ox/core/settings/downloads/pane.js:66 module:io.ox/core
-#, fuzzy
 #| msgid "Connector for Microsoft Outlook"
 msgid "Connector for Microsoft Outlook®"
-msgstr "Microsoft Outlook的连接器"
+msgstr "Microsoft Outlook® 的连接器"
 
 #: apps/io.ox/contacts/edit/main.js:272 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:126 module:io.ox/mail
@@ -1420,10 +1413,9 @@ msgid "Contact pictures"
 msgstr "联系人图像"
 
 #: apps/plugins/portal/xing/register.js:360 module:plugins/portal
-#, fuzzy
 #| msgid "Contact Details"
 msgid "Contact request sent"
-msgstr "联系人详情"
+msgstr "已发送联系人请求"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:136 module:io.ox/contacts
 msgid "Contacts"
@@ -1582,7 +1574,7 @@ msgstr "创建"
 
 #: apps/plugins/portal/xing/register.js:267 module:plugins/portal
 msgid "Create a %s account using the data stored here"
-msgstr ""
+msgstr "使用储存在这里的数据创建一个 %s 户口"
 
 #: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:325
@@ -1651,6 +1643,7 @@ msgid ""
 "Data synchronization with your local (Windows) machine. Drive Client lets "
 "you configure the folders to be synchronized."
 msgstr ""
+"和您的本地 (Windows) 机器的数据同步。Drive Client 让您配置要同步的文件夹。"
 
 #: apps/io.ox/backbone/forms.js:512 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:118
@@ -1893,10 +1886,9 @@ msgid "Distribution list has been saved"
 msgstr "已保存通讯组列表"
 
 #: apps/plugins/portal/xing/register.js:262 module:plugins/portal
-#, fuzzy
 #| msgid "Do you really want to delete this account?"
 msgid "Do you already have a %s account?"
-msgstr "确定要删除此户口吗？"
+msgstr "您已经有一个 %s 户口吗？"
 
 #: apps/io.ox/files/util.js:52 module:io.ox/files
 msgid ""
@@ -1971,10 +1963,9 @@ msgid ""
 msgstr "您是否想确认整个循环约会或循环约会中的其中一个？"
 
 #: apps/plugins/portal/xing/register.js:266 module:plugins/portal
-#, fuzzy
 #| msgid "Do you really want to delete this account?"
 msgid "Do you want to create a %s account?"
-msgstr "确定要删除此户口吗？"
+msgstr "您要创建一个 %s 户口吗？"
 
 #: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
 msgid ""
@@ -2030,10 +2021,9 @@ msgid "Download"
 msgstr "下载"
 
 #: apps/io.ox/core/settings/downloads/pane.js:54 module:io.ox/core
-#, fuzzy
 #| msgid "Download install file (for Windows)"
 msgid "Download installation file (for Windows)"
-msgstr "下载安装文件（视窗）"
+msgstr "下载安装文件（为 Windows）"
 
 #: apps/io.ox/core/settings/downloads/pane.js:101 module:io.ox/core
 #: apps/io.ox/core/settings/downloads/pane.js:110
@@ -2052,11 +2042,10 @@ msgid "Drive"
 msgstr "Drive"
 
 #: apps/io.ox/core/settings/downloads/pane.js:82 module:io.ox/core
-#, fuzzy
 #| msgctxt "help"
 #| msgid "Drive Settings"
 msgid "Drive Client"
-msgstr "Drive 设置"
+msgstr "Drive 客户端"
 
 #: apps/io.ox/files/guidance/main.js:95 module:io.ox/files
 msgctxt "help"
@@ -2274,10 +2263,9 @@ msgid ""
 msgstr "在超过您的邮件限额时，电子邮件未能放到垃圾文件夹。"
 
 #: apps/plugins/halo/xing/register.js:38 module:plugins/portal
-#, fuzzy
 #| msgid "Employee ID"
 msgid "Employee"
-msgstr "员工 ID"
+msgstr "员工"
 
 #: apps/io.ox/contacts/model.js:251 module:io.ox/contacts
 msgid "Employee ID"
@@ -2288,10 +2276,9 @@ msgid "Employee type"
 msgstr "员工类型"
 
 #: apps/plugins/halo/xing/register.js:182 module:plugins/portal
-#, fuzzy
 #| msgid "Employee type"
 msgid "Employment"
-msgstr "员工类型"
+msgstr "雇用"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js:712 module:io.ox/core
@@ -2350,7 +2337,7 @@ msgstr "在这里输入文档标题"
 #. what follows is a set of job/status descriptions used by XING
 #: apps/plugins/halo/xing/register.js:36 module:plugins/portal
 msgid "Entrepreneur"
-msgstr ""
+msgstr "创业家"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
@@ -2452,10 +2439,9 @@ msgid "Every day"
 msgstr "每天"
 
 #: apps/plugins/halo/xing/register.js:39 module:plugins/portal
-#, fuzzy
 #| msgid "Active"
 msgid "Executive"
-msgstr "激活"
+msgstr "行政主管"
 
 #: apps/io.ox/core/main.js:747 module:io.ox/core
 msgid "Exit Fullscreen"
@@ -2539,6 +2525,8 @@ msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
 msgstr ""
+"自动保存工作的当前进度失败。请保存您的工作，以防止万一浏览器在未预料关闭时丢"
+"失数据。"
 
 #: apps/io.ox/mail/accounts/settings.js:212
 #: module:io.ox/mail/accounts/settings
@@ -2800,7 +2788,7 @@ msgstr "空闲的"
 
 #: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Freelancer"
-msgstr ""
+msgstr "自由工作者"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:366
 #: module:io.ox/calendar/edit/main
@@ -2915,7 +2903,7 @@ msgstr "帮助"
 
 #: apps/plugins/halo/xing/register.js:247 module:plugins/portal
 msgid "Here is what %s knows about %s:"
-msgstr ""
+msgstr "以下是 %s 知道有关 %s 的："
 
 #: apps/io.ox/core/pubsub/publications.js:344 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/publications.js:345
@@ -3088,6 +3076,7 @@ msgid ""
 "Informs about the current status of E-Mails and appointments without having "
 "to display the user interface or another Windows® client."
 msgstr ""
+"不用显示用户界面或别的 Windows® 客户端，通知有关电子邮件和约会的当前状态。"
 
 #: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
 msgid "Inline"
@@ -3136,21 +3125,19 @@ msgid "Invalid data"
 msgstr "无效数据"
 
 #: apps/plugins/portal/xing/register.js:338 module:plugins/portal
-#, fuzzy
 #| msgid "Invitations"
 msgid "Invitation sent"
-msgstr "邀请"
+msgstr "已发送邀请"
 
 #: apps/io.ox/contacts/toolbar.js:67 module:io.ox/contacts
 msgid "Invite"
-msgstr ""
+msgstr "邀请"
 
 #: apps/plugins/portal/xing/register.js:368 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:375
-#, fuzzy
 #| msgid "Invitations"
 msgid "Invite to %s"
-msgstr "邀请"
+msgstr "邀请到 %s"
 
 #: apps/io.ox/contacts/actions.js:782 module:io.ox/contacts
 #: apps/io.ox/contacts/toolbar.js:68 apps/io.ox/mail/actions.js:1084
@@ -3310,7 +3297,7 @@ msgstr "浅绿色"
 
 #: apps/plugins/portal/xing/actions.js:172 module:plugins/portal
 msgid "Like"
-msgstr ""
+msgstr "赞"
 
 #: apps/plugins/portal/facebook/register.js:450 module:plugins/portal
 msgid "Liked a link: %s"
@@ -3318,10 +3305,9 @@ msgstr "赞一个链接：%s"
 
 #. As on Facebook, XING allows a user to point out that they like a comment
 #: apps/plugins/portal/xing/actions.js:152 module:plugins/portal
-#, fuzzy
 #| msgid "Hide comments"
 msgid "Liked comment"
-msgstr "隐藏注释"
+msgstr "已赞回帖"
 
 #: apps/plugins/portal/linkedIn/register.js:347 module:plugins/portal
 msgid "LinkedIn"
@@ -3402,10 +3388,9 @@ msgid "Mail Filter"
 msgstr "邮件过滤器"
 
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
-#, fuzzy
 #| msgid "Email address"
 msgid "Mail address"
-msgstr "电子邮件地址"
+msgstr "邮件地址"
 
 #: apps/io.ox/contacts/view-detail.js:520 module:io.ox/contacts
 msgid "Mail and Messaging"
@@ -3559,10 +3544,9 @@ msgid "Mark as spam"
 msgstr "标记成垃圾邮件"
 
 #: apps/io.ox/tasks/toolbar.js:77 module:io.ox/mail
-#, fuzzy
 #| msgid "Mark as done"
 msgid "Mark as undone"
-msgstr "标记为已完成"
+msgstr "标记为未完成"
 
 #: apps/io.ox/mail/mobileToolbarActions.js:92 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:102
@@ -3763,10 +3747,9 @@ msgstr "从来没有"
 #: apps/io.ox/contacts/toolbar.js:38 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:39 module:io.ox/files
 #: apps/io.ox/tasks/toolbar.js:43 module:io.ox/mail
-#, fuzzy
 #| msgid "&New"
 msgid "New"
-msgstr "新建(&N)"
+msgstr "新建"
 
 #: apps/io.ox/core/api/folder.js:545 module:io.ox/core
 #: apps/io.ox/core/pubsub/subscriptions.js:158 module:io.ox/core/pubsub
@@ -3798,10 +3781,9 @@ msgid "New contact"
 msgstr "新联系人"
 
 #: apps/io.ox/files/toolbar.js:40 module:io.ox/files
-#, fuzzy
 #| msgid "New folder"
 msgid "New file"
-msgstr "新文件夹"
+msgstr "新文件"
 
 #: apps/io.ox/core/commons-folderview.js:211 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/add.js:90
@@ -3838,10 +3820,9 @@ msgid "New subscription"
 msgstr "新订阅"
 
 #: apps/io.ox/tasks/toolbar.js:44 module:io.ox/mail
-#, fuzzy
 #| msgid "&New Task"
 msgid "New task"
-msgstr "新任务(&N)"
+msgstr "新任务"
 
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
@@ -4035,10 +4016,9 @@ msgstr ""
 "备注：此订阅将会以外部内容取代日历内容，因此您必须为此订阅创建一个新文件夹。"
 
 #: apps/io.ox/core/settings/downloads/pane.js:74 module:io.ox/core
-#, fuzzy
 #| msgid "Modified"
 msgid "Notifier"
-msgstr "已修改"
+msgstr "通知器"
 
 #: apps/io.ox/calendar/edit/template.js:435 module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
@@ -4555,7 +4535,7 @@ msgstr "请选择一个有效图像文件作插入"
 msgid ""
 "Please select which of the following data we may use to create your %s "
 "account:"
-msgstr ""
+msgstr "请选择以下哪些数据我们可以用作创建您的 %s 户口："
 
 #: apps/io.ox/core/main.js:944 module:io.ox/core apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
@@ -4588,10 +4568,9 @@ msgid "Position"
 msgstr "职位"
 
 #: apps/plugins/portal/xing/register.js:159 module:plugins/portal
-#, fuzzy
 #| msgid "Adjust start date"
 msgid "Post a status update"
-msgstr "调整起始日期"
+msgstr "发送一个状态更新"
 
 #: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
 #: apps/io.ox/contacts/model.js:247 apps/io.ox/contacts/model.js:262
@@ -4723,10 +4702,9 @@ msgid "Private"
 msgstr "私人"
 
 #: apps/plugins/halo/xing/register.js:156 module:plugins/portal
-#, fuzzy
 #| msgid "Other address"
 msgid "Private address"
-msgstr "其他地址"
+msgstr "私人地址"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:139
 #: module:io.ox/settings/settings
@@ -4766,10 +4744,9 @@ msgid "Public"
 msgstr "公共"
 
 #: apps/plugins/halo/xing/register.js:41 module:plugins/portal
-#, fuzzy
 #| msgid "Publication"
 msgid "Public servant"
-msgstr "发布"
+msgstr "公共服务者"
 
 #: apps/io.ox/core/pubsub/publications.js:348 module:io.ox/core/pubsub
 msgid "Publication"
@@ -4890,7 +4867,7 @@ msgstr "还原密码"
 
 #: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Recruiter"
-msgstr ""
+msgstr "招募者"
 
 #: apps/io.ox/tasks/model.js:164 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
@@ -5066,7 +5043,7 @@ msgstr "复原应用"
 
 #: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Retired"
-msgstr ""
+msgstr "退休"
 
 #: apps/io.ox/core/commons.js:873 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:308 module:io.ox/mail
@@ -5391,10 +5368,9 @@ msgid "Shared Appointments"
 msgstr "已分享约会"
 
 #: apps/plugins/portal/xing/actions.js:199 module:plugins/portal
-#, fuzzy
 #| msgid "Share this file"
 msgid "Shared activity"
-msgstr "分享此文件"
+msgstr "已分享活动"
 
 #: apps/io.ox/wizards/upsell.js:133 module:io.ox/wizards
 msgid "Shopping cart"
@@ -5592,13 +5568,12 @@ msgstr "保存更改时发生错误。"
 
 #: apps/plugins/halo/xing/register.js:230 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
-msgstr ""
+msgstr "抱歉，现在无法连接到 %s。"
 
 #: apps/plugins/halo/xing/register.js:261 module:plugins/portal
-#, fuzzy
 #| msgid "Sorry, this page is not available at the moment."
 msgid "Sorry, there is no data available for you on %s."
-msgstr "抱歉，此页面暂时不可用。"
+msgstr "抱歉，%s 没有您的可用数据。"
 
 #: apps/plugins/portal/linkedIn/register.js:155 module:plugins/portal
 msgid ""
@@ -5666,7 +5641,7 @@ msgstr "街道"
 
 #: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Student"
-msgstr ""
+msgstr "学生"
 
 #: apps/io.ox/calendar/edit/template.js:137 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:872 module:io.ox/mail
@@ -5680,10 +5655,9 @@ msgid "Subject"
 msgstr "主题"
 
 #: apps/plugins/portal/xing/actions.js:71 module:plugins/portal
-#, fuzzy
 #| msgid "Hide comments"
 msgid "Submit comment"
-msgstr "隐藏注释"
+msgstr "送出回帖"
 
 #: apps/io.ox/core/pubsub/subscriptions.js:53 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:56
@@ -5708,10 +5682,9 @@ msgid "Subscriptions"
 msgstr "订阅"
 
 #: apps/plugins/portal/xing/register.js:66 module:plugins/portal
-#, fuzzy
 #| msgid "You have reauthorized this %s account."
 msgid "Successfully reauthorized your %s account"
-msgstr "您已重认证此 %s 户口。"
+msgstr "已成功重认证您的 %s 户口"
 
 #: apps/io.ox/settings/accounts/settings/pane.js:92
 #: module:io.ox/settings/accounts
@@ -5740,6 +5713,8 @@ msgid ""
 "Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, "
 "Shared and System Folders to Microsoft Outlook® clients."
 msgstr ""
+"从电子邮件、日历、联系人、任务、公共文件夹、共享文件夹、系统文件夹，到 "
+"Microsoft Outlook® 客户端的同步。"
 
 #: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "TAX ID"
@@ -5901,10 +5876,9 @@ msgid "The account must be named"
 msgstr "户口必须命名"
 
 #: apps/plugins/portal/xing/actions.js:96 module:plugins/portal
-#, fuzzy
 #| msgid "The appointment has been deleted"
 msgid "The activity has been deleted successfully"
-msgstr "约会已删除"
+msgstr "已成功删除活动"
 
 #: apps/io.ox/files/api.js:359 module:io.ox/files
 msgid "The allowed quota is reached."
@@ -6023,10 +5997,9 @@ msgid "The character \" \" is not allowed."
 msgstr "不允许 \" \" 字符。"
 
 #: apps/plugins/portal/xing/actions.js:99 module:plugins/portal
-#, fuzzy
 #| msgid "The appointment has been deleted"
 msgid "The comment has been deleted successfully"
-msgstr "约会已删除"
+msgstr "已成功删除回帖"
 
 #. If the user changes the duedate of a task, it may be before the start date, which is not allowed
 #. If this happens the user gets the option to change the start date so it matches the due date
@@ -6088,7 +6061,7 @@ msgstr "以下产品将会马上激活："
 #: apps/plugins/portal/xing/register.js:137 module:plugins/portal
 msgid ""
 "The next step is allowing this system to access your %s account for you."
-msgstr ""
+msgstr "下一步是允许此系统替您访问您的 %s 户口。"
 
 #. Mail compose. Maximum number of recipients exceeded
 #. %1$s = maximum
@@ -6213,17 +6186,17 @@ msgstr "没有定义规则"
 #: apps/plugins/portal/xing/register.js:335
 #: apps/plugins/portal/xing/register.js:357
 msgid "There was a problem with %s. The error message was: \"%s\""
-msgstr ""
+msgstr "%s 有一个问题，错误消息为： \"%s\""
 
 #: apps/plugins/portal/xing/actions.js:54 module:plugins/portal
 #: apps/plugins/portal/xing/actions.js:156
 #: apps/plugins/portal/xing/actions.js:196
 msgid "There was a problem with XING, the error message was: \"%s\""
-msgstr ""
+msgstr "XING 有一个问题，错误消息为： \"%s\""
 
 #: apps/plugins/portal/xing/actions.js:105 module:plugins/portal
 msgid "There was a problem with XING. The error message was: \"%s\""
-msgstr ""
+msgstr "XING 有一个问题，错误消息为： \"%s\""
 
 #: apps/io.ox/mail/accounts/settings.js:190
 #: module:io.ox/mail/accounts/settings
@@ -6588,14 +6561,13 @@ msgstr "URL"
 
 #: apps/plugins/portal/xing/actions.js:167 module:plugins/portal
 msgid "Un-like"
-msgstr ""
+msgstr "取消喜欢"
 
 #. As on Facebook, XING allows a stop pointing out they liked a comment. An 'undo' for the like action, if you will.
 #: apps/plugins/portal/xing/actions.js:144 module:plugins/portal
-#, fuzzy
 #| msgid "Hide comments"
 msgid "Un-liked comment"
-msgstr "隐藏注释"
+msgstr "已取消回帖的赞"
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -6618,7 +6590,7 @@ msgstr "已复原"
 
 #: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Unemployed"
-msgstr ""
+msgstr "无业"
 
 #. twitter: Stop following this person
 #: apps/plugins/portal/twitter/util.js:374 module:plugins/portal
@@ -6858,7 +6830,7 @@ msgstr "工作周视图"
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51
 msgid "XING"
-msgstr ""
+msgstr "XING"
 
 #. Bytes
 #. Kilobytes
@@ -6938,7 +6910,7 @@ msgstr "您当前正使用 %2$s 可用磁盘空间的 %1$s。您剩下 %3$s。"
 #: apps/plugins/halo/xing/register.js:76 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
-msgstr ""
+msgstr "您不是直接连接到 %s。这些人是链接到 %s 的："
 
 #: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
 msgid "You are the organizer"
@@ -7086,11 +7058,11 @@ msgstr[1] "您会在 %1$d 秒后自动注销"
 #: apps/plugins/portal/xing/register.js:136 module:plugins/portal
 msgid ""
 "Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr ""
+msgstr "您的 %s 户口已创建，您快将收到来自 %s 邮件。"
 
 #: apps/plugins/portal/xing/register.js:295 module:plugins/portal
 msgid "Your %s newsfeed"
-msgstr ""
+msgstr "您的 %s 新闻条目"
 
 #: apps/io.ox/core/main.js:865 module:io.ox/core
 msgid "Your Applications"
@@ -7181,19 +7153,18 @@ msgid "Your session is expired"
 msgstr "会话已过期"
 
 #: apps/plugins/halo/xing/register.js:100 module:plugins/portal
-#, fuzzy
 #| msgid "Create contact"
 msgid "Your shared contacts:"
-msgstr "创建联系人"
+msgstr "您的已分享联系人："
 
 #: apps/plugins/portal/xing/register.js:170 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
-msgstr ""
+msgstr "无法在 %s 发送您的状态更新，错误消息为： \"%s\""
 
 #: apps/plugins/portal/xing/register.js:174 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
-msgstr ""
+msgstr "您的状态更新已成功在 %s 发送"
 
 #: apps/plugins/wizards/mandatory/main.js:125 module:io.ox/wizards/firstStart
 msgid "Your timezone"
