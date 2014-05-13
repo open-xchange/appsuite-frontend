@@ -81,9 +81,9 @@ define('io.ox/realtime/groups',
                         to: id,
                         payloads: [
                             {
-                                element: 'ping',
+                                element: 'command',
                                 namespace: 'group',
-                                data: 1
+                                data: 'ping'
                             }
                         ]
                     });
