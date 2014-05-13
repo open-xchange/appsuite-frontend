@@ -668,15 +668,7 @@ define('io.ox/search/view-template',
                         row, cell,
                         items = [],
                         titles = {},
-                        //TODO: remove when backend added setting 'io.ox/core/search/apps'
-                        appsdefault = [
-                            'io.ox/mail',
-                            'io.ox/contacts',
-                            'io.ox/calendar',
-                            'io.ox/tasks',
-                            'io.ox/files'
-                        ],
-                        apps = settings.get('search/apps', appsdefault);
+                        apps = settings.get('search/apps', []);
 
                     //create containers
                     row = $('<div class="row ">').append(

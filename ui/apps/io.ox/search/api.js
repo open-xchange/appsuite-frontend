@@ -109,16 +109,8 @@ define('io.ox/search/api',
         return http[opt.method](opt)
                 .then(function (data) {
                     _.each(data.facets, function (facet) {
-                        //TODO: remove when backend is ready
-                        if (['time', 'folder_type', 'type', 'date', 'status', 'file_type', 'file_size', 'contact_type', 'task_status', 'task_type'].indexOf(facet.id) > -1 ) {
-                            if (!facet.options) {
-                                facet.options = facet.values;
-                                delete facet.values;
-                            }
-                        }
-
                         //preparation to handle type3 facets
-                        if (!facet.values && facet.options) {
+                        if (!facet.values && !!facet.options) {
                             facet.values = [];
                             facet.flags = (facet.flags || []).concat('type3');
                             _.each(facet.options, function (option) {
