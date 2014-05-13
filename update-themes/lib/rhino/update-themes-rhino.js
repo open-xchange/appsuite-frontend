@@ -94,7 +94,6 @@ function deleteRecurse(filter, parent) {
         if (file.isDirectory()) {
             deleteRecurse(filter, file);
         } else if (filter.test(name)) {
-            print('removing css file ' + name);
             file.delete();
         }
     }
@@ -150,7 +149,6 @@ function compileLess(input, outputFile, sourceFileName) {
     }).parse(input, function (e, css) {
         if (e) return error(e);
         outputFile.getParentFile().mkdirs();
-        console.log('writing file: ' + fileName);
         writeFile(outputFile, css.toCSS({
             compress: true,
             cleancss: true,
