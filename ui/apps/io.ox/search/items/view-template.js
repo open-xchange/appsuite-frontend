@@ -88,7 +88,8 @@ define('io.ox/search/items/view-template',
             //require list view extensions points
             var dep = [config.dependencies[module]].concat('less!io.ox/search/items/style');
             require(dep, function () {
-                var last = items.length - baton.model.get('extra');
+                //ignore last element when greater than 'size' (only used to determine if more results exists)
+                var last = items.length > baton.model.get('size') ? items.length - baton.model.get('extra') : items.length;
 
                 items.each(function (model, current) {
 
