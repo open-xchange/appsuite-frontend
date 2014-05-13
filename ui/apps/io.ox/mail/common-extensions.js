@@ -139,7 +139,8 @@ define('io.ox/mail/common-extensions',
         },
 
         unread: function (baton) {
-            var isUnread = api.threads.partiallyUnseen(baton.model.attributes);
+            var data = (baton.model) ? baton.model.attributes : baton.data,
+                isUnread = api.threads.partiallyUnseen(data);
             if (isUnread) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
         },
 
