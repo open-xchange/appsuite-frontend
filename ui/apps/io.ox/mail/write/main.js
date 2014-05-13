@@ -283,24 +283,14 @@ define('io.ox/mail/write/main',
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
+                if (isHTML) text = getParagraph(text);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
-                if (isHTML) {
-                    text = getParagraph(text);
-                    if (signature.misc && signature.misc.insertion === 'below') {
-                        ed.appendContent(text);
-                        ed.scrollTop('bottom');
-                    } else {
-                        ed.prependContent(text);
-                        ed.scrollTop('top');
-                    }
+                if (signature.misc && signature.misc.insertion === 'below') {
+                    ed.appendContent(text);
+                    ed.scrollTop('bottom');
                 } else {
-                    if (signature.misc && signature.misc.insertion === 'below') {
-                        ed.appendContent(text);
-                        ed.scrollTop('bottom');
-                    } else {
-                        ed.prependContent(text);
-                        ed.scrollTop('top');
-                    }
+                    ed.prependContent(text);
+                    ed.scrollTop('top');
                 }
                 currentSignature = text;
             }
@@ -478,13 +468,11 @@ define('io.ox/mail/write/main',
             return str.replace(/[\s\uFEFF\xA0]+$/, '');
         }
 
-        var addBlankLine = function (signature) {
+        var addBlankLine = function () {
             var content = editor.getContent(),
-                blankline = editorMode === 'html' ? '<p><br></p>' : '',
-                pos = signature ? signature.misc && signature.misc.insertion || 'below' : 'below';
-            //required only in html mode with 'above' pos (and if it's not set already)
-            if (!(content === '' && pos === 'below' && editorMode === 'text') && content.indexOf(blankline) !== 0) {
-                app.getEditor().prependContent(blankline);
+                blankline = editorMode === 'html' ? '<p><br></p>' : '\n\n';
+            if (content !== '' && content.indexOf(blankline) !== 0) {
+                editor.setContent(blankline + content);
             }
         };
 
@@ -572,8 +560,9 @@ define('io.ox/mail/write/main',
             // look for real attachments
             var items = _.chain(data.attachments || [])
                         .filter(function (attachment) {
-                            //only real attachments
-                            return attachment.disp === 'attachment';
+                            //only real attachments and inline images
+                            return attachment.disp === 'attachment' ||
+                                (attachment.disp === 'inline' && /^image/.test(attachment.content_type));
                         })
                         .map(function (attachment) {
                             // add as linked attachment
@@ -1289,6 +1278,13 @@ define('io.ox/mail/write/main',
             old_vcard_flag = mail.data.vcard;
             delete mail.data.vcard;
 
+            // fix inline images
+            mail.data.attachments[0].content = mail.data.attachments[0].content
+                    .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
+                    .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
+                    .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
+                    .replace(/data-mce-src="[^"]+"\s?/, '');
+
             mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {
                     if (result.error) {
@@ -1361,7 +1357,9 @@ define('io.ox/mail/write/main',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard this mail?'))
-                        .addPrimaryButton('delete', gt('Discard'), 'delete', {tabIndex: '1'})
+                        //#. "Discard changes" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {tabIndex: '1'})
                         .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .show()

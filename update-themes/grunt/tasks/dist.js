@@ -35,7 +35,6 @@ module.exports = function (grunt) {
             files: [
                 {
                     src: [
-                        'bin/update-themes',
                         'lib/**/*',
                         '!lib/rhino/**/*',
                         'node_modules/grunt/**/*',
@@ -47,15 +46,26 @@ module.exports = function (grunt) {
                 },
                 {
                     expand: true,
-                    src: ['update-themes.sh'],
-                    cwd: 'bin/',
-                    dest: 'dist/appsuite/share'
+                    src: ['share/**/*'],
+                    cwd: 'build/',
+                    dest: 'dist/appsuite/'
+                }
+            ]
+        },
+        dist_executables: {
+            options: {
+                mode: parseInt('755', 8) //0755 is not allowed in strict mode o.O
+            },
+            files: [
+                {
+                    src: ['bin/update-themes'],
+                    dest: 'dist/appsuite/share/update-themes/'
                 },
                 {
                     expand: true,
-                    src: ['update-themes/**/*'],
-                    cwd: 'build/',
-                    dest: 'dist/appsuite/share/'
+                    src: ['update-themes.sh'],
+                    cwd: 'bin/',
+                    dest: 'dist/appsuite/share'
                 }
             ]
         }

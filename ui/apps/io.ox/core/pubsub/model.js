@@ -25,10 +25,12 @@ define('io.ox/core/pubsub/model',
     function createSyncer(api) {
         return {
             create: function (model) {
-                return api.create(model.attributes);
+                return settingsUtil.yellOnReject(
+                    api.create(model.attributes)
+                );
             },
             read: function (model) {
-                return api.get({id: model.id, folder: model.get('folder')});
+                return api.get({ id: model.id, folder: model.get('folder') });
             },
             update: function (model) {
                 return settingsUtil.yellOnReject(

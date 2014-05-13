@@ -15,9 +15,10 @@ define('io.ox/search/view-template',
     ['gettext!io.ox/core',
      'io.ox/core/extensions',
      'io.ox/core/api/apps',
+     'settings!io.ox/core',
      'io.ox/search/util',
      'io.ox/core/tk/autocomplete'
-    ], function (gt, ext, appAPI, util) {
+    ], function (gt, ext, appAPI, settings, util) {
 
     'use strict';
 
@@ -87,7 +88,13 @@ define('io.ox/search/view-template',
                                     model.remove();
                                 }
                                 ref.val('');
-                                model.add(value.facet, value.id);
+
+                                //type3: define used option (type2 default is index 0 of options)
+                                var option = _.find(value.options, function (item) {
+                                    return item.id === value.id;
+                                });
+
+                                model.add(value.facet, value.id, (option || {}).id);
                             }
                         })
                         .on('focus focus:custom click', function (e, isRetry) {
@@ -160,25 +167,33 @@ define('io.ox/search/view-template',
         draw: function (baton) {
             var id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
-                row, cell;
+                row, cell,
+                apps = settings.get('search/modules', ['mail', 'contacts', 'calendar', 'tasks', 'files']);
 
-            //create containers
+            //create container
             row = $('<div class="row applications">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled">')
             );
 
-            //create dropdown menu entries
-            _(appAPI.getFavorites()).each(function (app) {
-                if (!opt.mapping[app.id] || app.id === 'io.ox/files') {
+            //apply mapping (infostore-files-drive chameleon)
+            apps = _.map(apps, function (module) {
+                var id = 'io.ox/' + module;
+                return opt.mapping[id] || id;
+            });
+
+            //create menu entries
+            _(apps).each(function (id) {
+                var title = (ox.manifests.apps[id + '/main'] || {}).title;
+                if (title) {
                     cell.append(
                         $('<li role="presentation" class="application">')
                             .append(
                                 $('<div class="btn-group">')
                                 .append(
                                     $('<button type="button" class="btn btn-link">')
-                                        .attr('data-app', (opt.mapping[app.id] || app.id))
+                                        .attr('data-app', id)
                                         .addClass('pull-left')
-                                        .text(gt.pgettext('app', app.title))
+                                        .text(gt.pgettext('app', title))
                                 )
                             )
                     );
@@ -226,8 +241,13 @@ define('io.ox/search/view-template',
             this.draw.call(baton.$, baton);
         },
         draw: function (baton) {
+
+            //ensure folder facet is set
+            baton.model.ensure();
+
             var model = baton.model,
                 list = model.get('poollist'),
+                pool = model.get('pool'),
                 row, cell;
 
             row = $('<div class="row facets">').append(
@@ -236,28 +256,32 @@ define('io.ox/search/view-template',
 
             _.each(list, function (item) {
                 //get active value
-                var facet = model.get('pool')[item.facet],
-                    value = facet.values[item.value],
-                    facetnode, button;
+                var facet = pool[item.facet],
+                    value, facetnode, button;
 
-                //create facet node
-                cell.append(
-                    facetnode = $('<li role="presentation" class="facet btn-group">')
-                                .append(
-                                    // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                                    button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
-                                        e.preventDefault();
-                                    }).append($('<label>'))
-                                )
-                );
+                if (facet) {
+                    value = facet.values[item.value];
 
-                //general stuff
-                ext.point('io.ox/search/view/window/facet')
-                    .invoke('draw', button, value, facet, baton);
 
-                //additional actions per id/type
-                ext.point('io.ox/search/view/window/facet/' + value.facet)
-                    .invoke('draw', facetnode, value, baton);
+                    //create facet node
+                    cell.append(
+                        facetnode = $('<li role="presentation" class="facet btn-group">')
+                                    .append(
+                                        // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
+                                        button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
+                                            e.preventDefault();
+                                        }).append($('<label>'))
+                                    )
+                    );
+
+                    //general stuff
+                    ext.point('io.ox/search/view/window/facet')
+                        .invoke('draw', button, value, facet, baton);
+
+                    //additional actions per id/type
+                    ext.point('io.ox/search/view/window/facet/' + value.facet)
+                        .invoke('draw', facetnode, value, baton);
+                }
             });
 
             this.append(row);
@@ -304,6 +328,28 @@ define('io.ox/search/view-template',
                     baton.model.trigger('query');
                 }
             });
+        }
+    });
+
+    point.extend({
+        id: 'info',
+        index: 300,
+        draw: function (baton) {
+            var items = baton.model.get('items'),
+                count = items.length - baton.model.get('extra');
+            if (items.length > baton.model.get('size')) {
+                this.append(
+                    $('<div>')
+                    .addClass('info')
+                    .append(
+                            $('<span>')
+                            .addClass('info-item')
+                            .append(
+                                gt('More than the currently displayed %1$s items where found', count)
+                            )
+                        )
+                );
+            }
         }
     });
 
@@ -433,13 +479,12 @@ define('io.ox/search/view-template',
     //facet type: folder
     function folderDialog(facet, baton) {
         require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
-            var label = gt('Folder'),
-                id = facet.values[0].custom,
+            var id = facet.values[0].custom,
                 type = baton.model.getModule();
 
             var dialog = new dialogs.ModalDialog()
-                .header($('<h4>').text(label))
-                .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
+                .header($('<h4>').text(gt('Folder')))
+                .addPrimaryButton('ok', gt('Select Folder'), 'ok', {'tabIndex': '1'})
                 .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
             dialog.getBody().css({ height: '250px' });
 
@@ -624,38 +669,35 @@ define('io.ox/search/view-template',
                 draw: function (baton) {
 
                     var id = baton.model.getApp(),
-                        opt = baton.model.getOptions(),
                         row, cell,
                         items = [],
-                        titles = {};
+                        titles = {},
+                        apps = settings.get('search/apps', []);
 
                     //create containers
                     row = $('<div class="row ">').append(
                         cell = $('<div class="btn-group col-xs-12">')
                     );
 
-
                     //create dropdown menu entries
-                    _(appAPI.getFavorites()).each(function (app) {
-                        if (!opt.mapping[app.id] || app.id === 'io.ox/files') {
-                            var title = titles[app.id] = gt.pgettext('app', app.title);
-                            items.push(
-                                $('<li role="presentation">')
-                                .append(
-                                    $('<a role="menuitem" tabindex="-1" href="#">')
-                                        .attr({
-                                            'title': title,
-                                            'data-app': app.id
-                                        })
-                                        .append(
-                                            $('<i class="fa fa-fw"></i>'),
-                                            $('<span>').text(
-                                                title
-                                            )
+                    _(apps).each(function (id) {
+                        var title = titles[id] = ox.manifests.apps[id + '/main'].title;
+                        items.push(
+                            $('<li role="presentation">')
+                            .append(
+                                $('<a role="menuitem" tabindex="-1" href="#">')
+                                    .attr({
+                                        'title': title,
+                                        'data-app': id
+                                    })
+                                    .append(
+                                        $('<i class="fa fa-fw"></i>'),
+                                        $('<span>').text(
+                                            title
                                         )
-                                )
-                            );
-                        }
+                                    )
+                            )
+                        );
                     });
 
                     //create button and append dropdown menue
@@ -693,27 +735,5 @@ define('io.ox/search/view-template',
             });
         }
     });
-
-    // point.extend({
-    //     id: 'info',
-    //     index: 300,
-    //     draw: function (baton) {
-    //         var items = baton.model.get('items'),
-    //             timespend = Math.round((Date.now() - items.timestamp) / 100) / 10;
-    //         if (items.timestamp) {
-    //             this.append(
-    //                 $('<div>')
-    //                 .addClass('info')
-    //                 .append(
-    //                         $('<span>')
-    //                         .addClass('info-item')
-    //                         .append(
-    //                             gt('Found %1$s items in %2$s seconds', items.length, timespend)
-    //                         )
-    //                     )
-    //             );
-    //         }
-    //     }
-    // });
 
 });

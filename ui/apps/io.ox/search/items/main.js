@@ -32,7 +32,7 @@ define('io.ox/search/items/main',
                         render: view.render,
                         empty: function () {
                             delete this.timestamp;
-                            if (collection.length)
+                            if (this.length)
                                 this.reset();
                             return collection;
                         }

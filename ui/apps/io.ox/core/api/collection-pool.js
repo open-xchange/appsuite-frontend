@@ -108,7 +108,10 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             if ((model = collection.get(cid))) return model;
 
             model = new backbone.Model(data);
-            collection.add(model);
+
+            // add to pool unless it looks like a nested object
+            if (data.folder_id !== undefined && data.parent === undefined) collection.add(model);
+
             return model;
         }
     });

@@ -268,7 +268,7 @@ $(window).load(function () {
             $(this).busy();
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
-            require(['settings!io.ox/core', 'precore.js'], function (settings) {
+            require(['settings!io.ox/core', ox.base + '/precore.js'], function (settings) {
 
                 // greedy prefetch for mail app
                 // need to get this request out as soon as possible
@@ -305,6 +305,8 @@ $(window).load(function () {
                         function success(core) {
                             // go!
                             debug('boot.js: core.launch()');
+                            //trigger load event so custom dropdown can add event listeners (loading to early causes js errors on mobile devices during login)
+                            $(document).trigger('core-main-loaded');
                             core.launch();
                         },
                         function fail(e) {
@@ -661,12 +663,9 @@ $(window).load(function () {
                                 context_id: resp.context_id
                             });
 
-                            var redirect = '';
+                            var redirect = '#';
                             if (hash.ref) {
                                 redirect = '#' + hash.ref;
-                                // _.url.hash('ref', null);
-                            } else {
-                                redirect = location.hash || '#';
                             }
 
                             // cleanup url
@@ -680,7 +679,6 @@ $(window).load(function () {
                                 store: null,
                                 ref: null
                             });
-
                             _.url.redirect(redirect);
 
                             // go ...
@@ -846,12 +844,6 @@ $(window).load(function () {
             if (_.device('IE > 9')) {
                 // cannot change type with jQuery's attr()
                 $('#io-ox-login-username')[0].type = 'text';
-            }
-
-            //show errors saved inlocalstorage
-            if (localStorage.getItem('errormsg')) {
-                feedback('error', $.txt(localStorage.getItem('errormsg')));
-                localStorage.removeItem('errormsg');//remove errormessages from localstorage
             }
 
             debug('boot.js: Load "signin" plugins & set default language');

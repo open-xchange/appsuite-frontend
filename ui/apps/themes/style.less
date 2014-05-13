@@ -295,9 +295,14 @@ div.hopscotch-bubble {
     }
 
     .footer {
+
         padding-top: 13px;
         height: 50px - 13;
         text-align: right;
+
+        .btn {
+            margin-left: 5px;
+        }
     }
 }
 
@@ -669,6 +674,10 @@ div.hopscotch-bubble {
                 color: @white; //HC
             }
         }
+        &.fa-search {
+            font-size: 19px;
+            top: 3px;
+        }
     }
 
     @-webkit-keyframes launcherColours {
@@ -707,7 +716,7 @@ div.hopscotch-bubble {
 
         height: 40px;
         display: inline-block;
-        padding: 0;
+        padding: 0 7px;
 
         .badge {
 
@@ -3428,22 +3437,25 @@ a.toolbar-action, .toolbar-action > a {
 
 /* Guidance view */
 
-.guidance {
+.statistics {
 
     .overflow(auto);
     position: static; /* Bug 31425 */
-    @distance: 50px;
+    @distance: 28px;
+
+    &.modal-body {
+        padding: 28px 28px 0 28px;
+    }
 
     h1.folder-name {
-        font-size: 36px;
-        font-weight: 200;
+        font-size: 24px;
         text-transform: uppercase;
-        color: #ccc;
-        margin: 0 0 0 0;
+        margin: 0 0 24px 0;
     }
 
     header, section {
         margin: 0 0 @distance 0;
+        &:last-child { margin-bottom: 0; }
     }
 
     .folder-summary {
@@ -3457,9 +3469,8 @@ a.toolbar-action, .toolbar-action > a {
     h2 {
         font-size: 20px;
         line-height: 24px;
-        font-weight: 200;
-        text-transform: uppercase;
-        margin: @distance 0 5px 0;
+        font-weight: 300;
+        margin: 0 0 14px 0;
     }
 
     ul.compact {
@@ -3825,9 +3836,9 @@ input.flat-input {
     }
 
     .window-sidepanel.visible {
-        bottom: 40px;
-        width: auto;
-        right: 0;
+        width: auto !important;
+        right: 0 !important;
+        .resizebar { display: none; }
     }
 
     .window-body {

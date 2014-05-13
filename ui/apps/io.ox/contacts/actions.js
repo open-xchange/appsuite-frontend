@@ -70,9 +70,11 @@ define('io.ox/contacts/actions',
         },
         action: function (baton) {
             var data = baton.data;
+            //get full object first, because data might be a restored selection resulting in only having id and folder_id.
+            //This would make distribution lists behave as normal contacts
             if (data.mark_as_distributionlist === true) {
-                require(['io.ox/contacts/distrib/main'], function (m) {
-                    if (m.reuse('edit', data)) return;
+            require(['io.ox/contacts/distrib/main'], function (m) {
+                if (m.reuse('edit', data)) return;
                     m.getApp(data).launch().done(function () {
                         this.edit(data);
                     });

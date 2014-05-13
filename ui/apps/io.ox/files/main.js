@@ -39,7 +39,7 @@ define('io.ox/files/main',
          */
         'folder-view': function (app) {
             // folder tree
-            commons.addFolderView(app, { type: 'infostore', rootFolderId: settings.get('rootFolderId') });
+            commons.addFolderView(app, { type: 'infostore', rootFolderId: settings.get('rootFolderId', 9) });
             app.getWindow().nodes.sidepanel.addClass('border-right');
         },
 
@@ -97,6 +97,30 @@ define('io.ox/files/main',
             });
 
             window.app = app;
+        },
+
+        /*
+         * Folerview toolbar
+         */
+        'folderview-toolbar': function (app) {
+
+            if (_.device('small')) return;
+
+            function toggleFolderView(e) {
+                e.preventDefault();
+                e.data.app.toggleFolderView(e.data.state);
+            }
+
+            var side = app.getWindow().nodes.sidepanel;
+            side.find('.foldertree-container').addClass('bottom-toolbar');
+            side.find('.foldertree-sidepanel').append(
+                $('<div class="generic-toolbar bottom visual-focus">').append(
+                    $('<a href="#" class="toolbar-item" tabindex="1">')
+                    .attr('title', gt('Close folder view'))
+                    .append($('<i class="fa fa-angle-double-left">'))
+                    .on('click', { app: app, state: false }, toggleFolderView)
+                )
+            );
         }
     });
 
@@ -126,17 +150,17 @@ define('io.ox/files/main',
 
         commons.wirePerspectiveEvents(app);
 
-        app.on('folder:change', function (id, data) {
-            if (folderAPI.is('trash', data)) {//no new files in trash folders
-                ext.point('io.ox/files/links/toolbar').disable('default');//that's the plus sign
-            } else {
-                ext.point('io.ox/files/links/toolbar').enable('default');//that's the plus sign
-            }
-            win.updateToolbar();
-        });
-
-        // folder tree
-        commons.addFolderView(app, { type: 'infostore', rootFolderId: settings.get('rootFolderId') });
+        // doesn't work anymore
+        // might be better to revoke 'create' right on trash folder
+        // ------------------------------------------------------------
+        // app.on('folder:change', function (id, data) {
+        //     if (folderAPI.is('trash', data)) {//no new files in trash folders
+        //         ext.point('io.ox/files/links/toolbar').disable('default');//that's the plus sign
+        //     } else {
+        //         ext.point('io.ox/files/links/toolbar').enable('default');//that's the plus sign
+        //     }
+        //     win.updateToolbar();
+        // });
 
         win.nodes.outer.on('selection:drop', function (e, baton) {
             actions.invoke('io.ox/files/actions/move', null, baton);

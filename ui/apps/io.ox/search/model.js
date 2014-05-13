@@ -28,7 +28,7 @@ define('io.ox/search/model',
 
     var options = {},
         items = collection.create(),
-        defaults, factory;
+        defaults, factory, conflicts;
 
     //fetch settings/options
     ext.point('io.ox/search/main').invoke('config',  $(), options);
@@ -48,10 +48,12 @@ define('io.ox/search/model',
         active: [],
         pool: {},
         poollist: [],
+        pooldisabled: {},
         folder: {
             id: 'folder',
             custom: true,
             hidden: true,
+            flags: [],
             values: [{
                 facet: 'folder',
                 id: 'custom',
@@ -63,7 +65,35 @@ define('io.ox/search/model',
         options: options,
         //current folder
         start: 0,
-        size: 100
+        size: 100,
+        extra: 1
+    };
+
+    //resolve conflicting facets
+    conflicts = function () {
+        var pool = _.extend({}, this.get('pool')),
+            list = [].concat(this.get('poollist')),
+            disabled = {};
+
+        //remove conflicting facets
+        _.each(this.get('pool'), function (facet) {
+            _.each(facet.flags, function (flag) {
+                if (flag.indexOf('conflicts:') === 0) {
+                    var id = flag.split(':')[1];
+                    //remove from pool/list and mark disabled
+                    delete pool[id];
+                    disabled[id] = facet;
+                    list = _.filter(list, function (compact) {
+                        return compact.facet !== id;
+                    });
+                }
+            });
+        });
+
+        //update
+        this.set('pool', pool);
+        this.set('poollist', list);
+        this.set('pooldisabled', disabled);
     };
 
     factory = new ModelFactory({
@@ -132,15 +162,23 @@ define('io.ox/search/model',
                         var compact = {
                             facet: facet,
                             value: value,
-                            option: option || itemvalue.filter ? '' : itemvalue.options[0].id
+                            // a) type1, b) type3, c) type2
+                            option: itemvalue.filter ? '' : option || itemvalue.options[0].id
                         };
 
                         itemvalue._compact = compact;
                         pool[facet].values[value] = itemvalue;
-                        //add ids to pool list
-                        list.push(compact);
+
+                        //append/prepend ids to pool list
+                        if (facet === 'folder')
+                            list.unshift(compact);
+                        else
+                            list.push(compact);
                     }
                 });
+
+                //resolve conflicts
+                conflicts.call(this);
 
                 if (facet !== 'folder')
                     this.trigger('query');
@@ -163,6 +201,10 @@ define('io.ox/search/model',
                         list.splice(i, 1);
                     }
                 }
+                //resolve conflicts
+                conflicts.call(this);
+
+                items.empty();
                 this.trigger('query');
             },
             update: function (facet, value, data) {
@@ -232,21 +274,21 @@ define('io.ox/search/model',
                     return facet.id === id;
                 });
             },
-            //
-            getFacets: function () {
+            ensure: function () {
                 var self = this,
-                    missingFolder = !this.get('pool').folder,
+                    missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
                     def = missingFolder && this.isMandatory('folder') ? util.getFirstChoice(this) : $.Deferred().resolve({});
-
                 return def
                         .then(function (data) {
-                            //folder data available (if needed)
-                            if (missingFolder) {
-                                //add (and update for the right display name)
+                            data = data || {};
+                            if (missingFolder)
                                 self.add('folder', 'custom', data);
-                            }
-                        })
-                        .then(function () {
+                        });
+            },
+            //
+            getFacets: function () {
+                var self = this;
+                return this.ensure().then(function () {
                             //return active filters
                             return self.fetch();
                         });
@@ -281,6 +323,7 @@ define('io.ox/search/model',
                     active: [],
                     pool: {},
                     poollist: [],
+                    pooldisabled: {},
                     start: 0
                 },
                 {

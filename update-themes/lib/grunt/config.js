@@ -35,7 +35,7 @@ module.exports = function (grunt) {
                 relativeUrls: false,
                 paths: [
                     path.join(scriptBase, 'bower_components/bootstrap/less'),
-                    path.join(scriptBase, 'font-awesome/less'),
+                    path.join(scriptBase, 'bower_components/font-awesome/less'),
                     'apps/themes'
                 ],
                 imports: {
@@ -59,7 +59,8 @@ module.exports = function (grunt) {
                     ],
                     expand: true,
                     rename: function (dest) { return dest; },
-                    dest: 'apps/themes/' + themeName + '/common.css'
+                    dest: 'apps/themes/' + themeName + '/common.css',
+                    nonull: true
                 },
                 {
                     src: [

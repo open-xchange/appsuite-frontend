@@ -21,7 +21,8 @@ define('io.ox/mail/detail/view',
      'io.ox/core/extPatterns/links',
      'io.ox/core/emoji/util',
      'gettext!io.ox/mail',
-     'less!io.ox/mail/style'
+     'less!io.ox/mail/style',
+     'io.ox/mail/actions'
     ], function (extensions, ext, api, util, Pool, content, links, emoji, gt) {
 
     'use strict';
@@ -258,7 +259,7 @@ define('io.ox/mail/detail/view',
             // as an indicator whether this view has been destroyed meanwhile
             if (this.model === null) return;
 
-            var unseen = util.isUnseen(this.model.get('flags'));
+            var unseen = this.model.get('unseen') || util.isUnseen(this.model.get('flags'));
 
             // done
             this.$el.find('section.body').removeClass('loading');
@@ -269,7 +270,7 @@ define('io.ox/mail/detail/view',
             this.onChangeContent();
 
             // merge data
-            this.model.set(data);
+            if (data) this.model.set(data);
 
             // process unseen flag
             if (unseen) this.onUnseen();
@@ -294,7 +295,14 @@ define('io.ox/mail/detail/view',
                 $li.find('section.body').addClass('loading');
                 this.trigger('load');
                 // load detailed email data
-                api.get(_.cid(this.cid)).then(this.onLoad.bind(this), this.onLoadFail.bind(this));
+                if (this.loaded) {
+                    this.onLoad();
+                } else {
+                    api.get(_.cid(this.model.cid)).then(
+                        this.onLoad.bind(this),
+                        this.onLoadFail.bind(this)
+                    );
+                }
             }
 
             return this;
@@ -308,7 +316,7 @@ define('io.ox/mail/detail/view',
 
             this.options = options || {};
             this.model = pool.getDetailModel(options.data);
-            this.cid = this.model.cid;
+            this.loaded = options.loaded || false;
             this.listenTo(this.model, 'change:flags', this.onChangeFlags);
             this.listenTo(this.model, 'change:attachments', this.onChangeContent);
             this.$el.on('dispose', this.dispose.bind(this));
@@ -355,7 +363,7 @@ define('io.ox/mail/detail/view',
 
             this.$el.attr({
                 'aria-label': title,
-                'data-cid': this.cid,
+                'data-cid': this.model.cid,
                 'data-loaded': 'false'
             });
 

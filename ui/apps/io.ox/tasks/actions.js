@@ -100,7 +100,10 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/done', {
         requires: function (e) {
-            return (e.baton.data.length  !== undefined || e.baton.data.status !== 3);
+            if (!e.collection.has('some')) {
+                return false;
+            }
+            return (e.baton.data.status !== 3);
         },
         action: function (baton) {
             changeState(baton, 1);
@@ -109,7 +112,10 @@ define('io.ox/tasks/actions',
 
     new Action('io.ox/tasks/actions/undone', {
         requires: function (e) {
-            return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
+            if (!e.collection.has('some')) {
+                return false;
+            }
+            return (e.baton.data.status === 3);
         },
         action: function (baton) {
             changeState(baton, 3);

@@ -18,7 +18,7 @@ module.exports = function (grunt) {
     //Override the default tasks
 
     // steps to build the ui (ready for development)
-    grunt.registerTask('build', ['copy_build']);
+    grunt.registerTask('build', ['copy_build', 'less']);
     // create a package ready version of the ui (aka what jenkins does)
     grunt.registerTask('dist', ['clean', 'build', 'copy_dist']);
 };

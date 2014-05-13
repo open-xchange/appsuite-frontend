@@ -23,12 +23,13 @@ define('io.ox/mail/main',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
-     'io.ox/mail/navbarViews',
+     'io.ox/core/toolbars-mobile',
      'io.ox/core/commons-folderview',
-     'io.ox/core/pageController',
+     'io.ox/core/page-controller',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
+     'io.ox/mail/mobile-navbar-extensions',
      'io.ox/mail/toolbar',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
@@ -165,6 +166,7 @@ define('io.ox/mail/main',
             // checkbox toggle
             app.pages.getNavbar('listView').on('rightAction', function () {
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
+
             });
 
         },
@@ -219,7 +221,7 @@ define('io.ox/mail/main',
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': app.settings.get('layout', 'vertical'),
-                'checkboxes': app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
                 'contactPictures': app.settings.get('showContactPictures', false),
                 'mobileFolderSelectMode': false
             });
@@ -418,9 +420,11 @@ define('io.ox/mail/main',
                 app.settings
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
                     .set('layout', data.layout)
-                    .set('showCheckboxes', data.checkboxes)
-                    .set('showContactPictures', data.contactPictures)
-                    .save();
+                    .set('showContactPictures', data.contactPictures);
+                if (_.device('!smartphone')) {
+                    app.settings.set('showCheckboxes', data.checkboxes);
+                }
+                app.settings.save();
             }, 500));
         },
 
@@ -844,6 +848,7 @@ define('io.ox/mail/main',
          * Select next item in list view if current item gets deleted
          */
         'before-delete': function (app) {
+            if (_.device('small')) return; // fixes scrolling issue on mobiles during delete
             api.on('beforedelete', function () {
                 app.listView.selection.dodge();
             });
@@ -934,8 +939,13 @@ define('io.ox/mail/main',
          */
         'change:checkboxes-mobile': function (app) {
             if (_.device('!small')) return;
+
+            // intial hide
+            app.listControl.$el.toggleClass('toolbar-top-visible', false);
+
             app.props.on('change:checkboxes', function (model, value) {
                 app.listView.toggleCheckboxes(value);
+                app.listControl.$el.toggleClass('toolbar-top-visible', value);
                 if (value) {
                     app.pages.getNavbar('listView')
                         .setRight(gt('Cancel'))

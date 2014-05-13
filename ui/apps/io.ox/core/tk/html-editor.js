@@ -48,6 +48,9 @@ define.async('io.ox/core/tk/html-editor',
             .replace(/\sclass="[^"]+"/g, function (all) {
                 return regEmoji.test(all) ? all : '';
             })
+            // remove emoji images and convert them back to unicode characters
+            .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1')
+
             // remove custom attributes
             .replace(/ data-[^=]+="[^"]*"/ig, '')
             // remove relative links

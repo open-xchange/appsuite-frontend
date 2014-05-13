@@ -38,6 +38,7 @@ define('io.ox/calendar/main',
          * Early List view vsplit - we need that to get a Vgrid instance
          */
         'list-vsplit': function (app) {
+            // this causes problems on mobile, the dummy div down here will never be appended
             var vsplit = commons.vsplit($('<div>'), app);
             app.left = vsplit.left;
             app.right = vsplit.right;
@@ -84,9 +85,10 @@ define('io.ox/calendar/main',
          * Default application properties
          */
         'props': function (app) {
+            var view = settings.get('viewView', 'week:week');
             // introduce shared properties
             app.props = new Backbone.Model({
-                'layout': settings.get('viewView', 'week:workweek'),
+                'layout': view,
                 'checkboxes': app.settings.get('showCheckboxes', true)
             });
         },
@@ -112,7 +114,7 @@ define('io.ox/calendar/main',
             app.props.on('change', _.debounce(function () {
                 var data = app.props.toJSON();
                 app.settings
-                    .set('layout', data.checkboxes)
+                    .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
                     .save();
             }, 500));
@@ -159,6 +161,26 @@ define('io.ox/calendar/main',
         'change:layout': function (app) {
             app.props.on('change:layout', function (model, value) {
                 ox.ui.Perspective.show(app, value);
+            });
+        },
+        /*
+         * This fixes the missing back button for listview's detailview
+         * Can be removed until this App is converted to the Pagecontroller
+         */
+        'mobile-compatibility': function (app) {
+            if (!_.device('smartphone')) return;
+            app.left.one('select', function () {
+                var content = app.getWindow().nodes.body.find('.window-content');
+                $(content).append(app.navbar = $('<div class="rightside-navbar">'));
+                app.navbar.append(
+                    $('<a href="#" tabindex="-1">').append(
+                        $('<i class="fa fa-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
+                    ).on('tap', function (e) {
+                        e.preventDefault();
+                        app.getGrid().selection.clear();
+                        $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
+                    })
+                );
             });
         }
     });
@@ -214,9 +236,6 @@ define('io.ox/calendar/main',
             }
         });
 
-        // folder tree
-        commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
-
         // go!
         commons.addFolderSupport(app, null, 'calendar', options.folder || coreConfig.get('folder/calendar'))
             .always(function () {
@@ -225,28 +244,17 @@ define('io.ox/calendar/main',
             })
             .done(function () {
 
-                // app window
-                var lastPerspective = app.props.get('layout');
+                // app perspective
+                var lastPerspective = options.perspective || _.url.hash('perspective') || app.props.get('layout');
 
-                if (_.device('smartphone')) {
-                    // map different views here
-                    switch (lastPerspective) {
-                    case 'week:workweek':
-                        lastPerspective = 'month';
-                        break;
-                    case 'week:week':
-                        lastPerspective = 'month';
-                        break;
-                    case 'calendar':
-                        lastPerspective = 'month';
-                        break;
-                    }
+                if (_.device('small') && _.indexOf(['week:workweek', 'week:week', 'calendar'], lastPerspective) >= 0) {
+                    lastPerspective = 'week:day';
                 } else {
                     // corrupt data fix
                     if (lastPerspective === 'calendar') lastPerspective = 'week:workweek';
                 }
 
-                ox.ui.Perspective.show(app, options.perspective || _.url.hash('perspective') || lastPerspective);
+                ox.ui.Perspective.show(app, lastPerspective);
             });
 
         win.on('change:perspective', function (e, name, id) {

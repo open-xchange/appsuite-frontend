@@ -266,9 +266,6 @@ define('io.ox/portal/main',
                 tabindex: 1
             });
 
-        if (_.device('small')) {
-            node.css('minHeight', 300);
-        }
         model.node = node;
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
 
@@ -327,7 +324,16 @@ define('io.ox/portal/main',
                 node.find('.content').remove();
                 // draw summary only on small devices, i.e. smartphones
                 if (_.device('smartphone') && settings.get('mobile/summaryView')) {
-                    point.invoke('summary', node, baton);
+                    if (point.all()[0].summary) {
+                        //invoke special summary if there is one
+                        point.invoke('summary', node, baton);
+                    }
+                    else if(!node.hasClass('generic-summary')) {//add generic open close if it's not added yet
+                        node.addClass('with-summary show-summary generic-summary');
+                        node.on('tap', 'h2', function (e) {
+                            $(e.delegateTarget).toggleClass('show-summary generic-summary');
+                        });
+                    }
                 }
                 point.invoke('preview', node, baton);
                 node.removeClass('error-occurred');

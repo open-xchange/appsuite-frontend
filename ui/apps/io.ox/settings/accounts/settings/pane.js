@@ -77,8 +77,8 @@ define('io.ox/settings/accounts/settings/pane',
         },
 
         drawAddButton = function () {
-            return $('<div class="btn-group pull-right">').append(
-                $('<a class="btn btn-primary dropdown-toggle" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
+            return $('<div class="btn-group col-md-4 col-xs-12">').append(
+                $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true" tabindex="1">').append(
                     $.txt(gt('Add account')), $.txt(' '),
                     $('<span class="caret">')
                 ),
@@ -117,9 +117,10 @@ define('io.ox/settings/accounts/settings/pane',
 
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
-                $('<h1 class="pull-left">').text(gt('Mail and Social Accounts')),
-                drawAddButton(),
-                $('<div>').addClass('clearfix'),
+                $('<div>').addClass('row').append(
+                    $('<h1 class="col-md-8 col-xs-12">').text(gt('Mail and Social Accounts')),
+                    drawAddButton()
+                ),
                 $('<ul class="list-unstyled list-group widget-list">')
             );
         },

@@ -18,13 +18,12 @@ module.exports = function (grunt) {
     grunt.config.extend('concat', {
         rhino_less: {
             files: [{
-                src: ['node_module/less/dist/less-rhino-1.7.0.js', 'lib/rhino/*.js'],
-                dest: 'build/update-themes/lib/update-themes-rhino.js',
-                nonull: false
+                src: ['node_modules/less/dist/less-rhino-1.7.0.js', 'lib/rhino/*.js'],
+                dest: 'build/share/update-themes/lib/update-themes-rhino.js',
+                nonull: true
             }]
         }
     });
 
-    grunt.registerTask('build', ['lint', 'copy_build', 'concat', 'newer:less', 'compile_po']);
 };
 

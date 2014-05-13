@@ -84,13 +84,13 @@ define('io.ox/mail/common-extensions',
         },
 
         unreadClass: function (baton) {
-            var data = baton.data,
+            var data = (baton.model) ? baton.model.attributes : baton.data,
                 unread = util.isUnseen(data);
             this.closest('.list-item').toggleClass('unread', unread);
         },
 
         unreadClassPartial: function (baton) {
-            var data = baton.data,
+            var data = (baton.model) ? baton.model.attributes : baton.data,
                 unread = api.threads.partiallyUnseen(data);
             this.closest('.list-item').toggleClass('unread', unread);
         },
@@ -116,7 +116,7 @@ define('io.ox/mail/common-extensions',
             if (data.threadSize <= 1) return;
 
             this.append(
-                $('<div class="thread-size" aria-hidden="true" data-open="false">').append(
+                $('<div class="thread-size" aria-hidden="true">').append(
                     $('<span class="number">').text(_.noI18n(data.threadSize))
                 )
             );
@@ -139,7 +139,8 @@ define('io.ox/mail/common-extensions',
         },
 
         unread: function (baton) {
-            var isUnread = api.threads.partiallyUnseen(baton.data);
+            var data = (baton.model) ? baton.model.attributes : baton.data,
+                isUnread = api.threads.partiallyUnseen(data);
             if (isUnread) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
         },
 
@@ -271,7 +272,7 @@ define('io.ox/mail/common-extensions',
                         label: label,
                         classes: 'attachment-link',
                         ref: 'io.ox/mail/attachment/links'
-                    }).draw.call(node, ext.Baton({ data: data })),
+                    }).draw.call(node, ext.Baton({ data: data, $el: $('<span>') })),
                     contentType = getContentType(data.content_type),
                     url,
                     filename;
@@ -422,6 +423,9 @@ define('io.ox/mail/common-extensions',
             }
 
             return function (baton) {
+
+                if (util.isEmbedded(baton.data)) return;
+
                 this.append(
                     $('<a href="#" class="unread-toggle" tabindex="1"><i class="fa"/></a>')
                     .on('click', { view: baton.view }, toggle)
@@ -437,7 +441,7 @@ define('io.ox/mail/common-extensions',
                 view.trigger('load');
                 view.$el.find('.external-images').remove();
                 // get unmodified mail
-                api.getUnmodified(_.cid(view.cid)).done(function (data) {
+                api.getUnmodified(_.cid(view.model.cid)).done(function (data) {
                     view.trigger('load:done');
                     view.model.set(data);
                 });
@@ -445,16 +449,19 @@ define('io.ox/mail/common-extensions',
 
             function draw(model) {
 
-                if (model.get('modified') !== 1) {
+                // nothing to do if message is unchanged
+                // or if message is embedded (since we cannot reload it)
+                if (model.get('modified') !== 1 || util.isEmbedded(model.toJSON())) {
                     this.find('.external-images').remove();
-                } else {
-                    this.append(
-                        $('<div class="alert alert-info external-images">').append(
-                            $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
-                            $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
-                        )
-                    );
+                    return;
                 }
+
+                this.append(
+                    $('<div class="alert alert-info external-images">').append(
+                        $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
+                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
+                    )
+                );
             }
 
             return function (baton) {
@@ -498,9 +505,9 @@ define('io.ox/mail/common-extensions',
 
             function returnReceipt(e) {
                 e.preventDefault();
-                var view = e.data.view, obj = _.cid(view.cid);
+                var view = e.data.view, obj = _.cid(view.model.cid);
                 view.model.set('disp_notification_to', '');
-                skip[view.cid] = true;
+                skip[view.model.cid] = true;
                 api.ack({ folder: obj.folder_id, id: obj.id }).done(function () {
                     notifications.yell(
                         'success',
@@ -514,7 +521,7 @@ define('io.ox/mail/common-extensions',
                 e.preventDefault();
                 // add to skip hash
                 var view = e.data.view;
-                skip[view.cid] = true;
+                skip[view.model.cid] = true;
             }
 
             function draw(model) {

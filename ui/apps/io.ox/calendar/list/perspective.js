@@ -238,7 +238,7 @@ define('io.ox/calendar/list/perspective',
                         end: end.getTime(),
                         folder: settings.get('showAllPrivateAppointments', false) && folder.type === 1 ? undefined : prop.folder,
                         order: prop.order
-                    }).pipe(function (data) {
+                    }).then(function (data) {
                         if (!settings.get('showDeclinedAppointments', false)) {
                             data = _.filter(data, function (obj) {
                                 return util.getConfirmationStatus(obj) !== 2;

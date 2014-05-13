@@ -103,7 +103,7 @@ define('io.ox/mail/api',
             },
 
             getThreadSize: function (obj) {
-                return self.getThread(obj).length;
+                return self.getThread(obj).length || 1;
             },
 
             getUnreadCount: function (obj) {
@@ -835,7 +835,8 @@ define('io.ox/mail/api',
             pool.propagate('change', {
                 id: obj.id,
                 folder_id: obj.folder_id,
-                flags: obj.flags
+                flags: obj.flags,
+                unseen: false
             });
             // update thread model
             api.threads.touch(obj);
@@ -1013,7 +1014,8 @@ define('io.ox/mail/api',
                 params: {
                     action: action || '',
                     attachOriginalMessage: attachOriginalMessage,
-                    view: view
+                    view: view,
+                    setFrom: (/reply|replyall|forward/.test(action))
                 },
                 data: _([].concat(obj)).map(function (obj) {
                     return api.reduce(obj);
@@ -1810,8 +1812,11 @@ define('io.ox/mail/api',
         // we use the last item to generate the cid. More robust because unlikely to change.
         var last = _(thread).last();
 
+        // get thread size - deleted messages are ignored; minimum is 1
+        var size = thread.length;
+
         // store data of most recent message as head
-        obj.head = _.extend({ threadSize: thread.length }, obj);
+        obj.head = _.extend({ threadSize: size }, obj);
 
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID
@@ -1820,7 +1825,7 @@ define('io.ox/mail/api',
 
         // only store plain composite keys instead of full objects
         obj.thread = _(thread).map(_.cid);
-        obj.threadSize = thread.length;
+        obj.threadSize = size;
 
         // also copy thread property to 'last' item to detect model changes
         last.thread = _(thread).map(_.cid);
