@@ -274,21 +274,21 @@ define('io.ox/search/model',
                     return facet.id === id;
                 });
             },
-            //
-            getFacets: function () {
+            ensure: function () {
                 var self = this,
                     missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
                     def = missingFolder && this.isMandatory('folder') ? util.getFirstChoice(this) : $.Deferred().resolve({});
-
                 return def
                         .then(function (data) {
-                            //folder data available (if needed)
-                            if (missingFolder) {
-                                //add (and update for the right display name)
+                            data = data || {};
+                            if (missingFolder)
                                 self.add('folder', 'custom', data);
-                            }
-                        })
-                        .then(function () {
+                        });
+            },
+            //
+            getFacets: function () {
+                var self = this;
+                return this.ensure().then(function () {
                             //return active filters
                             return self.fetch();
                         });

@@ -241,6 +241,10 @@ define('io.ox/search/view-template',
             this.draw.call(baton.$, baton);
         },
         draw: function (baton) {
+
+            //ensure folder facet is set
+            baton.model.ensure();
+
             var model = baton.model,
                 list = model.get('poollist'),
                 pool = model.get('pool'),
