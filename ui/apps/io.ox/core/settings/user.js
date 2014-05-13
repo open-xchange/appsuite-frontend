@@ -72,12 +72,12 @@ define('io.ox/core/settings/user',
 
             var dialog = new dialogs.ModalDialog({
                     top: 60,
-                    width: 900,
+                    width: 910,
                     center: false,
                     maximize: true
                 })
-                .addPrimaryButton('save', gt('Save'), 'save', {'tabIndex': '1'})
-                .addButton('discard', gt('Discard'), 'discard', {'tabIndex': '1'});
+                .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: '1' })
+                .addButton('discard', gt('Discard'), 'discard', { tabIndex: '1' });
 
             var $node = dialog.getContentNode();
             var usermodel;
