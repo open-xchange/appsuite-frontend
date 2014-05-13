@@ -84,13 +84,13 @@ define('io.ox/mail/common-extensions',
         },
 
         unreadClass: function (baton) {
-            var data = baton.data,
+            var data = (baton.model) ? baton.model.attributes : baton.data,
                 unread = util.isUnseen(data);
             this.closest('.list-item').toggleClass('unread', unread);
         },
 
         unreadClassPartial: function (baton) {
-            var data = baton.data,
+            var data = (baton.model) ? baton.model.attributes : baton.data,
                 unread = api.threads.partiallyUnseen(data);
             this.closest('.list-item').toggleClass('unread', unread);
         },
