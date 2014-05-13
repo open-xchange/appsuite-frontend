@@ -66,7 +66,7 @@ define('io.ox/search/model',
         //current folder
         start: 0,
         size: 100,
-        extra: 0
+        extra: 1
     };
 
     //resolve conflicting facets
@@ -204,6 +204,7 @@ define('io.ox/search/model',
                 //resolve conflicts
                 conflicts.call(this);
 
+                items.empty();
                 this.trigger('query');
             },
             update: function (facet, value, data) {
