@@ -43,7 +43,6 @@
 {{~}}
 </script>
 
-
 <script type="text/template" class="phonelist">
 {{? it.filtered > 0 }}
     <div class="note">{{! it.i18n.filtered(it.filtered) }}. <i>{{! it.i18n.notPrinted }}.</i></div>
@@ -72,6 +71,45 @@
             </tr>
             <tr>
                 <td colspan="3" class="spacer">&nbsp;</td>
+            </tr>
+        </tbody>
+        {{~}}
+        </table>
+    </div>
+</script>
+
+
+<script type="text/template" class="contacts">
+    <div class="phonelist">
+        <table border="0">
+        <thead>
+            <tr>
+                <th>{{! it.i18n.name }}</th>
+                <th>{{! it.i18n.cellphone }}</th>
+                <th>{{! it.i18n.phone }}</th>
+                <th>{{! it.i18n.email }}</th>
+            </tr>
+        </thead>
+        {{~it.data :element}}
+        <tbody class="no-break">
+            {{? it.length >= 30 && element.thumbIndex(element.original.last_name) }}
+            <tr>
+                <td colspan="4" class="thumb-index">{{! element.thumbIndex.get() }}</td>
+            </tr>
+            {{?}}
+            <tr>
+                <td><b>{{! element.name }}</b><br>{{! element.where }}</td>
+                <td>{{! element.cellphone1 || '-' }}<br>{{! element.cellphone2 }}</td>
+                <td>{{! element.phone1 || '-' }}<br>{{! element.phone2 }}</td>
+                {{? element.isDistributionList === false }}
+                <td>{{! element.email1 }}{{? element.email2 !== ''}}<br>{{ element.email2 }}{{?}}{{? element.email3 !== '' }}<br>{{ element.email3 }}{{?}}{{? element.email3 !== '' }}<br>{{ element.email3 }}{{?}}</td>
+                {{?}}
+                {{? element.isDistributionList }}
+                <td>{{! element.distributionList }}</td>
+                {{?}}
+            </tr>
+            <tr>
+                <td colspan="4" class="spacer">&nbsp;</td>
             </tr>
         </tbody>
         {{~}}
