@@ -131,6 +131,7 @@ define('io.ox/mail/settings/signatures/register',
                         // set very first signature as default if no other signatures exist
                         if (sigs.length === 1) {
                             settings.set('defaultSignature', sigs[0].id).save();
+                            snippets.trigger('refresh.all');
                         }
                         popup.idle();
                         popup.close();
