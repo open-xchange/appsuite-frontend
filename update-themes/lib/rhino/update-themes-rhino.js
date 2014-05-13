@@ -64,28 +64,29 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
     }
 };
 
+(function main() {
+    var style1 = readFile('apps/themes/style.less');
+    var bootstrap = readFile('share/update-themes/bower_components/bootstrap/less/bootstrap.less');
+    var bootstrapDP = readFile('share/update-themes/bower_components/bootstrap-datepicker/less/datepicker3.less');
+    var fontAwesome = readFile('share/update-themes/bower_components/font-awesome/less/font-awesome.less');
+    var scriptBase = 'share/update-themes/';
 
-var style1 = readFile('apps/themes/style.less');
-var bootstrap = readFile('share/update-themes/bower_components/bootstrap/less/bootstrap.less');
-var bootstrapDP = readFile('share/update-themes/bower_components/bootstrap-datepicker/less/datepicker3.less');
-var fontAwesome = readFile('share/update-themes/bower_components/font-awesome/less/font-awesome.less');
-var scriptBase = 'share/update-themes/';
-
-var themes = new java.io.File('apps/themes').listFiles();
-for (var i = 0; i < themes.length; i++) {
-    var dir = themes[i];
-    if (!dir.isDirectory()) continue;
-    function subDir(name) { return new java.io.File(dir, name); }
-    defs2 = subDir('definitions.less');
-    if (!defs2.exists()) continue;
-    print('Processing', dir);
-    deleteRecurse(/\.css$/, new java.io.File(dir));
-    var defs = [bootstrap, bootstrapDP, fontAwesome, style1].join('\n');
-    compileLess(defs, subDir('common.css'));
-    compileLess(readFile(subDir('style.less')),
-                subDir('style.css'));
-    recurse('', subDir, new java.io.File('apps'));
-}
+    var themes = new java.io.File('apps/themes').listFiles();
+    for (var i = 0; i < themes.length; i++) {
+        var dir = themes[i];
+        if (!dir.isDirectory()) continue;
+        function subDir(name) { return new java.io.File(dir, name); }
+	defs2 = subDir('definitions.less');
+	if (!defs2.exists()) continue;
+	print('Processing', dir);
+	deleteRecurse(/\.css$/, new java.io.File(dir));
+	var defs = [bootstrap, bootstrapDP, fontAwesome, style1].join('\n');
+	compileLess(defs, subDir('common.css'));
+	compileLess(readFile(subDir('style.less')),
+		subDir('style.css'));
+	recurse('', subDir, new java.io.File('apps'));
+    }
+}());
 
 function deleteRecurse(filter, parent) {
     var files = parent.listFiles();
