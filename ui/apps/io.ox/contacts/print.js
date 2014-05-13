@@ -15,8 +15,9 @@ define('io.ox/contacts/print',
     ['io.ox/core/print',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
+     'settings!io.ox/contacts',
      'gettext!io.ox/contacts'
-    ], function (print, api, util, gt) {
+    ], function (print, api, util, settings, gt) {
 
     'use strict';
 
@@ -31,17 +32,44 @@ define('io.ox/contacts/print',
     function getCellPhone(data, index) {
         return _([data.cellular_telephone1, data.cellular_telephone2]).compact()[index] || '';
     }
+    
+    function getEmail(data, index) {
+        return _([data.email1, data.email2, data.email3]).compact()[index] || data.mail || '';
+    }
+    
+    function getDistributionList(data) {
+        if (!data.mark_as_distributionlist) return '';
+        var list = _(data.distribution_list || []), hash = {};
+        return _(list)
+        .chain()
+        .compact()
+        .filter(function (member) {
+            if (hash[member.mail]) {
+                return false;
+            } else {
+                return (hash[member.mail] = true);
+            }
+        })
+        .map(function (member) {
+            return (member.display_name ? ' "' + member.display_name + '"' : ' ') + '\u0020<' + member.mail + '>';
+        }).value();
+    }
 
     function process(data, index, options) {
         return {
             original: data,
-            name: util.getFullName(data),
+            name: util.getFullName(data) || '-',
             sort_name: util.getSortName(data),
             where: getWhere(data),
             phone1: getPhone(data, 0),
             phone2: getPhone(data, 1),
             cellphone1: getCellPhone(data, 0),
             cellphone2: getCellPhone(data, 1),
+            email1: getEmail(data, 0),
+            email2: getEmail(data, 1),
+            email3: getEmail(data, 2),
+            isDistributionList: api.looksLikeDistributionList(data),
+            distributionList: getDistributionList(data),
             thumbIndex: options.thumbIndex
         };
     }
@@ -67,8 +95,9 @@ define('io.ox/contacts/print',
 
         open: function (selection, win) {
 
-            print.smart({
-
+            var listType = settings.get('features/printList', 'phone');
+            
+            var options = {
                 get: function (obj) {
                     return api.get(obj);
                 },
@@ -80,6 +109,7 @@ define('io.ox/contacts/print',
                     name: gt('Name') + ', ' + gt('Department') + ', ' + gt('City'),
                     phone: gt('Phone'),
                     cellphone: gt('Cell phone'),
+                    email: gt('Email'),
                     filtered: function (n) {
                         return gt.format(gt.ngettext(
                             'Note: One contact is not shown due to missing phone numbers',
@@ -90,20 +120,24 @@ define('io.ox/contacts/print',
                     notPrinted: gt('This note will not be printed')
                 },
 
-                filter: function (o) {
-                    // ignore distribution lists plus
-                    // contacts should have at least one phone number to appear on a phone list
-                    return !o.mark_as_distributionlist && !!(o.phone1 || o.phone2 || o.cellphone1 || o.cellphone2);
-                },
-
                 process: process,
                 selection: selection,
-                selector: '.phonelist',
+                selector: listType === 'phone' ? '.phonelist' : '.contacts',
                 sortBy: 'sort_name',
                 window: win,
 
                 thumbIndex: createThumbIndex()
-            });
+            };
+            
+            if (listType === 'phone') {
+                options.filter = function (o) {
+                    // ignore distribution lists plus
+                    // contacts should have at least one phone number to appear on a phone list
+                    return !o.mark_as_distributionlist && !!(o.phone1 || o.phone2 || o.cellphone1 || o.cellphone2);
+                };
+            }
+            
+            print.smart(options);
         }
     };
 });
