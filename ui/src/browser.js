@@ -22,6 +22,7 @@
         phantom,
         MacOS,
         Windows,
+        Windows8,
         Blackberry,
         WindowsPhone,
         Android,
@@ -121,6 +122,7 @@
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
             Windows = ua.indexOf('Windows') > -1;
+            Windows8 = ua.indexOf('Windows NT 6.3') > -1;
             Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1);
             WindowsPhone = ua.indexOf('Windows Phone') > -1;
             Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined;
@@ -162,13 +164,14 @@
                 iOS: iOS,
                 MacOS: MacOS,
                 Android : Android,
-                Windows: Windows
+                Windows: Windows,
+                Windows8: Windows8
             };
 
         } catch (e) {
             error = true;
             console.warn('Could not detect browser, using fallback');
-            var browsers = 'IE Opera WebKit Safari PhantomJS Karma Chrome Firefox ChromeiOS UIWebView Blackberry WindowsPhone iOS MacOS Android Windows'.split(' ');
+            var browsers = 'IE Opera WebKit Safari PhantomJS Karma Chrome Firefox ChromeiOS UIWebView Blackberry WindowsPhone iOS MacOS Android Windows Windows8'.split(' ');
             // set to unknown browser
             us.browser = {
                 unknown: true
@@ -202,6 +205,16 @@
         // fixes for testrunner
         if (window.ox !== undefined) {
             us.browser.karma = !!window.ox.testUtils;
+        }
+
+        // fixes for Windows 8 Chrome
+        // Windows 8 Chrome does report touch events which leads to
+        // a wrong feature set (disabled stuff) as AppSuite thinks
+        // this is a Smartphone or tablet without a mouse.
+        if (us.browser.chrome && us.browser.windows8 && Modernizr.touch) {
+            // overwrite Modernizr's touch property and remove html class
+            Modernizr.touch = false;
+            document.getElementsByTagName('html')[0].className = document.getElementsByTagName('html')[0].className.replace(/\btouch\b/,'');
         }
     }
 

@@ -38,12 +38,13 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(support).toBe(true);
         });
 
-         it('should add a global funciton "isBrowserSupported" which returns a bool', function () {
 
+         it('should add a global funciton "isBrowserSupported" which returns a bool', function () {
             var browser = _.isFunction(window.isBrowserSupported);
             expect(browser).toBe(true);
             var bool = _.isBoolean(window.isBrowserSupported());
             expect(bool).toBe(true);
+
         });
 
         _(userAgents.valid).each(function (a, browser) {
@@ -64,6 +65,12 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
                 expect(_.browser.unknown).toBe(true);
                 spy.restore();
             });
+        });
+
+        it('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
+            _.device.loadUA(userAgents.valid.Chrome[34]);
+            expect(Modernizr.touch).to.be.false;
+            expect(_.browser.windows8).to.be.true;
         });
 
     });
