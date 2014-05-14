@@ -352,6 +352,20 @@ define('io.ox/search/view-template',
         }
     });
 
+    point.extend({
+        id: 'busy',
+        index: 500,
+        draw: function () {
+            this.append(
+                $('<div class="row busy">')
+                    .append(
+                        $('<div class="col-xs-12 io-ox-busy">')
+                            .css('min-height', '50px')
+                        )
+            );
+        }
+    });
+
     function getOptionLabel(options, id) {
         var current = _.find(options, function (item) {
                 return item.id === id;
