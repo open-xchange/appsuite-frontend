@@ -132,7 +132,7 @@
 
         })();
     }
-    else if (Modernizr.websqldatabase) {
+    else if (Modernizr.websqldatabase && _.device('!android')) {
 
         // Web SQL
         (function () {
@@ -207,6 +207,54 @@
                         }
                     )
                 });
+            };
+        })();
+    } else if (_.device('android') && Modernizr.localstorage) {
+        // use localstorage on android as this is still the fastest storage
+        (function () {
+
+            var storage = window.localStorage,
+                fileToc = [];
+
+            // simple test first
+            try {
+                storage.setItem('access-test', 1);
+                storage.removeItem('access-test');
+            } catch (e) {
+                console.warn('Access to localstorage forbidden. Disabling cache.');
+                fileCache = dummyFileCache;
+                return;
+            }
+
+            // if we've got an old version clear the cache and create a new one
+            var ui = JSON.parse(storage.getItem('appsuite-ui'));
+            if (ui && ui.version != ox.version) {
+
+                if (ox.debug) console.warn('New UI Version - clearing storage');
+
+                // clear all the caches
+                var cacheList = JSON.parse(storage.getItem('file-toc'));
+                _(cacheList).each(function (key) {
+                    console.log('removing item: ', key);
+                    storage.removeItem(key);
+                });
+            }
+
+            fileCache.cache = function (name, contents) {
+                fileToc.push(name);
+                storage.setItem(name, contents);
+                storage.setItem('file-toc', JSON.stringify(fileToc));
+            };
+
+            fileCache.retrieve = function (name) {
+                var def = $.Deferred();
+                var result = storage.getItem(name);
+                if (result) {
+                    def.resolve(result);
+                } else {
+                    def.reject()
+                }
+                return def;
             };
         })();
     }
