@@ -965,7 +965,6 @@ define('io.ox/mail/main',
             });
         },
 
-
         /*
          * Respond to change:contactPictures
          */
@@ -973,7 +972,30 @@ define('io.ox/mail/main',
             app.props.on('change:contactPictures', function () {
                 app.listView.redraw();
             });
-        }
+        },
+
+        // 'inplace-search': function (app) {
+
+        //     if (_.device('small')) return;
+
+        //     var side = app.getWindow().nodes.sidepanel;
+
+        //     require(['io.ox/search/main'], function (search) {
+
+        //         side.find('.foldertree-sidepanel').append(
+        //             $('<div class="generic-toolbar top inplace-search io-ox-search">').append(
+        //                 search.init()
+        //             )
+        //         );
+
+        //         var container = side.find('.foldertree-container').addClass('top-toolbar');
+
+        //         side.find('.search-field').on('focus blur', function (e) {
+        //             // hide on focus, show on blur
+        //             container.toggle(e.type === 'blur');
+        //         });
+        //     });
+        // }
     });
 
     // launcher

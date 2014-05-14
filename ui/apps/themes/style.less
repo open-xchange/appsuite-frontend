@@ -3200,9 +3200,8 @@ ul.io-ox-inline-links + header {
 
         overflow: auto;
 
-        &.bottom-toolbar {
-            bottom: 45px;
-        }
+        &.top-toolbar { top: 45px; }
+        &.bottom-toolbar { bottom: 45px; }
 
         .io-ox-foldertree {
 
@@ -3292,7 +3291,7 @@ ul.io-ox-inline-links + header {
 
     }
 
-    .generic-toolbar {
+    .generic-toolbar.bottom {
         border-color: rgba(0, 0, 0, 0.10);
         background-color: rgba(0, 0, 0, 0.015);
     }
@@ -3365,6 +3364,13 @@ ul.io-ox-inline-links + header {
             line-height: @height-small - 1;
         }
     }
+}
+
+// ------
+
+.inplace-search {
+    padding: 7px;
+    line-height: 20px;
 }
 
 // ------

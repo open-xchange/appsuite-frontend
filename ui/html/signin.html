@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{{ base }}/apps/themes/login/login.css">
 <script>
   // signin page
-  ox.signin = true;
+  window.ox = { signin: true };
   // fix broken URL
   var path = location.pathname;
   if (/^\/\//.test(path)) {

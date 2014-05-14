@@ -73,6 +73,10 @@ module.exports = function (grunt) {
                          'apps/io.ox/core/cache/localstorage.js',
                          'apps/io.ox/core/cache/simple.js',
                          'apps/plugins/halo/register.js',
+                         // missing for signin
+                         'apps/io.ox/core/login-i18n.js',
+                         'build/apps/io.ox/core/login.en_US.js',
+                         'build/apps/io.ox/core/login.de_DE.js',
                          'src/boot.js'
                     ],
                     dest: 'build/boot.js',

@@ -68,8 +68,8 @@ html, body {
 }
 
 .clear-title {
-    font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 300;
+    font-family: 'Helvetica Neue', OpenSans, Helvetica, Arial, sans-serif;
+    font-weight: 100;
     font-size: 20pt;
     line-height: 1.15em;
 }
@@ -315,7 +315,7 @@ html, body {
         left: 50%;
         margin: -10px 0 0 -10px;
         /* icon-refresh */
-        font-size: 20px;
+        font-size: 40px;
         font-family: 'FontAwesome';
         content: '\f021';
         color: rgba(0, 0, 0, 0.30);
@@ -326,6 +326,15 @@ html, body {
         animation: spin 1.5s infinite linear;
     }
 }
+
+#background-loader.io-ox-busy:before {
+    margin: -20x 0 0 -20px;
+    font-size: 40px;
+    color: #aaa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    content: '\21BB';
+}
+
 .row:before, .row:after {
     content: " ";
     display: table;
