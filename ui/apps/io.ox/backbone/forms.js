@@ -560,7 +560,8 @@ define('io.ox/backbone/forms',
                         weekStart: date.locale.weekStart,
                         parentEl: self.nodes.controlGroup,
                         todayHighlight: true,
-                        todayBtn: true
+                        todayBtn: true,
+                        autoclose: true
                     });
                 } else {
                     require(['io.ox/core/tk/mobiscroll'], function (defaultSettings) {
