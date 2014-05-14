@@ -3429,7 +3429,7 @@ a.toolbar-action, .toolbar-action > a {
         position: absolute;
         top: 100px;
         left: 100px;
-        z-index: 2;
+        z-index: 10001; // > 10000; see bug #32517
     }
 
     .divider + .divider { display: none; }
