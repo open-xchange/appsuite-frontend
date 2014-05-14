@@ -39,6 +39,53 @@ body { overflow: hidden; }
     position: absolute; top: 0px; left: 0px;
     width: 100%; height: 100%; background-color: #fff; z-index: 65300;
 }
+.io-ox-busy {
+    position: relative;
+}
+.io-ox-busy:before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 -10px;
+    /* icon-refresh */
+    font-size: 40px;
+    font-family: 'FontAwesome';
+    content: '\f021';
+    color: rgba(0, 0, 0, 0.30);
+    /* icon-spin */
+    -moz-animation: spin 1.5s infinite linear;
+    -o-animation: spin 1.5s infinite linear;
+    -webkit-animation: spin 1.5s infinite linear;
+    animation: spin 1.5s infinite linear;
+}
+#background-loader.io-ox-busy:before {
+    margin: -20px 0 0 -20px;
+    font-size: 40px;
+    color: #aaa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    content: '\21BB';
+}
+/* support for animated throbber */
+@-moz-keyframes spin {
+  0%    { -moz-transform: rotate(0deg);     }
+  100%  { -moz-transform: rotate(359deg);   }
+}
+@-webkit-keyframes spin {
+  0%    { -webkit-transform: rotate(0deg);  }
+  100%  { -webkit-transform: rotate(359deg);}
+}
+@-o-keyframes spin {
+  0%    { -o-transform: rotate(0deg);       }
+  100%  { -o-transform: rotate(359deg);     }
+}
+@-ms-keyframes spin {
+  0%    { -ms-transform: rotate(0deg);      }
+  100%  { -ms-transform: rotate(359deg);    }
+}
+@keyframes spin {
+  0%    { transform: rotate(0deg);          }
+  100%  { transform: rotate(359deg);        }
+}
 </style>
 
 <meta id="bootstrap">
