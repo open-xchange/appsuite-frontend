@@ -305,12 +305,12 @@ define('io.ox/core/tk/list',
         redraw: function () {
             var point = ext.point(this.ref + '/item'),
                 collection = this.collection;
-            this.getItems().each(function (index) {
+            this.getItems().each(function (index, li) {
                 if (index >= collection.length) return;
                 var model = collection.at(index),
                     data = this.map(model),
                     baton = ext.Baton({ data: data, model: model, app: this.app });
-                point.invoke('draw', $(this).children().eq(1).empty(), baton);
+                point.invoke('draw', $(li).children().eq(1).empty(), baton);
             }.bind(this));
         },
 

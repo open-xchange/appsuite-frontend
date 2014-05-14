@@ -223,6 +223,7 @@ define('io.ox/mail/toolbar',
             .option('folderview', true, gt('Folder view'))
             .option('checkboxes', true, gt('Checkboxes'))
             .option('contactPictures', true, gt('Contact pictures'))
+            .option('exactDates', true, gt('Exact dates'))
             .divider()
             .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
             .listenTo(baton.app.props, 'change:layout', updateContactPicture);
