@@ -1103,7 +1103,7 @@ msgid "Cart is empty."
 msgstr "Einkaufswagen ist leer."
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "Mobiltelefon"
 
@@ -1182,7 +1182,7 @@ msgstr "Zugangsdaten werden überprüft... Dies kann eine Weile dauern. "
 msgid "Children"
 msgstr "Kinder"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "Stadt"
 
@@ -1777,7 +1777,7 @@ msgid "Delete widget"
 msgstr "Widget löschen"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "Abteilung"
 
@@ -2200,6 +2200,10 @@ msgstr "Bearbeiten, um einen Namen hinzuzufügen"
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "Editor"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "E-Mail"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -3729,7 +3733,7 @@ msgstr "Mein Passwort"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -3988,7 +3992,7 @@ msgstr "Nicht begonnen"
 msgid "Note"
 msgstr "Hinweis"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -4339,7 +4343,7 @@ msgstr "Persönlich"
 msgid "Personal information"
 msgstr "Persönliche Daten "
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "Telefon"
 
@@ -4386,7 +4390,7 @@ msgstr "Telefon (weiteres)"
 msgid "Phone (private)"
 msgstr "Telefon (privat)"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "Telefonliste"
 
@@ -6429,7 +6433,7 @@ msgstr "Diese E-Mail wurde dem Portal hinzugefügt"
 msgid "This mail has no content"
 msgstr "Diese E-Mail hat keinen Inhalt"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Dieser Hinweis wird nicht gedruckt"
 
@@ -8591,9 +8595,6 @@ msgstr "jährlich"
 
 #~ msgid "Editing settings"
 #~ msgstr "Die Einstellungen bearbeiten"
-
-#~ msgid "Email"
-#~ msgstr "E-Mail"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-Mail-Adresse:"

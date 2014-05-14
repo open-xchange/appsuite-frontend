@@ -2383,7 +2383,7 @@ msgstr ""
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 #: apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229
 #: module:io.ox/core/pubsub
@@ -2664,7 +2664,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:242
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr ""
 
@@ -2778,7 +2778,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:273
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr ""
 
@@ -3019,29 +3019,34 @@ msgstr ""
 msgid "This contact is private and cannot be shared"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js:79
+#: apps/io.ox/contacts/print.js:108
 #: module:io.ox/contacts
 msgid "Phone list"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 #: module:io.ox/contacts
 msgid "City"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js:81
+#: apps/io.ox/contacts/print.js:110
 #: module:io.ox/contacts
 msgid "Phone"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js:84
+#: apps/io.ox/contacts/print.js:112
+#: module:io.ox/contacts
+msgid "Email"
+msgstr ""
+
+#: apps/io.ox/contacts/print.js:114
 #: module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: apps/io.ox/contacts/print.js:90
+#: apps/io.ox/contacts/print.js:120
 #: module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr ""

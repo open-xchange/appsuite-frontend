@@ -1098,7 +1098,7 @@ msgid "Cart is empty."
 msgstr "カートには何も入っていません。"
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "携帯電話"
 
@@ -1177,7 +1177,7 @@ msgstr "認証情報をチェックしています... 数秒かかる場合が�
 msgid "Children"
 msgstr "子供"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "市区町村"
 
@@ -1771,7 +1771,7 @@ msgid "Delete widget"
 msgstr "ウィジェットを削除"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "部署"
 
@@ -2199,6 +2199,10 @@ msgstr "編集して名前を設定"
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "エディタ"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "メール"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -3738,7 +3742,7 @@ msgstr "マイ パスワード"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -4001,7 +4005,7 @@ msgstr "未開始"
 msgid "Note"
 msgstr "通知内容"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] "注: 電話番号が見つからないため、表示されない連絡先があります。"
@@ -4345,7 +4349,7 @@ msgstr "個人用"
 msgid "Personal information"
 msgstr "個人情報"
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "電話"
 
@@ -4392,7 +4396,7 @@ msgstr "その他の電話"
 msgid "Phone (private)"
 msgstr "電話 (プライベート)"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "電話リスト"
 
@@ -6410,7 +6414,7 @@ msgstr "このメールをポータルに追加しました。"
 msgid "This mail has no content"
 msgstr "このメールには内容がありません。"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "このメモは印刷されません。"
 
@@ -10119,9 +10123,6 @@ msgstr "毎年"
 
 #~ msgid "Elements of this week only"
 #~ msgstr "今週の用件のみ"
-
-#~ msgid "Email"
-#~ msgstr "メール"
 
 #~ msgid "Email Address:"
 #~ msgstr "メール アドレス:"

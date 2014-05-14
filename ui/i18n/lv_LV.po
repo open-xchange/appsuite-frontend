@@ -1123,7 +1123,7 @@ msgid "Cart is empty."
 msgstr "Grozs ir tukšs"
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "Mob. telefons"
 
@@ -1202,7 +1202,7 @@ msgstr "Pieslēguma informācijas pārbaude... Tas var aizņemt vairākas sekund
 msgid "Children"
 msgstr "Bērni"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "Pilsēta"
 
@@ -1797,7 +1797,7 @@ msgid "Delete widget"
 msgstr "Dzēst vidžetu"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "Nodaļa"
 
@@ -2224,6 +2224,10 @@ msgstr "Ievadiet nosaukumu."
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "Redaktors"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "E-pasts"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -3764,7 +3768,7 @@ msgstr "Mana parole"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -4027,7 +4031,7 @@ msgstr "Nav iesākts"
 msgid "Note"
 msgstr "Piezīme"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -4380,7 +4384,7 @@ msgstr "Privāti"
 msgid "Personal information"
 msgstr "Personīgā informācija"
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "Telefons"
 
@@ -4427,7 +4431,7 @@ msgstr "Telefons (cits)"
 msgid "Phone (private)"
 msgstr "Telefons (privāts)"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "Telefonu saraksts"
 
@@ -6472,7 +6476,7 @@ msgstr "Šī vēstule ir pievienota portālam"
 msgid "This mail has no content"
 msgstr "Šai vēstulei nav satura"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Šī piezīme netiks drukāta"
 
@@ -9456,9 +9460,6 @@ msgstr "ik-gada"
 
 #~ msgid "El Salvador"
 #~ msgstr "Salvadora"
-
-#~ msgid "Email"
-#~ msgstr "E-pasts"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-pasta adrese:"

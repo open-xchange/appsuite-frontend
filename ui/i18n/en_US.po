@@ -1085,7 +1085,7 @@ msgid "Cart is empty."
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr ""
 
@@ -1164,7 +1164,7 @@ msgstr ""
 msgid "Children"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr ""
 
@@ -1752,7 +1752,7 @@ msgid "Delete widget"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr ""
 
@@ -2158,6 +2158,10 @@ msgstr ""
 #: apps/io.ox/editor/main.js:187 module:io.ox/editor
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
+msgstr ""
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
@@ -3660,7 +3664,7 @@ msgstr ""
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -3919,7 +3923,7 @@ msgstr ""
 msgid "Note"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -4260,7 +4264,7 @@ msgstr ""
 msgid "Personal information"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr ""
 
@@ -4307,7 +4311,7 @@ msgstr ""
 msgid "Phone (private)"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr ""
 
@@ -6248,7 +6252,7 @@ msgstr ""
 msgid "This mail has no content"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr ""
 

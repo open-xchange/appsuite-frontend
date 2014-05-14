@@ -1112,7 +1112,7 @@ msgid "Cart is empty."
 msgstr "Vagnen är tom."
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "Mobiltelefon"
 
@@ -1191,7 +1191,7 @@ msgstr "Kontrollerar behörighet... Det kan ta ett par sekunder."
 msgid "Children"
 msgstr "Barn"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "Stad"
 
@@ -1785,7 +1785,7 @@ msgid "Delete widget"
 msgstr "Ta bort komponent"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "Avdelning"
 
@@ -2203,6 +2203,10 @@ msgstr "Redigera för att ange ett namn."
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "Editor"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "E-post"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -3734,7 +3738,7 @@ msgstr "Mitt lösenord"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -3997,7 +4001,7 @@ msgstr "Inte startat"
 msgid "Note"
 msgstr "Anteckning"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] "Obs: En kontakt visas inte på grund av saknade telefonnummer"
@@ -4344,7 +4348,7 @@ msgstr "Personligt"
 msgid "Personal information"
 msgstr "Personlig information"
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "Telefon"
 
@@ -4391,7 +4395,7 @@ msgstr "Telefon (övrig)"
 msgid "Phone (private)"
 msgstr "Telefon (privat)"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "Telefonlista"
 
@@ -6421,7 +6425,7 @@ msgstr "E-brevet har lagts till i portalen"
 msgid "This mail has no content"
 msgstr "E-brevet har inget innehåll"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Anteckningen kunde inte skrivas ut"
 
@@ -9165,9 +9169,6 @@ msgstr "varje år"
 
 #~ msgid "Eliminating the FileStorage failed."
 #~ msgstr "Misslyckades att ta bort fillagringen."
-
-#~ msgid "Email"
-#~ msgstr "E-post"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-postadress:"

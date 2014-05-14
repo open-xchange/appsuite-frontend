@@ -1118,7 +1118,7 @@ msgid "Cart is empty."
 msgstr "A kosár üres."
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "Mobiltelefon"
 
@@ -1197,7 +1197,7 @@ msgstr "Hitelesítési adatok ellenőrzése… ez eltarthat pár másodpercig."
 msgid "Children"
 msgstr "Gyermekek"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "Város"
 
@@ -1790,7 +1790,7 @@ msgid "Delete widget"
 msgstr "Widget törlése"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "Osztály"
 
@@ -2214,6 +2214,10 @@ msgstr "Szerkessze név beállításához."
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "Szerkesztő"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "E-mail"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -3743,7 +3747,7 @@ msgstr "A jelszavam"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -4008,7 +4012,7 @@ msgstr "Nem indult el"
 msgid "Note"
 msgstr "Megjegyzés"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -4358,7 +4362,7 @@ msgstr "Személyes"
 msgid "Personal information"
 msgstr "Személyes adatok"
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "Telefon"
 
@@ -4405,7 +4409,7 @@ msgstr "Telefon (egyéb)"
 msgid "Phone (private)"
 msgstr "Telefon (személyes)"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "Telefonlista"
 
@@ -6438,7 +6442,7 @@ msgstr "A levél hozzáadva a portálhoz"
 msgid "This mail has no content"
 msgstr "A levélnek nincs tartalma"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Ez a megjegyzés nem kerül nyomtatásra"
 
@@ -8407,9 +8411,6 @@ msgstr "évente"
 
 #~ msgid "Editing settings"
 #~ msgstr "Beállítások szerkesztése"
-
-#~ msgid "Email"
-#~ msgstr "E-mail"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-mail cím:"

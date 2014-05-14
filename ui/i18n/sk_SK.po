@@ -1122,7 +1122,7 @@ msgid "Cart is empty."
 msgstr "Košík je prázdny."
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "Mobil"
 
@@ -1201,7 +1201,7 @@ msgstr "Kontroluje sa poverenia... To môže trvať niekoľko sekúnd."
 msgid "Children"
 msgstr "Deti"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "Mesto"
 
@@ -1796,7 +1796,7 @@ msgid "Delete widget"
 msgstr "Zmazať miniaplikáciu"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "Oddelenie"
 
@@ -2219,6 +2219,10 @@ msgstr "Upravením nastavíte meno."
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "Editor"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "Email"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -3761,7 +3765,7 @@ msgstr "Moje heslo"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -4024,7 +4028,7 @@ msgstr "Nezačaté"
 msgid "Note"
 msgstr "Poznámka"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -4374,7 +4378,7 @@ msgstr "Osobné"
 msgid "Personal information"
 msgstr "Osobné údaje"
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "Telefón"
 
@@ -4421,7 +4425,7 @@ msgstr "Telefón (iný)"
 msgid "Phone (private)"
 msgstr "Telefón (súkromný)"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "Telefónny zoznam"
 
@@ -6456,7 +6460,7 @@ msgstr "Tento email bol pridaný do portálu"
 msgid "This mail has no content"
 msgstr "Tento email nemá žiadny obsah"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Táto poznámka sa nevypíše"
 
@@ -9432,9 +9436,6 @@ msgstr "ročne"
 
 #~ msgid "El Salvador"
 #~ msgstr "Salvádor"
-
-#~ msgid "Email"
-#~ msgstr "Email"
 
 #~ msgid "Email Address:"
 #~ msgstr "Emailová adresa:"

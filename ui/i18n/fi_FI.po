@@ -1108,7 +1108,7 @@ msgid "Cart is empty."
 msgstr "Kori on tyhjä."
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "Matkapuhelin"
 
@@ -1187,7 +1187,7 @@ msgstr "Tarkistetaan valtuuksia Tämä voi kestää muutaman sekunnin."
 msgid "Children"
 msgstr "Lapsia"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "Kaupunki"
 
@@ -1779,7 +1779,7 @@ msgid "Delete widget"
 msgstr "Poista widget"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "Osasto"
 
@@ -2195,6 +2195,10 @@ msgstr "Muokkaa asettaaksesi nimi."
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "Editori"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "Sähköposti"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -3723,7 +3727,7 @@ msgstr "Salasanani"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -3986,7 +3990,7 @@ msgstr "Ei aloitettu"
 msgid "Note"
 msgstr "Huomaa"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -4335,7 +4339,7 @@ msgstr "Henkilökohtainen"
 msgid "Personal information"
 msgstr "Henkilötiedot"
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "Puhelin"
 
@@ -4382,7 +4386,7 @@ msgstr "Puhelin (muu)"
 msgid "Phone (private)"
 msgstr "Puhelin (yksityinen)"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "Puhelinluettelo"
 
@@ -6412,7 +6416,7 @@ msgstr "Tämä viesti on lisätty portaaliin"
 msgid "This mail has no content"
 msgstr "Tässä viestissä ei ole sisältöä"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Tämä merkintää ei tulosteta"
 
@@ -7962,9 +7966,6 @@ msgstr "vuosittain"
 
 #~ msgid "Editing settings"
 #~ msgstr "Asetusten muokkaaminen"
-
-#~ msgid "Email"
-#~ msgstr "Sähköposti"
 
 #~ msgid "Enabled for all mail folders"
 #~ msgstr "Käytössä kaikille viestikansioille"

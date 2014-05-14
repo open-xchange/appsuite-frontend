@@ -1115,7 +1115,7 @@ msgid "Cart is empty."
 msgstr "Indkøbsvogn er tom."
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "Mobiltelefon"
 
@@ -1194,7 +1194,7 @@ msgstr "Tjekker loginoplysninger... Dette kan tage nogle sekunder."
 msgid "Children"
 msgstr "Børn"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "By"
 
@@ -1786,7 +1786,7 @@ msgid "Delete widget"
 msgstr "Slet widget"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "Afdeling"
 
@@ -2203,6 +2203,10 @@ msgstr "Redigér for at vælge et navn."
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "Editor"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "E-mail"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -3734,7 +3738,7 @@ msgstr "Min adgangskode"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -3997,7 +4001,7 @@ msgstr "Ikke startet"
 msgid "Note"
 msgstr "Note"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] "Bemærk: Én kontakt er ikke vist som følge af manglende telefonnumre"
@@ -4346,7 +4350,7 @@ msgstr "Personlig"
 msgid "Personal information"
 msgstr "Personlig information"
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "Telefon"
 
@@ -4393,7 +4397,7 @@ msgstr "Telefon (anden)"
 msgid "Phone (private)"
 msgstr "Telefon (privat)"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "Telefonliste"
 
@@ -6421,7 +6425,7 @@ msgstr "Denne e-mail er blevet tilføjet portalen"
 msgid "This mail has no content"
 msgstr "Denne e-mail har ikke noget indhold"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Denne note vil ikke blive udskrevet"
 
@@ -8073,9 +8077,6 @@ msgstr "årsligt"
 
 #~ msgid "Editing settings"
 #~ msgstr "Redigere indstillinger"
-
-#~ msgid "Email"
-#~ msgstr "E-mail"
 
 #~ msgid "Email Address:"
 #~ msgstr "E-mail-adresse:"

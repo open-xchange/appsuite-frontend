@@ -1103,7 +1103,7 @@ msgid "Cart is empty."
 msgstr "购物车是空的。"
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "移动电话"
 
@@ -1182,7 +1182,7 @@ msgstr "检查证书中... 可能需时片刻。"
 msgid "Children"
 msgstr "子女"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "城市"
 
@@ -1774,7 +1774,7 @@ msgid "Delete widget"
 msgstr "删除迷你程序"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "部门"
 
@@ -2190,6 +2190,10 @@ msgstr "编辑一个名称。"
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "编辑器"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "电子邮件"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -3710,7 +3714,7 @@ msgstr "我的密码"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -3975,7 +3979,7 @@ msgstr "未开始"
 msgid "Note"
 msgstr "备注"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] "备注：因为缺少电话号码，有一个联系人没有显示。"
@@ -4321,7 +4325,7 @@ msgstr "个人"
 msgid "Personal information"
 msgstr "个人信息"
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "电话"
 
@@ -4368,7 +4372,7 @@ msgstr "电话（其他）"
 msgid "Phone (private)"
 msgstr "电话（私人）"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "电话列表"
 
@@ -6366,7 +6370,7 @@ msgstr "此邮件已添加到门户"
 msgid "This mail has no content"
 msgstr "此邮件没有内容"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "将不会打印此备注"
 
@@ -9219,9 +9223,6 @@ msgstr "每年"
 
 #~ msgid "El Salvador"
 #~ msgstr "萨尔瓦多"
-
-#~ msgid "Email"
-#~ msgstr "电子邮件"
 
 #~ msgid "Email Address:"
 #~ msgstr "电子邮件地址："
