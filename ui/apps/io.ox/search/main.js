@@ -89,7 +89,8 @@ define('io.ox/search/main',
             window: win
         }),
         yell = function (error) {
-            notifications.yell('error', error.error_desc);
+            //add custom exception handling here
+            notifications.yell(error);
         },
         sidepopup,
         win, model, run;

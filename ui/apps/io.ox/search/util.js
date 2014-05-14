@@ -19,6 +19,29 @@ define('io.ox/search/util',
 
     'use strict';
 
+    // when wrapper
+    // rejects only in case all deferreds failed
+    // otherwise resolves only with deferreds succeeded
+    var whenResolved = function (list, def) {
+        //remove failed deferreds until when resolves
+        def = def || $.Deferred();
+        $.when.apply($, list)
+            .then(
+                function () {
+                    def.resolve.apply(this, arguments);
+                },
+                function () {
+                    //kick rejected
+                    var valid = _.filter(list, function (item) {
+                        return item.state() !== 'rejected';
+                    });
+                    //when again
+                    whenResolved(valid, def);
+                }
+            );
+        return def;
+    };
+
     return {
 
         getFolders: function (model) {
@@ -61,8 +84,7 @@ define('io.ox/search/util',
                 }
             });
 
-            //TODO move account/default folder dingeling into accountAPI
-            return $.when.apply($, req)
+            return whenResolved(req)
                     .then(function () {
                         var args = Array.prototype.slice.apply(arguments);
 

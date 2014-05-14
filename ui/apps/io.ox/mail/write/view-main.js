@@ -1072,7 +1072,7 @@ define('io.ox/mail/write/view-main',
                 full_name: util.unescapeDisplayName(elem.full_name),
                 first_name: elem.first_name || '',
                 last_name: elem.last_name || '',
-                display_name: util.unescapeDisplayName(elem.display_name),
+                display_name: util.unescapeDisplayName(elem.full_name || elem.display_name).replace(/"/g, ''),
                 email: elem.email || elem.mail || '', // distribution lists just have "mail"
                 phone: elem.phone || '',
                 field: elem.field || '',
