@@ -33,58 +33,58 @@
 <link id="splash1096" href="" media="(device-aspect-ratio: 40/71)" rel="apple-touch-startup-image">
 
 <style type="text/css">
+
 html, body { background-color: #fff; margin: 0; padding: 0; border: 0; }
 body { overflow: hidden; }
+
 #background-loader {
     position: absolute; top: 0px; left: 0px;
     width: 100%; height: 100%; background-color: #fff; z-index: 65300;
 }
-.io-ox-busy {
-    position: relative;
+
+.throbber {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
 }
-.io-ox-busy:before {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -10px 0 0 -10px;
-    /* icon-refresh */
-    font-size: 40px;
-    font-family: 'FontAwesome';
-    content: '\f021';
-    color: rgba(0, 0, 0, 0.30);
-    /* icon-spin */
-    -moz-animation: spin 1.5s infinite linear;
-    -o-animation: spin 1.5s infinite linear;
-    -webkit-animation: spin 1.5s infinite linear;
-    animation: spin 1.5s infinite linear;
+
+.throbber > div {
+  width: 14px;
+  height: 14px;
+  background-color: #ccc;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  /* Prevent first frame from flickering when animation starts */
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
-#background-loader.io-ox-busy:before {
-    margin: -20px 0 0 -20px;
-    font-size: 40px;
-    color: #aaa;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    content: '\21BB';
+
+.throbber .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
 }
-/* support for animated throbber */
-@-moz-keyframes spin {
-  0%    { -moz-transform: rotate(0deg);     }
-  100%  { -moz-transform: rotate(359deg);   }
+
+.throbber .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
 }
-@-webkit-keyframes spin {
-  0%    { -webkit-transform: rotate(0deg);  }
-  100%  { -webkit-transform: rotate(359deg);}
+
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0.0) }
+  40% { -webkit-transform: scale(1.0) }
 }
-@-o-keyframes spin {
-  0%    { -o-transform: rotate(0deg);       }
-  100%  { -o-transform: rotate(359deg);     }
-}
-@-ms-keyframes spin {
-  0%    { -ms-transform: rotate(0deg);      }
-  100%  { -ms-transform: rotate(359deg);    }
-}
-@keyframes spin {
-  0%    { transform: rotate(0deg);          }
-  100%  { transform: rotate(359deg);        }
+
+@keyframes bouncedelay {
+  0%, 80%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 40% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
 }
 </style>
 
