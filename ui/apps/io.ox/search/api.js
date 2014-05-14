@@ -35,7 +35,9 @@ define('io.ox/search/api',
                 },
                 data: {
                     prefix: '',
-                    options: {},
+                    options: {
+                        timezone: 'UTC'
+                    },
                     facets: []
                 }
             },
@@ -48,7 +50,9 @@ define('io.ox/search/api',
                 },
                 data: {
                     facets: [],
-                    options: {},
+                    options: {
+                        timezone: 'UTC'
+                    },
                     start: 0,
                     size: 100
                 }
