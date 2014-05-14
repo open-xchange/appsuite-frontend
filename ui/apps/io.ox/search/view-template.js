@@ -339,8 +339,7 @@ define('io.ox/search/view-template',
                 count = items.length - baton.model.get('extra');
             if (items.length > baton.model.get('size')) {
                 this.append(
-                    $('<div>')
-                    .addClass('info')
+                    $('<div class="info">')
                     .append(
                             $('<span>')
                             .addClass('info-item')
