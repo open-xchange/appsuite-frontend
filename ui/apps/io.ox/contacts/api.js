@@ -226,7 +226,7 @@ define('io.ox/contacts/api',
                 }
                 return response;
             },
-            list: function (data) {
+            listPost: function (data) {
                 _(data).each(function (obj) {
                     // remove from cache if get cache is outdated
                     api.caches.get.dedust(obj, 'last_modified');
@@ -242,9 +242,11 @@ define('io.ox/contacts/api',
     * @returns defered
     */
     function clearUserApiCache(data) {
-        return $.when(userApi.caches.get.remove({ id: data.user_id }),
-                      userApi.caches.all.clear(),
-                      userApi.caches.list.remove({ id: data.user_id }));
+        return $.when(
+            userApi.caches.get.remove({ id: data.user_id }),
+            userApi.caches.all.clear(),
+            userApi.caches.list.remove({ id: data.user_id })
+        );
     }
 
     /**
