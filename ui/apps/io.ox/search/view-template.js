@@ -51,7 +51,7 @@ define('io.ox/search/view-template',
                             api: app.apiproxy,
                             minLength: 0,
                             mode: 'search',
-                            delay: 150,
+                            delay: 80,
                             parentSelector: container  ? '.query' : '.io-ox-search',
                             model: model,
                             container: container,
@@ -88,7 +88,13 @@ define('io.ox/search/view-template',
                                     model.remove();
                                 }
                                 ref.val('');
-                                model.add(value.facet, value.id);
+
+                                //type3: define used option (type2 default is index 0 of options)
+                                var option = _.find(value.options, function (item) {
+                                    return item.id === value.id;
+                                });
+
+                                model.add(value.facet, value.id, (option || {}).id);
                             }
                         })
                         .on('focus focus:custom click', function (e, isRetry) {
@@ -160,37 +166,38 @@ define('io.ox/search/view-template',
         row: '0',
         draw: function (baton) {
             var id = baton.model.getApp(),
+                opt = baton.model.getOptions(),
                 row, cell,
-                //TODO: remove when backend added setting 'io.ox/core/search/apps'
-                appsdefault = [
-                    'io.ox/mail',
-                    'io.ox/contacts',
-                    'io.ox/calendar',
-                    'io.ox/tasks',
-                    'io.ox/files'
-                ],
-                apps = settings.get('search/apps', appsdefault);
+                apps = settings.get('search/modules', ['mail', 'contacts', 'calendar', 'tasks', 'files']);
 
             //create container
             row = $('<div class="row applications">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled">')
             );
 
+            //apply mapping (infostore-files-drive chameleon)
+            apps = _.map(apps, function (module) {
+                var id = 'io.ox/' + module;
+                return opt.mapping[id] || id;
+            });
+
             //create menu entries
             _(apps).each(function (id) {
-                var title = ox.manifests.apps[id + '/main'].title;
-                cell.append(
-                    $('<li role="presentation" class="application">')
-                        .append(
-                            $('<div class="btn-group">')
+                var title = (ox.manifests.apps[id + '/main'] || {}).title;
+                if (title) {
+                    cell.append(
+                        $('<li role="presentation" class="application">')
                             .append(
-                                $('<button type="button" class="btn btn-link">')
-                                    .attr('data-app', id)
-                                    .addClass('pull-left')
-                                    .text(gt.pgettext('app', title))
+                                $('<div class="btn-group">')
+                                .append(
+                                    $('<button type="button" class="btn btn-link">')
+                                        .attr('data-app', id)
+                                        .addClass('pull-left')
+                                        .text(gt.pgettext('app', title))
+                                )
                             )
-                        )
-                );
+                    );
+                }
             });
 
             //mark as active
@@ -234,6 +241,10 @@ define('io.ox/search/view-template',
             this.draw.call(baton.$, baton);
         },
         draw: function (baton) {
+
+            //ensure folder facet is set
+            baton.model.ensure();
+
             var model = baton.model,
                 list = model.get('poollist'),
                 pool = model.get('pool'),
@@ -317,6 +328,41 @@ define('io.ox/search/view-template',
                     baton.model.trigger('query');
                 }
             });
+        }
+    });
+
+    point.extend({
+        id: 'info',
+        index: 300,
+        draw: function (baton) {
+            var items = baton.model.get('items'),
+                count = items.length - baton.model.get('extra');
+            if (items.length > baton.model.get('size')) {
+                this.append(
+                    $('<div class="info">')
+                    .append(
+                            $('<span>')
+                            .addClass('info-item')
+                            .append(
+                                gt('More than the currently displayed %1$s items where found', count)
+                            )
+                        )
+                );
+            }
+        }
+    });
+
+    point.extend({
+        id: 'busy',
+        index: 500,
+        draw: function () {
+            this.append(
+                $('<div class="row busy">')
+                    .append(
+                        $('<div class="col-xs-12 io-ox-busy">')
+                            .css('min-height', '50px')
+                        )
+            );
         }
     });
 
@@ -435,7 +481,7 @@ define('io.ox/search/view-template',
                     )
                     .on('click', function (e) {
                         e.stopPropagation();
-                        baton.model.remove(value.facet, value.id);
+                        baton.model.remove(value.facet || value._compact.facet, value.id);
                     })
                 );
             }
@@ -446,13 +492,12 @@ define('io.ox/search/view-template',
     //facet type: folder
     function folderDialog(facet, baton) {
         require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
-            var label = gt('Folder'),
-                id = facet.values[0].custom,
+            var id = facet.values[0].custom,
                 type = baton.model.getModule();
 
             var dialog = new dialogs.ModalDialog()
-                .header($('<h4>').text(label))
-                .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
+                .header($('<h4>').text(gt('Folder')))
+                .addPrimaryButton('ok', gt('Select Folder'), 'ok', {'tabIndex': '1'})
                 .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
             dialog.getBody().css({ height: '250px' });
 
@@ -640,15 +685,7 @@ define('io.ox/search/view-template',
                         row, cell,
                         items = [],
                         titles = {},
-                        //TODO: remove when backend added setting 'io.ox/core/search/apps'
-                        appsdefault = [
-                            'io.ox/mail',
-                            'io.ox/contacts',
-                            'io.ox/calendar',
-                            'io.ox/tasks',
-                            'io.ox/files'
-                        ],
-                        apps = settings.get('search/apps', appsdefault);
+                        apps = settings.get('search/apps', []);
 
                     //create containers
                     row = $('<div class="row ">').append(
@@ -711,27 +748,5 @@ define('io.ox/search/view-template',
             });
         }
     });
-
-    // point.extend({
-    //     id: 'info',
-    //     index: 300,
-    //     draw: function (baton) {
-    //         var items = baton.model.get('items'),
-    //             timespend = Math.round((Date.now() - items.timestamp) / 100) / 10;
-    //         if (items.timestamp) {
-    //             this.append(
-    //                 $('<div>')
-    //                 .addClass('info')
-    //                 .append(
-    //                         $('<span>')
-    //                         .addClass('info-item')
-    //                         .append(
-    //                             gt('Found %1$s items in %2$s seconds', items.length, timespend)
-    //                         )
-    //                     )
-    //             );
-    //         }
-    //     }
-    // });
 
 });

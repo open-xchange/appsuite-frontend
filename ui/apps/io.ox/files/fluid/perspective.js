@@ -417,6 +417,8 @@ define('io.ox/files/fluid/perspective',
                     );
             }
 
+            var title = file.filename || file.title;
+
             this.addClass('file-cell pull-left selectable')
                 .attr('data-obj-id', _.cid(file))
                 .attr('tabindex', -1)
@@ -432,10 +434,15 @@ define('io.ox/files/fluid/perspective',
                     //details
                     $('<div class="details">').append(
                         //title
-                        $('<div class="text title drag-title">').append(
-                            $('<span class="not-selectable">').text(gt.noI18n(cut(file.filename || file.title, 90))).append(
-                                    (api.tracker.isLocked(file) ? $('<i class="fa fa-lock">') : '')
-                                )
+                        $('<div class="text title drag-title">')
+                        .attr('title', title)
+                        .append(
+                            // lock icon
+                            api.tracker.isLocked(file) ? $('<i class="fa fa-lock">') : $(),
+                            // long title
+                            $('<span class="not-selectable title-long">').text(gt.noI18n(cut(title, 90))),
+                            // short title
+                            $('<span class="not-selectable title-short">').text(gt.noI18n(cut(title, 50)))
                         ),
                         //smart last modified
                         $('<span class="text modified">').text(gt.noI18n(changed)),

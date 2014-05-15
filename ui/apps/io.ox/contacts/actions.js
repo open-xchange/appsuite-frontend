@@ -69,24 +69,22 @@ define('io.ox/contacts/actions',
             return e.collection.has('one') && e.collection.has('modify');
         },
         action: function (baton) {
-            var obj = baton.data;
+            var data = baton.data;
             //get full object first, because data might be a restored selection resulting in only having id and folder_id.
             //This would make distribution lists behave as normal contacts
-            api.get(obj).done(function (data) {
-                if (data.mark_as_distributionlist === true) {
-                require(['io.ox/contacts/distrib/main'], function (m) {
+            if (data.mark_as_distributionlist === true) {
+            require(['io.ox/contacts/distrib/main'], function (m) {
+                if (m.reuse('edit', data)) return;
+                    m.getApp(data).launch().done(function () {
+                        this.edit(data);
+                    });
+                });
+            } else {
+                require(['io.ox/contacts/edit/main'], function (m) {
                     if (m.reuse('edit', data)) return;
-                        m.getApp(data).launch().done(function () {
-                            this.edit(data);
-                        });
-                    });
-                } else {
-                    require(['io.ox/contacts/edit/main'], function (m) {
-                        if (m.reuse('edit', data)) return;
-                        m.getApp(data).launch();
-                    });
-                }
-            });
+                    m.getApp(data).launch();
+                });
+            }
         }
     });
 
@@ -286,13 +284,9 @@ define('io.ox/contacts/actions',
         requires: function (e) {
             if (_.device('small')) return false;
             // check if collection has min 1 contact
-            return api.getList(e.context)
-                .then(function (list) {
-                    //ignore distribution lists
-                    return e.collection.has('some', 'read') && (_.filter([].concat(list), function (el) {
-                        return !el.mark_as_distributionlist;
-                    })).length > 0;
-                });
+            return e.collection.has('some', 'read') && (_.filter([].concat(e.context), function (el) {
+                return !el.mark_as_distributionlist;
+            })).length > 0;
         },
         multiple: function (list) {
             print.request('io.ox/contacts/print', list);

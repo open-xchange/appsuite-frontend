@@ -17,7 +17,7 @@ define('io.ox/calendar/week/view',
      'gettext!io.ox/calendar',
      'io.ox/core/api/folder',
      'settings!io.ox/calendar',
-     'apps/3rd.party/jquery-ui.min.js'
+     'static/3rd.party/jquery-ui.min.js'
     ], function (util, date, ext, gt, folderAPI, settings) {
 
     'use strict';
@@ -344,6 +344,9 @@ define('io.ox/calendar/week/view',
             switch (e.which) {
             case 27: // ESC
                 this.cleanUpLasso();
+                $('.week-container .day>.appointment.modify', this.$el)
+                    .draggable({ 'revert': true })
+                    .trigger( 'mouseup' );
                 break;
             case 37: // left
                 this.setStartDate('prev');
@@ -1225,11 +1228,11 @@ define('io.ox/calendar/week/view',
                 .draggable({
                     grid: [colWidth, self.gridHeight()],
                     distance: 10,
+                    delay: 300,
                     scroll: true,
                     revertDuration: 0,
                     revert: function (drop) {
                         //if false then no socket object drop occurred.
-
                         if (drop === false) {
                             //revert the appointment by returning true
                             $(this).show();
@@ -1391,7 +1394,12 @@ define('io.ox/calendar/week/view',
                             d.my.all.busy();
                             // disable widget
                             $(this).draggable('disable');
-                            self.onUpdateAppointment(app);
+
+                            if (app.start_date !==  app.old_start_date) {
+                                self.onUpdateAppointment(app);
+                            } else {
+                                self.renderAppointments();
+                            }
                         } else {
                             self.trigger('onRefresh');
                         }
@@ -1410,6 +1418,7 @@ define('io.ox/calendar/week/view',
                 .draggable({
                     grid: [colWidth, 0],
                     axis: 'x',
+                    delay: 300,
                     scroll: true,
                     snap: '.day',
                     zIndex: 2,
@@ -1427,7 +1436,12 @@ define('io.ox/calendar/week/view',
                                 start_date: startTS,
                                 end_date: startTS + (app.end_date - app.start_date)
                             });
-                            self.onUpdateAppointment(app);
+
+                            if (app.start_date !==  app.old_start_date) {
+                                self.onUpdateAppointment(app);
+                            } else {
+                                self.renderAppointments();
+                            }
                         } else {
                             self.trigger('onRefresh');
                         }

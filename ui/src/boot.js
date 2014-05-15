@@ -139,9 +139,6 @@ $(window).load(function () {
         });
     }
 
-    // be busy
-    $('#background-loader').busy();
-
     $(window).on('online offline', function (e) {
         ox.trigger('connection:' + e.type);
     });
@@ -167,7 +164,7 @@ $(window).load(function () {
             )
             .on('click', function (e) { e.preventDefault(); location.reload(); })
         );
-        $('#background-loader').idle().fadeOut(DURATION);
+        $('#background-loader').fadeOut(DURATION);
         console.warn('Server is down.');
         serverDown = $.noop;
     };
@@ -846,12 +843,6 @@ $(window).load(function () {
                 $('#io-ox-login-username')[0].type = 'text';
             }
 
-            //show errors saved inlocalstorage
-            if (localStorage.getItem('errormsg')) {
-                feedback('error', $.txt(localStorage.getItem('errormsg')));
-                localStorage.removeItem('errormsg');//remove errormessages from localstorage
-            }
-
             debug('boot.js: Load "signin" plugins & set default language');
 
             // make sure we get 'signin' plugins
@@ -946,7 +937,7 @@ $(window).load(function () {
                 $('#io-ox-login-username').prop('disabled', false).focus().select();
 
                 debug('boot.js: Fade in ...');
-                $('#background-loader').idle().fadeOut(DURATION, cont);
+                $('#background-loader').fadeOut(DURATION, cont);
             });
         };
 

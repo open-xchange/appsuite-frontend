@@ -35,7 +35,9 @@ define('io.ox/search/api',
                 },
                 data: {
                     prefix: '',
-                    options: {},
+                    options: {
+                        timezone: 'UTC'
+                    },
                     facets: []
                 }
             },
@@ -48,7 +50,9 @@ define('io.ox/search/api',
                 },
                 data: {
                     facets: [],
-                    options: {},
+                    options: {
+                        timezone: 'UTC'
+                    },
                     start: 0,
                     size: 100
                 }
@@ -62,7 +66,7 @@ define('io.ox/search/api',
             extendColumns: 'io.ox/mail/api/list'
         },
         files: {
-            columns: '20,23,1,5,700,702,703,704,707,3',
+            columns: '20,23,1,5,700,702,703,704,705,707,3',
             extendColumns: 'io.ox/files/api/list'
         },
         tasks: {
@@ -109,14 +113,8 @@ define('io.ox/search/api',
         return http[opt.method](opt)
                 .then(function (data) {
                     _.each(data.facets, function (facet) {
-                        //TODO: remove when backend is ready
-                        if (['time', 'folder_type', 'type', 'date', 'status', 'file_type', 'file_size', 'contact_type', 'task_status', 'task_type'].indexOf(facet.id) > -1 ) {
-                            facet.options = facet.values;
-                            delete facet.values;
-                        }
-
                         //preparation to handle type3 facets
-                        if (!facet.values && facet.options) {
+                        if (!facet.values && !!facet.options) {
                             facet.values = [];
                             facet.flags = (facet.flags || []).concat('type3');
                             _.each(facet.options, function (option) {

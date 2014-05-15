@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-20 22:08+0000\n"
+"PO-Revision-Date: 2014-05-12 21:58+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -57,13 +57,13 @@ msgstr "В последнее время было изменено %1$d файл
 msgid "%1$d messages in this conversation"
 msgstr "сообщений в обсуждении: %1$d"
 
-#: apps/io.ox/core/commons.js:101 module:io.ox/core
-#: apps/io.ox/mail/main.js:599 module:io.ox/mail
+#: apps/io.ox/core/commons.js:102 module:io.ox/core
+#: apps/io.ox/mail/main.js:601 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d выбрано"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:617 module:io.ox/mail
+#: apps/io.ox/mail/main.js:619 module:io.ox/mail
 msgid "%1$d selected"
 msgstr " выбрано: %1$d"
 
@@ -92,7 +92,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:366 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1683
+#: apps/io.ox/calendar/week/view.js:1697
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (под вопросом)"
@@ -100,29 +100,20 @@ msgstr "%1$s (под вопросом)"
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
 #: apps/plugins/halo/xing/register.js:172 module:plugins/portal
-#, fuzzy
-#| msgctxt "mail address"
-#| msgid "%1$s %2$s"
 msgid "%1$s at %2$s"
-msgstr "%1$s %2$s"
+msgstr "%1$s, %2$s"
 
 #: apps/plugins/portal/xing/activities.js:101 module:plugins/portal
-#, fuzzy
-#| msgid "Change status"
 msgid "%1$s changed their status:"
-msgstr "Изменить статус"
+msgstr "%1$s изменил(а) свой статус:"
 
 #: apps/plugins/portal/xing/activities.js:120 module:plugins/portal
-#, fuzzy
-#| msgid "%1$s is a new contact"
 msgid "%1$s has a new contact:"
-msgstr "%1$s является новым контактом"
+msgstr "Новый контакт у %1$s:"
 
 #: apps/plugins/portal/xing/activities.js:133 module:plugins/portal
-#, fuzzy
-#| msgid "%1$s is a new contact"
 msgid "%1$s has new contacts:"
-msgstr "%1$s является новым контактом"
+msgstr "Новые контакты у %1$s:"
 
 #: apps/plugins/portal/linkedIn/register.js:126 module:plugins/portal
 msgid "%1$s is a new contact"
@@ -144,17 +135,15 @@ msgstr "%1$s из %2$s"
 
 #: apps/plugins/portal/xing/activities.js:81 module:plugins/portal
 msgid "%1$s posted a link:"
-msgstr ""
+msgstr "%1$s опубликовал(а) ссылку:"
 
 #: apps/plugins/portal/xing/activities.js:151 module:plugins/portal
-#, fuzzy
-#| msgid "%1$s is a new contact"
 msgid "%1$s posted a new activity:"
-msgstr "%1$s является новым контактом"
+msgstr "Новые публикации %1$s:"
 
 #: apps/plugins/portal/xing/activities.js:59 module:plugins/portal
 msgid "%1$s recommends this link:"
-msgstr ""
+msgstr "%1$s рекомендует ссылку:"
 
 #. Format of addresses
 #. %1$s is the street
@@ -190,8 +179,8 @@ msgstr[0] "%d день"
 msgstr[1] "%d дня"
 msgstr[2] "%d дней"
 
-#: apps/io.ox/mail/settings/signatures/register.js:268 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:346
+#: apps/io.ox/mail/settings/signatures/register.js:274 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:352
 msgid "(Default)"
 msgstr "(по умолчанию)"
 
@@ -211,8 +200,8 @@ msgstr "В последнее время был изменен один файл
 msgid "1 hour"
 msgstr "1 час"
 
-#: apps/io.ox/core/tk/list-dnd.js:29 module:io.ox/core
-#: apps/io.ox/core/tk/selection.js:32
+#: apps/io.ox/core/tk/list-dnd.js:27 module:io.ox/core
+#: apps/io.ox/core/tk/selection.js:33
 msgid "1 item"
 msgid_plural "%1$d items"
 msgstr[0] "1 элемент"
@@ -318,12 +307,12 @@ msgstr "6 часов"
 msgid "8 hour"
 msgstr "8 часов"
 
-#: apps/io.ox/core/commons.js:52 module:io.ox/core
+#: apps/io.ox/core/commons.js:53 module:io.ox/core
 msgid "<b>%1$d</b> elements selected"
 msgstr "<b>%1$d</b> выбран(о)"
 
 #. delivery receipt; German "Lesebestätigung"
-#: apps/io.ox/mail/common-extensions.js:514 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:515 module:io.ox/mail
 msgid "A return receipt has been sent"
 msgstr "Уведомление отправлено"
 
@@ -332,7 +321,7 @@ msgstr "Уведомление отправлено"
 msgid "A severe error occurred!"
 msgstr "Произошла критическая ошибка."
 
-#: apps/io.ox/core/main.js:772 module:io.ox/core
+#: apps/io.ox/core/main.js:792 module:io.ox/core
 msgid "About"
 msgstr "О программе"
 
@@ -459,13 +448,13 @@ msgstr "Добавить код шифра"
 msgid "Add condition"
 msgstr "Добавить условие"
 
-#: apps/io.ox/contacts/actions.js:741 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/create-dist-view.js:98
-#: apps/io.ox/contacts/distrib/create-dist-view.js:100
+#: apps/io.ox/contacts/actions.js:735 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:105
+#: apps/io.ox/contacts/distrib/create-dist-view.js:107
 msgid "Add contact"
 msgstr "Добавить участника"
 
-#: apps/io.ox/contacts/actions.js:748 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:742 module:io.ox/contacts
 msgid "Add distribution list"
 msgstr "Добавить список рассылки"
 
@@ -500,22 +489,20 @@ msgstr "Добавить участника"
 msgid "Add new rule"
 msgstr "Добавить новое правило"
 
-#: apps/io.ox/mail/settings/signatures/register.js:359 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:365 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Добавить новую подпись"
 
 #. Please translate like "take a note", "Notiz" in German, for example.
 #. more like "to notice" than "to notify".
-#: apps/io.ox/files/actions.js:804 module:io.ox/files
+#: apps/io.ox/files/actions.js:791 module:io.ox/files
 msgid "Add note"
 msgstr "Добавить примечание"
 
 #: apps/plugins/portal/xing/register.js:382 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:389
-#, fuzzy
-#| msgid "Add action"
 msgid "Add on %s"
-msgstr "Добавить действие"
+msgstr "Добавить в %s"
 
 #: apps/io.ox/calendar/freebusy/templates.js:88 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/freebusy/templates.js:90
@@ -534,11 +521,11 @@ msgstr "Добавить участника или ресурс"
 msgid "Add signature"
 msgstr "Добавить подпись"
 
-#: apps/io.ox/mail/write/main.js:1246 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1235 module:io.ox/mail
 msgid "Add subject"
 msgstr "Добавить тему"
 
-#: apps/io.ox/contacts/actions.js:836 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:830 module:io.ox/contacts
 #: apps/io.ox/mail/actions.js:1149 module:io.ox/mail
 msgid "Add to address book"
 msgstr "Добавить в адресную книгу"
@@ -547,10 +534,10 @@ msgstr "Добавить в адресную книгу"
 msgid "Add to calendar"
 msgstr "Добавить в календарь"
 
-#: apps/io.ox/contacts/actions.js:813 module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:120 apps/io.ox/files/actions.js:959
-#: module:io.ox/files apps/io.ox/files/actions.js:1360
-#: apps/io.ox/files/toolbar.js:130 apps/io.ox/mail/actions.js:1139
+#: apps/io.ox/contacts/actions.js:807 module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js:121 apps/io.ox/files/actions.js:946
+#: module:io.ox/files apps/io.ox/files/actions.js:1352
+#: apps/io.ox/files/toolbar.js:138 apps/io.ox/mail/actions.js:1139
 #: module:io.ox/mail apps/io.ox/mail/toolbar.js:159
 msgid "Add to portal"
 msgstr "Добавить в портал"
@@ -624,9 +611,9 @@ msgstr "Все вложения"
 msgid "All day"
 msgstr "Весь день"
 
-#: apps/io.ox/search/view-template.js:597 module:io.ox/core
-#: apps/io.ox/search/view-template.js:600
-#: apps/io.ox/search/view-template.js:607
+#: apps/io.ox/search/view-template.js:642 module:io.ox/core
+#: apps/io.ox/search/view-template.js:645
+#: apps/io.ox/search/view-template.js:652
 msgid "All folders"
 msgstr "Все папки"
 
@@ -640,7 +627,7 @@ msgstr "Разрешить загрузку изображений из сети
 
 #: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Allow us to use your %s account here"
-msgstr ""
+msgstr "Разрешить использование вашей учетной записи %s"
 
 #: apps/io.ox/backbone/forms.js:56 module:io.ox/core
 msgid "An error occurred"
@@ -656,7 +643,7 @@ msgstr "Произошла ошибка. Повторите попытку по�
 
 #: apps/io.ox/calendar/week/perspective.js:66 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:198
-#: apps/io.ox/mail/write/main.js:1004 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:993 module:io.ox/mail
 msgid "An error occurred. Please try again."
 msgstr "Произошла ошибка. Повторите попытку."
 
@@ -691,7 +678,7 @@ msgstr "Добавить vCard"
 msgid "Application Toolbar"
 msgstr "Панель приложений"
 
-#: apps/io.ox/mail/main.js:999 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1033 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "Надо исправить ошибку, иначе работа приложения может быть нарушена."
 
@@ -715,7 +702,7 @@ msgid "Apply rule if any condition is met."
 msgstr "Применить правило, если удовлетворено любое условие"
 
 #: apps/io.ox/calendar/acceptdeny.js:163 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:163 apps/io.ox/calendar/edit/main.js:351
+#: apps/io.ox/calendar/actions.js:164 apps/io.ox/calendar/edit/main.js:353
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/week/perspective.js:136
 #: apps/io.ox/mail/detail/links.js:138 module:io.ox/mail
 msgid "Appointment"
@@ -727,14 +714,14 @@ msgstr "Встреча"
 msgid "Appointment Details"
 msgstr "Свойства встречи"
 
-#: apps/io.ox/calendar/actions.js:401 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:402 module:io.ox/calendar
 msgid "Appointment has been copied"
 msgid_plural "Appointments have been copied"
 msgstr[0] "Встреча скопирована"
 msgstr[1] "Встречи скопированы"
 msgstr[2] "Встречи скопированы"
 
-#: apps/io.ox/calendar/actions.js:400 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:401 module:io.ox/calendar
 msgid "Appointment has been moved"
 msgid_plural "Appointments have been moved"
 msgstr[0] "Встреча перенесена"
@@ -834,7 +821,7 @@ msgstr[2] "Вложения сохранены"
 msgid "Attachments"
 msgstr "Вложения"
 
-#: apps/io.ox/contacts/actions.js:626 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:620 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:572 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/actions.js:431 module:io.ox/tasks
 msgid "Attachments have been saved!"
@@ -908,7 +895,7 @@ msgstr "Б"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:177 module:io.ox/calendar
-#: apps/io.ox/core/commons.js:685 module:io.ox/core
+#: apps/io.ox/core/commons.js:693 module:io.ox/core
 #: apps/io.ox/mail/main.js:141 module:io.ox/mail apps/io.ox/mail/main.js:146
 #: apps/io.ox/mail/threadview.js:39
 msgid "Back"
@@ -924,7 +911,7 @@ msgstr "Назад к встрече"
 msgid "Basic settings"
 msgstr "Основные параметры"
 
-#: apps/io.ox/mail/common-extensions.js:238 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:239 module:io.ox/mail
 msgid "Bcc"
 msgstr "Скрытая копия"
 
@@ -1007,7 +994,7 @@ msgstr "CSV"
 
 #. %1$d = Calendar week
 #: apps/io.ox/calendar/month/view.js:133 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:833
+#: apps/io.ox/calendar/week/view.js:836
 msgid "CW %1$d"
 msgstr "%1$d неделя"
 
@@ -1027,32 +1014,32 @@ msgid "Calendar"
 msgstr "Календарь"
 
 #: apps/io.ox/calendar/acceptdeny.js:96 module:io.ox/calendar
-#: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:164
-#: apps/io.ox/calendar/actions.js:273 apps/io.ox/calendar/actions.js:285
-#: apps/io.ox/calendar/actions.js:416 apps/io.ox/calendar/edit/main.js:51
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:161
+#: apps/io.ox/calendar/acceptdeny.js:164 apps/io.ox/calendar/actions.js:165
+#: apps/io.ox/calendar/actions.js:274 apps/io.ox/calendar/actions.js:286
+#: apps/io.ox/calendar/actions.js:417 apps/io.ox/calendar/edit/main.js:53
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/main.js:163
 #: apps/io.ox/calendar/month/perspective.js:117
 #: apps/io.ox/calendar/week/perspective.js:94
 #: apps/io.ox/calendar/week/perspective.js:137
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:154 apps/io.ox/contacts/distrib/main.js:185
-#: apps/io.ox/contacts/edit/main.js:249
+#: apps/io.ox/contacts/actions.js:152 apps/io.ox/contacts/distrib/main.js:187
+#: apps/io.ox/contacts/edit/main.js:251
 #: apps/io.ox/core/commons-folderview.js:587 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1675 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
 #: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:408
-#: apps/io.ox/core/main.js:1183 apps/io.ox/core/permissions/permissions.js:357
+#: apps/io.ox/core/main.js:1203 apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:399 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
 #: apps/io.ox/core/tk/folderviews.js:593 apps/io.ox/core/tk/folderviews.js:651
 #: apps/io.ox/core/tk/mobiscroll.js:35 apps/io.ox/core/upsell.js:36
-#: apps/io.ox/editor/main.js:344 module:io.ox/editor
-#: apps/io.ox/files/actions.js:387 module:io.ox/files
-#: apps/io.ox/files/actions.js:542 apps/io.ox/files/actions.js:597
-#: apps/io.ox/files/actions.js:641 apps/io.ox/files/actions.js:752
-#: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/fluid/view-detail.js:212
+#: apps/io.ox/editor/main.js:346 module:io.ox/editor
+#: apps/io.ox/files/actions.js:375 module:io.ox/files
+#: apps/io.ox/files/actions.js:530 apps/io.ox/files/actions.js:584
+#: apps/io.ox/files/actions.js:628 apps/io.ox/files/actions.js:739
+#: apps/io.ox/files/filepicker.js:32 apps/io.ox/files/fluid/view-detail.js:213
 #: apps/io.ox/files/folderview-extensions.js:38 module:io.ox/mail
 #: apps/io.ox/files/views/create.js:114
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
@@ -1063,17 +1050,17 @@ msgstr "Календарь"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:388
-#: module:io.ox/settings/settings apps/io.ox/mail/main.js:243
-#: apps/io.ox/mail/main.js:950 apps/io.ox/mail/write/inline-images.js:80
-#: apps/io.ox/mail/write/main.js:1366 apps/io.ox/mail/write/view-main.js:586
+#: module:io.ox/settings/settings apps/io.ox/mail/main.js:244
+#: apps/io.ox/mail/main.js:953 apps/io.ox/mail/write/inline-images.js:80
+#: apps/io.ox/mail/write/main.js:1364 apps/io.ox/mail/write/view-main.js:586
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
 #: apps/io.ox/portal/main.js:510 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:456
-#: apps/io.ox/settings/accounts/settings/pane.js:161
+#: apps/io.ox/search/view-template.js:501
+#: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:62
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:204
-#: apps/io.ox/tasks/common-extensions.js:95 apps/io.ox/tasks/edit/main.js:161
+#: apps/io.ox/tasks/common-extensions.js:95 apps/io.ox/tasks/edit/main.js:163
 #: apps/plugins/core/feedback/register.js:130
 #: apps/plugins/portal/flickr/register.js:235 module:plugins/portal
 #: apps/plugins/portal/rss/register.js:162
@@ -1126,7 +1113,7 @@ msgstr "Мобильный"
 msgid "Cell phone (alt)"
 msgstr "Мобильный (доп.)"
 
-#: apps/io.ox/files/actions.js:814 module:io.ox/files
+#: apps/io.ox/files/actions.js:801 module:io.ox/files
 msgid "Change View"
 msgstr "Изменить вид"
 
@@ -1149,7 +1136,7 @@ msgstr "Изменить пароль"
 msgid "Change password and sign out"
 msgstr "Изменить пароль и выйти"
 
-#: apps/io.ox/calendar/actions.js:641 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:642 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:63
 msgid "Change status"
 msgstr "Изменить статус"
@@ -1183,7 +1170,7 @@ msgid "Character"
 msgstr "Символы"
 
 #: apps/io.ox/calendar/toolbar.js:142 module:io.ox/calendar
-#: apps/io.ox/contacts/toolbar.js:162 module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js:163 module:io.ox/contacts
 #: apps/io.ox/mail/toolbar.js:224 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:135
 msgid "Checkboxes"
@@ -1209,8 +1196,8 @@ msgstr "Очистить"
 msgid "Cleaning up... This may take a few seconds."
 msgstr "Очистка... Это может занять несколько секунд."
 
-#: apps/io.ox/calendar/week/view.js:801 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:805
+#: apps/io.ox/calendar/week/view.js:804 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:808
 msgid "Click for whole day appointment"
 msgstr "Щелкните для создания встречи на весь день"
 
@@ -1273,9 +1260,9 @@ msgstr "Нажмите, чтобы отправить изображение."
 #: apps/io.ox/core/commons-folderview.js:544
 #: apps/io.ox/core/permissions/permissions.js:458
 #: apps/io.ox/core/pubsub/publications.js:105 module:io.ox/core/pubsub
-#: apps/io.ox/core/tk/dialogs.js:539 apps/io.ox/core/wizard/registry.js:60
+#: apps/io.ox/core/tk/dialogs.js:557 apps/io.ox/core/wizard/registry.js:60
 #: module:io.ox/core/wizard apps/io.ox/editor/main.js:157 module:io.ox/editor
-#: apps/io.ox/files/actions.js:347 module:io.ox/files
+#: apps/io.ox/files/actions.js:335 module:io.ox/files
 #: apps/io.ox/files/mediaplayer.js:295
 #: apps/io.ox/mail/accounts/settings.js:327
 #: module:io.ox/mail/accounts/settings
@@ -1286,11 +1273,11 @@ msgstr "Нажмите, чтобы отправить изображение."
 msgid "Close"
 msgstr "Закрыть"
 
-#: apps/io.ox/core/tk/dialogs.js:732 module:io.ox/core
+#: apps/io.ox/core/tk/dialogs.js:750 module:io.ox/core
 msgid "Close all"
 msgstr "Закрыть все"
 
-#: apps/io.ox/core/commons.js:731 module:io.ox/core
+#: apps/io.ox/core/commons.js:739 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
 #: apps/io.ox/mail/view-options.js:138 module:io.ox/mail
 msgid "Close folder view"
@@ -1326,7 +1313,7 @@ msgstr "Комментарий"
 
 #: apps/plugins/portal/xing/actions.js:59 module:plugins/portal
 msgid "Comment has been successfully posted on XING"
-msgstr ""
+msgstr "Комментарий опубликован в XING"
 
 #: apps/plugins/portal/reddit/register.js:175 module:io.ox/portal
 msgid "Comments"
@@ -1379,7 +1366,7 @@ msgid "Compose new email"
 msgstr "Создать новое сообщение"
 
 #: apps/io.ox/mail/actions.js:930 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:675
+#: apps/io.ox/mail/write/main.js:664
 msgid "Compose new mail"
 msgstr "Создать новое сообщение"
 
@@ -1397,7 +1384,7 @@ msgstr "Подтверждение"
 msgid "Conflicts detected"
 msgstr "Обнаружены конфликты"
 
-#: apps/io.ox/calendar/edit/main.js:156 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:158 module:io.ox/calendar/edit/main
 msgid "Conflicts with resources cannot be ignored"
 msgstr "Конфликты ресурсов не могут быть проигнорированы."
 
@@ -1407,9 +1394,9 @@ msgstr "Конфликты:"
 
 #: apps/io.ox/core/settings/downloads/pane.js:66 module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
-msgstr ""
+msgstr "Microsoft Outlook® Connector"
 
-#: apps/io.ox/contacts/edit/main.js:272 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:274 module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js:138 module:io.ox/mail
 msgid "Contact"
 msgstr "Контакт"
@@ -1423,20 +1410,18 @@ msgid "Contact pictures"
 msgstr "Фото контакта"
 
 #: apps/plugins/portal/xing/register.js:360 module:plugins/portal
-#, fuzzy
-#| msgid "Contact Details"
 msgid "Contact request sent"
-msgstr "Контактные данные"
+msgstr "Запрос контакта отправлен"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:136 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:143 module:io.ox/contacts
 msgid "Contacts"
 msgstr "Участники"
 
-#: apps/io.ox/contacts/actions.js:197 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:195 module:io.ox/contacts
 msgid "Contacts have been copied"
 msgstr "Контакты скопированы"
 
-#: apps/io.ox/contacts/actions.js:196 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:194 module:io.ox/contacts
 msgid "Contacts have been moved"
 msgstr "Контакты перенесены"
 
@@ -1445,7 +1430,7 @@ msgstr "Контакты перенесены"
 msgid "Contains"
 msgstr "содержит"
 
-#: apps/io.ox/core/main.js:1184 module:io.ox/core
+#: apps/io.ox/core/main.js:1204 module:io.ox/core
 msgid "Continue"
 msgstr "Продолжить"
 
@@ -1459,18 +1444,18 @@ msgctxt "app"
 msgid "Conversations"
 msgstr "Обсуждения"
 
-#: apps/io.ox/contacts/actions.js:197 module:io.ox/contacts
-#: apps/io.ox/contacts/actions.js:829 apps/io.ox/contacts/toolbar.js:112
-#: apps/io.ox/files/actions.js:687 module:io.ox/files
-#: apps/io.ox/files/actions.js:997 apps/io.ox/files/actions.js:1380
-#: apps/io.ox/files/toolbar.js:144 apps/io.ox/mail/actions.js:349
+#: apps/io.ox/contacts/actions.js:195 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:823 apps/io.ox/contacts/toolbar.js:113
+#: apps/io.ox/files/actions.js:674 module:io.ox/files
+#: apps/io.ox/files/actions.js:984 apps/io.ox/files/actions.js:1372
+#: apps/io.ox/files/toolbar.js:152 apps/io.ox/mail/actions.js:349
 #: module:io.ox/mail apps/io.ox/mail/actions.js:1093
 #: apps/io.ox/mail/mobile-toolbar-actions.js:107
 #: apps/io.ox/mail/toolbar.js:123
 msgid "Copy"
 msgstr "Копировать"
 
-#: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:228 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
 msgctxt "CC"
 msgid "Copy"
@@ -1547,7 +1532,7 @@ msgstr "Не удалось загрузить информацию о встр�
 msgid "Couldn't load contact data."
 msgstr "Не удалось загрузить контактные данные."
 
-#: apps/io.ox/core/tk/folderviews.js:1066 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:1071 module:io.ox/core
 msgid "Couldn't load folders."
 msgstr "Не удалось загрузить папки."
 
@@ -1563,7 +1548,7 @@ msgstr "Не удалось загрузить задачу."
 msgid "Couldn't load your auto forward."
 msgstr "Не удалось загрузить автопересылку."
 
-#: apps/io.ox/contacts/settings/pane.js:118 module:io.ox/contacts
+#: apps/io.ox/core/settings/user.js:98 module:io.ox/contacts
 #: apps/plugins/portal/userSettings/register.js:52 module:io.ox/core
 msgid "Couldn't load your contact data."
 msgstr "Не удалось загрузить контактные данные."
@@ -1589,10 +1574,10 @@ msgstr "Создать"
 
 #: apps/plugins/portal/xing/register.js:267 module:plugins/portal
 msgid "Create a %s account using the data stored here"
-msgstr ""
+msgstr "Создать учетную запись  %s на основе определенных здесь данных"
 
-#: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:325
+#: apps/io.ox/calendar/edit/main.js:179 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:327
 msgid "Create appointment"
 msgstr "Создать встречу"
 
@@ -1601,7 +1586,7 @@ msgstr "Создать встречу"
 msgid "Create contact"
 msgstr "Создать контакт"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:45 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:42 module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js:53
 msgid "Create distribution list"
 msgstr "Создать список рассылки"
@@ -1643,7 +1628,7 @@ msgstr "Денежная единица"
 
 #: apps/io.ox/portal/main.js:86 module:io.ox/portal
 msgid "Customize this page"
-msgstr "Настроить эту страницу"
+msgstr "Настроить страницу"
 
 #: apps/io.ox/core/import/import.js:213 module:io.ox/core
 msgid "Data imported successfully"
@@ -1658,6 +1643,8 @@ msgid ""
 "Data synchronization with your local (Windows) machine. Drive Client lets "
 "you configure the folders to be synchronized."
 msgstr ""
+"Синхронизация данных с локальной системой Windows. Клиент Drive позволяет "
+"выбрать папки для синхронизации."
 
 #: apps/io.ox/backbone/forms.js:512 module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:118
@@ -1676,7 +1663,7 @@ msgid "Date of birth"
 msgstr "Дата рождения"
 
 #: apps/io.ox/backbone/mini-views/date.js:25 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:558 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:559 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:75 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:134
 msgid "Day"
@@ -1738,20 +1725,20 @@ msgstr "Отложено"
 
 #. Really delete portal widget - in contrast to "just disable"
 #. Really delete portal widget - in contrast to "just disable"
-#: apps/io.ox/calendar/actions.js:284 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:650
+#: apps/io.ox/calendar/actions.js:285 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:651
 #: apps/io.ox/calendar/invitations/register.js:33 module:io.ox/calendar/main
 #: apps/io.ox/calendar/toolbar.js:69 apps/io.ox/contacts/actions.js:53
-#: module:io.ox/contacts apps/io.ox/contacts/actions.js:805
-#: apps/io.ox/contacts/main.js:189 apps/io.ox/contacts/toolbar.js:81
+#: module:io.ox/contacts apps/io.ox/contacts/actions.js:799
+#: apps/io.ox/contacts/main.js:189 apps/io.ox/contacts/toolbar.js:82
 #: apps/io.ox/core/commons-folderview.js:413 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:592 apps/io.ox/files/actions.js:386
-#: module:io.ox/files apps/io.ox/files/actions.js:751
-#: apps/io.ox/files/actions.js:908 apps/io.ox/files/actions.js:1321
-#: apps/io.ox/files/toolbar.js:100 apps/io.ox/mail/actions.js:90
+#: apps/io.ox/core/tk/folderviews.js:592 apps/io.ox/files/actions.js:374
+#: module:io.ox/files apps/io.ox/files/actions.js:738
+#: apps/io.ox/files/actions.js:895 apps/io.ox/files/actions.js:1313
+#: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:90
 #: module:io.ox/mail apps/io.ox/mail/actions.js:112
 #: apps/io.ox/mail/actions.js:992 apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:272
+#: apps/io.ox/mail/settings/signatures/register.js:278
 #: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:508
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -1767,20 +1754,20 @@ msgstr "Отложено"
 msgid "Delete"
 msgstr "Удалить"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:160
+#: apps/io.ox/settings/accounts/settings/pane.js:161
 #: module:io.ox/settings/accounts
 msgid "Delete account"
 msgstr "Удалить учетную запись"
 
-#: apps/io.ox/calendar/actions.js:271 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:272 module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Удалить встречу"
 
-#: apps/io.ox/files/actions.js:1062 module:io.ox/files
+#: apps/io.ox/files/actions.js:1049 module:io.ox/files
 msgid "Delete version"
 msgstr "Удалить версию"
 
-#: apps/io.ox/calendar/actions.js:272 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:273 module:io.ox/calendar
 msgid "Delete whole series"
 msgstr "Удалить всю серию"
 
@@ -1801,7 +1788,7 @@ msgid "Descending"
 msgstr "По убыванию"
 
 #: apps/io.ox/calendar/edit/template.js:217 module:io.ox/calendar/edit/main
-#: apps/io.ox/files/actions.js:592 module:io.ox/files
+#: apps/io.ox/files/actions.js:579 module:io.ox/files
 #: apps/io.ox/files/views/create.js:163
 #: apps/io.ox/tasks/edit/view-template.js:117 module:io.ox/tasks/edit
 #: apps/plugins/portal/flickr/register.js:227 module:plugins/portal
@@ -1810,7 +1797,7 @@ msgstr "По убыванию"
 msgid "Description"
 msgstr "Описание"
 
-#: apps/io.ox/calendar/edit/main.js:93 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:95 module:io.ox/calendar/edit/main
 msgid "Description has been copied"
 msgstr "Описание скопировано"
 
@@ -1818,8 +1805,8 @@ msgstr "Описание скопировано"
 msgid "Details"
 msgstr "Подробности"
 
-#: apps/io.ox/files/actions.js:258 module:io.ox/files
-#: apps/io.ox/files/actions.js:259
+#: apps/io.ox/files/actions.js:246 module:io.ox/files
+#: apps/io.ox/files/actions.js:247
 msgid "Direct link: %1$s"
 msgstr "Прямая ссылка: %1$s"
 
@@ -1835,26 +1822,47 @@ msgstr "Отключить"
 msgid "Disable widget"
 msgstr "Отключить модуль"
 
-#: apps/io.ox/calendar/edit/main.js:50 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/template.js:96
-#: apps/io.ox/contacts/distrib/create-dist-view.js:56 module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js:184
-#: apps/io.ox/contacts/edit/main.js:248
+#: apps/io.ox/calendar/edit/template.js:96 module:io.ox/calendar/edit/main
+#: apps/io.ox/contacts/distrib/create-dist-view.js:63 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:183
-#: apps/io.ox/contacts/settings/pane.js:102 apps/io.ox/editor/main.js:343
-#: module:io.ox/editor
+#: apps/io.ox/core/settings/user.js:80
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/settings/signatures/register.js:107 module:io.ox/mail
 #: apps/io.ox/mail/write/inplace/inplace.js:114
-#: apps/io.ox/mail/write/main.js:1364 apps/io.ox/mail/write/view-main.js:64
+#: apps/io.ox/mail/write/view-main.js:64
 #: apps/io.ox/tasks/edit/view-template.js:82 module:io.ox/tasks/edit
 #: apps/plugins/portal/userSettings/register.js:44 module:io.ox/core
 msgid "Discard"
 msgstr "Отклонить"
 
-#: apps/io.ox/tasks/edit/main.js:160 module:io.ox/tasks
+#. "Discard changes" appears in combination with "Cancel" (this action)
+#. Translation should be distinguishable for the user
+#. "Discard changes" appears in combination with "Cancel" (this action)
+#. Translation should be distinguishable for the user
+#. "Discard changes" appears in combination with "Cancel" (this action)
+#. Translation should be distinguishable for the user
+#. "Discard changes" appears in combination with "Cancel" (this action)
+#. Translation should be distinguishable for the user
+#. "Discard changes" appears in combination with "Cancel" (this action)
+#. Translation should be distinguishable for the user
+#: apps/io.ox/calendar/edit/main.js:52 module:io.ox/calendar/edit/main
+#: apps/io.ox/contacts/distrib/main.js:186 module:io.ox/contacts
+#: apps/io.ox/contacts/edit/main.js:250 apps/io.ox/editor/main.js:345
+#: module:io.ox/editor apps/io.ox/tasks/edit/main.js:162 module:io.ox/tasks
+#, fuzzy
+#| msgid "Discard changes"
+msgctxt "dialog"
 msgid "Discard changes"
+msgstr "Отклонить изменения"
+
+#. "Discard message" appears in combination with "Cancel" (this action)
+#. Translation should be distinguishable for the user
+#: apps/io.ox/mail/write/main.js:1362 module:io.ox/mail
+#, fuzzy
+#| msgid "Discard changes"
+msgctxt "dialog"
+msgid "Discard message"
 msgstr "Отклонить изменения"
 
 #: apps/io.ox/mail/settings/pane.js:283 module:io.ox/mail
@@ -1900,10 +1908,8 @@ msgid "Distribution list has been saved"
 msgstr "Список рассылки сохранен"
 
 #: apps/plugins/portal/xing/register.js:262 module:plugins/portal
-#, fuzzy
-#| msgid "Do you really want to delete this account?"
 msgid "Do you already have a %s account?"
-msgstr "Вы действительно хотите удалить учетную запись?"
+msgstr "Уже есть учетная запись %s?"
 
 #: apps/io.ox/files/util.js:52 module:io.ox/files
 msgid ""
@@ -1919,7 +1925,7 @@ msgstr "Удалить папку «%s»?"
 msgid "Do you really want to delete these items?"
 msgstr "Удалить эти элементы?"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:159
+#: apps/io.ox/settings/accounts/settings/pane.js:160
 #: module:io.ox/settings/accounts
 msgid "Do you really want to delete this account?"
 msgstr "Вы действительно хотите удалить учетную запись?"
@@ -1932,8 +1938,8 @@ msgstr "Удалить контакт?"
 msgid "Do you really want to delete this distribution list?"
 msgstr "Удалить список рассылки?"
 
-#: apps/io.ox/files/actions.js:362 module:io.ox/files
-#: apps/io.ox/files/actions.js:743
+#: apps/io.ox/files/actions.js:350 module:io.ox/files
+#: apps/io.ox/files/actions.js:730
 msgid "Do you really want to delete this file?"
 msgid_plural "Do you really want to delete these files?"
 msgstr[0] "Удалить файл?"
@@ -1952,15 +1958,17 @@ msgstr[2] "Удалить задачи?"
 msgid "Do you really want to delete this widget?"
 msgstr "Удалить модуль?"
 
-#: apps/io.ox/mail/write/main.js:1363 module:io.ox/mail
-msgid "Do you really want to discard this mail?"
-msgstr "Удалить сообщение?"
-
 #: apps/io.ox/calendar/edit/main.js:49 module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/main.js:183 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:247 apps/io.ox/editor/main.js:342
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:159 module:io.ox/tasks
 msgid "Do you really want to discard your changes?"
+msgstr "Отменить изменения?"
+
+#: apps/io.ox/mail/write/main.js:1359 module:io.ox/mail
+#, fuzzy
+#| msgid "Do you really want to discard your changes?"
+msgid "Do you really want to discard your message?"
 msgstr "Отменить изменения?"
 
 #: apps/io.ox/files/folderview-extensions.js:36 module:io.ox/mail
@@ -1980,22 +1988,20 @@ msgid ""
 msgstr "Подтвердить отдельную встречу или всю серию?"
 
 #: apps/plugins/portal/xing/register.js:266 module:plugins/portal
-#, fuzzy
-#| msgid "Do you really want to delete this account?"
 msgid "Do you want to create a %s account?"
-msgstr "Вы действительно хотите удалить учетную запись?"
+msgstr "Создать учетную запись %s?"
 
-#: apps/io.ox/calendar/actions.js:270 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:271 module:io.ox/calendar
 msgid ""
 "Do you want to delete the whole series or just one appointment within the "
 "series?"
 msgstr "Удалить всю серию или отдельную встречу?"
 
-#: apps/io.ox/calendar/actions.js:283 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:284 module:io.ox/calendar
 msgid "Do you want to delete this appointment?"
 msgstr "Удалить встречу?"
 
-#: apps/io.ox/calendar/actions.js:159 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:160 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:133
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
@@ -2025,23 +2031,21 @@ msgstr "Документы"
 msgid "Done"
 msgstr "Готово"
 
-#: apps/io.ox/calendar/week/view.js:653 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:656 module:io.ox/calendar
 msgid "Doubleclick in this row for whole day appointment"
 msgstr "Щелкните дважды на строке, чтобы создать встречу на весь день."
 
-#: apps/io.ox/contacts/actions.js:865 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:859 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:459 module:io.ox/core/tk/attachments
-#: apps/io.ox/files/actions.js:899 module:io.ox/files
-#: apps/io.ox/files/actions.js:1048 apps/io.ox/files/actions.js:1312
-#: apps/io.ox/files/toolbar.js:93 apps/io.ox/mail/actions.js:1184
+#: apps/io.ox/files/actions.js:886 module:io.ox/files
+#: apps/io.ox/files/actions.js:1035 apps/io.ox/files/actions.js:1304
+#: apps/io.ox/files/toolbar.js:101 apps/io.ox/mail/actions.js:1184
 #: module:io.ox/mail apps/io.ox/tasks/actions.js:655 module:io.ox/tasks
 #: apps/plugins/portal/updater/register.js:38 module:plugins/portal
 msgid "Download"
 msgstr "Загрузить"
 
 #: apps/io.ox/core/settings/downloads/pane.js:54 module:io.ox/core
-#, fuzzy
-#| msgid "Download install file (for Windows)"
 msgid "Download installation file (for Windows)"
 msgstr "Загрузить установочный файл (Windows)"
 
@@ -2062,11 +2066,8 @@ msgid "Drive"
 msgstr "Drive"
 
 #: apps/io.ox/core/settings/downloads/pane.js:82 module:io.ox/core
-#, fuzzy
-#| msgctxt "help"
-#| msgid "Drive Settings"
 msgid "Drive Client"
-msgstr "Параметры Drive"
+msgstr "Клиент Drive"
 
 #: apps/io.ox/files/guidance/main.js:95 module:io.ox/files
 msgctxt "help"
@@ -2087,24 +2088,24 @@ msgstr "Перетащите сюда для импорта сообщения"
 msgid "Drop here to upload a <b class=\"dndignore\">new attachment</b>"
 msgstr "Перетащите сюда для добавления <b class=\"dndignore\">вложения</b>."
 
-#: apps/io.ox/files/actions.js:1072 module:io.ox/files
+#: apps/io.ox/files/actions.js:1059 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new file</b>"
 msgstr ""
 "Перетащите сюда для добавления <b class=\"dndignore\">нового файла</b>."
 
-#: apps/io.ox/files/actions.js:1092 module:io.ox/files
+#: apps/io.ox/files/actions.js:1079 module:io.ox/files
 msgid "Drop here to upload a <b class=\"dndignore\">new version</b>"
 msgstr ""
 "Перетащите сюда для добавления <b class=\"dndignore\">новой версии</b>."
 
-#: apps/io.ox/files/actions.js:1086 module:io.ox/files
+#: apps/io.ox/files/actions.js:1073 module:io.ox/files
 msgid ""
 "Drop here to upload a <b class=\"dndignore\">new version</b> of \"%1$s\""
 msgstr ""
 "Перетащите сюда для добавления <b class=\"dndignore\">новой версии</b> "
 "«%1$s»."
 
-#: apps/io.ox/mail/write/main.js:351 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:341 module:io.ox/mail
 msgid "Drop the file anywhere to add attachment"
 msgstr "Чтобы добавить вложение, перетащите сюда файл"
 
@@ -2143,17 +2144,17 @@ msgid "EB"
 msgstr "ЭБ"
 
 #. Used as a button label to enter the "edit mode"
-#: apps/io.ox/calendar/actions.js:632 module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:56 apps/io.ox/contacts/actions.js:795
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js:74
+#: apps/io.ox/calendar/actions.js:633 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:56 apps/io.ox/contacts/actions.js:789
+#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js:75
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
-#: apps/io.ox/files/actions.js:890 module:io.ox/files
+#: apps/io.ox/files/actions.js:877 module:io.ox/files
 #: apps/io.ox/mail/actions.js:982 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
 #: apps/io.ox/mail/main.js:129 apps/io.ox/mail/main.js:135
-#: apps/io.ox/mail/main.js:238 apps/io.ox/mail/main.js:954
-#: apps/io.ox/mail/settings/signatures/register.js:269
+#: apps/io.ox/mail/main.js:239 apps/io.ox/mail/main.js:957
+#: apps/io.ox/mail/settings/signatures/register.js:275
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
 #: apps/io.ox/settings/accounts/settings/pane.js:46
@@ -2177,14 +2178,20 @@ msgstr "Изменить фотоленту Flickr"
 msgid "Edit Tumblr feed"
 msgstr "Изменить ленту Tumblr"
 
-#: apps/io.ox/calendar/edit/main.js:177 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/edit/main.js:323
+#: apps/io.ox/calendar/edit/main.js:179 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:325
 msgid "Edit appointment"
 msgstr "Изменить встречу"
 
-#: apps/io.ox/files/actions.js:976 module:io.ox/files
+#: apps/io.ox/files/actions.js:963 module:io.ox/files
 msgid "Edit description"
 msgstr "Изменить описание"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:47 module:io.ox/contacts
+#, fuzzy
+#| msgid "Add distribution list"
+msgid "Edit distribution list"
+msgstr "Добавить список рассылки"
 
 #: apps/io.ox/mail/toolbar.js:93 module:io.ox/mail
 msgid "Edit draft"
@@ -2199,7 +2206,7 @@ msgid "Edit signature"
 msgstr "Изменить подпись"
 
 #: apps/io.ox/tasks/edit/main.js:27 module:io.ox/tasks
-#: apps/io.ox/tasks/edit/main.js:209 apps/io.ox/tasks/edit/view-template.js:48
+#: apps/io.ox/tasks/edit/main.js:211 apps/io.ox/tasks/edit/view-template.js:48
 #: module:io.ox/tasks/edit apps/io.ox/tasks/edit/view-template.js:88
 #: apps/io.ox/tasks/edit/view.js:127
 msgid "Edit task"
@@ -2243,7 +2250,7 @@ msgstr "Электронные адреса"
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js:235 module:io.ox/mail
-#: apps/io.ox/mail/detail/view.js:352
+#: apps/io.ox/mail/detail/view.js:351
 msgid "Email from %1$s: %2$s"
 msgstr "Сообщение от %1$s: %2$s"
 
@@ -2287,10 +2294,8 @@ msgid ""
 msgstr "Если квота превышена, сообщения не могут перемещаться в корзину."
 
 #: apps/plugins/halo/xing/register.js:38 module:plugins/portal
-#, fuzzy
-#| msgid "Employee ID"
 msgid "Employee"
-msgstr "Идентификатор сотрудника"
+msgstr "Сотрудник"
 
 #: apps/io.ox/contacts/model.js:251 module:io.ox/contacts
 msgid "Employee ID"
@@ -2301,10 +2306,8 @@ msgid "Employee type"
 msgstr "Тип сотрудника"
 
 #: apps/plugins/halo/xing/register.js:182 module:plugins/portal
-#, fuzzy
-#| msgid "Employee type"
 msgid "Employment"
-msgstr "Тип сотрудника"
+msgstr "Род занятий"
 
 #. list is empty / no items
 #: apps/io.ox/core/tk/vgrid.js:712 module:io.ox/core
@@ -2363,7 +2366,7 @@ msgstr "Введите название документа"
 #. what follows is a set of job/status descriptions used by XING
 #: apps/plugins/halo/xing/register.js:36 module:plugins/portal
 msgid "Entrepreneur"
-msgstr ""
+msgstr "Предприниматель"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:52
 #: module:io.ox/settings/settings
@@ -2464,11 +2467,17 @@ msgstr "Каждые %1$d года в %2$s %3$s, месяц: %4$d"
 msgid "Every day"
 msgstr "Каждый день"
 
+#: apps/io.ox/mail/toolbar.js:226 module:io.ox/mail
+#, fuzzy
+#| msgid "Start date"
+msgid "Exact dates"
+msgstr "Дата начала"
+
 #: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Executive"
-msgstr ""
+msgstr "Руководитель"
 
-#: apps/io.ox/core/main.js:747 module:io.ox/core
+#: apps/io.ox/core/main.js:767 module:io.ox/core
 msgid "Exit Fullscreen"
 msgstr "Закрыть полноэкранный режим"
 
@@ -2506,7 +2515,7 @@ msgstr "Расширенный вид"
 msgid "External contact"
 msgstr "Внешний контакт"
 
-#: apps/io.ox/mail/common-extensions.js:461 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:462 module:io.ox/mail
 msgid ""
 "External images have been blocked to protect you against potential spam!"
 msgstr "Внешние изображения были заблокированы с целью защиты от спама."
@@ -2545,6 +2554,8 @@ msgid ""
 "Failed to automatically save current stage of work. Please save your work to "
 "avoid data loss in case the browser closes unexpectedly."
 msgstr ""
+"Не удалось автоматически сохранить текущую версию. Во избежание потери "
+"данных сохраните изменения вручную."
 
 #: apps/io.ox/mail/accounts/settings.js:212
 #: module:io.ox/mail/accounts/settings
@@ -2630,7 +2641,7 @@ msgstr "Обратная связь"
 msgid "Feeling • Decoration"
 msgstr "Настроение • Оформление"
 
-#: apps/io.ox/files/fluid/view-detail.js:336 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:337 module:io.ox/files
 #: apps/io.ox/mail/detail/links.js:138 module:io.ox/mail
 msgid "File"
 msgstr "Файл"
@@ -2651,7 +2662,7 @@ msgstr "Имя файла не может содержать «/»"
 msgid "File quota"
 msgstr "Квота файлов"
 
-#: apps/io.ox/files/actions.js:257 module:io.ox/files
+#: apps/io.ox/files/actions.js:245 module:io.ox/files
 msgid "File: %1$s"
 msgstr "Файл: %1$s"
 
@@ -2659,15 +2670,15 @@ msgstr "Файл: %1$s"
 msgid "Files"
 msgstr "Файлы"
 
-#: apps/io.ox/files/fluid/perspective.js:559 module:io.ox/files
+#: apps/io.ox/files/fluid/perspective.js:566 module:io.ox/files
 msgid "Files View"
 msgstr "Файлы"
 
-#: apps/io.ox/files/actions.js:687 module:io.ox/files
+#: apps/io.ox/files/actions.js:674 module:io.ox/files
 msgid "Files have been copied"
 msgstr "Файлы скопированы"
 
-#: apps/io.ox/files/actions.js:686 module:io.ox/files
+#: apps/io.ox/files/actions.js:673 module:io.ox/files
 msgid "Files have been moved"
 msgstr "Файлы перенесены"
 
@@ -2697,8 +2708,8 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:139 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:344 module:io.ox/core
-#: apps/io.ox/search/view-template.js:449
+#: apps/io.ox/search/view-template.js:390 module:io.ox/core
+#: apps/io.ox/search/view-template.js:499
 msgid "Folder"
 msgstr "Папка"
 
@@ -2725,9 +2736,9 @@ msgid "Folder type"
 msgstr "Тип папки"
 
 #: apps/io.ox/calendar/toolbar.js:141 module:io.ox/calendar
-#: apps/io.ox/contacts/toolbar.js:161 module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js:162 module:io.ox/contacts
 #: apps/io.ox/core/tk/folderviews.js:478 module:io.ox/core
-#: apps/io.ox/files/toolbar.js:206 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:214 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:223 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:134
 msgid "Folder view"
@@ -2742,7 +2753,7 @@ msgstr ""
 "Папка «%1$s» будет скрыта. Для ее просмотра включите «Показать скрытые файлы "
 "и папки»."
 
-#: apps/io.ox/core/tk/folderviews.js:842 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:835 module:io.ox/core
 msgid "Folder-specific actions"
 msgstr "Действия папки"
 
@@ -2787,7 +2798,7 @@ msgstr "Форматировать как"
 
 #: apps/io.ox/mail/actions.js:972 module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js:64 apps/io.ox/mail/toolbar.js:67
-#: apps/io.ox/mail/write/main.js:678
+#: apps/io.ox/mail/write/main.js:667
 msgid "Forward"
 msgstr "Переслать"
 
@@ -2806,7 +2817,7 @@ msgstr "Свободно"
 
 #: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Freelancer"
-msgstr ""
+msgstr "Фрилансер"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:366
 #: module:io.ox/calendar/edit/main
@@ -2822,7 +2833,7 @@ msgstr "Пятница"
 msgid "From"
 msgstr "От"
 
-#: apps/io.ox/core/main.js:750 module:io.ox/core apps/io.ox/core/main.js:754
+#: apps/io.ox/core/main.js:770 module:io.ox/core apps/io.ox/core/main.js:774
 msgid "Fullscreen"
 msgstr "Полноэкранный режим"
 
@@ -2886,7 +2897,7 @@ msgstr "Группа"
 msgid "Guest"
 msgstr "Гость"
 
-#: apps/io.ox/files/actions.js:850 module:io.ox/files
+#: apps/io.ox/files/actions.js:837 module:io.ox/files
 msgid "Guidance"
 msgstr "Правила"
 
@@ -2913,25 +2924,25 @@ msgid "Hello World"
 msgstr "Здравствуй, мир!"
 
 #: apps/io.ox/calendar/freebusy/templates.js:109
-#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:715
+#: module:io.ox/calendar/freebusy apps/io.ox/core/main.js:735
 #: module:io.ox/core apps/io.ox/help/center.js:103 module:io.ox/help
 msgid "Help"
 msgstr "Справка"
 
 #: apps/plugins/halo/xing/register.js:247 module:plugins/portal
 msgid "Here is what %s knows about %s:"
-msgstr ""
+msgstr "Вот что %s знает о %s:"
 
 #: apps/io.ox/core/pubsub/publications.js:344 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/publications.js:345
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "<br><br>%1$s предоставляет вам доступ к публикации: <br>%2$s"
 
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:947 module:io.ox/core
 msgid "Hidden folders"
 msgstr "Скрытые папки"
 
-#: apps/io.ox/core/commons-folderview.js:695 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:697 module:io.ox/core
 #: apps/io.ox/mail/write/view-main.js:124 module:io.ox/mail
 msgid "Hide"
 msgstr "Скрыть"
@@ -3012,8 +3023,8 @@ msgstr "Подписка папки IMAP"
 msgid "IP phone"
 msgstr "IP-телефон"
 
-#: apps/io.ox/files/actions.js:828 module:io.ox/files
-#: apps/io.ox/files/actions.js:1427 apps/io.ox/files/toolbar.js:202
+#: apps/io.ox/files/actions.js:815 module:io.ox/files
+#: apps/io.ox/files/actions.js:1419 apps/io.ox/files/toolbar.js:210
 msgid "Icons"
 msgstr "Значки"
 
@@ -3029,7 +3040,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Игнорировать"
 
-#: apps/io.ox/calendar/edit/main.js:159 module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/main.js:161 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:116 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:93
 msgid "Ignore conflicts"
@@ -3056,8 +3067,8 @@ msgstr "Импорт"
 msgid "Import into"
 msgstr "Импорт в"
 
-#: apps/io.ox/mail/settings/signatures/register.js:222 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:376
+#: apps/io.ox/mail/settings/signatures/register.js:228 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:382
 msgid "Import signatures"
 msgstr "Импорт подписей"
 
@@ -3097,6 +3108,8 @@ msgid ""
 "Informs about the current status of E-Mails and appointments without having "
 "to display the user interface or another Windows® client."
 msgstr ""
+"Сообщает о текущем состоянии почты и встреч без доступа к интерфейсу "
+"пользователя и к другому клиенту  Windows®."
 
 #: apps/io.ox/mail/settings/pane.js:39 module:io.ox/mail
 msgid "Inline"
@@ -3146,29 +3159,25 @@ msgid "Invalid data"
 msgstr "Недопустимые данные"
 
 #: apps/plugins/portal/xing/register.js:338 module:plugins/portal
-#, fuzzy
-#| msgid "Invitations"
 msgid "Invitation sent"
-msgstr "Приглашения"
+msgstr "Приглашение отправлено"
 
-#: apps/io.ox/contacts/toolbar.js:67 module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js:68 module:io.ox/contacts
 msgid "Invite"
-msgstr ""
+msgstr "Пригласить"
 
 #: apps/plugins/portal/xing/register.js:368 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:375
-#, fuzzy
-#| msgid "Invitations"
 msgid "Invite to %s"
-msgstr "Приглашения"
+msgstr "Пригласить на %s"
 
-#: apps/io.ox/contacts/actions.js:786 module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:68 apps/io.ox/mail/actions.js:1064
+#: apps/io.ox/contacts/actions.js:780 module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js:69 apps/io.ox/mail/actions.js:1064
 #: module:io.ox/mail
 msgid "Invite to appointment"
 msgstr "Пригласить на встречу"
 
-#: apps/io.ox/calendar/actions.js:693 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:694 module:io.ox/calendar
 msgid "Invite to new appointment"
 msgstr "Пригласить на новую встречу"
 
@@ -3187,15 +3196,15 @@ msgstr "равно"
 msgid "Is smaller than"
 msgstr "меньше чем"
 
-#: apps/io.ox/core/commons.js:678 module:io.ox/core
+#: apps/io.ox/core/commons.js:686 module:io.ox/core
 msgid "Items"
 msgstr "Объекты"
 
-#: apps/io.ox/files/actions.js:192 module:io.ox/files
+#: apps/io.ox/files/actions.js:180 module:io.ox/files
 msgid "Items without a file can not be downloaded."
 msgstr "Объекты без файла не могут быть загружены."
 
-#: apps/io.ox/files/actions.js:228 module:io.ox/files
+#: apps/io.ox/files/actions.js:216 module:io.ox/files
 msgid "Items without a file can not be opened."
 msgstr "Объекты без файла не могут быть открыты."
 
@@ -3283,7 +3292,7 @@ msgid "Launcher dropdown. Press [enter] to jump to the dropdown."
 msgstr "Меню запуска. Чтобы перейти к списку, нажмите [Enter]."
 
 #: apps/io.ox/calendar/toolbar.js:133 module:io.ox/calendar
-#: apps/io.ox/files/toolbar.js:200 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:208 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:216 module:io.ox/mail
 msgid "Layout"
 msgstr "Раскладка"
@@ -3320,7 +3329,7 @@ msgstr "Светло-зеленый"
 
 #: apps/plugins/portal/xing/actions.js:172 module:plugins/portal
 msgid "Like"
-msgstr ""
+msgstr "Нравится"
 
 #: apps/plugins/portal/facebook/register.js:450 module:plugins/portal
 msgid "Liked a link: %s"
@@ -3328,10 +3337,8 @@ msgstr "Понравилось: %s"
 
 #. As on Facebook, XING allows a user to point out that they like a comment
 #: apps/plugins/portal/xing/actions.js:152 module:plugins/portal
-#, fuzzy
-#| msgid "Hide comments"
 msgid "Liked comment"
-msgstr "Скрыть комментарии"
+msgstr "Комментарий нравится"
 
 #: apps/plugins/portal/linkedIn/register.js:347 module:plugins/portal
 msgid "LinkedIn"
@@ -3349,10 +3356,10 @@ msgstr "Ошибка LinkedIn:"
 msgid "Links"
 msgstr "Ссылки"
 
-#: apps/io.ox/calendar/actions.js:586 module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js:138 apps/io.ox/files/actions.js:821
-#: module:io.ox/files apps/io.ox/files/actions.js:1417
-#: apps/io.ox/files/toolbar.js:201 apps/io.ox/mail/toolbar.js:220
+#: apps/io.ox/calendar/actions.js:587 module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js:138 apps/io.ox/files/actions.js:808
+#: module:io.ox/files apps/io.ox/files/actions.js:1409
+#: apps/io.ox/files/toolbar.js:209 apps/io.ox/mail/toolbar.js:220
 #: module:io.ox/mail
 msgid "List"
 msgstr "Список"
@@ -3361,8 +3368,8 @@ msgstr "Список"
 msgid "Location"
 msgstr "Место"
 
-#: apps/io.ox/files/actions.js:1007 module:io.ox/files
-#: apps/io.ox/files/actions.js:1390 apps/io.ox/files/toolbar.js:151
+#: apps/io.ox/files/actions.js:994 module:io.ox/files
+#: apps/io.ox/files/actions.js:1382 apps/io.ox/files/toolbar.js:159
 msgid "Lock"
 msgstr "Заблокировать"
 
@@ -3391,7 +3398,8 @@ msgstr "Низкий приоритет"
 msgid "MB"
 msgstr "МБ"
 
-#: apps/io.ox/mail/write/main.js:768 module:io.ox/mail
+#: apps/io.ox/core/tk/folderviews.js:851 module:io.ox/core
+#: apps/io.ox/mail/write/main.js:757 module:io.ox/mail
 msgid "Mail"
 msgstr "Почта"
 
@@ -3402,7 +3410,7 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Почта"
 
-#: apps/io.ox/mail/main.js:310 module:io.ox/mail
+#: apps/io.ox/mail/main.js:311 module:io.ox/mail
 msgid "Mail Details"
 msgstr "Свойства почты"
 
@@ -3412,16 +3420,14 @@ msgid "Mail Filter"
 msgstr "Фильтр почты"
 
 #: apps/plugins/portal/xing/register.js:88 module:plugins/portal
-#, fuzzy
-#| msgid "Email address"
 msgid "Mail address"
-msgstr "Email"
+msgstr "Почтовый адрес"
 
 #: apps/io.ox/contacts/view-detail.js:520 module:io.ox/contacts
 msgid "Mail and Messaging"
 msgstr "Почта и обмен сообщениями"
 
-#: apps/io.ox/settings/accounts/settings/pane.js:120
+#: apps/io.ox/settings/accounts/settings/pane.js:121
 #: module:io.ox/settings/accounts apps/io.ox/settings/main.js:243
 #: module:io.ox/core
 msgid "Mail and Social Accounts"
@@ -3443,11 +3449,11 @@ msgstr "Импорт почты выполнен"
 msgid "Mail has been moved"
 msgstr "Почта перенесена"
 
-#: apps/io.ox/mail/write/main.js:1244 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1233 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Пустая тема сообщения. Отправить?"
 
-#: apps/io.ox/mail/write/main.js:1237 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1226 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Не указан получатель."
 
@@ -3467,7 +3473,7 @@ msgstr "Напоминание по почте"
 msgid "Mail reminder for"
 msgstr "Напоминание для "
 
-#: apps/io.ox/mail/write/main.js:1300 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1296 module:io.ox/mail
 msgid "Mail saved as draft"
 msgstr "Черновик сохранен"
 
@@ -3501,7 +3507,7 @@ msgstr "Процент сообщений в час"
 msgid "Mails per week-day (%)"
 msgstr "Процент сообщений в день"
 
-#: apps/io.ox/files/actions.js:1055 module:io.ox/files
+#: apps/io.ox/files/actions.js:1042 module:io.ox/files
 msgid "Make this the current version"
 msgstr "Выбрать в качестве текущей версии"
 
@@ -3564,10 +3570,8 @@ msgid "Mark as spam"
 msgstr "Отметить как спам"
 
 #: apps/io.ox/tasks/toolbar.js:77 module:io.ox/mail
-#, fuzzy
-#| msgid "Mark as done"
 msgid "Mark as undone"
-msgstr "Отметить как завершенное"
+msgstr "Отметить как незавершенное"
 
 #: apps/io.ox/mail/mobile-toolbar-actions.js:92 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:102
@@ -3647,13 +3651,13 @@ msgstr "Другое"
 #: apps/io.ox/mail/write/view-main.js:1097 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:1098
 msgid "Mobile"
-msgstr "Телефон (мобильный)"
+msgstr "Мобильный"
 
 #: apps/io.ox/portal/settings/pane.js:426 module:io.ox/portal
 msgid "Mobile device settings:"
 msgstr "Параметры мобильного устройства:"
 
-#: apps/io.ox/core/pubsub/model.js:179 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/model.js:181 module:io.ox/core/pubsub
 msgid "Model is incomplete."
 msgstr "Неполная модель."
 
@@ -3670,7 +3674,7 @@ msgid "Monday"
 msgstr "Понедельник"
 
 #: apps/io.ox/backbone/mini-views/date.js:24 module:io.ox/core
-#: apps/io.ox/calendar/actions.js:579 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:580 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:137
 msgid "Month"
 msgstr "Месяц"
@@ -3699,19 +3703,23 @@ msgstr "Месяцы"
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:351
 #: apps/io.ox/mail/write/view-main.js:694 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:571
+#: apps/io.ox/search/view-template.js:616
 msgid "More"
 msgstr "Больше"
 
-#: apps/io.ox/calendar/actions.js:415 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:465 apps/io.ox/calendar/actions.js:659
-#: apps/io.ox/calendar/toolbar.js:85 apps/io.ox/contacts/actions.js:196
-#: module:io.ox/contacts apps/io.ox/contacts/actions.js:821
-#: apps/io.ox/contacts/toolbar.js:104
-#: apps/io.ox/core/commons-folderview.js:642 module:io.ox/core
-#: apps/io.ox/files/actions.js:686 module:io.ox/files
-#: apps/io.ox/files/actions.js:985 apps/io.ox/files/actions.js:1368
-#: apps/io.ox/files/toolbar.js:135 apps/io.ox/mail/actions.js:348
+#: apps/io.ox/search/view-template.js:347 module:io.ox/core
+msgid "More than the currently displayed %1$s items where found"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js:416 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:466 apps/io.ox/calendar/actions.js:660
+#: apps/io.ox/calendar/toolbar.js:85 apps/io.ox/contacts/actions.js:194
+#: module:io.ox/contacts apps/io.ox/contacts/actions.js:815
+#: apps/io.ox/contacts/toolbar.js:105
+#: apps/io.ox/core/commons-folderview.js:644 module:io.ox/core
+#: apps/io.ox/files/actions.js:673 module:io.ox/files
+#: apps/io.ox/files/actions.js:972 apps/io.ox/files/actions.js:1360
+#: apps/io.ox/files/toolbar.js:143 apps/io.ox/mail/actions.js:348
 #: module:io.ox/mail apps/io.ox/mail/actions.js:1084
 #: apps/io.ox/mail/mobile-toolbar-actions.js:81 apps/io.ox/mail/toolbar.js:116
 #: apps/io.ox/tasks/actions.js:202 module:io.ox/tasks
@@ -3730,7 +3738,8 @@ msgid "Move to folder"
 msgstr "Переместить в папку"
 
 #: apps/io.ox/contacts/settings/pane.js:91 module:io.ox/contacts
-#: apps/plugins/portal/userSettings/register.js:212 module:io.ox/core
+#: apps/io.ox/core/main.js:706 module:io.ox/core
+#: apps/plugins/portal/userSettings/register.js:212
 msgid "My contact data"
 msgstr "Мои контактные данные"
 
@@ -3743,8 +3752,8 @@ msgid "My password"
 msgstr "Мой пароль"
 
 #. Name of distribution list
-#: apps/io.ox/contacts/distrib/create-dist-view.js:73 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/distrib/create-dist-view.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:229 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:492
 #: module:io.ox/settings/settings
@@ -3765,18 +3774,18 @@ msgid "Never"
 msgstr "Никогда"
 
 #: apps/io.ox/calendar/toolbar.js:41 module:io.ox/calendar
-#: apps/io.ox/contacts/toolbar.js:38 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:39 module:io.ox/files
+#: apps/io.ox/contacts/toolbar.js:39 module:io.ox/contacts
+#: apps/io.ox/files/toolbar.js:40 module:io.ox/files
 #: apps/io.ox/tasks/toolbar.js:43 module:io.ox/mail
 msgid "New"
-msgstr ""
+msgstr "Создать"
 
 #: apps/io.ox/core/api/folder.js:545 module:io.ox/core
 #: apps/io.ox/core/pubsub/subscriptions.js:158 module:io.ox/core/pubsub
 msgid "New Folder"
 msgstr "Создать папку"
 
-#: apps/io.ox/mail/api.js:1670 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1671 module:io.ox/mail
 msgid "New Mail"
 msgstr "Новые"
 
@@ -3791,7 +3800,7 @@ msgstr "Новое сообщение от %1$s %2$s. Чтобы открыть,
 msgid "New Mails"
 msgstr "Новые"
 
-#: apps/io.ox/calendar/actions.js:541 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:542 module:io.ox/calendar
 #: apps/io.ox/calendar/settings/pane.js:176 apps/io.ox/calendar/toolbar.js:42
 msgid "New appointment"
 msgstr "Новая встреча"
@@ -3800,11 +3809,9 @@ msgstr "Новая встреча"
 msgid "New contact"
 msgstr "Новый контакт"
 
-#: apps/io.ox/files/toolbar.js:40 module:io.ox/files
-#, fuzzy
-#| msgid "New folder"
+#: apps/io.ox/files/toolbar.js:41 module:io.ox/files
 msgid "New file"
-msgstr "Новая папка"
+msgstr "Новый файл"
 
 #: apps/io.ox/core/commons-folderview.js:211 module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83 apps/io.ox/core/folder/add.js:90
@@ -3841,22 +3848,20 @@ msgid "New subscription"
 msgstr "Новая подписка"
 
 #: apps/io.ox/tasks/toolbar.js:44 module:io.ox/mail
-#, fuzzy
-#| msgid "Show task"
 msgid "New task"
-msgstr "Показать задачу"
+msgstr "Новая задача"
 
 #: apps/io.ox/core/wizard/registry.js:47 module:io.ox/core/wizard
 #: apps/io.ox/wizards/upsell.js:80 module:io.ox/wizards
 msgid "Next"
 msgstr "Вперед"
 
-#: apps/io.ox/calendar/week/view.js:681 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:684 module:io.ox/calendar
 msgid "Next Day"
 msgstr "Следующий день"
 
 #: apps/io.ox/calendar/util.js:161 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:681
+#: apps/io.ox/calendar/week/view.js:684
 msgid "Next Week"
 msgstr "Следующая неделя"
 
@@ -3888,9 +3893,9 @@ msgstr "Нет встреч до %s"
 msgid "No birthdays within the next %1$d weeks"
 msgstr "Нет дней рождения на протяжении %1$d нед."
 
-#: apps/io.ox/core/commons.js:206 module:io.ox/core
+#: apps/io.ox/core/commons.js:207 module:io.ox/core
 msgid "No elements selected"
-msgstr "Элементы не выбраны."
+msgstr "Ничего не выбрано"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js:230 module:io.ox/core
 msgid "No errors"
@@ -3906,7 +3911,7 @@ msgstr "Файл не выбран."
 msgid "No files have been changed recently"
 msgstr "В последнее время файлы не изменялись"
 
-#: apps/io.ox/search/items/view-template.js:118 module:io.ox/core
+#: apps/io.ox/search/items/view-template.js:123 module:io.ox/core
 msgid "No items found"
 msgstr "Нет результатов."
 
@@ -3922,7 +3927,7 @@ msgstr "Нет входящих сообщений."
 msgid "No matching templates on this Server"
 msgstr "Нет подходящих шаблонов на сервере"
 
-#: apps/io.ox/mail/main.js:585 module:io.ox/mail
+#: apps/io.ox/mail/main.js:587 module:io.ox/mail
 msgid "No message selected"
 msgstr "Сообщения не выбраны."
 
@@ -3930,7 +3935,7 @@ msgstr "Сообщения не выбраны."
 msgid "No notifications"
 msgstr "Нет уведомлений"
 
-#: apps/io.ox/contacts/actions.js:583 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:577 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:508 module:io.ox/core/tk/attachments
 #: apps/io.ox/tasks/actions.js:388 module:io.ox/tasks
 msgid "No preview available"
@@ -3949,7 +3954,7 @@ msgstr "Нет получателей"
 msgid "No reminder"
 msgstr "Без напоминания"
 
-#: apps/io.ox/mail/settings/signatures/register.js:294 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:300 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:976
 msgid "No signature"
 msgstr "Нет подписи"
@@ -3962,7 +3967,7 @@ msgstr "Нет медленных запросов"
 #. %2$s mail subject
 #: apps/io.ox/mail/util.js:369 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:107 module:io.ox/core/mail
-#: apps/io.ox/mail/write/main.js:768 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:757 module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:59
 #, c-format
@@ -4011,8 +4016,7 @@ msgstr "Примечание"
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
-"Примечание. Номера телефонов одного контакта не определены, поэтому он не "
-"показан."
+"Примечание. Номера телефонов контакта не определены, поэтому он не показан."
 msgstr[1] ""
 "Примечание. Номера телефонов %1$d контактов не определены, поэтому они не "
 "показаны."
@@ -4031,7 +4035,7 @@ msgstr ""
 
 #: apps/io.ox/core/export/export.js:79 module:io.ox/core
 msgid "Note: The vCard format cannot contain distribution lists"
-msgstr "Примечание. Формат vCard не может содержать списки рассылок."
+msgstr "Примечание. vCard не может содержать списки рассылок."
 
 #: apps/io.ox/core/pubsub/subscriptions.js:321 module:io.ox/core/pubsub
 msgid ""
@@ -4042,10 +4046,8 @@ msgstr ""
 "папку для этой подписки."
 
 #: apps/io.ox/core/settings/downloads/pane.js:74 module:io.ox/core
-#, fuzzy
-#| msgid "Modified"
 msgid "Notifier"
-msgstr "Изменено"
+msgstr "Уведомления"
 
 #: apps/io.ox/calendar/edit/template.js:435 module:io.ox/calendar/edit/main
 msgid "Notify all participants by email."
@@ -4116,10 +4118,10 @@ msgstr "Показывать только обзор виджетов на мо�
 
 #: apps/io.ox/core/pubsub/settings/pane.js:68 module:io.ox/core/pubsub
 msgid "Only showing items related to folder \"%1$s\""
-msgstr "Показаны только объекты для папки «%1$s»."
+msgstr "Показаны только объекты папки «%1$s»."
 
-#: apps/io.ox/files/actions.js:881 module:io.ox/files
-#: apps/io.ox/files/actions.js:1041
+#: apps/io.ox/files/actions.js:868 module:io.ox/files
+#: apps/io.ox/files/actions.js:1028
 msgid "Open"
 msgstr "Открыть"
 
@@ -4127,12 +4129,12 @@ msgstr "Открыть"
 msgid "Open external link"
 msgstr "Открыть внешнюю ссылку"
 
-#: apps/io.ox/core/commons.js:718 module:io.ox/core
+#: apps/io.ox/core/commons.js:726 module:io.ox/core
 #: apps/io.ox/mail/view-options.js:127 module:io.ox/mail
 msgid "Open folder view"
 msgstr "Открыть просмотр папок"
 
-#: apps/io.ox/contacts/actions.js:858 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:852 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:452 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1177 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:648 module:io.ox/tasks
@@ -4228,9 +4230,9 @@ msgid "Optional 20"
 msgstr "Дополнительно 20"
 
 #: apps/io.ox/calendar/toolbar.js:140 module:io.ox/calendar
-#: apps/io.ox/contacts/toolbar.js:160 module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js:161 module:io.ox/contacts
 #: apps/io.ox/core/emoji/view.js:119 module:io.ox/mail/emoji
-#: apps/io.ox/files/toolbar.js:205 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:213 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:222 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:695 apps/io.ox/tasks/toolbar.js:133
 msgid "Options"
@@ -4436,13 +4438,13 @@ msgstr "Места"
 msgid "Plain text"
 msgstr "Текст"
 
-#: apps/io.ox/files/actions.js:1023 module:io.ox/files
-#: apps/io.ox/files/actions.js:1296 apps/io.ox/files/toolbar.js:79
+#: apps/io.ox/files/actions.js:1010 module:io.ox/files
+#: apps/io.ox/files/actions.js:1288 apps/io.ox/files/toolbar.js:87
 msgid "Play audio files"
 msgstr "Проигрывать аудиофайлы"
 
-#: apps/io.ox/files/actions.js:1031 module:io.ox/files
-#: apps/io.ox/files/actions.js:1303 apps/io.ox/files/toolbar.js:86
+#: apps/io.ox/files/actions.js:1018 module:io.ox/files
+#: apps/io.ox/files/actions.js:1295 apps/io.ox/files/toolbar.js:94
 msgid "Play video files"
 msgstr "Проигрывать видеофайлы"
 
@@ -4471,7 +4473,7 @@ msgstr "Введите адрес ленты."
 msgid "Please enter a search query"
 msgstr "Введите запрос поиска"
 
-#: apps/io.ox/backbone/forms.js:647 module:io.ox/core
+#: apps/io.ox/backbone/forms.js:648 module:io.ox/core
 #: apps/io.ox/backbone/validation.js:60 module:io.ox/backbone/validation
 #: apps/io.ox/backbone/validation.js:67
 msgid "Please enter a valid date"
@@ -4564,9 +4566,9 @@ msgstr "Выберите файл изображения для вставки"
 msgid ""
 "Please select which of the following data we may use to create your %s "
 "account:"
-msgstr ""
+msgstr "Выберите данные, на основе которых будет создана учетная запись %s:"
 
-#: apps/io.ox/core/main.js:944 module:io.ox/core apps/io.ox/core/relogin.js:48
+#: apps/io.ox/core/main.js:964 module:io.ox/core apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Авторизуйтесь для продолжения"
 
@@ -4597,10 +4599,8 @@ msgid "Position"
 msgstr "Должность"
 
 #: apps/plugins/portal/xing/register.js:159 module:plugins/portal
-#, fuzzy
-#| msgid "Adjust start date"
 msgid "Post a status update"
-msgstr "Изменить дату начала"
+msgstr "Опубликовать обновление статуса"
 
 #: apps/io.ox/contacts/model.js:230 module:io.ox/contacts
 #: apps/io.ox/contacts/model.js:247 apps/io.ox/contacts/model.js:262
@@ -4669,7 +4669,7 @@ msgstr "Нажмите, чтобы скрыть все приглашения з
 msgid "Press to hide all task reminders."
 msgstr "Нажмите, чтобы скрыть напоминания задач."
 
-#: apps/io.ox/contacts/actions.js:851 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:845 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:445 module:io.ox/core/tk/attachments
 #: apps/io.ox/core/tk/attachmentsUtil.js:93 apps/io.ox/mail/actions.js:1170
 #: module:io.ox/mail apps/io.ox/tasks/actions.js:641 module:io.ox/tasks
@@ -4680,11 +4680,11 @@ msgstr "Предварительный просмотр"
 msgid "Previous"
 msgstr "Назад"
 
-#: apps/io.ox/calendar/week/view.js:682 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:685 module:io.ox/calendar
 msgid "Previous Day"
 msgstr "Предыдущий день"
 
-#: apps/io.ox/calendar/week/view.js:682 module:io.ox/calendar
+#: apps/io.ox/calendar/week/view.js:685 module:io.ox/calendar
 msgid "Previous Week"
 msgstr "Предыдущая неделя"
 
@@ -4692,11 +4692,11 @@ msgstr "Предыдущая неделя"
 msgid "Primary account"
 msgstr "Основная учетная запись"
 
-#: apps/io.ox/calendar/actions.js:616 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:668 apps/io.ox/calendar/toolbar.js:78
-#: apps/io.ox/calendar/toolbar.js:144 apps/io.ox/contacts/actions.js:323
-#: module:io.ox/contacts apps/io.ox/contacts/actions.js:777
-#: apps/io.ox/contacts/toolbar.js:97 apps/io.ox/core/print.js:108
+#: apps/io.ox/calendar/actions.js:617 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:669 apps/io.ox/calendar/toolbar.js:78
+#: apps/io.ox/calendar/toolbar.js:144 apps/io.ox/contacts/actions.js:317
+#: module:io.ox/contacts apps/io.ox/contacts/actions.js:771
+#: apps/io.ox/contacts/toolbar.js:98 apps/io.ox/core/print.js:108
 #: module:io.ox/core apps/io.ox/mail/actions.js:1102 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:130 apps/io.ox/tasks/actions.js:626
 #: module:io.ox/tasks apps/io.ox/tasks/toolbar.js:92
@@ -4726,21 +4726,19 @@ msgstr "Заявление о конфиденциальности"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:947 module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js:355 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "Личное"
 
 #: apps/plugins/halo/xing/register.js:156 module:plugins/portal
-#, fuzzy
-#| msgid "Other address"
 msgid "Private address"
-msgstr "Другие адреса"
+msgstr "Частный адрес"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/form-elements.js:139
 #: module:io.ox/settings/settings
 msgid "Process subsequent rules"
-msgstr "Обработать последующие правила"
+msgstr "Обработать правила последовательно"
 
 #: apps/io.ox/contacts/model.js:237 module:io.ox/contacts
 msgid "Profession"
@@ -4770,25 +4768,23 @@ msgstr "Процент выполнения может принимать зна
 msgid "Properties"
 msgstr "Свойства"
 
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:947 module:io.ox/core
 msgid "Public"
 msgstr "Общие"
 
 #: apps/plugins/halo/xing/register.js:41 module:plugins/portal
-#, fuzzy
-#| msgid "Publication"
 msgid "Public servant"
-msgstr "Публикация"
+msgstr "Госслужащий"
 
 #: apps/io.ox/core/pubsub/publications.js:348 module:io.ox/core/pubsub
 msgid "Publication"
 msgstr "Публикация"
 
-#: apps/io.ox/core/pubsub/model.js:171 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/model.js:173 module:io.ox/core/pubsub
 msgid "Publication must have a site."
 msgstr "Необходимо выбрать сайт публикации."
 
-#: apps/io.ox/core/pubsub/model.js:167 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/model.js:169 module:io.ox/core/pubsub
 msgid "Publication must have a target."
 msgstr "Необходимо определить получателя публикации."
 
@@ -4901,7 +4897,7 @@ msgstr "Восстановить пароли"
 
 #: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Recruiter"
-msgstr ""
+msgstr "Рекрутер"
 
 #: apps/io.ox/tasks/model.js:164 module:io.ox/tasks
 msgid "Recurring tasks need a valid due date."
@@ -4923,7 +4919,7 @@ msgstr "Красный"
 msgid "Redirect to"
 msgstr "Переслать"
 
-#: apps/io.ox/core/main.js:676 module:io.ox/core
+#: apps/io.ox/core/main.js:677 module:io.ox/core
 #: apps/io.ox/core/pubsub/settings/pane.js:198 module:io.ox/core/pubsub
 msgid "Refresh"
 msgstr "Обновить"
@@ -5001,9 +4997,9 @@ msgid "Remove from recipient list"
 msgstr "Удалить из списка получателей"
 
 #: apps/io.ox/core/commons-folderview.js:390 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:650 apps/io.ox/files/actions.js:536
-#: module:io.ox/files apps/io.ox/files/actions.js:541
-#: apps/io.ox/files/actions.js:967
+#: apps/io.ox/core/tk/folderviews.js:650 apps/io.ox/files/actions.js:524
+#: module:io.ox/files apps/io.ox/files/actions.js:529
+#: apps/io.ox/files/actions.js:954
 msgid "Rename"
 msgstr "Переименовать"
 
@@ -5021,7 +5017,7 @@ msgid "Repeat new password"
 msgstr "Повторите пароль"
 
 #: apps/io.ox/mail/actions.js:951 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:677 apps/plugins/portal/twitter/util.js:230
+#: apps/io.ox/mail/write/main.js:666 apps/plugins/portal/twitter/util.js:230
 #: module:plugins/portal apps/plugins/portal/twitter/util.js:234
 msgid "Reply"
 msgstr "Ответить"
@@ -5030,7 +5026,7 @@ msgstr "Ответить"
 msgid "Reply All"
 msgstr "Ответить всем"
 
-#: apps/io.ox/mail/write/main.js:676 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:665 module:io.ox/mail
 msgid "Reply all"
 msgstr "Ответить всем"
 
@@ -5070,15 +5066,15 @@ msgstr "Группы ресурсов"
 msgid "Resources"
 msgstr "Ресурсы"
 
-#: apps/io.ox/core/main.js:1176 module:io.ox/core
+#: apps/io.ox/core/main.js:1196 module:io.ox/core
 msgid "Restore applications"
 msgstr "Восстановить приложения"
 
 #: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Retired"
-msgstr ""
+msgstr "На пенсии"
 
-#: apps/io.ox/core/commons.js:873 module:io.ox/core
+#: apps/io.ox/core/commons.js:881 module:io.ox/core
 #: apps/io.ox/core/tk/autocomplete.js:308 module:io.ox/mail
 msgid "Retry"
 msgstr "Повторить"
@@ -5136,16 +5132,16 @@ msgid "Saturday"
 msgstr "Суббота"
 
 #: apps/io.ox/calendar/edit/template.js:77 module:io.ox/calendar/edit/main
-#: apps/io.ox/contacts/distrib/create-dist-view.js:41 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:46 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js:173
-#: apps/io.ox/contacts/settings/pane.js:101
 #: apps/io.ox/core/folder/imap-subscription.js:63 module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:356
 #: apps/io.ox/core/permissions/permissions.js:399
-#: apps/io.ox/core/tk/dialogs.js:539 apps/io.ox/editor/main.js:132
-#: module:io.ox/editor apps/io.ox/editor/main.js:154
-#: apps/io.ox/files/actions.js:596 module:io.ox/files
-#: apps/io.ox/files/filepicker.js:31 apps/io.ox/files/views/create.js:113
+#: apps/io.ox/core/settings/user.js:79 apps/io.ox/core/tk/dialogs.js:557
+#: apps/io.ox/editor/main.js:132 module:io.ox/editor
+#: apps/io.ox/editor/main.js:154 apps/io.ox/files/actions.js:583
+#: module:io.ox/files apps/io.ox/files/filepicker.js:31
+#: apps/io.ox/files/views/create.js:113
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:65 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:90
@@ -5160,12 +5156,12 @@ msgstr "Суббота"
 msgid "Save"
 msgstr "Сохранить"
 
-#: apps/io.ox/calendar/actions.js:702 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:703 module:io.ox/calendar
 #: apps/io.ox/mail/actions.js:1073 module:io.ox/mail
 msgid "Save as distribution list"
 msgstr "Сохранить как список рассылки"
 
-#: apps/io.ox/mail/write/main.js:1365 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1363 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Сохранить черновик"
 
@@ -5178,7 +5174,7 @@ msgstr "Сохранить как файл"
 msgid "Save attachment"
 msgstr "Сохранить вложение"
 
-#: apps/io.ox/contacts/actions.js:872 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:866 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:466 module:io.ox/core/tk/attachments
 #: apps/io.ox/mail/actions.js:1191 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:662 module:io.ox/tasks
@@ -5186,11 +5182,11 @@ msgid "Save to Drive"
 msgstr "Сохранить в Drive"
 
 #: apps/io.ox/contacts/view-detail.js:743 module:io.ox/contacts
-#: apps/io.ox/files/fluid/view-detail.js:177 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:178 module:io.ox/files
 msgid "Saved in"
 msgstr "Сохранено в"
 
-#: apps/io.ox/mail/api.js:1334 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1335 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Вложение сохранено"
 
@@ -5201,7 +5197,7 @@ msgstr[0] "Сохранение вложения в Drive"
 msgstr[1] "Сохранение вложений в Drive"
 msgstr[2] "Сохранение вложений в Drive"
 
-#: apps/io.ox/calendar/actions.js:601 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:602 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:31 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:49
 msgid "Scheduling"
@@ -5215,10 +5211,10 @@ msgstr "Планирование"
 
 #: apps/io.ox/core/desktop.js:1553 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1554 apps/io.ox/core/desktop.js:1612
-#: apps/io.ox/core/main.js:623 apps/io.ox/search/main.js:150
-#: module:io.ox/search apps/io.ox/search/main.js:171
+#: apps/io.ox/core/main.js:660 apps/io.ox/search/main.js:152
+#: module:io.ox/search apps/io.ox/search/main.js:173
 #: apps/io.ox/search/view-template.js:48
-#: apps/io.ox/search/view-template.js:120
+#: apps/io.ox/search/view-template.js:126
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
 msgid "Search"
 msgstr "Поиск"
@@ -5238,16 +5234,22 @@ msgid "Searched for: %1$s"
 msgstr "Поиск: %1$s"
 
 #. Searched in: <folder name>
-#: apps/io.ox/core/commons.js:385 module:io.ox/core
+#: apps/io.ox/core/commons.js:386 module:io.ox/core
 msgid "Searched in"
 msgstr "Поиск выполнен в"
 
-#: apps/io.ox/core/commons.js:379 module:io.ox/core
+#: apps/io.ox/core/commons.js:380 module:io.ox/core
 msgid "Searched in all folders"
 msgstr "Поиск выполнен во всех папках"
 
+#: apps/io.ox/search/view-template.js:500 module:io.ox/core
+#, fuzzy
+#| msgid "Select folder"
+msgid "Select Folder"
+msgstr "Выбор папки"
+
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
-#: apps/io.ox/mail/settings/signatures/register.js:210 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:216 module:io.ox/mail
 #: apps/io.ox/mail/view-options.js:98
 msgid "Select all"
 msgstr "Выбрать все"
@@ -5258,7 +5260,7 @@ msgstr "Выбрать все"
 msgid "Select folder"
 msgstr "Выбор папки"
 
-#: apps/io.ox/core/commons.js:181 module:io.ox/core
+#: apps/io.ox/core/commons.js:182 module:io.ox/core
 msgid "Selection Details"
 msgstr "Свойства выбора"
 
@@ -5268,22 +5270,22 @@ msgid "Send"
 msgstr "Отправить"
 
 #. Respond to delivery receipt; German "Lesebestätigung senden"
-#: apps/io.ox/mail/common-extensions.js:544 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:545 module:io.ox/mail
 msgid "Send a return receipt"
 msgstr "Отправить уведомление о доставке"
 
-#: apps/io.ox/files/actions.js:939 module:io.ox/files
-#: apps/io.ox/files/actions.js:1340 apps/io.ox/files/toolbar.js:116
+#: apps/io.ox/files/actions.js:926 module:io.ox/files
+#: apps/io.ox/files/actions.js:1332 apps/io.ox/files/toolbar.js:124
 msgid "Send as internal link"
 msgstr "Отправить как внутреннюю ссылку"
 
-#: apps/io.ox/contacts/actions.js:770 module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:90
+#: apps/io.ox/contacts/actions.js:764 module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js:91
 msgid "Send as vCard"
 msgstr "Отправить vCard"
 
-#: apps/io.ox/files/actions.js:929 module:io.ox/files
-#: apps/io.ox/files/actions.js:1330 apps/io.ox/files/toolbar.js:109
+#: apps/io.ox/files/actions.js:916 module:io.ox/files
+#: apps/io.ox/files/actions.js:1322 apps/io.ox/files/toolbar.js:117
 msgid "Send by mail"
 msgstr "Отправить по почте"
 
@@ -5291,12 +5293,12 @@ msgstr "Отправить по почте"
 msgid "Send feedback"
 msgstr "Отправить отзыв"
 
-#: apps/io.ox/contacts/actions.js:761 module:io.ox/contacts
-#: apps/io.ox/contacts/toolbar.js:61
+#: apps/io.ox/contacts/actions.js:755 module:io.ox/contacts
+#: apps/io.ox/contacts/toolbar.js:62
 msgid "Send mail"
 msgstr "Отправить почту"
 
-#: apps/io.ox/calendar/actions.js:684 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:685 module:io.ox/calendar
 msgid "Send mail to all participants"
 msgstr "Отправить сообщение участникам"
 
@@ -5337,7 +5339,7 @@ msgstr "Сентябрь"
 #. Use singular in this context
 #. Use singular in this context
 #: apps/io.ox/calendar/acceptdeny.js:162 module:io.ox/calendar
-#: apps/io.ox/calendar/actions.js:162
+#: apps/io.ox/calendar/actions.js:163
 #: apps/io.ox/calendar/week/perspective.js:135
 msgid "Series"
 msgstr "Серия"
@@ -5352,8 +5354,8 @@ msgstr "Сервер недоступен."
 msgid "Server version"
 msgstr "Версия сервера"
 
-#: apps/io.ox/mail/settings/signatures/register.js:268 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:344
+#: apps/io.ox/mail/settings/signatures/register.js:274 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:350
 msgid "Set as default"
 msgstr "Использовать по умолчанию"
 
@@ -5361,7 +5363,7 @@ msgstr "Использовать по умолчанию"
 msgid "Set color"
 msgstr "Изменить цвет"
 
-#: apps/io.ox/core/main.js:688 module:io.ox/core apps/io.ox/core/main.js:824
+#: apps/io.ox/core/main.js:689 module:io.ox/core apps/io.ox/core/main.js:844
 msgid "Settings"
 msgstr "Параметры"
 
@@ -5371,7 +5373,7 @@ msgid "Settings"
 msgstr "Параметры"
 
 #: apps/io.ox/core/pubsub/publications.js:113 module:io.ox/core/pubsub
-#: apps/io.ox/files/toolbar.js:63 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:71 module:io.ox/files
 #: apps/plugins/portal/xing/actions.js:206 module:plugins/portal
 msgid "Share"
 msgstr "Открыть общий доступ"
@@ -5382,18 +5384,18 @@ msgid "Share link by email"
 msgstr "Отправить ссылку по почте"
 
 #: apps/io.ox/core/pubsub/publications.js:119 module:io.ox/core/pubsub
-#: apps/io.ox/files/actions.js:919 module:io.ox/files
+#: apps/io.ox/files/actions.js:906 module:io.ox/files
 msgid "Share this file"
 msgstr "Открыть доступ к файлу"
 
 #: apps/io.ox/core/commons-folderview.js:297 module:io.ox/core
 #: apps/io.ox/core/pubsub/publications.js:117 module:io.ox/core/pubsub
-#: apps/io.ox/files/actions.js:1280 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:64
+#: apps/io.ox/files/actions.js:1272 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:72
 msgid "Share this folder"
 msgstr "Открыть доступ к папке"
 
-#: apps/io.ox/core/tk/folderviews.js:942 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:947 module:io.ox/core
 msgid "Shared"
 msgstr "Общий доступ"
 
@@ -5402,16 +5404,14 @@ msgid "Shared Appointments"
 msgstr "Общие встречи"
 
 #: apps/plugins/portal/xing/actions.js:199 module:plugins/portal
-#, fuzzy
-#| msgid "Share this file"
 msgid "Shared activity"
-msgstr "Открыть доступ к файлу"
+msgstr "Общие действия"
 
 #: apps/io.ox/wizards/upsell.js:133 module:io.ox/wizards
 msgid "Shopping cart"
 msgstr "Корзина"
 
-#: apps/io.ox/core/commons-folderview.js:695 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:697 module:io.ox/core
 msgid "Show"
 msgstr "Показать"
 
@@ -5462,7 +5462,7 @@ msgstr "Показать выполненные задачи"
 msgid "Show hidden files and folders"
 msgstr "Показать скрытые файлы и папки"
 
-#: apps/io.ox/mail/common-extensions.js:460 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:461 module:io.ox/mail
 msgid "Show images"
 msgstr "Показать изображения"
 
@@ -5470,8 +5470,8 @@ msgstr "Показать изображения"
 msgid "Show inbox"
 msgstr "Показать входящие"
 
-#: apps/io.ox/files/actions.js:949 module:io.ox/files
-#: apps/io.ox/files/actions.js:1350 apps/io.ox/files/toolbar.js:123
+#: apps/io.ox/files/actions.js:936 module:io.ox/files
+#: apps/io.ox/files/actions.js:1342 apps/io.ox/files/toolbar.js:131
 msgid "Show internal link"
 msgstr "Показать внутреннюю ссылку"
 
@@ -5501,7 +5501,7 @@ msgstr "Показать трассировку стека"
 msgid "Show task details"
 msgstr "Показать данные встречи"
 
-#: apps/io.ox/files/fluid/view-detail.js:348 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:349 module:io.ox/files
 msgid "Show version history"
 msgstr "Показать журнал версий"
 
@@ -5516,7 +5516,7 @@ msgstr "Статус в календаре:"
 msgid "Sign in"
 msgstr "Вход"
 
-#: apps/io.ox/core/main.js:793 module:io.ox/core apps/io.ox/core/main.js:843
+#: apps/io.ox/core/main.js:813 module:io.ox/core apps/io.ox/core/main.js:863
 msgid "Sign out"
 msgstr "Выход"
 
@@ -5525,7 +5525,7 @@ msgid "Sign out now"
 msgstr "Выход"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:292 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:298 module:io.ox/mail
 msgid "Signature"
 msgstr "Подпись"
 
@@ -5541,7 +5541,7 @@ msgstr "Расположение подписи"
 msgid "Signature text"
 msgstr "Текст подписи"
 
-#: apps/io.ox/mail/settings/signatures/register.js:306 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:312 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:624
 #: apps/io.ox/mail/write/view-main.js:626
 msgid "Signatures"
@@ -5561,9 +5561,9 @@ msgstr "Размер"
 msgid "Size (bytes)"
 msgstr "Размер (в байтах)"
 
-#: apps/io.ox/contacts/actions.js:844 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:838 module:io.ox/contacts
 #: apps/io.ox/core/tk/attachments.js:438 module:io.ox/core/tk/attachments
-#: apps/io.ox/files/toolbar.js:71 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:79 module:io.ox/files
 #: apps/io.ox/mail/actions.js:1163 module:io.ox/mail
 #: apps/io.ox/tasks/actions.js:634 module:io.ox/tasks
 msgid "Slideshow"
@@ -5605,13 +5605,11 @@ msgstr "Не удалось сохранить изменения."
 
 #: apps/plugins/halo/xing/register.js:230 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
-msgstr ""
+msgstr "Не удалось подключиться к %s."
 
 #: apps/plugins/halo/xing/register.js:261 module:plugins/portal
-#, fuzzy
-#| msgid "Sorry, this page is not available at the moment."
 msgid "Sorry, there is no data available for you on %s."
-msgstr "Извините, страница недоступна."
+msgstr "Для вас нет данных на %s."
 
 #: apps/plugins/portal/linkedIn/register.js:155 module:plugins/portal
 msgid ""
@@ -5660,7 +5658,7 @@ msgstr "Начало:"
 msgid "State"
 msgstr "Штат"
 
-#: apps/io.ox/mail/toolbar.js:227 module:io.ox/mail
+#: apps/io.ox/mail/toolbar.js:228 module:io.ox/mail
 #, fuzzy
 #| msgid "Reload statistics"
 msgid "Statistics"
@@ -5683,7 +5681,7 @@ msgstr "Адрес"
 
 #: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Student"
-msgstr ""
+msgstr "Студент"
 
 #: apps/io.ox/calendar/edit/template.js:137 module:io.ox/calendar/edit/main
 #: apps/io.ox/mail/actions.js:875 module:io.ox/mail
@@ -5697,10 +5695,8 @@ msgid "Subject"
 msgstr "Тема"
 
 #: apps/plugins/portal/xing/actions.js:71 module:plugins/portal
-#, fuzzy
-#| msgid "Hide comments"
 msgid "Submit comment"
-msgstr "Скрыть комментарии"
+msgstr "Отправить комментарий"
 
 #: apps/io.ox/core/pubsub/subscriptions.js:53 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:56
@@ -5725,10 +5721,8 @@ msgid "Subscriptions"
 msgstr "Подписки"
 
 #: apps/plugins/portal/xing/register.js:66 module:plugins/portal
-#, fuzzy
-#| msgid "You have reauthorized this %s account."
 msgid "Successfully reauthorized your %s account"
-msgstr "Учетная запись %s повторно авторизована."
+msgstr "Учетная запись %s авторизована повторно."
 
 #: apps/io.ox/settings/accounts/settings/pane.js:92
 #: module:io.ox/settings/accounts
@@ -5757,6 +5751,8 @@ msgid ""
 "Synchronization of E-Mails, Calendar, Contacts and Tasks, along with Public, "
 "Shared and System Folders to Microsoft Outlook® clients."
 msgstr ""
+"Синхронизация почты, календаря, контактов, задач, а также общих и системных "
+"папок с клиентами Microsoft Outlook®."
 
 #: apps/io.ox/contacts/model.js:253 module:io.ox/contacts
 msgid "TAX ID"
@@ -5780,7 +5776,7 @@ msgid "Tag mail with"
 msgstr "Метка: "
 
 #: apps/io.ox/mail/detail/links.js:138 module:io.ox/mail
-#: apps/io.ox/tasks/edit/main.js:191 module:io.ox/tasks
+#: apps/io.ox/tasks/edit/main.js:193 module:io.ox/tasks
 msgid "Task"
 msgstr "Задача"
 
@@ -5915,10 +5911,8 @@ msgid "The account must be named"
 msgstr "Необходимо выбрать имя учетной записи"
 
 #: apps/plugins/portal/xing/actions.js:96 module:plugins/portal
-#, fuzzy
-#| msgid "The appointment has been deleted"
 msgid "The activity has been deleted successfully"
-msgstr "Встреча удалена"
+msgstr "События удалены"
 
 #: apps/io.ox/files/api.js:359 module:io.ox/files
 msgid "The allowed quota is reached."
@@ -6038,10 +6032,8 @@ msgid "The character \" \" is not allowed."
 msgstr "Использование пробелов не допускается"
 
 #: apps/plugins/portal/xing/actions.js:99 module:plugins/portal
-#, fuzzy
-#| msgid "The appointment has been deleted"
 msgid "The comment has been deleted successfully"
-msgstr "Встреча удалена"
+msgstr "Комментарий удален"
 
 #. If the user changes the duedate of a task, it may be before the start date, which is not allowed
 #. If this happens the user gets the option to change the start date so it matches the due date
@@ -6050,7 +6042,7 @@ msgid "The due date cannot be before start date. Adjust start date?"
 msgstr ""
 "Срок выполнения не может быть раньше даты начала. Сдвинуть дату начала?"
 
-#: apps/io.ox/mail/write/main.js:1179 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1168 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Сообщение отправлено"
 
@@ -6091,7 +6083,7 @@ msgstr "Папка освобождена."
 msgid "The folder is available at %1$s"
 msgstr "Папка доступна в %1$s"
 
-#: apps/io.ox/core/main.js:1178 module:io.ox/core
+#: apps/io.ox/core/main.js:1198 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6106,7 +6098,7 @@ msgstr "Будут активированы перечисленные прод�
 #: apps/plugins/portal/xing/register.js:137 module:plugins/portal
 msgid ""
 "The next step is allowing this system to access your %s account for you."
-msgstr ""
+msgstr "Следующий шаг разрешает доступ системы к вашей учетной записи %s."
 
 #. Mail compose. Maximum number of recipients exceeded
 #. %1$s = maximum
@@ -6118,7 +6110,7 @@ msgstr "Максимальное число получателей в поле: 
 msgid "The provided filename exceeds the allowed length."
 msgstr "Предоставленное имя файла превышает допустимую длину."
 
-#: apps/io.ox/mail/common-extensions.js:547 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:548 module:io.ox/mail
 msgid "The sender wants to get notified when you have read this email"
 msgstr "Отправитель запрашивает уведомление о прочтении сообщения"
 
@@ -6239,17 +6231,17 @@ msgstr "Нет правил."
 #: apps/plugins/portal/xing/register.js:335
 #: apps/plugins/portal/xing/register.js:357
 msgid "There was a problem with %s. The error message was: \"%s\""
-msgstr ""
+msgstr "Ошибка %s: «%s»"
 
 #: apps/plugins/portal/xing/actions.js:54 module:plugins/portal
 #: apps/plugins/portal/xing/actions.js:156
 #: apps/plugins/portal/xing/actions.js:196
 msgid "There was a problem with XING, the error message was: \"%s\""
-msgstr ""
+msgstr "Ошибка XING: «%s»"
 
 #: apps/plugins/portal/xing/actions.js:105 module:plugins/portal
 msgid "There was a problem with XING. The error message was: \"%s\""
-msgstr ""
+msgstr "Ошибка XING: «%s»"
 
 #: apps/io.ox/mail/accounts/settings.js:190
 #: module:io.ox/mail/accounts/settings
@@ -6278,7 +6270,7 @@ msgstr "Браузер не поддерживается на этой плат�
 msgid "This contact is private and cannot be shared"
 msgstr "Доступ к личному контакту не может быть предоставлен"
 
-#: apps/io.ox/contacts/actions.js:477 module:io.ox/contacts
+#: apps/io.ox/contacts/actions.js:471 module:io.ox/contacts
 msgid "This distribution list has been added to the portal"
 msgstr "Список рассылки добавлен в портал"
 
@@ -6311,25 +6303,25 @@ msgstr "Заполните поле"
 msgid "This file has been added"
 msgstr "Файл добавлен"
 
-#: apps/io.ox/files/actions.js:714 module:io.ox/files
+#: apps/io.ox/files/actions.js:701 module:io.ox/files
 msgid "This file has been added to the portal"
 msgstr "Файл добавлен в портал"
 
-#: apps/io.ox/files/actions.js:367 module:io.ox/files
+#: apps/io.ox/files/actions.js:355 module:io.ox/files
 msgid "This file has been deleted"
 msgid_plural "These files have been deleted"
 msgstr[0] "Файл удален."
 msgstr[1] "Файлы удалены."
 msgstr[2] "Файлы удалены."
 
-#: apps/io.ox/files/actions.js:425 module:io.ox/files
+#: apps/io.ox/files/actions.js:413 module:io.ox/files
 msgid "This file has been locked"
 msgid_plural "These files have been locked"
 msgstr[0] "Файл заблокирован"
 msgstr[1] "Файлы заблокированы"
 msgstr[2] "Файлы заблокированы"
 
-#: apps/io.ox/files/actions.js:454 module:io.ox/files
+#: apps/io.ox/files/actions.js:442 module:io.ox/files
 msgid "This file has been unlocked"
 msgid_plural "These files have been unlocked"
 msgstr[0] "Файл разблокирован"
@@ -6340,14 +6332,14 @@ msgstr[2] "Файлы разблокированы"
 msgid "This file has not been added"
 msgstr "Файл не был добавлен"
 
-#: apps/io.ox/files/actions.js:372 module:io.ox/files
+#: apps/io.ox/files/actions.js:360 module:io.ox/files
 msgid "This file has not been deleted"
 msgid_plural "These files have not been deleted"
 msgstr[0] "Файл не удален"
 msgstr[1] "Файлы не удалены"
 msgstr[2] "Файлы не удалены"
 
-#: apps/io.ox/files/actions.js:377 module:io.ox/files
+#: apps/io.ox/files/actions.js:365 module:io.ox/files
 msgid "This file has not been deleted, as it is locked by its owner."
 msgid_plural ""
 "These files have not been deleted, as they are locked by their owner."
@@ -6355,25 +6347,25 @@ msgstr[0] "Файл заблокирован другим пользовател
 msgstr[1] "Файлы заблокированы другим пользователем и не могут быть удалены."
 msgstr[2] "Файлы заблокированы другим пользователем и не могут быть удалены."
 
-#: apps/io.ox/files/actions.js:430 module:io.ox/files
+#: apps/io.ox/files/actions.js:418 module:io.ox/files
 msgid "This file has not been locked"
 msgid_plural "These files have not been locked"
 msgstr[0] "Файл не заблокирован"
 msgstr[1] "Файлы не заблокированы"
 msgstr[2] "Файлы не заблокированы"
 
-#: apps/io.ox/files/actions.js:459 module:io.ox/files
+#: apps/io.ox/files/actions.js:447 module:io.ox/files
 msgid "This file has not been unlocked"
 msgid_plural "These files have not been unlocked"
 msgstr[0] "Файл не разблокирован"
 msgstr[1] "Файлы не разблокированы"
 msgstr[2] "Файлы не разблокированы"
 
-#: apps/io.ox/files/fluid/view-detail.js:75 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:76 module:io.ox/files
 msgid "This file is locked by %1$s"
 msgstr "Файл заблокирован пользователем %1$s."
 
-#: apps/io.ox/files/fluid/view-detail.js:73 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:74 module:io.ox/files
 msgid "This file is locked by you"
 msgstr "Файл заблокирован вами."
 
@@ -6389,7 +6381,7 @@ msgstr "Папка не содержит публикации"
 msgid "This folder has no subscriptions"
 msgstr "Папка не содержит подписки"
 
-#: apps/io.ox/core/tk/folderviews.js:897 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:902 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "Папка содержит публикации и подписки"
 
@@ -6424,7 +6416,7 @@ msgstr "Недопустимый электронный адрес"
 msgid "This is not a valid user or group."
 msgstr "Недопустимый пользователь или группа."
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:193 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:200 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:248
 msgid "This list has no contacts yet"
 msgstr "В списке нет участников"
@@ -6474,12 +6466,12 @@ msgstr "Обсуждение"
 msgid "Thursday"
 msgstr "Четверг"
 
-#: apps/io.ox/files/actions.js:835 module:io.ox/files
-#: apps/io.ox/files/actions.js:1437
+#: apps/io.ox/files/actions.js:822 module:io.ox/files
+#: apps/io.ox/files/actions.js:1429
 msgid "Tile"
 msgstr "Плитка"
 
-#: apps/io.ox/files/toolbar.js:203 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:211 module:io.ox/files
 msgid "Tiles"
 msgstr "Плитки"
 
@@ -6505,7 +6497,7 @@ msgctxt "salutation"
 msgid "Title"
 msgstr "Обращение"
 
-#: apps/io.ox/mail/common-extensions.js:216 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:217 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:49
 #: module:io.ox/settings/settings apps/io.ox/mail/print.js:84
 #: apps/io.ox/mail/write/inplace/inplace.js:72
@@ -6513,7 +6505,7 @@ msgstr "Обращение"
 msgid "To"
 msgstr "Кому"
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:284 module:io.ox/contacts
+#: apps/io.ox/contacts/distrib/create-dist-view.js:291 module:io.ox/contacts
 msgid ""
 "To add contacts manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
@@ -6524,7 +6516,7 @@ msgstr ""
 #: apps/io.ox/backbone/forms.js:491 module:io.ox/core
 #: apps/io.ox/calendar/month/perspective.js:424 module:io.ox/calendar
 #: apps/io.ox/calendar/util.js:155 apps/io.ox/calendar/util.js:192
-#: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:704
+#: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:707
 #: apps/plugins/portal/birthdays/register.js:83 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:152
 msgid "Today"
@@ -6534,8 +6526,8 @@ msgstr "Сегодня"
 msgid "Toggle checkboxes"
 msgstr "Переключить флажки"
 
-#: apps/io.ox/core/commons-folderview.js:1105 module:io.ox/core
-#: apps/io.ox/core/commons-folderview.js:1133
+#: apps/io.ox/core/commons-folderview.js:1107 module:io.ox/core
+#: apps/io.ox/core/commons-folderview.js:1135
 msgid "Toggle folder"
 msgstr "Перейти в папку"
 
@@ -6630,14 +6622,12 @@ msgstr "URL"
 
 #: apps/plugins/portal/xing/actions.js:167 module:plugins/portal
 msgid "Un-like"
-msgstr ""
+msgstr "Не нравится"
 
 #. As on Facebook, XING allows a stop pointing out they liked a comment. An 'undo' for the like action, if you will.
 #: apps/plugins/portal/xing/actions.js:144 module:plugins/portal
-#, fuzzy
-#| msgid "Hide comments"
 msgid "Un-liked comment"
-msgstr "Скрыть комментарии"
+msgstr "Комментарий не нравится"
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:43
@@ -6660,7 +6650,7 @@ msgstr "Отменено"
 
 #: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Unemployed"
-msgstr ""
+msgstr "Неработающий"
 
 #. twitter: Stop following this person
 #: apps/plugins/portal/twitter/util.js:374 module:plugins/portal
@@ -6681,8 +6671,8 @@ msgstr "Неизвестная ошибка при проверке tumblr-blog.
 msgid "Unknown sender"
 msgstr "Неизвестный отправитель"
 
-#: apps/io.ox/files/actions.js:1015 module:io.ox/files
-#: apps/io.ox/files/actions.js:1400 apps/io.ox/files/toolbar.js:158
+#: apps/io.ox/files/actions.js:1002 module:io.ox/files
+#: apps/io.ox/files/actions.js:1392 apps/io.ox/files/toolbar.js:166
 msgid "Unlock"
 msgstr "Разблокировать"
 
@@ -6690,7 +6680,7 @@ msgstr "Разблокировать"
 msgid "Unread"
 msgstr "Непрочитанное"
 
-#: apps/io.ox/mail/settings/signatures/register.js:365 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:371 module:io.ox/mail
 msgid "Unset default signature"
 msgstr "Удалить стандартную подпись"
 
@@ -6720,17 +6710,17 @@ msgstr "Повысить до уровня Premium"
 msgid "Upgrade to premium edition"
 msgstr "Повысить до Premium"
 
-#: apps/io.ox/files/fluid/view-detail.js:201 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:202 module:io.ox/files
 msgid "Upload a new version"
 msgstr "Отправить новую версию"
 
 #: apps/io.ox/core/tk/attachments.js:580 module:io.ox/core/tk/attachments
-#: apps/io.ox/files/fluid/view-detail.js:210 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:211 module:io.ox/files
 msgid "Upload file"
 msgstr "Отправить файл"
 
-#: apps/io.ox/files/actions.js:794 module:io.ox/files
-#: apps/io.ox/files/actions.js:1270
+#: apps/io.ox/files/actions.js:781 module:io.ox/files
+#: apps/io.ox/files/actions.js:1262
 msgid "Upload new file"
 msgstr "Отправить новый файл"
 
@@ -6738,7 +6728,7 @@ msgstr "Отправить новый файл"
 msgid "Upload new files"
 msgstr "Отправить новые файлы"
 
-#: apps/io.ox/files/fluid/view-detail.js:224 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:225 module:io.ox/files
 msgid "Upload new version"
 msgstr "Отправить новую версию"
 
@@ -6746,7 +6736,7 @@ msgstr "Отправить новую версию"
 msgid "Uploading folders is not supported."
 msgstr "Передача папок не поддерживается."
 
-#: apps/io.ox/files/fluid/view-detail.js:248 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:249 module:io.ox/files
 msgid "Uploading..."
 msgstr "Отправляется..."
 
@@ -6797,11 +6787,11 @@ msgstr "Имя пользователя"
 msgid "Vacation Notice"
 msgstr "Сообщение автоответчика"
 
-#: apps/io.ox/files/fluid/view-detail.js:216 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:217 module:io.ox/files
 msgid "Version Comment"
 msgstr "Комментарий к версии"
 
-#: apps/io.ox/files/fluid/view-detail.js:353 module:io.ox/files
+#: apps/io.ox/files/fluid/view-detail.js:354 module:io.ox/files
 msgid "Version history"
 msgstr "Журнал версий"
 
@@ -6815,15 +6805,15 @@ msgstr "Вертикально"
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
 #: apps/io.ox/calendar/toolbar.js:132 module:io.ox/calendar
-#: apps/io.ox/contacts/toolbar.js:159 module:io.ox/contacts
-#: apps/io.ox/files/toolbar.js:199 module:io.ox/files
+#: apps/io.ox/contacts/toolbar.js:160 module:io.ox/contacts
+#: apps/io.ox/files/toolbar.js:207 module:io.ox/files
 #: apps/io.ox/mail/toolbar.js:215 module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js:132
 msgid "View"
 msgstr "Вид"
 
-#: apps/io.ox/files/actions.js:1289 module:io.ox/files
-#: apps/io.ox/files/toolbar.js:72
+#: apps/io.ox/files/actions.js:1281 module:io.ox/files
+#: apps/io.ox/files/toolbar.js:80
 msgid "View Slideshow"
 msgstr "Просмотр слайд-шоу"
 
@@ -6840,7 +6830,7 @@ msgstr "Показать код"
 msgid "Waiting"
 msgstr "Ожидание"
 
-#: apps/io.ox/mail/common-extensions.js:487 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:488 module:io.ox/mail
 msgid "Warning: This message might be a phishing or scam mail"
 msgstr "Предупреждение. Возможно, это поддельное или мошенническое сообщение."
 
@@ -6861,7 +6851,7 @@ msgstr "Погода • Времена года"
 msgid "Wednesday"
 msgstr "Среда"
 
-#: apps/io.ox/calendar/actions.js:572 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:573 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:77 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:136
 msgid "Week"
@@ -6889,7 +6879,7 @@ msgstr "Добро пожаловать. Здесь можно оставить 
 msgid "Whole day"
 msgstr "Весь день"
 
-#: apps/io.ox/calendar/actions.js:565 module:io.ox/calendar
+#: apps/io.ox/calendar/actions.js:566 module:io.ox/calendar
 #: apps/io.ox/calendar/freebusy/templates.js:76 module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js:135
 msgid "Workweek"
@@ -6903,7 +6893,7 @@ msgstr "Рабочие дни"
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51
 msgid "XING"
-msgstr ""
+msgstr "XING"
 
 #. Bytes
 #. Kilobytes
@@ -6954,7 +6944,7 @@ msgstr "Желтый"
 msgid "Yes"
 msgstr "Да"
 
-#: apps/io.ox/mail/write/main.js:1245 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1234 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Да, отправить без темы"
 
@@ -6985,7 +6975,7 @@ msgstr "Вы используете %1$s из %2$s (осталось %3$s). "
 #: apps/plugins/halo/xing/register.js:76 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
-msgstr ""
+msgstr "Вы не связаны с %s напрямую. Контакты, связанные с %s: "
 
 #: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
 msgid "You are the organizer"
@@ -7096,7 +7086,7 @@ msgstr "Учетная запись повторно авторизована."
 msgid "You have tentatively accepted the appointment"
 msgstr "Приглашение принято под вопросом"
 
-#: apps/io.ox/core/pubsub/model.js:184 module:io.ox/core/pubsub
+#: apps/io.ox/core/pubsub/model.js:186 module:io.ox/core/pubsub
 msgid "You have to enter a username and password to subscribe."
 msgstr "Чтобы подписаться, необходимо ввести имя пользователя и пароль."
 
@@ -7114,7 +7104,7 @@ msgstr "Необходимо использовать Android %n или боле
 msgid "You need to use iOS %n or higher."
 msgstr "Необходимо использовать iOS %n или более позднюю версию."
 
-#: apps/io.ox/core/tk/folderviews.js:920 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:925 module:io.ox/core
 msgid "You share this folder with other users"
 msgstr "Вы открыли общий доступ к этой папке"
 
@@ -7136,13 +7126,13 @@ msgstr[2] "Сеанс будет завершен через %1$d секунд"
 #: apps/plugins/portal/xing/register.js:136 module:plugins/portal
 msgid ""
 "Your %s account has been created. Expect a confirmation mail from %s soon."
-msgstr ""
+msgstr "Учетная запись %s создана. Вы получите подтверждение по почте от %s."
 
 #: apps/plugins/portal/xing/register.js:295 module:plugins/portal
 msgid "Your %s newsfeed"
-msgstr ""
+msgstr "Лента новостей %s"
 
-#: apps/io.ox/core/main.js:865 module:io.ox/core
+#: apps/io.ox/core/main.js:885 module:io.ox/core
 msgid "Your Applications"
 msgstr "Ваши приложения"
 
@@ -7228,24 +7218,22 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "Изображение будет показано после сохранения."
 
-#: apps/io.ox/core/main.js:943 module:io.ox/core apps/io.ox/core/relogin.js:46
+#: apps/io.ox/core/main.js:963 module:io.ox/core apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "Время сеанса истекло"
 
 #: apps/plugins/halo/xing/register.js:100 module:plugins/portal
-#, fuzzy
-#| msgid "Create contact"
 msgid "Your shared contacts:"
-msgstr "Создать контакт"
+msgstr "Общие контакты:"
 
 #: apps/plugins/portal/xing/register.js:170 module:plugins/portal
 msgid ""
 "Your status update could not be posted on %s. The error message was: \"%s\""
-msgstr ""
+msgstr "Не удалось опубликовать ваш статус в %s. Ошибка: «%s»"
 
 #: apps/plugins/portal/xing/register.js:174 module:plugins/portal
 msgid "Your status update has been successfully posted on %s"
-msgstr ""
+msgstr "Обновление статуса опубликовано в %s"
 
 #: apps/plugins/wizards/mandatory/main.js:125 module:io.ox/wizards/firstStart
 msgid "Your timezone"
@@ -7278,12 +7266,12 @@ msgid "and"
 msgstr "и"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
-#: apps/io.ox/mail/common-extensions.js:253 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:254 module:io.ox/mail
 msgid "and %1$d others"
 msgstr "и еще %1$d"
 
 #. %1$d - number of attachments not shown (will be shown when string is clicked)
-#: apps/io.ox/mail/common-extensions.js:347 module:io.ox/mail
+#: apps/io.ox/mail/common-extensions.js:348 module:io.ox/mail
 msgid "and %1$d others ..."
 msgstr "и еще %1$d..."
 
@@ -7291,7 +7279,7 @@ msgstr "и еще %1$d..."
 msgid "by noon"
 msgstr "до полудня"
 
-#: apps/io.ox/backbone/forms.js:575 module:io.ox/core
+#: apps/io.ox/backbone/forms.js:576 module:io.ox/core
 msgid "clear"
 msgstr "очистить"
 
@@ -7667,7 +7655,7 @@ msgstr "завтра"
 msgid "tonight"
 msgstr "сегодня вечером"
 
-#: apps/io.ox/core/tk/folderviews.js:850 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:844 module:io.ox/core
 msgid "total"
 msgstr "всего"
 
@@ -7681,7 +7669,7 @@ msgstr "неизвестно"
 msgid "unlimited"
 msgstr "не ограничено"
 
-#: apps/io.ox/core/tk/folderviews.js:851 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:845 module:io.ox/core
 msgid "unread"
 msgstr "не прочитано"
 
@@ -8112,6 +8100,9 @@ msgstr "каждый год"
 
 #~ msgid "Displaying the help or the settings"
 #~ msgstr "Просмотр справки и настроек"
+
+#~ msgid "Do you really want to discard this mail?"
+#~ msgstr "Удалить сообщение?"
 
 #~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "Хранить черновик после отправки сообщения?"

@@ -81,9 +81,9 @@ define('io.ox/realtime/groups',
                         to: id,
                         payloads: [
                             {
-                                element: 'ping',
+                                element: 'command',
                                 namespace: 'group',
-                                data: 1
+                                data: 'ping'
                             }
                         ]
                     });
@@ -102,7 +102,9 @@ define('io.ox/realtime/groups',
                     }
                 ]).concat(options.additionalPayloads || [])
             };
-            console.log('JOIN: ', stanza);
+            if (rt.debug) {
+                console.log('JOIN: ', stanza);
+            }
             if (options.expectWelcomeMessage) {
                 return this.query(stanza);
             } else {

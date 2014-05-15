@@ -13,7 +13,7 @@ then
     else
         echo 'Updating themes... (this may take a while)'
         java -jar /opt/open-xchange/bundles/com.openexchange.scripting.rhino/lib/js.jar \
-             share/update-themes/lib/update-themes-rhino.js > /dev/null \
+             share/update-themes/lib/update-themes-rhino.js \
         || echo 'failed! If a subsequent theme update finishes without errors,' \
                 'you can ignore the above error message.'
         exit 0

@@ -58,7 +58,7 @@ define('plugins/portal/xing/activities',
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s recommends this link:', makeName(creator))),
                 $('<div class="actionContent">').append(
-                    $('<a>').attr({href: activityObj.url}),
+                    $('<a>').attr({href: activityObj.url}).addClass('external xing'),
                     $('<div class="title">').text(activityObj.title),
                     $('<div class="description">').text(activityObj.description)
                 )
@@ -80,7 +80,9 @@ define('plugins/portal/xing/activities',
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s posted a link:', makeName(linkActivity.creator))),
                 $('<div class="actionContent">').append(
-                    $('<a>').attr({'href': linkActivity.url, 'target': '_blank'}).text(linkActivity.description || linkActivity.url)
+                    $('<a>').attr({'href': linkActivity.url, 'target': '_blank'})
+                    .addClass('external xing')
+                    .text(linkActivity.description || linkActivity.url)
                 )
             );
         }
@@ -150,6 +152,25 @@ define('plugins/portal/xing/activities',
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s posted a new activity:', makeName(statusActivity.creator))),
                 $('<div class="actionContent">').text(statusActivity.content)
+            );
+        }
+    });
+
+
+    ext.point('io.ox/portal/widget/xing/activityhandler').extend({
+        id: 'singleUpdate',
+        accepts: function (activity) {
+            return activity.verb === 'update' &&
+                activity.objects.length === 1;
+        },
+        handle: function (activity) {
+            var profile = activity.objects[0];
+
+            return $('<div class="xing activityObj">').append(
+                $('<div class="actionDesc">').text(gt('%1$s updated their profile:', makeName(profile))),
+                    $('<div class="actionContent">').append(
+                        linkXingContact(profile)
+                    )
             );
         }
     });

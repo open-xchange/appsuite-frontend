@@ -132,7 +132,7 @@
 
         })();
     }
-    else if (Modernizr.websqldatabase) {
+    else if (Modernizr.websqldatabase && _.device('!android')) {
 
         // Web SQL
         (function () {
@@ -141,7 +141,16 @@
                 quotaExceeded = false,
                 // initial size - we start with less than 5MB to avoid the prompt
                 size = 4 * 1024 * 1024,
+                db;
+
+            try {
                 db = openDatabase('filecache', '1.0', 'caches files for OX', size);
+            } catch (e) {
+                console.warn('Access to localstorage forbidden. Disabling cache.');
+                fileCache = dummyFileCache;
+                initialization.reject();
+                return;
+            }
 
             db.transaction(function (tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS version (version TEXT)');
@@ -200,6 +209,54 @@
                 });
             };
         })();
+    } else if (_.device('android') && Modernizr.localstorage) {
+        // use localstorage on android as this is still the fastest storage
+        (function () {
+
+            var storage = window.localStorage,
+                fileToc = [];
+
+            // simple test first
+            try {
+                storage.setItem('access-test', 1);
+                storage.removeItem('access-test');
+            } catch (e) {
+                console.warn('Access to localstorage forbidden. Disabling cache.');
+                fileCache = dummyFileCache;
+                return;
+            }
+
+            // if we've got an old version clear the cache and create a new one
+            var ui = JSON.parse(storage.getItem('appsuite-ui'));
+            if (ui && ui.version != ox.version) {
+
+                if (ox.debug) console.warn('New UI Version - clearing storage');
+
+                // clear all the caches
+                var cacheList = JSON.parse(storage.getItem('file-toc'));
+                _(cacheList).each(function (key) {
+                    console.log('removing item: ', key);
+                    storage.removeItem(key);
+                });
+            }
+
+            fileCache.cache = function (name, contents) {
+                fileToc.push(name);
+                storage.setItem(name, contents);
+                storage.setItem('file-toc', JSON.stringify(fileToc));
+            };
+
+            fileCache.retrieve = function (name) {
+                var def = $.Deferred();
+                var result = storage.getItem(name);
+                if (result) {
+                    def.resolve(result);
+                } else {
+                    def.reject()
+                }
+                return def;
+            };
+        })();
     }
 
     function badSource(source) {
@@ -252,6 +309,29 @@
             if (modulename.slice(0, 5) === 'apps/') {
                 url = ox.apiRoot + '/apps/load/' + ox.version + ',' + url.slice(5);
                 return oldload.apply(this, arguments);
+            } else if (modulename.slice(0, 7) === 'static/') {
+                fileCache.retrieve(modulename).then(
+                    function hit(contents) {
+                        if (_.url.hash('debug-filecache')) console.log('Cache HIT for static file: ', modulename);
+                        runCode(modulename, contents);
+                        context.completeLoad(modulename);
+                    },
+                    function miss() {
+                        url = url + '?' + ox.base;
+                        // get the file via ajax as text, run it and store it later
+                        $.ajax({
+                            url: url,
+                            type: 'get',
+                            contentType: 'text'
+                        }).done(function (sourceText) {
+                            if (_.url.hash('debug-filecache')) console.log('Cache MISS for static file: ', modulename);
+                            runCode(modulename, sourceText);
+                            fileCache.cache(modulename, sourceText);
+                            context.completeLoad(modulename);
+                        });
+                    });
+                return $.Deferred().resolve();
+
             } else if (modulename.charAt(0) !== '/') {
                 if (url.slice(0, prefix.length) !== prefix) {
                     return oldload.apply(this, arguments);

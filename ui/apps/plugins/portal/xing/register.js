@@ -148,7 +148,9 @@ define('plugins/portal/xing/register',
         return $.when(
             keychain.createInteractively('xing', win))
         .then(function () {
-            baton.model.node.removeClass('requires-setup');
+            var model = baton.model;
+            $(model.node).find('.setup-questions').remove();
+            model.changed.props = baton.model.drawn = true; //hack to provoke loadAndPreview()
             ox.trigger('refresh^');
         });
     };
@@ -232,7 +234,7 @@ define('plugins/portal/xing/register',
 
 
             } else {
-                console.log('Could not find a handler for the following activity', JSON.stringify(activity));
+                console.log('Could not find a handler for the following activity: ' + activity.verb + '. Please let us know about this. Here is some data that would help us: ', JSON.stringify(activity));
             }
 
         });
@@ -272,10 +274,9 @@ define('plugins/portal/xing/register',
 
         load: function (baton) {
             return api.getUserfeed({
-                    email: 'dimitribronkowitsch@googlemail.com',
                     user_fields: '0,1,2,3,4,8,23' //name variations, page_name and picture
                 }).then(function (xingResponse) {
-                    //console.log('LOAD', JSON.stringify(xingResponse));
+//                    console.log('LOAD', JSON.stringify(xingResponse));
                     baton.data = xingResponse;
                 });
         },
@@ -284,7 +285,7 @@ define('plugins/portal/xing/register',
             this.append(
                 $('<div class="content preview io-ox-xing pointer">').append(
                     makeNewsfeed(baton.data.network_activities, MAX_ITEMS_PREVIEW)
-                )
+                ).on('click', 'a.external.xing', function (e) { e.stopPropagation(); })
             );
         },
 
@@ -362,6 +363,7 @@ define('plugins/portal/xing/register',
         }
     });
 
+    /* invite to xing actions in toolbars */
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'invite-contact-to-xing',
         index: 610,
@@ -376,6 +378,15 @@ define('plugins/portal/xing/register',
         ref: 'io.ox/xing/actions/invite'
     }));
 
+    ext.point('io.ox/contacts/classic-toolbar/links').extend(new links.Link({
+        id: 'invite-contact-to-xing-classic',
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Add on %s', XING_NAME),
+        ref: 'io.ox/xing/actions/invite'
+    }));
+
+    /* add on xing actions in toolbars */
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'add-on-xing-by-contact',
         index: 610, /* same index as 'invite to XING', because it is mutually exclusive */
@@ -389,4 +400,14 @@ define('plugins/portal/xing/register',
         label: gt('Add on %s', XING_NAME),
         ref: 'io.ox/xing/actions/add'
     }));
+
+    ext.point('io.ox/contacts/classic-toolbar/links').extend(new links.Link({
+        id: 'add-on-xing-by-contact-classic',
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Add on %s', XING_NAME),
+        ref: 'io.ox/xing/actions/add'
+    }));
+
+
 });

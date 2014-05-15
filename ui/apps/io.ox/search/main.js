@@ -50,6 +50,7 @@ define('io.ox/search/main',
                 //name mapping
                 'io.ox/mail/write' : 'io.ox/mail',
                 'io.ox/messenger' : data.defaultApp,
+                'io.ox/drive' : 'io.ox/files',
                 'io.ox/office/text' : 'io.ox/files',
                 'io.ox/office/portal' : 'io.ox/files',
                 'io.ox/office/spreadsheet' : 'io.ox/files',
@@ -88,7 +89,8 @@ define('io.ox/search/main',
             window: win
         }),
         yell = function (error) {
-            notifications.yell('error', error.error_desc);
+            //add custom exception handling here
+            notifications.yell(error);
         },
         sidepopup,
         win, model, run;
@@ -279,7 +281,8 @@ define('io.ox/search/main',
                         },
                         data: {
                             start: model.get('start'),
-                            size: model.get('size')
+                            //workaround: more searchresults?
+                            size: model.get('size') + model.get('extra')
                         }
                     };
                     run();

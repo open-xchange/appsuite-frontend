@@ -17,8 +17,9 @@ define('io.ox/core/settings/user',
      'io.ox/contacts/model',
      'io.ox/contacts/edit/view-form',
      'io.ox/core/tk/dialogs',
-     'io.ox/contacts/util'
-    ], function (ext, api, contactModel, ViewForm, dialogs, util) {
+     'io.ox/contacts/util',
+     'gettext!io.ox/contacts'
+    ], function (ext, api, contactModel, ViewForm, dialogs, util, gt) {
 
     'use strict';
 
@@ -26,6 +27,7 @@ define('io.ox/core/settings/user',
     var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
 
     return {
+
         editCurrentUser: function ($node) {
             //$node.busy();
             return factory.realm('edit').get({})
@@ -61,9 +63,50 @@ define('io.ox/core/settings/user',
                         });
                     });
         },
+
         getCurrentUser: function () {
             return factory.realm('default').get({});
+        },
+
+        openModalDialog: function () {
+
+            var dialog = new dialogs.ModalDialog({
+                    top: 60,
+                    width: 910,
+                    center: false,
+                    maximize: true
+                })
+                .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: '1' })
+                .addButton('discard', gt('Discard'), 'discard', { tabIndex: '1' });
+
+            var $node = dialog.getContentNode();
+            var usermodel;
+            var self = this;
+
+            if (_.device('smartphone')) {
+                // workaround: will be fixed with upcoming bootstrap 4
+                dialog.getPopup().width('100%');
+                $node.css('padding', 10).addClass('max-height-350');
+            }
+
+            this.editCurrentUser($node).then(
+                function success(model) {
+                    usermodel = model;
+                },
+                function fail() {
+                    $node.append(
+                        $.fail(gt('Couldn\'t load your contact data.'), function () {
+                            self.editCurrentUser($node).done(function () {
+                                $node.find('[data-action="discard"]').hide();
+                            });
+                        })
+                    );
+                }
+            );
+
+            dialog.show().done(function (action) {
+                if (action === 'save') usermodel.save();
+            });
         }
     };
-
 });

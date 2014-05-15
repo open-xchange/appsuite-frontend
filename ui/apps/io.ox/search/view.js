@@ -44,7 +44,8 @@ define('io.ox/search/view',
                 return this;
             },
             idle: function () {
-                var container = this.$el.find('.query');
+                var container = this.$el.find('.query'),
+                    busy = this.$el.find('.busy');
                 //input
                 container.find('.search-field')
                  .prop('disabled', false);
@@ -52,11 +53,11 @@ define('io.ox/search/view',
                 container.find('.btn-search>.fa')
                     .prop('disabled', false);
                 //busy node
-                this.$el.find('.result').find('.busy').remove();
+                busy.hide();
             },
             busy: function () {
                 var container = this.$el.find('.query'),
-                    result = this.$el.find('.result');
+                    busy = this.$el.find('.busy');
                 //input
                 container.find('.search-field')
                         .prop('disabled', true);
@@ -64,12 +65,7 @@ define('io.ox/search/view',
                 container.find('.btn-search>.fa')
                     .prop('disabled', true);
                 //result row
-                result.empty();
-                result.append(
-                    $('<div class="col-xs-12 busy">')
-                        .css('min-height', '50px')
-                        .busy()
-                );
+                busy.show();
                 return this;
             },
             redraw: function () {

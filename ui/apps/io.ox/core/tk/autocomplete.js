@@ -74,6 +74,7 @@ define('io.ox/core/tk/autocomplete',
 
             // last search
             lastValue = '',
+            lastSearch = $.Deferred().resolve(),
             // no-results prefix
             emptyPrefix = '\u0000',
             // current search result index
@@ -292,6 +293,8 @@ define('io.ox/core/tk/autocomplete',
                         emptyPrefix = data.hits ? emptyPrefix : query;
                         close();
                     }
+                    //lastSearch will never reject
+                    lastSearch.resolve('succeeded');
                 },
 
             // adds 'retry'-item to popup
@@ -314,7 +317,18 @@ define('io.ox/core/tk/autocomplete',
                             )
                         );
                     node.appendTo(scrollpane);
+                    //lastSearch will will never reject
+                    lastSearch.resolve('failed');
                 },
+
+            autoSelectFirst = function () {
+                scrollpane.find('.autocomplete-item:visible:not(.unselectable)').first().click();
+            },
+
+            //waits for finished server call/drawn dropdown
+            autoSelectFirstWait = _.debounce(function () {
+                lastSearch.done(autoSelectFirst);
+            }, o.delay),
 
             // handle key down (esc/cursor only)
             fnKeyDown = function (e) {
@@ -344,7 +358,11 @@ define('io.ox/core/tk/autocomplete',
                             selected.trigger('click');
                         } else {
                             // auto-select first item
-                            scrollpane.find('.autocomplete-item:visible:not(.unselectable)').first().click();
+                            if (o.mode === 'participant') {
+                                autoSelectFirst();
+                            } else {
+                                autoSelectFirstWait();
+                            }
                         }
 
                         // calendar: add string
@@ -389,6 +407,10 @@ define('io.ox/core/tk/autocomplete',
                         }
                         break;*/
                     case 13:
+                        if (o.mode !== 'participant') {
+                            autoSelectFirstWait();
+                        }
+                        /* falls through */
                     case 9:
                         var val = $.trim($(this).val());
                         if (val.length > 0) {
@@ -402,7 +424,7 @@ define('io.ox/core/tk/autocomplete',
             // handle key up (debounced)
             fnKeyUp = _.debounce(function (e, isRetry) {
                 //TODO: element destroyed before debounce resolved
-                if (!document.contains(this))
+                if (!document.body.contains(this))
                     return;
                 this.focus();
                 e.stopPropagation();
@@ -410,6 +432,7 @@ define('io.ox/core/tk/autocomplete',
                 isRetry = isRetry || (e.data || {}).isRetry || false;
                 if (val.length >= o.minLength) {
                     if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
+                        lastSearch = $.Deferred();
                         lastValue = val;
                         //scrollpane.empty();
                         o.container.busy();

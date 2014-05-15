@@ -23,6 +23,9 @@ module.exports = function (grunt) {
 
     //Override the default tasks
 
+    //work around issue with manifests watch task
+    grunt.registerTask('manifests', ['newer:jsonlint:all', 'newer:concat:manifests']);
+
     // steps to build the ui (ready for development)
     grunt.registerTask('build', ['lint', 'copy_build', 'assemble_build', 'newer:concat', 'newer:less', 'compile_po']);
     // create a package ready version of the ui (aka what jenkins does)

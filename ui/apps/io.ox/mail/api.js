@@ -835,7 +835,8 @@ define('io.ox/mail/api',
             pool.propagate('change', {
                 id: obj.id,
                 folder_id: obj.folder_id,
-                flags: obj.flags
+                flags: obj.flags,
+                unseen: false
             });
             // update thread model
             api.threads.touch(obj);

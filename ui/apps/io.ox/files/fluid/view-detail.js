@@ -54,7 +54,8 @@ define('io.ox/files/fluid/view-detail',
                     if ((e.keyCode || e.which) === 13) { // enter
                         actionPerformer.invoke('io.ox/files/actions/rename', null, baton);
                     }
-                })
+                }),
+                baton.data.url ? $('<a>').text(baton.data.url).attr({ href: baton.data.url, target: '_blank' }) : $()
             );
         }
     });

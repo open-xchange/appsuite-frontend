@@ -419,9 +419,10 @@ define('io.ox/mail/detail/content',
                         .attr('title', gt('Show quoted text')),
                         $.txt(text)
                     )
-                    .on('click', explandBlockquote)
                 );
             });
+            // delegate
+            this.on('click', '.blockquote-toggle', explandBlockquote);
         }
     });
 

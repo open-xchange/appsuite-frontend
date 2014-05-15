@@ -96,23 +96,11 @@ define('io.ox/files/actions',
         }
     });
 
-    new Action('io.ox/files/actions/audioplayer', {
-        requires: function (e) {
-            return _.device('!android') && e.collection.has('some') && checkMedia(e, 'audio');
-        },
-        action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: false
-                });
-            });
-        }
-    });
-
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
-            return _.device('!android') && e.collection.has('some') && checkMedia(e, 'video');
+            if (_.device('android')) return false;
+            if (e.collection.has('none')) return false;
+            return checkMedia(e, 'video');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
@@ -561,7 +549,6 @@ define('io.ox/files/actions',
                 var keys = new KeyListener($input),
                     dialog = new dialogs.ModalDialog(),
                     $input = $('<textarea rows="10" class="form-control" tabindex="1"></textarea>')
-                            .css({width: '507px'})
                             .val(baton.data.description),
                     $form = $('<form>')
                             .css('margin', '0 0 0 0')
@@ -1175,6 +1162,7 @@ define('io.ox/files/actions',
     }
 
     function checkMedia(e, type) {
+
         if (!e.collection.has('some') && !settings.get(type + 'Enabled')) {
             return false;
         }
@@ -1189,6 +1177,8 @@ define('io.ox/files/actions',
             e.baton.allIds = e.baton.data;
             list = [e.baton.allIds];
         }
+
+        if (!_.isArray(list)) return false; // avoid runtime errors
 
         //identify incomplete items
         _(list).each(function (item) {
@@ -1230,7 +1220,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
-            return _.device('!android') && checkMedia(e, 'audio');
+            if (_.device('android')) return false;
+            return checkMedia(e, 'audio');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
@@ -1244,7 +1235,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/videoplayer', {
         requires: function (e) {
-            return _.device('!android') && checkMedia(e, 'video');
+            if (_.device('android')) return false;
+            return checkMedia(e, 'video');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {

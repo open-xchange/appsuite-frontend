@@ -84,13 +84,13 @@ define('io.ox/mail/common-extensions',
         },
 
         unreadClass: function (baton) {
-            var data = baton.data,
+            var data = (baton.model) ? baton.model.attributes : baton.data,
                 unread = util.isUnseen(data);
             this.closest('.list-item').toggleClass('unread', unread);
         },
 
         unreadClassPartial: function (baton) {
-            var data = baton.data,
+            var data = (baton.model) ? baton.model.attributes : baton.data,
                 unread = api.threads.partiallyUnseen(data);
             this.closest('.list-item').toggleClass('unread', unread);
         },
@@ -139,7 +139,8 @@ define('io.ox/mail/common-extensions',
         },
 
         unread: function (baton) {
-            var isUnread = api.threads.partiallyUnseen(baton.data);
+            var data = (baton.model) ? baton.model.attributes : baton.data,
+                isUnread = api.threads.partiallyUnseen(data);
             if (isUnread) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
         },
 
@@ -440,7 +441,7 @@ define('io.ox/mail/common-extensions',
                 view.trigger('load');
                 view.$el.find('.external-images').remove();
                 // get unmodified mail
-                api.getUnmodified(_.cid(view.cid)).done(function (data) {
+                api.getUnmodified(_.cid(view.model.cid)).done(function (data) {
                     view.trigger('load:done');
                     view.model.set(data);
                 });
@@ -504,9 +505,9 @@ define('io.ox/mail/common-extensions',
 
             function returnReceipt(e) {
                 e.preventDefault();
-                var view = e.data.view, obj = _.cid(view.cid);
+                var view = e.data.view, obj = _.cid(view.model.cid);
                 view.model.set('disp_notification_to', '');
-                skip[view.cid] = true;
+                skip[view.model.cid] = true;
                 api.ack({ folder: obj.folder_id, id: obj.id }).done(function () {
                     notifications.yell(
                         'success',
@@ -520,7 +521,7 @@ define('io.ox/mail/common-extensions',
                 e.preventDefault();
                 // add to skip hash
                 var view = e.data.view;
-                skip[view.cid] = true;
+                skip[view.model.cid] = true;
             }
 
             function draw(model) {

@@ -820,19 +820,12 @@ define('io.ox/core/tk/folderviews',
         customize: function (data, options) {
 
             var label = this.find('.folder-label'),
-                counter = this.find('.folder-counter');
-
-            // selectable?
-            var hasProperType = !options.type || options.type === data.module,
-                isSelectable = hasProperType, // so: all folder that I can see
+                counter = this.find('.folder-counter'),
+                isSelectable = !options.type || options.type === data.module, // so: all folder that I can see
                 isReadable = isSelectable && api.can('read', data),
-                isExpandable = !!data.subfolders,
-                isEnabled = !(options.targetmode && isReadable && !api.can('create', data));
-
-            if (!isEnabled) { this.addClass('disabled'); isSelectable = false; }
-            if (isExpandable) { this.addClass('expandable'); }
-            if (!isReadable) { this.addClass('unreadable'); }
-            if (!isSelectable) { this.removeClass('selectable').addClass('unselectable'); }
+                isEnabled = !(options.targetmode && isReadable && !api.can('create', data)),
+                labelTitle = data.title,
+                cls = '';
 
             // add options (only if 'app' is defined; should not appear in modal dialogs, for example)
             if (options.app && this.find('.folder-options').length === 0) {
@@ -845,20 +838,18 @@ define('io.ox/core/tk/folderviews',
                 );
             }
 
-            // set title
-            var shortTitle = api.getFolderTitle(data.title, 20),
-                total = data.total && data.total !== 0 ? ' - ' + gt('total') + ' ' + data.total : '',
-                unread = data.unread && data.unread !== 0 ? ' - ' + gt('unread') + ' ' + data.unread : '',
-                labelTitle = options.type === 'mail' ? data.title + total + unread : data.title;
-
-            label.attr('title', labelTitle).empty().append(
-                $('<span class="short-title">').text(_.noI18n(shortTitle)),
-                $('<span class="long-title">').text(_.noI18n(data.title))
-            );
-            this.attr('aria-label', labelTitle);
-
             // set counter (mail only)
             if (options.type === 'mail') {
+                // set title
+                var total = data.total && data.total !== 0 ? ' - ' + gt('total') + ' ' + data.total : '',
+                    unread = data.unread && data.unread !== 0 ? ' - ' + gt('unread') + ' ' + data.unread : '';
+                labelTitle = data.title + total + unread;
+
+                // rename root
+                if (options.skipRoot === false && data.module === 'system') {
+                    // rename mail root folder
+                    data.title = gt('Mail');
+                }
                 if (_.device('!small') && data.id === 'default0/INBOX' && (!data.unread  || data.unread === 0)) {//remove new mail title if inbox new-mail counter is 0
                     document.fixedtitle = false;
                     document.title = document.temptitle;
@@ -873,6 +864,20 @@ define('io.ox/core/tk/folderviews',
             } else {
                 this.removeClass('show-counter');
             }
+
+            // add css classes
+            if (!isEnabled) { cls += 'disabled '; isSelectable = false; }
+            if (!!data.subfolders) { cls += 'expandable '; }
+            if (!isReadable) { cls += 'unreadable '; }
+            cls += (!isSelectable ? 'un' :'') + 'selectable';
+
+            this.addClass(cls)
+                .attr('aria-label', labelTitle);
+
+            label.attr('title', labelTitle).empty().append(
+                $('<span class="short-title">').text(_.noI18n(api.getFolderTitle(data.title, 20))),
+                $('<span class="long-title">').text(_.noI18n(data.title))
+            );
         }
     });
 

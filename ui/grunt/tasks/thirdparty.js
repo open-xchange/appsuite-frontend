@@ -33,9 +33,15 @@ module.exports = function (grunt) {
                 },
                 {
                     expand: true,
-                    src: ['jquery-ui.min.js', 'view-qrcode.js', 'hopscotch/*', 'mobiscroll/css/*'],
+                    src: ['view-qrcode.js', 'hopscotch/*', 'mobiscroll/css/*'],
                     cwd: 'lib/',
                     dest: 'build/apps/3rd.party/'
+                },
+                {
+                    expand: true,
+                    src: ['jquery-ui.min.js'],
+                    cwd: 'lib/',
+                    dest: 'build/static/3rd.party/'
                 },
                 {
                     expand: true,

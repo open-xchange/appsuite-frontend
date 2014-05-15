@@ -223,6 +223,7 @@ define('io.ox/mail/main',
                 'layout': app.settings.get('layout', 'vertical'),
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
                 'contactPictures': app.settings.get('showContactPictures', false),
+                'exactDates': app.settings.get('showExactDates', false),
                 'mobileFolderSelectMode': false
             });
         },
@@ -420,7 +421,8 @@ define('io.ox/mail/main',
                 app.settings
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
                     .set('layout', data.layout)
-                    .set('showContactPictures', data.contactPictures);
+                    .set('showContactPictures', data.contactPictures)
+                    .set('showExactDates', data.exactDates);
                 if (_.device('!smartphone')) {
                     app.settings.set('showCheckboxes', data.checkboxes);
                 }
@@ -848,6 +850,7 @@ define('io.ox/mail/main',
          * Select next item in list view if current item gets deleted
          */
         'before-delete': function (app) {
+            if (_.device('small')) return; // fixes scrolling issue on mobiles during delete
             api.on('beforedelete', function () {
                 app.listView.selection.dodge();
             });
@@ -964,7 +967,6 @@ define('io.ox/mail/main',
             });
         },
 
-
         /*
          * Respond to change:contactPictures
          */
@@ -972,7 +974,39 @@ define('io.ox/mail/main',
             app.props.on('change:contactPictures', function () {
                 app.listView.redraw();
             });
-        }
+        },
+
+        /*
+         * Respond to change:exactDates
+         */
+        'change:exactDates': function (app) {
+            app.props.on('change:exactDates', function () {
+                app.listView.redraw();
+            });
+        },
+
+        // 'inplace-search': function (app) {
+
+        //     if (_.device('small')) return;
+
+        //     var side = app.getWindow().nodes.sidepanel;
+
+        //     require(['io.ox/search/main'], function (search) {
+
+        //         side.find('.foldertree-sidepanel').append(
+        //             $('<div class="generic-toolbar top inplace-search io-ox-search">').append(
+        //                 search.init()
+        //             )
+        //         );
+
+        //         var container = side.find('.foldertree-container').addClass('top-toolbar');
+
+        //         side.find('.search-field').on('focus blur', function (e) {
+        //             // hide on focus, show on blur
+        //             container.toggle(e.type === 'blur');
+        //         });
+        //     });
+        // }
     });
 
     // launcher

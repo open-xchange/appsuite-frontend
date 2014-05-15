@@ -107,11 +107,20 @@ define('io.ox/core/tk/dialogs',
             busy = function () {
                 nodes.footer
                     .find('input, select, button')
-                    .prop('disabled', true);
-                nodes.body
-                    .css('opacity', 0.5)
-                    .find('input, select, button, textarea')
-                    .prop('disabled', true);
+                    .add(
+                        nodes.body
+                            .css('opacity', 0.5)
+                            .find('input, select, button, textarea')
+                    )
+                    .each(function (key, val) {
+                        val = $(val);
+                        if (val.prop('disabled')) {
+                            val.data('disabled', true);
+                        } else {
+                            val.prop('disabled', true);
+                        }
+                    });
+
                 innerFocus = $(document.activeElement);
                 nodes.popup.focus();
                 isBusy = true;
@@ -120,11 +129,20 @@ define('io.ox/core/tk/dialogs',
             idle = function () {
                 nodes.footer
                     .find('input, select, button')
-                    .prop('disabled', false);
-                nodes.body
-                    .css('opacity', '')
-                    .find('input, select, button, textarea')
-                    .prop('disabled', false);
+                    .add(
+                        nodes.body
+                            .css('opacity','')
+                            .find('input, select, button, textarea')
+                    )
+                    .each(function (key, val) {
+                        val = $(val);
+                        if (val.data('disabled')) {
+                            val.removeData('disabled');
+                        } else {
+                            val.prop('disabled', false);
+                        }
+                    });
+
                 innerFocus.focus();
                 isBusy = false;
             },
@@ -839,10 +857,24 @@ define('io.ox/core/tk/dialogs',
         CreateDialog: CreateDialog,
         SidePopup: SidePopup,
         busy: function (node) {
-            node.find('button, input').prop('disabled', true);
+            node.find('button, input').each(function (key, val) {
+                val = $(val);
+                if (val.prop('disabled')) {
+                    val.data('disabled', true);
+                } else {
+                    val.prop('disabled', true);
+                }
+            });
         },
         idle: function (node) {
-            node.find('button, input').prop('disabled', false);
+            node.find('button, input').each(function (key, val) {
+                val = $(val);
+                if (val.data('disabled')) {
+                    val.removeData('disabled');
+                } else {
+                    val.prop('disabled', false);
+                }
+            });
         }
     };
 });

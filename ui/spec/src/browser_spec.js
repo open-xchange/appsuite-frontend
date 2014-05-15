@@ -33,7 +33,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(_.browserSupport).to.be.an('object');
         });
 
-        it('should add a global funciton "isBrowserSupported" which returns a bool', function () {
+        it('should add a global function "isBrowserSupported" which returns a bool', function () {
             expect(window.isBrowserSupported).to.be.a('function');
             expect(window.isBrowserSupported()).to.be.a('boolean');
         });
@@ -58,6 +58,12 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
                 expect(_.browser.unknown).to.be.true;
                 spy.restore();
             });
+        });
+
+        it('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
+            _.device.loadUA(userAgents.valid.Chrome[34]);
+            expect(Modernizr.touch).to.be.false;
+            expect(_.browser.windows8).to.be.true;
         });
 
     });

@@ -20,7 +20,7 @@ define('io.ox/mail/mailfilter/settings/filter',
      'io.ox/mail/mailfilter/settings/filter/view-form',
      'gettext!io.ox/mail',
      'io.ox/mail/mailfilter/settings/filter/defaults',
-     'apps/3rd.party/jquery-ui.min.js'
+     'static/3rd.party/jquery-ui.min.js'
 
     ], function (ext, api, mailfilterModel, dialogs, settingsUtil, FilterDetailView, gt, DEFAULTS) {
 

@@ -46,9 +46,9 @@ module.exports = function (grunt) {
                 },
                 {
                     expand: true,
-                    src: ['update-themes/**/*'],
+                    src: ['share/**/*'],
                     cwd: 'build/',
-                    dest: 'dist/appsuite/share/'
+                    dest: 'dist/appsuite/'
                 }
             ]
         },

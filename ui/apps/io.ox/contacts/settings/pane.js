@@ -86,47 +86,13 @@ define('io.ox/contacts/settings/pane',
         index: 300,
         id: 'myaccount',
         draw: function () {
-            var usermodel,
-                button = $('<button type="button" class="btn btn-primary" data-action="add">')
+
+            var button = $('<button type="button" class="btn btn-primary" data-action="add">')
                     .text(gt('My contact data'));
 
             button.on('click', function () {
-                require(['io.ox/core/tk/dialogs', 'io.ox/core/settings/user'], function (dialogs, users) {
-                    var dialog = new dialogs.ModalDialog({
-                            top: 60,
-                            width: 900,
-                            center: false,
-                            maximize: true
-                        })
-                        .addPrimaryButton('save', gt('Save'), 'save', {'tabIndex': '1'})
-                        .addButton('discard', gt('Discard'), 'discard', {'tabIndex': '1'});
-
-                    var $node = dialog.getContentNode();
-
-                    if (_.device('smartphone')) {
-                        // workaround: will be fixed with upcoming bootstrap 4
-                        dialog.getPopup().width('100%');
-                        $node
-                            .css('padding', 10)
-                            .addClass('max-height-350');
-                    }
-
-                    users.editCurrentUser($node).done(function (model) {
-                        usermodel = model;
-                    }).fail(function () {
-                        $node.append(
-                            $.fail(gt('Couldn\'t load your contact data.'), function () {
-                                users.editCurrentUser($node).done(function () {
-                                    $node.find('[data-action="discard"]').hide();
-                                });
-                            })
-                        );
-                    });
-                    dialog.show().done(function (action) {
-                        if (action === 'save') {
-                            usermodel.save();
-                        }
-                    });
+                require(['io.ox/core/settings/user'], function (userSettings) {
+                    userSettings.openModalDialog();
                 });
             });
 

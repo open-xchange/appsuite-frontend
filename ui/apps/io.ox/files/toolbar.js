@@ -20,9 +20,10 @@ define('io.ox/files/toolbar',
      'io.ox/core/dropzone',
      'io.ox/core/notifications',
      'gettext!io.ox/files',
+     'io.ox/files/api',
      'io.ox/files/actions',
      'less!io.ox/files/style'
-    ], function (ext, links, actions, Dropdown, upload, dropzone, notifications, gt) {
+    ], function (ext, links, actions, Dropdown, upload, dropzone, notifications, gt, api) {
 
     'use strict';
 
@@ -41,11 +42,18 @@ define('io.ox/files/toolbar',
             drawDisabled: true,
             ref: 'io.ox/files/dropdown/new',
             customize: function (baton) {
+                var self = this;
 
                 this.append('<i class="fa fa-caret-down">');
 
                 this.after(
-                    links.DropdownLinks({ ref: 'io.ox/files/links/toolbar/default', wrap: false }, baton)
+                    links.DropdownLinks({ ref: 'io.ox/files/links/toolbar/default',
+                        wrap: false,
+                        emptyCallback: function () {//function to call when dropdown is empty
+                            self.addClass('disabled')
+                                .attr({ 'aria-disabled': true })
+                                .removeAttr('href');
+                        }}, baton)
                 );
 
                 this.addClass('dropdown-toggle').attr({
@@ -216,12 +224,17 @@ define('io.ox/files/toolbar',
 
     var updateToolbar = _.debounce(function (list) {
         if (!list) return;
-        // extract single object if length === 1
-        list = list.length === 1 ? list[0] : list;
-        // draw toolbar
-        var ids = this.getIds ? this.getIds() : [],
-            baton = ext.Baton({ $el: toolbar, data: list, app: this, allIds: ids });
-        ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.empty(), baton);
+        var self = this,
+            ids = this.getIds ? this.getIds() : [];
+
+        //get full data, needed for require checks for example
+        api.getList(list).done(function (data) {
+            // extract single object if length === 1
+            data = data.length === 1 ? data[0] : data;
+            // draw toolbar
+            var baton = ext.Baton({ $el: toolbar, data: data, app: self, allIds: ids});
+            ext.point('io.ox/files/classic-toolbar').invoke('draw', toolbar.empty(), baton);
+        });
     }, 10);
 
     ext.point('io.ox/files/mediator').extend({

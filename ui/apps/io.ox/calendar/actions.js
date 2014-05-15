@@ -148,7 +148,8 @@ define('io.ox/calendar/actions',
                     id: params.id,
                     folder: params.folder_id
                 };
-            if (!_.isUndefined(params.recurrence_position)) {
+
+            if (!!params.recurrence_position) {
                 o.recurrence_position = params.recurrence_position;
             }
 
@@ -223,7 +224,7 @@ define('io.ox/calendar/actions',
                     id: obj.id,
                     folder: obj.folder_id
                 };
-                if (!_.isUndefined(obj.recurrence_position)) {
+                if (!!obj.recurrence_position) {
                     o.recurrence_position = obj.recurrence_position;
                 }
 

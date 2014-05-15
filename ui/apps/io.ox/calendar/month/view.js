@@ -18,7 +18,7 @@ define('io.ox/calendar/month/view',
      'gettext!io.ox/calendar',
      'settings!io.ox/calendar',
      'less!io.ox/calendar/month/style',
-     'apps/3rd.party/jquery-ui.min.js'
+     'static/3rd.party/jquery-ui.min.js'
     ], function (util, date, ext, folderAPI, gt, settings) {
 
     'use strict';

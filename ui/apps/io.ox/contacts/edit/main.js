@@ -245,7 +245,9 @@ define('io.ox/contacts/edit/main',
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to discard your changes?'))
-                        .addPrimaryButton('delete', gt('Discard'), 'delete', {'tabIndex': '1'})
+                        //#. "Discard changes" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard changes'), 'delete', {'tabIndex': '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'})
                         .show()
                         .done(function (action) {
