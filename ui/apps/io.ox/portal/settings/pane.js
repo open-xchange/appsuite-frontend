@@ -373,7 +373,7 @@ define('io.ox/portal/settings/pane',
             // make sortable
             list.sortable({
                 axis: 'y',
-                containment: list,
+                containment: list.parent(),
                 delay: 150,
                 handle: '.drag-handle',
                 cancel: 'li.protected',
