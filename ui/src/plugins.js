@@ -309,6 +309,29 @@
             if (modulename.slice(0, 5) === 'apps/') {
                 url = ox.apiRoot + '/apps/load/' + ox.version + ',' + url.slice(5);
                 return oldload.apply(this, arguments);
+            } else if (modulename.slice(0, 7) === 'static/') {
+                fileCache.retrieve(modulename).then(
+                    function hit(contents) {
+                        if (ox.debug) console.log('Cache HIT for static file: ', modulename);
+                        runCode(modulename, contents);
+                        context.completeLoad(modulename);
+                    },
+                    function miss() {
+                        url = ox.base + '/' + url;
+                        // special käse
+                        $.ajax({
+                            url: url,
+                            type: 'get',
+                            contentType: 'text'
+                        }).done(function (sourceText) {
+                            if (ox.debug) console.log('Cache MISS for static file: ', modulename);
+                            runCode(modulename, sourceText);
+                            fileCache.cache(modulename, sourceText);
+                            context.completeLoad(modulename);
+                        });
+                    });
+                return $.Deferred().resolve();
+
             } else if (modulename.charAt(0) !== '/') {
                 if (url.slice(0, prefix.length) !== prefix) {
                     return oldload.apply(this, arguments);
