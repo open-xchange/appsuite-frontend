@@ -301,6 +301,7 @@ define('io.ox/search/main',
             .on('query change:start change:size', app.apiproxy.query)
             .on('reset change', function () {
                 app.view.redraw();
+                app.idle();
             });
 
     //run app
