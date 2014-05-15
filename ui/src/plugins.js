@@ -317,7 +317,7 @@
                         context.completeLoad(modulename);
                     },
                     function miss() {
-                        url = ox.base + '/' + url;
+                        url = url + '?' + ox.base;
                         // get the file via ajax as text, run it and store it later
                         $.ajax({
                             url: url,
