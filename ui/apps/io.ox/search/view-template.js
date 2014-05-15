@@ -51,7 +51,7 @@ define('io.ox/search/view-template',
                             api: app.apiproxy,
                             minLength: 0,
                             mode: 'search',
-                            delay: 150,
+                            delay: 80,
                             parentSelector: container  ? '.query' : '.io-ox-search',
                             model: model,
                             container: container,
@@ -481,7 +481,7 @@ define('io.ox/search/view-template',
                     )
                     .on('click', function (e) {
                         e.stopPropagation();
-                        baton.model.remove(value.facet, value.id);
+                        baton.model.remove(value.facet || value._compact.facet, value.id);
                     })
                 );
             }
