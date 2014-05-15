@@ -203,7 +203,6 @@ define('plugins/halo/xing/register',
                 data = baton.data.values ? baton.data.values[0] : baton.data,
                 xing,
                 hasNoConnectionData = true;
-            debugger;
             xing = $('<div>').addClass('io-ox-xing halo clear').append(
                 $('<div>').addClass('widget-title clear-title').text(XING_NAME)
             );
