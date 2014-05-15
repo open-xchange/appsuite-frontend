@@ -535,20 +535,25 @@ define('io.ox/core/commons',
 
             defaultFolderId = _.url.hash('folder') || defaultFolderId;
 
-            // explicit vs. default
-            if (defaultFolderId !== undefined) {
-                return app.folder.set(defaultFolderId).then(null, function () {
+            function apply(id) {
+                return app.folder.set(id).then(null, function () {
                     // fallback to default on error
                     return app.folder.setDefault();
                 });
-            } else {
+            }
+
+            // explicit vs. default
+            if (defaultFolderId !== undefined) {
+                return apply(defaultFolderId);
+            }
+            else if (type === 'mail') {
                 return accountAPI.getUnifiedInbox().then(function (id) {
                     if (id === null) return app.folder.setDefault();
-                    return app.folder.set(id).then(null, function () {
-                        // fallback to default on error
-                        return app.folder.setDefault();
-                    });
+                    return apply(id);
                 });
+            }
+            else {
+                return app.folder.setDefault();
             }
         },
 
