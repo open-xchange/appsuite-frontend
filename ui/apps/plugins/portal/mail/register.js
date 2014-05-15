@@ -136,7 +136,7 @@ define('plugins/portal/mail/register',
                         api.on('update:' + ecid + '.portalTitle', updater);
 
                         var received = new date.Local(mail.received_date).format(date.DATE);
-                        return $('<li class="item" tabindex="1">')
+                        var $node = $('<li class="item" tabindex="1">')
                             .data('item', mail)
                             .append(
                                 (function () {
@@ -148,6 +148,9 @@ define('plugins/portal/mail/register',
                                 $('<span class="normal">').text(_.noI18n(_.ellipsis(mail.subject, {max: 50}))), $.txt(' '),
                                 $('<span class="accent">').text(_.noI18n(received))
                             );
+                        // Give plugins a chance to customize mail display
+                        ext.point('io.ox/mail/portal/list/item').invoke('customize', $node, mail, baton, $node);
+                        return $node;
                     })
                 );
             } else {
