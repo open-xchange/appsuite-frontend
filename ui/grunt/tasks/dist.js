@@ -56,7 +56,7 @@ module.exports = function (grunt) {
     grunt.config.extend('uglify', {
         dist_rootfolder: {
             files: [{
-                src: ['*.js'],
+                src: ['*.js', 'static/**/*.js'],
                 cwd: 'build/',
                 dest: 'dist/appsuite/',
                 filter: function (f) {

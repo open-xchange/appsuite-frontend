@@ -17,11 +17,13 @@ module.exports = function (grunt) {
 
     var staticSrc = grunt.config('copy.local_install_static.files.0.src');
     staticSrc.push('appsuite/**/.htaccess');
+    staticSrc.push('appsuite/static/**/*');
     grunt.config('copy.local_install_static.files.0.src', staticSrc);
 
     //exclude language properties files from main install target
     var dynamicSrc = grunt.config('copy.local_install_dynamic.files.0.src');
     dynamicSrc.push('!etc/languages/**/*');
+    dynamicSrc.push('!appsuite/static/**/*');
     grunt.config('copy.local_install_dynamic.files.0.src', dynamicSrc);
 
     // add language properties file to each language package
