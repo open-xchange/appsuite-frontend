@@ -549,7 +549,6 @@ define('io.ox/files/actions',
                 var keys = new KeyListener($input),
                     dialog = new dialogs.ModalDialog(),
                     $input = $('<textarea rows="10" class="form-control" tabindex="1"></textarea>')
-                            .css({width: '507px'})
                             .val(baton.data.description),
                     $form = $('<form>')
                             .css('margin', '0 0 0 0')
