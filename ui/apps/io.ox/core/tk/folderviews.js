@@ -155,17 +155,17 @@ define('io.ox/core/tk/folderviews',
                 }
                 nodes.arrow.find('i').attr('class', className);
                 if (hasFolderIcons) {
-                    var folderClass = 'fa fa-';
+                    var folderClass = 'icon icon-';
                     if (accountAPI.is('trash', id)) {
-                        folderClass += 'trash-o special';
+                        folderClass += 'trash special';
                     } else if (accountAPI.is('inbox', id)) {
                         folderClass += 'inbox special';
                     } else if (accountAPI.is('sent', id)) {
-                        folderClass += (hasChildren() ? 'send special' : 'send-o special');
+                        folderClass += 'upload-alt';
                     } else if (accountAPI.is('drafts', id)) {
-                        folderClass += 'file-o special';
+                        folderClass += 'file-alt special';
                     } else {
-                        folderClass += isOpen() ? 'folder-open-o' : 'folder-o';
+                        folderClass += isOpen() ? 'folder-open-alt' : 'folder-close-alt';
                     }
                     nodes.icon.find('i').attr('class', folderClass);
                 }
@@ -412,8 +412,8 @@ define('io.ox/core/tk/folderviews',
 
                 if (nodes && nodes.arrow === undefined) {
                     // create DOM nodes
-                    nodes.arrow = $('<div class="folder-arrow" role="presentation"><i class="fa fa-chevron-right"></i></div>');
-                    nodes.icon = hasFolderIcons ? $('<div class="folder-icon" role="presentation"><i class="fa fa-folder"></i></div>') : $();
+                    nodes.arrow = $('<div class="folder-arrow" role="presentation"><i class="icon icon-chevron-right"></i></div>');
+                    nodes.icon = hasFolderIcons ? $('<div class="folder-icon" role="presentation"><i class="icon icon-folder"></i></div>') : $();
                     nodes.label = $('<div class="folder-label">');
                     nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
                     nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', tabindex: -1, 'value': data.id });

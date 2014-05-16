@@ -415,7 +415,7 @@ define('io.ox/contacts/view-detail',
                     .append(
                         $('<address>').text($.trim(text)),
                         $('<p>').append(
-                            $('<i class="fa fa-external-link">'),
+                            $('<i class="icon icon-external-link">'),
                             $.txt(' Google Maps \u2122') // \u2122 = &trade;
                         )
                     )
@@ -730,7 +730,7 @@ define('io.ox/contacts/view-detail',
 
             node.append(
                 $('<legend class="sr-only">').text(gt('Show QR code')),
-                $('<i class="fa fa-qrcode">'), $.txt(' '),
+                $('<i class="icon icon-qrcode">'), $.txt(' '),
                 showLink
             );
         }
