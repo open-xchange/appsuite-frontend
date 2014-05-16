@@ -166,7 +166,7 @@ define('io.ox/core/tk/folderviews',
                     } else if (accountAPI.is('drafts', id)) {
                         folderClass += 'file-o special';
                     } else {
-                         folderClass += isOpen() ? 'folder-open-o' : 'folder-o';
+                        folderClass += isOpen() ? 'folder-open-o' : 'folder-o';
                     }
                     nodes.icon.find('i').attr('class', folderClass);
                 }
