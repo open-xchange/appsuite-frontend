@@ -19,6 +19,7 @@
  * - "liking" does not toggle to un/disliking
  * - revoke xing invitations
  * - pre-select the correct language in createXingAccount by matching the first part of locale
+ * - error handling when looking up e-mails for add/invite-to
  */
 
 define('plugins/portal/xing/register',
