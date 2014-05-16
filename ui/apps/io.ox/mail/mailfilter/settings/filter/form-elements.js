@@ -17,8 +17,21 @@ define('io.ox/mail/mailfilter/settings/filter/form-elements', ['gettext!io.ox/se
 
     return {
         drawInputfieldTest: function (labeltext, activeValue) {
-            var inputid = _.uniqueId('change-text-test-first');
-            return [$('<label>').attr('for', inputid).addClass('sr-only').text(labeltext), $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'}).val(activeValue)];
+            var inputid = _.uniqueId('change-text-test-first'),
+                inputField = $('<input class="form-control">').attr({ id: inputid, type: 'text', 'data-action': 'change-text-test', 'tabindex': '1'});
+
+                if (activeValue.trim() === '') {
+                    inputField.addClass('warning');
+                }
+                inputField.on('keyup', function () {
+                    if (inputField.val().trim() !== '') {
+                        inputField.removeClass('warning');
+                    } else {
+                        inputField.addClass('warning');
+                    }
+                });
+
+            return [$('<label>').attr('for', inputid).addClass('sr-only').text(labeltext), inputField.val(activeValue)];
         },
 
         drawInputfieldTestSecond: function (activeValue, label) {
