@@ -17,7 +17,7 @@ define('io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/date',
      'settings!io.ox/core',
      'gettext!io.ox/core',
-     'apps/3rd.party/Chart.js/Chart.js'
+     'static/3rd.party/Chart.js/Chart.js'
     ], function (ext, http, date, settings, gt) {
 
     'use strict';

@@ -28,7 +28,7 @@ define('io.ox/files/mediaplayer',
     ['io.ox/core/commons',
      'gettext!io.ox/files',
      'io.ox/files/api',
-     'apps/3rd.party/mediaelement/mediaelement-and-player.js', // TODO move to static
+     'static/3rd.party/mediaelement/mediaelement-and-player.js',
      'io.ox/files/actions',
      'less!io.ox/files/mediaplayer',
      'css!3rd.party/mediaelement/mediaelementplayer.css',
