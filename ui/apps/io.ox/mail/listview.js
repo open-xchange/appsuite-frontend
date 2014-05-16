@@ -56,7 +56,7 @@ define('io.ox/mail/listview',
     ext.point('io.ox/mail/listview/item/small').extend({
         id: 'unread',
         index: 110,
-        draw: extensions.unreadClassPartial
+        draw: extensions.unreadClass
     });
 
     ext.point('io.ox/mail/listview/item/small').extend({
@@ -192,7 +192,7 @@ define('io.ox/mail/listview',
     ext.point('io.ox/mail/listview/item/default').extend({
         id: 'unread',
         index: 110,
-        draw: extensions.unreadClassPartial
+        draw: extensions.unreadClass
     });
 
     ext.point('io.ox/mail/listview/item/default').extend({
@@ -263,7 +263,21 @@ define('io.ox/mail/listview',
 
         map: function (model) {
             // use head data for list view
-            return api.threads.head(model.toJSON());
+            var data = api.threads.head(model.toJSON());
+            // get thread with recent data
+            var thread = api.threads.get(model.cid);
+            // get unseen flag for entire thread
+            var unseen = _(thread).reduce(function (memo, obj) {
+                return memo || util.isUnseen(obj);
+            }, false);
+            data.flags = unseen ? data.flags & ~32 : data.flags | 32;
+            // get color_label for entire thread
+            var color = _(thread).reduce(function (memo, obj) {
+                return memo || parseInt(obj.color_label || 0, 10);
+            }, 0);
+            data.color_label = color;
+            // done
+            return data;
         },
 
         // support for custom cid attributes

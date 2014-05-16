@@ -106,7 +106,6 @@ define('io.ox/core/tk/list',
 
         // called when the view model changes (not collection models)
         onModelChange: function () {
-            this.empty();
             this.load();
         },
 

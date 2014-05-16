@@ -84,15 +84,8 @@ define('io.ox/mail/common-extensions',
         },
 
         unreadClass: function (baton) {
-            var data = (baton.model) ? baton.model.attributes : baton.data,
-                unread = util.isUnseen(data);
-            this.closest('.list-item').toggleClass('unread', unread);
-        },
-
-        unreadClassPartial: function (baton) {
-            var data = (baton.model) ? baton.model.attributes : baton.data,
-                unread = api.threads.partiallyUnseen(data);
-            this.closest('.list-item').toggleClass('unread', unread);
+            var isUnseen = util.isUnseen(baton.data);
+            this.closest('.list-item').toggleClass('unread', isUnseen);
         },
 
         deleted: function (baton) {
@@ -101,7 +94,7 @@ define('io.ox/mail/common-extensions',
 
         flag: function (baton) {
 
-            var color = api.threads.color(baton.data);
+            var color = baton.data.color_label;
             if (color <= 0) return; // 0 and a buggy -1
 
             this.append(
@@ -139,9 +132,8 @@ define('io.ox/mail/common-extensions',
         },
 
         unread: function (baton) {
-            var data = (baton.model) ? baton.model.attributes : baton.data,
-                isUnread = api.threads.partiallyUnseen(data);
-            if (isUnread) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
+            var isUnseen = util.isUnseen(baton.data);
+            if (isUnseen) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
         },
 
         answered: function (baton) {

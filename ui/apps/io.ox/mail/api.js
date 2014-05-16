@@ -755,12 +755,14 @@ define('io.ox/mail/api',
         label = String(label); // Bugfix: #24730
 
         _(list).each(function (obj) {
+            obj.color_label = label;
             pool.propagate('change', {
                 id: obj.id,
                 folder_id: obj.folder_id,
                 color_label: parseInt(label, 10) || 0
             });
-            obj.color_label = label;
+            // update thread model
+            api.threads.touch(obj);
             tracker.setColorLabel(obj);
             api.trigger('update:' + _.ecid(obj), obj);
         });
@@ -1741,28 +1743,6 @@ define('io.ox/mail/api',
             _(this.hash[cid]).each(function (thread_cid) {
                 this.reverse[thread_cid] = cid;
             }, this);
-        },
-
-        partiallyUnseen: function (data) {
-            // look for a thread collection
-            var cid = _.cid(data), thread = this.get(cid);
-            // no thread? then just check current object
-            if (thread.length <= 1) return util.isUnseen(data);
-            // otherwise check collection
-            return thread.reduce(function (memo, obj) {
-                return memo || util.isUnseen(obj);
-            }, false);
-        },
-
-        color: function (data) {
-            // look for a thread collection
-            var cid = _.cid(data), thread = this.get(cid);
-            // no thread? then just check current object
-            if (thread.length <= 1) return parseInt(data.color_label || 0, 10);
-            // otherwise check collection
-            return thread.reduce(function (memo, obj) {
-                return memo || parseInt(obj.color_label || 0, 10);
-            }, 0);
         }
     };
 
