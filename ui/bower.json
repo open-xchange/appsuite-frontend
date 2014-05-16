@@ -17,7 +17,7 @@
     "bootstrap": "3.1.1",
     "bootstrap-datepicker": "https://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#0168474d70a2ffcea51497e2b6ea6b7496045d93",
     "bootstrap-typeahead": "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git#304421b880ed990bada46c858b6fbdeec662dee3",
-    "font-awesome": "4.0.3",
+    "font-awesome": "4.1.0",
     "open-sans-fontface": "1.0.4",
     "backbone": "1.0.0",
     "backbone-validation": "0.9.1",
