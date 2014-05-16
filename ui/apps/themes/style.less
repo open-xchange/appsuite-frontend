@@ -3040,7 +3040,7 @@ ul.io-ox-inline-links + header {
         min-height: 70px;
     }
 
-    .folder-arrow {
+    .folder-arrow, .folder-icon {
 
         display: inline-block;
         width: 50px;
@@ -3052,7 +3052,26 @@ ul.io-ox-inline-links + header {
         }
 
         i {
-            display: block; width: 50px;
+            display: block;
+            width: 50px;
+        }
+
+    }
+
+    .folder-icons& {
+
+        .folder-arrow, .folder-icon {
+
+            width: 25px;
+
+            i {
+                width: 25px;
+
+                &.special {
+                    color: @hc-link-color;
+                }
+            }
+
         }
 
     }
@@ -3274,7 +3293,7 @@ ul.io-ox-inline-links + header {
             }
 
             .folder-icon {
-                display: none;
+                display: inline-block;
             }
 
             .io-ox-fail {
@@ -4072,11 +4091,6 @@ input.flat-input {
         left: 0;
     }
 
-    .io-ox-foldertree {
-        .folder-arrow, .folder-arrow i {
-            width: 50px;
-        }
-    }
     .core-boot-dialog {
 
         .btn {
