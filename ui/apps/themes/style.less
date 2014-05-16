@@ -2285,7 +2285,7 @@ input.nice-input {
         min-height: 70px;
     }
 
-    .folder-arrow {
+    .folder-arrow, .folder-icon {
 
         display: inline-block;
         width: 50px;
@@ -2297,7 +2297,26 @@ input.nice-input {
         }
 
         i {
-            display: block; width: 50px;
+            display: block;
+            width: 50px;
+        }
+
+    }
+
+    .folder-icons& {
+
+        .folder-arrow, .folder-icon {
+
+            width: 25px;
+
+            i {
+                width: 25px;
+
+                &.special {
+                    color: @hc-link-color;
+                }
+            }
+
         }
 
     }
@@ -2484,7 +2503,7 @@ input.nice-input {
 
 
             .folder-icon {
-                display: none;
+                display: inline-block;
             }
 
             .io-ox-fail {
@@ -3037,11 +3056,13 @@ input.flat-input {
     .foldertree-sidepanel {
         left: 0px;
     }
+
     .io-ox-foldertree {
         .folder-arrow, .folder-arrow i {
             width: 50px;
         }
     }
+
     .core-boot-dialog {
         .btn {
             width: 100%;
