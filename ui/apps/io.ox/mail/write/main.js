@@ -495,15 +495,16 @@ define('io.ox/mail/write/main',
                     o.index = i;
                     return o.id === dsID;
                 });
-            if (isPhone) {
-                ds.misc = {
-                    insertion: 'below'
-                };
-            }
+
             //set content
             app.getEditor().setContent(content);
             //fix misc property and set signature
             if (ds) {
+                if (isPhone) {
+                    ds.misc = {
+                        insertion: 'below'
+                    };
+                }
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 app.setSignature(({ data: ds}));
             }
