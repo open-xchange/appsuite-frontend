@@ -273,21 +273,19 @@ define('io.ox/core/tk/autocomplete',
 
             // handle search result
             cbSearchResult = function (query, data) {
+                    // reset scrollpane and show drop-down
+                    scrollpane.empty();
                     open();
                     var list = data.list;
                     if (list.length) {
                         o.container.idle();
                         // draw results
-
                         create.call(self, list, query);
-
                         // leads to results
                         emptyPrefix = '\u0000';
                         index = -1;
-                        //select first element without updating input field
-                        if (o.autoselect) {
-                            selectFirst();
-                        }
+                        // select first element without updating input field
+                        if (o.autoselect) selectFirst();
                     } else {
                         // leads to no results if returned data wasn't filtered before (allready participant)
                         emptyPrefix = data.hits ? emptyPrefix : query;
@@ -299,6 +297,7 @@ define('io.ox/core/tk/autocomplete',
 
             // adds 'retry'-item to popup
             cbSearchResultFail = function () {
+                    scrollpane.empty();
                     o.container.idle();
                     var node = $('<div>')
                         .addClass('io-ox-center')
@@ -424,8 +423,7 @@ define('io.ox/core/tk/autocomplete',
             // handle key up (debounced)
             fnKeyUp = _.debounce(function (e, isRetry) {
                 //TODO: element destroyed before debounce resolved
-                if (!document.body.contains(this))
-                    return;
+                if (!document.body.contains(this)) return;
                 this.focus();
                 e.stopPropagation();
                 var val = $.trim($(this).val());
@@ -434,14 +432,9 @@ define('io.ox/core/tk/autocomplete',
                     if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
                         lastSearch = $.Deferred();
                         lastValue = val;
-                        //scrollpane.empty();
                         o.container.busy();
                         o.source(val)
                             .then(o.reduce)
-                            .then(function (data) {
-                                scrollpane.empty();
-                                return data;
-                            })
                             .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
                     }
                 } else {
