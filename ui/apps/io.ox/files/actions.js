@@ -310,7 +310,7 @@ define('io.ox/files/actions',
                     new dialogs.ModalDialog({ width: 500 })
                         .build(function () {
                             // header
-                            this.header($('<h4>').text('Direct link'));
+                            this.header($('<h4>').text(gt('Direct link')));
                             // content
                             this.getContentNode().addClass('user-select-text max-height-200').append(
 

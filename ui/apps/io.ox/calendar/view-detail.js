@@ -245,7 +245,8 @@ define('io.ox/calendar/view-detail',
             //stolen from io.ox/mail/detail/links: processDeepLinks
             if (options && options.deeplink)  {
                 var url = getDeepLink(baton.data),
-                    label = $('<dt class="detail-label">Direct link:&#160;</dt>'),
+                    label = $('<dt class="detail-label">')
+                            .html(gt('Direct link') + ':' + '&#160;'),
                     link = $('<dd class="detail">')
                                 .attr('style', 'font-size: 12px;')
                                 .append(
