@@ -962,6 +962,11 @@ define('io.ox/mail/write/view-main',
                     }
                 });
             }
+
+            // prevent dragging of links and text
+            $(this.leftside).on('dragstart', 'a, span', function (e) {
+                e.preventDefault();
+            });
         }
     });
 
