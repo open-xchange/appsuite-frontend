@@ -460,6 +460,14 @@ define('io.ox/mail/util',
             return mailArray._wrapped[0];
         },
 
+        fixInlineImages: function (data) {
+            return data
+                .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
+                .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
+                .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
+                .replace(/data-mce-src="[^"]+"\s?/, '');
+        },
+
         signatures: (function () {
             var htmltags = /(<([^>]+)>)/ig,
                 nothing = /.^/,
