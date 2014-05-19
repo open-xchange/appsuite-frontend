@@ -493,7 +493,6 @@ define('io.ox/mail/write/view-main',
             // side panel
             this.leftside = $('<div class="leftside io-ox-mail-write-sidepanel">');
             this.scrollpane = this.leftside.scrollable();
-
             // title
             this.scrollpane.append(
                 $('<h1 class="title">').text('\u00A0')
@@ -823,10 +822,7 @@ define('io.ox/mail/write/view-main',
                     self.textarea
                         .on('keyup change input paste', autogrow)
                         .on('focus', function () {
-
-                            //self.subject.attr('emojiFocus', 'false');
                             // do we have emoji support
-
                             if (emojiMobileSupport) {
                                 $(this).attr('emojiFocus', 'true');
                                 if (self.emojiview && self.emojiview.isOpen) {
@@ -856,10 +852,6 @@ define('io.ox/mail/write/view-main',
                             }
 
                         });
-                    if (_.device('!android')) {
-
-                    }
-                    // textarea only, no container overkill
                     return self.textarea;
                 }
             }
