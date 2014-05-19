@@ -1135,7 +1135,7 @@ define('io.ox/mail/write/main',
                 // close window now (!= quit / might be reopened)
                 win.preQuit();
 
-                if (attachmentsExceedQouta(mail)) {
+                if (require('io.ox/core/capabilities').has('publish_mail_attachments') && attachmentsExceedQouta(mail)) {
                     notifications.yell({
                         type: 'info',
                         message: gt(
