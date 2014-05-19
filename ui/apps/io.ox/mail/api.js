@@ -999,6 +999,19 @@ define('io.ox/mail/api',
             });
     };
 
+    api.autosave = function (obj) {
+        return http.PUT({
+            module: 'mail',
+            params: {
+                action: 'autosave'
+            },
+            data: obj,
+            appendColumns: false
+        }).pipe(function (data) {
+            return $.Deferred().resolve(data);
+        });
+    };
+
     var react = function (action, obj, view) {
 
         // get proper view first
