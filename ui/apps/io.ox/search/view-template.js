@@ -89,7 +89,7 @@ define('io.ox/search/view-template',
                                 }
                                 ref.val('');
 
-                                //type3: define used option (type2 default is index 0 of options)
+                                //exclusive: define used option (type2 default is index 0 of options)
                                 var option = _.find(value.options, function (item) {
                                     return item.id === value.id;
                                 });
@@ -373,10 +373,6 @@ define('io.ox/search/view-template',
         return (current || {}).display_name;
     }
 
-    function is(facet, type) {
-        return (facet.flags || []).indexOf(type) > -1;
-    }
-
     //facet
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'type',
@@ -397,7 +393,7 @@ define('io.ox/search/view-template',
                     $('<span>')
                         .addClass('type')
                         //TYPE 3: use facet label instead of option label
-                        .html(is(facet, 'type3') ? facet.display_name : type)
+                        .html(facet.style === 'exclusive' ? facet.display_name : type)
                 );
             }
         }
@@ -410,7 +406,7 @@ define('io.ox/search/view-template',
             var type;
 
             //TYPE 3: use option label instead of value label
-            if (is(facet, 'type3'))
+            if (facet.style === 'exclusive')
                 type = getOptionLabel(value.options, value._compact.option);
 
             this.find('label').append(
