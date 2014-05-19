@@ -115,6 +115,13 @@ define('io.ox/search/api',
                     _.each(data.facets, function (facet) {
                         //preparation to handle type3 facets
                         if (!facet.values && !!facet.options) {
+                        //preparation to handle 'simple' facets
+                        if (facet.style === 'simple') {
+                            _.each(facet.values, function (value) {
+                                //display name or template
+                                value.display_name = value.display_name || [value.display_item[0], ' <i>', value.display_item[1], '</i>'].join('');
+                            });
+                        }
                             facet.values = [];
                             facet.flags = (facet.flags || []).concat('type3');
                             _.each(facet.options, function (option) {
