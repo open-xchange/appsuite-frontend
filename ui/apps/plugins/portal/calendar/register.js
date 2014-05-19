@@ -119,7 +119,7 @@ define('plugins/portal/calendar/register',
             require(['io.ox/calendar/view-detail'], function (view) {
                 var obj = api.reduce(baton.item);
                 api.get(obj).done(function (data) {
-                    popup.idle().append(view.draw(data));
+                    popup.idle().append(view.draw(data, {deeplink: true}));
                 });
             });
         },

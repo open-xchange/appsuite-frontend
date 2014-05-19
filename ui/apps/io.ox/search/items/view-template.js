@@ -135,14 +135,17 @@ define('io.ox/search/items/view-template',
     });
 
     function draw(baton, detail, api) {
-        var popup = this.busy();
+        var popup = this.busy(),
+            options = {deeplink: true};
         require([detail, api], function (view, api) {
             //render data with available data
-            popup.idle().append(view.draw(baton.data));
+            popup.idle().append(view.draw(baton.data, options));
             api.get(baton.data).then(function (data) {
                 //render again with get response if needed
                 if (!_.isEqual(baton.data, data)) {
-                    popup.empty().append(view.draw(data));
+                    popup.empty().append(
+                        view.draw(data, options)
+                    );
                 }
             });
         });
@@ -192,7 +195,7 @@ define('io.ox/search/items/view-template',
                         api.get(baton.data).then(function (data) {
                             //render again with get response
                             if (!_.isEqual(baton.data, data)) {
-                                var view = new detail.View({ data: data });
+                                var view = new detail.View({ data: data }, {deeplink: true});
                                 popup.idle().empty().append(
                                     view.render().expand().$el.addClass('no-padding')
                                 );
