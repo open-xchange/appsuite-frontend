@@ -460,7 +460,7 @@ define('io.ox/mail/common-extensions',
             return function (baton) {
                 draw.call(this, baton.model);
                 this.on('click', '.external-images', { view: baton.view }, loadImages);
-                baton.model.on('change:modified', draw.bind(this));
+                baton.view.listenTo(baton.model, 'change:modified', draw.bind(this));
             };
 
         }()),
@@ -487,7 +487,7 @@ define('io.ox/mail/common-extensions',
 
             return function (baton) {
                 draw.call(this, baton.model);
-                baton.model.on('change:headers', draw.bind(this));
+                baton.view.listenTo(baton.model, 'change:headers', draw.bind(this));
             };
 
         }()),
@@ -548,7 +548,7 @@ define('io.ox/mail/common-extensions',
                 draw.call(this, baton.model);
                 this.on('click', '.disposition-notification .btn', { view: baton.view }, returnReceipt);
                 this.on('click', '.disposition-notification .close', { view: baton.view }, cancel);
-                baton.model.on('change:disp_notification_to', draw.bind(this));
+                baton.view.listenTo(baton.model, 'change:disp_notification_to', draw.bind(this));
             };
 
         }()),

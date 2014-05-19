@@ -376,7 +376,8 @@ define('io.ox/mail/detail/view',
 
         dispose: function () {
             this.stopListening();
-            this.model = null;
+            this.off();
+            this.model = this.options = this.$el = null;
         }
     });
 

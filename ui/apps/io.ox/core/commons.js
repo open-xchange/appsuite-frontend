@@ -767,11 +767,12 @@ define('io.ox/core/commons',
     // view container with dispose capability
     var originalCleanData = $.cleanData,
         triggerDispose = function (elem) {
-            return $(elem).triggerHandler('dispose');
+            $(elem).triggerHandler('dispose');
         };
 
     $.cleanData = function (list) {
-        return originalCleanData(_(list).map(triggerDispose));
+        _(list).map(triggerDispose);
+        return originalCleanData.call(this, list);
     };
 
     // factory
