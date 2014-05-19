@@ -147,7 +147,7 @@ define('io.ox/calendar/view-detail',
     ext.point('io.ox/calendar/detail').extend({
         index: 800,
         id: 'details',
-        draw: function (baton) {
+        draw: function (baton, options) {
             var node = $('<dl>');
             this.append(
                 $('<fieldset>').addClass('details')
@@ -156,7 +156,7 @@ define('io.ox/calendar/view-detail',
                         node.addClass('dl-horizontal')
                 )
             );
-            ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton);
+            ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);
         }
     });
 
@@ -218,6 +218,47 @@ define('io.ox/calendar/view-detail',
                         .attr('data-folder', baton.data.folder_id)
                         .append(folderAPI.getTextNode(baton.data.folder_id))
                 );
+            }
+        }
+    });
+
+    function getDeepLink (data) {
+        return [
+                ox.abs,
+                ox.root,
+                '/#app=io.ox/calendar&id=',
+                data.folder_id || data.folder,
+                '.',
+                data.recurrence_id || data.id,
+                '.',
+                data.recurrence_position || 0,
+                '&folder=',
+                data.folder_id || data.folder
+            ].join('');
+    }
+
+    //used to show deep link when outside calendar app (search, portal)
+    ext.point('io.ox/calendar/detail/details').extend({
+        index: 350,
+        id: 'deeplink',
+        draw: function (baton, options) {
+            //stolen from io.ox/mail/detail/links: processDeepLinks
+            if (options && options.deeplink)  {
+                var url = getDeepLink(baton.data),
+                    label = $('<dt class="detail-label">Direct link:&#160;</dt>'),
+                    link = $('<dd class="detail">')
+                                .attr('style', 'font-size: 12px;')
+                                .append(
+                                        $('<a role="button">')
+                                        .attr({
+                                                href: url,
+                                                target: '_blank',
+                                                class: 'deep-link btn btn-primary btn-xs deep-link-calendar',
+                                                style: 'font-family: Arial; color: white; text-decoration: none; height: 16px; line-height: 16px; box-sizing: content-box;'
+                                        })
+                                        .text(gt('Appointment'))
+                                    );
+                this.append(label, link);
             }
         }
     });
