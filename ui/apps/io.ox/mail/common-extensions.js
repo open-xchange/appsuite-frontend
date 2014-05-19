@@ -35,7 +35,8 @@ define('io.ox/mail/common-extensions',
 
         picture: function (baton) {
             var data = baton.data,
-                from = data.from,
+                folder = baton.data.folder_id,
+                from = account.is('sent', folder) ? data.to : data.from,
                 size = _.device('retina') ? 80 : 40;
             this.append(
                 contactsAPI.pictureHalo(
