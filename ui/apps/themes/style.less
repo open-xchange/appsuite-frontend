@@ -341,18 +341,7 @@ div.hopscotch-bubble {
     }
 }
 
-@media (min-width: 481px), (min-device-width: 481px) {//don't break mobile dropdowns
-
-    #topbar-settings-dropdown {//keep settings dropdown inside the window (Bug #30256)
-        top: 40px;
-        right: 20px;
-        left: auto;
-    }
-
-}
-
 #io-ox-top-logo-small {
-
     width: 60px;
     height: 22px;
     margin: 8px 13px 0 13px;
@@ -363,7 +352,6 @@ div.hopscotch-bubble {
     html.high-contrast & {
         display: none;
     }
-
 }
 
 /** High res logo for retina screens **/
@@ -3963,24 +3951,19 @@ input.flat-input {
 // iOS will go fullscreen and show an overaly with own buttons
 // we need to position our buttons around them
 @media (height: 320px) and (orientation:landscape) {
-
     .window-head {
-
         padding-right: 40px;
-
         .toolbar-button {
             float: right;
         }
-
     }
-
 }
 
-// mobile
+// small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media (max-width: 480px), (max-device-width: 480px) {
+@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
     .default-content-padding {
         padding: 5px 10px 5px 10px;
@@ -4138,25 +4121,9 @@ input.flat-input {
         }
 
     }
-    //** blur style for body when mobile custom menus are shown **/
-    .ios {
-
-        #io-ox-core {
-
-             transition: -webkit-filter 100ms ease-in;
-             -webkit-filter: blur(0);
-
-            &.menu-blur {
-                -webkit-filter: blur(5px);
-            }
-
-        }
-
-    }
 
     /** custom bootstrap dropdowns on mobile devices **/
     .custom-dropdown.dropdown-menu {
-
         z-index: 65500;
         max-height: 90%;
         min-width: initial;
@@ -4254,6 +4221,35 @@ input.flat-input {
         .color-purple { background-color: @purple; }
         .color-pink { background-color: darken(@pink, 10%); }
         .color-gray { background-color: darken(@gray-light, 20%); }
+
+        // Disable hover state on mobile devices for custom dropdowns
+        // -----------
+        &.dropdown-menu li > a:hover,
+        &.dropdown-menu li > a:focus,
+        &.dropdown-submenu:hover > a {
+            text-decoration: none;
+            color: inherit;
+            background-color: inherit;
+            background-image: none;
+        }
+
+        &.dropdown-menu li > a:active {
+            color: @dropdown-link-active-color;
+            text-decoration: none;
+            outline: 0;
+            .vertical-gradient(@dropdown-link-active-bg, darken(@dropdown-link-active-bg, 5%));
+        }
+    }
+
+    //** blur style for body when mobile custom menus are shown **/
+    .ios {
+        #io-ox-core {
+             transition: -webkit-filter 100ms ease-in;
+             -webkit-filter: blur(0);
+            &.menu-blur {
+                -webkit-filter: blur(5px);
+            }
+        }
     }
 
     #background-loader.secure.block {
@@ -4269,27 +4265,7 @@ input.flat-input {
             font-weight: bold;
             color: #aaa;
         }
-
     }
-
-    // Disable hover state on mobile devices for custom dropdowns
-    // -----------
-    .dropdown-menu li > a:hover,
-    .dropdown-menu li > a:focus,
-    .dropdown-submenu:hover > a {
-        text-decoration: none;
-        color: inherit;
-        background-color: inherit;
-        background-image: none;
-    }
-
-    .dropdown-menu li > a:active {
-        color: @dropdown-link-active-color;
-        text-decoration: none;
-        outline: 0;
-        .vertical-gradient(@dropdown-link-active-bg, darken(@dropdown-link-active-bg, 5%));
-    }
-
 }
 
 @media (max-width: 380px) {
