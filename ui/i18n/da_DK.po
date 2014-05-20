@@ -906,6 +906,7 @@ msgstr "Ombryd automatisk efter tegnet:"
 msgid "Average time: %1$s ms"
 msgstr "Gennemsnitstid: %1$s ms"
 
+#. Bytes
 #: apps/io.ox/core/strings.js:18 module:io.ox/core
 msgid "B"
 msgstr "B"
@@ -2160,12 +2161,7 @@ msgstr "Afleveringsdato"
 msgid "Due on %1$s"
 msgstr "Forfalder d. %1$s"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
+#. Exabytes
 #: apps/io.ox/core/strings.js:24 module:io.ox/core
 msgid "EB"
 msgstr "EB"
@@ -2881,9 +2877,7 @@ msgstr "Furigana for fornavn"
 msgid "Furigana for last name"
 msgstr "Furigana for efternavn"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
+#. Gigabytes
 #: apps/io.ox/core/strings.js:21 module:io.ox/core
 msgid "GB"
 msgstr "GB"
@@ -3274,7 +3268,7 @@ msgstr "Juni"
 msgid "Just disable widget"
 msgstr "Deaktivér kun widget"
 
-#. Bytes
+#. Kilobytes
 #: apps/io.ox/core/strings.js:19 module:io.ox/core
 msgid "KB"
 msgstr "KB"
@@ -3422,8 +3416,7 @@ msgstr "Lav"
 msgid "Low priority"
 msgstr "Lav prioritet"
 
-#. Bytes
-#. Kilobytes
+#. Megabytes
 #: apps/io.ox/core/strings.js:20 module:io.ox/core
 msgid "MB"
 msgstr "MB"
@@ -4316,11 +4309,7 @@ msgstr "Opgaver over tid"
 msgid "Owner"
 msgstr "Ejer"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
+#. Petabytes
 #: apps/io.ox/core/strings.js:23 module:io.ox/core
 msgid "PB"
 msgstr "PB"
@@ -5808,10 +5797,7 @@ msgstr ""
 msgid "TAX ID"
 msgstr "Told ID"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
+#. Terabytes
 #: apps/io.ox/core/strings.js:22 module:io.ox/core
 msgid "TB"
 msgstr "TB"
@@ -6950,14 +6936,7 @@ msgstr "Arbejdsugevisning"
 msgid "XING"
 msgstr ""
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
-#. Exabytes
-#. Zettabytes
+#. Yottabytes
 #: apps/io.ox/core/strings.js:26 module:io.ox/core
 msgid "YB"
 msgstr "YB"
@@ -7299,13 +7278,7 @@ msgstr ""
 msgid "Your timezone"
 msgstr "Din tidszone"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
-#. Exabytes
+#. Zettabytes
 #: apps/io.ox/core/strings.js:25 module:io.ox/core
 msgid "ZB"
 msgstr "ZB"

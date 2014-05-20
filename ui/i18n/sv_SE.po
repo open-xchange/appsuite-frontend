@@ -903,6 +903,7 @@ msgstr "Radbryt klartext automatiskt efter tecknet:"
 msgid "Average time: %1$s ms"
 msgstr "Genomsnittlig tid: %1$s ms"
 
+#. Bytes
 #: apps/io.ox/core/strings.js:18 module:io.ox/core
 msgid "B"
 msgstr "b"
@@ -2160,12 +2161,7 @@ msgstr "Datum för deadline"
 msgid "Due on %1$s"
 msgstr "Deadline är %1$s"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
+#. Exabytes
 #: apps/io.ox/core/strings.js:24 module:io.ox/core
 msgid "EB"
 msgstr "Eb"
@@ -2881,9 +2877,7 @@ msgstr "Furigana för förnamn"
 msgid "Furigana for last name"
 msgstr "Furigana för efternamn"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
+#. Gigabytes
 #: apps/io.ox/core/strings.js:21 module:io.ox/core
 msgid "GB"
 msgstr "Gb"
@@ -3274,7 +3268,7 @@ msgstr "Juni"
 msgid "Just disable widget"
 msgstr "Bara avaktivera komponenten"
 
-#. Bytes
+#. Kilobytes
 #: apps/io.ox/core/strings.js:19 module:io.ox/core
 msgid "KB"
 msgstr "Kb"
@@ -3422,8 +3416,7 @@ msgstr "Låg"
 msgid "Low priority"
 msgstr "Låg prioritet"
 
-#. Bytes
-#. Kilobytes
+#. Megabytes
 #: apps/io.ox/core/strings.js:20 module:io.ox/core
 msgid "MB"
 msgstr "Mb"
@@ -4314,11 +4307,7 @@ msgstr "Försenade uppgifter"
 msgid "Owner"
 msgstr "Ägare"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
+#. Petabytes
 #: apps/io.ox/core/strings.js:23 module:io.ox/core
 msgid "PB"
 msgstr "Pb"
@@ -5808,10 +5797,7 @@ msgstr ""
 msgid "TAX ID"
 msgstr "Org. nr."
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
+#. Terabytes
 #: apps/io.ox/core/strings.js:22 module:io.ox/core
 msgid "TB"
 msgstr "Tb"
@@ -6950,14 +6936,7 @@ msgstr "Arbetsveckovy"
 msgid "XING"
 msgstr ""
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
-#. Exabytes
-#. Zettabytes
+#. Yottabytes
 #: apps/io.ox/core/strings.js:26 module:io.ox/core
 msgid "YB"
 msgstr "Yb"
@@ -7301,13 +7280,7 @@ msgstr ""
 msgid "Your timezone"
 msgstr "Din tidszon"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
-#. Exabytes
+#. Zettabytes
 #: apps/io.ox/core/strings.js:25 module:io.ox/core
 msgid "ZB"
 msgstr "Zb"

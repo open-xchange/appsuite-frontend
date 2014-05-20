@@ -908,6 +908,7 @@ msgstr "Automaticky zalamovat prostý text na znaku: "
 msgid "Average time: %1$s ms"
 msgstr "Průměrná doba: %1$s ms"
 
+#. Bytes
 #: apps/io.ox/core/strings.js:18 module:io.ox/core
 msgid "B"
 msgstr "B"
@@ -2164,12 +2165,7 @@ msgstr "Datum dokončení"
 msgid "Due on %1$s"
 msgstr "Dokončit do %1$s"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
+#. Exabytes
 #: apps/io.ox/core/strings.js:24 module:io.ox/core
 msgid "EB"
 msgstr "EB"
@@ -2882,9 +2878,7 @@ msgstr "Furigana pro  jméno"
 msgid "Furigana for last name"
 msgstr "Furigana pro příjmení"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
+#. Gigabytes
 #: apps/io.ox/core/strings.js:21 module:io.ox/core
 msgid "GB"
 msgstr "GB"
@@ -3281,7 +3275,7 @@ msgstr "Červen"
 msgid "Just disable widget"
 msgstr "Pouze vypnout widget"
 
-#. Bytes
+#. Kilobytes
 #: apps/io.ox/core/strings.js:19 module:io.ox/core
 msgid "KB"
 msgstr "kB"
@@ -3429,8 +3423,7 @@ msgstr "Nízká"
 msgid "Low priority"
 msgstr "Nízká priorita"
 
-#. Bytes
-#. Kilobytes
+#. Megabytes
 #: apps/io.ox/core/strings.js:20 module:io.ox/core
 msgid "MB"
 msgstr "MB"
@@ -4324,11 +4317,7 @@ msgstr "Přetažené úkoly"
 msgid "Owner"
 msgstr "Vlastník"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
+#. Petabytes
 #: apps/io.ox/core/strings.js:23 module:io.ox/core
 msgid "PB"
 msgstr "PB"
@@ -5818,10 +5807,7 @@ msgstr ""
 msgid "TAX ID"
 msgstr "DIČ"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
+#. Terabytes
 #: apps/io.ox/core/strings.js:22 module:io.ox/core
 msgid "TB"
 msgstr "TB"
@@ -6969,14 +6955,7 @@ msgstr "Pohled: pracovní týden"
 msgid "XING"
 msgstr ""
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
-#. Exabytes
-#. Zettabytes
+#. Yottabytes
 #: apps/io.ox/core/strings.js:26 module:io.ox/core
 msgid "YB"
 msgstr "YB"
@@ -7320,13 +7299,7 @@ msgstr ""
 msgid "Your timezone"
 msgstr "Vaše časové pásmo"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
-#. Exabytes
+#. Zettabytes
 #: apps/io.ox/core/strings.js:25 module:io.ox/core
 msgid "ZB"
 msgstr "ZB"

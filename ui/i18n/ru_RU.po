@@ -897,6 +897,7 @@ msgstr "Автоматически переносить текст после з
 msgid "Average time: %1$s ms"
 msgstr "Среднее время: %1$s мс."
 
+#. Bytes
 #: apps/io.ox/core/strings.js:18 module:io.ox/core
 msgid "B"
 msgstr "Б"
@@ -2148,12 +2149,7 @@ msgstr "Срок"
 msgid "Due on %1$s"
 msgstr "Заканчивается %1$s"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
+#. Exabytes
 #: apps/io.ox/core/strings.js:24 module:io.ox/core
 msgid "EB"
 msgstr "ЭБ"
@@ -2863,9 +2859,7 @@ msgstr "Фуригана для имени"
 msgid "Furigana for last name"
 msgstr "Фуригана для фамилии"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
+#. Gigabytes
 #: apps/io.ox/core/strings.js:21 module:io.ox/core
 msgid "GB"
 msgstr "ГБ"
@@ -3254,7 +3248,7 @@ msgstr "Июнь"
 msgid "Just disable widget"
 msgstr "Отключить модуль"
 
-#. Bytes
+#. Kilobytes
 #: apps/io.ox/core/strings.js:19 module:io.ox/core
 msgid "KB"
 msgstr "КБ"
@@ -3400,8 +3394,7 @@ msgstr "Низкий"
 msgid "Low priority"
 msgstr "Низкий приоритет"
 
-#. Bytes
-#. Kilobytes
+#. Megabytes
 #: apps/io.ox/core/strings.js:20 module:io.ox/core
 msgid "MB"
 msgstr "МБ"
@@ -4288,11 +4281,7 @@ msgstr "Просроченные задачи"
 msgid "Owner"
 msgstr "Владелец"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
+#. Petabytes
 #: apps/io.ox/core/strings.js:23 module:io.ox/core
 msgid "PB"
 msgstr "ПБ"
@@ -5767,10 +5756,7 @@ msgstr ""
 msgid "TAX ID"
 msgstr "Налоговый идентификатор"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
+#. Terabytes
 #: apps/io.ox/core/strings.js:22 module:io.ox/core
 msgid "TB"
 msgstr "ТБ"
@@ -6904,14 +6890,7 @@ msgstr "Рабочие дни"
 msgid "XING"
 msgstr "XING"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
-#. Exabytes
-#. Zettabytes
+#. Yottabytes
 #: apps/io.ox/core/strings.js:26 module:io.ox/core
 msgid "YB"
 msgstr "ЙБ"
@@ -7248,13 +7227,7 @@ msgstr "Обновление статуса опубликовано в %s"
 msgid "Your timezone"
 msgstr "Ваш часовой пояс"
 
-#. Bytes
-#. Kilobytes
-#. Megabytes
-#. Gigabytes
-#. Terabytes
-#. Petabytes
-#. Exabytes
+#. Zettabytes
 #: apps/io.ox/core/strings.js:25 module:io.ox/core
 msgid "ZB"
 msgstr "ЗБ"
