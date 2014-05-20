@@ -153,7 +153,7 @@ define('io.ox/core/tk/list',
 
             var children = this.getItems(),
                 cid = this.getCID(model),
-                li = children.filter('[data-cid="' + cid + '"]'),
+                li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
                 top = this.$el.scrollTop();
 
             if (li.length === 0) return;
@@ -185,7 +185,7 @@ define('io.ox/core/tk/list',
 
         // called whenever a model inside the collection changes
         onChange: function (model) {
-            var li = this.$el.find('li[data-cid="' + this.getCID(model) + '"]'),
+            var li = this.$el.find('li[data-cid="' + $.escape(this.getCID(model)) + '"]'),
                 data = this.map(model),
                 baton = ext.Baton({ data: data, model: model, app: this.app }),
                 index = model.changed.index;

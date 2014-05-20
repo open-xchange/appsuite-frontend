@@ -833,7 +833,6 @@ define('io.ox/mail/api',
         _(list).each(function (obj) {
             tracker.setSeen(obj, { silent: true });
             obj.flags = obj.flags | 32;
-
             pool.propagate('change', {
                 id: obj.id,
                 folder_id: obj.folder_id,
