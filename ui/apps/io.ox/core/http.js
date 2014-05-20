@@ -740,7 +740,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     ox.trigger('connection:down');
                 } else {
                     that.trigger('reachable');
-                    ox.trigger('connection:up');
+                    ox.trigger('connection:online connection:up');
                 }
                 error = _.extend({ status: status, took: took }, error);
                 log.add(error, r.o);
@@ -759,7 +759,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 .done(function (response) {
 
                     that.trigger('reachable');
-                    ox.trigger('connection:up');
+                    ox.trigger('connection:online connection:up');
 
                     //write response to console
                     if (ox.debug)
