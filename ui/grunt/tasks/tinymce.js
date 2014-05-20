@@ -15,7 +15,7 @@
 module.exports = function (grunt) {
 
     grunt.config.extend('copy', {
-        tinymce: {
+        build_tinymce: {
             files: [
                 {
                     expand: true,

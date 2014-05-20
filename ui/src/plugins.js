@@ -312,7 +312,7 @@
             } else if (modulename.slice(0, 7) === 'static/') {
                 fileCache.retrieve(modulename).then(
                     function hit(contents) {
-                        if (_.url.hash('debug-filecache')) console.log('Cache HIT for static file: ', modulename);
+                        if (_.url.hash('debug-filecache')) console.log('FileCache: Cache HIT for static file: ', modulename);
                         runCode(modulename, contents);
                         context.completeLoad(modulename);
                     },
@@ -324,8 +324,9 @@
                             type: 'get',
                             contentType: 'text'
                         }).done(function (sourceText) {
-                            if (_.url.hash('debug-filecache')) console.log('Cache MISS for static file: ', modulename);
+                            if (_.url.hash('debug-filecache')) console.log('FileCache: Cache MISS for static file: ', modulename);
                             runCode(modulename, sourceText);
+                            if (_.url.hash('debug-filecache')) console.log('FileCache: Caching static file: ', modulename);
                             fileCache.cache(modulename, sourceText);
                             context.completeLoad(modulename);
                         });

@@ -1188,7 +1188,8 @@ define('io.ox/core/main',
                             topbar.show();
                             dialog.remove();
                             dialog = null;
-                        });
+                        }),
+                        btn1, btn2;
 
                     $('#io-ox-core').append(
                         dialog = $('<div class="core-boot-dialog" tabindex="0">').append(
@@ -1200,11 +1201,16 @@ define('io.ox/core/main',
                             ),
                             $('<ul class="list-unstyled content">'),
                             $('<div class="footer">').append(
-                                $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
-                                $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
+                                btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
+                                btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                             )
                         )
                     );
+
+                    if (_.device('small')) {
+                        btn1.addClass('btn-block btn-lg');
+                        btn2.addClass('btn-block btn-lg');
+                    }
 
                     // draw savepoints to allow the user removing them
                     ox.ui.App.getSavePoints().done(function (list) {

@@ -322,6 +322,7 @@ define('io.ox/core/tk/attachments',
 
                 //check
                 if (isMail) {
+                    autoPublish = require('io.ox/core/capabilities').has('publish_mail_attachments');
                     maxFileSize = autoPublish ? -1 : properties.attachmentQuotaPerFile;
                     quota = autoPublish ? -1 : properties.attachmentQuota;
                     usage = 0;

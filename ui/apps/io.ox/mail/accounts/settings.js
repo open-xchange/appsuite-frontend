@@ -186,12 +186,7 @@ define('io.ox/mail/accounts/settings',
 
             myModel.validationCheck(data, {ignoreInvalidTransport: true}).then(
                 function success(response) {
-                    if (response === false) {
-                        var message = gt('There was no suitable server found for this mail/password combination');
-                        drawAlert(getAlertPlaceholder(popup), message);
-                        popup.idle();
-                        popup.getBody().find('a.close').focus();
-                    } else {
+                    if (response === true) {
                         myModel.save(data, deferedSave);
                         deferedSave.done(function (response) {
                             if (response.error_id) {
@@ -206,6 +201,11 @@ define('io.ox/mail/accounts/settings',
                                 def.resolve(response);
                             }
                         });
+                    } else {
+                        var message = gt('There was no suitable server found for this mail/password combination');
+                        drawAlert(getAlertPlaceholder(popup), message);
+                        popup.idle();
+                        popup.getBody().find('a.close').focus();
                     }
                 },
                 function fail() {

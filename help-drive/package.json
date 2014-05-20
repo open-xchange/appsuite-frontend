@@ -1,11 +1,11 @@
 {
   "name": "open-xchange-appsuite-help-drive",
-  "version": "7.6.0-2",
+  "version": "7.6.0-3",
   "dependencies": {
   },
   "optionalDependencies": {
     "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
-    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.0.1"
+    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.2.1"
   },
   "devDependencies": {
     "grunt-contrib-watch": "^0.6.1",

@@ -323,18 +323,28 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/changestatus', {
         id: 'change_status',
         requires: function (e) {
-            var app = e.baton.data,
-                iamUser = false;
-            if (app.users) {
-                for (var i = 0; i < app.users.length; i++) {
-                    if (app.users[i].id === ox.user_id) {
-                        iamUser = true;
+
+            function cont(app) {
+                return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
+                    var iamUser = false;
+                    if (app.users) {
+                        for (var i = 0; i < app.users.length; i++) {
+                            if (app.users[i].id === ox.user_id) {
+                                iamUser = true;
+                            }
+                        }
                     }
-                }
+                    return e.collection.has('one') && iamUser && isBossy;
+                });
             }
-            return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
-                return e.collection.has('one') && iamUser && isBossy;
-            });
+
+            var app = e.baton.data;
+            // incomplete
+            if (app.id && !app.users) {
+                return api.get(app).then(cont);
+            } else {
+                return cont(app);
+            }
         },
         action: function (baton) {
             // load & call

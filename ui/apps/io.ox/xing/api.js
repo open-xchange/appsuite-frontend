@@ -17,9 +17,9 @@
  * to provide more functions.
  */
 define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
-    var xingGet, xingPost, xingDelete,
+    var xingGet, xingPost, xingDelete, xingPut,
         /* external methods go here */
-        getByEMail, getUserfeed, getComments, addComment, deleteComment,
+        findByMail, getUserfeed, getComments, addComment, deleteComment,
         likeActivity, unlikeActivity, getLikes, showActivity,
         shareActivity, deleteActivity, changeStatus, createProfile,
         initiateContactRequest, revokeContactRequest, invite,
@@ -43,6 +43,14 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
         });
     };
 
+    xingPut = function (action, params, data) {
+        return http.PUT({
+            module: 'xing',
+            params: _.extend(params, {action: action}),
+            data: data
+        });
+    };
+
     xingDelete = function (action, params) {
         return http.DELETE({
             module: 'xing',
@@ -54,29 +62,8 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
      * API methods
      */
 
-    getByEMail = function (params) {
-
-        console.error('THIS IS NOT YET IMPLEMENTED', params);
-        //return xingPost('get_by_email', params);
-        return {
-            results: {
-                items: [
-                    {
-                        email: 'existing_user@xing.com',
-                        hash: null,
-                        user: {
-                            id: '10368_ddec16'
-                        }
-                    },
-                    {
-                        email: 'unknown_user@xing.com',
-                        hash: null,
-                        user: null
-                    }
-                ],
-                total: 2
-            }
-        };
+    findByMail = function (emails) {
+        return xingPut('find_by_mails', {}, {'emails' : emails});
     };
 
     getUserfeed = function (params) {
@@ -159,6 +146,7 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
         createProfile: createProfile,
         initiateContactRequest: initiateContactRequest,
         revokeContactRequest: revokeContactRequest,
-        invite: invite
+        invite: invite,
+        findByMail: findByMail
     };
 });

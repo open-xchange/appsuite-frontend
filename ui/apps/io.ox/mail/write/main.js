@@ -102,8 +102,8 @@ define('io.ox/mail/write/main',
         timer = function () {
             // only auto-save if something changed (see Bug #26927)
             if (app.dirty()) {
-                app.saveDraft().done(function (data) {
-                    app.refId = data.id;
+                app.autoSaveDraft().done(function (data) {
+                    app.refId = data;
                 });
             } else {
                 delay();
@@ -495,15 +495,16 @@ define('io.ox/mail/write/main',
                     o.index = i;
                     return o.id === dsID;
                 });
-            if (isPhone) {
-                ds.misc = {
-                    insertion: 'below'
-                };
-            }
+
             //set content
             app.getEditor().setContent(content);
             //fix misc property and set signature
             if (ds) {
+                if (isPhone) {
+                    ds.misc = {
+                        insertion: 'below'
+                    };
+                }
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 app.setSignature(({ data: ds}));
             }
@@ -1126,11 +1127,7 @@ define('io.ox/mail/write/main',
             }
 
             // fix inline images
-            mail.data.attachments[0].content = mail.data.attachments[0].content
-                    .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
-                    .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
-                    .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
-                    .replace(/data-mce-src="[^"]+"\s?/, '');
+            mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
             function cont() {
                 // start being busy
@@ -1138,7 +1135,7 @@ define('io.ox/mail/write/main',
                 // close window now (!= quit / might be reopened)
                 win.preQuit();
 
-                if (attachmentsExceedQouta(mail)) {
+                if (require('io.ox/core/capabilities').has('publish_mail_attachments') && attachmentsExceedQouta(mail)) {
                     notifications.yell({
                         type: 'info',
                         message: gt(
@@ -1254,6 +1251,33 @@ define('io.ox/mail/write/main',
             return def;
         };
 
+        app.autoSaveDraft = function () {
+            // get mail
+            var mail = this.getMail(),
+                def = new $.Deferred();
+
+            prepareMailForSending(mail);
+
+            // fix inline images
+            mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
+
+            mailAPI.autosave(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
+                if (result.error) {
+                    notifications.yell(result);
+                    def.reject(result);
+                } else {
+                    app.setMsgRef(result);
+                    app.dirty(false);
+                    notifications.yell('success', gt('Mail saved as draft'));
+                    def.resolve(result);
+                }
+            });
+
+            _.defer(initAutoSaveAsDraft, this);
+
+            return def;
+        };
+
         app.saveDraft = function () {
 
             // get mail
@@ -1279,11 +1303,7 @@ define('io.ox/mail/write/main',
             delete mail.data.vcard;
 
             // fix inline images
-            mail.data.attachments[0].content = mail.data.attachments[0].content
-                    .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
-                    .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
-                    .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
-                    .replace(/data-mce-src="[^"]+"\s?/, '');
+            mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
             mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {

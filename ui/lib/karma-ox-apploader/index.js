@@ -24,6 +24,11 @@ var createCustomFileHandler = function(handlers, builddir) {
         urlRegex: /(\/apps\/)/,
         handler: localFiles
     });
+
+    handlers.push({
+        urlRegex: /(\/static\/)/,
+        handler: localFiles
+    });
 }
 
 createCustomFileHandler.$inject = ['customFileHandlers', 'config.builddir'];

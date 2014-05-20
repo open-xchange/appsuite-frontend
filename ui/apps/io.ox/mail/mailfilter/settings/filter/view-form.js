@@ -195,11 +195,50 @@ define('io.ox/mail/mailfilter/settings/filter/view-form',
 
             onSave: function () {
                 var self = this,
-                    rulePosition;
+                    rulePosition,
+                    testsPart = this.model.get('test'),
+                    config = {
+                        'header': ['headers', 'values'],
+                        'envelope': ['headers', 'values'],
+                        'size': ['size']
+                    };
+
+
+                function loopAndRemove(testsArray) {
+                    var idArray = [];
+                    _.each(testsArray, function (single) {
+                        var valueIds = config[single.id],
+                            sum = _.reduce(valueIds, function (memo, val) {
+                            var value = _.isArray(single[val]) ? single[val][0] : single[val];
+                            return value.trim() === '' ? false : memo;
+                        }, true);
+                        if (sum) {
+                            idArray.push(single);
+                        }
+                    });
+
+                    return idArray;
+                }
 
                 if (!this.model.has('position')) {
                     rulePosition = adjustRulePosition(self.options.listView.collection.models, ['vacation']);
                     this.model.set('position', rulePosition);
+                }
+
+                if (testsPart.tests) {
+                    testsPart.tests = loopAndRemove(testsPart.tests);
+                    if (testsPart.tests.length === 0) {
+                        this.model.set('test', { id: 'true' });
+                    } else {
+                        this.model.set('test', testsPart);
+                    }
+                } else {
+                    if (testsPart.id === 'header' && testsPart.values[0].trim() === '') {
+                        this.model.set('test', { id: 'true' });
+                    }
+                    if (testsPart.id === 'size' && testsPart.size.trim() === '') {
+                        this.model.set('test', { id: 'true' });
+                    }
                 }
 
                 this.model.save().then(function (id) {

@@ -446,7 +446,7 @@ define.async('io.ox/realtime/rt',
             if (stanza.seq === -1 || stanza.seq > serverSequenceThreshhold || stanza.seq === 0) {
                 var outOfOrder = false;
                 if (stanza.seq > 0 && stanza.seq - serverSequenceThreshhold > 1) {
-                    console.error('Received a sequence number that is too far out of order: Expected: ' + serverSequenceThreshhold + 1 + ', but got: ' + stanza.seq);
+                    console.error('Received a sequence number that is too far out of order: Expected: ' + (serverSequenceThreshhold + 1) + ', but got: ' + stanza.seq);
                     outOfOrder = true;
                 }
                 if (stanza.seq > 0 && stanza.seq <= serverSequenceThreshhold) {

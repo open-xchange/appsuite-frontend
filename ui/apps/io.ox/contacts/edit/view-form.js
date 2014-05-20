@@ -469,7 +469,7 @@ define('io.ox/contacts/edit/view-form',
         function propagateAttachmentChange(model, id, errors) {
 
             var folder_id = model.get('folder_id'), id = model.get('id') || id,
-                upload = api.uploadInProgress(_.ecid(model.attributes));
+                upload = api.uploadInProgress(_.ecid({ folder: folder_id, id: id}));
 
             //if there are errors show them
             if (errors.length > 0) {

@@ -24,7 +24,7 @@ define('io.ox/files/carousel',
     'use strict';
 
     var regIsImage = /\.(gif|tiff|jpe?g|gmp|png)$/i,
-        regIsDocument = /\.(pdf|docx?|xslx?|pptx?)$/i;
+        regIsDocument = /\.(pdf|docx?|xlsx?|pptx?)$/i;
 
     var carouselSlider = {
 

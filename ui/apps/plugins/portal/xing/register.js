@@ -19,6 +19,7 @@
  * - "liking" does not toggle to un/disliking
  * - revoke xing invitations
  * - pre-select the correct language in createXingAccount by matching the first part of locale
+ * - error handling when looking up e-mails for add/invite-to
  */
 
 define('plugins/portal/xing/register',
@@ -52,8 +53,10 @@ define('plugins/portal/xing/register',
         point = ext.point('io.ox/portal/widget/xing');
 
     isAlreadyOnXing = function (emailArray) {
-        return api.find_by_emails(emailArray).then(function (data) {
+        return api.findByMail(emailArray).then(function (data) {
+
             return _(data.results.items).some(function (inquiry) {
+
                 return !!inquiry.user;
             });
         });
@@ -324,8 +327,11 @@ define('plugins/portal/xing/register',
         capabilities: 'xing',
         requires: function (e) {
             var contact = e.baton.data,
-                arr = _.compact([contact.email1, contact.email2, contact.email3]);
-            return function () { return !isAlreadyOnXing(arr); };
+                arr = _.compact([contact.email1, contact.email2, contact.email3]),
+                def = isAlreadyOnXing(arr).then(function (isPresent) {
+                    return $.Deferred().resolve(!isPresent);
+                });
+            return def;
         },
         action: function (baton) {
             var contact = baton.data;
@@ -346,8 +352,9 @@ define('plugins/portal/xing/register',
         capabilities: 'xing',
         requires: function (e) {
             var contact = e.baton.data,
-                arr = _.compact([contact.email1, contact.email2, contact.email3]);
-            return function () { return isAlreadyOnXing(arr); };
+                arr = _.compact([contact.email1, contact.email2, contact.email3]),
+                def = isAlreadyOnXing(arr);
+            return def;
         },
         action: function (baton) {
             var contact = baton.data;
@@ -382,7 +389,7 @@ define('plugins/portal/xing/register',
         id: 'invite-contact-to-xing-classic',
         prio: 'lo',
         mobile: 'lo',
-        label: gt('Add on %s', XING_NAME),
+        label: gt('Invite to %s', XING_NAME),
         ref: 'io.ox/xing/actions/invite'
     }));
 

@@ -34,13 +34,12 @@ define('io.ox/mail/common-extensions',
     var extensions = {
 
         picture: function (baton) {
-            var data = baton.data,
-                from = data.from,
+            var data = baton.data, from = data.from,
                 size = _.device('retina') ? 80 : 40;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: from && from[0] && from[0][1], width: size, height: size, scaleType: 'cover' }
+                    { email: data.picture || (from && from[0] && from[0][1]), width: size, height: size, scaleType: 'cover' }
                 )
             );
         },
@@ -84,15 +83,8 @@ define('io.ox/mail/common-extensions',
         },
 
         unreadClass: function (baton) {
-            var data = (baton.model) ? baton.model.attributes : baton.data,
-                unread = util.isUnseen(data);
-            this.closest('.list-item').toggleClass('unread', unread);
-        },
-
-        unreadClassPartial: function (baton) {
-            var data = (baton.model) ? baton.model.attributes : baton.data,
-                unread = api.threads.partiallyUnseen(data);
-            this.closest('.list-item').toggleClass('unread', unread);
+            var isUnseen = util.isUnseen(baton.data);
+            this.closest('.list-item').toggleClass('unread', isUnseen);
         },
 
         deleted: function (baton) {
@@ -101,7 +93,7 @@ define('io.ox/mail/common-extensions',
 
         flag: function (baton) {
 
-            var color = api.threads.color(baton.data);
+            var color = baton.data.color_label;
             if (color <= 0) return; // 0 and a buggy -1
 
             this.append(
@@ -139,9 +131,8 @@ define('io.ox/mail/common-extensions',
         },
 
         unread: function (baton) {
-            var data = (baton.model) ? baton.model.attributes : baton.data,
-                isUnread = api.threads.partiallyUnseen(data);
-            if (isUnread) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
+            var isUnseen = util.isUnseen(baton.data);
+            if (isUnseen) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
         },
 
         answered: function (baton) {
@@ -178,6 +169,14 @@ define('io.ox/mail/common-extensions',
         title: function (baton) {
             var subject = util.getSubject(baton.data);
             this.closest('.list-item').attr('title', subject);
+        },
+
+        // used in unified inbox
+        account: function (baton) {
+            if (!account.isUnifiedFolder(baton.data.folder_id)) return;
+            this.append(
+                $('<span class="account-name">').text(baton.data.account_name || '')
+            );
         },
 
         recipients: (function () {
@@ -467,7 +466,7 @@ define('io.ox/mail/common-extensions',
             return function (baton) {
                 draw.call(this, baton.model);
                 this.on('click', '.external-images', { view: baton.view }, loadImages);
-                baton.model.on('change:modified', draw.bind(this));
+                baton.view.listenTo(baton.model, 'change:modified', draw.bind(this));
             };
 
         }()),
@@ -494,7 +493,7 @@ define('io.ox/mail/common-extensions',
 
             return function (baton) {
                 draw.call(this, baton.model);
-                baton.model.on('change:headers', draw.bind(this));
+                baton.view.listenTo(baton.model, 'change:headers', draw.bind(this));
             };
 
         }()),
@@ -555,7 +554,7 @@ define('io.ox/mail/common-extensions',
                 draw.call(this, baton.model);
                 this.on('click', '.disposition-notification .btn', { view: baton.view }, returnReceipt);
                 this.on('click', '.disposition-notification .close', { view: baton.view }, cancel);
-                baton.model.on('change:disp_notification_to', draw.bind(this));
+                baton.view.listenTo(baton.model, 'change:disp_notification_to', draw.bind(this));
             };
 
         }()),

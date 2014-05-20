@@ -113,10 +113,18 @@ define('io.ox/search/api',
         return http[opt.method](opt)
                 .then(function (data) {
                     _.each(data.facets, function (facet) {
-                        //preparation to handle type3 facets
-                        if (!facet.values && !!facet.options) {
+
+                        //preparation to handle 'simple' facets
+                        if (facet.style === 'simple') {
+                            _.each(facet.values, function (value) {
+                                //display name or template
+                                value.display_name = value.display_name || [value.display_item[0], ' <i>', value.display_item[1], '</i>'].join('');
+                            });
+                        }
+
+                        //preparation to handle 'exclusive' facets
+                        if (facet.style === 'exclusive') {
                             facet.values = [];
-                            facet.flags = (facet.flags || []).concat('type3');
                             _.each(facet.options, function (option) {
                                 var value = _.extend({}, option, {options: facet.options});
                                 delete value.filter;
