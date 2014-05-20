@@ -69,7 +69,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var collection = this.collection = this.getCollection(params);
             this.loading = false;
 
-            if (collection.length > 0) {
+            if (collection.length > 0 && !collection.expired) {
                 _.defer(function () {
                     collection.trigger('reset load');
                 });
@@ -88,6 +88,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var offset = collection.length;
             params = this.getQueryParams(_.extend({ offset: offset }, params));
             params.limit = offset + ',' + (offset + this.LIMIT);
+            collection.expired = false;
             this.loading = true;
 
             _.defer(process.bind(this), params, 'paginate');
@@ -101,6 +102,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
             params.limit = '0,' + Math.max(collection.length, this.LIMIT);
+            collection.expired = false;
             this.loading = true;
 
             _.defer(process.bind(this), params, 'reload');
