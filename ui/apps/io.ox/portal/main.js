@@ -207,7 +207,7 @@ define('io.ox/portal/main',
             } else if (this.wasElementDeleted(model)) {
                 // element was removed, no need to refresh it.
                 return;
-            } else if ('unset' in e && 'candidate' in model.changed) {
+            } else if ('unset' in e && 'candidate' in model.changed && model.drawn) {
                 // redraw fresh widget
                 app.refreshWidget(model);
             } else if ('props' in model.changed && model.drawn) {
@@ -424,25 +424,24 @@ define('io.ox/portal/main',
 
     app.refreshWidget = function (model, index) {
 
-        if (model.drawn) {
+        if (!model.drawn) return;
 
-            index = index || 0;
+        index = index || 0;
 
-            var node = model.node,
-                delay = (index / 2 >> 0) * 1000,
-                baton = model.get('baton'),
-                point = ext.point(baton.point);
+        var node = model.node,
+            delay = (index / 2 >> 0) * 1000,
+            baton = model.get('baton'),
+            point = ext.point(baton.point);
 
-            _.defer(function () {
+        _.defer(function () {
+            _.delay(function () {
+                node.find('.decoration').addClass('pending');
                 _.delay(function () {
-                    node.find('.decoration').addClass('pending');
-                    _.delay(function () {
-                        loadAndPreview(point, node, baton);
-                        node = baton = point = null;
-                    }, 300); // CSS Transition delay 0.3s
-                }, delay);
-            });
-        }
+                    loadAndPreview(point, node, baton);
+                    node = baton = point = null;
+                }, 300); // CSS Transition delay 0.3s
+            }, delay);
+        });
     };
 
     // can be called every 30 seconds
