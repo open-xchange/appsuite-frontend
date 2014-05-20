@@ -16,7 +16,7 @@
 module.exports = function (grunt) {
 
     grunt.config.extend('copy', {
-        thirdparty: {
+        build_thirdparty: {
             files: [
                 {
                     expand: true,

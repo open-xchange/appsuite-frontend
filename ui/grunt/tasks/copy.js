@@ -16,7 +16,7 @@
 module.exports = function (grunt) {
 
     grunt.config.extend('copy', {
-        static: {
+        build_static: {
             files: [
                 {
                     src: ['.*', '*', '!*.hbs', '!{core_*,index,signin}.html'],
@@ -36,7 +36,7 @@ module.exports = function (grunt) {
                 }
             ]
         },
-        dateData: {
+        build_dateData: {
             files: [
                 {
                     src: ['apps/io.ox/core/date/*.json'],
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
                 }
             ]
         },
-        specs: {
+        build_specs: {
             files: [
                 {
                     src: ['spec/**/*.js'],
@@ -63,16 +63,6 @@ module.exports = function (grunt) {
             ]
         }
     });
-
-    grunt.registerTask('copy_build', [
-        'newer:copy:static',
-        'newer:copy:apps',
-        'newer:copy:dateData',
-        'newer:copy:themes',
-        'newer:copy:tinymce',
-        'newer:copy:thirdparty',
-        'newer:copy:specs'
-    ]);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
 };
