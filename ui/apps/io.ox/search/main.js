@@ -160,7 +160,7 @@ define('io.ox/search/main',
                     .create(app, model, win.nodes.main);
 
         //register model item
-        model.get('items').on('redraw', function () {
+        model.get('items').on('changed:collection', function () {
             this.render(app.view.getBaton());
         });
 
