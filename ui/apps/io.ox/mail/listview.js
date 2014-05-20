@@ -279,6 +279,11 @@ define('io.ox/mail/listview',
                 return memo || parseInt(obj.color_label || 0, 10);
             }, 0);
             data.color_label = color;
+            // add proper picture
+            var isThread = thread.length > 1,
+                useRecipientAddress = !isThread && account.is('sent|drafts', data.folder_id),
+                address = useRecipientAddress ? data.to : data.from;
+            data.picture = address && address[0] && address[0][1];
             // done
             return data;
         },

@@ -34,14 +34,12 @@ define('io.ox/mail/common-extensions',
     var extensions = {
 
         picture: function (baton) {
-            var data = baton.data,
-                folder = baton.data.folder_id,
-                from = account.is('sent', folder) ? data.to : data.from,
+            var data = baton.data, from = data.from,
                 size = _.device('retina') ? 80 : 40;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: from && from[0] && from[0][1], width: size, height: size, scaleType: 'cover' }
+                    { email: data.picture || (from && from[0] && from[0][1]), width: size, height: size, scaleType: 'cover' }
                 )
             );
         },
