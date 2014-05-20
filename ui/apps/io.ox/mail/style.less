@@ -348,29 +348,33 @@
         color: rgba(255, 255, 255, 0.50);
     }
 
-    .thread-size {
-
-        min-width: 2em;
-        padding: 0 0.5em 0 0.5em;
+    .box() {
+        color: #888;
+        padding: 0 7px;
         margin-left: 7px;
         display: inline-block;
         float: right;
-        cursor: pointer;
         overflow: visible;
         text-align: center;
-        color: #888;
         border: 1px solid rgba(0, 0, 0, 0.10);
         .fontWeight(normal);
         .border-radius(3px);
+    }
 
+    .account-name {
+        .box();
+    }
+
+    .thread-size {
+        .box();
+        min-width: 2em;
         html.high-contrast & {
             color: @hc-gray; //HC
         }
-
     }
 
-    &.visible-selection.has-focus .selected .thread-size {
-        color: #fff;
+    &.visible-selection.has-focus .selected {
+        .thread-size, .account-name { color: #fff; }
     }
 
     .thread-item {

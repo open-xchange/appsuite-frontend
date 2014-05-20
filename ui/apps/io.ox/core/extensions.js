@@ -155,47 +155,51 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
          * @param  {extension}
          * @return {point}
          */
-        this.extend = function (extension) {
+        this.extend = function () {
 
-            if (extension.invoke) {
-                console.error(extension);
-                throw 'Extensions must not have their own invoke method';
-            }
+            _(arguments).each(function (extension) {
 
-            if (!extension.id) {
-                extension.id = 'default';
-                extension.index = extension.index || 100;
-            } else {
-                extension.index = extension.index || 1000000000;
-            }
-
-            // skip duplicates (= same id)
-            if (!has(extension.id)) {
-
-                extension.invoke = createInvoke(this, extension);
-
-                if (replacements[extension.id]) {
-                    _.extend(extension, replacements[extension.id]);
-                    delete replacements[extension.id];
+                if (extension.invoke) {
+                    console.error(extension);
+                    throw 'Extensions must not have their own invoke method';
                 }
 
-                extensions.push(extension);
-                sort();
+                if (!extension.id) {
+                    extension.id = 'default';
+                    extension.index = extension.index || 100;
+                } else {
+                    extension.index = extension.index || 1000000000;
+                }
 
-                if (!extension.metadata) {
-                    extension.metadata = function (name, args) {
-                        if (this[name]) {
-                            if (_.isFunction(this[name])) {
-                                return this[name].apply(this, args);
+                // skip duplicates (= same id)
+                if (!has(extension.id)) {
+
+                    extension.invoke = createInvoke(this, extension);
+
+                    if (replacements[extension.id]) {
+                        _.extend(extension, replacements[extension.id]);
+                        delete replacements[extension.id];
+                    }
+
+                    extensions.push(extension);
+                    sort();
+
+                    if (!extension.metadata) {
+                        extension.metadata = function (name, args) {
+                            if (this[name]) {
+                                if (_.isFunction(this[name])) {
+                                    return this[name].apply(this, args);
+                                }
+                                return this[name];
                             }
-                            return this[name];
-                        }
-                        return undefined;
-                    };
+                            return undefined;
+                        };
+                    }
+
+                    this.trigger('extended', extension);
                 }
 
-                this.trigger('extended', extension);
-            }
+            }, this);
 
             return this;
         };

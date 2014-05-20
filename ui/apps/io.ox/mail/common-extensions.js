@@ -173,6 +173,14 @@ define('io.ox/mail/common-extensions',
             this.closest('.list-item').attr('title', subject);
         },
 
+        // used in unified inbox
+        account: function (baton) {
+            if (!account.isUnifiedFolder(baton.data.folder_id)) return;
+            this.append(
+                $('<span class="account-name">').text(baton.data.account_name || '')
+            );
+        },
+
         recipients: (function () {
 
             // var drawAllDropDown = function (node, label, data) {
