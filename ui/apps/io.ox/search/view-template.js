@@ -308,8 +308,7 @@ define('io.ox/search/view-template',
                     list = link.closest('ul'),
                     option = link.attr('data-action') || link.attr('data-custom') || link.attr('data-option'),
                     facet = list.attr('data-facet'),
-                    value = list.attr('data-value'),
-                    data = {};
+                    value = list.attr('data-value');
 
                 //select option
                 if (option === 'dialog') {
@@ -324,7 +323,6 @@ define('io.ox/search/view-template',
                         //use existing option
                         baton.model.update(facet, value, {option: option });
                     }
-                    baton.model.update(facet, value, data);
                     baton.model.trigger('query');
                 }
             });
