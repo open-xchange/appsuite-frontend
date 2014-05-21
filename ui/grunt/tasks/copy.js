@@ -64,5 +64,7 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('copy_build', grunt.util.runPrefixedSubtasksFor('copy', 'build'));
+
     grunt.loadNpmTasks('grunt-contrib-copy');
 };
