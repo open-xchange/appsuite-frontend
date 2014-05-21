@@ -268,12 +268,6 @@ define('io.ox/search/model',
                     return require(app).getApp().folder.get() || undefined;
                 return undefined;
             },
-            //a facet from autocomplete
-            getFacet: function (id) {
-                return _.find(this.get('autocomplete').concat(this.get('folder')), function (facet) {
-                    return facet.id === id;
-                });
-            },
             ensure: function () {
                 var self = this,
                     missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
