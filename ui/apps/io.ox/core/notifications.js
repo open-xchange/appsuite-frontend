@@ -88,6 +88,9 @@ define('io.ox/core/notifications',
                 lastFocused = $(document.activeElement),//save focus
                 nextFocus, //focus in case lastFocus got lost (item not there anymore)
                 empty = true; //check if notification area is empty
+ 
+            //remove old empty message to avoid duplicates
+            self.$el.find('.no-news-message').remove();
 
             if (lastFocused.hasClass('refocus')) {//refocusable elements have this marker class
                 //find next possible focus
@@ -108,7 +111,7 @@ define('io.ox/core/notifications',
                 lastFocused = lastFocused.attr('focus-id');
                 refocus = true;
             }
-            self.$el.empty();
+
 
             if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
                 _(notifications).each(function (category, type) {
@@ -119,14 +122,14 @@ define('io.ox/core/notifications',
             }
 
             _(self.subviews).each(function (category) {
+                self.$el.append(category.render().el);
                 if (category.collection.length > 0) {
-                    self.$el.append(category.render().el);
                     empty = false;
                 }
             });
 
             if (empty) {
-                self.$el.append($('<legend class="section-title">').text(gt('No notifications')));
+                self.$el.append($('<legend class="section-title no-news-message">').text(gt('No notifications')));
             }
 
             if (refocus) {//restore focus if possible
