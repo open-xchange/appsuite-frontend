@@ -1056,7 +1056,7 @@ define('io.ox/calendar/week/view',
                     minHeight: self.gridHeight(),
                     containment: 'parent',
                     start: function (e, ui) {
-                        var d = $(this).data('resizable');
+                        var d = $(this).data('ui-resizable');
                         // init custom resize object
                         d.my = {};
                         // set current day
@@ -1073,9 +1073,10 @@ define('io.ox/calendar/week/view',
                     },
                     resize:  function (e, ui) {
                         var el = $(this),
-                            d = el.data('resizable'),
+                            d = el.data('ui-resizable'),
                             day = Math.floor((e.pageX - paneOffset) / colWidth),
                             mouseY = e.pageY - (self.pane.offset().top - self.pane.scrollTop());
+
                         // detect direction
                         if (ui.position.top !== ui.originalPosition.top) {
                             d.my.handle = 'n';
@@ -1203,7 +1204,7 @@ define('io.ox/calendar/week/view',
                     },
                     stop: function () {
                         var el = $(this),
-                            d = el.data('resizable'),
+                            d = el.data('ui-resizable'),
                             app = self.collection.get(el.data('cid')).attributes,
                             tmpTS = self.getTimeFromDateTag(d.my.day);
                         d.my.all.removeClass('opac');
@@ -1244,7 +1245,7 @@ define('io.ox/calendar/week/view',
                     },
                     start: function (e, ui) {
                         // write all appointment divs to draggable object
-                        var d = $(this).data('draggable');
+                        var d = $(this).data('ui-draggable');
                         d.my = {
                             all: $('[data-cid="' + ui.helper.data('cid') + '"]', self.$el)
                                 .addClass('opac')
@@ -1266,7 +1267,7 @@ define('io.ox/calendar/week/view',
                         });
                     },
                     drag: function (e, ui) {
-                        var d = $(this).data('draggable'),
+                        var d = $(this).data('ui-draggable'),
                             left = ui.position.left -= ui.originalPosition.left, // normalize to colWith
                             move = Math.floor(left / colWidth),
                             day = d.my.initPos + move,
@@ -1373,7 +1374,7 @@ define('io.ox/calendar/week/view',
                         d.my.lastLeft = left;
                     },
                     stop: function (e, ui) {
-                        var d = $(this).data('draggable'),
+                        var d = $(this).data('ui-draggable'),
                             off = $('.week-container', this.$el).offset(),
                             move = Math.round(ui.position.left / colWidth),
                             app = self.collection.get($(this).data('cid')).attributes,
