@@ -28,8 +28,8 @@ define('io.ox/core/tk/folderviews',
 
     'use strict';
 
-    var OPEN = 'fa fa-chevron-right',
-        CLOSE = 'fa fa-chevron-down',
+    var OPEN = 'icon icon-chevron-right',
+        CLOSE = 'icon icon-chevron-down',
         hasFolderIcons = settings.get('features/folderIcons', false),
 
         SMALL_FOLDER_PADDING = 15, // for small devices like smartphons
