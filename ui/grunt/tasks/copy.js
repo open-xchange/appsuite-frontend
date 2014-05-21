@@ -31,6 +31,7 @@ module.exports = function (grunt) {
                     dest: 'build/'
                 },
                 {
+                    expand: true,
                     src: ['apps/**/*.{json,yml,tmpl}', '!apps/io.ox/core/date/*.json', '!apps/**/manifest.json'],
                     dest: 'build/'
                 }
@@ -63,8 +64,6 @@ module.exports = function (grunt) {
             ]
         }
     });
-
-    grunt.registerTask('copy_build', grunt.util.runPrefixedSubtasksFor('copy', 'build'));
 
     grunt.loadNpmTasks('grunt-contrib-copy');
 };
