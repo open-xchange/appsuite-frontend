@@ -232,7 +232,7 @@ define('io.ox/core/main',
                 e.preventDefault();
                 var self = $(this), content;
                 // set fixed width, hide label, be busy
-                content = self.contents();
+                content = self.contents().detach();
                 self.css('width', self.width() + 'px').text('\u00A0').busy();
                 // call launcher
                 (fn.call(this) || $.when()).done(function () {
