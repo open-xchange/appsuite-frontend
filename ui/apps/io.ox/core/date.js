@@ -698,13 +698,14 @@ define.async('io.ox/core/date',
                 offset;
 
             function getBin(t) {
-                return Math.floor((t - offset) / BIN_SIZE);
+                return Math.max(0, Math.floor((t - offset) / BIN_SIZE));
             }
 
             var hash = [];
             if (transitions.length) {
-                firstTransition = _.first(transitions).start;
                 lastTransition = _.last(transitions).start;
+                firstTransition = Math.max(_.first(transitions).start,
+                                           lastTransition - 1000 * AVG_YEAR);
                 offset = firstTransition + AVG_YEAR / 4;
                 var bin = -1;
                 for (var i = 0; i < transitions.length; i++) {
