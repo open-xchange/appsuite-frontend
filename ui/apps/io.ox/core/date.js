@@ -704,9 +704,10 @@ define.async('io.ox/core/date',
             var hash = [];
             if (transitions.length) {
                 lastTransition = _.last(transitions).start;
-                firstTransition = Math.max(_.first(transitions).start,
-                                           lastTransition - 1000 * AVG_YEAR);
-                offset = firstTransition + AVG_YEAR / 4;
+                firstTransition = _.first(transitions).start;
+                offset = _.find(transitions, function (t) {
+                        return lastTransition - t.start < 1000 * AVG_YEAR;
+                    }).start + AVG_YEAR / 4;
                 var bin = -1;
                 for (var i = 0; i < transitions.length; i++) {
                     var index = getBin(transitions[i].start);
