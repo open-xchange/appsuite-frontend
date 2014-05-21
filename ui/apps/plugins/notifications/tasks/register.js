@@ -278,8 +278,8 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click [data-action="ok"]': 'deleteReminder',
-            'change [data-action="selector"]': 'remindAgain',
-            'click [data-action="selector"]': 'remindAgain',
+            'change [data-action="reminder"]': 'remindAgain',
+            'click [data-action="reminder"]': 'remindAgain',
             'click': 'onClickItem',
             'keydown': 'onClickItem'
         },

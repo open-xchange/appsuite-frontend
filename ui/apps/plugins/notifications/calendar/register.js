@@ -202,8 +202,8 @@ define('plugins/notifications/calendar/register',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
-            'change [data-action="selector"]': 'onClickReminder',
-            'click [data-action="selector"]': 'onClickReminder',
+            'change [data-action="reminder"]': 'onClickReminder',
+            'click [data-action="reminder"]': 'onClickReminder',
             'click [data-action="ok"]': 'onClickOk'
         },
 
