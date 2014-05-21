@@ -155,19 +155,19 @@ define('io.ox/search/model',
                         if (facet === 'global' || facet === value) {
                             //pseudo uuid
                             value = Date.now();
-                            itemvalue.id = value;
+                            data.id = value;
                         }
 
                         //add option to value
                         var compact = {
                             facet: facet,
                             value: value,
-                            // a) simple, b) exclusive, c) default
-                            option: itemvalue.filter ? '' : option || itemvalue.options[0].id
+                            // a) simple or default without options, b) exclusive, c) default with options
+                            option: data.style === 'simple' || itemvalue.filter ? '' : option || itemvalue.options[0].id
                         };
 
-                        itemvalue._compact = compact;
-                        pool[facet].values[value] = itemvalue;
+                        (itemvalue || data)._compact = compact;
+                        pool[facet].values[value] = (itemvalue || data);
 
                         //append/prepend ids to pool list
                         if (facet === 'folder')
