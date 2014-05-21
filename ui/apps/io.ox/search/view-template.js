@@ -344,7 +344,7 @@ define('io.ox/search/view-template',
                             $('<span>')
                             .addClass('info-item')
                             .append(
-                                gt('More than the currently displayed %1$s items where found', count)
+                                gt('More than the currently displayed %1$s items were found', count)
                             )
                         )
                 );
