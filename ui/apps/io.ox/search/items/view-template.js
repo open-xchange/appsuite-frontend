@@ -27,11 +27,11 @@ define('io.ox/search/items/view-template',
         id: 'dependencies',
         config: function (config) {
             var defaults = {
-                mail: 'io.ox/mail/listview',
-                tasks: 'io.ox/tasks/listview',
-                contacts: 'io.ox/contacts/listview',
-                calendar: 'io.ox/calendar/listview',
-                files: 'io.ox/files/listview'
+                mail: ['io.ox/mail/listview', 'io.ox/mail/api'],
+                tasks: ['io.ox/tasks/listview', 'io.ox/tasks/api'],
+                contacts: ['io.ox/contacts/listview', 'io.ox/contacts/api'],
+                calendar: ['io.ox/calendar/listview', 'io.ox/calendar/api'],
+                files: ['io.ox/files/listview', 'io.ox/files/api']
             };
             $.extend(config.dependencies, defaults);
         }
@@ -86,7 +86,7 @@ define('io.ox/search/items/view-template',
 
 
             //require list view extensions points
-            var dep = [config.dependencies[module]].concat('less!io.ox/search/items/style');
+            var dep = [].concat(config.dependencies[module]).concat('less!io.ox/search/items/style');
             require(dep, function () {
                 //ignore last element when greater than 'size' (only used to determine if more results exists)
                 var last = items.length > baton.model.get('size') ? items.length - baton.model.get('extra') : items.length;
