@@ -968,7 +968,7 @@ define('io.ox/core/main',
                 }
 
                 _(favorites).each(function (obj) {
-                    if (upsell.visible(obj.requires)) {
+                    if (upsell.visible(obj.requires) && _.device(obj.device)) {
                         ox.ui.apps.add(new ox.ui.AppPlaceholder({
                             id: obj.id,
                             title: obj.title,
