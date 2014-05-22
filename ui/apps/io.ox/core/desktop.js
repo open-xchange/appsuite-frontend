@@ -69,6 +69,8 @@ define('io.ox/core/desktop',
             return this.get('title');
         },
 
+        saveRestorePoint: $.noop,
+
         call: $.noop
     });
 
@@ -486,7 +488,7 @@ define('io.ox/core/desktop',
         saveRestorePoint: function () {
             var self = this, uniqueID = self.get('uniqueID');
             if (this.failSave) {
-                ox.ui.App.getSavePoints().done(function (list) {
+                return ox.ui.App.getSavePoints().then(function (list) {
                     // might be null, so:
                     list = list || [];
                     var data, ids, pos;
@@ -514,9 +516,13 @@ define('io.ox/core/desktop',
                         if (pos > -1) { list.splice(pos, 1); delete self.failSave; }
                     }
                     if (list.length > 0) {
-                        ox.ui.App.setSavePoints(list);
+                        return ox.ui.App.setSavePoints(list);
+                    } else {
+                        return $.when();
                     }
                 });
+            } else {
+                return $.when();
             }
         },
 
@@ -642,14 +648,6 @@ define('io.ox/core/desktop',
 
         getCurrentWindow: function () {
             return currentWindow;
-        }
-    });
-
-    // listen for logout event
-    ext.point('io.ox/core/logout').extend({
-        id: 'saveCoreSettings',
-        logout: function () {
-            return coreConfig.save();
         }
     });
 

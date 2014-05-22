@@ -92,19 +92,74 @@ define('io.ox/core/main',
         });
     };
 
-    // listen for logout event
+    // trigger all apps to save restorepoints
     ext.point('io.ox/core/logout').extend({
-        id: 'saveSettings',
-        logout: function () {
-            // force save requests for all pending settings
-            var pending = settings.getAllPendingSettings(),
-                defs = [];
-            if (!_.isEmpty(pending)) {
-                _(pending).each(function (setting) {
-                    defs.push(setting.save(undefined, { force: true }));
+        id: 'saveRestorePoint',
+        index: 'first',
+        logout: function (baton) {
+            http.pause();
+            var def = $.Deferred();
+            if (baton.autologout || ox.online) {
+                // TODO: add http pause / resume
+                $.when.apply($,
+                    ox.ui.apps.map(function (app) {
+                        return app.saveRestorePoint();
+                    })
+                ).always(def.resolve);
+            } else {
+                ox.ui.App.canRestore().then(function (canRestore) {
+                    if (canRestore) {
+                        $('#io-ox-core').show();
+                        $('#background-loader').hide();
+                        require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                            new dialogs.ModalDialog()
+                                .text(gt('Unsaved documents will be lost. Do you want to sign out now?'))
+                                .addPrimaryButton('Yes', gt('Yes'))
+                                .addButton('No', gt('No'))
+                                .show()
+                                .then(function (action) {
+                                    if (action === 'No') {
+                                        def.reject();
+                                    } else {
+                                        $('#io-ox-core').hide();
+                                        $('#background-loader').show();
+                                        def.resolve();
+                                    }
+                                });
+                        });
+                    } else {
+                        def.resolve();
+                    }
                 });
             }
-            return $.when(defs);
+            // save core settings
+            settings.save();
+            http.resume();
+            return def;
+        }
+    });
+
+    // clear all caches
+    ext.point('io.ox/core/logout').extend({
+        id: 'clearCache',
+        logout: function () {
+            return ox.cache.clear();
+        }
+    });
+
+    // wait for all pending settings
+    ext.point('io.ox/core/logout').extend({
+        id: 'savePendingSettings',
+        index: 'last',
+        logout: function () {
+            // force save requests for all pending settings
+            http.pause();
+            $.when.apply($,
+                _(settings.getAllPendingSettings()).map(function (set) {
+                    return set.save(undefined, { force: true });
+                })
+            );
+            return http.resume();
         }
     });
 

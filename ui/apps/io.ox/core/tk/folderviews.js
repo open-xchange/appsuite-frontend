@@ -157,13 +157,13 @@ define('io.ox/core/tk/folderviews',
                 nodes.arrow.find('i').attr('class', className);
                 if (hasFolderIcons) {
                     var folderClass = 'fa fa-';
-                    if (accountAPI.is('trash', id)) {
+                    if (accountAPI.is('trash', self.id)) {
                         folderClass += 'trash-o special';
-                    } else if (accountAPI.is('inbox', id)) {
+                    } else if (accountAPI.is('inbox', self.id)) {
                         folderClass += 'inbox special';
-                    } else if (accountAPI.is('sent', id)) {
+                    } else if (accountAPI.is('sent', self.id)) {
                         folderClass += (hasChildren() ? 'send special' : 'send-o special');
-                    } else if (accountAPI.is('drafts', id)) {
+                    } else if (accountAPI.is('drafts', self.id)) {
                         folderClass += 'file-o special';
                     } else {
                         folderClass += isOpen() ? 'folder-open-o' : 'folder-o';
