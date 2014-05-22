@@ -526,6 +526,7 @@ define('io.ox/mail/main',
                 var options = app.getViewOptions(id);
                 app.props.set(options);
                 app.listView.model.set('folder', id);
+                app.folder.getData();
             });
         },
 
