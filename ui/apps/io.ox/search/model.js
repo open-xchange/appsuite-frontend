@@ -51,6 +51,7 @@ define('io.ox/search/model',
         pooldisabled: {},
         folder: {
             id: 'folder',
+            style: 'custom',
             custom: true,
             hidden: true,
             flags: [],
@@ -208,7 +209,8 @@ define('io.ox/search/model',
                 this.trigger('query');
             },
             update: function (facet, value, data) {
-                var isCustom = this.get('pool')[facet].custom,
+                var facetdata = this.get('pool')[facet],
+                    isCustom = facetdata.custom,
                     list = this.get('poollist');
 
                 //update opt reference in pool list
@@ -225,9 +227,31 @@ define('io.ox/search/model',
                     for (var i = list.length - 1; i >= 0; i--) {
                         var item = list[i];
                         if (item.facet === facet && item.value === value) {
-                            _.extend(item, data);
+                            _.extend(item, data, facetdata.style === 'exclusive' ?  {value: data.option } : {});
                         }
                     }
+                }
+
+                //TODO: remove hack
+                if (facetdata.style === 'exclusive') {
+                    facetdata.values = {};
+                    //get value object
+                    _.each(facetdata.options, function (obj) {
+                        //folder support via hidden flag
+                        if (obj.id === data.option) {
+                            facetdata.values[obj.id] = _.extend(
+                                                            {},
+                                                            obj,
+                                                            {
+                                                                _compact: {
+                                                                    facet: facet,
+                                                                    value: data.option,
+                                                                    option: data.option
+                                                                }
+                                                            }
+                                                        );
+                        }
+                    });
                 }
                 this.trigger('query');
             },
@@ -240,7 +264,7 @@ define('io.ox/search/model',
                     var facet = pool[item.facet],
                         value = facet.values[item.value],
                         simple;
-                    if (item.option) {
+                    if (item.option && value && value.options) {
                         _.each(value.options, function (opt) {
                             if (opt.id === item.option) {
                                 simple = _.copy(opt, true);
