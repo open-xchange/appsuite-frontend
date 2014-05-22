@@ -134,9 +134,8 @@ define('io.ox/search/items/view-template',
         }
     });
 
-    function draw(baton, detail, api) {
-        var popup = this.busy(),
-            options = {deeplink: true};
+    function draw(baton, detail, api, options) {
+        var popup = this.busy();
         require([detail, api], function (view, api) {
             //render data with available data
             popup.idle().append(view.draw(baton.data, options));
@@ -160,7 +159,7 @@ define('io.ox/search/items/view-template',
 
             ext.point('io.ox/search/items/calendar').extend({
                 draw: function (baton) {
-                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/api');
+                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/api', {deeplink: true});
                 }
             });
 
