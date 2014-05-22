@@ -53,6 +53,7 @@ define(['io.ox/core/extensions',
         });
 
         describe('EditableFileList:', function () {
+            var def, baton;
 
             var setUploadLimit = function (limit) {
                 return require(['settings!io.ox/core']).then(function (coreSettings) {
@@ -82,34 +83,36 @@ define(['io.ox/core/extensions',
             };
 
             beforeEach(function () {
-                this.baton = new ext.Baton();
+                baton = new ext.Baton();
             });
 
             afterEach(function (done) {
-                this.def.done(function (result) {
+                def.done(function (result) {
                     expect(result).to.equal('done');
                     done();
+                }).always(function () {
+                    def = null;
+                    baton = null;
                 });
             });
 
             describe('list with one file added', function () {
-
+                var setup;
                 beforeEach(function () {
-                    this.setup = setUploadLimit({
+                    setup = setUploadLimit({
                         'infostoreMaxUploadSize': 2000,
                         'infostoreQuota': 2000,
                         'infostoreUsage': 1000
                     })
-                    .then(createList(this.baton, attachmentFile));
+                    .then(createList(baton, attachmentFile));
                 });
 
                 it('should be cleared', function () {
-                    var self = this;
 
-                    this.def = this.setup.then(getList(this.baton))
+                    def = setup.then(getList(baton))
                     .then(function () {
-                        self.baton.fileList.clear();
-                        var result = self.baton.fileList.get();
+                        baton.fileList.clear();
+                        var result = baton.fileList.get();
                         expect(result).to.be.an('array');
                         expect(result).to.be.empty;
 
@@ -118,11 +121,9 @@ define(['io.ox/core/extensions',
                 });
 
                 it('should return the file', function () {
-                    var self = this;
-
-                    this.def = this.setup.then(getList(this.baton))
+                    def = setup.then(getList(baton))
                     .then(function () {
-                        var result = self.baton.fileList.get();
+                        var result = baton.fileList.get();
                         expect(result).to.be.an('array');
                         expect(result).to.have.deep.property('[0]', attachmentFile);
 
@@ -136,12 +137,12 @@ define(['io.ox/core/extensions',
                 describe('adding file to infostore', function () {
 
                     it('when exeeding infostore quota', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 2000,
                             'infostoreQuota': 1999,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, attachmentFile))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.have.property('reason');
@@ -153,12 +154,12 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when exceeding infostore maximum upload size limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 999,
                             'infostoreQuota': 2000,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, attachmentFile))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.have.property('reason');
@@ -170,12 +171,12 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when having the same size as available infostore quota limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 1000,
                             'infostoreQuota': 2000,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, attachmentFile))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
@@ -186,12 +187,12 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when having the smaller size as available infostore quota limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 1001,
                             'infostoreQuota': 2001,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, attachmentFile))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
@@ -202,12 +203,12 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when infostore quota limit is 0', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 1000,
                             'infostoreQuota': 0,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, attachmentFile))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
@@ -218,12 +219,12 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when infostore quota limit is -1', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 1000,
                             'infostoreQuota': -1,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, attachmentFile))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
@@ -234,12 +235,12 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when infostore max upload size is 0', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': 0,
                             'infostoreQuota': 0,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, attachmentFile))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
@@ -250,12 +251,12 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when infostore max upload size is -1', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'infostoreMaxUploadSize': -1,
                             'infostoreQuota': -1,
                             'infostoreUsage': 1000
                         })
-                        .then(createList(this.baton, attachmentFile))
+                        .then(createList(baton, attachmentFile))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
@@ -269,11 +270,11 @@ define(['io.ox/core/extensions',
                 describe('adding a file as attachment', function () {
 
                     it('when exceeding attachment quota', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': 999,
                             'attachmentQuotaPerFile': 1000
                         })
-                        .then(createList(this.baton, attachmentFile, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.have.property('reason');
@@ -285,11 +286,11 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when having the same size as available attachment quota limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': 1000,
                             'attachmentQuotaPerFile': 1000
                         })
-                        .then(createList(this.baton, attachmentFile, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
@@ -300,11 +301,11 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when having the smaller size as available attachment quota limit', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': 1001,
                             'attachmentQuotaPerFile': 1001
                         })
-                        .then(createList(this.baton, attachmentFile, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
@@ -315,11 +316,11 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when attachment quota limit is 0', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': 0,
                             'attachmentQuotaPerFile': 0
                         })
-                        .then(createList(this.baton, attachmentFile, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
@@ -330,11 +331,11 @@ define(['io.ox/core/extensions',
                     });
 
                     it('when attachment quota limit is -1', function () {
-                        this.def = setUploadLimit({
+                        def = setUploadLimit({
                             'attachmentQuota': -1,
                             'attachmentQuotaPerFile': -1
                         })
-                        .then(createList(this.baton, attachmentFile, true))
+                        .then(createList(baton, attachmentFile, true))
                         .then(function (result) {
                             expect(result).to.have.property('added');
                             expect(result).to.not.have.property('reason');
