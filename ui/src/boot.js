@@ -662,7 +662,7 @@ $(window).load(function () {
 
                             var redirect = '#';
                             if (hash.ref) {
-                                redirect = '#' + hash.ref;
+                                redirect += hash.ref;
                             }
 
                             // cleanup url

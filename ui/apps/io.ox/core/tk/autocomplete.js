@@ -233,8 +233,8 @@ define('io.ox/core/tk/autocomplete',
                     });
 
                     _(list).each(function (facet) {
-                        regular = !(facet.field_facet) && !!facet.display_name;
-                        childs = facet.values.length > 0;
+                        regular = facet.style !== 'simple' && !!facet.display_name;
+                        childs = facet.values && facet.values.length > 0;
                         //facet
                         count++;
                         if (facet.display_name && childs && regular) {
@@ -250,7 +250,7 @@ define('io.ox/core/tk/autocomplete',
                                 .appendTo(scrollpane);
                         }
                         //values
-                        _(facet.values).each(function (value) {
+                        _([].concat(facet.style === 'simple' ? facet : facet.values)).each(function (value) {
                             value.facet = facet.id;
                             var node = $('<div class="autocomplete-item">')
                                 .on('click', fnSelectItem);

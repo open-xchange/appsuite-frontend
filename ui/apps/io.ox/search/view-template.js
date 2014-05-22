@@ -308,8 +308,7 @@ define('io.ox/search/view-template',
                     list = link.closest('ul'),
                     option = link.attr('data-action') || link.attr('data-custom') || link.attr('data-option'),
                     facet = list.attr('data-facet'),
-                    value = list.attr('data-value'),
-                    data = {};
+                    value = list.attr('data-value');
 
                 //select option
                 if (option === 'dialog') {
@@ -324,7 +323,6 @@ define('io.ox/search/view-template',
                         //use existing option
                         baton.model.update(facet, value, {option: option });
                     }
-                    baton.model.update(facet, value, data);
                     baton.model.trigger('query');
                 }
             });
@@ -344,7 +342,7 @@ define('io.ox/search/view-template',
                             $('<span>')
                             .addClass('info-item')
                             .append(
-                                gt('More than the currently displayed %1$s items where found', count)
+                                gt('More than the currently displayed %1$s items were found', count)
                             )
                         )
                 );
@@ -420,14 +418,13 @@ define('io.ox/search/view-template',
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'dropdown',
         index: 300,
-        draw: function (value, facet, baton) {
-            var facet = baton.model.getFacet(value.facet),
-                filters = facet ? facet.values[0].options || [] : [],
+        draw: function (value, facet) {
+            var options = facet.options || _.values(facet.values)[0].options || [],
                 current = value._compact.option, option,
                 parent = this.parent(),
                 menu;
 
-            if (filters.length) {
+            if (options.length) {
                 this.attr('data-toggle', 'dropdown');
                 //add caret
                 this.prepend(
@@ -442,7 +439,7 @@ define('io.ox/search/view-template',
                             'data-facet': facet.id,
                             'data-value': value.id
                         });
-                _.each(filters, function (item) {
+                _.each(options, function (item) {
                     menu.append(
                         option = $('<li role="presentation">').append(
                                      $('<a role="menuitem" tabindex="-1" href="#">')

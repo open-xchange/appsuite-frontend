@@ -341,6 +341,15 @@ div.hopscotch-bubble {
     }
 }
 
+@media (min-width: 481px), (min-device-width: 481px) {//don't break mobile dropdowns
+
+    #topbar-settings-dropdown {//keep settings dropdown inside the window (Bug #30256)
+        top: 40px;
+        right: 20px;
+        left: auto;
+    }
+
+}
 #io-ox-top-logo-small {
     width: 60px;
     height: 22px;
@@ -615,6 +624,13 @@ div.hopscotch-bubble {
             -webkit-animation-timing-function: ease-in-out;
         }
 
+        &.dropdown {
+            overflow: visible;
+            .dropdown-menu {
+                right: 0;
+                left: auto;
+            }
+        }
     }
 
     .launcher-dropdown {
@@ -831,7 +847,7 @@ div.hopscotch-bubble {
             font-weight: 300;
             font-size: 16px;
             line-height: 24px;
-            margin: 0 0 7px 0;
+            margin: 14px 0 7px 0;
             padding: 0 14px;
             border: 0;
 
@@ -847,10 +863,6 @@ div.hopscotch-bubble {
             padding: 0;
             color: #ccc;
             font-size: 14px;
-        }
-
-        .notifications {
-            margin: 14px 0 0 0;
         }
 
         .notifications:first-child {
@@ -1439,7 +1451,7 @@ div.hopscotch-bubble {
 
             display: inline-block;
             line-height: @toolbar-line-height;
-            padding: @toolbar-vertical-padding 14px;
+            padding: @toolbar-vertical-padding 13px;
             text-decoration: none;
             float: left;
             outline: 0;

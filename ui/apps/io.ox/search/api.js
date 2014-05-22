@@ -112,14 +112,22 @@ define('io.ox/search/api',
         var opt = $.extend(true, {}, getDefault('autocomplete'), options);
         return http[opt.method](opt)
                 .then(function (data) {
-                    _.each(data.facets, function (facet) {
+                    _.each(data.facets, function (facet, index) {
 
                         //preparation to handle 'simple' facets
                         if (facet.style === 'simple') {
-                            _.each(facet.values, function (value) {
-                                //display name or template
-                                value.display_name = value.display_name || [value.display_item[0], ' <i>', value.display_item[1], '</i>'].join('');
-                            });
+                            var flat;
+                            //until backend is ready
+                            if (!!facet.values) {
+                                flat = _.extend({}, facet, facet.values[0]);
+                                delete flat.values;
+                                delete flat.field_facet;
+                                //delete flat.display_name;
+                            } else {
+                                flat = _.extend({}, facet);
+                            }
+                            flat.display_name = flat.display_name || [flat.display_item[0], ' <i>', flat.display_item[1], '</i>'].join('');
+                            data.facets[index] = flat;
                         }
 
                         //preparation to handle 'exclusive' facets

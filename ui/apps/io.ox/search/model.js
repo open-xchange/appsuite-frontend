@@ -51,6 +51,7 @@ define('io.ox/search/model',
         pooldisabled: {},
         folder: {
             id: 'folder',
+            style: 'custom',
             custom: true,
             hidden: true,
             flags: [],
@@ -155,19 +156,19 @@ define('io.ox/search/model',
                         if (facet === 'global' || facet === value) {
                             //pseudo uuid
                             value = Date.now();
-                            itemvalue.id = value;
+                            data.id = value;
                         }
 
                         //add option to value
                         var compact = {
                             facet: facet,
                             value: value,
-                            // a) simple, b) exclusive, c) default
-                            option: itemvalue.filter ? '' : option || itemvalue.options[0].id
+                            // a) simple or default without options, b) exclusive, c) default with options
+                            option: data.style === 'simple' || itemvalue.filter ? '' : option || itemvalue.options[0].id
                         };
 
-                        itemvalue._compact = compact;
-                        pool[facet].values[value] = itemvalue;
+                        (itemvalue || data)._compact = compact;
+                        pool[facet].values[value] = (itemvalue || data);
 
                         //append/prepend ids to pool list
                         if (facet === 'folder')
@@ -208,21 +209,49 @@ define('io.ox/search/model',
                 this.trigger('query');
             },
             update: function (facet, value, data) {
-                var isCustom = this.get('pool')[facet].custom,
+                var facetdata = this.get('pool')[facet],
+                    isCustom = facetdata.custom,
                     list = this.get('poollist');
 
                 //update opt reference in pool list
                 if (isCustom) {
                     //update pool item itself
-                    $.extend(this.get('pool')[facet].values.custom, data);
+                    if (!data.custom || data.custom === 'custom') {
+                        //reset to 'all folders' by removing facet again
+                        this.remove('folder', 'custom');
+                        return;
+                    } else
+                        $.extend(this.get('pool')[facet].values.custom, data);
                 } else {
                     //update poollist
                     for (var i = list.length - 1; i >= 0; i--) {
                         var item = list[i];
                         if (item.facet === facet && item.value === value) {
-                            _.extend(item, data);
+                            _.extend(item, data, facetdata.style === 'exclusive' ?  {value: data.option } : {});
                         }
                     }
+                }
+
+                //TODO: remove hack
+                if (facetdata.style === 'exclusive') {
+                    facetdata.values = {};
+                    //get value object
+                    _.each(facetdata.options, function (obj) {
+                        //folder support via hidden flag
+                        if (obj.id === data.option) {
+                            facetdata.values[obj.id] = _.extend(
+                                                            {},
+                                                            obj,
+                                                            {
+                                                                _compact: {
+                                                                    facet: facet,
+                                                                    value: data.option,
+                                                                    option: data.option
+                                                                }
+                                                            }
+                                                        );
+                        }
+                    });
                 }
                 this.trigger('query');
             },
@@ -235,7 +264,7 @@ define('io.ox/search/model',
                     var facet = pool[item.facet],
                         value = facet.values[item.value],
                         simple;
-                    if (item.option) {
+                    if (item.option && value && value.options) {
                         _.each(value.options, function (opt) {
                             if (opt.id === item.option) {
                                 simple = _.copy(opt, true);
@@ -267,12 +296,6 @@ define('io.ox/search/model',
                 if (require.defined(app))
                     return require(app).getApp().folder.get() || undefined;
                 return undefined;
-            },
-            //a facet from autocomplete
-            getFacet: function (id) {
-                return _.find(this.get('autocomplete').concat(this.get('folder')), function (facet) {
-                    return facet.id === id;
-                });
             },
             ensure: function () {
                 var self = this,

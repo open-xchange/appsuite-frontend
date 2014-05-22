@@ -84,47 +84,49 @@ define('plugins/notifications/mail/register',
 
         render: function () {
 
-            var i = 0, size = this.collection.size(),
-                $i = Math.min(size, numMessages),
-                baton,
-                mails = new Array($i),
-                view = this;
+            this.$el.empty();
+            if (this.collection.length) {
+                var i = 0, size = this.collection.size(),
+                    $i = Math.min(size, numMessages),
+                    baton,
+                    mails = new Array($i),
+                    view = this;
 
-            baton = ext.Baton({ view: view, size: size, more: size > $i });
-            ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el.empty(), baton);
+                baton = ext.Baton({ view: view, size: size, more: size > $i });
+                ext.point('io.ox/core/notifications/mail/header').invoke('draw', this.$el, baton);
 
-            for (i = 0; i < $i; i++) {
-                mails[i] = api.reduce(this.collection.at(i).toJSON());
-            }
+                for (i = 0; i < $i; i++) {
+                    mails[i] = api.reduce(this.collection.at(i).toJSON());
+                }
 
-            //no need to request mails where we have all the information already
-            mails = _(mails).filter(function (item) {
-                return view.collection._byId[item.id].get('subject') === undefined;
-            });
+                //no need to request mails where we have all the information already
+                mails = _(mails).filter(function (item) {
+                    return view.collection._byId[item.id].get('subject') === undefined;
+                });
 
-            if (mails.length > 0) {
-                api.getList(mails, true, {unseen: true}).done(function (response) {
+                if (mails.length > 0) {
+                    api.getList(mails, true, {unseen: true}).done(function (response) {
+                        view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
+                        //save data to model so we don't need to ask again everytime
+                        for (i = 0; i < mails.length; i++) {
+                            view.collection._byId[response[i].id].attributes = response[i];
+                        }
+                        // draw mails
+                        for (i = 0; i < $i; i++) {
+                            baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
+                            ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.items'), baton);
+                        }
+
+                    });
+                } else {
                     view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
-                    //save data to model so we don't need to ask again everytime
-                    for (i = 0; i < mails.length; i++) {
-                        view.collection._byId[response[i].id].attributes = response[i];
-                    }
                     // draw mails
                     for (i = 0; i < $i; i++) {
                         baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
                         ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.items'), baton);
                     }
-
-                });
-            } else {
-                view.$el.find('.item').remove();//remove mails that may be drawn already. ugly race condition fix
-                // draw mails
-                for (i = 0; i < $i; i++) {
-                    baton = ext.Baton({ data: view.collection.models[i].attributes, view: view });
-                    ext.point('io.ox/core/notifications/mail/item').invoke('draw', view.$('.items'), baton);
                 }
             }
-
             return this;
         },
 

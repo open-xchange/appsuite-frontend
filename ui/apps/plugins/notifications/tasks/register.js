@@ -93,14 +93,16 @@ define('plugins/notifications/tasks/register',
 
         render: function () {
 
-            var baton = ext.Baton({ view: this });
-            ext.point('io.ox/core/notifications/due-tasks/header').invoke('draw', this.$el.empty(), baton);
+            this.$el.empty();
+            if (this.collection.length) {
+                var baton = ext.Baton({ view: this });
+                ext.point('io.ox/core/notifications/due-tasks/header').invoke('draw', this.$el, baton);
 
-            this.collection.each(function (model) {
-                baton = ext.Baton({ model: model, view: this });
-                ext.point('io.ox/core/notifications/due-tasks/item').invoke('draw', this.$('.notifications'), baton);
-            }, this);
-
+                this.collection.each(function (model) {
+                    baton = ext.Baton({ model: model, view: this });
+                    ext.point('io.ox/core/notifications/due-tasks/item').invoke('draw', this.$('.notifications'), baton);
+                }, this);
+            }
             return this;
         },
 
@@ -278,8 +280,8 @@ define('plugins/notifications/tasks/register',
 
         events: {
             'click [data-action="ok"]': 'deleteReminder',
-            'change [data-action="selector"]': 'remindAgain',
-            'click [data-action="selector"]': 'remindAgain',
+            'change [data-action="reminder"]': 'remindAgain',
+            'click [data-action="reminder"]': 'remindAgain',
             'click': 'onClickItem',
             'keydown': 'onClickItem'
         },
@@ -375,15 +377,18 @@ define('plugins/notifications/tasks/register',
 
         render: function () {
 
-            var baton = ext.Baton({ view: this });
-            ext.point('io.ox/core/notifications/task-reminder/header').invoke('draw', this.$el.empty(), baton);
+            this.$el.empty();
+            if (this.collection.length) {
+                var baton = ext.Baton({ view: this });
 
-            this.collection.each(function (model) {
-                this.$el.find('.notifications').append(
-                    new ReminderView({ model: model }).render().$el
-                );
-            }, this);
+                ext.point('io.ox/core/notifications/task-reminder/header').invoke('draw', this.$el, baton);
 
+                this.collection.each(function (model) {
+                    this.$el.find('.notifications').append(
+                        new ReminderView({ model: model }).render().$el
+                    );
+                }, this);
+            }
             return this;
         },
 
@@ -617,15 +622,18 @@ define('plugins/notifications/tasks/register',
 
         render: function () {
 
-            var baton = ext.Baton({ view: this });
-            ext.point('io.ox/core/notifications/task-confirmation/header').invoke('draw', this.$el.empty(), baton);
+            this.$el.empty();
+            if (this.collection.length) {
+                var baton = ext.Baton({ view: this });
 
-            this.collection.each(function (model) {
-                this.$el.append(
-                    new ConfirmationView({ model: model }).render().$el
-                );
-            }, this);
+                ext.point('io.ox/core/notifications/task-confirmation/header').invoke('draw', this.$el, baton);
 
+                this.collection.each(function (model) {
+                    this.$el.append(
+                        new ConfirmationView({ model: model }).render().$el
+                    );
+                }, this);
+            }
             return this;
         },
 
