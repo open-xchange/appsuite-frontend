@@ -341,6 +341,15 @@ div.hopscotch-bubble {
     }
 }
 
+@media (min-width: 481px), (min-device-width: 481px) {//don't break mobile dropdowns
+
+    #topbar-settings-dropdown {//keep settings dropdown inside the window (Bug #30256)
+        top: 40px;
+        right: 20px;
+        left: auto;
+    }
+
+}
 #io-ox-top-logo-small {
     width: 60px;
     height: 22px;
