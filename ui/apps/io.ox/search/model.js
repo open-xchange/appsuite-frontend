@@ -321,6 +321,7 @@ define('io.ox/search/model',
             },
             setItems: function (data, timestamp) {
                 var application = this.getApp(),
+                    self = this,
                     list = _.map(data.results, function (item) {
                         return {
                             id: item.id,
@@ -334,6 +335,10 @@ define('io.ox/search/model',
                 //set collection
                 items.reset(list);
                 items.timestamp = timestamp || Date.now();
+                self.stopListening();
+                self.listenTo(items, 'needs-refresh', function () {
+                    self.trigger('query');
+                });
             },
             getOptions: function () {
                 return  _.copy(options);

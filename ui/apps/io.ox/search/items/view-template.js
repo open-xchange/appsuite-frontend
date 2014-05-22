@@ -67,6 +67,13 @@ define('io.ox/search/items/view-template',
     //fetch config
     ext.point('io.ox/search/main/items').invoke('config', $, config);
 
+    var refresh = _.debounce(function (e) {
+                    e.data.trigger('needs-refresh');
+                    //hide sidepanel
+                    if (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0)
+                        $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
+                }, 100);
+
     ext.point('io.ox/search/view/items').extend({
         id: 'results',
         index: 100,
@@ -76,6 +83,7 @@ define('io.ox/search/items/view-template',
             var self = this,
                 items = baton.model.get('items'),
                 module = baton.model.getModule(),
+                events = 'refresh refresh.all refresh.list deleted-mails update delete change move',
                 nodes = [],
                 row, cell;
 
@@ -87,9 +95,13 @@ define('io.ox/search/items/view-template',
 
             //require list view extensions points
             var dep = [].concat(config.dependencies[module]).concat('less!io.ox/search/items/style');
-            require(dep, function () {
+            require(dep, function (view, api) {
                 //ignore last element when greater than 'size' (only used to determine if more results exists)
                 var last = items.length > baton.model.get('size') ? items.length - baton.model.get('extra') : items.length;
+                if (api) {
+                    api.off(events, refresh);
+                    api.on(events, items, refresh);
+                }
 
                 items.each(function (model, current) {
 
