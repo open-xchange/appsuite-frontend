@@ -25,7 +25,7 @@ define('io.ox/search/items/main',
 
             //event listener
             collection.on('reset set', function () {
-                collection.trigger('changed:collection');
+                collection.trigger('needs-redraw');
             });
 
             return _.extend({}, collection, {
