@@ -295,8 +295,6 @@ define('io.ox/mail/write/main',
                 currentSignature = text;
             }
 
-            addBlankLine(signature);
-
             ed.focus();
         };
 
@@ -468,19 +466,19 @@ define('io.ox/mail/write/main',
             return str.replace(/[\s\uFEFF\xA0]+$/, '');
         }
 
-        var addBlankLine = function () {
-            var content = editor.getContent(),
-                blankline = editorMode === 'html' ? '<p><br></p>' : '\n\n';
-            if (content !== '' && content.indexOf(blankline) !== 0) {
-                editor.setContent(blankline + content);
-            }
-        };
-
         // only used on mobile to add blank lines above reply text
         var addBlankLineSimple = function (number) {
             var blankline = '\n';
             for (var i = 0; i < number; i++) {
                 app.getEditor().prependContent(blankline);
+            }
+        };
+
+        var prependNewLine = function () {
+            var content = editor.getContent(),
+                nl = editorMode === 'html' ? '<p><br></p>' : '\n\n';
+            if (content !== '' && content.indexOf(nl) !== 0) {
+                editor.setContent(nl + content);
             }
         };
 
@@ -508,6 +506,7 @@ define('io.ox/mail/write/main',
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 app.setSignature(({ data: ds}));
             }
+            prependNewLine();
         };
 
         app.getRecipients = function (id) {
