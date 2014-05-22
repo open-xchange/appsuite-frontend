@@ -52,7 +52,7 @@ define('io.ox/core/api/apps',
                         'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet'];
     _(allFavorites).each(function (id) {
         var app = appData.apps[id];
-        if (app && capabilities.has(app.requires)) {
+        if (app && !manifests.manager.isDisabled(app.path)) {
             appData.favorites.push(id);
         }
     });
