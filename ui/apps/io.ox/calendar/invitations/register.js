@@ -442,8 +442,8 @@ define('io.ox/calendar/invitations/register',
         },
 
         onActionSuccess: function (action, updated) {
+
             var data = this.appointment || this.task,
-                self = this,
                 reminder = this.reminder,
                 tempdata;
 
@@ -470,12 +470,12 @@ define('io.ox/calendar/invitations/register',
             } else {
                 this.task = updated;
             }
+
             if (this.settings.get('deleteInvitationMailAfterAction', false)) {
                 // remove mail
                 notifications.yell('success', successInternal[action]);
                 require(['io.ox/mail/api'], function (api) {
-                    var mailData = self.options.model.attributes;
-                    api.remove([mailData]);
+                    api.remove([this.model.toJSON()]);
                 }.bind(this));
             } else {
                 // update well
