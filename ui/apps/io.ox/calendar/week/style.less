@@ -139,7 +139,6 @@
             position: relative;
             height: 100%;
             float: left;
-            border-left: 1px solid #ccc;
             background-color: rgba(0, 0, 0, 0.01);
             .user-select(none);
 
@@ -207,6 +206,7 @@
         opacity: 1;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
+        .border-radius(0.5em);
 
         &.modify {
             cursor: pointer;
