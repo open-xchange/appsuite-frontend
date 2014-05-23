@@ -2,7 +2,6 @@
     "title": "Search",
     "path": "io.ox/search/main",
     "company": "Open-Xchange",
-    "icon": "search.png",
     "category": "Dev",
     "requires": "search",
     "settings": false
