@@ -13,8 +13,12 @@
 
 define('io.ox/core/api/user',
     ['io.ox/core/http',
-     'io.ox/core/api/factory'
-    ], function (http, apiFactory) {
+     'io.ox/core/api/factory',
+     'io.ox/contacts/util',
+     'io.ox/core/date',
+     'io.ox/core/capabilities',
+     'io.ox/contacts/api'
+    ], function (http, apiFactory, util, date, capabilities, contactsApi) {
 
     'use strict';
 
@@ -89,7 +93,14 @@ define('io.ox/core/api/user',
                                 api.trigger('update:' + _.ecid(data), data);
                                 api.trigger('update', data);
                                 api.trigger('refresh.list');
-                                // TODO: What about the corresponding contact events?
+                                // get new contact and trigger contact events
+                                // skip this if GAB is missing
+                                if (data.folder_id === 6 && capabilities.has('!gab')) return;
+                                // fetch contact
+                                contactsApi.get({folder_id: data.folder_id, id: data.contact_id}).done(function (contactData) {
+                                    contactsApi.trigger('update:' + _.ecid(contactData), contactData);
+                                    contactsApi.trigger('update', contactData);
+                                });
                             });
                         });
                 });
