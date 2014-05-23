@@ -453,6 +453,7 @@
 
     define('less', {
         load: function (name, parentRequire, load, config) {
+            name = name.replace(/\.less$/, '');
             var file = {
                 path: config.baseUrl + name,
                 name: name,
