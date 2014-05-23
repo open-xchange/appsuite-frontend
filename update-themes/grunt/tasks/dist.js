@@ -35,6 +35,7 @@ module.exports = function (grunt) {
             files: [
                 {
                     src: [
+                        'package.json',
                         'lib/**/*',
                         '!lib/rhino/**/*',
                         'node_modules/grunt/**/*',
