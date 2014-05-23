@@ -156,12 +156,10 @@ define('io.ox/contacts/edit/view-form',
             id: ref + '/edit/picture',
             index: 100,
             customizeNode: function () {
-                //access to global address book?
-                if (isMyContactData && !capabilities.has('gab')) {
-                    this.$el = $('');
-                } else {
-                    this.$el.addClass('contact-picture-upload f6-target');
-                }
+                // before 7.4.2 (?) we had to check if global address book is available
+                // apparently the user API has been improved and handles the contact image as well
+                // so we just go on here
+                this.$el.addClass('contact-picture-upload f6-target');
             }
         }));
 
