@@ -511,7 +511,7 @@ define('io.ox/calendar/invitations/register',
                 id: data.id,
                 data: { confirmation: confirmation }
             })
-            .then(this.onActionSuccess.bind(this, action), this.onActionFail.bind(this, action));
+            .then(this.onActionSuccess.bind(this, confirmation), this.onActionFail.bind(this, action));
         },
 
         loadAppointment: function () {
