@@ -68,7 +68,8 @@ define('io.ox/search/items/view-template',
     ext.point('io.ox/search/main/items').invoke('config', $, config);
 
     var refresh = _.debounce(function (e) {
-                    e.data.trigger('needs-refresh');
+                    if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/search')
+                        e.data.trigger('needs-refresh');
                     //hide sidepanel
                     if (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0)
                         $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
