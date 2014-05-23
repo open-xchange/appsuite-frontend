@@ -120,14 +120,22 @@ define('io.ox/search/util',
         },
         getFirstChoice: function (model) {
             var module = model.getModule(),
-                id = model.getFolder() || folderAPI.getDefaultFolder(module);
-            return folderAPI.get({folder: id})
-                    .then(function (folder) {
-                        return {
-                            custom: folder.id,
-                            display_name: folder.title //folderAPI.getFolderTitle(folder.title, 15)
-                        };
+                id = model.getFolder() || folderAPI.getDefaultFolder(module),
+                def = $.Deferred(),
+                value = function (id, folder) {
+                    folder = folder || {};
+                    //use id as fallback
+                    def.resolve({
+                        custom: folder.id || id,
+                        display_name: folder.title || id
                     });
+                };
+
+            //get folder title
+            folderAPI.get({folder: id})
+                    .always(value.bind(this, id));
+
+            return def;
         }
 
     };
