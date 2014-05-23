@@ -442,14 +442,12 @@ define('io.ox/calendar/invitations/register',
         },
 
         onActionSuccess: function (action, updated) {
-
             var data = this.appointment || this.task,
-                status = util.getConfirmationStatus(data),
-                accepted = status === 1,
-                reminder, tempdata, dep;
+                self = this,
+                reminder = this.reminder,
+                tempdata;
 
-            if (!accepted) {
-                reminder = parseInt(this.$el.find('.reminder-select').val(), 10);
+            if (reminder) {
                 if (reminder !== this.getDefaultReminder()) {
                     // don't use whole data object here, because it overwrites the confirmations with it's users attribute
                     tempdata = {
@@ -469,23 +467,21 @@ define('io.ox/calendar/invitations/register',
 
             if (this.type === 'appointment') {
                 this.appointment = updated;
-                dep =  'settings!io.ox/calendar';
             } else {
                 this.task = updated;
-                dep = 'settings!io.ox/tasks';
             }
-
-            require(['io.ox/mail/api', dep], function (api, settings) {
-                if (settings.get('deleteInvitationMailAfterAction')) {
-                    // remove mail
-                    notifications.yell('success', successInternal[action]);
-                    this.api.remove([this.data]);
-                } else {
-                    // update well
-                    this.$el.idle();
-                    this.render();
-                }
-            }.bind(this));
+            if (this.settings.get('deleteInvitationMailAfterAction', false)) {
+                // remove mail
+                notifications.yell('success', successInternal[action]);
+                require(['io.ox/mail/api'], function (api) {
+                    var mailData = self.options.model.attributes;
+                    api.remove([mailData]);
+                }.bind(this));
+            } else {
+                // update well
+                this.$el.idle();
+                this.render();
+            }
         },
 
         onActionFail: function () {
@@ -499,12 +495,16 @@ define('io.ox/calendar/invitations/register',
         },
 
         onAction: function (e) {
-
-            this.$el.empty().busy();
             var action = $(e.currentTarget).attr('data-action'),
                 hash = { accept: 1, decline: 2, tentative: 3 },
                 confirmation = hash[action],
-                data = this.appointment || this.task;
+                data = this.appointment || this.task,
+                status = util.getConfirmationStatus(data),
+                accepted = status === 1;
+
+            this.reminder = accepted ? false : parseInt(this.$el.find('.reminder-select').val(), 10);
+
+            this.$el.busy(true);
 
             this.api.confirm({
                 folder: data.folder_id,
