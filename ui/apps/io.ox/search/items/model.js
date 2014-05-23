@@ -12,9 +12,7 @@
  */
 
 define('io.ox/search/items/model',
-    ['io.ox/search/api',
-     'io.ox/backbone/basicModel'
-    ], function (api, BasicModel) {
+    ['io.ox/backbone/basicModel'], function (BasicModel) {
 
     'use strict';
 

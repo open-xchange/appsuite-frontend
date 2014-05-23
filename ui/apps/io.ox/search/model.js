@@ -16,10 +16,8 @@ define('io.ox/search/model',
      'io.ox/search/items/main',
      'io.ox/backbone/modelFactory',
      'io.ox/search/util',
-     'io.ox/backbone/validation',
-     'io.ox/core/extensions',
-     'gettext!io.ox/core'
-    ], function (api, items, ModelFactory, util, Validations, ext, gt) {
+     'io.ox/core/extensions'
+    ], function (api, collection, ModelFactory, util, ext) {
 
     'use strict';
 
@@ -29,8 +27,8 @@ define('io.ox/search/model',
      */
 
     var options = {},
-        items = new items.Collection(),
-        defaults, factory;
+        items = collection.create(),
+        defaults, factory, conflicts;
 
     //fetch settings/options
     ext.point('io.ox/search/main').invoke('config',  $(), options);
@@ -50,10 +48,13 @@ define('io.ox/search/model',
         active: [],
         pool: {},
         poollist: [],
+        pooldisabled: {},
         folder: {
             id: 'folder',
+            style: 'custom',
             custom: true,
             hidden: true,
+            flags: [],
             values: [{
                 facet: 'folder',
                 id: 'custom',
@@ -65,7 +66,35 @@ define('io.ox/search/model',
         options: options,
         //current folder
         start: 0,
-        size: 100
+        size: 100,
+        extra: 1
+    };
+
+    //resolve conflicting facets
+    conflicts = function () {
+        var pool = _.extend({}, this.get('pool')),
+            list = [].concat(this.get('poollist')),
+            disabled = {};
+
+        //remove conflicting facets
+        _.each(this.get('pool'), function (facet) {
+            _.each(facet.flags, function (flag) {
+                if (flag.indexOf('conflicts:') === 0) {
+                    var id = flag.split(':')[1];
+                    //remove from pool/list and mark disabled
+                    delete pool[id];
+                    disabled[id] = facet;
+                    list = _.filter(list, function (compact) {
+                        return compact.facet !== id;
+                    });
+                }
+            });
+        });
+
+        //update
+        this.set('pool', pool);
+        this.set('poollist', list);
+        this.set('pooldisabled', disabled);
     };
 
     factory = new ModelFactory({
@@ -127,22 +156,30 @@ define('io.ox/search/model',
                         if (facet === 'global' || facet === value) {
                             //pseudo uuid
                             value = Date.now();
-                            itemvalue.id = value;
+                            data.id = value;
                         }
 
                         //add option to value
                         var compact = {
                             facet: facet,
                             value: value,
-                            option: option || itemvalue.filter ? '' : itemvalue.options[0].id
+                            // a) simple or default without options, b) exclusive, c) default with options
+                            option: data.style === 'simple' || itemvalue.filter ? '' : option || itemvalue.options[0].id
                         };
 
-                        itemvalue._compact = compact;
-                        pool[facet].values[value] = itemvalue;
-                        //add ids to pool list
-                        list.push(compact);
+                        (itemvalue || data)._compact = compact;
+                        pool[facet].values[value] = (itemvalue || data);
+
+                        //append/prepend ids to pool list
+                        if (facet === 'folder')
+                            list.unshift(compact);
+                        else
+                            list.push(compact);
                     }
                 });
+
+                //resolve conflicts
+                conflicts.call(this);
 
                 if (facet !== 'folder')
                     this.trigger('query');
@@ -165,24 +202,56 @@ define('io.ox/search/model',
                         list.splice(i, 1);
                     }
                 }
+                //resolve conflicts
+                conflicts.call(this);
+
+                items.empty();
                 this.trigger('query');
             },
             update: function (facet, value, data) {
-                var isCustom = this.get('pool')[facet].custom,
+                var facetdata = this.get('pool')[facet],
+                    isCustom = facetdata.custom,
                     list = this.get('poollist');
 
                 //update opt reference in pool list
                 if (isCustom) {
                     //update pool item itself
-                    $.extend(this.get('pool')[facet].values.custom, data);
+                    if (!data.custom || data.custom === 'custom') {
+                        //reset to 'all folders' by removing facet again
+                        this.remove('folder', 'custom');
+                        return;
+                    } else
+                        $.extend(this.get('pool')[facet].values.custom, data);
                 } else {
                     //update poollist
                     for (var i = list.length - 1; i >= 0; i--) {
                         var item = list[i];
                         if (item.facet === facet && item.value === value) {
-                            _.extend(item, data);
+                            _.extend(item, data, facetdata.style === 'exclusive' ?  {value: data.option } : {});
                         }
                     }
+                }
+
+                //TODO: remove hack
+                if (facetdata.style === 'exclusive') {
+                    facetdata.values = {};
+                    //get value object
+                    _.each(facetdata.options, function (obj) {
+                        //folder support via hidden flag
+                        if (obj.id === data.option) {
+                            facetdata.values[obj.id] = _.extend(
+                                                            {},
+                                                            obj,
+                                                            {
+                                                                _compact: {
+                                                                    facet: facet,
+                                                                    value: data.option,
+                                                                    option: data.option
+                                                                }
+                                                            }
+                                                        );
+                        }
+                    });
                 }
                 this.trigger('query');
             },
@@ -195,7 +264,7 @@ define('io.ox/search/model',
                     var facet = pool[item.facet],
                         value = facet.values[item.value],
                         simple;
-                    if (item.option) {
+                    if (item.option && value && value.options) {
                         _.each(value.options, function (opt) {
                             if (opt.id === item.option) {
                                 simple = _.copy(opt, true);
@@ -205,8 +274,7 @@ define('io.ox/search/model',
                         simple = _.copy(value, true);
                     }
 
-                    //
-                    if (!!value) {
+                    if (value && (value.custom || value.id !== 'custom')) {
                         active.push({
                             facet: facet.id,
                             value: value.custom || value.id,
@@ -229,27 +297,21 @@ define('io.ox/search/model',
                     return require(app).getApp().folder.get() || undefined;
                 return undefined;
             },
-            //a facet from autocomplete
-            getFacet: function (id) {
-                return _.find(this.get('autocomplete').concat(this.get('folder')), function (facet) {
-                    return facet.id === id;
-                });
+            ensure: function () {
+                var self = this,
+                    missingFolder = !this.get('pool').folder && !this.get('pooldisabled').folder,
+                    def = missingFolder && this.isMandatory('folder') ? util.getFirstChoice(this) : $.Deferred().resolve({});
+                return def
+                        .then(function (data) {
+                            data = data || {};
+                            if (missingFolder)
+                                self.add('folder', 'custom', data);
+                        });
             },
             //
             getFacets: function () {
-                var self = this,
-                    missingFolder = !this.get('pool').folder,
-                    def = missingFolder && this.isMandatory('folder') ? util.getFirstChoice(this) : $.Deferred().resolve({});
-
-                return def
-                        .then(function (data) {
-                            //folder data available (if needed)
-                            if (missingFolder) {
-                                //add (and update for the right display name)
-                                self.add('folder', 'custom', data);
-                            }
-                        })
-                        .then(function () {
+                var self = this;
+                return this.ensure().then(function () {
                             //return active filters
                             return self.fetch();
                         });
@@ -259,6 +321,7 @@ define('io.ox/search/model',
             },
             setItems: function (data, timestamp) {
                 var application = this.getApp(),
+                    self = this,
                     list = _.map(data.results, function (item) {
                         return {
                             id: item.id,
@@ -270,37 +333,31 @@ define('io.ox/search/model',
                     });
 
                 //set collection
-                items.reset();
-                items.add(list);
+                items.reset(list);
                 items.timestamp = timestamp || Date.now();
+                self.stopListening();
+                self.listenTo(items, 'needs-refresh', function () {
+                    self.trigger('query');
+                });
             },
             getOptions: function () {
                 return  _.copy(options);
             },
             reset: function () {
-                items.reset();
-                delete items.timestamp;
+                items.empty();
                 this.set({
                     query: '',
                     autocomplete: [],
                     active: [],
                     pool: {},
                     poollist: [],
+                    pooldisabled: {},
                     start: 0
                 },
                 {
                     silent: true
                 });
                 this.trigger('reset');
-            }
-        }
-    });
-
-    ext.point('io.ox/search/model/validation').extend({
-        id: 'recurrence-needs-end-date',
-        validate: function (attributes) {
-            if (attributes.recurrence_type && (attributes.end_date === undefined || attributes.end_date === null)) {//0 is a valid number so check precisely
-                this.add('end_date', gt('Recurring tasks need a valid end date.'));
             }
         }
     });

@@ -1,6 +1,6 @@
 {
   "name": "update-themes",
-  "version": "0.0.1",
+  "version": "7.6.0-3",
   "description": "A tool to manually update a set of themes for Open-Xchange Appsuite",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,11 @@
     "grunt-contrib-clean": "^0.5.0",
     "grunt": "^0.4.4",
     "assemble-less": "^0.7.0",
-    "underscore": "^1.6.0"
+    "underscore": "^1.6.0",
+    "less": "^1.7.0"
+  },
+  "optionalDependencies": {
+    "jshint": "Open-Xchange-Frontend/jshint#0ffee4a9ae",
+    "shared-grunt-config": "Open-Xchange-Frontend/shared-grunt-config#v0.2.1"
   }
 }

@@ -242,7 +242,7 @@ define('io.ox/tasks/view-detail',
     };
 
     var buildDropdown = function (container, label, data) {
-        var bla = new links.DropdownLinks({
+        var bla = new links.Dropdown({
                 label: label,
                 classes: 'attachment-item',
                 ref: 'io.ox/tasks/attachment/links'

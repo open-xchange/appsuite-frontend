@@ -196,6 +196,13 @@ define('io.ox/mail/toolbar',
         if (layout === 'vertical' || layout === 'compact') li.show(); else li.hide();
     }
 
+    function statistics(app, e) {
+        e.preventDefault();
+        require(['io.ox/mail/statistics']).done(function (statistics) {
+            statistics.open(app);
+        });
+    }
+
     // view dropdown
     ext.point('io.ox/mail/classic-toolbar').extend({
         id: 'view-dropdown',
@@ -216,6 +223,9 @@ define('io.ox/mail/toolbar',
             .option('folderview', true, gt('Folder view'))
             .option('checkboxes', true, gt('Checkboxes'))
             .option('contactPictures', true, gt('Contact pictures'))
+            .option('exactDates', true, gt('Exact dates'))
+            .divider()
+            .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
             .listenTo(baton.app.props, 'change:layout', updateContactPicture);
 
             this.append(

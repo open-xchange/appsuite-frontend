@@ -205,7 +205,7 @@ define('io.ox/core/settings',
             else {
                 // offline
                 self.detach();
-                return { tree: tree, meta: meta };
+                return $.Deferred().resolve({ tree: tree, meta: meta });
             }
         };
 

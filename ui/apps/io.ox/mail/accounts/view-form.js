@@ -63,13 +63,8 @@ define.async('io.ox/mail/accounts/view-form',
 
         validationCheck = function (data) {
 
-            data = _.extend({
-                unified_inbox_enabled: false,
-                transport_credentials: false
-            }, data);
-
+            data = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, data);
             data.name = data.personal = data.primary_address;
-
             return accountAPI.validate(data);
         },
 
@@ -105,11 +100,16 @@ define.async('io.ox/mail/accounts/view-form',
 
                 ext.point(POINT + '/pane').invoke('draw', self.$el.find('.io-ox-account-settings'));
 
-                var pop3nodes = self.$el.find('.form-group.pop3');
+                var pop3nodes = self.$el.find('.form-group.pop3'),
+                    dropdown = self.$el.find('#mail_protocol');
 
                 //check if pop3 refresh rate needs to be displayed
                 if (self.model.get('mail_protocol') !== 'pop3') {
                     pop3nodes.hide();
+                }
+
+                if (self.model.get('id')) {
+                    dropdown.prop('disabled', true);
                 }
 
                 function syncLogin(model, value) {

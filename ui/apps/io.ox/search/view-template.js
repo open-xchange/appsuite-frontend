@@ -15,9 +15,10 @@ define('io.ox/search/view-template',
     ['gettext!io.ox/core',
      'io.ox/core/extensions',
      'io.ox/core/api/apps',
+     'settings!io.ox/core',
      'io.ox/search/util',
      'io.ox/core/tk/autocomplete'
-    ], function (gt, ext, appAPI, util) {
+    ], function (gt, ext, appAPI, settings, util) {
 
     'use strict';
 
@@ -50,7 +51,7 @@ define('io.ox/search/view-template',
                             api: app.apiproxy,
                             minLength: 0,
                             mode: 'search',
-                            delay: 150,
+                            delay: 100,
                             parentSelector: container  ? '.query' : '.io-ox-search',
                             model: model,
                             container: container,
@@ -87,7 +88,13 @@ define('io.ox/search/view-template',
                                     model.remove();
                                 }
                                 ref.val('');
-                                model.add(value.facet, value.id);
+
+                                //exclusive: define used option (type2 default is index 0 of options)
+                                var option = _.find(value.options, function (item) {
+                                    return item.id === value.id;
+                                });
+
+                                model.add(value.facet, value.id, (option || {}).id);
                             }
                         })
                         .on('focus focus:custom click', function (e, isRetry) {
@@ -160,25 +167,33 @@ define('io.ox/search/view-template',
         draw: function (baton) {
             var id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
-                row, cell;
+                row, cell,
+                apps = settings.get('search/modules', ['mail', 'contacts', 'calendar', 'tasks', 'files']);
 
-            //create containers
+            //create container
             row = $('<div class="row applications">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled">')
             );
 
-            //create dropdown menu entries
-            _(appAPI.getFavorites()).each(function (app) {
-                if (!opt.mapping[app.id] || app.id === 'io.ox/files') {
+            //apply mapping (infostore-files-drive chameleon)
+            apps = _.map(apps, function (module) {
+                var id = 'io.ox/' + module;
+                return opt.mapping[id] || id;
+            });
+
+            //create menu entries
+            _(apps).each(function (id) {
+                var title = (ox.manifests.apps[id + '/main'] || {}).title;
+                if (title) {
                     cell.append(
                         $('<li role="presentation" class="application">')
                             .append(
                                 $('<div class="btn-group">')
                                 .append(
                                     $('<button type="button" class="btn btn-link">')
-                                        .attr('data-app', (opt.mapping[app.id] || app.id))
+                                        .attr('data-app', id)
                                         .addClass('pull-left')
-                                        .text(gt.pgettext('app', app.title))
+                                        .text(gt.pgettext('app', title))
                                 )
                             )
                     );
@@ -226,9 +241,14 @@ define('io.ox/search/view-template',
             this.draw.call(baton.$, baton);
         },
         draw: function (baton) {
+
+            //ensure folder facet is set
+            baton.model.ensure();
+
             var model = baton.model,
                 list = model.get('poollist'),
-                facet, row, cell, button;
+                pool = model.get('pool'),
+                row, cell;
 
             row = $('<div class="row facets">').append(
                 cell = $('<ul class="col-xs-12 list-unstyled facets">')
@@ -236,27 +256,32 @@ define('io.ox/search/view-template',
 
             _.each(list, function (item) {
                 //get active value
-                var value = model.get('pool')[item.facet].values[item.value];
+                var facet = pool[item.facet],
+                    value, facetnode, button;
 
-                //create facet node
-                cell.append(
-                    facet = $('<li role="presentation" class="facet btn-group">')
-                                // .addClass('fac!et pull-left')
-                                .append(
-                                    // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
-                                    button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
-                                        e.preventDefault();
-                                    }).append($('<label>'))
-                                )
-                );
+                if (facet) {
+                    value = facet.values[item.value];
 
-                //general stuff
-                ext.point('io.ox/search/view/window/facet')
-                    .invoke('draw', button, value, baton);
 
-                //additional actions per id/type
-                ext.point('io.ox/search/view/window/facet/' + value.facet)
-                    .invoke('draw', facet, value, baton);
+                    //create facet node
+                    cell.append(
+                        facetnode = $('<li role="presentation" class="facet btn-group">')
+                                    .append(
+                                        // in firefox clicks on nested elements in buttons won't work - therefore this needs to be a  <a href="#">
+                                        button = $('<a href="#" type="button" role="button" class="btn btn-default dropdown-toggle">').on('click', function (e) {
+                                            e.preventDefault();
+                                        }).append($('<label>'))
+                                    )
+                    );
+
+                    //general stuff
+                    ext.point('io.ox/search/view/window/facet')
+                        .invoke('draw', button, value, facet, baton);
+
+                    //additional actions per id/type
+                    ext.point('io.ox/search/view/window/facet/' + value.facet)
+                        .invoke('draw', facetnode, value, baton);
+                }
             });
 
             this.append(row);
@@ -283,8 +308,7 @@ define('io.ox/search/view-template',
                     list = link.closest('ul'),
                     option = link.attr('data-action') || link.attr('data-custom') || link.attr('data-option'),
                     facet = list.attr('data-facet'),
-                    value = list.attr('data-value'),
-                    data = {};
+                    value = list.attr('data-value');
 
                 //select option
                 if (option === 'dialog') {
@@ -299,36 +323,75 @@ define('io.ox/search/view-template',
                         //use existing option
                         baton.model.update(facet, value, {option: option });
                     }
-                    baton.model.update(facet, value, data);
                     baton.model.trigger('query');
                 }
             });
         }
     });
 
+    point.extend({
+        id: 'info',
+        index: 300,
+        draw: function (baton) {
+            var items = baton.model.get('items'),
+                count = items.length - baton.model.get('extra');
+            if (items.length > baton.model.get('size')) {
+                this.append(
+                    $('<div class="info">')
+                    .append(
+                            $('<span>')
+                            .addClass('info-item')
+                            .append(
+                                gt('More than the currently displayed %1$s items were found', count)
+                            )
+                        )
+                );
+            }
+        }
+    });
+
+    point.extend({
+        id: 'busy',
+        index: 500,
+        draw: function () {
+            this.append(
+                $('<div class="row busy">')
+                    .append(
+                        $('<div class="col-xs-12 io-ox-busy">')
+                            .css('min-height', '50px')
+                        )
+            );
+        }
+    });
+
+    function getOptionLabel(options, id) {
+        var current = _.find(options, function (item) {
+                return item.id === id;
+            });
+        return (current || {}).display_name;
+    }
+
     //facet
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'type',
         index: 100,
-        draw: function (value) {
+        draw: function (value, facet) {
             var options = value.options,
                 id = value._compact.option,
-                type, current;
+                type;
             //get type label
             if (value.facet === 'folder')
                 type = gt('Folder');
             else if (options) {
-                current = _.find(options, function (item) {
-                    return item.id === id;
-                });
-                type = current && current.display_name;
+                type = getOptionLabel(options, id);
             }
             //append type
             if (type) {
                 this.find('label').prepend(
                     $('<span>')
                         .addClass('type')
-                        .html(type)
+                        //TYPE 3: use facet label instead of option label
+                        .html(facet.style === 'exclusive' ? facet.display_name : type)
                 );
             }
         }
@@ -337,11 +400,17 @@ define('io.ox/search/view-template',
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'name',
         index: 200,
-        draw: function (value) {
+        draw: function (value, facet) {
+            var type;
+
+            //TYPE 3: use option label instead of value label
+            if (facet.style === 'exclusive')
+                type = getOptionLabel(value.options, value._compact.option);
+
             this.find('label').append(
                 $('<span>')
                     .addClass('name')
-                    .html(value.display_name)
+                    .html(type || value.display_name)
             );
         }
     });
@@ -349,14 +418,13 @@ define('io.ox/search/view-template',
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'dropdown',
         index: 300,
-        draw: function (value, baton) {
-            var facet = baton.model.getFacet(value.facet),
-                filters = facet ? facet.values[0].options || [] : [],
+        draw: function (value, facet) {
+            var options = facet.options || _.values(facet.values)[0].options || [],
                 current = value._compact.option, option,
                 parent = this.parent(),
                 menu;
 
-            if (filters.length) {
+            if (options.length) {
                 this.attr('data-toggle', 'dropdown');
                 //add caret
                 this.prepend(
@@ -371,7 +439,7 @@ define('io.ox/search/view-template',
                             'data-facet': facet.id,
                             'data-value': value.id
                         });
-                _.each(filters, function (item) {
+                _.each(options, function (item) {
                     menu.append(
                         option = $('<li role="presentation">').append(
                                      $('<a role="menuitem" tabindex="-1" href="#">')
@@ -395,7 +463,7 @@ define('io.ox/search/view-template',
     ext.point('io.ox/search/view/window/facet').extend({
         id: 'remove',
         index: 400,
-        draw: function (value, baton) {
+        draw: function (value, facet, baton) {
             var isMandatory = baton.model.isMandatory(value.facet);
            //remove action for non mandatory facets
             if (!isMandatory && value.facet !== 'folder') {
@@ -406,7 +474,7 @@ define('io.ox/search/view-template',
                     )
                     .on('click', function (e) {
                         e.stopPropagation();
-                        baton.model.remove(value.facet, value.id);
+                        baton.model.remove(value.facet || value._compact.facet, value.id);
                     })
                 );
             }
@@ -417,13 +485,12 @@ define('io.ox/search/view-template',
     //facet type: folder
     function folderDialog(facet, baton) {
         require(['io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (dialogs, views) {
-            var label = gt('Folder'),
-                id = facet.values[0].custom,
+            var id = facet.values[0].custom,
                 type = baton.model.getModule();
 
             var dialog = new dialogs.ModalDialog()
-                .header($('<h4>').text(label))
-                .addPrimaryButton('ok', label, 'ok', {'tabIndex': '1'})
+                .header($('<h4>').text(gt('Folder')))
+                .addPrimaryButton('ok', gt('Select Folder'), 'ok', {'tabIndex': '1'})
                 .addButton('cancel', gt('Cancel'), 'cancel', {'tabIndex': '1'});
             dialog.getBody().css({ height: '250px' });
 
@@ -464,15 +531,6 @@ define('io.ox/search/view-template',
             });
         });
     }
-
-    ext.point('io.ox/search/view/window/facet/folder').extend({
-        id: 'fallback',
-        index: '200',
-        draw: function (value) {
-            if (!value.display_name)
-                this.find('.name').html('<i>' + gt('All folders') + '</i>');
-        }
-    });
 
     ext.point('io.ox/search/view/window/facet/folder').extend({
         id: 'dropdown',
@@ -560,6 +618,39 @@ define('io.ox/search/view-template',
         }
     });
 
+    ext.point('io.ox/search/view/window/facet/folder').extend({
+        id: 'all-folders',
+        index: '400',
+        draw: function (value, baton) {
+            var link;
+            //dropdown entry
+            if (!baton.model.isMandatory('folder')) {
+
+                //add dropdown entry
+                this.find('ul.dropdown').prepend(
+                    $('<li role="presentation">').append(
+                         link = $('<a href="#" class="option more" role="menuitem" tabindex="-1">')
+                                    .append(
+                                        $('<i class="fa fa-fw ">'),
+                                        $('<span>').text(gt('All folders'))
+                                    )
+                                    .attr('data-custom', 'custom')
+                                    .attr('title', gt('All folders'))
+                    )
+                );
+                //is active
+                if (!value.custom || value.custom === 'custom') {
+                    //set display name
+                    this.find('.name')
+                        .text(gt('All folders'));
+                    //set fa-check icon
+                    link.find('i')
+                        .addClass('fa-check');
+                }
+            }
+        }
+    });
+
     // inline dropdown
     ext.point('io.ox/search/view/window/mobile').extend({
         id: 'dropdown',
@@ -584,38 +675,35 @@ define('io.ox/search/view-template',
                 draw: function (baton) {
 
                     var id = baton.model.getApp(),
-                        opt = baton.model.getOptions(),
                         row, cell,
                         items = [],
-                        titles = {};
+                        titles = {},
+                        apps = settings.get('search/apps', []);
 
                     //create containers
                     row = $('<div class="row ">').append(
                         cell = $('<div class="btn-group col-xs-12">')
                     );
 
-
                     //create dropdown menu entries
-                    _(appAPI.getFavorites()).each(function (app) {
-                        if (!opt.mapping[app.id] || app.id === 'io.ox/files') {
-                            var title = titles[app.id] = gt.pgettext('app', app.title);
-                            items.push(
-                                $('<li role="presentation">')
-                                .append(
-                                    $('<a role="menuitem" tabindex="-1" href="#">')
-                                        .attr({
-                                            'title': title,
-                                            'data-app': app.id
-                                        })
-                                        .append(
-                                            $('<i class="fa fa-fw"></i>'),
-                                            $('<span>').text(
-                                                title
-                                            )
+                    _(apps).each(function (id) {
+                        var title = titles[id] = ox.manifests.apps[id + '/main'].title;
+                        items.push(
+                            $('<li role="presentation">')
+                            .append(
+                                $('<a role="menuitem" tabindex="-1" href="#">')
+                                    .attr({
+                                        'title': title,
+                                        'data-app': id
+                                    })
+                                    .append(
+                                        $('<i class="fa fa-fw"></i>'),
+                                        $('<span>').text(
+                                            title
                                         )
-                                )
-                            );
-                        }
+                                    )
+                            )
+                        );
                     });
 
                     //create button and append dropdown menue
@@ -653,27 +741,5 @@ define('io.ox/search/view-template',
             });
         }
     });
-
-    // point.extend({
-    //     id: 'info',
-    //     index: 300,
-    //     draw: function (baton) {
-    //         var items = baton.model.get('items'),
-    //             timespend = Math.round((Date.now() - items.timestamp) / 100) / 10;
-    //         if (items.timestamp) {
-    //             this.append(
-    //                 $('<div>')
-    //                 .addClass('info')
-    //                 .append(
-    //                         $('<span>')
-    //                         .addClass('info-item')
-    //                         .append(
-    //                             gt('Found %1$s items in %2$s seconds', items.length, timespend)
-    //                         )
-    //                     )
-    //             );
-    //         }
-    //     }
-    // });
 
 });

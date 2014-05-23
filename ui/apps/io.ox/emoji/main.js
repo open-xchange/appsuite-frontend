@@ -275,6 +275,7 @@ define('io.ox/emoji/main',
                         $('<img src="apps/themes/login/1x1.gif" class="emoji ' + css + '">')
                         .attr({
                             'data-emoji-unicode': unicode,
+                            'data-mce-resize': 'false',
                             'alt': unicode
                         })
                     ).html();

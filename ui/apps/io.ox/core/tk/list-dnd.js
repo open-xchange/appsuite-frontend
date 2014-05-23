@@ -16,7 +16,9 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
     'use strict';
 
     function joinTextNodes(nodes, delimiter) {
-        nodes = nodes.map(function () { return $.trim($(this).text()); });
+        nodes = nodes.map(function () {
+            return $.trim($(this).attr('title') || $(this).text());
+        });
         return $.makeArray(nodes).join(delimiter || '');
     }
 

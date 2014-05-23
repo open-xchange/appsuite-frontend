@@ -139,9 +139,6 @@ $(window).load(function () {
         });
     }
 
-    // be busy
-    $('#background-loader').busy();
-
     $(window).on('online offline', function (e) {
         ox.trigger('connection:' + e.type);
     });
@@ -167,7 +164,7 @@ $(window).load(function () {
             )
             .on('click', function (e) { e.preventDefault(); location.reload(); })
         );
-        $('#background-loader').idle().fadeOut(DURATION);
+        $('#background-loader').fadeOut(DURATION);
         console.warn('Server is down.');
         serverDown = $.noop;
     };
@@ -268,7 +265,7 @@ $(window).load(function () {
             $(this).busy();
             debug('boot.js: loadCore > load settings ...');
             // get configuration & core
-            require(['settings!io.ox/core'], function (settings) {
+            require(['settings!io.ox/core', ox.base + '/precore.js'], function (settings) {
 
                 // greedy prefetch for mail app
                 // need to get this request out as soon as possible
@@ -305,6 +302,8 @@ $(window).load(function () {
                         function success(core) {
                             // go!
                             debug('boot.js: core.launch()');
+                            //trigger load event so custom dropdown can add event listeners (loading to early causes js errors on mobile devices during login)
+                            $(document).trigger('core-main-loaded');
                             core.launch();
                         },
                         function fail(e) {
@@ -630,10 +629,6 @@ $(window).load(function () {
                 )
                 .always(function () {
 
-                    var ref = hash.ref;
-                    ref = ref ? ('#' + decodeURIComponent(ref)) : location.hash;
-                    _.url.redirect(ref ? ref : '#');
-
                     // fetch user config
                     ox.secretCookie = hash.secretCookie === 'true';
                     fetchUserSpecificServerConfig().done(function () {
@@ -664,6 +659,12 @@ $(window).load(function () {
                                 user_id: parseInt(resp.user_id || '0', 10),
                                 context_id: resp.context_id
                             });
+
+                            var redirect = '#';
+                            if (hash.ref) {
+                                redirect += hash.ref;
+                            }
+
                             // cleanup url
                             _.url.hash({
                                 language: null,
@@ -672,8 +673,11 @@ $(window).load(function () {
                                 user_id: null,
                                 context_id: null,
                                 secretCookie: null,
-                                store: null
+                                store: null,
+                                ref: null
                             });
+                            _.url.redirect(redirect);
+
                             // go ...
                             loadCoreFiles().done(function () {
                                 loadCore();
@@ -839,12 +843,6 @@ $(window).load(function () {
                 $('#io-ox-login-username')[0].type = 'text';
             }
 
-            //show errors saved inlocalstorage
-            if (localStorage.getItem('errormsg')) {
-                feedback('error', $.txt(localStorage.getItem('errormsg')));
-                localStorage.removeItem('errormsg');//remove errormessages from localstorage
-            }
-
             debug('boot.js: Load "signin" plugins & set default language');
 
             // make sure we get 'signin' plugins
@@ -939,7 +937,7 @@ $(window).load(function () {
                 $('#io-ox-login-username').prop('disabled', false).focus().select();
 
                 debug('boot.js: Fade in ...');
-                $('#background-loader').idle().fadeOut(DURATION, cont);
+                $('#background-loader').fadeOut(DURATION, cont);
             });
         };
 

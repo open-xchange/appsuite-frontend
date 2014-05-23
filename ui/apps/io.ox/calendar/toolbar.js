@@ -19,7 +19,7 @@ define('io.ox/calendar/toolbar',
      'io.ox/core/tk/upload',
      'io.ox/core/dropzone',
      'io.ox/core/notifications',
-     'gettext!io.ox/mail',
+     'gettext!io.ox/calendar',
      'io.ox/calendar/actions',
      'less!io.ox/calendar/style'
     ], function (ext, links, actions, Dropdown, upload, dropzone, notifications, gt) {
@@ -42,6 +42,13 @@ define('io.ox/calendar/toolbar',
             title: gt('New appointment'),
             drawDisabled: true,
             ref: 'io.ox/calendar/detail/actions/create'
+        },
+        'schedule': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Scheduling'),
+            drawDisabled: true,
+            ref: 'io.ox/calendar/actions/freebusy'
         },
         'edit': {
             prio: 'hi',
@@ -101,6 +108,20 @@ define('io.ox/calendar/toolbar',
         ref: 'io.ox/calendar/classic-toolbar/links'
     }));
 
+    // local mediator
+    function updateCheckboxOption() {
+        // only show this option if preview pane is right (vertical/compact)
+        var li = this.$el.find('[data-name="checkboxes"]').parent(),
+            layout = this.model.get('layout');
+        li.toggle(layout === 'list');
+    }
+
+    function print(app, e) {
+        e.preventDefault();
+        var baton = ext.Baton({ app: app, window: app.getWindow() });
+        actions.invoke('io.ox/calendar/detail/actions/print', null, baton);
+    }
+
     // view dropdown
     ext.point('io.ox/calendar/classic-toolbar').extend({
         id: 'view-dropdown',
@@ -109,13 +130,25 @@ define('io.ox/calendar/toolbar',
 
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ model: baton.app.props, label: gt('View'), tagName: 'li' })
+            .header(gt('Layout'))
+            .option('layout', 'week:day', gt('Day'))
+            .option('layout', 'week:workweek', gt('Workweek'))
+            .option('layout', 'week:week', gt('Week'))
+            .option('layout', 'month', gt('Month'))
+            .option('layout', 'list', gt('List'))
+            .divider()
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
-            .option('checkboxes', true, gt('Checkboxes'));
+            .option('checkboxes', true, gt('Checkboxes'))
+            .divider()
+            .link('print', gt('Print'), print.bind(null, baton.app))
+            .listenTo(baton.app.props, 'change:layout', updateCheckboxOption);
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
             );
+
+            updateCheckboxOption.call(dropdown);
         }
     });
 
@@ -142,16 +175,28 @@ define('io.ox/calendar/toolbar',
         }
     });
 
+    function prepareUpdateToolbar(app) {
+        var perspective = app.getWindow().getPerspective(),
+            list = perspective && perspective.name === 'list' ? app.getGrid().selection.get() : {};
+        app.updateToolbar(list);
+    }
+
     ext.point('io.ox/calendar/mediator').extend({
         id: 'update-toolbar',
         index: 10200,
         setup: function (app) {
             app.updateToolbar();
-            // // update toolbar on selection change as well as any model change (seen/unseen flag)
-            app.getGrid().selection.on('change', function (e, list) {
-                app.updateToolbar(list);
+            // update toolbar on selection change
+            app.getGrid().selection.on('change', function () {
+                prepareUpdateToolbar(app);
+            });
+            // folder change
+            app.on('folder:change', function () {
+                prepareUpdateToolbar(app);
+            });
+            app.getWindow().on('change:perspective change:initialPerspective', function () {
+                prepareUpdateToolbar(app);
             });
         }
     });
-
 });

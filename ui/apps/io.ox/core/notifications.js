@@ -88,6 +88,9 @@ define('io.ox/core/notifications',
                 lastFocused = $(document.activeElement),//save focus
                 nextFocus, //focus in case lastFocus got lost (item not there anymore)
                 empty = true; //check if notification area is empty
+ 
+            //remove old empty message to avoid duplicates
+            self.$el.find('.no-news-message').remove();
 
             if (lastFocused.hasClass('refocus')) {//refocusable elements have this marker class
                 //find next possible focus
@@ -108,7 +111,7 @@ define('io.ox/core/notifications',
                 lastFocused = lastFocused.attr('focus-id');
                 refocus = true;
             }
-            self.$el.empty();
+
 
             if (_.size(self.subviews) < _.size(notifications)) { //make sure views are created one time only to avoid zombies
                 _(notifications).each(function (category, type) {
@@ -119,14 +122,14 @@ define('io.ox/core/notifications',
             }
 
             _(self.subviews).each(function (category) {
+                self.$el.append(category.render().el);
                 if (category.collection.length > 0) {
-                    self.$el.append(category.render().el);
                     empty = false;
                 }
             });
 
             if (empty) {
-                self.$el.append($('<legend class="section-title">').text(gt('No notifications')));
+                self.$el.append($('<legend class="section-title no-news-message">').text(gt('No notifications')));
             }
 
             if (refocus) {//restore focus if possible
@@ -360,7 +363,7 @@ define('io.ox/core/notifications',
                     info: 10000,
                     success: 4000,
                     warning: 10000,
-                    screenreader: 0,
+                    screenreader: 100,
                 },
 
                 icons = {
@@ -381,12 +384,15 @@ define('io.ox/core/notifications',
                         return;
                     }
 
-                    $('.io-ox-alert')
+                    var nodes =  $('.io-ox-alert')
                         .trigger('notification:removed')
-                        .on('transitionend webkitTransitionEnd', function () {
-                            $(this).remove();
-                        })
                         .removeClass('appear');
+
+                    // has been event-based (transitionend webkitTransitionEnd) but sometimes
+                    // such events are not triggered causing invisible but blocking overlays
+                    setTimeout(function () {
+                        nodes.remove(); nodes = null;
+                    }, 300);
                 },
 
                 click = function (e) {
@@ -442,9 +448,15 @@ define('io.ox/core/notifications',
                 if (validType.test(o.type)) {
 
                     active = false;
-                    clearTimeout(timer);
 
-                    timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+                    if (o.type !== 'screenreader') {//screenreader notifications should not remove standard ones, so special remove here
+                        clearTimeout(timer);
+                        timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+                    } else {
+                        setTimeout(function () {
+                            $('.io-ox-alert-screenreader').remove();
+                        }, o.duration || durations[o.type] || 100);
+                    }
 
                     var html = o.html ? o.message : _.escape(o.message).replace(/\n/g, '<br>'),
                         reuse = false,
@@ -454,7 +466,7 @@ define('io.ox/core/notifications',
                     // reuse existing alert?
                     var node = $('.io-ox-alert');
 
-                    if (node.length) {
+                    if (node.length && o.type !== 'screenreader') {//screenreader should not reuse existing notifications, this would only remove them for other users
                         node.empty();
                         reuse = true;
                         className += ' appear';
@@ -485,7 +497,7 @@ define('io.ox/core/notifications',
                         );
                     }
 
-                    if (!reuse) $('body').append(node);
+                    if (!reuse) $('#io-ox-core').append(node);
 
                     // put at end of stack not to run into opening click
                     setTimeout(function () {

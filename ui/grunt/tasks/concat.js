@@ -68,12 +68,27 @@ module.exports = function (grunt) {
                          'apps/io.ox/core/capabilities.js',
                          'apps/io.ox/core/settings.js',
                          'apps/io.ox/core/gettext.js',
-                         'src/boot.js',
-                         // 2nd wave
                          'apps/io.ox/core/event.js',
                          'apps/io.ox/core/cache/indexeddb.js',
                          'apps/io.ox/core/cache/localstorage.js',
                          'apps/io.ox/core/cache/simple.js',
+                         'apps/plugins/halo/register.js',
+                         // missing for signin
+                         'apps/io.ox/core/login-i18n.js',
+                         'build/apps/io.ox/core/login.en_US.js',
+                         'build/apps/io.ox/core/login.de_DE.js',
+                         'src/boot.js'
+                    ],
+                    dest: 'build/boot.js',
+                    nonull: true
+                }
+            ]
+        },
+        precore: {
+            files: [
+                {
+                    src: [
+                         // 2nd wave
                          'apps/io.ox/core/desktop.js',
                          'apps/io.ox/core/api/apps.js',
                          'apps/io.ox/core/extPatterns/stage.js',
@@ -97,7 +112,6 @@ module.exports = function (grunt) {
                          'apps/io.ox/core/tk/folderviews.js',
                          'apps/io.ox/core/tk/selection.js',
                          // core
-                         'apps/plugins/halo/register.js',
                          'apps/io.ox/core/main.js',
                          // mail app
                          'apps/io.ox/mail/util.js',
@@ -105,8 +119,8 @@ module.exports = function (grunt) {
                          'apps/io.ox/mail/listview.js',
                          'apps/io.ox/core/tk/list-control.js',
                          'apps/io.ox/mail/threadview.js',
-                         'apps/io.ox/mail/navbarViews.js',
-                         'apps/io.ox/core/pageController.js',
+                         'apps/io.ox/core/toolbars-mobile.js',
+                         'apps/io.ox/core/page-controller.js',
                          'apps/io.ox/mail/actions.js',
                          'apps/io.ox/mail/toolbar.js',
                          'apps/io.ox/mail/import.js',
@@ -123,7 +137,8 @@ module.exports = function (grunt) {
                          'apps/io.ox/mail/detail/view.js',
                          'apps/io.ox/mail/detail/mobileView.js',
                          'apps/io.ox/core/tk/list-dnd.js',
-                         'apps/io.ox/mail/mobileToolbarActions.js',
+                         'apps/io.ox/mail/mobile-toolbar-actions.js',
+                         'apps/io.ox/mail/mobile-navbar-extensions.js',
                          'apps/io.ox/core/print.js',
                          'apps/io.ox/contacts/api.js',
                          'apps/io.ox/core/tk/flag-picker.js',
@@ -143,7 +158,7 @@ module.exports = function (grunt) {
                          // mail app - main
                          'apps/io.ox/mail/main.js'
                     ],
-                    dest: 'build/boot.js',
+                    dest: 'build/precore.js',
                     nonull: true
                 }
             ]

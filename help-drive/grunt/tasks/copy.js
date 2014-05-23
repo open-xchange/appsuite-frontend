@@ -6,17 +6,18 @@ module.exports = function (grunt) {
         help: {
             files: [
                 {
-                    src: ['help-drive/**/*'],
+                    src: ['**/*'],
                     expand: true,
                     filter: 'isFile',
-                    dest: 'build/'
+                    cwd: 'html',
+                    dest: 'build/help-drive'
                 }
             ]
         },
         dist_help_common: {
             files: [
                 {
-                    src: ['help-drive/**/*', '!help-drive/l10n/**/*'],
+                    src: ['**/*', '!help-drive/l10n/**/*'],
                     expand: true,
                     filter: 'isFile',
                     cwd: 'build/',
@@ -57,7 +58,7 @@ module.exports = function (grunt) {
     // add dist l10n copy tasks
 
     grunt.file.expand({
-        cwd: 'help-drive/l10n',
+        cwd: 'html/l10n',
         filter: 'isDirectory'
     }, '*').forEach(function (Lang) {
         var lang = Lang.toLowerCase().replace(/_/g, '-'),

@@ -58,7 +58,7 @@ define('plugins/portal/xing/activities',
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s recommends this link:', makeName(creator))),
                 $('<div class="actionContent">').append(
-                    $('<a>').attr({href: activityObj.url}),
+                    $('<a>').attr({href: activityObj.url}).addClass('external xing'),
                     $('<div class="title">').text(activityObj.title),
                     $('<div class="description">').text(activityObj.description)
                 )
@@ -67,8 +67,9 @@ define('plugins/portal/xing/activities',
         }
     });
 
+
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
-        id: 'singleStatusPost',
+        id: 'singleBookmarkPost',
         accepts: function (activity) {
             return activity.verb === 'post' &&
                 activity.objects.length === 1 &&
@@ -78,10 +79,15 @@ define('plugins/portal/xing/activities',
             var linkActivity = activity.objects[0];
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s posted a link:', makeName(linkActivity.creator))),
-                $('<div class="actionContent">').text(linkActivity.url)
+                $('<div class="actionContent">').append(
+                    $('<a>').attr({'href': linkActivity.url, 'target': '_blank'})
+                    .addClass('external xing')
+                    .text(linkActivity.description || linkActivity.url)
+                )
             );
         }
     });
+
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'singleStatusPost',
@@ -99,6 +105,7 @@ define('plugins/portal/xing/activities',
             );
         }
     });
+
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'friend',
@@ -127,6 +134,43 @@ define('plugins/portal/xing/activities',
             return $('<div class="xing activityObj">').append(
                 $('<div class="actionDesc">').text(gt('%1$s has new contacts:', makeName(creator))),
                 $('<div class="actionContent">').append(newContacts)
+            );
+        }
+    });
+
+
+    ext.point('io.ox/portal/widget/xing/activityhandler').extend({
+        id: 'singleActivityPost',
+        accepts: function (activity) {
+            return activity.verb === 'post' &&
+                activity.objects.length === 1 &&
+                activity.objects[0].type === 'activity';
+        },
+        handle: function (activity) {
+            var statusActivity = activity.objects[0];
+
+            return $('<div class="xing activityObj">').append(
+                $('<div class="actionDesc">').text(gt('%1$s posted a new activity:', makeName(statusActivity.creator))),
+                $('<div class="actionContent">').text(statusActivity.content)
+            );
+        }
+    });
+
+
+    ext.point('io.ox/portal/widget/xing/activityhandler').extend({
+        id: 'singleUpdate',
+        accepts: function (activity) {
+            return activity.verb === 'update' &&
+                activity.objects.length === 1;
+        },
+        handle: function (activity) {
+            var profile = activity.objects[0];
+
+            return $('<div class="xing activityObj">').append(
+                $('<div class="actionDesc">').text(gt('%1$s updated their profile:', makeName(profile))),
+                    $('<div class="actionContent">').append(
+                        linkXingContact(profile)
+                    )
             );
         }
     });

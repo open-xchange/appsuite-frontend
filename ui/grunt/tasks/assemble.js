@@ -19,8 +19,10 @@ module.exports = function (grunt) {
 
         options: {
             version: '<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss'),
+            revision: '<%= String(pkg.version.slice(pkg.version.indexOf("-") + 1)) %>',
             enable_debug: '<%= String(local.debug) %>',
-            base: 'v=<%= assemble.options.version %>'
+            base: 'v=<%= assemble.options.version %>',
+            cap: '<%= String(local.cap || "") %>',
         },
         base: {
             options: {

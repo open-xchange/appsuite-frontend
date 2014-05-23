@@ -64,6 +64,9 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             // register new collection
             hash[cid] = { access: _.now(), collection: new backbone.Collection() };
 
+            // add "expired" attribute
+            hash[cid].collection.expired = false;
+
             // propagate changes in all collections
             return hash[cid].collection.on({
                 'remove': propagateRemove.bind(this, module),
@@ -74,6 +77,14 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         this.getModule = function () {
             return module;
         };
+
+        // clear pool on global refresh
+        ox.on('refresh^', function () {
+            // remove anything except detail pool
+            _(hash).each(function (entry) {
+                entry.collection.expired = true;
+            });
+        });
     }
 
     _.extend(Pool.prototype, {
@@ -108,7 +119,10 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             if ((model = collection.get(cid))) return model;
 
             model = new backbone.Model(data);
-            collection.add(model);
+
+            // add to pool unless it looks like a nested object
+            if (data.folder_id !== undefined && data.parent === undefined) collection.add(model);
+
             return model;
         }
     });

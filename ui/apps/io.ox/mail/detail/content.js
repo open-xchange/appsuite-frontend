@@ -419,11 +419,35 @@ define('io.ox/mail/detail/content',
                         .attr('title', gt('Show quoted text')),
                         $.txt(text)
                     )
-                    .on('click', explandBlockquote)
                 );
             });
+            // delegate
+            this.on('click', '.blockquote-toggle', explandBlockquote);
         }
     });
+
+    function findFarthestElement(memo, node) {
+        var pos;
+        if (node.css('position') === 'absolute' && (pos = node.position())) {
+            memo.x = Math.max(memo.x, pos.left + node.width());
+            memo.y = Math.max(memo.y, pos.top + node.height());
+            memo.found = true;
+        }
+        return memo;
+    }
+
+    function fixAbsolutePositions(content) {
+        var farthest = { x: content.get(0).scrollWidth, y: content.get(0).scrollHeight, found: false },
+            width = content.width(), height = content.height();
+        if (!content.isLarge && (farthest.x >= width || farthest.y >= height)) { // Bug 22756: FF18 is behaving oddly correct, but impractical
+            farthest = _.chain($(content).find('*')).map($).reduce(findFarthestElement, farthest).value();
+        }
+        // only do this for absolute elements
+        if (farthest.found) {
+            content.css('overflow-x', 'auto');
+            if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
+        }
+    }
 
     return {
 
@@ -433,17 +457,7 @@ define('io.ox/mail/detail/content',
                 return { content: $(), isLarge: false, type: 'text/plain' };
             }
 
-            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content,
-
-            findFarthestElement = function (memo, node) {
-                var pos;
-                if (node.css('position') === 'absolute' && (pos = node.position())) {
-                    memo.x = Math.max(memo.x, pos.left + node.width());
-                    memo.y = Math.max(memo.y, pos.top + node.height());
-                    memo.found = true;
-                }
-                return memo;
-            };
+            var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content;
 
             try {
 
@@ -498,19 +512,7 @@ define('io.ox/mail/detail/content',
                 // process content unless too large
                 if (!baton.isLarge) ext.point('io.ox/mail/detail/content').invoke('process', content, baton);
 
-                setTimeout(function () {
-                    var farthest = { x: content.get(0).scrollWidth, y: content.get(0).scrollHeight, found: false },
-                        width = content.width(), height = content.height();
-                    if (!content.isLarge && (farthest.x >= width || farthest.y >= height)) { // Bug 22756: FF18 is behaving oddly correct, but impractical
-                        farthest = _.chain($(content).find('*')).map($).reduce(findFarthestElement, farthest).value();
-                    }
-                    // only do this for absolute elements
-                    if (farthest.found) {
-                        content.css('overflow-x', 'auto');
-                        if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
-                    }
-                    content = null;
-                }, 10);
+                setTimeout(fixAbsolutePositions, 10, content);
 
             } catch (e) {
                 console.error('mail.getContent', e.message, e, data);

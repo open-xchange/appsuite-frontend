@@ -186,12 +186,7 @@ define('io.ox/mail/accounts/settings',
 
             myModel.validationCheck(data, {ignoreInvalidTransport: true}).then(
                 function success(response) {
-                    if (response === false) {
-                        var message = gt('There was no suitable server found for this mail/password combination');
-                        drawAlert(getAlertPlaceholder(popup), message);
-                        popup.idle();
-                        popup.getBody().find('a.close').focus();
-                    } else {
+                    if (response === true) {
                         myModel.save(data, deferedSave);
                         deferedSave.done(function (response) {
                             if (response.error_id) {
@@ -206,6 +201,11 @@ define('io.ox/mail/accounts/settings',
                                 def.resolve(response);
                             }
                         });
+                    } else {
+                        var message = gt('There was no suitable server found for this mail/password combination');
+                        drawAlert(getAlertPlaceholder(popup), message);
+                        popup.idle();
+                        popup.getBody().find('a.close').focus();
                     }
                 },
                 function fail() {
@@ -217,13 +217,18 @@ define('io.ox/mail/accounts/settings',
         },
 
         autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def) {
+
             api.autoconfig({
                 'email': newMailaddress,
                 'password': newPassword
-            }).done(function (data) {
+            })
+            .done(function (data) {
                 if (data.login) {
                     data.primary_address = newMailaddress;
                     data.password = newPassword;
+                    // make sure not to set the SMTP credentials
+                    delete data.transport_login;
+                    delete data.transport_password;
                     validateMailaccount(data, popup, def);
                 } else {
                     var data = {};

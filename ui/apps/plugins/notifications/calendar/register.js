@@ -202,8 +202,8 @@ define('plugins/notifications/calendar/register',
         events: {
             'click': 'onClickItem',
             'keydown': 'onClickItem',
-            'change [data-action="selector"]': 'onClickReminder',
-            'click [data-action="selector"]': 'onClickReminder',
+            'change [data-action="reminder"]': 'onClickReminder',
+            'click [data-action="reminder"]': 'onClickReminder',
             'click [data-action="ok"]': 'onClickOk'
         },
 
@@ -305,15 +305,17 @@ define('plugins/notifications/calendar/register',
 
         render: function () {
 
-            var baton = ext.Baton({ view: this });
-            ext.point('io.ox/core/notifications/invites/header').invoke('draw', this.$el.empty(), baton);
+            this.$el.empty();
+            if (this.collection.length) {
+                var baton = ext.Baton({ view: this });
+                ext.point('io.ox/core/notifications/invites/header').invoke('draw', this.$el, baton);
 
-            this.collection.each(function (model) {
-                this.$el.append(
-                    new InviteView({ model: model, collection: this.collection }).render().$el
-                );
-            }, this);
-
+                this.collection.each(function (model) {
+                    this.$el.append(
+                        new InviteView({ model: model, collection: this.collection }).render().$el
+                    );
+                }, this);
+            }
             return this;
         },
 
@@ -343,19 +345,17 @@ define('plugins/notifications/calendar/register',
 
         render: function () {
 
-            var baton = ext.Baton({ view: this });
-            ext.point('io.ox/core/notifications/reminder/header').invoke('draw', this.$el.empty(), baton);
-            if (this.collection.length > 0) {
-                this.$el.show();
+            this.$el.empty();
+            if (this.collection.length) {
+                var baton = ext.Baton({ view: this });
+                ext.point('io.ox/core/notifications/reminder/header').invoke('draw', this.$el, baton);
+
                 this.collection.each(function (model) {
                     this.$el.append(
                         new ReminderView({ model: model, collection: this.collection }).render().$el
                     );
                 }, this);
-            } else {
-                this.$el.hide();
             }
-
             return this;
         },
 

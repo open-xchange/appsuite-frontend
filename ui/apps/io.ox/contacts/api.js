@@ -73,7 +73,7 @@ define('io.ox/contacts/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
                 extendColumns: 'io.ox/contacts/api/list'
             },
             get: {
@@ -81,7 +81,7 @@ define('io.ox/contacts/api',
             },
             search: {
                 action: 'search',
-                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607',
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5,2',
                 extendColumns: 'io.ox/contacts/api/list',
                 sort: '609', // magic sort field - ignores asc/desc
                 getData: function (query, opt) {
@@ -225,7 +225,7 @@ define('io.ox/contacts/api',
                 }
                 return response;
             },
-            list: function (data) {
+            listPost: function (data) {
                 _(data).each(function (obj) {
                     // remove from cache if get cache is outdated
                     api.caches.get.dedust(obj, 'last_modified');
@@ -244,9 +244,11 @@ define('io.ox/contacts/api',
      * @returns defered
      */
     function clearUserApiCache(data) {
-      return $.when(userApi.caches.get.remove({ id: data.user_id }),
-              userApi.caches.all.clear(),
-              userApi.caches.list.remove({ id: data.user_id }));
+        return $.when(
+            userApi.caches.get.remove({ id: data.user_id }),
+            userApi.caches.all.clear(),
+            userApi.caches.list.remove({ id: data.user_id })
+        );
     }
 
     /**
@@ -351,6 +353,7 @@ define('io.ox/contacts/api',
                 return $.when().then(function () {
                     api.addToUploadList(_.ecid(o));//to make the detailview show the busy animation
                     api.trigger('update:' + _.ecid(o));
+                    api.trigger('update', o);
                     return { folder_id: o.folder, id: o.id };
                 });
             } else {
@@ -571,7 +574,12 @@ define('io.ox/contacts/api',
     };
 
     // local hash to recognize URLs that have been fetched already
-    var cachesURLs = {};
+    var cachesURLs = {}, uniq = ox.t0;
+
+    // update uniq on picture change
+    api.on('update:image', function () {
+        uniq = _.now();
+    });
 
     // node is optional. if missing function returns just the URL
     api.pictureHalo = function (/* [node], options */) {
@@ -638,7 +646,8 @@ define('io.ox/contacts/api',
             // scale
             width: options.width,
             height: options.height,
-            scaleType: options.scaleType
+            scaleType: options.scaleType,
+            uniq: uniq
         });
         // remove options
         options = null;

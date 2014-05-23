@@ -10,7 +10,7 @@
     }
 
     .mini-profile, .extended-profile {
-        display: table-cell;
+        display: inline-block;
         vertical-align: top;
 
     }
@@ -18,14 +18,14 @@
     .mini-profile, .connection {
         width: 64px;
         height: 80px;
-        display: table-cell;
-        vertical-align: middle;
+        display: inline-block;
+        vertical-align: top;
         text-align: center;
     }
 
     .mini-profile {
         text-align: center;
-        margin: 0 14px;
+        margin: 0 14px 28px 14px;
 
         .pic, .permalink {
             display: block;
@@ -39,9 +39,9 @@
     .extended-profile {
 
         .extended-profile-block {
-            display: table-cell;
+            display: inline-block;
             vertical-align: top;
-            padding-left: 28px;
+            padding: 28px 0 0 28px;
 
             .header {
                 /* from .contact-detail .block legend which should become a mixin */
@@ -55,8 +55,12 @@
         }
     }
 
-    .shared-contacts .mini-profile {
-        padding-right: 28px;
+    .shared-contacts {
+        padding-top: 28px;
+
+        .mini-profile {
+            padding-right: 28px;
+        }
     }
 
     .connection {
@@ -82,7 +86,7 @@
         display: block;
         margin: 7px 0;
 
-        .possible-action {
+        .possible-action, .date {
             display: none;
         }
     }
@@ -118,6 +122,10 @@
             .fa {
                 margin-right: 3px;
             }
+        }
+
+        .date {
+            font-size: 80%;
         }
     }
 

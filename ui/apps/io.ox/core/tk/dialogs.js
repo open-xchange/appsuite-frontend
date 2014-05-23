@@ -40,7 +40,7 @@ define('io.ox/core/tk/dialogs',
                 async: false,
                 maximize: false,
                 top: '50%',
-                container: $('body'),
+                container: $('#io-ox-core'),
                 tabTrap: true,
                 focus: true
             }, options),
@@ -107,11 +107,20 @@ define('io.ox/core/tk/dialogs',
             busy = function () {
                 nodes.footer
                     .find('input, select, button')
-                    .prop('disabled', true);
-                nodes.body
-                    .css('opacity', 0.5)
-                    .find('input, select, button, textarea')
-                    .prop('disabled', true);
+                    .add(
+                        nodes.body
+                            .css('opacity', 0.5)
+                            .find('input, select, button, textarea')
+                    )
+                    .each(function (key, val) {
+                        val = $(val);
+                        if (val.prop('disabled')) {
+                            val.data('disabled', true);
+                        } else {
+                            val.prop('disabled', true);
+                        }
+                    });
+
                 innerFocus = $(document.activeElement);
                 nodes.popup.focus();
                 isBusy = true;
@@ -120,11 +129,20 @@ define('io.ox/core/tk/dialogs',
             idle = function () {
                 nodes.footer
                     .find('input, select, button')
-                    .prop('disabled', false);
-                nodes.body
-                    .css('opacity', '')
-                    .find('input, select, button, textarea')
-                    .prop('disabled', false);
+                    .add(
+                        nodes.body
+                            .css('opacity','')
+                            .find('input, select, button, textarea')
+                    )
+                    .each(function (key, val) {
+                        val = $(val);
+                        if (val.data('disabled')) {
+                            val.removeData('disabled');
+                        } else {
+                            val.prop('disabled', false);
+                        }
+                    });
+
                 innerFocus.focus();
                 isBusy = false;
             },
@@ -381,7 +399,7 @@ define('io.ox/core/tk/dialogs',
                         'max-width': dim.width,
                         top: o.top || 0
                     });
-                    var height = $(window).height() - 170 - o.top;
+                    var height = $('#io-ox-core').height() - 170 - o.top;//not window here, or we might overlap ads or sth
                     nodes.body.css({
                         'height': height,
                         'max-height': height
@@ -438,7 +456,7 @@ define('io.ox/core/tk/dialogs',
 
                 _.each(nodes.buttons, function (buttonNode) {
                     nodes.footer.rowfluid.prepend(buttonNode.addClass('btn-medium'));
-                    buttonNode.wrap('<div class="col-xs-6 col-md-3">');
+                    buttonNode.wrap('<div class="col-xs-12 col-md-3">');
                 });
                 nodes.body.css('margin-bottom', Math.ceil(nodes.buttons.length / 2) * 40);
             }
@@ -839,10 +857,24 @@ define('io.ox/core/tk/dialogs',
         CreateDialog: CreateDialog,
         SidePopup: SidePopup,
         busy: function (node) {
-            node.find('button, input').prop('disabled', true);
+            node.find('button, input').each(function (key, val) {
+                val = $(val);
+                if (val.prop('disabled')) {
+                    val.data('disabled', true);
+                } else {
+                    val.prop('disabled', true);
+                }
+            });
         },
         idle: function (node) {
-            node.find('button, input').prop('disabled', false);
+            node.find('button, input').each(function (key, val) {
+                val = $(val);
+                if (val.data('disabled')) {
+                    val.removeData('disabled');
+                } else {
+                    val.prop('disabled', false);
+                }
+            });
         }
     };
 });

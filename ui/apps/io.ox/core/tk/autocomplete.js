@@ -74,6 +74,7 @@ define('io.ox/core/tk/autocomplete',
 
             // last search
             lastValue = '',
+            lastSearch = $.Deferred().resolve(),
             // no-results prefix
             emptyPrefix = '\u0000',
             // current search result index
@@ -232,8 +233,8 @@ define('io.ox/core/tk/autocomplete',
                     });
 
                     _(list).each(function (facet) {
-                        regular = !(facet.field_facet) && !!facet.display_name;
-                        childs = facet.values.length > 0;
+                        regular = facet.style !== 'simple' && !!facet.display_name;
+                        childs = facet.values && facet.values.length > 0;
                         //facet
                         count++;
                         if (facet.display_name && childs && regular) {
@@ -249,7 +250,7 @@ define('io.ox/core/tk/autocomplete',
                                 .appendTo(scrollpane);
                         }
                         //values
-                        _(facet.values).each(function (value) {
+                        _([].concat(facet.style === 'simple' ? facet : facet.values)).each(function (value) {
                             value.facet = facet.id;
                             var node = $('<div class="autocomplete-item">')
                                 .on('click', fnSelectItem);
@@ -272,30 +273,31 @@ define('io.ox/core/tk/autocomplete',
 
             // handle search result
             cbSearchResult = function (query, data) {
+                    // reset scrollpane and show drop-down
+                    scrollpane.empty();
                     open();
                     var list = data.list;
                     if (list.length) {
                         o.container.idle();
                         // draw results
-
                         create.call(self, list, query);
-
                         // leads to results
                         emptyPrefix = '\u0000';
                         index = -1;
-                        //select first element without updating input field
-                        if (o.autoselect) {
-                            selectFirst();
-                        }
+                        // select first element without updating input field
+                        if (o.autoselect) selectFirst();
                     } else {
                         // leads to no results if returned data wasn't filtered before (allready participant)
                         emptyPrefix = data.hits ? emptyPrefix : query;
                         close();
                     }
+                    //lastSearch will never reject
+                    lastSearch.resolve('succeeded');
                 },
 
             // adds 'retry'-item to popup
             cbSearchResultFail = function () {
+                    scrollpane.empty();
                     o.container.idle();
                     var node = $('<div>')
                         .addClass('io-ox-center')
@@ -314,7 +316,18 @@ define('io.ox/core/tk/autocomplete',
                             )
                         );
                     node.appendTo(scrollpane);
+                    //lastSearch will will never reject
+                    lastSearch.resolve('failed');
                 },
+
+            autoSelectFirst = function () {
+                scrollpane.find('.autocomplete-item:visible:not(.unselectable)').first().click();
+            },
+
+            //waits for finished server call/drawn dropdown
+            autoSelectFirstWait = _.debounce(function () {
+                lastSearch.done(autoSelectFirst);
+            }, o.delay),
 
             // handle key down (esc/cursor only)
             fnKeyDown = function (e) {
@@ -344,7 +357,11 @@ define('io.ox/core/tk/autocomplete',
                             selected.trigger('click');
                         } else {
                             // auto-select first item
-                            scrollpane.find('.autocomplete-item:visible:not(.unselectable)').first().click();
+                            if (o.mode === 'participant') {
+                                autoSelectFirst();
+                            } else {
+                                autoSelectFirstWait();
+                            }
                         }
 
                         // calendar: add string
@@ -389,6 +406,10 @@ define('io.ox/core/tk/autocomplete',
                         }
                         break;*/
                     case 13:
+                        if (o.mode !== 'participant') {
+                            autoSelectFirstWait();
+                        }
+                        /* falls through */
                     case 9:
                         var val = $.trim($(this).val());
                         if (val.length > 0) {
@@ -402,23 +423,18 @@ define('io.ox/core/tk/autocomplete',
             // handle key up (debounced)
             fnKeyUp = _.debounce(function (e, isRetry) {
                 //TODO: element destroyed before debounce resolved
-                if (!document.contains(this))
-                    return;
+                if (!document.body.contains(this)) return;
                 this.focus();
                 e.stopPropagation();
                 var val = $.trim($(this).val());
                 isRetry = isRetry || (e.data || {}).isRetry || false;
                 if (val.length >= o.minLength) {
                     if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
+                        lastSearch = $.Deferred();
                         lastValue = val;
-                        //scrollpane.empty();
                         o.container.busy();
                         o.source(val)
                             .then(o.reduce)
-                            .then(function (data) {
-                                scrollpane.empty();
-                                return data;
-                            })
                             .then(_.lfo(cbSearchResult, val), cbSearchResultFail);
                     }
                 } else {

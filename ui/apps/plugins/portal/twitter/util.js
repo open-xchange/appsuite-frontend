@@ -481,7 +481,6 @@ define('plugins/portal/twitter/util',
             textArea = $('<textarea>').attr({
                     'class': 'io-ox-twitter-tweet-textarea form-control',
                     'aria-required': 'true',
-                    maxlength: 140,
                     rows: '4'
                 })
                 .on('click', function (e) {
@@ -554,7 +553,17 @@ define('plugins/portal/twitter/util',
         }
 
         function updateTextLength() {
-            tweetCounter.text((140 - textArea.val().length));
+            var linkRegexp = /\b(https?:\/\/|www.)\S+\.\S+\b/gi,
+                linkLength = (textArea.val().match(linkRegexp) || [] ).length * 22, //calculate the length of links (twitter makes every link 22 chars long)
+                nonLinkLength = textArea.val().replace(linkRegexp, '').length; //cut out links
+
+            tweetCounter.text((140 - (linkLength + nonLinkLength)));
+
+            if (linkLength + nonLinkLength > 140) {
+                tweetCounter.addClass('limit-exceeded');
+            } else {
+                tweetCounter.removeClass('limit-exceeded');
+            }
 
             if (textArea.val().length === 0) {
                 tweetButton.addClass('disabled').removeClass('btn-primary');

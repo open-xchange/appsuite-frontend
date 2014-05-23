@@ -103,7 +103,7 @@ define('io.ox/mail/api',
             },
 
             getThreadSize: function (obj) {
-                return self.getThread(obj).length;
+                return self.getThread(obj).length || 1;
             },
 
             getUnreadCount: function (obj) {
@@ -345,9 +345,11 @@ define('io.ox/mail/api',
             },
             get: function (data, options) {
                 // inject view (text/html/noimg). need this to generate proper cache keys.
-                data.view = options.view;
-                // was unseen?
-                if (data.unseen) folderAPI.decUnread(data);
+                // data might be plain string, e.g. for mail source
+                if (_.isObject(data)) {
+                    data.view = options.view;
+                    if (data.unseen) folderAPI.decUnread(data);
+                }
                 return data;
             }
         },
@@ -753,12 +755,14 @@ define('io.ox/mail/api',
         label = String(label); // Bugfix: #24730
 
         _(list).each(function (obj) {
+            obj.color_label = label;
             pool.propagate('change', {
                 id: obj.id,
                 folder_id: obj.folder_id,
                 color_label: parseInt(label, 10) || 0
             });
-            obj.color_label = label;
+            // update thread model
+            api.threads.touch(obj);
             tracker.setColorLabel(obj);
             api.trigger('update:' + _.ecid(obj), obj);
         });
@@ -829,11 +833,11 @@ define('io.ox/mail/api',
         _(list).each(function (obj) {
             tracker.setSeen(obj, { silent: true });
             obj.flags = obj.flags | 32;
-
             pool.propagate('change', {
                 id: obj.id,
                 folder_id: obj.folder_id,
-                flags: obj.flags
+                flags: obj.flags,
+                unseen: false
             });
             // update thread model
             api.threads.touch(obj);
@@ -994,6 +998,19 @@ define('io.ox/mail/api',
             });
     };
 
+    api.autosave = function (obj) {
+        return http.PUT({
+            module: 'mail',
+            params: {
+                action: 'autosave'
+            },
+            data: obj,
+            appendColumns: false
+        }).pipe(function (data) {
+            return $.Deferred().resolve(data);
+        });
+    };
+
     var react = function (action, obj, view) {
 
         // get proper view first
@@ -1011,7 +1028,8 @@ define('io.ox/mail/api',
                 params: {
                     action: action || '',
                     attachOriginalMessage: attachOriginalMessage,
-                    view: view
+                    view: view,
+                    setFrom: (/reply|replyall|forward/.test(action))
                 },
                 data: _([].concat(obj)).map(function (obj) {
                     return api.reduce(obj);
@@ -1737,28 +1755,6 @@ define('io.ox/mail/api',
             _(this.hash[cid]).each(function (thread_cid) {
                 this.reverse[thread_cid] = cid;
             }, this);
-        },
-
-        partiallyUnseen: function (data) {
-            // look for a thread collection
-            var cid = _.cid(data), thread = this.get(cid);
-            // no thread? then just check current object
-            if (thread.length <= 1) return util.isUnseen(data);
-            // otherwise check collection
-            return thread.reduce(function (memo, obj) {
-                return memo || util.isUnseen(obj);
-            }, false);
-        },
-
-        color: function (data) {
-            // look for a thread collection
-            var cid = _.cid(data), thread = this.get(cid);
-            // no thread? then just check current object
-            if (thread.length <= 1) return parseInt(data.color_label || 0, 10);
-            // otherwise check collection
-            return thread.reduce(function (memo, obj) {
-                return memo || parseInt(obj.color_label || 0, 10);
-            }, 0);
         }
     };
 
@@ -1808,8 +1804,11 @@ define('io.ox/mail/api',
         // we use the last item to generate the cid. More robust because unlikely to change.
         var last = _(thread).last();
 
+        // get thread size - deleted messages are ignored; minimum is 1
+        var size = thread.length;
+
         // store data of most recent message as head
-        obj.head = _.extend({ threadSize: thread.length }, obj);
+        obj.head = _.extend({ threadSize: size }, obj);
 
         // Use last item's id and folder_id.
         // As we got obj by reference, such changes affect the CID
@@ -1818,7 +1817,7 @@ define('io.ox/mail/api',
 
         // only store plain composite keys instead of full objects
         obj.thread = _(thread).map(_.cid);
-        obj.threadSize = thread.length;
+        obj.threadSize = size;
 
         // also copy thread property to 'last' item to detect model changes
         last.thread = _(thread).map(_.cid);

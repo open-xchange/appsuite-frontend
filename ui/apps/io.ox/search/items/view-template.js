@@ -27,11 +27,11 @@ define('io.ox/search/items/view-template',
         id: 'dependencies',
         config: function (config) {
             var defaults = {
-                mail: 'io.ox/mail/listview',
-                tasks: 'io.ox/tasks/listview',
-                contacts: 'io.ox/contacts/listview',
-                calendar: 'io.ox/calendar/listview',
-                files: 'io.ox/files/listview'
+                mail: ['io.ox/mail/listview', 'io.ox/mail/api'],
+                tasks: ['io.ox/tasks/listview', 'io.ox/tasks/api'],
+                contacts: ['io.ox/contacts/listview', 'io.ox/contacts/api'],
+                calendar: ['io.ox/calendar/listview', 'io.ox/calendar/api'],
+                files: ['io.ox/files/listview', 'io.ox/files/api']
             };
             $.extend(config.dependencies, defaults);
         }
@@ -67,15 +67,23 @@ define('io.ox/search/items/view-template',
     //fetch config
     ext.point('io.ox/search/main/items').invoke('config', $, config);
 
-    ext.point('io.ox/search/view/window').extend({
+    var refresh = _.debounce(function (e) {
+                    e.data.trigger('needs-refresh');
+                    //hide sidepanel
+                    if (e.type.indexOf('delete') >= 0 || e.type.indexOf('move') >= 0)
+                        $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
+                }, 100);
+
+    ext.point('io.ox/search/view/items').extend({
         id: 'results',
-        index: 400,
+        index: 100,
         row: '0',
         draw: function (baton) {
 
             var self = this,
                 items = baton.model.get('items'),
                 module = baton.model.getModule(),
+                events = 'refresh refresh.all refresh.list deleted-mails update delete change move',
                 nodes = [],
                 row, cell;
 
@@ -86,27 +94,37 @@ define('io.ox/search/items/view-template',
 
 
             //require list view extensions points
-            require([config.dependencies[module]], function () {
+            var dep = [].concat(config.dependencies[module]).concat('less!io.ox/search/items/style');
+            require(dep, function (view, api) {
+                //ignore last element when greater than 'size' (only used to determine if more results exists)
+                var last = items.length > baton.model.get('size') ? items.length - baton.model.get('extra') : items.length;
+                if (api) {
+                    api.off(events, refresh);
+                    api.on(events, items, refresh);
+                }
 
-                items.each(function (model) {
+                items.each(function (model, current) {
 
-                    var node = $('<li class="item">'),
-                        item = model.get('data'),
-                        baton = new ext.Baton({ data: item });
+                    //do not show last item
+                    if (last !== current) {
+                        var node = $('<li class="item">'),
+                            item = model.get('data'),
+                            baton = new ext.Baton({ data: item });
 
-                    node.attr({
-                        'data-id': model.get('id'),
-                        'data-folder': model.get('folder'),
-                        'data-app': model.get('application'),
-                    });
+                        node.attr({
+                            'data-id': model.get('id'),
+                            'data-folder': model.get('folder'),
+                            'data-app': model.get('application'),
+                        });
 
-                    //add app specific classes
-                    if (module === 'mail') cell.addClass('mail-item');
-                    node.addClass(config.classes[module] || '');
+                        //add app specific classes
+                        if (module === 'mail') cell.addClass('mail-item');
+                        node.addClass(config.classes[module] || '');
 
-                    //draw item
-                    ext.point(config.points[module]).invoke('draw', node, baton);
-                    nodes.push(node);
+                        //draw item
+                        ext.point(config.points[module]).invoke('draw', node, baton);
+                        nodes.push(node);
+                    }
                 });
 
                 //empty result
@@ -127,4 +145,78 @@ define('io.ox/search/items/view-template',
             self.append(row);
         }
     });
+
+    function draw(baton, detail, api, options) {
+        var popup = this.busy();
+        require([detail, api], function (view, api) {
+            //render data with available data
+            popup.idle().append(view.draw(baton.data, options));
+            api.get(baton.data).then(function (data) {
+                //render again with get response if needed
+                if (!_.isEqual(baton.data, data)) {
+                    popup.empty().append(
+                        view.draw(data, options)
+                    );
+                }
+            });
+        });
+    }
+
+    //register sidepanel details views
+    ext.point('io.ox/search/view/items').extend({
+        id: 'sidepanel',
+        index: 200,
+        row: '0',
+        draw: function () {
+
+            ext.point('io.ox/search/items/calendar').extend({
+                draw: function (baton) {
+                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/api', {deeplink: true});
+                }
+            });
+
+            ext.point('io.ox/search/items/contacts').extend({
+                draw: function (baton) {
+                    draw.call(this, baton, 'io.ox/contacts/view-detail', 'io.ox/contacts/api');
+                }
+            });
+
+            ext.point('io.ox/search/items/tasks').extend({
+                draw: function (baton) {
+                    draw.call(this, baton, 'io.ox/tasks/view-detail', 'io.ox/tasks/api');
+                }
+            });
+
+            ext.point('io.ox/search/items/files').extend({
+                draw: function (baton) {
+                    draw.call(this, baton, 'io.ox/files/fluid/view-detail', 'io.ox/files/api');
+                }
+            });
+
+            //special for mail
+            ext.point('io.ox/search/items/mail').extend({
+                draw: function (baton) {
+                    var popup = this.busy();
+                    require(['io.ox/mail/detail/view', 'io.ox/mail/api'], function (detail, api) {
+                        //render data with available data
+                        var view = new detail.View({ data: baton.data });
+                        popup.idle().append(
+                            view.render().expand().$el.addClass('no-padding')
+                        );
+                        api.get(baton.data).then(function (data) {
+                            //render again with get response
+                            if (!_.isEqual(baton.data, data)) {
+                                var view = new detail.View({ data: data }, {deeplink: true});
+                                popup.idle().empty().append(
+                                    view.render().expand().$el.addClass('no-padding')
+                                );
+                            }
+                        });
+                    });
+                }
+            });
+
+        }
+    });
+
 });

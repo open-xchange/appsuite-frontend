@@ -14,11 +14,13 @@
 define('io.ox/contacts/toolbar',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
+     'io.ox/core/extPatterns/actions',
      'io.ox/backbone/mini-views/dropdown',
      'gettext!io.ox/contacts',
+     'io.ox/contacts/api',
      'io.ox/contacts/actions',
      'less!io.ox/contacts/style'
-    ], function (ext, links, Dropdown, gt) {
+    ], function (ext, links, actions, Dropdown, gt, api) {
 
     'use strict';
 
@@ -36,7 +38,23 @@ define('io.ox/contacts/toolbar',
             mobile: 'hi',
             label: gt('New'),
             drawDisabled: true,
-            ref: 'io.ox/contacts/actions/create'
+            ref: 'io.ox/contacts/dropdown/new',
+            customize: function (baton) {
+
+                this.append('<i class="fa fa-caret-down">');
+
+                this.after(
+                    links.DropdownLinks({ ref: 'io.ox/contacts/links/toolbar/default', wrap: false }, baton)
+                );
+
+                this.addClass('dropdown-toggle').attr({
+                    'aria-haspopup': 'true',
+                    'data-toggle': 'dropdown',
+                    'role': 'button'
+                });
+
+                this.parent().addClass('dropdown');
+            }
         },
         'send': {
             prio: 'hi',
@@ -106,6 +124,13 @@ define('io.ox/contacts/toolbar',
         }
     };
 
+    // local dummy action
+
+    new actions.Action('io.ox/contacts/dropdown/new', {
+        requires: function () { return true; },
+        action: $.noop
+    });
+
     // transform into extensions
 
     var index = 0;
@@ -147,12 +172,17 @@ define('io.ox/contacts/toolbar',
     var toolbar = $('<ul class="classic-toolbar" role="menu">');
 
     var updateToolbar = _.debounce(function (list) {
+        var self = this;
         if (!list) return;
-        // extract single object if length === 1
-        list = list.length === 1 ? list[0] : list;
-        // draw toolbar
-        var baton = ext.Baton({ $el: toolbar, data: list, app: this });
-        ext.point('io.ox/contacts/classic-toolbar').invoke('draw', toolbar.empty(), baton);
+        //get full data, needed for require checks for example
+        api.getList(list).done(function (data) {
+            // extract single object if length === 1
+            data = data.length === 1 ? data[0] : data;
+            // draw toolbar
+            var baton = ext.Baton({ $el: toolbar, data: data, app: self });
+            ext.point('io.ox/contacts/classic-toolbar').invoke('draw', toolbar.empty(), baton);
+        });
+        
     }, 10);
 
     ext.point('io.ox/contacts/mediator').extend({

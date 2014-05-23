@@ -58,6 +58,9 @@ ExpiresByType application/font-woff "access plus 6 months"
     Header set Content-type "text/html"
     ForceType "text/html"
     ExpiresByType text/html "now"
+    # always send 200 due to Safari's 304 bug (affects Desktop and iOS)
+    RequestHeader unset If-Modified-Since
+    RequestHeader unset If-None-Match
 </FilesMatch>
 
 # Avoid click jacking (https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet)

@@ -327,12 +327,14 @@ define('io.ox/core/extPatterns/links',
                 // add toggle unless multi-selection
                 var all = nav.children(),
                     lo = all.children().filter('[data-prio="lo"]').parent(),
+                    links = lo.find('a'),
+                    allDisabled = links.length === links.filter('.disabled').length,
                     isSmall = _.device('small');
 
                 // remove unimportant links on smartphone (prio='none')
                 if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
 
-                if (lo.length > 1 && (!multiple || options.forcelimit)) {
+                if (lo.length > 1 && !allDisabled && (!multiple || options.forcelimit)) {
                     nav.append(
                         $('<li class="dropdown">').append(
                             $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
@@ -352,10 +354,10 @@ define('io.ox/core/extPatterns/links',
                     );
                     injectDividers(nav.find('ul'));
                 }
+                // hide if all links are disabled
+                if (allDisabled) lo.hide();
+                if (options.customizeNode) options.customizeNode(nav);
                 all = lo = null;
-                if (options.customizeNode) {
-                    options.customizeNode(nav);
-                }
             });
         };
     };
@@ -395,9 +397,11 @@ define('io.ox/core/extPatterns/links',
         label = baton.label || label;
         label = _.isString(label) ? $.txt(label) : label;
 
+        node = baton.$el || $('<div>');
+
         // build dropdown
         this.append(
-            node = $('<div class="dropdown">').append(
+            node.addClass('dropdown').append(
                 $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .append(label, $('<i class="fa fa-caret-down">')),
                 $('<ul class="dropdown-menu" role="menu">')
@@ -418,12 +422,29 @@ define('io.ox/core/extPatterns/links',
         return node;
     };
 
-    var DropdownLinks = function (options) {
+    // full dropdown; <div> <a> + <ul> + inks </div>
+    var Dropdown = function (options) {
         var o = _.extend(this, options);
         this.draw = function (baton) {
             baton = ext.Baton.ensure(baton);
             return drawDropDown.call(this, o, baton);
         };
+    };
+
+    // just the dropdown - <ul> + links; not the container
+    var DropdownLinks = function (options, baton, wrap) {
+        options = options || {};
+        baton.$el = $('<ul class="dropdown-menu" role="menu">');
+        var wrap = options.wrap === undefined ? true : !!options.wrap;
+        drawLinks(options || {}, new Collection(baton.data), null, baton, [], wrap)
+            .done(function () {
+                //if dropdown is emtpy and we have an empty-callback, execute it(some async drawing methods use this)
+                if (options.emptyCallback && baton.$el.hasClass('empty')) {
+                    options.emptyCallback();
+                }
+                injectDividers(baton.$el);
+                });
+        return baton.$el;
     };
 
     var drawButtonGroup = function (options, baton) {
@@ -557,6 +578,7 @@ define('io.ox/core/extPatterns/links',
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
         InlineButtonGroup: InlineButtonGroup,
+        Dropdown: Dropdown,
         DropdownLinks: DropdownLinks,
         ButtonGroup: ButtonGroup,
         ActionGroup: ActionGroup

@@ -18,7 +18,6 @@ define('io.ox/mail/write/view-main',
      'io.ox/mail/actions',
      'io.ox/mail/api',
      'io.ox/core/tk/view',
-     'io.ox/core/tk/model',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/mail/util',
@@ -33,7 +32,7 @@ define('io.ox/mail/write/view-main',
      'io.ox/core/tk/attachments',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, mailAPI, ViewClass, Model, contactsAPI, contactsUtil, mailUtil, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, util, notifications, sender, attachments, settings, gt) {
+    ], function (ext, links, actions, mailAPI, ViewClass, contactsAPI, contactsUtil, mailUtil, capabilities, autocomplete, AutocompleteAPI, accountAPI, snippetAPI, util, notifications, sender, attachments, settings, gt) {
 
     'use strict';
 
@@ -80,9 +79,6 @@ define('io.ox/mail/write/view-main',
 
             // disable the button
             ext.point(POINT + '/toolbar').disable('draft');
-
-            // reorder button
-            ext.point(POINT + '/toolbar').replace({id: 'discard', index: 50});
 
             //invoke other buttons with new container
             ext.point(POINT + '/toolbar').invoke(
@@ -497,7 +493,6 @@ define('io.ox/mail/write/view-main',
             // side panel
             this.leftside = $('<div class="leftside io-ox-mail-write-sidepanel">');
             this.scrollpane = this.leftside.scrollable();
-
             // title
             this.scrollpane.append(
                 $('<h1 class="title">').text('\u00A0')
@@ -827,36 +822,36 @@ define('io.ox/mail/write/view-main',
                     self.textarea
                         .on('keyup change input paste', autogrow)
                         .on('focus', function () {
-                            $(this).attr('emojiFocus', 'true');
-                            //self.subject.attr('emojiFocus', 'false');
                             // do we have emoji support
-                            if (emojiMobileSupport && self.emojiview && self.emojiview.isOpen) {
+                            if (emojiMobileSupport) {
+                                $(this).attr('emojiFocus', 'true');
+                                if (self.emojiview && self.emojiview.isOpen) {
 
-                                if (self.emojiview.isOpen) {
-                                    self.emojiview.toggle();
-                                    self.spacer.hide();
-                                } else {
-                                    self.emojiview.toggle();
-                                    self.spacer.show();
-                                    self.scrollEmoji();
+                                    if (self.emojiview.isOpen) {
+                                        self.emojiview.toggle();
+                                        self.spacer.hide();
+                                    } else {
+                                        self.emojiview.toggle();
+                                        self.spacer.show();
+                                        self.scrollEmoji();
+                                    }
+                                    if (_.device('android')) {//android needs special handling here
+                                        setTimeout(function () {//use timeout because the onscreen keyboard resizes the window
+                                            self.form.parent().scrollTop(self.form.parent().height());
+                                        }, 500);
+
+                                        self.textarea.on('blur', function () {
+                                            //hide spacer again after onscreen keyboard is closed
+                                            self.spacer.hide();
+                                        });
+                                    } else {
+                                        self.spacer.show();//show spacer to prevent onscreen keyboard from overlapping
+                                        self.form.parent().scrollTop(self.form.parent().scrollTop() + self.spacer.height());
+                                    }
                                 }
                             }
-                            if (_.device('android')) {//android needs special handling here
-                                setTimeout(function () {//use timeout because the onscreen keyboard resizes the window
-                                    self.form.parent().scrollTop(self.form.parent().height());
-                                }, 500);
-                            } else {
-                                self.spacer.show();//show spacer to prevent onscreen keyboard from overlapping
-                                self.form.parent().scrollTop(self.form.parent().scrollTop() + self.spacer.height());
-                            }
+
                         });
-                    if (_.device('!android')) {
-                        self.textarea.on('blur', function () {
-                            //hide spacer again after onscreen keyboard is closed
-                            self.spacer.hide();
-                        });
-                    }
-                    // textarea only, no container overkill
                     return self.textarea;
                 }
             }
@@ -967,6 +962,11 @@ define('io.ox/mail/write/view-main',
                     }
                 });
             }
+
+            // prevent dragging of links and text
+            $(this.leftside).on('dragstart', 'a, span', function (e) {
+                e.preventDefault();
+            });
         }
     });
 
@@ -1069,7 +1069,7 @@ define('io.ox/mail/write/view-main',
                 full_name: util.unescapeDisplayName(elem.full_name),
                 first_name: elem.first_name || '',
                 last_name: elem.last_name || '',
-                display_name: util.unescapeDisplayName(elem.display_name),
+                display_name: util.unescapeDisplayName(elem.full_name || elem.display_name).replace(/"/g, ''),
                 email: elem.email || elem.mail || '', // distribution lists just have "mail"
                 phone: elem.phone || '',
                 field: elem.field || '',

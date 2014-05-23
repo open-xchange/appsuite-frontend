@@ -19,6 +19,7 @@
  * - "liking" does not toggle to un/disliking
  * - revoke xing invitations
  * - pre-select the correct language in createXingAccount by matching the first part of locale
+ * - error handling when looking up e-mails for add/invite-to
  */
 
 define('plugins/portal/xing/register',
@@ -32,40 +33,32 @@ define('plugins/portal/xing/register',
      'io.ox/core/extPatterns/links',
      'io.ox/keychain/api',
      'io.ox/backbone/forms',
+     'io.ox/core/date',
      'gettext!plugins/portal',
      'less!plugins/portal/xing/xing'
     ], function (ext, eventActions, activityParsers, api, userApi,
-        notifications, dialogs, links, keychain, forms, gt) {
+        notifications, dialogs, links, keychain, forms, date, gt) {
 
     'use strict';
 
     var addXingAccount,
         createXingAccount,
-        isAlreadyOnXing,
         makeNewsfeed,
         statusUpdateForm,
         title = gt('XING'),
         reauthorizeAccount,
         MAX_ITEMS_PREVIEW = 3,
-        XING_NAME = gt('XING');
-
-    isAlreadyOnXing = function (emailArray) {
-        return api.find_by_emails(emailArray).then(function (data) {
-            console.log('Information found about this user:', emailArray, data);
-            return _(data.results.items).some(function (inquiry) {
-                return !!inquiry.user;
-            });
-        });
-    };
+        XING_NAME = gt('XING'),
+        point = ext.point('io.ox/portal/widget/xing');
 
     reauthorizeAccount = function () {
         var account = keychain.getStandardAccount('xing');
 
         keychain.submodules.xing.reauthorize(account).done(function () {
-            notifications.yell('success', gt('Reauthorized your %s account successfully', XING_NAME));
+            notifications.yell('success', gt('Successfully reauthorized your %s account', XING_NAME));
             ox.trigger('refresh^');
         }).fail(function (response) {
-            notifications.yell('error', gt('There was a problem with %s, the error message was: "%s"', XING_NAME, response.error));
+            notifications.yell('error', gt('There was a problem with %s. The error message was: "%s"', XING_NAME, response.error));
         });
     };
 
@@ -84,7 +77,7 @@ define('plugins/portal/xing/register',
                     menu = $('<div>').addClass('io-ox-xing submitted-data').append(
                         $('<p>').text(gt('Please select which of the following data we may use to create your %s account:', XING_NAME)),
                         $('<label>').append(
-                            $.txt(gt('E-mail address')),
+                            $.txt(gt('Mail address')),
                             email = $('<input>').attr({type: 'text', name: 'email'})
                         ),
                         $('<label>').append(
@@ -104,9 +97,13 @@ define('plugins/portal/xing/register',
                     )
                 );
                 userApi.getCurrentUser().done(function (userData) {
+                    var locale = userData.attributes.locale,
+                        lang = locale.indexOf('_') > -1 ? locale.split('_')[0] : locale;
+
                     email.val(userData.attributes.email1 || userData.attributes.email2 || userData.attributes.email3);
                     firstname.val(userData.attributes.first_name);
                     lastname.val(userData.attributes.last_name);
+                    language.val(lang);
                 });
             })
 
@@ -115,9 +112,8 @@ define('plugins/portal/xing/register',
 
             .show()
 
-            .done(function (action, data, node) {
+            .done(function (action) {
                 if (action === 'cancel') return;
-                console.log('Submitting to XING', action, data, node);
                 api.createProfile({
                     tandc_check: true,
                     email: email.val(),
@@ -126,10 +122,10 @@ define('plugins/portal/xing/register',
                     language: language.val()
                 })
                 .fail(function (response) {
-                    notifications.yell('error', gt('There was a problem with %s, the error message was: "%s"', XING_NAME, response.error));
+                    notifications.yell('error', gt('There was a problem with %s. The error message was: "%s"', XING_NAME, response.error));
                 })
                 .done(function () {
-                    notifications.yell('success', gt('Your %s account was created. Expect a confirmation e-mail from %s soon.', XING_NAME, XING_NAME));
+                    notifications.yell('success', gt('Your %s account has been created. Expect a confirmation mail from %s soon.', XING_NAME, XING_NAME));
                     notifications.yell('success', gt('The next step is allowing this system to access your %s account for you.', XING_NAME));
                     addXingAccount(event);
                 });
@@ -144,7 +140,9 @@ define('plugins/portal/xing/register',
         return $.when(
             keychain.createInteractively('xing', win))
         .then(function () {
-            baton.model.node.removeClass('requires-setup');
+            var model = baton.model;
+            $(model.node).find('.setup-questions').remove();
+            model.changed.props = baton.model.drawn = true; //hack to provoke loadAndPreview()
             ox.trigger('refresh^');
         });
     };
@@ -163,11 +161,11 @@ define('plugins/portal/xing/register',
                 message: input.val()
 
             }).fail(function (response) {
-                notifications.yell('error', gt('Your status update could not be posted on %s, the error message was: "%s"', XING_NAME, response.error));
+                notifications.yell('error', gt('Your status update could not be posted on %s. The error message was: "%s"', XING_NAME, response.error));
 
             }).done(function () {
                 container.remove();
-                notifications.yell('success', gt('Your status update was posted on %s successfully', XING_NAME));
+                notifications.yell('success', gt('Your status update has been successfully posted on %s', XING_NAME));
 
             });
         });
@@ -190,8 +188,10 @@ define('plugins/portal/xing/register',
 
             var activityNode = $('<div>').addClass('activity').appendTo(node),
                 reactionNode = $('<div>').addClass('reactions'),
+                dateNode = $('<div>').addClass('date'),
                 foundHandler = false,
                 id;
+
             if (id = activity.ids[0]) {
                 activityNode.attr('data-activity-id', id);
             }
@@ -206,6 +206,13 @@ define('plugins/portal/xing/register',
             });
 
             if (foundHandler) {
+                // Date
+                if (activity.created_at) {
+                    var creationDate = new date.Local(activity.created_at);
+                    dateNode.text(creationDate.format(date.DATE_TIME)).appendTo(activityNode);
+                }
+
+                //reactions like comment, share, like
                 _(activity.possible_actions).each(function (reaction) {
                     ext.point('io.ox/portal/widget/xing/reaction').each(function (handler) {
                         if (handler.accepts(reaction)) {
@@ -216,8 +223,10 @@ define('plugins/portal/xing/register',
                     });
                 });
                 reactionNode.appendTo(activityNode);
+
+
             } else {
-                console.log('Could not find a handler for the following activity', JSON.stringify(activity));
+                console.log('Could not find a handler for the following activity: ' + activity.verb + '. Please let us know about this. Here is some data that would help us: ', JSON.stringify(activity));
             }
 
         });
@@ -228,7 +237,7 @@ define('plugins/portal/xing/register',
     /*
      * Portal extension points: Here's where it all starts
      */
-    ext.point('io.ox/portal/widget/xing').extend({
+    point.extend({
         title: title,
 
         isEnabled: function () {
@@ -257,10 +266,9 @@ define('plugins/portal/xing/register',
 
         load: function (baton) {
             return api.getUserfeed({
-                    email: 'dimitribronkowitsch@googlemail.com',
                     user_fields: '0,1,2,3,4,8,23' //name variations, page_name and picture
                 }).then(function (xingResponse) {
-                    //console.log('LOAD', JSON.stringify(xingResponse));
+//                    console.log('LOAD', JSON.stringify(xingResponse));
                     baton.data = xingResponse;
                 });
         },
@@ -269,7 +277,7 @@ define('plugins/portal/xing/register',
             this.append(
                 $('<div class="content preview io-ox-xing pointer">').append(
                     makeNewsfeed(baton.data.network_activities, MAX_ITEMS_PREVIEW)
-                )
+                ).on('click', 'a.external.xing', function (e) { e.stopPropagation(); })
             );
         },
 
@@ -281,6 +289,18 @@ define('plugins/portal/xing/register',
                     makeNewsfeed(baton.data.network_activities)
                 )
             );
+        },
+
+        error: function (error, baton) {
+            if (!point.invoke('requiresCustomSetUp')) {
+                return;
+            }
+            var node = baton.model.node,
+                title = node.find('.title').parent(),
+                decoration = $('<div>').addClass('decoration').append(title);
+
+            node.empty().append(decoration);
+            point.invoke('performCustomSetUp', node, baton);
         }
     });
 
@@ -290,76 +310,4 @@ define('plugins/portal/xing/register',
         editable: false,
         unique: true
     });
-
-    new links.Action('io.ox/xing/actions/invite', {
-        id: 'invite-xing',
-        capabilities: 'xing',
-        requires: function (e) {
-            var contact = e.baton.data,
-                arr = _.compact([contact.email1, contact.email2, contact.email3]);
-            return function () { return !isAlreadyOnXing(arr); };
-        },
-        action: function (baton) {
-            var contact = baton.data;
-            api.invite({
-                email: contact.email1 || contact.email2 || contact.email3
-            })
-            .fail(function (response) {
-                notifications.yell('error', gt('There was a problem with %s, the error message was: "%s"', XING_NAME, response.error));
-            })
-            .done(function () {
-                notifications.yell('success', gt('Invitation sent'));
-            });
-        }
-    });
-
-    new links.Action('io.ox/xing/actions/add', {
-        id: 'add-on-xing',
-        capabilities: 'xing',
-        requires: function (e) {
-            var contact = e.baton.data,
-                arr = _.compact([contact.email1, contact.email2, contact.email3]);
-            return function () { return isAlreadyOnXing(arr); };
-        },
-        action: function (baton) {
-            var contact = baton.data;
-            api.initiateContactRequest({
-                email: contact.email1 || contact.email2 || contact.email3
-            })
-            .fail(function (response) {
-                notifications.yell('error', gt('There was a problem with %s, the error message was: "%s"', XING_NAME, response.error));
-            })
-            .done(function () {
-                notifications.yell('success', gt('Contact request sent'));
-            });
-        }
-    });
-
-    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
-        id: 'invite-contact-to-xing',
-        index: 610,
-        label: gt('Invite to %s', XING_NAME),
-        ref: 'io.ox/xing/actions/invite'
-    }));
-
-    ext.point('io.ox/mail/all/actions').extend(new links.Link({
-        id: 'invite-email-to-xing',
-        index: 310, /* Preferably closely following 300, "invite to appointment" */
-        label: gt('Invite to %s', XING_NAME),
-        ref: 'io.ox/xing/actions/invite'
-    }));
-
-    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
-        id: 'add-on-xing-by-contact',
-        index: 610, /* same index as 'invite to XING', because it is mutually exclusive */
-        label: gt('Add on %s', XING_NAME),
-        ref: 'io.ox/xing/actions/add'
-    }));
-
-    ext.point('io.ox/mail/all/actions').extend(new links.Link({
-        id: 'add-on-xing-by-e-mail',
-        index: 310, /* same index as 'invite to XING', because it is mutually exclusive */
-        label: gt('Add on %s', XING_NAME),
-        ref: 'io.ox/xing/actions/add'
-    }));
 });

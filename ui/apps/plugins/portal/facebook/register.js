@@ -98,7 +98,7 @@ define('plugins/portal/facebook/register',
                     comment: 'SELECT id, post_id, attachment, fromid, is_private, likes, user_likes, text, time, user_likes FROM comment WHERE post_id IN (SELECT post_id FROM #newsfeed)'
                 })
             })
-            .pipe(JSON.parse);
+            .pipe(JSON.parse).fail(require('io.ox/core/notifications').yell);
     };
 
     var drawPreview = function (baton) {
@@ -211,7 +211,7 @@ define('plugins/portal/facebook/register',
             .pipe(JSON.parse)
             .done(function (data) {
                 baton.data = data;
-            });
+            }).fail(require('io.ox/core/notifications').yell);
         },
 
         draw: function (baton) {

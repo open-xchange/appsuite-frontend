@@ -207,7 +207,7 @@ define('io.ox/portal/main',
             } else if (this.wasElementDeleted(model)) {
                 // element was removed, no need to refresh it.
                 return;
-            } else if ('unset' in e && 'candidate' in model.changed) {
+            } else if ('unset' in e && 'candidate' in model.changed && model.drawn) {
                 // redraw fresh widget
                 app.refreshWidget(model);
             } else if ('props' in model.changed && model.drawn) {
@@ -266,9 +266,6 @@ define('io.ox/portal/main',
                 tabindex: 1
             });
 
-        if (_.device('small')) {
-            node.css('minHeight', 300);
-        }
         model.node = node;
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
 
@@ -327,7 +324,16 @@ define('io.ox/portal/main',
                 node.find('.content').remove();
                 // draw summary only on small devices, i.e. smartphones
                 if (_.device('smartphone') && settings.get('mobile/summaryView')) {
-                    point.invoke('summary', node, baton);
+                    if (point.all()[0].summary) {
+                        //invoke special summary if there is one
+                        point.invoke('summary', node, baton);
+                    }
+                    else if(!node.hasClass('generic-summary')) {//add generic open close if it's not added yet
+                        node.addClass('with-summary show-summary generic-summary');
+                        node.on('tap', 'h2', function (e) {
+                            $(e.delegateTarget).toggleClass('show-summary generic-summary');
+                        });
+                    }
                 }
                 point.invoke('preview', node, baton);
                 node.removeClass('error-occurred');
@@ -418,25 +424,24 @@ define('io.ox/portal/main',
 
     app.refreshWidget = function (model, index) {
 
-        if (model.drawn) {
+        if (!model.drawn) return;
 
-            index = index || 0;
+        index = index || 0;
 
-            var node = model.node,
-                delay = (index / 2 >> 0) * 1000,
-                baton = model.get('baton'),
-                point = ext.point(baton.point);
+        var node = model.node,
+            delay = (index / 2 >> 0) * 1000,
+            baton = model.get('baton'),
+            point = ext.point(baton.point);
 
-            _.defer(function () {
+        _.defer(function () {
+            _.delay(function () {
+                node.find('.decoration').addClass('pending');
                 _.delay(function () {
-                    node.find('.decoration').addClass('pending');
-                    _.delay(function () {
-                        loadAndPreview(point, node, baton);
-                        node = baton = point = null;
-                    }, 300); // CSS Transition delay 0.3s
-                }, delay);
-            });
-        }
+                    loadAndPreview(point, node, baton);
+                    node = baton = point = null;
+                }, 300); // CSS Transition delay 0.3s
+            }, delay);
+        });
     };
 
     // can be called every 30 seconds
@@ -542,7 +547,7 @@ define('io.ox/portal/main',
 
             // make sortable, but not for Touch devices
             if (!Modernizr.touch) {
-                require(['apps/3rd.party/jquery-ui.min.js']).done(function () {
+                require(['static/3rd.party/jquery-ui.min.js']).done(function () {
                     appBaton.$.widgets.sortable({
                         items: '> li.draggable',
                         cancel: 'li.protected',

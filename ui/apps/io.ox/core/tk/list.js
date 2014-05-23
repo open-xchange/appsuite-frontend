@@ -106,7 +106,6 @@ define('io.ox/core/tk/list',
 
         // called when the view model changes (not collection models)
         onModelChange: function () {
-            this.empty();
             this.load();
         },
 
@@ -145,13 +144,16 @@ define('io.ox/core/tk/list',
             if (li.position().top <= 0) {
                 this.$el.scrollTop(this.$el.scrollTop() + li.outerHeight(true));
             }
+
+            // forward event
+            this.trigger('add', model, index);
         },
 
         onRemove: function (model) {
 
             var children = this.getItems(),
                 cid = this.getCID(model),
-                li = children.filter('[data-cid="' + cid + '"]'),
+                li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
                 top = this.$el.scrollTop();
 
             if (li.length === 0) return;
@@ -166,6 +168,9 @@ define('io.ox/core/tk/list',
             // Unless it's the last one! If we did scroll for the last one, we would
             // trigger a paginate call that probably overtakes the delete request
             if (children.length > 1) this.$el.trigger('scroll');
+
+            // forward event
+            this.trigger('remove', model);
         },
 
         onSort: function () {
@@ -180,15 +185,15 @@ define('io.ox/core/tk/list',
 
         // called whenever a model inside the collection changes
         onChange: function (model) {
-            var li = this.$el.find('li[data-cid="' + this.getCID(model) + '"]'),
-                data = model.toJSON(),
+            var li = this.$el.find('li[data-cid="' + $.escape(this.getCID(model)) + '"]'),
+                data = this.map(model),
                 baton = ext.Baton({ data: data, model: model, app: this.app }),
                 index = model.changed.index;
             // change position?
             if (index !== undefined) li.attr('data-index', index);
             // draw via extensions
             ext.point(this.ref + '/item').invoke('draw', li.children().eq(1).empty(), baton);
-            // propagate events
+            // forward event
             this.trigger('change', model);
         },
 
@@ -298,19 +303,20 @@ define('io.ox/core/tk/list',
 
         redraw: function () {
             var point = ext.point(this.ref + '/item'),
-                collection = this.collection,
-                app = this.app;
-            this.getItems().each(function (index) {
+                collection = this.collection;
+            this.getItems().each(function (index, li) {
                 if (index >= collection.length) return;
                 var model = collection.at(index),
-                    baton = ext.Baton({ data: model.toJSON(), model: model, app: app });
-                point.invoke('draw', $(this).children().eq(1).empty(), baton);
-            });
+                    data = this.map(model),
+                    baton = ext.Baton({ data: data, model: model, app: this.app });
+                point.invoke('draw', $(li).children().eq(1).empty(), baton);
+            }.bind(this));
         },
 
         renderListItem: function (model) {
             var li = this.scaffold.clone(),
-                baton = ext.Baton({ data: model.toJSON(), model: model, app: this.app });
+                data = this.map(model),
+                baton = ext.Baton({ data: data, model: model, app: this.app });
             // add cid and full data
             li.attr({ 'data-cid': this.getCID(model), 'data-index': model.get('index') });
             // draw via extensions

@@ -256,7 +256,10 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/print', {
         requires: function (e) {
-            return e.collection.has('some', 'read') && _.device('!small');
+            // not on smartphones
+            if (_.device('small')) return false;
+            // need some and either read access or being embedded
+            return e.collection.has('some') && (e.collection.has('read') || !e.collection.has('toplevel'));
         },
         multiple: function (list) {
             print.request('io.ox/mail/print', list);
@@ -385,11 +388,20 @@ define('io.ox/mail/actions',
         capabilities: 'spam',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'some')) return false;
             // is spam?
             return _(e.baton.array()).reduce(function (memo, obj) {
-                return memo || (!account.is('spam', obj.folder_id) && !util.isSpam(obj));
-            }, false);
+                // already false?
+                if (memo === false) return false;
+                // is not primary account?
+                if (!account.isPrimary(obj.folder_id)) return false;
+                // is spam folder?
+                if (account.is('spam', obj.folder_id)) return false;
+                // is marked as spam already?
+                if (util.isSpam(obj)) return false;
+                // else
+                return true;
+            }, true);
         },
         multiple: function (list) {
             api.markSpam(list);
@@ -400,11 +412,16 @@ define('io.ox/mail/actions',
         capabilities: 'spam',
         requires: function (e) {
             // must be top-level
-            if (!e.collection.has('toplevel')) return;
+            if (!e.collection.has('toplevel', 'some')) return false;
             // is spam?
             return _(e.baton.array()).reduce(function (memo, obj) {
-                return memo || account.is('spam', obj.folder_id) || util.isSpam(obj);
-            }, false);
+                // already false?
+                if (memo === false) return false;
+                // is not primary account?
+                if (!account.isPrimary(obj.folder_id)) return false;
+                // else
+                return account.is('spam', obj.folder_id) || util.isSpam(obj);
+            }, true);
         },
         multiple: function (list) {
             api.noSpam(list);
@@ -480,12 +497,14 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             require(['io.ox/files/carousel'], function (slideshow) {
-                var files = _(list).map(function (file) {
-                    return {
-                        url: api.getUrl(file, 'view'),
-                        filename: file.filename
-                    };
-                });
+                var regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i,
+                    files = _(list).map(function (file) {
+                        // get URL
+                        var url = api.getUrl(file, 'view');
+                        // non-image files need special format parameter
+                        if (!regIsImage.test(file.filename)) url += '&format=preview_image&session=' + ox.session;
+                        return { url: url, filename: file.filename };
+                    });
                 slideshow.init({
                     fullScreen: false,
                     baton: {allIds: files},
@@ -656,7 +675,7 @@ define('io.ox/mail/actions',
 
     new Action('io.ox/mail/actions/add-to-portal', {
         capabilities: 'portal',
-        requires: 'one',
+        requires: 'one toplevel',
         action: function (baton) {
             require(['io.ox/portal/widgets'], function (widgets) {
                 //using baton.data.parent if previewing during compose (forward mail as attachment)
@@ -831,7 +850,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
         capabilities: 'tasks',
-        requires: 'one',
+        requires: 'one toplevel',
         action: function (baton) {
             var data = baton.data;
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'], function (dialogs, taskAPI, tasksUtil) {
@@ -895,16 +914,6 @@ define('io.ox/mail/actions',
         }
     });
 
-    // guidance
-
-    new Action('io.ox/mail/actions/guidance', {
-        action: function (baton) {
-            require(['io.ox/mail/guidance/main']).done(function (guidance) {
-                guidance.sidePopup(baton.app, baton.e);
-            });
-        }
-    });
-
     // toolbar
 
     new links.ActionGroup('io.ox/mail/links/toolbar', {
@@ -920,19 +929,6 @@ define('io.ox/mail/actions',
         id: 'compose',
         label: gt('Compose new mail'),
         ref: 'io.ox/mail/actions/compose'
-    });
-
-    new links.ActionGroup('io.ox/mail/links/toolbar', {
-        id: 'guidance',
-        index: 400,
-        icon: function () {
-            return $('<i class="fa fa-question-circle">');
-        }
-    });
-
-    new links.ActionLink('io.ox/mail/links/toolbar/guidance', {
-        label: gt('Guidance'),
-        ref: 'io.ox/mail/actions/guidance'
     });
 
     // inline links

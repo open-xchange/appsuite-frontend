@@ -148,6 +148,13 @@ define('io.ox/core/api/account',
         return def;
     };
 
+    api.getUnifiedInbox = function () {
+        return this.getUnifiedMailboxName().then(function (id) {
+            if (id === null) return null;
+            return id + separator + 'INBOX';
+        });
+    };
+
     /**
      * check folder type
      * @param  {string} type (foldertype, example is 'drafts')
@@ -292,7 +299,7 @@ define('io.ox/core/api/account',
         if (!account || (account.personal && $.trim(account.personal) !== '')) {
             return $.Deferred().resolve(account);
         }
-        
+
         return api.getDefaultDisplayName().then(function (personal) {
             account.personal = personal;
             return account;

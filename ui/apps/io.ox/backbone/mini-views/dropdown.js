@@ -22,29 +22,27 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         tagName: 'div',
         className: 'dropdown',
 
-        events: {
-            'click ul a': 'onClick'
-        },
-
         onClick: function (e) {
             e.preventDefault();
             var node = $(e.currentTarget),
                 name = node.attr('data-name'),
                 value = node.data('value'),
                 toggle = node.data('toggle');
+            if (value === undefined) return; // ignore plain links
             this.model.set(name, toggle === true ? !this.model.get(name) : value);
         },
 
         setup: function (options) {
             this.label = options.label;
             this.$ul = $('<ul class="dropdown-menu" role="menu">');
+            this.$ul.on('click', 'a', this.onClick.bind(this));
             this.listenTo(this.model, 'change', this.update);
         },
 
         update: function () {
-            var $el = this.$el;
+            var $ul = this.$ul;
             _(this.model.changed).each(function (value, name) {
-                var li = $el.find('[data-name="' + name + '"]');
+                var li = $ul.find('[data-name="' + name + '"]');
                 li.children('i').attr('class', 'fa fa-fw fa-none');
                 li.filter('[data-value="' + value + '"]').children('i').attr('class', 'fa fa-fw fa-check');
             }, this);
@@ -57,6 +55,16 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                         $('<i class="fa fa-fw">').addClass(this.model.get(name) === value ? 'fa-check' : 'fa-none'),
                         $('<span>').text(text)
                     )
+                )
+            );
+            return this;
+        },
+
+        link: function (name, text, callback) {
+            this.$ul.append(
+                $('<li>').append(
+                    $('<a href="#">', { href: '#', 'data-name': name })
+                    .text(text).on('click', callback)
                 )
             );
             return this;

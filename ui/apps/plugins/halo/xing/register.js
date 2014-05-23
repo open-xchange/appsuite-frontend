@@ -135,7 +135,7 @@ define('plugins/halo/xing/register',
 
             node.append(
                 $('<div>').addClass('birthdate extended-profile-block').append(
-                    $('<legend>').addClass('header').text(gt('Birthdate')),
+                    $('<legend>').addClass('header').text(gt('Date of birth')),
                     $('<p>').text(birthday.format(date.DATE))
                 )
             );
@@ -202,8 +202,7 @@ define('plugins/halo/xing/register',
                 def = $.Deferred(),
                 data = baton.data.values ? baton.data.values[0] : baton.data,
                 xing,
-                hasNoConnectionData = false;
-
+                hasNoConnectionData = true;
             xing = $('<div>').addClass('io-ox-xing halo clear').append(
                 $('<div>').addClass('widget-title clear-title').text(XING_NAME)
             );
@@ -212,15 +211,23 @@ define('plugins/halo/xing/register',
             if (baton.contact.display_name === 'annamariaoberhuber') {
                 data.sharedContacts = [
                     { 'display_name': 'Herbert', 'page_name': 'Herbert', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
+                    { 'display_name': 'Bernie', 'page_name': 'Bernie', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
                     { 'display_name': 'Bert', 'page_name': 'Bert', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
-                    { 'display_name': 'Ernie', 'page_name': 'Ernie', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } }
+                    { 'display_name': 'Herbert Zwo', 'page_name': 'Herbert', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
+                    { 'display_name': 'Bernie Zwo', 'page_name': 'Bernie', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
+                    { 'display_name': 'Bert Zwo', 'page_name': 'Bert', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
+                    { 'display_name': 'Ernie', 'page_name': 'Ernie', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'http://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Tiling_Regular_4-4_Square.svg/200px-Tiling_Regular_4-4_Square.svg.png' } }
                 ];
             }
             if (baton.contact.display_name === 'ewaldbartkowiak') {
                 data.path = [
                     { 'display_name': 'Herbert', 'page_name': 'Herbert', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
+                    { 'display_name': 'Bernie', 'page_name': 'Bernie', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
                     { 'display_name': 'Bert', 'page_name': 'Bert', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
-                    { 'display_name': 'Ernie', 'page_name': 'Ernie', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } }
+                    { 'display_name': 'Herbert Zwo', 'page_name': 'Herbert', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
+                    { 'display_name': 'Bernie Zwo', 'page_name': 'Bernie', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
+                    { 'display_name': 'Bert Zwo', 'page_name': 'Bert', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'https://www.xing.com/img/n/nobody_f.70x93.jpg' } },
+                    { 'display_name': 'Ernie', 'page_name': 'Ernie', 'permalink': 'https://www.xing.com/profile/AnnaMaria_Oberhuber', 'photo_urls': { 'mini_thumb': 'https://www.xing.com/img/n/nobody_f.18x24.jpg', 'maxi_thumb': 'http://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Tiling_Regular_4-4_Square.svg/200px-Tiling_Regular_4-4_Square.svg.png' } }
                 ];
             }
             /*END: DEMO CODE*/
@@ -228,41 +235,33 @@ define('plugins/halo/xing/register',
             if (data.status && data.status === 404) {
                 // temporary connection problem
                 xing.append($('<div>').text(gt('Sorry, could not connect to %s right now.', XING_NAME)));
+            }
 
-            } else if (data.path && data.path.length > 0) {
+            if (data.profile) {
+                xing.append(
+                    miniProfile(data.profile),
+                    extendedProfile(data.profile)
+                );
+                hasNoConnectionData = false;
+            }
+
+            if (data.path && data.path.length > 0) {
                 // not directly know, but a path is present
                 shortestPath(data).appendTo(xing);
+                hasNoConnectionData = false;
 
             } else if (data.sharedContacts && data.sharedContacts.length > 0) {
                 // directly known
                 sharedContacts(data).appendTo(xing);
-
-            } else {
-                hasNoConnectionData = true;
+                hasNoConnectionData = false;
             }
 
-            if (data.profile) {
-                // No connection available, but we got information from XING anyway.
-                // Probably a privileged key or a public profile
-                var intro = $('<p>').addClass('intro padding').text(gt('Here is what %s knows about %s:', XING_NAME, data.profile.display_name));
-
-                xing.append(
-                    intro,
-                    miniProfile(data.profile),
-                    extendedProfile(data.profile)
-                );
-                if (hasNoConnectionData) {
-                    //remove padding if this is placed directly below the widget title
-                    intro.removeClass('padding');
-                }
-
-            } else if (hasNoConnectionData) {
+            if (hasNoConnectionData) {
                 // no data available at all
                 xing.append($('<div>').text(gt('Sorry, there is no data available for you on %s.', XING_NAME)));
             }
 
             node.append(xing);
-
             def.resolve();
             return def;
         }

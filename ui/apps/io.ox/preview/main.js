@@ -134,7 +134,7 @@ define('io.ox/preview/main',
                     autoplay: false
                 }).hide().appendTo(this.on('click', function () { return false; }));
                 var self = this;
-                require(['apps/3rd.party/mediaelement/mediaelement-and-player.js',
+                require(['static/3rd.party/mediaelement/mediaelement-and-player.js',
                         'css!3rd.party/mediaelement/mediaelementplayer.css'], function () {
 
                     var pw = self.closest('.file-details, .scrollable-pane').width() || '100%';
@@ -201,7 +201,7 @@ define('io.ox/preview/main',
                         needsfix: true
                     };
                 }
-                var view = new detail.View({ data: data });
+                var view = new detail.View({ data: data, loaded: true });
                 self.idle().append(view.render().expand().$el.addClass('no-padding'));
             });
         },

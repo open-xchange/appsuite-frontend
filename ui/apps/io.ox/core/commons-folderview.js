@@ -590,12 +590,14 @@ define('io.ox/core/commons-folderview',
                         tree = new views.FolderTree(dialog.getBody(), {
                             type: type,
                             rootFolderId: type === 'infostore' ? '9' : '1',
-                            skipRoot: true,
+                            skipRoot: type === 'mail' ? false : true,
                             tabindex: 0,
                             cut: folder.id,
-                            customize: function (data) {
-                                var canMove = api.can('moveFolder', folder, data);
-                                if (!canMove) {
+                            customize: function (target) {
+                                if (type === 'mail' && target.module === 'system') {
+                                    return;
+                                }
+                                if (!api.can('moveFolder', folder, target)) {
                                     this.removeClass('selectable').addClass('disabled');
                                 }
                             }

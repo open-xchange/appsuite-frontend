@@ -24,28 +24,28 @@ define('io.ox/mail/common-extensions',
      'io.ox/contacts/api',
      'io.ox/core/api/collection-pool',
      'io.ox/core/tk/flag-picker',
+     'io.ox/core/capabilities',
      'settings!io.ox/mail',
      'gettext!io.ox/mail'
-    ], function (ext, links, actions, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, settings, gt) {
+    ], function (ext, links, actions, util, api, account, date, strings, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, gt) {
 
     'use strict';
 
     var extensions = {
 
         picture: function (baton) {
-            var data = api.threads.head(baton.data),
-                from = data.from,
+            var data = baton.data, from = data.from,
                 size = _.device('retina') ? 80 : 40;
             this.append(
                 contactsAPI.pictureHalo(
                     $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: from && from[0] && from[0][1], width: size, height: size, scaleType: 'cover' }
+                    { email: data.picture || (from && from[0] && from[0][1]), width: size, height: size, scaleType: 'cover' }
                 )
             );
         },
 
         date: function (baton, options) {
-            var data = api.threads.head(baton.data), t = data.received_date, d;
+            var data = baton.data, t = data.received_date, d;
             if (!_.isNumber(t)) return;
             d = new date.Local(t);
             this.append(
@@ -64,7 +64,7 @@ define('io.ox/mail/common-extensions',
         },
 
         from: function (baton) {
-            var data = api.threads.head(baton.data),
+            var data = baton.data,
                 single = !data.threadSize || data.threadSize === 1,
                 field = single && account.is('sent|drafts', data.folder_id) ? 'to' : 'from';
             this.append(
@@ -75,7 +75,7 @@ define('io.ox/mail/common-extensions',
         },
 
         size: function (baton) {
-            var data = api.threads.head(baton.data);
+            var data = baton.data;
             if (!_.isNumber(data.size)) return;
             this.append(
                 $('<span class="size">').text(strings.fileSize(data.size, 1))
@@ -83,15 +83,8 @@ define('io.ox/mail/common-extensions',
         },
 
         unreadClass: function (baton) {
-            var data = api.threads.head(baton.data),
-                unread = util.isUnseen(data);
-            this.closest('.list-item').toggleClass('unread', unread);
-        },
-
-        unreadClassPartial: function (baton) {
-            var data = baton.data,
-                unread = api.threads.partiallyUnseen(data);
-            this.closest('.list-item').toggleClass('unread', unread);
+            var isUnseen = util.isUnseen(baton.data);
+            this.closest('.list-item').toggleClass('unread', isUnseen);
         },
 
         deleted: function (baton) {
@@ -100,7 +93,7 @@ define('io.ox/mail/common-extensions',
 
         flag: function (baton) {
 
-            var color = api.threads.color(baton.data);
+            var color = baton.data.color_label;
             if (color <= 0) return; // 0 and a buggy -1
 
             this.append(
@@ -115,7 +108,7 @@ define('io.ox/mail/common-extensions',
             if (data.threadSize <= 1) return;
 
             this.append(
-                $('<div class="thread-size" aria-hidden="true" data-open="false">').append(
+                $('<div class="thread-size" aria-hidden="true">').append(
                     $('<span class="number">').text(_.noI18n(data.threadSize))
                 )
             );
@@ -129,7 +122,7 @@ define('io.ox/mail/common-extensions',
         },
 
         priority: function (baton) {
-            var data = api.threads.head(baton.data);
+            var data = baton.data;
             this.append(
                 $('<span class="priority" aria-hidden="true">').append(
                     util.getPriority(data)
@@ -138,8 +131,8 @@ define('io.ox/mail/common-extensions',
         },
 
         unread: function (baton) {
-            var isUnread = api.threads.partiallyUnseen(baton.data);
-            if (isUnread) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
+            var isUnseen = util.isUnseen(baton.data);
+            if (isUnseen) this.append('<i class="icon-unread fa fa-envelope" aria-hidden="true">');
         },
 
         answered: function (baton) {
@@ -160,7 +153,7 @@ define('io.ox/mail/common-extensions',
 
         subject: function (baton) {
 
-            var data = api.threads.head(baton.data),
+            var data = baton.data,
                 keepFirstPrefix = baton.data.threadSize === 1,
                 subject = util.getSubject(data, keepFirstPrefix);
 
@@ -178,11 +171,19 @@ define('io.ox/mail/common-extensions',
             this.closest('.list-item').attr('title', subject);
         },
 
+        // used in unified inbox
+        account: function (baton) {
+            if (!account.isUnifiedFolder(baton.data.folder_id)) return;
+            this.append(
+                $('<span class="account-name">').text(baton.data.account_name || '')
+            );
+        },
+
         recipients: (function () {
 
             // var drawAllDropDown = function (node, label, data) {
             //     // use extension pattern
-            //     new links.DropdownLinks({
+            //     new links.Dropdown({
             //         label: label,
             //         classes: 'all-link',
             //         ref: 'io.ox/mail/all/actions'
@@ -266,11 +267,11 @@ define('io.ox/mail/common-extensions',
 
             var drawAttachmentDropDown = function (node, label, data) {
                 // use extension pattern
-                var dd = new links.DropdownLinks({
+                var dd = new links.Dropdown({
                         label: label,
                         classes: 'attachment-link',
                         ref: 'io.ox/mail/attachment/links'
-                    }).draw.call(node, ext.Baton({ data: data })),
+                    }).draw.call(node, ext.Baton({ data: data, $el: $('<span>') })),
                     contentType = getContentType(data.content_type),
                     url,
                     filename;
@@ -360,14 +361,18 @@ define('io.ox/mail/common-extensions',
 
         attachmentPreview: (function () {
 
-            var regSupportsPreview = /\.(gif|bmp|tiff|jpe?g|gmp|png|pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
+            var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|p[po]tx?)$/i,
                 regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
 
             return function (baton) {
 
                 var attachments = baton.attachments,
+                    supportsDocumentPreview = capabilities.has('document_preview'),
                     list = _(attachments).filter(function (attachment) {
-                        return attachment.disp === 'attachment' && regSupportsPreview.test(attachment.filename);
+                        if (attachment.disp !== 'attachment') return false;
+                        if (regIsImage.test(attachment.filename)) return true;
+                        if (supportsDocumentPreview && regIsDocument.test(attachment.filename)) return true;
+                        return false;
                     }),
                     $ul;
 
@@ -417,6 +422,9 @@ define('io.ox/mail/common-extensions',
             }
 
             return function (baton) {
+
+                if (util.isEmbedded(baton.data)) return;
+
                 this.append(
                     $('<a href="#" class="unread-toggle" tabindex="1"><i class="fa"/></a>')
                     .on('click', { view: baton.view }, toggle)
@@ -432,7 +440,7 @@ define('io.ox/mail/common-extensions',
                 view.trigger('load');
                 view.$el.find('.external-images').remove();
                 // get unmodified mail
-                api.getUnmodified(_.cid(view.cid)).done(function (data) {
+                api.getUnmodified(_.cid(view.model.cid)).done(function (data) {
                     view.trigger('load:done');
                     view.model.set(data);
                 });
@@ -440,22 +448,25 @@ define('io.ox/mail/common-extensions',
 
             function draw(model) {
 
-                if (model.get('modified') !== 1) {
+                // nothing to do if message is unchanged
+                // or if message is embedded (since we cannot reload it)
+                if (model.get('modified') !== 1 || util.isEmbedded(model.toJSON())) {
                     this.find('.external-images').remove();
-                } else {
-                    this.append(
-                        $('<div class="alert alert-info external-images">').append(
-                            $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
-                            $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
-                        )
-                    );
+                    return;
                 }
+
+                this.append(
+                    $('<div class="alert alert-info external-images">').append(
+                        $('<a href="#" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
+                        $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
+                    )
+                );
             }
 
             return function (baton) {
                 draw.call(this, baton.model);
                 this.on('click', '.external-images', { view: baton.view }, loadImages);
-                baton.model.on('change:modified', draw.bind(this));
+                baton.view.listenTo(baton.model, 'change:modified', draw.bind(this));
             };
 
         }()),
@@ -482,7 +493,7 @@ define('io.ox/mail/common-extensions',
 
             return function (baton) {
                 draw.call(this, baton.model);
-                baton.model.on('change:headers', draw.bind(this));
+                baton.view.listenTo(baton.model, 'change:headers', draw.bind(this));
             };
 
         }()),
@@ -493,9 +504,9 @@ define('io.ox/mail/common-extensions',
 
             function returnReceipt(e) {
                 e.preventDefault();
-                var view = e.data.view, obj = _.cid(view.cid);
+                var view = e.data.view, obj = _.cid(view.model.cid);
                 view.model.set('disp_notification_to', '');
-                skip[view.cid] = true;
+                skip[view.model.cid] = true;
                 api.ack({ folder: obj.folder_id, id: obj.id }).done(function () {
                     notifications.yell(
                         'success',
@@ -509,7 +520,7 @@ define('io.ox/mail/common-extensions',
                 e.preventDefault();
                 // add to skip hash
                 var view = e.data.view;
-                skip[view.cid] = true;
+                skip[view.model.cid] = true;
             }
 
             function draw(model) {
@@ -543,7 +554,7 @@ define('io.ox/mail/common-extensions',
                 draw.call(this, baton.model);
                 this.on('click', '.disposition-notification .btn', { view: baton.view }, returnReceipt);
                 this.on('click', '.disposition-notification .close', { view: baton.view }, cancel);
-                baton.model.on('change:disp_notification_to', draw.bind(this));
+                baton.view.listenTo(baton.model, 'change:disp_notification_to', draw.bind(this));
             };
 
         }()),

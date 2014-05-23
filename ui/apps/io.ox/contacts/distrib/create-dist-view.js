@@ -38,11 +38,18 @@ define('io.ox/contacts/distrib/create-dist-view',
         className: 'row title-controls',
         render: function () {
             var self = this,
-            buttonText = (self.model.get('id')) ? gt('Save') : gt('Create list');
+                buttonText = gt('Create list'),
+                header = gt('Create distribution list');
+
+            // on edit
+            if (self.model.get('id')) {
+                buttonText = gt('Save');
+                header = gt('Edit distribution list');
+            }
 
             this.$el.append(
                 $('<div class="header col-md-12">').append(
-                    $('<h1 class="clear-title title">').text(gt('Create distribution list')),
+                    $('<h1 class="clear-title title">').text(header),
                     // save/create button
                     $('<button type="button" class="btn btn-primary" data-action="save" tabindex="3">').text(buttonText).on('click', function () {
                         self.options.parentView.trigger('save:start');

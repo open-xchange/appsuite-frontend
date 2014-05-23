@@ -357,15 +357,15 @@ define(['io.ox/calendar/util', 'io.ox/core/date'], function (util, date) {
                 this.server.respondWith('PUT', /api\/user\?action=list/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'}, JSON.stringify(userList));
                 });
-                this.server.respondWith('GET', /api\/group\?action=get/, function (xhr) {
+                this.server.respondWith('PUT', /api\/group\?action=list/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                        '{"timestamp":1383694139525,"data":{"id":1337,"display_name":"dream-team","members":[1,2,3],"last_modified_utc":1383694139525,"name":"dream-team"}}'
+                        '{"timestamp":1383694139525,"data":[{"id":1337,"display_name":"dream-team","members":[1,2,3],"last_modified_utc":1383694139525,"name":"dream-team"}]}'
                     );
                 });
             });
 
             it('for test group', function (done) {
-                util.resolveGroupMembers([1337], [4]).then(function (result) {
+                util.resolveGroupMembers([{id: 1337}], [4]).then(function (result) {
                     var expectedResult = [{
                         'id': 1,
                         'folder_id': 6,

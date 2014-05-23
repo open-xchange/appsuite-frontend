@@ -96,23 +96,11 @@ define('io.ox/files/actions',
         }
     });
 
-    new Action('io.ox/files/actions/audioplayer', {
-        requires: function (e) {
-            return _.device('!android') && e.collection.has('some') && checkMedia(e, 'audio');
-        },
-        action: function (baton) {
-            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: false
-                });
-            });
-        }
-    });
-
     new Action('io.ox/files/actions/videoplayer', {
         requires: function (e) {
-            return _.device('!android') && e.collection.has('some') && checkMedia(e, 'video');
+            if (_.device('android')) return false;
+            if (e.collection.has('none')) return false;
+            return checkMedia(e, 'video');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
@@ -322,7 +310,7 @@ define('io.ox/files/actions',
                     new dialogs.ModalDialog({ width: 500 })
                         .build(function () {
                             // header
-                            this.header($('<h4>').text('Direct link'));
+                            this.header($('<h4>').text(gt('Direct link')));
                             // content
                             this.getContentNode().addClass('user-select-text max-height-200').append(
 
@@ -561,7 +549,6 @@ define('io.ox/files/actions',
                 var keys = new KeyListener($input),
                     dialog = new dialogs.ModalDialog(),
                     $input = $('<textarea rows="10" class="form-control" tabindex="1"></textarea>')
-                            .css({width: '507px'})
                             .val(baton.data.description),
                     $form = $('<form>')
                             .css('margin', '0 0 0 0')
@@ -877,6 +864,7 @@ define('io.ox/files/actions',
         id: 'open',
         index: index += 100,
         prio: 'hi',
+        mobile: 'hi',
         label: gt('Open'),
         ref: 'io.ox/files/actions/open'
     }));
@@ -885,6 +873,7 @@ define('io.ox/files/actions',
         id: 'editor',
         index: index += 100,
         prio: 'hi',
+        mobile: 'lo',
         label: gt('Edit'),
         ref: 'io.ox/files/actions/editor'
     }));
@@ -893,6 +882,7 @@ define('io.ox/files/actions',
         id: 'download',
         index: index += 100,
         prio: 'hi',
+        mobile: 'lo',
         label: gt('Download'),
         ref: 'io.ox/files/actions/download'
     }));
@@ -901,6 +891,7 @@ define('io.ox/files/actions',
         id: 'delete',
         index: index += 100,
         prio: 'hi',
+        mobile: 'lo',
         label: gt('Delete'),
         ref: 'io.ox/files/actions/delete'
     }));
@@ -911,6 +902,7 @@ define('io.ox/files/actions',
         id: 'publish',
         index: index += 100,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Share this file'),
         ref: 'io.ox/files/actions/publish',
         section: 'share'
@@ -920,6 +912,7 @@ define('io.ox/files/actions',
         id: 'send',
         index: index += 100,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Send by mail'),
         ref: 'io.ox/files/actions/send',
         section: 'share'
@@ -929,6 +922,7 @@ define('io.ox/files/actions',
         id: 'sendlink',
         index: index += 100,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Send as internal link'),
         ref: 'io.ox/files/actions/sendlink',
         section: 'share'
@@ -938,6 +932,7 @@ define('io.ox/files/actions',
         id: 'showlink',
         index: index += 100,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Show internal link'),
         ref: 'io.ox/files/actions/showlink',
         section: 'share'
@@ -947,6 +942,7 @@ define('io.ox/files/actions',
         id: 'add-to-portal',
         index: index += 100,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Add to portal'),
         ref: 'io.ox/files/actions/add-to-portal',
         section: 'share'
@@ -956,6 +952,7 @@ define('io.ox/files/actions',
         id: 'rename',
         index: index += 100,
         label: gt('Rename'),
+        mobile: 'lo',
         ref: 'io.ox/files/actions/rename',
         section: 'edit'
     }));
@@ -964,6 +961,7 @@ define('io.ox/files/actions',
         id: 'edit-description',
         index: index += 100,
         label: gt('Edit description'),
+        mobile: 'lo',
         ref: 'io.ox/files/actions/edit-description',
         section: 'edit'
     }));
@@ -973,6 +971,7 @@ define('io.ox/files/actions',
         index: index += 100,
         label: gt('Move'),
         prio: 'lo',
+        mobile: 'lo',
         ref: 'io.ox/files/actions/move',
         section: 'file-op'
     }));
@@ -981,6 +980,7 @@ define('io.ox/files/actions',
         id: 'copy',
         index: index += 100,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Copy'),
         ref: 'io.ox/files/actions/copy',
         section: 'file-op'
@@ -990,6 +990,7 @@ define('io.ox/files/actions',
         id: 'lock',
         index: index += 100,
         prio: 'lo',
+        mobile: 'lo',
         label: gt('Lock'),
         ref: 'io.ox/files/actions/lock',
         section: 'file-op'
@@ -1161,6 +1162,7 @@ define('io.ox/files/actions',
     }
 
     function checkMedia(e, type) {
+
         if (!e.collection.has('some') && !settings.get(type + 'Enabled')) {
             return false;
         }
@@ -1175,6 +1177,8 @@ define('io.ox/files/actions',
             e.baton.allIds = e.baton.data;
             list = [e.baton.allIds];
         }
+
+        if (!_.isArray(list)) return false; // avoid runtime errors
 
         //identify incomplete items
         _(list).each(function (item) {
@@ -1216,7 +1220,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/audioplayer', {
         requires: function (e) {
-            return _.device('!android') && checkMedia(e, 'audio');
+            if (_.device('android')) return false;
+            return checkMedia(e, 'audio');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
@@ -1230,7 +1235,8 @@ define('io.ox/files/actions',
 
     new Action('io.ox/files/icons/videoplayer', {
         requires: function (e) {
-            return _.device('!android') && checkMedia(e, 'video');
+            if (_.device('android')) return false;
+            return checkMedia(e, 'video');
         },
         action: function (baton) {
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
@@ -1274,16 +1280,6 @@ define('io.ox/files/actions',
         id: 'slideshow',
         label: gt('View Slideshow'),
         ref: 'io.ox/files/icons/slideshow'
-    }));
-
-    ext.point('io.ox/files/icons/inline').extend(new links.Link({
-        index: 400,
-        prio: 'hi',
-        mobile: 'lo',
-        cssClasses: 'io-ox-action-link fullscreen',
-        id: 'slideshow-fullscreen',
-        label: gt('Fullscreen'),
-        ref: 'io.ox/files/icons/slideshow-fullscreen'
     }));
 
     ext.point('io.ox/files/icons/inline').extend(new links.Link({

@@ -23,12 +23,13 @@ define('io.ox/mail/main',
      'io.ox/core/extPatterns/actions',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
-     'io.ox/mail/navbarViews',
+     'io.ox/core/toolbars-mobile',
      'io.ox/core/commons-folderview',
-     'io.ox/core/pageController',
+     'io.ox/core/page-controller',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
+     'io.ox/mail/mobile-navbar-extensions',
      'io.ox/mail/toolbar',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
@@ -165,6 +166,7 @@ define('io.ox/mail/main',
             // checkbox toggle
             app.pages.getNavbar('listView').on('rightAction', function () {
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
+
             });
 
         },
@@ -219,8 +221,9 @@ define('io.ox/mail/main',
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': app.settings.get('layout', 'vertical'),
-                'checkboxes': app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', true),
                 'contactPictures': app.settings.get('showContactPictures', false),
+                'exactDates': app.settings.get('showExactDates', false),
                 'mobileFolderSelectMode': false
             });
         },
@@ -334,6 +337,24 @@ define('io.ox/mail/main',
         },
 
         /*
+         * Scroll-o-mat
+         * Scroll to top if new unseen messages arrive
+         */
+        'auto-scroll': function (app) {
+            app.listView.on('add', function (model, index) {
+                // only for top position
+                if (index !== 0) return;
+                // only for unseen messages
+                if (!util.isUnseen(model.toJSON())) return;
+                // only scroll to top if scroll position is below 50% of outer height
+                var height = app.listView.$el.height() / 2;
+                if (app.listView.$el.scrollTop() > height) return;
+                // scroll to top
+                app.listView.$el.scrollTop(0);
+            });
+        },
+
+        /*
          * Get folder-based view options
          */
         'get-view-options': function (app) {
@@ -400,9 +421,12 @@ define('io.ox/mail/main',
                 app.settings
                     .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
                     .set('layout', data.layout)
-                    .set('showCheckboxes', data.checkboxes)
                     .set('showContactPictures', data.contactPictures)
-                    .save();
+                    .set('showExactDates', data.exactDates);
+                if (_.device('!smartphone')) {
+                    app.settings.set('showCheckboxes', data.checkboxes);
+                }
+                app.settings.save();
             }, 500));
         },
 
@@ -502,6 +526,7 @@ define('io.ox/mail/main',
                 var options = app.getViewOptions(id);
                 app.props.set(options);
                 app.listView.model.set('folder', id);
+                app.folder.getData();
             });
         },
 
@@ -826,6 +851,7 @@ define('io.ox/mail/main',
          * Select next item in list view if current item gets deleted
          */
         'before-delete': function (app) {
+            if (_.device('small')) return; // fixes scrolling issue on mobiles during delete
             api.on('beforedelete', function () {
                 app.listView.selection.dodge();
             });
@@ -916,8 +942,13 @@ define('io.ox/mail/main',
          */
         'change:checkboxes-mobile': function (app) {
             if (_.device('!small')) return;
+
+            // intial hide
+            app.listControl.$el.toggleClass('toolbar-top-visible', false);
+
             app.props.on('change:checkboxes', function (model, value) {
                 app.listView.toggleCheckboxes(value);
+                app.listControl.$el.toggleClass('toolbar-top-visible', value);
                 if (value) {
                     app.pages.getNavbar('listView')
                         .setRight(gt('Cancel'))
@@ -937,7 +968,6 @@ define('io.ox/mail/main',
             });
         },
 
-
         /*
          * Respond to change:contactPictures
          */
@@ -945,7 +975,39 @@ define('io.ox/mail/main',
             app.props.on('change:contactPictures', function () {
                 app.listView.redraw();
             });
-        }
+        },
+
+        /*
+         * Respond to change:exactDates
+         */
+        'change:exactDates': function (app) {
+            app.props.on('change:exactDates', function () {
+                app.listView.redraw();
+            });
+        },
+
+        // 'inplace-search': function (app) {
+
+        //     if (_.device('small')) return;
+
+        //     var side = app.getWindow().nodes.sidepanel;
+
+        //     require(['io.ox/search/main'], function (search) {
+
+        //         side.find('.foldertree-sidepanel').append(
+        //             $('<div class="generic-toolbar top inplace-search io-ox-search">').append(
+        //                 search.init()
+        //             )
+        //         );
+
+        //         var container = side.find('.foldertree-container').addClass('top-toolbar');
+
+        //         side.find('.search-field').on('focus blur', function (e) {
+        //             // hide on focus, show on blur
+        //             container.toggle(e.type === 'blur');
+        //         });
+        //     });
+        // }
     });
 
     // launcher

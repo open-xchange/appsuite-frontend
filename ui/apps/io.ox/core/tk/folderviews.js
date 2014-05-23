@@ -16,18 +16,21 @@ define('io.ox/core/tk/folderviews',
     ['io.ox/core/tk/selection',
      'io.ox/core/api/folder',
      'io.ox/core/api/user',
+     'io.ox/core/api/account',
      'io.ox/core/extensions',
      'io.ox/core/event',
      'io.ox/core/notifications',
      'io.ox/core/http',
      'io.ox/core/capabilities',
+     'settings!io.ox/core',
      'gettext!io.ox/core'
-    ], function (Selection, api, userAPI, ext, Events, notifications, http, capabilities, gt) {
+    ], function (Selection, api, userAPI, accountAPI, ext, Events, notifications, http, capabilities, settings, gt) {
 
     'use strict';
 
     var OPEN = 'fa fa-chevron-right',
         CLOSE = 'fa fa-chevron-down',
+        hasFolderIcons = settings.get('features/folderIcons', false),
 
         SMALL_FOLDER_PADDING = 15, // for small devices like smartphons
         DESKTOP_FOLDER_PADDING = 30, // for mouse-based devices (could be smaller but irrelevant) and for fat finger support
@@ -152,6 +155,21 @@ define('io.ox/core/tk/folderviews',
                     nodes.folder.removeAttr('aria-expanded');
                 }
                 nodes.arrow.find('i').attr('class', className);
+                if (hasFolderIcons) {
+                    var folderClass = 'fa fa-';
+                    if (accountAPI.is('trash', self.id)) {
+                        folderClass += 'trash-o special';
+                    } else if (accountAPI.is('inbox', self.id)) {
+                        folderClass += 'inbox special';
+                    } else if (accountAPI.is('sent', self.id)) {
+                        folderClass += (hasChildren() ? 'send special' : 'send-o special');
+                    } else if (accountAPI.is('drafts', self.id)) {
+                        folderClass += 'file-o special';
+                    } else {
+                        folderClass += isOpen() ? 'folder-open-o' : 'folder-o';
+                    }
+                    nodes.icon.find('i').attr('class', folderClass);
+                }
                 if (childrenLoaded && !children) {
                     hideArrow();
                 }
@@ -396,6 +414,7 @@ define('io.ox/core/tk/folderviews',
                 if (nodes && nodes.arrow === undefined) {
                     // create DOM nodes
                     nodes.arrow = $('<div class="folder-arrow" role="presentation"><i class="fa fa-chevron-right"></i></div>');
+                    nodes.icon = hasFolderIcons ? $('<div class="folder-icon" role="presentation"><i class="fa fa-folder"></i></div>') : $();
                     nodes.label = $('<div class="folder-label">');
                     nodes.counter = $('<div class="folder-counter">').append('<span class="folder-counter-badge">');
                     nodes.subscriber = $('<input>').attr({ 'type': 'checkbox', 'name': 'folder', tabindex: -1, 'value': data.id });
@@ -417,9 +436,9 @@ define('io.ox/core/tk/folderviews',
                         nodes.subscriber.prop('disabled', true);
                         nodes.subscriber.prop('checked', false);
                     }
-                    nodes.folder.append(nodes.arrow, $('<div>').addClass('subscribe-wrapper').append(nodes.subscriber), nodes.label, nodes.counter);
+                    nodes.folder.append(nodes.arrow, nodes.icon, $('<div>').addClass('subscribe-wrapper').append(nodes.subscriber), nodes.label, nodes.counter);
                 } else {
-                    nodes.folder.append(nodes.arrow, nodes.label, nodes.counter);
+                    nodes.folder.append(nodes.arrow, nodes.icon, nodes.label, nodes.counter);
                 }
                 // customize
                 self.customize();
@@ -474,7 +493,7 @@ define('io.ox/core/tk/folderviews',
         var self = this;
 
         $(container)
-            .addClass('io-ox-foldertree f6-target')
+            .addClass('io-ox-foldertree f6-target' + (hasFolderIcons ? ' folder-icons' : ''))
             .attr({ role: 'tree', 'aria-label': gt('Folder view') })
             // add tree container
             .append(this.container = $('<div class="folder-root">'));
@@ -820,19 +839,12 @@ define('io.ox/core/tk/folderviews',
         customize: function (data, options) {
 
             var label = this.find('.folder-label'),
-                counter = this.find('.folder-counter');
-
-            // selectable?
-            var hasProperType = !options.type || options.type === data.module,
-                isSelectable = hasProperType, // so: all folder that I can see
+                counter = this.find('.folder-counter'),
+                isSelectable = !options.type || options.type === data.module, // so: all folder that I can see
                 isReadable = isSelectable && api.can('read', data),
-                isExpandable = !!data.subfolders,
-                isEnabled = !(options.targetmode && isReadable && !api.can('create', data));
-
-            if (!isEnabled) { this.addClass('disabled'); isSelectable = false; }
-            if (isExpandable) { this.addClass('expandable'); }
-            if (!isReadable) { this.addClass('unreadable'); }
-            if (!isSelectable) { this.removeClass('selectable').addClass('unselectable'); }
+                isEnabled = !(options.targetmode && isReadable && !api.can('create', data)),
+                labelTitle = data.title,
+                cls = '';
 
             // add options (only if 'app' is defined; should not appear in modal dialogs, for example)
             if (options.app && this.find('.folder-options').length === 0) {
@@ -845,20 +857,18 @@ define('io.ox/core/tk/folderviews',
                 );
             }
 
-            // set title
-            var shortTitle = api.getFolderTitle(data.title, 20),
-                total = data.total && data.total !== 0 ? ' - ' + gt('total') + ' ' + data.total : '',
-                unread = data.unread && data.unread !== 0 ? ' - ' + gt('unread') + ' ' + data.unread : '',
-                labelTitle = options.type === 'mail' ? data.title + total + unread : data.title;
-
-            label.attr('title', labelTitle).empty().append(
-                $('<span class="short-title">').text(_.noI18n(shortTitle)),
-                $('<span class="long-title">').text(_.noI18n(data.title))
-            );
-            this.attr('aria-label', labelTitle);
-
             // set counter (mail only)
             if (options.type === 'mail') {
+                // set title
+                var total = data.total && data.total !== 0 ? ' - ' + gt('total') + ' ' + data.total : '',
+                    unread = data.unread && data.unread !== 0 ? ' - ' + gt('unread') + ' ' + data.unread : '';
+                labelTitle = data.title + total + unread;
+
+                // rename root
+                if (options.skipRoot === false && data.module === 'system') {
+                    // rename mail root folder
+                    data.title = gt('Mail');
+                }
                 if (_.device('!small') && data.id === 'default0/INBOX' && (!data.unread  || data.unread === 0)) {//remove new mail title if inbox new-mail counter is 0
                     document.fixedtitle = false;
                     document.title = document.temptitle;
@@ -873,6 +883,20 @@ define('io.ox/core/tk/folderviews',
             } else {
                 this.removeClass('show-counter');
             }
+
+            // add css classes
+            if (!isEnabled) { cls += 'disabled '; isSelectable = false; }
+            if (!!data.subfolders) { cls += 'expandable '; }
+            if (!isReadable) { cls += 'unreadable '; }
+            cls += (!isSelectable ? 'un' :'') + 'selectable';
+
+            this.addClass(cls)
+                .attr('aria-label', labelTitle);
+
+            label.attr('title', labelTitle).empty().append(
+                $('<span class="short-title">').text(_.noI18n(api.getFolderTitle(data.title, 20))),
+                $('<span class="long-title">').text(_.noI18n(data.title))
+            );
         }
     });
 

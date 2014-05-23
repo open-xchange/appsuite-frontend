@@ -368,8 +368,9 @@ define('io.ox/mail/util',
 
             if (subject === '') return gt('No subject');
 
-            // remove mailing list stuff
-            subject = subject.replace(/\[[^\[]*\]\s*/g, '');
+            // remove mailing list stuff (optional)
+            if (settings.get('features/cleanSubjects', false))
+                subject = subject.replace(/\[[^\[]*\]\s*/g, '');
 
             return keepFirstPrefix ?
                 subject.replace(/^((re|fwd|aw|wg):\s?)((re|fwd|aw|wg):\s?)*/i, '$1') :
@@ -474,6 +475,11 @@ define('io.ox/mail/util',
             return typeof (data || {}).parent !== 'undefined';
         },
 
+        isEmbedded: function (data) {
+            if (!_.isObject(data)) return false;
+            return data.folder_id === undefined && data.filename !== undefined;
+        },
+
         byMyself: function (data) {
             data = data || {};
             return data.from && data.from.length && String(data.from[0][1] || '').toLowerCase() in addresses;
@@ -493,6 +499,14 @@ define('io.ox/mail/util',
         getInitialDefaultSender: function () {
             var mailArray = _(settings.get('defaultSendAddress', []));
             return mailArray._wrapped[0];
+        },
+
+        fixInlineImages: function (data) {
+            return data
+                .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
+                .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
+                .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
+                .replace(/data-mce-src="[^"]+"\s?/, '');
         },
 
         signatures: (function () {

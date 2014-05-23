@@ -155,6 +155,7 @@ define('io.ox/core/tk/text-editor', function () {
         this.handleShow = function () {
             textarea.prop('disabled', false).idle().show()
                 .next().hide();
+            textarea.parents('.window-content').find('.mce-tinymce').hide();
             resizeEditorMargin();
             $(window).on('resize', resizeEditorMargin);
 

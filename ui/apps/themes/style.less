@@ -295,9 +295,14 @@ div.hopscotch-bubble {
     }
 
     .footer {
+
         padding-top: 13px;
         height: 50px - 13;
         text-align: right;
+
+        .btn {
+            margin-left: 5px;
+        }
     }
 }
 
@@ -345,9 +350,7 @@ div.hopscotch-bubble {
     }
 
 }
-
 #io-ox-top-logo-small {
-
     width: 60px;
     height: 22px;
     margin: 8px 13px 0 13px;
@@ -358,7 +361,6 @@ div.hopscotch-bubble {
     html.high-contrast & {
         display: none;
     }
-
 }
 
 /** High res logo for retina screens **/
@@ -428,6 +430,11 @@ div.hopscotch-bubble {
 
             &:hover {
                 text-decoration: none;
+                i.fa {
+                    html.high-contrast & {
+                        color: @white;
+                    }
+                }
             }
 
             &:focus {
@@ -622,6 +629,13 @@ div.hopscotch-bubble {
             -webkit-animation-timing-function: ease-in-out;
         }
 
+        &.dropdown {
+            overflow: visible;
+            .dropdown-menu {
+                right: 0;
+                left: auto;
+            }
+        }
     }
 
     .launcher-dropdown {
@@ -669,6 +683,10 @@ div.hopscotch-bubble {
                 color: @white; //HC
             }
         }
+        &.fa-search {
+            font-size: 19px;
+            top: 3px;
+        }
     }
 
     @-webkit-keyframes launcherColours {
@@ -702,16 +720,12 @@ div.hopscotch-bubble {
             color: @color;
         }
     }
-    #io-ox-notifications-icon {
-        min-width: 4.5em;//prevent jumping of searchtool if number changes
-        text-align: center;
-    }
 
     .launcher a.notifications-icon {
 
         height: 40px;
         display: inline-block;
-        padding: 0;
+        padding: 0 7px;
 
         .badge {
 
@@ -838,7 +852,7 @@ div.hopscotch-bubble {
             font-weight: 300;
             font-size: 16px;
             line-height: 24px;
-            margin: 0 0 7px 0;
+            margin: 14px 0 7px 0;
             padding: 0 14px;
             border: 0;
 
@@ -854,10 +868,6 @@ div.hopscotch-bubble {
             padding: 0;
             color: #ccc;
             font-size: 14px;
-        }
-
-        .notifications {
-            margin: 14px 0 0 0;
         }
 
         .notifications:first-child {
@@ -1361,7 +1371,110 @@ div.hopscotch-bubble {
         top: -3px;
         left: 10px;
     }
+}
 
+//
+// Classic and mobile toolbars
+//
+
+/* definitions */
+@toolbar-line-height: 24px;
+@toolbar-vertical-padding: 10px;
+@toolbar-height: @toolbar-line-height + 2 * @toolbar-vertical-padding + 1;
+
+.mobile-navbar {
+    text-align: center;
+    font-size: 15px;
+    .navbar-action {
+        .ellipsis();
+        max-width: 24%;
+        top: 10px;
+        position: absolute;
+        &.left {
+            .fa-chevron-left {
+                margin-right: 2px;
+            }
+            left: 5px;
+        }
+        &.right {
+            right: 5px;
+        }
+    }
+    .navbar-title {
+        .ellipsis();
+        margin: 10px 24%;
+    }
+}
+
+.mobile-toolbar {
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    height: @toolbar-height;
+    z-index: 10;
+    margin: 0;
+    padding: 0 4px 0 5px;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    a.io-ox-action-link.mobile-toolbar-action {
+        display: inline-block;
+        font-size: 20px;
+        line-height: @toolbar-height;
+        width: 19.9%;
+        height: @toolbar-height;
+        text-align: center;
+        margin: 0;
+        vertical-align: middle;
+    }
+    .dropdown {
+        display: inline-block;
+        position: static;
+    }
+}
+
+.classic-toolbar-visible .window-content { top: @toolbar-height; }
+
+.classic-toolbar, .inline-toolbar, .mobile-navbar {
+
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: @toolbar-height;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    margin: 0;
+    padding: 0 4px 0 5px;
+    .user-select(none);
+
+    html.high-contrast & {
+        border-color: @hc-border-color;
+    }
+
+    & > li {
+
+        list-style: none;
+        display: inline-block;
+        padding: 0;
+        float: left; // to support pull-right while keeping items in-order (a11y)
+
+        & > a {
+
+            display: inline-block;
+            line-height: @toolbar-line-height;
+            padding: @toolbar-vertical-padding 13px;
+            text-decoration: none;
+            float: left;
+            outline: 0;
+
+            i { text-decoration: none; }
+            &:focus { background-color: #eee; }
+        }
+    }
+
+    & > li.pull-right {
+        float: right;
+        & > .dropdown-menu { right: 10px; }
+    }
 }
 
 .window-toolbar {
@@ -2042,7 +2155,7 @@ a.button {
         top: 3px;
         bottom: 0;
         left: 0;
-        width: 30px;
+        width: 31px;
         display: none;
         cursor: pointer;
         padding: 7px 0 0 18px;
@@ -2568,9 +2681,11 @@ ul.io-ox-inline-links + header {
         left: @window-head-width;
     }
 
-    // larger popups for notification overlay
-    .notifications-overlay &.right { left: 39.5%; }
-    .notifications-overlay &.left { right: 39.5%; }
+    @media (min-width: 480px), (min-device-width: 480px) {
+        // larger popups for notification overlay
+        .notifications-overlay &.right { left: 39.5%; }
+        .notifications-overlay &.left { right: 39.5%; }
+    }
 }
 
 
@@ -2722,6 +2837,8 @@ ul.io-ox-inline-links + header {
     .autocomplete-item.selected {
         background-color: #eee;
     }
+
+    &.io-ox-busy .scrollable-pane { opacity: 0.5; }
 
     /* bug 26808 hide scrollbars
     .scrollable-pane:after {
@@ -2930,7 +3047,7 @@ ul.io-ox-inline-links + header {
         min-height: 70px;
     }
 
-    .folder-arrow {
+    .folder-arrow, .folder-icon {
 
         display: inline-block;
         width: 50px;
@@ -2942,7 +3059,26 @@ ul.io-ox-inline-links + header {
         }
 
         i {
-            display: block; width: 50px;
+            display: block;
+            width: 50px;
+        }
+
+    }
+
+    .folder-icons& {
+
+        .folder-arrow, .folder-icon {
+
+            width: 25px;
+
+            i {
+                width: 25px;
+
+                &.special {
+                    color: @hc-link-color;
+                }
+            }
+
         }
 
     }
@@ -3090,9 +3226,8 @@ ul.io-ox-inline-links + header {
 
         overflow: auto;
 
-        &.bottom-toolbar {
-            bottom: 45px;
-        }
+        &.top-toolbar { top: 45px; }
+        &.bottom-toolbar { bottom: 45px; }
 
         .io-ox-foldertree {
 
@@ -3165,7 +3300,7 @@ ul.io-ox-inline-links + header {
             }
 
             .folder-icon {
-                display: none;
+                display: inline-block;
             }
 
             .io-ox-fail {
@@ -3182,9 +3317,9 @@ ul.io-ox-inline-links + header {
 
     }
 
-    .generic-toolbar {
+    .generic-toolbar.bottom {
         border-color: rgba(0, 0, 0, 0.10);
-        background-color: rgba(0, 0, 0, 0.03);
+        background-color: rgba(0, 0, 0, 0.015);
     }
 }
 
@@ -3259,6 +3394,13 @@ ul.io-ox-inline-links + header {
 
 // ------
 
+.inplace-search {
+    padding: 7px;
+    line-height: 20px;
+}
+
+// ------
+
 .toolbar-action {
     display: inline-block;
     line-height: 40px - 2; // yep!
@@ -3319,7 +3461,7 @@ a.toolbar-action, .toolbar-action > a {
         position: absolute;
         top: 100px;
         left: 100px;
-        z-index: 2;
+        z-index: 10001; // > 10000; see bug #32517
     }
 
     .divider + .divider { display: none; }
@@ -3327,22 +3469,25 @@ a.toolbar-action, .toolbar-action > a {
 
 /* Guidance view */
 
-.guidance {
+.statistics {
 
     .overflow(auto);
     position: static; /* Bug 31425 */
-    @distance: 50px;
+    @distance: 28px;
+
+    &.modal-body {
+        padding: 28px 28px 0 28px;
+    }
 
     h1.folder-name {
-        font-size: 36px;
-        font-weight: 200;
+        font-size: 24px;
         text-transform: uppercase;
-        color: #ccc;
-        margin: 0 0 0 0;
+        margin: 0 0 24px 0;
     }
 
     header, section {
         margin: 0 0 @distance 0;
+        &:last-child { margin-bottom: 0; }
     }
 
     .folder-summary {
@@ -3356,9 +3501,8 @@ a.toolbar-action, .toolbar-action > a {
     h2 {
         font-size: 20px;
         line-height: 24px;
-        font-weight: 200;
-        text-transform: uppercase;
-        margin: @distance 0 5px 0;
+        font-weight: 300;
+        margin: 0 0 14px 0;
     }
 
     ul.compact {
@@ -3533,30 +3677,6 @@ a.toolbar-action, .toolbar-action > a {
     border-top: 1px solid #ddd;
     margin-top: 6px;
 }
-
-/** Simplify BOOTSTRAP buttons */
-.btn-custom(@color) {
-    background-color: @color;
-    &:hover, &.hover { background-color: darken(@color, 10%); }
-    border: 1px solid @color;
-    color: white;
-}
-
-.btn-default {
-    background-image: none;
-    background-color: #eee;
-    text-shadow: none;
-    &:hover, &.hover { background-color: darken(#eee, 10%); }
-    color: #555;
-    border: 1px solid #ccc;
-    border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
-}
-
-.btn-primary { .btn-custom(@btn-primary-background); }
-.btn-inverse { .btn-custom(@btn-inverse-background-highlight); }
-.btn-success { .btn-custom(@btn-success-background-highlight); }
-.btn-warning { .btn-custom(@btn-warning-background-highlight); }
-.btn-danger  { .btn-custom(@btn-danger-background-highlight); }
 
 /** BOOTSTRAP FIXES **/
 
@@ -3748,9 +3868,9 @@ input.flat-input {
     }
 
     .window-sidepanel.visible {
-        bottom: 40px;
-        width: auto;
-        right: 0;
+        width: auto !important;
+        right: 0 !important;
+        .resizebar { display: none; }
     }
 
     .window-body {
@@ -3824,6 +3944,7 @@ input.flat-input {
         padding: 5px 13px 5px 13px;
         z-index: 2;
         line-height: 2em;
+        display: block;
     }
 
     .vsplit-reverse {
@@ -3847,24 +3968,19 @@ input.flat-input {
 // iOS will go fullscreen and show an overaly with own buttons
 // we need to position our buttons around them
 @media (height: 320px) and (orientation:landscape) {
-
     .window-head {
-
         padding-right: 40px;
-
         .toolbar-button {
             float: right;
         }
-
     }
-
 }
 
-// mobile
+// small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media (max-width: 480px), (max-device-width: 480px) {
+@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
     .default-content-padding {
         padding: 5px 10px 5px 10px;
@@ -3977,16 +4093,7 @@ input.flat-input {
         left: 0;
     }
 
-    .io-ox-foldertree {
-        .folder-arrow, .folder-arrow i {
-            width: 50px;
-        }
-    }
     .core-boot-dialog {
-
-        .btn {
-            width: 100%;
-        }
 
         .alert {
             margin-bottom: 10px;
@@ -4021,26 +4128,12 @@ input.flat-input {
         .content {
             height: 140px;
             overflow: auto;
+            margin-bottom: 15px;
         }
 
         .footer {
-            padding-top: 13px;
-            height: 50px - 13;
-            text-align: right;
-        }
-
-    }
-    //** blur style for body when mobile custom menus are shown **/
-    .ios {
-
-        #io-ox-core {
-
-             transition: -webkit-filter 100ms ease-in;
-             -webkit-filter: blur(0);
-
-            &.menu-blur {
-                -webkit-filter: blur(5px);
-            }
+            padding-top: 0;
+            height: auto;
 
         }
 
@@ -4048,7 +4141,6 @@ input.flat-input {
 
     /** custom bootstrap dropdowns on mobile devices **/
     .custom-dropdown.dropdown-menu {
-
         z-index: 65500;
         max-height: 90%;
         min-width: initial;
@@ -4146,6 +4238,35 @@ input.flat-input {
         .color-purple { background-color: @purple; }
         .color-pink { background-color: darken(@pink, 10%); }
         .color-gray { background-color: darken(@gray-light, 20%); }
+
+        // Disable hover state on mobile devices for custom dropdowns
+        // -----------
+        &.dropdown-menu li > a:hover,
+        &.dropdown-menu li > a:focus,
+        &.dropdown-submenu:hover > a {
+            text-decoration: none;
+            color: inherit;
+            background-color: inherit;
+            background-image: none;
+        }
+
+        &.dropdown-menu li > a:active {
+            color: @dropdown-link-active-color;
+            text-decoration: none;
+            outline: 0;
+            .vertical-gradient(@dropdown-link-active-bg, darken(@dropdown-link-active-bg, 5%));
+        }
+    }
+
+    //** blur style for body when mobile custom menus are shown **/
+    .ios {
+        #io-ox-core {
+             transition: -webkit-filter 100ms ease-in;
+             -webkit-filter: blur(0);
+            &.menu-blur {
+                -webkit-filter: blur(5px);
+            }
+        }
     }
 
     #background-loader.secure.block {
@@ -4161,27 +4282,7 @@ input.flat-input {
             font-weight: bold;
             color: #aaa;
         }
-
     }
-
-    // Disable hover state on mobile devices for custom dropdowns
-    // -----------
-    .dropdown-menu li > a:hover,
-    .dropdown-menu li > a:focus,
-    .dropdown-submenu:hover > a {
-        text-decoration: none;
-        color: inherit;
-        background-color: inherit;
-        background-image: none;
-    }
-
-    .dropdown-menu li > a:active {
-        color: @dropdown-link-active-color;
-        text-decoration: none;
-        outline: 0;
-        .vertical-gradient(@dropdown-link-active-bg, darken(@dropdown-link-active-bg, 5%));
-    }
-
 }
 
 @media (max-width: 380px) {

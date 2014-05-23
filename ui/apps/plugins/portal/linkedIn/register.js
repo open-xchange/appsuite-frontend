@@ -168,9 +168,13 @@ define('plugins/portal/linkedIn/register',
             return keychain.isEnabled('linkedin') && !keychain.hasStandardAccount('linkedin');
         },
 
-        performSetUp: function () {
+        performSetUp: function (baton) {
             var win = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
-            return keychain.createInteractively('linkedin', win);
+            return keychain.createInteractively('linkedin', win)
+                .then(function () {
+                    baton.model.node.removeClass('requires-setup');
+                    ox.trigger('refresh^');
+                });
         },
 
         load: function (baton) {
@@ -189,9 +193,7 @@ define('plugins/portal/linkedIn/register',
                     }
                     return (baton.data = data.values);
                 })
-                .fail(function (err) {
-                    console.log('Nope', err);
-                });
+                .fail(require('io.ox/core/notifications').yell);
 
             } else {
                 return http.GET({

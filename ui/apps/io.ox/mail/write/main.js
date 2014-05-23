@@ -50,7 +50,8 @@ define('io.ox/mail/write/main',
             var self = this;
             self.busy();
             baton.app.saveDraft()
-                .done(function () {
+                .done(function (data) {
+                    baton.app.refId = data.id;
                     self.idle();
                 });
         }
@@ -101,8 +102,8 @@ define('io.ox/mail/write/main',
         timer = function () {
             // only auto-save if something changed (see Bug #26927)
             if (app.dirty()) {
-                app.saveDraft().done(function (data) {
-                    app.refId = data.id;
+                app.autoSaveDraft().done(function (data) {
+                    app.refId = data;
                 });
             } else {
                 delay();
@@ -282,29 +283,17 @@ define('io.ox/mail/write/main',
             if (index < view.signatures.length) {
                 signature = view.signatures[index];
                 text = mailUtil.signatures.cleanAdd(signature.content, isHTML);
+                if (isHTML) text = getParagraph(text);
                 if (_.isString(signature.misc)) { signature.misc = JSON.parse(signature.misc); }
-                if (isHTML) {
-                    text = getParagraph(text);
-                    if (signature.misc && signature.misc.insertion === 'below') {
-                        ed.appendContent(text);
-                        ed.scrollTop('bottom');
-                    } else {
-                        ed.prependContent(text);
-                        ed.scrollTop('top');
-                    }
+                if (signature.misc && signature.misc.insertion === 'below') {
+                    ed.appendContent(text);
+                    ed.scrollTop('bottom');
                 } else {
-                    if (signature.misc && signature.misc.insertion === 'below') {
-                        ed.appendContent(text);
-                        ed.scrollTop('bottom');
-                    } else {
-                        ed.prependContent(text);
-                        ed.scrollTop('top');
-                    }
+                    ed.prependContent(text);
+                    ed.scrollTop('top');
                 }
                 currentSignature = text;
             }
-
-            addBlankLine(signature);
 
             ed.focus();
         };
@@ -377,7 +366,7 @@ define('io.ox/mail/write/main',
 
             function load(mode, content) {
                 var editorSrc = 'io.ox/core/tk/' + (mode === 'html' ? 'html-editor' : 'text-editor');
-                return require([editorSrc]).pipe(function (Editor) {
+                return require([editorSrc]).then(function (Editor) {
                     return (editorHash[mode] = new Editor(view.textarea))
                         .done(function () {
                             app.setEditor(editorHash[mode]);
@@ -477,34 +466,47 @@ define('io.ox/mail/write/main',
             return str.replace(/[\s\uFEFF\xA0]+$/, '');
         }
 
-        var addBlankLine = function (signature) {
-            var content = editor.getContent(),
-                blankline = editorMode === 'html' ? '<p><br></p>' : '',
-                pos = signature ? signature.misc && signature.misc.insertion || 'below' : 'below';
-            //required only in html mode with 'above' pos (and if it's not set already)
-            if (!(content === '' && pos === 'below' && editorMode === 'text') && content.indexOf(blankline) !== 0) {
+        // only used on mobile to add blank lines above reply text
+        var addBlankLineSimple = function (number) {
+            var blankline = '\n';
+            for (var i = 0; i < number; i++) {
                 app.getEditor().prependContent(blankline);
+            }
+        };
+
+        var prependNewLine = function () {
+            var content = editor.getContent(),
+                nl = editorMode === 'html' ? '<p><br></p>' : '\n\n';
+            if (content !== '' && content.indexOf(nl) !== 0) {
+                editor.setContent(nl + content);
             }
         };
 
         app.setBody = function (str) {
             var content = trimContent(str),
-                dsID, ds;
+                dsID, ds, isPhone = _.device('smartphone');
             //get default signature
-            dsID = _.device('smartphone') ?
+            dsID = isPhone ?
                 (settings.get('mobileSignatureType') === 'custom' ? 0 : 1) :
                 settings.get('defaultSignature');
             ds = _.find(view.signatures, function (o, i) {
                     o.index = i;
                     return o.id === dsID;
                 });
+
             //set content
             app.getEditor().setContent(content);
             //fix misc property and set signature
             if (ds) {
+                if (isPhone) {
+                    ds.misc = {
+                        insertion: 'below'
+                    };
+                }
                 ds.misc = _.isString(ds.misc) ? JSON.parse(ds.misc) : ds.misc;
                 app.setSignature(({ data: ds}));
             }
+            prependNewLine();
         };
 
         app.getRecipients = function (id) {
@@ -558,8 +560,9 @@ define('io.ox/mail/write/main',
             // look for real attachments
             var items = _.chain(data.attachments || [])
                         .filter(function (attachment) {
-                            //only real attachments
-                            return attachment.disp === 'attachment';
+                            //only real attachments and inline images
+                            return attachment.disp === 'attachment' ||
+                                (attachment.disp === 'inline' && /^image/.test(attachment.content_type));
                         })
                         .map(function (attachment) {
                             // add as linked attachment
@@ -871,6 +874,10 @@ define('io.ox/mail/write/main',
                                     if (_.device('ios')) {
                                         view.textarea.trigger('blur');
                                     }
+                                    // add some blank lines to textarea
+                                    addBlankLineSimple(1);
+                                    view.textarea.focus();
+                                    app.getWindow().nodes.main.scrollTop(0);
                                 }
                             });
                         })
@@ -911,15 +918,16 @@ define('io.ox/mail/write/main',
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
+                        if (_.device('smartphone')) {
+                            // trigger keyup to resize the textarea
+                            view.textarea.trigger('keyup');
+                        }
                         var ed = app.getEditor();
                         ed.setCaretPosition(0);
                         win.idle();
                         focus('to');
                         def.resolve();
-                        if (_.device('smartphone')) {
-                            // trigger keyup to resize the textarea
-                            view.textarea.trigger('keyup');
-                        }
+
                     });
                 })
                 .fail(function (e) {
@@ -1118,11 +1126,7 @@ define('io.ox/mail/write/main',
             }
 
             // fix inline images
-            mail.data.attachments[0].content = mail.data.attachments[0].content
-                    .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
-                    .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
-                    .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
-                    .replace(/data-mce-src="[^"]+"\s?/, '');
+            mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
             function cont() {
                 // start being busy
@@ -1130,7 +1134,7 @@ define('io.ox/mail/write/main',
                 // close window now (!= quit / might be reopened)
                 win.preQuit();
 
-                if (attachmentsExceedQouta(mail)) {
+                if (require('io.ox/core/capabilities').has('publish_mail_attachments') && attachmentsExceedQouta(mail)) {
                     notifications.yell({
                         type: 'info',
                         message: gt(
@@ -1246,6 +1250,33 @@ define('io.ox/mail/write/main',
             return def;
         };
 
+        app.autoSaveDraft = function () {
+            // get mail
+            var mail = this.getMail(),
+                def = new $.Deferred();
+
+            prepareMailForSending(mail);
+
+            // fix inline images
+            mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
+
+            mailAPI.autosave(mail.data, mail.files, view.form.find('.oldschool')).always(function (result) {
+                if (result.error) {
+                    notifications.yell(result);
+                    def.reject(result);
+                } else {
+                    app.setMsgRef(result);
+                    app.dirty(false);
+                    notifications.yell('success', gt('Mail saved as draft'));
+                    def.resolve(result);
+                }
+            });
+
+            _.defer(initAutoSaveAsDraft, this);
+
+            return def;
+        };
+
         app.saveDraft = function () {
 
             // get mail
@@ -1269,6 +1300,9 @@ define('io.ox/mail/write/main',
             // backend will append vcard for every send operation (which save as draft is)
             old_vcard_flag = mail.data.vcard;
             delete mail.data.vcard;
+
+            // fix inline images
+            mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
             mailAPI.send(mail.data, mail.files, view.form.find('.oldschool'))
                 .always(function (result) {
@@ -1341,8 +1375,10 @@ define('io.ox/mail/write/main',
             if (app.dirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt('Do you really want to discard this mail?'))
-                        .addPrimaryButton('delete', gt('Discard'), 'delete', {tabIndex: '1'})
+                        .text(gt('Do you really want to discard your message?'))
+                        //#. "Discard message" appears in combination with "Cancel" (this action)
+                        //#. Translation should be distinguishable for the user
+                        .addPrimaryButton('delete', gt.pgettext('dialog', 'Discard message'), 'delete', {tabIndex: '1'})
                         .addAlternativeButton('savedraft', gt('Save as draft'), 'savedraft', {tabIndex: '1'})
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .show()

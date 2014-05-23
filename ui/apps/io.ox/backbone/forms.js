@@ -560,7 +560,8 @@ define('io.ox/backbone/forms',
                         weekStart: date.locale.weekStart,
                         parentEl: self.nodes.controlGroup,
                         todayHighlight: true,
-                        todayBtn: true
+                        todayBtn: true,
+                        autoclose: true
                     });
                 } else {
                     require(['io.ox/core/tk/mobiscroll'], function (defaultSettings) {
@@ -593,7 +594,7 @@ define('io.ox/backbone/forms',
                 if (!mobileMode && options.display === 'DATETIME') {
                     var hours_typeahead = [],
                         filldate = new date.Local().setHours(0, 0, 0, 0),
-                        interval = parseInt(settings.get('interval'), 10);
+                        interval = parseInt(settings.get('interval'), 10) || 30;
                     for (var i = 0; i < 1440; i += interval) {
                         hours_typeahead.push(filldate.format(date.TIME));
                         filldate.add(interval * date.MINUTE);

@@ -22,7 +22,7 @@ define('io.ox/mail/print',
     'use strict';
 
     var regImageSrc = /(<img[^>]+src=")\/ajax/g,
-        //TODO: add setting (html OR text)
+        // TODO: add setting (html OR text)
         type = 'html';
 
     function getContent(data) {
@@ -43,6 +43,15 @@ define('io.ox/mail/print',
         }).join('\u00A0\u2022 ');
     }
 
+    function getAttachments(data) {
+        return _(util.getAttachments(data) || []).map(function (attachment, i) {
+            return {
+                title: attachment.filename || ('Attachment #' + i),
+                size: attachment.size ? _.filesize(attachment.size || 0) : 0
+            };
+        });
+    }
+
     function process(data) {
         return {
             from: getList(data, 'from'),
@@ -51,7 +60,8 @@ define('io.ox/mail/print',
             subject: data.subject,
             date: util.getFullDate(data.received_date || data.sent_date),
             sort_date: -(data.received_date || data.sent_date),
-            content: getContent(data)
+            content: getContent(data),
+            attachments: getAttachments(data)
         };
     }
 
@@ -62,7 +72,10 @@ define('io.ox/mail/print',
             print.smart({
 
                 get: function (obj) {
-                    return api.get(_.extend({ view: type}, obj));
+                    // is an embedded email?
+                    if (util.isEmbedded(selection[0])) return $.Deferred().resolve(selection[0]);
+                    // fetch normal message
+                    return api.get(_.extend({ view: type }, obj));
                 },
 
                 title: selection.length === 1 ? selection[0].subject : undefined,

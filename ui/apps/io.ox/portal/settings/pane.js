@@ -19,7 +19,7 @@ define('io.ox/portal/settings/pane',
      'io.ox/portal/widgets',
      'gettext!io.ox/portal',
      'settings!io.ox/portal',
-     'apps/3rd.party/jquery-ui.min.js',
+     'static/3rd.party/jquery-ui.min.js',
      'less!io.ox/portal/style'
     ], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings) {
 
@@ -373,7 +373,7 @@ define('io.ox/portal/settings/pane',
             // make sortable
             list.sortable({
                 axis: 'y',
-                containment: list,
+                containment: list.parent(),
                 delay: 150,
                 handle: '.drag-handle',
                 cancel: 'li.protected',
@@ -426,7 +426,7 @@ define('io.ox/portal/settings/pane',
                     $('<legend>').text(gt('Mobile device settings:')),
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('checkbox').append(
-                            $('<label>').text(gt('Only show widget summary on mobile devices')).append(
+                            $('<label>').text(gt('Only show widget summary on mobile devices')).prepend(
                                 buildCheckbox('showHidden')
                             )
                         )

@@ -586,8 +586,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
         if (isError) {
             // session expired?
             var isSessionError = (/^SES\-/i).test(response.code),
-                isAutoLogin = o.module === 'login' && o.data && /^(autologin|store|tokens)$/.test(o.data.action);
-            if (isSessionError && !isAutoLogin) {
+                isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
+            if (isSessionError && !isLogin) {
                 // login dialog
                 ox.session = '';
                 ox.trigger('relogin:required', o, deferred, response);
@@ -740,7 +740,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     ox.trigger('connection:down');
                 } else {
                     that.trigger('reachable');
-                    ox.trigger('connection:up');
+                    ox.trigger('connection:online connection:up');
                 }
                 error = _.extend({ status: status, took: took }, error);
                 log.add(error, r.o);
@@ -759,7 +759,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 .done(function (response) {
 
                     that.trigger('reachable');
-                    ox.trigger('connection:up');
+                    ox.trigger('connection:online connection:up');
 
                     //write response to console
                     if (ox.debug)
@@ -913,7 +913,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 }
                 r = o = null;
             }
-            that.trigger('start', r.xhr);
+            that.trigger('start', r.xhr, o);
             if (slow && Number(_.url.hash('slow'))) {
                 // simulate slow connection
                 setTimeout(cont, 250 * Number(_.url.hash('slow')) + (Math.random() * 500 >> 0));
@@ -1080,11 +1080,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 if (typeof item === 'object') {
                     tmp[i] = { id: item.id };
                     // look for folder(_id) - e.g. groups/users don't have one
-                    if (item.folder || item.folder_id) {
+                    if ('folder' in item || 'folder_id' in item) {
                         tmp[i].folder = item.folder || item.folder_id;
                     }
                     // calendar support:
-                    if (item.recurrence_position) {
+                    if ('recurrence_position' in item) {
                         tmp[i].recurrence_position = item.recurrence_position;
                     }
                 } else {
@@ -1102,7 +1102,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
          * @return {deferred} resolve returns array
          */
         fixList: function (ids, deferred) {
-
             return deferred.then(function (data) {
                 // simplify
                 ids = that.simplify(ids);
