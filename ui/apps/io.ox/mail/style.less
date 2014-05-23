@@ -52,9 +52,26 @@
 }
 
 .preview-right {
-    .leftside { width: 320px; } // 320px also works perfectly on mobile
-    .rightside { left: 320px; }
+    .leftside {
+        width: 320px;
+    }
+    .rightside {
+        left: 320px;
+    }
 }
+
+@media(max-width: 700px) {
+    .preview-right {
+        .leftside {
+            width: 280px;
+        }
+        .rightside {
+            left: 280px;
+        }
+    }
+}
+
+
 
 .preview-bottom {
     .leftside { left: 0; right: 0; bottom: auto; width: auto !important; height: 45%; border-bottom: 1px solid #ccc;  z-index: 2; }
@@ -575,6 +592,12 @@
     }
 }
 
+@media(max-width: 700px) {
+    .thread-view-list {
+        padding: 0;
+    }
+}
+
 .thread-view.list-view .list-item { cursor: default; }
 .thread-view.list-view.multiple-messages .list-item { cursor: pointer; }
 
@@ -712,8 +735,18 @@ textarea.inplace-editor {
     }
 }
 
-/* vgrid touch helper */
 .io-ox-mail-window {
+    @media(max-width: 700px) {
+        .vsplit {
+            width: 100%;
+            .rightside {
+                width: auto;
+                top: 0;
+                right: 0;
+            }
+        }
+    }
+
     .vgrid-cell {
         .touch-helper {
             /*
@@ -1335,17 +1368,10 @@ h4.mail-attachment-preview {
     }
 
     .mail-detail {
-
-        .contact-picture {
-            display: none;
-        }
-
         .subject {
             padding-right: 0;
         }
-
     }
-
 }
 
 .mail-source-view {
@@ -1370,6 +1396,10 @@ h4.mail-attachment-preview {
 
         list-style-type: none;
         border-bottom: 0;
+
+        .contact-picture {
+            display: none;
+        }
 
         .subject {
             font-size: 14px;

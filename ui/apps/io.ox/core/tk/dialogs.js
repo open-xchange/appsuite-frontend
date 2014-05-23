@@ -458,7 +458,7 @@ define('io.ox/core/tk/dialogs',
                     nodes.footer.rowfluid.prepend(buttonNode.addClass('btn-medium'));
                     buttonNode.wrap('<div class="col-xs-12 col-md-3">');
                 });
-                nodes.body.css('margin-bottom', Math.ceil(nodes.buttons.length / 2) * 40);
+                //nodes.body.css('margin-bottom', Math.ceil(nodes.buttons.length / 2) * 40);
             }
 
             this.trigger('beforeshow');

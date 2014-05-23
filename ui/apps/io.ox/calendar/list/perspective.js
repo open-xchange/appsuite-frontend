@@ -144,7 +144,7 @@ define('io.ox/calendar/list/perspective',
 
         function drawAppointment(data) {
             var baton = ext.Baton({ data: data });
-            baton.disable('io.ox/calendar/detail', 'inline-actions');
+            if (_.device('!small')) baton.disable('io.ox/calendar/detail', 'inline-actions');
             right.idle().empty().append(viewDetail.draw(baton));
         }
 
