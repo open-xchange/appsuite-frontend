@@ -239,7 +239,7 @@ define('io.ox/contacts/main',
             return api.advancedsearch(win.search.query, options);
         });
         // LFO callback
-        var showContact, drawContact, drawFail, reDrawContact;
+        var showContact, drawContact, drawFail;
 
         showContact = function (obj) {
             // get contact
@@ -251,12 +251,6 @@ define('io.ox/contacts/main',
                     .fail(_.lfo(drawFail, obj));
             } else {
                 right.idle().empty();
-            }
-        };
-
-        reDrawContact = function () {
-            if (app.currentContact) {
-                showContact(app.currentContact);
             }
         };
 
@@ -403,10 +397,6 @@ define('io.ox/contacts/main',
             if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
                 showContact(app.currentContact);
             }
-        });
-
-        api.on('list:ready', function () {
-            reDrawContact();
         });
 
         api.on('create update delete refresh.all', function () {
