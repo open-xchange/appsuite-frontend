@@ -64,12 +64,11 @@ less.Parser.fileLoader = function (file, currentFileInfo, callback, env) {
     }
 };
 
-var scriptBase = 'share/update-themes/';
 (function main() {
     var style1 = readFile('apps/themes/style.less');
-    var bootstrap = readFile('share/update-themes/bower_components/bootstrap/less/bootstrap.less');
-    var bootstrapDP = readFile('share/update-themes/bower_components/bootstrap-datepicker/less/datepicker3.less');
-    var fontAwesome = readFile('share/update-themes/bower_components/font-awesome/less/font-awesome.less');
+    var bootstrap = readFile('apps/3rd.party/bootstrap/less/bootstrap.less');
+    var bootstrapDP = readFile('apps/3rd.party/bootstrap-datepicker/less/datepicker3.less');
+    var fontAwesome = readFile('apps/3rd.party/font-awesome/less/font-awesome.less');
 
     var themes = new java.io.File('apps/themes').listFiles();
     for (var i = 0; i < themes.length; i++) {
@@ -109,7 +108,9 @@ function recurse(defs, subDir, parent) {
         } else {
             if (name.slice(-5) !== '.less') continue;
             if (name.slice(0, 12) === 'apps/themes/') continue;
+            if (name.indexOf('apps/3rd.party/bootstrap/less/') === 0) continue;
             if (name.indexOf('apps/3rd.party/font-awesome/less/') === 0) continue;
+            if (name.indexOf('apps/3rd.party/bootstrap-datepicker/less/') === 0) continue;
             var input = readFile(file.toString(), 'UTF-8');
             compileLess(input,
                         subDir(name.slice(5, -4) + 'css'), name);
@@ -142,8 +143,8 @@ function compileLess(input, outputFile, sourceFileName) {
         syncImport: true,
         relativeUrls: false,
         paths: [
-            scriptBase + 'bower_components/bootstrap/less',
-            scriptBase + 'bower_components/font-awesome/less',
+            'apps/3rd.party/bootstrap/less',
+            'apps/3rd.party/font-awesome/less',
             'apps/themes'
         ],
         filename: '' + sourceFileName

@@ -34,8 +34,8 @@ module.exports = function (grunt) {
                 strictUnits: false,
                 relativeUrls: false,
                 paths: [
-                    path.join(scriptBase, 'bower_components/bootstrap/less'),
-                    path.join(scriptBase, 'bower_components/font-awesome/less'),
+                    'apps/3rd.party/bootstrap/less',
+                    'apps/3rd.party/font-awesome/less',
                     'apps/themes'
                 ],
                 imports: {
@@ -52,9 +52,9 @@ module.exports = function (grunt) {
             files: [
                 {
                     src: [
-                        path.join(scriptBase, 'bower_components/bootstrap/less/bootstrap.less'),
-                        path.join(scriptBase, 'bower_components/bootstrap-datepicker/less/datepicker3.less'),
-                        path.join(scriptBase, 'bower_components/font-awesome/less/font-awesome.less'),
+                        'apps/3rd.party/bootstrap/less/bootstrap.less',
+                        'apps/3rd.party/bootstrap-datepicker/less/datepicker3.less',
+                        'apps/3rd.party/font-awesome/less/font-awesome.less',
                         'apps/themes/style.less'
                     ],
                     expand: true,
@@ -75,7 +75,15 @@ module.exports = function (grunt) {
                     dest: 'apps/themes/' + themeName + '/style.css'
                 },
                 {
-                    src: ['**/*.less', '!themes/**/*.less', '!themes/*.less', '!3rd.party/font-awesome/**/*.less'],
+                    src: [
+                        '**/*.less',
+                        '!themes/**/*.less',
+                        '!themes/*.less',
+                        //those are compiled into common.css
+                        '!3rd.party/bootstrap/less/*.less',
+                        '!3rd.party/font-awesome/less/*.less',
+                        '!3rd.party/bootstrap-datepicker/less/*.less'
+                    ],
                     expand: true,
                     ext: '.css',
                     cwd: 'apps/',

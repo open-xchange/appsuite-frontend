@@ -40,8 +40,7 @@ module.exports = function (grunt) {
                         'node_modules/grunt/**/*',
                         'node_modules/grunt-contrib-clean/**/*',
                         'node_modules/assemble-less/**/*',
-                        'node_modules/underscore/**/*',
-                        'bower_components/**/*'],
+                        'node_modules/underscore/**/*'],
                     dest: 'dist/appsuite/share/update-themes/'
                 },
                 {
