@@ -104,7 +104,8 @@ define('io.ox/search/model',
             defaults: defaults,
             getApp: function () {
                 var app,
-                    current = ox.ui.App.getCurrentApp().get('name');
+                    ref = ox.ui.App.getCurrentApp(),
+                    current = ref ? ref.get('name') : options.defaultApp;
 
                 //target app changed?
                 if (current !== 'io.ox/search') {
@@ -304,7 +305,7 @@ define('io.ox/search/model',
                 return def
                         .then(function (data) {
                             data = data || {};
-                            if (missingFolder)
+                            if (!self.get('pool').folder)
                                 self.add('folder', 'custom', data);
                         });
             },
