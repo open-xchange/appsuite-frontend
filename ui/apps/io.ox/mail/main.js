@@ -62,8 +62,7 @@ define('io.ox/mail/main',
 
             app.pages = new PageController(app);
 
-            app.getWindow()
-                .nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
+            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
 
             // create 4 pages with toolbars and navbars
             app.pages.addPage({
@@ -166,7 +165,6 @@ define('io.ox/mail/main',
             // checkbox toggle
             app.pages.getNavbar('listView').on('rightAction', function () {
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
-
             });
 
         },
@@ -299,7 +297,6 @@ define('io.ox/mail/main',
          * Split into left and right pane
          */
         'vsplit': function (app) {
-            //if (_.device('small')) return;
             // replacing vsplit with new pageController
             // TODO: refactor app.left and app.right
             var left = app.pages.getPage('listView'),
@@ -732,7 +729,7 @@ define('io.ox/mail/main',
          * Respond to changing layout
          */
         'apply-layout': function (app) {
-
+            if (_.device('small')) return;
             app.applyLayout = function () {
 
                 var layout = app.props.get('layout'), nodes = app.getWindow().nodes, toolbar, className;

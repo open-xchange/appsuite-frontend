@@ -93,10 +93,6 @@ define('io.ox/core/toolbars-mobile',
             this.render();
             return this;
         },
-        // TODO change to event based
-        setRightAction: function (fn) {
-            this.rightAction = fn;
-        },
 
         onRightAction: function (e) {
             e.preventDefault();
@@ -137,6 +133,8 @@ define('io.ox/core/toolbars-mobile',
         },
         render: function () {
             this.$el.empty();
+            // TODO
+            // refactor and don't use static ext point for mail
             ext.point('io.ox/mail/mobile/toolbar/' + this.page).invoke('draw', this.$el, this.baton);
             return this;
         },

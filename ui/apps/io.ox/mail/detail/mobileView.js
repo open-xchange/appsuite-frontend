@@ -252,7 +252,7 @@ define('io.ox/mail/detail/mobileView',
             });
 
             this.$el.data({ view: this, model: this.model });
-
+            this.baton = baton;
             ext.point('io.ox/mail/mobile/detail').invoke('draw', this.$el, baton);
 
             return this;
