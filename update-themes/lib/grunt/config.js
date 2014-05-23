@@ -7,6 +7,8 @@ module.exports = function (grunt) {
     // for @import statements (see http://stackoverflow.com/questions/10715214/lessc-with-an-absolute-path-in-importing)
     var scriptBase = path.relative(process.cwd(), path.join(path.dirname(__filename), '../..'));
 
+    grunt.config('pkg', grunt.file.readJSON(path.join(scriptBase, 'package.json')));
+
     // make grunt config extendable
     grunt.config.extend = function (k, v) {
         grunt.config(k, require('underscore').extend({}, grunt.config(k), v));
@@ -33,6 +35,7 @@ module.exports = function (grunt) {
                 strictMath: false,
                 strictUnits: false,
                 relativeUrls: false,
+                rootpath: 'v=<%= pkg.version %>.' + grunt.template.date(new Date(), 'yyyymmdd.hhMMss') + '/',
                 paths: [
                     'apps/3rd.party/bootstrap/less',
                     'apps/3rd.party/font-awesome/less',
