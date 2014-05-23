@@ -80,6 +80,30 @@ define('plugins/portal/facebook/register',
         wall_content.append(link);
     };
 
+    //parses text to filter links and wraps them in <a> nodes
+    //non link text is wrapped in spans
+    //returns array of nodes
+    var parseMessageText = function (text) {
+        var linkRegexp = /\b(https?:\/\/|www.)\S+\.\S+\b/gi,
+            links = (text.match(linkRegexp) || [] ), //extract links
+            nodes = [],
+            tempText = text;
+
+        _(links).each(function (link) {
+            var splitText = tempText.split(link, 1);
+            if(splitText[0]) {
+                nodes.push($('<span>').text(splitText[0]));
+            }
+            nodes.push($('<a href="' + link + '">').text(link));
+        });
+
+        if (!nodes.length) {
+            return $('<span>').text(text);
+        } else {
+            return nodes;
+        }
+    };
+
     var getProfile = function (profiles, actor_id) {
         return _.find(profiles, function (profile) { return profile.id === actor_id; });
     };
@@ -343,7 +367,7 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             var self = $(this);
-            $('<div class="message">').text(post.message || post.attachment.name).appendTo($(this));
+            $('<div class="message">').append(parseMessageText(post.message || post.attachment.name)).appendTo($(this));
             _(post.attachment.media).each(function (media) {
                 $('<a class = facebook-image>').attr({href: media.href})
                     .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
@@ -360,7 +384,7 @@ define('plugins/portal/facebook/register',
             return (post.type === 46);
         },
         draw: function (post) {
-            this.text(post.message);
+            this.append(parseMessageText(post.message));
         }
     });
 
@@ -371,7 +395,7 @@ define('plugins/portal/facebook/register',
             return (post.type === 8);
         },
         draw: function (post) {
-            this.text(post.message);
+            this.append(parseMessageText(post.message));
         }
     });
 
@@ -382,7 +406,7 @@ define('plugins/portal/facebook/register',
             return (post.type === 65);
         },
         draw: function (post) {
-            this.text(post.description);
+            this.append(parseMessageText(post.description));
             getHelpFromUser(post);
         }
     });
@@ -394,7 +418,7 @@ define('plugins/portal/facebook/register',
             return (post.type === 56);
         },
         draw: function (post) {
-            this.text(post.message);
+            this.append(parseMessageText(post.message));
         }
     });
 
@@ -460,7 +484,7 @@ define('plugins/portal/facebook/register',
             return post.type === 80 && post.attachment.fb_object_type === 'photo';
         },
         draw: function (post) {
-            $('<div class="message">').text(post.attachment.name || post.message).appendTo($(this));
+            $('<div class="message">').append(parseMessageText(post.attachment.name || post.message)).appendTo($(this));
             var self = $(this);
             _(post.attachment.media).each(function (media) {
                 $('<a class = facebook-image>').attr({href: media.href})
@@ -480,7 +504,7 @@ define('plugins/portal/facebook/register',
         draw: function (post) {
             $(this).append(
                     $('<div>').text(post.description),
-                    $('<div class="message">').text(post.message));
+                    $('<div class="message">').append(parseMessageText(post.message)));
             var self = $(this);
             _(post.attachment.media).each(function (media) {
                 $('<a class = facebook-image>').attr({href: media.href})
@@ -505,7 +529,7 @@ define('plugins/portal/facebook/register',
             var media = post.attachment.media[0],
                 link = post.attachment.href;
             this.append(
-                $('<div>').text(post.description || post.message || ''),
+                $('<div>').append(parseMessageText(post.description || post.message || '')),
                 media ? $('<a>', {href: media.href}).append(
                     $('<img class="wall-img-left">').attr({src: media.src}),
                     $('<span class="caption">').text(post.attachment.description)
@@ -524,7 +548,7 @@ define('plugins/portal/facebook/register',
         draw: function (post) {
             var media = post.attachment.media[0];
 
-            $('<div class="message">').text(post.attachment.name || post.message).appendTo($(this));
+            $('<div class="message">').append(parseMessageText(post.attachment.name || post.message)).appendTo($(this));
             if (media !== undefined) {
                 $('<a>').attr({href: media.href})
                     .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
@@ -540,7 +564,7 @@ define('plugins/portal/facebook/register',
             return (post.type === 237);
         },
         draw: function (post) {
-            $('<div class="message">').text(post.message).appendTo($(this));
+            $('<div class="message">').append(parseMessageText(post.message)).appendTo($(this));
             if (post.attachment && post.attachment.media && post.attachment.media[0]) {
                 var media = post.attachment.media[0];
                 $('<a class="app-story">').attr('href', media.href || post.attachment.href).append(
@@ -562,7 +586,7 @@ define('plugins/portal/facebook/register',
             var media = post.attachment.media[0],
                 link = post.attachment.href;
             this.append(
-                $('<div>').text(post.description || post.message || ''),
+                $('<div>').append(parseMessageText(post.description || post.message || '')),
                 media ? $('<a>', {href: media.href}).append(
                     $('<img class="wall-img-left">').attr({src: media.src}),
                     $('<span class="caption">').text(post.attachment.description)
@@ -581,10 +605,30 @@ define('plugins/portal/facebook/register',
         draw: function (post) {
             var media = post.attachment.media[0];
             this.append(
-                $('<div>').text(post.description || post.message || ''),
+                $('<div>').append(parseMessageText(post.description || post.message || '')),
                 $('<a>', { href: media.href }).append(
                     $('<img class="wall-img-left">').attr({ src: media.src })
                 )
+            );
+        }
+    });
+
+    ext.point('io.ox/plugins/portal/facebook/renderer').extend({
+        id: 'group-post',
+        index: 196,
+        accepts: function (post) {
+            return post.type === 308;
+        },
+        draw: function (post) {
+            var media = post.attachment.media[0],
+            link = post.attachment.href;
+            this.append(
+                $('<div>').append(parseMessageText(post.description || post.message || '')),
+                media ? $('<a>', {href: media.href}).append(
+                    $('<img class="wall-img-left">').attr({src: media.src}),
+                    $('<span class="caption">').text(post.attachment.description)
+                ) : '',
+                (!media && link) ? $('<a>', {href: link}).text(post.attachment.name || link) : ''
             );
         }
     });
@@ -598,7 +642,7 @@ define('plugins/portal/facebook/register',
         },
         draw: function (post) {
             console.log('This message is of the type "' + post.type + '". We do not know how to render this yet. Please tell us about it! Here is some additional data:', JSON.stringify(post));
-            this.text(post.message);
+            this.append(parseMessageText(post.message));
         }
     });
 
