@@ -193,7 +193,8 @@ define('io.ox/core/page-controller',
         var showNavbar = function (page) {
             var bar = pages[page].navbar;
             if (bar) {
-                app.navbar.empty().append(bar.render().$el);
+                app.navbar.find('.toolbar-content').detach();
+                app.navbar.append(bar.$el);
             }
         };
 
@@ -205,9 +206,14 @@ define('io.ox/core/page-controller',
                 bar = pages[page].toolbar;
             }
             if (bar) {
-                app.toolbar.empty().show().append(bar.render().$el);
+                app.toolbar.children().detach();
+                app.toolbar.append(bar.$el);
+                if (!secondary) {
+                     bar.render();
+                }
             } else {
-                app.toolbar.empty().hide();
+                app.toolbar.children().detach();
+                app.toolbar.hide();
             }
         };
 

@@ -458,6 +458,7 @@ define('io.ox/mail/threadview',
                 tagName: 'li',
                 data: model.toJSON()
             });
+            this.mail = model.toJSON();
             return view.render().toggle().$el.attr({ role: 'listitem', tabindex: '1' });
 
 

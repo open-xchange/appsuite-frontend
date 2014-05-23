@@ -144,12 +144,12 @@ define('io.ox/mail/mobile-toolbar-actions',
     }));
 
     var updateToolbar = _.debounce(function (list) {
-
-        if (!list) return;
+         if (!list) return;
         // remember if this list is based on a single thread
         var isThread = list.length === 1 && /^thread\./.test(list[0]);
         // resolve thread
         list = api.threads.resolve(list);
+        if (list.length === 0) isThread = false;
         // extract single object if length === 1
         list = list.length === 1 ? list[0] : list;
         // draw toolbar
@@ -203,6 +203,12 @@ define('io.ox/mail/mobile-toolbar-actions',
                 // don't update in folderview
                 if (app.pages.getCurrentPage().name === 'folderView') return;
                 app.updateToolbar(app.listView.selection.get());
+            });
+
+            app.threadView.$el.on('showmail', function () {
+                var baton = ext.Baton({data: app.threadView.mail, isThread: false, app: app });
+                // handle updated baton to pageController
+                app.pages.getCurrentPage().toolbar.setBaton(baton);
             });
         }
     });
