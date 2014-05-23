@@ -24,7 +24,6 @@ define('io.ox/core/toolbars-mobile',
      * Holds some shared
      */
     var BarView = Backbone.View.extend({
-
         show: function () {
             this.$el.show();
             return this;
@@ -33,7 +32,6 @@ define('io.ox/core/toolbars-mobile',
             this.$el.hide();
             return this;
         }
-
     });
 
     /*
