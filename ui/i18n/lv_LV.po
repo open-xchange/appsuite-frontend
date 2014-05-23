@@ -57,12 +57,12 @@ msgid "%1$d messages in this conversation"
 msgstr "Šai sarunā ir %1$d ziņojumi"
 
 #: apps/io.ox/core/commons.js:102 module:io.ox/core
-#: apps/io.ox/mail/main.js:601 module:io.ox/mail
+#: apps/io.ox/mail/main.js:602 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "Iezīmēti %1$d ziņojumi"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:619 module:io.ox/mail
+#: apps/io.ox/mail/main.js:620 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d iezīmēti"
 
@@ -91,7 +91,7 @@ msgstr "%1$s %2$s"
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
 #: apps/io.ox/calendar/month/view.js:366 module:io.ox/calendar
-#: apps/io.ox/calendar/week/view.js:1697
+#: apps/io.ox/calendar/week/view.js:1698
 #, c-format
 msgid "%1$s (Tentative)"
 msgstr "%1$s (Pagaidu)"
@@ -360,12 +360,12 @@ msgstr "Piekrist izmaiņām"
 #: apps/plugins/notifications/calendar/register.js:82
 #: module:plugins/notifications
 #: apps/plugins/notifications/calendar/register.js:83
-#: apps/plugins/notifications/tasks/register.js:500
-#: apps/plugins/notifications/tasks/register.js:501
+#: apps/plugins/notifications/tasks/register.js:505
+#: apps/plugins/notifications/tasks/register.js:506
 msgid "Accept invitation"
 msgstr "Akceptēt uzaicinājumu"
 
-#: apps/plugins/notifications/tasks/register.js:498
+#: apps/plugins/notifications/tasks/register.js:503
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "Piekrist / Atteikt"
@@ -528,7 +528,7 @@ msgstr "Pievienot dalībnieku/resursu"
 msgid "Add signature"
 msgstr "Pievienot parakstu"
 
-#: apps/io.ox/mail/write/main.js:1232 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1231 module:io.ox/mail
 msgid "Add subject"
 msgstr "Pievienot tematu"
 
@@ -618,9 +618,9 @@ msgstr "Visi pievienojumi"
 msgid "All day"
 msgstr "Visa diena"
 
-#: apps/io.ox/search/view-template.js:638 module:io.ox/core
-#: apps/io.ox/search/view-template.js:641
-#: apps/io.ox/search/view-template.js:648
+#: apps/io.ox/search/view-template.js:635 module:io.ox/core
+#: apps/io.ox/search/view-template.js:638
+#: apps/io.ox/search/view-template.js:645
 msgid "All folders"
 msgstr "Visas mapes"
 
@@ -650,7 +650,7 @@ msgstr "Reģistrēta kļūda. Lūdzu mēģiniet vēlreiz."
 
 #: apps/io.ox/calendar/week/perspective.js:66 module:io.ox/calendar
 #: apps/io.ox/calendar/week/perspective.js:198
-#: apps/io.ox/mail/write/main.js:994 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:993 module:io.ox/mail
 msgid "An error occurred. Please try again."
 msgstr "Reģistrēta kļūda. Lūdzu mēģiniet vēlreiz."
 
@@ -685,7 +685,7 @@ msgstr "Pievienot vCard"
 msgid "Application Toolbar"
 msgstr "Aplikācijas rīkjosla"
 
-#: apps/io.ox/mail/main.js:1033 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1034 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikācija var nestrādāt kā paredzēts kamēr šī problēma nav atrisināta."
@@ -1044,7 +1044,7 @@ msgstr "Kalendārs"
 #: apps/io.ox/core/folder/add.js:96
 #: apps/io.ox/core/folder/imap-subscription.js:64
 #: apps/io.ox/core/import/import.js:129 apps/io.ox/core/main.js:408
-#: apps/io.ox/core/main.js:1204 apps/io.ox/core/permissions/permissions.js:357
+#: apps/io.ox/core/main.js:1192 apps/io.ox/core/permissions/permissions.js:357
 #: apps/io.ox/core/permissions/permissions.js:399 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
@@ -1066,19 +1066,19 @@ msgstr "Kalendārs"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:427
 #: module:io.ox/settings/settings apps/io.ox/mail/main.js:244
-#: apps/io.ox/mail/main.js:953 apps/io.ox/mail/write/inline-images.js:80
-#: apps/io.ox/mail/write/main.js:1384 apps/io.ox/mail/write/view-main.js:585
+#: apps/io.ox/mail/main.js:954 apps/io.ox/mail/write/inline-images.js:80
+#: apps/io.ox/mail/write/main.js:1383 apps/io.ox/mail/write/view-main.js:585
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
-#: apps/io.ox/portal/main.js:510 module:io.ox/portal
+#: apps/io.ox/portal/main.js:509 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:116
-#: apps/io.ox/search/view-template.js:497
+#: apps/io.ox/search/view-template.js:494
 #: apps/io.ox/settings/accounts/settings/pane.js:162
 #: module:io.ox/settings/accounts apps/io.ox/tasks/actions.js:62
 #: module:io.ox/tasks apps/io.ox/tasks/actions.js:204
 #: apps/io.ox/tasks/common-extensions.js:95 apps/io.ox/tasks/edit/main.js:163
 #: apps/plugins/core/feedback/register.js:130
 #: apps/plugins/portal/flickr/register.js:235 module:plugins/portal
-#: apps/plugins/portal/rss/register.js:162
+#: apps/plugins/portal/rss/register.js:163
 #: apps/plugins/portal/tumblr/register.js:252
 #: apps/plugins/portal/twitter/util.js:123
 #: apps/plugins/portal/twitter/util.js:452
@@ -1381,7 +1381,7 @@ msgid "Compose new email"
 msgstr "Sastādīt jaunu e-pastu"
 
 #: apps/io.ox/mail/actions.js:930 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:665
+#: apps/io.ox/mail/write/main.js:664
 msgid "Compose new mail"
 msgstr "Sastādīšana"
 
@@ -1445,7 +1445,7 @@ msgstr "Kontakts ir pārvietots"
 msgid "Contains"
 msgstr "Satur"
 
-#: apps/io.ox/core/main.js:1205 module:io.ox/core
+#: apps/io.ox/core/main.js:1193 module:io.ox/core
 msgid "Continue"
 msgstr "Turpināt"
 
@@ -1754,7 +1754,7 @@ msgstr "Atlikts"
 #: module:io.ox/mail apps/io.ox/mail/actions.js:112
 #: apps/io.ox/mail/actions.js:992 apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:278
-#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:508
+#: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:507
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
 #: module:io.ox/settings/accounts
@@ -1786,7 +1786,7 @@ msgstr "Dzēst versiju"
 msgid "Delete whole series"
 msgstr "Dzēst visu sēriju"
 
-#: apps/io.ox/portal/main.js:504 module:io.ox/portal
+#: apps/io.ox/portal/main.js:503 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:110
 msgid "Delete widget"
 msgstr "Dzēst vidžetu"
@@ -1807,7 +1807,7 @@ msgstr "Dilstoši"
 #: apps/io.ox/files/views/create.js:163
 #: apps/io.ox/tasks/edit/view-template.js:117 module:io.ox/tasks/edit
 #: apps/plugins/portal/flickr/register.js:227 module:plugins/portal
-#: apps/plugins/portal/rss/register.js:154 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:155 module:io.ox/portal
 #: apps/plugins/portal/tumblr/register.js:244
 msgid "Description"
 msgstr "Apraksts"
@@ -1878,7 +1878,7 @@ msgstr "Atcelt izmaiņas"
 
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
-#: apps/io.ox/mail/write/main.js:1382 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1381 module:io.ox/mail
 #, fuzzy
 #| msgid "Direct message"
 msgctxt "dialog"
@@ -1975,7 +1975,7 @@ msgstr[0] "Vai tiešām vēlaties dzēst šo uzdevumu?"
 msgstr[1] "Vai tiešām vēlaties dzēst šos uzdevumus?"
 msgstr[2] "Vai tiešām vēlaties dzēst šos uzdevumus?"
 
-#: apps/io.ox/portal/main.js:505 module:io.ox/portal
+#: apps/io.ox/portal/main.js:504 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:111
 msgid "Do you really want to delete this widget?"
 msgstr "Vai tiešām vēlaties dzēst šo vidžetu?"
@@ -1987,7 +1987,7 @@ msgstr "Vai tiešām vēlaties dzēst šo vidžetu?"
 msgid "Do you really want to discard your changes?"
 msgstr "Vai tiešām vēlaties atsaukt izmaiņas?"
 
-#: apps/io.ox/mail/write/main.js:1379 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1378 module:io.ox/mail
 #, fuzzy
 #| msgid "Do you really want to discard your changes?"
 msgid "Do you really want to discard your message?"
@@ -2129,7 +2129,7 @@ msgstr ""
 "Pārvelciet šeit, lai augšupielādētu <b class=\"dndignore\">jaunu versiju</b> "
 "šim \"%1$s\""
 
-#: apps/io.ox/mail/write/main.js:341 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:339 module:io.ox/mail
 msgid "Drop the file anywhere to add attachment"
 msgstr "Lai izveidotu pievienojumu vienkārši nomtiet failu vinalga kur"
 
@@ -2172,7 +2172,7 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
 #: apps/io.ox/mail/main.js:129 apps/io.ox/mail/main.js:135
-#: apps/io.ox/mail/main.js:239 apps/io.ox/mail/main.js:957
+#: apps/io.ox/mail/main.js:239 apps/io.ox/mail/main.js:958
 #: apps/io.ox/mail/settings/signatures/register.js:275
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2394,7 +2394,7 @@ msgstr "Uzņēmējs"
 msgid "Envelope"
 msgstr "Aploksne"
 
-#: apps/io.ox/core/notifications.js:435 module:io.ox/core
+#: apps/io.ox/core/notifications.js:438 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -2733,8 +2733,8 @@ msgstr "Flickr"
 
 #: apps/io.ox/calendar/view-detail.js:216 module:io.ox/calendar
 #: apps/io.ox/mail/detail/links.js:139 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:386 module:io.ox/core
-#: apps/io.ox/search/view-template.js:495
+#: apps/io.ox/search/view-template.js:384 module:io.ox/core
+#: apps/io.ox/search/view-template.js:492
 msgid "Folder"
 msgstr "Mape"
 
@@ -2823,7 +2823,7 @@ msgstr "Formatēt e-pastu kā"
 
 #: apps/io.ox/mail/actions.js:972 module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js:64 apps/io.ox/mail/toolbar.js:67
-#: apps/io.ox/mail/write/main.js:668
+#: apps/io.ox/mail/write/main.js:667
 msgid "Forward"
 msgstr "Pārsūtīt"
 
@@ -2997,7 +2997,7 @@ msgstr "Augsta"
 msgid "High contrast theme"
 msgstr "Augsta kontrasta tēma"
 
-#: apps/io.ox/mail/util.js:382 module:io.ox/core apps/io.ox/tasks/util.js:341
+#: apps/io.ox/mail/util.js:383 module:io.ox/core apps/io.ox/tasks/util.js:341
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Augsta prioritāte"
@@ -3262,7 +3262,7 @@ msgstr "Jūnijs"
 
 #. Just disable portal widget - in contrast to delete
 #. Just disable portal widget - in contrast to delete
-#: apps/io.ox/portal/main.js:514 module:io.ox/portal
+#: apps/io.ox/portal/main.js:513 module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js:120
 msgid "Just disable widget"
 msgstr "Tikai atspējot vidžetu"
@@ -3408,7 +3408,7 @@ msgstr "Zaudēts: %1$s %"
 msgid "Low"
 msgstr "Zema"
 
-#: apps/io.ox/mail/util.js:383 module:io.ox/core apps/io.ox/tasks/util.js:335
+#: apps/io.ox/mail/util.js:384 module:io.ox/core apps/io.ox/tasks/util.js:335
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Zema prioritāte"
@@ -3419,7 +3419,7 @@ msgid "MB"
 msgstr "MB"
 
 #: apps/io.ox/core/tk/folderviews.js:870 module:io.ox/core
-#: apps/io.ox/mail/write/main.js:758 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:757 module:io.ox/mail
 msgid "Mail"
 msgstr "Pasts"
 
@@ -3469,11 +3469,11 @@ msgstr "Vēstules ir importētas"
 msgid "Mail has been moved"
 msgstr "Vēstules ir pārvietotas"
 
-#: apps/io.ox/mail/write/main.js:1230 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1229 module:io.ox/mail
 msgid "Mail has empty subject. Send it anyway?"
 msgstr "Vēstulei nav subjekta teksta. Vai vienalga to nosūtīt?"
 
-#: apps/io.ox/mail/write/main.js:1223 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1222 module:io.ox/mail
 msgid "Mail has no recipient."
 msgstr "Vēstulei nav saņēmēja."
 
@@ -3493,8 +3493,8 @@ msgstr "Vēstules atgādinājums"
 msgid "Mail reminder for"
 msgstr "Atgādinājuma saņēmējs"
 
-#: apps/io.ox/mail/write/main.js:1271 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:1316
+#: apps/io.ox/mail/write/main.js:1270 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1315
 msgid "Mail saved as draft"
 msgstr "Saglabāts kā melnraksts"
 
@@ -3724,12 +3724,12 @@ msgstr "Mēneši"
 #: apps/io.ox/core/extPatterns/links.js:342 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:351
 #: apps/io.ox/mail/write/view-main.js:693 module:io.ox/mail
-#: apps/io.ox/search/view-template.js:612
+#: apps/io.ox/search/view-template.js:609
 msgid "More"
 msgstr "Vairāk"
 
-#: apps/io.ox/search/view-template.js:347 module:io.ox/core
-msgid "More than the currently displayed %1$s items where found"
+#: apps/io.ox/search/view-template.js:345 module:io.ox/core
+msgid "More than the currently displayed %1$s items were found"
 msgstr ""
 
 #: apps/io.ox/calendar/actions.js:426 module:io.ox/calendar
@@ -3806,7 +3806,7 @@ msgstr "Jauns"
 msgid "New Folder"
 msgstr "Jauna mape"
 
-#: apps/io.ox/mail/api.js:1686 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1685 module:io.ox/mail
 msgid "New Mail"
 msgstr "Jaunais pasts"
 
@@ -3948,11 +3948,11 @@ msgstr "Jūsu pasta kastē nav vēstuļu"
 msgid "No matching templates on this Server"
 msgstr "Šajā serverī nav atbilstošu sagatavju"
 
-#: apps/io.ox/mail/main.js:587 module:io.ox/mail
+#: apps/io.ox/mail/main.js:588 module:io.ox/mail
 msgid "No message selected"
 msgstr "Neviens ziņojums nav izvēlēts"
 
-#: apps/io.ox/core/notifications.js:129 module:io.ox/core
+#: apps/io.ox/core/notifications.js:132 module:io.ox/core
 msgid "No notifications"
 msgstr "Nav paziņojumu"
 
@@ -3988,7 +3988,7 @@ msgstr "Nav lēnu pieprasījumu"
 #. %2$s mail subject
 #: apps/io.ox/mail/util.js:369 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:107 module:io.ox/core/mail
-#: apps/io.ox/mail/write/main.js:758 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:757 module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
 #: apps/plugins/notifications/mail/register.js:59
 #, c-format
@@ -4484,7 +4484,7 @@ msgstr "Lūdzu ievadiet aprakstu"
 msgid "Please enter a description."
 msgstr "Lūdzu ievadiet aprakstu."
 
-#: apps/plugins/portal/rss/register.js:182 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:183 module:io.ox/portal
 msgid "Please enter a feed URL."
 msgstr "Lūdzu ievadiet avota URL."
 
@@ -4588,7 +4588,7 @@ msgid ""
 "account:"
 msgstr "Lūdzu norādiet kādus jūsu datus var izmantot %s konta izveidošanai:"
 
-#: apps/io.ox/core/main.js:964 module:io.ox/core apps/io.ox/core/relogin.js:48
+#: apps/io.ox/core/main.js:952 module:io.ox/core apps/io.ox/core/relogin.js:48
 msgid "Please sign in again to continue"
 msgstr "Lai turpinātu lūdzu pieslēdzieties no jauna"
 
@@ -4606,7 +4606,7 @@ msgctxt "app"
 msgid "Portal"
 msgstr "Portāls"
 
-#: apps/io.ox/portal/main.js:470 module:io.ox/portal
+#: apps/io.ox/portal/main.js:469 module:io.ox/portal
 msgid "Portal Widgets"
 msgstr "Portāla logrīki"
 
@@ -4679,12 +4679,12 @@ msgstr "Piespiediet, lai paslēptu visus jauna pasta paziņojumus."
 msgid "Press to hide all notifications for overdue tasks."
 msgstr "Piespiediet, lai paslēptu visu nokavēto uzdevumu paziņojumus."
 
-#: apps/plugins/notifications/tasks/register.js:465
+#: apps/plugins/notifications/tasks/register.js:470
 #: module:plugins/notifications
 msgid "Press to hide all task invitations."
 msgstr "Piespiediet, lai paslēptu visus uzdevumu uzaicinājumus."
 
-#: apps/plugins/notifications/tasks/register.js:256
+#: apps/plugins/notifications/tasks/register.js:258
 #: module:plugins/notifications
 msgid "Press to hide all task reminders."
 msgstr "Piespiediet, lai paslēptu visis uzdevumu atgādinājumus."
@@ -4708,7 +4708,7 @@ msgstr "Iepriekšējā diena"
 msgid "Previous Week"
 msgstr "Iepriekšējā nedēļa"
 
-#: apps/io.ox/mail/util.js:389 module:io.ox/core
+#: apps/io.ox/mail/util.js:390 module:io.ox/core
 msgid "Primary account"
 msgstr "Primārais konts"
 
@@ -4845,11 +4845,11 @@ msgstr "Kvota"
 
 #: apps/plugins/portal/rss/register.js:31 module:io.ox/portal
 #: apps/plugins/portal/rss/register.js:59
-#: apps/plugins/portal/rss/register.js:209
+#: apps/plugins/portal/rss/register.js:210
 msgid "RSS Feed"
 msgstr "RSS avots"
 
-#: apps/plugins/portal/rss/register.js:143 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:144 module:io.ox/portal
 msgid "RSS Feeds"
 msgstr "RSS avoti"
 
@@ -5038,7 +5038,7 @@ msgid "Repeat new password"
 msgstr "Jaunā parole atkārtoti"
 
 #: apps/io.ox/mail/actions.js:951 module:io.ox/mail
-#: apps/io.ox/mail/write/main.js:667 apps/plugins/portal/twitter/util.js:230
+#: apps/io.ox/mail/write/main.js:666 apps/plugins/portal/twitter/util.js:230
 #: module:plugins/portal apps/plugins/portal/twitter/util.js:234
 msgid "Reply"
 msgstr "Atbildēt"
@@ -5047,7 +5047,7 @@ msgstr "Atbildēt"
 msgid "Reply All"
 msgstr "Atbildēt visiem"
 
-#: apps/io.ox/mail/write/main.js:666 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:665 module:io.ox/mail
 msgid "Reply all"
 msgstr "Atbildēt visiem"
 
@@ -5087,7 +5087,7 @@ msgstr "Resursu grupa"
 msgid "Resources"
 msgstr "Resursi"
 
-#: apps/io.ox/core/main.js:1197 module:io.ox/core
+#: apps/io.ox/core/main.js:1185 module:io.ox/core
 msgid "Restore applications"
 msgstr "Atjaunot aplikācijas"
 
@@ -5171,7 +5171,7 @@ msgstr "Sestdiena"
 #: module:io.ox/settings/oauth apps/io.ox/tasks/edit/view-template.js:47
 #: module:io.ox/tasks/edit apps/io.ox/tasks/edit/view-template.js:89
 #: apps/plugins/portal/flickr/register.js:234 module:plugins/portal
-#: apps/plugins/portal/rss/register.js:161 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:162 module:io.ox/portal
 #: apps/plugins/portal/tumblr/register.js:251
 #: apps/plugins/portal/userSettings/register.js:43
 msgid "Save"
@@ -5182,7 +5182,7 @@ msgstr "Saglabāt"
 msgid "Save as distribution list"
 msgstr "Saglabāt kā izplatīšanas sarakstu"
 
-#: apps/io.ox/mail/write/main.js:1383 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1382 module:io.ox/mail
 msgid "Save as draft"
 msgstr "Saglabāt melnrakstu"
 
@@ -5207,7 +5207,7 @@ msgstr "Saglabāt diskā Drive"
 msgid "Saved in"
 msgstr "Saglabāt iekš"
 
-#: apps/io.ox/mail/api.js:1350 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1349 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Pievienojums saglabāts"
 
@@ -5263,7 +5263,7 @@ msgstr "Meklēts iekš"
 msgid "Searched in all folders"
 msgstr "Meklēt visās mapēs"
 
-#: apps/io.ox/search/view-template.js:496 module:io.ox/core
+#: apps/io.ox/search/view-template.js:493 module:io.ox/core
 #, fuzzy
 #| msgid "Select folder"
 msgid "Select Folder"
@@ -5384,7 +5384,7 @@ msgstr "Uzstādīt kā noklusēto"
 msgid "Set color"
 msgstr "Iestatīt krāsu"
 
-#: apps/io.ox/core/main.js:689 module:io.ox/core apps/io.ox/core/main.js:844
+#: apps/io.ox/core/main.js:689 module:io.ox/core apps/io.ox/core/main.js:832
 msgid "Settings"
 msgstr "Iestatījumi"
 
@@ -5537,7 +5537,7 @@ msgstr "Rādīts kā"
 msgid "Sign in"
 msgstr "Pieslēgšanās"
 
-#: apps/io.ox/core/main.js:813 module:io.ox/core apps/io.ox/core/main.js:863
+#: apps/io.ox/core/main.js:813 module:io.ox/core apps/io.ox/core/main.js:851
 msgid "Sign out"
 msgstr "Atslēgties"
 
@@ -5813,14 +5813,14 @@ msgstr[2] "Uzdevumi ir izdzēsti!"
 
 #. %1$s task title
 #. %2$s task end date
-#: apps/plugins/notifications/tasks/register.js:485
+#: apps/plugins/notifications/tasks/register.js:490
 #: module:plugins/notifications
 #, c-format
 msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 msgstr ""
 "Uzaicinājums uzdevumam. %1$s %2$s %3$s. Lai atvērtu piespiediet [enter]"
 
-#: apps/plugins/notifications/tasks/register.js:462
+#: apps/plugins/notifications/tasks/register.js:467
 #: module:plugins/notifications
 msgid "Task invitations"
 msgstr "Uzdevumu uzaicinājumi"
@@ -5840,7 +5840,7 @@ msgstr[2] "Uzdevumi ir pārvietoti."
 msgid "Task reminder. %1$s %2$s %3$s. Press [enter] to open"
 msgstr "Uzdevuma atgādinājums. %1$s %2$s %3$s. Lai atvērtu piespiediet [enter]"
 
-#: apps/plugins/notifications/tasks/register.js:252
+#: apps/plugins/notifications/tasks/register.js:254
 #: module:plugins/notifications
 msgid "Task reminders"
 msgstr "Uzdevumu atgādinājumi"
@@ -6066,7 +6066,7 @@ msgid "The due date cannot be before start date. Adjust start date?"
 msgstr ""
 "Izpildes datums nevar būt pirms sākuma datuma. Vai koriģēt sākuma datumu?"
 
-#: apps/io.ox/mail/write/main.js:1165 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1164 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "Vēstule ir nosūtīta"
 
@@ -6110,7 +6110,7 @@ msgstr "Mape ir iztukšota."
 msgid "The folder is available at %1$s"
 msgstr "Mape ir pieejama iekš %1$s"
 
-#: apps/io.ox/core/main.js:1199 module:io.ox/core
+#: apps/io.ox/core/main.js:1187 module:io.ox/core
 msgid ""
 "The following applications can be restored. Just remove the restore point if "
 "you don't want it to be restored."
@@ -6647,7 +6647,7 @@ msgid "UI version"
 msgstr "Interfeisa versija"
 
 #: apps/io.ox/contacts/model.js:280 module:io.ox/contacts
-#: apps/plugins/portal/rss/register.js:148 module:io.ox/portal
+#: apps/plugins/portal/rss/register.js:149 module:io.ox/portal
 msgid "URL"
 msgstr "URL"
 
@@ -6970,7 +6970,7 @@ msgstr "Dzeltens"
 msgid "Yes"
 msgstr "Jā"
 
-#: apps/io.ox/mail/write/main.js:1231 module:io.ox/mail
+#: apps/io.ox/mail/write/main.js:1230 module:io.ox/mail
 msgid "Yes, send without subject"
 msgstr "Jā, nosūtīt bez temata"
 
@@ -7167,7 +7167,7 @@ msgstr ""
 msgid "Your %s newsfeed"
 msgstr "Jūsu %s ziņu straumējums"
 
-#: apps/io.ox/core/main.js:885 module:io.ox/core
+#: apps/io.ox/core/main.js:873 module:io.ox/core
 msgid "Your Applications"
 msgstr "Jūsu aplikācijas"
 
@@ -7256,7 +7256,7 @@ msgstr ""
 msgid "Your selected picture will be displayed after saving"
 msgstr "Jūsu izvēlētais attēls tiks parādīts pēc saglabāšanas"
 
-#: apps/io.ox/core/main.js:963 module:io.ox/core apps/io.ox/core/relogin.js:46
+#: apps/io.ox/core/main.js:951 module:io.ox/core apps/io.ox/core/relogin.js:46
 msgid "Your session is expired"
 msgstr "Jūsu sesijas derīgums ir beidzies"
 
@@ -7395,7 +7395,7 @@ msgstr "rediģēt paša objektus"
 #: apps/io.ox/core/tk/reminder-util.js:75 module:io.ox/core
 #: apps/plugins/notifications/tasks/register.js:49
 #: module:plugins/notifications
-#: apps/plugins/notifications/tasks/register.js:480
+#: apps/plugins/notifications/tasks/register.js:485
 msgid "end date"
 msgstr "beigu datums"
 
@@ -7694,8 +7694,8 @@ msgid "total"
 msgstr "kopā"
 
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
-#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:404
-#: apps/io.ox/mail/util.js:417
+#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:405
+#: apps/io.ox/mail/util.js:418
 msgid "unknown"
 msgstr "nezināms"
 
