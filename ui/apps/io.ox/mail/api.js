@@ -486,6 +486,9 @@ define('io.ox/mail/api',
 
         var collection = pool.get('detail');
 
+        // fallback
+        all = all || ids;
+
         // we need the original list of ids "all" to also catch threads
         // that start with an email from the sent folder
         api.trigger('beforedelete', all);
