@@ -131,13 +131,14 @@ $(window).load(function () {
         };
     }
 
-    if (_.device('tablet')) {
-        // dismiss dropdown on rotation change due to
-        // positioning issues
-        $(document).on('orientationchange', function () {
-            $('body').trigger('click');
-        });
-    }
+    $(window).on('orientationchange', function () {
+        // dismiss dropdown on rotation change due to positioning issues
+        if (_.device('tablet')) $('body').trigger('click');
+        // ios scroll fix; only fix if scrollTop is below 64 pixel
+        // some apps like portal really scroll <body>
+        if ($(window).scrollTop() > 64) return;
+        _.defer(function () { $(window).scrollTop(0); });
+    });
 
     $(window).on('online offline', function (e) {
         ox.trigger('connection:' + e.type);
