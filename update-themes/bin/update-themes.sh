@@ -21,6 +21,6 @@ then
 fi
 
 echo 'Updating themes...'
-$NODEJS "share/update-themes/bin/update-themes" > /dev/null \
+$NODEJS "share/update-themes/bin/update-themes" \
 || echo 'failed! If a subsequent theme update finishes without errors,' \
         'you can ignore the above error message.'
