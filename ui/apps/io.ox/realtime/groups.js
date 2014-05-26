@@ -176,6 +176,10 @@ define('io.ox/realtime/groups',
             destroyed = true;
         };
 
+        this.isRTWorking = function () {
+            return (rt.send !== $.noop);
+        };
+
         Event.extend(this);
     }
 
