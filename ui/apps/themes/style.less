@@ -3065,22 +3065,24 @@ ul.io-ox-inline-links + header {
 
     }
 
-    .folder-icons& {
-
-        .folder-arrow, .folder-icon {
-
-            width: 25px;
-
+    &.folder-icons {
+        .folder-icon {
+            width: 30px;
+            text-align: left;
             i {
-                width: 25px;
-
+                width: 30px;
+                font-size: 14px;
+                position: relative;
+                top: 1px;
+                color: rgba(0, 0, 0, 0.25);
                 &.special {
-                    color: @hc-link-color;
+                    color: #333; // @hc-link-color;
                 }
             }
-
         }
-
+        .folder.selected:focus .folder-icon i {
+            color: rgba(255, 255, 255, 0.5);
+        }
     }
 
     .folder-counter-badge, .folder-options-badge {
@@ -3238,10 +3240,6 @@ ul.io-ox-inline-links + header {
             }
 
             .folder {
-
-                .folder-label {
-                    text-shadow: 0 0 2px #fff;
-                }
 
                 &.selectable .folder-label {
                     color: @foldertree-active-label-color;
