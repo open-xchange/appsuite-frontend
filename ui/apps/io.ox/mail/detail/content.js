@@ -154,7 +154,7 @@ define('io.ox/mail/detail/content',
             subject: params.subject,
             attachments: [{ content: params.body || '' }]
         };
-        ox.launch('io.ox/mail/write/main').done(function () {
+        ox.launch('io.ox/mail/compose/main').done(function () {
             this.compose(data);
         });
     };

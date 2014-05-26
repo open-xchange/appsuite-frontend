@@ -55,7 +55,7 @@ define('io.ox/mail/actions',
             return true;
         },
         action: function (baton) {
-            require(['io.ox/mail/write/main'], function (m) {
+            require(['io.ox/mail/compose/main'], function (m) {
                 m.getApp().launch().done(function () {
                     this.compose({ folder_id: baton.app.folder.get() });
                 });
@@ -138,7 +138,7 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             var data = baton.first();
-            require(['io.ox/mail/write/main'], function (m) {
+            require(['io.ox/mail/compose/main'], function (m) {
                 if (m.reuse('replyall', data)) return;
                 m.getApp().launch().done(function () {
                     this.replyall(data);
@@ -161,7 +161,7 @@ define('io.ox/mail/actions',
         },
         action: function (baton) {
             var data = baton.first();
-            require(['io.ox/mail/write/main'], function (m) {
+            require(['io.ox/mail/compose/main'], function (m) {
                 if (m.reuse('reply', data)) return;
                 m.getApp().launch().done(function () {
                     this.reply(data);
@@ -179,7 +179,7 @@ define('io.ox/mail/actions',
 
             var data = baton.isThread ? baton.first() : baton.data;
 
-            require(['io.ox/mail/write/main'], function (m) {
+            require(['io.ox/mail/compose/main'], function (m) {
                 if (m.reuse('forward', data)) return;
                 m.getApp().launch().done(function () {
                     this.forward(data);
@@ -211,7 +211,7 @@ define('io.ox/mail/actions',
             });
             if (check === true) return;
 
-            require(['io.ox/mail/write/main'], function (m) {
+            require(['io.ox/mail/compose/main'], function (m) {
                 if (m.reuse('edit', data)) return;
                 m.getApp().launch().done(function () {
                     this.edit(data);
@@ -708,7 +708,7 @@ define('io.ox/mail/actions',
         action: function (baton) {
             var data = baton.data,
                 recipients = data.to.concat(data.cc).concat(data.from);
-            require(['io.ox/mail/write/main'], function (m) {
+            require(['io.ox/mail/compose/main'], function (m) {
                 m.getApp().launch().done(function () {
                     this.compose({ folder_id: data.folder_id, to: recipients });
                 });

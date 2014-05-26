@@ -53,6 +53,11 @@ define('io.ox/mail/sender',
 
     var that = {
 
+        getsender: function (data) {
+            return getSender(data);
+        },
+
+
         // get current sender
         get: function (select) {
             var option = select.children('option:selected'),
@@ -228,6 +233,37 @@ define('io.ox/mail/sender',
                 select.attr('data-default', defaultAddress);
 
                 if (defaultValue) select.val(defaultValue);
+            });
+                },
+
+        drawDropdown: function () {
+            // fallback address - if any other request fails we have the default send address
+            var fallbackAddress = this.getDefaultSendAddress();
+
+            //button.text(defaultAddress);
+
+            // append options to select-box
+            return that.getAddresses().then(function (addresses, numbers, primary) {
+                var defaultAddress = fallbackAddress || primary[1], //button.attr('data-default') || primary[1],
+                    defaultValue,
+                    list = [].concat(addresses, numbers);
+
+                // process with mail addresses and phone numbers
+                list = _(list).map(function (address) {
+                    console.log(address);
+                    var sender = getSender(address);
+                    //support typed or typeless defaultAddress
+                    if (address[1] === defaultAddress || sender.address === defaultAddress) {
+                        defaultValue = sender.value;
+                    }
+
+                    return { value: sender.value, option: address };
+                });
+
+                return {
+                    sortedAddresses: list.sort(sorter),
+                    defaultAddress: defaultAddress
+                };
             });
         }
     };
