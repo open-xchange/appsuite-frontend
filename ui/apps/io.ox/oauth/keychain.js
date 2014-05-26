@@ -110,7 +110,7 @@ define.async('io.ox/oauth/keychain',
                 }
 
                 // this is far too late not to run into popup blocker
-                var popupWindow = win || window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
+                var popupWindow = win || window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
 
                 http.GET({
                     module: 'oauth/accounts',
@@ -186,7 +186,7 @@ define.async('io.ox/oauth/keychain',
             if (account) {
                 params.id = account.id;
             }
-            var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=400, width=600');
+            var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
             popupWindow.focus();
 
             http.GET({
