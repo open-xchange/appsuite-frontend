@@ -1100,8 +1100,10 @@ define('io.ox/calendar/week/view',
                             mouseY = self.roundToGrid(mouseY, 's');
                             // default move
                             if (day !== d.my.startPos) {
-                                ui.position.top = ui.originalPosition.top;
-                                ui.size.height = paneHeight - ui.position.top;
+                                ui.element.css({
+                                    top: ui.originalPosition.top,
+                                    height: paneHeight - ui.position.top
+                                });
                             } else {
                                 d.my.bottom = ui.size.height + ui.position.top;
                             }
@@ -1149,8 +1151,10 @@ define('io.ox/calendar/week/view',
                             // left side
                             mouseY = self.roundToGrid(mouseY, 'n');
                             if (day !== d.my.startPos) {
-                                ui.size.height = paneHeight;
-                                ui.position.top = 0;
+                                ui.element.css({
+                                    top: 0,
+                                    height: ui.size.height + ui.position.top
+                                });
                             } else {
                                 d.my.top = ui.position.top;
                             }
