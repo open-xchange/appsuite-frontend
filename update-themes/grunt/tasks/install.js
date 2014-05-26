@@ -15,6 +15,7 @@
 
 module.exports = function (grunt) {
 
-    //disable install task, not needed for this module
+    //disable install and install:static tasks, not needed for this module
     grunt.registerTask('install', []);
+    grunt.registerTask('install:static', []);
 };
