@@ -16,8 +16,9 @@ define('io.ox/core/commons',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/core',
      'io.ox/core/commons-folderview',
-     'io.ox/core/api/folder'
-    ], function (ext, links, gt, folderview, folderAPI) {
+     'io.ox/core/api/folder',
+     'io.ox/core/api/account'
+    ], function (ext, links, gt, FolderView, folderAPI, accountAPI) {
 
     'use strict';
 
@@ -516,11 +517,18 @@ define('io.ox/core/commons',
 
             // explicit vs. default
             if (defaultFolderId !== undefined) {
-                return app.folder.set(defaultFolderId).pipe(null, function () {
+                return app.folder.set(defaultFolderId).then(null, function () {
+                    // fallback to default on error
                     return app.folder.setDefault();
                 });
             } else {
-                return app.folder.setDefault();
+                return accountAPI.getUnifiedInbox().then(function (id) {
+                    if (id === null) return app.folder.setDefault();
+                    return app.folder.set(id).then(null, function () {
+                        // fallback to default on error
+                        return app.folder.setDefault();
+                    });
+                });
             }
         },
 
@@ -609,7 +617,7 @@ define('io.ox/core/commons',
             });
         },
 
-        addFolderView: folderview.add,
+        addFolderView: FolderView.add,
 
         vsplit: (function () {
             var selectionInProgress = false;

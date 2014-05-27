@@ -631,9 +631,13 @@ define('io.ox/mail/main',
                         });
                         //use latest thread mail when no valid targets exists
                         valid = valid.length ? valid : valid.concat(list[0]);
-
-                        grid.selection.set(valid);
-                        grid.selection.remove(items);
+                        //special case: thread head is selected
+                        if (valid.length === 1 && (_.cid(valid[0]) === _.cid(list[0]))) {
+                            showMail(list[0]);
+                        } else {
+                            grid.selection.set(valid);
+                            grid.selection.remove(items);
+                        }
                         refresh();
                     });
                 }

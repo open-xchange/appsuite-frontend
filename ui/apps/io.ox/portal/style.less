@@ -283,13 +283,6 @@
     .line { line-height: @line-height; }
 
     .content a.solution { cursor: pointer; }
-
-    .widget.with-summary {
-        .summary { display: none; }
-        .content { display: block; }
-        &.show-summary .summary { display: block; }
-        &.show-summary .content { display: none; }
-    }
 }
 
 .portal-feed {
@@ -448,6 +441,31 @@
                     cursor: pointer;
                     padding-top: 0;
                 }
+            }
+        }
+
+        .widget.with-summary {//apply summary styles only on smartphone
+            &.generic-summary {//remove some padding here
+                h2 {
+                    height: initial;
+                    padding: 0;
+                }
+            }
+
+            .summary {
+                display: none;
+            }
+
+            .content {
+                display: block;
+            }
+
+            &.show-summary .summary {
+                display: block;
+            }
+
+            &.show-summary .content {
+                display: none;
             }
         }
 

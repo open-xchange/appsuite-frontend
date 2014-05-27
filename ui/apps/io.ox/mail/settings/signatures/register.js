@@ -127,8 +127,15 @@ define('io.ox/mail/settings/signatures/register',
                     def = snippets.create(update);
                 }
                 def.done(function () {
-                    popup.idle();
-                    popup.close();
+                    snippets.getAll('signature').done(function (sigs) {
+                        // set very first signature as default if no other signatures exist
+                        if (sigs.length === 1) {
+                            settings.set('defaultSignature', sigs[0].id).save();
+                            snippets.trigger('refresh.all');
+                        }
+                        popup.idle();
+                        popup.close();
+                    });
                 }).fail(require('io.ox/core/notifications').yell);
 
                 popup.close();

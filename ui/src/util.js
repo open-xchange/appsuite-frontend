@@ -519,6 +519,25 @@
             }
         },
 
+        /**
+         * Normalizes newlines in given string and replaces newlines with <br>
+         * This can be safely used without risking CSS.
+         * @param {string} text
+         * @param {object} jQuery node
+         * @return {object} jQuery node
+         */
+        nltobr: function (text, node) {
+            var normalizedText = text.replace('\r\n', '\n'),
+                textFragment = normalizedText.split('\n');
+            for (var i = 0; i < textFragment.length; i++) {
+                node.append($.txt(textFragment[i]));
+                if (i < textFragment.length - 1) {
+                    node.append($('<br>'));
+                }
+            }
+            return node;
+        },
+
         // makes sure you have an array
         getArray: function (o) {
             return _.isArray(o) ? o : [o];
