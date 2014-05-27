@@ -88,7 +88,7 @@ define('io.ox/core/notifications',
                 lastFocused = $(document.activeElement),//save focus
                 nextFocus, //focus in case lastFocus got lost (item not there anymore)
                 empty = true; //check if notification area is empty
- 
+
             //remove old empty message to avoid duplicates
             self.$el.find('.no-news-message').remove();
 
@@ -508,5 +508,14 @@ define('io.ox/core/notifications',
             };
         }())
     };
-    return new NotificationController();
+
+    var controller = new NotificationController();
+
+    // auto-close if other apps are started; see bug #32768
+    // users might open mails from notification area, open a contact halo, clicking edit
+    ox.on('app:start', function () {
+        controller.hideList();
+    });
+
+    return controller;
 });

@@ -414,6 +414,7 @@ define('io.ox/core/desktop',
 
             if (this.get('state') === 'ready') {
                 this.set('state', 'initializing');
+                ox.trigger('app:init', this);
                 if (isDisabled) {
                     deferred = $.Deferred().reject();
                 } else {
@@ -428,6 +429,7 @@ define('io.ox/core/desktop',
                         ox.ui.apps.add(self);
                         self.set('state', 'running');
                         self.trigger('launch', self);
+                        ox.trigger('app:start', self);
                     },
                     function fail() {
                         ox.launch(
@@ -439,6 +441,7 @@ define('io.ox/core/desktop',
                 // toggle app window
                 this.get('window').show();
                 this.trigger('resume', this);
+                ox.trigger('app:resume', this);
             }
 
             return deferred.pipe(function () {
@@ -475,6 +478,7 @@ define('io.ox/core/desktop',
                 ox.ui.apps.remove(self);
                 // mark as not running
                 self.trigger('quit');
+                ox.trigger('app:stop', self);
                 self.set('state', 'stopped');
                 // remove app's properties
                 for (var id in self) {
