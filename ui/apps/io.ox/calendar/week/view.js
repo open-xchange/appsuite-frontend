@@ -1053,7 +1053,7 @@ define('io.ox/calendar/week/view',
                 .resizable({
                     handles: 'n, s',
                     grid: [0, self.gridHeight()],
-                    minHeight: self.gridHeight(),
+                    minHeight: self.gridHeight() - 1,
                     containment: 'parent',
                     start: function (e, ui) {
                         var d = $(this).data('ui-resizable');
