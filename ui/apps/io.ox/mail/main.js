@@ -742,6 +742,10 @@ define('io.ox/mail/main',
                     nodes.main.addClass('preview-none').removeClass('preview-right preview-bottom');
                 }
 
+                // remove inline styles from using the resize bar
+                app.left.css({ width: '', height: '' });
+                app.right.css({ left: '', top: '' });
+
                 // relocate toolbar
                 toolbar = nodes.body.find('.classic-toolbar');
                 className = 'classic-toolbar-visible';

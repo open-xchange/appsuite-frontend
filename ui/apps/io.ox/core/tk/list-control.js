@@ -20,7 +20,8 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
         className: 'abs list-view-control',
 
         events: {
-            'mousedown .resizebar': 'onResize'
+            'mousedown .resizebar': 'onResize',
+            'mousedown .resizebar.vertical': 'onVerticalResize'
         },
 
         onResize: function (e) {
@@ -28,12 +29,30 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
             var left = this.$el.parent(),
                 right = left.siblings('.rightside'),
                 base = e.pageX - left.width(),
-                limitX = $(document).width() - 250;
+                limit = $(document).width() - 250;
             $(document).on({
                 'mousemove.resize': function (e) {
-                    var width = Math.max(250, Math.min(e.pageX, limitX) - base);
+                    var width = Math.max(250, Math.min(e.pageX, limit) - base);
                     left.css('width', width);
                     right.css('left', width);
+                },
+                'mouseup.resize': function () {
+                    $(this).off('mousemove.resize mouseup.resize');
+                }
+            });
+        },
+
+        onVerticalResize: function (e) {
+            e.preventDefault();
+            var left = this.$el.parent(),
+                right = left.siblings('.rightside'),
+                base = e.pageY - left.height(),
+                limit = $(document).height() - 100;
+            $(document).on({
+                'mousemove.resize': function (e) {
+                    var height = Math.max(150, Math.min(e.pageY, limit) - base);
+                    left.css('height', height);
+                    right.css('top', height);
                 },
                 'mouseup.resize': function () {
                     $(this).off('mousemove.resize mouseup.resize');
@@ -45,6 +64,7 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
             // ignore touch devicess
             if (_.device('touch')) return;
             this.$el.append('<div class="resizebar">');
+            this.$el.append('<div class="resizebar vertical">');
         },
 
         initialize: function (options) {
