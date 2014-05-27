@@ -352,15 +352,16 @@
 
 .settings-detail-pane legend.sectiontitle {
     font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: bold;
     display: block;
     width: 100%;
     padding: 0;
-    margin-bottom: 20px;
-    font-size: 21px;
+    margin-bottom: 5px;
+    padding-top: 5px;
+    font-size: 18px;
     line-height: 40px;
     color: #333;
     border: 0;
-    border-bottom: 1px solid @inline-link-border-color;
 }
 
 @media (max-width: 480px), (max-device-width: 480px)  {
@@ -375,6 +376,10 @@
     .settings-detail-pane {
 
         h1:first-child, h1.pane-headline:first-child { margin: 0; }
+
+        .btn.btn-primary {
+            margin-bottom: 7px;
+        }
 
         h1 + .sectiondelimiter {
             border: none;
