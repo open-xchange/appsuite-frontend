@@ -416,10 +416,15 @@ define('io.ox/core/pubsub/publications',
                         $('<br>'),
                         $('<b>').addClass('privacy-label').text(gt('Privacy Notice')),
                         $('<div>').addClass('privacy-text').text(
-                            gt('When using this feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). ' +
-                               'Especially when sharing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. ' +
-                               'According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person\'s consent. ' +
-                               'Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. Please ensure appropriate access protection, e.g. by proper password protection.')));
+                            /*jshint multistr: true */
+                            gt('\
+When using this feature, you as the current owner of the data are responsible for being careful with privacy rules and for complying with legal obligations (Copyright, Privacy Laws). \
+Especially when sharing personal data you are the responsible party according to the Federal Data Protection Act (BDSG, Germany) or other Privacy Acts of your country. \
+According to European and other national regulations you as the responsible party are in charge of data economy, and must not publish or forward personal data without the person\'s consent. \
+Beyond legal obligations, we would like to encourage extreme care when dealing with personal data. Please consider carefully where you store and to whom you forward personal data. \
+Please ensure appropriate access protection, e.g. by proper password protection.'
+/*jshint multistr: false */
+                            )));
 
             var link = $('<div>').css('cursor', 'pointer').addClass('control-group').append($('<a href="#">').addClass('controls').text(gt('Show legal information')).on('click', function (e) {
                     e.preventDefault();
