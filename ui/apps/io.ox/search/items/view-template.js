@@ -152,7 +152,7 @@ define('io.ox/search/items/view-template',
         require([detail, api], function (view, api) {
             //render data with available data
             popup.idle().append(view.draw(baton.data, options));
-            api.get(baton.data).then(function (data) {
+            api.get(api.reduce(baton.data)).then(function (data) {
                 //render again with get response if needed
                 if (!_.isEqual(baton.data, data)) {
                     popup.empty().append(
@@ -204,7 +204,7 @@ define('io.ox/search/items/view-template',
                         popup.idle().append(
                             view.render().expand().$el.addClass('no-padding')
                         );
-                        api.get(baton.data).then(function (data) {
+                        api.get(api.reduce(baton.data)).then(function (data) {
                             //render again with get response
                             if (!_.isEqual(baton.data, data)) {
                                 var view = new detail.View({ data: data }, {deeplink: true});
