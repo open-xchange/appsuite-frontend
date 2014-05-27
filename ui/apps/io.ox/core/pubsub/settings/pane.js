@@ -406,7 +406,7 @@ define('io.ox/core/pubsub/settings/pane',
                 this.$el.append(
                     $('<fieldset>').append(
                         // pub
-                        both ? $('<legend class="pane-headline">').text(gt('Publications')) : $(),
+                        both ? $('<legend class="pane-headline sectiontitle">').text(gt('Publications')) : $(),
                         baton.pubListNode = $('<ul class="list-unstyled publications">')
                     )
                 );
@@ -417,7 +417,7 @@ define('io.ox/core/pubsub/settings/pane',
                 this.$el.append(
                     $('<fieldset>').append(
                         // sub
-                        both ? $('<legend class="pane-headline">').text(gt('Subscriptions')) : $(),
+                        both ? $('<legend class="pane-headline sectiontitle">').text(gt('Subscriptions')) : $(),
                         baton.subListNode = $('<ul class="list-unstyled subscriptions">')
                     )
                 );

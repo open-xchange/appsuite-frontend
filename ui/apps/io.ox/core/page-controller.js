@@ -207,7 +207,7 @@ define('io.ox/core/page-controller',
             }
             if (bar) {
                 app.toolbar.children().detach();
-                app.toolbar.append(bar.$el);
+                app.toolbar.append(bar.$el).show();
                 if (!secondary) {
                      bar.render();
                 }
