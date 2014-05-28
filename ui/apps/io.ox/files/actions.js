@@ -409,7 +409,7 @@ define('io.ox/files/actions',
                     return memo || !api.tracker.isLocked(obj);
                 }, false);
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             var responseSuccess = gt.ngettext(
                     'This file has been locked',
                     'These files have been locked',
@@ -422,6 +422,7 @@ define('io.ox/files/actions',
             );
 
             api.lock(list).done(function () {
+                baton.app.updateToolbar(baton.app.selection.get());//update toolbar so unlock option is shown
                 notifications.yell('success', responseSuccess);
             }).fail(function () {
                 notifications.yell('error', responseFail);
@@ -438,7 +439,7 @@ define('io.ox/files/actions',
                     return memo || api.tracker.isLockedByMe(obj);
                 }, false);
         },
-        multiple: function (list) {
+        multiple: function (list, baton) {
             var responseSuccess = gt.ngettext(
                     'This file has been unlocked',
                     'These files have been unlocked',
@@ -451,6 +452,7 @@ define('io.ox/files/actions',
             );
 
             api.unlock(list).done(function () {
+                baton.app.updateToolbar(baton.app.selection.get());//update toolbar so lock option is shown
                 notifications.yell('success', responseSuccess);
             }).fail(function () {
                 notifications.yell('error', responseFail);
