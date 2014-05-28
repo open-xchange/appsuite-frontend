@@ -107,9 +107,8 @@ define('io.ox/core/tk/dialogs',
                     )
                     .each(function (key, val) {
                         val = $(val);
-                        if (val.prop('disabled')) {
-                            val.data('disabled', true);
-                        } else {
+                        if (_.isUndefined(val.data('wasDisabled'))) {
+                            val.data('wasDisabled', val.prop('disabled'));
                             val.prop('disabled', true);
                         }
                     });
@@ -129,10 +128,9 @@ define('io.ox/core/tk/dialogs',
                     )
                     .each(function (key, val) {
                         val = $(val);
-                        if (val.data('disabled')) {
-                            val.removeData('disabled');
-                        } else {
-                            val.prop('disabled', false);
+                        if (!_.isUndefined(val.data('wasDisabled'))) {
+                            val.prop('disabled', val.data('wasDisabled'));
+                            val.removeData('wasDisabled');
                         }
                     });
 
