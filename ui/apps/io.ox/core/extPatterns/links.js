@@ -376,7 +376,7 @@ define('io.ox/core/extPatterns/links',
     };
 
     var drawDropDownItems = function (options, baton, args) {
-        baton.$el = this.find('ul').empty();
+        baton.$el = this.data('ul').empty();
         drawLinks(options, new Collection(baton.data), null, baton, args, true).done(function () {
             injectDividers(baton.$el);
         });
@@ -391,7 +391,7 @@ define('io.ox/core/extPatterns/links',
 
     var drawDropDown = function (options, baton) {
 
-        var label = options.label, args = $.makeArray(arguments), node;
+        var label = options.label, args = $.makeArray(arguments), node, ul;
 
         // label: Use baton or String or DOM node
         label = baton.label || label;
@@ -404,9 +404,12 @@ define('io.ox/core/extPatterns/links',
             node.addClass('dropdown').append(
                 $('<a href="#" data-toggle="dropdown" aria-haspopup="true" tabindex="1">')
                 .append(label, $('<i class="fa fa-caret-down">')),
-                $('<ul class="dropdown-menu" role="menu">')
+                ul = $('<ul class="dropdown-menu" role="menu">')
             )
         );
+
+        // store reference to <ul>; we need that for mobile drop-downs
+        node.data('ul', ul);
 
         // use smart update?
         if (baton.model) {
