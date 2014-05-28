@@ -142,12 +142,8 @@ define('io.ox/files/fluid/perspective',
     }
 
     function preview(e, cid) {
-        var app = this.baton.app, el, self = this;
+        var app = this.baton.app, el;
         api.get(cid).done(function (file) {
-            if (self.main.find('[data-obj-id="' + _.cid(cid) + '"] .title').text() !== file.filename) {//file was renamed meanwhile (may happen with shared files for example)
-                api.propagate('change', file);
-            }
-
             app.currentFile = file;
             if (dropZone) {
                 dropZone.update();
