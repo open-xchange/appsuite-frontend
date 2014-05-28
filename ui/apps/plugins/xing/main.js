@@ -31,7 +31,7 @@ define('plugins/xing/main',
 
     isAlreadyOnXing = function (emailArray) {
         return api.findByMail(emailArray).then(function (data) {
-
+            if (!data.results) return false;
             return _(data.results.items).some(function (inquiry) {
 
                 return !!inquiry.user;
