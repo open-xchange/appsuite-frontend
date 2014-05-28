@@ -52,7 +52,7 @@ define('io.ox/mail/settings/signatures/register',
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="signature-text">').text(gt('Signature text')),
-                    baton.$.signature = $('<textarea class="form-control" rows="10" id="signature-text">')
+                    baton.$.signature = $('<textarea class="form-control" rows="10" id="signature-text">').attr({'tabindex': 1})
                 )
             );
         }
@@ -66,6 +66,7 @@ define('io.ox/mail/settings/signatures/register',
                 $('<div class="form-group">').append(
                     $('<label for="signature-position">').text(gt('Signature position')),
                     baton.$.insertion = $('<select id="signature-position" class="form-control">')
+                        .attr({'tabindex': 1})
                         .append(
                             $('<option value="above">').text(gt('Above quoted text')),
                             $('<option value="below">').text(gt('Below quoted text'))
