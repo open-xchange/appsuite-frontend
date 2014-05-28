@@ -374,7 +374,6 @@ define('io.ox/core/main',
                 if (ox.online && ox.session !== '') {
                     try {
                         // trigger global event
-                        console.log('trigger global refresh');
                         ox.trigger('refresh^');
                     } catch (e) {
                         console.error('io.ox/core/refresh:default', e.message, e);
