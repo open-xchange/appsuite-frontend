@@ -342,7 +342,8 @@ define('io.ox/search/model',
             getOptions: function () {
                 return  _.copy(options);
             },
-            reset: function () {
+            reset: function (options) {
+                var opt = options || {};
                 items.empty();
                 this.set({
                     query: '',
@@ -356,7 +357,8 @@ define('io.ox/search/model',
                 {
                     silent: true
                 });
-                this.trigger('reset');
+                if (!opt.silent)
+                    this.trigger('reset');
             }
         }
     });

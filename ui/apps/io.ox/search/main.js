@@ -140,7 +140,7 @@ define('io.ox/search/main',
         // mark as not running
         app.trigger('quit');
         //reset
-        model.setModule('');
+        model.reset({silent: true});
     };
     //define launcher callback
     app.setLauncher(function (options) {
