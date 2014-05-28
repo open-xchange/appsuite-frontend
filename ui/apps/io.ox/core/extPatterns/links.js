@@ -211,9 +211,7 @@ define('io.ox/core/extPatterns/links',
                     }
                 });
                 // empty?
-                if (count === 0) {
-                    nav.addClass('empty');
-                }
+                if (count === 0) nav.addClass('empty');
             })
             .then(function () {
                 return nav;
@@ -314,51 +312,62 @@ define('io.ox/core/extPatterns/links',
             }
         }, options);
 
+        function processItems(baton, nav) {
+
+            // add toggle unless multi-selection
+            var multiple = _.isArray(baton.data) && baton.data.length > 1,
+                all = nav.children(),
+                lo = all.children().filter('[data-prio="lo"]').parent(),
+                links = lo.find('a'),
+                allDisabled = links.length === links.filter('.disabled').length,
+                isSmall = _.device('small');
+
+            // remove unimportant links on smartphone (prio='none')
+            if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
+
+            if (lo.length > 1 && !allDisabled && (!multiple || options.forcelimit)) {
+                nav.append(
+                    $('<li class="dropdown">').append(
+                        $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
+                        .append(
+                            $.txt(isSmall ? gt('Actions') : gt('More')),
+                            $('<i class="fa fa-caret-down">')
+                        )
+                        .on(Modernizr.touch ? 'touchstart' : 'click', function () {
+                            // fix dropdown position on-the-fly
+                            var left = $(this).parent().position().left;
+                            $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' pull-right'));
+                        }),
+                        $('<ul class="dropdown-menu pull-right" role="menu">')
+                        .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
+                        .append(lo)
+                    )
+                );
+                injectDividers(nav.find('ul'));
+            }
+
+            // hide if all links are disabled
+            if (allDisabled) lo.hide();
+            if (options.customizeNode) options.customizeNode(nav);
+
+            // move to real target node
+            baton.$.target.append(nav.children());
+
+            // clear
+            baton.$ = all = lo = null;
+        }
+
         this.draw = function (baton) {
 
             baton = ext.Baton.ensure(baton);
 
-            // create & add node first, since the rest is async
-            var args = $.makeArray(arguments),
-                multiple = _.isArray(baton.data) && baton.data.length > 1;
+            // use temporary container and remember real target node
+            baton.$.temp = $('<div>');
+            baton.$.target = baton.$el || this;
+            baton.$el = null;
 
-            drawLinks(extension, new Collection(baton.data), this, baton, args, true).done(function (nav) {
-
-                // add toggle unless multi-selection
-                var all = nav.children(),
-                    lo = all.children().filter('[data-prio="lo"]').parent(),
-                    links = lo.find('a'),
-                    allDisabled = links.length === links.filter('.disabled').length,
-                    isSmall = _.device('small');
-
-                // remove unimportant links on smartphone (prio='none')
-                if (isSmall) all.children().filter('[data-prio="none"]').parent().remove();
-
-                if (lo.length > 1 && !allDisabled && (!multiple || options.forcelimit)) {
-                    nav.append(
-                        $('<li class="dropdown">').append(
-                            $('<a href="#" class="actionlink" role="menuitem" data-toggle="dropdown" data-action="more" aria-haspopup="true" tabindex="1">')
-                            .append(
-                                $.txt(isSmall ? gt('Actions') : gt('More')),
-                                $('<i class="fa fa-caret-down">')
-                            )
-                            .on(Modernizr.touch ? 'touchstart' : 'click', function () {
-                                // fix dropdown position on-the-fly
-                                var left = $(this).parent().position().left;
-                                $(this).next().attr('class', 'dropdown-menu' + (left < 100 ? '' : ' pull-right'));
-                            }),
-                            $('<ul class="dropdown-menu pull-right" role="menu">')
-                            .attr('aria-label', isSmall ? gt('Actions') : gt('More'))
-                            .append(lo)
-                        )
-                    );
-                    injectDividers(nav.find('ul'));
-                }
-                // hide if all links are disabled
-                if (allDisabled) lo.hide();
-                if (options.customizeNode) options.customizeNode(nav);
-                all = lo = null;
-            });
+            drawLinks(extension, new Collection(baton.data), baton.$.temp, baton, $.makeArray(arguments), true)
+                .done(_.lfo(processItems, baton));
         };
     };
 
@@ -376,7 +385,9 @@ define('io.ox/core/extPatterns/links',
     };
 
     var drawDropDownItems = function (options, baton, args) {
-        baton.$el = this.data('ul').empty();
+        var ul = this.data('ul');
+        if (!ul) return; // race-condition
+        baton.$el = ul.empty();
         drawLinks(options, new Collection(baton.data), null, baton, args, true).done(function () {
             injectDividers(baton.$el);
         });
