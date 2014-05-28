@@ -351,10 +351,10 @@ define('io.ox/core/extPatterns/links',
             if (options.customizeNode) options.customizeNode(nav);
 
             // move to real target node
-            baton.$.target.append(nav.children());
+            if (baton.$.target) baton.$.target.append(nav.children());
 
             // clear
-            baton.$ = all = lo = null;
+            all = lo = null;
         }
 
         this.draw = function (baton) {
@@ -362,12 +362,14 @@ define('io.ox/core/extPatterns/links',
             baton = ext.Baton.ensure(baton);
 
             // use temporary container and remember real target node
-            baton.$.temp = $('<div>');
-            baton.$.target = baton.$el || this;
-            baton.$el = null;
+            if (baton.$el) {
+                baton.$.temp = $('<div>');
+                baton.$.target = baton.$el;
+                baton.$el = null;
+            }
 
-            drawLinks(extension, new Collection(baton.data), baton.$.temp, baton, $.makeArray(arguments), true)
-                .done(_.lfo(processItems, baton));
+            drawLinks(extension, new Collection(baton.data), baton.$.temp || this, baton, $.makeArray(arguments), true)
+                .done(_.lfo(true, processItems, baton));
         };
     };
 
