@@ -256,7 +256,7 @@ define('io.ox/mail/settings/signatures/register',
     ext.point('io.ox/mail/settings/detail').extend({
         id: 'signatures',
         index: 300,
-        draw: function () {
+        draw: function (baton) {
             var $node, $list, signatures;
             this.append($node = $('<fieldset>'));
             function fnDrawAll() {
@@ -318,11 +318,11 @@ define('io.ox/mail/settings/signatures/register',
 
             function radioChange() {
                 var type = radioCustom.prop('checked') ? 'custom' : 'none';
-                settings.set('mobileSignatureType', type).save();
+                baton.model.set('mobileSignatureType', type);
             }
 
             function textChange() {
-                settings.set('mobileSignature', signatureText.val()).save();
+                baton.model.set('mobileSignature', signatureText.val());
             }
 
             function addSignatureList($node) {
