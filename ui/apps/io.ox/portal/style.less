@@ -669,7 +669,7 @@
         }
 
         .widget.with-summary {//apply summary styles only on smartphone
-    	    &.generic-summary {//remove some padding here
+    	    &.generic-summary:not(.photo-stream) {//remove some padding here
     		    h2 {
     		    	height: initial;
     			   padding: 0;
@@ -695,6 +695,10 @@
 
         .photo-stream, .photo-stream .content, .preview, .preview .content {
             height: 320px;
+        }
+
+        li.photo-stream.show-summary {
+            height: 60px;
         }
 
         .widget.photo-stream, .widget.preview {
