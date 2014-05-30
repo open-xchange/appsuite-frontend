@@ -115,7 +115,7 @@ define('io.ox/tasks/actions',
             if (!e.collection.has('some')) {
                 return false;
             }
-            return (e.baton.data.status === 3);
+            return (e.baton.data.length  !== undefined || e.baton.data.status === 3);
         },
         action: function (baton) {
             changeState(baton, 3);
