@@ -47,9 +47,14 @@ define('plugins/xing/main',
         requires: function (e) {
             var contact = e.baton.data,
                 arr = _.compact([contact.email1, contact.email2, contact.email3]),
-                def = isAlreadyOnXing(arr).then(function (isPresent) {
-                    return $.Deferred().resolve(!isPresent);
-                });
+                def = $.Deferred();
+
+            isAlreadyOnXing(arr).done(function (isPresent) {
+                def.resolve(!isPresent);
+            }).fail(function () {
+                def.resolve(false);
+            });
+
             return def;
         },
         action: function (baton) {
@@ -72,7 +77,13 @@ define('plugins/xing/main',
         requires: function (e) {
             var contact = e.baton.data,
                 arr = _.compact([contact.email1, contact.email2, contact.email3]),
-                def = isAlreadyOnXing(arr);
+                def = $.Deferred();
+
+            isAlreadyOnXing(arr).done(function (isPresent) {
+                def.resolve(isPresent);
+            }).fail(function () {
+                def.resolve(false);
+            });
             return def;
         },
         action: function (baton) {
