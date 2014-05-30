@@ -58,6 +58,15 @@ define('plugins/portal/tumblr/register',
             }
         },
 
+        summary: function () {
+            var self = this;
+            this.addClass('with-summary show-summary');
+            // this.on('tap', '.pointer', function () { console.log('treffer click'); });
+            this.on('click', 'h2', function () {
+                self.toggleClass('show-summary');
+            });
+        },
+
         preview: function (baton) {
 
             var data = baton.data,
