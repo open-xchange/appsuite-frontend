@@ -195,7 +195,7 @@ define('io.ox/search/view-template',
                                     $('<button type="button" class="btn btn-link">')
                                         .attr('data-app', id)
                                         .addClass('pull-left')
-                                        .text(gt.pgettext('app', title))
+                                        .text(/*#, dynamic*/gt.pgettext('app', title))
                                 )
                             )
                     );

@@ -42,14 +42,14 @@ define('io.ox/settings/main',
                 return { title: title };
             },
             set: function (data, fields) {
-                var title = gt.pgettext('app', data.title);
+                var title = /*#, dynamic*/gt.pgettext('app', data.title);
                 this.attr({
                     'aria-label': title
                 });
                 //clean template
                 fields.title.empty();
                 fields.title.append($.txt(
-                        title === data.title ? gt(data.title) : title
+                        title === data.title ? /*#, dynamic*/gt(data.title) : title
                     )
                 );
             }
@@ -189,7 +189,7 @@ define('io.ox/settings/main',
             }
 
             // try to get a translated title
-            var title = declaration['title_' + ox.language] || gt(declaration.title || '');
+            var title = declaration['title_' + ox.language] || /*#, dynamic*/gt(declaration.title) || '';
 
             ext.point('io.ox/settings/pane').extend(_.extend({
                 id: id,

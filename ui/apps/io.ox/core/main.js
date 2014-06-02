@@ -300,7 +300,7 @@ define('io.ox/core/main',
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
                 return arialabel ? $('<a href="#" class="apptitle" tabindex="1" role="button" aria-label="' + _.escape(arialabel) + '">').append(label) : $('<a href="#" class="apptitle" tabindex="1" role="button">').append(label);
             } else {
@@ -631,7 +631,7 @@ define('io.ox/core/main',
                     'role': 'menuitem'
                 })
                 .addClass(closable ? 'closable' : '')
-                .text(gt.pgettext('app', title))
+                .text(/*#, dynamic*/gt.pgettext('app', title))
             );
 
             if (closable) {

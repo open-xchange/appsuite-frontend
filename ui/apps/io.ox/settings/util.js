@@ -61,7 +61,7 @@ define('io.ox/settings/util',
                         obj.message = gtcore('Unable to load mail filter settings.');
                     } else if (obj.erro) {
                         // show main error message
-                        obj.message = gt(obj.error);
+                        obj.message = /*#, dynamic*/gt(obj.error);
                     }
 
                     // notification.yell favors obj.message over obj.error

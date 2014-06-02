@@ -346,7 +346,7 @@ define('io.ox/files/api',
         if (e && e.code && (e.code === 'UPL-0005' || e.code === 'IFO-1700')) {
             e.data.custom = {
                 type: 'error',
-                text: gt(e.error, e.error_params[0], e.error_params[1])
+                text: /*#, dynamic*/gt(e.error, e.error_params[0], e.error_params[1])
             };
         } else if (e && e.code && e.code === 'IFO-0100' && e.problematic && e.problematic[0] && e.problematic[0].id === 700) {
             e.data.custom = {
