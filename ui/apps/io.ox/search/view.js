@@ -84,10 +84,10 @@ define('io.ox/search/view',
                 }
                 return this;
             },
-            focus: function (isRetry) {
+            focus: function () {
                 var searchfield = this.$el.find('.search-field');
                 //set focus and trigger autocomplete
-                searchfield.trigger('focus:custom', isRetry);
+                searchfield.trigger('focus:custom');
             },
             getBaton: function () {
                 return this.baton;

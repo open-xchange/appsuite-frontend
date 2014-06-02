@@ -421,15 +421,18 @@ define('io.ox/core/tk/autocomplete',
             },
 
             // handle key up (debounced)
-            fnKeyUp = _.debounce(function (e, isRetry) {
+            fnKeyUp = _.debounce(function (e, options) {
                 //TODO: element destroyed before debounce resolved
                 if (!document.body.contains(this)) return;
                 this.focus();
                 e.stopPropagation();
-                var val = $.trim($(this).val());
-                isRetry = isRetry || (e.data || {}).isRetry || false;
-                if (val.length >= o.minLength) {
-                    if (isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
+
+                var opt = _.extend({}, (e.data || {}), options || {}),
+                    val = $.trim($(this).val());
+
+                if (val.length >= o.minLength && !opt.keepClosed) {
+                    //request data?
+                    if (opt.isRetry || (val !== lastValue && val.indexOf(emptyPrefix) === -1)) {
                         lastSearch = $.Deferred();
                         lastValue = val;
                         o.container.busy();

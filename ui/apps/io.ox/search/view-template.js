@@ -97,27 +97,29 @@ define('io.ox/search/view-template',
                                 model.add(value.facet, value.id, (option || {}).id);
                             }
                         })
-                        .on('focus focus:custom click', function (e, isRetry) {
-                            //simulate tab keyup event
+                        .on('focus focus:custom click', function (e, opt) {
                             //hint: 'click' supports click on already focused
+
+                            //keep dropdown closed on focus event
+                            opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
+
+                            //simulate tab keyup event
                             ref.trigger({
                                     type: 'keyup',
                                     which: 9
-                                }, isRetry);
+                                }, opt);
 
                         })
-                        .on('keyup', function (e, isRetry) {
-                            //adjust original event instead of throwing a new one cause
-                            //handler (fnKeyUp) is debounced and we have set the isRetry flag
+                        .on('keyup', function (e, options) {
+                            var opt = _.extend({}, (e.data || {}), options || {}),
+                                //keys pressed
+                                down = e.which === 40 && !ref.isOpen(),
+                                tab = e.which === 9;
 
-                            var focusedDown = !ref.isOpen() && e.which === 40,
-                                //tab used to focus
-                                tabToFocus = e.which === 9;
-
-                            //isRetry argument is used for custom events thrown via trigger
-                            //use e.data for orign event
-                            if (_.isUndefined(isRetry) && (focusedDown || tabToFocus)) {
-                                e.data = {isRetry: true};
+                            // adjust original event instead of throwing a new one
+                            // cause handler (fnKeyUp) is debounced and we might set some options
+                            if (_.isUndefined(opt.isRetry) && (down || tab)) {
+                                e.data = _.extend({}, e.data || {}, opt, {isRetry: true});
                             }
                         }),
                         $('<span class="input-group-btn">').append(
