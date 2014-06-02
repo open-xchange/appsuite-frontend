@@ -20,25 +20,25 @@ msgstr ""
 msgid "%1$d %2$s"
 msgstr "%1$d %2$s"
 
-#: apps/io.ox/calendar/util.js:267 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:272 module:io.ox/calendar
 msgid "%1$d Day"
 msgid_plural "%1$d Days"
 msgstr[0] "%1$d 天"
 msgstr[1] "%1$d 天"
 
-#: apps/io.ox/calendar/util.js:263 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:268 module:io.ox/calendar
 msgid "%1$d Hour"
 msgid_plural "%1$d Hours"
 msgstr[0] "%1$d 小时"
 msgstr[1] "%1$d 小时"
 
-#: apps/io.ox/calendar/util.js:259 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:264 module:io.ox/calendar
 msgid "%1$d Minute"
 msgid_plural "%1$d Minutes"
 msgstr[0] "%1$d 分钟"
 msgstr[1] "%1$d 分钟"
 
-#: apps/io.ox/calendar/util.js:271 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:276 module:io.ox/calendar
 msgid "%1$d Week"
 msgid_plural "%1$d Weeks"
 msgstr[0] "%1$d 周"
@@ -201,7 +201,7 @@ msgstr ""
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js:293 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:298 module:io.ox/calendar
 #: apps/io.ox/core/date.js:110 module:io.ox/core
 #, c-format
 msgid "%d day"
@@ -893,7 +893,7 @@ msgstr "您确定要删除此推吗？"
 
 #: apps/io.ox/calendar/list/perspective.js:201 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:45 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:397 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:394 module:io.ox/tasks
 msgid "Ascending"
 msgstr "升序"
 
@@ -1645,7 +1645,7 @@ msgstr "加载文件夹失败。"
 msgid "Couldn't load subfolders."
 msgstr "加载子文件夹失败。"
 
-#: apps/io.ox/tasks/main.js:306 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:303 module:io.ox/tasks
 msgid "Couldn't load that task."
 msgstr "加载该任务失败。"
 
@@ -1683,6 +1683,7 @@ msgstr "使用储存在这里的数据创建一个 %s 户口"
 
 #: apps/io.ox/calendar/edit/main.js:179 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:327
+#: apps/io.ox/calendar/edit/template.js:67
 msgid "Create appointment"
 msgstr "创建约会"
 
@@ -1850,7 +1851,7 @@ msgstr "延迟"
 #: apps/io.ox/settings/accounts/settings/pane.js:71
 #: apps/io.ox/settings/accounts/settings/pane.js:72
 #: apps/io.ox/tasks/actions.js:61 module:io.ox/tasks
-#: apps/io.ox/tasks/actions.js:599 apps/io.ox/tasks/main.js:196
+#: apps/io.ox/tasks/actions.js:599 apps/io.ox/tasks/main.js:193
 #: apps/io.ox/tasks/toolbar.js:83 apps/plugins/portal/twitter/util.js:318
 #: module:plugins/portal apps/plugins/portal/twitter/util.js:451
 #: apps/plugins/portal/xing/actions.js:117
@@ -1890,7 +1891,7 @@ msgstr "部门"
 
 #: apps/io.ox/calendar/list/perspective.js:202 module:io.ox/calendar
 #: apps/io.ox/mail/view-options.js:46 module:io.ox/mail
-#: apps/io.ox/tasks/main.js:398 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:395 module:io.ox/tasks
 msgid "Descending"
 msgstr "降序"
 
@@ -2223,7 +2224,7 @@ msgid "Due %1$s"
 msgstr "%1$s 到期"
 
 #: apps/io.ox/tasks/edit/view-template.js:181 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:393 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:390 module:io.ox/tasks
 msgid "Due date"
 msgstr "截止日"
 
@@ -2275,6 +2276,7 @@ msgstr "编辑 Tumblr feed"
 
 #: apps/io.ox/calendar/edit/main.js:179 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/main.js:325
+#: apps/io.ox/calendar/edit/template.js:67
 msgid "Edit appointment"
 msgstr "编辑约会"
 
@@ -2502,14 +2504,14 @@ msgstr "预估持续时间（分钟）"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:440 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:445 module:io.ox/calendar
 msgid "Every %1$d days"
 msgstr "每 %1$d 天"
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:482 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:487 module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
 msgstr "每 %1$d 月的第 %2$d 天"
 
@@ -2517,26 +2519,26 @@ msgstr "每 %1$d 月的第 %2$d 天"
 #. %1$d: numeric, interval
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:494 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:499 module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
 msgstr "每 %1$d 月的 %2$s %3$s"
 
 #. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:470 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:475 module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
 msgstr "每 %1$d 周的 %2$s"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:450 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:455 module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
 msgstr "每 %1$d 周的每一天"
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js:460 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:465 module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
 msgstr "每 %1$d 周的工作天"
 
@@ -2544,7 +2546,7 @@ msgstr "每 %1$d 周的工作天"
 #. %1$d: interval, numeric
 #. %2$s: Month nane, e.g. January
 #. %3$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:508 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:513 module:io.ox/calendar
 msgid "Every %1$d years on %2$s %3$d"
 msgstr "每 %1$d 年的 %2$s 月 %3$d 日"
 
@@ -2553,12 +2555,12 @@ msgstr "每 %1$d 年的 %2$s 月 %3$d 日"
 #. %2$s: count string, e.g. first, second, or last
 #. %3$s: day string, e.g. Monday
 #. %4$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:522 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:527 module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
 msgstr "每 %1$d 年 %4$d 月的第 %2$s 个 %3$s"
 
-#: apps/io.ox/calendar/util.js:437 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:447
+#: apps/io.ox/calendar/util.js:442 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:452
 msgid "Every day"
 msgstr "每天"
 
@@ -2931,7 +2933,7 @@ msgstr "自由工作者"
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:437
 #: apps/io.ox/calendar/model.js:176 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:409
+#: apps/io.ox/calendar/util.js:414
 msgid "Friday"
 msgstr "星期五"
 
@@ -3383,7 +3385,7 @@ msgstr "语言指定的默认值"
 msgid "Languages"
 msgstr "语言"
 
-#: apps/io.ox/calendar/util.js:150 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:155 module:io.ox/calendar
 msgid "Last Week"
 msgstr "上周"
 
@@ -3783,7 +3785,7 @@ msgstr "已修改"
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:433
 #: apps/io.ox/calendar/model.js:172 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:405
+#: apps/io.ox/calendar/util.js:410
 msgid "Monday"
 msgstr "星期一"
 
@@ -3799,14 +3801,14 @@ msgstr "月视图"
 
 #. recurrence string
 #. %1$d: numeric, day in month
-#: apps/io.ox/calendar/util.js:478 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:483 module:io.ox/calendar
 msgid "Monthly on day %1$d"
 msgstr "每月 %1$d 日"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
-#: apps/io.ox/calendar/util.js:489 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:494 module:io.ox/calendar
 msgid "Monthly on the %1$s %2$s"
 msgstr "每月的第 %1$s 个 %2$s"
 
@@ -3974,7 +3976,7 @@ msgstr "下一个"
 msgid "Next Day"
 msgstr "下一天"
 
-#: apps/io.ox/calendar/util.js:161 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:166 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:684
 msgid "Next Week"
 msgstr "下周"
@@ -4069,7 +4071,7 @@ msgid "No recipients"
 msgstr "无收件人"
 
 #: apps/io.ox/calendar/settings/pane.js:51 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:256
+#: apps/io.ox/calendar/util.js:261
 msgid "No reminder"
 msgstr "无提醒"
 
@@ -4220,7 +4222,7 @@ msgid "On new notifications except mails"
 msgstr "在除了邮件的新通知"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:457 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:462 module:io.ox/calendar
 msgid "On work days"
 msgstr "在工作天"
 
@@ -4841,7 +4843,7 @@ msgstr "打印"
 
 #: apps/io.ox/mail/write/view-main.js:699 module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js:344 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:395 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:392 module:io.ox/tasks
 #: apps/io.ox/tasks/print.js:103
 msgid "Priority"
 msgstr "优先级"
@@ -5261,7 +5263,7 @@ msgstr "销售量"
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:438
 #: apps/io.ox/calendar/model.js:177 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:410
+#: apps/io.ox/calendar/util.js:415
 msgid "Saturday"
 msgstr "星期六"
 
@@ -5615,7 +5617,7 @@ msgstr "显示已拒绝约会"
 msgid "Show details"
 msgstr "显示详情"
 
-#: apps/io.ox/tasks/main.js:400 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:397 module:io.ox/tasks
 msgid "Show done tasks"
 msgstr "显示已完成任务"
 
@@ -5785,7 +5787,7 @@ msgid "Sort by"
 msgstr "依 .. 排序"
 
 #: apps/io.ox/calendar/list/perspective.js:193 module:io.ox/calendar
-#: apps/io.ox/tasks/main.js:387 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:384 module:io.ox/tasks
 msgid "Sort options"
 msgstr "排序选项"
 
@@ -5831,7 +5833,7 @@ msgstr "重读统计"
 
 #: apps/io.ox/calendar/toolbar.js:62 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:272 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:392 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:389 module:io.ox/tasks
 msgid "Status"
 msgstr "状态"
 
@@ -5855,7 +5857,7 @@ msgstr "学生"
 #: apps/io.ox/mail/vacationnotice/settings/model.js:131
 #: apps/io.ox/mail/view-options.js:34 apps/io.ox/mail/write/view-main.js:873
 #: apps/io.ox/tasks/edit/view-template.js:105 module:io.ox/tasks/edit
-#: apps/io.ox/tasks/main.js:394 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:391 module:io.ox/tasks
 msgid "Subject"
 msgstr "主题"
 
@@ -5902,7 +5904,7 @@ msgstr "后缀"
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:432
 #: apps/io.ox/calendar/model.js:171 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:404
+#: apps/io.ox/calendar/util.js:409
 msgid "Sunday"
 msgstr "星期日"
 
@@ -5942,7 +5944,7 @@ msgstr "标签邮件为"
 msgid "Task"
 msgstr "任务"
 
-#: apps/io.ox/tasks/main.js:173 module:io.ox/tasks
+#: apps/io.ox/tasks/main.js:170 module:io.ox/tasks
 msgid "Task Details"
 msgstr "任务详情"
 
@@ -6200,6 +6202,10 @@ msgstr "已成功删除回帖"
 msgid "The due date cannot be before start date. Adjust start date?"
 msgstr "结束时间不能在开始时间之前。调整开始时间？"
 
+#: apps/io.ox/contacts/distrib/create-dist-view.js:180 module:io.ox/contacts
+msgid "The email address %1$s is already in the list"
+msgstr ""
+
 #: apps/io.ox/mail/write/main.js:1164 module:io.ox/mail
 msgid "The email has been sent"
 msgstr "已发送电子邮件"
@@ -6261,6 +6267,10 @@ msgstr "下一步是允许此系统替您访问您的 %s 户口。"
 #: apps/io.ox/mail/write/view-main.js:345 module:io.ox/mail
 msgid "The number of recipients is limited to %1$s recipients per field"
 msgstr "收件人数量限制每输入字段 %1$s 个"
+
+#: apps/io.ox/contacts/distrib/create-dist-view.js:182 module:io.ox/contacts
+msgid "The person %1$s is already in the list"
+msgstr ""
 
 #: apps/io.ox/files/api.js:354 module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
@@ -6592,7 +6602,7 @@ msgstr "帖子"
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:436
 #: apps/io.ox/calendar/model.js:175 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:408
+#: apps/io.ox/calendar/util.js:413
 msgid "Thursday"
 msgstr "星期四"
 
@@ -6645,7 +6655,7 @@ msgstr ""
 
 #: apps/io.ox/backbone/forms.js:491 module:io.ox/core
 #: apps/io.ox/calendar/month/perspective.js:424 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:155 apps/io.ox/calendar/util.js:192
+#: apps/io.ox/calendar/util.js:160 apps/io.ox/calendar/util.js:197
 #: apps/io.ox/calendar/week/view.js:150 apps/io.ox/calendar/week/view.js:707
 #: apps/plugins/portal/birthdays/register.js:83 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:152
@@ -6665,8 +6675,8 @@ msgstr "切换文件夹"
 msgid "Toggle search"
 msgstr "切换搜寻"
 
-#: apps/io.ox/calendar/util.js:157 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:194
+#: apps/io.ox/calendar/util.js:162 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:199
 #: apps/plugins/portal/birthdays/register.js:85 module:plugins/portal
 #: apps/plugins/portal/birthdays/register.js:152
 msgid "Tomorrow"
@@ -6721,7 +6731,7 @@ msgstr "正在尝试自动设置您的邮件户口"
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:434
 #: apps/io.ox/calendar/model.js:173 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:406
+#: apps/io.ox/calendar/util.js:411
 msgid "Tuesday"
 msgstr "星期二"
 
@@ -7006,7 +7016,7 @@ msgstr "天气：季节"
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:435
 #: apps/io.ox/calendar/model.js:174 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:407
+#: apps/io.ox/calendar/util.js:412
 msgid "Wednesday"
 msgstr "星期三"
 
@@ -7022,7 +7032,7 @@ msgstr "周视图"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js:466 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:471 module:io.ox/calendar
 msgid "Weekly on %1$s"
 msgstr "每周的 %1$s"
 
@@ -7073,7 +7083,7 @@ msgstr ""
 "个人数据时极端用心。请小心考虑您的存储位置和转发个人数据的目标人。请保持适当"
 "访问保护，例如：正确的密码保护。"
 
-#: apps/io.ox/calendar/util.js:289 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:294 module:io.ox/calendar
 msgid "Whole day"
 msgstr "全天"
 
@@ -7105,7 +7115,7 @@ msgstr "年"
 #. recurrence string
 #. %1$s: Month nane, e.g. January
 #. %2$d: Date, numeric, e.g. 29
-#: apps/io.ox/calendar/util.js:503 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:508 module:io.ox/calendar
 msgid "Yearly on %1$s %2$d"
 msgstr "每年的 %1$s %2$d"
 
@@ -7113,7 +7123,7 @@ msgstr "每年的 %1$s %2$d"
 #. %1$s: count string, e.g. first, second, or last
 #. %2$s: day string, e.g. Monday
 #. %3$s: month nane, e.g. January
-#: apps/io.ox/calendar/util.js:516 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:521 module:io.ox/calendar
 msgid "Yearly on the %1$s %2$s of %3$d"
 msgstr "每年 %3$d 月的第 %1$s 个 %2$s"
 
@@ -7139,8 +7149,8 @@ msgstr "是"
 msgid "Yes, send without subject"
 msgstr "是，不带题目发送"
 
-#: apps/io.ox/calendar/util.js:148 module:io.ox/calendar
-#: apps/io.ox/calendar/util.js:185 apps/io.ox/mail/util.js:72
+#: apps/io.ox/calendar/util.js:153 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:190 apps/io.ox/mail/util.js:72
 #: module:io.ox/core apps/plugins/portal/birthdays/register.js:87
 #: module:plugins/portal apps/plugins/portal/birthdays/register.js:152
 msgid "Yesterday"
@@ -7458,6 +7468,12 @@ msgstr "您的时区"
 msgid "ZB"
 msgstr "ZB"
 
+#: apps/io.ox/calendar/util.js:36 module:io.ox/calendar
+#, fuzzy
+#| msgid "Accepted"
+msgid "accepted"
+msgstr "接受"
+
 #: apps/io.ox/calendar/edit/recurrence-view.js:210
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/edit/recurrence-view.js:504
@@ -7468,7 +7484,7 @@ msgstr[1] "%1$d 次约会后"
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
-#: apps/io.ox/calendar/util.js:416 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:421 module:io.ox/calendar
 msgid "and"
 msgstr "与"
 
@@ -7530,6 +7546,12 @@ msgstr "每周的"
 #: apps/io.ox/calendar/edit/recurrence-view.js:440
 msgid "day of the weekend"
 msgstr "每周末的"
+
+#: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
+#, fuzzy
+#| msgid "Declined"
+msgid "declined"
+msgstr "已拒绝"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js:161 module:io.ox/core
@@ -7829,6 +7851,12 @@ msgstr "状态"
 msgid "subfolders of %s"
 msgstr "%s 的子文件夹"
 
+#: apps/io.ox/calendar/util.js:38 module:io.ox/calendar
+#, fuzzy
+#| msgid "Tentative"
+msgid "tentative"
+msgstr "暂定"
+
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js:350
@@ -7857,6 +7885,12 @@ msgstr "今晚"
 #: apps/io.ox/core/tk/folderviews.js:863 module:io.ox/core
 msgid "total"
 msgstr "合共"
+
+#: apps/io.ox/calendar/util.js:35 module:io.ox/calendar
+#, fuzzy
+#| msgid "Unconfirmed"
+msgid "unconfirmed"
+msgstr "未确认"
 
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
 #: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:405
@@ -7896,7 +7930,7 @@ msgid "weekly"
 msgstr "每周"
 
 #. recurrence string
-#: apps/io.ox/calendar/util.js:401 module:io.ox/calendar
+#: apps/io.ox/calendar/util.js:406 module:io.ox/calendar
 msgid "work days"
 msgstr "工作日"
 
