@@ -171,6 +171,10 @@ define('io.ox/core/tk/list-selection', [], function () {
 
         resetCheckmark: function (items) {
             items.filter('.selected').removeClass('selected');
+            // collect garbage: remove preserved items when selection changes
+            _.defer(function () {
+                items.filter('.preserved').not('.selected').fadeOut('fast', function () { $(this).remove(); });
+            });
         },
 
         // resets all (usually one) items with swipe-left class
@@ -260,8 +264,8 @@ define('io.ox/core/tk/list-selection', [], function () {
                 first = items.index(selected.first()),
                 apply = this.select.bind(this);
 
-            // All: if all items are selected we cannot dodge
-            if (items.length === length) return;
+            // All: if all items are selected we dodge by clearing the entire selection
+            if (items.length === length) return this.clear();
 
             // Tail: if there's no room inbetween or after the selection we move up
             if ((first + length) === items.length) return apply(first - 1, items);

@@ -17,10 +17,11 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
     var pools = {},
         collections = {},
-        skip = false; // to avoid unnecessary/endless recursion
+        skip = false, // to avoid unnecessary/endless recursion
+        skipRemove = false;
 
     function propagateRemove(module, model) {
-        if (skip) return;
+        if (skip || skipRemove) return;
         _(collections[module]).each(function (entry) {
             var target = entry.collection.get(model.cid);
             if (target) {
@@ -147,6 +148,13 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             });
             console.log('Pool:', module, 'Model count:', count, 'Collections:', collections);
         });
+    };
+
+    // don't propagate remove events; usually during a collection.set
+    Pool.preserve = function(fn) {
+        skipRemove = true;
+        if (fn) fn();
+        skipRemove = false;
     };
 
     _.extend(Pool.prototype, {
