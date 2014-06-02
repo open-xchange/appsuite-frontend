@@ -170,7 +170,7 @@ define('io.ox/search/view-template',
             var id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
                 row, cell,
-                apps = settings.get('search/modules', ['mail', 'contacts', 'calendar', 'tasks', 'files']);
+                apps = settings.get('search/modules', []);
 
             //create container
             row = $('<div class="row applications">').append(
@@ -677,19 +677,26 @@ define('io.ox/search/view-template',
                 draw: function (baton) {
 
                     var id = baton.model.getApp(),
+                        opt = baton.model.getOptions(),
                         row, cell,
                         items = [],
                         titles = {},
-                        apps = settings.get('search/apps', []);
+                        apps = settings.get('search/modules', []);
 
                     //create containers
                     row = $('<div class="row ">').append(
                         cell = $('<div class="btn-group col-xs-12">')
                     );
 
+                    //apply mapping (infostore-files-drive chameleon)
+                    apps = _.map(apps, function (module) {
+                        var id = 'io.ox/' + module;
+                        return opt.mapping[id] || id;
+                    });
+
                     //create dropdown menu entries
                     _(apps).each(function (id) {
-                        var title = titles[id] = ox.manifests.apps[id + '/main'].title;
+                        var title = titles[id] = (ox.manifests.apps[id + '/main'] || {}).title;
                         items.push(
                             $('<li role="presentation">')
                             .append(
