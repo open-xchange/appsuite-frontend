@@ -212,7 +212,7 @@ define.async('io.ox/core/date',
         var keyDay = getKeyDayOfWeek(d);
         var D = d.constructor;
         var keyDate = new D(keyDay * api.DAY);
-        var jan1st = new D(keyDate.getYear(), inMonth ? keyDate.getMonth() : 0);
+        var jan1st = new D(keyDate.getTime()).setMonth(inMonth ? keyDate.getMonth() : 0, 1);
         return Math.floor((keyDay - jan1st.getDays()) / 7) + 1;
     }
 

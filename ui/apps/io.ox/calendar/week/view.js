@@ -252,7 +252,7 @@ define('io.ox/calendar/week/view',
             if (month % 2 === 1) {
                 month--;
             }
-            this.apiRefTime = new date.Local(this.startDate.getYear(), month, 1);
+            this.apiRefTime = new date.Local(this.startDate.getTime()).setMonth(month, 1);
         },
 
         /**
