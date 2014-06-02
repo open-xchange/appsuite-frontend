@@ -54,6 +54,7 @@ define('io.ox/search/view',
                     .prop('disabled', false);
                 //busy node
                 busy.hide();
+                return this;
             },
             busy: function () {
                 var container = this.$el.find('.query'),
@@ -88,6 +89,7 @@ define('io.ox/search/view',
                 var searchfield = this.$el.find('.search-field');
                 //set focus and trigger autocomplete
                 searchfield.trigger('focus:custom');
+                return this;
             },
             getBaton: function () {
                 return this.baton;

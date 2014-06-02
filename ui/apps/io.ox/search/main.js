@@ -120,6 +120,10 @@ define('io.ox/search/main',
         app.view.idle();
     };
 
+    app.is = function (state) {
+        return app.get('state') === state;
+    };
+
     //reduced version of app.quit to ensure app/window is reusable
     app.quit = function () {
         // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
@@ -300,13 +304,14 @@ define('io.ox/search/main',
     model = SearchModel.factory.create({mode: 'widget'})
             .on('query change:start change:size', app.apiproxy.query)
             .on('reset change', function () {
-                app.view.redraw();
-                app.idle();
+                app.view.redraw()
+                         .focus()
+                         .idle();
             });
 
     //run app
     run = function () {
-        if (app.get('state') === 'running') {
+        if (app.is('running')) {
             //reuse
             app.launch();
             app.view.redraw();
