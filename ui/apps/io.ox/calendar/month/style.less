@@ -90,7 +90,8 @@
                 display: inline-block;
                 width: 100/8%;
                 height: 100%;
-                border-top: 1px solid #eee;
+                border-top: 1px solid @monthview-border;
+                border-left: 1px solid @monthview-border;
                 background-color: #fff;
                 .transition(background-color 0.2s linear);
                 .backface-visibility(hidden);
@@ -148,25 +149,21 @@
 
                 &.out {
 
-                    background-color: #eee;
+                    background-color: lighten(@monthview-appointment-out, 20%);
                     .transition(background-color 0.2s linear);
                     .backface-visibility(hidden);
 
                     &.today {
 
-                        background-color: #f0f0f0;
 
                         .number {
-                            color: darken(#08c, 10%);
-                            background-color: #f0f0f0;
-                            .transition(background-color 0.2s linear);
                         }
 
                     }
 
                     .number {
-                        color: #aaa;
-                        background-color: #eee;
+                        color: darken(@monthview-appointment-out, 25%);
+                        background-color: lighten(@monthview-appointment-out, 20%);
                         .transition(background-color 0.2s linear);
                     }
 
@@ -174,7 +171,7 @@
 
                         background-color: @monthview-appointment-out;
                         border-color: @monthview-appointment-out;
-                        color: darken(@monthview-appointment-out, 25%);
+                        color: darken(@monthview-appointment-out, 30%);
 
                         html.high-contrast & {
 
