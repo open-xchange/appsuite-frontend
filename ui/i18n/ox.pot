@@ -2463,23 +2463,27 @@ msgstr ""
 msgid "Contacts"
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:180
+#. uniqueness of distribution listmembers
+#. %1$s is the duplicate mail address
+#: apps/io.ox/contacts/distrib/create-dist-view.js:182
 #: module:io.ox/contacts
 msgid "The email address %1$s is already in the list"
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:182
+#. uniqueness of distribution listmembers
+#. %1$s is the duplicate display name of the person
+#: apps/io.ox/contacts/distrib/create-dist-view.js:186
 #: module:io.ox/contacts
 msgid "The person %1$s is already in the list"
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:200
+#: apps/io.ox/contacts/distrib/create-dist-view.js:204
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:248
 msgid "This list has no contacts yet"
 msgstr ""
 
-#: apps/io.ox/contacts/distrib/create-dist-view.js:291
+#: apps/io.ox/contacts/distrib/create-dist-view.js:295
 #: module:io.ox/contacts
 msgid "To add contacts manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""

@@ -177,8 +177,12 @@ define('io.ox/contacts/distrib/create-dist-view',
                     // custom error message
                     var message;
                     if (matchingEmail) {
+                        //#. uniqueness of distribution listmembers
+                        //#. %1$s is the duplicate mail address
                         message = gt.format(gt('The email address %1$s is already in the list'),  newMember.mail);
                     } else if (matchingPlaceholder) {
+                        //#. uniqueness of distribution listmembers
+                        //#. %1$s is the duplicate display name of the person
                         message = gt.format(gt('The person %1$s is already in the list'), newMember.display_name);
                     }
 
