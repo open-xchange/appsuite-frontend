@@ -136,7 +136,7 @@
             height: 100%;
             float: left;
             background-color: rgba(0, 0, 0, 0.01);
-            border-right: 1px solid @weekview-border;
+            border-left: 1px solid @weekview-border;
             .user-select(none);
 
             .timeslot {
@@ -146,7 +146,7 @@
                 height: 24px;
 
                 &:nth-child(2n+1) {
-                    border-bottom-style: dotted;
+                    border-color: lighten(@weekview-border, 10%);
                 }
 
                 &:last-child, .time:last-child {
@@ -163,17 +163,17 @@
 
             }
 
-            &.today .timeslot {
+            // &.today .timeslot {
 
-                &.in {
-                    background-color: darken(@weekview-day-in, 5%);
-                }
+            //     &.in {
+            //         background-color: darken(@weekview-day-in, 5%);
+            //     }
 
-                &.out {
-                    background-color: darken(@weekview-day-out, 3%);
-                }
+            //     &.out {
+            //         background-color: darken(@weekview-day-out, 3%);
+            //     }
 
-            }
+            // }
 
         }
 
@@ -209,8 +209,10 @@
         }
 
         &.border {
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-left-width: 0px;
+            @border: 1px solid rgba(0, 0, 0, 0.2);
+            border-top: @border;
+            border-right: @border;
+            border-bottom: @border;
         }
 
         &.current, &.hover {
@@ -236,8 +238,9 @@
 
             height: 100%;
             font-size: 12px;
-            padding: 0 5px;
-            border-left: .4em solid;
+            line-height: 16px;
+            padding: 4px 7px;
+            border-left: 3px solid;
             border-color: inherit;
             .ellipsis();
 
