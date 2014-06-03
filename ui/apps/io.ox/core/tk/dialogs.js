@@ -123,7 +123,7 @@ define('io.ox/core/tk/dialogs',
                     .find('input, select, button')
                     .add(
                         nodes.body
-                            .css('opacity','')
+                            .css('opacity', '')
                             .find('input, select, button, textarea')
                     )
                     .each(function (key, val) {
