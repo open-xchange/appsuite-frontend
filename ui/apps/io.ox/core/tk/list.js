@@ -70,7 +70,7 @@ define('io.ox/core/tk/list',
 
         onScroll: _.debounce(function () {
 
-            if (this.isBusy || this.complete) return;
+            if (!this.options.pagination || this.isBusy || this.complete) return;
 
             var height = this.$el.height(),
                 scrollTop = this.$el.scrollTop(),
@@ -94,7 +94,7 @@ define('io.ox/core/tk/list',
 
         // load more data (wraps paginate call)
         processPaginate: function () {
-            if (this.isBusy || this.complete) return;
+            if (!this.options.pagination || this.isBusy || this.complete) return;
             this.paginate();
         },
 
@@ -208,6 +208,12 @@ define('io.ox/core/tk/list',
 
         initialize: function (options) {
 
+            // options
+            // ref: id of the extension point that is used to render list items
+            // app: application
+            // pagination: use pagination (default is true)
+            this.options = _.extend({ pagination: true }, options);
+
             this.ref = this.ref || options.ref;
             this.app = options.app;
             this.selection = new Selection(this);
@@ -258,6 +264,7 @@ define('io.ox/core/tk/list',
         // if true current collection is regarded complete
         // no more items are fetches
         toggleComplete: function (state) {
+            if (!this.options.pagination) state = true;
             this.$el.toggleClass('complete', state);
             this.complete = !!state;
         },
