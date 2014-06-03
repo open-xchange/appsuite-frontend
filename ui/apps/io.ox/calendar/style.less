@@ -28,7 +28,7 @@
             text-align: left;
             width: 30%;
             position: absolute;
-            left: @weekview-time-width;
+            left: 20px;
             line-height: @calendar-toolbar-height - @calendar-toolbar-top-padding;
             font-size: 20px;
             color: #333;
@@ -83,12 +83,13 @@
             left: @weekview-time-width;
             white-space: nowrap;
             padding-top: 13px;
+            padding-right: 14px;
 
             .weekday {
 
                 display: inline-block;
                 font-size: 13px;
-                text-align: left;
+                text-align: center;
                 .ellipsis();
 
                 &.today {
@@ -138,7 +139,7 @@
     .appointment {
 
         .location, .title {
-            color: @white;
+            font-weight: bold;
         }
 
         &.opac {
@@ -146,9 +147,14 @@
             .transition(opacity 0.2s);
         }
 
+        @light: 35%;
+        @dark: 15%;
+
         &.reserved {
 
-            @r: @appointment-reserved;
+            @r: lighten(@appointment-reserved, @light);
+            border-color: @appointment-reserved;
+            color: darken(@appointment-reserved, @dark);
             background-color: @r;
 
             &.hover {
@@ -167,7 +173,9 @@
 
         &.temporary {
 
-            @t: @appointment-temporary;
+            @t: lighten(@appointment-temporary, @light);
+            border-color: @appointment-temporary;
+            color: darken(@appointment-temporary, @dark);
             background-color: @t;
 
             &.hover {
@@ -190,7 +198,9 @@
 
         &.absent {
 
-            @a: @appointment-absent;
+            @a: lighten(@appointment-absent, @light);
+            border-color: @appointment-absent;
+            color: darken(@appointment-absent, @dark);
             background-color: @a;
 
             &.hover {
@@ -209,7 +219,9 @@
 
         &.free {
 
-            @f: @appointment-free;
+            @f: lighten(@appointment-free, @light);
+            border-color: @appointment-free;
+            color: darken(@appointment-free, @dark);
             background-color: @f;
 
             &.hover {
@@ -232,10 +244,13 @@
 
         &.private {
 
-            background-color: @appointment-private;
+            border-color: @appointment-private;
+            color: darken(@appointment-private, @dark);
+            background-color: lighten(@appointment-private, @light);
 
             &.hover {
                 background-color: darken(@appointment-private, @appointment-hover-pct);
+                color: @white;
             }
 
             &.disabled {

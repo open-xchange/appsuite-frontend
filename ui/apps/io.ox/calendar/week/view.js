@@ -796,7 +796,7 @@ define('io.ox/calendar/week/view',
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
             for (var d = 0; d < this.columns; d++) {
-                var formatDate = tmpDate.format(date.DAYOFWEEK_DATE),
+                var formatDate = tmpDate.format('E d'),
                     day = $('<a>')
                     .addClass('weekday')
                     .attr({
@@ -878,6 +878,7 @@ define('io.ox/calendar/week/view',
                         }
                         app.css({
                             height: this.fulltimeHeight,
+                            lineHeight: this.fulltimeHeight + 'px',
                             width: (100 / this.columns) * fulltimeWidth + '%',
                             left: (100 / this.columns) * Math.max(0, fulltimePos) + '%',
                             top: row * (this.fulltimeHeight + 1)

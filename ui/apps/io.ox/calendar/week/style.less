@@ -29,7 +29,7 @@
         height: 100%;
         position: relative;
         display: inline-block;
-        border-right: 1px solid #ccc;
+        border-right: 1px solid @weekview-border;
         overflow: hidden;
         .transition(background-color 0.4s);
         .backface-visibility(hidden);
@@ -49,7 +49,7 @@
             height: @weekview-footer-height;
             overflow-y: scroll;
             overflow-x: hidden;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid @weekview-border;
             left: @weekview-time-width;
             right: 0;
 
@@ -76,7 +76,6 @@
                 }
 
                 .appointment-content {
-                    border-left: 1px solid rgba(255, 255, 255, 0.6);
                 }
 
             }
@@ -140,15 +139,14 @@
             height: 100%;
             float: left;
             background-color: rgba(0, 0, 0, 0.01);
+            border-right: 1px solid @weekview-border;
             .user-select(none);
 
             .timeslot {
 
                 -webkit-touch-callout: none !important;
-                border-bottom: 1px solid #ccc;
+                border-bottom: 1px solid @weekview-border;
                 height: 24px;
-                border-left: 1.5em solid rgba(0, 0, 0, 0);
-                border-right: 1.5em solid rgba(0, 0, 0, 0);
 
                 &:nth-child(2n+1) {
                     border-bottom-style: dotted;
@@ -205,10 +203,9 @@
 
         position: absolute;
         background-color: @appointment-reserved;
-        opacity: 1;
+        opacity: 0.85;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
-        .border-radius(0.5em);
 
         &.modify {
             cursor: pointer;
@@ -216,6 +213,7 @@
 
         &.border {
             border: 1px solid rgba(255, 255, 255, 0.3);
+            border-left-width: 0px;
         }
 
         &.current, &.hover {
@@ -241,8 +239,8 @@
 
             height: 100%;
             font-size: 12px;
-            color: #fff;
-            padding: 0 7px 0 7px;
+            padding: 0 5px;
+            border-left: .4em solid;
             .ellipsis();
 
             * {
