@@ -331,17 +331,21 @@
          */
         lfo: function () {
             // call counter
-            var curry = slice.call(arguments),
-                fn = curry.shift() || $.noop,
-                count = (fn.count = (fn.count || 0) + 1);
+            var curry = slice.call(arguments), sync = false, fn, count;
+            // sync or async (default)
+            if (curry[0] === true) { curry.shift(); sync = true; }
+            // get function and count
+            fn = curry.shift() || $.noop;
+            count = (fn.count = (fn.count || 0) + 1);
             // wrap
             return function () {
                 var args = slice.call(arguments);
-                setTimeout(function () {
+                function cont() {
                     if (count === fn.count) {
                         fn.apply(fn, curry.concat(args));
                     }
-                }, 0);
+                }
+                if (sync) cont(); else setTimeout(cont, 0);
             };
         },
 

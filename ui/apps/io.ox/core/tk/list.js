@@ -158,6 +158,15 @@ define('io.ox/core/tk/list',
 
             if (li.length === 0) return;
 
+            // preserve item?
+            if (li.hasClass('selected')) {
+                // note: preserved items are no longer part of the collection, i.e.
+                // they won't respond to model changes! They are just visible until
+                // the selection is changed by the user
+                li.addClass('preserved');
+                return;
+            }
+
             // keep scroll position
             if (li.position().top < top) this.$el.scrollTop(top - li.outerHeight(true));
 

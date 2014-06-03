@@ -114,7 +114,8 @@ define('io.ox/mail/settings/pane',
     ext.point(POINT).extend({
         index: 200,
         id: 'mailsettings',
-        draw: function () {
+        draw: function (baton) {
+            baton.model = mailSettings;
             this.addClass('io-ox-mail-settings');
             mailViewSettings = new MailSettingsView({model: mailSettings});
 

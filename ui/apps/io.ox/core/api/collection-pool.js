@@ -15,11 +15,13 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
     'use strict';
 
-    var collections = {},
-        skip = false; // to avoid unnecessary/endless recursion
+    var pools = {},
+        collections = {},
+        skip = false, // to avoid unnecessary/endless recursion
+        skipRemove = false;
 
     function propagateRemove(module, model) {
-        if (skip) return;
+        if (skip || skipRemove) return;
         _(collections[module]).each(function (entry) {
             var target = entry.collection.get(model.cid);
             if (target) {
@@ -42,6 +44,55 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             }
         });
         skip = false;
+    }
+
+    function gc(hash) {
+
+        // Garbage Collection
+        // ------------------
+        // concept:
+        // - on first refreah, all collections are marked as expired
+        // - collections that are still used in UI will be updated and therefore "expired" will be set to false
+        // - models that are in active collections are collected
+        // - all remaining models will be removed
+
+        // hash to track referenced models
+        var models = {};
+
+        // look for expired collection
+        _(hash).each(function (entry, id) {
+            // ignore detail collection
+            if (id === 'detail') return;
+            if (entry.collection.expired) {
+                // remove collections if marked as expired
+                entry.collection.reset();
+                delete hash[id];
+            } else {
+                // track all referenced models
+                entry.collection.each(function (model) {
+                    models[model.cid] = true;
+                });
+            }
+        });
+
+        // loop over detail collection to find expired models
+        var expired = this.get('detail').filter(function (model) {
+            return !models[model.cid];
+        });
+
+        // remove expired modesl from detail collection
+        this.get('detail').remove(expired, { silent: true });
+
+        // clean up
+        expired = models = null;
+
+        // mark all collections as expired
+        _(hash).each(function (entry, id) {
+            // ignore detail collection
+            if (id === 'detail') return;
+            // mark as expired
+            entry.collection.expired = true;
+        });
     }
 
     function Pool(module) {
@@ -79,13 +130,32 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         };
 
         // clear pool on global refresh
-        ox.on('refresh^', function () {
-            // remove anything except detail pool
-            _(hash).each(function (entry) {
-                entry.collection.expired = true;
-            });
-        });
+        ox.on('refresh^', _.throttle(gc.bind(this, hash), 5000));
     }
+
+    // create new pool / singleton per module
+    // avoids having different instances per module
+    Pool.create = function (module) {
+        return pools[module] || (pools[module] = new Pool(module));
+    };
+
+    // inspect
+    Pool.inspect = function () {
+        _(pools).each(function (pool, module) {
+            var count = 0, collections = pool.getCollections();
+            _(collections).each(function (entry) {
+                count += _(entry.collection).size();
+            });
+            console.log('Pool:', module, 'Model count:', count, 'Collections:', collections);
+        });
+    };
+
+    // don't propagate remove events; usually during a collection.set
+    Pool.preserve = function(fn) {
+        skipRemove = true;
+        if (fn) fn();
+        skipRemove = false;
+    };
 
     _.extend(Pool.prototype, {
 

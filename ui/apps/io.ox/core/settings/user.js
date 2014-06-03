@@ -83,12 +83,6 @@ define('io.ox/core/settings/user',
             var usermodel;
             var self = this;
 
-            if (_.device('smartphone')) {
-                // workaround: will be fixed with upcoming bootstrap 4
-                dialog.getPopup().width('100%');
-                $node.css('padding', 10).addClass('max-height-350');
-            }
-
             this.editCurrentUser($node).then(
                 function success(model) {
                     usermodel = model;

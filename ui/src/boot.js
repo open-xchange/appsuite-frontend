@@ -131,6 +131,10 @@ $(window).load(function () {
         };
     }
 
+    if (_.device('firefox && windows')) {
+        $('html').addClass('fix-spin');
+    }
+
     $(window).on('orientationchange', function () {
         // dismiss dropdown on rotation change due to positioning issues
         if (_.device('tablet')) $('body').trigger('click');

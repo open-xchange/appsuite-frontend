@@ -31,14 +31,16 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             ignore: 'limit max'
         }, options);
 
-        this.pool = new Pool(this.module);
+        this.pool = Pool.create(this.module);
         this.ignore = toHash(String(this.ignore).split(' '));
         this.collection = null;
         this.loading = false;
 
         function apply(collection, type, data) {
-            var method = methods[type];
-            collection[method](data);
+            Pool.preserve(function () {
+                var method = methods[type];
+                collection[method](data);
+            });
             if (type === 'paginate' && data.length === 0) collection.trigger('complete');
             collection.trigger(type);
         }
@@ -76,6 +78,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 return collection;
             }
 
+            collection.expired = false;
             _.defer(process.bind(this), params, 'load');
             return collection;
         };
@@ -88,9 +91,9 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             var offset = collection.length;
             params = this.getQueryParams(_.extend({ offset: offset }, params));
             params.limit = offset + ',' + (offset + this.LIMIT);
-            collection.expired = false;
             this.loading = true;
 
+            collection.expired = false;
             _.defer(process.bind(this), params, 'paginate');
             return collection;
         };
@@ -102,9 +105,9 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
             params = this.getQueryParams(_.extend({ offset: 0 }, params));
             params.limit = '0,' + Math.max(collection.length, this.LIMIT);
-            collection.expired = false;
             this.loading = true;
 
+            collection.expired = false;
             _.defer(process.bind(this), params, 'reload');
             return collection;
         };

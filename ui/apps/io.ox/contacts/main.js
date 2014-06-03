@@ -256,7 +256,8 @@ define('io.ox/contacts/main',
                 if (data.mark_as_distributionlist === true) {
                     name = data.display_name || '';
                     fields.name.text(_.noI18n(name));
-                    fields.private_flag.toggle(!!data.private_flag);
+                    fields.private_flag.get(0).style.display =
+                        data.private_flag ? '' : 'none';
                     fields.description.text(gt('Distribution list'));
                 } else {
                     fullname = $.trim(util.getFullName(data));
@@ -269,7 +270,8 @@ define('io.ox/contacts/main',
                         fields.name.text(_.noI18n(name));
                     }
                     description = $.trim(util.getJob(data));
-                    fields.private_flag.toggle(!!data.private_flag);
+                    fields.private_flag.get(0).style.display =
+                        data.private_flag ? '' : 'none';
                     fields.description.text(_.noI18n(description));
                     if (name === '' && description === '') {
                         // nothing is written down, add some text, so user isn’t confused

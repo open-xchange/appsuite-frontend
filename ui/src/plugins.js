@@ -102,7 +102,7 @@
                 var def = $.Deferred();
                 initialization.then(
                     function success() {
-                        var tx = db.transaction(['filecache'], 'readonly');
+                        var tx = db.transaction('filecache', 'readonly');
                         var request = tx.objectStore('filecache').get(name);
                         request.onsuccess = function (e) {
                             if (!e.target.result) {
@@ -125,8 +125,19 @@
 
             fileCache.cache = function (name, contents) {
                 initialization.done(function () {
-                    var tx = db.transaction(['filecache'], 'readwrite');
-                    tx.objectStore('filecache').put({name: name, contents: contents, version: ox.version});
+                    var tx = db.transaction('filecache', 'readwrite');
+                    tx.objectStore('filecache').put({ name: name, contents: contents, version: ox.version });
+                });
+            };
+
+            ox.clearFileCache = function () {
+                initialization.done(function () {
+                    try {
+                        var tx = db.transaction('filecache', 'readwrite');
+                        tx.objectStore('filecache').clear();
+                    } catch (e) {
+                        console.error('clearFileCache', e.message, e);
+                    }
                 });
             };
 
@@ -235,7 +246,6 @@
                 // clear all the caches
                 var cacheList = JSON.parse(storage.getItem('file-toc'));
                 _(cacheList).each(function (key) {
-                    console.log('removing item: ', key);
                     storage.removeItem(key);
                 });
             }

@@ -92,9 +92,9 @@ define('io.ox/search/model',
         });
 
         //update
+        this.set('pooldisabled', disabled, {silent: true});
         this.set('pool', pool);
         this.set('poollist', list);
-        this.set('pooldisabled', disabled);
     };
 
     factory = new ModelFactory({
@@ -122,7 +122,6 @@ define('io.ox/search/model',
             getModule: function () {
                 return this.getApp().split('/')[1];
             },
-            //ALT
             add: function (facet, value, option) {
                 var pool = this.get('pool'),
                     list = this.get('poollist');
@@ -305,11 +304,10 @@ define('io.ox/search/model',
                 return def
                         .then(function (data) {
                             data = data || {};
-                            if (!self.get('pool').folder)
+                            if (!self.get('pool').folder && !self.get('pooldisabled').folder)
                                 self.add('folder', 'custom', data);
                         });
             },
-            //
             getFacets: function () {
                 var self = this;
                 return this.ensure().then(function () {
@@ -344,7 +342,8 @@ define('io.ox/search/model',
             getOptions: function () {
                 return  _.copy(options);
             },
-            reset: function () {
+            reset: function (options) {
+                var opt = options || {};
                 items.empty();
                 this.set({
                     query: '',
@@ -358,7 +357,8 @@ define('io.ox/search/model',
                 {
                     silent: true
                 });
-                this.trigger('reset');
+                if (!opt.silent)
+                    this.trigger('reset');
             }
         }
     });

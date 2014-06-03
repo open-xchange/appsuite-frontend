@@ -170,7 +170,6 @@ div.hopscotch-bubble {
         -webkit-animation: spin 1.5s infinite linear;
         animation: spin 1.5s infinite linear;
     }
-
 }
 
 #io-ox-core {
@@ -652,6 +651,20 @@ div.hopscotch-bubble {
             a {
                 max-width: 10em;
                 .ellipsis();
+            }
+
+            a.closable {
+                display: inline-block;
+                width: 10em;
+            }
+
+            a.closelink {
+                display: inline-block;
+                padding: 3px 0px;
+                i {
+                    text-align: center;
+                    color: rgba(0, 0, 0, 0.4);
+                }
             }
         }
 
@@ -1753,6 +1766,9 @@ a.button {
         cursor: ew-resize;
         cursor: col-resize;
         right: -3px;
+        &.vertical {
+            display: none;
+        }
     }
 }
 
@@ -2966,7 +2982,7 @@ ul.io-ox-inline-links + header {
 
             font-weight: 300;
             display: inline-block;
-            margin: 0 14px 0 0;
+            margin: 0 7px 0 0;
 
             i {
                 color: @foldertree-passive-label-color;
@@ -3080,7 +3096,15 @@ ul.io-ox-inline-links + header {
         }
     }
 
-    .folder-counter-badge, .folder-options-badge {
+    .folder-counter-badge {
+        color: #08c;
+        padding: 0 7px;
+        margin: 2px 0;
+        display: inline-block;
+        line-height: 24px;
+    }
+
+    .folder-options-badge {
 
         padding: 0 0.75em 0 0.75em;
         margin-top: 2px;
@@ -3092,19 +3116,11 @@ ul.io-ox-inline-links + header {
         &:focus i, &:hover i {
             text-decoration: none;
         }
-
     }
 
     .folder-options-badge {
         color: #888;
         line-height: 26px;
-    }
-
-    .folder-counter-badge {
-        color: inherit;
-        background-color: transparent;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        line-height: 24px;
     }
 
     // more space for fat fingers
@@ -3277,7 +3293,6 @@ ul.io-ox-inline-links + header {
 
                         background-color: @foldertree-selected-focus-background;
 
-                        .folder-counter-badge,
                         .folder-options-badge {
                             background-color: @foldertree-badge-focus-background;
                         }
@@ -4332,4 +4347,10 @@ wbr:after {
     -webkit-transition-property: none;
     -webkit-transition-duration: none;
     left:90%;
+}
+
+/* special fix for broken spin animation for Firefox on windows */
+/* see http://stackoverflow.com/questions/19661001/firefox-bug-font-is-sloppy-when-transformed#19684395 */
+.fix-spin .fa-spin {
+    filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'saturate\' values=\'1\'/></filter></svg>#grayscale");
 }

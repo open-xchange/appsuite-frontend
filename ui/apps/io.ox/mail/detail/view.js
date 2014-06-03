@@ -201,7 +201,7 @@ define('io.ox/mail/detail/view',
         }
     });
 
-    var pool = new Pool('mail');
+    var pool = Pool.create('mail');
 
     var View = Backbone.View.extend({
 

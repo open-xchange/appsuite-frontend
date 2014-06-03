@@ -213,7 +213,7 @@ define('io.ox/core/settings/pane',
         if (settings.isConfigurable('autoStart')) {
             var options = {};
             _(appAPI.getFavorites()).each(function (app) {
-                options[app.path] = gt.pgettext('app', app.title);
+                options[app.path] = /*#, dynamic*/gt.pgettext('app', app.title);
             });
 
             options.none = gt('None');

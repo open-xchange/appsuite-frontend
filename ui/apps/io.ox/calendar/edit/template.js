@@ -64,7 +64,7 @@ define('io.ox/calendar/edit/template',
         index: 100,
         id: 'title',
         draw: function (baton) {
-            this.append($('<h1>').addClass('clear-title title').text(gt(baton.mode === 'edit' ? 'Edit appointment' : 'Create appointment')));
+            this.append($('<h1>').addClass('clear-title title').text(baton.mode === 'edit' ? gt('Edit appointment') : gt('Create appointment')));
         }
     });
 

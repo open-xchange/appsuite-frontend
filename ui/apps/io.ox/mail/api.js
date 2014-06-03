@@ -249,7 +249,7 @@ define('io.ox/mail/api',
         };
 
     // model pool
-    var pool = new Pool('mail');
+    var pool = Pool.create('mail');
 
     // generate basic API
     var api = apiFactory({

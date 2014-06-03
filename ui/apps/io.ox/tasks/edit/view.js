@@ -118,7 +118,6 @@ define('io.ox/tasks/edit/view',
             function fnToggleSave(value) {
                 var node = self.$el.find('.btn[data-action="save"]');
                 if (_.device('smartphone')) node = self.$el.parent().parent().find('.btn[data-action="save"]');
-                self.model.set('title', value);
                 node.prop('disabled', value === '');
             }
             //delegate some events

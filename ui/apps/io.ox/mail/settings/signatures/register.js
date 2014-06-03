@@ -52,7 +52,7 @@ define('io.ox/mail/settings/signatures/register',
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="signature-text">').text(gt('Signature text')),
-                    baton.$.signature = $('<textarea class="form-control" rows="10" id="signature-text">')
+                    baton.$.signature = $('<textarea class="form-control" rows="10" id="signature-text">').attr({'tabindex': 1})
                 )
             );
         }
@@ -66,6 +66,7 @@ define('io.ox/mail/settings/signatures/register',
                 $('<div class="form-group">').append(
                     $('<label for="signature-position">').text(gt('Signature position')),
                     baton.$.insertion = $('<select id="signature-position" class="form-control">')
+                        .attr({'tabindex': 1})
                         .append(
                             $('<option value="above">').text(gt('Above quoted text')),
                             $('<option value="below">').text(gt('Below quoted text'))
@@ -256,7 +257,7 @@ define('io.ox/mail/settings/signatures/register',
     ext.point('io.ox/mail/settings/detail').extend({
         id: 'signatures',
         index: 300,
-        draw: function () {
+        draw: function (baton) {
             var $node, $list, signatures;
             this.append($node = $('<fieldset>'));
             function fnDrawAll() {
@@ -318,11 +319,11 @@ define('io.ox/mail/settings/signatures/register',
 
             function radioChange() {
                 var type = radioCustom.prop('checked') ? 'custom' : 'none';
-                settings.set('mobileSignatureType', type).save();
+                baton.model.set('mobileSignatureType', type);
             }
 
             function textChange() {
-                settings.set('mobileSignature', signatureText.val()).save();
+                baton.model.set('mobileSignature', signatureText.val());
             }
 
             function addSignatureList($node) {

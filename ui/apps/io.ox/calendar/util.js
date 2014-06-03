@@ -32,6 +32,11 @@ define('io.ox/calendar/util',
         shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
         confirmClass = 'unconfirmed accepted declined tentative'.split(' '),
+        confirmTitles = [/*appointment confirmation status*/gt('unconfirmed'),
+            /*appointment confirmation status*/gt('accepted'),
+            /*appointment confirmation status*/gt('declined'),
+            /*appointment confirmation status*/gt('tentative')
+        ],
         n_confirm = ['', '<i class="fa fa-check">', '<i class="fa fa-times">', '<i class="fa fa-question-circle">'];
 
     var that = {
@@ -575,7 +580,8 @@ define('io.ox/calendar/util',
                 ret[i] = {
                     icon: n_confirm[i] || '<i class="fa fa-exclamation-circle">',
                     count: 0,
-                    css: cls
+                    css: cls,
+                    title: confirmTitles[i] || ''
                 };
             });
             _.each(conf, function (c) {

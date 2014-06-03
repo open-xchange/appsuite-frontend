@@ -410,6 +410,7 @@ define('io.ox/files/actions',
                 }, false);
         },
         multiple: function (list) {
+
             var responseSuccess = gt.ngettext(
                     'This file has been locked',
                     'These files have been locked',
@@ -439,6 +440,7 @@ define('io.ox/files/actions',
                 }, false);
         },
         multiple: function (list) {
+
             var responseSuccess = gt.ngettext(
                     'This file has been unlocked',
                     'These files have been unlocked',

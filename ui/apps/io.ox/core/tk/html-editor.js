@@ -432,6 +432,8 @@ define.async('io.ox/core/tk/html-editor',
 
             script_url: ox.base + '/apps/3rd.party/tinymce/tinymce.min.js',
 
+            extended_valid_elements: 'blockquote[type]',
+
             // CSS for Editor content (See /apps/io.ox/core/tk/html-editor.less)
             content_css: ox.base + '/apps/themes/' + require('settings!io.ox/core').get('theme') + '/io.ox/core/tk/html-editor.css',
 

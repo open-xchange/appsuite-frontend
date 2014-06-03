@@ -41,6 +41,11 @@ define.async('io.ox/mail/accounts/view-form',
             { label: gt.noI18n('360'), value: '360'}
         ],
 
+        portDefaults = {
+            mail_port: '143',
+            transport_port: '587'
+        },
+
         //conditional defaults
         defaults = {
             pop3: {
@@ -66,6 +71,17 @@ define.async('io.ox/mail/accounts/view-form',
             data = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, data);
             data.name = data.personal = data.primary_address;
             return accountAPI.validate(data);
+        },
+
+        returnPortMail = function () {
+            var secure = model.get('mail_secure'),
+                protocol = model.get('mail_protocol') || 'imap';
+
+            if (protocol === 'imap') {
+                return secure ? '993' : '143';
+            } else {
+                return secure ? '995' : '110';
+            }
         },
 
         defaultDisplayName = '',
@@ -110,6 +126,13 @@ define.async('io.ox/mail/accounts/view-form',
 
                 if (self.model.get('id')) {
                     dropdown.prop('disabled', true);
+                }
+
+                //setting port defefaults
+                if (!self.model.get('id')) {
+                    _.each(portDefaults, function (value, key) {
+                        model.set(key, value);
+                    });
                 }
 
                 function syncLogin(model, value) {
@@ -171,7 +194,26 @@ define.async('io.ox/mail/accounts/view-form',
             },
             events: {
                 'save': 'onSave',
-                'click .folderselect': 'onFolderSelect'
+                'click .folderselect': 'onFolderSelect',
+                'change [name="mail_protocol"]': 'onMailProtocolChange',
+                'change [name="mail_secure"]': 'onMailSecureChange',
+                'change [name="transport_secure"]': 'onTransportSecureChange'
+            },
+
+            onMailProtocolChange: function () {
+                if (this.model.id) return;
+                model.set('mail_port', returnPortMail());
+            },
+
+            onMailSecureChange: function () {
+                if (this.model.id) return;
+                model.set('mail_port', returnPortMail());
+            },
+
+            onTransportSecureChange: function () {
+                if (this.model.id) return;
+                var value = this.model.get('transport_secure') ? '465' : '587';
+                this.model.set('transport_port', value);
             },
 
             onSave: function () {

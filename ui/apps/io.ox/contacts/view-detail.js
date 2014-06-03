@@ -688,49 +688,43 @@ define('io.ox/contacts/view-detail',
         }
     });
 
+    function showQRCode(node) {
+        require(['3rd.party/view-qrcode'], function (qr) {
+            node.find('a').text(gt('Hide QR code'));
+            var vc = qr.getVCard(node.data());
+            node.qrcode(vc);
+        });
+    }
+
+    function hideQRCode(node) {
+        node.find('canvas').remove();
+        node.find('a').text(gt('Show QR code'));
+    }
+
+    function toggleQRCode(e) {
+        e.preventDefault();
+        var node = $(e.delegateTarget);
+        if (node.find('canvas').length) hideQRCode(node); else showQRCode(node);
+    }
+
     ext.point('io.ox/contacts/detail/content').extend({
         index: 10000,
         id: 'qr',
         draw: function (baton) {
-            var data = baton.data;
 
             // disabled?
             if (!settings.get('features/qrcode', true)) return;
             // not supported
-            if (!Modernizr.canvas || data.mark_as_distributionlist) return;
+            if (!Modernizr.canvas || baton.data.mark_as_distributionlist) return;
 
-            var node = $('<fieldset class="block">'),
-                show = function (e) {
-                    e.preventDefault();
-                    node.empty().busy();
-                    require(['3rd.party/view-qrcode'], function (qr) {
-                        var vc = qr.getVCard(data);
-                        node.append(
-                            $('<span class="qrcode">').append(
-                                $('<i class="fa fa-qrcode">'), $.txt(' '),
-                                $('<a href="#">').text(gt('Hide QR code')).on('click', hide)
-                            )
-                        );
-                        node.idle().qrcode(vc);
-                        vc = qr = null;
-                    });
-                },
-                hide = function (e) {
-                    e.preventDefault();
-                    node.empty();
-                    node.append(
-                        $('<i class="fa fa-qrcode">'), $.txt(' '),
-                        showLink
-                    );
-                },
-                showLink = $('<a>', { href: '#' }).text(gt('Show QR code')).on('click', show);
-
-            this.append(node);
-
-            node.append(
-                $('<legend class="sr-only">').text(gt('Show QR code')),
-                $('<i class="fa fa-qrcode">'), $.txt(' '),
-                showLink
+            this.append(
+                $('<fieldset class="block">').append(
+                    $('<legend class="sr-only">').text(gt('Show QR code')),
+                    $('<i class="fa fa-qrcode">'), $.txt(' '),
+                    $('<a href="#">').text(gt('Show QR code'))
+                )
+                .data(baton.data)
+                .on('click', 'a', toggleQRCode)
             );
         }
     });

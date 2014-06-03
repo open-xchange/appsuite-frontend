@@ -127,7 +127,7 @@ define('io.ox/contacts/toolbar',
     // local dummy action
 
     new actions.Action('io.ox/contacts/dropdown/new', {
-        requires: function () { return true; },
+        requires: 'create',
         action: $.noop
     });
 

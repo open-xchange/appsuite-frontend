@@ -247,7 +247,7 @@ define('io.ox/backbone/mini-views/participants',
                                     $('<a>')
                                         .attr({
                                             href: '#',
-                                            title: gt(res.css)
+                                            title: res.title
                                         })
                                         .addClass('countgroup')
                                         .text(res.count)

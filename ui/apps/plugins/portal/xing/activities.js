@@ -114,25 +114,25 @@ define('plugins/portal/xing/activities',
         },
         handle: function (activity) {
             var newContacts = [],
-                actors = activity.actors,
-                creator = activity.objects[0];
+                actor = activity.actors[0],
+                objs = activity.objects;
 
-            if (actors.length === 1) {
+            if (objs.length === 1) {
                 return $('<div class="xing activityObj">').append(
-                    $('<div class="actionDesc">').text(gt('%1$s has a new contact:', makeName(creator))),
+                    $('<div class="actionDesc">').text(gt('%1$s has a new contact:', makeName(actor))),
                     $('<div class="actionContent">').append(
-                        linkXingContact(actors[0])
+                        linkXingContact(objs[0])
                     )
                 );
             }
 
-            _(actors).each(function (actor) {
-                newContacts.push(linkXingContact(actor));
+            _(objs).each(function (contact) {
+                newContacts.push(linkXingContact(contact));
                 newContacts.push($.txt(', '));
             });
             newContacts.pop();
             return $('<div class="xing activityObj">').append(
-                $('<div class="actionDesc">').text(gt('%1$s has new contacts:', makeName(creator))),
+                $('<div class="actionDesc">').text(gt('%1$s has new contacts:', makeName(actor))),
                 $('<div class="actionContent">').append(newContacts)
             );
         }

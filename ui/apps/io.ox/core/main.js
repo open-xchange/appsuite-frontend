@@ -300,7 +300,7 @@ define('io.ox/core/main',
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle" tabindex="1" role="menuitem">').text(/*#, dynamic*/gt.pgettext('app', label));
             } else if (label[0].tagName === 'I') {
                 return arialabel ? $('<a href="#" class="apptitle" tabindex="1" role="button" aria-label="' + _.escape(arialabel) + '">').append(label) : $('<a href="#" class="apptitle" tabindex="1" role="button">').append(label);
             } else {
@@ -568,7 +568,7 @@ define('io.ox/core/main',
             }
         }
 
-        function addUserContent(model, launcher, first) {
+        function quit(model) {
             var ariaBasicLabel =
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
@@ -582,11 +582,14 @@ define('io.ox/core/main',
                     .on('focus', function () {
                         quitApp.attr('aria-label', ariaBasicLabel);
                     });
+            return quitApp;
+        }
 
+        function addUserContent(model, launcher, first) {
             if (model.get('closable')) {
                 launcher.addClass('closable');
                 if (first) {
-                    launcher.find('a').after(quitApp);
+                    launcher.find('a').after(quit(model));
                 }
             }
 
@@ -606,6 +609,7 @@ define('io.ox/core/main',
             // create topbar launcher
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
                 title = model.get('title'),
+                closable = model.get('closable') && !_.device('smartphone'),
                 name;
 
             add(node, launchers, model);
@@ -626,8 +630,17 @@ define('io.ox/core/main',
                     tabindex: 1,
                     'role': 'menuitem'
                 })
-                .text(gt.pgettext('app', title))
+                .addClass(closable ? 'closable' : '')
+                .text(/*#, dynamic*/gt.pgettext('app', title))
             );
+
+            if (closable) {
+                //add close button
+                node.append(
+                    quit(model)
+                );
+            }
+
             launcherDropdown.append(
                 node.on('click', function (e) {
                     e.preventDefault();

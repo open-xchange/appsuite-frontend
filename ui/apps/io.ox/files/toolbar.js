@@ -261,6 +261,10 @@ define('io.ox/files/toolbar',
             app.on('folder:change', function () {
                 app.updateToolbar(app.selection.get());
             });
+            // file change
+            api.on('update', function () {
+                app.updateToolbar(app.selection.get());
+            });
         }
     });
 });

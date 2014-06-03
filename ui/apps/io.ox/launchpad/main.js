@@ -151,7 +151,7 @@ define('io.ox/launchpad/main',
         },
 
         drawApp = function (data) {
-            data.title = gt.pgettext('app', data.title);
+            data.title = /*#, dynamic*/gt.pgettext('app', data.title);
             return $(appTmpl(data));
         },
 

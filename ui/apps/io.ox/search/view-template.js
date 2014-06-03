@@ -97,27 +97,29 @@ define('io.ox/search/view-template',
                                 model.add(value.facet, value.id, (option || {}).id);
                             }
                         })
-                        .on('focus focus:custom click', function (e, isRetry) {
-                            //simulate tab keyup event
+                        .on('focus focus:custom click', function (e, opt) {
                             //hint: 'click' supports click on already focused
+
+                            //keep dropdown closed on focus event
+                            opt = _.extend({}, opt || {}, { keepClosed: e.type.indexOf('focus') === 0});
+
+                            //simulate tab keyup event
                             ref.trigger({
                                     type: 'keyup',
                                     which: 9
-                                }, isRetry);
+                                }, opt);
 
                         })
-                        .on('keyup', function (e, isRetry) {
-                            //adjust original event instead of throwing a new one cause
-                            //handler (fnKeyUp) is debounced and we have set the isRetry flag
+                        .on('keyup', function (e, options) {
+                            var opt = _.extend({}, (e.data || {}), options || {}),
+                                //keys pressed
+                                down = e.which === 40 && !ref.isOpen(),
+                                tab = e.which === 9;
 
-                            var focusedDown = !ref.isOpen() && e.which === 40,
-                                //tab used to focus
-                                tabToFocus = e.which === 9;
-
-                            //isRetry argument is used for custom events thrown via trigger
-                            //use e.data for orign event
-                            if (_.isUndefined(isRetry) && (focusedDown || tabToFocus)) {
-                                e.data = {isRetry: true};
+                            // adjust original event instead of throwing a new one
+                            // cause handler (fnKeyUp) is debounced and we might set some options
+                            if (_.isUndefined(opt.isRetry) && (down || tab)) {
+                                e.data = _.extend({}, e.data || {}, opt, {isRetry: true});
                             }
                         }),
                         $('<span class="input-group-btn">').append(
@@ -168,7 +170,7 @@ define('io.ox/search/view-template',
             var id = baton.model.getApp(),
                 opt = baton.model.getOptions(),
                 row, cell,
-                apps = settings.get('search/modules', ['mail', 'contacts', 'calendar', 'tasks', 'files']);
+                apps = settings.get('search/modules', []);
 
             //create container
             row = $('<div class="row applications">').append(
@@ -193,7 +195,7 @@ define('io.ox/search/view-template',
                                     $('<button type="button" class="btn btn-link">')
                                         .attr('data-app', id)
                                         .addClass('pull-left')
-                                        .text(gt.pgettext('app', title))
+                                        .text(/*#, dynamic*/gt.pgettext('app', title))
                                 )
                             )
                     );
@@ -675,19 +677,26 @@ define('io.ox/search/view-template',
                 draw: function (baton) {
 
                     var id = baton.model.getApp(),
+                        opt = baton.model.getOptions(),
                         row, cell,
                         items = [],
                         titles = {},
-                        apps = settings.get('search/apps', []);
+                        apps = settings.get('search/modules', []);
 
                     //create containers
                     row = $('<div class="row ">').append(
                         cell = $('<div class="btn-group col-xs-12">')
                     );
 
+                    //apply mapping (infostore-files-drive chameleon)
+                    apps = _.map(apps, function (module) {
+                        var id = 'io.ox/' + module;
+                        return opt.mapping[id] || id;
+                    });
+
                     //create dropdown menu entries
                     _(apps).each(function (id) {
-                        var title = titles[id] = ox.manifests.apps[id + '/main'].title;
+                        var title = titles[id] = (ox.manifests.apps[id + '/main'] || {}).title;
                         items.push(
                             $('<li role="presentation">')
                             .append(
