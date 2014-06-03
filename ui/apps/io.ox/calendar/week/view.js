@@ -1024,13 +1024,14 @@ define('io.ox/calendar/week/view',
                         width = Math.min((self.appWidth / idx) * (1 + (self.overlap * (idx - 1))), self.appWidth),
                         left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0,
                         border = (left > 0 || (left === 0 && width < self.appWidth)),
-                        height = Math.max(pos.height, self.minCellHeight - 1);
+                        height = Math.max(pos.height, self.minCellHeight - 1),
+                        lineHeight = self.minCellHeight;
 
                     app.css({
                         top: pos.top,
                         left: left + '%',
                         height: height + 'px',
-                        lineHeight: Math.min(height, self.cellHeight) + 'px',
+                        lineHeight: lineHeight + 'px',
                         width: width + '%',
                         minHeight: (self.minCellHeight - 1) + 'px',
                         maxWidth: self.appWidth + '%'

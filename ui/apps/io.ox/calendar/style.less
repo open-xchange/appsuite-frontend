@@ -152,9 +152,9 @@
 
         &.reserved {
 
-            @r: lighten(@appointment-reserved, 45%);
+            @r: lighten(@appointment-reserved, 50%);
             border-color: @appointment-reserved;
-            color: darken(@appointment-reserved, @dark);
+            color: darken(@appointment-reserved, 0%);
             background-color: @r;
 
             &.hover {
@@ -202,9 +202,9 @@
 
         &.absent {
 
-            @a: lighten(@appointment-absent, @light);
+            @a: lighten(@appointment-absent, 40%);
             border-color: @appointment-absent;
-            color: darken(@appointment-absent, @dark);
+            color: darken(@appointment-absent, 10%);
             background-color: @a;
 
             &.hover {
@@ -253,8 +253,8 @@
         &.private {
 
             border-color: @appointment-private;
-            color: darken(@appointment-private, @dark);
-            background-color: lighten(@appointment-private, @light);
+            color: @white;
+            background-color: lighten(@appointment-private, 15%);
 
             &.hover {
                 background-color: darken(@appointment-private, @appointment-hover-pct);
