@@ -718,7 +718,7 @@ define('io.ox/core/commons-folderview',
             top = 0,
             onChangeFolder, changeFolder, changeFolderOff, changeFolderOn,
 
-            fnHide = $.noop, fnShow = $.noop, fnResize = $.noop,
+            handleResize = $.noop, fnHide = $.noop, fnShow = $.noop, fnResize = $.noop,
             fnShowSml = $.noop, fnHideSml = $.noop, initResize = $.noop,
             applyInitialWidth, restoreWidth, makeResizable,
             toggle = $.noop, toggleTree, loadTree, initTree,
@@ -848,11 +848,32 @@ define('io.ox/core/commons-folderview',
 
                 getWidths();
 
-                $(window).off('resize.folderview').on('resize.folderview', function () {
-                    if (!visible) { fnHide(); } else { fnShow(true);  }
-                });
-                $(window).off('orientationchange.folderview').on('orientationchange.folderview', fnHide);
+                $(window)
+                    .off('resize.folderview', handleResize)
+                    .on('resize.folderview', handleResize);
+
+                if (_.device('!large')) {
+                    $(window)
+                        .off('orientationchange.folderview', fnHide)
+                        .on('orientationchange.folderview', fnHide);
+                }
             };
+
+            var hiddenByResize = false;
+
+            handleResize = _.throttle(function () {
+                var width = $(document).width();
+                // make sure view is properly shown/hidden
+                if (!visible) fnHide(); else fnShow(true);
+                // respond to current width
+                if (!hiddenByResize && visible && width <= 700) {
+                    fnHide();
+                    hiddenByResize = true;
+                } else if (hiddenByResize && width > 700) {
+                    fnShow(true);
+                    hiddenByResize = false;
+                }
+            }, 200);
 
             fnResize = function () {
                 var win = app.getWindow(),
@@ -861,28 +882,24 @@ define('io.ox/core/commons-folderview',
                 win.nodes.body.css('left', chromeless || tooSmall ? 0 : 50);
             };
 
-
-
             fnHide = function () {
-                app.settings.set('folderview/visible/' + _.display(), visible = false).save();
+                visible = false;
+                if (!hiddenByResize) app.settings.set('folderview/visible/' + _.display(), visible).save();
                 top = container.scrollTop();
                 var nodes = app.getWindow().nodes;
                 fnResize();
                 nodes.sidepanel.removeClass('visible').css('width', '');
                 app.trigger('folderview:close');
-                if (app.getGrid) {
-                    app.getGrid().focus();
-                }
+                if (app.getGrid) app.getGrid().focus();
             };
 
             fnShow = function (resized) {
-                app.settings.set('folderview/visible/' + _.display(), visible = true).save();
+                visible = true;
+                if (!hiddenByResize) app.settings.set('folderview/visible/' + _.display(), visible).save();
                 var nodes = app.getWindow().nodes;
                 nodes.sidepanel.addClass('visible');
                 restoreWidth();
-                if (!resized) {
-                    baton.$.container.focus();
-                }
+                if (!resized) baton.$.container.focus();
                 app.trigger('folderview:open');
                 return $.when();
             };
