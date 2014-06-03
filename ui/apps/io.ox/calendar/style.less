@@ -147,12 +147,12 @@
             .transition(opacity 0.2s);
         }
 
-        @light: 35%;
-        @dark: 15%;
+        @light: 25%;
+        @dark: 25%;
 
         &.reserved {
 
-            @r: lighten(@appointment-reserved, @light);
+            @r: lighten(@appointment-reserved, 45%);
             border-color: @appointment-reserved;
             color: darken(@appointment-reserved, @dark);
             background-color: @r;

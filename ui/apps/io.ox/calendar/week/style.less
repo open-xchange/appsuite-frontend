@@ -75,9 +75,6 @@
                     border: none;
                 }
 
-                .appointment-content {
-                }
-
             }
 
         }
@@ -203,7 +200,7 @@
 
         position: absolute;
         background-color: @appointment-reserved;
-        opacity: 0.85;
+        opacity: 1;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
 
@@ -241,6 +238,7 @@
             font-size: 12px;
             padding: 0 5px;
             border-left: .4em solid;
+            border-color: inherit;
             .ellipsis();
 
             * {

@@ -173,6 +173,8 @@
                     .appointment {
 
                         background-color: @monthview-appointment-out;
+                        border-color: @monthview-appointment-out;
+                        color: darken(@monthview-appointment-out, 25%);
 
                         html.high-contrast & {
 
@@ -201,13 +203,12 @@
     /* Appointment */
     .appointment {
 
-        padding: 0px 2px;
         line-height: 14px;
         margin-bottom: 1px;
         white-space: nowrap;
         cursor: pointer;
         background-color: @appointment-reserved;
-        opacity: 1;
+        opacity: 0.85;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
 
@@ -216,6 +217,7 @@
             width: 100%;
             font-size: 12px;
             padding: 2px 0;
+            border-left: .4em solid;
             .ellipsis();
         }
 
