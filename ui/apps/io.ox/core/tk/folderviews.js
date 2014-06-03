@@ -848,7 +848,7 @@ define('io.ox/core/tk/folderviews',
 
             // add options (only if 'app' is defined; should not appear in modal dialogs, for example)
             if (options.app && this.find('.folder-options').length === 0) {
-                label.after(
+                counter.after(
                     $('<span class="folder-options">').append(
                         $('<a href="#" class="folder-options-badge" tabindex="1">')
                         .attr('title', gt('Folder-specific actions'))
@@ -875,7 +875,6 @@ define('io.ox/core/tk/folderviews',
                 }
                 if (data.unread && !options.checkbox) {
                     this.addClass('show-counter');
-
                     counter.find('span').text(gt.noI18n(data.unread || ''));
                 } else {
                     this.removeClass('show-counter');

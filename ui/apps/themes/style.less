@@ -2987,7 +2987,7 @@ ul.io-ox-inline-links + header {
 
             font-weight: 300;
             display: inline-block;
-            margin: 0 14px 0 0;
+            margin: 0 7px 0 0;
 
             i {
                 color: @foldertree-passive-label-color;
@@ -3101,7 +3101,15 @@ ul.io-ox-inline-links + header {
         }
     }
 
-    .folder-counter-badge, .folder-options-badge {
+    .folder-counter-badge {
+        color: #08c;
+        padding: 0 7px;
+        margin: 2px 0;
+        display: inline-block;
+        line-height: 24px;
+    }
+
+    .folder-options-badge {
 
         padding: 0 0.75em 0 0.75em;
         margin-top: 2px;
@@ -3113,19 +3121,11 @@ ul.io-ox-inline-links + header {
         &:focus i, &:hover i {
             text-decoration: none;
         }
-
     }
 
     .folder-options-badge {
         color: #888;
         line-height: 26px;
-    }
-
-    .folder-counter-badge {
-        color: inherit;
-        background-color: transparent;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        line-height: 24px;
     }
 
     // more space for fat fingers
@@ -3298,7 +3298,6 @@ ul.io-ox-inline-links + header {
 
                         background-color: @foldertree-selected-focus-background;
 
-                        .folder-counter-badge,
                         .folder-options-badge {
                             background-color: @foldertree-badge-focus-background;
                         }
