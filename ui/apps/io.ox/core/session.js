@@ -13,8 +13,9 @@
 
 define('io.ox/core/session',
     ['io.ox/core/http',
-     'io.ox/core/manifests'
-    ], function (http, manifests) {
+     'io.ox/core/manifests',
+     'io.ox/core/uuids'
+    ], function (http, manifests, uuids) {
 
     'use strict';
 
@@ -211,6 +212,22 @@ define('io.ox/core/session',
             // makes store() always successful (should never block)
             .always(def.resolve);
             return def;
+        },
+
+        redeemToken: function (token) {
+            return http.POST({
+                processResponse: false,
+                appendSession: false,
+                appendColumns: false,
+                module: 'login',
+                url: 'api/login?action=redeemToken',
+                params: {
+                    authId: uuids.randomUUID(),
+                    token: token,
+                    client: 'mobile-notifier',
+                    secret: 'notifier-123'
+                }
+            });
         },
 
         logout: function () {

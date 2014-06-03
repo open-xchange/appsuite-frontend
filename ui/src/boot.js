@@ -618,10 +618,92 @@ $(window).load(function () {
             };
             ox.on('relogin:required', ox.relogin);
 
-            // got session via hash?
             var hash = _.url.hash();
-            if (hash.session) {
+            // token login?
+            if (hash.tokenSession) {
+                var whoami = $.Deferred();
+                debug('boot.js: autoLogin > hash.tokenSession');
 
+                session.redeemToken(hash.tokenSession).fail(function (e) {
+                  debug('boot.js redeemToken > failed', e);
+                }).done(function (resp) {
+                    debug('boot.js redeemToken > success');
+
+                    ox.session = resp.session;
+                    session.store();
+
+                     // set store cookie?
+                    $.when(
+                        session.rampup(),
+                        hash.store === 'true' ? session.store() : $.when()
+                    )
+                    .always(function () {
+
+                        // fetch user config
+                        ox.secretCookie = hash.secretCookie === 'true';
+                        fetchUserSpecificServerConfig().done(function () {
+                            var whoami = $.Deferred();
+                            if (hash.user && hash.language && hash.user_id) {
+                                whoami.resolve(hash);
+                            } else {
+                                require(['io.ox/core/http'], function (http) {
+                                    http.GET({
+                                        module: 'system',
+                                        params: {
+                                            action: 'whoami'
+                                        }
+                                    }).done(function (resp) {
+                                        resp.language = resp.locale;
+                                        whoami.resolve(resp);
+                                    }).fail(whoami.reject);
+                                });
+                            }
+
+                            whoami.done(function (resp) {
+                                serverUp();
+                                // store login data (cause we have all valid languages now)
+                                session.set({
+                                    locale: resp.language,
+                                    session: resp.session,
+                                    user: resp.user,
+                                    user_id: parseInt(resp.user_id || '0', 10),
+                                    context_id: resp.context_id
+                                });
+
+                                var redirect = '#';
+                                if (hash.ref) {
+                                    redirect += hash.ref;
+                                }
+
+                                // cleanup url
+                                _.url.hash({
+                                    language: null,
+                                    session: null,
+                                    user: null,
+                                    user_id: null,
+                                    context_id: null,
+                                    secretCookie: null,
+                                    store: null,
+                                    ref: null
+                                });
+                                _.url.redirect(redirect);
+
+                                // go ...
+                                loadCoreFiles().done(function () {
+                                    loadCore();
+                                });
+
+                            });
+                        });
+                    });
+
+                }).fail(function (e) {
+                    // TBD
+                    gotoSignin();
+                });
+
+            } else if (hash.session) {
+                // session via hash?
                 debug('boot.js: autoLogin > hash.session', hash.session);
 
                 // set session; session.store() might need it now (formlogin)
