@@ -208,15 +208,24 @@
             li.facet {
                 margin-right: 8px;
                 margin-bottom: 8px;
+                max-width: 470px;
                 a[type="button"] {
                     background-color: #E6E6E6;
                     border: transparent;
                     //inherited from btn-group
                     -webkit-box-shadow: none;
                     box-shadow: none;
+                    max-height: 28px;
+                    max-width: 470px;
                 }
                 html.high-contrast & a {
                     color: #333;
+                }
+                label>span {
+                    display: inline-block;
+                    max-width: 94%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
             }
         }
