@@ -69,7 +69,8 @@ define('io.ox/mail/main',
                 name: 'folderTree',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app
+                    app: app,
+                    extension: 'io.ox/mail/mobile/navbar'
                 })
             });
 
@@ -78,15 +79,18 @@ define('io.ox/mail/main',
                 container: c,
                 startPage: true,
                 navbar: new Bars.NavbarView({
-                    app: app
+                    app: app,
+                    extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'listView'
+                    page: 'listView',
+                    extension: 'io.ox/mail/mobile/toolbar'
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'listView/multiselect'
+                    page: 'listView/multiselect',
+                    extension: 'io.ox/mail/mobile/toolbar'
                 })
             });
 
@@ -94,11 +98,13 @@ define('io.ox/mail/main',
                 name: 'threadView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app
+                    app: app,
+                    extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'threadView'
+                    page: 'threadView',
+                    extension: 'io.ox/mail/mobile/toolbar'
                 })
             });
 
@@ -106,11 +112,13 @@ define('io.ox/mail/main',
                 name: 'detailView',
                 container: c,
                 navbar: new Bars.NavbarView({
-                    app: app
+                    app: app,
+                    extension: 'io.ox/mail/mobile/navbar'
                 }),
                 toolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'detailView'
+                    page: 'detailView',
+                    extension: 'io.ox/mail/mobile/toolbar'
                 })
             });
 

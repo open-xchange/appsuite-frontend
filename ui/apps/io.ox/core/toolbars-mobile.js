@@ -55,6 +55,7 @@ define('io.ox/core/toolbars-mobile',
             this.title = (opt.title) ? opt.title : '';
             this.left = (opt.left) ? opt.left : false;
             this.right = (opt.right) ? opt.right : false;
+            this.extension = opt.extension;
             this.hiddenElements = [];
         },
 
@@ -62,7 +63,7 @@ define('io.ox/core/toolbars-mobile',
 
             this.$el.empty();
 
-            ext.point('io.ox/mail/mobile/navbar').invoke('draw', this, {
+            ext.point(this.extension).invoke('draw', this, {
                 left: this.left,
                 right: this.right,
                 title: this.title
@@ -128,12 +129,11 @@ define('io.ox/core/toolbars-mobile',
             this.app = opt.app;
             this.page = opt.page;
             this.baton = opt.baton || ext.Baton({});
+            this.extension = opt.extension;
         },
         render: function () {
             this.$el.empty();
-            // TODO
-            // refactor and don't use static ext point for mail
-            ext.point('io.ox/mail/mobile/toolbar/' + this.page).invoke('draw', this.$el, this.baton);
+            ext.point(this.extension + '/' + this.page).invoke('draw', this.$el, this.baton);
             return this;
         },
         setBaton: function (baton) {
