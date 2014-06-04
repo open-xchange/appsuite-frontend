@@ -1,6 +1,13 @@
 {
-  "name": "open-xchange-spamexperts",
-  "version": "0.0.0",
+  "name": "open-xchange-appsuite-spamexperts",
+  "version": "0.0.1",
+  "author": {
+      "name": "Viktor Pracht",
+      "email": "viktor.pracht@open-xchange.com"
+  },
+  "summary": "Configuration UI for SpamExperts",
+  "description": "Configuration UI for SpamExperts",
+  "license": "CC-BY-NC-SA-3.0",
   "dependencies": {
   },
   "optionalDependencies": {
