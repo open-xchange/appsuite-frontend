@@ -220,7 +220,14 @@ define('io.ox/core/notifications',
                     if (self.opened()) {//focus badge when closing
                         _.defer(function () { self.badgeView.$el.focus(); });
                     } else {//focus notifications when opening
-                        _.defer(function () { $('#io-ox-notifications .item').first().focus(); });
+                        _.defer(function () {
+                            var firstItem = $('#io-ox-notifications .item').first();
+                            if (firstItem.length > 0) {
+                                firstItem.focus();
+                            } else {
+                                self.badgeView.$el.focus();
+                            }
+                        });
                     }
                 }
             }
