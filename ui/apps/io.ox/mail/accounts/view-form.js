@@ -142,7 +142,7 @@ define.async('io.ox/mail/accounts/view-form',
                 }
 
                 //just change port settings if this is a new account
-                if (!self.model.get('id')) {
+                if (self.model.get('id') === undefined) {
 
                     //setting port defefaults
                     _.each(portDefaults, function (value, key) {
