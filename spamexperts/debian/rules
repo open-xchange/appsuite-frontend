@@ -2,29 +2,13 @@
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
+export DEB_BUILDINFO_STRICT=1
 
-ifneq (,$(or $(filter noopt,$(DEB_BUILD_OPTIONS)),\
-             $(filter nostrip,$(DEB_BUILD_OPTIONS))))
-	FLAGS += debug=1
-endif
+include /usr/share/cdbs/1/class/ant.mk
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/rules/utils.mk
 
-BACKEND := debian/open-xchange-appsuite-spamexperts/opt/open-xchange/appsuite
-FRONTEND := debian/open-xchange-appsuite-spamexperts-static/var/www/appsuite
-
-override_dh_auto_install:
-	sh /opt/open-xchange-appsuite-dev/bin/build-appsuite app skipLess=1 \
-	    builddir=$(BACKEND) $(FLAGS) --trace
-## Uncomment for multiple packages
-#	for i in $$(find $(BACKEND) -type f                                \
-#	            ! -regex '.*\.\(js\|css\|less\|json\)' -printf '%P '); \
-#	do                                                                 \
-#	    mkdir -p "$(FRONTEND)/$$(dirname $$i)";                        \
-#	    cp "$(BACKEND)/$$i" "$(FRONTEND)/$$i";                         \
-#	done
-
-override_dh_auto_clean:
-	sh /opt/open-xchange-appsuite-dev/bin/build-appsuite clean skipLess=1 \
-	    builddir=$(BACKEND) $(FLAGS) --trace
-
-%:
-	dh $@
+JAVA_HOME = /usr/lib/jvm/default-java
+DEB_ANT_ARGS = -DdestDir=$(DEB_DESTDIR) -DpackageName=$(DEB_SOURCE_PACKAGE) -DkeepCache=true
+DEB_ANT_BUILDFILE = build/build.xml
+DEB_ANT_INSTALL_TARGET = build
