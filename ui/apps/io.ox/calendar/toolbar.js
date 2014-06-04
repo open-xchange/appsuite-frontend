@@ -116,6 +116,13 @@ define('io.ox/calendar/toolbar',
         li.toggle(layout === 'list');
     }
 
+    function updateInverseOption() {
+        // only show this option if preview pane is right (vertical/compact)
+        var li = this.$el.find('[data-name="inverseColors"]').parent(),
+            layout = this.model.get('layout');
+        li.toggle(layout !== 'list');
+    }
+
     function print(app, e) {
         e.preventDefault();
         var baton = ext.Baton({ app: app, window: app.getWindow() });
@@ -140,15 +147,18 @@ define('io.ox/calendar/toolbar',
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
             .option('checkboxes', true, gt('Checkboxes'))
+            .option('inverseColors', true, gt('Inverse colors'))
             .divider()
             .link('print', gt('Print'), print.bind(null, baton.app))
-            .listenTo(baton.app.props, 'change:layout', updateCheckboxOption);
+            .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
+            .listenTo(baton.app.props, 'change:layout', updateInverseOption);
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
             );
 
             updateCheckboxOption.call(dropdown);
+            updateInverseOption.call(dropdown);
         }
     });
 

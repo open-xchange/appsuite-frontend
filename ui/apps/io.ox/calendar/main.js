@@ -89,7 +89,8 @@ define('io.ox/calendar/main',
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': view,
-                'checkboxes': app.settings.get('showCheckboxes', true)
+                'checkboxes': app.settings.get('showCheckboxes', true),
+                'inverseColors': app.settings.get('inverseColors', false)
             });
         },
 
@@ -148,6 +149,17 @@ define('io.ox/calendar/main',
         },
 
         /*
+         * Respond to change:inverseColors
+         */
+        'change:inverseColors': function (app) {
+            if (_.device('small')) return;
+            app.props.on('change:inverseColors', function (model, value) {
+                app.getWindow().nodes.outer.toggleClass('inverse-colors', value);
+            });
+            app.getWindow().nodes.outer.toggleClass('inverse-colors', app.props.get('inverseColors'));
+        },
+
+        /*
          * Folerview toolbar
          */
         'folderview-toolbar': function (app) {
@@ -198,6 +210,9 @@ define('io.ox/calendar/main',
         app.refDate = new date.Local();
 
         win.addClass('io-ox-calendar-main');
+
+        // easy debugging
+        window.calendar = app;
 
         // "show all" extension for folder view
 
