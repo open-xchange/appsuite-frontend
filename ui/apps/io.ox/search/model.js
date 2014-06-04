@@ -243,6 +243,7 @@ define('io.ox/search/model',
                                                             {},
                                                             obj,
                                                             {
+                                                                options: facetdata.options,
                                                                 _compact: {
                                                                     facet: facet,
                                                                     value: data.option,

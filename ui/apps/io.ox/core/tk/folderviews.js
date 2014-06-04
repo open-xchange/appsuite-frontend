@@ -848,7 +848,7 @@ define('io.ox/core/tk/folderviews',
 
             // add options (only if 'app' is defined; should not appear in modal dialogs, for example)
             if (options.app && this.find('.folder-options').length === 0) {
-                counter.after(
+                (counter.length ? counter : label).after(
                     $('<span class="folder-options">').append(
                         $('<a href="#" class="folder-options-badge" tabindex="1">')
                         .attr('title', gt('Folder-specific actions'))

@@ -21,67 +21,68 @@ define('io.ox/search/api',
     'use strict';
 
     var api = apiFactory({
-        id: 'search',
-        module: 'find',
-        requests: {
-            autocomplete: {
-                module: 'find',
-                method: 'PUT',
-                params: {
-                    action: 'autocomplete',
-                    module: '',
-                    //max. number of values for each facet
-                    limit: 3
-                },
-                data: {
-                    prefix: '',
-                    options: {
-                        timezone: 'UTC'
+            id: 'search',
+            module: 'find',
+            requests: {
+                autocomplete: {
+                    module: 'find',
+                    method: 'PUT',
+                    params: {
+                        action: 'autocomplete',
+                        module: '',
+                        //max. number of values for each facet
+                        limit: 3
                     },
-                    facets: []
-                }
-            },
-            query: {
-                module: 'find',
-                method: 'PUT',
-                params: {
-                    action: 'query',
-                    module: ''
+                    data: {
+                        prefix: '',
+                        options: {
+                            timezone: 'UTC'
+                        },
+                        facets: []
+                    }
                 },
-                data: {
-                    facets: [],
-                    options: {
-                        timezone: 'UTC'
+                query: {
+                    module: 'find',
+                    method: 'PUT',
+                    params: {
+                        action: 'query',
+                        module: ''
                     },
-                    start: 0,
-                    size: 100
+                    data: {
+                        facets: [],
+                        options: {
+                            timezone: 'UTC'
+                        },
+                        start: 0,
+                        size: 100
+                    }
                 }
             }
-        }
-    });
+        }),
+        columns = {
+            mail: {
+                columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
+                extendColumns: 'io.ox/mail/api/list'
+            },
+            files: {
+                columns: '20,23,1,5,700,702,703,704,705,707,3',
+                extendColumns: 'io.ox/files/api/list'
+            },
+            tasks: {
+                columns: '1,20,101,200,202,203,220,300,301,309',
+                extendColumns: 'io.ox/tasks/api/list',
+            },
+            contacts: {
+                columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5',
+                extendColumns: 'io.ox/contacts/api/list'
+            },
+            calendar: {
+                columns: '1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
+                extendColumns: 'io.ox/calendar/api/list'
+            }
+        },
+        simpleCache = new cache.SimpleCache('search-find');
 
-    var columns = {
-        mail: {
-            columns: '102,600,601,602,603,604,605,607,608,610,611,614,652',
-            extendColumns: 'io.ox/mail/api/list'
-        },
-        files: {
-            columns: '20,23,1,5,700,702,703,704,705,707,3',
-            extendColumns: 'io.ox/files/api/list'
-        },
-        tasks: {
-            columns: '1,20,101,200,202,203,220,300,301,309',
-            extendColumns: 'io.ox/tasks/api/list',
-        },
-        contacts: {
-            columns: '20,1,101,500,501,502,505,520,524,555,556,557,569,592,602,606,607,5',
-            extendColumns: 'io.ox/contacts/api/list'
-        },
-        calendar: {
-            columns: '1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
-            extendColumns: 'io.ox/calendar/api/list'
-        }
-    };
 
     function getColumns (options) {
         var module = options.params.module,
@@ -103,35 +104,37 @@ define('io.ox/search/api',
         return obj;
     }
 
+    api.cid = function (request) {
+        return JSON.stringify(request);
+    };
+
+
     /**
      * get available facets
      * @param  {object}     options
      * @return {deferred}   returns list of sorted facets/values
      */
     api.autocomplete = function (options) {
-        var opt = $.extend(true, {}, getDefault('autocomplete'), options);
-        return http[opt.method](opt)
+        var opt = $.extend(true, {}, getDefault('autocomplete'), options),
+            key = api.cid(opt);
+
+        return simpleCache.get(key).then(function (data) {
+
+            //use cache
+            if (data !== null) {
+                return data;
+            }
+
+            //call server
+            return http[opt.method](opt)
                 .then(function (data) {
-                    _.each(data.facets, function (facet, index) {
+                    //process data
+                    _.each(data.facets, function (facet) {
+                        //add surrounding <i> tag
+                        facet.display_name = facet.display_name || [facet.display_item[0], ' <i>', facet.display_item[1], '</i>'].join('');
 
-                        //preparation to handle 'simple' facets
-                        if (facet.style === 'simple') {
-                            var flat;
-                            //until backend is ready
-                            if (!!facet.values) {
-                                flat = _.extend({}, facet, facet.values[0]);
-                                delete flat.values;
-                                delete flat.field_facet;
-                                //delete flat.display_name;
-                            } else {
-                                flat = _.extend({}, facet);
-                            }
-                            flat.display_name = flat.display_name || [flat.display_item[0], ' <i>', flat.display_item[1], '</i>'].join('');
-                            data.facets[index] = flat;
-                        }
-
-                        //preparation to handle 'exclusive' facets
-                        if (facet.style === 'exclusive') {
+                        //handle 'exclusive' facets (use options as values also)
+                        if (facet.style === 'exclusive' && !facet.values) {
                             facet.values = [];
                             _.each(facet.options, function (option) {
                                 var value = _.extend({}, option, {options: facet.options});
@@ -140,8 +143,10 @@ define('io.ox/search/api',
                             });
                         }
                     });
-                    return data;
+                    //add to cache and return data
+                    return simpleCache.add(key, data);
                 });
+        });
     };
 
     /**

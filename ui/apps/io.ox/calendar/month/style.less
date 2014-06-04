@@ -90,8 +90,8 @@
                 display: inline-block;
                 width: 100/8%;
                 height: 100%;
-                border-top: 1px solid #eee;
-                background-color: #fff;
+                border-top: 1px solid @monthview-border;
+                background-color: @white;
                 .transition(background-color 0.2s linear);
                 .backface-visibility(hidden);
                 .box-sizing(content-box);
@@ -142,45 +142,41 @@
                 }
 
                 .list {
+                    border-left: 1px solid @monthview-border;
                     margin: 2px;
                     .overflow-y(auto);
                 }
 
                 &.out {
 
-                    background-color: #eee;
+                    background-color: lighten(@monthview-appointment-out, 20%);
                     .transition(background-color 0.2s linear);
                     .backface-visibility(hidden);
 
                     &.today {
 
-                        background-color: #f0f0f0;
 
                         .number {
-                            color: darken(#08c, 10%);
-                            background-color: #f0f0f0;
-                            .transition(background-color 0.2s linear);
                         }
 
                     }
 
                     .number {
-                        color: #aaa;
-                        background-color: #eee;
+                        color: darken(@monthview-appointment-out, 25%);
+                        background-color: lighten(@monthview-appointment-out, 20%);
                         .transition(background-color 0.2s linear);
                     }
 
                     .appointment {
 
                         background-color: @monthview-appointment-out;
+                        border-color: @monthview-appointment-out;
+                        color: darken(@monthview-appointment-out, 30%);
 
                         html.high-contrast & {
 
                             background-color: @hc-gray;
-
-                            .title, .location {
-                                color: @white;
-                            }
+                            color: @black;
 
                         }
 
@@ -201,14 +197,12 @@
     /* Appointment */
     .appointment {
 
-        padding: 0px 2px;
-        border-radius: 9px;
         line-height: 14px;
         margin-bottom: 1px;
         white-space: nowrap;
         cursor: pointer;
         background-color: @appointment-reserved;
-        opacity: 1;
+        opacity: 0.85;
         .transition(opacity 0.2s);
         .backface-visibility(hidden);
 
@@ -216,8 +210,8 @@
             height: 100%;
             width: 100%;
             font-size: 12px;
-            color: white;
             padding: 2px 0;
+            border-left: 3px solid;
             .ellipsis();
         }
 
