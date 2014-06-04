@@ -7,6 +7,7 @@
 .mce-toolbar-grp .mce-btn.mce-active, .mce-toolbar-grp .mce-btn.mce-active:hover { background-color: #e6e6e6; }
 .mce-panel.mce-container:not(.mce-floatpanel):not(.mce-edit-area) { border-width:0 !important; }
 .mce-panel.mce-edit-area { border:1px solid #ccc !important; }
+.mce-btn button { background:transparent; }
 
 /* Dialogue overrides */
 .mce-close { display:none; }
@@ -40,7 +41,7 @@
 }
 .mce-window-head,.mce-foot { border-color: #e5e5e5; }
 /* emoji plugin */
-.mce-container *:not(.emoji) { background:transparent; }
+.mce-container *:not(.emoji, .mce-i-backcolor) { background:transparent; }
 
 .mce-container *:not(.emoji) .mce-menu-item:hover,
 .mce-container *:not(.emoji) .mce-menu-item.mce-selected,
