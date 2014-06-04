@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-05-22 14:50+0100\n"
+"PO-Revision-Date: 2014-06-04 14:06+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2362,10 +2362,9 @@ msgid "Email 3"
 msgstr "E-Mail 3"
 
 #: apps/io.ox/mail/accounts/view-form.js:507 module:io.ox/settings/settings
-#, fuzzy
 #| msgid "Email addresses"
 msgid "Email address"
-msgstr "E-Mail-Adressen"
+msgstr "E-Mail-Adresse"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js:135 module:io.ox/mail
 msgid "Email addresses"
@@ -3194,10 +3193,9 @@ msgid "Ignore"
 msgstr "Ignorieren"
 
 #: apps/io.ox/mail/accounts/view-form.js:267 module:io.ox/settings/settings
-#, fuzzy
 #| msgid "Ignore conflicts"
 msgid "Ignore Warnings"
-msgstr "Konflikte ignorieren"
+msgstr "Warnhinweise ignorieren"
 
 #: apps/io.ox/calendar/edit/main.js:161 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:116 module:io.ox/calendar
@@ -3873,7 +3871,6 @@ msgid "More"
 msgstr "Weitere"
 
 #: apps/io.ox/search/view-template.js:347 module:io.ox/core
-#, fuzzy
 #| msgid "More than the currently displayed %1$s items where found"
 msgid "More than the currently displayed %1$s items were found"
 msgstr "Es wurden mehr als die derzeit angezeigten %1$s Elemente gefunden."
@@ -6290,7 +6287,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:180 module:io.ox/contacts
 msgid "The email address %1$s is already in the list"
-msgstr ""
+msgstr "Die E-Mail-Adresse %1$s befindet sich bereits in der Liste."
 
 #: apps/io.ox/mail/write/main.js:1164 module:io.ox/mail
 msgid "The email has been sent"
@@ -6364,7 +6361,7 @@ msgstr "Die Anzahl der Empfänger ist auf %1$s Empfänger pro Feld beschränkt."
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:182 module:io.ox/contacts
 msgid "The person %1$s is already in the list"
-msgstr ""
+msgstr "Die Person %1$s befindet sich bereits in der Liste."
 
 #: apps/io.ox/files/api.js:354 module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
@@ -6950,6 +6947,7 @@ msgstr "Ungelesen"
 #: apps/io.ox/core/main.js:116 module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
+"Ungesicherte Dokumente werden verloren gehen. Wollen Sie sich nun abmelden?"
 
 #: apps/io.ox/mail/settings/signatures/register.js:372 module:io.ox/mail
 msgid "Unset default signature"
@@ -7134,7 +7132,7 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/view-form.js:262 module:io.ox/settings/settings
 msgid "Warnings"
-msgstr ""
+msgstr "Warnhinweise"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -7179,7 +7177,6 @@ msgstr "Willkommen. Bitte geben Sie Feedback zu diesem Produkt."
 
 #: apps/io.ox/core/settings/downloads/pane.js:57 module:io.ox/core
 #: apps/plugins/portal/updater/register.js:32 module:plugins/portal
-#, fuzzy
 #| msgid ""
 #| "The updater provides a simple installation wizard. Follow the "
 #| "instructions to install the application. The updater will inform you of "
@@ -7191,10 +7188,10 @@ msgid ""
 "Windows® client software. The Updater automatically informs about new "
 "updates. You can download the updates from within the Updater."
 msgstr ""
-"Der Updater bietet einen einfachen Installationsassistenten. Folgen Sie den "
-"Anweisungen zum Installieren der Applikation. Der Updater informiert Sie "
-"über alle Updates für den Konnektor für Microsoft Outlook, Notifier und "
-"Drive. Sie können die Updates aus dem Updater heraus herunterladen."
+"Nach dem Ausführen der heruntergeladenen Datei wird ein "
+"Installationsassistent gestartet. Folgen Sie den Anweisungen zum "
+"Installieren des Updaters. Der Updater informiert Sie automatisch über neue "
+"Updates. Sie können die Updates aus dem Updater heraus herunterladen."
 
 #: apps/io.ox/core/pubsub/publications.js:419 module:io.ox/core/pubsub
 msgid ""
@@ -7632,10 +7629,9 @@ msgid "ZB"
 msgstr "ZB"
 
 #: apps/io.ox/calendar/util.js:36 module:io.ox/calendar
-#, fuzzy
 #| msgid "Accepted"
 msgid "accepted"
-msgstr "Bestätigt"
+msgstr "bestätigt"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js:210
 #: module:io.ox/calendar/edit/main
@@ -7711,10 +7707,9 @@ msgid "day of the weekend"
 msgstr "Tag des Wochenendes"
 
 #: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
-#, fuzzy
 #| msgid "Declined"
 msgid "declined"
-msgstr "Abgelehnt"
+msgstr "abgelehnt"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js:161 module:io.ox/core
@@ -8015,10 +8010,9 @@ msgid "subfolders of %s"
 msgstr "Unterordner von %s"
 
 #: apps/io.ox/calendar/util.js:38 module:io.ox/calendar
-#, fuzzy
 #| msgid "Tentative"
 msgid "tentative"
-msgstr "Vorläufig"
+msgstr "vorläufig"
 
 #. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: third week or third Monday
@@ -8050,10 +8044,9 @@ msgid "total"
 msgstr "gesamt"
 
 #: apps/io.ox/calendar/util.js:35 module:io.ox/calendar
-#, fuzzy
 #| msgid "Unconfirmed"
 msgid "unconfirmed"
-msgstr "Nicht bestätigt"
+msgstr "nicht bestätigt"
 
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
 #: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:405
