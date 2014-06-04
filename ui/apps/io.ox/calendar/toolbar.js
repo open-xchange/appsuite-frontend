@@ -205,7 +205,7 @@ define('io.ox/calendar/toolbar',
                 prepareUpdateToolbar(app);
             });
             app.getWindow().on('change:perspective change:initialPerspective', function () {
-                prepareUpdateToolbar(app);
+                _.defer(prepareUpdateToolbar, app);
             });
         }
     });
