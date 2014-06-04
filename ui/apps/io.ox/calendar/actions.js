@@ -299,9 +299,7 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
-        requires: function (e) {
-            return e.collection.has('one', 'create');
-        },
+        requires: 'create',
         action: function (baton, obj) {
             // FIXME: if this action is invoked by the menu button, both
             // arguments are the same (the app)
