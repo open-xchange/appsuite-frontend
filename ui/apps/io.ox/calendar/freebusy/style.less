@@ -132,9 +132,15 @@
     .appointment {
         opacity: @opacity;
         cursor: pointer;
+        &.hover {
+            opacity: 1;
+        }
     }
 
-    .appointment-content { cursor: inherit; }
+    .appointment-content {
+        cursor: inherit;
+        color: @white;
+    }
 
     .appointment.fulltime {
         opacity: @opacity / 2;

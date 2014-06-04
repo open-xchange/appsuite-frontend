@@ -47,7 +47,7 @@ define('io.ox/core/notifications',
                             role: 'button'})
                 .append(
                 $('<span class="badge">').append(
-                     $('<span class="number">'),
+                    $('<span class="number">'),
                     $.txt(' '),
                     $('<i class="fa fa-caret-right">')
                 )

@@ -19,10 +19,6 @@
         -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
-    .info {
-        cursor: pointer;
-    }
-
     .week {
         width: 100%;
         min-height: 100%;
@@ -33,6 +29,23 @@
         overflow: hidden;
         .transition(background-color 0.4s);
         .backface-visibility(hidden);
+    }
+
+    .toolbar {
+
+        .info {
+            cursor: pointer;
+        }
+
+    }
+
+    .footer-container {
+
+        .footer {
+            .overflow-y(scroll);
+            .overflow-x(hidden);
+        }
+
     }
 
     .week-view-container {
@@ -47,8 +60,8 @@
 
             position: absolute;
             height: @weekview-footer-height;
-            overflow-y: scroll;
-            overflow-x: hidden;
+            .overflow-y(scroll);
+            .overflow-x(hidden);
             border-bottom: 1px solid @weekview-border;
             left: @weekview-time-width;
             right: 0;
@@ -124,6 +137,11 @@
                     background-color: @weekview-timeline;
                     z-index: 10;
                     .user-select(none);
+                }
+
+                .appointment-content {
+                    line-height: 16px;
+                    padding: 4px 7px;
                 }
 
             }
@@ -292,6 +310,27 @@
         left: 0;
         top: 0;
         height: 100%;
+    }
+
+    /* Big Screen */
+    @media all and (min-height: 1200px) {
+
+        .week-view-container {
+
+            .scrollpane {
+
+                .week-container {
+
+                    .appointment-content {
+                        line-height: 20px;
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
     /* Mobile */
