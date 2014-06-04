@@ -25,11 +25,12 @@ define('io.ox/core/notifications',
         className: 'notifications-icon',
         initialize: function () {
             this.model.on('change', _.bind(this.onChange, this));
+            this.nodes = {};
         },
         onChange: function () {
             var count = this.model.get('count');
-            this.$el.find('.badge').toggleClass('empty', count === 0);
-            this.$el.find('.number').text(_.noI18n(count >= 100 ? '99+' : count));
+            this.nodes.badge.toggleClass('empty', count === 0);
+            this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
 
             new NotificationController().yell('screenreader',
                     //#. %1$d number of notifications
@@ -39,25 +40,27 @@ define('io.ox/core/notifications',
 
         },
         onToggle: function (open) {
-            this.$el.find('.badge i').attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
+            this.nodes.icon.attr('class', open ? 'fa fa-caret-down' : 'fa fa-caret-right');
         },
         render: function () {
-            this.$el.attr({ href: '#',
-                            tabindex: '1',
-                            role: 'button'})
+            this.$el.attr({
+                    href: '#',
+                    tabindex: '1',
+                    role: 'button'
+                })
                 .append(
-                $('<span class="badge">').append(
-                    $('<span class="number">'),
-                    $.txt(' '),
-                    $('<i class="fa fa-caret-right">')
-                )
-             );
+                    this.nodes.badge = $('<span class="badge">').append(
+                        this.nodes.number = $('<span class="number">'),
+                        $.txt(' '),
+                        this.nodes.icon = $('<i class="fa fa-caret-right">')
+                    )
+                );
 
             this.onChange();
             return this;
         },
         setNotifier: function (b) {
-            this.$el.find('.badge').toggleClass('active', !!b);
+            this.nodes.badge.toggleClass('active', !!b);
         },
         setCount: function (count, newMails) {
             var newOther = count - this.model.get('count') - newMails;//check if there are new notifications, that are not mail
@@ -122,8 +125,8 @@ define('io.ox/core/notifications',
             }
 
             _(self.subviews).each(function (category) {
-                self.$el.append(category.render().el);
                 if (category.collection.length > 0) {
+                    self.$el.append(category.render().el);
                     empty = false;
                 }
             });
