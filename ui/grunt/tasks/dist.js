@@ -34,12 +34,6 @@ module.exports = function (grunt) {
         dist_custom: {
             files: [
                 {
-                    expand: true,
-                    src: ['touch-appsuite'],
-                    cwd: 'bin/',
-                    dest: 'dist/sbin/'
-                },
-                {
                     src: ['readme.txt', 'apps/themes/.htaccess'],
                     dest: 'dist/appsuite/'
                 },
@@ -48,6 +42,19 @@ module.exports = function (grunt) {
                     src: ['.htaccess'],
                     cwd: 'html/',
                     dest: 'dist/appsuite/'
+                }
+            ]
+        },
+        dist_touchAppsuite: {
+            options: {
+                mode: parseInt('755', 8) //0755 is not allowed in strict mode o.O
+            },
+            files: [
+                {
+                    expand: true,
+                    src: ['touch-appsuite'],
+                    cwd: 'bin/',
+                    dest: 'dist/sbin/'
                 }
             ]
         }
