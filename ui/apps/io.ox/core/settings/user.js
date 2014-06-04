@@ -71,13 +71,14 @@ define('io.ox/core/settings/user',
         openModalDialog: function () {
 
             var dialog = new dialogs.ModalDialog({
-                    top: 60,
-                    width: 910,
-                    center: false,
-                    maximize: true
-                })
-                .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: '1' })
-                .addButton('discard', gt('Discard'), 'discard', { tabIndex: '1' });
+                top: 60,
+                width: 910,
+                center: false,
+                maximize: true,
+                async: true
+            })
+            .addPrimaryButton('save', gt('Save'), 'save', { tabIndex: '1' })
+            .addButton('discard', gt('Discard'), 'discard', { tabIndex: '1' });
 
             var $node = dialog.getContentNode();
             var usermodel;
@@ -98,8 +99,17 @@ define('io.ox/core/settings/user',
                 }
             );
 
-            dialog.show().done(function (action) {
-                if (action === 'save') usermodel.save();
+            dialog.show();
+
+            dialog.on('save', function () {
+                if (usermodel._valid) {
+                    usermodel.save();
+                    dialog.close();
+                } else {
+                    dialog.idle();
+                }
+            }).on('discard', function () {
+                dialog.close();
             });
         }
     };
