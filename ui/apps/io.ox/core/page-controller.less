@@ -12,7 +12,7 @@
  */
 
 
-.io-ox-core-page {
+.io-ox-pagecontroller {
     &.page {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
@@ -34,11 +34,10 @@
  *   Animation stuff
  */
 .io-ox-core-animation {
-    @duration: 350ms;
 
     &.in, &.out{
-                animation-duration: @duration;
-        -webkit-animation-duration: @duration;
+                animation-duration: @pagecontroller-animation-duration;
+        -webkit-animation-duration: @pagecontroller-animation-duration;
                 animation-fill-mode: both;
         -webkit-animation-fill-mode: both;
         -webkit-animation-timing-function: cubic-bezier(.1, .7, .1, 1);

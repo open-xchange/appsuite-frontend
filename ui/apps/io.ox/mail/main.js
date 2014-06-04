@@ -113,6 +113,13 @@ define('io.ox/mail/main',
                     page: 'detailView'
                 })
             });
+
+            // important
+            // tell page controller about special navigation rules
+            app.pages.setBackbuttonRules({
+                'listView': 'folderTree',
+                'threadView': 'listView'
+            });
         },
         /*
          * Init all nav- and toolbar labels for mobile

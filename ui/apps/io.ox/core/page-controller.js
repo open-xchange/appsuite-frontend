@@ -23,12 +23,13 @@ define('io.ox/core/page-controller',
             order = [],
             lastPage = [],
             self = this,
-            app = app;
+            app = app,
+            backButtonRules;
 
         function createPage(opt) {
             var defaults = {
                 tag: '<div>',
-                classes: 'io-ox-core-page page',
+                classes: 'io-ox-pagecontroller page',
                 container: $()
             };
 
@@ -123,20 +124,43 @@ define('io.ox/core/page-controller',
 
             showNavbar(to);
             showToolbar(to);
+        };
 
+        /**
+         * setBackButtonRules is used to customize
+         * the back button navigation. The rules object
+         * is used to navigate back from a page (key) to another page (value)
+         * @param {[Object]} rules An object with key-value pairs
+         * of currentPage and toPage
+         */
+        this.setBackbuttonRules = function (rules) {
+            backButtonRules = rules;
         };
 
         this.goBack = function () {
-            // TODO overhaulin, this is special for mail
             var target = lastPage;
-            // this is not a browsing history, so we have to maintain special states
-            if (current === 'listView') target = 'folderTree';
-            if (current === 'threadView') target = 'listView';
-            // TODO respect real last page
+
+            // if we do have a custom navigation for some pages
+            // use this instead of the last page
+            if (backButtonRules && backButtonRules[current]) {
+                target = backButtonRules[current];
+            }
             this.changePage(target, {animation: 'slideright'});
         };
 
+        /**
+         * addPage creates a new page and adds it to the current
+         * page stack
+         * @param {[object]} opt an object like this
+         * {
+                name: string,
+                container: Node,
+                navbar: NavbarView,
+                toolbar: ToolbarView
+            }
+         */
         this.addPage = function (opt) {
+            if (!opt) return;
             createPage(opt);
             return this;
         };
