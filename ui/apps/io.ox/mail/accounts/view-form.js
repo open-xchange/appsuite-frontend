@@ -129,7 +129,7 @@ define.async('io.ox/mail/accounts/view-form',
                 }
 
                 //setting port defefaults
-                if (!self.model.get('id')) {
+                if (self.model.get('id') === undefined) {
                     _.each(portDefaults, function (value, key) {
                         model.set(key, value);
                     });
