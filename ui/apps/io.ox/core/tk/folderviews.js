@@ -781,6 +781,8 @@ define('io.ox/core/tk/folderviews',
                 break;
             case 13:
                 // enter
+                // prevent toggle on contextmenu
+                if (origEvent.target && $(origEvent.target).hasClass('folder-options-badge')) return;
                 treeNode.toggle();
                 break;
             }
