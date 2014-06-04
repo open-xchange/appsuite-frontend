@@ -91,10 +91,10 @@
                 width: 100/8%;
                 height: 100%;
                 border-top: 1px solid @monthview-border;
+                border-right: 1px solid @monthview-border;
                 background-color: @white;
                 .transition(background-color 0.2s linear);
                 .backface-visibility(hidden);
-                .box-sizing(content-box);
 
                 &.bordertop {}
 
@@ -142,7 +142,6 @@
                 }
 
                 .list {
-                    border-left: 1px solid @monthview-border;
                     margin: 2px;
                     .overflow-y(auto);
                 }
