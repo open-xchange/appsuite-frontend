@@ -90,7 +90,7 @@ define('io.ox/calendar/main',
             app.props = new Backbone.Model({
                 'layout': view,
                 'checkboxes': app.settings.get('showCheckboxes', true),
-                'inverseColors': app.settings.get('inverseColors', false)
+                'darkColors': app.settings.get('darkColors', false)
             });
         },
 
@@ -117,6 +117,7 @@ define('io.ox/calendar/main',
                 app.settings
                     .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
+                    .set('darkColors', data.darkColors)
                     .save();
             }, 500));
         },
@@ -149,14 +150,14 @@ define('io.ox/calendar/main',
         },
 
         /*
-         * Respond to change:inverseColors
+         * Respond to change:darkColors
          */
-        'change:inverseColors': function (app) {
+        'change:darkColors': function (app) {
             if (_.device('small')) return;
-            app.props.on('change:inverseColors', function (model, value) {
-                app.getWindow().nodes.outer.toggleClass('inverse-colors', value);
+            app.props.on('change:darkColors', function (model, value) {
+                app.getWindow().nodes.outer.toggleClass('dark-colors', value);
             });
-            app.getWindow().nodes.outer.toggleClass('inverse-colors', app.props.get('inverseColors'));
+            app.getWindow().nodes.outer.toggleClass('dark-colors', app.props.get('darkColors'));
         },
 
         /*
