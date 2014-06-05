@@ -44,8 +44,6 @@ Configuration UI for SpamExperts
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
 ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DkeepCache=true -f build/build.xml build
-find "%{buildroot}$APPSUITE" -type d | sed -e 's,%{buildroot},%dir ,' > %{name}.files
-find "%{buildroot}$APPSUITE" \( -type f -o -type l \) | sed -e 's,%{buildroot},,' >> %{name}.files
 
 ## Uncomment for multiple packages (2/4)
 #files=$(find "%{buildroot}/opt/open-xchange/appsuite/" -type f \
@@ -70,10 +68,17 @@ if [ $1 -eq 1 -a -x %{update} ]; then %{update}; fi
 %postun
 if [ -x %{update} ]; then %{update}; fi
 
-%files -f %{name}.files
+%files
 %defattr(-,root,root)
 %dir /opt/open-xchange
-%exclude %{docroot}/*
+%dir /opt/open-xchange/appsuite
+%dir /opt/open-xchange/appsuite/apps
+%dir /opt/open-xchange/appsuite/apps/com.spamexperts
+%dir /opt/open-xchange/appsuite/apps/com.spamexperts/settings
+/opt/open-xchange/appsuite/apps/com.spamexperts/*
+/opt/open-xchange/appsuite/apps/com.spamexperts/settings/*
+%dir /opt/open-xchange/appsuite/manifests
+/opt/open-xchange/appsuite/manifests/open-xchange-appsuite-spamexperts.json
 
 ## Uncomment for multiple packages (4/4)
 #%files static
