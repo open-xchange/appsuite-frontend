@@ -92,6 +92,9 @@ define('io.ox/core/api/factory',
             get: new cache.ObjectCache(o.id + '-get', true, o.keyGenerator)
         };
 
+        // hash to track very first cache hit
+        var readThrough = {};
+
         // track last_modified
         var lastModified = {};
 
@@ -172,7 +175,17 @@ define('io.ox/core/api/factory',
                     });
                 };
 
-                return (useCache ? cache.get(cid, getter) : getter())
+                var hit = function () {
+                    if (ox.serverConfig.persistence === false) return;
+                    if (!(cid in readThrough)) {
+                        readThrough[cid] = true;
+                        setTimeout(function () {
+                            api.refresh();
+                        }, 5000); // wait some secs
+                    }
+                };
+
+                return (useCache ? cache.get(cid, getter, hit) : getter())
                     .pipe(o.pipe.allPost)
                     .done(o.done.all || $.noop);
             },
