@@ -12,7 +12,7 @@ module.exports = function (grunt) {
                     ],
                     expand: true,
                     rename: function (dest) { return dest; },
-                    dest: 'build/help-drive/bootstrap.min.css'
+                    dest: 'build/help/bootstrap.min.css'
                 }
             ]
         }
