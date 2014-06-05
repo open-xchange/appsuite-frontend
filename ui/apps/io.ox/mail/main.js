@@ -332,7 +332,6 @@ define('io.ox/mail/main',
             app.listView.model.set({ folder: app.folder.get() });
             // for debugging
             app.listView.model.set('thread', true);
-            window.list = app.listView;
         },
 
         'list-view-checkboxes': function (app) {

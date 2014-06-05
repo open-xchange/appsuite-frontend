@@ -1,0 +1,143 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Alexander Quast <alexander.quast@open-xchange.com>
+ */
+
+define('io.ox/contacts/mobile-toolbar-actions',
+   ['io.ox/core/extensions',
+    'io.ox/core/extPatterns/links',
+    'io.ox/contacts/api',
+    'gettext!io.ox/mail'],
+    function (ext, links, api, gt) {
+
+    'use strict';
+
+    // define links for each page
+
+    var pointListView = ext.point('io.ox/contacts/mobile/toolbar/listView'),
+        pointDetailView = ext.point('io.ox/contacts/mobile/toolbar/detailView'),
+        meta = {
+        'create': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('New'),
+            //icon: 'fa fa-edit',
+            drawDisabled: true,
+            ref: 'io.ox/contacts/actions/create',
+            cssClasses: 'io-ox-action-link mobile-toolbar-action'
+        }
+    };
+
+    function addAction(point, ids) {
+        var index = 0;
+        _(ids).each(function (id) {
+            var extension = meta[id];
+            extension.id = id;
+            extension.index = (index += 100);
+            point.extend(new links.Link(extension));
+        });
+        index = 0;
+    }
+
+    addAction(pointListView, ['create']);
+
+    //multiselect in listview
+    //addAction(pointListViewMultiSelect, ['delete', 'forward', 'move']);
+
+    // add submenu as text link to toolbar in multiselect
+    pointDetailView.extend(new links.Dropdown({
+        index: 50,
+        label: $('<span>').text(
+            //.# Will be used as menu heading in mail module which then shows the sub-actions "mark as read" and "mark as unread"
+            gt('Actions')
+        ),
+        noCaret: true, // don't draw the caret icon beside menu link
+        ref: 'io.ox/contacts/links/inline'
+    }));
+
+    var updateToolbar = _.debounce(function (list) {
+        var self = this;
+        if (!list) return;
+        //get full data, needed for require checks for example
+        api.getList(list).done(function (data) {
+            // extract single object if length === 1
+            data = data.length === 1 ? data[0] : data;
+            // draw toolbar
+            var baton = ext.Baton({ data: data, app: self });
+            //ext.point('io.ox/contacts/classic-toolbar').invoke('draw', toolbar.empty(), baton);
+            // handle updated baton to pageController
+            self.pages.getCurrentPage().toolbar.setBaton(baton);
+            if (self.pages.getCurrentPage().secondaryToolbar) {
+                self.pages.getCurrentPage().secondaryToolbar.setBaton(baton);
+            }
+        });
+
+    }, 10);
+
+
+
+    // multi select toolbar links need some attention
+    // in case nothing is selected disabled buttons
+    // This should be done via our Link concept, but I
+    // didn't get it running. Feel free to refactor this
+    // to a nicer solutioun
+    /*pointListViewMultiSelect.extend({
+        id: 'update-button-states',
+        index: 10000,
+        draw: function (baton) {
+            // hmmmm, should work for this easy case
+            if (baton.data.length === 0) {
+                $('.mobile-toolbar-action', this).addClass('ui-disabled');
+            } else {
+                $('.mobile-toolbar-action', this).removeClass('ui-disabled');
+            }
+        }
+    });*/
+
+    // some mediator extensions
+    // register update function and introduce toolbar updating
+    ext.point('io.ox/contacts/mediator').extend({
+        id: 'toolbar-mobile',
+        index: 10100,
+        setup: function (app) {
+            if (_.device('!small')) return;
+            app.updateToolbar = updateToolbar;
+        }
+    });
+
+    ext.point('io.ox/contacts/mediator').extend({
+        id: 'update-toolbar-mobile',
+        index: 10300,
+        setup: function (app) {
+            if (!_.device('small')) return;
+
+            app.updateToolbar();
+            // // update toolbar on selection change as well as any model change (seen/unseen flag)
+            app.grid.selection.on('change', function (e, list) {
+                app.updateToolbar(list);
+            });
+        }
+    });
+
+    ext.point('io.ox/contacts/mediator').extend({
+        id: 'change-mode-toolbar-mobile',
+        index: 10400,
+        setup: function () {
+            if (!_.device('small')) return;
+            // if multiselect is triggered, show secondary toolbar with other options based on selection
+            /*app.props.on('change:checkboxes', function (model, state) {
+                var page = app.pages.getCurrentPage();
+                app.pages.toggleSecondaryToolbar(page.name, state);
+            });*/
+        }
+    });
+
+});
