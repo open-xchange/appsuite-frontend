@@ -952,6 +952,11 @@ define('io.ox/mail/api',
             if (model) collection.remove(model);
         });
 
+        // mark target folder as expired
+        _(pool.getByFolder(targetFolderId)).each(function (collection) {
+            collection.expired = true;
+        });
+
         // start update on server
         return update(list, { folder_id: targetFolderId }).then(function (response) {
             var errorText, i = 0, $i = response.length;
