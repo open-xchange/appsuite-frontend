@@ -470,6 +470,12 @@ define.async('io.ox/core/tk/html-editor',
                 //suppress firefox dnd inline image support
                 var iframe = textarea.parent().find('iframe'),
                     html = $(iframe[0].contentDocument).find('html');
+
+                // small paragraphs option
+                if (settings.get('features/mailComposeSmallParagraphs', false)) {
+                    html.find('head').append('<style type="text/css">body>p{margin:.5em 0;}</style>');
+                }
+
                 html.on('dragover drop', function (e) {
                     if (_.browser.Firefox && _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'))
                         e.preventDefault();
