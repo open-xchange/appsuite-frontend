@@ -157,15 +157,22 @@ define('io.ox/core/tk/list-dnd', ['io.ox/core/extensions', 'gettext!io.ox/core']
         function drag(e) {
             // unbind
             $(document).off('mousemove.dnd', drag);
+            // get selected items
+            var selected = container.find('.selected');
             // get data now
             data = source.attr('data-drag-data') ?
                 [source.attr('data-drag-data')] :
-                _(container.find('.selected')).map(function (node) {
+                _(selected).map(function (node) {
                     return $(node).attr('data-cid');
                 });
+            // get counter
+            var counter = _(selected).reduce(function (sum, node) {
+                var count = $(node).find('.drag-count');
+                return sum + (count.length ? parseInt(count.text(), 10) : 1);
+            }, 0);
             // create helper
             helper = $('<div class="drag-helper">').append(
-                $('<span class="drag-counter">').text(data.length),
+                $('<span class="drag-counter">').text(counter || data.length),
                 $('<span>').text(
                     source.attr('data-drag-message') || options.dragMessage.call(container, data, source)
                 )
