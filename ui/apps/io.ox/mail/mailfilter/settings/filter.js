@@ -358,7 +358,7 @@ define('io.ox/mail/mailfilter/settings/filter',
                     },
 
                     render: function () {
-                        this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter')),
+                        this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter Rules')),
                             $('<div>').addClass('btn-group pull-right').append(
                                 $('<button>').addClass('btn btn-primary').text(gt('Add new rule')).attr({
                                     'data-action': 'add',
