@@ -15,7 +15,9 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
 
     'use strict';
 
-    var n_size = [/*#. Bytes*/      gt('B'),
+    var n_size;
+    function init_n_size() {
+        n_size = [/*#. Bytes*/      gt('B'),
                   /*#. Kilobytes*/  gt('KB'),
                   /*#. Megabytes*/  gt('MB'),
                   /*#. Gigabytes*/  gt('GB'),
@@ -24,6 +26,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
                   /*#. Exabytes*/   gt('EB'),
                   /*#. Zettabytes*/ gt('ZB'),
                   /*#. Yottabytes*/ gt('YB')];
+    }
 
     return {
 
@@ -42,6 +45,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
         },
 
         fileSize: function (size, decimalPlaces) {
+            if (!n_size) init_n_size();
             var i = 0, $i = n_size.length;
             if (decimalPlaces > 10) {//for security so math.pow doesn't get really high values
                 decimalPlaces = 10;
