@@ -896,18 +896,16 @@ define('io.ox/core/main',
             id: 'default',
             draw: function () {
 
-                var topbar = settings.get('topbar/order'),
-                    apps = [],
+                var favorites = appAPI.getAllFavorites(),
+                    topbar = settings.get('topbar/order'),
                     hash = {};
 
                 // use custom order?
                 if (topbar) {
-                    // get apps
-                    apps = appAPI.getAvailable();
                     // get hash of exisiting favorites
-                    _(apps).each(function (obj) { hash[obj.id] = obj; });
+                    _(favorites).each(function (obj) { hash[obj.id] = obj; });
                     // get proper order
-                    apps = _(topbar.split(','))
+                    favorites = _(topbar.split(','))
                         .chain()
                         .map(function (id) {
                             return hash[id];
@@ -915,15 +913,13 @@ define('io.ox/core/main',
                         .compact()
                         .value();
                 } else {
-                    // get apps
-                    apps = appAPI.getAllFavorites();
                     // sort by index
-                    apps.sort(function (a, b) {
+                    favorites.sort(function (a, b) {
                         return ext.indexSorter(a, b);
                     });
                 }
 
-                _(apps).each(function (obj) {
+                _(favorites).each(function (obj) {
                     if (upsell.visible(obj.requires)) {
                         ox.ui.apps.add(new ox.ui.AppPlaceholder({
                             id: obj.id,

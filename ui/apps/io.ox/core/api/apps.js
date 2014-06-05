@@ -209,10 +209,6 @@ define('io.ox/core/api/apps',
             return getSpecial('favorites', allFavorites);
         },
 
-        getAvailable: function () {
-            return getSpecial('installed');
-        },
-
         /**
          * checks if app is marked as favorite (special category)
          * @param  {object}  data (app object)
