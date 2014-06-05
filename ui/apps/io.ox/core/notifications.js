@@ -65,9 +65,9 @@ define('io.ox/core/notifications',
         setCount: function (count, newMails) {
             var newOther = count - this.model.get('count') - newMails;//check if there are new notifications, that are not mail
 
-            if (newOther > 0) {//new notifications not mail
+            if (newOther > 0) { //new notifications not mail
                 this.trigger('newNotifications');
-            } else if (newMails > 0) {//new mail notifications
+            } else if (newMails > 0) { //new mail notifications
                 this.trigger('newMailNotifications');
             } else //just trigger if count is set to 0, not if it was 0 already
                 if (count === 0 && this.model.get('count') > count) {
@@ -80,26 +80,26 @@ define('io.ox/core/notifications',
     var NotificationsView = Backbone.View.extend({
         tagName: 'ul',
         id: 'io-ox-notifications-display',
+        className: 'list-unstyled',
         initialize: function (options) {
             options = options || {};
             this.subviews = options.subviews || {};
-            this.$el.attr('role', 'list');
         },
         render: function (notifications) {
             var self = this,
                 refocus = false,
-                lastFocused = $(document.activeElement),//save focus
+                lastFocused = $(document.activeElement, self.$el), //save focus
                 nextFocus, //focus in case lastFocus got lost (item not there anymore)
                 empty = true; //check if notification area is empty
 
             //remove old empty message to avoid duplicates
             self.$el.find('.no-news-message').remove();
 
-            if (lastFocused.hasClass('refocus')) {//refocusable elements have this marker class
+            if (lastFocused.hasClass('refocus')) { //refocusable elements have this marker class
                 //find next possible focus
                 var items = $('#io-ox-notifications .item'),
                     lastFocusItemId = lastFocused.closest('.item').attr('focus-id');
-                if (lastFocusItemId !== undefined) {//refocus only when inside of items (clear buttons or inbox link are outside)
+                if (lastFocusItemId !== undefined) { //refocus only when inside of items (clear buttons or inbox link are outside)
                     for (var i = 0; i < items.length; i++) {
                         if (lastFocusItemId === $(items[i]).attr('focus-id')) {
                             if ((i + 1) < items.length) { //prevent index out of bounds
@@ -135,15 +135,15 @@ define('io.ox/core/notifications',
                 self.$el.append($('<legend class="section-title no-news-message">').text(gt('No notifications')));
             }
 
-            if (refocus) {//restore focus if possible
+            if (refocus) { //restore focus if possible
                 var found = self.$el.find('[focus-id="' + lastFocused + '"]');
                 if (found.length > 0) {
                     found.focus();
-                } else {//item was deleted. try focusing the next item
+                } else { //item was deleted. try focusing the next item
                     found = self.$el.find('[focus-id="' + nextFocus + '"]');
-                    if (found.length > 0) {//focus if its there
+                    if (found.length > 0) { //focus if its there
                         found.focus();
-                    } else {//just focus first
+                    } else { //just focus first
                         $('#io-ox-notifications .refocus').first().focus();
                     }
                 }
@@ -160,17 +160,27 @@ define('io.ox/core/notifications',
 
     NotificationController.prototype = {
 
-        attach: function (addLauncher, delay) {//delay only affects requests, not the drawing of the badge
+        nodes: {
+            main: $('<div>').attr({
+                tabindex: -1,
+                id: 'io-ox-notifications'
+            }),
+            overlay: $('<div>').attr({
+                id: 'io-ox-notifications-overlay'
+            }).addClass('abs notifications-overlay')
+        },
+
+        attach: function (addLauncher, delay) { //delay only affects requests, not the drawing of the badge
             //view
             var self = this;
 
-            this.badgeView = new BadgeView({ model: new Backbone.Model({ count: 0})});
+            this.badgeView = new BadgeView({ model: new Backbone.Model({ count: 0}) });
 
             this.notificationsView = new NotificationsView();
 
             $('#io-ox-core').prepend(
-                $('<div id="io-ox-notifications" tabindex="-1">').append(this.notificationsView.el),
-                $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
+                self.nodes.main.append(this.notificationsView.el),
+                self.nodes.overlay.click(function (e) {
                     if (e.target === this) {
                         self.hideList();
                     }
@@ -203,9 +213,8 @@ define('io.ox/core/notifications',
 
             //close if count set to 0
             self.badgeView.on('lastItemDeleted', function () {
-                var overlay = $('#io-ox-notifications-overlay');
-                if (overlay.children().length > 0) {//if there is an open popup, wait till this is closed
-                    overlay.prop('sidepopup').one('close', _.bind(self.slowClose, self));
+                if (self.nodes.overlay.children().length > 0) { //if there is an open popup, wait till this is closed
+                    self.nodes.overlay.prop('sidepopup').one('close', _.bind(self.slowClose, self));
                 } else {
                     self.hideList();
                 }
@@ -220,9 +229,11 @@ define('io.ox/core/notifications',
 
             function focusNotifications(e) {
                 if (e.which === 13) { //enter
-                    if (self.opened()) {//focus badge when closing
-                        _.defer(function () { self.badgeView.$el.focus(); });
-                    } else {//focus notifications when opening
+                    if (self.isOpen()) { //focus badge when closing
+                        _.defer(function () {
+                            self.badgeView.$el.focus();
+                        });
+                    } else { //focus notifications when opening
                         _.defer(function () {
                             var firstItem = $('#io-ox-notifications .item').first();
                             if (firstItem.length > 0) {
@@ -241,8 +252,8 @@ define('io.ox/core/notifications',
                 $.proxy(this.toggleList, this)
             ).attr('id', 'io-ox-notifications-icon');
         },
-        opened: function () {
-            return $('#io-ox-notifications').hasClass('active');
+        isOpen: function () {
+            return this.nodes.main.hasClass('active');
         },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
@@ -257,10 +268,10 @@ define('io.ox/core/notifications',
             return this.notifications[key];
         },
         slowClose: function () {
-            $('#io-ox-notifications-overlay').off('mail-detail-closed');
+            this.nodes.overlay.off('mail-detail-closed');
             this.hideList();
         },
-        delayedUpdate: function () {//delays updating by 100ms (prevents updating the view multiple times in a row)
+        delayedUpdate: function () { //delays updating by 100ms (prevents updating the view multiple times in a row)
             var self = this;
             if (!this.updateTimer) {
                 this.updateTimer = setTimeout(function () {
@@ -297,9 +308,10 @@ define('io.ox/core/notifications',
                     badgeView.setNotifier(false);
                 }
             });
+
             var focusBadge =  function (e) {
-                e.preventDefault();//prevent default to not jump to reload button
                 if (e.which === 9) { //tabkey
+                    e.preventDefault(); //prevent default to not jump to reload button
                     $('#io-ox-notifications .refocus').first().focus();
                 }
             };
@@ -317,10 +329,10 @@ define('io.ox/core/notifications',
         toggleList: function () {
             //create nice listing view of all notifications grouped by
             //their app
-            if ($('#io-ox-notifications').hasClass('active')) {
+            if (this.nodes.main.hasClass('active')) {
                 this.hideList();
                 if (_.device('smartphone')) {
-                    $('#io-ox-notifications-overlay').empty().removeClass('active');
+                    this.nodes.overlay.empty().removeClass('active');
                 }
             } else {
                 this.showList();
@@ -330,12 +342,13 @@ define('io.ox/core/notifications',
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]:visible').addClass('notifications-open');
             }
-            //$('#io-ox-notifications').find('[tabindex="1"]').focus();
-            $('#io-ox-notifications').addClass('active');
-            $('#io-ox-notifications-overlay').addClass('active');
+
+            this.nodes.main.addClass('active');
+            this.nodes.overlay.addClass('active');
+
             this.badgeView.onToggle(true);
             $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27 && !($('#io-ox-notifications-overlay').prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
+                if (e.which === 27 && !(this.nodes.overlay.prop('sidepopup'))) { // escapekey and no open sidepopup (escapekey closes the sidepopup then)
                     $(document).off('keydown.notification');
                     //focus badge when closing
                     this.badgeView.$el.focus();
@@ -349,11 +362,12 @@ define('io.ox/core/notifications',
                 badgeView.setNotifier(false);
             });
             this.badgeView.onToggle(false);
-            $('#io-ox-notifications').removeClass('active');
-            $('#io-ox-notifications-overlay').empty().removeClass('active');
+            this.nodes.main.removeClass('active');
+            this.nodes.overlay.empty().removeClass('active');
             if (_.device('smartphone')) {
                 $('[data-app-name="io.ox/portal"]').removeClass('notifications-open');
             }
+            this.badgeView.$el.focus();
 
         },
 
@@ -459,7 +473,7 @@ define('io.ox/core/notifications',
 
                     active = false;
 
-                    if (o.type !== 'screenreader') {//screenreader notifications should not remove standard ones, so special remove here
+                    if (o.type !== 'screenreader') { //screenreader notifications should not remove standard ones, so special remove here
                         clearTimeout(timer);
                         timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
                     } else {
@@ -476,7 +490,7 @@ define('io.ox/core/notifications',
                     // reuse existing alert?
                     var node = $('.io-ox-alert');
 
-                    if (node.length && o.type !== 'screenreader') {//screenreader should not reuse existing notifications, this would only remove them for other users
+                    if (node.length && o.type !== 'screenreader') { //screenreader should not reuse existing notifications, this would only remove them for other users
                         node.empty();
                         reuse = true;
                         className += ' appear';
