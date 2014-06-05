@@ -292,11 +292,11 @@ define('io.ox/core/tk/autocomplete',
                         close();
                     }
                     //lastSearch will never reject
-                    lastSearch.resolve('succeeded');
+                    lastSearch.resolve('succeeded', query);
                 },
 
             // adds 'retry'-item to popup
-            cbSearchResultFail = function () {
+            cbSearchResultFail = function (query) {
                     scrollpane.empty();
                     o.container.idle();
                     var node = $('<div>')
@@ -317,7 +317,7 @@ define('io.ox/core/tk/autocomplete',
                         );
                     node.appendTo(scrollpane);
                     //lastSearch will will never reject
-                    lastSearch.resolve('failed');
+                    lastSearch.resolve('failed', query);
                 },
 
             autoSelectFirst = function () {
@@ -326,7 +326,23 @@ define('io.ox/core/tk/autocomplete',
 
             //waits for finished server call/drawn dropdown
             autoSelectFirstWait = _.debounce(function () {
-                lastSearch.done(autoSelectFirst);
+                /*
+                 * EXAMPLE:
+                 * 123...t°......4.t¹..t²..t³....
+                 * t°: search request ('123')
+                 * t¹: search response
+                 * t²: enter
+                 * t³: search request ('1234')
+                */
+                lastSearch.done(function (state, query) {
+                    if (self.val() !== query) {
+                        //t¹
+                        autoSelectFirstWait();
+                    } else {
+                        //else
+                        autoSelectFirst();
+                    }
+                });
             }, o.delay),
 
             // handle key down (esc/cursor only)
