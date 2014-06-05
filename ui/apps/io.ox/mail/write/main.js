@@ -815,6 +815,7 @@ define('io.ox/mail/write/main',
                     } else {
                         focus('to');
                     }
+                    ox.trigger('mail:compose:stop', data, app);
                     def.resolve({app: app});
                 })
                 .fail(function (e) {
@@ -861,6 +862,7 @@ define('io.ox/mail/write/main',
                                         view.textarea.trigger('blur');
                                     }
                                 }
+                                ox.trigger('mail:reply:stop', data, app);
                             });
                         })
                         .fail(function (e) {
@@ -909,6 +911,7 @@ define('io.ox/mail/write/main',
                             // trigger keyup to resize the textarea
                             view.textarea.trigger('keyup');
                         }
+                        ox.trigger('mail:forward:stop', data, app);
                     });
                 })
                 .fail(function (e) {

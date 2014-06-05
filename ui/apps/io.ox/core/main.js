@@ -38,6 +38,7 @@ define('io.ox/core/main',
     var debug = _.url.hash('debug') === 'boot' ? function () { console.log.apply(console, arguments); } : $.noop;
 
     debug('core: Loaded');
+    ox.trigger('core:load');
 
     _.stepwiseInvoke = function (list, method, context) {
         if (!_.isArray(list)) return $.when();
@@ -1344,6 +1345,14 @@ define('io.ox/core/main',
                     $('#background-loader').idle().fadeOut(DURATION, def.resolve);
                     return def;
                 }
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'ready',
+            index: 'last',
+            run: function () {
+                ox.trigger('core:ready');
             }
         });
 

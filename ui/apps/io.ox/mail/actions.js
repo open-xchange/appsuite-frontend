@@ -52,6 +52,7 @@ define('io.ox/mail/actions',
     new Action('io.ox/mail/actions/compose', {
         id: 'compose',
         action: function (baton) {
+            ox.trigger('mail:compose:start');
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
                     this.compose({ folder_id: baton.app.folder.get() });
@@ -129,6 +130,7 @@ define('io.ox/mail/actions',
                 util.hasOtherRecipients(e.context) && !isDraftMail(e.context);
         },
         action: function (baton) {
+            ox.trigger('mail:reply:start');
             require(['io.ox/mail/write/main'], function (m) {
                 if (m.reuse('replyall', baton.data)) return;
                 m.getApp().launch().done(function () {
@@ -144,6 +146,7 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel', 'one') && util.hasFrom(e.context) && !isDraftMail(e.context);
         },
         action: function (baton) {
+            ox.trigger('mail:reply:start');
             require(['io.ox/mail/write/main'], function (m) {
                 if (m.reuse('reply', baton.data)) return;
                 m.getApp().launch().done(function () {
@@ -159,6 +162,7 @@ define('io.ox/mail/actions',
             return e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
+            ox.trigger('mail:forward:start');
             require(['io.ox/mail/write/main'], function (m) {
                 if (m.reuse('forward', baton.data)) return;
                 m.getApp().launch().done(function () {

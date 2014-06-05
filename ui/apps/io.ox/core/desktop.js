@@ -371,6 +371,7 @@ define('io.ox/core/desktop',
                         ox.ui.apps.add(self);
                         self.set('state', 'running');
                         self.trigger('launch', self);
+                        ox.trigger('app:start', self);
                     },
                     function fail() {
                         ox.launch(
@@ -411,6 +412,7 @@ define('io.ox/core/desktop',
                 if (self.has('window')) {
                     win = self.get('window');
                     win.trigger('quit');
+                    ox.trigger('app:stop', self);
                     ox.ui.windowManager.trigger('window.quit', win);
                     win.destroy();
                 }
@@ -1022,6 +1024,7 @@ define('io.ox/core/desktop',
                                 self.trigger('open');
                                 self.state.running = true;
                                 ox.ui.windowManager.trigger('window.open', self);
+                                ox.trigger('app:ready', self.app);
                                 firstShow = false;
                             }
                             ox.ui.windowManager.trigger('window.show', self);
