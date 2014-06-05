@@ -92,12 +92,9 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'create',
         requires:  function (e) {
-            console.log('coll', e);
             return e.collection.has('create');
         },
         action: function (baton) {
-            debugger;
-            console.log('baton', baton);
             var folder = baton.folder || baton.app.folder.get();
             require(['io.ox/contacts/edit/main'], function (m) {
                 m.getApp({ folder_id: folder }).launch()
