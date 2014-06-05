@@ -19,7 +19,7 @@ override_dh_auto_install:
 	done
 	mv $(ROOT)/opt $(ROOT)-manifest/
 	mkdir -p $(ROOT)/opt/open-xchange
-	sed -e "s:## cd ##:cd /var/www/appsuite:" $(ROOT)-manifest/opt/open-xchange/sbin/touch-appsuite > \
+	cat $(ROOT)-manifest/opt/open-xchange/sbin/touch-appsuite | sed -e "s:## cd ##:cd /var/www/appsuite:" > \
 		$(ROOT)-manifest/opt/open-xchange/sbin/touch-appsuite
 	mv $(ROOT)-manifest/opt/open-xchange/sbin $(ROOT)/opt/open-xchange/
 
