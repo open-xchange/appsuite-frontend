@@ -95,12 +95,12 @@ msgid "%1$d messages in this conversation"
 msgstr "此對話中的 %1$d 封訊息"
 
 #: apps/io.ox/core/commons.js:102 module:io.ox/core
-#: apps/io.ox/mail/main.js:599 module:io.ox/mail
+#: apps/io.ox/mail/main.js:613 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "已選擇 %1$d 封訊息"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:617 module:io.ox/mail
+#: apps/io.ox/mail/main.js:631 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "已選擇 %1$d 封"
 
@@ -511,9 +511,9 @@ msgstr "無法儲存帳號設定，請參考表單中的標示修正。"
 msgid "Account updated"
 msgstr "已更新帳戶"
 
+#: apps/io.ox/contacts/mobile-toolbar-actions.js:60 module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js:333 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:342 apps/io.ox/mail/detail/view.js:88
-#: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:733
 #: module:io.ox/settings/settings
 msgid "Actions"
@@ -790,7 +790,7 @@ msgstr "附加 vCard"
 msgid "Application Toolbar"
 msgstr "應用程式工具列"
 
-#: apps/io.ox/mail/main.js:1035 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1049 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr "在此問題解決前應用程式可能暫時無法使用。"
 
@@ -1000,8 +1000,9 @@ msgstr "B"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:177 module:io.ox/calendar
+#: apps/io.ox/contacts/main.js:367 module:io.ox/contacts
 #: apps/io.ox/core/commons.js:698 module:io.ox/core
-#: apps/io.ox/mail/main.js:140 module:io.ox/mail apps/io.ox/mail/main.js:145
+#: apps/io.ox/mail/main.js:155 module:io.ox/mail apps/io.ox/mail/main.js:160
 #: apps/io.ox/mail/threadview.js:39
 msgid "Back"
 msgstr "向後"
@@ -1128,7 +1129,7 @@ msgstr "日曆"
 #: apps/io.ox/calendar/week/perspective.js:137
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:152 apps/io.ox/contacts/distrib/main.js:187
-#: apps/io.ox/contacts/edit/main.js:251
+#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:675
 #: apps/io.ox/core/commons-folderview.js:587 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
@@ -1157,7 +1158,7 @@ msgstr "日曆"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:427
-#: apps/io.ox/mail/main.js:242 apps/io.ox/mail/main.js:955
+#: apps/io.ox/mail/main.js:257 apps/io.ox/mail/main.js:969
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1383 apps/io.ox/mail/write/view-main.js:585
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -1631,7 +1632,8 @@ msgstr "無法儲存設定，必須有最少一個擁有管理員權力的使用
 msgid "Couldn't load appointment data."
 msgstr "無法載入約會資料。"
 
-#: apps/io.ox/contacts/main.js:347 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:497 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:541
 msgid "Couldn't load contact data."
 msgstr "無法載入聯絡人資料。"
 
@@ -1657,7 +1659,9 @@ msgid "Couldn't load your contact data."
 msgstr "無法載入您的聯絡人資料。"
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:46 module:io.ox/mail
-msgid "Couldn't load your mail filters."
+#, fuzzy
+#| msgid "Couldn't load your mail filters."
+msgid "Couldn't load your mail filter rules."
 msgstr "無法載入您的郵件篩選設定。"
 
 #: apps/io.ox/mail/vacationnotice/settings/register.js:72 module:io.ox/mail
@@ -1832,14 +1836,14 @@ msgstr "延遲"
 #: apps/io.ox/calendar/invitations/register.js:33 module:io.ox/calendar/main
 #: apps/io.ox/calendar/toolbar.js:69 apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:799
-#: apps/io.ox/contacts/main.js:189 apps/io.ox/contacts/toolbar.js:82
-#: apps/io.ox/core/commons-folderview.js:413 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:611 apps/io.ox/files/actions.js:374
-#: module:io.ox/files apps/io.ox/files/actions.js:740
-#: apps/io.ox/files/actions.js:897 apps/io.ox/files/actions.js:1315
-#: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:90
-#: module:io.ox/mail apps/io.ox/mail/actions.js:112
-#: apps/io.ox/mail/actions.js:992 apps/io.ox/mail/mobile-toolbar-actions.js:73
+#: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:413
+#: module:io.ox/core apps/io.ox/core/tk/folderviews.js:611
+#: apps/io.ox/files/actions.js:374 module:io.ox/files
+#: apps/io.ox/files/actions.js:740 apps/io.ox/files/actions.js:897
+#: apps/io.ox/files/actions.js:1315 apps/io.ox/files/toolbar.js:108
+#: apps/io.ox/mail/actions.js:90 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:112 apps/io.ox/mail/actions.js:992
+#: apps/io.ox/mail/mobile-toolbar-actions.js:73
 #: apps/io.ox/mail/settings/signatures/register.js:279
 #: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:507
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
@@ -2000,7 +2004,7 @@ msgid "Distribution List"
 msgstr "通訊組列表"
 
 #: apps/io.ox/contacts/common-extensions.js:41 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:261 apps/io.ox/contacts/model.js:314
+#: apps/io.ox/contacts/main.js:203 apps/io.ox/contacts/model.js:314
 #: apps/io.ox/contacts/view-detail.js:49 apps/io.ox/participants/views.js:176
 #: module:io.ox/calendar/edit/main
 msgid "Distribution list"
@@ -2240,14 +2244,16 @@ msgstr "EB"
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:643 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:56 apps/io.ox/contacts/actions.js:789
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js:75
+#: module:io.ox/contacts apps/io.ox/contacts/main.js:355
+#: apps/io.ox/contacts/main.js:361 apps/io.ox/contacts/main.js:670
+#: apps/io.ox/contacts/toolbar.js:75
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:879 module:io.ox/files
 #: apps/io.ox/mail/actions.js:982 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
-#: apps/io.ox/mail/main.js:128 apps/io.ox/mail/main.js:134
-#: apps/io.ox/mail/main.js:237 apps/io.ox/mail/main.js:959
+#: apps/io.ox/mail/main.js:143 apps/io.ox/mail/main.js:149
+#: apps/io.ox/mail/main.js:252 apps/io.ox/mail/main.js:973
 #: apps/io.ox/mail/settings/signatures/register.js:276
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2307,7 +2313,7 @@ msgstr "編輯簽名"
 msgid "Edit task"
 msgstr "編輯任務"
 
-#: apps/io.ox/contacts/main.js:279 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:221 module:io.ox/contacts
 msgid "Edit to set a name."
 msgstr "編輯以設定名稱。"
 
@@ -2421,7 +2427,7 @@ msgstr "空"
 msgid "Empty folder"
 msgstr "空文件夾"
 
-#: apps/io.ox/contacts/main.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:220 module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr "找到空白的名稱與描述。"
 
@@ -2857,8 +2863,10 @@ msgstr ""
 msgid "Folder-specific actions"
 msgstr "資料夾行為"
 
-#: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
-#: apps/io.ox/mail/main.js:125 module:io.ox/mail apps/io.ox/mail/main.js:132
+#: apps/io.ox/contacts/main.js:352 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:359 apps/io.ox/core/commons-folderview.js:49
+#: module:io.ox/core apps/io.ox/mail/main.js:140 module:io.ox/mail
+#: apps/io.ox/mail/main.js:147
 msgid "Folders"
 msgstr "文件夾"
 
@@ -3521,13 +3529,15 @@ msgctxt "app"
 msgid "Mail"
 msgstr "郵件"
 
-#: apps/io.ox/mail/main.js:308 module:io.ox/mail
+#: apps/io.ox/mail/main.js:323 module:io.ox/mail
 msgid "Mail Details"
 msgstr "郵件詳細資訊"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:361 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
-msgid "Mail Filter"
+#, fuzzy
+#| msgid "Mail Filter"
+msgid "Mail Filter Rules"
 msgstr "郵件篩選"
 
 #: apps/io.ox/mail/accounts/keychain.js:98 module:io.ox/core
@@ -3890,9 +3900,10 @@ msgid "Never"
 msgstr "永不"
 
 #: apps/io.ox/calendar/toolbar.js:41 module:io.ox/calendar
+#: apps/io.ox/contacts/mobile-toolbar-actions.js:31 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:39 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:40 module:io.ox/files
-#: apps/io.ox/tasks/toolbar.js:43 module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js:43
 msgid "New"
 msgstr "新增"
 
@@ -4048,7 +4059,7 @@ msgstr "您的收件匣中沒有郵件"
 msgid "No matching templates on this Server"
 msgstr "伺服器上沒有符合的範本"
 
-#: apps/io.ox/mail/main.js:585 module:io.ox/mail
+#: apps/io.ox/mail/main.js:599 module:io.ox/mail
 msgid "No message selected"
 msgstr "未選擇訊息"
 
@@ -6597,7 +6608,7 @@ msgid ""
 "This widget is currently offline because the twitter rate limit exceeded."
 msgstr "因為超過 Twitter 使用率限制，此小工具目前已離線。"
 
-#: apps/io.ox/mail/main.js:144 module:io.ox/mail
+#: apps/io.ox/mail/main.js:159 module:io.ox/mail
 msgid "Thread"
 msgstr "討論串"
 
@@ -6776,8 +6787,13 @@ msgstr "收回讚"
 msgid "Un-liked comment"
 msgstr "已對留言收回讚"
 
+#: apps/io.ox/mail/mailfilter/settings/register.js:43 module:io.ox/mail
+#, fuzzy
+#| msgid "Unable to load mail filter settings."
+msgid "Unable to load mail filter rules settings."
+msgstr "無法連絡後端郵件過濾器"
+
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/register.js:43
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
 #: apps/io.ox/settings/util.js:61 module:io.ox/core
 msgid "Unable to load mail filter settings."

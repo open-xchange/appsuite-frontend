@@ -222,6 +222,7 @@ msgstr ""
 #: apps/io.ox/contacts/actions.js:152
 #: apps/io.ox/contacts/distrib/main.js:187
 #: apps/io.ox/contacts/edit/main.js:251
+#: apps/io.ox/contacts/main.js:675
 #: apps/io.ox/core/commons-folderview.js:587
 #: module:io.ox/core
 #: apps/io.ox/core/desktop.js:1677
@@ -271,8 +272,8 @@ msgstr ""
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:427
-#: apps/io.ox/mail/main.js:242
-#: apps/io.ox/mail/main.js:955
+#: apps/io.ox/mail/main.js:257
+#: apps/io.ox/mail/main.js:969
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1383
 #: apps/io.ox/mail/write/view-main.js:585
@@ -387,7 +388,6 @@ msgstr ""
 #: apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:799
-#: apps/io.ox/contacts/main.js:189
 #: apps/io.ox/contacts/toolbar.js:82
 #: apps/io.ox/core/commons-folderview.js:413
 #: module:io.ox/core
@@ -537,6 +537,9 @@ msgstr ""
 #: apps/io.ox/calendar/toolbar.js:56
 #: apps/io.ox/contacts/actions.js:789
 #: module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:355
+#: apps/io.ox/contacts/main.js:361
+#: apps/io.ox/contacts/main.js:670
 #: apps/io.ox/contacts/toolbar.js:75
 #: apps/io.ox/core/pubsub/settings/pane.js:207
 #: module:io.ox/core/pubsub
@@ -546,10 +549,10 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
-#: apps/io.ox/mail/main.js:128
-#: apps/io.ox/mail/main.js:134
-#: apps/io.ox/mail/main.js:237
-#: apps/io.ox/mail/main.js:959
+#: apps/io.ox/mail/main.js:143
+#: apps/io.ox/mail/main.js:149
+#: apps/io.ox/mail/main.js:252
+#: apps/io.ox/mail/main.js:973
 #: apps/io.ox/mail/settings/signatures/register.js:276
 #: apps/io.ox/portal/settings/pane.js:312
 #: module:io.ox/portal
@@ -1535,11 +1538,13 @@ msgstr ""
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:177
 #: module:io.ox/calendar
+#: apps/io.ox/contacts/main.js:367
+#: module:io.ox/contacts
 #: apps/io.ox/core/commons.js:698
 #: module:io.ox/core
-#: apps/io.ox/mail/main.js:140
+#: apps/io.ox/mail/main.js:155
 #: module:io.ox/mail
-#: apps/io.ox/mail/main.js:145
+#: apps/io.ox/mail/main.js:160
 #: apps/io.ox/mail/threadview.js:39
 msgid "Back"
 msgstr ""
@@ -1841,12 +1846,13 @@ msgstr ""
 
 #: apps/io.ox/calendar/toolbar.js:41
 #: module:io.ox/calendar
+#: apps/io.ox/contacts/mobile-toolbar-actions.js:31
+#: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:39
 #: module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:40
 #: module:io.ox/files
 #: apps/io.ox/tasks/toolbar.js:43
-#: module:io.ox/mail
 msgid "New"
 msgstr ""
 
@@ -2422,7 +2428,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/common-extensions.js:41
 #: module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:261
+#: apps/io.ox/contacts/main.js:203
 #: apps/io.ox/contacts/model.js:314
 #: apps/io.ox/contacts/view-detail.js:49
 #: apps/io.ox/participants/views.js:176
@@ -2604,19 +2610,42 @@ msgstr ""
 msgid "Compact view"
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:278
+#: apps/io.ox/contacts/main.js:220
 #: module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:279
+#: apps/io.ox/contacts/main.js:221
 #: module:io.ox/contacts
 msgid "Edit to set a name."
 msgstr ""
 
-#: apps/io.ox/contacts/main.js:347
+#: apps/io.ox/contacts/main.js:352
 #: module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:359
+#: apps/io.ox/core/commons-folderview.js:49
+#: module:io.ox/core
+#: apps/io.ox/mail/main.js:140
+#: module:io.ox/mail
+#: apps/io.ox/mail/main.js:147
+msgid "Folders"
+msgstr ""
+
+#: apps/io.ox/contacts/main.js:497
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:541
 msgid "Couldn't load contact data."
+msgstr ""
+
+#: apps/io.ox/contacts/mobile-toolbar-actions.js:60
+#: module:io.ox/mail
+#: apps/io.ox/core/extPatterns/links.js:333
+#: module:io.ox/core
+#: apps/io.ox/core/extPatterns/links.js:342
+#: apps/io.ox/mail/detail/view.js:88
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:733
+#: module:io.ox/settings/settings
+msgid "Actions"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js:223
@@ -3365,14 +3394,6 @@ msgstr ""
 msgid "Folder names must not contain slashes"
 msgstr ""
 
-#: apps/io.ox/core/commons-folderview.js:49
-#: module:io.ox/core
-#: apps/io.ox/mail/main.js:125
-#: module:io.ox/mail
-#: apps/io.ox/mail/main.js:132
-msgid "Folders"
-msgstr ""
-
 #: apps/io.ox/core/commons-folderview.js:211
 #: module:io.ox/core
 #: apps/io.ox/core/folder/add.js:83
@@ -3489,7 +3510,7 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js:102
 #: module:io.ox/core
-#: apps/io.ox/mail/main.js:599
+#: apps/io.ox/mail/main.js:613
 #: module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr ""
@@ -3759,16 +3780,6 @@ msgstr ""
 #: apps/io.ox/core/extPatterns/links.js:311
 #: module:io.ox/core
 msgid "Inline menu %1$s"
-msgstr ""
-
-#: apps/io.ox/core/extPatterns/links.js:333
-#: module:io.ox/core
-#: apps/io.ox/core/extPatterns/links.js:342
-#: apps/io.ox/mail/detail/view.js:88
-#: module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:733
-#: module:io.ox/settings/settings
-msgid "Actions"
 msgstr ""
 
 #: apps/io.ox/core/extPatterns/links.js:333
@@ -6468,7 +6479,6 @@ msgstr ""
 
 #: apps/io.ox/mail/autoforward/settings/register.js:50
 #: module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/register.js:43
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
 #: apps/io.ox/settings/util.js:61
 #: module:io.ox/core
@@ -6643,7 +6653,7 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter.js:361
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
-msgid "Mail Filter"
+msgid "Mail Filter Rules"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:363
@@ -6817,33 +6827,38 @@ msgstr ""
 msgid "New rule"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/register.js:46
+#: apps/io.ox/mail/mailfilter/settings/register.js:43
 #: module:io.ox/mail
-msgid "Couldn't load your mail filters."
+msgid "Unable to load mail filter rules settings."
 msgstr ""
 
-#: apps/io.ox/mail/main.js:144
+#: apps/io.ox/mail/mailfilter/settings/register.js:46
+#: module:io.ox/mail
+msgid "Couldn't load your mail filter rules."
+msgstr ""
+
+#: apps/io.ox/mail/main.js:159
 #: module:io.ox/mail
 msgid "Thread"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:308
+#: apps/io.ox/mail/main.js:323
 #: module:io.ox/mail
 msgid "Mail Details"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:585
+#: apps/io.ox/mail/main.js:599
 #: module:io.ox/mail
 msgid "No message selected"
 msgstr ""
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:617
+#: apps/io.ox/mail/main.js:631
 #: module:io.ox/mail
 msgid "%1$d selected"
 msgstr ""
 
-#: apps/io.ox/mail/main.js:1035
+#: apps/io.ox/mail/main.js:1049
 #: module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
