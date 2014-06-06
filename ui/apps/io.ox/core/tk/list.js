@@ -232,7 +232,7 @@ define('io.ox/core/tk/list',
             _.bindAll(this, 'busy', 'idle');
 
             // set special class if not on smartphones (different behavior)
-            if (_.device('!touch && !smartphone')) this.$el.addClass('visible-selection');
+            if (_.device('!smartphone')) this.$el.addClass('visible-selection');
         },
 
         setCollection: function (collection) {
