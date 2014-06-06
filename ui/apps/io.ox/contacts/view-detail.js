@@ -208,7 +208,7 @@ define('io.ox/contacts/view-detail',
         id: 'contact-content',
         draw: function (baton) {
 
-            var node = $('<article>').appendTo(this),
+            var node = $('<article class="clearfix">').appendTo(this),//clearfix needed or halo design is broken
                 id = baton.data.mark_as_distributionlist ?
                     'io.ox/contacts/detail/list' :
                     'io.ox/contacts/detail/content';
