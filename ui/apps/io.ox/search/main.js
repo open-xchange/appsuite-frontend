@@ -313,6 +313,7 @@ define('io.ox/search/main',
     run = function () {
         if (app.is('running')) {
             //reuse
+            model.set('app', ox.ui.App.getCurrentApp().get('name'), {silent: true});
             app.launch();
             app.view.redraw();
         } else {
