@@ -103,6 +103,7 @@ define('io.ox/mail/settings/signatures/register',
 
         var baton = new ext.Baton();
         ext.point('io.ox/mail/settings/signature-dialog').invoke('draw', popup.getContentNode(), baton);
+        popup.getContentNode().css('overflow-y', 'hidden');
 
         popup.addPrimaryButton('save', gt('Save'), 'save', {tabIndex: '1'})
         .addButton('cancel', gt('Discard'), 'cancel', {tabIndex: '1'})
