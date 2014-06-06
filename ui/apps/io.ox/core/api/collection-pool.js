@@ -194,6 +194,20 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             if (data.folder_id !== undefined && data.parent === undefined) collection.add(model);
 
             return model;
+        },
+
+        grep: function (str) {
+            return _(this.getCollections())
+                .chain()
+                .filter(function (entry, id) {
+                    return id.indexOf(str) > -1;
+                })
+                .pluck('collection')
+                .value();
+        },
+
+        getByFolder: function (id) {
+            return this.grep('folder=' + id);
         }
     });
 

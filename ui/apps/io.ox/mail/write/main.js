@@ -262,7 +262,9 @@ define('io.ox/mail/write/main',
                     var node = $(this),
                         text = node.html()
                             //remove added image urls(tiny adds them automatically)
-                            .replace(/ data-mce-src="[^"]+"\s?/, '');
+                            .replace(/ data-mce-src="[^"]+"\s?/, '')
+                            //remove empty alt attribute(added by tiny)
+                            .replace(/ alt=""/, '');
 
                     if (app.isSignature(text)) {
                         // remove entire node

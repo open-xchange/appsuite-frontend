@@ -116,6 +116,13 @@ define('io.ox/calendar/toolbar',
         li.toggle(layout === 'list');
     }
 
+    function updateColorOption() {
+        // only show this option if preview pane is right (vertical/compact)
+        var li = this.$el.find('[data-name="darkColors"]').parent(),
+            layout = this.model.get('layout');
+        li.toggle(layout !== 'list');
+    }
+
     function print(app, e) {
         e.preventDefault();
         var baton = ext.Baton({ app: app, window: app.getWindow() });
@@ -140,15 +147,18 @@ define('io.ox/calendar/toolbar',
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
             .option('checkboxes', true, gt('Checkboxes'))
+            .option('darkColors', true, gt('Dark colors'))
             .divider()
             .link('print', gt('Print'), print.bind(null, baton.app))
-            .listenTo(baton.app.props, 'change:layout', updateCheckboxOption);
+            .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
+            .listenTo(baton.app.props, 'change:layout', updateColorOption);
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
             );
 
             updateCheckboxOption.call(dropdown);
+            updateColorOption.call(dropdown);
         }
     });
 
@@ -195,7 +205,7 @@ define('io.ox/calendar/toolbar',
                 prepareUpdateToolbar(app);
             });
             app.getWindow().on('change:perspective change:initialPerspective', function () {
-                prepareUpdateToolbar(app);
+                _.defer(prepareUpdateToolbar, app);
             });
         }
     });

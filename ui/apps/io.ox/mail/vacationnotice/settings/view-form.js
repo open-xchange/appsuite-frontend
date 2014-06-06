@@ -21,7 +21,7 @@ define('io.ox/mail/vacationnotice/settings/view-form',
 
     'use strict';
 
-    function createVacationEdit(ref, multiValues, timeFrameState) {
+    function createVacationEdit(ref, multiValues) {
         var point = views.point(ref + '/edit/view'),
             VacationEditView = point.createView({
                 tagName: 'div',
@@ -171,7 +171,6 @@ define('io.ox/mail/vacationnotice/settings/view-form',
                     index: 500,
                     id: ref + '/edit/view/end_date',
                     draw: function (baton) {
-                        console.log(timeFrameState);
                         this.append(
                             $('<fieldset class="col-md-12 form-group dateUntil">').append(
                                 $('<legend class="simple">').text(model.fields.dateUntil),

@@ -161,17 +161,25 @@ define('io.ox/core/tk/list-dnd', [
         function drag(e) {
             // unbind
             $(document).off('mousemove.dnd', drag);
+            // get selected items
+            var selected = _(container.find('.selected'));
             // get data now
             data = source.attr('data-drag-data') ?
                 [source.attr('data-drag-data')] :
-                _(container.find('.selected')).map(function (node) {
+                selected.map(function (node) {
                     return $(node).attr('data-cid');
                 });
+            // get counter
+            var counter = selected.reduce(function (sum, node) {
+                var count = $(node).find('.drag-count');
+                return sum + (count.length ? parseInt(count.text(), 10) : 1);
+            }, 0);
             // create helper
             helper = $('<div class="drag-helper">');
             ext.point('io.ox/core/tk/draghelper').invoke('draw', helper,
                 new ext.Baton({
                     container: container,
+                    count: counter || data.length,
                     data: data,
                     source: source,
                     dragMessage: options.dragMessage

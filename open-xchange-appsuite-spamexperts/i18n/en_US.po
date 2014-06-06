@@ -6,3 +6,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#. %1$s is the name of the configuration panel
+#: apps/com.spamexperts/register.js:21 module:com.spamexperts/translations
+msgid "%1$s access"
+msgstr ""

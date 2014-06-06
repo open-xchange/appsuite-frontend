@@ -18,7 +18,7 @@ define('io.ox/core/tk/draghelper', ['io.ox/core/extensions'], function (ext) {
         id: 'counter',
         index: 100,
         draw: function (baton) {
-            this.append($('<span class="drag-counter">').text(baton.data.length));
+            this.append($('<span class="drag-counter">').text(baton.count));
         }
     }).extend({
         id: 'text',

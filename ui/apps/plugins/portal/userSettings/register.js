@@ -38,7 +38,8 @@ define('plugins/portal/userSettings/register',
                     top: 60,
                     width: 908,
                     center: false,
-                    maximize: true
+                    maximize: true,
+                    async: true
                 })
                 .addPrimaryButton('save', gt('Save'))
                 .addButton('discard', gt('Discard'));
@@ -56,10 +57,17 @@ define('plugins/portal/userSettings/register',
                     })
                 );
             });
-            dialog.show().done(function (action) {
-                if (action === 'save') {
+            dialog.show();
+
+            dialog.on('save', function () {
+                if (usermodel._valid) {
                     usermodel.save();
+                    dialog.close();
+                } else {
+                    dialog.idle();
                 }
+            }).on('discard', function () {
+                dialog.close();
             });
         });
     }

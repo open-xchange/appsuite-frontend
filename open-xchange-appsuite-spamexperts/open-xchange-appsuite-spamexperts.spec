@@ -10,7 +10,9 @@ Source:         %{name}_%{version}.orig.tar.bz2
 
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-root
-BuildRequires:  open-xchange-appsuite-dev
+BuildRequires:  ant-nodeps
+BuildRequires:  java-devel >= 1.6.0
+BuildRequires:  nodejs >= 0.10.0
 
 Requires(post): open-xchange-appsuite-manifest
 
@@ -40,8 +42,8 @@ Configuration UI for SpamExperts
 %build
 
 %install
-sh /opt/open-xchange-appsuite-dev/bin/build-appsuite app skipLess=1 \
-    builddir="%{buildroot}/opt/open-xchange/appsuite"
+export NO_BRP_CHECK_BYTECODE_VERSION=true
+ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DkeepCache=true -f build/build.xml build
 
 ## Uncomment for multiple packages (2/4)
 #files=$(find "%{buildroot}/opt/open-xchange/appsuite/" -type f \
@@ -53,8 +55,7 @@ sh /opt/open-xchange-appsuite-dev/bin/build-appsuite app skipLess=1 \
 #done
 
 %clean
-sh /opt/open-xchange-appsuite-dev/bin/build-appsuite clean skipLess=1 \
-    builddir="%{buildroot}/opt/open-xchange/appsuite"
+%{__rm} -rf %{buildroot}
 
 ## Uncomment for multiple packages (3/4)
 #rm -r "%{buildroot}%{docroot}"
@@ -70,7 +71,14 @@ if [ -x %{update} ]; then %{update}; fi
 %files
 %defattr(-,root,root)
 %dir /opt/open-xchange
-/opt/open-xchange/appsuite
+%dir /opt/open-xchange/appsuite
+%dir /opt/open-xchange/appsuite/apps
+%dir /opt/open-xchange/appsuite/apps/com.spamexperts
+%dir /opt/open-xchange/appsuite/apps/com.spamexperts/settings
+/opt/open-xchange/appsuite/apps/com.spamexperts/*
+/opt/open-xchange/appsuite/apps/com.spamexperts/settings/*
+%dir /opt/open-xchange/appsuite/manifests
+/opt/open-xchange/appsuite/manifests/open-xchange-appsuite-spamexperts.json
 
 ## Uncomment for multiple packages (4/4)
 #%files static

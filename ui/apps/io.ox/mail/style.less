@@ -169,6 +169,9 @@
 
 .list-view {
     @media (max-width: 480px), (max-device-width: 480px)  {
+        .list-item:hover {
+            background-color: rgba(221, 221, 221, 0.5);
+        }
         &.complete > .list-item:last-child {
             margin-bottom: @toolbar-height;
             border-bottom: 0;

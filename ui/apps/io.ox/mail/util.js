@@ -556,7 +556,9 @@ define('io.ox/mail/util',
                                         .replace(/>[\t\f\v ]+/g, '>')
                                         .replace(/[\t\f\v ]+</g, '<')
                                         //set breaks
-                                        .replace(/(\r\n|\n|\r)/g, '<br>');
+                                        .replace(/(\r\n|\n|\r)/g, '<br>')
+                                        //remove empty alt attribute(added by tiny)
+                                        .replace(/ alt=""/, '');
                             }
                         });
                     return _(signatures).indexOf(text) > - 1;

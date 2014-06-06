@@ -289,9 +289,9 @@ define('io.ox/calendar/util',
             return (data.end_date - data.start_date) / date.DAY >> 0;
         },
 
-        getFullTimeInterval: function (data) {
+        getFullTimeInterval: function (data, smart) {
             var length = this.getDurationInDays(data);
-            return length <= 1 ? gt('Whole day') : gt.format(
+            return length <= 1  && smart ? gt('Whole day') : gt.format(
                 //#. General duration (nominative case): X days
                 //#. %d is the number of days
                 //#, c-format
@@ -301,7 +301,7 @@ define('io.ox/calendar/util',
         getTimeInterval: function (data, D) {
             if (!data || !data.start_date || !data.end_date) return '';
             if (data.full_time) {
-                return this.getFullTimeInterval(data);
+                return this.getFullTimeInterval(data, true);
             } else {
                 D = D || date.Local;
                 var diff = date.locale.intervals[(date.locale.h12 ? 'hm' : 'Hm') + (date.TIME & date.TIMEZONE ? 'v' : '')];
@@ -313,7 +313,7 @@ define('io.ox/calendar/util',
             var ret = [];
             if (!data || !data.start_date || !data.end_date) return ret;
             if (data.full_time) {
-                ret.push(this.getFullTimeInterval(data));
+                ret.push(this.getFullTimeInterval(data, false));
             } else {
                 ret.push(new date.Local(data.start_date).format(date.TIME), new date.Local(data.end_date).format(date.TIME));
             }

@@ -188,6 +188,12 @@ define('io.ox/core/tk/autocomplete',
                     if (isOpen) {
                         // toggle blur handlers
                         self.on('blur', o.blur).off('blur', fnBlur);
+                        //check if input or dropdown has focus otherwise user has clicked somewhere else to close the dropdown. See Bug 32949
+                        //body.has(self) is needed to check if the input is still attached (may happen if you close mail compose with opened dropdown for example)
+                        if (self.val() && $('body').has(self).length && !self.is(document.activeElement) && !o.container.has(document.activeElement).length) {
+                            //focus is outside so this can be handled as a blur
+                            self.trigger('blur');
+                        }
                         $(window).off('resize', reposition);
                         scrollpane.empty();
                         o.container.detach();
@@ -292,11 +298,11 @@ define('io.ox/core/tk/autocomplete',
                         close();
                     }
                     //lastSearch will never reject
-                    lastSearch.resolve('succeeded');
+                    lastSearch.resolve('succeeded', query);
                 },
 
             // adds 'retry'-item to popup
-            cbSearchResultFail = function () {
+            cbSearchResultFail = function (query) {
                     scrollpane.empty();
                     o.container.idle();
                     var node = $('<div>')
@@ -317,7 +323,7 @@ define('io.ox/core/tk/autocomplete',
                         );
                     node.appendTo(scrollpane);
                     //lastSearch will will never reject
-                    lastSearch.resolve('failed');
+                    lastSearch.resolve('failed', query);
                 },
 
             autoSelectFirst = function () {
@@ -326,7 +332,23 @@ define('io.ox/core/tk/autocomplete',
 
             //waits for finished server call/drawn dropdown
             autoSelectFirstWait = _.debounce(function () {
-                lastSearch.done(autoSelectFirst);
+                /*
+                 * EXAMPLE:
+                 * 123...t°......4.t¹..t²..t³....
+                 * t°: search request ('123')
+                 * t¹: search response
+                 * t²: enter
+                 * t³: search request ('1234')
+                */
+                lastSearch.done(function (state, query) {
+                    if (self.val() !== query) {
+                        //t¹
+                        autoSelectFirstWait();
+                    } else {
+                        //else
+                        autoSelectFirst();
+                    }
+                });
             }, o.delay),
 
             // handle key down (esc/cursor only)

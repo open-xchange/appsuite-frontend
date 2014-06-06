@@ -89,7 +89,8 @@ define('io.ox/calendar/main',
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': view,
-                'checkboxes': app.settings.get('showCheckboxes', true)
+                'checkboxes': app.settings.get('showCheckboxes', true),
+                'darkColors': app.settings.get('darkColors', false)
             });
         },
 
@@ -116,6 +117,7 @@ define('io.ox/calendar/main',
                 app.settings
                     .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
+                    .set('darkColors', data.darkColors)
                     .save();
             }, 500));
         },
@@ -145,6 +147,17 @@ define('io.ox/calendar/main',
                 var grid = app.getGrid();
                 grid.setEditable(value);
             });
+        },
+
+        /*
+         * Respond to change:darkColors
+         */
+        'change:darkColors': function (app) {
+            if (_.device('small')) return;
+            app.props.on('change:darkColors', function (model, value) {
+                app.getWindow().nodes.outer.toggleClass('dark-colors', value);
+            });
+            app.getWindow().nodes.outer.toggleClass('dark-colors', app.props.get('darkColors'));
         },
 
         /*
@@ -198,6 +211,9 @@ define('io.ox/calendar/main',
         app.refDate = new date.Local();
 
         win.addClass('io-ox-calendar-main');
+
+        // easy debugging
+        window.calendar = app;
 
         // "show all" extension for folder view
 

@@ -599,6 +599,10 @@ define('io.ox/contacts/edit/view-form',
 
                         // call requires "draw" method
                         (draw[field] || drawDefault).call(node, options, baton.model, baton);
+
+                        if (baton.model.get('folder_id') === 6 && field === 'email1') {
+                            node.find('input').prop('disabled', true);
+                        }
                         if (id === 'userfields') {
                             this.append($('<div class="col-sm-6 col-md-6 col-lg-6">').append(node));
                         } else {

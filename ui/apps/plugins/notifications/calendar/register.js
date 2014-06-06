@@ -295,6 +295,7 @@ define('plugins/notifications/calendar/register',
 
     var InviteNotificationsView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-calendar',
 
@@ -331,6 +332,7 @@ define('plugins/notifications/calendar/register',
 
     var ReminderNotificationsView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-calendar-reminder',
 
@@ -416,7 +418,7 @@ define('plugins/notifications/calendar/register',
                             };
                             calAPI.get(obj).done(function (data) {
                                 require(['io.ox/calendar/util'], function (util) {
-    
+
                                     var inObj = {
                                         cid: _.cid(remObj),
                                         title: data.title,
@@ -426,25 +428,25 @@ define('plugins/notifications/calendar/register',
                                         remdata: remObj,
                                         caldata: data
                                     };
-    
+
                                     // ignore appointments that are over
                                     var isOver = data.end_date < now;
-    
+
                                     if (!isOver) {
                                         _(ReminderNotifications.collection.models).each(function (reminderModel) {//remove outdated versions of the model
                                             if (reminderModel.get('cid') === inObj.cid) {
                                                 ReminderNotifications.collection.remove(reminderModel);
                                             }
                                         });
-    
+
                                         // do not add user suppressed ('remind me later') reminders
                                         if (ReminderNotifications.collection.hidden.length === 0 || _.indexOf(ReminderNotifications.collection.hidden, _.cid(remObj)) === -1) {
                                             ReminderNotifications.collection.add(new Backbone.Model(inObj));
                                         }
                                     }
-    
+
                                     counter--;
-    
+
                                     if (counter === 0) {
                                         //all data processed. Update Collection
                                         ReminderNotifications.collection.trigger('add');

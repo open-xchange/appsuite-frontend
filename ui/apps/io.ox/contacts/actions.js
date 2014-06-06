@@ -451,7 +451,7 @@ define('io.ox/contacts/actions',
     new Action('io.ox/contacts/actions/add-to-portal', {
         capabilities: 'portal',
         requires: function (e) {
-            if (!e.collection.has('one')) return false;
+            if (!e.collection.has('one') || !e.context.id || !e.folder_id) return false;
             return api.get(api.reduce(e.context)).then(function (data) {
                 return !!data.mark_as_distributionlist && !addedToPortal(data);
             });

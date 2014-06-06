@@ -72,6 +72,7 @@ define('plugins/notifications/mail/register',
 
     var NotificationsView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-mail',
         events: {

@@ -80,6 +80,7 @@ define('plugins/notifications/tasks/register',
 
     var NotificationsView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-tasks',
 
@@ -188,7 +189,7 @@ define('plugins/notifications/tasks/register',
 
             function add(e, tasks, reset) {
                 var items = [];
-                
+
                 if(tasks.length > 0) {
                     require(['io.ox/tasks/util'], function (util) {
                         _(tasks).each(function (taskObj) {
@@ -368,6 +369,7 @@ define('plugins/notifications/tasks/register',
 
     var NotificationsReminderView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-reminder-tasks',
         events: {
@@ -612,6 +614,7 @@ define('plugins/notifications/tasks/register',
 
     var NotificationsConfirmationView = Backbone.View.extend({
 
+        tagName: 'li',
         className: 'notifications',
         id: 'io-ox-notifications-confirmation-tasks',
 
