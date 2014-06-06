@@ -66,7 +66,8 @@ define('io.ox/search/util',
 
             //default folder
             id = folderAPI.getDefaultFolder(module);
-            mapping[id] = 'default';
+            if (id)
+                mapping[id] = 'default';
 
             //current folder
             app = model.getApp(true) + '/main';
@@ -100,7 +101,7 @@ define('io.ox/search/util',
                         return _.map(args, function (folder) {
                             return {
                                 id: folder.id,
-                                title: folder.title, //folderAPI.getFolderTitle(folder.title, 15),
+                                title: folder.title || folder.id, //folderAPI.getFolderTitle(folder.title, 15),
                                 type: mapping[folder.id],
                                 data: folder
                             };
@@ -135,7 +136,7 @@ define('io.ox/search/util',
             folderAPI.get({folder: id})
                     .always(value.bind(this, id));
 
-            return def;
+            return def.promise();
         }
 
     };
