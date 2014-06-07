@@ -94,12 +94,12 @@ msgid "%1$d messages in this conversation"
 msgstr "%1$d viestiä tässä keskustelussa"
 
 #: apps/io.ox/core/commons.js:102 module:io.ox/core
-#: apps/io.ox/mail/main.js:599 module:io.ox/mail
+#: apps/io.ox/mail/main.js:613 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d viestiä valittuna"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:617 module:io.ox/mail
+#: apps/io.ox/mail/main.js:631 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d valittuna"
 
@@ -271,8 +271,8 @@ msgid_plural "%d weeks"
 msgstr[0] "%d viikko"
 msgstr[1] "%d viikkoa"
 
-#: apps/io.ox/mail/settings/signatures/register.js:275 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:353
+#: apps/io.ox/mail/settings/signatures/register.js:276 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:354
 msgid "(Default)"
 msgstr "(Oletus)"
 
@@ -292,8 +292,8 @@ msgstr "yhtä tiedostoa on muutettu hiljattain"
 msgid "1 hour"
 msgstr "1 tunnin"
 
-#: apps/io.ox/core/tk/list-dnd.js:27 module:io.ox/core
-#: apps/io.ox/core/tk/selection.js:33
+#: apps/io.ox/core/tk/list-dnd.js:31 module:io.ox/core
+#: apps/io.ox/core/tk/selection.js:34
 msgid "1 item"
 msgid_plural "%1$d items"
 msgstr[0] "1 kohta"
@@ -510,9 +510,9 @@ msgstr ""
 msgid "Account updated"
 msgstr "Tili päivitetty"
 
+#: apps/io.ox/contacts/mobile-toolbar-actions.js:60 module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js:333 module:io.ox/core
 #: apps/io.ox/core/extPatterns/links.js:342 apps/io.ox/mail/detail/view.js:88
-#: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:733
 #: module:io.ox/settings/settings
 msgid "Actions"
@@ -600,7 +600,7 @@ msgstr "Lisää uusi osallistuja"
 msgid "Add new rule"
 msgstr "Lisää uusi sääntö"
 
-#: apps/io.ox/mail/settings/signatures/register.js:366 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:367 module:io.ox/mail
 msgid "Add new signature"
 msgstr "Lisää uusi allekirjoitus"
 
@@ -789,7 +789,7 @@ msgstr "Lisää vCard käyntikorttini"
 msgid "Application Toolbar"
 msgstr "Sovellustyökalupalkki"
 
-#: apps/io.ox/mail/main.js:1035 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1049 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Sovellus ei välttämättä toimi odotetusti ennnen tämän ongelman korjaamista."
@@ -1005,8 +1005,9 @@ msgstr "T"
 
 #. Used as button label for a navigation action, like the browser back button
 #: apps/io.ox/calendar/main.js:190 module:io.ox/calendar
+#: apps/io.ox/contacts/main.js:367 module:io.ox/contacts
 #: apps/io.ox/core/commons.js:698 module:io.ox/core
-#: apps/io.ox/mail/main.js:140 module:io.ox/mail apps/io.ox/mail/main.js:145
+#: apps/io.ox/mail/main.js:155 module:io.ox/mail apps/io.ox/mail/main.js:160
 #: apps/io.ox/mail/threadview.js:39
 msgid "Back"
 msgstr "Takaisin"
@@ -1135,7 +1136,7 @@ msgstr "Kalenteri"
 #: apps/io.ox/calendar/week/perspective.js:137
 #: apps/io.ox/contacts/actions.js:54 module:io.ox/contacts
 #: apps/io.ox/contacts/actions.js:152 apps/io.ox/contacts/distrib/main.js:187
-#: apps/io.ox/contacts/edit/main.js:251
+#: apps/io.ox/contacts/edit/main.js:251 apps/io.ox/contacts/main.js:675
 #: apps/io.ox/core/commons-folderview.js:587 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1677 apps/io.ox/core/export/export.js:104
 #: apps/io.ox/core/folder/add.js:96
@@ -1164,7 +1165,7 @@ msgstr "Kalenteri"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:427
-#: apps/io.ox/mail/main.js:242 apps/io.ox/mail/main.js:955
+#: apps/io.ox/mail/main.js:257 apps/io.ox/mail/main.js:969
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1385 apps/io.ox/mail/write/view-main.js:585
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -1218,7 +1219,7 @@ msgid "Cart is empty."
 msgstr "Kori on tyhjä."
 
 #: apps/io.ox/contacts/model.js:273 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:82
+#: apps/io.ox/contacts/print.js:111
 msgid "Cell phone"
 msgstr "Matkapuhelin"
 
@@ -1297,7 +1298,7 @@ msgstr "Tarkistetaan valtuuksia Tämä voi kestää muutaman sekunnin."
 msgid "Children"
 msgstr "Lapsia"
 
-#: apps/io.ox/contacts/print.js:80 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:109 module:io.ox/contacts
 msgid "City"
 msgstr "Kaupunki"
 
@@ -1640,7 +1641,8 @@ msgstr ""
 msgid "Couldn't load appointment data."
 msgstr "Tapaamisen tietoja ei voitu ladata."
 
-#: apps/io.ox/contacts/main.js:347 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:497 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:541
 msgid "Couldn't load contact data."
 msgstr "Yhteystietoja ei voitu ladata."
 
@@ -1666,7 +1668,9 @@ msgid "Couldn't load your contact data."
 msgstr "Yhteystietojasi ei voitu ladata."
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:46 module:io.ox/mail
-msgid "Couldn't load your mail filters."
+#, fuzzy
+#| msgid "Couldn't load your mail filters."
+msgid "Couldn't load your mail filter rules."
 msgstr "Postisuodattimiasi ei voitu ladata."
 
 #: apps/io.ox/mail/vacationnotice/settings/register.js:72 module:io.ox/mail
@@ -1848,15 +1852,15 @@ msgstr "Lykätty"
 #: apps/io.ox/calendar/invitations/register.js:33 module:io.ox/calendar/main
 #: apps/io.ox/calendar/toolbar.js:69 apps/io.ox/contacts/actions.js:53
 #: module:io.ox/contacts apps/io.ox/contacts/actions.js:799
-#: apps/io.ox/contacts/main.js:189 apps/io.ox/contacts/toolbar.js:82
-#: apps/io.ox/core/commons-folderview.js:413 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:611 apps/io.ox/files/actions.js:374
-#: module:io.ox/files apps/io.ox/files/actions.js:740
-#: apps/io.ox/files/actions.js:897 apps/io.ox/files/actions.js:1315
-#: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:90
-#: module:io.ox/mail apps/io.ox/mail/actions.js:112
-#: apps/io.ox/mail/actions.js:992 apps/io.ox/mail/mobile-toolbar-actions.js:73
-#: apps/io.ox/mail/settings/signatures/register.js:279
+#: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:413
+#: module:io.ox/core apps/io.ox/core/tk/folderviews.js:611
+#: apps/io.ox/files/actions.js:374 module:io.ox/files
+#: apps/io.ox/files/actions.js:740 apps/io.ox/files/actions.js:897
+#: apps/io.ox/files/actions.js:1315 apps/io.ox/files/toolbar.js:108
+#: apps/io.ox/mail/actions.js:90 module:io.ox/mail
+#: apps/io.ox/mail/actions.js:112 apps/io.ox/mail/actions.js:992
+#: apps/io.ox/mail/mobile-toolbar-actions.js:73
+#: apps/io.ox/mail/settings/signatures/register.js:280
 #: apps/io.ox/mail/toolbar.js:75 apps/io.ox/portal/main.js:507
 #: module:io.ox/portal apps/io.ox/portal/settings/widgetview.js:114
 #: apps/io.ox/settings/accounts/settings/pane.js:61
@@ -1899,7 +1903,7 @@ msgid "Deleting messages on local storage also deletes them on server"
 msgstr "Paikallisten viestien poistaminen poistaa ne myös palvelimelta"
 
 #: apps/io.ox/contacts/model.js:242 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80
+#: apps/io.ox/contacts/print.js:109
 msgid "Department"
 msgstr "Osasto"
 
@@ -1957,7 +1961,7 @@ msgstr "Poista widget käytöstä"
 #: apps/io.ox/core/settings/user.js:81
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:58
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/settings/signatures/register.js:108 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:109 module:io.ox/mail
 #: apps/io.ox/mail/write/inplace/inplace.js:114
 #: apps/io.ox/mail/write/view-main.js:64
 #: apps/io.ox/tasks/edit/view-template.js:82 module:io.ox/tasks/edit
@@ -2018,7 +2022,7 @@ msgid "Distribution List"
 msgstr "Jakelulista"
 
 #: apps/io.ox/contacts/common-extensions.js:41 module:io.ox/contacts
-#: apps/io.ox/contacts/main.js:261 apps/io.ox/contacts/model.js:314
+#: apps/io.ox/contacts/main.js:203 apps/io.ox/contacts/model.js:314
 #: apps/io.ox/contacts/view-detail.js:49 apps/io.ox/participants/views.js:176
 #: module:io.ox/calendar/edit/main
 msgid "Distribution list"
@@ -2258,15 +2262,17 @@ msgstr "ET"
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/calendar/actions.js:641 module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js:56 apps/io.ox/contacts/actions.js:789
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js:75
+#: module:io.ox/contacts apps/io.ox/contacts/main.js:355
+#: apps/io.ox/contacts/main.js:361 apps/io.ox/contacts/main.js:670
+#: apps/io.ox/contacts/toolbar.js:75
 #: apps/io.ox/core/pubsub/settings/pane.js:207 module:io.ox/core/pubsub
 #: apps/io.ox/files/actions.js:879 module:io.ox/files
 #: apps/io.ox/mail/actions.js:982 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
-#: apps/io.ox/mail/main.js:128 apps/io.ox/mail/main.js:134
-#: apps/io.ox/mail/main.js:237 apps/io.ox/mail/main.js:959
-#: apps/io.ox/mail/settings/signatures/register.js:276
+#: apps/io.ox/mail/main.js:143 apps/io.ox/mail/main.js:149
+#: apps/io.ox/mail/main.js:252 apps/io.ox/mail/main.js:973
+#: apps/io.ox/mail/settings/signatures/register.js:277
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
 #: apps/io.ox/settings/accounts/settings/pane.js:46
@@ -2325,7 +2331,7 @@ msgstr "Muokkaa allekirjoitusta"
 msgid "Edit task"
 msgstr "Muokkaa tehtävää"
 
-#: apps/io.ox/contacts/main.js:279 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:221 module:io.ox/contacts
 msgid "Edit to set a name."
 msgstr "Muokkaa asettaaksesi nimi."
 
@@ -2333,6 +2339,10 @@ msgstr "Muokkaa asettaaksesi nimi."
 #: apps/io.ox/editor/main.js:207 apps/io.ox/editor/main.js:312
 msgid "Editor"
 msgstr "Editori"
+
+#: apps/io.ox/contacts/print.js:112 module:io.ox/contacts
+msgid "Email"
+msgstr "Sähköposti"
 
 #: apps/io.ox/contacts/model.js:277 module:io.ox/contacts
 msgid "Email 1"
@@ -2436,7 +2446,7 @@ msgstr "Tyhjä"
 msgid "Empty folder"
 msgstr "Tyhjennä kansio"
 
-#: apps/io.ox/contacts/main.js:278 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:220 module:io.ox/contacts
 msgid "Empty name and description found."
 msgstr "Löydetty tyhjä nimi ja kuvaus."
 
@@ -2878,8 +2888,10 @@ msgstr ""
 msgid "Folder-specific actions"
 msgstr "Kansiokohtaiset toimenpiteet"
 
-#: apps/io.ox/core/commons-folderview.js:49 module:io.ox/core
-#: apps/io.ox/mail/main.js:125 module:io.ox/mail apps/io.ox/mail/main.js:132
+#: apps/io.ox/contacts/main.js:352 module:io.ox/contacts
+#: apps/io.ox/contacts/main.js:359 apps/io.ox/core/commons-folderview.js:49
+#: module:io.ox/core apps/io.ox/mail/main.js:140 module:io.ox/mail
+#: apps/io.ox/mail/main.js:147
 msgid "Folders"
 msgstr "Kansiot"
 
@@ -3210,8 +3222,8 @@ msgstr "Tuo"
 msgid "Import into"
 msgstr "Tuo"
 
-#: apps/io.ox/mail/settings/signatures/register.js:229 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:383
+#: apps/io.ox/mail/settings/signatures/register.js:230 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:384
 msgid "Import signatures"
 msgstr "Tuo allekirjoituksia"
 
@@ -3551,13 +3563,15 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Sähköposti"
 
-#: apps/io.ox/mail/main.js:308 module:io.ox/mail
+#: apps/io.ox/mail/main.js:323 module:io.ox/mail
 msgid "Mail Details"
 msgstr "Viestin yksityiskohdat"
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:361 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
-msgid "Mail Filter"
+#, fuzzy
+#| msgid "Mail Filter"
+msgid "Mail Filter Rules"
 msgstr "Postisuodatin"
 
 #: apps/io.ox/mail/accounts/keychain.js:98 module:io.ox/core
@@ -3899,7 +3913,7 @@ msgstr "Salasanani"
 
 #. Name of distribution list
 #: apps/io.ox/contacts/distrib/create-dist-view.js:80 module:io.ox/contacts
-#: apps/io.ox/contacts/print.js:80 apps/io.ox/contacts/view-detail.js:456
+#: apps/io.ox/contacts/print.js:109 apps/io.ox/contacts/view-detail.js:456
 #: apps/io.ox/core/pubsub/publications.js:228 module:io.ox/core/pubsub
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:531
 #: module:io.ox/settings/settings
@@ -3920,9 +3934,10 @@ msgid "Never"
 msgstr "Ei koskaan"
 
 #: apps/io.ox/calendar/toolbar.js:41 module:io.ox/calendar
+#: apps/io.ox/contacts/mobile-toolbar-actions.js:31 module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js:39 module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js:40 module:io.ox/files
-#: apps/io.ox/tasks/toolbar.js:43 module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js:43
 msgid "New"
 msgstr "Uusi"
 
@@ -4079,7 +4094,7 @@ msgstr "Ei viestejä saapuneet laatikossasi"
 msgid "No matching templates on this Server"
 msgstr "Ei sopivia pohjia tällä palvelimella"
 
-#: apps/io.ox/mail/main.js:585 module:io.ox/mail
+#: apps/io.ox/mail/main.js:599 module:io.ox/mail
 msgid "No message selected"
 msgstr "Ei valittuja viestejä"
 
@@ -4106,7 +4121,7 @@ msgstr "Ei vastaanottajia"
 msgid "No reminder"
 msgstr "Ei muistutusta"
 
-#: apps/io.ox/mail/settings/signatures/register.js:301 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:302 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:973
 msgid "No signature"
 msgstr "Ei allekirjoitusta"
@@ -4164,7 +4179,7 @@ msgstr "Ei aloitettu"
 msgid "Note"
 msgstr "Huomaa"
 
-#: apps/io.ox/contacts/print.js:84 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:114 module:io.ox/contacts
 msgid "Note: One contact is not shown due to missing phone numbers"
 msgid_plural "Note: %1$d contacts are not shown due to missing phone numbers"
 msgstr[0] ""
@@ -4523,7 +4538,7 @@ msgstr "Henkilökohtainen"
 msgid "Personal information"
 msgstr "Henkilötiedot"
 
-#: apps/io.ox/contacts/print.js:81 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:110 module:io.ox/contacts
 msgid "Phone"
 msgstr "Puhelin"
 
@@ -4570,7 +4585,7 @@ msgstr "Puhelin (muu)"
 msgid "Phone (private)"
 msgstr "Puhelin (yksityinen)"
 
-#: apps/io.ox/contacts/print.js:79 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:108 module:io.ox/contacts
 msgid "Phone list"
 msgstr "Puhelinluettelo"
 
@@ -5324,7 +5339,7 @@ msgstr "lauantai"
 #: apps/io.ox/mail/accounts/settings.js:44 module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/attachmentSave.js:65 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js:90
-#: apps/io.ox/mail/settings/signatures/register.js:107
+#: apps/io.ox/mail/settings/signatures/register.js:108
 #: apps/io.ox/mail/write/view-main.js:55 apps/io.ox/oauth/settings.js:80
 #: module:io.ox/settings/oauth apps/io.ox/tasks/edit/view-template.js:47
 #: module:io.ox/tasks/edit apps/io.ox/tasks/edit/view-template.js:89
@@ -5434,7 +5449,7 @@ msgid "Select Folder"
 msgstr "Valitse kansio"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
-#: apps/io.ox/mail/settings/signatures/register.js:217 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
 #: apps/io.ox/mail/view-options.js:98
 msgid "Select all"
 msgstr "Valitse kaikki"
@@ -5559,8 +5574,8 @@ msgstr "Palvelin ei saatavilla"
 msgid "Server version"
 msgstr "Palvelimen versio"
 
-#: apps/io.ox/mail/settings/signatures/register.js:275 module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/register.js:351
+#: apps/io.ox/mail/settings/signatures/register.js:276 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:352
 msgid "Set as default"
 msgstr "Aseta oletusarvoksi"
 
@@ -5731,7 +5746,7 @@ msgid "Sign out now"
 msgstr "Kirjaudu heti ulos"
 
 #. Section title for the mobile signature
-#: apps/io.ox/mail/settings/signatures/register.js:299 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:300 module:io.ox/mail
 msgid "Signature"
 msgstr "Allekirjoitus"
 
@@ -5747,7 +5762,7 @@ msgstr "Allekirjoituksen sijainti"
 msgid "Signature text"
 msgstr "Allekirjoituksen teksti"
 
-#: apps/io.ox/mail/settings/signatures/register.js:313 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:314 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:623
 #: apps/io.ox/mail/write/view-main.js:625
 msgid "Signatures"
@@ -6650,7 +6665,7 @@ msgstr "Tämä viesti on lisätty portaaliin"
 msgid "This mail has no content"
 msgstr "Tässä viestissä ei ole sisältöä"
 
-#: apps/io.ox/contacts/print.js:90 module:io.ox/contacts
+#: apps/io.ox/contacts/print.js:120 module:io.ox/contacts
 msgid "This note will not be printed"
 msgstr "Tämä merkintää ei tulosteta"
 
@@ -6673,7 +6688,7 @@ msgid ""
 "This widget is currently offline because the twitter rate limit exceeded."
 msgstr "Tämä widget on offline, koska twitter nopeusrajoitus ylittyi."
 
-#: apps/io.ox/mail/main.js:144 module:io.ox/mail
+#: apps/io.ox/mail/main.js:159 module:io.ox/mail
 msgid "Thread"
 msgstr "Keskustelu"
 
@@ -6852,8 +6867,13 @@ msgstr "Poista tykkäys"
 msgid "Un-liked comment"
 msgstr "Poista tykkäys kommentilta"
 
+#: apps/io.ox/mail/mailfilter/settings/register.js:43 module:io.ox/mail
+#, fuzzy
+#| msgid "Unable to load mail filter settings."
+msgid "Unable to load mail filter rules settings."
+msgstr "Postisuodattimien asetuksia ei voitu ladata."
+
 #: apps/io.ox/mail/autoforward/settings/register.js:50 module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/register.js:43
 #: apps/io.ox/mail/vacationnotice/settings/register.js:69
 #: apps/io.ox/settings/util.js:61 module:io.ox/core
 msgid "Unable to load mail filter settings."
@@ -6907,7 +6927,7 @@ msgstr "Lukematon"
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
 
-#: apps/io.ox/mail/settings/signatures/register.js:372 module:io.ox/mail
+#: apps/io.ox/mail/settings/signatures/register.js:373 module:io.ox/mail
 msgid "Unset default signature"
 msgstr "Ei oletusarvoa allekirjoitukselle"
 
@@ -8237,9 +8257,6 @@ msgstr "vuosittain"
 
 #~ msgid "Editing settings"
 #~ msgstr "Asetusten muokkaaminen"
-
-#~ msgid "Email"
-#~ msgstr "Sähköposti"
 
 #~ msgid "Enabled for all mail folders"
 #~ msgstr "Käytössä kaikille viestikansioille"
