@@ -278,7 +278,7 @@ define('io.ox/mail/detail/view',
 
         onLoadFail: function () {
             this.trigger('load:done');
-            this.$el.attr('data-loaded', false).removeClass('expanded');
+            if (this.$el) this.$el.attr('data-loaded', false).removeClass('expanded');
         },
 
         toggle: function (state) {
