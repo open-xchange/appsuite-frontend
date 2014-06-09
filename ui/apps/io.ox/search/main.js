@@ -124,6 +124,10 @@ define('io.ox/search/main',
         return app.get('state') === state;
     };
 
+    app.getModel = function () {
+        return model;
+    };
+
     //reduced version of app.quit to ensure app/window is reusable
     app.quit = function () {
         // update hash but don't delete information of other apps that might already be open at this point (async close when sending a mail for exsample);
@@ -307,6 +311,7 @@ define('io.ox/search/main',
                 app.view.redraw()
                          .focus()
                          .idle();
+                app.view.trigger('redraw');
             });
 
     //run app
@@ -321,6 +326,7 @@ define('io.ox/search/main',
         }
         app.view.focus();
         app.idle();
+        return app;
     };
 
     return {
