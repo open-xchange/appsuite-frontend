@@ -71,9 +71,12 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
                 // track all referenced models
                 entry.collection.each(function (model) {
                     models[model.cid] = true;
-                });
+                    _(this.getDependentModels(model.cid)).each(function (model) {
+                        models[model.cid] = true;
+                    });
+                }, this);
             }
-        });
+        }, this);
 
         // loop over detail collection to find expired models
         var expired = this.get('detail').filter(function (model) {
@@ -146,7 +149,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             _(collections).each(function (entry) {
                 count += _(entry.collection).size();
             });
-            console.log('Pool:', module, 'Model count:', count, 'Collections:', collections);
+            console.debug('Pool:', module, 'Model count:', count, 'Collections:', collections);
         });
     };
 
@@ -208,6 +211,11 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
 
         getByFolder: function (id) {
             return this.grep('folder=' + id);
+        },
+
+        // used by garbage collector to resolve threads
+        getDependentModels: function (/* cid */) {
+            return [];
         }
     });
 

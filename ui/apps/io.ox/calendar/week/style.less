@@ -144,8 +144,10 @@
                     padding: 4px 7px;
                 }
 
+                .dark-colors & .appointment-content {
+                    padding: 4px 10px;
+                }
             }
-
         }
 
         .day {
@@ -219,7 +221,7 @@
         position: absolute;
         background-color: @appointment-reserved;
         opacity: 1;
-        .transition(opacity 0.2s);
+        .transition(~"opacity 0.2s, background-color 0.3s, color 0.3s");
         .backface-visibility(hidden);
 
         &.modify {
@@ -241,7 +243,7 @@
         &.lasso {
             border: 1px solid #08c;
             background-color: @weekview-appointment-lasso;
-            opacity: @appointment-declined-alpha;
+            opacity: 0.4;
             width: 100%;
             cursor: default;
         }

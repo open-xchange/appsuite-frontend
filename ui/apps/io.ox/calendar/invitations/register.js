@@ -189,6 +189,8 @@ define('io.ox/calendar/invitations/register',
                 $('<b>').text(data.title), separator,
                 $('<span class="day">').append(
                     $.txt(gt.noI18n(util.getDateInterval(data))),
+                    $.txt(gt.noI18n(' ')),
+                    $.txt(gt.noI18n(util.getTimeInterval(data))),
                     $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
                 ),
                 // confirmation

@@ -146,8 +146,8 @@
 
         .background(@color) {
             background-color: @color;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.50);
             &.hover { background-color: darken(@color, 10%); }
-            &.declined { background-color: rgba(0, 0, 0, 0.10); }
         }
 
         &.reserved { .background(@appointment-reserved); }
@@ -157,9 +157,24 @@
         &.private { .background(@appointment-private); }
 
         &.border { border-left: 1px solid rgba(0, 0, 0, 0.2); }
+
+        &.declined { background-color: @appointment-declined; }
+        &.unconfirmed { background-color: @appointment-unconfirmed; }
+
+        &.unconfirmed:not(.hover) {
+            .title { color: rgba(0, 0, 0, 0.7); }
+            .location { color: rgba(0, 0, 0, 0.5); }
+        }
+
+        &.io-ox-busy:before { color: white; opacity: 0.30; }
     }
 
     .appointment {
+
+        &.io-ox-busy:before {
+            color: inherit;
+            opacity: 0.50;
+        }
 
         .title {
             font-weight: bold;
@@ -168,6 +183,15 @@
         &.opac {
             opacity: 0.5;
             .transition(opacity 0.2s);
+        }
+
+        .common() {
+
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+            html.high-contrast & .location, html.high-contrast & .title {
+                color: @black;
+            }
         }
 
         &.reserved {
@@ -181,18 +205,7 @@
                 background-color: darken(@r, @appointment-hover-pct);
             }
 
-            &.unconfirmed {
-                background-color: hsla(hue(@r), saturation(@r), lightness(@r), @appointment-unconfirmed-alpha);
-            }
-
-            &.declined {
-                background-color: hsla(hue(@r), saturation(@r), lightness(@r), @appointment-declined-alpha);
-            }
-
-            html.high-contrast & .location, html.high-contrast & .title {
-                color: @black;
-            }
-
+            .common();
         }
 
         &.temporary {
@@ -206,18 +219,7 @@
                 background-color: darken(@t, @appointment-hover-pct);
             }
 
-            &.unconfirmed {
-                background-color: hsla(hue(@t), saturation(@t), lightness(@t), @appointment-unconfirmed-alpha);
-            }
-
-            &.declined {
-                background-color: hsla(hue(@t), saturation(@t), lightness(@t), @appointment-declined-alpha);
-            }
-
-            html.high-contrast & .location, html.high-contrast & .title {
-                color: @black;
-            }
-
+            .common();
        }
 
         &.absent {
@@ -231,18 +233,7 @@
                 background-color: darken(@a, @appointment-hover-pct);
             }
 
-            &.unconfirmed {
-                background-color: hsla(hue(@a), saturation(@a), lightness(@a), @appointment-unconfirmed-alpha);
-            }
-
-            &.declined {
-                background-color: hsla(hue(@a), saturation(@a), lightness(@a), @appointment-declined-alpha);
-            }
-
-            html.high-contrast & .location, html.high-contrast & .title {
-                color: @black;
-            }
-
+            .common();
         }
 
         &.free {
@@ -256,18 +247,7 @@
                 background-color: darken(@f, @appointment-hover-pct);
             }
 
-            &.unconfirmed {
-                background-color: hsla(hue(@f), saturation(@f), lightness(@f), @appointment-unconfirmed-alpha);
-            }
-
-            &.declined {
-                background-color: hsla(hue(@f), saturation(@f), lightness(@f), @appointment-declined-alpha);
-            }
-
-            html.high-contrast & .location, html.high-contrast & .title {
-                color: @black;
-            }
-
+            .common();
         }
 
         &.private {
@@ -285,15 +265,29 @@
                 cursor: normal;
             }
 
-            html.high-contrast & .location, html.high-contrast & .title {
-                color: @black;
-            }
+            .common();
+        }
 
+        &.unconfirmed {
+            color: @appointment-unconfirmed-font;
+            background-color: @appointment-unconfirmed;
+            border-left-color: rgba(0, 0, 0, 0.2);
+            &.hover {
+                background-color: darken(@appointment-unconfirmed, @appointment-hover-pct);
+            }
+        }
+
+        &.declined {
+            background-color: @appointment-declined;
+            border-left-color: rgba(0, 0, 0, 0.1);
+            &.hover {
+                background-color: darken(@appointment-declined, @appointment-hover-pct);
+            }
         }
 
         &.declined .appointment-content * {
-            text-decoration: line-through;
             color: @appointment-declined-font;
+            text-decoration: line-through;
         }
 
         &:focus {

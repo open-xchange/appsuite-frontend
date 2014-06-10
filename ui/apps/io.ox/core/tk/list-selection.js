@@ -24,7 +24,7 @@ define('io.ox/core/tk/list-selection', [], function () {
         this.view.$el
             // normal click/keybard navigation
             .on('keydown', SELECTABLE, $.proxy(this.onKeydown, this))
-            .on(isTouch ? 'click' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
+            .on(isTouch ? 'tap' : 'mousedown click', SELECTABLE, $.proxy(this.onClick, this))
             // help accessing the list via keyboard if focus is outside
             .on('focus', $.proxy(function () {
                 var items = this.getItems(),
@@ -32,7 +32,7 @@ define('io.ox/core/tk/list-selection', [], function () {
                     index = items.index(first);
                 if (index > -1) this.select(index); else this.select(0);
             }, this))
-            .on('click', SELECTABLE, $.proxy(function (e) {
+            .on(isTouch ? 'tap' : 'click', SELECTABLE, $.proxy(function (e) {
                 if (!this.isMultiple(e)) this.triggerAction(e);
             }, this))
             // double clikc
@@ -347,7 +347,11 @@ define('io.ox/core/tk/list-selection', [], function () {
         },
 
         onClick: function (e) {
-
+            if (e.type === 'tap') {
+                // prevent ghostlicks
+                e.preventDefault();
+                e.stopPropagation();
+            }
             // consider mousedown only if unselected and not in multiple-mode
             if (e.type === 'mousedown' && !this.isMultiple(e) && $(e.currentTarget).is('.selected')) return;
             // ignore clicks in multiple-mode
@@ -359,7 +363,7 @@ define('io.ox/core/tk/list-selection', [], function () {
                 previous = this.get();
 
             if (isTouch && this.resetSwipe(items)) return;
-            if (e.isDefaultPrevented()) return;
+            if (e.isDefaultPrevented() && e.type !== 'tap') return;
             if (!this.isMultiple(e)) this.resetCheckmark(items);
             this.resetTabIndex(items, items.eq(index));
 

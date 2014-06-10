@@ -37,7 +37,7 @@
 
 html, body {
     height: 100%;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: @normal-font-family;
     font-size: 14px;
     line-height: 20px;
     color: #333;
@@ -68,7 +68,7 @@ html, body {
 }
 
 .clear-title {
-    font-family: 'Helvetica Neue', OpenSans, Helvetica, Arial, sans-serif;
+    font-family: @light-font-family;
     font-weight: 100;
     font-size: 20pt;
     line-height: 1.15em;
@@ -331,14 +331,6 @@ html, body {
         animation: spin 1.5s infinite linear;
     }
 }
-
-// #background-loader.io-ox-busy:before {
-//     margin: -15px 0 0 -15px;
-//     font-size: 0px;
-//     color: #aaa;
-//     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-//     content: '\21BB';
-// }
 
 .row:before, .row:after {
     content: " ";

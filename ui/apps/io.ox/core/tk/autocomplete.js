@@ -189,7 +189,8 @@ define('io.ox/core/tk/autocomplete',
                         // toggle blur handlers
                         self.on('blur', o.blur).off('blur', fnBlur);
                         //check if input or dropdown has focus otherwise user has clicked somewhere else to close the dropdown. See Bug 32949
-                        if (self.val() && !self.is(document.activeElement) && !o.container.has(document.activeElement).length) {
+                        //body.has(self) is needed to check if the input is still attached (may happen if you close mail compose with opened dropdown for example)
+                        if (self.val() && $('body').has(self).length && !self.is(document.activeElement) && !o.container.has(document.activeElement).length) {
                             //focus is outside so this can be handled as a blur
                             self.trigger('blur');
                         }

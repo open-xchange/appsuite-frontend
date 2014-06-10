@@ -1030,10 +1030,10 @@ define('io.ox/calendar/week/view',
                     app.css({
                         top: pos.top,
                         left: left + '%',
-                        height: height + 'px',
+                        height: (height + 1) + 'px',
                         lineHeight: lineHeight + 'px',
                         width: width + '%',
-                        minHeight: (self.minCellHeight - 1) + 'px',
+                        minHeight: (self.minCellHeight) + 'px',
                         maxWidth: self.appWidth + '%'
                         // zIndex: j
                     })
