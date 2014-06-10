@@ -250,7 +250,8 @@ define('io.ox/mail/detail/view',
         },
 
         onUnseen: function () {
-            api.markRead(this.model.toJSON());
+            var data = this.model.toJSON();
+            if (util.isToplevel(data)) api.markRead(data);
         },
 
         onLoad: function (data) {
