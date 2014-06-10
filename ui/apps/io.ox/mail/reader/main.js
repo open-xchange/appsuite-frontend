@@ -39,6 +39,12 @@ define('io.ox/mail/reader/main',
                 if (app.threadView.model) {
                     var subject = app.threadView.model.get('subject');
                     app.setTitle(util.getSubject(subject));
+                    // respond to 'remove' event to close the reader
+                    app.threadView.listenTo(app.threadView.model, 'remove', function () {
+                        app.threadView.remove();
+                        app.quit();
+                        app = app.threadView = null;
+                    });
                 }
             };
         }

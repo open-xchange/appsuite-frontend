@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-04 14:06+0100\n"
+"PO-Revision-Date: 2014-06-10 09:41+0100\n"
 "Last-Translator: Antje Faber\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1757,10 +1757,9 @@ msgid "Customize this page"
 msgstr "Diese Seite personalisieren"
 
 #: apps/io.ox/calendar/toolbar.js:150 module:io.ox/calendar
-#, fuzzy
 #| msgid "Standard colors"
 msgid "Dark colors"
-msgstr "Standardfarben"
+msgstr "Dunkle Farben"
 
 #: apps/io.ox/core/import/import.js:213 module:io.ox/core
 msgid "Data imported successfully"

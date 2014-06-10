@@ -17,7 +17,7 @@
 		margin-bottom: 5px;
 		font-size: 13px;
 		font-weight: 700;
-		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		font-family: @normal-font-family;
 		color: #888;
 		border: 0;
     }
@@ -121,7 +121,7 @@
         .progress-field { width: 49px; }
     }
     @media all and (max-width: 480px), all and (max-device-width: 480px) {
-    
+
     	.form-control[readonly] {//datepickers become readonly on mobile but they are still editable with mobiscroll, so don't make them grey
     		background-color: #fff;//white
     	}

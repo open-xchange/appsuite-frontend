@@ -165,9 +165,16 @@
             .title { color: rgba(0, 0, 0, 0.7); }
             .location { color: rgba(0, 0, 0, 0.5); }
         }
+
+        &.io-ox-busy:before { color: white; opacity: 0.30; }
     }
 
     .appointment {
+
+        &.io-ox-busy:before {
+            color: inherit;
+            opacity: 0.50;
+        }
 
         .title {
             font-weight: bold;

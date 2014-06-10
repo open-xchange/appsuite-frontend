@@ -1712,12 +1712,19 @@ define('io.ox/mail/api',
             return !!this.hash[cid];
         },
 
-        get: function (cid) {
+        getModels: function (cid) {
             if (!_.isString(cid)) return [];
             var thread = this.hash[cid] || [cid], collection = pool.get('detail');
-            return _(thread).chain()
+            return _(thread)
+                .chain()
                 .map(collection.get, collection)
                 .compact()
+                .value();
+        },
+
+        get: function (cid) {
+            return _(this.getModels(cid))
+                .chain()
                 .invoke('toJSON')
                 .map(function injectIndex(obj, index) {
                     obj.index = index;
@@ -1764,6 +1771,11 @@ define('io.ox/mail/api',
                 this.reverse[thread_cid] = cid;
             }, this);
         }
+    };
+
+    // help garbage collector to find dependent models
+    api.pool.getDependentModels = function (cid) {
+        return api.threads.getModels(cid);
     };
 
     // collection loader
