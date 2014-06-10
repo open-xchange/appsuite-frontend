@@ -11,9 +11,25 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define(['fixture!io.ox/core/settings.json',
+        'fixture!io.ox/search/autocomplete.json',
         'settings!io.ox/mail',
         'settings!io.ox/core',
-        'beforeEachEnsure'], function (settingsFixture, mailSettings, settings, beforeEachEnsure) {
+        'beforeEachEnsure'], function (settingsFixture, autocompleteFixture, mailSettings, settings, beforeEachEnsure) {
+
+    var setupFakeServer = function (server) {
+        server.respondWith('PUT', /api\/find\?action=autocomplete/, function (xhr) {
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                JSON.stringify({timestamp: 1378223251586, data: autocompleteFixture.data})
+            );
+        });
+
+        server.respondWith('PUT', /api\/find\?action=query/, function (xhr) {
+            var data = {};
+            xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
+                JSON.stringify({timestamp: 1378223251586, data: data})
+            );
+        });
+    };
 
     //aync setup loads app and and add some variables to test context
     function setup () {
@@ -27,6 +43,9 @@ define(['fixture!io.ox/core/settings.json',
             var id = 'io.ox/' + module + '/main';
             ox.manifests.apps[id] = {title: module};
         });
+
+        //fake autocomplete and query response
+        setupFakeServer(self.server);
 
         //load app
         require(['io.ox/search/main'], function (main) {

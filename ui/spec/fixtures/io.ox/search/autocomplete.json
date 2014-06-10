@@ -1,0 +1,302 @@
+{
+  "data": {
+    "facets": [
+      {
+        "id": "global",
+        "style": "simple",
+        "display_name": "f",
+        "filter": {
+          "fields": [
+            "global"
+          ],
+          "queries": [
+            "f"
+          ]
+        },
+        "flags": [
+
+        ]
+      },
+      {
+        "id": "subject",
+        "style": "simple",
+        "display_item": [
+          "f",
+          "im Betreff"
+        ],
+        "filter": {
+          "fields": [
+            "subject"
+          ],
+          "queries": [
+            "f"
+          ]
+        },
+        "flags": [
+
+        ]
+      },
+      {
+        "id": "mail_text",
+        "style": "simple",
+        "display_item": [
+          "f",
+          "im E-Mail-Text"
+        ],
+        "filter": {
+          "fields": [
+            "body"
+          ],
+          "queries": [
+            "f"
+          ]
+        },
+        "flags": [
+
+        ]
+      },
+      {
+        "id": "contacts",
+        "style": "default",
+        "display_name": "Absender\/Empf&auml;nger",
+        "values": [
+          {
+            "id": "contact\/1\/101",
+            "display_name": "Friedrich, Tobias",
+            "options": [
+              {
+                "id": "all",
+                "display_name": "Absender\/Empf&auml;nger",
+                "filter": {
+                  "fields": [
+                    "from",
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "tobias.friedrich@open-xchange.com"
+                  ]
+                }
+              },
+              {
+                "id": "sender",
+                "display_name": "Absender",
+                "filter": {
+                  "fields": [
+                    "from"
+                  ],
+                  "queries": [
+                    "tobias.friedrich@open-xchange.com"
+                  ]
+                }
+              },
+              {
+                "id": "recipient",
+                "display_name": "Empf&auml;nger",
+                "filter": {
+                  "fields": [
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "tobias.friedrich@open-xchange.com"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "contact\/1\/79",
+            "display_name": "Laguna, Francisco",
+            "options": [
+              {
+                "id": "all",
+                "display_name": "Absender\/Empf&auml;nger",
+                "filter": {
+                  "fields": [
+                    "from",
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "francisco.laguna@open-xchange.com"
+                  ]
+                }
+              },
+              {
+                "id": "sender",
+                "display_name": "Absender",
+                "filter": {
+                  "fields": [
+                    "from"
+                  ],
+                  "queries": [
+                    "francisco.laguna@open-xchange.com"
+                  ]
+                }
+              },
+              {
+                "id": "recipient",
+                "display_name": "Empf&auml;nger",
+                "filter": {
+                  "fields": [
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "francisco.laguna@open-xchange.com"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "contact\/1\/464373",
+            "display_name": "Paczynski, Frank",
+            "options": [
+              {
+                "id": "all",
+                "display_name": "Absender\/Empf&auml;nger",
+                "filter": {
+                  "fields": [
+                    "from",
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "frank.paczynski@open-xchange.com",
+                    "frank.paczynski@gmail.com",
+                    "x_x_x_do_not_use@this.address "
+                  ]
+                }
+              },
+              {
+                "id": "sender",
+                "display_name": "Absender",
+                "filter": {
+                  "fields": [
+                    "from"
+                  ],
+                  "queries": [
+                    "frank.paczynski@open-xchange.com",
+                    "frank.paczynski@gmail.com",
+                    "x_x_x_do_not_use@this.address "
+                  ]
+                }
+              },
+              {
+                "id": "recipient",
+                "display_name": "Empf&auml;nger",
+                "filter": {
+                  "fields": [
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "frank.paczynski@open-xchange.com",
+                    "frank.paczynski@gmail.com",
+                    "x_x_x_do_not_use@this.address "
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "f",
+            "display_name": "f",
+            "options": [
+              {
+                "id": "all",
+                "display_name": "Absender\/Empf&auml;nger",
+                "filter": {
+                  "fields": [
+                    "from",
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "f"
+                  ]
+                }
+              },
+              {
+                "id": "sender",
+                "display_name": "Absender",
+                "filter": {
+                  "fields": [
+                    "from"
+                  ],
+                  "queries": [
+                    "f"
+                  ]
+                }
+              },
+              {
+                "id": "recipient",
+                "display_name": "Empf&auml;nger",
+                "filter": {
+                  "fields": [
+                    "to",
+                    "cc"
+                  ],
+                  "queries": [
+                    "f"
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "flags": [
+
+        ]
+      },
+      {
+        "id": "time",
+        "style": "exclusive",
+        "display_name": "Zeit",
+        "options": [
+          {
+            "id": "last_week",
+            "display_name": "letzte Woche",
+            "filter": {
+              "fields": [
+                "time"
+              ],
+              "queries": [
+                "last_week"
+              ]
+            }
+          },
+          {
+            "id": "last_month",
+            "display_name": "letzter Monat",
+            "filter": {
+              "fields": [
+                "time"
+              ],
+              "queries": [
+                "last_month"
+              ]
+            }
+          },
+          {
+            "id": "last_year",
+            "display_name": "letztes Jahr",
+            "filter": {
+              "fields": [
+                "time"
+              ],
+              "queries": [
+                "last_year"
+              ]
+            }
+          }
+        ],
+        "flags": [
+
+        ]
+      }
+    ]
+  }
+}
