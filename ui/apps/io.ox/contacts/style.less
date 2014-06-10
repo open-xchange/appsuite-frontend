@@ -150,6 +150,10 @@
             font-size: 24px;
             line-height: 28px;
             margin: 0;
+
+            &.header-name {
+                word-break: break-all;
+            }
         }
 
         h2 {
@@ -165,6 +169,7 @@
             &.header-job {
                 color: @hc-gray;
                 margin: 0 0 14px 0;
+                word-break: break-all;
             }
 
         }
@@ -247,7 +252,7 @@
 
             dd {
                 margin-left: 160px;
-                word-wrap: break-word;
+                word-break: break-all;
             }
         }
     }
