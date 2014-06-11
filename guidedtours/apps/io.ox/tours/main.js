@@ -81,20 +81,20 @@ define('io.ox/tours/main',
                 title: gt('Launching an app'),
                 placement: 'bottom',
                 target: function () { return $('.launcher[data-app-name="io.ox/mail"]')[0]; },
-                content: gt('To launch an app, click on an entry on the top-left side of the menu bar.')
+                content: gt('To launch an app, click on an entry on the left side of the menu bar.')
             },
             {
                 onShow: function () { notifications.hideList(); },
                 title: gt('Displaying the help or the settings'),
                 placement: 'left',
                 target: function () { return $('.launcher .fa-cog:visible')[0]; },
-                content: gt('To display the help or the settings, use the icons on the right side of the menu bar.'),
+                content: gt('To display the help or the settings, click the System menu icon in the menu bar.'),
                 arrowOffset: 1,
                 yOffset: -5
             },
             {
                 onShow: function () { notifications.showList(); },
-                title: gt('New objects icon'),
+                title: gt('The New objects icon'),
                 placement: 'left',
                 target: function () { return $('#io-ox-notifications-icon:visible')[0]; },
                 content: gt('The New objects icon shows the number of unread E-Mails or other notifications. If clicking the icon, the info area opens.'),
@@ -102,7 +102,7 @@ define('io.ox/tours/main',
             },
             {
                 onShowDeferred: switchToAppFunc('io.ox/mail/main'),
-                title: gt('Info area'),
+                title: gt('The info area'),
                 placement: 'left',
                 target: function () { return $('#io-ox-notifications')[0]; },
                 content: gt('In case of new notifications, e.g. appointment invitations, the info area is opened on the right side.')
@@ -111,46 +111,52 @@ define('io.ox/tours/main',
                 onShow: function () { notifications.hideList(); },
                 title: gt('Creating new items'),
                 placement: 'right',
-                target: function () { return $('.window-toolbar .fa-pencil:visible')[0]; },
-                content: gt('To create a new E-Mail, click the Compose new E-Mail icon at the top.'),
+                target: function () { return $('.classic-toolbar .io-ox-action-link:visible')[0]; },
+                content: gt('To create a new E-Mail, click the Compose new E-Mail in the toolbar.'),
                 arrowOffset: 1,
                 yOffset: -5
             },
             {
                 title: gt('Opening or closing the folder tree'),
-                placement: 'right',
-                target: function () { return $('.window-toolbar [data-ref="io.ox/mail/links/toolbar/folder"]:visible')[0]; },
-                content: gt('To open or close the folder tree, click the Toggle folder icon.')
+                placement: 'left',
+                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
+                content: gt('To open or close the folder tree, click on View >  Folder view on the right side of the toolbar.')
             },
             {
                 title: gt('Searching for objects'),
-                placement: 'right',
-                target: function () { return $('.window-toolbar [data-ref="io.ox/mail/links/toolbar/search"]:visible')[0]; },
-                content: gt('To search for objects, click the Toggle search icon.')
+                placement: 'left',
+                target: function () { return $('#io-ox-search-topbar-icon:visible')[0]; },
+                content: gt('To search for objects, click the Search icon in the menu bar.')
             },
             {
-                title: gt('Folder tree'),
+                title: gt('The toolbar'),
+                placement: 'bottom',
+                target: function () { return $('.classic-toolbar:visible')[0]; },
+                content: gt('Depending on the app, the toolbar contains various functions for creating, editing and organizing objects.')
+            },
+            {
+                title: gt('The folder tree'),
                 placement: 'right',
                 target: function () { return $('.foldertree-container:visible')[0]; },
-                content: gt('Use the folder tree to open the folder containing the objects that you want to view in the sidebar.')
+                content: gt('Use the folder tree to open the folder containing the objects that you want to view in the list.')
             },
             {
-                title: gt('Sidebar'),
-                placement: 'right',
-                target: function () { return $('.vgrid-cell.selectable.mail:visible')[0]; },
-                content: gt('Use the sidebar to select an object in order to view its contents or to apply functions.')
-            },
-            {
-                title: gt('Display area'),
+                title: gt('The list'),
                 placement: 'left',
-                target: function () { return $('.mail-detail:visible')[0]; },
-                content: gt('The display area shows an object\'s content. At the top of the display area you will find functions for e.g. moving or deleting objects.')
+                target: function () { return $('.list-view:visible')[0]; },
+                content: gt('Use the list to select an object, show its contents or activate functions.')
+            },
+            {
+                title: gt('The Detail view'),
+                placement: 'left',
+                target: function () { return $('.mail-detail-pane:visible')[0]; },
+                content: gt('The Detail view displays an object\'s content. Depending on the app, further functions for organizing objects can be found in the Detail view.')
             },
             {
                 title: gt('Further information'),
                 placement: 'left',
                 target: function () { return $('.launcher .fa-cog:visible')[0]; },
-                content: gt('Detailed guides for all modules are located in the help section of the settings.'),
+                content: gt('Detailed instructions for the single apps are located in System menu > Help.'),
                 arrowOffset: 1,
                 yOffset: -5
             }]
@@ -175,13 +181,7 @@ define('io.ox/tours/main',
                 title: gt('Reading the details'),
                 placement: 'bottom',
                 target: function () { return $('.widget .item:visible')[0]; },
-                content: gt('To read the details, click on an entry in a tile.')
-            },
-            {
-                title: gt('Launching an app'),
-                placement: 'bottom',
-                target: function () { return $('.widget .title:visible')[0]; },
-                content: gt('To launch an app, click on a tile\'s headline.')
+                content: gt('To read the details, click on an entry in a square.')
             },
             {
                 title: gt('Drag and drop'),
@@ -193,21 +193,21 @@ define('io.ox/tours/main',
                         return null;
                     }
                 },
-                content: gt('To change the layout, drag a tile\'s background to another position and drop it there.')
+                content: gt('To change the layout, drag a square\'s title to another position and drop it there.')
             },
             {
-                title: gt('Closing a tile'),
+                title: gt('Closing a square'),
                 placement: 'bottom',
                 target: function () { return $('.widget .disable-widget .fa-times:visible')[0]; },
-                content: gt('If you no longer want to display a tile, click the cross on the upper right side.'),
+                content: gt('If you no longer want to display a square, click the cross on the upper right side.'),
                 xOffset: -10,
                 arrowOffset: 1
             },
             {
-                title: gt('Customizing'),
+                title: gt('Customizing the Portal'),
                 placement: 'left',
                 target: function () { return $('.header [data-action="customize"]')[0]; },
-                content: gt('To display a tile again or to display further information sources, click on Customize this page.'),
+                content: gt('To display a square again or to display further information sources, click on Customize this page.'),
                 yOffset: -10,
                 arrowOffset: 1
             }]
@@ -224,8 +224,8 @@ define('io.ox/tours/main',
             steps: [{
                 title: gt('Composing a new E-Mail'),
                 placement: 'right',
-                target: function () { return $('[data-ref="io.ox/mail/links/toolbar/default"]:visible')[0]; },
-                content: gt('To compose a new E-Mail, click on the Compose new E-Mail icon at the top.'),
+                target: function () { return $('[data-ref="io.ox/mail/actions/compose"]:visible')[0]; },
+                content: gt('To compose a new E-Mail, click on Compose in the toolbar.'),
                 arrowOffset: 1,
                 yOffset: -5,
                 multipage: true,
@@ -291,14 +291,28 @@ define('io.ox/tours/main',
             },
             {
                 title: gt('Sorting your E-Mails'),
-                placement: 'top',
-                target: function () { return $('.vgrid-toolbar .fa-arrow-down:visible')[0]; },
-                content: gt('The icon on the bottom right side helps you sort your E-Mails. Click the icon to get a list of sort criteria.'),
+                placement: 'bottom', /* Check target */
+                target: function () { return $('.dropdown.grid-options.toolbar-item.pull-right:visible')[0]; },
+                content: gt('To sort the E-Mails, click on Sort by. Select a sort criteria.'),
                 xOffset: -15
             },
             {
-                title: gt('Opening E-Mail threads'),
+                title: gt('Selecting a view'),
+                placement: 'left',
+                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
+                content: gt('To choose between the different views. click on View in the toolbar. Select a menu entry in the layout.'),
+                xOffset: -15
+            }, 
+            {
+                title: gt('Opening an E-Mail in a separate window'),
                 placement: 'right',
+                target: function () { return $('.list-view:visible')[0]; },
+                content: gt('If double-clicking on an E-Mail in the list, the E-Mail is opened in a separate window.'),
+                xOffset: -15
+            }, 
+            {
+                title: gt('Reading E-Mail conversations'),
+                placement: 'left',
                 target: function () {
                     var visibleMails = $('.selectable.mail').slice(0, 5),
                         threadedMails = visibleMails.find('.thread-size:visible');
@@ -307,7 +321,7 @@ define('io.ox/tours/main',
                     }
                     return null;
                 },
-                content: gt('The number on the right side of the E-Mail subject corresponds to the number of E-Mails in a thread. To open the thread, click on the number.'),
+                content: gt('To open or close an E-Mail in a conversation, click on a free area in the header.'),
                 arrowOffset: 1,
                 yOffset: -10
             },
@@ -321,16 +335,17 @@ define('io.ox/tours/main',
             },
             {
                 title: gt('Editing multiple E-Mails'),
-                placement: 'top',
-                target: function () { return $('.vgrid-toolbar.bottom .fa-th-list:visible')[0]; },
-                content: gt('In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click the icon on the bottom left side.'),
+                placement: 'bottom',
+                target: function () { return $('[data-ref="io.ox/mail/listview"]:visible')[0]; },
+                //target: function () { return $('.list-view:visible')[0]; },
+                content: gt('In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'),
                 xOffset: -15
             },
             {
                 title: gt('Opening the E-Mail settings'),
                 placement: 'left',
                 target: function () { return $('.launcher .fa-cog:visible')[0]; },
-                content: gt('To open the E-Mail settings, click the Gearwheel icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side.'),
+                content: gt('To open the E-Mail settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side. To display all settings, enable Advanced settings in the bottom left side'),
                 arrowOffset: 1,
                 yOffset: -5
             }]
@@ -347,8 +362,8 @@ define('io.ox/tours/main',
             steps: [{
                 title: gt('Creating a new contact'),
                 placement: 'right',
-                target: function () { return $('.window-toolbar .fa-plus:visible')[0]; },
-                content: gt('To create a new contact, click the Add contact icon on top.'),
+                target: function () { return $('.classic-toolbar .io-ox-action-link:visible')[0]; },
+                content: gt('To create a new contact, click on New > Add contact in the toolbar.'),
                 yOffset: -10
             },
             {
@@ -361,13 +376,13 @@ define('io.ox/tours/main',
                 title: gt('Sending an E-Mail to a contact'),
                 placement: 'bottom',
                 target: function () { return $('.contact-detail [href^="mailto"]:visible')[0]; },
-                content: gt('To send an E-Mail to the contact, click on an E-Mail address or on Send E-Mail at the top of the display area.')
+                content: gt('To send an E-Mail to the contact, click on an E-Mail address or on Send email in the toolbar.')
             },
             {
                 title: gt('Editing multiple contacts'),
                 placement: 'top',
-                target: function () { return $('.vgrid-toolbar.bottom .fa-th-list:visible')[0]; },
-                content: gt('To edit multiple contacts at once, enable the checkboxes on the left side of the contacts. If the checkboxes are not displayed, click the icon on the bottom left side.'),
+                target: function () { return $('.vgrid-scrollpane-container:visible')[0]; },
+                content: gt('To edit multiple contacts at once, enable the checkboxes on the left side of the contacts. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'),
                 xOffset: -20
             }]
         }
@@ -384,9 +399,10 @@ define('io.ox/tours/main',
                 title: gt('Creating a new appointment'),
                 placement: 'right',
                 target: function () {
-                    return $('[data-ref="io.ox/calendar/links/toolbar/default"]')[0];
+                    return $('[data-ref="io.ox/calendar/detail/actions/create"]')[0];
                 },
-                content: gt('To create a new appointment, click the New appointment icon at the top.'),
+                // target: function () { return $('.classic-toolbar .io-ox-action-link:visible')[0];
+                content: gt('To create a new appointment, click on New in the toolbar.'),
                 multipage: true,
                 onNext: function () {
                     if (
@@ -403,7 +419,7 @@ define('io.ox/tours/main',
                 }
             },
             {
-                title: gt('Entering the data'),
+                title: gt('Entering the appointment\'s data'),
                 placement: 'bottom',
                 target: function () { return $('[data-extension-id="title"]:visible')[0]; },
                 content: gt('Enter the subject, the start and the end date of the appointment. Other details are optional.')
@@ -415,10 +431,10 @@ define('io.ox/tours/main',
                 content: gt('To create recurring appointments, enable Repeat. Functions for setting the recurrence parameters are shown.')
             },
             {
-                title: gt('Using the reminder functions'),
+                title: gt('Using the reminder function'),
                 placement: 'top',
                 target: function () { return $('[data-extension-id="alarm"]:visible')[0]; },
-                content: gt('To not miss the appointment, use the reminder functions.')
+                content: gt('To not miss the appointment, use the reminder function.')
             },
             {
                 title: gt('Inviting other participants'),
@@ -440,7 +456,7 @@ define('io.ox/tours/main',
                     }
                     return $('[data-extension-id="attachments_legend"]:visible')[0];
                 },
-                content: gt('Further down you can add attachments to the appointment.')
+                content: gt('Further down you can add documents as attachments to the appointment.')
             },
             {
                 title: gt('Creating the appointment'),
@@ -467,9 +483,9 @@ define('io.ox/tours/main',
                     }
                 },
                 title: gt('Selecting a view'),
-                placement: 'right',
-                target: function () { return $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible')[0]; },
-                content: gt('To select one of the views like Day, Month or List, click the Eye icon in the toolbar.')
+                placement: 'left',
+                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
+                content: gt('To select one of the views like Day, Month or List, click on View in the toolbar. Select a menu entry from the Layout section.')
             },
             {
                 onShow: function () {
@@ -478,9 +494,9 @@ define('io.ox/tours/main',
                     }
                 },
                 title: gt('The List view'),
-                placement: 'right',
-                target: function () { return $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible')[0]; },
-                content: gt('The List view shows a sidebar with appointments and a display area with the data of the selected appointment. This view corresponds to the view in E-Mail and Contacts.')
+                placement: 'left',
+                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
+                content: gt('The List view shows a list of the appointments in the current folder. If clicking on an appointment, the appointment\'s data and some functions are displayed in the Detail view.')
             },
             {
                 onShow: function () {
@@ -489,9 +505,9 @@ define('io.ox/tours/main',
                     }
                 },
                 title: gt('The calendar views'),
-                placement: 'right',
-                target: function () { return $('[data-ref="io.ox/calendar/links/toolbar/view"]:visible')[0]; },
-                content: gt('The calendar views display a calendar sheet with the appointments.')
+                placement: 'left',
+                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
+                content: gt('The calendar views display a calendar sheet with the appointments for the selected time range.')
             }]
         }
     });
@@ -504,68 +520,69 @@ define('io.ox/tours/main',
         tour: {
             id: 'Files',
             steps: [{
-                title: gt('Selecting a view'),
+                title: gt('Folder tree'),
                 placement: 'right',
-                target: function () { return $('[data-ref="io.ox/files/links/toolbar/view"]')[0]; },
-                content: gt('To select one of the views Icon or List, click the icon at the bottom of the toolbar.')
+                target: function () { return $('.foldertree-container:visible')[0]; },
+                content: gt('Use the folder tree to access own, public or shared files. If the folder tree is hidden, click on View > Folder view on the right side of the toolbar.')
+            },
+            {
+                title: gt('Selecting a view'),
+                placement: 'left',
+                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
+                content: gt('To select one of the views List, Icons or Squares, click on View on the right side of the toolbar.')
             },
             {
                 title: gt('The List view'),
-                placement: 'right',
-                target: function () { return $('[data-ref="io.ox/files/links/toolbar/view"]')[0]; },
-                content: gt('The List view shows a sidebar with files and a display area with the data of the selected file. This view corresponds to the views in E-Mail and Contacts.')
+                placement: 'left',
+                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
+                content: gt('The List view shows details like the size and date of change. Use the checkboxes to select files. Click on a file to view further details and functions in the pop-up.')
             },
             {
                 title: gt('The Icons view'),
-                placement: 'right',
-                target: function () { return $('[data-ref="io.ox/files/links/toolbar/view"]')[0]; },
-                content: gt('The Icons view displays an icon for each file.')
+                placement: 'left',
+                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
+                content: gt('The Icons view displays an icon and the file name for each file. Click on an icon to view further details and functions in the pop-up.')
+            },
+            {
+                title: gt('The Tiles view'),
+                placement: 'left',
+                target: function () { return $('.classic-toolbar .pull-right:visible')[0]; },
+                content: gt('The Tiles view shows a big icon for each file. Click on an icon to view further details and functions in the pop-up.')
             },
             {
                 onShow: function () {
                     if ($('.toolbar-button.dropdown.open .dropdown-menu').length === 0) {
-                        $('[data-ref="io.ox/files/links/toolbar/default"]').click();
+                        $('[data-ref="io.ox/files/dropdown/new"]').click();
                     }
                 },
                 title: gt('Uploading a file'),
                 placement: 'right',
-                target: function () { return $('[data-ref="io.ox/files/links/toolbar/default"]')[0]; },
-                content: gt('To upload a file, click the icon at the top. Select Upload new file.')
+                target: function () { return $('[data-ref="io.ox/files/dropdown/new"]')[0]; },
+                /*target: function () { return $('[data-action="io.ox/files/actions/upload"]')[0]; },*/
+                content: gt('To upload a file, click on New > Upload new file in the toolbar.')
             },
             {
                 onShow: function () {
                     if ($('.toolbar-button.dropdown.open .dropdown-menu').length === 0) {
-                        $('[data-ref="io.ox/files/links/toolbar/default"]').click();
+                        $('[data-ref="io.ox/files/dropdown/new"]').click();
                     }
                 },
                 title: gt('Creating a note'),
                 placement: 'right',
-                target: function () { return $('[data-ref="io.ox/files/links/toolbar/default"]')[0]; },
-                content: gt('To create a note, click the icon at the top. Select Add note.')
-            },
-            {
-                title: gt('The Icons view'),
-                placement: 'bottom',
-                target: function () { return $('.file-cell')[0]; },//no scrollable pane here. when there are too much files the bubble is pushed out of the visible area
-                content: gt('In the Icons view you can see the files of the selected folder in the display area.')
-            },
-            {
-                title: gt('The folder path'),
-                placement: 'bottom',
-                target: function () { return $('.files-wrapper .breadcrumb:visible')[0]; },
-                content: gt('At the top of the display area the path to the selected folder is shown. Click on the path to switch to another folder.')
+                target: function () { return $('[data-ref="io.ox/files/dropdown/new"]')[0]; },
+                content: gt('To create a note, click on New > Add note in the toolbar.')
             },
             {
                 title: gt('Slideshow'),
                 placement: 'bottom',
-                target: function () { return $('[data-action="slideshow"]:visible')[0]; },
-                content: gt('If a folder contains images, you can display a slideshow. To do so click on Slideshow on the upper right side.')
+                target: function () { return $('[data-ref="io.ox/files/icons/slideshow"]:visible')[0]; },
+                content: gt('If a folder contains images, you can display a slideshow. To do so click the View slideshow icon in the toolbar.')
             },
             {
                 title: gt('Displaying information'),
                 placement: 'bottom',
                 target: function () { return $('.file-cell')[0]; },
-                content: gt('To view further information, click on a file. The information are displayed in a pop-up window.')
+                content: gt('To view further information, click on a file. A pop-up window displays further details and functions.')
             }]
         }
     });
@@ -580,8 +597,8 @@ define('io.ox/tours/main',
             steps: [{
                 title: gt('Creating a new task'),
                 placement: 'right',
-                target: function () { return $('.window-toolbar [data-ref="io.ox/tasks/links/toolbar/default"]')[0]; },
-                content: gt('To create a new task, click the Create new task icon at the top.'),
+                target: function () { return $('[data-ref="io.ox/tasks/actions/create"]')[0]; },
+                content: gt('To create a new task, click on New in the toolbar.'),
                 multipage: true,
                 onNext: function () {
                     if ($('.launcher[data-app-name="io.ox/tasks/edit"]').length === 0) {
@@ -597,7 +614,7 @@ define('io.ox/tours/main',
                 }
             },
             {
-                title: gt('Entering the data'),
+                title: gt('Entering the task\'s data'),
                 placement: 'bottom',
                 target: function () { return $('.io-ox-tasks-edit [data-extension-id="title"]:visible')[0]; },
                 content: gt('Enter the subject, the start date, and a description.')
@@ -623,7 +640,7 @@ define('io.ox/tours/main',
                 title: gt('Using the reminder function'),
                 placement: 'top',
                 target: function () { return $('[for="task-edit-reminder-select"]:visible')[0]; },
-                content: gt('To not miss the task, use the reminder function. ')
+                content: gt('To not miss the task, use the reminder function.')
             },
             {
                 title: gt('Tracking the editing status'),
@@ -654,7 +671,7 @@ define('io.ox/tours/main',
                 title: gt('Entering billing information'),
                 placement: (_.device('desktop') ? 'top': 'left'),
                 target: function () { return $('.task-edit-row [tabindex="2"]:visible')[0]; },
-                content: gt('In the Details section at the bottom right side you can enter billing information.'),
+                content: gt('To enter billing information, click on Show details.'),
                 onShow: function () { $('.tab-link[tabindex="2"]:visible').click(); }
             },
             {
@@ -679,17 +696,18 @@ define('io.ox/tours/main',
                 }
             },
             {
-                title: gt('Sorting your tasks'),
-                placement: 'top',
-                target: function () { return $('.vgrid-toolbar.bottom .fa-arrow-down:visible')[0]; },
-                content: gt('The icon at the bottom right side helps you sort your tasks. Click the icon to get a list of sort criteria.'),
+                title: gt('Sorting tasks'),
+                placement: 'bottom',
+                target: function () { return $('.grid-options.dropdown:visible')[0]; },
+                content: gt('To sort the tasks, click on Sort by. Select a sort criteria.'),
                 xOffset: -10
             },
             {
                 title: gt('Editing multiple tasks'),
-                placement: 'top',
-                target: function () { return $('.vgrid-toolbar.bottom .fa-th-list:visible')[0]; },
-                content: gt('To edit multiple tasks at once, enable the checkboxes at the left side of the tasks. If the checkboxes are not displayed, click the icon at the bottom left side.'),
+                placement: 'right',
+                target: function () { return $('.vgrid-scrollpane-container:visible')[0]; },
+                //target: function () { return $('abs.vgrid-scrollpane:visible')[0]; },
+                content: gt('To edit multiple tasks at once, enable the checkboxes at the left side of the tasks. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar.'),
                 xOffset: -10
             }]
         }
@@ -705,26 +723,26 @@ define('io.ox/tours/main',
             steps: [{
                 title: gt('Opening the settings'),
                 placement: 'left',
-                target: function () { return $('#io-ox-topbar .launcher .fa-cog')[0]; },
+                target: function () { return $('.launcher .fa-cog:visible')[0]; },
                 content: gt('To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings. ')
             },
             {
                 title: gt('How the settings are organized'),
                 placement: 'right',
                 target: function () { return $('.io-ox-settings-window .vgrid-scrollpane')[0]; },
-                content: gt('The settings are organized in topics. Select the topic on the left side, e.g Basic settings, E-Mail or My contact data.')
+                content: gt('The settings are organized in topics. Select the topic on the left side, e.g Basic settings or E-Mail. To view all settings, enable Advanced settings at the bottom.')
             },
             {
                 title: gt('Editing settings'),
-                placement: 'right',
-                target: function () { return $('.io-ox-settings-window .vgrid-scrollpane .vgrid-cell.selectable.application')[0]; },
+                placement: 'left',
+                target: function () { return $('.io-ox-settings-window .settings-container')[0]; },
                 content: gt('Edit a setting on the right side. In most of the cases, the changes are activated immediately.')
             },
             {
                 title: gt('Opening the help'),
                 placement: 'left',
                 target: function () { return $('#io-ox-topbar .launcher .fa-cog')[0]; },
-                content: gt('To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. ')
+                content: gt('To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window.')
             },
             {
                 title: gt('Signing out'),

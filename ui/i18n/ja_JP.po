@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-05-12 12:24+0900\n"
+"PO-Revision-Date: 2014-06-06 17:15+0900\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -172,10 +172,8 @@ msgid "%1$s recommends this link:"
 msgstr "%1$s が次のリンクをお勧めしました:"
 
 #: apps/plugins/portal/xing/activities.js:170 module:plugins/portal
-#, fuzzy
-#| msgid "%1$s changed their status:"
 msgid "%1$s updated their profile:"
-msgstr "%1$s がステータスを次に変更"
+msgstr "%1$s がプロファイルを次に変更: "
 
 #. Format of addresses
 #. %1$s is the street
@@ -1648,7 +1646,6 @@ msgstr "連絡先のデータを読み込めませんでした。"
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:46 module:io.ox/mail
 #, fuzzy
-#| msgid "Couldn't load your mail filters."
 msgid "Couldn't load your mail filter rules."
 msgstr "メール フィルタを読み込めませんでした。"
 
@@ -1728,7 +1725,6 @@ msgstr "このページをカスタマイズ"
 
 #: apps/io.ox/calendar/toolbar.js:150 module:io.ox/calendar
 #, fuzzy
-#| msgid "Standard colors"
 msgid "Dark colors"
 msgstr "標準の色"
 
@@ -1953,8 +1949,6 @@ msgstr "破棄"
 #: apps/io.ox/contacts/distrib/main.js:186 module:io.ox/contacts
 #: apps/io.ox/contacts/edit/main.js:250 apps/io.ox/editor/main.js:345
 #: module:io.ox/editor apps/io.ox/tasks/edit/main.js:162 module:io.ox/tasks
-#, fuzzy
-#| msgid "Discard changes"
 msgctxt "dialog"
 msgid "Discard changes"
 msgstr "変更を破棄"
@@ -1962,11 +1956,9 @@ msgstr "変更を破棄"
 #. "Discard message" appears in combination with "Cancel" (this action)
 #. Translation should be distinguishable for the user
 #: apps/io.ox/mail/write/main.js:1383 module:io.ox/mail
-#, fuzzy
-#| msgid "Direct message"
 msgctxt "dialog"
 msgid "Discard message"
-msgstr "ダイレクト メッセージ"
+msgstr "メッセージを破棄"
 
 #: apps/io.ox/mail/settings/pane.js:284 module:io.ox/mail
 msgid "Display"
@@ -2065,10 +2057,8 @@ msgid "Do you really want to discard your changes?"
 msgstr "変更を破棄しますか？"
 
 #: apps/io.ox/mail/write/main.js:1380 module:io.ox/mail
-#, fuzzy
-#| msgid "Do you really want to discard your changes?"
 msgid "Do you really want to discard your message?"
-msgstr "変更を破棄しますか？"
+msgstr "メッセージを本当に破棄しますか？"
 
 #: apps/io.ox/files/folderview-extensions.js:36 module:io.ox/mail
 #: apps/io.ox/mail/folderview-extensions.js:104
@@ -2297,8 +2287,6 @@ msgid "Edit description"
 msgstr "説明を編集"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js:47 module:io.ox/contacts
-#, fuzzy
-#| msgid "Edit Distribution List"
 msgid "Edit distribution list"
 msgstr "配布リストを編集"
 
@@ -2351,8 +2339,6 @@ msgid "Email 3"
 msgstr "メール 3"
 
 #: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings/settings
-#, fuzzy
-#| msgid "Email addresses"
 msgid "Email address"
 msgstr "メール アドレス"
 
@@ -2581,10 +2567,8 @@ msgid "Every day"
 msgstr "毎日"
 
 #: apps/io.ox/mail/toolbar.js:226 module:io.ox/mail
-#, fuzzy
-#| msgid "Start date"
 msgid "Exact dates"
-msgstr "開始日"
+msgstr "確定日"
 
 #: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Executive"
@@ -2847,10 +2831,8 @@ msgid "Folder permissions"
 msgstr "フォルダ権限"
 
 #: apps/io.ox/mail/accounts/view-form.js:493 module:io.ox/settings/settings
-#, fuzzy
-#| msgid "Folder actions"
 msgid "Folder settings"
-msgstr "フォルダ アクション"
+msgstr "フォルダ設定"
 
 #: apps/io.ox/core/commons-folderview.js:519 module:io.ox/core
 msgid "Folder type"
@@ -3181,10 +3163,8 @@ msgid "Ignore"
 msgstr "無視"
 
 #: apps/io.ox/mail/accounts/view-form.js:309 module:io.ox/settings/settings
-#, fuzzy
-#| msgid "Warnings:"
 msgid "Ignore Warnings"
-msgstr "警告:"
+msgstr "警告を無視"
 
 #: apps/io.ox/calendar/edit/main.js:161 module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/month/perspective.js:116 module:io.ox/calendar
@@ -3562,7 +3542,6 @@ msgstr "メールの詳細"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:361 module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/register.js:24
 #, fuzzy
-#| msgid "Mail Filter"
 msgid "Mail Filter Rules"
 msgstr "メール フィルタ"
 
@@ -3863,6 +3842,7 @@ msgstr "さらに表示"
 #: apps/io.ox/search/view-template.js:347 module:io.ox/core
 msgid "More than the currently displayed %1$s items were found"
 msgstr ""
+"現在表示されている %1$s 個のアイテムよりも多いアイテムが見つかりました。"
 
 #: apps/io.ox/calendar/actions.js:424 module:io.ox/calendar
 #: apps/io.ox/calendar/actions.js:474 apps/io.ox/calendar/actions.js:668
@@ -5429,8 +5409,6 @@ msgid "Select"
 msgstr "選択"
 
 #: apps/io.ox/search/view-template.js:495 module:io.ox/core
-#, fuzzy
-#| msgid "Select folder"
 msgid "Select Folder"
 msgstr "フォルダを選択"
 
@@ -5872,10 +5850,8 @@ msgid "State"
 msgstr "都道府県"
 
 #: apps/io.ox/mail/toolbar.js:228 module:io.ox/mail
-#, fuzzy
-#| msgid "Reload statistics"
 msgid "Statistics"
-msgstr "統計を再読み込み"
+msgstr "統計"
 
 #: apps/io.ox/calendar/toolbar.js:62 module:io.ox/calendar
 #: apps/io.ox/tasks/edit/view-template.js:272 module:io.ox/tasks/edit
@@ -6254,7 +6230,7 @@ msgstr "期限を開始日の前に設定できません。開始日を変更し
 #. %1$s is the duplicate mail address
 #: apps/io.ox/contacts/distrib/create-dist-view.js:182 module:io.ox/contacts
 msgid "The email address %1$s is already in the list"
-msgstr ""
+msgstr "メールアドレス %1$s は既に一覧に存在します。"
 
 #: apps/io.ox/mail/write/main.js:1166 module:io.ox/mail
 msgid "The email has been sent"
@@ -6328,7 +6304,7 @@ msgstr "一つのフィールド内の宛先の数は %1$s 件に制限されま
 #. %1$s is the duplicate display name of the person
 #: apps/io.ox/contacts/distrib/create-dist-view.js:186 module:io.ox/contacts
 msgid "The person %1$s is already in the list"
-msgstr ""
+msgstr "人 %1$s は既に一覧に存在します。"
 
 #: apps/io.ox/files/api.js:354 module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
@@ -6844,7 +6820,6 @@ msgstr "いいね！を取り消されたコメント"
 
 #: apps/io.ox/mail/mailfilter/settings/register.js:43 module:io.ox/mail
 #, fuzzy
-#| msgid "Unable to load mail filter settings."
 msgid "Unable to load mail filter rules settings."
 msgstr "メール フィルタ バックエンドに接続できません。"
 
@@ -6901,6 +6876,7 @@ msgstr "未読にする"
 #: apps/io.ox/core/main.js:116 module:io.ox/core
 msgid "Unsaved documents will be lost. Do you want to sign out now?"
 msgstr ""
+"保存されていないドキュメントは失われます。今すぐサイン アウトしますか？"
 
 #: apps/io.ox/mail/settings/signatures/register.js:373 module:io.ox/mail
 msgid "Unset default signature"
@@ -7081,10 +7057,8 @@ msgid "Warning: This message might be a phishing or scam mail"
 msgstr "警告: このメッセージは詐欺メールの疑いがあります。"
 
 #: apps/io.ox/mail/accounts/view-form.js:304 module:io.ox/settings/settings
-#, fuzzy
-#| msgid "Warnings:"
 msgid "Warnings"
-msgstr "警告:"
+msgstr "警告"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -7129,23 +7103,17 @@ msgstr "この製品のフィードバックをお送りください。"
 
 #: apps/io.ox/core/settings/downloads/pane.js:57 module:io.ox/core
 #: apps/plugins/portal/updater/register.js:32 module:plugins/portal
-#, fuzzy
-#| msgid ""
-#| "The updater provides a simple installation wizard. Follow the "
-#| "instructions to install the application. The updater will inform you of "
-#| "any updates for the Connector for Microsoft Outlook, Notifier and Drive. "
-#| "You can download the updates from within the updater."
 msgid ""
 "When executing the downloaded file, an installation wizard will be launched. "
 "Follow the instructions and install the updater. Installs latest versions of "
 "Windows® client software. The Updater automatically informs about new "
 "updates. You can download the updates from within the Updater."
 msgstr ""
-"アップデータでは、簡易的なインストール ウィザードが提供されます。指示に従っ"
-"て、アプリケーションをインストールしてください。アップデータを使用すると、"
-"Connector for Microsoft Outlook、Notifier、Drive のアップデートに関する通知が"
-"すべて受信できます。これらのアップデートはアップデータ内からダウンロードでき"
-"ます。"
+"ダウンロードしたファイルを実行すると、インストール ウィザードが起動します。指"
+"示に従って、アップデータをインストールしてください。Window クライアント ソフ"
+"トウェアの最新バージョンをインストールしてください。アップデータを使用する"
+"と、最新のアップデートに関する通知が受信できます。これらのアップデートはアッ"
+"プデータ内からダウンロードできます。"
 
 #: apps/io.ox/core/pubsub/publications.js:419 module:io.ox/core/pubsub
 msgid ""
@@ -7576,8 +7544,6 @@ msgid "ZB"
 msgstr "ZB"
 
 #: apps/io.ox/calendar/util.js:36 module:io.ox/calendar
-#, fuzzy
-#| msgid "Accepted"
 msgid "accepted"
 msgstr "承諾済み"
 
@@ -7654,8 +7620,6 @@ msgid "day of the weekend"
 msgstr "週末"
 
 #: apps/io.ox/calendar/util.js:37 module:io.ox/calendar
-#, fuzzy
-#| msgid "Declined"
 msgid "declined"
 msgstr "辞退"
 
@@ -7987,8 +7951,6 @@ msgid "total"
 msgstr "合計"
 
 #: apps/io.ox/calendar/util.js:35 module:io.ox/calendar
-#, fuzzy
-#| msgid "Unconfirmed"
 msgid "unconfirmed"
 msgstr "未確認"
 

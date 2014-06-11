@@ -853,18 +853,8 @@ define('io.ox/core/tk/folderviews',
                 (counter.length ? counter : label).after(
                     $('<span class="folder-options">').append(
                         $('<a href="#" class="folder-options-badge" tabindex="1">')
+                        .attr('title', gt('Folder-specific actions'))
                         .append($('<i class="fa fa-cog"></i></span>'))
-                        .attr({
-                            'title': gt('Folder-specific actions'),
-                            'data-toggle': 'tooltip',
-                            'data-placement': 'bottom',
-                            'data-animation': 'false',
-                            'data-container': 'body'
-                        })
-                        .tooltip()
-                        .on('dispose click', function () {
-                            $(this).tooltip('hide');
-                        })
                     )
                 );
             }

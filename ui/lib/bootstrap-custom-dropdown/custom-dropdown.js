@@ -137,8 +137,7 @@
       $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
       if (e.isDefaultPrevented()) return
       if (activeElement) {
-          activeElement.focus();
-          activeElement.tooltip('hide');//hide tooltips here to prevent showing wrong tooltips see Bug 32790
+        activeElement.focus();
       }
       $parent.removeClass('open').trigger('hidden.bs.dropdown', relatedTarget)
     })
