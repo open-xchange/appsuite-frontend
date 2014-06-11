@@ -189,13 +189,20 @@ define('io.ox/core/pubsub/settings/pane',
             var data = baton.model.toJSON(),
                 enabled = data.enabled,
                 dynamicAction,
-                url;
+                url,
+                displayName = getDisplayName(data) || '\u00A0';
 
             this[enabled ? 'removeClass' : 'addClass']('disabled');
 
             if (data.source && (baton.model.refreshState() === 'ready')) {
                 // this is a subscription
-                dynamicAction = $('<a href="#" tabindex="1" class="action" data-action="refresh">').text(gt('Refresh'));
+                dynamicAction = $('<a>').attr({
+                    href: '#',
+                    tabindex: '1',
+                    class: 'action',
+                    'data-action': 'refresh',
+                    'aria-label': displayName + ', ' + gt('Refresh')
+                }).text(gt('Refresh'));
                 if (isDestructiveRefresh(data)) {
                     dynamicAction.addClass('text-error');
                 }
@@ -204,19 +211,40 @@ define('io.ox/core/pubsub/settings/pane',
                 dynamicAction = $('<span>');
             } else if (data.target) {
                 // this is a publication
-                dynamicAction = $('<a href="#" tabindex="1" class="action" data-action="edit">').text(gt('Edit'));
+                dynamicAction = $('<a>').attr({
+                    href: '#',
+                    tabindex: '1',
+                    class: 'action',
+                    'data-action': 'edit',
+                    'aria-label': displayName + ', ' + gt('Edit')
+                }).text(gt('Edit'));
             }
 
             url = getUrl(data);
 
-            this.addClass('item').append(
-                $('<div class="actions">').append(
+            this.addClass('widget-settings-view').append(
+                $('<div class="widget-controls">').append(
                     enabled ? dynamicAction : '',
-                    $('<a href="#" tabindex="1" class="action" data-action="toggle">').text(enabled ? gt('Disable') : gt('Enable')),
-                    $('<a href="#" tabindex="1" class="close" data-action="remove">').append($('<i class="fa fa-trash-o">'))
+                    $('<a>').attr({
+                        href: '#',
+                        tabindex: '1',
+                        class: 'action',
+                        'data-action': 'toggle',
+                        'aria-label': displayName + ', ' + (enabled ? gt('Disable') : gt('Enable'))
+                    }).text(enabled ? gt('Disable') : gt('Enable')),
+                    $('<a class="remove">').attr({
+                        href: '#',
+                        tabindex: 1,
+                        role: 'button',
+                        title: gt('Delete'),
+                        'data-action': 'delete',
+                        'aria-label': displayName + ', ' + gt('Delete')
+                    })
+                    .append($('<i class="fa fa-trash-o">'))
                 ),
-                $('<div class="content">').append(
-                    $('<div class="name">').text(getDisplayName(data) || '\u00A0'),
+                $('<span class="content">').append(
+                    $('<span data-property="displayName" class="list-title pull-left">')
+                    .text(displayName),
                     $('<div class="url">').append(
                         enabled ?
                             $('<a tabindex="1" target="_blank">').attr('href', url).text(getShortUrl(url) || '\u00A0') :
@@ -407,7 +435,7 @@ define('io.ox/core/pubsub/settings/pane',
                     $('<fieldset>').append(
                         // pub
                         both ? $('<legend class="pane-headline sectiontitle">').text(gt('Publications')) : $(),
-                        baton.pubListNode = $('<ul class="list-unstyled publications">')
+                        baton.pubListNode = $('<ul class="list-unstyled publications list-group widget-list">')
                     )
                 );
                 setupList(baton.pubListNode.empty(), baton.publications, 'publication');
@@ -418,7 +446,7 @@ define('io.ox/core/pubsub/settings/pane',
                     $('<fieldset>').append(
                         // sub
                         both ? $('<legend class="pane-headline sectiontitle">').text(gt('Subscriptions')) : $(),
-                        baton.subListNode = $('<ul class="list-unstyled subscriptions">')
+                        baton.subListNode = $('<ul class="list-unstyled subscriptions list-group widget-list">')
                     )
                 );
                 setupList(baton.subListNode.empty(), baton.subscriptions, 'subscription');
