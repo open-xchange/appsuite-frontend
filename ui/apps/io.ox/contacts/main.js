@@ -380,6 +380,10 @@ define('io.ox/contacts/main',
 
             // checkbox toggle
             app.pages.getNavbar('listView').on('rightAction', function () {
+                if (app.props.get('checkboxes') === true) {
+                    // leave multiselect? -> clear selection
+                    app.grid.selection.clear();
+                }
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
             });
 
@@ -584,7 +588,7 @@ define('io.ox/contacts/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'checkboxes': app.settings.get('showCheckboxes', true),
+                'checkboxes': _.device('small') ? false : app.settings.get('showCheckboxes', true),
                 'mobileFolderSelectMode': false
             });
         },

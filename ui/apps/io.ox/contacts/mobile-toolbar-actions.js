@@ -106,6 +106,7 @@ define('io.ox/contacts/mobile-toolbar-actions',
             gt('Actions')
         ),
         noCaret: true, // don't draw the caret icon beside menu link
+        drawDisabled: true,
         ref: 'io.ox/contacts/mobile/actions'
     }));
 
@@ -166,7 +167,13 @@ define('io.ox/contacts/mobile-toolbar-actions',
 
             // multiselect
             app.grid.selection.on('change', function  (e, list) {
-                if (app.props.get('checkboxes') !== true) return;
+                if (app.props.get('checkboxes') !== true ) return;
+                if (list.length === 0) {
+                    // reset to remove old baton
+                     app.pages.getSecondaryToolbar('listView')
+                        .setBaton(ext.Baton({data: [], app: app}));
+                     return;
+                }
                 api.getList(list).done(function (data) {
                     if (!data) return;
                     var baton = ext.Baton({ data: data, app: app });
