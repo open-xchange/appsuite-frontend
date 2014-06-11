@@ -82,7 +82,7 @@ define('io.ox/core/tk/list',
             // show indicator
             this.addBusyIndicator();
             // really refresh?
-            if (tail > 0) return;
+            if (tail > 1) return;
             // load more
             this.processPaginate();
 
