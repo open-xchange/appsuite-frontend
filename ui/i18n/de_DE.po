@@ -1757,7 +1757,6 @@ msgid "Customize this page"
 msgstr "Diese Seite personalisieren"
 
 #: apps/io.ox/calendar/toolbar.js:150 module:io.ox/calendar
-#| msgid "Standard colors"
 msgid "Dark colors"
 msgstr "Dunkle Farben"
 
@@ -2723,7 +2722,7 @@ msgstr ""
 "Applikation konnte nicht gestartet werden. Vielleicht haben Sie "
 "Verbindungsprobleme. Bitte versuchen Sie es erneut."
 
-#: apps/io.ox/calendar/invitations/register.js:492 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:494 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
@@ -2731,7 +2730,7 @@ msgstr ""
 "Der Bestätigungsstatus konnte nicht aktualisiert werden. Der Termin wurde "
 "wahrscheinlich gelöscht."
 
-#: apps/io.ox/calendar/invitations/register.js:493 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:495 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
@@ -5192,7 +5191,7 @@ msgstr "Erneut erinnern"
 
 #: apps/io.ox/calendar/acceptdeny.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/invitations/register.js:564 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:566 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1130 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
@@ -5441,8 +5440,8 @@ msgstr "Planung"
 
 #: apps/io.ox/core/desktop.js:1555 module:io.ox/core
 #: apps/io.ox/core/desktop.js:1556 apps/io.ox/core/desktop.js:1614
-#: apps/io.ox/core/main.js:728 apps/io.ox/search/main.js:156
-#: module:io.ox/search apps/io.ox/search/main.js:177
+#: apps/io.ox/core/main.js:728 apps/io.ox/search/main.js:160
+#: module:io.ox/search apps/io.ox/search/main.js:181
 #: apps/io.ox/search/view-template.js:48
 #: apps/io.ox/search/view-template.js:128
 #: apps/plugins/portal/flickr/register.js:215 module:plugins/portal
@@ -5697,7 +5696,7 @@ msgstr "Termindetails anzeigen"
 msgid "Show comments"
 msgstr "Kommentar anzeigen"
 
-#: apps/io.ox/calendar/invitations/register.js:413 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:415 module:io.ox/calendar/main
 msgid "Show conflicts"
 msgstr "Konflikte anzeigen"
 
@@ -6496,7 +6495,7 @@ msgstr "Design"
 msgid "There are unsaved changes."
 msgstr "Es gibt ungesicherte Änderungen."
 
-#: apps/io.ox/calendar/invitations/register.js:406 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:408 module:io.ox/calendar/main
 msgid "There is already %1$d appointment in this timeframe."
 msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Es gibt bereits %1$d Termin in diesem Zeitraum."
