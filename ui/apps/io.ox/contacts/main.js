@@ -9,6 +9,7 @@
  * © 2011 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Alexander Quast <alexander.quast@open-xchange.com>
  *
  */
 
@@ -79,7 +80,6 @@ define('io.ox/contacts/main',
                 navbar: new Bars.NavbarView({
                     app: app,
                     extension: 'io.ox/contacts/mobile/navbar'
-
                 }),
                 toolbar: new Bars.ToolbarView({
                     app: app,
@@ -88,7 +88,8 @@ define('io.ox/contacts/main',
                 }),
                 secondaryToolbar: new Bars.ToolbarView({
                     app: app,
-                    page: 'listView/multiselect'
+                    page: 'detailView', // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
+                    extension: 'io.ox/contacts/mobile/toolbar'
                 })
             });
 
@@ -140,11 +141,6 @@ define('io.ox/contacts/main',
 
             if (_.device('!small')) return;
 
-            app.pages.getNavbar('folderTree')
-                .on('rightAction', function () {
-                    //app.toggleFolders();
-                });
-
             var view = new FolderView(app, {
                 type: 'contacts',
                 container: app.pages.getPage('folderTree')
@@ -180,7 +176,6 @@ define('io.ox/contacts/main',
                 // grid container
                 app.gridContainer
             );
-
 
             // add template
             grid.addTemplate({
@@ -501,7 +496,6 @@ define('io.ox/contacts/main',
             };
 
             app.showContact = showContact;
-
             commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api, true);
         },
 
@@ -545,13 +539,26 @@ define('io.ox/contacts/main',
             };
 
             app.showContact = showContact;
-
             commons.wireGridAndSelectionChange(grid, 'io.ox/contacts', showContact, app.right, api, true);
         },
-
+        /*
+         * Always change pages on tap, don't wait for data to load
+         */
         'select:contact-mobile': function (app) {
             app.grid.getContainer().on('tap', '.vgrid-cell.selectable', function () {
+                if (app.props.get('checkboxes') === true) return;
+                // hijack selection event hub to trigger page-change event
+                app.grid.selection.trigger('pagechange:detailView');
                 app.pages.changePage('detailView');
+            });
+        },
+
+        'delete:contact-mobile': function (app) {
+            if (_.device('!small')) return;
+            api.on('delete', function () {
+                if (app.pages.getCurrentPage().name === 'detailView') {
+                    app.pages.goBack();
+                }
             });
         },
 
@@ -589,6 +596,16 @@ define('io.ox/contacts/main',
             grid.setEditable(app.props.get('checkboxes'));
         },
 
+        'vgrid-checkboxes-mobile': function (app) {
+            // always hide checkboxes on small devices initially
+            if (_.device('!small')) return;
+            var grid = app.getGrid();
+            app.props.on('change:checkboxes', function () {
+                grid.setEditable(app.props.get('checkboxes'));
+            });
+
+        },
+
         /*
          * Set folderview property
          */
@@ -600,6 +617,7 @@ define('io.ox/contacts/main',
          * Store view options
          */
         'store-view-options': function (app) {
+            if (_.device('small')) return;
             app.props.on('change', _.debounce(function () {
                 var data = app.props.toJSON();
                 app.settings
@@ -628,10 +646,7 @@ define('io.ox/contacts/main',
             if (_.device('small')) return;
             // folder change
             app.grid.on('change:ids', function () {
-                //hasDeletePermission = undefined;
-                //if (true || _.device('!small')) {
                 ext.point('io.ox/contacts/thumbIndex').invoke('draw', app.thumbs, app.baton);
-                //}
             });
         },
 
@@ -677,9 +692,7 @@ define('io.ox/contacts/main',
 
                 }
             };
-
             app.toggleFolders = toggleFolders;
-
         },
 
         /*
@@ -746,7 +759,6 @@ define('io.ox/contacts/main',
         };
 
         // go!
-        window.kack = app;
         commons.addFolderSupport(app, app.grid, 'contacts', options.folder)
             .always(function () {
                 app.mediate();

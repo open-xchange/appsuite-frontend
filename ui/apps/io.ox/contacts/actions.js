@@ -751,7 +751,7 @@ define('io.ox/contacts/actions',
         id: 'send',
         index: INDEX += 100,
         prio: 'hi',
-        mobile: 'lo',
+        mobile: 'hi',
         label: gt('Send mail'),
         ref: 'io.ox/contacts/actions/send'
     }));
@@ -776,7 +776,7 @@ define('io.ox/contacts/actions',
         id: 'invite',
         index: INDEX += 100,
         prio: 'hi',
-        mobile: 'lo',
+        mobile: 'hi',
         label: gt('Invite to appointment'),
         ref: 'io.ox/contacts/actions/invite'
     }));
@@ -785,7 +785,7 @@ define('io.ox/contacts/actions',
         id: 'edit',
         index: INDEX += 100,
         prio: 'hi',
-        mobile: 'lo',
+        mobile: 'hi',
         label: gt('Edit'),
         ref: 'io.ox/contacts/actions/update'
     }));
@@ -794,7 +794,7 @@ define('io.ox/contacts/actions',
         id: 'delete',
         index: INDEX += 100,
         prio: 'hi',
-        mobile: 'lo',
+        mobile: 'hi',
         icon: 'fa fa-trash-o',
         label: gt('Delete'),
         ref: 'io.ox/contacts/actions/delete'

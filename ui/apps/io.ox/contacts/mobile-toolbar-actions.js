@@ -24,15 +24,63 @@ define('io.ox/contacts/mobile-toolbar-actions',
 
     var pointListView = ext.point('io.ox/contacts/mobile/toolbar/listView'),
         pointDetailView = ext.point('io.ox/contacts/mobile/toolbar/detailView'),
+        actions = ext.point('io.ox/contacts/mobile/actions'),
         meta = {
         'create': {
             prio: 'hi',
             mobile: 'hi',
             label: gt('New'),
-            //icon: 'fa fa-edit',
+            icon: 'fa fa-plus',
             drawDisabled: true,
             ref: 'io.ox/contacts/actions/create',
             cssClasses: 'io-ox-action-link mobile-toolbar-action'
+        },
+        'send': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Send mail'),
+            ref: 'io.ox/contacts/actions/send',
+            drawDisabled: true
+        },
+        'vcard': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Send as vCard'),
+            ref: 'io.ox/contacts/actions/vcard',
+            drawDisabled: true
+        },
+        'invite': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Invite to appointment'),
+            ref: 'io.ox/contacts/actions/invite',
+            drawDisabled: true
+        },
+        'edit': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Edit'),
+            ref: 'io.ox/contacts/actions/update',
+            drawDisabled: true
+        },
+        'delete': {
+            prio: 'hi',
+            mobile: 'hi',
+            label: gt('Delete'),
+            drawDisabled: true,
+            ref: 'io.ox/contacts/actions/delete'
+        },
+        'move': {
+            mobile: 'lo',
+            label: gt('Move'),
+            drawDisabled: true,
+            ref: 'io.ox/contacts/actions/move'
+        },
+        'copy': {
+            mobile: 'lo',
+            label: gt('Copy'),
+            drawDisabled: true,
+            ref: 'io.ox/contacts/actions/copy'
         }
     };
 
@@ -48,9 +96,7 @@ define('io.ox/contacts/mobile-toolbar-actions',
     }
 
     addAction(pointListView, ['create']);
-
-    //multiselect in listview
-    //addAction(pointListViewMultiSelect, ['delete', 'forward', 'move']);
+    addAction(actions, ['send', 'invite', 'vcard', 'edit', 'delete', 'move', 'copy']);
 
     // add submenu as text link to toolbar in multiselect
     pointDetailView.extend(new links.Dropdown({
@@ -60,29 +106,19 @@ define('io.ox/contacts/mobile-toolbar-actions',
             gt('Actions')
         ),
         noCaret: true, // don't draw the caret icon beside menu link
-        ref: 'io.ox/contacts/links/inline'
+        ref: 'io.ox/contacts/mobile/actions'
     }));
 
-    var updateToolbar = _.debounce(function (list) {
+    var updateToolbar = _.debounce(function (contact) {
         var self = this;
-        if (!list) return;
         //get full data, needed for require checks for example
-        api.getList(list).done(function (data) {
-            // extract single object if length === 1
-            data = data.length === 1 ? data[0] : data;
-            // draw toolbar
+        api.get(contact).done(function (data) {
+            if (!data) return;
             var baton = ext.Baton({ data: data, app: self });
-            //ext.point('io.ox/contacts/classic-toolbar').invoke('draw', toolbar.empty(), baton);
             // handle updated baton to pageController
-            self.pages.getCurrentPage().toolbar.setBaton(baton);
-            if (self.pages.getCurrentPage().secondaryToolbar) {
-                self.pages.getCurrentPage().secondaryToolbar.setBaton(baton);
-            }
+            self.pages.getToolbar('detailView').setBaton(baton);
         });
-
-    }, 10);
-
-
+    }, 50);
 
     // multi select toolbar links need some attention
     // in case nothing is selected disabled buttons
@@ -119,24 +155,45 @@ define('io.ox/contacts/mobile-toolbar-actions',
         setup: function (app) {
             if (!_.device('small')) return;
 
-            app.updateToolbar();
-            // // update toolbar on selection change as well as any model change (seen/unseen flag)
-            app.grid.selection.on('change', function (e, list) {
-                app.updateToolbar(list);
+            // folder change
+            app.grid.on('change:ids', function () {
+                app.folder.getData().done(function (data) {
+                    var baton = ext.Baton({ data: data, app: app });
+                    // handle updated baton to pageController
+                    app.pages.getToolbar('listView').setBaton(baton);
+                });
             });
+
+            // multiselect
+            app.grid.selection.on('change', function  (e, list) {
+                if (app.props.get('checkboxes') !== true) return;
+                api.getList(list).done(function (data) {
+                    if (!data) return;
+                    var baton = ext.Baton({ data: data, app: app });
+                    // handle updated baton to pageController
+                    app.pages.getSecondaryToolbar('listView').setBaton(baton);
+                });
+            });
+
+            // simple select
+            app.grid.selection.on('pagechange:detailView', function () {
+                // update toolbar on each pagechange
+                var data = app.grid.selection.get();
+                app.updateToolbar(data[0]);
+            });
+
         }
     });
 
     ext.point('io.ox/contacts/mediator').extend({
         id: 'change-mode-toolbar-mobile',
         index: 10400,
-        setup: function () {
+        setup: function (app) {
             if (!_.device('small')) return;
             // if multiselect is triggered, show secondary toolbar with other options based on selection
-            /*app.props.on('change:checkboxes', function (model, state) {
-                var page = app.pages.getCurrentPage();
-                app.pages.toggleSecondaryToolbar(page.name, state);
-            });*/
+            app.props.on('change:checkboxes', function (model, state) {
+                app.pages.toggleSecondaryToolbar('listView', state);
+            });
         }
     });
 

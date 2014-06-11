@@ -194,6 +194,17 @@ define('io.ox/core/page-controller',
             return pages[page].toolbar;
         };
 
+        this.getSecondaryToolbar = function (page) {
+            if (!pages[page]) {
+                console.error('PageController: Page ' + page + ' does not exist.');
+                return;
+            } else if (!pages[page].secondaryToolbar) {
+                console.error('PageController: Page ' + page + ' does not own a secondary toolbar.');
+                return;
+            }
+            return pages[page].secondaryToolbar;
+        };
+
         this.getCurrentPage = function () {
             return pages[current];
         };
@@ -230,12 +241,15 @@ define('io.ox/core/page-controller',
                 bar = pages[page].toolbar;
             }
             if (bar) {
+                // remove old stuff
                 app.toolbar.children().detach();
+                // appen new toolbar view and show toolbar container
                 app.toolbar.append(bar.$el).show();
                 if (!secondary) {
-                     bar.render();
+                    bar.render();
                 }
             } else {
+                // if there is no toolbar defined for the current page, hide the whole container
                 app.toolbar.children().detach();
                 app.toolbar.hide();
             }
