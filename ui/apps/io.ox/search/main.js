@@ -318,7 +318,9 @@ define('io.ox/search/main',
     run = function () {
         if (app.is('running')) {
             //reuse
-            model.set('app', ox.ui.App.getCurrentApp().get('name'), {silent: true});
+            var current = ox.ui.App.getCurrentApp().get('name');
+            if (current !== 'io.ox/search')
+                model.set('app', current, {silent: true});
             app.launch();
             app.view.redraw();
         } else {

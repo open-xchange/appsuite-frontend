@@ -12,11 +12,14 @@
  */
 define(['fixture!io.ox/core/settings.json',
         'fixture!io.ox/search/autocomplete.json',
+        'fixture!io.ox/search/query.json',
         'settings!io.ox/mail',
         'settings!io.ox/core',
-        'beforeEachEnsure'], function (settingsFixture, autocompleteFixture, mailSettings, settings, beforeEachEnsure) {
+        'beforeEachEnsure',
+        'waitsFor'], function (settingsFixture, autocompleteFixture, queryFixture, mailSettings, settings, beforeEachEnsure, waitsFor) {
 
-    var setupFakeServer = function (server) {
+    var setupFakeServer = function () {
+        var server = this.server;
         server.respondWith('PUT', /api\/find\?action=autocomplete/, function (xhr) {
             xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
                 JSON.stringify({timestamp: 1378223251586, data: autocompleteFixture.data})
@@ -24,9 +27,8 @@ define(['fixture!io.ox/core/settings.json',
         });
 
         server.respondWith('PUT', /api\/find\?action=query/, function (xhr) {
-            var data = {};
             xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8'},
-                JSON.stringify({timestamp: 1378223251586, data: data})
+                JSON.stringify({timestamp: 1378223251586, data: queryFixture.data})
             );
         });
     };
@@ -44,9 +46,6 @@ define(['fixture!io.ox/core/settings.json',
             ox.manifests.apps[id] = {title: module};
         });
 
-        //fake autocomplete and query response
-        setupFakeServer(self.server);
-
         //load app
         require(['io.ox/search/main'], function (main) {
             main.init();
@@ -62,13 +61,13 @@ define(['fixture!io.ox/core/settings.json',
     }
 
 
-    describe('Search app:', function () {
+    describe.only('Search app:', function () {
         //ensure setup is finished
         beforeEachEnsure(setup);
 
         describe('has a view that', function () {
 
-            describe('has a row for applications that', function () {
+            describe('has applications row that', function () {
 
                 var getApps = function (data) {
                     return data.vars.node.find('.row.applications>ul').children();
@@ -101,7 +100,7 @@ define(['fixture!io.ox/core/settings.json',
                 });
             });
 
-            describe('has a row for search field that', function () {
+            describe('has a search field row that', function () {
 
                 var getField = function (data) {
                     return data.vars.node.find('.search-field');
@@ -111,26 +110,50 @@ define(['fixture!io.ox/core/settings.json',
                     expect(getField(this)).to.not.be.empty;
 
                 });
-                describe('contains a focued input field that', function () {
+                describe('contains an input field that', function () {
                     it('exists', function () {
                         expect(getField(this).length).to.equal(1);
                     });
-                    it.skip('has focus', function () {
-                        var field = getField(this),
-                            focused = document.activeElement;
+                    it('has focus', function (done) {
+                        var self = this;
+                        return waitsFor(function () {
+                            var field = getField(self),
+                                focused = document.activeElement;
+
+                            return $(document.activeElement).hasClass('search-field');
+                        }).done(done);
                     });
-                    describe('calls autocomplete action api when', function () {
+                    describe('calls autocomplete action when', function () {
+
+                        beforeEach(setupFakeServer);
+
+                        afterEach(function () {
+                            $('.autocomplete-popup').empty();
+                        });
+
+                        var expectsDropdown = function (done) {
+                            waitsFor(function () {
+                                var items = $('.autocomplete-popup>.scrollable-pane').children();
+                                return items.length !== 0;
+                            }).done(done);
+                        };
+
                         it('clicked', function () {
                             var field = getField(this);
                             field.trigger($.Event('click'));
+                            expectsDropdown();
+                        });
+                        it.skip('key was pressed', function (done) {
+                            var field = getField(this);
+                            field.trigger(
+                                $.Event('keydown', { keyCode: 80})
+                            );
+                            expectsDropdown();
                         });
                         it.skip('focused via tab', function () {
                             var field = getField(this);
                             field.trigger($.Event('click'));
-                        });
-                        it.skip('key was pressed', function () {
-                            var field = getField(this);
-                            field.trigger($.Event('click'));
+                            expectsDropdown();
                         });
                     });
 

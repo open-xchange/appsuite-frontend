@@ -445,6 +445,10 @@ define('io.ox/mail/util',
             }, 0);
         },
 
+        isToplevel: function (data) {
+            return _.isObject(data) && 'folder_id' in data && !('filename' in data);
+        },
+
         isUnseen: function (data) {
             data = _.isObject(data) ? data.flags : data;
             return _.isNumber(data) ? (data & 32) !== 32 : undefined;
