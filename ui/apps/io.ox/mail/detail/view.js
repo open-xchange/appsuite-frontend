@@ -270,7 +270,7 @@ define('io.ox/mail/detail/view',
             this.onChangeAttachments();
             this.onChangeContent();
 
-            // merge data
+            // merge data (probably unnecessary here since API updates the model)
             if (data) this.model.set(data);
 
             // process unseen flag

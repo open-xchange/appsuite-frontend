@@ -199,7 +199,6 @@ define('io.ox/mail/main',
             // folder tree
             commons.addFolderView(app, { type: 'mail' });
             app.getWindow().nodes.sidepanel.addClass('border-right');
-
         },
 
         /*
@@ -315,8 +314,8 @@ define('io.ox/mail/main',
         'list-view': function (app) {
             app.listView = new MailListView({ app: app, ignoreFocus: true });
             app.listView.model.set({ folder: app.folder.get() });
-            // for debugging
             app.listView.model.set('thread', true);
+            // for debugging
             window.list = app.listView;
         },
 

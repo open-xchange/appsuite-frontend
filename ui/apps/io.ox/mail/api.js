@@ -425,6 +425,11 @@ define('io.ox/mail/api',
         getList = api.getList,
         search = api.search;
 
+    // update thread model
+    function propagate(model) {
+        api.threads.touch(model.toJSON());
+    }
+
     api.get = function (obj, options) {
 
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
@@ -434,7 +439,14 @@ define('io.ox/mail/api',
         if (!obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
 
         return get.call(api, obj, options && options.cache).done(function (data) {
-            pool.add('detail', data);
+            if (model) {
+                // if we already have a model we promote changes for threads
+                model.set(data);
+                propagate(model);
+            } else {
+                // add new model
+                pool.add('detail', data);
+            }
         });
     };
 
@@ -1742,7 +1754,7 @@ define('io.ox/mail/api',
         touch: function (cid) {
             cid = _.isString(cid) ? cid : _.cid(cid);
             var top = this.reverse[cid];
-            if (!top) return;
+            if (!top || top === cid) return;
             pool.propagate('change', _.extend({ timestamp: _.now() }, _.cid(top)));
         },
 
