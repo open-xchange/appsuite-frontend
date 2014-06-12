@@ -79,7 +79,7 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
     // get subfolders
     function list(id, options) {
 
-        options = _.extend({ all: '0' }, options);
+        options = _.extend({ all: false }, options);
 
         return http.GET({
             module: 'folders',

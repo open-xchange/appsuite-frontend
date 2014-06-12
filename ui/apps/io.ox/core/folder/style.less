@@ -1,0 +1,60 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.folder-tree {
+
+    padding: 7px 0;
+    overflow: auto;
+    outline: 0;
+    background-color: @foldertree-sidepanel-background;
+    .user-select(none);
+
+    .folder {
+
+        line-height: 30px;
+        overflow: visible;
+        white-space: nowrap;
+        width: 100%;
+        display: block;
+
+        .selectable:focus {
+            outline: 0;
+            background-color: @foldertree-selected-focus-background;
+            * { color: @foldertree-focused-label-color; font-weight: 500; }
+        }
+    }
+
+    .folder-arrow {
+
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        color: #777;
+    }
+
+    .folder-label {
+
+        font-weight: 300;
+        display: inline-block;
+        margin: 0 7px 0 0;
+    }
+
+    .subfolders {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    &.top-toolbar { top: 45px; }
+    &.bottom-toolbar { bottom: 45px; }
+}
