@@ -65,6 +65,10 @@ define('io.ox/mail/listview',
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-1">');
                 extensions.answered.call(column, baton);
+                if (column.children().length === 0) {
+                    // horizontal view: only show forwarded icon if answered flag not set
+                    extensions.forwarded.call(column, baton);
+                }
                 this.append(column);
             }
         },
