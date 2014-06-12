@@ -69,7 +69,9 @@ define('io.ox/search/view',
                 busy.show();
                 return this;
             },
-            redraw: function () {
+            redraw: function (options) {
+                options = options || {};
+
                 var mode = this.baton.model.get('mode'),
                     node = $('<span>');
                 if (mode !== 'widget') {
@@ -83,6 +85,10 @@ define('io.ox/search/view',
                     this.$el.empty();
                     this.$el.append(node.children());
                 }
+
+                if (options.closeSidepanel)
+                    $('.io-ox-sidepopup', '#io-ox-windowmanager-pane>.io-ox-search-window').detach();
+
                 return this;
             },
             focus: function () {
