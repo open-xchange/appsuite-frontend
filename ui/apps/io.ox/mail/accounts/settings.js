@@ -200,6 +200,9 @@ define('io.ox/mail/accounts/settings',
                                 successDialog();
                                 def.resolve(response);
                             }
+                        }).fail(function (response) {
+                            popup.close();
+                            failDialog(response.error);
                         });
                     } else {
                         var message = gt('There was no suitable server found for this mail/password combination');
