@@ -48,6 +48,9 @@ define('io.ox/core/page-controller',
             // first page created is the most left page in the stack
             order.push(opt.name);
 
+            // for easier debugging
+            pages[opt.name].$el.attr('data-page-id', app.options.name + '/' + opt.name);
+
             // append to container
             $(opt.container)
                 .append(pages[opt.name].$el);
