@@ -232,7 +232,7 @@ define('io.ox/calendar/edit/recurrence-view',
                     recView: $('<div class="io-ox-recurrence-view">').hide(),
                     summary: $('<span>'),
                     typeChoice: $('<div class="inset">'),
-                    hint: $('<div class="muted inset">'),
+                    hint: $('<div class="text-muted inset">'),
                     alternative1: $('<div class="inset">'),
                     alternative2: $('<div class="inset">'),
                     endsChoice: $('<div class="inset">')
@@ -623,8 +623,8 @@ define('io.ox/calendar/edit/recurrence-view',
                             this.nodes.alternative2.show().append(this.sentences.monthlyDate.$el);
                         } else {
                             this.setHint(this.sentences.chooseSentenceHint);
-                            this.nodes.alternative1.find('.muted').removeClass('muted');
-                            this.nodes.alternative2.find('.muted').removeClass('muted');
+                            this.nodes.alternative1.find('.text-muted').removeClass('text-muted');
+                            this.nodes.alternative2.find('.text-muted').removeClass('text-muted');
                             this.setChoice(null);
                         }
                         break;
@@ -651,8 +651,8 @@ define('io.ox/calendar/edit/recurrence-view',
                             this.nodes.alternative2.show().append(this.sentences.yearlyDate.$el);
                         } else {
                             this.setHint(this.sentences.chooseSentenceHint);
-                            this.nodes.alternative1.find('.muted').removeClass('muted');
-                            this.nodes.alternative2.find('.muted').removeClass('muted');
+                            this.nodes.alternative1.find('.text-muted').removeClass('text-muted');
+                            this.nodes.alternative2.find('.text-muted').removeClass('text-muted');
                             this.setChoice(null);
                         }
                         break;
@@ -810,7 +810,7 @@ define('io.ox/calendar/edit/recurrence-view',
             },
             createGhost: function (sentence) {
                 var self = this;
-                return $('<span class="muted" tabindex="' + self.tabindex + '">')
+                return $('<span class="text-muted" tabindex="' + self.tabindex + '">')
                     .append(sentence.ghost())
                     .on('click keydown', function (e) {
                         // hit space or enter
