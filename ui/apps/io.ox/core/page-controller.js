@@ -16,7 +16,7 @@ define('io.ox/core/page-controller',
 
     'use strict';
 
-    var PageController = function (app) {
+    var PageController = function (app, o) {
 
         var pages = {},
             current,
@@ -24,7 +24,8 @@ define('io.ox/core/page-controller',
             lastPage = [],
             self = this,
             app = app,
-            backButtonRules;
+            backButtonRules,
+            options = o || {};
 
         function createPage(opt) {
             var defaults = {
@@ -34,6 +35,7 @@ define('io.ox/core/page-controller',
             };
 
             opt = _.extend(defaults, opt);
+            if (options.container) opt.container = options.container;
             // store page
             pages[opt.name] = {
                 $el: $(opt.tag).addClass(opt.classes),
