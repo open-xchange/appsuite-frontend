@@ -302,7 +302,7 @@ define('io.ox/mail/util',
             return tmp;
         },
 
-        getDisplayName: function (pair) {
+        getDisplayName: function (pair, forceShowMail) {
 
             if (!_.isArray(pair)) return '';
 
@@ -313,7 +313,11 @@ define('io.ox/mail/util',
             // fix order ("last name, firstname" becomes "first name last name")
             display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
 
-            return display_name || email;
+            if (forceShowMail && display_name && email) {
+                display_name += ' <' + email + '>';
+            }
+
+            return _.escape(display_name || email);
         },
 
         // takes care of special edge-case: no from address
