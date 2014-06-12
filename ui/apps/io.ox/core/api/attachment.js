@@ -14,8 +14,9 @@
 define('io.ox/core/api/attachment',
     ['io.ox/core/http',
      'io.ox/core/event',
-     'settings!io.ox/core'
-    ], function (http, Events, coreConfig) {
+     'settings!io.ox/core',
+     'gettext!io.ox/core'
+    ], function (http, Events, coreConfig, gt) {
 
     'use strict';
 
@@ -197,6 +198,14 @@ define('io.ox/core/api/attachment',
             //multiple does not work, because module overides module
             //in params. So we need to do it one by one
             // be robust
+
+            var descriptionText = {
+                1: gt('Saved appointment attachment'),
+                4: gt('Saved task attachment'),
+                7: gt('Saved contact attachment')
+                // 137: 'Saved Infostore attachment'
+            };
+
             target = (target || coreConfig.get('folder/infostore')).toString();//make sure we have a string or target + api.DELIM results in NaN
 
             http.PUT({
@@ -208,7 +217,7 @@ define('io.ox/core/api/attachment',
                     attached: data.attached,
                     attachment: data.id
                 },
-                data: { folder_id: target, description: 'Saved task attachment' },
+                data: { folder_id: target, description: descriptionText[data.module] || gt('Saved attachment') },
                 appendColumns: false
             }).done(function () {
                 require(['io.ox/files/api'], function (fileAPI) {
