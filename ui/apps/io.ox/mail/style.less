@@ -610,11 +610,19 @@
         }
 
         .summary {
+
             color: #888;
             font-size: 13px;
             line-height: 16px;
+
+            html.high-contrast & {
+                color: @hc-gray;
+            }
+
         }
+
     }
+
 }
 
 @media(max-width: 700px) {
@@ -1030,9 +1038,15 @@ textarea.inplace-editor {
     }
 
     &:not(.expanded) .recipients {
+
         height: 20px;
         opacity: 0.3;
         .ellipsis();
+
+        html.high-contrast & {
+            opacity: 1;
+        }
+
     }
 
     .instant-preview {
