@@ -131,7 +131,7 @@ define('io.ox/core/settings',
         };
 
         var applyDefaults = function () {
-            return require([path + '/settings/defaults']).pipe(function (defaults) {
+            return require([path + '/settings/defaults']).then(function (defaults) {
                 tree = _.extend(defaults, tree);
             });
         };
@@ -196,7 +196,9 @@ define('io.ox/core/settings',
                 tree = data.tree;
                 meta = data.meta;
                 saved = JSON.parse(JSON.stringify(tree));
-                return $.Deferred().resolve({ tree: tree, meta: meta });
+                return applyDefaults().then(function () {
+                    return { tree: tree, meta: meta };
+                });
             }
             else if (ox.online) {
                 // online
