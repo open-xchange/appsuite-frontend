@@ -1,0 +1,52 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2014 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+
+.io-ox-recurrence-view {
+    background-color: #eee;
+    padding: 10px;
+    margin: 7px 0 10px 0;
+    min-height: 140px;
+
+    * {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    .recurrence-detail-toggle .fa-times {
+        color: #888;
+    }
+
+    span.dropdown {
+        position: static;
+
+        &.open {
+            position: relative;
+        }
+    }
+
+    .inset {
+        padding-left: 5px;
+        height: 20px;
+    }
+
+    input[type="text"] {
+        min-width: 25px;
+        padding: 0 2px;
+    }
+}
+
+/* Mobile */
+@media all and (max-width: 480px), all and (max-device-width: 480px) {
+    .io-ox-recurrence-view .inset {
+        height: auto;
+    }
+}
