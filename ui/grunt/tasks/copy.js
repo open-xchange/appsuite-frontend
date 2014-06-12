@@ -46,22 +46,6 @@ module.exports = function (grunt) {
                     dest: 'build/'
                 }
             ]
-        },
-        build_specs: {
-            files: [
-                {
-                    src: ['spec/**/*.js'],
-                    expand: true,
-                    filter: 'isFile',
-                    dest: 'build/'
-                },
-                {
-                    src: ['spec/fixtures/**/*'],
-                    expand: true,
-                    filter: 'isFile',
-                    dest: 'build/'
-                }
-            ]
         }
     });
 
