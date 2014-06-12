@@ -215,6 +215,12 @@ define('io.ox/mail/main',
             // folder tree
             commons.addFolderView(app, { type: 'mail' });
             app.getWindow().nodes.sidepanel.addClass('border-right');
+
+            require(['io.ox/core/folder/tree'], function (FolderTreeView) {
+                app.getWindow().nodes.sidepanel.append(
+                    new FolderTreeView({ module: 'mail', root: 1 }).render().$el
+                );
+            });
         },
 
         /*
