@@ -20,7 +20,22 @@ define('io.ox/core/folder/tree', ['io.ox/core/folder/view', 'less!io.ox/core/fol
         className: 'folder-tree bottom-toolbar abs',
 
         events: {
+            'click .selectable': 'onClick',
             'keydown .selectable': 'onKeydown'
+        },
+
+        onClick: function (e) {
+
+            var items = this.getItems(),
+                current = $(e.currentTarget),
+                index = items.index(current) || 0;
+
+            // do nothing if already selected
+            if (current.hasClass('selected')) return;
+
+            this.resetTabIndex(items, items.eq(index));
+            this.resetSelected(items);
+            this.pick(index, items);
         },
 
         onKeydown: function (e) {
@@ -56,7 +71,7 @@ define('io.ox/core/folder/tree', ['io.ox/core/folder/view', 'less!io.ox/core/fol
         },
 
         resetSelected: function (items) {
-            items.filter('.selected').removeClass('selected');
+            items.filter('.selected').removeClass('selected').attr('aria-selected', false);
         },
 
         resetTabIndex: function (items, skip) {
@@ -70,7 +85,7 @@ define('io.ox/core/folder/tree', ['io.ox/core/folder/view', 'less!io.ox/core/fol
             // workaround for chrome's CSS bug:
             // styles of "selected" class are not applied if focus triggers scrolling.
             // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
-            if (_.device('chrome')) node.hide(0, function () { $(this).show(); });
+            if (_.device('chrome')) node.hide(0, function () { $(this).css('display', ''); });
             return node;
         },
 
@@ -88,6 +103,7 @@ define('io.ox/core/folder/tree', ['io.ox/core/folder/view', 'less!io.ox/core/fol
 
         triggerChange: function () {
             var id = this.$el.find('.selectable.selected').attr('data-id');
+            console.log('change', id);
             this.trigger('change', id);
         },
 
