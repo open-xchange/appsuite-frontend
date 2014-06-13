@@ -549,6 +549,7 @@ define('io.ox/contacts/main',
          * Always change pages on tap, don't wait for data to load
          */
         'select:contact-mobile': function (app) {
+            if (_.device('!small')) return;
             app.grid.getContainer().on('tap', '.vgrid-cell.selectable', function () {
                 if (app.props.get('checkboxes') === true) return;
                 // hijack selection event hub to trigger page-change event

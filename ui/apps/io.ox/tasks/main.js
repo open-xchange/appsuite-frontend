@@ -23,8 +23,13 @@ define('io.ox/tasks/main',
      'io.ox/tasks/view-detail',
      'settings!io.ox/tasks',
      'io.ox/core/api/folder',
-     'io.ox/tasks/toolbar'
-    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI) {
+     'io.ox/core/commons-folderview',
+     'io.ox/core/toolbars-mobile',
+     'io.ox/core/page-controller',
+     'io.ox/tasks/toolbar',
+     'io.ox/tasks/mobile-navbar-extensions'
+     //'io.ox/tasks/mobile-toolbar-actions',
+    ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, FolderView, Bars, PageController) {
 
     'use strict';
 
@@ -38,7 +43,274 @@ define('io.ox/tasks/main',
     var grid, taskToolbarOptions;
 
     app.mediator({
+        /*
+         * Init pages for mobile use
+         * Each View will get a single page with own
+         * toolbars and navbars. A PageController instance
+         * will handle the page changes and also maintain
+         * the state of the toolbars and navbars
+         */
+        'pages-mobile': function (app) {
+            if (_.device('!small')) return;
+            var c = app.getWindow().nodes.main;
+            var navbar = $('<div class="mobile-navbar">'),
+                toolbar = $('<div class="mobile-toolbar">');
+            app.navbar = navbar;
+            app.toolbar = toolbar;
 
+            app.pages = new PageController(app, {container: c});
+
+            app.getWindow().nodes.body.addClass('classic-toolbar-visible').append(navbar, toolbar);
+
+            // create 3 pages with toolbars and navbars
+            app.pages.addPage({
+                name: 'folderTree',
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/tasks/mobile/navbar'
+                })
+            });
+
+            app.pages.addPage({
+                name: 'listView',
+                startPage: true,
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/tasks/mobile/navbar'
+                }),
+                toolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'listView',
+                    extension: 'io.ox/tasks/mobile/toolbar'
+                }),
+                secondaryToolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'detailView', // nasty, but saves duplicate code. We reuse the toolbar from detailView for multiselect
+                    extension: 'io.ox/tasks/mobile/toolbar'
+                })
+            });
+
+            app.pages.addPage({
+                name: 'detailView',
+                navbar: new Bars.NavbarView({
+                    app: app,
+                    extension: 'io.ox/tasks/mobile/navbar'
+                }),
+                toolbar: new Bars.ToolbarView({
+                    app: app,
+                    page: 'detailView',
+                    extension: 'io.ox/tasks/mobile/toolbar'
+
+                })
+            });
+
+            // important
+            // tell page controller about special navigation rules
+            app.pages.setBackbuttonRules({
+                'listView': 'folderTree'
+            });
+        },
+
+        'pages-desktop': function (app) {
+            if (_.device('small')) return;
+
+            // add page controller
+            app.pages = new PageController(app);
+
+            // create 2 pages
+            // legacy compatibility
+            app.getWindow().nodes.main.addClass('vsplit');
+
+            app.pages.addPage({
+                name: 'listView',
+                container: app.getWindow().nodes.main,
+                classes: 'leftside'
+            });
+            app.pages.addPage({
+                name: 'detailView',
+                container: app.getWindow().nodes.main,
+                classes: 'rightside'
+            });
+        },
+        /*
+         * Init all nav- and toolbar labels for mobile
+         */
+        'navbars-mobile': function (app) {
+
+            if (!_.device('small')) return;
+
+            app.pages.getNavbar('listView')
+                .setLeft(gt('Folders'))
+                .setRight(
+                    //#. Used as a button label to enter the "edit mode"
+                    gt('Edit')
+                );
+
+            app.pages.getNavbar('folderTree')
+                .setTitle(gt('Folders'))
+                .setLeft(false)
+                .setRight(gt('Edit'));
+
+            app.pages.getNavbar('detailView')
+                .setTitle('') // no title
+                .setLeft(
+                    //#. Used as button label for a navigation action, like the browser back button
+                    gt('Back')
+                );
+
+            // TODO restore last folder as starting point
+            app.pages.showPage('listView');
+        },
+
+       'toolbars-mobile': function (app) {
+            if (!_.device('small')) return;
+
+            // tell each page's back button what to do
+            app.pages.getNavbar('listView').on('leftAction', function () {
+                app.pages.goBack();
+            });
+
+            app.pages.getNavbar('detailView').on('leftAction', function () {
+                app.pages.goBack();
+            });
+
+            // checkbox toggle
+            app.pages.getNavbar('listView').on('rightAction', function () {
+                if (app.props.get('checkboxes') === true) {
+                    // leave multiselect? -> clear selection
+                    app.grid.selection.clear();
+                }
+                app.props.set('checkboxes', !app.props.get('checkboxes'));
+            });
+
+            app.pages.getNavbar('folderTree').on('rightAction', function () {
+                app.toggleFolders();
+            });
+
+        },
+        /*
+         * Split into left and right pane
+         */
+        'vsplit': function (app) {
+            // replacing vsplit with new pageController
+            // TODO: refactor app.left and app.right
+            var left = app.pages.getPage('listView'),
+                right = app.pages.getPage('detailView');
+
+            app.left = left;
+            app.right = right.addClass('default-content-padding f6-target task-detail-container')
+            .attr({
+                'tabindex': 1,
+                'role': 'complementary',
+                'aria-label': gt('Task Details')
+            })
+            .scrollable();
+        },
+
+        'vgrid': function (app) {
+
+            var grid = app.grid;
+
+            app.left.append(app.gridContainer);
+
+            grid.addTemplate(template.main);
+
+            commons.wireGridAndAPI(grid, api);
+            commons.wireGridAndWindow(grid, app.getWindow());
+            commons.wireFirstRefresh(app, api);
+            commons.wireGridAndRefresh(grid, api, app.getWindow());
+            //custom requests
+            var allRequest = function () {
+                    var datacopy,
+                        done = grid.prop('done'),
+                        sort = grid.prop('sort'),
+                        order = grid.prop('order'),
+                        column;
+                    if (sort !== 'state') {
+                        column = sort;
+                    } else {
+                        column = 202;
+                    }
+                    return api.getAll({folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
+                        if (sort !== 'state') {
+                            datacopy = _.copy(data, true);
+                        } else {
+                            datacopy = util.sortTasks(data, order);
+                        }
+
+                        if (!done) {
+                            datacopy = _(datacopy).filter(function (obj) {
+                                return obj.status !== 3;
+                            });
+                        }
+                        return datacopy;
+                    });
+                },
+                listRequest = function (ids) {
+                    return api.getList(ids).pipe(function (list) {
+                        var listcopy = _.copy(_.compact(list), true),//use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
+                            i = 0;
+                        for (; i < listcopy.length; i++) {
+                            listcopy[i] = util.interpretTask(listcopy[i]);
+                        }
+
+                        return listcopy;
+                    });
+                };
+
+            grid.setAllRequest(allRequest);
+            grid.setListRequest(listRequest);
+        },
+
+        'show-contact': function (app) {
+            var showTask, drawTask, drawFail;
+
+            //detailview lfo callbacks
+            showTask = function (obj) {
+                // be busy
+                app.right.busy(true);
+                obj = {folder: obj.folder || obj.folder_id, id: obj.id};//remove unnecessary information
+                api.get(obj)
+                    .done(_.lfo(drawTask))
+                    .fail(_.lfo(drawFail, obj));
+            };
+
+            showTask.cancel = function () {
+                _.lfo(drawTask);
+                _.lfo(drawFail);
+            };
+
+            drawTask = function (data) {
+                var baton = ext.Baton({ data: data });
+                // since we use a classic toolbar on non-small devices, we disable inline links in this case
+                if (_.device('!small')) baton.disable('io.ox/tasks/detail-inline', 'inline-links');
+                app.right.idle().empty().append(viewDetail.draw(baton));
+            };
+
+            drawFail = function (obj) {
+                app.right.idle().empty().append(
+                    $.fail(gt('Couldn\'t load that task.'), function () {
+                        showTask(obj);
+                    })
+                );
+            };
+
+            commons.wireGridAndSelectionChange(app.grid, 'io.ox/tasks', showTask, app.right, api, true);
+
+        },
+        /*
+         * Always change pages on tap, don't wait for data to load
+         */
+        'select:contact-mobile': function (app) {
+            if (_.device('!small')) return;
+
+            app.grid.getContainer().on('tap', '.vgrid-cell.selectable', function () {
+                //if (app.props.get('checkboxes') === true) return;
+                // hijack selection event hub to trigger page-change event
+                app.grid.selection.trigger('pagechange:detailView');
+                app.pages.changePage('detailView');
+            });
+        },
         /*
          * Folder view support
          */
@@ -46,6 +318,25 @@ define('io.ox/tasks/main',
             // folder tree
             commons.addFolderView(app, { type: 'tasks', view: 'FolderList' });
             app.getWindow().nodes.sidepanel.addClass('border-right');
+        },
+
+        'folder-view-mobile': function (app) {
+
+            if (_.device('!small')) return;
+
+            var view = new FolderView(app, {
+                type: 'tasks',
+                container: app.pages.getPage('folderTree')
+            });
+            view.handleFolderChange();
+            view.load();
+
+            // bind action for edit button
+            //app.bindFolderChange();
+
+            // make folder visible by default
+            //app.toggleFolderView(true);
+
         },
 
         /*
@@ -145,8 +436,8 @@ define('io.ox/tasks/main',
             // grid
             grid,
             // nodes
-            left,
-            right,
+            //left,
+            //right,
             showSwipeButton = false,
             hasDeletePermission;
 
@@ -160,16 +451,6 @@ define('io.ox/tasks/main',
         win.addClass('io-ox-tasks-main');
         app.setWindow(win);
         app.settings = settings;
-
-        var vsplit = commons.vsplit(win.nodes.main, app);
-        left = vsplit.left.addClass('border-right');
-        right = vsplit.right.addClass('default-content-padding f6-target task-detail-container')
-            .attr({
-                'tabindex': 1,
-                'role': 'complementary',
-                'aria-label': gt('Task Details')
-            })
-            .scrollable();
 
         var removeButton = function () {
             if (showSwipeButton) {
@@ -220,96 +501,15 @@ define('io.ox/tasks/main',
                 ext.point('io.ox/tasks/swipeDelete').invoke('draw', cell, obj);
             }
         };
-
-        // grid
-        grid = new VGrid(left, {
+        app.gridContainer = $('<div class="border-right">');
+          // grid
+        var grid = new VGrid(app.gridContainer, {
             settings: settings,
             swipeRightHandler: swipeRightHandler,
             showToggle: _.device('small')
         });
+        app.grid = grid;
 
-        grid.addTemplate(template.main);
-
-        commons.wireGridAndAPI(grid, api);
-
-        //custom requests
-        var allRequest = function () {
-                var datacopy,
-                    done = grid.prop('done'),
-                    sort = grid.prop('sort'),
-                    order = grid.prop('order'),
-                    column;
-                if (sort !== 'state') {
-                    column = sort;
-                } else {
-                    column = 202;
-                }
-                return api.getAll({folder: this.prop('folder'), sort: column, order: order}).pipe(function (data) {
-                    if (sort !== 'state') {
-                        datacopy = _.copy(data, true);
-                    } else {
-                        datacopy = util.sortTasks(data, order);
-                    }
-
-                    if (!done) {
-                        datacopy = _(datacopy).filter(function (obj) {
-                            return obj.status !== 3;
-                        });
-                    }
-                    return datacopy;
-                });
-            },
-            listRequest = function (ids) {
-                return api.getList(ids).pipe(function (list) {
-                    var listcopy = _.copy(_.compact(list), true),//use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
-                        i = 0;
-                    for (; i < listcopy.length; i++) {
-                        listcopy[i] = util.interpretTask(listcopy[i]);
-                    }
-
-                    return listcopy;
-                });
-            };
-
-        grid.setAllRequest(allRequest);
-        grid.setListRequest(listRequest);
-
-        var showTask, drawTask, drawFail;
-
-        //detailview lfo callbacks
-        showTask = function (obj) {
-            // be busy
-            right.busy(true);
-            obj = {folder: obj.folder || obj.folder_id, id: obj.id};//remove unnecessary information
-            api.get(obj)
-                .done(_.lfo(drawTask))
-                .fail(_.lfo(drawFail, obj));
-        };
-
-        showTask.cancel = function () {
-            _.lfo(drawTask);
-            _.lfo(drawFail);
-        };
-
-        drawTask = function (data) {
-            var baton = ext.Baton({ data: data });
-            // since we use a classic toolbar on non-small devices, we disable inline links in this case
-            if (_.device('!small')) baton.disable('io.ox/tasks/detail-inline', 'inline-links');
-            right.idle().empty().append(viewDetail.draw(baton));
-        };
-
-        drawFail = function (obj) {
-            right.idle().empty().append(
-                $.fail(gt('Couldn\'t load that task.'), function () {
-                    showTask(obj);
-                })
-            );
-        };
-
-        commons.wireGridAndSelectionChange(grid, 'io.ox/tasks', showTask, right, api, true);
-        commons.wireGridAndWindow(grid, win);
-        commons.wireFirstRefresh(app, api);
-        commons.wireGridAndRefresh(grid, api, win);
 
         app.getGrid = function () {
             return grid;
@@ -364,7 +564,7 @@ define('io.ox/tasks/main',
         api.on('create', function (e, data) {
             grid.selection.set(data);
         });
-
+        window.tasks = app;
         //ready for show
         commons.addFolderSupport(app, grid, 'tasks', options.folder)
             .always(function () {
