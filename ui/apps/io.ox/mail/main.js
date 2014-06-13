@@ -522,9 +522,7 @@ define('io.ox/mail/main',
                     .toggleNext(list.hasNext());
             }
 
-            app.listView.on('selection:change', function () {
-                if (app.props.get('layout') === 'list') update();
-            });
+            app.listView.on('selection:change', update);
 
             update();
         },
