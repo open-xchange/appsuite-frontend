@@ -668,6 +668,7 @@ define('io.ox/backbone/forms',
             },
 
             onFullTimeChange: function () {
+                // toggle time input fields
                 var ft = this.model.get('full_time');
                 if (mobileMode) {
                     this.nodes.dayField.mobiscroll('option', {

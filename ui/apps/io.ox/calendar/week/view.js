@@ -424,7 +424,7 @@ define('io.ox/calendar/week/view',
             if ($(e.target).hasClass('day') || $(e.target).hasClass('weekday')) {
                 // calculate timestamp for current position
                 var startTS = date.Local.localTime(this.getTimeFromDateTag($(e.currentTarget).attr('date')).getTime());
-                this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.DAY, full_time: true});
+                this.trigger('openCreateAppointment', e, { start_date: startTS, end_date: startTS + date.DAY, full_time: true });
             }
         },
 
