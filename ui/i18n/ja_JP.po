@@ -484,7 +484,7 @@ msgstr "アカウント"
 msgid "Account Settings"
 msgstr "アカウント設定"
 
-#: apps/io.ox/mail/accounts/settings.js:330
+#: apps/io.ox/mail/accounts/settings.js:333
 #: module:io.ox/mail/accounts/settings apps/io.ox/oauth/keychain.js:129
 #: module:io.ox/core
 msgid "Account added successfully"
@@ -530,7 +530,7 @@ msgstr "実際のコスト"
 msgid "Actual duration in minutes"
 msgstr "実際の時間 (分)"
 
-#: apps/io.ox/mail/accounts/settings.js:276
+#: apps/io.ox/mail/accounts/settings.js:279
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/write/view-main.js:584
 #: module:io.ox/mail
 msgid "Add"
@@ -578,7 +578,7 @@ msgstr "ファイルを追加"
 msgid "Add folder"
 msgstr "フォルダを追加"
 
-#: apps/io.ox/mail/accounts/settings.js:270
+#: apps/io.ox/mail/accounts/settings.js:273
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js:42 module:io.ox/mail
 msgid "Add mail account"
@@ -1151,7 +1151,7 @@ msgstr "予定表"
 #: apps/io.ox/files/views/create.js:114
 #: apps/io.ox/keychain/secretRecoveryDialog.js:39 module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45 module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/accounts/settings.js:277
+#: apps/io.ox/mail/accounts/settings.js:280
 #: apps/io.ox/mail/accounts/view-form.js:310 module:io.ox/settings/settings
 #: apps/io.ox/mail/accounts/view-form.js:345 apps/io.ox/mail/actions.js:91
 #: apps/io.ox/mail/actions.js:113 apps/io.ox/mail/actions.js:308
@@ -1372,9 +1372,9 @@ msgstr "クリックして画像をアップロード"
 #: module:io.ox/core/wizard apps/io.ox/editor/main.js:157 module:io.ox/editor
 #: apps/io.ox/files/actions.js:335 module:io.ox/files
 #: apps/io.ox/files/mediaplayer.js:295
-#: apps/io.ox/mail/accounts/settings.js:327
+#: apps/io.ox/mail/accounts/settings.js:330
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/accounts/settings.js:349 apps/io.ox/mail/actions.js:237
+#: apps/io.ox/mail/accounts/settings.js:352 apps/io.ox/mail/actions.js:237
 #: module:io.ox/mail apps/io.ox/mail/statistics.js:272
 #: apps/plugins/upsell/simple-wizard/register.js:91
 #: module:plugins/upsell/simple-wizard
@@ -2676,7 +2676,7 @@ msgstr ""
 "現在のファイルの自動保存に失敗しました。ブラウザが予期せずに終了してもデータ"
 "を失わないよう、ファイルを保存してください。"
 
-#: apps/io.ox/mail/accounts/settings.js:212
+#: apps/io.ox/mail/accounts/settings.js:215
 #: module:io.ox/mail/accounts/settings
 msgid "Failed to connect."
 msgstr "接続に失敗しました。"
@@ -3677,7 +3677,7 @@ msgctxt "help"
 msgid "Managing Files"
 msgstr "ファイルの管理"
 
-#: apps/io.ox/mail/accounts/settings.js:278
+#: apps/io.ox/mail/accounts/settings.js:281
 #: module:io.ox/mail/accounts/settings
 msgid "Manual"
 msgstr "手動設定"
@@ -5365,6 +5365,24 @@ msgstr "添付ファイルを保存"
 msgid "Save to Drive"
 msgstr "Drive に保存"
 
+#: apps/io.ox/core/api/attachment.js:203 module:io.ox/core
+#, fuzzy
+#| msgid "Saved mail attachment"
+msgid "Saved appointment attachment"
+msgstr "保存された添付ファイル"
+
+#: apps/io.ox/core/api/attachment.js:220 module:io.ox/core
+#, fuzzy
+#| msgid "Save attachment"
+msgid "Saved attachment"
+msgstr "添付ファイルを保存"
+
+#: apps/io.ox/core/api/attachment.js:205 module:io.ox/core
+#, fuzzy
+#| msgid "Saved mail attachment"
+msgid "Saved contact attachment"
+msgstr "保存された添付ファイル"
+
 #: apps/io.ox/contacts/view-detail.js:737 module:io.ox/contacts
 #: apps/io.ox/files/fluid/view-detail.js:178 module:io.ox/files
 msgid "Saved in"
@@ -5373,6 +5391,12 @@ msgstr "保存先:"
 #: apps/io.ox/mail/api.js:1369 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "保存された添付ファイル"
+
+#: apps/io.ox/core/api/attachment.js:204 module:io.ox/core
+#, fuzzy
+#| msgid "Send as attachment"
+msgid "Saved task attachment"
+msgstr "添付ファイルとして送信"
 
 #: apps/io.ox/mail/actions/attachmentSave.js:29 module:io.ox/mail
 msgid "Saving attachment to Drive"
@@ -6466,7 +6490,7 @@ msgstr "XING に問題があります。エラー メッセージ: \"%s\""
 msgid "There was a problem with XING. The error message was: \"%s\""
 msgstr "XING に問題があります。エラー メッセージ: \"%s\""
 
-#: apps/io.ox/mail/accounts/settings.js:205
+#: apps/io.ox/mail/accounts/settings.js:208
 #: module:io.ox/mail/accounts/settings
 msgid "There was no suitable server found for this mail/password combination"
 msgstr "このメールとパスワードの組み合わせが保存されているサーバがありません。"
@@ -6617,7 +6641,7 @@ msgstr "これは標準フォルダです。名前を変更できません。"
 msgid "This is not a valid email address"
 msgstr "このメール アドレスは無効です。"
 
-#: apps/io.ox/mail/accounts/settings.js:290
+#: apps/io.ox/mail/accounts/settings.js:293
 #: module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr "このメール アドレスは無効です。"
@@ -13063,9 +13087,6 @@ msgstr "毎年"
 
 #~ msgid "Send as E-Mail"
 #~ msgstr "メールで送信"
-
-#~ msgid "Send as attachment"
-#~ msgstr "添付ファイルとして送信"
 
 #~ msgid "Send as mail"
 #~ msgstr "メールで送信"

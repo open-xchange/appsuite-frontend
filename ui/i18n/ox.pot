@@ -260,7 +260,7 @@ msgstr ""
 #: module:io.ox/keychain
 #: apps/io.ox/mail/accounts/settings.js:45
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/accounts/settings.js:277
+#: apps/io.ox/mail/accounts/settings.js:280
 #: apps/io.ox/mail/accounts/view-form.js:310
 #: module:io.ox/settings/settings
 #: apps/io.ox/mail/accounts/view-form.js:345
@@ -3365,15 +3365,35 @@ msgstr ""
 #: apps/io.ox/files/actions.js:335
 #: module:io.ox/files
 #: apps/io.ox/files/mediaplayer.js:295
-#: apps/io.ox/mail/accounts/settings.js:327
+#: apps/io.ox/mail/accounts/settings.js:330
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/accounts/settings.js:349
+#: apps/io.ox/mail/accounts/settings.js:352
 #: apps/io.ox/mail/actions.js:237
 #: module:io.ox/mail
 #: apps/io.ox/mail/statistics.js:272
 #: apps/plugins/upsell/simple-wizard/register.js:91
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
+msgstr ""
+
+#: apps/io.ox/core/api/attachment.js:203
+#: module:io.ox/core
+msgid "Saved appointment attachment"
+msgstr ""
+
+#: apps/io.ox/core/api/attachment.js:204
+#: module:io.ox/core
+msgid "Saved task attachment"
+msgstr ""
+
+#: apps/io.ox/core/api/attachment.js:205
+#: module:io.ox/core
+msgid "Saved contact attachment"
+msgstr ""
+
+#: apps/io.ox/core/api/attachment.js:220
+#: module:io.ox/core
+msgid "Saved attachment"
 msgstr ""
 
 #: apps/io.ox/core/api/folder.js:68
@@ -6101,41 +6121,41 @@ msgstr ""
 msgid "Trying to auto-configure your mail account"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/settings.js:205
+#: apps/io.ox/mail/accounts/settings.js:208
 #: module:io.ox/mail/accounts/settings
 msgid "There was no suitable server found for this mail/password combination"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/settings.js:212
+#: apps/io.ox/mail/accounts/settings.js:215
 #: module:io.ox/mail/accounts/settings
 msgid "Failed to connect."
 msgstr ""
 
-#: apps/io.ox/mail/accounts/settings.js:270
+#: apps/io.ox/mail/accounts/settings.js:273
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/folderview-extensions.js:42
 #: module:io.ox/mail
 msgid "Add mail account"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/settings.js:276
+#: apps/io.ox/mail/accounts/settings.js:279
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/write/view-main.js:584
 #: module:io.ox/mail
 msgid "Add"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/settings.js:278
+#: apps/io.ox/mail/accounts/settings.js:281
 #: module:io.ox/mail/accounts/settings
 msgid "Manual"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/settings.js:290
+#: apps/io.ox/mail/accounts/settings.js:293
 #: module:io.ox/mail/accounts/settings
 msgid "This is not a valid mail address"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/settings.js:330
+#: apps/io.ox/mail/accounts/settings.js:333
 #: module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js:129
 #: module:io.ox/core
