@@ -561,7 +561,7 @@ define('io.ox/calendar/edit/template',
             if (capabilities.has('freebusy !alone')) {
                 var selector = '.find-free-time-top, .find-free-time legend';
                 this.parent().find(selector).append(
-                    $('<button class="btn btn-link pull-right hidden-xs" tabindex="1">').text(gt('Find a free time'))
+                    $('<button type="button" class="btn btn-link pull-right hidden-xs" tabindex="1">').text(gt('Find a free time'))
                         .on('click', { app: baton.app, model: baton.model }, openFreeBusyView)
                 );
             }
