@@ -177,6 +177,10 @@ define('plugins/portal/xing/register',
         var node = $('<div>').addClass('networkActivities'),
             newsItemCount = 0;
 
+        if (networkActivities.length === 0) {
+            node.text(gt('There is no recent activity in your Xing network.'));
+        }
+
         _(networkActivities).each(function (activity) {
             if (activity.type !== 'activity') {
                 return;
