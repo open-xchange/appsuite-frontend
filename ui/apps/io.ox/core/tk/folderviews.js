@@ -621,7 +621,7 @@ define('io.ox/core/tk/folderviews',
                 require(['io.ox/core/tk/dialogs'])
             ).done(function (folder, dialogs) {
                 new dialogs.ModalDialog()
-                .text(gt('Do you really want to delete folder "%s"?', folder.title))
+                .text(gt('Do you really want to delete folder "%s"?', api.getFolderTitle(folder.title, 30)))
                 .addPrimaryButton('delete', gt('Delete'))
                 .addButton('cancel', gt('Cancel'))
                 .show()
