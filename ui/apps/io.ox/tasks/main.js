@@ -27,7 +27,8 @@ define('io.ox/tasks/main',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
      'io.ox/tasks/toolbar',
-     'io.ox/tasks/mobile-navbar-extensions'
+     'io.ox/tasks/mobile-navbar-extensions',
+     'io.ox/tasks/mobile-toolbar-actions'
      //'io.ox/tasks/mobile-toolbar-actions',
     ], function (api, ext, actions, gt, VGrid, template, commons, util, viewDetail, settings, folderAPI, FolderView, Bars, PageController) {
 
@@ -301,11 +302,10 @@ define('io.ox/tasks/main',
         /*
          * Always change pages on tap, don't wait for data to load
          */
-        'select:contact-mobile': function (app) {
+        'select:task-mobile': function (app) {
             if (_.device('!small')) return;
-
             app.grid.getContainer().on('tap', '.vgrid-cell.selectable', function () {
-                //if (app.props.get('checkboxes') === true) return;
+                if (app.props.get('checkboxes') === true) return;
                 // hijack selection event hub to trigger page-change event
                 app.grid.selection.trigger('pagechange:detailView');
                 app.pages.changePage('detailView');
@@ -345,7 +345,7 @@ define('io.ox/tasks/main',
         'props': function (app) {
             // introduce shared properties
             app.props = new Backbone.Model({
-                'checkboxes': app.settings.get('showCheckboxes', true)
+                'checkboxes': _.device('small') ? false: app.settings.get('showCheckboxes', true)
             });
         },
 
@@ -391,11 +391,31 @@ define('io.ox/tasks/main',
             });
         },
 
+        'change:folder-mobile': function () {
+            if (_.device('!small')) return;
+            app.grid.on('change:ids', function () {
+                app.folder.getData().done(function (d) {
+                    app.pages.getNavbar('listView').setTitle(d.title);
+                });
+
+            });
+        },
+
+        'folder-view-mobile-listener': function () {
+            if (_.device('!small')) return;
+            // always change folder on click
+            app.pages.getPage('folderTree').on('tap', '.folder.selectable', function (e) {
+                if (app.props.get('mobileFolderSelectMode') === true) {
+                    $(e.currentTarget).trigger('contextmenu'); // open menu
+                    return; // do not change page in edit mode
+                }
+                app.pages.changePage('listView');
+            });
+        },
         /*
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
-            if (_.device('small')) return;
             app.props.on('change:checkboxes', function (model, value) {
                 var grid = app.getGrid();
                 grid.setEditable(value);
@@ -445,7 +465,7 @@ define('io.ox/tasks/main',
         win = ox.ui.createWindow({
             name: 'io.ox/tasks',
             title: 'Tasks',
-            chromeless: _.device('!small')
+            chromeless: true
         });
 
         win.addClass('io-ox-tasks-main');
@@ -506,10 +526,13 @@ define('io.ox/tasks/main',
         var grid = new VGrid(app.gridContainer, {
             settings: settings,
             swipeRightHandler: swipeRightHandler,
-            showToggle: _.device('small')
+            showToggle: _.device('small'),
+            hideTopbar: _.device('small'),
+            hideToolbar: _.device('small'),
+            toolbarPlacement: 'none'
         });
-        app.grid = grid;
 
+        app.grid = grid;
 
         app.getGrid = function () {
             return grid;
