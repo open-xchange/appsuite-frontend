@@ -50,6 +50,7 @@ define('io.ox/core/api/apps',
     var allFavorites = ['io.ox/portal', 'io.ox/mail', 'io.ox/contacts',
                         'io.ox/calendar', 'io.ox/tasks', 'io.ox/files',
                         'io.ox/office/portal/text', 'io.ox/office/portal/spreadsheet'];
+    ext.point('io.ox/core/apps/favorites/allFavorites').invoke('customize', allFavorites, allFavorites);
     _(allFavorites).each(function (id) {
         var app = appData.apps[id];
         if (app && !manifests.manager.isDisabled(app.path)) {

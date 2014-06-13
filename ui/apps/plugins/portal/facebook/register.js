@@ -339,7 +339,7 @@ define('plugins/portal/facebook/register',
             );
         },
 
-        error: function (error) {
+        error: function (error, baton) {
 
             if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
 
@@ -352,7 +352,7 @@ define('plugins/portal/facebook/register',
                 ),
                 $('<div class="content">').text(gt('Click here to add your account'))
                 .on('click', {}, function () {
-                    ext.point('io.ox/portal/widget/facebook').invoke('performSetUp');
+                    ext.point('io.ox/portal/widget/facebook').invoke('performSetUp', null, baton);
                 })
             );
         }
@@ -523,10 +523,10 @@ define('plugins/portal/facebook/register',
         accepts: function (post) {
             return post.type === 80 &&
                 post.attachment.caption !== 'www.youtube.com' &&
-                (post.attachment.media[0] || post.attachment.href);
+                ((post.attachment.media && post.attachment.media[0]) || post.attachment.href);
         },
         draw: function (post) {
-            var media = post.attachment.media[0],
+            var media = post.attachment.media ? post.attachment.media[0] : false,
                 link = post.attachment.href;
             this.append(
                 $('<div>').append(parseMessageText(post.description || post.message || '')),
@@ -546,10 +546,10 @@ define('plugins/portal/facebook/register',
             return (post.type === 128) || (post.type === 80 && post.attachment.caption === 'www.youtube.com');
         },
         draw: function (post) {
-            var media = post.attachment.media[0];
+            var media = post.attachment.media ? post.attachment.media[0] : false;
 
             $('<div class="message">').append(parseMessageText(post.attachment.name || post.message)).appendTo($(this));
-            if (media !== undefined) {
+            if (media) {
                 $('<a>').attr({href: media.href})
                     .append($('<img>').attr({src: media.src}).css({height: '150px', width: 'auto'}))
                     .appendTo($(this));
@@ -583,7 +583,7 @@ define('plugins/portal/facebook/register',
             return post.type === 295;
         },
         draw: function (post) {
-            var media = post.attachment.media[0],
+            var media = post.attachment.media ? post.attachment.media[0] : false,
                 link = post.attachment.href;
             this.append(
                 $('<div>').append(parseMessageText(post.description || post.message || '')),
@@ -600,7 +600,7 @@ define('plugins/portal/facebook/register',
         id: 'new-cover-photo',
         index: 196,
         accepts: function (post) {
-            return post.type === 373 && post.attachment.media[0];
+            return post.type === 373 && post.attachment.media && post.attachment.media[0];
         },
         draw: function (post) {
             var media = post.attachment.media[0];
@@ -620,7 +620,7 @@ define('plugins/portal/facebook/register',
             return post.type === 308;
         },
         draw: function (post) {
-            var media = post.attachment.media[0],
+            var media = post.attachment.media ? post.attachment.media[0] : false,
             link = post.attachment.href;
             this.append(
                 $('<div>').append(parseMessageText(post.description || post.message || '')),

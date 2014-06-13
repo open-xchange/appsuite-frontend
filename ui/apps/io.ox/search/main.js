@@ -317,16 +317,28 @@ define('io.ox/search/main',
             });
 
     //run app
-    run = function () {
-        if (app.is('running')) {
-            //reuse
-            var current = ox.ui.App.getCurrentApp().get('name');
+    run = function (options) {
+        var current;
+
+        //ensure
+        options = options || {};
+
+        if (app.is('ready')) {
+            //not started yet use app callback for inital stuff
+            app.launch.call(app);
+        } else if (options.reset) {
+            //reset model and update current app
+            model.reset({silent: true});
+            current = ox.ui.App.getCurrentApp().get('name');
             if (current !== 'io.ox/search')
                 model.set('app', current, {silent: true});
+            //update state
+            app.set('state', 'running');
+            //reset view
             app.launch();
+            app.view.redraw({closeSidepanel: true});
+        } else if (app.is('running')) {
             app.view.redraw();
-        } else {
-            app.launch.call(app);
         }
         app.view.focus();
         app.idle();

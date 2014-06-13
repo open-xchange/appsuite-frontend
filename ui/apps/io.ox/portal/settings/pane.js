@@ -367,7 +367,9 @@ define('io.ox/portal/settings/pane',
             this.append(list.empty());
 
             collection.each(function (model) {
-                list.append(createView(model).render().el);
+                if (model.get('protectedWidget') !== true || model.get('enabled') !== false) {
+                    list.append(createView(model).render().el);
+                }
             });
 
             // make sortable
@@ -401,7 +403,9 @@ define('io.ox/portal/settings/pane',
                     this.sort({ silent: true });
                     list.empty();
                     this.each(function (model) {
-                        list.append(createView(model).render().el);
+                        if (model.get('protectedWidget') !== true || model.get('enabled') !== false) {
+                            list.append(createView(model).render().el);
+                        }
                     });
                 });
         }

@@ -273,15 +273,17 @@ define('io.ox/calendar/month/view',
                 helper: function () {
                     return $(this)
                         .clone()
-                        .width($(this).outerWidth())
-                        .css({zIndex: 999});
+                        .width($(this).outerWidth());
                 },
                 appendTo: self.$el,
                 scroll: true,
+                scrollSpeed: 100,
+                scrollSensitivity: 100,
                 snap: '.day>.list',
                 snapMode: 'inner',
                 snapTolerance: 20,
                 distance: 20,
+                zIndex: 999,
                 containment: self.$el.parent(),
                 revertDuration: 0,
                 revert: function (drop) {

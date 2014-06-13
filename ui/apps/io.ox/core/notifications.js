@@ -125,8 +125,11 @@ define('io.ox/core/notifications',
             }
 
             _(self.subviews).each(function (category) {
+                //subviews must be rendered even if they have 0 items.
+                //this is because the empty call had to be moved from the general render of the notification area to each subview.
+                //if empty is called here the notificationviews loose their events on redraw and if we don't call render views with 0 items they might not clear old items properly
+                self.$el.append(category.render().el);
                 if (category.collection.length > 0) {
-                    self.$el.append(category.render().el);
                     empty = false;
                 }
             });

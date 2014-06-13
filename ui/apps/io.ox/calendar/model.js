@@ -308,9 +308,10 @@ define('io.ox/calendar/model',
 
                     // handle time
                     var startDate = new date.Local(_start),
-                        endDate = new date.Local(_end - 1),
-                        oldStart = new date.Local(oldStart),
-                        oldEnd = new date.Local(oldEnd);
+                        endDate = new date.Local(_end + 1);
+
+                    oldStart = new date.Local(oldStart);
+                    oldEnd = new date.Local(oldEnd);
 
                     startDate.setHours(oldStart.getHours(), oldStart.getMinutes(), 0, 0);
                     endDate.setHours(oldEnd.getHours(), oldEnd.getMinutes(), 0, 0);

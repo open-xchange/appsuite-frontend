@@ -269,13 +269,13 @@ define('io.ox/calendar/week/view',
         initSettings: function () {
             // init settings
             var self = this;
-            this.gridSize = 60 / settings.get('interval', this.gridSize);
+            this.gridSize = 60 / settings.get('interval', 30);
             this.workStart = settings.get('startTime', this.workStart);
             this.workEnd = settings.get('endTime', this.workEnd);
             settings.on('change', function (e, key) {
                 switch (key) {
                 case 'interval':
-                    self.gridSize = 60 / settings.get('interval', self.gridSize);
+                    self.gridSize = 60 / settings.get('interval', 30);
                     break;
                 case 'startTime':
                 case 'endTime':
@@ -424,7 +424,7 @@ define('io.ox/calendar/week/view',
             if ($(e.target).hasClass('day') || $(e.target).hasClass('weekday')) {
                 // calculate timestamp for current position
                 var startTS = date.Local.localTime(this.getTimeFromDateTag($(e.currentTarget).attr('date')).getTime());
-                this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.DAY, full_time: true});
+                this.trigger('openCreateAppointment', e, { start_date: startTS, end_date: startTS + date.DAY, full_time: true });
             }
         },
 

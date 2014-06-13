@@ -723,7 +723,7 @@ define('io.ox/core/main',
                     this.append(
                         addLauncher('right', $('<i class="fa fa-search launcher-icon">').attr('aria-hidden', 'true'), function () {
                                 require(['io.ox/search/main'], function (searchapp) {
-                                    searchapp.run();
+                                    searchapp.run({reset: true});
                                 });
                             },  gt('Search'))
                         .attr('id', 'io-ox-search-topbar-icon')
