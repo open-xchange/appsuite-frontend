@@ -595,8 +595,22 @@ define('io.ox/core/tk/folderviews',
             }
         }
 
+        function reloadTrash() {
+            if (self.options.type === 'infostore') {
+                require(['settings!io.ox/files'], function (fileSettings) {
+                    var trash = fileSettings.get('folder/trash');
+                    if (trash) {
+                        api.reload(trash);
+                        api.sync();
+                    }
+                });
+            }
+        }
+
         this.removeProcess = function (folder) {
-            api.remove({ folder: folder.id }).fail(notifications.yell);
+            api.remove({ folder: folder.id })
+               .always(reloadTrash)
+               .fail(notifications.yell);
         };
 
         this.remove = function () {
