@@ -339,7 +339,7 @@ define('plugins/portal/facebook/register',
             );
         },
 
-        error: function (error) {
+        error: function (error, baton) {
 
             if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
 
@@ -352,7 +352,7 @@ define('plugins/portal/facebook/register',
                 ),
                 $('<div class="content">').text(gt('Click here to add your account'))
                 .on('click', {}, function () {
-                    ext.point('io.ox/portal/widget/facebook').invoke('performSetUp');
+                    ext.point('io.ox/portal/widget/facebook').invoke('performSetUp', null, baton);
                 })
             );
         }
