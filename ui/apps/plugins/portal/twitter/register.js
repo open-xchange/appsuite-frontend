@@ -375,7 +375,7 @@ define('plugins/portal/twitter/register',
             );
         },
 
-        error: function (error) {
+        error: function (error, baton) {
 
             if (error.code !== 'OAUTH-0006') return; // let the default handling do the job
 
@@ -388,7 +388,7 @@ define('plugins/portal/twitter/register',
                 ),
                 $('<div class="content">').text(gt('Click here to add your account'))
                 .on('click', {}, function () {
-                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp');
+                    ext.point('io.ox/portal/widget/twitter').invoke('performSetUp', null, baton);
                 })
             );
         }
