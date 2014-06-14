@@ -106,19 +106,19 @@ msgid "%1$d messages in this conversation"
 msgstr "%1$d správ v tejto konverzácii"
 
 #: apps/io.ox/core/commons.js:102 module:io.ox/core
-#: apps/io.ox/mail/main.js:613 module:io.ox/mail
+#: apps/io.ox/mail/main.js:611 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d správ vybraných"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:631 module:io.ox/mail
+#: apps/io.ox/mail/main.js:629 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d vybraných"
 
 #. Name in mail addresses
 #. %1$s is the first name
 #. %2$s is the last name
-#: apps/io.ox/contacts/util.js:176 module:io.ox/contacts
+#: apps/io.ox/contacts/util.js:177 module:io.ox/contacts
 msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -134,7 +134,7 @@ msgstr "%2$s %1$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js:366 module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js:368 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:1704
 #, c-format
 msgid "%1$s (Tentative)"
@@ -772,7 +772,7 @@ msgstr "Povoliť emaily vo formáte HTML"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Povoliť automatické načítanie externých obrázkov"
 
-#: apps/plugins/portal/xing/register.js:258 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
 msgid "Allow us to use your %s account here"
 msgstr "Umožnite nám tu použiť váš účet %s."
 
@@ -825,7 +825,7 @@ msgstr "Pripojiť vCard"
 msgid "Application Toolbar"
 msgstr "Panel nástrojov aplikácie"
 
-#: apps/io.ox/mail/main.js:1049 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1047 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Aplikácia nemusí fungovať podľa očakávania, kým tento problém nevyriešite."
@@ -1186,7 +1186,7 @@ msgstr "Kalendár"
 #: apps/io.ox/core/permissions/permissions.js:399 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
-#: apps/io.ox/core/tk/folderviews.js:612 apps/io.ox/core/tk/folderviews.js:670
+#: apps/io.ox/core/tk/folderviews.js:626 apps/io.ox/core/tk/folderviews.js:684
 #: apps/io.ox/core/tk/mobiscroll.js:35 apps/io.ox/core/upsell.js:36
 #: apps/io.ox/editor/main.js:346 module:io.ox/editor
 #: apps/io.ox/files/actions.js:375 module:io.ox/files
@@ -1205,7 +1205,7 @@ msgstr "Kalendár"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:427
-#: apps/io.ox/mail/main.js:256 apps/io.ox/mail/main.js:969
+#: apps/io.ox/mail/main.js:256 apps/io.ox/mail/main.js:967
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1385 apps/io.ox/mail/write/view-main.js:585
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -1689,7 +1689,7 @@ msgstr "Nepodarilo sa načítať dáta schôdzky."
 msgid "Couldn't load contact data."
 msgstr "Nepodarilo sa načítať dáta kontaktu."
 
-#: apps/io.ox/core/tk/folderviews.js:1091 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:1105 module:io.ox/core
 msgid "Couldn't load folders."
 msgstr "Nepodarilo sa načítať priečinky."
 
@@ -1731,7 +1731,7 @@ msgstr "Krajina"
 msgid "Create"
 msgstr "Vytvoriť"
 
-#: apps/plugins/portal/xing/register.js:261 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:265 module:plugins/portal
 msgid "Create a %s account using the data stored here"
 msgstr "Vytvoriť účet %s pomocou tu uložených údajov."
 
@@ -1899,7 +1899,7 @@ msgstr "Odložené"
 #: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:413
 #: module:io.ox/core apps/io.ox/core/pubsub/settings/pane.js:239
 #: module:io.ox/core/pubsub apps/io.ox/core/pubsub/settings/pane.js:241
-#: apps/io.ox/core/tk/folderviews.js:611 apps/io.ox/files/actions.js:374
+#: apps/io.ox/core/tk/folderviews.js:625 apps/io.ox/files/actions.js:374
 #: module:io.ox/files apps/io.ox/files/actions.js:740
 #: apps/io.ox/files/actions.js:897 apps/io.ox/files/actions.js:1315
 #: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:90
@@ -2076,7 +2076,7 @@ msgstr "Poštová konferencia"
 msgid "Distribution list has been saved"
 msgstr "Tento distribučný zoznam bol uložený"
 
-#: apps/plugins/portal/xing/register.js:256 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
 msgid "Do you already have a %s account?"
 msgstr "Máte už účet na %s?"
 
@@ -2087,7 +2087,7 @@ msgid ""
 msgstr ""
 "Ste si istý, že chcete naozaj zmeniť príponu súboru z „.%1$s“ na „.%2$s“?"
 
-#: apps/io.ox/core/tk/folderviews.js:610 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:624 module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Ste si istý, že chcete priečinok „%s“ zmazať?"
 
@@ -2158,7 +2158,7 @@ msgid ""
 "series?"
 msgstr "Skutočne chcete potvrdiť celú sériu alebo len jedinú schôdzku v sérii?"
 
-#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Do you want to create a %s account?"
 msgstr "Ste si istý, že chcete vytvoriť účet %s?"
 
@@ -2323,7 +2323,7 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
 #: apps/io.ox/mail/main.js:143 apps/io.ox/mail/main.js:149
-#: apps/io.ox/mail/main.js:251 apps/io.ox/mail/main.js:973
+#: apps/io.ox/mail/main.js:251 apps/io.ox/mail/main.js:971
 #: apps/io.ox/mail/settings/signatures/register.js:277
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2550,7 +2550,7 @@ msgstr "Podnikateľ"
 msgid "Envelope"
 msgstr "Obálka"
 
-#: apps/io.ox/core/notifications.js:462 module:io.ox/core
+#: apps/io.ox/core/notifications.js:465 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -2896,7 +2896,7 @@ msgid "Folder"
 msgstr "Priečiok"
 
 #: apps/io.ox/core/folder/add.js:91 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:664
+#: apps/io.ox/core/tk/folderviews.js:678
 msgid "Folder name"
 msgstr "Názov priečinka"
 
@@ -2941,7 +2941,7 @@ msgstr ""
 "Priečinok s názvom „%1$s“ bude skrytý. Povoľte nastavenie „Zobrazovať skryté "
 "súbory a priečinky“ ak chcete k tomuto priečinku pristupovať."
 
-#: apps/io.ox/core/tk/folderviews.js:856 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:870 module:io.ox/core
 msgid "Folder-specific actions"
 msgstr "Operácie priečinka"
 
@@ -3135,7 +3135,7 @@ msgstr "Pomocník"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "Ahoj!<br><br>%1$s s vami zdieľa publikáciu:<br>%2$s"
 
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 msgid "Hidden folders"
 msgstr "Skryté priečinky"
 
@@ -3175,7 +3175,7 @@ msgstr "Vysoká"
 msgid "High contrast theme"
 msgstr "Téma vzhľadu s vysokým kontrastom"
 
-#: apps/io.ox/mail/util.js:383 module:io.ox/core apps/io.ox/tasks/util.js:341
+#: apps/io.ox/mail/util.js:387 module:io.ox/core apps/io.ox/tasks/util.js:341
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Vysoká priorita"
@@ -3601,7 +3601,7 @@ msgstr "Strata: %1$s %"
 msgid "Low"
 msgstr "Nízka"
 
-#: apps/io.ox/mail/util.js:384 module:io.ox/core apps/io.ox/tasks/util.js:335
+#: apps/io.ox/mail/util.js:388 module:io.ox/core apps/io.ox/tasks/util.js:335
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Nízka priorita"
@@ -3611,7 +3611,7 @@ msgstr "Nízka priorita"
 msgid "MB"
 msgstr "MB"
 
-#: apps/io.ox/core/tk/folderviews.js:872 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:886 module:io.ox/core
 #: apps/io.ox/mail/write/main.js:759 module:io.ox/mail
 msgid "Mail"
 msgstr "Pošta"
@@ -3873,7 +3873,7 @@ msgstr "Rozličné"
 msgid "Mobile"
 msgstr "Mobil"
 
-#: apps/io.ox/portal/settings/pane.js:426 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:430 module:io.ox/portal
 msgid "Mobile device settings:"
 msgstr "Nastavenie mobilného zariadenia:"
 
@@ -4156,11 +4156,11 @@ msgstr "Žiadne poštové správy v priečinku Prijaté"
 msgid "No matching templates on this Server"
 msgstr "Žiadne zodpovedajúce šablóny na tomto serveri"
 
-#: apps/io.ox/mail/main.js:599 module:io.ox/mail
+#: apps/io.ox/mail/main.js:597 module:io.ox/mail
 msgid "No message selected"
 msgstr "Nebola vybraná žiadna správa."
 
-#: apps/io.ox/core/notifications.js:135 module:io.ox/core
+#: apps/io.ox/core/notifications.js:138 module:io.ox/core
 msgid "No notifications"
 msgstr "Žiadne oznámenia"
 
@@ -4174,7 +4174,7 @@ msgstr "Žiaden náhľad nie je dostupný"
 msgid "No priority"
 msgstr "Bez priority"
 
-#: apps/io.ox/mail/util.js:331 module:io.ox/core
+#: apps/io.ox/mail/util.js:335 module:io.ox/core
 msgid "No recipients"
 msgstr "Žiadni príjemcovia"
 
@@ -4194,7 +4194,7 @@ msgstr "Žiadne pomalé požiadavky"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/util.js:369 module:io.ox/core
+#: apps/io.ox/mail/util.js:373 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:107 module:io.ox/core/mail
 #: apps/io.ox/mail/write/main.js:759 module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
@@ -4351,7 +4351,7 @@ msgstr ""
 "serveri. Email, ktorý ste práve poslali obsahuje len odkazy na stiahnutie "
 "týchto súborov."
 
-#: apps/io.ox/portal/settings/pane.js:429 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:433 module:io.ox/portal
 msgid "Only show widget summary on mobile devices"
 msgstr "Na mobilných zariadeniach zobraziť iba zhrnutie ovládacieho prvku"
 
@@ -4939,7 +4939,7 @@ msgstr "Predošlý deň"
 msgid "Previous Week"
 msgstr "Predošlý týždeň"
 
-#: apps/io.ox/mail/util.js:390 module:io.ox/core
+#: apps/io.ox/mail/util.js:394 module:io.ox/core
 msgid "Primary account"
 msgstr "Primárny účet"
 
@@ -4977,7 +4977,7 @@ msgstr "Ochrana súkromia"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js:355 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "Súkromné"
@@ -5019,7 +5019,7 @@ msgstr "Priebeh musí byť platné číslo medzi 0 a 100"
 msgid "Properties"
 msgstr "Vlastnosti"
 
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 msgid "Public"
 msgstr "Verejné"
 
@@ -5258,13 +5258,13 @@ msgid "Remove from recipient list"
 msgstr "Odstrániť zo zoznamu príjemcov"
 
 #: apps/io.ox/core/commons-folderview.js:390 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:669 apps/io.ox/files/actions.js:526
+#: apps/io.ox/core/tk/folderviews.js:683 apps/io.ox/files/actions.js:526
 #: module:io.ox/files apps/io.ox/files/actions.js:531
 #: apps/io.ox/files/actions.js:956
 msgid "Rename"
 msgstr "Premenovať"
 
-#: apps/io.ox/core/tk/folderviews.js:657 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:671 module:io.ox/core
 msgid "Rename folder"
 msgstr "Premenovať priečinok"
 
@@ -5709,7 +5709,7 @@ msgstr "Zdieľať tento súbor"
 msgid "Share this folder"
 msgstr "Zdieľať tento priečinok"
 
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 msgid "Shared"
 msgstr "Zdieľané"
 
@@ -6552,6 +6552,12 @@ msgstr[0] "V tomto časovom rámci máte už %1$d schôdzku."
 msgstr[1] "V tomto časovom rámci máte už %1$d schôdzky."
 msgstr[2] "V tomto časovom rámci máte už %1$d schôdzok."
 
+#: apps/plugins/portal/xing/register.js:181 module:plugins/portal
+#, fuzzy
+#| msgid "There were not activities in your network"
+msgid "There is no recent activity in your Xing network."
+msgstr "Vo vašej sieti nenastali žiadne aktivity"
+
 #: apps/io.ox/mail/mailfilter/settings/filter.js:380 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Žiadne pravidlo nie je definované"
@@ -6714,7 +6720,7 @@ msgstr "Tento priečinok nemá žiadne publikácie"
 msgid "This folder has no subscriptions"
 msgstr "Tento priečinok nemá žiadne odbery"
 
-#: apps/io.ox/core/tk/folderviews.js:922 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:936 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "Tento priečinok má publikácie a/alebo odbery"
 
@@ -6729,7 +6735,7 @@ msgid ""
 "This folder has subscriptions but you are not allowed to view or edit them"
 msgstr "Tento priečinok má odbery, ale nemôžete ich zobraziť alebo upravovať"
 
-#: apps/io.ox/core/tk/folderviews.js:649 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:663 module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Jedná sa o štandardný priečinok, ktorý nemôže byť premenovaný."
 
@@ -7006,7 +7012,7 @@ msgstr "Zjednotená"
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Neznáma chyba počas kontrolovania blogu Tumblr."
 
-#: apps/io.ox/mail/util.js:329 module:io.ox/core
+#: apps/io.ox/mail/util.js:333 module:io.ox/core
 msgid "Unknown sender"
 msgstr "Neznámy odosielateľ"
 
@@ -7544,7 +7550,7 @@ msgstr "Musíte použiť Android %n alebo vyšší."
 msgid "You need to use iOS %n or higher."
 msgstr "Musíte použiť iOS %n alebo vyšší."
 
-#: apps/io.ox/core/tk/folderviews.js:945 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:959 module:io.ox/core
 msgid "You share this folder with other users"
 msgstr "Tento priečinok zdieľate s inými používateľmi"
 
@@ -7578,7 +7584,7 @@ msgstr ""
 "Váš účet %s bol vytvorený. Čoskoro očakávajte potvrdzovací e-mail od "
 "odosielateľa %s."
 
-#: apps/plugins/portal/xing/register.js:288 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:292 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Váš kanál noviniek %s"
 
@@ -8116,7 +8122,7 @@ msgstr "zajtra"
 msgid "tonight"
 msgstr "dnes večer"
 
-#: apps/io.ox/core/tk/folderviews.js:865 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:879 module:io.ox/core
 msgid "total"
 msgstr "celkom"
 
@@ -8127,8 +8133,8 @@ msgid "unconfirmed"
 msgstr "Nepotvrdené"
 
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
-#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:405
-#: apps/io.ox/mail/util.js:418
+#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:409
+#: apps/io.ox/mail/util.js:422
 msgid "unknown"
 msgstr "neznáme"
 
@@ -8136,7 +8142,7 @@ msgstr "neznáme"
 msgid "unlimited"
 msgstr "neobmedzené"
 
-#: apps/io.ox/core/tk/folderviews.js:866 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:880 module:io.ox/core
 msgid "unread"
 msgstr "neprečítané"
 

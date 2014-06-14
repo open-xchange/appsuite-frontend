@@ -106,19 +106,19 @@ msgid "%1$d messages in this conversation"
 msgstr "Liczba wiadomości w konwersacji: %1$d"
 
 #: apps/io.ox/core/commons.js:102 module:io.ox/core
-#: apps/io.ox/mail/main.js:613 module:io.ox/mail
+#: apps/io.ox/mail/main.js:611 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "Liczba wybranych wiadomości: %1$d"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:631 module:io.ox/mail
+#: apps/io.ox/mail/main.js:629 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "Wybrano: %1$d"
 
 #. Name in mail addresses
 #. %1$s is the first name
 #. %2$s is the last name
-#: apps/io.ox/contacts/util.js:176 module:io.ox/contacts
+#: apps/io.ox/contacts/util.js:177 module:io.ox/contacts
 msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -134,7 +134,7 @@ msgstr "%1$s %2$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js:366 module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js:368 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:1704
 #, c-format
 msgid "%1$s (Tentative)"
@@ -772,7 +772,7 @@ msgstr "Zezwalaj na wiadomości e-mail w formacie HTML"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Pozwól na wstępne wczytywanie połączonych obrazów zewnętrznych"
 
-#: apps/plugins/portal/xing/register.js:258 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
 msgid "Allow us to use your %s account here"
 msgstr "Zezwól nam na używanie Twojego konta %s w tym miejscu"
 
@@ -825,7 +825,7 @@ msgstr "Dołącz wizytówkę"
 msgid "Application Toolbar"
 msgstr "Pasek narzędzi aplikacji"
 
-#: apps/io.ox/mail/main.js:1049 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1047 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Dopóki ten problem nie zostanie rozwiązany, aplikacja może działać "
@@ -1191,7 +1191,7 @@ msgstr "Kalendarz"
 #: apps/io.ox/core/permissions/permissions.js:399 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
-#: apps/io.ox/core/tk/folderviews.js:612 apps/io.ox/core/tk/folderviews.js:670
+#: apps/io.ox/core/tk/folderviews.js:626 apps/io.ox/core/tk/folderviews.js:684
 #: apps/io.ox/core/tk/mobiscroll.js:35 apps/io.ox/core/upsell.js:36
 #: apps/io.ox/editor/main.js:346 module:io.ox/editor
 #: apps/io.ox/files/actions.js:375 module:io.ox/files
@@ -1210,7 +1210,7 @@ msgstr "Kalendarz"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:427
-#: apps/io.ox/mail/main.js:256 apps/io.ox/mail/main.js:969
+#: apps/io.ox/mail/main.js:256 apps/io.ox/mail/main.js:967
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1385 apps/io.ox/mail/write/view-main.js:585
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -1694,7 +1694,7 @@ msgstr "Nie można wczytać danych spotkania."
 msgid "Couldn't load contact data."
 msgstr "Nie można wczytać danych kontaktu."
 
-#: apps/io.ox/core/tk/folderviews.js:1091 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:1105 module:io.ox/core
 msgid "Couldn't load folders."
 msgstr "Nie można wczytać folderów."
 
@@ -1736,7 +1736,7 @@ msgstr "Kraj"
 msgid "Create"
 msgstr "Utwórz"
 
-#: apps/plugins/portal/xing/register.js:261 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:265 module:plugins/portal
 msgid "Create a %s account using the data stored here"
 msgstr "Utwórz konto %s przy użyciu danych przechowywanych w tym miejscu"
 
@@ -1906,7 +1906,7 @@ msgstr "Odroczone"
 #: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:413
 #: module:io.ox/core apps/io.ox/core/pubsub/settings/pane.js:239
 #: module:io.ox/core/pubsub apps/io.ox/core/pubsub/settings/pane.js:241
-#: apps/io.ox/core/tk/folderviews.js:611 apps/io.ox/files/actions.js:374
+#: apps/io.ox/core/tk/folderviews.js:625 apps/io.ox/files/actions.js:374
 #: module:io.ox/files apps/io.ox/files/actions.js:740
 #: apps/io.ox/files/actions.js:897 apps/io.ox/files/actions.js:1315
 #: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:90
@@ -2087,7 +2087,7 @@ msgstr "Lista dystrybucyjna"
 msgid "Distribution list has been saved"
 msgstr "Lista dystrybucyjna została zapisana"
 
-#: apps/plugins/portal/xing/register.js:256 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
 msgid "Do you already have a %s account?"
 msgstr "Czy masz już konto %s?"
 
@@ -2098,7 +2098,7 @@ msgid ""
 msgstr ""
 "Czy na pewno chcesz zmienić rozszerzenie pliku z \".%1$s\" na \".%2$s\" ?"
 
-#: apps/io.ox/core/tk/folderviews.js:610 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:624 module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Czy na pewno chcesz usunąć folder \"%s\"?"
 
@@ -2168,7 +2168,7 @@ msgid ""
 "series?"
 msgstr "Czy chcesz potwierdzić cały cykl, czy tylko jedno spotkanie z cyklu?"
 
-#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Do you want to create a %s account?"
 msgstr "Czy chcesz utworzyć konto %s?"
 
@@ -2333,7 +2333,7 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
 #: apps/io.ox/mail/main.js:143 apps/io.ox/mail/main.js:149
-#: apps/io.ox/mail/main.js:251 apps/io.ox/mail/main.js:973
+#: apps/io.ox/mail/main.js:251 apps/io.ox/mail/main.js:971
 #: apps/io.ox/mail/settings/signatures/register.js:277
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2561,7 +2561,7 @@ msgstr "Przedsiębiorca"
 msgid "Envelope"
 msgstr "Koperta"
 
-#: apps/io.ox/core/notifications.js:462 module:io.ox/core
+#: apps/io.ox/core/notifications.js:465 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -2907,7 +2907,7 @@ msgid "Folder"
 msgstr "Folder"
 
 #: apps/io.ox/core/folder/add.js:91 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:664
+#: apps/io.ox/core/tk/folderviews.js:678
 msgid "Folder name"
 msgstr "Nazwa folderu"
 
@@ -2952,7 +2952,7 @@ msgstr ""
 "Folder o nazwie \"%1$s\" zostanie ukryty. Aby go ponownie wyświetlić, włącz "
 "ustawienie \"Pokaż ukryte pliki i foldery\"."
 
-#: apps/io.ox/core/tk/folderviews.js:856 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:870 module:io.ox/core
 msgid "Folder-specific actions"
 msgstr "Działania specyficzne dla folderu"
 
@@ -3146,7 +3146,7 @@ msgstr "Pomoc"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "Hej!<br><br>%1$s udostępnia Ci publikację:<br>%2$s"
 
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 msgid "Hidden folders"
 msgstr "Ukryte foldery"
 
@@ -3186,7 +3186,7 @@ msgstr "Wysoki"
 msgid "High contrast theme"
 msgstr "Motyw z wysokim kontrastem"
 
-#: apps/io.ox/mail/util.js:383 module:io.ox/core apps/io.ox/tasks/util.js:341
+#: apps/io.ox/mail/util.js:387 module:io.ox/core apps/io.ox/tasks/util.js:341
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Wysoki priorytet"
@@ -3613,7 +3613,7 @@ msgstr "Strata: %1$s%"
 msgid "Low"
 msgstr "Niski"
 
-#: apps/io.ox/mail/util.js:384 module:io.ox/core apps/io.ox/tasks/util.js:335
+#: apps/io.ox/mail/util.js:388 module:io.ox/core apps/io.ox/tasks/util.js:335
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Niski priorytet"
@@ -3623,7 +3623,7 @@ msgstr "Niski priorytet"
 msgid "MB"
 msgstr "MB"
 
-#: apps/io.ox/core/tk/folderviews.js:872 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:886 module:io.ox/core
 #: apps/io.ox/mail/write/main.js:759 module:io.ox/mail
 msgid "Mail"
 msgstr "Poczta"
@@ -3885,7 +3885,7 @@ msgstr "Inne"
 msgid "Mobile"
 msgstr "Telefon komórkowy"
 
-#: apps/io.ox/portal/settings/pane.js:426 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:430 module:io.ox/portal
 msgid "Mobile device settings:"
 msgstr "Ustawienia dla urządzenia mobilnego:"
 
@@ -4168,11 +4168,11 @@ msgstr "Brak wiadomości w skrzynce odbiorczej"
 msgid "No matching templates on this Server"
 msgstr "Brak pasujących szablonów na serwerze"
 
-#: apps/io.ox/mail/main.js:599 module:io.ox/mail
+#: apps/io.ox/mail/main.js:597 module:io.ox/mail
 msgid "No message selected"
 msgstr "Brak wybranych wiadomości"
 
-#: apps/io.ox/core/notifications.js:135 module:io.ox/core
+#: apps/io.ox/core/notifications.js:138 module:io.ox/core
 msgid "No notifications"
 msgstr "Brak powiadomień"
 
@@ -4186,7 +4186,7 @@ msgstr "Brak dostępnego podglądu"
 msgid "No priority"
 msgstr "Brak priorytetu"
 
-#: apps/io.ox/mail/util.js:331 module:io.ox/core
+#: apps/io.ox/mail/util.js:335 module:io.ox/core
 msgid "No recipients"
 msgstr "Brak odbiorców"
 
@@ -4206,7 +4206,7 @@ msgstr "Bez wolnych żądań"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/util.js:369 module:io.ox/core
+#: apps/io.ox/mail/util.js:373 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:107 module:io.ox/core/mail
 #: apps/io.ox/mail/write/main.js:759 module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
@@ -4362,7 +4362,7 @@ msgstr ""
 "zachowane na serwerze. Wysyłana wiadomość e-mail zawiera tylko łącza "
 "umożliwiające pobranie tych plików."
 
-#: apps/io.ox/portal/settings/pane.js:429 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:433 module:io.ox/portal
 msgid "Only show widget summary on mobile devices"
 msgstr "Na urządzeniach mobilnych pokazuj tylko zestawienie widgetów"
 
@@ -4952,7 +4952,7 @@ msgstr "Poprzedni dzień"
 msgid "Previous Week"
 msgstr "Poprzedni tydzień"
 
-#: apps/io.ox/mail/util.js:390 module:io.ox/core
+#: apps/io.ox/mail/util.js:394 module:io.ox/core
 msgid "Primary account"
 msgstr "Konto główne"
 
@@ -4990,7 +4990,7 @@ msgstr "Zawiadomienie o poufności danych"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js:355 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "Prywatne"
@@ -5032,7 +5032,7 @@ msgstr "Wartość postępu musi być liczbą z zakresu od 0 do 100."
 msgid "Properties"
 msgstr "Właściwości"
 
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 msgid "Public"
 msgstr "Publiczne"
 
@@ -5271,13 +5271,13 @@ msgid "Remove from recipient list"
 msgstr "Usuń z listy odbiorców"
 
 #: apps/io.ox/core/commons-folderview.js:390 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:669 apps/io.ox/files/actions.js:526
+#: apps/io.ox/core/tk/folderviews.js:683 apps/io.ox/files/actions.js:526
 #: module:io.ox/files apps/io.ox/files/actions.js:531
 #: apps/io.ox/files/actions.js:956
 msgid "Rename"
 msgstr "Zmień nazwę"
 
-#: apps/io.ox/core/tk/folderviews.js:657 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:671 module:io.ox/core
 msgid "Rename folder"
 msgstr "Zmień nazwę folderu"
 
@@ -5722,7 +5722,7 @@ msgstr "Udostępnij ten plik"
 msgid "Share this folder"
 msgstr "Udostępnij ten folder"
 
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 msgid "Shared"
 msgstr "Udostępnione"
 
@@ -6583,6 +6583,12 @@ msgstr[0] "W tym przedziale czasu masz już %1$d spotkanie."
 msgstr[1] "W tym przedziale czasu masz już %1$d spotkania."
 msgstr[2] "W tym przedziale czasu masz już %1$d spotkań."
 
+#: apps/plugins/portal/xing/register.js:181 module:plugins/portal
+#, fuzzy
+#| msgid "There were not activities in your network"
+msgid "There is no recent activity in your Xing network."
+msgstr "W Twojej sieci nie było żadnej aktywności"
+
 #: apps/io.ox/mail/mailfilter/settings/filter.js:380 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Brak zdefiniowanej reguły"
@@ -6749,7 +6755,7 @@ msgstr "Ten folder nie ma publikacji"
 msgid "This folder has no subscriptions"
 msgstr "Ten folder nie ma subskrypcji"
 
-#: apps/io.ox/core/tk/folderviews.js:922 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:936 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "Folder zawiera publikacje lub subskrypcje"
 
@@ -6765,7 +6771,7 @@ msgid ""
 msgstr ""
 "Ten folder zawiera subskrypcje, ale nie możesz ich przeglądać ani edytować"
 
-#: apps/io.ox/core/tk/folderviews.js:649 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:663 module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "To jest folder standardowy. Zmiana jego nazwy nie jest możliwa."
 
@@ -7041,7 +7047,7 @@ msgstr "Ujednolicone"
 msgid "Unknown error while checking tumblr-blog."
 msgstr "W trakcie sprawdzania blogu w serwisie Tumblr wystąpił nieznany błąd."
 
-#: apps/io.ox/mail/util.js:329 module:io.ox/core
+#: apps/io.ox/mail/util.js:333 module:io.ox/core
 msgid "Unknown sender"
 msgstr "Nieznany nadawca"
 
@@ -7580,7 +7586,7 @@ msgstr "Wymagany jest system Android w wersji %n lub wyższej."
 msgid "You need to use iOS %n or higher."
 msgstr "Wymagany jest system iOS w wersji %n lub wyższej."
 
-#: apps/io.ox/core/tk/folderviews.js:945 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:959 module:io.ox/core
 msgid "You share this folder with other users"
 msgstr "Folder ten został udostępniony innym użytkownikom"
 
@@ -7615,7 +7621,7 @@ msgstr ""
 "Twoje konto %s zostało utworzone. Wkrótce otrzymasz wiadomość z "
 "potwierdzeniem od: %s."
 
-#: apps/plugins/portal/xing/register.js:288 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:292 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Twój kanał informacyjny %s"
 
@@ -8154,7 +8160,7 @@ msgstr "jutro"
 msgid "tonight"
 msgstr "dziś"
 
-#: apps/io.ox/core/tk/folderviews.js:865 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:879 module:io.ox/core
 msgid "total"
 msgstr "razem"
 
@@ -8165,8 +8171,8 @@ msgid "unconfirmed"
 msgstr "Niepotwierdzone"
 
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
-#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:405
-#: apps/io.ox/mail/util.js:418
+#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:409
+#: apps/io.ox/mail/util.js:422
 msgid "unknown"
 msgstr "nieznane"
 
@@ -8174,7 +8180,7 @@ msgstr "nieznane"
 msgid "unlimited"
 msgstr "bez ograniczeń"
 
-#: apps/io.ox/core/tk/folderviews.js:866 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:880 module:io.ox/core
 msgid "unread"
 msgstr "nieprzeczytane"
 

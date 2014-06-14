@@ -97,19 +97,19 @@ msgid "%1$d messages in this conversation"
 msgstr "%1$d üzenet a beszélgetésben"
 
 #: apps/io.ox/core/commons.js:102 module:io.ox/core
-#: apps/io.ox/mail/main.js:613 module:io.ox/mail
+#: apps/io.ox/mail/main.js:611 module:io.ox/mail
 msgid "%1$d messages selected"
 msgstr "%1$d üzenet kijelölve"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
-#: apps/io.ox/mail/main.js:631 module:io.ox/mail
+#: apps/io.ox/mail/main.js:629 module:io.ox/mail
 msgid "%1$d selected"
 msgstr "%1$d kiválasztva"
 
 #. Name in mail addresses
 #. %1$s is the first name
 #. %2$s is the last name
-#: apps/io.ox/contacts/util.js:176 module:io.ox/contacts
+#: apps/io.ox/contacts/util.js:177 module:io.ox/contacts
 msgctxt "mail address"
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
@@ -125,7 +125,7 @@ msgstr "%1$s %2$s"
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
-#: apps/io.ox/calendar/month/view.js:366 module:io.ox/calendar
+#: apps/io.ox/calendar/month/view.js:368 module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js:1704
 #, c-format
 msgid "%1$s (Tentative)"
@@ -755,7 +755,7 @@ msgstr "HTML formátumú e-mailek engedélyezése"
 msgid "Allow pre-loading of externally linked images"
 msgstr "A külső hivatkozásokon található képek előtöltésének engedélyezése"
 
-#: apps/plugins/portal/xing/register.js:258 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
 msgid "Allow us to use your %s account here"
 msgstr "Engedélyezze %s fiókjának használatát itt"
 
@@ -808,7 +808,7 @@ msgstr "vCard hozzáadása"
 msgid "Application Toolbar"
 msgstr "Alkalmazás eszköztár"
 
-#: apps/io.ox/mail/main.js:1049 module:io.ox/mail
+#: apps/io.ox/mail/main.js:1047 module:io.ox/mail
 msgid "Application may not work as expected until this problem is solved."
 msgstr ""
 "Az alkalmazás nem feltétlenül fog az elvárható módon működni a probléma "
@@ -1171,7 +1171,7 @@ msgstr "Naptár"
 #: apps/io.ox/core/permissions/permissions.js:399 apps/io.ox/core/print.js:113
 #: apps/io.ox/core/pubsub/publications.js:114 module:io.ox/core/pubsub
 #: apps/io.ox/core/pubsub/subscriptions.js:54 apps/io.ox/core/relogin.js:56
-#: apps/io.ox/core/tk/folderviews.js:612 apps/io.ox/core/tk/folderviews.js:670
+#: apps/io.ox/core/tk/folderviews.js:626 apps/io.ox/core/tk/folderviews.js:684
 #: apps/io.ox/core/tk/mobiscroll.js:35 apps/io.ox/core/upsell.js:36
 #: apps/io.ox/editor/main.js:346 module:io.ox/editor
 #: apps/io.ox/files/actions.js:375 module:io.ox/files
@@ -1190,7 +1190,7 @@ msgstr "Naptár"
 #: apps/io.ox/mail/folderview-extensions.js:106
 #: apps/io.ox/mail/mailfilter/settings/filter.js:91
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js:427
-#: apps/io.ox/mail/main.js:256 apps/io.ox/mail/main.js:969
+#: apps/io.ox/mail/main.js:256 apps/io.ox/mail/main.js:967
 #: apps/io.ox/mail/write/inline-images.js:80
 #: apps/io.ox/mail/write/main.js:1385 apps/io.ox/mail/write/view-main.js:585
 #: apps/io.ox/oauth/settings.js:82 module:io.ox/settings/oauth
@@ -1673,7 +1673,7 @@ msgstr "A találkozó adatai nem tölthetők be."
 msgid "Couldn't load contact data."
 msgstr "A partner adatai nem tölthetők be."
 
-#: apps/io.ox/core/tk/folderviews.js:1091 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:1105 module:io.ox/core
 msgid "Couldn't load folders."
 msgstr "A mappák nem tölthetők be."
 
@@ -1715,7 +1715,7 @@ msgstr "Ország"
 msgid "Create"
 msgstr "Létrehozás"
 
-#: apps/plugins/portal/xing/register.js:261 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:265 module:plugins/portal
 msgid "Create a %s account using the data stored here"
 msgstr "%s fiók létrehozása az itt tárolt adatok használatával"
 
@@ -1883,7 +1883,7 @@ msgstr "Elhalasztott"
 #: apps/io.ox/contacts/toolbar.js:82 apps/io.ox/core/commons-folderview.js:413
 #: module:io.ox/core apps/io.ox/core/pubsub/settings/pane.js:239
 #: module:io.ox/core/pubsub apps/io.ox/core/pubsub/settings/pane.js:241
-#: apps/io.ox/core/tk/folderviews.js:611 apps/io.ox/files/actions.js:374
+#: apps/io.ox/core/tk/folderviews.js:625 apps/io.ox/files/actions.js:374
 #: module:io.ox/files apps/io.ox/files/actions.js:740
 #: apps/io.ox/files/actions.js:897 apps/io.ox/files/actions.js:1315
 #: apps/io.ox/files/toolbar.js:108 apps/io.ox/mail/actions.js:90
@@ -2063,7 +2063,7 @@ msgstr "Disztribúciós lista"
 msgid "Distribution list has been saved"
 msgstr "A disztribúciós lista mentve"
 
-#: apps/plugins/portal/xing/register.js:256 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
 msgid "Do you already have a %s account?"
 msgstr "Már van %s fiókja?"
 
@@ -2074,7 +2074,7 @@ msgid ""
 msgstr ""
 "Valóban meg kívánja változtatni a(z) „.%1$s” kiterjesztést erre: „.%2$s”?"
 
-#: apps/io.ox/core/tk/folderviews.js:610 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:624 module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Biztos, hogy törölni szeretné a mappát: „%s”?"
 
@@ -2144,7 +2144,7 @@ msgstr ""
 "A teljes ismétlődést, vagy csak az ismétlődésen belüli egyik találkozót "
 "kívánja jóváhagyni?"
 
-#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Do you want to create a %s account?"
 msgstr "Szeretne létrehozni egy %s fiókot?"
 
@@ -2311,7 +2311,7 @@ msgstr "EB"
 #: apps/io.ox/mail/mailfilter/settings/filter.js:131
 #: apps/io.ox/mail/mailfilter/settings/filter.js:136
 #: apps/io.ox/mail/main.js:143 apps/io.ox/mail/main.js:149
-#: apps/io.ox/mail/main.js:251 apps/io.ox/mail/main.js:973
+#: apps/io.ox/mail/main.js:251 apps/io.ox/mail/main.js:971
 #: apps/io.ox/mail/settings/signatures/register.js:277
 #: apps/io.ox/portal/settings/pane.js:312 module:io.ox/portal
 #: apps/io.ox/portal/settings/pane.js:314
@@ -2539,7 +2539,7 @@ msgstr "Vállalkozó"
 msgid "Envelope"
 msgstr "Boríték"
 
-#: apps/io.ox/core/notifications.js:462 module:io.ox/core
+#: apps/io.ox/core/notifications.js:465 module:io.ox/core
 #: apps/io.ox/core/print.js:198 apps/io.ox/core/pubsub/subscriptions.js:110
 #: module:io.ox/core/pubsub
 msgid "Error"
@@ -2881,7 +2881,7 @@ msgid "Folder"
 msgstr "Mappa"
 
 #: apps/io.ox/core/folder/add.js:91 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:664
+#: apps/io.ox/core/tk/folderviews.js:678
 msgid "Folder name"
 msgstr "Mappa neve"
 
@@ -2926,7 +2926,7 @@ msgstr ""
 "A(z) „%1$s” nevű mappa elrejtésre kerül. Engedélyezze a „Rejtett fájlok és "
 "mappák megjelenítése” beállítást ezen mappa ismételt eléréséhez."
 
-#: apps/io.ox/core/tk/folderviews.js:856 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:870 module:io.ox/core
 msgid "Folder-specific actions"
 msgstr "Mappaspecifikus műveletek"
 
@@ -3121,7 +3121,7 @@ msgstr "Segítség"
 msgid "Hi!<br><br>%1$s shares a publication with you:<br>%2$s"
 msgstr "Üdv!<br><br>%1$s megosztott egy publikációt:<br>%2$s"
 
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 msgid "Hidden folders"
 msgstr "Rejtett mappák"
 
@@ -3161,7 +3161,7 @@ msgstr "Magas"
 msgid "High contrast theme"
 msgstr "Magas kontrasztú témák"
 
-#: apps/io.ox/mail/util.js:383 module:io.ox/core apps/io.ox/tasks/util.js:341
+#: apps/io.ox/mail/util.js:387 module:io.ox/core apps/io.ox/tasks/util.js:341
 #: module:io.ox/tasks
 msgid "High priority"
 msgstr "Magas prioritás"
@@ -3585,7 +3585,7 @@ msgstr "Veszteség: %1$s %"
 msgid "Low"
 msgstr "Alacsony"
 
-#: apps/io.ox/mail/util.js:384 module:io.ox/core apps/io.ox/tasks/util.js:335
+#: apps/io.ox/mail/util.js:388 module:io.ox/core apps/io.ox/tasks/util.js:335
 #: module:io.ox/tasks
 msgid "Low priority"
 msgstr "Alacsony prioritás"
@@ -3595,7 +3595,7 @@ msgstr "Alacsony prioritás"
 msgid "MB"
 msgstr "MB"
 
-#: apps/io.ox/core/tk/folderviews.js:872 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:886 module:io.ox/core
 #: apps/io.ox/mail/write/main.js:759 module:io.ox/mail
 msgid "Mail"
 msgstr "Levelek"
@@ -3857,7 +3857,7 @@ msgstr "Egyebek"
 msgid "Mobile"
 msgstr "Mobil"
 
-#: apps/io.ox/portal/settings/pane.js:426 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:430 module:io.ox/portal
 msgid "Mobile device settings:"
 msgstr "Mobileszköz beállításai:"
 
@@ -4140,11 +4140,11 @@ msgstr "Nincsenek levelek Beérkezett üzenetek mappában"
 msgid "No matching templates on this Server"
 msgstr "Nincsenek megfelelő sablonok ezen a kiszolgálón"
 
-#: apps/io.ox/mail/main.js:599 module:io.ox/mail
+#: apps/io.ox/mail/main.js:597 module:io.ox/mail
 msgid "No message selected"
 msgstr "Nincs kiválasztott üzenet"
 
-#: apps/io.ox/core/notifications.js:135 module:io.ox/core
+#: apps/io.ox/core/notifications.js:138 module:io.ox/core
 msgid "No notifications"
 msgstr "Nincsenek értesítések"
 
@@ -4158,7 +4158,7 @@ msgstr "Nem érhető el előnézet"
 msgid "No priority"
 msgstr "Nincs prioritás"
 
-#: apps/io.ox/mail/util.js:331 module:io.ox/core
+#: apps/io.ox/mail/util.js:335 module:io.ox/core
 msgid "No recipients"
 msgstr "Nincsenek címzettek"
 
@@ -4178,7 +4178,7 @@ msgstr "Nincs lassú kérés"
 
 #. %1$s mail sender
 #. %2$s mail subject
-#: apps/io.ox/mail/util.js:369 module:io.ox/core
+#: apps/io.ox/mail/util.js:373 module:io.ox/core
 #: apps/io.ox/mail/view-grid-template.js:107 module:io.ox/core/mail
 #: apps/io.ox/mail/write/main.js:759 module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js:56 module:plugins/notifications
@@ -4332,7 +4332,7 @@ msgstr ""
 "fájlok nem kerülnek elküldésre mellékletként, hanem a kiszolgálón maradnak. "
 "Az elküldött levél hivatkozásokat tartalmaz ezekre a fájlokra."
 
-#: apps/io.ox/portal/settings/pane.js:429 module:io.ox/portal
+#: apps/io.ox/portal/settings/pane.js:433 module:io.ox/portal
 msgid "Only show widget summary on mobile devices"
 msgstr "Mobil eszközökön csak a összefoglalás megjelenítése"
 
@@ -4921,7 +4921,7 @@ msgstr "Előző nap"
 msgid "Previous Week"
 msgstr "Előző hét"
 
-#: apps/io.ox/mail/util.js:390 module:io.ox/core
+#: apps/io.ox/mail/util.js:394 module:io.ox/core
 msgid "Primary account"
 msgstr "Elsődleges fiók"
 
@@ -4959,7 +4959,7 @@ msgstr "Adatvédelmi nyilatkozat"
 #: apps/io.ox/calendar/list/view-grid-template.js:72 module:io.ox/calendar
 #: apps/io.ox/calendar/view-grid-template.js:74
 #: apps/io.ox/contacts/view-detail.js:149 module:io.ox/contacts
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js:355 module:io.ox/tasks/edit
 msgid "Private"
 msgstr "Személyes"
@@ -5001,7 +5001,7 @@ msgstr "Az előrehaladásnak 0 és 100 közötti érvényes számnak kell lennie
 msgid "Properties"
 msgstr "Tulajdonságok"
 
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 msgid "Public"
 msgstr "Nyilvános"
 
@@ -5240,13 +5240,13 @@ msgid "Remove from recipient list"
 msgstr "Eltávolítás a címzettlistából"
 
 #: apps/io.ox/core/commons-folderview.js:390 module:io.ox/core
-#: apps/io.ox/core/tk/folderviews.js:669 apps/io.ox/files/actions.js:526
+#: apps/io.ox/core/tk/folderviews.js:683 apps/io.ox/files/actions.js:526
 #: module:io.ox/files apps/io.ox/files/actions.js:531
 #: apps/io.ox/files/actions.js:956
 msgid "Rename"
 msgstr "Átnevezés"
 
-#: apps/io.ox/core/tk/folderviews.js:657 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:671 module:io.ox/core
 msgid "Rename folder"
 msgstr "Mappa átnevezése"
 
@@ -5690,7 +5690,7 @@ msgstr "Fájl megosztása"
 msgid "Share this folder"
 msgstr "Mappa megosztása"
 
-#: apps/io.ox/core/tk/folderviews.js:967 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:981 module:io.ox/core
 msgid "Shared"
 msgstr "Megosztott"
 
@@ -6539,6 +6539,12 @@ msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Ebben az időszakban már van %1$d találkozója."
 msgstr[1] "Ebben az időszakban már van %1$d találkozója."
 
+#: apps/plugins/portal/xing/register.js:181 module:plugins/portal
+#, fuzzy
+#| msgid "There were not activities in your network"
+msgid "There is no recent activity in your Xing network."
+msgstr "Nem volt tevékenység a hálózatában"
+
 #: apps/io.ox/mail/mailfilter/settings/filter.js:380 module:io.ox/mail
 msgid "There is no rule defined"
 msgstr "Nincs megadva szabály"
@@ -6691,7 +6697,7 @@ msgstr "A mappa nem tartalmaz publikációkat"
 msgid "This folder has no subscriptions"
 msgstr "A mappa nem tartalmaz feliratkozásokat"
 
-#: apps/io.ox/core/tk/folderviews.js:922 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:936 module:io.ox/core
 msgid "This folder has publications and/or subscriptions"
 msgstr "A mappa tartalmaz publikációkat és/vagy feliratkozásokat"
 
@@ -6709,7 +6715,7 @@ msgstr ""
 "Ez a mappa feliratkozásokat tartalmaz, de nem nézheti meg vagy szerkesztheti "
 "azokat"
 
-#: apps/io.ox/core/tk/folderviews.js:649 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:663 module:io.ox/core
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Ez egy szabványos mappa, amely nem nevezhető át."
 
@@ -6986,7 +6992,7 @@ msgstr "Egységes"
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Ismeretlen hiba a tumblr blog ellenőrzésekor."
 
-#: apps/io.ox/mail/util.js:329 module:io.ox/core
+#: apps/io.ox/mail/util.js:333 module:io.ox/core
 msgid "Unknown sender"
 msgstr "ismeretlen feladó"
 
@@ -7522,7 +7528,7 @@ msgstr "Az Android %n vagy újabb verziója szükséges."
 msgid "You need to use iOS %n or higher."
 msgstr "Az iOS %n vagy újabb verziója szükséges."
 
-#: apps/io.ox/core/tk/folderviews.js:945 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:959 module:io.ox/core
 msgid "You share this folder with other users"
 msgstr "Ezt a mappát megosztja más felhasználókkal"
 
@@ -7554,7 +7560,7 @@ msgid ""
 msgstr ""
 "%s fiókja létrejött. Számítson egy megerősítési levélre hamarosan ettől: %s."
 
-#: apps/plugins/portal/xing/register.js:288 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:292 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "%s hírforrása"
 
@@ -8086,7 +8092,7 @@ msgstr "holnap"
 msgid "tonight"
 msgstr "este"
 
-#: apps/io.ox/core/tk/folderviews.js:865 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:879 module:io.ox/core
 msgid "total"
 msgstr "összes"
 
@@ -8097,8 +8103,8 @@ msgid "unconfirmed"
 msgstr "Megerősítetlen"
 
 #: apps/io.ox/files/fluid/perspective.js:108 module:io.ox/files
-#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:405
-#: apps/io.ox/mail/util.js:418
+#: apps/io.ox/mail/util.js:47 module:io.ox/core apps/io.ox/mail/util.js:409
+#: apps/io.ox/mail/util.js:422
 msgid "unknown"
 msgstr "ismeretlen"
 
@@ -8106,7 +8112,7 @@ msgstr "ismeretlen"
 msgid "unlimited"
 msgstr "korlátlan"
 
-#: apps/io.ox/core/tk/folderviews.js:866 module:io.ox/core
+#: apps/io.ox/core/tk/folderviews.js:880 module:io.ox/core
 msgid "unread"
 msgstr "olvasatlan"
 
