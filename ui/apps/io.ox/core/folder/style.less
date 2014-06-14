@@ -34,6 +34,9 @@
                 color: @foldertree-selected-label-color;
                 font-weight: 500;
             }
+            .folder-options {
+                display: inline-block;
+            }
         }
 
         .selectable:hover {
@@ -46,6 +49,12 @@
             * {
                 color: @foldertree-focused-label-color;
                 font-weight: 500; // need both! applies before .selected is set
+            }
+            .folder-counter {
+                color: rgba(255, 255, 255, 0.50);
+            }
+            .folder-options {
+                background-color: rgba(0, 0, 0, 0.20);
             }
         }
 
@@ -63,14 +72,39 @@
         width: 40px;
     }
 
-    .folder-label {
-
+    .folder-label, .folder-counter, .folder-options {
         font-weight: 300;
         display: inline-block;
-        margin: 0 7px 0 0;
+        margin: 0 14px 0 0;
+        &:empty { margin: 0; }
+    }
+
+    .folder-label {
 
         &:first-child { // needed when arrows are hidden
             margin-left: 14px;
+        }
+    }
+
+    .folder-counter {
+        color: #08c;
+    }
+
+    .folder-options {
+
+        padding: 0 12px;
+        line-height: 26px;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        background-color: rgba(0, 0, 0, 0.10);
+        border-radius: 5px;
+        outline: 0;
+
+        display: none;
+
+        &:focus {
+            i { color: white; }
+            background-color: @foldertree-selected-focus-background;
         }
     }
 
