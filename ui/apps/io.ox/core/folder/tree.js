@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/tree', ['io.ox/core/folder/view', 'less!io.ox/core/folder/style'], function (FolderView) {
+define('io.ox/core/folder/tree',
+    ['io.ox/core/folder/view',
+     'io.ox/core/folder/selection',
+     'io.ox/core/api/account',
+     'less!io.ox/core/folder/style'], function (FolderView, Selection, account) {
 
     'use strict';
 
@@ -19,109 +23,52 @@ define('io.ox/core/folder/tree', ['io.ox/core/folder/view', 'less!io.ox/core/fol
 
         className: 'folder-tree bottom-toolbar abs',
 
-        events: {
-            'click .selectable': 'onClick',
-            'keydown .selectable': 'onKeydown'
-        },
-
-        onClick: function (e) {
-
-            var items = this.getItems(),
-                current = $(e.currentTarget),
-                index = items.index(current) || 0;
-
-            // do nothing if already selected
-            if (current.hasClass('selected')) return;
-
-            this.resetTabIndex(items, items.eq(index));
-            this.resetSelected(items);
-            this.pick(index, items);
-        },
-
-        onKeydown: function (e) {
-            switch (e.which) {
-            // cursor up/down
-            case 38:
-            case 40:
-                this.onCursorUpDown(e);
-                break;
-            }
-        },
-
-        onCursorUpDown: function (e) {
-
-            var items = this.getItems().filter(':visible'),
-                current = $(document.activeElement),
-                index = (items.index(current) || 0) + (e.which === 38 ? -1 : +1);
-
-            if (index >= items.length || index < 0) return;
-
-            // prevent default to avoid unwanted scrolling
-            e.preventDefault();
-
-            this.resetTabIndex(items, items.eq(index));
-            this.resetSelected(items);
-            this.pick(index, items);
-        },
-
-        pick: function (index, items) {
-            var node = this.focus(index, items);
-            this.check(node);
-            this.triggerChange();
-        },
-
-        resetSelected: function (items) {
-            items.filter('.selected').removeClass('selected').attr('aria-selected', false);
-        },
-
-        resetTabIndex: function (items, skip) {
-            items = items.filter('[tabindex="1"]');
-            items.not(skip).attr('tabindex', '-1');
-        },
-
-        focus: function (index, items) {
-            items = items || this.getItems();
-            var node = items.eq(index).attr('tabindex', '1').focus();
-            // workaround for chrome's CSS bug:
-            // styles of "selected" class are not applied if focus triggers scrolling.
-            // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
-            if (_.device('chrome')) node.hide(0, function () { $(this).css('display', ''); });
-            return node;
-        },
-
-        check: function (nodes) {
-            nodes.addClass('selected').attr('aria-selected', true);
-        },
-
-        uncheck: function (nodes) {
-            nodes.removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' });
-        },
-
-        getItems: function () {
-            return this.$el.find('.selectable');
-        },
-
-        triggerChange: function () {
-            var id = this.$el.find('.selectable.selected').attr('data-id');
-            console.log('change', id);
-            this.trigger('change', id);
-        },
-
         initialize: function (options) {
             this.root = options.root;
             this.module = options.module;
+            this.selection = new Selection(this);
             this.$el.attr({ role: 'tree', tabindex: '1' });
             this.$el.data('view', this);
         },
 
-        filter: function (model) {
+        filter: function (folder, model) {
+            // only standard folder on top level
+            if (folder === '1') {
+                return account.isStandardFolder(model.id);
+            }
+            // other folders
             var module = model.get('module');
             return module === this.module || (module === 'mail' && (/^default\d+(\W|$)/i).test(model.id));
         },
 
+        getFolderViewOptions: function (options, model) {
+            if (model.get('id') === 'default0/INBOX') {
+                options.subfolders = false;
+            }
+            return options;
+        },
+
         render: function () {
+
             this.$el.append(
-                new FolderView({ folder: this.root, headless: true, open: true, tree: this }).render().$el
+                // headline
+                $('<h2>').text('New folder tree'),
+                // standard folders
+                new FolderView({ folder: this.root, headless: true, open: true, tree: this, parent: this })
+                    .render().$el,
+                // example
+                $('<section>').css('color', '#aaa').text('You can also place stuff in between folders'),
+                // local folders
+                new FolderView({
+                    folder: 'virtual/folders', // convention! virtual folders are identified by their id starting with "virtual"
+                    model_id: 'default0/INBOX',
+                    parent: this,
+                    title: 'My folders',
+                    tree: this
+                })
+                .render().$el.css('margin-top', '14px'),
+                // example
+                $('<section>').css('color', '#aaa').text('Or below of course')
             );
             return this;
         }

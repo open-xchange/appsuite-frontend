@@ -33,7 +33,7 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api'], function (api) {
                 .append(
                     this.collection
                     .chain()
-                    .filter(this.tree.filter, this.tree)
+                    .filter(this.tree.filter.bind(this.tree, this.model_id))
                     .map(this.getFolderView, this)
                     .value()
                 )
@@ -68,7 +68,7 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api'], function (api) {
         // respond to new sub-folders
         onChangeSubFolders: function () {
             // has subfolders?
-            var hasSubFolders = this.model.get('subfolders') === true, isOpen = this.open;
+            var hasSubFolders = this.subfolders && this.model.get('subfolders') === true, isOpen = this.open;
             // update arrow
             this.$arrow.html(
                 hasSubFolders ?
@@ -76,15 +76,19 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api'], function (api) {
                     '<i class="fa fa-fw">'
             );
             // toggle subfolder node
-            this.$subfolders.toggle(isOpen);
+            this.$subfolders.toggle(hasSubFolders && isOpen);
             // fetch sub-folders
-            if (hasSubFolders && isOpen) api.list(this.folder);
+            if (hasSubFolders && isOpen) api.list(this.model_id);
         },
 
         // respond to cursor left/right
         onKeydown: function (e) {
             // already processed?
-            if (e.isDefaultPrevented()) return; else e.preventDefault();
+            if (e.isDefaultPrevented()) return;
+            // not cursor right/left?
+            if (e.which !== 37 && e.which !== 39) return;
+            // avoid further processing
+            e.preventDefault();
             // skip unless folder has subfolders
             if (!this.model.get('subfolders')) return;
             // cursor right?
@@ -101,26 +105,39 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api'], function (api) {
 
         // get a new FolderView instance
         getFolderView: function (model) {
-            var level = this.headless ? this.level : this.level + 1;
-            return new FolderView({ folder: model.id, level: level, tree: this.tree }).render().$el;
+            var level = this.headless ? this.level : this.level + 1,
+                options = this.tree.getFolderViewOptions({ folder: model.id, level: level, tree: this.tree, parent: this }, model);
+            return new FolderView(options).render().$el;
         },
 
         initialize: function (options) {
 
-            this.folder = options.folder;
-            this.level = options.level || 0;
-            this.open = !!options.open;
-            this.tree = options.tree;
-            this.model = api.pool.getFolderModel(this.folder);
-            this.collection = api.pool.getSubFolderCollection(this.folder);
-            this.headless = !!options.headless;
+            // make sure we work with strings
+            options.folder = String(options.folder);
+
+            _.extend(this, {
+                arrow: true,                    // show folder arrow
+                headless: false,                // show folder row? root folder usually hidden
+                level: 0,                       // nesting / left padding
+                model_id: options.folder,       // use this id to load model data and subfolders
+                open: false,                    // state
+                subfolders: true,               // load/avoid subfolders
+                title: ''                       // custom title
+            }, options);
+
+            // also set: folder, parent, tree
+
+            this.model = api.pool.getFolderModel(this.model_id);
+            this.collection = api.pool.getSubFolderCollection(this.model_id);
 
             // collection changes
-            this.listenTo(this.collection, {
-                'reset'  : this.onReset,
-                'add'    : this.onAdd,
-                'remove' : this.onRemove
-            });
+            if (this.subfolders) {
+                this.listenTo(this.collection, {
+                    'reset'  : this.onReset,
+                    'add'    : this.onAdd,
+                    'remove' : this.onRemove
+                });
+            }
 
             // model changes
             this.listenTo(this.model, {
@@ -141,7 +158,7 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api'], function (api) {
                     .attr('data-id', this.folder)
                     .css('padding-left', this.level * 30)
                     .append(
-                        this.$arrow = $('<div class="folder-arrow" role="presentation"><i class="fa fa-fw"></i></div>'),
+                        this.$arrow = this.arrow ? $('<div class="folder-arrow" role="presentation"><i class="fa fa-fw"></i></div>') : $(),
                         this.$label = $('<div class="folder-label">')
                     ),
                     // subfolders
@@ -150,25 +167,31 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api'], function (api) {
 
             // headless?
             if (this.headless) {
-                this.$el.find('.selectable').removeClass('selectable').removeAttr('tabindex').hide();
+                this.$el.children('.selectable').removeClass('selectable').removeAttr('tabindex').hide();
+            }
+
+            // virtual?
+            if (/^virtual/.test(this.folder)) {
+                this.$el.children('.selectable').addClass('virtual');
             }
 
             // get data
-            api.get(this.folder);
+            api.get(this.model_id);
 
             // register for 'dispose' event (using inline function to make this testable via spyOn)
             this.$el.on('dispose', this.remove.bind(this));
         },
 
         render: function () {
-            this.$label.text(this.model.get('title'));
+            this.$label.text(this.title || this.model.get('title'));
             this.onChangeSubFolders();
             return this;
         },
 
         remove: function () {
             this.stopListening();
-            this.collection = this.$subfolders = this.$label = this.$arrow = null;
+            this.$subfolders = this.$label = this.$arrow = null;
+            this.collection = this.tree = this.parent = null;
         }
     });
 

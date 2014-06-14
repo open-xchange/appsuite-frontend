@@ -217,9 +217,12 @@ define('io.ox/mail/main',
             app.getWindow().nodes.sidepanel.addClass('border-right');
 
             require(['io.ox/core/folder/tree'], function (FolderTreeView) {
-                app.getWindow().nodes.sidepanel.append(
-                    new FolderTreeView({ module: 'mail', root: 1 }).render().$el
-                );
+                var view = new FolderTreeView({ module: 'mail', root: 1 });
+                app.getWindow().nodes.sidepanel.append(view.render().$el);
+                // respond to selection change
+                view.on('change', function (id) {
+                    app.folder.set(id);
+                });
             });
         },
 
