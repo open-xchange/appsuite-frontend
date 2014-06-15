@@ -25,9 +25,13 @@ define('io.ox/core/folder/tree',
         className: 'folder-tree bottom-toolbar abs',
 
         initialize: function (options) {
+
+            options = _.extend({ contextmenu: false }, options);
+
             this.app = options.app;
             this.root = options.root;
             this.module = options.module;
+            this.contextmenu = options.contextmenu;
             this.selection = new Selection(this);
             this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
         },
@@ -90,7 +94,7 @@ define('io.ox/core/folder/tree',
             draw: function () {
                 this.append(
                     // example
-                    $('<section>').css('color', '#aaa').text('You can also place stuff in between folders')
+                    $('<section>').css('color', '#aaa').text('You can also place stuff between folders')
                 );
             }
         },

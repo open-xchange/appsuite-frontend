@@ -103,13 +103,13 @@ define('io.ox/core/folder/selection', [], function () {
             return this.view.$el.find('.selectable');
         },
 
-        triggerChange: function (items) {
+        triggerChange: _.debounce(function (items) {
             var id = (items || this.getItems()).filter('.selected').attr('data-id');
             // ignore virtual folders
             if (/^virtual/.test(id)) return;
             // trigger change event on view
             this.view.trigger('change', id);
-        }
+        }, 300)
     });
 
     return Selection;

@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core'], function (api, gt) {
+define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'io.ox/core/folder/contextmenu'], function (api, contextmenu) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core']
 
         onReset: function () {
             var o = this.options;
-            this.$subfolders
+            this.$.subfolders
                 .empty()
                 .append(
                     this.collection
@@ -43,12 +43,12 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core']
         },
 
         onAdd: function (model) {
-            this.$subfolders.append(this.getFolderView(model));
+            this.$.subfolders.append(this.getFolderView(model));
         },
 
         onRemove: function (model) {
 
-            var nodes = this.$subfolders.children(),
+            var nodes = this.$.subfolders.children(),
                 node = nodes.filter('[data-id="' + $.escape(model.id) + '"]');
 
             node.remove();
@@ -78,13 +78,13 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core']
                 hasSubFolders = o.subfolders && this.model.get('subfolders') === true,
                 isOpen = o.open;
             // update arrow
-            this.$arrow.html(
+            this.$.arrow.html(
                 hasSubFolders ?
                     (isOpen ? '<i class="fa fa-' + ICON + '-down">' : '<i class="fa fa-' + ICON + '-right">') :
                     '<i class="fa fa-fw">'
             );
             // toggle subfolder node
-            this.$subfolders.toggle(hasSubFolders && isOpen);
+            this.$.subfolders.toggle(hasSubFolders && isOpen);
             // fetch sub-folders
             if (hasSubFolders && isOpen) api.list(o.model_id);
         },
@@ -138,8 +138,10 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core']
 
             // also set: folder, parent, tree
 
+            this.isVirtual = /^virtual/.test(this.folder);
             this.model = api.pool.getFolderModel(o.model_id);
             this.collection = api.pool.getSubFolderCollection(o.model_id);
+            this.$ = {};
 
             // collection changes
             if (o.subfolders) {
@@ -161,37 +163,28 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core']
                 .attr('role', 'treeitem')
                 .append(
                     // folder
-                    $('<div class="selectable" tabindex="-1">')
+                    this.$.selectable = $('<div class="selectable" tabindex="-1">')
                     .attr('data-id', this.folder)
                     .css('padding-left', o.level * 30)
                     .append(
-                        this.$arrow = o.arrow ? $('<div class="folder-arrow" role="presentation"><i class="fa fa-fw"></i></div>') : $(),
-                        this.$label = $('<div class="folder-label">'),
-                        this.$counter = $('<div class="folder-counter">')
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow" role="presentation"><i class="fa fa-fw"></i></div>') : $(),
+                        this.$.label = $('<div class="folder-label">'),
+                        this.$.counter = $('<div class="folder-counter">')
                     ),
                     // subfolders
-                    this.$subfolders = $('<ul class="subfolders" role="group" style="display: none;">')
+                    this.$.subfolders = $('<ul class="subfolders" role="group" style="display: none;">')
                 );
-
-            var $selectable = this.$el.children('.selectable'),
-                isVirtual = /^virtual/.test(this.folder);
 
             // headless?
             if (o.headless) {
-                $selectable.removeClass('selectable').removeAttr('tabindex').hide();
+                this.$.selectable.removeClass('selectable').removeAttr('tabindex').hide();
             }
 
             // virtual?
-            if (isVirtual) $selectable.addClass('virtual');
+            if (this.isVirtual) this.$.selectable.addClass('virtual');
 
-            // add options (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if (o.tree.app && !isVirtual) {
-                $selectable.append(
-                    $('<a href="#" class="folder-options" tabindex="1">')
-                    .attr('title', gt('Folder-specific actions'))
-                    .append($('<i class="fa fa-cog">'))
-                );
-            }
+            // folder contextmenu
+            if (o.tree.contextmenu) contextmenu.renderButton(this);
 
             // get data
             api.get(o.model_id);
@@ -206,7 +199,7 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core']
 
         renderCounter: function () {
             var value = this.getCounter();
-            if (!value) this.$counter.empty(); else this.$counter.text(value);
+            if (!value) this.$.counter.empty(); else this.$.counter.text(value);
         },
 
         getTitle: function () {
@@ -214,7 +207,7 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core']
         },
 
         renderTitle: function () {
-            this.$label.text(this.getTitle());
+            this.$.label.text(this.getTitle());
         },
 
         render: function () {
@@ -226,8 +219,7 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core']
 
         remove: function () {
             this.stopListening();
-            this.$subfolders = this.$label = this.$arrow = this.$counter = null;
-            this.collection = this.model = this.options = null;
+            this.collection = this.model = this.options = this.$ =null;
         }
     });
 

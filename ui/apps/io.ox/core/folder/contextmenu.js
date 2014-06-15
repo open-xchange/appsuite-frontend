@@ -14,7 +14,7 @@
 define('io.ox/core/folder/contextmenu',
     ['io.ox/core/extensions',
      'io.ox/core/folder/actions/common',
-     'io.ox/core/api/folder',
+     'io.ox/core/folder/api',
      'io.ox/core/notifications',
      'io.ox/core/capabilities',
      'gettext!io.ox/core'], function (ext, actions, api, notifications, capabilities, gt) {
@@ -28,12 +28,13 @@ define('io.ox/core/folder/contextmenu',
     //
 
     function a(action, text) {
-        return $('<a href="#" tabindex="1" role="menuitem">').attr('data-action', action).text(text);
+        return $('<a href="#" tabindex="1" role="menuitem">')
+            .attr('data-action', action).text(text)
+            .on('click', $.preventDefault); // always prevent default
     }
 
     function disable(node) {
-        return node.attr('aria-disabled', true).removeAttr('tabindex')
-            .addClass('disabled').on('click', $.preventDefault);
+        return node.attr('aria-disabled', true).removeAttr('tabindex').addClass('disabled');
     }
 
     function addLink(node, options) {
@@ -105,8 +106,7 @@ define('io.ox/core/folder/contextmenu',
         add: (function () {
 
             function handler(e) {
-                e.preventDefault();
-                ox.load(['io.ox/core/folder/add']).done(function (add) {
+                ox.load(['io.ox/core/folder/actions/add']).done(function (add) {
                     add(e.data.folder, { module: e.data.module });
                 });
             }
@@ -133,8 +133,9 @@ define('io.ox/core/folder/contextmenu',
         rename: (function () {
 
             function handler(e) {
-                e.preventDefault();
-                e.data.app.folderView.rename();
+                ox.load(['io.ox/core/folder/actions/rename']).done(function (rename) {
+                    rename(e.data.id);
+                });
             }
 
             return function (baton) {
@@ -143,7 +144,7 @@ define('io.ox/core/folder/contextmenu',
 
                 addLink(this, {
                     action: 'rename',
-                    data: { app: baton.app },
+                    data: { id: baton.data.id },
                     enabled: true,
                     handler: handler,
                     text: gt('Rename')
@@ -157,8 +158,9 @@ define('io.ox/core/folder/contextmenu',
         deleteFolder: (function () {
 
             function handler(e) {
-                e.preventDefault();
-                e.data.app.folderView.remove();
+                ox.load(['io.ox/core/folder/actions/remove']).done(function (remove) {
+                    remove(e.data.id);
+                });
             }
 
             return function (baton) {
@@ -167,7 +169,7 @@ define('io.ox/core/folder/contextmenu',
 
                 addLink(this, {
                     action: 'delete',
-                    data: { app: baton.app },
+                    data: { id: baton.data.id },
                     enabled: true,
                     handler: handler,
                     text: gt('Delete')
@@ -181,10 +183,8 @@ define('io.ox/core/folder/contextmenu',
         move: (function () {
 
             function handler(e) {
-                e.preventDefault();
-                var baton = e.data.baton;
-                require(['io.ox/core/folder/move'], function (move) {
-                    move(baton);
+                require(['io.ox/core/folder/actions/move'], function (move) {
+                    move(e.data.id);
                 });
             }
 
@@ -196,7 +196,7 @@ define('io.ox/core/folder/contextmenu',
 
                 addLink(this, {
                     action: 'move',
-                    data: { baton: baton },
+                    data: { id: baton.data.id },
                     enabled: true,
                     handler: handler,
                     text: gt('Move')
@@ -210,7 +210,6 @@ define('io.ox/core/folder/contextmenu',
         exportData: (function () {
 
             function handler(e) {
-                e.preventDefault();
                 require(['io.ox/core/export/export'], function (exporter) {
                     //module,folderid
                     exporter.show(e.data.baton.data.module, String(e.data.baton.app.folderView.selection.get()));
@@ -381,7 +380,7 @@ define('io.ox/core/folder/contextmenu',
             function handler(e) {
                 e.preventDefault();
                 var id = e.data.baton.app.folder.get();
-                require(['io.ox/core/folder/properties'], function (fn) {
+                require(['io.ox/core/folder/actions/properties'], function (fn) {
                     fn(id);
                 });
             }
@@ -406,32 +405,31 @@ define('io.ox/core/folder/contextmenu',
 
         toggle: (function () {
 
-            function handler(e) { // move folder to hidden folders section or removes it from there
+            function handler(e) {
                 e.preventDefault();
-                require(['io.ox/core/folder/toggle'], function (fn) {
-                    fn(e.data.baton, e.data.state, point);
-                });
+                // hide/show
+                api.toggle(e.data.id, e.data.state);
+                // dropdown menu needs a redraw
+                e.data.view.renderContextMenuItems();
             }
 
             return function (baton) {
 
-                if (baton.options.view !== 'FolderList') return;
+                if (baton.options.type !== 'contacts') return;
                 if (_.device('smartphone')) return;
                 if (!baton.data.id) return; // if data is empty we have nothing to do here
+                if (baton.data.standard_folder) return;
 
-                var settings = baton.app.settings,
-                    // apps have their own blacklists for hidden folders
-                    hide = !settings.get('folderview/blacklist', {})[baton.data.id];
+                var hidden = api.is('hidden', baton.data);
 
-                // always show unhide function (we don't want to loose folders here) but hide only when it's not a standard folder
-                if (baton.data.standard_folder || hide) return;
+                console.log('show/hide?', baton.data.id, hidden);
 
                 addLink(this, {
                     action: 'hide',
-                    data: { baton: baton, state: !hide, point: point },
+                    data: { id: baton.data.id, state: hidden, view: baton.view },
                     enabled: true,
                     handler: handler,
-                    text: hide ? gt('Hide'): gt('Show')
+                    text: hidden ? gt('Show') : gt('Hide')
                 });
             };
         }())
@@ -537,4 +535,11 @@ define('io.ox/core/folder/contextmenu',
             draw: extensions.deleteFolder
         }
     );
+
+    return {
+        extensions: extensions,
+        addLink: addLink,
+        disable: disable,
+        divider: divider
+    };
 });
