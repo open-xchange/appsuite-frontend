@@ -354,7 +354,10 @@
     }
 
     &.visible-selection.has-focus .list-item.selected i {
-        color: rgba(255, 255, 255, 0.50);
+        opacity: 0.9;
+        &:not(.flag) {
+            color: rgba(255, 255, 255, 0.50);
+        }
     }
 
     .fa-paperclip.has-attachments {
