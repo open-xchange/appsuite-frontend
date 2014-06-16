@@ -22,14 +22,15 @@ define('plugins/halo/xing/register',
      'plugins/portal/xing/activities',
      'io.ox/xing/api',
      'io.ox/core/api/user',
+     'io.ox/contacts/api',
      'io.ox/core/date',
      'gettext!plugins/portal',
      'less!plugins/portal/xing/xing'
-    ], function (ext, eventActions, activityParsers, api, userApi, date, gt) {
+    ], function (ext, eventActions, activityParsers, api, userApi, contactApi, date, gt) {
 
     'use strict';
 
-    var  shortestPath, sharedContacts, miniProfile, extendedProfile, postalAddress, addressView, isEmpty,
+    var  shortestPath, sharedContacts, miniProfile, extendedProfile, postalAddress, addressView, isEmpty, extractDimensionsFromName,
         XING_NAME = gt('XING'),
         EMPLOYMENT = {
             //#. what follows is a set of job/status descriptions used by XING
@@ -45,6 +46,11 @@ define('plugins/halo/xing/register',
 
     isEmpty = function (obj) {
         return _(obj).isEmpty() || (_(_(obj).values()).compact().length === 0);
+    };
+
+    extractDimensionsFromName = function (name) {
+        var parts = name.split('.');
+        console.log(parts);
     };
 
     addressView = function (ad) {
@@ -113,9 +119,10 @@ define('plugins/halo/xing/register',
         var node, img;
 
         img = _.device('small') ? contact.photo_urls.thumb : contact.photo_urls.maxi_thumb;
-
+        extractDimensionsFromName(img);
         node = $('<div>').addClass('mini-profile').append(
-            $('<img>').attr({src: img}).addClass('pic'),
+            //$('<img>').attr({src: img}).addClass('pic'),
+            $('<div>').css({'background-image': 'url(' + img + ')'}).addClass('pic'),
             $('<a>').attr({href: contact.permalink, target: '_blank'})
                 .addClass('permalink')
                 .text(contact.display_name)
