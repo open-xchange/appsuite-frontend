@@ -382,7 +382,7 @@ define.async('io.ox/mail/accounts/view-form',
 
                 serverSettingsIn = $('<fieldset>').append(
                     $('<legend>').addClass('sectiontitle').text(gt('Server settings')),
-                    $('<div>').addClass('form-horizontal').append(
+                    $('<form>').addClass('form-horizontal').attr({ role: 'form' }).append(
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'mail_protocol' }).addClass('control-label col-sm-3').text(gt('Server type')),
                             $('<div>').addClass('col-sm-4').append(
@@ -451,7 +451,7 @@ define.async('io.ox/mail/accounts/view-form',
 
                 serverSettingsOut = $('<fieldset>').append(
                     $('<legend>').addClass('sectiontitle').text(gt('Outgoing server settings (SMTP)')),
-                    $('<div>').addClass('form-horizontal').append(
+                    $('<form>').addClass('form-horizontal').attr({ role: 'form' }).append(
                         $('<div>').addClass('form-group').append(
                             $('<div>').addClass('col-sm-offset-3 col-sm-8').append(
                                 $('<div>').addClass('checkbox').append(
@@ -491,29 +491,36 @@ define.async('io.ox/mail/accounts/view-form',
 
                 serverSettingsFolder = $('<fieldset>').append(
                     $('<legend>').addClass('sectiontitle').text(gt('Folder settings')),
-                    $('<div>').addClass('form-horizontal').append(
+                    $('<form>').addClass('form-horizontal').attr({ role: 'form' }).append(
                         $('<div>').addClass('form-group').append(
+
                             $('<label>').attr({ 'for':  'sent_fullname'}).addClass('control-label col-sm-3').text(gt('Sent folder')),
                             $('<div>').addClass('col-sm-6 variable_size').append(
                                 new InputView({ name: 'sent_fullname', model: model, id: 'sent_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
                             ),
                             $('<div>').addClass('col-sm-1').append(
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            ),
+                            )
+                        ),
+                        $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'trash_fullname'}).addClass('control-label col-sm-3').text(gt('Trash folder')),
                             $('<div>').addClass('col-sm-6 variable_size').append(
                                 new InputView({ name: 'trash_fullname', model: model, id: 'trash_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
                             ),
                             $('<div>').addClass('col-sm-1').append(
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            ),
+                            )
+                        ),
+                        $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'drafts_fullname'}).addClass('control-label col-sm-3').text(gt('Drafts folder')),
                             $('<div>').addClass('col-sm-6 variable_size').append(
                                 new InputView({ name: 'drafts_fullname', model: model, id: 'drafts_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
                             ),
                             $('<div>').addClass('col-sm-1').append(
                                 $('<button>').attr({ 'type': 'button', 'tabindex': '1' }).addClass('btn folderselect').text(gt('Select'))
-                            ),
+                            )
+                        ),
+                        $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for':  'spam_fullname'}).addClass('control-label col-sm-3').text(gt('Spam folder')),
                             $('<div>').addClass('col-sm-6 variable_size').append(
                                 new InputView({ name: 'spam_fullname', model: model, id: 'spam_fullname' }).render().$el.attr({ 'disabled': 'disabled' })
@@ -532,7 +539,7 @@ define.async('io.ox/mail/accounts/view-form',
             this.append(
                 $('<fieldset>').append(
                     $('<legend>').addClass('sectiontitle').text(gt('Account settings')),
-                    $('<div>').addClass('form-horizontal').append(
+                    $('<form>').addClass('form-horizontal').attr({ role: 'form' }).append(
                         $('<div>').addClass('form-group').append(
                             $('<label>').attr({ 'for': 'name'}).addClass('control-label col-sm-3').text(gt('Account name')),
                             $('<div>').addClass('col-sm-8').append(
