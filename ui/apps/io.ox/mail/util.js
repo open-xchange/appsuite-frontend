@@ -628,7 +628,7 @@ define('io.ox/mail/util',
                 // get non-inline attachments
                 for (i = 0, $i = (data.attachments || []).length; i < $i; i++) {
                     obj = data.attachments[i];
-                    if (obj.disp === 'attachment') {
+                    if (obj.disp === 'attachment' || /^image/.test(obj.content_type)) {
                         fixIds(data, obj);
                         attachments.push(
                             _.extend(obj, { mail: mail, title: obj.filename || '', parent: data.parent || mail })
