@@ -1247,6 +1247,7 @@ define('io.ox/mail/api',
         }
 
         api.trigger('beforesend', { data: data, files: files, form: form });
+        ox.trigger('mail:send:start', data, files);
 
         if (Modernizr.filereader && 'FormData' in window) {
             deferred = handleSendXHR2(data, files, deferred);
@@ -1257,6 +1258,7 @@ define('io.ox/mail/api',
         return deferred
             .done(function () {
                 api.trigger('send', { data: data, files: files, form: form });
+                ox.trigger('mail:send:stop', data, files);
             })
             .then(function (text) {
                 // wait a moment, then update mail index
