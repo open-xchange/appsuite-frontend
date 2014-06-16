@@ -893,6 +893,8 @@ define('io.ox/core/tk/vgrid',
                         .done(function () {
                             var hasChanged = !_.isEqual(all, list);
                             updateSelection(hasChanged);
+                            // global event
+                            ox.trigger('grid:stop', _.clone(props), list);
                         });
                 } else {
                     console.warn('VGrid.all() must provide an array!');
@@ -901,6 +903,8 @@ define('io.ox/core/tk/vgrid',
             }
 
             return function () {
+                // global event
+                ox.trigger('grid:start', _.clone(props));
                 // get all IDs
                 if (responsiveChange || all.length === 0) self.busy();
                 var load = loadIds[currentMode] || loadIds.all;

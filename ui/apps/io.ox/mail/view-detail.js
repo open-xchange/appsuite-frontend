@@ -131,6 +131,9 @@ define('io.ox/mail/view-detail',
 
             container.append(node);
 
+            // global event
+            ox.trigger('mail:detail:stop', data);
+
             return container;
         },
 

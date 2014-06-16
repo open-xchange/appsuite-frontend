@@ -159,7 +159,7 @@ define('io.ox/core/print',
                 })
                 .uniq()
                 .map(function getData(cid, index) {
-                    return options.get(_.cid(cid)).pipe(function (obj) {
+                    return options.get(_.cid(cid)).then(function (obj) {
                         return options.process ? options.process(obj, index, options) : obj;
                     });
                 })

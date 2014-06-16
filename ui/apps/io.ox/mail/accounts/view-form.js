@@ -58,6 +58,11 @@ define.async('io.ox/mail/accounts/view-form',
 
         optionsRefreshRatePop = _([3, 5, 10, 15, 30, 60, 360]).map(gt.noI18n),
 
+        portDefaults = {
+            mail_port: '143',
+            transport_port: '587'
+        },
+
         //conditional defaults
         defaults = {
             pop3: {
@@ -74,6 +79,17 @@ define.async('io.ox/mail/accounts/view-form',
             data = _.extend({ unified_inbox_enabled: false /*, transport_auth: true */ }, data);
             data.name = data.personal = data.primary_address;
             return accountAPI.validate(data);
+        },
+
+        returnPortMail = function (model) {
+            var secure = model.get('mail_secure'),
+                protocol = model.get('mail_protocol') || 'imap';
+
+            if (protocol === 'imap') {
+                return secure ? '993' : '143';
+            } else {
+                return secure ? '995' : '110';
+            }
         },
 
         defaultDisplayName = '',
@@ -123,6 +139,28 @@ define.async('io.ox/mail/accounts/view-form',
 
                 function syncLogin(model, value) {
                     model.set('login', value, {validate: true});
+                }
+
+                //just change port settings if this is a new account
+                if (self.model.get('id') === undefined) {
+
+                    //setting port defefaults
+                    _.each(portDefaults, function (value, key) {
+                        self.model.set(key, value);
+                    });
+
+                    self.model.on('change:mail_protocol', function (model) {
+                        self.model.set('mail_port', returnPortMail(model));
+                    });
+
+                    self.model.on('change:mail_secure', function (model) {
+                        self.model.set('mail_port', returnPortMail(model));
+                    });
+
+                    self.model.on('change:transport_secure', function (model, value) {
+                        var portValue = value ? '465' : '587';
+                        self.model.set('transport_port', portValue);
+                    });
                 }
 
                 if (self.model.get('id') !== 0) {//check for primary account

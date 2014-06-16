@@ -755,6 +755,8 @@ define('io.ox/mail/main',
                 }
                 // be busy
                 right.idle().busy(!update);
+                // global event
+                ox.trigger('mail:detail:start', thread[0]);
                 // get first mail first
                 api.get(api.reduce(thread[0]))
                     .done(_.lfo(drawThread, baton, update))
@@ -762,6 +764,9 @@ define('io.ox/mail/main',
             } else {
                 // be busy
                 right.idle().busy(true);
+                // global event
+                ox.trigger('mail:detail:start', obj);
+                // load
                 api.get(api.reduce(obj))
                     .done(_.lfo(drawMail))
                     .fail(_.lfo(drawFail, obj));

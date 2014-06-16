@@ -38,6 +38,7 @@ define('io.ox/core/main',
     var debug = _.url.hash('debug') === 'boot' ? function () { console.log.apply(console, arguments); } : $.noop;
 
     debug('core: Loaded');
+    ox.trigger('core:load');
 
     _.stepwiseInvoke = function (list, method, context) {
         if (!_.isArray(list)) return $.when();
@@ -895,16 +896,18 @@ define('io.ox/core/main',
             id: 'default',
             draw: function () {
 
-                var favorites = appAPI.getAllFavorites(),
-                    topbar = settings.get('topbar/order'),
+                var topbar = settings.get('topbar/order'),
+                    apps = [],
                     hash = {};
 
                 // use custom order?
                 if (topbar) {
+                    // get apps
+                    apps = appAPI.getAvailable();
                     // get hash of exisiting favorites
-                    _(favorites).each(function (obj) { hash[obj.id] = obj; });
+                    _(apps).each(function (obj) { hash[obj.id] = obj; });
                     // get proper order
-                    favorites = _(topbar.split(','))
+                    apps = _(topbar.split(','))
                         .chain()
                         .map(function (id) {
                             return hash[id];
@@ -912,13 +915,15 @@ define('io.ox/core/main',
                         .compact()
                         .value();
                 } else {
+                    // get apps
+                    apps = appAPI.getAllFavorites();
                     // sort by index
-                    favorites.sort(function (a, b) {
+                    apps.sort(function (a, b) {
                         return ext.indexSorter(a, b);
                     });
                 }
 
-                _(favorites).each(function (obj) {
+                _(apps).each(function (obj) {
                     if (upsell.visible(obj.requires)) {
                         ox.ui.apps.add(new ox.ui.AppPlaceholder({
                             id: obj.id,
@@ -1344,6 +1349,14 @@ define('io.ox/core/main',
                     $('#background-loader').idle().fadeOut(DURATION, def.resolve);
                     return def;
                 }
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
+            id: 'ready',
+            index: 'last',
+            run: function () {
+                ox.trigger('core:ready');
             }
         });
 

@@ -176,6 +176,7 @@ define('io.ox/core/api/factory',
                 };
 
                 var hit = function () {
+                    if (ox.serverConfig.persistence === false) return;
                     if (!(cid in readThrough)) {
                         readThrough[cid] = true;
                         setTimeout(function () {

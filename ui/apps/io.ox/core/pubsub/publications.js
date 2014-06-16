@@ -155,7 +155,6 @@ define('io.ox/core/pubsub/publications',
                             baton.model.attributes = $.extend(true, baton.model.attributes, model);
                             sendInvitation(baton).always(function () {
                                 popup.close();
-                                self.finish(pubUrl);
                             });
                         } else {
                             // close popup now
