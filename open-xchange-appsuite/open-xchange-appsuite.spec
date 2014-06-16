@@ -266,8 +266,10 @@ find "%{buildroot}$APPSUITE" \( -type f -o -type l \) | sed -e 's,%{buildroot},,
 for LANG in cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do
     ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DinstallTarget=${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build
 done
-cat "%{buildroot}/opt/open-xchange/sbin/touch-appsuite" | sed -e "s:## cd ##:cd %{docroot}:" > \
+mv "%{buildroot}/opt/open-xchange/sbin/touch-appsuite" "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
+cat "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp" | sed -e "s:## cd ##:cd %{docroot}:" > \
     "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
+rm "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
 
 %clean
 %{__rm} -rf %{buildroot}
