@@ -139,7 +139,7 @@ msgstr "%1$s (Pagaidu)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:172 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s - %2$s"
 
@@ -199,7 +199,7 @@ msgstr "%1$s izmainīja statusu:"
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:67 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr "%1$s%2$s %3$s%4$s%5$s"
 
@@ -524,11 +524,11 @@ msgstr "Konta iestatījumi"
 msgid "Account added successfully"
 msgstr "Konts ir veiksmīgi pievienots"
 
-#: apps/io.ox/mail/accounts/view-form.js:537 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:544 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "Konta vārds"
 
-#: apps/io.ox/mail/accounts/view-form.js:534 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:541 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "Konta iestatījumi"
 
@@ -1112,7 +1112,7 @@ msgid "Business Address"
 msgstr "Darba adrese"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:147 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
 msgid "Business address"
 msgstr "Darba adrese"
 
@@ -1825,7 +1825,7 @@ msgid "Date completed"
 msgstr "Izpildes datums"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:138 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
 msgid "Date of birth"
 msgstr "Dzimšanas datums"
 
@@ -2226,7 +2226,7 @@ msgstr "Lejuplādēt instalēšanas failu (Windows) "
 msgid "Downloads"
 msgstr "Lejupielādes"
 
-#: apps/io.ox/mail/accounts/view-form.js:510 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:515 module:io.ox/settings/settings
 msgid "Drafts folder"
 msgstr "Melnrakstu mape"
 
@@ -2417,7 +2417,7 @@ msgstr "E-pasts 2"
 msgid "Email 3"
 msgstr "E-pasts 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:556 module:io.ox/settings/settings
 #, fuzzy
 #| msgid "Email addresses"
 msgid "Email address"
@@ -2475,7 +2475,7 @@ msgstr ""
 "E-pasta vēstules nevar tikt pārvietotas uz atkritni kamēr ir pārsniegta "
 "pasta kvota."
 
-#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Employee"
 msgstr "Darbinieks"
 
@@ -2487,7 +2487,7 @@ msgstr "Darbinieka ID"
 msgid "Employee type"
 msgstr "Darbinieka tips"
 
-#: apps/plugins/halo/xing/register.js:182 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
 msgid "Employment"
 msgstr "Nodarbinātība"
 
@@ -2547,7 +2547,7 @@ msgid "Enter document title here"
 msgstr "Ievadiet dokumenta nosaukumu"
 
 #. what follows is a set of job/status descriptions used by XING
-#: apps/plugins/halo/xing/register.js:36 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Entrepreneur"
 msgstr "Uzņēmējs"
 
@@ -2656,7 +2656,7 @@ msgstr "Katru dienu"
 msgid "Exact dates"
 msgstr "Sākuma datums"
 
-#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Executive"
 msgstr "Vadītājs"
 
@@ -3023,7 +3023,7 @@ msgstr "Pārsūtīt e-pastu kā"
 msgid "Free"
 msgstr "Brīvs"
 
-#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
 msgid "Freelancer"
 msgstr "Pašnodarbinātais"
 
@@ -4011,7 +4011,7 @@ msgstr "Jauns"
 msgid "New Folder"
 msgstr "Jauna mape"
 
-#: apps/io.ox/mail/api.js:1705 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1707 module:io.ox/mail
 msgid "New Mail"
 msgstr "Jaunais pasts"
 
@@ -4986,7 +4986,7 @@ msgstr "Privātuma paziņojums"
 msgid "Private"
 msgstr "Privāts"
 
-#: apps/plugins/halo/xing/register.js:156 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
 msgid "Private address"
 msgstr "Pivātā adrese"
 
@@ -5027,7 +5027,7 @@ msgstr "Īpašibas"
 msgid "Public"
 msgstr "Publisks"
 
-#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Public servant"
 msgstr "Publisks kalpotājs"
 
@@ -5151,7 +5151,7 @@ msgstr "Atgūt"
 msgid "Recover passwords"
 msgstr "Paroļu atgūšana"
 
-#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
 msgid "Recruiter"
 msgstr "Rekrūteris"
 
@@ -5335,7 +5335,7 @@ msgstr "Resursi"
 msgid "Restore applications"
 msgstr "Atjaunot aplikācijas"
 
-#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:45 module:plugins/portal
 msgid "Retired"
 msgstr "Atvaļināts"
 
@@ -5469,7 +5469,7 @@ msgstr "Pievienojums saglabāts"
 msgid "Saved in"
 msgstr "Saglabāt iekš"
 
-#: apps/io.ox/mail/api.js:1369 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1371 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Pievienojums saglabāts"
 
@@ -5531,10 +5531,10 @@ msgstr "Meklēts iekš"
 msgid "Searched in all folders"
 msgstr "Meklēt visās mapēs"
 
-#: apps/io.ox/mail/accounts/view-form.js:501 module:io.ox/settings/settings
-#: apps/io.ox/mail/accounts/view-form.js:508
-#: apps/io.ox/mail/accounts/view-form.js:515
-#: apps/io.ox/mail/accounts/view-form.js:522
+#: apps/io.ox/mail/accounts/view-form.js:502 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:511
+#: apps/io.ox/mail/accounts/view-form.js:520
+#: apps/io.ox/mail/accounts/view-form.js:529
 msgid "Select"
 msgstr "Izvēlēties"
 
@@ -5618,7 +5618,7 @@ msgstr "Sūtītājs"
 msgid "Sender/From"
 msgstr "Sūtītājs/No"
 
-#: apps/io.ox/mail/accounts/view-form.js:496 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:497 module:io.ox/settings/settings
 msgid "Sent folder"
 msgstr "Nosūtīto mape"
 
@@ -5922,11 +5922,11 @@ msgstr "Kļūda pie šī konta atkārtotas autorizēšanas."
 msgid "Something went wrong saving your changes."
 msgstr "Kļūda pie izmaiņu saglabāšanas."
 
-#: apps/plugins/halo/xing/register.js:237 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "Atvainojiet, bet pašreiz nav iespējamas pieslēgties pie %s."
 
-#: apps/plugins/halo/xing/register.js:261 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Atvainojiet, bet %s nav jums pieejamu datu."
 
@@ -5953,7 +5953,7 @@ msgstr "Kārtošanas opcijas"
 msgid "Source"
 msgstr "Avots"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:524 module:io.ox/settings/settings
 msgid "Spam folder"
 msgstr "Mēstuļu mape"
 
@@ -6004,7 +6004,7 @@ msgstr "Palikt iekšā"
 msgid "Street"
 msgstr "Iela"
 
-#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Student"
 msgstr "Studnts"
 
@@ -6927,7 +6927,7 @@ msgstr "Kopā: %1$s pieprasījumi"
 msgid "Town"
 msgstr "Pilsēta"
 
-#: apps/io.ox/mail/accounts/view-form.js:503 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:506 module:io.ox/settings/settings
 msgid "Trash folder"
 msgstr "Atkritumu mape"
 
@@ -7006,7 +7006,7 @@ msgstr "Apstiprinājums atsaukts"
 msgid "Undone"
 msgstr "Atsaukts"
 
-#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Unemployed"
 msgstr "Bezdarbnieks"
 
@@ -7139,7 +7139,7 @@ msgstr "Lai izmainītu vienības atrašanās vietu, izmantojiet kursora taustiņ
 msgid "Use fixed-width font for text mails"
 msgstr "Lietot fiksēta garuma fontu teksta formāta vēstulēs"
 
-#: apps/io.ox/mail/accounts/view-form.js:557 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:564 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "Šim kontam lietot vienoto pastu"
 
@@ -7327,7 +7327,7 @@ msgstr "Darba nedēļa"
 msgid "Workweek View"
 msgstr "Darba nedēļas skats"
 
-#: apps/plugins/halo/xing/register.js:33 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
 msgid "XING"
@@ -7428,7 +7428,7 @@ msgstr ""
 "Jums nav tiesību izveidot tikšanās ierakstus iekš \"%1$s\". Tikšanās "
 "ieraksti tiks izveidotai jūsu privātajā kalendārā."
 
-#: apps/plugins/halo/xing/register.js:76 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "Jūs neesat tieši saistīts ar %s. Šeit ir ar %s saistītās personas:"
@@ -7663,7 +7663,7 @@ msgstr "Jūsu e-pasta adrese"
 msgid "Your messages"
 msgstr "Jūsu ziņojumi"
 
-#: apps/io.ox/mail/accounts/view-form.js:543 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:550 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Jūsu vārds"
@@ -7698,7 +7698,7 @@ msgstr "Jūsu izvēlētais attēls tiks parādīts pēc saglabāšanas"
 msgid "Your session is expired"
 msgstr "Jūsu sesijas derīgums ir beidzies"
 
-#: apps/plugins/halo/xing/register.js:100 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "Jūsu koplietojuma kontakti:"
 

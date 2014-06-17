@@ -142,7 +142,7 @@ msgstr "%1$s (nezáväzne)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:172 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s, %2$s"
 
@@ -202,7 +202,7 @@ msgstr "%1$s zmenil(a) svoj stav:"
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:67 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr "%1$s%2$s %3$s%4$s%5$s"
 
@@ -527,11 +527,11 @@ msgstr "Nastavenia účtu"
 msgid "Account added successfully"
 msgstr "Účet úspešne pridaný"
 
-#: apps/io.ox/mail/accounts/view-form.js:537 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:544 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "Názov účtu"
 
-#: apps/io.ox/mail/accounts/view-form.js:534 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:541 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "Nastavenia účtu"
 
@@ -1111,7 +1111,7 @@ msgid "Business Address"
 msgstr "Adresa do práce"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:147 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
 msgid "Business address"
 msgstr "Adresa do práce"
 
@@ -1824,7 +1824,7 @@ msgid "Date completed"
 msgstr "Dátum dokončenia"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:138 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
 msgid "Date of birth"
 msgstr "Dátum narodenia"
 
@@ -2225,7 +2225,7 @@ msgstr "Stiahnuť inštalačný súbor (pre Windows)"
 msgid "Downloads"
 msgstr "Sťahovania"
 
-#: apps/io.ox/mail/accounts/view-form.js:510 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:515 module:io.ox/settings/settings
 msgid "Drafts folder"
 msgstr "Priečinok Rozpísané"
 
@@ -2412,7 +2412,7 @@ msgstr "Email 2"
 msgid "Email 3"
 msgstr "Email 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:556 module:io.ox/settings/settings
 #, fuzzy
 #| msgid "Email addresses"
 msgid "Email address"
@@ -2469,7 +2469,7 @@ msgid ""
 msgstr ""
 "Emaily nemožno presunúť do priečinka Kôš, ak ste prekročili kvótu pošty."
 
-#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Employee"
 msgstr "Zamestnanec"
 
@@ -2481,7 +2481,7 @@ msgstr "ID zamestnanca"
 msgid "Employee type"
 msgstr "Typ zamestnanca"
 
-#: apps/plugins/halo/xing/register.js:182 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
 msgid "Employment"
 msgstr "Zamestnanie"
 
@@ -2541,7 +2541,7 @@ msgid "Enter document title here"
 msgstr "Sem zadajte názov dokumentu"
 
 #. what follows is a set of job/status descriptions used by XING
-#: apps/plugins/halo/xing/register.js:36 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Entrepreneur"
 msgstr "Podnikateľ"
 
@@ -2650,7 +2650,7 @@ msgstr "každý deň"
 msgid "Exact dates"
 msgstr "Dátum začiatku"
 
-#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Executive"
 msgstr "Konateľ"
 
@@ -3018,7 +3018,7 @@ msgstr "Preposlať email ako"
 msgid "Free"
 msgstr "Zadarmo"
 
-#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
 msgid "Freelancer"
 msgstr "Na voľnej nohe"
 
@@ -4007,7 +4007,7 @@ msgstr "Nový"
 msgid "New Folder"
 msgstr "Nový priečinok"
 
-#: apps/io.ox/mail/api.js:1705 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1707 module:io.ox/mail
 msgid "New Mail"
 msgstr "Nová pošta"
 
@@ -4982,7 +4982,7 @@ msgstr "Ochrana súkromia"
 msgid "Private"
 msgstr "Súkromné"
 
-#: apps/plugins/halo/xing/register.js:156 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
 msgid "Private address"
 msgstr "Súkromná adresa"
 
@@ -5023,7 +5023,7 @@ msgstr "Vlastnosti"
 msgid "Public"
 msgstr "Verejné"
 
-#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Public servant"
 msgstr "Zamestnanec verejnej správy"
 
@@ -5147,7 +5147,7 @@ msgstr "Obnoviť"
 msgid "Recover passwords"
 msgstr "Obnovenie hesiel"
 
-#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
 msgid "Recruiter"
 msgstr "Náborár"
 
@@ -5331,7 +5331,7 @@ msgstr "Zdroje"
 msgid "Restore applications"
 msgstr "Obnoviť aplikácie"
 
-#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:45 module:plugins/portal
 msgid "Retired"
 msgstr "V dôchodku"
 
@@ -5465,7 +5465,7 @@ msgstr "Uložená príloha pošty"
 msgid "Saved in"
 msgstr "Uložené v"
 
-#: apps/io.ox/mail/api.js:1369 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1371 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Uložená príloha pošty"
 
@@ -5527,10 +5527,10 @@ msgstr "Vyhľadané v"
 msgid "Searched in all folders"
 msgstr "Vyhľadané vo všetkých priečinkoch"
 
-#: apps/io.ox/mail/accounts/view-form.js:501 module:io.ox/settings/settings
-#: apps/io.ox/mail/accounts/view-form.js:508
-#: apps/io.ox/mail/accounts/view-form.js:515
-#: apps/io.ox/mail/accounts/view-form.js:522
+#: apps/io.ox/mail/accounts/view-form.js:502 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:511
+#: apps/io.ox/mail/accounts/view-form.js:520
+#: apps/io.ox/mail/accounts/view-form.js:529
 msgid "Select"
 msgstr "Vybrať"
 
@@ -5614,7 +5614,7 @@ msgstr "Odosielateľ"
 msgid "Sender/From"
 msgstr "Odosielateľ/Od"
 
-#: apps/io.ox/mail/accounts/view-form.js:496 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:497 module:io.ox/settings/settings
 msgid "Sent folder"
 msgstr "Priečinok Odoslané"
 
@@ -5918,11 +5918,11 @@ msgstr "Pri opätovnej autorizácii účtu sa niečo pokazilo."
 msgid "Something went wrong saving your changes."
 msgstr "Pri ukladaní vašich zmien sa niečo pokazilo."
 
-#: apps/plugins/halo/xing/register.js:237 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "Ľutujeme, ale momentálne nie je možné pripojiť sa k %s."
 
-#: apps/plugins/halo/xing/register.js:261 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Ľutujeme, nie sú pre vás k dispozícii žiadne údaje o %s."
 
@@ -5949,7 +5949,7 @@ msgstr "Možnosti zoradenia"
 msgid "Source"
 msgstr "Zdroj"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:524 module:io.ox/settings/settings
 msgid "Spam folder"
 msgstr "Priečinok Spam"
 
@@ -6000,7 +6000,7 @@ msgstr "Zostať prihlásený"
 msgid "Street"
 msgstr "Ulica"
 
-#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Student"
 msgstr "Študent"
 
@@ -6914,7 +6914,7 @@ msgstr "Celkom: %1$s žiadostí"
 msgid "Town"
 msgstr "Mesto"
 
-#: apps/io.ox/mail/accounts/view-form.js:503 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:506 module:io.ox/settings/settings
 msgid "Trash folder"
 msgstr "Priečinok Kôš"
 
@@ -6993,7 +6993,7 @@ msgstr "Nepotvrdené"
 msgid "Undone"
 msgstr "Vrátené späť"
 
-#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Unemployed"
 msgstr "Nezamestnaný"
 
@@ -7126,7 +7126,7 @@ msgstr "Použite klávesy so šípkami na zmenu polohy bodu"
 msgid "Use fixed-width font for text mails"
 msgstr "Používať proporcionálne písmo pre text emailov"
 
-#: apps/io.ox/mail/accounts/view-form.js:557 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:564 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "Použiť pre tento účet Zjednotenú poštu"
 
@@ -7313,7 +7313,7 @@ msgstr "Pracovný týždeň"
 msgid "Workweek View"
 msgstr "Zobrazenie pracovného týždňa"
 
-#: apps/plugins/halo/xing/register.js:33 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
 msgid "XING"
@@ -7414,7 +7414,7 @@ msgstr ""
 "Nemôžete vytvárať plánované činnosti v „%1$s“. Schôdzky budú preto vytvorené "
 "vo vašom súkromnom kalendári."
 
-#: apps/plugins/halo/xing/register.js:76 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "Nie sú priamo spojený s %s. Tu sú ľudia, ktorí sú spojení s %s:"
@@ -7646,7 +7646,7 @@ msgstr "Vaša emailová adresa"
 msgid "Your messages"
 msgstr "Vaše správy"
 
-#: apps/io.ox/mail/accounts/view-form.js:543 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:550 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Vaše meno"
@@ -7681,7 +7681,7 @@ msgstr "Obrázok, ktorý ste zvolili sa zobrazí po uložení"
 msgid "Your session is expired"
 msgstr "Vaša relácia vypršala"
 
-#: apps/plugins/halo/xing/register.js:100 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "Vaše spoločné kontakty:"
 

@@ -2578,7 +2578,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/edit/view-form.js:107
 #: module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:147
+#: apps/plugins/halo/xing/register.js:154
 #: module:plugins/portal
 msgid "Business address"
 msgstr ""
@@ -2607,7 +2607,7 @@ msgstr ""
 #: apps/io.ox/contacts/edit/view-form.js:135
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:67
+#: apps/plugins/halo/xing/register.js:73
 #: module:plugins/portal
 msgid ""
 "%1$s"
@@ -2742,7 +2742,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:234
 #: module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:138
+#: apps/plugins/halo/xing/register.js:145
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr ""
@@ -6255,57 +6255,57 @@ msgstr ""
 msgid "Folder settings"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:496
+#: apps/io.ox/mail/accounts/view-form.js:497
 #: module:io.ox/settings/settings
 msgid "Sent folder"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:501
+#: apps/io.ox/mail/accounts/view-form.js:502
 #: module:io.ox/settings/settings
-#: apps/io.ox/mail/accounts/view-form.js:508
-#: apps/io.ox/mail/accounts/view-form.js:515
-#: apps/io.ox/mail/accounts/view-form.js:522
+#: apps/io.ox/mail/accounts/view-form.js:511
+#: apps/io.ox/mail/accounts/view-form.js:520
+#: apps/io.ox/mail/accounts/view-form.js:529
 msgid "Select"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:503
+#: apps/io.ox/mail/accounts/view-form.js:506
 #: module:io.ox/settings/settings
 msgid "Trash folder"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:510
+#: apps/io.ox/mail/accounts/view-form.js:515
 #: module:io.ox/settings/settings
 msgid "Drafts folder"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:517
+#: apps/io.ox/mail/accounts/view-form.js:524
 #: module:io.ox/settings/settings
 msgid "Spam folder"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:534
+#: apps/io.ox/mail/accounts/view-form.js:541
 #: module:io.ox/settings/settings
 msgid "Account settings"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:537
+#: apps/io.ox/mail/accounts/view-form.js:544
 #: module:io.ox/settings/settings
 msgid "Account name"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:543
+#: apps/io.ox/mail/accounts/view-form.js:550
 #: module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43
 #: module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:549
+#: apps/io.ox/mail/accounts/view-form.js:556
 #: module:io.ox/settings/settings
 msgid "Email address"
 msgstr ""
 
-#: apps/io.ox/mail/accounts/view-form.js:557
+#: apps/io.ox/mail/accounts/view-form.js:564
 #: module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr ""
@@ -6504,12 +6504,12 @@ msgstr[1] ""
 msgid "Save attachment"
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1369
+#: apps/io.ox/mail/api.js:1371
 #: module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr ""
 
-#: apps/io.ox/mail/api.js:1705
+#: apps/io.ox/mail/api.js:1707
 #: module:io.ox/mail
 msgid "New Mail"
 msgstr ""
@@ -8490,7 +8490,7 @@ msgstr ""
 msgid "Cannot find any messages you sent to this contact."
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:33
+#: apps/plugins/halo/xing/register.js:34
 #: module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51
@@ -8499,84 +8499,84 @@ msgid "XING"
 msgstr ""
 
 #. what follows is a set of job/status descriptions used by XING
-#: apps/plugins/halo/xing/register.js:36
+#: apps/plugins/halo/xing/register.js:37
 #: module:plugins/portal
 msgid "Entrepreneur"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:37
+#: apps/plugins/halo/xing/register.js:38
 #: module:plugins/portal
 msgid "Freelancer"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:38
+#: apps/plugins/halo/xing/register.js:39
 #: module:plugins/portal
 msgid "Employee"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:39
+#: apps/plugins/halo/xing/register.js:40
 #: module:plugins/portal
 msgid "Executive"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:40
+#: apps/plugins/halo/xing/register.js:41
 #: module:plugins/portal
 msgid "Recruiter"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:41
+#: apps/plugins/halo/xing/register.js:42
 #: module:plugins/portal
 msgid "Public servant"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:42
+#: apps/plugins/halo/xing/register.js:43
 #: module:plugins/portal
 msgid "Student"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:43
+#: apps/plugins/halo/xing/register.js:44
 #: module:plugins/portal
 msgid "Unemployed"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:44
+#: apps/plugins/halo/xing/register.js:45
 #: module:plugins/portal
 msgid "Retired"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:76
+#: apps/plugins/halo/xing/register.js:82
 #: module:plugins/portal
 msgid "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:100
+#: apps/plugins/halo/xing/register.js:106
 #: module:plugins/portal
 msgid "Your shared contacts:"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:156
+#: apps/plugins/halo/xing/register.js:163
 #: module:plugins/portal
 msgid "Private address"
 msgstr ""
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:172
+#: apps/plugins/halo/xing/register.js:179
 #: module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:182
+#: apps/plugins/halo/xing/register.js:189
 #: module:plugins/portal
 msgid "Employment"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:237
+#: apps/plugins/halo/xing/register.js:244
 #: module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:261
+#: apps/plugins/halo/xing/register.js:268
 #: module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr ""

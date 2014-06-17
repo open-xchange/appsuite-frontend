@@ -125,7 +125,7 @@ msgstr "%1$s (仮の予定)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:172 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s - %2$s"
 
@@ -183,7 +183,7 @@ msgstr "%1$s がプロファイルを次に変更: "
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:67 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr "%2$s %5$s %4$s %3$s %1$s"
 
@@ -490,11 +490,11 @@ msgstr "アカウント設定"
 msgid "Account added successfully"
 msgstr "アカウントが正しく追加されました。"
 
-#: apps/io.ox/mail/accounts/view-form.js:537 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:544 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "アカウント名"
 
-#: apps/io.ox/mail/accounts/view-form.js:534 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:541 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "アカウント設定"
 
@@ -1065,7 +1065,7 @@ msgid "Business Address"
 msgstr "勤務先住所"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:147 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
 msgid "Business address"
 msgstr "勤務先住所"
 
@@ -1773,7 +1773,7 @@ msgid "Date completed"
 msgstr "完成日"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:138 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
 msgid "Date of birth"
 msgstr "生年月日"
 
@@ -2166,7 +2166,7 @@ msgstr "インストール ファイルをダウンロード (Windows)"
 msgid "Downloads"
 msgstr "ダウンロード"
 
-#: apps/io.ox/mail/accounts/view-form.js:510 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:515 module:io.ox/settings/settings
 msgid "Drafts folder"
 msgstr "下書きフォルダ"
 
@@ -2358,7 +2358,7 @@ msgstr "メール 2"
 msgid "Email 3"
 msgstr "メール 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:556 module:io.ox/settings/settings
 msgid "Email address"
 msgstr "メール アドレス"
 
@@ -2412,7 +2412,7 @@ msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr "メールの割当量を超えたため、メールをごみ箱フォルダに移動できません。"
 
-#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Employee"
 msgstr "従業員"
 
@@ -2424,7 +2424,7 @@ msgstr "従業員 ID"
 msgid "Employee type"
 msgstr "従業員タイプ"
 
-#: apps/plugins/halo/xing/register.js:182 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
 msgid "Employment"
 msgstr "職業"
 
@@ -2484,7 +2484,7 @@ msgid "Enter document title here"
 msgstr "ドキュメントの件名をここに入力してください。"
 
 #. what follows is a set of job/status descriptions used by XING
-#: apps/plugins/halo/xing/register.js:36 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Entrepreneur"
 msgstr "起業家"
 
@@ -2591,7 +2591,7 @@ msgstr "毎日"
 msgid "Exact dates"
 msgstr "確定日"
 
-#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Executive"
 msgstr "役員"
 
@@ -2954,7 +2954,7 @@ msgstr "メールの転送方法:"
 msgid "Free"
 msgstr "空き時間"
 
-#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
 msgid "Freelancer"
 msgstr "フリーランサー"
 
@@ -3941,7 +3941,7 @@ msgstr "新規"
 msgid "New Folder"
 msgstr "新規フォルダ"
 
-#: apps/io.ox/mail/api.js:1705 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1707 module:io.ox/mail
 msgid "New Mail"
 msgstr "新規メール"
 
@@ -4906,7 +4906,7 @@ msgstr "プライバシーに関する注意"
 msgid "Private"
 msgstr "プライベート"
 
-#: apps/plugins/halo/xing/register.js:156 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
 msgid "Private address"
 msgstr "プライベート アドレス"
 
@@ -4947,7 +4947,7 @@ msgstr "プロパティ"
 msgid "Public"
 msgstr "パブリック"
 
-#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Public servant"
 msgstr "公務員"
 
@@ -5070,7 +5070,7 @@ msgstr "復元"
 msgid "Recover passwords"
 msgstr "パスワードを復元"
 
-#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
 msgid "Recruiter"
 msgstr "採用担当者"
 
@@ -5254,7 +5254,7 @@ msgstr "設備"
 msgid "Restore applications"
 msgstr "アプリケーションを復元"
 
-#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:45 module:plugins/portal
 msgid "Retired"
 msgstr "退職"
 
@@ -5388,7 +5388,7 @@ msgstr "保存された添付ファイル"
 msgid "Saved in"
 msgstr "保存先:"
 
-#: apps/io.ox/mail/api.js:1369 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1371 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "保存された添付ファイル"
 
@@ -5448,10 +5448,10 @@ msgstr "検索先:"
 msgid "Searched in all folders"
 msgstr "すべてのフォルダを検索しました。"
 
-#: apps/io.ox/mail/accounts/view-form.js:501 module:io.ox/settings/settings
-#: apps/io.ox/mail/accounts/view-form.js:508
-#: apps/io.ox/mail/accounts/view-form.js:515
-#: apps/io.ox/mail/accounts/view-form.js:522
+#: apps/io.ox/mail/accounts/view-form.js:502 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:511
+#: apps/io.ox/mail/accounts/view-form.js:520
+#: apps/io.ox/mail/accounts/view-form.js:529
 msgid "Select"
 msgstr "選択"
 
@@ -5533,7 +5533,7 @@ msgstr "差出人"
 msgid "Sender/From"
 msgstr "差出人"
 
-#: apps/io.ox/mail/accounts/view-form.js:496 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:497 module:io.ox/settings/settings
 msgid "Sent folder"
 msgstr "送信済みフォルダ"
 
@@ -5837,11 +5837,11 @@ msgstr "このアカウントの再認証中にエラーが発生しました。
 msgid "Something went wrong saving your changes."
 msgstr "変更の保存中にエラーが発生しました。"
 
-#: apps/plugins/halo/xing/register.js:237 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "現在 %s に接続できません。"
 
-#: apps/plugins/halo/xing/register.js:261 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "%s には利用できるデータがありません。"
 
@@ -5868,7 +5868,7 @@ msgstr "ソート オプション"
 msgid "Source"
 msgstr "ソース"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:524 module:io.ox/settings/settings
 msgid "Spam folder"
 msgstr "スパム フォルダ"
 
@@ -5917,7 +5917,7 @@ msgstr "サイン イン状態を保存"
 msgid "Street"
 msgstr "番地"
 
-#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Student"
 msgstr "学生"
 
@@ -6818,7 +6818,7 @@ msgstr "総数: %1$s 件のリクエスト"
 msgid "Town"
 msgstr "市区町村"
 
-#: apps/io.ox/mail/accounts/view-form.js:503 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:506 module:io.ox/settings/settings
 msgid "Trash folder"
 msgstr "ごみ箱フォルダ"
 
@@ -6896,7 +6896,7 @@ msgstr "未確認"
 msgid "Undone"
 msgstr "未完了"
 
-#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Unemployed"
 msgstr "無職"
 
@@ -7031,7 +7031,7 @@ msgstr "カーソルキーを使用して、アイテムの位置を変更でき
 msgid "Use fixed-width font for text mails"
 msgstr "テキスト メールに固定幅フォントを使用"
 
-#: apps/io.ox/mail/accounts/view-form.js:557 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:564 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "このアカウントに統合メールを使用"
 
@@ -7211,7 +7211,7 @@ msgstr "稼働日"
 msgid "Workweek View"
 msgstr "稼働日ビュー"
 
-#: apps/plugins/halo/xing/register.js:33 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
 msgid "XING"
@@ -7311,7 +7311,7 @@ msgstr ""
 "\"%1$s\" にアポイントを作成することは許可されていません。アポイントは、自身の"
 "プライベートの予定表に作成されます。"
 
-#: apps/plugins/halo/xing/register.js:76 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "直接 %s にリンクされていません。%s にリンクされているユーザ:"
@@ -7537,7 +7537,7 @@ msgstr "ご利用のメールアドレス"
 msgid "Your messages"
 msgstr "メッセージ"
 
-#: apps/io.ox/mail/accounts/view-form.js:543 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:550 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "名前"
@@ -7572,7 +7572,7 @@ msgstr "選択された写真は保存後に表示されます。"
 msgid "Your session is expired"
 msgstr "セッションが期限切れです。"
 
-#: apps/plugins/halo/xing/register.js:100 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "共有連絡先:"
 

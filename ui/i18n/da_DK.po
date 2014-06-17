@@ -132,7 +132,7 @@ msgstr "%1$s (foreløbig)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:172 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s, %2$s"
 
@@ -192,7 +192,7 @@ msgstr "%1$s ændrede deres status:"
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:67 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr ""
 "%1$s\n"
@@ -512,11 +512,11 @@ msgstr "Kontoindstillinger"
 msgid "Account added successfully"
 msgstr "Kontoen blev tilføjet med succes"
 
-#: apps/io.ox/mail/accounts/view-form.js:537 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:544 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "Kontonavn"
 
-#: apps/io.ox/mail/accounts/view-form.js:534 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:541 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "Kontoindstillinger"
 
@@ -1093,7 +1093,7 @@ msgid "Business Address"
 msgstr "Virksomhedsadresse"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:147 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
 msgid "Business address"
 msgstr "Virksomhedsadresse"
 
@@ -1804,7 +1804,7 @@ msgid "Date completed"
 msgstr "Gennemført dato"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:138 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
 msgid "Date of birth"
 msgstr "Fødselsdato"
 
@@ -2202,7 +2202,7 @@ msgstr "Hent installationsfil (til Windows)"
 msgid "Downloads"
 msgstr "Hentninger"
 
-#: apps/io.ox/mail/accounts/view-form.js:510 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:515 module:io.ox/settings/settings
 msgid "Drafts folder"
 msgstr "Udkast mappe"
 
@@ -2388,7 +2388,7 @@ msgstr "E-mail 2"
 msgid "Email 3"
 msgstr "E-mail 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:556 module:io.ox/settings/settings
 #, fuzzy
 #| msgid "Email addresses"
 msgid "Email address"
@@ -2445,7 +2445,7 @@ msgid ""
 msgstr ""
 "E-mails kan ikke kommes i skraldemappen mens din e-mail-kvote er overskredet."
 
-#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Employee"
 msgstr "Medarbejder"
 
@@ -2457,7 +2457,7 @@ msgstr "Medarbejder ID"
 msgid "Employee type"
 msgstr "Medarbejder type"
 
-#: apps/plugins/halo/xing/register.js:182 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
 msgid "Employment"
 msgstr "Ansættelse"
 
@@ -2517,7 +2517,7 @@ msgid "Enter document title here"
 msgstr "Skriv dokumentets titel her"
 
 #. what follows is a set of job/status descriptions used by XING
-#: apps/plugins/halo/xing/register.js:36 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Entrepreneur"
 msgstr "Iværksætter"
 
@@ -2626,7 +2626,7 @@ msgstr "Hver dag"
 msgid "Exact dates"
 msgstr "Startdato"
 
-#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Executive"
 msgstr "Leder"
 
@@ -2992,7 +2992,7 @@ msgstr "Videresend e-mails som"
 msgid "Free"
 msgstr "Ledig"
 
-#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
 msgid "Freelancer"
 msgstr "Freelancer"
 
@@ -3979,7 +3979,7 @@ msgstr "Ny"
 msgid "New Folder"
 msgstr "Ny mappe"
 
-#: apps/io.ox/mail/api.js:1705 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1707 module:io.ox/mail
 msgid "New Mail"
 msgstr "Ny e-email"
 
@@ -4951,7 +4951,7 @@ msgstr "Persondatapolitik"
 msgid "Private"
 msgstr "Privat"
 
-#: apps/plugins/halo/xing/register.js:156 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
 msgid "Private address"
 msgstr "Privatadresse"
 
@@ -4992,7 +4992,7 @@ msgstr "Egenskaber"
 msgid "Public"
 msgstr "Offentlig"
 
-#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Public servant"
 msgstr "Offentligt ansat"
 
@@ -5116,7 +5116,7 @@ msgstr "Gendan"
 msgid "Recover passwords"
 msgstr "Gendan adgangskoder"
 
-#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
 msgid "Recruiter"
 msgstr "Rekrutteringsmedarbejder"
 
@@ -5300,7 +5300,7 @@ msgstr "Ressourcer"
 msgid "Restore applications"
 msgstr "Gendan programmer"
 
-#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:45 module:plugins/portal
 msgid "Retired"
 msgstr "Pensioneret"
 
@@ -5434,7 +5434,7 @@ msgstr "Gemt e-mail-vedhæftning"
 msgid "Saved in"
 msgstr "Gemt i"
 
-#: apps/io.ox/mail/api.js:1369 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1371 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Gemt e-mail-vedhæftning"
 
@@ -5495,10 +5495,10 @@ msgstr "Søgte i"
 msgid "Searched in all folders"
 msgstr "Søgte i alle mapper"
 
-#: apps/io.ox/mail/accounts/view-form.js:501 module:io.ox/settings/settings
-#: apps/io.ox/mail/accounts/view-form.js:508
-#: apps/io.ox/mail/accounts/view-form.js:515
-#: apps/io.ox/mail/accounts/view-form.js:522
+#: apps/io.ox/mail/accounts/view-form.js:502 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:511
+#: apps/io.ox/mail/accounts/view-form.js:520
+#: apps/io.ox/mail/accounts/view-form.js:529
 msgid "Select"
 msgstr "Vælg"
 
@@ -5582,7 +5582,7 @@ msgstr "Sender"
 msgid "Sender/From"
 msgstr "Sender/Fra"
 
-#: apps/io.ox/mail/accounts/view-form.js:496 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:497 module:io.ox/settings/settings
 msgid "Sent folder"
 msgstr "Sendt mappe"
 
@@ -5884,11 +5884,11 @@ msgstr "Der gik noget galt under re-godkendelsen af kontoen."
 msgid "Something went wrong saving your changes."
 msgstr "Der gik noget galt, da dine indstillinger skulle gemmes."
 
-#: apps/plugins/halo/xing/register.js:237 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "Beklager.  Kunne ikke forbinde til %s lige nu."
 
-#: apps/plugins/halo/xing/register.js:261 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Beklage.  Der er ingen data til dig på %s."
 
@@ -5915,7 +5915,7 @@ msgstr "Indstillinger for sortering"
 msgid "Source"
 msgstr "Kilde"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:524 module:io.ox/settings/settings
 msgid "Spam folder"
 msgstr "Spam mappe"
 
@@ -5966,7 +5966,7 @@ msgstr "Forbliv logget ind"
 msgid "Street"
 msgstr "Gade"
 
-#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Student"
 msgstr "Studerende"
 
@@ -6875,7 +6875,7 @@ msgstr "Total: %1$s forespørgelser"
 msgid "Town"
 msgstr "By"
 
-#: apps/io.ox/mail/accounts/view-form.js:503 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:506 module:io.ox/settings/settings
 msgid "Trash folder"
 msgstr "Skrald mappe"
 
@@ -6954,7 +6954,7 @@ msgstr "Ubekræftet"
 msgid "Undone"
 msgstr "Fortryd"
 
-#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Unemployed"
 msgstr "Ledig"
 
@@ -7087,7 +7087,7 @@ msgstr "Brug piltaster for at ændre elementets position"
 msgid "Use fixed-width font for text mails"
 msgstr "Brug fast-bredde skrifttype for e-mails"
 
-#: apps/io.ox/mail/accounts/view-form.js:557 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:564 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "Brug forenet e-mail for denne konto"
 
@@ -7272,7 +7272,7 @@ msgstr "Arbejdsuge"
 msgid "Workweek View"
 msgstr "Arbejdsugevisning"
 
-#: apps/plugins/halo/xing/register.js:33 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
 msgid "XING"
@@ -7373,7 +7373,7 @@ msgstr ""
 "Du har ikke tilladelse til at lave aftaler i \"%1$s\". Aftaler vil derfor "
 "blive lavet i din private kaldender."
 
-#: apps/plugins/halo/xing/register.js:76 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
@@ -7601,7 +7601,7 @@ msgstr "Din e-mailadresse"
 msgid "Your messages"
 msgstr "Dine beskeder"
 
-#: apps/io.ox/mail/accounts/view-form.js:543 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:550 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Dit navn"
@@ -7636,7 +7636,7 @@ msgstr "Dit valgte billede bliver vist når der er blevet gemt"
 msgid "Your session is expired"
 msgstr "Din session er udløbet"
 
-#: apps/plugins/halo/xing/register.js:100 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "Dine delte kontakter:"
 

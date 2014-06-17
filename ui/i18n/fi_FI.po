@@ -130,7 +130,7 @@ msgstr "%1$s (Alustava)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:172 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s %2$s"
 
@@ -190,7 +190,7 @@ msgstr "%1$s muutti tilaansa:"
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:67 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr "%1$s%2$s %3$s%4$s%5$s"
 
@@ -506,11 +506,11 @@ msgstr "Tilin asetukset"
 msgid "Account added successfully"
 msgstr "Tili onnistuneesti päivitetty"
 
-#: apps/io.ox/mail/accounts/view-form.js:537 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:544 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "Tilin nimi"
 
-#: apps/io.ox/mail/accounts/view-form.js:534 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:541 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "Tilin asetukset"
 
@@ -1086,7 +1086,7 @@ msgid "Business Address"
 msgstr "Työosoite"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:147 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
 msgid "Business address"
 msgstr "Työosoite"
 
@@ -1797,7 +1797,7 @@ msgid "Date completed"
 msgstr "Valmistumispäivämäärä"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:138 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
 msgid "Date of birth"
 msgstr "Syntymäaika"
 
@@ -2195,7 +2195,7 @@ msgstr "Lataa Windows asennustiedosto"
 msgid "Downloads"
 msgstr "Lataukset"
 
-#: apps/io.ox/mail/accounts/view-form.js:510 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:515 module:io.ox/settings/settings
 msgid "Drafts folder"
 msgstr "Luonnokset"
 
@@ -2380,7 +2380,7 @@ msgstr "Sähköposti 2"
 msgid "Email 3"
 msgstr "Sähköposti 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:556 module:io.ox/settings/settings
 #, fuzzy
 #| msgid "Email addresses"
 msgid "Email address"
@@ -2437,7 +2437,7 @@ msgid ""
 msgstr ""
 "Viestikiintiön ollessa ylitettynä, et voi siirtää viestejä roskakansioon."
 
-#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Employee"
 msgstr "Työntekijä"
 
@@ -2449,7 +2449,7 @@ msgstr "Työntekijätunnus"
 msgid "Employee type"
 msgstr "Työntekijän tyyppi"
 
-#: apps/plugins/halo/xing/register.js:182 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
 msgid "Employment"
 msgstr "Työ"
 
@@ -2509,7 +2509,7 @@ msgid "Enter document title here"
 msgstr "Syötä asiakirjan otsikko tähän"
 
 #. what follows is a set of job/status descriptions used by XING
-#: apps/plugins/halo/xing/register.js:36 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Entrepreneur"
 msgstr "Yrittäjä"
 
@@ -2618,7 +2618,7 @@ msgstr "Päivittäin"
 msgid "Exact dates"
 msgstr "Aloituspäivämäärä"
 
-#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Executive"
 msgstr "Johtaja"
 
@@ -2982,7 +2982,7 @@ msgstr "Viestien välitys"
 msgid "Free"
 msgstr "Vapaa"
 
-#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
 msgid "Freelancer"
 msgstr "Freelancer"
 
@@ -3968,7 +3968,7 @@ msgstr "Uusi"
 msgid "New Folder"
 msgstr "Uusi kansio"
 
-#: apps/io.ox/mail/api.js:1705 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1707 module:io.ox/mail
 msgid "New Mail"
 msgstr "Uusi viesti"
 
@@ -4938,7 +4938,7 @@ msgstr "Tiedote yksityisyyden suojasta"
 msgid "Private"
 msgstr "Yksityinen"
 
-#: apps/plugins/halo/xing/register.js:156 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
 msgid "Private address"
 msgstr "Yksityisosoite"
 
@@ -4979,7 +4979,7 @@ msgstr "Ominaisuudet"
 msgid "Public"
 msgstr "Julkinen"
 
-#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Public servant"
 msgstr "Virkamies"
 
@@ -5103,7 +5103,7 @@ msgstr "Palauta"
 msgid "Recover passwords"
 msgstr "Palauta salasanoja"
 
-#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
 msgid "Recruiter"
 msgstr "Rekrytoija"
 
@@ -5287,7 +5287,7 @@ msgstr "Resurssit"
 msgid "Restore applications"
 msgstr "Keskeneräisiä toimintoja"
 
-#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:45 module:plugins/portal
 msgid "Retired"
 msgstr "Eläköitynyt"
 
@@ -5421,7 +5421,7 @@ msgstr "Tallennettu viestin liite"
 msgid "Saved in"
 msgstr "Tallennettu"
 
-#: apps/io.ox/mail/api.js:1369 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1371 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Tallennettu viestin liite"
 
@@ -5482,10 +5482,10 @@ msgstr "Etsittiin"
 msgid "Searched in all folders"
 msgstr "Etsittiin kaikista kansioista"
 
-#: apps/io.ox/mail/accounts/view-form.js:501 module:io.ox/settings/settings
-#: apps/io.ox/mail/accounts/view-form.js:508
-#: apps/io.ox/mail/accounts/view-form.js:515
-#: apps/io.ox/mail/accounts/view-form.js:522
+#: apps/io.ox/mail/accounts/view-form.js:502 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:511
+#: apps/io.ox/mail/accounts/view-form.js:520
+#: apps/io.ox/mail/accounts/view-form.js:529
 msgid "Select"
 msgstr "Valitse"
 
@@ -5569,7 +5569,7 @@ msgstr "Lähettäjä"
 msgid "Sender/From"
 msgstr "Lähettäjä"
 
-#: apps/io.ox/mail/accounts/view-form.js:496 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:497 module:io.ox/settings/settings
 msgid "Sent folder"
 msgstr "Lähetetyt"
 
@@ -5873,11 +5873,11 @@ msgstr "Jotakin meni pieleen uudelleenvaltuutettaessa tiliä."
 msgid "Something went wrong saving your changes."
 msgstr "Jotakin meni pieleen muutoksiasi tallennettaessa."
 
-#: apps/plugins/halo/xing/register.js:237 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "%s ei juuri nyt saada yhteyttä."
 
-#: apps/plugins/halo/xing/register.js:261 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "%s:ssa ei ole tietoja sinun saatavillasi."
 
@@ -5904,7 +5904,7 @@ msgstr "Lajitteluvaihtoehdot"
 msgid "Source"
 msgstr "Lähde"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:524 module:io.ox/settings/settings
 msgid "Spam folder"
 msgstr "Roskaposti"
 
@@ -5955,7 +5955,7 @@ msgstr "Pysy kirjautuneena"
 msgid "Street"
 msgstr "Katu"
 
-#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Student"
 msgstr "Opiskelija"
 
@@ -6867,7 +6867,7 @@ msgstr "Yhteensä %1$s pyyntöä"
 msgid "Town"
 msgstr "Kaupunki"
 
-#: apps/io.ox/mail/accounts/view-form.js:503 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:506 module:io.ox/settings/settings
 msgid "Trash folder"
 msgstr "Roskat"
 
@@ -6946,7 +6946,7 @@ msgstr "Vahvistamaton"
 msgid "Undone"
 msgstr "Tekemätön"
 
-#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Unemployed"
 msgstr "Työtön"
 
@@ -7078,7 +7078,7 @@ msgstr "Käytä nuolinäppäimiä muuttaaksesi kohdan sijaintia"
 msgid "Use fixed-width font for text mails"
 msgstr "Näytä tekstimuotoiset postit vakiolevyisellä kirjasimella"
 
-#: apps/io.ox/mail/accounts/view-form.js:557 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:564 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "Käytä tälle tilille yhtenäistä postia"
 
@@ -7262,7 +7262,7 @@ msgstr "Työviikko"
 msgid "Workweek View"
 msgstr "Työviikkonäkymä"
 
-#: apps/plugins/halo/xing/register.js:33 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
 msgid "XING"
@@ -7361,7 +7361,7 @@ msgstr ""
 "Sinulla ei ole valtuuksia luoda tapaamisia kohteeseen \"%1$s\". Tapaamiset "
 "luodaan siksi yksityiseen kalenteriisi."
 
-#: apps/plugins/halo/xing/register.js:76 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
@@ -7589,7 +7589,7 @@ msgstr "Postiosoitteesi"
 msgid "Your messages"
 msgstr "Viestisi"
 
-#: apps/io.ox/mail/accounts/view-form.js:543 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:550 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Nimesi"
@@ -7624,7 +7624,7 @@ msgstr "Valitsemasi kuva tulee näkyviin tallentamisen jälkeen"
 msgid "Your session is expired"
 msgstr "Istuntosi on vanhentunut"
 
-#: apps/plugins/halo/xing/register.js:100 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "Jaetut yhteystietosi:"
 

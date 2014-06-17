@@ -131,7 +131,7 @@ msgstr "%1$s （暂定）"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:172 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s - %2$s"
 
@@ -191,7 +191,7 @@ msgstr "%1$s 更改了他们的状态："
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:67 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr ""
 "%5$s\n"
@@ -510,11 +510,11 @@ msgstr "账户设置"
 msgid "Account added successfully"
 msgstr "户口添加成功"
 
-#: apps/io.ox/mail/accounts/view-form.js:537 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:544 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "账户名称"
 
-#: apps/io.ox/mail/accounts/view-form.js:534 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:541 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "账户设定"
 
@@ -1083,7 +1083,7 @@ msgid "Business Address"
 msgstr "业务地址"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:147 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
 msgid "Business address"
 msgstr "业务地址"
 
@@ -1789,7 +1789,7 @@ msgid "Date completed"
 msgstr "完成日期"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:138 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
 msgid "Date of birth"
 msgstr "出生日期"
 
@@ -2185,7 +2185,7 @@ msgstr "下载安装文件（为 Windows）"
 msgid "Downloads"
 msgstr "下载"
 
-#: apps/io.ox/mail/accounts/view-form.js:510 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:515 module:io.ox/settings/settings
 msgid "Drafts folder"
 msgstr "草稿文件夹"
 
@@ -2370,7 +2370,7 @@ msgstr "电子邮件 2"
 msgid "Email 3"
 msgstr "电子邮件 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:556 module:io.ox/settings/settings
 #, fuzzy
 #| msgid "Email addresses"
 msgid "Email address"
@@ -2426,7 +2426,7 @@ msgid ""
 "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr "在超过您的邮件限额时，电子邮件未能放到垃圾文件夹。"
 
-#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Employee"
 msgstr "员工"
 
@@ -2438,7 +2438,7 @@ msgstr "员工 ID"
 msgid "Employee type"
 msgstr "员工类型"
 
-#: apps/plugins/halo/xing/register.js:182 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
 msgid "Employment"
 msgstr "雇用"
 
@@ -2498,7 +2498,7 @@ msgid "Enter document title here"
 msgstr "在这里输入文档标题"
 
 #. what follows is a set of job/status descriptions used by XING
-#: apps/plugins/halo/xing/register.js:36 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Entrepreneur"
 msgstr "创业家"
 
@@ -2607,7 +2607,7 @@ msgstr "每天"
 msgid "Exact dates"
 msgstr "起始日期"
 
-#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Executive"
 msgstr "行政主管"
 
@@ -2964,7 +2964,7 @@ msgstr "电子邮件的转发方式"
 msgid "Free"
 msgstr "空闲的"
 
-#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
 msgid "Freelancer"
 msgstr "自由工作者"
 
@@ -3944,7 +3944,7 @@ msgstr "新建"
 msgid "New Folder"
 msgstr "新文件夹"
 
-#: apps/io.ox/mail/api.js:1705 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1707 module:io.ox/mail
 msgid "New Mail"
 msgstr "新邮件"
 
@@ -4904,7 +4904,7 @@ msgstr "隐私通告"
 msgid "Private"
 msgstr "私人"
 
-#: apps/plugins/halo/xing/register.js:156 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
 msgid "Private address"
 msgstr "私人地址"
 
@@ -4945,7 +4945,7 @@ msgstr "属性"
 msgid "Public"
 msgstr "公共"
 
-#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Public servant"
 msgstr "公共服务者"
 
@@ -5066,7 +5066,7 @@ msgstr "还原"
 msgid "Recover passwords"
 msgstr "还原密码"
 
-#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
 msgid "Recruiter"
 msgstr "招募者"
 
@@ -5250,7 +5250,7 @@ msgstr "资源"
 msgid "Restore applications"
 msgstr "复原应用"
 
-#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:45 module:plugins/portal
 msgid "Retired"
 msgstr "退休"
 
@@ -5384,7 +5384,7 @@ msgstr "保存邮件附件"
 msgid "Saved in"
 msgstr "保存在"
 
-#: apps/io.ox/mail/api.js:1369 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1371 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "保存邮件附件"
 
@@ -5445,10 +5445,10 @@ msgstr "搜寻在"
 msgid "Searched in all folders"
 msgstr "已搜寻所有文件夹"
 
-#: apps/io.ox/mail/accounts/view-form.js:501 module:io.ox/settings/settings
-#: apps/io.ox/mail/accounts/view-form.js:508
-#: apps/io.ox/mail/accounts/view-form.js:515
-#: apps/io.ox/mail/accounts/view-form.js:522
+#: apps/io.ox/mail/accounts/view-form.js:502 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:511
+#: apps/io.ox/mail/accounts/view-form.js:520
+#: apps/io.ox/mail/accounts/view-form.js:529
 msgid "Select"
 msgstr "选择"
 
@@ -5532,7 +5532,7 @@ msgstr "发送者"
 msgid "Sender/From"
 msgstr "发送者/来自"
 
-#: apps/io.ox/mail/accounts/view-form.js:496 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:497 module:io.ox/settings/settings
 msgid "Sent folder"
 msgstr "发送文件夹"
 
@@ -5834,11 +5834,11 @@ msgstr "在重认证户口时发生错误。"
 msgid "Something went wrong saving your changes."
 msgstr "保存更改时发生错误。"
 
-#: apps/plugins/halo/xing/register.js:237 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "抱歉，现在无法连接到 %s。"
 
-#: apps/plugins/halo/xing/register.js:261 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "抱歉，%s 没有您的可用数据。"
 
@@ -5865,7 +5865,7 @@ msgstr "排序选项"
 msgid "Source"
 msgstr "来源"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:524 module:io.ox/settings/settings
 msgid "Spam folder"
 msgstr "垃圾邮件文件夹"
 
@@ -5916,7 +5916,7 @@ msgstr "保持登入"
 msgid "Street"
 msgstr "街道"
 
-#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Student"
 msgstr "学生"
 
@@ -6798,7 +6798,7 @@ msgstr "合共：%1$s 个请求"
 msgid "Town"
 msgstr "城镇"
 
-#: apps/io.ox/mail/accounts/view-form.js:503 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:506 module:io.ox/settings/settings
 msgid "Trash folder"
 msgstr "垃圾文件夹"
 
@@ -6877,7 +6877,7 @@ msgstr "未确认"
 msgid "Undone"
 msgstr "已复原"
 
-#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Unemployed"
 msgstr "无业"
 
@@ -7006,7 +7006,7 @@ msgstr "使用方向键以更改项目位置"
 msgid "Use fixed-width font for text mails"
 msgstr "文本邮件使用固定宽度"
 
-#: apps/io.ox/mail/accounts/view-form.js:557 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:564 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "该户口使用统一邮件"
 
@@ -7182,7 +7182,7 @@ msgstr "工作周"
 msgid "Workweek View"
 msgstr "工作周视图"
 
-#: apps/plugins/halo/xing/register.js:33 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
 msgid "XING"
@@ -7277,7 +7277,7 @@ msgid ""
 "therefore be created in your private calendar."
 msgstr "您不允许在  \"%1$s\" 里创建约会。因此，约会将会在您的私人日历里创建。"
 
-#: apps/plugins/halo/xing/register.js:76 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "您不是直接连接到 %s。这些人是链接到 %s 的："
@@ -7498,7 +7498,7 @@ msgstr "您的电子邮件地址"
 msgid "Your messages"
 msgstr "您的信息"
 
-#: apps/io.ox/mail/accounts/view-form.js:543 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:550 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "您的名字"
@@ -7531,7 +7531,7 @@ msgstr "您选择的图像将会在保存后显示"
 msgid "Your session is expired"
 msgstr "会话已过期"
 
-#: apps/plugins/halo/xing/register.js:100 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "您的已分享联系人："
 

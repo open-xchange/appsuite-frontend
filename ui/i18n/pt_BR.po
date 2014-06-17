@@ -133,7 +133,7 @@ msgstr "%1$s (Provisório)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:172 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s em %2$s"
 
@@ -193,7 +193,7 @@ msgstr "%1$s alterou seu status:"
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:67 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr "%1$s%2$s %3$s%4$s%5$s"
 
@@ -510,11 +510,11 @@ msgstr "Configurações da conta"
 msgid "Account added successfully"
 msgstr "Conta adicionada com sucesso"
 
-#: apps/io.ox/mail/accounts/view-form.js:537 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:544 module:io.ox/settings/settings
 msgid "Account name"
 msgstr "Nome da conta"
 
-#: apps/io.ox/mail/accounts/view-form.js:534 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:541 module:io.ox/settings/settings
 msgid "Account settings"
 msgstr "Configurações da conta"
 
@@ -1094,7 +1094,7 @@ msgid "Business Address"
 msgstr "Endereço comercial"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:147 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
 msgid "Business address"
 msgstr "Endereço comercial"
 
@@ -1807,7 +1807,7 @@ msgid "Date completed"
 msgstr "Data de conclusão"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:138 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
 msgid "Date of birth"
 msgstr "Data de nascimento"
 
@@ -2209,7 +2209,7 @@ msgstr "Baixar arquivo de instalação (para Windows)"
 msgid "Downloads"
 msgstr "Downloads"
 
-#: apps/io.ox/mail/accounts/view-form.js:510 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:515 module:io.ox/settings/settings
 msgid "Drafts folder"
 msgstr "Pasta de rascunhos"
 
@@ -2395,7 +2395,7 @@ msgstr "E-mail 2"
 msgid "Email 3"
 msgstr "E-mail 3"
 
-#: apps/io.ox/mail/accounts/view-form.js:549 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:556 module:io.ox/settings/settings
 #, fuzzy
 #| msgid "Email addresses"
 msgid "Email address"
@@ -2453,7 +2453,7 @@ msgstr ""
 "Os e-mails não podem ser postos na Lixeira enquanto sua cota de e-mail "
 "estiver excedida."
 
-#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
 msgid "Employee"
 msgstr "Funcionário"
 
@@ -2465,7 +2465,7 @@ msgstr "ID do funcionário"
 msgid "Employee type"
 msgstr "Tipo de funcionário"
 
-#: apps/plugins/halo/xing/register.js:182 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
 msgid "Employment"
 msgstr "Emprego"
 
@@ -2525,7 +2525,7 @@ msgid "Enter document title here"
 msgstr "Insira o título do documento aqui"
 
 #. what follows is a set of job/status descriptions used by XING
-#: apps/plugins/halo/xing/register.js:36 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
 msgid "Entrepreneur"
 msgstr "Empresário"
 
@@ -2634,7 +2634,7 @@ msgstr "Todo dia"
 msgid "Exact dates"
 msgstr "Data de início"
 
-#: apps/plugins/halo/xing/register.js:39 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
 msgid "Executive"
 msgstr "Executivo"
 
@@ -3002,7 +3002,7 @@ msgstr "Encaminhar e-mails como"
 msgid "Free"
 msgstr "Livre"
 
-#: apps/plugins/halo/xing/register.js:37 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:38 module:plugins/portal
 msgid "Freelancer"
 msgstr "Freelancer"
 
@@ -3990,7 +3990,7 @@ msgstr "Novo"
 msgid "New Folder"
 msgstr "Nova pasta"
 
-#: apps/io.ox/mail/api.js:1705 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1707 module:io.ox/mail
 msgid "New Mail"
 msgstr "Novo e-mail"
 
@@ -4969,7 +4969,7 @@ msgstr "Política de privacidade"
 msgid "Private"
 msgstr "Privada"
 
-#: apps/plugins/halo/xing/register.js:156 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
 msgid "Private address"
 msgstr "Endereço pessoal"
 
@@ -5010,7 +5010,7 @@ msgstr "Propriedades"
 msgid "Public"
 msgstr "Pública"
 
-#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
 msgid "Public servant"
 msgstr "Servidor público"
 
@@ -5134,7 +5134,7 @@ msgstr "Recuperar"
 msgid "Recover passwords"
 msgstr "Recuperar senhas"
 
-#: apps/plugins/halo/xing/register.js:40 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:41 module:plugins/portal
 msgid "Recruiter"
 msgstr "Recrutador"
 
@@ -5318,7 +5318,7 @@ msgstr "Recursos"
 msgid "Restore applications"
 msgstr "Restaurar aplicativos"
 
-#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:45 module:plugins/portal
 msgid "Retired"
 msgstr "Aposentado"
 
@@ -5452,7 +5452,7 @@ msgstr "Salvar e-mail anexo"
 msgid "Saved in"
 msgstr "Salvo em"
 
-#: apps/io.ox/mail/api.js:1369 module:io.ox/mail
+#: apps/io.ox/mail/api.js:1371 module:io.ox/mail
 msgid "Saved mail attachment"
 msgstr "Salvar e-mail anexo"
 
@@ -5513,10 +5513,10 @@ msgstr "Pesquisado em"
 msgid "Searched in all folders"
 msgstr "Pesquisado em todas as pastas"
 
-#: apps/io.ox/mail/accounts/view-form.js:501 module:io.ox/settings/settings
-#: apps/io.ox/mail/accounts/view-form.js:508
-#: apps/io.ox/mail/accounts/view-form.js:515
-#: apps/io.ox/mail/accounts/view-form.js:522
+#: apps/io.ox/mail/accounts/view-form.js:502 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:511
+#: apps/io.ox/mail/accounts/view-form.js:520
+#: apps/io.ox/mail/accounts/view-form.js:529
 msgid "Select"
 msgstr "Selecionar"
 
@@ -5600,7 +5600,7 @@ msgstr "Remetente"
 msgid "Sender/From"
 msgstr "Remetente/de"
 
-#: apps/io.ox/mail/accounts/view-form.js:496 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:497 module:io.ox/settings/settings
 msgid "Sent folder"
 msgstr "Pasta enviada"
 
@@ -5903,11 +5903,11 @@ msgstr "Algo deu errado ao reautorizar a conta."
 msgid "Something went wrong saving your changes."
 msgstr "Algo deu errado ao salvar suas alterações."
 
-#: apps/plugins/halo/xing/register.js:237 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "Desculpe, não foi possível conectar a %s agora."
 
-#: apps/plugins/halo/xing/register.js:261 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Desculpe, não existem dados disponíveis para você em %s."
 
@@ -5934,7 +5934,7 @@ msgstr "Opções de classificação"
 msgid "Source"
 msgstr "Origem"
 
-#: apps/io.ox/mail/accounts/view-form.js:517 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:524 module:io.ox/settings/settings
 msgid "Spam folder"
 msgstr "Pasta de spam"
 
@@ -5985,7 +5985,7 @@ msgstr "Permanecer conectado"
 msgid "Street"
 msgstr "Rua"
 
-#: apps/plugins/halo/xing/register.js:42 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
 msgid "Student"
 msgstr "Estudante"
 
@@ -6906,7 +6906,7 @@ msgstr "Total: %1$s requisições"
 msgid "Town"
 msgstr "Cidade"
 
-#: apps/io.ox/mail/accounts/view-form.js:503 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:506 module:io.ox/settings/settings
 msgid "Trash folder"
 msgstr "Lixeira"
 
@@ -6985,7 +6985,7 @@ msgstr "Não confirmado"
 msgid "Undone"
 msgstr "Desfazer"
 
-#: apps/plugins/halo/xing/register.js:43 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:44 module:plugins/portal
 msgid "Unemployed"
 msgstr "Desempregado"
 
@@ -7119,7 +7119,7 @@ msgstr "Use as teclas do cursor para alterar a posição do item"
 msgid "Use fixed-width font for text mails"
 msgstr "Usar fonte de largura fixa para e-mails de texto"
 
-#: apps/io.ox/mail/accounts/view-form.js:557 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:564 module:io.ox/settings/settings
 msgid "Use unified mail for this account"
 msgstr "Usar e-mail unificado para essa conta"
 
@@ -7307,7 +7307,7 @@ msgstr "Semana de trabalho"
 msgid "Workweek View"
 msgstr "Visualizar semana de trabalho"
 
-#: apps/plugins/halo/xing/register.js:33 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
 #: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
 msgid "XING"
@@ -7408,7 +7408,7 @@ msgstr ""
 "Você não tem permissão para criar compromissos em \"%1$s\". Portanto, os "
 "compromissos serão criados em seu calendário privado."
 
-#: apps/plugins/halo/xing/register.js:76 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
@@ -7642,7 +7642,7 @@ msgstr "Seu endereço de e-mail"
 msgid "Your messages"
 msgstr "Suas mensagens"
 
-#: apps/io.ox/mail/accounts/view-form.js:543 module:io.ox/settings/settings
+#: apps/io.ox/mail/accounts/view-form.js:550 module:io.ox/settings/settings
 #: apps/plugins/wizards/mandatory/main.js:43 module:io.ox/wizards/firstStart
 msgid "Your name"
 msgstr "Seu nome"
@@ -7677,7 +7677,7 @@ msgstr "Sua imagem selecionada será exibida depois que for salva"
 msgid "Your session is expired"
 msgstr "Sua sessão expirou"
 
-#: apps/plugins/halo/xing/register.js:100 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "Seus contatos compartilhados:"
 
