@@ -613,12 +613,13 @@ define('io.ox/tasks/api',
      */
     api.refresh = function () {
         if (ox.online) {
-            // clear 'all & list' caches
-            api.caches.all.clear();
-            api.caches.list.clear();
-            api.getTasks().done(function () {
-                // trigger local refresh
-                api.trigger('refresh.all');
+            // clear all caches
+            $.when(api.caches.all.clear(),
+                   api.caches.list.clear(),
+                   api.caches.get.clear(),
+                   api.getTasks()).done(function () {
+                       // trigger local refresh
+                       api.trigger('refresh.all');
             });
         }
 
