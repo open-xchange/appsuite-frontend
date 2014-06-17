@@ -132,7 +132,7 @@ define('io.ox/tasks/edit/view-template',
             }
             this.append(
                 $('<div class="col-lg-12">').append(
-                    $('<button tabindex="1" class="btn btn-link expand-link">').text(text)
+                    $('<button type="button" tabindex="1" class="btn btn-link expand-link">').text(text)
                     .on('click', function () {
                         if (baton.parentView.collapsed) {
                             baton.parentView.$el.find('.collapsed').show();
