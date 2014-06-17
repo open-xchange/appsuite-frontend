@@ -768,7 +768,7 @@ define('io.ox/calendar/week/view',
             // only update if height differs from CSS default
             if (this.cellHeight !== this.minCellHeight) {
                 $('.timeslot', this.pane).height(this.cellHeight - 1);
-                $('.time', this.pane).height(this.cellHeight * this.fragmentation);
+                $('.time', this.pane).height((this.cellHeight * this.fragmentation) - 1);
             }
             return this;
         },
