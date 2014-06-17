@@ -91,6 +91,7 @@ define('io.ox/mail/actions',
                         .addButton('cancel', gt('Cancel'), 'cancel', {tabIndex: '1'})
                         .on('delete', function () {
                             api.remove(list, all).fail(notifications.yell);
+                            api.refresh();
                         })
                         .show(function () {
                             this.find('[role="document"]').focus();
@@ -120,6 +121,7 @@ define('io.ox/mail/actions',
                         notifications.yell(e);
                     }
                 });
+            api.refresh();
             }
         }
     });
