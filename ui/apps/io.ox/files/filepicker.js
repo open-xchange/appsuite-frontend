@@ -61,7 +61,7 @@ define('io.ox/files/filepicker',
         this.selection.keyboard(filesPane, true);
         this.selection.setMultiple(options.multiselect);
         if (options.multiselect) {
-            this.selection.setEditable(true, '.file');
+            this.selection.setEditable(true, '.checkbox-inline');
             filesPane.addClass('multiselect');
         } else {
             filesPane.addClass('singleselect');
