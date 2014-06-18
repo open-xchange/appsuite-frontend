@@ -141,7 +141,7 @@ define('io.ox/backbone/mini-views/participants',
                     })
                     .value();
 
-                if (baton.data.confirmations.length === 0) {//workaround for tasks
+                if (baton.data.confirmations === undefined || baton.data.confirmations.length === 0) {//workaround for tasks
                     confirmations = util.getConfirmations({users: baton.data.users, confirmations: external});
                 } else {
                     confirmations = util.getConfirmations(baton.data);
