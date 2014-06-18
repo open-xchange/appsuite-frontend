@@ -497,8 +497,9 @@ define('plugins/notifications/tasks/register',
                            'aria-label': label})
                 .append(
                     $('<div class="title">').text(_.noI18n(task.title)),
-                    $('<span class="end_date">').text(_.noI18n(task.end_date)),
-                    $('<span class="status">').text(task.status).addClass(task.badge),
+                    $('<div class="clearfix">').append(
+                        $('<span class="end_date">').text(_.noI18n(task.end_date)),
+                        $('<span class="status">').text(task.status).addClass(task.badge)),
                     $('<div class="actions">').append(
                         $('<button type="button" tabindex="1" class="accept-decline-button refocus btn btn-inverse" data-action="change_state">')
                         .attr('focus-id', 'task-invitation-accept-decline' + _.ecid(baton.model.attributes))
