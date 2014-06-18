@@ -433,7 +433,7 @@ define('io.ox/calendar/week/view',
          * @param  {Object} obj appointment object
          */
         onUpdateAppointment: function (obj) {
-            if (obj.start_date && obj.end_date && obj.start_date < obj.end_date) {
+            if (obj.start_date && obj.end_date && obj.start_date <= obj.end_date) {
                 this.trigger('updateAppointment', obj);
             }
         },
