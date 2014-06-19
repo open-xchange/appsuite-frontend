@@ -34,6 +34,11 @@ define('io.ox/core/folder/tree',
             this.contextmenu = options.contextmenu;
             this.selection = new Selection(this);
             this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
+
+            // add contextmenu?
+            if (this.contextmenu) {
+
+            }
         },
 
         filter: function (folder, model) {

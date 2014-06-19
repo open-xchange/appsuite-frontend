@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'io.ox/core/folder/contextmenu'], function (api, contextmenu) {
+define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core'], function (api, gt) {
 
     'use strict';
 
@@ -183,8 +183,8 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'io.ox/core/folder/co
             // virtual?
             if (this.isVirtual) this.$.selectable.addClass('virtual');
 
-            // folder contextmenu
-            if (o.tree.contextmenu) contextmenu.renderButton(this);
+            // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
+            if (o.tree.contextmenu && this.options.tree.app && !this.isVirtual) this.renderContextControl();
 
             // get data
             api.get(o.model_id);
@@ -208,6 +208,14 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'io.ox/core/folder/co
 
         renderTitle: function () {
             this.$.label.text(this.getTitle());
+        },
+
+        renderContextControl: function () {
+            this.$.selectable.append(
+                $('<a href="#" role="button" class="folder-options" tabindex="1">')
+                .attr('title', gt('Folder-specific actions'))
+                .append($('<i class="fa fa-cog">'))
+            );
         },
 
         render: function () {
