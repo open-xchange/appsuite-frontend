@@ -452,12 +452,12 @@ msgstr "変更を承諾"
 #: apps/plugins/notifications/calendar/register.js:82
 #: module:plugins/notifications
 #: apps/plugins/notifications/calendar/register.js:83
-#: apps/plugins/notifications/tasks/register.js:507
 #: apps/plugins/notifications/tasks/register.js:508
+#: apps/plugins/notifications/tasks/register.js:509
 msgid "Accept invitation"
 msgstr "出席依頼を承諾"
 
-#: apps/plugins/notifications/tasks/register.js:505
+#: apps/plugins/notifications/tasks/register.js:506
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "承諾/辞退"
@@ -1619,7 +1619,7 @@ msgstr "このリストを読み込めませんでした。"
 msgid "Could not save settings"
 msgstr "設定を保存できませんでした。"
 
-#: apps/io.ox/portal/widgets.js:407 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:405 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "設定を保存できませんでした。"
 
@@ -2249,7 +2249,7 @@ msgstr "期限"
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:68 module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:110
+#: apps/plugins/portal/tasks/register.js:111
 msgid "Due on %1$s"
 msgstr "期限: %1$s"
 
@@ -2701,7 +2701,7 @@ msgstr ""
 "アプリケーションの起動に失敗しました。接続に問題がある可能性があります。もう"
 "一度やり直してください。"
 
-#: apps/io.ox/calendar/invitations/register.js:494 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:489 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
@@ -2709,7 +2709,7 @@ msgstr ""
 "確認ステータスの更新に失敗しました。アポイントが削除されている可能性がありま"
 "す。"
 
-#: apps/io.ox/calendar/invitations/register.js:495 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:490 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
@@ -5145,7 +5145,7 @@ msgstr "再通知"
 
 #: apps/io.ox/calendar/acceptdeny.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/invitations/register.js:566 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:561 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1130 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
@@ -5666,7 +5666,7 @@ msgstr "すべてのアイテムを表示"
 msgid "Show all my appointments from all calendars"
 msgstr "予定表全体から自分のアポイントすべてを表示"
 
-#: apps/io.ox/calendar/invitations/register.js:126 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:121 module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "アポイントの詳細を表示"
 
@@ -5675,7 +5675,7 @@ msgstr "アポイントの詳細を表示"
 msgid "Show comments"
 msgstr "コメントを表示"
 
-#: apps/io.ox/calendar/invitations/register.js:415 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:410 module:io.ox/calendar/main
 msgid "Show conflicts"
 msgstr "競合を表示"
 
@@ -5731,7 +5731,7 @@ msgstr "リクエストの本文を表示"
 msgid "Show stack trace"
 msgstr "スタック トレースを表示"
 
-#: apps/io.ox/calendar/invitations/register.js:127 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
 msgid "Show task details"
 msgstr "仕事の詳細を表示"
 
@@ -6065,7 +6065,7 @@ msgstr "この仕事は既に変更されています。再読み込みしてく
 
 #: apps/io.ox/mail/detail/links.js:139 module:io.ox/mail
 #: apps/plugins/portal/tasks/register.js:25 module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:133
+#: apps/plugins/portal/tasks/register.js:135
 msgid "Tasks"
 msgstr "仕事"
 
@@ -6465,7 +6465,7 @@ msgstr "テーマ"
 msgid "There are unsaved changes."
 msgstr "まだ保存されていない変更があります。"
 
-#: apps/io.ox/calendar/invitations/register.js:408 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:403 module:io.ox/calendar/main
 msgid "There is already %1$d appointment in this timeframe."
 msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "この期間には既に %1$d 件のアポイントがあります。"
@@ -6532,11 +6532,11 @@ msgstr "この配布リストをポータルに追加しました。"
 msgid "This email address cannot be used for appointments"
 msgstr "このメール アドレスは、アポイントに使用できません。"
 
-#: apps/io.ox/calendar/invitations/register.js:123 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:118 module:io.ox/calendar/main
 msgid "This email contains a task"
 msgstr "このメールには仕事が含まれています。"
 
-#: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:117 module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "このメールにはアポイントが含まれています。"
 
@@ -7316,7 +7316,7 @@ msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "直接 %s にリンクされていません。%s にリンクされているユーザ:"
 
-#: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:145 module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "あなたはこのアポイントの開催者です。"
 
@@ -7339,11 +7339,11 @@ msgstr ""
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Ctrl キー + Enter キーで、変更をすぐに保存できます。"
 
-#: apps/io.ox/calendar/invitations/register.js:165 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
 msgid "You declined this appointment"
 msgstr "このアポイントを辞退しました。"
 
-#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:161 module:io.ox/calendar/main
 msgid "You declined this task"
 msgstr "この仕事を辞退しました。"
 
@@ -7361,7 +7361,7 @@ msgid "You don't have any subscriptions yet"
 msgstr "何も登録していません。"
 
 #: apps/plugins/portal/tasks/register.js:58 module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:95
+#: apps/plugins/portal/tasks/register.js:96
 msgid "You don't have any tasks that are either due soon or overdue."
 msgstr "期限が近い仕事や期限が過ぎた仕事はありません。"
 
@@ -7387,11 +7387,11 @@ msgstr "1 件の未読メッセージがあります。"
 msgid "You have accepted the appointment"
 msgstr "このアポイントを承諾しました。"
 
-#: apps/io.ox/calendar/invitations/register.js:159 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:154 module:io.ox/calendar/main
 msgid "You have accepted this appointment"
 msgstr "このアポイントを承諾しました。"
 
-#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:155 module:io.ox/calendar/main
 msgid "You have accepted this task"
 msgstr "この仕事を承諾しました。"
 
@@ -7448,11 +7448,11 @@ msgstr "iOS %n 以上を使用する必要があります。"
 msgid "You share this folder with other users"
 msgstr "他のユーザとこのフォルダを共有しています。"
 
-#: apps/io.ox/calendar/invitations/register.js:171 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
 msgid "You tentatively accepted this invitation"
 msgstr "この出席依頼を仮承諾しました"
 
-#: apps/io.ox/calendar/invitations/register.js:172 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:167 module:io.ox/calendar/main
 msgid "You tentatively accepted this task"
 msgstr "この仕事を仮承諾しました。"
 

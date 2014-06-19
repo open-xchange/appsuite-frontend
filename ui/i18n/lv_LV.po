@@ -486,12 +486,12 @@ msgstr "Piekrist izmaiņām"
 #: apps/plugins/notifications/calendar/register.js:82
 #: module:plugins/notifications
 #: apps/plugins/notifications/calendar/register.js:83
-#: apps/plugins/notifications/tasks/register.js:507
 #: apps/plugins/notifications/tasks/register.js:508
+#: apps/plugins/notifications/tasks/register.js:509
 msgid "Accept invitation"
 msgstr "Akceptēt uzaicinājumu"
 
-#: apps/plugins/notifications/tasks/register.js:505
+#: apps/plugins/notifications/tasks/register.js:506
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "Piekrist / Atteikt"
@@ -1669,7 +1669,7 @@ msgstr "Nevar ielādēt šo sarakstu"
 msgid "Could not save settings"
 msgstr "Nevar saglabāt iestatījumus"
 
-#: apps/io.ox/portal/widgets.js:407 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:405 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "Nevar saglabāt iestatījumus."
 
@@ -2306,7 +2306,7 @@ msgstr "Izpildes datums"
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:68 module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:110
+#: apps/plugins/portal/tasks/register.js:111
 msgid "Due on %1$s"
 msgstr "Izpildāms %1$s"
 
@@ -2767,7 +2767,7 @@ msgstr ""
 "Kļūda pie aplikācijas uzsākšanas. Iespējams, ka ir radušās komunikāciju "
 "problēmas. Lūdzu mēģiniet vēlreiz."
 
-#: apps/io.ox/calendar/invitations/register.js:494 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:489 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
@@ -2775,7 +2775,7 @@ msgstr ""
 "Kļūda pie apstiprinājuma statusa jaunināšanas; iespējams, ka tikšanās "
 "ieraksts ir izdzēsts."
 
-#: apps/io.ox/calendar/invitations/register.js:495 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:490 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
@@ -5226,7 +5226,7 @@ msgstr "Atgādināt atkal"
 
 #: apps/io.ox/calendar/acceptdeny.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/invitations/register.js:566 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:561 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1130 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
@@ -5751,7 +5751,7 @@ msgstr "Rādīt visu"
 msgid "Show all my appointments from all calendars"
 msgstr "Rādīt visas manas tikšanās no visiem kalendāriem"
 
-#: apps/io.ox/calendar/invitations/register.js:126 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:121 module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "Rādīt tikšanās detaļas"
 
@@ -5760,7 +5760,7 @@ msgstr "Rādīt tikšanās detaļas"
 msgid "Show comments"
 msgstr "Rādīt komentārus"
 
-#: apps/io.ox/calendar/invitations/register.js:415 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:410 module:io.ox/calendar/main
 msgid "Show conflicts"
 msgstr "Rādīt konfliktus"
 
@@ -5816,7 +5816,7 @@ msgstr "Rādīt pieprasījuma informāciju"
 msgid "Show stack trace"
 msgstr "Rādīt izsekošanu"
 
-#: apps/io.ox/calendar/invitations/register.js:127 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
 msgid "Show task details"
 msgstr "Rādīt uzdevuma detaļas"
 
@@ -6157,7 +6157,7 @@ msgstr "Uzdevums ir pārveidots. Lūdzu jauniniet "
 
 #: apps/io.ox/mail/detail/links.js:139 module:io.ox/mail
 #: apps/plugins/portal/tasks/register.js:25 module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:133
+#: apps/plugins/portal/tasks/register.js:135
 msgid "Tasks"
 msgstr "Uzdevumi"
 
@@ -6560,7 +6560,7 @@ msgstr "Tēma"
 msgid "There are unsaved changes."
 msgstr "Atrastas nesaglabātas izmaiņas."
 
-#: apps/io.ox/calendar/invitations/register.js:408 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:403 module:io.ox/calendar/main
 msgid "There is already %1$d appointment in this timeframe."
 msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Šajā laikā jau ir %1$d tikšanās."
@@ -6630,11 +6630,11 @@ msgstr "Šis izplatīšanas saraksts ir pievienots portālam"
 msgid "This email address cannot be used for appointments"
 msgstr "Šī e-pasta adrese nevar tikt izmantota tikšanās notikumiem"
 
-#: apps/io.ox/calendar/invitations/register.js:123 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:118 module:io.ox/calendar/main
 msgid "This email contains a task"
 msgstr "Šī vēstule satur uzdevumu"
 
-#: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:117 module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "Šī vēstule satur tikšanos"
 
@@ -7433,7 +7433,7 @@ msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "Jūs neesat tieši saistīts ar %s. Šeit ir ar %s saistītās personas:"
 
-#: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:145 module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "Jūs esat rīkotājs"
 
@@ -7456,11 +7456,11 @@ msgstr ""
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Jūs varat ātri saglabāt izmaiņas izmantojot Ctrl+Enter"
 
-#: apps/io.ox/calendar/invitations/register.js:165 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
 msgid "You declined this appointment"
 msgstr "Jūs esat atteicis šo tikšanos"
 
-#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:161 module:io.ox/calendar/main
 msgid "You declined this task"
 msgstr "Jūs esat atteicis šo uzdevumu"
 
@@ -7478,7 +7478,7 @@ msgid "You don't have any subscriptions yet"
 msgstr "Jums vēl nav neviena abonementa"
 
 #: apps/plugins/portal/tasks/register.js:58 module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:95
+#: apps/plugins/portal/tasks/register.js:96
 msgid "You don't have any tasks that are either due soon or overdue."
 msgstr ""
 "Jums nav nepabeigtu uzdevumu ar izpildes datumiem pagātnē vai tuvākajā "
@@ -7508,11 +7508,11 @@ msgstr "Jums ir 1 jauns ziņojums"
 msgid "You have accepted the appointment"
 msgstr "Jūs esat apstiprinājis tikšanos"
 
-#: apps/io.ox/calendar/invitations/register.js:159 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:154 module:io.ox/calendar/main
 msgid "You have accepted this appointment"
 msgstr "Jūs esat apstiprinājis šo tikšanos"
 
-#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:155 module:io.ox/calendar/main
 msgid "You have accepted this task"
 msgstr "Jūs esat apstiprinājis šo uzdevumu"
 
@@ -7569,11 +7569,11 @@ msgstr "Jums ir jāizmanto iOS %n vai jaunāka versija."
 msgid "You share this folder with other users"
 msgstr "Jūs koplietojat šo mapi ar citiem lietotājiem"
 
-#: apps/io.ox/calendar/invitations/register.js:171 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
 msgid "You tentatively accepted this invitation"
 msgstr "Jūs esat veicis pagaidu apstiprināšanu"
 
-#: apps/io.ox/calendar/invitations/register.js:172 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:167 module:io.ox/calendar/main
 msgid "You tentatively accepted this task"
 msgstr "Jūs esat pagaidu apstiprinājis šo uzdevumu"
 

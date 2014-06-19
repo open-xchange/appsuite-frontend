@@ -473,12 +473,12 @@ msgstr "Accepter les modifications"
 #: apps/plugins/notifications/calendar/register.js:82
 #: module:plugins/notifications
 #: apps/plugins/notifications/calendar/register.js:83
-#: apps/plugins/notifications/tasks/register.js:507
 #: apps/plugins/notifications/tasks/register.js:508
+#: apps/plugins/notifications/tasks/register.js:509
 msgid "Accept invitation"
 msgstr "Accepter l'invitation"
 
-#: apps/plugins/notifications/tasks/register.js:505
+#: apps/plugins/notifications/tasks/register.js:506
 #: module:plugins/notifications
 msgid "Accept/Decline"
 msgstr "Accepter / Décliner"
@@ -1654,7 +1654,7 @@ msgstr "Impossible de charger cette liste"
 msgid "Could not save settings"
 msgstr "Impossible d'enregistrer les réglages"
 
-#: apps/io.ox/portal/widgets.js:407 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:405 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "Impossible d'enregistrer les réglages."
 
@@ -2300,7 +2300,7 @@ msgstr "Date d'échéance"
 
 #. Due on date
 #: apps/plugins/portal/tasks/register.js:68 module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:110
+#: apps/plugins/portal/tasks/register.js:111
 msgid "Due on %1$s"
 msgstr "Arrive à échéance le %1$s"
 
@@ -2764,7 +2764,7 @@ msgstr ""
 "L'application n'a pas pu être lancée. Vous avez peut-être des problèmes de "
 "connexion. Veuillez réessayer."
 
-#: apps/io.ox/calendar/invitations/register.js:494 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:489 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the appointment has been "
 "deleted."
@@ -2772,7 +2772,7 @@ msgstr ""
 "Impossible de mettre à jour l'état de confirmation ; il est probable que le "
 "rendez-vous a été supprimé."
 
-#: apps/io.ox/calendar/invitations/register.js:495 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:490 module:io.ox/calendar/main
 msgid ""
 "Failed to update confirmation status; most probably the task has been "
 "deleted."
@@ -5243,7 +5243,7 @@ msgstr "Me le rappeler à nouveau"
 
 #: apps/io.ox/calendar/acceptdeny.js:48 module:io.ox/calendar
 #: apps/io.ox/calendar/edit/template.js:255 module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/invitations/register.js:566 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:561 module:io.ox/calendar/main
 #: apps/io.ox/mail/actions.js:1130 module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js:152
 msgid "Reminder"
@@ -5767,7 +5767,7 @@ msgstr "Afficher tous les éléments"
 msgid "Show all my appointments from all calendars"
 msgstr "Afficher tous mes rendez-vous provenant de tous les agendas"
 
-#: apps/io.ox/calendar/invitations/register.js:126 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:121 module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "Afficher le détail du rendez-vous"
 
@@ -5776,7 +5776,7 @@ msgstr "Afficher le détail du rendez-vous"
 msgid "Show comments"
 msgstr "Afficher les commentaires"
 
-#: apps/io.ox/calendar/invitations/register.js:415 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:410 module:io.ox/calendar/main
 msgid "Show conflicts"
 msgstr "Afficher les conflits"
 
@@ -5832,7 +5832,7 @@ msgstr "Afficher le corps de la requête"
 msgid "Show stack trace"
 msgstr "Afficher la trace d'erreurs"
 
-#: apps/io.ox/calendar/invitations/register.js:127 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
 msgid "Show task details"
 msgstr "Afficher les détails de la tâche"
 
@@ -6172,7 +6172,7 @@ msgstr "La tâche a été modifiée entre-temps, veuillez réactualiser"
 
 #: apps/io.ox/mail/detail/links.js:139 module:io.ox/mail
 #: apps/plugins/portal/tasks/register.js:25 module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:133
+#: apps/plugins/portal/tasks/register.js:135
 msgid "Tasks"
 msgstr "Tâches"
 
@@ -6575,7 +6575,7 @@ msgstr "Thème"
 msgid "There are unsaved changes."
 msgstr "Certaines modifications n'ont pas été enregistrées."
 
-#: apps/io.ox/calendar/invitations/register.js:408 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:403 module:io.ox/calendar/main
 msgid "There is already %1$d appointment in this timeframe."
 msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "Il y a déjà %1$d rendez-vous dans cette plage horaire."
@@ -6651,11 +6651,11 @@ msgstr ""
 "Cette adresse de courrier électronique ne peut pas être utilisée pour des "
 "rendez-vous"
 
-#: apps/io.ox/calendar/invitations/register.js:123 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:118 module:io.ox/calendar/main
 msgid "This email contains a task"
 msgstr "Ce message contient une tâche"
 
-#: apps/io.ox/calendar/invitations/register.js:122 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:117 module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "Ce message contient un rendez-vous"
 
@@ -7469,7 +7469,7 @@ msgstr ""
 "Vous n'êtes pas en contact direct avec %s. Voici des personnes qui sont en "
 "contact direct avec %s :"
 
-#: apps/io.ox/calendar/invitations/register.js:150 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:145 module:io.ox/calendar/main
 msgid "You are the organizer"
 msgstr "Vous êtes l'organisateur"
 
@@ -7493,11 +7493,11 @@ msgstr ""
 msgid "You can quick-save your changes via Ctrl+Enter."
 msgstr "Vous pouvez enregistrer rapidement vos modifications avec Ctrl+Entrée."
 
-#: apps/io.ox/calendar/invitations/register.js:165 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
 msgid "You declined this appointment"
 msgstr "Vous avez décliné ce rendez-vous"
 
-#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:161 module:io.ox/calendar/main
 msgid "You declined this task"
 msgstr "Vous avez décliné cette tâche"
 
@@ -7515,7 +7515,7 @@ msgid "You don't have any subscriptions yet"
 msgstr "Vous n'avez pas encore d'abonnements"
 
 #: apps/plugins/portal/tasks/register.js:58 module:plugins/portal
-#: apps/plugins/portal/tasks/register.js:95
+#: apps/plugins/portal/tasks/register.js:96
 msgid "You don't have any tasks that are either due soon or overdue."
 msgstr ""
 "Vous n'avez pas de tâches qui arriveront bientôt à échéance ou sont déjà "
@@ -7544,11 +7544,11 @@ msgstr "Vous avez 1 message non lu"
 msgid "You have accepted the appointment"
 msgstr "Vous avez accepté le rendez-vous"
 
-#: apps/io.ox/calendar/invitations/register.js:159 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:154 module:io.ox/calendar/main
 msgid "You have accepted this appointment"
 msgstr "Vous avez accepté ce rendez-vous"
 
-#: apps/io.ox/calendar/invitations/register.js:160 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:155 module:io.ox/calendar/main
 msgid "You have accepted this task"
 msgstr "Vous avez accepté cette tâche"
 
@@ -7607,11 +7607,11 @@ msgstr "Vous devez utiliser la version %n d'iOS ou une version supérieure."
 msgid "You share this folder with other users"
 msgstr "Vous partagez ce dossier avec d'autres utilisateurs"
 
-#: apps/io.ox/calendar/invitations/register.js:171 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:166 module:io.ox/calendar/main
 msgid "You tentatively accepted this invitation"
 msgstr "Vous avez accepté cette invitation à titre provisoire"
 
-#: apps/io.ox/calendar/invitations/register.js:172 module:io.ox/calendar/main
+#: apps/io.ox/calendar/invitations/register.js:167 module:io.ox/calendar/main
 msgid "You tentatively accepted this task"
 msgstr "Vous avez accepté cette tâche à titre provisoire"
 
