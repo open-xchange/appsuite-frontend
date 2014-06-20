@@ -82,7 +82,7 @@ define('io.ox/mail/print',
 
                 i18n: {
                     to: gt('To'),
-                    copy: gt.npgettext('CC', 'Copy', 'Copy', 1)
+                    copy: gt.pgettext('CC', 'Copy')
                 },
 
                 process: process,
