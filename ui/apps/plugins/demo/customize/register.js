@@ -30,7 +30,7 @@ define('plugins/demo/customize/register', [], function () {
         '      </div>' +
         '      <div class="modal-body">' +
         '        <form>' +
-        '          <div class="form-group"><label>Tob bar color</label><br><input type="color" value="#3774A8" class="color-topbar"></div>' +
+        '          <div class="form-group"><label>Top bar color</label><br><input type="color" value="#3774A8" class="color-topbar"></div>' +
         '          <div class="form-group"><label>Selection color</label><br><input type="color" value="#428BCA" class="color-selection"></div>' +
         '          <div class="form-group"><label>Link color</label><br><input type="color" value="#428BCA" class="color-link"></div>' +
         '          <div class="form-group"><label>Logo</label><br><input type="file"></div>' +
