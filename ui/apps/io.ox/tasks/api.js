@@ -379,13 +379,10 @@ define('io.ox/tasks/api',
             data: task,
             appendColumns: false
         }).pipe(function () {
-            if (task.folder_id && task.folder_id !== useFolder) {//move operation
-                useFolder = task.folder_id; //make sure we get the item in it's new location
-            }
             // update cache
             return $.when(
                     api.removeFromCache(key)
-                        .then(function () {return api.get({id: task.id, folder_id: useFolder}); }),//api.get updates list and get caches
+                        .then(function () {return api.get({id: task.id, folder_id: newFolder || useFolder}); }),//api.get updates list and get caches
                         updateAllCache([task], useFolder, task));
         }).pipe(function (data) {
             //return object with id and folder id needed to save the attachments correctly
