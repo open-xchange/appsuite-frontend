@@ -86,6 +86,12 @@ define('io.ox/tasks/toolbar',
         //
         // --- LO ----
         //
+        'confirm': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Change confirmation status'),
+            ref: 'io.ox/tasks/actions/confirm'
+        },
         'print': {
             prio: 'lo',
             mobile: 'lo',
