@@ -30,10 +30,11 @@ define('plugins/demo/customize/register', [], function () {
         '      </div>' +
         '      <div class="modal-body">' +
         '        <form>' +
-        '          <div class="form-group"><label>Top bar color</label><br><input type="color" value="#3774A8" class="color-topbar"></div>' +
-        '          <div class="form-group"><label>Selection color</label><br><input type="color" value="#428BCA" class="color-selection"></div>' +
-        '          <div class="form-group"><label>Link color</label><br><input type="color" value="#428BCA" class="color-link"></div>' +
-        '          <div class="form-group"><label>Logo</label><br><input type="file"></div>' +
+        '          <div class="form-group"><label>Top bar color</label><br><input type="color" value="#3774A8" data-color="topbar"></div>' +
+        '          <div class="form-group"><label>Selection color</label><br><input type="color" value="#428BCA" data-color="selection"></div>' +
+        '          <div class="form-group"><label>Link color</label><br><input type="color" value="#428BCA" data-color="link"></div>' +
+        '          <div class="form-group"><span class="btn btn-default btn-file">Upload logo<input type="file" class="file-input"></span></div>' +
+        '          <div class="form-group"><a href="#" class="apply-preset">Browse presets</a></div>' +
         '        </form>' +
         '      </div>' +
         '    </div>' +
@@ -47,35 +48,61 @@ define('plugins/demo/customize/register', [], function () {
         $('#customize-dialog').modal({ backdrop: false, keyboard: true, show: true });
     });
 
-    // on change color - topbar
-    $('#customize-dialog .color-topbar').on('change', function () {
-        var color = $(this).val();
-        $('#io-ox-topbar').css('backgroundColor', color);
-    });
+    var fields = $('#customize-dialog input[type="color"]'),
+        defaults = [
+            { topbar: '#3774A8', selection: '#428BCA', link: '#428BCA' }, // blue
+            { topbar: '#728a88', selection: '#5f5e5e', link: '#4fa8a6' }, // cyan
+            { topbar: '#88356f', selection: '#772475', link: '#785194' }, // pink
+            { topbar: '#587a20', selection: '#606961', link: '#608e21' }, // gree
+            { topbar: '#992019', selection: '#af1916', link: '#ad1c13' }, // red
+            { topbar: '#595354', selection: '#494849', link: '#3e5ea9' }, // gray
+            { topbar: '#8d8c86', selection: '#496393', link: '#537898' }, // gray (alt)
+            { topbar: '#424242', selection: '#39A9E1', link: '#0088cc' }  // 7.4.2
+        ],
+        preset = 0,
+        colors = {};
 
-    var colors = { selection: '#428BCA', link: '#428BCA' };
-
-    function updateStylesheet() {
+    var updateStylesheet = function () {
         $('#customize-css').text(
+            '#io-ox-topbar { background-color: ' + colors.topbar + '; }\n' +
             '.list-view.visible-selection.has-focus .list-item.selected,\n' +
             '.vgrid .vgrid-scrollpane > div:focus .vgrid-cell.selected,\n' +
             '.foldertree-sidepanel .foldertree-container .io-ox-foldertree .folder:focus.selected {\n' +
             '  background-color: ' + colors.selection + ';\n' +
             '}\n' +
-            'a { color: ' + colors.link + '; }'
+            'a, a:hover, a:active, a:focus,\n' +
+            '.foldertree-sidepanel .foldertree-container .io-ox-foldertree .folder-arrow {' +
+            '  color: ' + colors.link + ';\n' +
+            '}\n' +
+             // wrong wrt a11y but works better for demo purposes
+            '.list-view.visible-selection .list-item.selected {' +
+            '  color: white;\n' +
+            '  background-color: ' + colors.selection + ';\n' +
+            '}\n' +
+            '.list-view.visible-selection .list-item.selected .fa-checkmark,\n' +
+            '.mail-item.visible-selection .selected .thread-size { color: white; }'
         );
-    }
+    };
 
-    // on change color - selection
-    $('#customize-dialog .color-selection').on('change', function () {
-        colors.selection = $(this).val();
+    var initialize = function (useHash) {
+        _('topbar selection link'.split(' ')).each(function (color) {
+            var value = (useHash && _.url.hash('color.' + color)) || defaults[preset][color];
+            fields.filter('[data-color="' + color + '"]').val(value);
+            _.url.hash('color.' + color, value);
+            colors[color] = value;
+        });
         updateStylesheet();
-    });
+    };
 
-    // on change color - link
-    $('#customize-dialog .color-link').on('change', function () {
-        colors.link = $(this).val();
+    var set = _.debounce(function (color, value) {
+        colors[color] = value;
+        _.url.hash('color.' + color, value);
         updateStylesheet();
+    }, 50);
+
+    // on change color
+    fields.on('change', function () {
+        set($(this).data('color'), $(this).val());
     });
 
     // on select file
@@ -105,4 +132,19 @@ define('plugins/demo/customize/register', [], function () {
         };
         reader.readAsDataURL(file);
     });
+
+    // on apply preset
+    $('#customize-dialog .apply-preset').on('click', function (e) {
+        e.preventDefault();
+        preset = preset === defaults.length - 1 ? 0 : preset + 1;
+        initialize(false);
+    });
+
+    // initailize stylesheet once to apply URL parameters
+    initialize(true);
+
+    // console tool to get new presets easily
+    window.colors = function () {
+        console.log('{ topbar: \'%s\', selection: \'%s\', link: \'%s\' }', _.url.hash('color.topbar'), _.url.hash('color.selection'), _.url.hash('color.link'));
+    };
 });
