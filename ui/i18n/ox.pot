@@ -1043,7 +1043,7 @@ msgstr ""
 #: apps/io.ox/core/permissions/permissions.js:356
 #: apps/io.ox/core/permissions/permissions.js:399
 #: apps/io.ox/core/settings/user.js:80
-#: apps/io.ox/core/tk/dialogs.js:555
+#: apps/io.ox/core/tk/dialogs.js:558
 #: apps/io.ox/editor/main.js:132
 #: module:io.ox/editor
 #: apps/io.ox/editor/main.js:154
@@ -3357,7 +3357,7 @@ msgstr ""
 #: apps/io.ox/core/permissions/permissions.js:458
 #: apps/io.ox/core/pubsub/publications.js:105
 #: module:io.ox/core/pubsub
-#: apps/io.ox/core/tk/dialogs.js:555
+#: apps/io.ox/core/tk/dialogs.js:558
 #: apps/io.ox/core/wizard/registry.js:60
 #: module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js:157
@@ -5003,7 +5003,7 @@ msgstr ""
 msgid "Could not load this list"
 msgstr ""
 
-#: apps/io.ox/core/tk/dialogs.js:748
+#: apps/io.ox/core/tk/dialogs.js:751
 #: module:io.ox/core
 msgid "Close all"
 msgstr ""

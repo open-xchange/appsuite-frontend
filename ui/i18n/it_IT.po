@@ -1400,7 +1400,7 @@ msgstr "Fai clic per caricare l'immagine"
 #: apps/io.ox/core/commons-folderview.js:544
 #: apps/io.ox/core/permissions/permissions.js:458
 #: apps/io.ox/core/pubsub/publications.js:105 module:io.ox/core/pubsub
-#: apps/io.ox/core/tk/dialogs.js:555 apps/io.ox/core/wizard/registry.js:60
+#: apps/io.ox/core/tk/dialogs.js:558 apps/io.ox/core/wizard/registry.js:60
 #: module:io.ox/core/wizard apps/io.ox/editor/main.js:157 module:io.ox/editor
 #: apps/io.ox/files/actions.js:335 module:io.ox/files
 #: apps/io.ox/files/mediaplayer.js:295
@@ -1413,7 +1413,7 @@ msgstr "Fai clic per caricare l'immagine"
 msgid "Close"
 msgstr "Chiudi"
 
-#: apps/io.ox/core/tk/dialogs.js:748 module:io.ox/core
+#: apps/io.ox/core/tk/dialogs.js:751 module:io.ox/core
 msgid "Close all"
 msgstr "Chiudi tutto"
 
@@ -5379,7 +5379,7 @@ msgstr "Sabato"
 #: apps/io.ox/core/folder/imap-subscription.js:63 module:io.ox/core
 #: apps/io.ox/core/permissions/permissions.js:356
 #: apps/io.ox/core/permissions/permissions.js:399
-#: apps/io.ox/core/settings/user.js:80 apps/io.ox/core/tk/dialogs.js:555
+#: apps/io.ox/core/settings/user.js:80 apps/io.ox/core/tk/dialogs.js:558
 #: apps/io.ox/editor/main.js:132 module:io.ox/editor
 #: apps/io.ox/editor/main.js:154 apps/io.ox/files/actions.js:585
 #: module:io.ox/files apps/io.ox/files/filepicker.js:31
