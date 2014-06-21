@@ -473,7 +473,7 @@ define('io.ox/mail/common-extensions',
                 }
 
                 this.append(
-                    $('<div class="alert alert-info external-images">').append(
+                    $('<div class="notification-item external-images">').append(
                         $('<button type="button" class="btn btn-primary btn-sm" tabindex="1">').text(gt('Show images')),
                         $('<div class="comment">').text(gt('External images have been blocked to protect you against potential spam!'))
                     )
