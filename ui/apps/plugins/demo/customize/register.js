@@ -40,7 +40,11 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         '               <label><input type="checkbox" checked="checked" data-name="topbarVisible"> Show top-bar</label>' +
         '          </div>' +
         '          <div class="form-group"><div class="btn-group"><span class="btn btn-default btn-file">Upload logo<input type="file" class="file-input"></span><button type="button" class="btn btn-default">&times;</button></div></div>' +
-        '          <div class="form-group"><a href="#" class="apply-preset">Browse presets</a></div>' +
+        '          <div class="form-group">' +
+        '            <a href="#" class="apply-preset">Browse presets</a> &mdash; ' +
+        '            <a href="#" class="store-model">Store</a> &mdash; ' +
+        '            <a href="#" class="restore-model">Restore</a>' +
+        '          </div>' +
         '        </form>' +
         '      </div>' +
         '    </div>' +
@@ -59,7 +63,7 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
 
     var fields = $('#customize-dialog input[data-name]'),
         defaults = {
-            bannerSpace: 0, bannerText: 'Purple CableCom', bannerDark: false, topbarVisible: true
+            bannerSpace: 0, bannerText: 'Purple CableCom', bannerDark: false, topbarVisible: true, url: ''
         },
         presets = [
             { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA' }, // blue
@@ -71,7 +75,8 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
             { topbarColor: '#424242', selectionColor: '#39A9E1', linkColor: '#0088cc' }, // 7.4.2
             { topbarColor: '#4a9dae', selectionColor: '#bd1e02', linkColor: '#077271' }, // cyan/red
             { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700' }, // gray/orange
-            { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700', bannerSpace: 5, topbarVisible: false }, // gray/orange
+            { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700', bannerSpace: 3, topbarVisible: false }, // gray/orange
+            { topbarColor: '#736f71', selectionColor: '#707274', linkColor: '#cc2c20', bannerSpace: 3, topbarVisible: false }, // gray/red
             { topbarColor: '#e6be0a', selectionColor: '#7c7775', linkColor: '#8b898c', bannerSpace: 3, topbarVisible: false, bannerDark: true }, // yellow
             { topbarColor: '#98631e', selectionColor: '#90956b', linkColor: '#ba7a30' }  // brown/green
         ],
@@ -82,7 +87,11 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         $('#customize-css').text(
             // UI
             '#customize-dialog { right: 10px; left: auto; top: 45px; }\n' +
-            '#customize-text { position: absolute; top: 0; left: 0; width: 100%; color: ' + model.get('topbarColor') + '; font-weight: bold; padding: 0 10px; }\n' +
+            '#customize-text {\n' +
+            '  position: absolute; top: 0; left: 0; width: 100%; color: ' + model.get('topbarColor') + '; font-weight: 300; padding: 0 10px;\n' +
+            '  background-position: right; background-origin: content-box; background-repeat: no-repeat;\n' +
+            '}\n' +
+            '#customize-text:empty { background-position: left; }\n' +
             // top bar
             '#io-ox-top-logo-small { cursor: pointer; }\n' +
             '#io-ox-topbar { background-color: ' + model.get('topbarColor') + '; }\n' +
@@ -123,9 +132,9 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
     // Banner space
     //
     model.on('change:bannerSpace', function (model, value) {
-        value = value === 0 ? 0 : 40 + value * 6;
+        value = value === 0 ? 0 : 30 + 20 + value * 5;
         $('#io-ox-core').css('top', value);
-        $('#customize-text').css({ fontSize: Math.floor(value / 3.0) + 'px', lineHeight: value + 'px' });
+        $('#customize-text').css({ fontSize: Math.floor(value / 3.0) + 'px', lineHeight: (value - 20) + 'px', height: value + 'px', padding: '10px' });
     });
 
     //
@@ -149,6 +158,14 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
     //
     model.on('change:bannerDark', function (model, value) {
         $('#customize-text').css('backgroundColor', value ? '#333' : '');
+    });
+
+    //
+    // Logo
+    //
+    model.on('change:url', function (model, value) {
+        url = value;
+        updateLogo();
     });
 
     //
@@ -208,8 +225,6 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
             $('#customize-text').css({
                 backgroundImage: 'url(' + url + ')',
                 backgroundSize: 'contain',
-                backgroundPosition: 'right',
-                backgroundRepeat: 'no-repeat'
             });
         } else {
             $('#customize-text').css({
@@ -231,7 +246,7 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
 
     // on change text
     fields.filter('[data-name="bannerText"]').on('input', function () {
-        var value = $(this).val() || 'Purple CableCom';
+        var value = $(this).val();
         model.set('bannerText', value);
     });
 
@@ -259,7 +274,7 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         var reader = new FileReader();
         reader.onload = function() {
             url = reader.result;
-            updateLogo();
+            if (url.length <= 64 * 1024) model.set('url', url); else updateLogo();
             file = reader = null;
         };
         reader.readAsDataURL(file);
@@ -267,7 +282,7 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
 
     $('#customize-dialog button').on('click', function () {
         url = '';
-        updateLogo();
+        model.set('url', '');
         $('#customize-dialog input[type="file"]').val('');
     });
 
@@ -279,6 +294,23 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         applyPreset(index);
     });
 
+    //
+    // Simple store/restore
+    //
+
+    $('#customize-dialog .store-model').on('click', function (e) {
+        e.preventDefault();
+        if (!Modernizr.localstorage) return;
+        localStorage.setItem('customize/clipboard', JSON.stringify(model.toJSON()));
+    });
+
+    $('#customize-dialog .restore-model').on('click', function (e) {
+        e.preventDefault();
+        if (!Modernizr.localstorage) return;
+        var data = localStorage.getItem('customize/clipboard');
+        if (data) model.set(JSON.parse(data));
+    });
+
     initialize();
 
     // debugging
@@ -286,7 +318,9 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         model: model,
         colors: function () {
             console.log('{ topbarColor: \'%s\', selectionColor: \'%s\', linkColor: \'%s\' }', model.get('topbarColor'), model.get('selectionColor'), model.get('linkColor'));
+        },
+        reset: function () {
+            settings.set('customize/presets/default', {}).save();
         }
     };
-
 });
