@@ -26,7 +26,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         '    <div class="modal-content">' +
         '      <div class="modal-header">' +
         '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-        '        <h5 class="modal-title">Customize</h5>' +
+        '        <h5 class="modal-title">Customization Wizard</h5>' +
         '      </div>' +
         '      <div class="modal-body">' +
         '        <form>' +
@@ -72,7 +72,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             { topbarColor: '#587a20', selectionColor: '#606961', linkColor: '#608e21' }, // green
             { topbarColor: '#992019', selectionColor: '#af1916', linkColor: '#ad1c13' }, // red
             { topbarColor: '#474243', selectionColor: '#656465', linkColor: '#377fb5' }, // gray
-            { topbarColor: '#728a88', selectionColor: '#5f5e5e', linkColor: '#4fa8a6', headerSize: 4, headerDark: true }, // cyan
+            { topbarColor: '#179aa8', selectionColor: '#5f5e5e', linkColor: '#179ca9', headerColor: '#f05921', headerSize: 4, headerDark: true }, // cyan
             { topbarColor: '#88356f', selectionColor: '#772475', linkColor: '#785194', headerSize: 4, headerColor: '#555555', topbarVisible: false }, // pink
             { topbarColor: '#424242', selectionColor: '#39A9E1', linkColor: '#0088cc' }, // 7.4.2
             { topbarColor: '#4a9dae', selectionColor: '#bd1e02', linkColor: '#077271' }, // cyan/red
@@ -321,7 +321,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         model: model,
         colors: function () {
             console.log(
-                '{ topbarColor: \'%s\', selectionColor: \'%s\', linkColor: \'%s\', headerColor: \'%s\'}',
+                '{ topbarColor: \'%s\', selectionColor: \'%s\', linkColor: \'%s\', headerColor: \'%s\' }',
                 model.get('topbarColor'), model.get('selectionColor'), model.get('linkColor'), model.get('headerColor')
             );
         },
