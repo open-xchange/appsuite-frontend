@@ -28,25 +28,35 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
         '        <h5 class="modal-title">Customization Wizard</h5>' +
         '      </div>' +
-        '      <div class="modal-body">' +
-        '        <form>' +
-        '          <div class="form-group"><label>Top-bar color</label><br><input type="color" data-name="topbarColor"></div>' +
-        '          <div class="form-group"><label>Selection color</label><br><input type="color" data-name="selectionColor"></div>' +
-        '          <div class="form-group"><label>Link color</label><br><input type="color" data-name="linkColor"></div>' +
-        '          <div class="form-group"><label>Header size</label><br><input type="range" min="0" max="10" data-name="headerSize"></div>' +
-        '          <div class="form-group"><label>Header text</label><br><input type="text" class="form-control" data-name="headerText"></div>' +
-        '          <div class="form-group"><label>Header color</label><br><input type="color" data-name="headerColor"></div>' +
-        '          <div class="form-group">' +
-        '               <label><input type="checkbox" data-name="headerDark"> Dark header</label><br/>' +
-        '               <label><input type="checkbox" checked="checked" data-name="topbarVisible"> Show top-bar</label>' +
-        '          </div>' +
-        '          <div class="form-group"><div class="btn-group"><span class="btn btn-default btn-file">Upload logo<input type="file" class="file-input"></span><button type="button" class="btn btn-default clear-logo">&times;</button></div></div>' +
-        '          <div class="form-group">' +
-        '            <a href="#" class="apply-preset">Browse presets</a> &mdash; ' +
-        '            <a href="#" class="store-model">Store</a> &mdash; ' +
+        '      <div class="modal-body container-fluid">' +
+        '        <div class="row form-group">' +
+        '          <div class="col-xs-4 text-left"><label>Top-bar</label><br><input type="color" data-name="topbarColor"></div>' +
+        '          <div class="col-xs-4 text-center"><label>Selection</label><br><input type="color" data-name="selectionColor"></div>' +
+        '          <div class="col-xs-4 text-right"><label>Links</label><br><input type="color" data-name="linkColor"></div>' +
+        '        </div>' +
+        '        <div class="row form-group">' +
+        '          <div class="col-xs-12"><label>Header size</label><br><input type="range" min="0" max="10" data-name="headerSize"></div>' +
+        '        </div>' +
+        '        <div class="row form-group">' +
+        '          <div class="col-xs-12"><label>Header text</label><br><input type="text" class="form-control" data-name="headerText"></div>' +
+        '        </div>' +
+        '        <div class="row form-group">' +
+        '          <div class="col-xs-6"><label>Header color</label><br><input type="color" data-name="headerColor"></div>' +
+        '          <div class="col-xs-6 text-right"><label>Background</label><br><input type="color" data-name="headerBackground"></div>' +
+        '        </div>' +
+        '        <div class="row form-group">' +
+        '          <div class="col-xs-12"><label><input type="checkbox" checked="checked" data-name="topbarVisible"> Show top-bar</label></div>' +
+        '        </div>' +
+        '        <div class="row form-group">' +
+        '          <div class="col-xs-12"><div class="btn-group"><span class="btn btn-default btn-file">Upload logo<input type="file" class="file-input"></span><button type="button" class="btn btn-default clear-logo">&times;</button></div></div>' +
+        '        </div>' +
+        '        <div class="row form-group">' +
+        '          <div class="col-xs-6 text-left"><a href="#" class="apply-preset">Browse presets</a></div>' +
+        '          <div class="col-xs-6 text-right">' +
+        '            <a href="#" class="store-model">Store</a> &bull; ' +
         '            <a href="#" class="restore-model">Restore</a>' +
         '          </div>' +
-        '        </form>' +
+        '        </div>' +
         '      </div>' +
         '    </div>' +
         '  </div>' +
@@ -65,14 +75,14 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
 
     var fields = $('#customize-dialog input[data-name]'),
         defaults = {
-            headerSize: 0, headerText: 'Purple CableCom', headerColor: '#aaaaaa', headerDark: false, topbarVisible: true, url: ''
+            headerSize: 0, headerText: 'Purple CableCom', headerColor: '#aaaaaa', headerBackground: '#ffffff', topbarVisible: true, url: ''
         },
         presets = [
             { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA' }, // blue
             { topbarColor: '#587a20', selectionColor: '#606961', linkColor: '#608e21' }, // green
             { topbarColor: '#992019', selectionColor: '#af1916', linkColor: '#ad1c13' }, // red
             { topbarColor: '#474243', selectionColor: '#656465', linkColor: '#377fb5' }, // gray
-            { topbarColor: '#179aa8', selectionColor: '#5f5e5e', linkColor: '#179ca9', headerColor: '#f05921', headerSize: 4, headerDark: true }, // cyan
+            { topbarColor: '#18a0ae', selectionColor: '#1baebd', linkColor: '#e84f1b', headerSize: 4, headerColor: '#ffffff', headerBackground: '#0f6b75' }, // cyan
             { topbarColor: '#88356f', selectionColor: '#772475', linkColor: '#785194', headerSize: 4, headerColor: '#555555', topbarVisible: false }, // pink
             { topbarColor: '#424242', selectionColor: '#39A9E1', linkColor: '#0088cc' }, // 7.4.2
             { topbarColor: '#4a9dae', selectionColor: '#bd1e02', linkColor: '#077271' }, // cyan/red
@@ -80,7 +90,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700' }, // gray/orange
             { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700', headerSize: 3, headerColor: '#d24518', topbarVisible: false }, // gray/orange
             { topbarColor: '#736f71', selectionColor: '#707274', linkColor: '#cc2c20', headerSize: 3, headerColor: '#555555', topbarVisible: false }, // gray/red
-            { topbarColor: '#484547', selectionColor: '#7c7775', linkColor: '#8b898c', headerSize: 3, headerColor: '#ffe600', topbarVisible: true, headerDark: true } // yellow
+            { topbarColor: '#625e61', selectionColor: '#585453', linkColor: '#6388ba', headerSize: 3, headerColor: '#ffe600', headerBackground: '#454244' } // yellow
         ],
         current = 0,
         model = new Backbone.Model();
@@ -90,7 +100,8 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             // UI
             '#customize-dialog { right: 10px; left: auto; top: 45px; }\n' +
             '#customize-text {\n' +
-            '  position: absolute; top: 0; left: 0; width: 100%; color: ' + model.get('headerColor') + '; font-weight: 300; padding: 0 10px;\n' +
+            '  position: absolute; top: 0; left: 0; width: 100%; font-weight: 300; padding: 0 10px;\n' +
+            '  color: ' + model.get('headerColor') + '; background-color: ' + model.get('headerBackground') + ';\n' +
             '  background-position: right; background-origin: content-box; background-repeat: no-repeat; z-index: 0;\n' +
             '}\n' +
             '#customize-text:empty { background-position: left; }\n' +
@@ -129,7 +140,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
     //
     // Colors
     //
-    model.on('change:topbarColor change:selectionColor change:linkColor change:headerColor', updateStylesheet);
+    model.on('change:topbarColor change:selectionColor change:linkColor change:headerColor change:headerBackground', updateStylesheet);
 
     //
     // header size
@@ -155,13 +166,6 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         $('#io-ox-topbar').toggle(value);
         $('#io-ox-screens').css({ top: value ? 40 : 0, borderTop: value ? 'none' : '1px solid #ccc' });
         updateLogo();
-    });
-
-    //
-    // Top-bar dark
-    //
-    model.on('change:headerDark', function (model, value) {
-        $('#customize-text').css('backgroundColor', value ? '#333' : '');
     });
 
     //
@@ -255,13 +259,6 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         model.set('topbarVisible', state);
     });
 
-    // on change checkbox
-    fields.filter('[data-name="headerDark"]').on('change', function () {
-        var state = $(this).prop('checked');
-        model.set('headerDark', state);
-        if (state && model.get('headerSize') === 0) model.set('headerSize', 3);
-    });
-
     // on select file
     $('#customize-dialog input[type="file"]').on('change', function () {
 
@@ -321,8 +318,8 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         model: model,
         colors: function () {
             console.log(
-                '{ topbarColor: \'%s\', selectionColor: \'%s\', linkColor: \'%s\', headerColor: \'%s\' }',
-                model.get('topbarColor'), model.get('selectionColor'), model.get('linkColor'), model.get('headerColor')
+                '{ topbarColor: \'%s\', selectionColor: \'%s\', linkColor: \'%s\', headerColor: \'%s\', headerBackground: \'%s\' }',
+                model.get('topbarColor'), model.get('selectionColor'), model.get('linkColor'), model.get('headerColor'), model.get('headerBackground')
             );
         },
         reset: function () {
