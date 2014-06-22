@@ -39,7 +39,7 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         '               <label><input type="checkbox" data-name="bannerDark"> Dark banner</label><br/>' +
         '               <label><input type="checkbox" checked="checked" data-name="topbarVisible"> Show top-bar</label>' +
         '          </div>' +
-        '          <div class="form-group"><div class="btn-group"><span class="btn btn-default btn-file">Upload logo<input type="file" class="file-input"></span><button type="button" class="btn btn-default">&times;</button></div></div>' +
+        '          <div class="form-group"><div class="btn-group"><span class="btn btn-default btn-file">Upload logo<input type="file" class="file-input"></span><button type="button" class="btn btn-default clear-logo">&times;</button></div></div>' +
         '          <div class="form-group">' +
         '            <a href="#" class="apply-preset">Browse presets</a> &mdash; ' +
         '            <a href="#" class="store-model">Store</a> &mdash; ' +
@@ -51,7 +51,8 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         '  </div>' +
         '</div>' +
         '<div id="customize-text">Purple CableCom</div>' +
-        '<style id="customize-css"></style>'
+        '<style id="customize-css"></style>' +
+        '<style id="customize-logo"></style>'
     );
 
     $('#customize-dialog').modal({ backdrop: false, keyboard: true, show: false });
@@ -88,10 +89,12 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
             // UI
             '#customize-dialog { right: 10px; left: auto; top: 45px; }\n' +
             '#customize-text {\n' +
-            '  position: absolute; top: 0; left: 0; width: 100%; color: ' + model.get('topbarColor') + '; font-weight: 300; padding: 0 10px;\n' +
-            '  background-position: right; background-origin: content-box; background-repeat: no-repeat;\n' +
+            '  position: absolute; top: 0; left: 0; width: 100%; color: ' + model.get('linkColor') + '; font-weight: 300; padding: 0 10px;\n' +
+            '  background-position: right; background-origin: content-box; background-repeat: no-repeat; z-index: 0;\n' +
             '}\n' +
             '#customize-text:empty { background-position: left; }\n' +
+            '.hide-small-logo #io-ox-top-logo-small { display: none; }\n' +
+            '#io-ox-core { z-index: 1; }\n' +
             // top bar
             '#io-ox-top-logo-small { cursor: pointer; }\n' +
             '#io-ox-topbar { background-color: ' + model.get('topbarColor') + '; }\n' +
@@ -135,6 +138,7 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         value = value === 0 ? 0 : 30 + 20 + value * 5;
         $('#io-ox-core').css('top', value);
         $('#customize-text').css({ fontSize: Math.floor(value / 3.0) + 'px', lineHeight: (value - 20) + 'px', height: value + 'px', padding: '10px' });
+        updateLogo(); // maybe we need to toggle the banner logo
     });
 
     //
@@ -150,7 +154,7 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
     model.on('change:topbarVisible', function (model, value) {
         $('#io-ox-topbar').toggle(value);
         $('#io-ox-screens').css({ top: value ? 40 : 0, borderTop: value ? 'none' : '1px solid #ccc' });
-        additionalLogo();
+        updateLogo();
     });
 
     //
@@ -201,35 +205,28 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
             img.src = url;
             ratio = 40 / img.height;
             // apply logo
-            $('#io-ox-top-logo-small').css({
-                backgroundImage: 'url(' + url + ')',
-                backgroundSize: 'contain',
-                height: 40,
-                margin: '0 10px',
-                width: Math.floor(img.width * ratio)
-            });
+            $('#customize-logo').text(
+                '#io-ox-top-logo-small {' +
+                '  background-image: url(' + url + ') !important;' +
+                '  background-size: contain; height: 40px; margin: 0 10px;' +
+                '  width: ' + Math.floor(img.width * ratio) + 'px;' +
+                '}'
+            );
         } else {
-            $('#io-ox-top-logo-small').css({
-                backgroundImage: '',
-                height: '',
-                margin: '',
-                width: ''
-            });
+            $('#customize-logo').text('');
         }
         // update additional logo
-        additionalLogo();
-    }
-
-    function additionalLogo() {
-        if (url !== '' && model.get('topbarVisible') === false) {
+        if (url !== '' && model.get('bannerSpace') > 0) {
             $('#customize-text').css({
                 backgroundImage: 'url(' + url + ')',
                 backgroundSize: 'contain',
             });
+            $('html').addClass('hide-small-logo');
         } else {
             $('#customize-text').css({
                 backgroundImage: 'none'
             });
+            $('html').removeClass('hide-small-logo');
         }
     }
 
@@ -280,7 +277,7 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         reader.readAsDataURL(file);
     });
 
-    $('#customize-dialog button').on('click', function () {
+    $('#customize-dialog .clear-logo').on('click', function () {
         url = '';
         model.set('url', '');
         $('#customize-dialog input[type="file"]').val('');
