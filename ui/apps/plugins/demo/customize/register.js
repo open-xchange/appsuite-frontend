@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/demo/customize/register', ['settings!io.ox/core'], function (settings) {
+define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings!io.ox/core'], function (notifications, settings) {
 
     'use strict';
 
@@ -59,8 +59,8 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
     $('#customize-dialog').modal({ backdrop: false, keyboard: true, show: false });
 
     // show modal dialog
-    $(document).on('click', '#io-ox-top-logo-small, #customize-text', function () {
-        $('#customize-dialog').modal('toggle');
+    $(document).on('click', '#io-ox-top-logo-small, #customize-text', function (e) {
+        if (e.altKey) $('#customize-dialog').modal('toggle');
     });
 
     var fields = $('#customize-dialog input[data-name]'),
@@ -97,7 +97,6 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
             '.hide-small-logo #io-ox-top-logo-small { display: none; }\n' +
             '#io-ox-core { z-index: 1; }\n' +
             // top bar
-            '#io-ox-top-logo-small { cursor: pointer; }\n' +
             '#io-ox-topbar { background-color: ' + model.get('topbarColor') + '; }\n' +
             // selection
             '.list-view.visible-selection.has-focus .list-item.selected,\n' +
@@ -179,8 +178,9 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
     model.on('change', function (model) {
         // update fields
         _(model.changed).each(function (value, name) {
-            var field = fields.filter('[data-name="' + name + '"]');
-            if (field.attr('type') === 'checkbox') field.prop('checked', value); else field.val(value);
+            var field = fields.filter('[data-name="' + name + '"]'), current = field.val();
+            if (field.attr('type') === 'checkbox') field.prop('checked', value);
+            else if (current !== value) field.val(value);
         });
         // save
         settings.set('customize/presets/default', model.toJSON()).save();
@@ -300,6 +300,11 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
         e.preventDefault();
         if (!Modernizr.localstorage) return;
         localStorage.setItem('customize/clipboard', JSON.stringify(model.toJSON()));
+        notifications.yell({
+            type: 'success',
+            message: 'Current customizations have been stored in your local browser cache. You can login with another user and use "Restore" to share customizations across different users.',
+            duration: -1
+        });
     });
 
     $('#customize-dialog .restore-model').on('click', function (e) {
@@ -321,6 +326,7 @@ define('plugins/demo/customize/register', ['settings!io.ox/core'], function (set
             );
         },
         reset: function () {
+            applyPreset(0);
             settings.set('customize/presets/default', {}).save();
         }
     };
