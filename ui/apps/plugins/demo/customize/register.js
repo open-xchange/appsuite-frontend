@@ -78,7 +78,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
 
     var fields = $('#customize-dialog input[data-name]'),
         defaults = {
-            headerSize: 0, headerText: 'Purple CableCom', headerColor: '#aaaaaa', headerBackground: '#ffffff', topbarVisible: true, url: ''
+            headerSize: 0, headerText: '**Purple** |CableCom|', headerColor: '#aaaaaa', headerBackground: '#ffffff', topbarVisible: true, url: ''
         },
         presets = [
             { topbarColor: '#3774A8', selectionColor: '#428BCA', linkColor: '#428BCA' }, // blue
@@ -91,9 +91,9 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             { topbarColor: '#4a9dae', selectionColor: '#bd1e02', linkColor: '#077271' }, // cyan/red
             { topbarColor: '#98631e', selectionColor: '#90956b', linkColor: '#ba7a30' }, // brown/green
             { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700' }, // gray/orange
-            { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700', headerSize: 3, headerColor: '#d24518', topbarVisible: false }, // gray/orange
+            { topbarColor: '#5e595d', selectionColor: '#d2450a', linkColor: '#b84700', headerSize: 3, headerColor: '#d24518', topbarVisible: false, headerText: '**Purple** |||CableCom|||' }, // gray/orange
             { topbarColor: '#736f71', selectionColor: '#707274', linkColor: '#cc2c20', headerSize: 3, headerColor: '#555555', topbarVisible: false }, // gray/red
-            { topbarColor: '#625e61', selectionColor: '#585453', linkColor: '#6388ba', headerSize: 3, headerColor: '#ffe600', headerBackground: '#454244' } // yellow
+            { topbarColor: '#625e61', selectionColor: '#585453', linkColor: '#6388ba', headerSize: 3, headerColor: '#ffe600', headerBackground: '#454244', headerText: '**Purple** ||CableCom||' } // yellow
         ],
         current = 0,
         model = new Backbone.Model();
@@ -159,7 +159,14 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
     // header text
     //
     model.on('change:headerText', function (model, value) {
-        $('#customize-text').text(value);
+        // very simple markdown-ish support
+        value = _.escape(value)
+            .replace(/\*\*([^*]+)\*\*/g,        '<b>$1</b>')
+            .replace(/\*([^*]+)\*/g,            '<i>$1</i>')
+            .replace(/\|\|\|([^\|]+)\|\|\|/g,   '<span style="color: rgba(0, 0, 0, 0.5);">$1</span>')
+            .replace(/\|\|([^\|]+)\|\|/g,       '<span style="color: rgba(255, 255, 255, 0.5);">$1</span>')
+            .replace(/\|([^\|]+)\|/g,           '<span style="opacity: 0.5;">$1</span>');
+        $('#customize-text').html(value);
     });
 
     //
