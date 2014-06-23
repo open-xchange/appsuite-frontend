@@ -38,10 +38,59 @@ define('io.ox/portal/widgets',
     var widgets = (function () {
 
         var widgets = {},
-            userValues = settings.get('settings' + widgetSet, {});
+            userValues = settings.get('settings' + widgetSet, {}),
+            setDefaultWidgets = function () {
+                var defaultWidgets = {
+                    mail_0: {
+                        plugin: 'plugins/portal/mail/register',
+                        color: 'blue',
+                        userWidget: true,
+                        index: 1
+                    },
+                    calendar_0: {
+                        plugin: 'plugins/portal/calendar/register',
+                        color: 'red',
+                        userWidget: true,
+                        index: 2
+                    },
+                    tasks_0: {
+                        plugin: 'plugins/portal/tasks/register',
+                        color: 'green',
+                        userWidget: true,
+                        index: 3
+                    },
+                    birthdays_0: {
+                        plugin: 'plugins/portal/birthdays/register',
+                        color: 'lightgreen',
+                        userWidget: true,
+                        index: 4
+                    },
+                    facebook_0: {
+                        plugin: 'plugins/portal/facebook/register',
+                        color: 'blue',
+                        userWidget: true,
+                        index: 4
+                    },
+                    twitter_0: {
+                        plugin: 'plugins/portal/twitter/register',
+                        color: 'pink',
+                        userWidget: true,
+                        index: 5
+                    },
+                    linkedin_0: {
+                        plugin: 'plugins/portal/linkedin/register',
+                        color: 'lightblue',
+                        userWidget: true,
+                        index: 6
+                    }
+                };
+
+                settings.set('widgets/user', defaultWidgets).save();
+                return defaultWidgets;
+            };
 
         // Load the users widgets
-        _(settings.get('widgets/user', {})).each(function (widgetDef, id) {
+        _(settings.get('widgets/user') || setDefaultWidgets()).each(function (widgetDef, id) {
             widgets[id] = _.extend({}, widgetDef, {userWidget: true});
         });
 
@@ -75,57 +124,6 @@ define('io.ox/portal/widgets',
                 });
             }
         });
-
-        if (_.isEmpty(widgets)) {
-            // Fallback. No widgets configured and no ones saved previously.
-
-            widgets = {
-                mail_0: {
-                    plugin: 'plugins/portal/mail/register',
-                    color: 'blue',
-                    userWidget: true,
-                    index: 1
-                },
-                calendar_0: {
-                    plugin: 'plugins/portal/calendar/register',
-                    color: 'red',
-                    userWidget: true,
-                    index: 2
-                },
-                tasks_0: {
-                    plugin: 'plugins/portal/tasks/register',
-                    color: 'green',
-                    userWidget: true,
-                    index: 3
-                },
-                birthdays_0: {
-                    plugin: 'plugins/portal/birthdays/register',
-                    color: 'lightgreen',
-                    userWidget: true,
-                    index: 4
-                },
-                facebook_0: {
-                    plugin: 'plugins/portal/facebook/register',
-                    color: 'blue',
-                    userWidget: true,
-                    index: 4
-                },
-                twitter_0: {
-                    plugin: 'plugins/portal/twitter/register',
-                    color: 'pink',
-                    userWidget: true,
-                    index: 5
-                },
-                linkedin_0: {
-                    plugin: 'plugins/portal/linkedin/register',
-                    color: 'lightblue',
-                    userWidget: true,
-                    index: 6
-                }
-            };
-
-            settings.set('widgets/user', widgets).save();
-        }
 
         return widgets;
 
