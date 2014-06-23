@@ -15,6 +15,9 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
 
     'use strict';
 
+    // exclude smartphones
+    if (_.device('small')) return;
+
     //
     // This is quick & dirty code. Don't adopt this style for productive use.
     //
