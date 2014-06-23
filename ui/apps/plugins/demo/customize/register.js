@@ -20,6 +20,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
 
     //
     // This is quick & dirty code. Don't adopt this style for productive use.
+    // For Interal use only! No i18n, no a11y support, latest Chrome/Firefox only!
     //
 
     // add model dialog
