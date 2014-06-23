@@ -26,6 +26,10 @@ define('io.ox/core/folder/selection', [], function () {
 
     _.extend(Selection.prototype, {
 
+        get: function () {
+            return this.view.$el.find('.selectable.selected').attr('data-id');
+        },
+
         onClick: function (e) {
 
             var items = this.getItems(),
@@ -41,8 +45,10 @@ define('io.ox/core/folder/selection', [], function () {
         },
 
         onKeydown: function (e) {
-            switch (e.which) {
+            // bubbling?
+            if (!$(e.target).hasClass('selectable')) return;
             // cursor up/down
+            switch (e.which) {
             case 38:
             case 40:
                 this.onCursorUpDown(e);

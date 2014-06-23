@@ -14,15 +14,21 @@
 define('io.ox/core/folder/tree',
     ['io.ox/core/folder/view',
      'io.ox/core/folder/selection',
+     'io.ox/core/api/folder',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
-     'less!io.ox/core/folder/style'], function (FolderView, Selection, account, ext) {
+     'less!io.ox/core/folder/style'], function (FolderView, Selection, api, account, ext) {
 
     'use strict';
 
     var FolderTreeView = Backbone.View.extend({
 
         className: 'folder-tree bottom-toolbar abs',
+
+        events: {
+            'click .contextmenu-control': 'onToggleContextMenu',
+            'keydown .contextmenu-control': 'onKeydown',
+        },
 
         initialize: function (options) {
 
@@ -36,9 +42,7 @@ define('io.ox/core/folder/tree',
             this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
 
             // add contextmenu?
-            if (this.contextmenu) {
-
-            }
+            if (this.contextmenu) this.renderContextMenu();
         },
 
         filter: function (folder, model) {
@@ -56,6 +60,74 @@ define('io.ox/core/folder/tree',
                 options.subfolders = false;
             }
             return options;
+        },
+
+        onToggleContextMenu: function (e) {
+
+            var dropdown = this.$el.find('.context-dropdown'),
+                isOpen = dropdown.hasClass('open'),
+                target = $(e.currentTarget);
+
+            _.defer(function () {
+
+                if (isOpen) return dropdown.removeClass('open');
+
+                this.renderContextMenuItems();
+
+                var offset = target.offset(),
+                    top = offset.top - 7,
+                    left = offset.left + target.outerWidth() + 7;
+
+                dropdown.find('.dropdown-menu').css({ top: top, left: left });
+                dropdown.addClass('open').data('previous-focus', target); // helps to restore focus (see renderContextMenu)
+
+            }.bind(this));
+        },
+
+        onKeydown: function (e) {
+
+            var dropdown = this.$el.find('.context-dropdown');
+            if (!dropdown.hasClass('open')) return; // done if not open
+            if (e.shiftKey && e.which === 9) return; // shift-tab
+
+            switch (e.which) {
+            case 9:  // tab
+            case 40: // cursor down
+                e.preventDefault();
+                return dropdown.find('.dropdown-menu > li:first > a').focus();
+            case 38: // cursor up
+                e.preventDefault();
+                return dropdown.find('.dropdown-menu > li:last > a').focus();
+            case 27: // escape
+                return dropdown.find('.dropdown-toggle').dropdown('toggle');
+            }
+        },
+
+        renderContextMenuItems: function () {
+            var id = this.selection.get(),
+                app = this.app,
+                ul = this.$el.find('.context-dropdown .dropdown-menu').empty(),
+                point = 'io.ox/' + this.module + '/folderview/sidepanel/context-menu';
+            // get folder data and redraw
+            api.get({ folder: id }).done(function (data) {
+                var baton = new ext.Baton({ app: app, data: data });
+                ext.point(point).invoke('draw', ul, baton);
+            });
+        },
+
+        renderContextMenu: function () {
+            this.$el.append(
+                $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
+                    $('<div class="abs context-dropdown-overlay">'),
+                    $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
+                    $('<ul class="dropdown-menu" role="menu">')
+                )
+                .on('hidden.bs.dropdown', function () {
+                    // restore focus
+                    var node = $(this).data('previous-focus');
+                    if (node) node.parent().focus();
+                })
+            );
         },
 
         render: function () {

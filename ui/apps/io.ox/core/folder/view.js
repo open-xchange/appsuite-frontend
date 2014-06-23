@@ -212,7 +212,7 @@ define('io.ox/core/folder/view', ['io.ox/core/folder/api', 'gettext!io.ox/core']
 
         renderContextControl: function () {
             this.$.selectable.append(
-                $('<a href="#" role="button" class="folder-options" tabindex="1">')
+                $('<a href="#" role="button" class="folder-options contextmenu-control" tabindex="1">')
                 .attr('title', gt('Folder-specific actions'))
                 .append($('<i class="fa fa-cog">'))
             );
