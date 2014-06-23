@@ -156,6 +156,23 @@ define('plugins/portal/xing/activities',
         }
     });
 
+    ext.point('io.ox/portal/widget/xing/activityhandler').extend({
+        id: 'singleCompanyProfileUpdate',
+        accepts: function (activity) {
+            return (activity.verb === 'share' || activity.verb === 'post')&&
+                activity.objects.length === 1 &&
+                activity.objects[0].type === 'company_profile_update';
+        },
+        handle: function (activity) {
+            var profileUpdate = activity.objects[0];
+
+            return $('<div class="xing activityObj">').append(
+                $('<div class="actionDesc">').text(gt('%1$s updated their profile:', profileUpdate.description)),
+                $('<div class="actionContent">').text(profileUpdate.name)
+            );
+        }
+    });
+
 
     ext.point('io.ox/portal/widget/xing/activityhandler').extend({
         id: 'singleUpdate',
