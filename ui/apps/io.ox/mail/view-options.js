@@ -86,6 +86,11 @@ define('io.ox/mail/view-options',
             i.attr('class', 'fa fa-check-square-o');
             selection.selectAll();
         }
+
+        e.data.baton.view.listView.on('selection:empty', function () {
+            i.removeClass('fa fa-check-square-o');
+            i.addClass('fa fa-square-o');
+        });
     }
 
     ext.point('io.ox/mail/list-view/toolbar/top').extend({
