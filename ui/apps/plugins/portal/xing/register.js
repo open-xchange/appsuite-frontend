@@ -200,7 +200,6 @@ define('plugins/portal/xing/register',
                 activityNode.attr('data-activity-id', id);
             }
 
-            newsItemCount++;
 
             ext.point('io.ox/portal/widget/xing/activityhandler').each(function (handler) {
                 if (handler.accepts(activity)) {
@@ -227,13 +226,16 @@ define('plugins/portal/xing/register',
                     });
                 });
                 reactionNode.appendTo(activityNode);
-
+                newsItemCount++;
 
             } else {
                 console.log('Could not find a handler for the following activity: ' + activity.verb + '. Please let us know about this. Here is some data that would help us: ', JSON.stringify(activity));
             }
-
         });
+
+        if (newsItemCount.length === 0) {
+            node.text(gt('There is no recent activity in your Xing network.'));
+        }
         return node;
     };
 
