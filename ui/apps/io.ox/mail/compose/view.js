@@ -15,6 +15,7 @@
 
 define('io.ox/mail/compose/view',
     ['io.ox/mail/compose/extensions',
+     'io.ox/backbone/mini-views/dropdown',
      'io.ox/core/extensions',
      'io.ox/mail/api',
      'io.ox/mail/util',
@@ -29,7 +30,7 @@ define('io.ox/mail/compose/view',
      'io.ox/core/api/account',
      'gettext!io.ox/mail',
      'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js'
-    ], function (extensions, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, emoji, settings, coreSettings, notifications, autocomplete, AutocompleteAPI, accountAPI, gt) {
+    ], function (extensions, Dropdown, ext, mailAPI, mailUtil, contactsAPI, contactsUtil, emoji, settings, coreSettings, notifications, autocomplete, AutocompleteAPI, accountAPI, gt) {
 
     'use strict';
 
@@ -72,32 +73,74 @@ define('io.ox/mail/compose/view',
         draw: extensions.subject
     });
 
-    ext.point(POINT + '/toolbar').extend({
+    ext.point(POINT + '/composetoolbar').extend({
         id: 'attachment',
         index: INDEX += 100,
         draw: extensions.attachment
     });
 
-    ext.point(POINT + '/toolbar').extend({
+    ext.point(POINT + '/composetoolbar').extend({
         id: 'signature',
         index: INDEX += 100,
         draw: extensions.signature
     });
 
-     ext.point(POINT + '/toolbar').extend({
-        id: 'menu',
-        index: INDEX += 100,
-        draw: extensions.menu
+    ext.point(POINT + '/menuoptions').extend({
+        id: 'editor',
+        index: 100,
+        draw: function () {
+            this.data('view')
+                .header(gt('Editor'))
+                .option('editorMode', 'text', gt('Plain Text'))
+                .option('editorMode', 'html', gt('Rich Text'));
+        }
     });
 
+    ext.point(POINT + '/menuoptions').extend({
+        id: 'priority',
+        index: 200,
+        draw: function () {
+            this.data('view')
+                .header(gt('Priority'))
+                .option('priority', 0, gt('Low'))
+                .option('priority', 3, gt('Normal'))
+                .option('priority', 5, gt('High'));
+        }
+    });
 
+    ext.point(POINT + '/menuoptions').extend({
+        id: 'options',
+        index: 300,
+        draw: function () {
+            this.data('view')
+                .header(gt('Options'))
+                .option('vcard', 1, gt('Attach Vcard'))
+                .option('disp_notification_to', true, gt('Delivery Receipt'));
+        }
+    });
+
+    ext.point(POINT + '/composetoolbar').extend({
+        id: 'menu',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var dropdown = new Dropdown({ label: gt('Options'), model: baton.model });
+
+            ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
+
+            this.append(
+                $('<div class="col-xs-6 col-md-4">').append(
+                    dropdown.render().$el.addClass('pull-right')
+                )
+            );
+        }
+    });
 
     ext.point(POINT + '/fields').extend({
-        id: 'optiontoolbar',
+        id: 'composetoolbar',
         index: INDEX += 100,
         draw: function (baton) {
             var node = $('<div class="row">');
-            ext.point(POINT + '/toolbar').invoke('draw', node, baton);
+            ext.point(POINT + '/composetoolbar').invoke('draw', node, baton);
             this.append(node);
         }
     });

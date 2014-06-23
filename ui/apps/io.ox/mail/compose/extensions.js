@@ -90,7 +90,7 @@ define('io.ox/mail/compose/extensions',
 
         sender: function (baton) {
 
-            var node = $('<div class="row" data-extension-id="sender">');
+          /*  var node = $('<div class="row" data-extension-id="sender">');
 
             var dropdown = new SenderDropdown({ model: baton.model, label: gt('From') });
 
@@ -104,7 +104,7 @@ define('io.ox/mail/compose/extensions',
                 }
             });
 
-            this.append(node);
+            this.append(node);*/
         },
         to: function () {
             this.append(
@@ -150,32 +150,9 @@ define('io.ox/mail/compose/extensions',
                 )
             );
         },
-        menu: function (baton) {
-            var dropdown = new Dropdown({ model: baton.model, label: gt('Options'), tagName: 'span' })
-            .header(gt('Editor'))
-            .option('text', true, gt('Plain Text'))
-            .option('html', true, gt('Rich Text'))
-            .header(gt('Priority'))
-            .option('priority', 0, gt('Low'))
-            .option('priority', 3, gt('Normal'))
-            .option('priority', 5, gt('High'))
-            .header(gt('Options'))
-            .option('vcard', 1, gt('Attach Vcard'))
-            .option('disp_notification_to', true, gt('Delivery Receipt'));
-
-            this.append(
-                $('<div class="col-xs-6 col-md-4">').append(
-                    dropdown.$el
-                        .addClass('pull-right')
-                        .attr('data-dropdown', 'view')
-                )
-            );
-
-            baton.model.on('change', dropdown.render());
-        },
         signature: function (baton) {
             var dropdown = new Dropdown({ model: baton.model, label: gt('Signature'), tagName: 'span' })
-                .option('singature', false, gt('No signature'));
+                .option('signature', false, gt('No signature'));
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
                 snippetAPI.getAll('signature').done(function (signatures) {
                     var sa = _.map(signatures, function (o) {
@@ -192,13 +169,11 @@ define('io.ox/mail/compose/extensions',
 
             this.append(
                 $('<div class="col-xs-6 col-md-4">').append(
-                    dropdown.$el
+                    dropdown.render().$el
                         .addClass('pull-right')
                         .attr('data-dropdown', 'signature')
                 )
             );
-
-            baton.model.on('change', dropdown.render());
         },
         attachment: function () {
             this.append(

@@ -22,6 +22,7 @@ define('io.ox/mail/compose/model',
 
     var MailModel = Backbone.Model.extend({
         defaults: {
+            editorMode: 'html',
             account_name: '',
             attachment: '',
             attachments: [],
@@ -36,7 +37,6 @@ define('io.ox/mail/compose/model',
             folder_id: 'default0/INBOX',
             from: [],
             headers: {},
-            id: '',
             infostore_ids: [],
             level: '',
             modified: '',
