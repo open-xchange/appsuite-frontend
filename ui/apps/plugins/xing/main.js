@@ -19,15 +19,20 @@ define('plugins/xing/main',
      'io.ox/xing/api',
      'io.ox/core/extPatterns/links',
      'io.ox/core/notifications',
+     'io.ox/keychain/api',
      'gettext!plugins/portal'
-    ], function (Stage, ext, date, api, links, notifications, gt) {
+    ], function (Stage, ext, date, api, links, notifications, keychain, gt) {
 
     'use strict';
 
     var XING_NAME = gt('XING'),
-        isAlreadyOnXing;
+        isAlreadyOnXing,
+        hasXingAccount;
 
 
+    hasXingAccount = function () {
+        return keychain.isEnabled('xing') && keychain.hasStandardAccount('xing');
+    };
 
     isAlreadyOnXing = function (emailArray) {
         return api.findByMail(emailArray).then(function (data) {
@@ -48,6 +53,11 @@ define('plugins/xing/main',
             var contact = e.baton.data,
                 arr = _.compact([contact.email1, contact.email2, contact.email3]),
                 def = $.Deferred();
+
+            if (! hasXingAccount()) {
+                def.resolve(false);
+                return def;
+            }
 
             isAlreadyOnXing(arr).done(function (isPresent) {
                 def.resolve(!isPresent);
@@ -78,6 +88,11 @@ define('plugins/xing/main',
             var contact = e.baton.data,
                 arr = _.compact([contact.email1, contact.email2, contact.email3]),
                 def = $.Deferred();
+
+            if (! hasXingAccount()) {
+                def.resolve(false);
+                return def;
+            }
 
             isAlreadyOnXing(arr).done(function (isPresent) {
                 def.resolve(isPresent);
