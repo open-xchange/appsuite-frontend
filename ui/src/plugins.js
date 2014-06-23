@@ -163,7 +163,7 @@
                 return;
             }
 
-            db.transaction(function (tx) {
+            db.transaction(function fetch(tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS version (version TEXT)');
                 tx.executeSql('SELECT 1 FROM version WHERE version = ?', [ox.version], function (tx, result) {
                     if (result.rows.length === 0) {
@@ -174,11 +174,13 @@
                     }
                     initialization.resolve();
                 });
+            }, function fetchFail() {
+                initialization.reject();
             });
 
             fileCache.retrieve = function (name) {
                 var def = $.Deferred();
-                initialization.done(function () {
+                initialization.then(function () {
                     db.transaction(
                         function fetch(tx) {
                             tx.executeSql(
@@ -199,7 +201,7 @@
                             def.reject();
                         }
                     );
-                });
+                }, def.reject);
                 return def;
             };
 
