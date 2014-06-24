@@ -22,7 +22,7 @@ define('io.ox/settings/main',
      'io.ox/core/settings/errorlog/settings/pane',
      'io.ox/core/settings/downloads/pane',
      'less!io.ox/settings/style'
-    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, advancedModeSettings) {
+    ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings) {
 
     'use strict';
 
@@ -78,7 +78,7 @@ define('io.ox/settings/main',
         // nodes
         left,
         right,
-        expertmode = advancedModeSettings.get('settings/advancedMode', false),
+        expertmode = coreSettings.get('settings/advancedMode', false),
         currentSelection = null,
         previousSelection = null;
 
@@ -246,13 +246,16 @@ define('io.ox/settings/main',
         });
 
         var getAllSettingsPanes = function () {
-            var def = $.Deferred();
+            var def = $.Deferred(),
+                disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
+
             appsInitialized.done(function () {
 
                 def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), function (point) {
-                    if (expertmode) {
+                    var shown = _.indexOf(disabledSettingsPanes, point.id) === -1 ? true : false;
+                    if (expertmode && shown) {
                         return true;
-                    } else if (!point.advancedMode) {
+                    } else if (!point.advancedMode && shown) {
                         return true;
                     }
                 }));
@@ -358,7 +361,7 @@ define('io.ox/settings/main',
                     .on('change', function () {
 
                         expertmode = checkbox.prop('checked');
-                        advancedModeSettings.set('settings/advancedMode', expertmode).save();
+                        coreSettings.set('settings/advancedMode', expertmode).save();
                         grid.setAllRequest(getAllSettingsPanes);
                         grid.paint();
                         updateExpertMode();
