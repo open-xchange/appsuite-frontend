@@ -9,17 +9,22 @@
 <link rel="prev" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="12.3. Permissions">
 <link rel="next" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html" title="12.3.2. Permissions for folders that already exist">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Legal Notice">
-<link rel="stylesheet" type="text/css" href="../../../apps/io.ox/core/bootstrap/css/bootstrap.min.css"​/> 
-
+<link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<div class="oxhelp-navigation-top"><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><ul class="nav">
-<a class="brand">Open-Xchange</a><li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.html">Prev</a></li>
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.rights.html">Prev</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Start Page</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Table Of Contents</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">Next</a></li>
-</ul></div></div></div>
+</ul></div>
+</div></nav></div>
 <div class="oxhelp-content">
   <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
@@ -27,18 +32,10 @@
 <div class="concept">
 <a name="ox.appsuite.user.concept.rights.roles"></a><p>In order to easily grant logical permission combinations, there are specific preset user roles: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>
-		<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Owner">Owner</a>
-	      </p></li>
-<li class="listitem"><p>
-              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">Administrator</a>
-            </p></li>
-<li class="listitem"><p>
-		<a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Author">Author</a>
-	      </p></li>
-<li class="listitem"><p>
-              <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="Guest">Guest</a>
-            </p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.owner" title="Owner">Owner</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.administrator" title="Administrator">Administrator</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.author" title="Author">Author</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.defined.html#ox.appsuite.user.concept.rights.roles.guest" title="Guest">Guest</a></p></li>
 </ul></div>
 <p>
       </p>
@@ -47,15 +44,15 @@
 <a name="ox.appsuite.user.concept.rights.roles.owner"></a><p><b>Owner </b>A folder's owner has all permissions for that folder. The owner can grant other users permissions to the folder.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Folder permissions: create objects and subfolders</p></li>
-<li class="listitem"><p>Object permissions: read all objects, edit all objects, and delete all objects</p></li>
+<li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
 <li class="listitem"><p>Administrative rights: Yes</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p><b>Administrator </b>A folder's administrator owns all permissions for this folder. The administrator can grant other users permissions for the folder.</p>
+<a name="ox.appsuite.user.concept.rights.roles.administrator"></a><p><b>Administrator </b>A folder's administrator owns all permissions for this folder. The owner can grant other users permissions to the folder.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Folder permissions: create objects and subfolders</p></li>
-<li class="listitem"><p>Object permissions: read all objects, edit all objects, and delete all objects</p></li>
+<li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
 <li class="listitem"><p>Administrative rights: Yes</p></li>
 </ul></div>
 </div>
@@ -63,7 +60,7 @@
 <a name="ox.appsuite.user.concept.rights.roles.author"></a><p><b>Author </b>An author is allowed to change objects that already exist, to create and edit new objects, and to create subfolders.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Folder permissions: create objects and subfolders</p></li>
-<li class="listitem"><p>Object permissions: read all objects, edit all objects, and delete all objects</p></li>
+<li class="listitem"><p>Object permissions: read all objects, edit all objects, delete all objects</p></li>
 <li class="listitem"><p>Administrative rights: No</p></li>
 </ul></div>
 </div>
