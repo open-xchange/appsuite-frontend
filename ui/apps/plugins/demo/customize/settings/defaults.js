@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
- define('plugins/demo/customize/settings/defaults.js', function () {
+ define('plugins/demo/customize/settings/defaults', function () {
 
     'use strict';
 

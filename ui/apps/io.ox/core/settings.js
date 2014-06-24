@@ -270,7 +270,12 @@ define('io.ox/core/settings',
                 if (detached || (!custom && _.isEqual(saved, tree))) return $.when();
 
                 var data = { tree: custom || tree, meta: meta };
+
+                // don't save undefined
+                if (data.tree === undefined) return $.when();
+
                 pending[path] = this;
+
                 if (opt.force) {
                     sendRequest(data.tree);
                 } else {
