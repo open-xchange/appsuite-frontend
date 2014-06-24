@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings!io.ox/core'], function (notifications, settings) {
+define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings!plugins/demo/customize'], function (notifications, settings) {
 
     'use strict';
 
@@ -198,7 +198,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
             else if (current !== value) field.val(value);
         });
         // save
-        settings.set('customize/presets/default', model.toJSON()).save();
+        settings.set('presets/default', model.toJSON()).save();
     });
 
     var applyPreset = function (index) {
@@ -207,7 +207,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
     };
 
     var initialize = function () {
-        var data = settings.get('customize/presets/default', {});
+        var data = settings.get('presets/default', {});
         if (_.isEmpty(data)) applyPreset(0); else model.set(data);
         updateStylesheet(); // make sure this is called once!
     };
@@ -281,7 +281,8 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         var reader = new FileReader();
         reader.onload = function() {
             url = reader.result;
-            if (url.length <= 64 * 1024) model.set('url', url); else updateLogo();
+            // jslobs cannot handle more that 64KB right now; let's keep some safety distance
+            if (url.length <= 54 * 1024) model.set('url', url); else updateLogo();
             file = reader = null;
         };
         reader.readAsDataURL(file);
@@ -335,7 +336,7 @@ define('plugins/demo/customize/register', ['io.ox/core/notifications', 'settings
         },
         reset: function () {
             applyPreset(0);
-            settings.set('customize/presets/default', {}).save();
+            settings.set('presets/default', {}).save();
         }
     };
 });
