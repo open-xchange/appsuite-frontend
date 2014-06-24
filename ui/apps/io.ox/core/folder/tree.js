@@ -17,6 +17,7 @@ define('io.ox/core/folder/tree',
      'io.ox/core/api/folder',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
+     'io.ox/core/folder/contextmenu',
      'less!io.ox/core/folder/style'], function (FolderView, Selection, api, account, ext) {
 
     'use strict';
@@ -106,11 +107,12 @@ define('io.ox/core/folder/tree',
         renderContextMenuItems: function () {
             var id = this.selection.get(),
                 app = this.app,
+                module = this.module,
                 ul = this.$el.find('.context-dropdown .dropdown-menu').empty(),
-                point = 'io.ox/' + this.module + '/folderview/sidepanel/context-menu';
+                point = 'io.ox/core/foldertree/contextmenu';
             // get folder data and redraw
             api.get({ folder: id }).done(function (data) {
-                var baton = new ext.Baton({ app: app, data: data });
+                var baton = new ext.Baton({ app: app, data: data, options: { type: module } });
                 ext.point(point).invoke('draw', ul, baton);
             });
         },
