@@ -38,6 +38,7 @@ define('io.ox/core/tk/autocomplete',
             node: null,
             container: $('<div>').addClass('autocomplete-popup'),
             mode: 'participant',
+            keyupRefocus: true,
 
             cbshow: null,
 
@@ -446,7 +447,7 @@ define('io.ox/core/tk/autocomplete',
             fnKeyUp = _.debounce(function (e, options) {
                 //TODO: element destroyed before debounce resolved
                 if (!document.body.contains(this)) return;
-                this.focus();
+                if (o.keyupRefocus) this.focus();
                 e.stopPropagation();
 
                 var opt = _.extend({}, (e.data || {}), options || {}),

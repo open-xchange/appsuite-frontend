@@ -718,6 +718,7 @@ define('io.ox/mail/compose/view',
                 createTokensOnBlur: true,
                 autocomplete: {
                     api: autocompleteAPI,
+                    keyupRefocus: false, // suppress focus on keyup
                     reduce: function (data) {
 
                         // TODO: remove duplicates
