@@ -241,7 +241,7 @@ define('io.ox/mail/compose/view',
         id: 'autoCompleteItem',
         index: 100,
         draw: function (baton) {
-            this.addClass('io-ox-mail-write-contact');
+            this.addClass('io-ox-mail-compose-contact');
             baton.autocomplete = true;
             // contact picture
             ext.point(POINT + '/contactPicture').invoke('draw', this, baton);
@@ -254,14 +254,6 @@ define('io.ox/mail/compose/view',
 
 
     var autocompleteAPI = new AutocompleteAPI({ id: 'mailwrite', contacts: true, msisdn: true });
-
-    var Recipient = Backbone.Model.extend({
-
-    });
-
-    var Recipients = Backbone.Collection.extend({
-        model: Recipient
-    });
 
     var MailComposeView = Backbone.View.extend({
 
@@ -720,52 +712,64 @@ define('io.ox/mail/compose/view',
         },
 
         postRender: function () {
-            var self = this;
-            var el = this.$el,
-            editor = el.find('.editable');
+            var el = this.$el;
 
-            el.find('.tokenfield').tokenfield();
+            var tokenfields = el.find('.tokenfield').tokenfield({
+                createTokensOnBlur: true,
+                autocomplete: {
+                    api: autocompleteAPI,
+                    reduce: function (data) {
 
-            var to = el.find('.to.tokenfield');
-            var node = to.data('bs.tokenfield').$input;
-            node.autocomplete({
-                source: function (val) {
-                    return autocompleteAPI.search(val).then(function (autocomplete_result) {
-                        return accountAPI.getAllSenderAddresses().then(function (result) {
-                            result = result.filter(function (elem) {
-                                return elem[0].indexOf(val) >= 0 || elem[1].indexOf(val) >= 0;
-                            });
-                            return { list: result.concat(autocomplete_result), hits: result.length };
+                        // TODO: remove duplicates
+
+                        var list = _(data).map(function (elem) {
+                            return elem.type === 'contact' ? elem : { data: {}, display_name: elem[0], email: elem[1] };
                         });
-                    });
-                },
-                draw: function (data) {
-                    ext.point(POINT + '/autoCompleteItem').invoke('draw', this, ext.Baton({ data: data }));
-                },
-                reduce: function (data) {
-                    data.list = _(data.list).map(function (elem) {
-                        return elem.type === 'contact' ? elem : {data: {}, display_name: elem[0], email: elem[1]};
-                    });
-                    return data;
-                },
-                stringify: function (data) {
-                    var name = contactsUtil.getMailFullName(data),
-                                address = data.email || data.phone || '';
-                    //return name ? '"' + name + '" <' + address + '>' : address;
-                    if (name) {
-                        return { value: address, label: name };
-                        //to.tokenfield('createToken', { value: address, label: name });
-                    } else {
-                        return address;
-                        //to.tokenfield('createToken', address);
+                        return { list: list, hits: data.length };
+                    },
+                    draw: function (data) {
+                        ext.point(POINT + '/autoCompleteItem').invoke('draw', this, ext.Baton({ data: data }));
+                    },
+                    stringify: function (data) {
+                        var name = contactsUtil.getMailFullName(data),
+                            address = data.email || data.phone || '';
+                        return name ? '"' + name + '"' : address;
                     }
-                },
-                click: function (e) {
-                    copyRecipients.call(self, to, $(this), e);
-                },
-                blur: function (e) {
-                    copyRecipients.call(self, to, $(this), e);
                 }
+            });
+
+            tokenfields.each(function () {
+                $(this).data('bs.tokenfield').$input.on({
+                    // IME support (e.g. for Japanese)
+                    compositionstart: function () {
+                        $(this).attr('data-ime', 'active');
+                    },
+                    compositionend: function () {
+                        $(this).attr('data-ime', 'inactive');
+                    },
+                    keydown: function (e) {
+                        if (e.which === 13 && $(this).attr('data-ime') !== 'active') {
+                            // clear tokenfield input
+                            $(this).val('');
+                        }
+                    },
+                    // shortcuts (to/cc/bcc)
+                    keyup: function (e) {
+                        if (e.which === 13) return;
+                        // look for special prefixes
+                        var val = $(this).val();
+                        if ((/^to:?\s/i).test(val)) {
+                            $(this).val('');
+                            // self.showSection('to');
+                        } else if ((/^cc:?\s/i).test(val)) {
+                            $(this).val('');
+                            this.$el.find('[data-extension-id="cc"]').removeClass('hidden');
+                        } else if ((/^bcc:?\s/i).test(val)) {
+                            $(this).val('');
+                            this.$el.find('[data-extension-id="bcc"]').removeClass('hidden');
+                        }
+                    }
+                });
             });
 
             el.append(this.textarea);
@@ -784,39 +788,39 @@ define('io.ox/mail/compose/view',
 
     });
 
-    function copyRecipients(to, node, e) {
+    // function copyRecipients(to, node, e) {
 
-        var valBase, list;
+    //     var valBase, list;
 
-        // normalize data
-        if (e && e.data && e.data.distlistarray !== null) {
-            // distribution list
-            list = _(e.data.distlistarray).map(function (member) {
-                return {
-                    label: member.display_name,
-                    value: member.mail
-                };
-            });
-        } else if (e && e.data && e.data.id) {
-            // selected contact list
-            list = [e.data];
-        } else {
-            valBase = node.val();
-            list = mailUtil.parseRecipients(valBase);
-        }
+    //     // normalize data
+    //     if (e && e.data && e.data.distlistarray !== null) {
+    //         // distribution list
+    //         list = _(e.data.distlistarray).map(function (member) {
+    //             return {
+    //                 label: member.display_name,
+    //                 value: member.mail
+    //             };
+    //         });
+    //     } else if (e && e.data && e.data.id) {
+    //         // selected contact list
+    //         list = [e.data];
+    //     } else {
+    //         valBase = node.val();
+    //         list = mailUtil.parseRecipients(valBase);
+    //     }
 
-        if (list.length) {
-            // add
-            //this.addRecipients(id, list);
-            to.tokenfield('createToken', list);
-            // don't refocus on blur
-            if (e.type !== 'blur') node.val('').focus();
-            //clear the input field
-            node.val('');
-        } else if ($.trim(node.val()) !== '') {
-            // not accepted but has content
-        }
-    }
+    //     if (list.length) {
+    //         // add
+    //         //this.addRecipients(id, list);
+    //         to.tokenfield('createToken', list);
+    //         // don't refocus on blur
+    //         if (e.type !== 'blur') node.val('').focus();
+    //         //clear the input field
+    //         node.val('');
+    //     } else if ($.trim(node.val()) !== '') {
+    //         // not accepted but has content
+    //     }
+    // }
 
     return MailComposeView;
 });

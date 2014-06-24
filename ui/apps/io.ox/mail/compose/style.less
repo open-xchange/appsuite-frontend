@@ -67,6 +67,31 @@
 
 }
 
+.io-ox-mail-compose-contact {
+
+    .contact-image {
+        height: 3 * 14px;
+        width: 3 * 14px;
+        margin-right: 14px;
+        display: inline-block;
+        background-size: cover;
+        background-repeat: no-repeat;
+        float: left;
+    }
+
+    .recipient-name {
+        font-weight: 500;
+        .ellipsis();
+    }
+
+    .email {
+        color: @link-color;
+        .ellipsis();
+    }
+
+}
+
+
 // Variables
 
 @token-background: #ededed;
@@ -125,7 +150,7 @@
   }
 }
 
-// Tokenfield
+// Bootstrap Tokenfield
 
 .tokenfield {
   height: auto;
