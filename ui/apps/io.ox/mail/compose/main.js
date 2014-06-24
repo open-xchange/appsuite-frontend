@@ -118,7 +118,7 @@ define('io.ox/mail/compose/main',
                             app.view = new MailComposeView({ model: model, app: app });
                             win.nodes.main.addClass('scrollable').append(app.view.render().$el);
 
-                            app.view.setMail({ data: data })
+                            app.view.setMail(data)
                             .done(function () {
                                 win.idle();
                                 def.resolve({app: app});

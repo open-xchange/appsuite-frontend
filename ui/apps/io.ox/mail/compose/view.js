@@ -35,7 +35,11 @@ define('io.ox/mail/compose/view',
     'use strict';
 
     var INDEX = 0,
-        POINT = 'io.ox/mail/compose';
+        POINT = 'io.ox/mail/compose',
+        convertAllToUnified = emoji.converterFor({
+            from: 'all',
+            to: 'unified'
+        });
 
     ext.point(POINT + '/fields').extend({
         id: 'title',
@@ -707,7 +711,25 @@ define('io.ox/mail/compose/view',
         },
 
         setMail: function (mail) {
+            var self = this,
+                data = mail || {};
             return this.setFormat(this.editorMode).done(function () {
+                var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[self.editorMode] || []) : (undefined);
+                var content = attachments && attachments.length ? (attachments[0].content || '') : '';
+                var format = attachments && attachments.length && attachments[0].content_type === 'text/plain' ? 'text' : 'html';
+
+                if (this.editorMode === 'text') {
+                    content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
+                }
+                // image URL fix
+                if (this.editorMode === 'html') {
+                    content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
+                }
+                // convert different emoji encodings to unified
+                content = convertAllToUnified(content);
+                if (data.replaceBody !== 'no') {
+                    self[data.initial ? 'setBody' : 'setRawBody'](content);
+                }
             });
         },
 
