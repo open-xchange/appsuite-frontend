@@ -156,7 +156,7 @@ define('io.ox/mail/compose/extensions',
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
                 snippetAPI.getAll('signature').done(function (signatures) {
                     var sa = _.map(signatures, function (o) {
-                        return { 'id': o.id, 'displayName':o.displayname };
+                        return { 'id': o.id, 'displayName': o.displayname };
                     });
 
                     if (sa.length >= 1) {

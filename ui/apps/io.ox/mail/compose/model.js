@@ -15,14 +15,15 @@
 define('io.ox/mail/compose/model',
     ['io.ox/mail/api',
      'io.ox/mail/util',
-     'io.ox/emoji/main'
-    ], function (mailAPI, mailUtil, emoji) {
+     'io.ox/emoji/main',
+     'settings!io.ox/mail'
+    ], function (mailAPI, mailUtil, emoji, settings) {
 
     'use strict';
 
     var MailModel = Backbone.Model.extend({
         defaults: {
-            editorMode: 'html',
+            editorMode: settings.get('messageFormat', 'html'),
             account_name: '',
             attachment: '',
             attachments: [],

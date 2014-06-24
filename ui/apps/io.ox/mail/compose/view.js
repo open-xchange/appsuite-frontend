@@ -285,7 +285,7 @@ define('io.ox/mail/compose/view',
             this.messageFormat = settings.get('messageFormat', 'html');
             this.editor = null;
             this.composeMode = 'compose';
-            this.textarea = $('<textarea>');
+            this.textarea = $('<textarea class="plain-text">');
         },
 
         setSubject: function (e) {
@@ -525,6 +525,10 @@ define('io.ox/mail/compose/view',
 
             _.defer($.proxy(this.postRender, this));
 
+            this.model.on('change:editorMode', function () {
+                self.changeEditorMode();
+            });
+
             return this;
         },
 
@@ -711,7 +715,8 @@ define('io.ox/mail/compose/view',
         },
 
         setMail: function (mail) {
-            return this.setFormat(mail.format).done(function () { });
+            return this.setFormat(this.editorMode).done(function () {
+            });
         },
 
         postRender: function () {
