@@ -77,8 +77,6 @@ define('io.ox/mail/compose/main',
             var model = new MailModel({mode: 'compose'});
             app.view = new MailComposeView({ model: model, app: app });
 
-            window.mailcomposeview = app.view;
-
             _.url.hash('app', 'io.ox/mail/compose:compose');
 
             win.busy().show(function () {
@@ -112,7 +110,7 @@ define('io.ox/mail/compose/main',
                     win.busy().show(function () {
                         mailAPI[type](obj, 'html')
                         .done(function (data) {
-                            data.sendtype = mailAPI.SENDTYPE.REPLY;
+                            data.sendtype = type === 'forward' ? mailAPI.SENDTYPE.FORWARD : mailAPI.SENDTYPE.REPLY;
                             data.mode = type;
                             var model = new MailModel(data);
                             app.view = new MailComposeView({ model: model, app: app });
@@ -142,9 +140,9 @@ define('io.ox/mail/compose/main',
             };
         }
 
-        app.compose = compose;
-
-        app.reply = reply('reply');
+        app.compose  = compose;
+        app.forward  = reply('forward');
+        app.reply    = reply('reply');
         app.replyall = reply('replyall');
 
         return app;
