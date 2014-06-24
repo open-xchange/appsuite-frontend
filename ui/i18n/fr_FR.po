@@ -182,6 +182,7 @@ msgid "%1$s recommends this link:"
 msgstr "%1$s recommande ce lien :"
 
 #: apps/plugins/portal/xing/activities.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/activities.js:187
 msgid "%1$s updated their profile:"
 msgstr "%1$s a mis à jour son profil :"
 
@@ -630,8 +631,8 @@ msgstr "Ajouter une nouvelle signature"
 msgid "Add note"
 msgstr "Ajouter une note"
 
-#: apps/plugins/xing/main.js:136 module:plugins/portal
-#: apps/plugins/xing/main.js:143 apps/plugins/xing/main.js:151
+#: apps/plugins/xing/main.js:151 module:plugins/portal
+#: apps/plugins/xing/main.js:158 apps/plugins/xing/main.js:166
 msgid "Add on %s"
 msgstr "Ajouter à %s"
 
@@ -756,7 +757,7 @@ msgstr "Autoriser les courriels mis en forme avec HTML"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Autoriser le préchargement des images externes liées"
 
-#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Allow us to use your %s account here"
 msgstr "Autorisez-nous à utiliser ici votre compte %s"
 
@@ -1421,7 +1422,7 @@ msgstr "Tout fermer"
 
 #: apps/io.ox/core/commons.js:744 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
-#: apps/io.ox/mail/view-options.js:138 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:143 module:io.ox/mail
 msgid "Close folder view"
 msgstr "Fermer la vue du dossier"
 
@@ -1551,7 +1552,7 @@ msgstr "Détails sur le contact"
 msgid "Contact pictures"
 msgstr "Images du contact"
 
-#: apps/plugins/xing/main.js:98 module:plugins/portal
+#: apps/plugins/xing/main.js:113 module:plugins/portal
 msgid "Contact request sent"
 msgstr "Demande de mise en contact envoyée"
 
@@ -1600,11 +1601,13 @@ msgstr "Copier"
 
 #: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
+#, fuzzy
+#| msgctxt "CC"
+#| msgid "Copy"
+#| msgid_plural "Copy"
 msgctxt "CC"
 msgid "Copy"
-msgid_plural "Copy"
-msgstr[0] "Copie"
-msgstr[1] "Copies"
+msgstr "Copie"
 
 #: apps/io.ox/mail/write/view-main.js:511 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:512
@@ -1654,7 +1657,7 @@ msgstr "Impossible de charger cette liste"
 msgid "Could not save settings"
 msgstr "Impossible d'enregistrer les réglages"
 
-#: apps/io.ox/portal/widgets.js:405 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:403 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "Impossible d'enregistrer les réglages."
 
@@ -1717,7 +1720,7 @@ msgstr "Pays"
 msgid "Create"
 msgstr "Créer"
 
-#: apps/plugins/portal/xing/register.js:265 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:267 module:plugins/portal
 msgid "Create a %s account using the data stored here"
 msgstr "Créer un compte %s au moyen des données enregistrées ici"
 
@@ -2063,7 +2066,7 @@ msgstr "Liste de diffusion"
 msgid "Distribution list has been saved"
 msgstr "La liste de diffusion a été enregistrée"
 
-#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
 msgid "Do you already have a %s account?"
 msgstr "Possédez-vous déjà un compte %s ?"
 
@@ -2142,7 +2145,7 @@ msgstr ""
 "Voulez-vous confirmer la série complète ou uniquement un seul rendez-vous de "
 "la série ?"
 
-#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:266 module:plugins/portal
 msgid "Do you want to create a %s account?"
 msgstr "Souhaitez-vous créer un compte %s ?"
 
@@ -3358,7 +3361,7 @@ msgstr "Messagerie instantanée 2"
 msgid "Invalid data"
 msgstr "Données invalides"
 
-#: apps/plugins/xing/main.js:69 module:plugins/portal
+#: apps/plugins/xing/main.js:79 module:plugins/portal
 msgid "Invitation sent"
 msgstr "Invitation envoyée"
 
@@ -3366,8 +3369,8 @@ msgstr "Invitation envoyée"
 msgid "Invite"
 msgstr "Inviter"
 
-#: apps/plugins/xing/main.js:113 module:plugins/portal
-#: apps/plugins/xing/main.js:120 apps/plugins/xing/main.js:128
+#: apps/plugins/xing/main.js:128 module:plugins/portal
+#: apps/plugins/xing/main.js:135 apps/plugins/xing/main.js:143
 msgid "Invite to %s"
 msgstr "Inviter à %s"
 
@@ -4361,7 +4364,7 @@ msgid "Open external link"
 msgstr "Ouvrir le lien externe"
 
 #: apps/io.ox/core/commons.js:731 module:io.ox/core
-#: apps/io.ox/mail/view-options.js:127 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:132 module:io.ox/mail
 msgid "Open folder view"
 msgstr "Ouvrir la vue du dossier"
 
@@ -5543,7 +5546,7 @@ msgstr "Choisir un dossier"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:98
+#: apps/io.ox/mail/view-options.js:103
 msgid "Select all"
 msgstr "Tout sélectionner"
 
@@ -6562,6 +6565,7 @@ msgstr[0] "Il y a déjà %1$d rendez-vous dans cette plage horaire."
 msgstr[1] "Il y a déjà %1$d rendez-vous dans cette plage horaire."
 
 #: apps/plugins/portal/xing/register.js:181 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:237
 #, fuzzy
 #| msgid "There were not activities in your network"
 msgid "There is no recent activity in your Xing network."
@@ -6572,8 +6576,8 @@ msgid "There is no rule defined"
 msgstr "Pas de règle définie"
 
 #: apps/plugins/portal/xing/register.js:61 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:66
-#: apps/plugins/xing/main.js:95
+#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:76
+#: apps/plugins/xing/main.js:110
 msgid "There was a problem with %s. The error message was: \"%s\""
 msgstr ""
 "Un problème est survenu avec %s. Le message d'erreur est le suivant : « %s »"
@@ -7338,7 +7342,7 @@ msgstr "Vue de la semaine ouvrée"
 
 #: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
-#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
+#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:28
 msgid "XING"
 msgstr "XING"
 
@@ -7613,7 +7617,7 @@ msgstr ""
 "Votre compte %s a été créé. Un courriel de confirmation émanant de %s "
 "devrait vous parvenir d'ici peu."
 
-#: apps/plugins/portal/xing/register.js:292 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:294 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Votre flux d'actualités %s"
 

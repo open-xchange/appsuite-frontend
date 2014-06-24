@@ -179,6 +179,7 @@ msgid "%1$s recommends this link:"
 msgstr "%1$s recommends this link:"
 
 #: apps/plugins/portal/xing/activities.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/activities.js:187
 msgid "%1$s updated their profile:"
 msgstr "%1$s updated their profile:"
 
@@ -626,8 +627,8 @@ msgstr "Add new signature"
 msgid "Add note"
 msgstr "Add note"
 
-#: apps/plugins/xing/main.js:136 module:plugins/portal
-#: apps/plugins/xing/main.js:143 apps/plugins/xing/main.js:151
+#: apps/plugins/xing/main.js:151 module:plugins/portal
+#: apps/plugins/xing/main.js:158 apps/plugins/xing/main.js:166
 msgid "Add on %s"
 msgstr "Add on %s"
 
@@ -752,7 +753,7 @@ msgstr "Allow HTML formatted email messages"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Allow pre-loading of externally linked images"
 
-#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Allow us to use your %s account here"
 msgstr "Allow us to use your %s account here"
 
@@ -1411,7 +1412,7 @@ msgstr "Close all"
 
 #: apps/io.ox/core/commons.js:744 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
-#: apps/io.ox/mail/view-options.js:138 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:143 module:io.ox/mail
 msgid "Close folder view"
 msgstr "Close folder view"
 
@@ -1541,7 +1542,7 @@ msgstr "Contact Details"
 msgid "Contact pictures"
 msgstr "Contact pictures"
 
-#: apps/plugins/xing/main.js:98 module:plugins/portal
+#: apps/plugins/xing/main.js:113 module:plugins/portal
 msgid "Contact request sent"
 msgstr "Contact request sent"
 
@@ -1590,11 +1591,13 @@ msgstr "Copy"
 
 #: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
+#, fuzzy
+#| msgctxt "CC"
+#| msgid "Copy"
+#| msgid_plural "Copy"
 msgctxt "CC"
 msgid "Copy"
-msgid_plural "Copy"
-msgstr[0] "Copy"
-msgstr[1] "Copies"
+msgstr "Copy"
 
 #: apps/io.ox/mail/write/view-main.js:511 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:512
@@ -1644,7 +1647,7 @@ msgstr "Could not load this list"
 msgid "Could not save settings"
 msgstr "Could not save settings"
 
-#: apps/io.ox/portal/widgets.js:405 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:403 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "Could not save settings."
 
@@ -1707,7 +1710,7 @@ msgstr "Country"
 msgid "Create"
 msgstr "Create"
 
-#: apps/plugins/portal/xing/register.js:265 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:267 module:plugins/portal
 msgid "Create a %s account using the data stored here"
 msgstr "Create a %s account using the data stored here"
 
@@ -2048,7 +2051,7 @@ msgstr "Distribution list"
 msgid "Distribution list has been saved"
 msgstr "Distribution list has been saved"
 
-#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
 msgid "Do you already have a %s account?"
 msgstr "Do you already have a %s account?"
 
@@ -2128,7 +2131,7 @@ msgstr ""
 "Do you want to confirm the whole series or just one appointment within the "
 "series?"
 
-#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:266 module:plugins/portal
 msgid "Do you want to create a %s account?"
 msgstr "Do you want to create a %s account?"
 
@@ -3331,7 +3334,7 @@ msgstr "Instant Messenger 2"
 msgid "Invalid data"
 msgstr "Invalid data"
 
-#: apps/plugins/xing/main.js:69 module:plugins/portal
+#: apps/plugins/xing/main.js:79 module:plugins/portal
 msgid "Invitation sent"
 msgstr "Invitation sent"
 
@@ -3339,8 +3342,8 @@ msgstr "Invitation sent"
 msgid "Invite"
 msgstr "Invite"
 
-#: apps/plugins/xing/main.js:113 module:plugins/portal
-#: apps/plugins/xing/main.js:120 apps/plugins/xing/main.js:128
+#: apps/plugins/xing/main.js:128 module:plugins/portal
+#: apps/plugins/xing/main.js:135 apps/plugins/xing/main.js:143
 msgid "Invite to %s"
 msgstr "Invite to %s"
 
@@ -4321,7 +4324,7 @@ msgid "Open external link"
 msgstr "Open external link"
 
 #: apps/io.ox/core/commons.js:731 module:io.ox/core
-#: apps/io.ox/mail/view-options.js:127 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:132 module:io.ox/mail
 msgid "Open folder view"
 msgstr "Open folder view"
 
@@ -5492,7 +5495,7 @@ msgstr "Select Folder"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:98
+#: apps/io.ox/mail/view-options.js:103
 msgid "Select all"
 msgstr "Select all"
 
@@ -6504,6 +6507,7 @@ msgstr[0] "There is already %1$d appointment in this timeframe."
 msgstr[1] "There are already %1$d appointments in this timeframe."
 
 #: apps/plugins/portal/xing/register.js:181 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:237
 #, fuzzy
 #| msgid "There were not activities in your network"
 msgid "There is no recent activity in your Xing network."
@@ -6514,8 +6518,8 @@ msgid "There is no rule defined"
 msgstr "There is no rule defined"
 
 #: apps/plugins/portal/xing/register.js:61 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:66
-#: apps/plugins/xing/main.js:95
+#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:76
+#: apps/plugins/xing/main.js:110
 msgid "There was a problem with %s. The error message was: \"%s\""
 msgstr "There was a problem with %s. The error message was: \"%s\""
 
@@ -7250,7 +7254,7 @@ msgstr "Workweek View"
 
 #: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
-#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
+#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:28
 msgid "XING"
 msgstr "XING"
 
@@ -7515,7 +7519,7 @@ msgid ""
 msgstr ""
 "Your %s account has been created. Expect a confirmation mail from %s soon."
 
-#: apps/plugins/portal/xing/register.js:292 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:294 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Your %s newsfeed"
 

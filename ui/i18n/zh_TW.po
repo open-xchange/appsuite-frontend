@@ -178,6 +178,7 @@ msgid "%1$s recommends this link:"
 msgstr "%1$s 推薦此連結:"
 
 #: apps/plugins/portal/xing/activities.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/activities.js:187
 msgid "%1$s updated their profile:"
 msgstr "%1$s 更新了個人資料:"
 
@@ -624,8 +625,8 @@ msgstr "新增簽名"
 msgid "Add note"
 msgstr "新增筆記"
 
-#: apps/plugins/xing/main.js:136 module:plugins/portal
-#: apps/plugins/xing/main.js:143 apps/plugins/xing/main.js:151
+#: apps/plugins/xing/main.js:151 module:plugins/portal
+#: apps/plugins/xing/main.js:158 apps/plugins/xing/main.js:166
 msgid "Add on %s"
 msgstr "新增至 %s"
 
@@ -750,7 +751,7 @@ msgstr "允許 HTML 格式的電子郵件"
 msgid "Allow pre-loading of externally linked images"
 msgstr "允許預載外部鏈結圖像"
 
-#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Allow us to use your %s account here"
 msgstr "允許我們在此使用您的 %s 帳號"
 
@@ -1400,7 +1401,7 @@ msgstr "全部關閉"
 
 #: apps/io.ox/core/commons.js:744 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
-#: apps/io.ox/mail/view-options.js:138 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:143 module:io.ox/mail
 msgid "Close folder view"
 msgstr "關閉文件夾面板"
 
@@ -1530,7 +1531,7 @@ msgstr "聯絡人詳細資訊"
 msgid "Contact pictures"
 msgstr "聯絡人照片"
 
-#: apps/plugins/xing/main.js:98 module:plugins/portal
+#: apps/plugins/xing/main.js:113 module:plugins/portal
 msgid "Contact request sent"
 msgstr "已送出聯絡人請求"
 
@@ -1579,11 +1580,13 @@ msgstr "複製"
 
 #: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
+#, fuzzy
+#| msgctxt "CC"
+#| msgid "Copy"
+#| msgid_plural "Copy"
 msgctxt "CC"
 msgid "Copy"
-msgid_plural "Copy"
-msgstr[0] "複製"
-msgstr[1] "副本"
+msgstr "複製"
 
 #: apps/io.ox/mail/write/view-main.js:511 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:512
@@ -1633,7 +1636,7 @@ msgstr "無法載入此清單"
 msgid "Could not save settings"
 msgstr "無法儲存設定"
 
-#: apps/io.ox/portal/widgets.js:405 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:403 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "無法儲存設定。"
 
@@ -1694,7 +1697,7 @@ msgstr "國家/地區"
 msgid "Create"
 msgstr "建立"
 
-#: apps/plugins/portal/xing/register.js:265 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:267 module:plugins/portal
 msgid "Create a %s account using the data stored here"
 msgstr "使用儲存於此的資料註冊 %s 帳號"
 
@@ -2034,7 +2037,7 @@ msgstr "通訊組列表"
 msgid "Distribution list has been saved"
 msgstr "此通訊組清單已儲存"
 
-#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
 msgid "Do you already have a %s account?"
 msgstr "已經有 %s 帳號了嗎？"
 
@@ -2110,7 +2113,7 @@ msgid ""
 "series?"
 msgstr "您想確認整個系列或系列中的單個約會？"
 
-#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:266 module:plugins/portal
 msgid "Do you want to create a %s account?"
 msgstr "想要註冊 %s 帳號嗎？"
 
@@ -3289,7 +3292,7 @@ msgstr "即時訊息 2"
 msgid "Invalid data"
 msgstr "無效資料"
 
-#: apps/plugins/xing/main.js:69 module:plugins/portal
+#: apps/plugins/xing/main.js:79 module:plugins/portal
 msgid "Invitation sent"
 msgstr "已送出邀請"
 
@@ -3297,8 +3300,8 @@ msgstr "已送出邀請"
 msgid "Invite"
 msgstr "邀請"
 
-#: apps/plugins/xing/main.js:113 module:plugins/portal
-#: apps/plugins/xing/main.js:120 apps/plugins/xing/main.js:128
+#: apps/plugins/xing/main.js:128 module:plugins/portal
+#: apps/plugins/xing/main.js:135 apps/plugins/xing/main.js:143
 msgid "Invite to %s"
 msgstr "邀請至 %s"
 
@@ -4276,7 +4279,7 @@ msgid "Open external link"
 msgstr "開啟外部連結"
 
 #: apps/io.ox/core/commons.js:731 module:io.ox/core
-#: apps/io.ox/mail/view-options.js:127 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:132 module:io.ox/mail
 msgid "Open folder view"
 msgstr "開啟文件夾面板"
 
@@ -5437,7 +5440,7 @@ msgstr "選擇資料夾"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:98
+#: apps/io.ox/mail/view-options.js:103
 msgid "Select all"
 msgstr "選擇全部"
 
@@ -6429,6 +6432,7 @@ msgstr[0] "此時段內您有 %1$s 場約會。"
 msgstr[1] "此時段內您有 %1$s 場約會。"
 
 #: apps/plugins/portal/xing/register.js:181 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:237
 #, fuzzy
 #| msgid "There were not activities in your network"
 msgid "There is no recent activity in your Xing network."
@@ -6439,8 +6443,8 @@ msgid "There is no rule defined"
 msgstr "沒有定義規則"
 
 #: apps/plugins/portal/xing/register.js:61 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:66
-#: apps/plugins/xing/main.js:95
+#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:76
+#: apps/plugins/xing/main.js:110
 msgid "There was a problem with %s. The error message was: \"%s\""
 msgstr "%s 有點問題。錯誤訊息為:「%s」"
 
@@ -7155,7 +7159,7 @@ msgstr "工作周視圖"
 
 #: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
-#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
+#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:28
 msgid "XING"
 msgstr "XING"
 
@@ -7408,7 +7412,7 @@ msgid ""
 "Your %s account has been created. Expect a confirmation mail from %s soon."
 msgstr "已建立您的 %s 帳號，等下可能會有來自 %s 的確認信。"
 
-#: apps/plugins/portal/xing/register.js:292 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:294 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "您的 %s 訊息清單"
 

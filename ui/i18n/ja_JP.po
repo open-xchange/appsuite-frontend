@@ -172,6 +172,7 @@ msgid "%1$s recommends this link:"
 msgstr "%1$s が次のリンクをお勧めしました:"
 
 #: apps/plugins/portal/xing/activities.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/activities.js:187
 msgid "%1$s updated their profile:"
 msgstr "%1$s がプロファイルを次に変更: "
 
@@ -610,8 +611,8 @@ msgstr "新規の署名を追加"
 msgid "Add note"
 msgstr "メモを追加"
 
-#: apps/plugins/xing/main.js:136 module:plugins/portal
-#: apps/plugins/xing/main.js:143 apps/plugins/xing/main.js:151
+#: apps/plugins/xing/main.js:151 module:plugins/portal
+#: apps/plugins/xing/main.js:158 apps/plugins/xing/main.js:166
 msgid "Add on %s"
 msgstr "%s に追加"
 
@@ -736,7 +737,7 @@ msgstr "HTML フォーマットのメールを許可"
 msgid "Allow pre-loading of externally linked images"
 msgstr "外部リンク先の画像の事前読み込みを許可"
 
-#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Allow us to use your %s account here"
 msgstr "ここで %s アカウントを使用できるようにします。"
 
@@ -1388,7 +1389,7 @@ msgstr "すべて閉じる"
 
 #: apps/io.ox/core/commons.js:744 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
-#: apps/io.ox/mail/view-options.js:138 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:143 module:io.ox/mail
 msgid "Close folder view"
 msgstr "フォルダ ビューを閉じる"
 
@@ -1518,7 +1519,7 @@ msgstr "連絡先の詳細"
 msgid "Contact pictures"
 msgstr "連絡先の写真"
 
-#: apps/plugins/xing/main.js:98 module:plugins/portal
+#: apps/plugins/xing/main.js:113 module:plugins/portal
 msgid "Contact request sent"
 msgstr "コンタクトリクエストが送信されました。"
 
@@ -1567,10 +1568,13 @@ msgstr "コピー"
 
 #: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
+#, fuzzy
+#| msgctxt "CC"
+#| msgid "Copy"
+#| msgid_plural "Copy"
 msgctxt "CC"
 msgid "Copy"
-msgid_plural "Copy"
-msgstr[0] "コピー"
+msgstr "コピー"
 
 #: apps/io.ox/mail/write/view-main.js:511 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:512
@@ -1620,7 +1624,7 @@ msgstr "このリストを読み込めませんでした。"
 msgid "Could not save settings"
 msgstr "設定を保存できませんでした。"
 
-#: apps/io.ox/portal/widgets.js:405 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:403 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "設定を保存できませんでした。"
 
@@ -1682,7 +1686,7 @@ msgstr "国"
 msgid "Create"
 msgstr "作成"
 
-#: apps/plugins/portal/xing/register.js:265 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:267 module:plugins/portal
 msgid "Create a %s account using the data stored here"
 msgstr "ここに保存されているデータを使用して %s アカウントを作成"
 
@@ -2024,7 +2028,7 @@ msgstr "配布リスト"
 msgid "Distribution list has been saved"
 msgstr "配布リストが保存されました。"
 
-#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
 msgid "Do you already have a %s account?"
 msgstr "既に %s アカウントをお持ちですか？"
 
@@ -2100,7 +2104,7 @@ msgstr ""
 "定期的なアポイント全体を編集しますか、それともこのアポイントのみを編集します"
 "か？"
 
-#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:266 module:plugins/portal
 msgid "Do you want to create a %s account?"
 msgstr "%s アカウントを作成しますか？"
 
@@ -3308,7 +3312,7 @@ msgstr "IM 2"
 msgid "Invalid data"
 msgstr "日付が無効です。"
 
-#: apps/plugins/xing/main.js:69 module:plugins/portal
+#: apps/plugins/xing/main.js:79 module:plugins/portal
 msgid "Invitation sent"
 msgstr "出席依頼が送信されました。"
 
@@ -3316,8 +3320,8 @@ msgstr "出席依頼が送信されました。"
 msgid "Invite"
 msgstr "出席依頼"
 
-#: apps/plugins/xing/main.js:113 module:plugins/portal
-#: apps/plugins/xing/main.js:120 apps/plugins/xing/main.js:128
+#: apps/plugins/xing/main.js:128 module:plugins/portal
+#: apps/plugins/xing/main.js:135 apps/plugins/xing/main.js:143
 msgid "Invite to %s"
 msgstr "%s に出席依頼"
 
@@ -4299,7 +4303,7 @@ msgid "Open external link"
 msgstr "外部リンクを開く"
 
 #: apps/io.ox/core/commons.js:731 module:io.ox/core
-#: apps/io.ox/mail/view-options.js:127 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:132 module:io.ox/mail
 msgid "Open folder view"
 msgstr "フォルダ ビューを開く"
 
@@ -5465,7 +5469,7 @@ msgstr "フォルダを選択"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:98
+#: apps/io.ox/mail/view-options.js:103
 msgid "Select all"
 msgstr "すべてを選択"
 
@@ -6475,6 +6479,7 @@ msgid_plural "There are already %1$d appointments in this timeframe."
 msgstr[0] "この期間には既に %1$d 件のアポイントがあります。"
 
 #: apps/plugins/portal/xing/register.js:181 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:237
 #, fuzzy
 #| msgid "There were not activities in your network"
 msgid "There is no recent activity in your Xing network."
@@ -6485,8 +6490,8 @@ msgid "There is no rule defined"
 msgstr "定義されているルールはありません。"
 
 #: apps/plugins/portal/xing/register.js:61 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:66
-#: apps/plugins/xing/main.js:95
+#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:76
+#: apps/plugins/xing/main.js:110
 msgid "There was a problem with %s. The error message was: \"%s\""
 msgstr "%s に問題があります。エラー メッセージ: \"%s\""
 
@@ -7218,7 +7223,7 @@ msgstr "稼働日ビュー"
 
 #: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
-#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
+#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:28
 msgid "XING"
 msgstr "XING"
 
@@ -7480,7 +7485,7 @@ msgid ""
 msgstr ""
 "%s アカウントが作成されました。まもなく %s から確認メールが送信されます。"
 
-#: apps/plugins/portal/xing/register.js:292 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:294 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "%s のニュースフィード"
 

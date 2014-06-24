@@ -186,6 +186,7 @@ msgid "%1$s recommends this link:"
 msgstr "%1$s iesaka šo saiti:"
 
 #: apps/plugins/portal/xing/activities.js:170 module:plugins/portal
+#: apps/plugins/portal/xing/activities.js:187
 #, fuzzy
 #| msgid "%1$s changed their status:"
 msgid "%1$s updated their profile:"
@@ -644,8 +645,8 @@ msgstr "Pievienot jaunu parakstu"
 msgid "Add note"
 msgstr "Pievienot piezīmi"
 
-#: apps/plugins/xing/main.js:136 module:plugins/portal
-#: apps/plugins/xing/main.js:143 apps/plugins/xing/main.js:151
+#: apps/plugins/xing/main.js:151 module:plugins/portal
+#: apps/plugins/xing/main.js:158 apps/plugins/xing/main.js:166
 msgid "Add on %s"
 msgstr "Pievienot %s"
 
@@ -770,7 +771,7 @@ msgstr "Atļaut HTML formatētu e-pastu"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Atļaut ārēji saistīto attēlu priekš-ielādi"
 
-#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
 msgid "Allow us to use your %s account here"
 msgstr "Atļaut mums šeit izmantot jūsu %s kontu"
 
@@ -1436,7 +1437,7 @@ msgstr "Aizvērt visu"
 
 #: apps/io.ox/core/commons.js:744 module:io.ox/core
 #: apps/io.ox/files/main.js:119 module:io.ox/files
-#: apps/io.ox/mail/view-options.js:138 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:143 module:io.ox/mail
 msgid "Close folder view"
 msgstr "Aizvērt mapes skatu"
 
@@ -1566,7 +1567,7 @@ msgstr "Kontakta detaļas"
 msgid "Contact pictures"
 msgstr "Kontaktu attēli"
 
-#: apps/plugins/xing/main.js:98 module:plugins/portal
+#: apps/plugins/xing/main.js:113 module:plugins/portal
 msgid "Contact request sent"
 msgstr "Kontakta pieprasījums ir nosūtīts"
 
@@ -1615,12 +1616,13 @@ msgstr "Kopēt"
 
 #: apps/io.ox/mail/common-extensions.js:227 module:io.ox/mail
 #: apps/io.ox/mail/print.js:85
+#, fuzzy
+#| msgctxt "CC"
+#| msgid "Copy"
+#| msgid_plural "Copy"
 msgctxt "CC"
 msgid "Copy"
-msgid_plural "Copy"
-msgstr[0] "Kopija"
-msgstr[1] "Kopijas"
-msgstr[2] "Kopijas"
+msgstr "Kopija"
 
 #: apps/io.ox/mail/write/view-main.js:511 module:io.ox/mail
 #: apps/io.ox/mail/write/view-main.js:512
@@ -1670,7 +1672,7 @@ msgstr "Nevar ielādēt šo sarakstu"
 msgid "Could not save settings"
 msgstr "Nevar saglabāt iestatījumus"
 
-#: apps/io.ox/portal/widgets.js:405 module:io.ox/portal
+#: apps/io.ox/portal/widgets.js:403 module:io.ox/portal
 msgid "Could not save settings."
 msgstr "Nevar saglabāt iestatījumus."
 
@@ -1733,7 +1735,7 @@ msgstr "Valsts"
 msgid "Create"
 msgstr "Izveidot"
 
-#: apps/plugins/portal/xing/register.js:265 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:267 module:plugins/portal
 msgid "Create a %s account using the data stored here"
 msgstr "Izveidot %s kontu, izmantojot šeit saglabātos datus"
 
@@ -2078,7 +2080,7 @@ msgstr "Izplatīšanas saraksts"
 msgid "Distribution list has been saved"
 msgstr "Izplatīšanas saraksts ir saglabāts"
 
-#: apps/plugins/portal/xing/register.js:260 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:262 module:plugins/portal
 msgid "Do you already have a %s account?"
 msgstr "Vai jums jau ir %s konts?"
 
@@ -2160,7 +2162,7 @@ msgid ""
 "series?"
 msgstr "Vai vēlaties apstiprināt visu sēriju vai tikai atsevišķu tikšanos?"
 
-#: apps/plugins/portal/xing/register.js:264 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:266 module:plugins/portal
 msgid "Do you want to create a %s account?"
 msgstr "Vai vēlaties izveidot %s kontu?"
 
@@ -3378,7 +3380,7 @@ msgstr "Ziņapmaiņa 2"
 msgid "Invalid data"
 msgstr "Nederīgs datums"
 
-#: apps/plugins/xing/main.js:69 module:plugins/portal
+#: apps/plugins/xing/main.js:79 module:plugins/portal
 msgid "Invitation sent"
 msgstr "Uzaicinājums nosūtīts"
 
@@ -3386,8 +3388,8 @@ msgstr "Uzaicinājums nosūtīts"
 msgid "Invite"
 msgstr "Uzaicināt"
 
-#: apps/plugins/xing/main.js:113 module:plugins/portal
-#: apps/plugins/xing/main.js:120 apps/plugins/xing/main.js:128
+#: apps/plugins/xing/main.js:128 module:plugins/portal
+#: apps/plugins/xing/main.js:135 apps/plugins/xing/main.js:143
 msgid "Invite to %s"
 msgstr "Uzaicināt %s"
 
@@ -4376,7 +4378,7 @@ msgid "Open external link"
 msgstr "Atvērt ārējo saiti"
 
 #: apps/io.ox/core/commons.js:731 module:io.ox/core
-#: apps/io.ox/mail/view-options.js:127 module:io.ox/mail
+#: apps/io.ox/mail/view-options.js:132 module:io.ox/mail
 msgid "Open folder view"
 msgstr "Atvērt mapes skatu"
 
@@ -5547,7 +5549,7 @@ msgstr "Izvēlēties mapi"
 
 #: apps/io.ox/core/tk/vgrid.js:300 module:io.ox/core
 #: apps/io.ox/mail/settings/signatures/register.js:218 module:io.ox/mail
-#: apps/io.ox/mail/view-options.js:98
+#: apps/io.ox/mail/view-options.js:103
 msgid "Select all"
 msgstr "Izvēlēties visu"
 
@@ -6569,6 +6571,7 @@ msgstr[1] "Šajā laikā jau ir %1$d tikšanās."
 msgstr[2] "Šajā laikā jau ir %1$d tikšanās."
 
 #: apps/plugins/portal/xing/register.js:181 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:237
 #, fuzzy
 #| msgid "There were not activities in your network"
 msgid "There is no recent activity in your Xing network."
@@ -6579,8 +6582,8 @@ msgid "There is no rule defined"
 msgstr "Nav definēts nosacījums"
 
 #: apps/plugins/portal/xing/register.js:61 module:plugins/portal
-#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:66
-#: apps/plugins/xing/main.js:95
+#: apps/plugins/portal/xing/register.js:125 apps/plugins/xing/main.js:76
+#: apps/plugins/xing/main.js:110
 msgid "There was a problem with %s. The error message was: \"%s\""
 msgstr "Reģistrēta problēma ar %s. Kļūdas paziņojums ir: \"%s\""
 
@@ -7330,7 +7333,7 @@ msgstr "Darba nedēļas skats"
 
 #: apps/plugins/halo/xing/register.js:34 module:plugins/portal
 #: apps/plugins/portal/xing/register.js:48
-#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:27
+#: apps/plugins/portal/xing/register.js:51 apps/plugins/xing/main.js:28
 msgid "XING"
 msgstr "XING"
 
@@ -7600,7 +7603,7 @@ msgstr ""
 "Jūsu %s konts ir veiksmīgi izveidots. Jūs drīzumā saņemsiet apstiprinājuma e-"
 "pastu no %s."
 
-#: apps/plugins/portal/xing/register.js:292 module:plugins/portal
+#: apps/plugins/portal/xing/register.js:294 module:plugins/portal
 msgid "Your %s newsfeed"
 msgstr "Jūsu %s ziņu straumējums"
 
