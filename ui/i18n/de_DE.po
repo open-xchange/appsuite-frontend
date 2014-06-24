@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-10 09:41+0100\n"
-"Last-Translator: Antje Faber\n"
+"PO-Revision-Date: 2014-06-24 11:43+0100\n"
+"Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -6502,10 +6502,9 @@ msgstr[0] "Es gibt bereits %1$d Termin in diesem Zeitraum."
 msgstr[1] "Es gibt bereits %1$d Termine in diesem Zeitraum."
 
 #: apps/plugins/portal/xing/register.js:181 module:plugins/portal
-#, fuzzy
 #| msgid "There were not activities in your network"
 msgid "There is no recent activity in your Xing network."
-msgstr "Es gab keine Aktivitäten in Ihrem Netzwerk"
+msgstr "Es gibt keine aktuellen Aktivitäten in Ihrem Xing-Netzwerk."
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js:380 module:io.ox/mail
 msgid "There is no rule defined"
