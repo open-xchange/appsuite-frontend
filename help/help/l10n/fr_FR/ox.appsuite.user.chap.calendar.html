@@ -9,26 +9,32 @@
 <link rel="prev" href="ox.appsuite.user.sect.contacts.settings.html" title="6.9. Réglages du carnet d'adresses">
 <link rel="next" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Les composants de Agenda">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
-<link rel="stylesheet" type="text/css" href="../../../apps/io.ox/core/bootstrap/css/bootstrap.min.css"​/> 
-
+<link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<div class="oxhelp-navigation-top"><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><ul class="nav">
-<a class="brand"></a><li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.contacts.settings.html">Précédent</a></li>
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.contacts.settings.html">Précédent</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Sommaire</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdM</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.gui.html">Suivant</a></li>
-</ul></div></div></div>
+</ul></div>
+</div></nav></div>
 <div class="oxhelp-content">
-  <div lang="fr_FR-FR_FR" class="chapter">
+  <div lang="fr-FR" class="chapter">
 <div class="titlepage"><div><div><h1 class="title">
-<a name="ox.appsuite.user.chap.calendar"></a>Chapitre 7. <span class="phrase">Agenda</span>   </h1></div></div></div>
+<a name="ox.appsuite.user.chap.calendar"></a>Chapitre 7. <span class="phrase">Agenda</span>
+</h1></div></div></div>
 <div class="toc">
 <p><b>Table des matières</b></p>
 <dl class="toc">
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.gui.html">7.1 Les composants de <span class="phrase"> <span class="guilabel"><strong>Agenda</strong></span> </span>  </a></span></dt>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.view.html">7.2 Afficher des rendez-vous</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.view.html">7.2 Vues des rendez-vous</a></span></dt>
 <dd><dl>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.calendar.html">7.2.1 Afficher les rendez-vous dans une vue en calendrier</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.view.list.html">7.2.2 Afficher des rendez-vous dans la vue en liste</a></span></dt>
@@ -42,18 +48,18 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.subscribe.html">7.3.4 S'abonner à des rendez-vous d'autres agendas</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.add.conflicthandling.html">7.3.5 Résoudre les conflits de rendez-vous</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.4 Répondre à des invitations à des rendez-vous</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.invitation.html">7.4 Répondre aux invitations à des rendez-vous</a></span></dt>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.manage.html">7.5 Gérer les rendez-vous</a></span></dt>
 <dd><dl>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.edit.html">7.5.1 Modifier un rendez-vous</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.dragndrop.html">7.5.2 Modifier des rendez-vous par glisser-déposer</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.changestatus.html">7.5.3 Changer l'état d'un rendez-vous</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.5.4 Déplacer des rendez-vous dans un autre dossier</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.move.html">7.5.4 Déplacer des rendez-vous vers un autre dossier</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.print.html">7.5.5 Imprimer des rendez-vous</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.delete.html">7.5.6 Supprimer des rendez-vous</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.manage.multiple.html">7.5.7 Modifier plusieurs rendez-vous à la fois</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.6 Rendez-vous d'équipe</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.share.html">7.6 Rendez-vous en équipe</a></span></dt>
 <dd><dl>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.appointments.html">7.6.1 Partager des rendez-vous</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.calendar.share.mail_participants.html">7.6.2 Envoyer un courriel aux participants</a></span></dt>
@@ -64,23 +70,23 @@
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.calendar.settings.html">7.7 Réglages de l'agenda</a></span></dt>
 </dl>
 </div>
-<a class="indexterm" name="idm140475923965936"></a><a class="indexterm" name="idm140475918465712"></a><a class="indexterm" name="idm140475917400928"></a><a class="indexterm" name="idm140475919515968"></a><div class="concept">
-<a name="ox.appsuite.user.concept.calendar"></a><p>Apprenez à utiliser l'application <span class="phrase"> <span class="guilabel"><strong>Agenda</strong></span>. </span>   </p>
+<a class="indexterm" name="idm139841092000896"></a><a class="indexterm" name="idm139841091707232"></a><a class="indexterm" name="idm139841090281936"></a><a class="indexterm" name="idm139841089395744"></a><div class="concept">
+<a name="ox.appsuite.user.concept.calendar"></a><p>Apprenez à utiliser l'application <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span>.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>les <a class="link" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Les composants de Agenda">composants <span class="phrase"> d'<span class="guilabel"><strong>Agenda</strong></span> </span>   </a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Afficher des rendez-vous">afficher</a> des rendez-vous</p></li>
+<li class="listitem"><p>les <a class="link" href="ox.appsuite.user.sect.calendar.gui.html" title="7.1. Les composants de Agenda">composants <span class="phrase"> de <span class="guilabel"><strong>Agenda</strong></span> </span>   </a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.view.html" title="7.2. Vues des rendez-vous">afficher</a> des rendez-vous</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.add.html" title="7.3. Créer des rendez-vous">créer</a> des rendez-vous</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.invitation.html" title="7.4. Répondre à des invitations à des rendez-vous">répondre</a> à des invitations à des rendez-vous</p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.invitation.html" title="7.4. Répondre aux invitations à des rendez-vous">répondre</a> à des invitations à des rendez-vous</p></li>
 <li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.manage.html" title="7.5. Gérer les rendez-vous">gérer</a> des rendez-vous</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.6. Rendez-vous d'équipe">partager</a> des agendas avec d'autres utilisateurs</p></li>
-<li class="listitem"><p>utiliser les <a class="link" href="ox.appsuite.user.sect.calendar.settings.html" title="7.7. Réglages de l'agenda">réglages</a> <span class="phrase"> d'<span class="guilabel"><strong>Agenda</strong></span> </span>  </p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.share.html" title="7.6. Rendez-vous en équipe">partager</a> des agendas avec d'autres utilisateurs</p></li>
+<li class="listitem"><p>utilisez les réglages de <a class="link" href="ox.appsuite.user.sect.calendar.settings.html" title="7.7. Réglages de l'agenda"><span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span></a></p></li>
 </ul></div>
 <p>
   </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.calendar.start"></a><p class="title"><b>Pour démarrer l'app <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span>   : </b></p>
-<div class="procedure"><ul class="procedure"><li class="step"><p>Cliquez sur <span class="phrase"><span class="guimenu"><strong>Agenda</strong></span></span>   dans la barre de menu. </p></li></ul></div>
+<a name="ox.appsuite.user.task.calendar.start"></a><p class="title"><b>Pour démarrer l'app <span class="phrase"><span class="guilabel"><strong>Agenda</strong></span></span>   :</b></p>
+<div class="procedure"><ul class="procedure"><li class="step"><p>Cliquez sur <span class="phrase"><span class="guimenu"><strong>Agenda</strong></span></span>   dans la barre de menu.</p></li></ul></div>
 </div>
 </div>
 </body>

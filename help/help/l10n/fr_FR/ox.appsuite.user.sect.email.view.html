@@ -1,31 +1,36 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>5.2. Afficher des courriels</title>
+<title>5.2. Affichage des courriels</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="OX App Suite">
 <link rel="up" href="ox.appsuite.user.chap.email.html" title="Chapitre 5. Courriel">
-<link rel="prev" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Les composants de Courriel">
+<link rel="prev" href="ox.appsuite.user.sect.email.gui.html" title="5.1. Les composants Courriel">
 <link rel="next" href="ox.appsuite.user.sect.email.attachments.html" title="5.3. Afficher ou enregistrer les pièces jointes à un courriel">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
-<link rel="stylesheet" type="text/css" href="../../../apps/io.ox/core/bootstrap/css/bootstrap.min.css"​/> 
-
+<link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<div class="oxhelp-navigation-top"><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><ul class="nav">
-<a class="brand"></a><li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.gui.html">Précédent</a></li>
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.gui.html">Précédent</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Sommaire</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdM</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.attachments.html">Suivant</a></li>
-</ul></div></div></div>
+</ul></div>
+</div></nav></div>
 <div class="oxhelp-content">
   <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.email.view"></a>5.2. Afficher des courriels</h2></div></div></div>
-<a class="indexterm" name="idm140475918165520"></a><a class="indexterm" name="idm140475918163904"></a><div class="concept">
-<a name="ox.appsuite.user.concept.email.view"></a><p>Par défaut, le contenu de la boîte de réception s'affiche. Les autres dossiers de courrier peuvent être ouverts depuis l'arborescence des dossiers.</p>
+<a name="ox.appsuite.user.sect.email.view"></a>5.2. Affichage des courriels</h2></div></div></div>
+<a class="indexterm" name="idm139841087866896"></a><a class="indexterm" name="idm139841087865280"></a><div class="concept">
+<a name="ox.appsuite.user.concept.email.view"></a><p>Par défaut, le contenu de la boîte de réception est affiché. Les autres dossiers de courriers peuvent être ouverts depuis l'arborescence des dossiers. Afin de réduire la latence, seul un certain pourcentage des courriels d'un dossier sont chargés par le serveur, si leur nombre dépasse une limite prédéfinie. En naviguant vers le bas de la liste, la partie suivante sera chargée.</p>
 </div>
 <div class="task">
 <a name="ox.appsuite.user.task.email.view"></a><p class="title"><b>Pour afficher un message électronique :</b></p>
@@ -34,34 +39,30 @@
 <li class="step">
 <p>Pour trouver rapidement un message donné, utilisez une des méthodes suivantes : </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Pour trouver des messages à partir d'un terme de recherche, utilisez la <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.html#ox.appsuite.user.task.search" title="Pour chercher un objet :">fonctionnalité de recherche</a>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour trier la liste des messages, cliquez sur l'icône <span class="guibutton"><strong>Trier</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.sort1"></a><img src="../../images/appsuite_user_icon_sort.png"></span> sous la barre latérale. Choisissez un critère de recherche dans le menu.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour n'afficher que les messages non lus de la liste, cliquez sur l'icône <span class="guibutton"><strong>Trier</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.sort2"></a><img src="../../images/appsuite_user_icon_sort.png"></span> sous la barre latérale. Choisissez <span class="guibutton"><strong>Seulement les non lus</strong></span> dans le menu.</p></li>
-</ul></div>
-</li>
-<li class="step"><p>Cliquez sur un message dans la barre latérale. Le contenu du message sera affiché dans la zone d'affichage. Si le message appartient à un fil de discussion, la réponse correspondante sera affichée en haut et le message originel en bas.</p></li>
-<li class="step">
-<p>Si le message appartient à un fil de discussion, les fonctionnalités suivantes s'offrent à vous : </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Pour afficher tous les messages précédents appartenant à la discussion dans la barre latérale, cliquez sur l'icône <span class="guibutton"><strong>Fil de discussion</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.thread01"></a><img src="../../images/appsuite_user_icon_thread.png"></span>.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour afficher le contenu d'un message précédent, cliquer dessus dans la barre latérale.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour afficher le contenu de tout un fil de discussion, cliquer sur le message courant dans la barre latérale.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Pour cacher les messages précédents dans la barre latérale, cliquez à nouveau sur l'icône <span class="guibutton"><strong>Fil de discussion</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.thread02"></a><img src="../../images/appsuite_user_icon_thread.png"></span>.</p></li>
-</ul></div>
-</li>
-<li class="step">
-<p>Si le message cite du texte d'un courriel précédent, les fonctionnalités suivantes s'offrent à vous :</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>Pour afficher la citation complète, cliquez sur la barre verticale sur le côté gauche de la citation ou sur  <span class="guibutton"><strong>Afficher plus…</strong></span>.</p></li></ul></div>
-</li>
-<li class="step">
-<p>Pour afficher un autre message : </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Cliquez sur un autre message dans la barre latérale.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Utilisez les touches fléchées pour parcourir la liste.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour trouver des messages à partir d'un terme de recherche, utilisez la <a class="link" href="ox.appsuite.user.sect.dataorganisation.search.objects.html#ox.appsuite.user.task.search" title="Pour chercher un objet :">fonctionnalité de recherche</a>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour trier la liste de courriels, cliquez sur <span class="guibutton"><strong>Trier par</strong></span> au-dessus de la liste. Sélectionnez le critère de tri dans le menu.</p></li>
 </ul></div>
 <p>
           </p>
 </li>
+<li class="step"><p>Pour combiner tous les courriels d'une discussion dans une seul entrée de liste, activez la case à cocher <span class="guibutton"><strong>Discussions</strong></span> dans <span class="guibutton"><strong>Trier par</strong></span>.</p></li>
+<li class="step">
+<p>Cliquez sur un message dans la liste. Le contenu du message sera affiché dans la vue détaillée. Si le message appartient à un fil de discussion, tous les courriels de cette discussion seront affichés les uns après les autres.</p>
+<p>Si vous avez sélectionné <span class="guibutton"><strong>Liste</strong></span> dans la liste déroulante <span class="guibutton"><strong>Vue</strong></span> de la barre d'outils, la liste est remplacée par une vue détaillée du courriel sélectionné. Dans ce cas, les fonctions suivantes sont disponibles au-dessus de la vue détaillée.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Pour ouvrir à nouveau la liste, cliquez sur le bouton ou l'icône <span class="guibutton"><strong>Retour</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.back"></a><img src="../../images/appsuite_user_icon_view_back.png"></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour afficher le courriel suivant, cliquez sur l'icône <span class="guibutton"><strong>Afficher le suivant</strong></span> icon <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.next"></a><img src="../../images/appsuite_user_icon_view_next.png"></span>.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Pour afficher le message précédent, cliquez sur l'icône <span class="guibutton"><strong>Afficher le précédent</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.previous"></a><img src="../../images/appsuite_user_icon_view_previous.png"></span>.</p></li>
+</ul></div>
+<p>
+          </p>
+<p>En sélectionnant, depuis la barre d'outils, dans la liste déroulante <span class="guibutton"><strong>Vue</strong></span> les choix <span class="guibutton"><strong>Verticale</strong></span> ou <span class="guibutton"><strong>Compacte</strong></span>, vous pouvez ouvrir un courriel dans une fenêtre séparée en double-cliquant sur un courriel de la liste.</p>
+</li>
+<li class="step">
+<p>Si une discussion est affichée, vous pouvez ouvrir ou fermer un courriel unique dans la vue détaillée en cliquant sur la zone disponible entre l'expéditeur et la date de réception.</p>
+<p>Pour ouvrir ou fermer tous les courriels de la conversation, cliquez sur l'icône <span class="guibutton"><strong>Ouvrir /fermer tous les messages</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.threadopen"></a><img src="../../images/appsuite_user_icon_thread_open.png"></span> sur le coin en haut à droite de la vue détaillée.</p>
+</li>
+<li class="step"><p>Si le courriel inclut une citation du courriel précédent, vous pouvez l'afficher en cliquant sur l'icône <span class="guibutton"><strong>Afficher le texte cité</strong></span> <span class="inlinemediaobject"><a name="ox.appsuite.user.fig.email.view.showquoted"></a><img src="../../images/appsuite_user_icon_email_quote.png"></span> .</p></li>
 </ol></div>
 </div>
 </div>

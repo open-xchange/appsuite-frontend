@@ -9,22 +9,27 @@
 <link rel="prev" href="ox.appsuite.user.sect.files.webdav.winxp.html" title="9.6.2. Configurer WebDAV sous Windows XP">
 <link rel="next" href="ox.appsuite.user.sect.files.webdav.win7.html" title="9.6.4. Configurer WebDAV sous Windows 7">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Note légale">
-<link rel="stylesheet" type="text/css" href="../../../apps/io.ox/core/bootstrap/css/bootstrap.min.css"​/> 
-
+<link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<div class="oxhelp-navigation-top"><div class="navbar navbar-inverse navbar-fixed-top"><div class="navbar-inner"><ul class="nav">
-<a class="brand"></a><li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.webdav.winxp.html">Précédent</a></li>
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">Open-Xchange</a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.files.webdav.winxp.html">Précédent</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Sommaire</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdM</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.files.webdav.win7.html">Suivant</a></li>
-</ul></div></div></div>
+</ul></div>
+</div></nav></div>
 <div class="oxhelp-content">
   <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.files.webdav.winvista"></a>9.6.3. Configurer WebDAV sous Windows Vista</h3></div></div></div>
-<a class="indexterm" name="idm140475913192784"></a><a class="indexterm" name="idm140475913191392"></a><p><a name="ox.appsuite.user.concept.files.webdav.winvista"></a>Il y a plusieurs méthodes pour configurer l'accès par WebDAV sous Windows Vista :</p>
+<a class="indexterm" name="idm139841082886224"></a><a class="indexterm" name="idm139841082884832"></a><p><a name="ox.appsuite.user.concept.files.webdav.winvista"></a>Il y a plusieurs méthodes pour configurer l'accès par WebDAV sous Windows Vista :</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Utilisez le Programme de mise à jour de OX. Vous trouverez des informations à ce sujet dans la documentation utilisateur du Programme de mise à jour de OX.</p></li>
 <li class="listitem"><p>Installez d'abord la <a class="link" href="ox.appsuite.user.sect.files.webdav.winvista.html#ox.appsuite.user.task.webdav.msupdate" title="Pour installer la mise à jour logicielle de Microsoft pour WebDAV :">Mise à jour logicielle</a> de Microsoft pour les dossiers web. Ensuite, configurez l'<a class="link" href="ox.appsuite.user.sect.files.webdav.winvista.html#ox.appsuite.user.task.webdav.winvista" title="Pour régler l'accès par WebDAV sous Windows Vista :">accès WebDav</a>.</p></li>
@@ -38,7 +43,7 @@
 <li class="step"><p>Saisissez l'adresse suivante : http://support.microsoft.com/kb/907306</p></li>
 <li class="step"><p>Allez jusqu'à <span class="guilabel"><strong>Plus d'informations</strong></span> et cliquez sur <span class="guibutton"><strong>Télécharger la mise à jour de logiciel pour le package de dossiers Web maintenant.</strong></span>.</p></li>
 <li class="step"><p>Sur la page de téléchargement, cliquez sur <span class="guibutton"><strong>TÉLÉCHARGER</strong></span>. Le fichier Webfldrs-KB907306-ENU.exe sera téléchargé.</p></li>
-<li class="step"><p>Double-cliquez sur le fichier téléchargé pour lancer l'installation.</p></li>
+<li class="step"><p>Faites un double-clic sur le fichier téléchargé pour lancer l'installation.</p></li>
 </ol></div>
 </div>
 <div class="task">
@@ -48,12 +53,12 @@
 <li class="step"><p>Cliquez avec le bouton droit de la souris sur une zone libre du volet de droite de l'explorateur. Dans le menu contextuel, choisissez <span class="guibutton"><strong>Ajouter un emplacement réseau</strong></span>. L'assistant <span class="guilabel"><strong>Ajouter un emplacement réseau</strong></span> se lance. Cliquez sur <span class="guibutton"><strong>Suivant</strong></span>.</p></li>
 <li class="step"><p>Sélectionnez <span class="guibutton"><strong>Choisissez un emplacement réseau personnalisé</strong></span>. Cliquez sur Suivant.</p></li>
 <li class="step"><p>Dans l'écran <span class="guilabel"><strong>Spécifiez l'emplacement de votre site Web</strong></span>, saisissez l'adresse suivante : https://&lt;adresse&gt;/servlet/webdav.infostore Remplacez &lt;adresse&gt; par l'adresse IP ou l'URL du serveur de travail collaboratif.</p></li>
-<li class="step"><p>Saisissez votre nom d'utilisateur et votre mot de passe. Prenez pour cela les données de connexion au serveur de travail collaboratif. </p></li>
-<li class="step"><p>Dans l'écran suivant, vous pouvez associer un nom à la ressource.</p></li>
+<li class="step"><p>Saisissez le nom d'utilisateur et le mot de passe qui vous permettent d'accéder au serveur de travail collaboratif. </p></li>
+<li class="step"><p>Dans l'écran d'assistant suivant, vous pouvez associer un nom à la ressource réseau.</p></li>
 <li class="step"><p>Dans l'écran suivant, cliquez sur <span class="guibutton"><strong>Terminer</strong></span>.</p></li>
 </ol></div>
 <div class="taskrelated">
-          <p class="order.result"><span class="phrase"><strong>Résultat :</strong></span> sous <span class="guibutton"><strong>Ordinateur</strong></span>, vous pouvez accéder à vos fichiers de l'app <span class="phrase"> <span class="guilabel"><strong>Lecteur</strong></span>. </span>  </p>
+          <p class="order.result"><span class="phrase"><strong>Résultat :</strong></span> sous <span class="guibutton"><strong>Ordinateur</strong></span>, vous pouvez accéder à vos fichiers de l'app <span class="guibutton"><strong>Computer </strong></span> you can access your <span class="phrase"><span class="guilabel"><strong>Fichiers</strong></span></span>.</p>
         </div>
 </div>
 </div>
