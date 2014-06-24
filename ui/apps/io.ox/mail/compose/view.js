@@ -128,7 +128,7 @@ define('io.ox/mail/compose/view',
             ext.point(POINT + '/menuoptions').invoke('draw', dropdown.$el, baton);
 
             this.append(
-                $('<div class="col-xs-6 col-md-4">').append(
+                $('<div class="col-xs-6 col-md-3">').append(
                     dropdown.render().$el.addClass('pull-right')
                 )
             );

@@ -140,12 +140,12 @@ define('io.ox/mail/compose/extensions',
                 )
             );
         },
-        subject: function () {
+        subject: function (baton) {
             this.append(
                 $('<div class="row" data-extension-id="subject">').append(
                     $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text('Subject')),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input class="form-control">')
+                        $('<input class="form-control">').val(baton.model.get('subject'))
                     )
                 )
             );
@@ -168,16 +168,15 @@ define('io.ox/mail/compose/extensions',
             });
 
             this.append(
-                $('<div class="col-xs-6 col-md-4">').append(
+                $('<div class="col-xs-6 col-md-3">').append(
                     dropdown.render().$el
-                        .addClass('pull-right')
                         .attr('data-dropdown', 'signature')
                 )
             );
         },
         attachment: function () {
             this.append(
-                $('<div class="col-xs-6 col-md-4">').append(
+                $('<div class="col-xs-12 col-md-6">').append(
 
                 )
             );

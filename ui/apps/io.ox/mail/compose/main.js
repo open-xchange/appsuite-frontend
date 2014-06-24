@@ -83,7 +83,7 @@ define('io.ox/mail/compose/main',
 
             win.busy().show(function () {
                 win.nodes.main.addClass('scrollable').append(app.view.render().$el);
-                app.view.setMail({ data: data })
+                app.view.setMail()
                 .done(function () {
                     win.idle();
                      // render view and append
@@ -104,7 +104,7 @@ define('io.ox/mail/compose/main',
             return function (obj) {
 
                 var def = $.Deferred();
-                _.url.hash('app', 'io.ox/mail/write:' + type);
+                _.url.hash('app', 'io.ox/mail/compose:' + type);
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
