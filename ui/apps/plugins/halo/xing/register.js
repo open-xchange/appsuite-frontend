@@ -30,7 +30,7 @@ define('plugins/halo/xing/register',
 
     'use strict';
 
-    var  shortestPath, sharedContacts, miniProfile, extendedProfile, postalAddress, addressView, isEmpty, extractDimensionsFromName,
+    var  shortestPath, sharedContacts, miniProfile, extendedProfile, postalAddress, addressView, isEmpty,
         XING_NAME = gt('XING'),
         EMPLOYMENT = {
             //#. what follows is a set of job/status descriptions used by XING
@@ -46,11 +46,6 @@ define('plugins/halo/xing/register',
 
     isEmpty = function (obj) {
         return _(obj).isEmpty() || (_(_(obj).values()).compact().length === 0);
-    };
-
-    extractDimensionsFromName = function (name) {
-        var parts = name.split('.');
-        console.log(parts);
     };
 
     addressView = function (ad) {
@@ -116,16 +111,22 @@ define('plugins/halo/xing/register',
     };
 
     miniProfile = function (contact) {
-        var node, img;
+        var node, img, name;
 
         img = _.device('small') ? contact.photo_urls.thumb : contact.photo_urls.maxi_thumb;
-        extractDimensionsFromName(img);
+
+        if (contact.permalink) {
+            name = $('<a>').attr({href: contact.permalink, target: '_blank'})
+                .addClass('permalink')
+                .text(contact.display_name);
+        } else {
+            name = $('<p>').text(contact.display_name);
+        }
+
         node = $('<div>').addClass('mini-profile').append(
             //$('<img>').attr({src: img}).addClass('pic'),
             $('<div>').css({'background-image': 'url(' + img + ')'}).addClass('pic'),
-            $('<a>').attr({href: contact.permalink, target: '_blank'})
-                .addClass('permalink')
-                .text(contact.display_name)
+            name
         );
 
         return node;
