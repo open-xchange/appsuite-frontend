@@ -111,9 +111,9 @@ define('io.ox/mail/compose/extensions',
                 $('<div class="row" data-extension-id="to">').append(
                     $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text(gt('To'))),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<div class="recipient-actions pull-right">').append(
-                            $('<span data-action="add-cc">').text(gt('CC')),
-                            $('<span data-action="add-bcc">').text(gt('BCC'))
+                        $('<div class="recipient-actions">').append(
+                            $('<a href="#" data-action="add-cc">').text(gt('CC')),
+                            $('<a href="#" data-action="add-bcc">').text(gt('BCC'))
                         ),
                         $('<input type="text" class="form-control to tokenfield">').data('type', 'to')
                     )

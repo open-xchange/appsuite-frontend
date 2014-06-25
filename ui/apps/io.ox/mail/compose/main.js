@@ -70,6 +70,32 @@ define('io.ox/mail/compose/main',
             }));
         });
 
+        app.failSave = function () {
+            var mail = app.view.getMail();
+            delete mail.files;
+            return {
+                module: 'io.ox/mail/compose',
+                description: gt('Mail') + ': ' + (mail.data.subject || gt('No subject')),
+                point: mail
+            };
+        };
+
+        app.failRestore = function (point) {
+            return $.when();
+            // var def = $.Deferred();
+            // win.busy().show(function () {
+            //     _.url.hash('app', 'io.ox/mail/compose:' + point.mode);
+            //     debugger;
+            //     app.view.setMail(point).done(function () {
+            //         app.dirty(true);
+            //         win.idle();
+            //         app.getEditor().focus();
+            //         def.resolve();
+            //     });
+            // });
+            // return def;
+        };
+
         function compose(data) {
 
             var def = $.Deferred();
