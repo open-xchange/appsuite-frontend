@@ -15,6 +15,18 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
 
     'use strict';
 
+    function newModel(data) {
+        var model = new Backbone.Model(data || {});
+        model.fetched = false;
+        return model;
+    }
+
+    function newCollection(list) {
+        var collection = new Backbone.Collection(list || []);
+        collection.fetched = false;
+        return collection;
+    }
+
     // collection pool
     var pool = {
 
@@ -25,15 +37,11 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
             var id = data.id;
             if (this.models[id] === undefined) {
                 // add new model
-                this.models[id] = new Backbone.Model(data);
+                this.models[id] = newModel(data);
             } else {
                 // update existing model
                 this.models[id].set(data);
             }
-        },
-
-        hasCollection: function (id) {
-            return this.collections[id] !== undefined;
         },
 
         addCollection: function (id, list) {
@@ -42,20 +50,20 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
             // add to pool
             if (this.collections[id] === undefined) {
                 // add new collection
-                this.collections[id] = new Backbone.Collection(list);
+                this.collections[id] = newCollection(list);
             } else {
                 // update existing collection
                 var collection = this.collections[id];
-                if (collection.length === 0) collection.reset(list); else collection.set(list);
+                if (!collection.fetched) collection.reset(list); else collection.set(list);
             }
         },
 
-        getFolderModel: function (id) {
-            return this.models[id] || (this.models[id] = new Backbone.Model({ id: id }));
+        getModel: function (id) {
+            return this.models[id] || (this.models[id] = newModel({ id: id }));
         },
 
-        getSubFolderCollection: function (id) {
-            return this.collections[id] || (this.collections[id] = new Backbone.Collection());
+        getCollection: function (id) {
+            return this.collections[id] || (this.collections[id] = newCollection());
         }
     };
 
@@ -100,7 +108,8 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
         options = _.extend({ all: false }, options);
 
         // already cached?
-        if (pool.hasCollection(id)) return $.when(pool.getSubFolderCollection(id).toJSON());
+        var collection = pool.getCollection(id);
+        if (collection.fetched) return $.when(collection.toJSON());
 
         return http.GET({
             module: 'folders',
@@ -115,7 +124,8 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
             appendColumns: true
         })
         .done(function (list) {
-            pool.addCollection(id, list);
+            collection.fetched = true;
+            collection.reset(list);
         });
     }
 

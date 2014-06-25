@@ -139,8 +139,8 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             // also set: folder, parent, tree
 
             this.isVirtual = /^virtual/.test(this.folder);
-            this.model = api.pool.getFolderModel(o.model_id);
-            this.collection = api.pool.getSubFolderCollection(o.model_id);
+            this.model = api.pool.getModel(o.model_id);
+            this.collection = api.pool.getCollection(o.model_id);
             this.$ = {};
 
             // collection changes
