@@ -79,10 +79,10 @@ define('io.ox/mail/compose/extensions',
             this.append(
                 $('<div class="row" data-extension-id="title">').append(
                     $('<div class="col-lg-12 header">').append(
-                        $('<h1 class="clear-title title">').text('Compose new mail'),
-                        $('<button type="button" class="btn btn-primary" data-action="send">').text('Send'),
-                        $('<button type="button" class="btn btn-default" data-action="save">').text('Save'),
-                        $('<button type="button" class="btn btn-default" data-action="discard">').text('Discard')
+                        $('<h1 class="clear-title title">').text(gt('Compose new mail')),
+                        $('<button type="button" class="btn btn-primary" data-action="send">').text(gt('Send')),
+                        $('<button type="button" class="btn btn-default" data-action="save">').text(gt('Save')),
+                        $('<button type="button" class="btn btn-default" data-action="discard">').text(gt('Discard'))
                     )
                 )
             );
@@ -109,11 +109,11 @@ define('io.ox/mail/compose/extensions',
         to: function () {
             this.append(
                 $('<div class="row" data-extension-id="to">').append(
-                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text('To')),
+                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text(gt('To'))),
                     $('<div class="col-xs-10 col-md-11">').append(
                         $('<div class="recipient-actions pull-right">').append(
-                            $('<span data-action="add-cc">').text('CC'),
-                            $('<span data-action="add-bcc">').text('BCC')
+                            $('<span data-action="add-cc">').text(gt('CC')),
+                            $('<span data-action="add-bcc">').text(gt('BCC'))
                         ),
                         $('<input type="text" class="form-control to tokenfield">').data('type', 'to')
                     )
@@ -123,7 +123,7 @@ define('io.ox/mail/compose/extensions',
         cc: function () {
             this.append(
                 $('<div class="row hidden" data-extension-id="cc">').append(
-                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text('CC')),
+                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text(gt('CC'))),
                     $('<div class="col-xs-10 col-md-11">').append(
                         $('<input type="text" class="form-control cc tokenfield">').data('type', 'cc')
                     )
@@ -133,7 +133,7 @@ define('io.ox/mail/compose/extensions',
         bcc: function () {
             this.append(
                 $('<div class="row hidden" data-extension-id="bcc">').append(
-                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text('BCC')),
+                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text(gt('BCC'))),
                     $('<div class="col-xs-10 col-md-11">').append(
                         $('<input type="text" class="form-control bcc tokenfield">').data('type', 'bcc')
                     )
@@ -143,7 +143,7 @@ define('io.ox/mail/compose/extensions',
         subject: function (baton) {
             this.append(
                 $('<div class="row" data-extension-id="subject">').append(
-                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text('Subject')),
+                    $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text(gt('Subject'))),
                     $('<div class="col-xs-10 col-md-11">').append(
                         $('<input class="form-control">').val(baton.model.get('subject'))
                     )
