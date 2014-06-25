@@ -24,9 +24,9 @@ define('io.ox/mail/main',
      'io.ox/core/api/account',
      'io.ox/core/notifications',
      'io.ox/core/toolbars-mobile',
-     'io.ox/core/commons-folderview',
      'io.ox/core/page-controller',
      'io.ox/core/capabilities',
+     'io.ox/core/folder/view',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
      'io.ox/mail/actions',
@@ -35,7 +35,7 @@ define('io.ox/mail/main',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, FolderView, PageController, capabilities, gt, settings) {
+    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, FolderView, PageController, capabilities, FolderView, gt, settings) {
 
     'use strict';
 
@@ -211,13 +211,15 @@ define('io.ox/mail/main',
          * Folder view support
          */
         'folder-view': function (app) {
-            if (_.device('small')) return;
-            // folder tree
-            commons.addFolderView(app, { type: 'mail' });
-            app.getWindow().nodes.sidepanel.addClass('border-right');
 
-            require(['io.ox/core/folder/tree'], function (FolderTreeView) {
-                var view = new FolderTreeView({ app: app, module: 'mail', root: 1, contextmenu: true });
+            if (_.device('small')) return;
+
+            // initialize folder view
+            FolderView.initialize(app);
+            // commons.addFolderView(app, { type: 'mail' });
+
+            require(['io.ox/core/folder/tree'], function (TreeView) {
+                var view = new TreeView({ app: app, module: 'mail', root: 1, contextmenu: true });
                 app.getWindow().nodes.sidepanel.append(view.render().$el);
                 // respond to selection change
                 view.on('change', function (id) {
@@ -296,26 +298,27 @@ define('io.ox/mail/main',
          */
         'folder-view-mobile': function (app) {
 
-            if (_.device('!small')) return;
+            if (_.device('!small')) return app;
 
-            app.pages.getNavbar('folderTree')
-                .on('rightAction', function () {
-                    app.toggleFolders();
-                });
+            // TODO: fix folder tree for mobile
 
-            var view = new FolderView(app, {
-                type: 'mail',
-                container: app.pages.getPage('folderTree')
-            });
-            view.handleFolderChange();
-            view.load();
+            // app.pages.getNavbar('folderTree')
+            //     .on('rightAction', function () {
+            //         app.toggleFolders();
+            //     });
 
-            // bind action for edit button
-            app.bindFolderChange();
+            // var view = new FolderView(app, {
+            //     type: 'mail',
+            //     container: app.pages.getPage('folderTree')
+            // });
+            // view.handleFolderChange();
+            // view.load();
 
-            // make folder visible by default
-            app.toggleFolderView(true);
+            // // bind action for edit button
+            // app.bindFolderChange();
 
+            // // make folder visible by default
+            // app.toggleFolderView(true);
         },
 
         /*

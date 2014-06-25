@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/toggle', [], function () {
+define('io.ox/core/folder/actions/toggle', [], function () {
 
     'use strict';
 

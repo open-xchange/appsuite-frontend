@@ -12,17 +12,16 @@
  */
 
 define('io.ox/core/folder/tree',
-    ['io.ox/core/folder/view',
+    ['io.ox/core/folder/node',
      'io.ox/core/folder/selection',
      'io.ox/core/api/folder',
      'io.ox/core/api/account',
      'io.ox/core/extensions',
-     'io.ox/core/folder/contextmenu',
-     'less!io.ox/core/folder/style'], function (FolderView, Selection, api, account, ext) {
+     'less!io.ox/core/folder/style'], function (TreeNodeView, Selection, api, account, ext) {
 
     'use strict';
 
-    var FolderTreeView = Backbone.View.extend({
+    var TreeView = Backbone.View.extend({
 
         className: 'folder-tree bottom-toolbar abs',
 
@@ -56,34 +55,45 @@ define('io.ox/core/folder/tree',
             return module === this.module || (module === 'mail' && (/^default\d+(\W|$)/i).test(model.id));
         },
 
-        getFolderViewOptions: function (options, model) {
+        getTreeNodeOptions: function (options, model) {
             if (model.get('id') === 'default0/INBOX') {
                 options.subfolders = false;
             }
             return options;
         },
 
-        onToggleContextMenu: function (e) {
+        onToggleContextMenu: (function () {
 
-            var dropdown = this.$el.find('.context-dropdown'),
-                isOpen = dropdown.hasClass('open'),
-                target = $(e.currentTarget);
+            function renderItems(dropdown, continuation) {
+                dropdown.find('.dropdown-menu').idle();
+                continuation();
+            }
 
-            _.defer(function () {
+            return function (e) {
 
-                if (isOpen) return dropdown.removeClass('open');
+                var dropdown = this.$el.find('.context-dropdown'),
+                    isOpen = dropdown.hasClass('open'),
+                    target = $(e.currentTarget);
 
-                this.renderContextMenuItems();
+                // return early on close
+                if (isOpen) return;
 
-                var offset = target.offset(),
-                    top = offset.top - 7,
-                    left = offset.left + target.outerWidth() + 7;
+                _.defer(function () {
 
-                dropdown.find('.dropdown-menu').css({ top: top, left: left });
-                dropdown.addClass('open').data('previous-focus', target); // helps to restore focus (see renderContextMenu)
+                    // calculate proper position
+                    var offset = target.offset(),
+                        top = offset.top - 7,
+                        left = offset.left + target.outerWidth() + 7;
 
-            }.bind(this));
-        },
+                    dropdown.find('.dropdown-menu').css({ top: top, left: left }).busy();
+                    dropdown.addClass('open').data('previous-focus', target); // helps to restore focus (see renderContextMenu)
+
+                    // load relevant code on demand
+                    require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems, dropdown, this.renderContextMenuItems.bind(this)));
+
+                }.bind(this));
+            };
+        }()),
 
         onKeydown: function (e) {
 
@@ -162,7 +172,7 @@ define('io.ox/core/folder/tree',
             draw: function (tree) {
                 this.append(
                     // standard folders
-                    new FolderView({ folder: tree.root, headless: true, open: true, tree: tree, parent: tree })
+                    new TreeNodeView({ folder: tree.root, headless: true, open: true, tree: tree, parent: tree })
                     .render().$el
                 );
             }
@@ -183,7 +193,7 @@ define('io.ox/core/folder/tree',
             draw: function (tree) {
                 this.append(
                     // local folders
-                    new FolderView({
+                    new TreeNodeView({
                         count: 0,
                         folder: 'virtual/folders', // convention! virtual folders are identified by their id starting with "virtual"
                         model_id: 'default0/INBOX',
@@ -207,5 +217,5 @@ define('io.ox/core/folder/tree',
         }
     );
 
-    return FolderTreeView;
+    return TreeView;
 });

@@ -524,10 +524,6 @@ define('io.ox/core/commons-folderview',
 
         this.init = function (views) {
 
-            // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
-            var open = app.settings.get('folderview/open', {});
-            if (open && open[_.display()]) open = open[_.display()];
-            open = _.isArray(open) ? open : [];
 
             // init tree before running toolbar extensions
             var tree = baton.tree = app.folderView = new views[options.view](container, {

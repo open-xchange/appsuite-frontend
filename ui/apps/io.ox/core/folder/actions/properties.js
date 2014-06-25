@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/properties',
+define('io.ox/core/folder/actions/properties',
     ['io.ox/core/api/folder',
      'io.ox/core/capabilities',
      'gettext!io.ox/core'], function (api, capabilities, gt) {

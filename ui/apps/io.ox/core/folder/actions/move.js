@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/move',
+define('io.ox/core/folder/actions/move',
     ['io.ox/core/api/folder',
      'io.ox/core/notifications',
      'gettext!io.ox/core'], function (api, notifications, gt) {

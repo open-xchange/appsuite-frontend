@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/add',
+define('io.ox/core/folder/actions/add',
     ['io.ox/core/api/folder',
      'io.ox/core/tk/dialogs',
      'io.ox/core/extensions',

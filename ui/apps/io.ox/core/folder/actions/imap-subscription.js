@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/folder/imap-subscription',
+define('io.ox/core/folder/actions/imap-subscription',
     ['io.ox/core/api/folder',
      'io.ox/core/cache',
      'io.ox/core/tk/folderviews',
