@@ -2580,7 +2580,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/edit/view-form.js:107
 #: module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:154
+#: apps/plugins/halo/xing/register.js:155
 #: module:plugins/portal
 msgid "Business address"
 msgstr ""
@@ -2609,7 +2609,7 @@ msgstr ""
 #: apps/io.ox/contacts/edit/view-form.js:135
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:73
+#: apps/plugins/halo/xing/register.js:68
 #: module:plugins/portal
 msgid ""
 "%1$s"
@@ -2744,7 +2744,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js:234
 #: module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:145
+#: apps/plugins/halo/xing/register.js:146
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr ""
@@ -7835,7 +7835,7 @@ msgstr ""
 msgid "Delete account"
 msgstr ""
 
-#: apps/io.ox/settings/main.js:374
+#: apps/io.ox/settings/main.js:377
 #: module:io.ox/core
 msgid "Advanced Settings"
 msgstr ""
@@ -8544,39 +8544,39 @@ msgstr ""
 msgid "Retired"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:82
+#: apps/plugins/halo/xing/register.js:77
 #: module:plugins/portal
 msgid "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:106
+#: apps/plugins/halo/xing/register.js:101
 #: module:plugins/portal
 msgid "Your shared contacts:"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:163
+#: apps/plugins/halo/xing/register.js:164
 #: module:plugins/portal
 msgid "Private address"
 msgstr ""
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:179
+#: apps/plugins/halo/xing/register.js:180
 #: module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:189
+#: apps/plugins/halo/xing/register.js:190
 #: module:plugins/portal
 msgid "Employment"
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:244
+#: apps/plugins/halo/xing/register.js:245
 #: module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr ""
 
-#: apps/plugins/halo/xing/register.js:268
+#: apps/plugins/halo/xing/register.js:269
 #: module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr ""

@@ -131,7 +131,7 @@ msgstr "%1$s （暂定）"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:180 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s - %2$s"
 
@@ -190,7 +190,7 @@ msgstr "%1$s 更改了他们的状态："
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:68 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr ""
 "%5$s\n"
@@ -719,7 +719,7 @@ msgstr "调整起始日期"
 msgid "Administrator"
 msgstr "管理员"
 
-#: apps/io.ox/settings/main.js:374 module:io.ox/core
+#: apps/io.ox/settings/main.js:377 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "进阶设置"
 
@@ -1082,7 +1082,7 @@ msgid "Business Address"
 msgstr "业务地址"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:155 module:plugins/portal
 msgid "Business address"
 msgstr "业务地址"
 
@@ -1791,7 +1791,7 @@ msgid "Date completed"
 msgstr "完成日期"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:146 module:plugins/portal
 msgid "Date of birth"
 msgstr "出生日期"
 
@@ -2430,7 +2430,7 @@ msgstr "员工 ID"
 msgid "Employee type"
 msgstr "员工类型"
 
-#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:190 module:plugins/portal
 msgid "Employment"
 msgstr "雇用"
 
@@ -4890,7 +4890,7 @@ msgstr "隐私通告"
 msgid "Private"
 msgstr "私人"
 
-#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:164 module:plugins/portal
 msgid "Private address"
 msgstr "私人地址"
 
@@ -5818,11 +5818,11 @@ msgstr "在重认证户口时发生错误。"
 msgid "Something went wrong saving your changes."
 msgstr "保存更改时发生错误。"
 
-#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:245 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "抱歉，现在无法连接到 %s。"
 
-#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:269 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "抱歉，%s 没有您的可用数据。"
 
@@ -7254,7 +7254,7 @@ msgid ""
 "therefore be created in your private calendar."
 msgstr "您不允许在  \"%1$s\" 里创建约会。因此，约会将会在您的私人日历里创建。"
 
-#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:77 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "您不是直接连接到 %s。这些人是链接到 %s 的："
@@ -7508,7 +7508,7 @@ msgstr "您选择的图像将会在保存后显示"
 msgid "Your session is expired"
 msgstr "会话已过期"
 
-#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:101 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "您的已分享联系人："
 

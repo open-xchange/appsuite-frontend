@@ -139,7 +139,7 @@ msgstr "%1$s (Pagaidu)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:180 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s - %2$s"
 
@@ -200,7 +200,7 @@ msgstr "%1$s izmainīja statusu:"
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:68 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr "%1$s%2$s %3$s%4$s%5$s"
 
@@ -737,7 +737,7 @@ msgstr "Koriģēt sākuma datumu"
 msgid "Administrator"
 msgstr "Administrators"
 
-#: apps/io.ox/settings/main.js:374 module:io.ox/core
+#: apps/io.ox/settings/main.js:377 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Papildu iestatījumi"
 
@@ -1113,7 +1113,7 @@ msgid "Business Address"
 msgstr "Darba adrese"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:155 module:plugins/portal
 msgid "Business address"
 msgstr "Darba adrese"
 
@@ -1828,7 +1828,7 @@ msgid "Date completed"
 msgstr "Izpildes datums"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:146 module:plugins/portal
 msgid "Date of birth"
 msgstr "Dzimšanas datums"
 
@@ -2490,7 +2490,7 @@ msgstr "Darbinieka ID"
 msgid "Employee type"
 msgstr "Darbinieka tips"
 
-#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:190 module:plugins/portal
 msgid "Employment"
 msgstr "Nodarbinātība"
 
@@ -4989,7 +4989,7 @@ msgstr "Privātuma paziņojums"
 msgid "Private"
 msgstr "Privāts"
 
-#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:164 module:plugins/portal
 msgid "Private address"
 msgstr "Pivātā adrese"
 
@@ -5925,11 +5925,11 @@ msgstr "Kļūda pie šī konta atkārtotas autorizēšanas."
 msgid "Something went wrong saving your changes."
 msgstr "Kļūda pie izmaiņu saglabāšanas."
 
-#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:245 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "Atvainojiet, bet pašreiz nav iespējamas pieslēgties pie %s."
 
-#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:269 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Atvainojiet, bet %s nav jums pieejamu datu."
 
@@ -7432,7 +7432,7 @@ msgstr ""
 "Jums nav tiesību izveidot tikšanās ierakstus iekš \"%1$s\". Tikšanās "
 "ieraksti tiks izveidotai jūsu privātajā kalendārā."
 
-#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:77 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "Jūs neesat tieši saistīts ar %s. Šeit ir ar %s saistītās personas:"
@@ -7702,7 +7702,7 @@ msgstr "Jūsu izvēlētais attēls tiks parādīts pēc saglabāšanas"
 msgid "Your session is expired"
 msgstr "Jūsu sesijas derīgums ir beidzies"
 
-#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:101 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "Jūsu koplietojuma kontakti:"
 

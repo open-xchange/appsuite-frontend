@@ -142,7 +142,7 @@ msgstr "%1$s (nezáväzne)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:180 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s, %2$s"
 
@@ -201,7 +201,7 @@ msgstr "%1$s aktualizoval(a) svoj profil:"
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:68 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr "%1$s%2$s %3$s%4$s%5$s"
 
@@ -737,7 +737,7 @@ msgstr "Zmeniť dátum začiatku"
 msgid "Administrator"
 msgstr "Správca"
 
-#: apps/io.ox/settings/main.js:374 module:io.ox/core
+#: apps/io.ox/settings/main.js:377 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Pokročilé nastavenie"
 
@@ -1110,7 +1110,7 @@ msgid "Business Address"
 msgstr "Adresa do práce"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:155 module:plugins/portal
 msgid "Business address"
 msgstr "Adresa do práce"
 
@@ -1825,7 +1825,7 @@ msgid "Date completed"
 msgstr "Dátum dokončenia"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:146 module:plugins/portal
 msgid "Date of birth"
 msgstr "Dátum narodenia"
 
@@ -2472,7 +2472,7 @@ msgstr "ID zamestnanca"
 msgid "Employee type"
 msgstr "Typ zamestnanca"
 
-#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:190 module:plugins/portal
 msgid "Employment"
 msgstr "Zamestnanie"
 
@@ -4967,7 +4967,7 @@ msgstr "Ochrana súkromia"
 msgid "Private"
 msgstr "Súkromné"
 
-#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:164 module:plugins/portal
 msgid "Private address"
 msgstr "Súkromná adresa"
 
@@ -5901,11 +5901,11 @@ msgstr "Pri opätovnej autorizácii účtu sa niečo pokazilo."
 msgid "Something went wrong saving your changes."
 msgstr "Pri ukladaní vašich zmien sa niečo pokazilo."
 
-#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:245 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "Ľutujeme, ale momentálne nie je možné pripojiť sa k %s."
 
-#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:269 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Ľutujeme, nie sú pre vás k dispozícii žiadne údaje o %s."
 
@@ -7389,7 +7389,7 @@ msgstr ""
 "Nemôžete vytvárať plánované činnosti v „%1$s“. Schôdzky budú preto vytvorené "
 "vo vašom súkromnom kalendári."
 
-#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:77 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr "Nie sú priamo spojený s %s. Tu sú ľudia, ktorí sú spojení s %s:"
@@ -7656,7 +7656,7 @@ msgstr "Obrázok, ktorý ste zvolili sa zobrazí po uložení"
 msgid "Your session is expired"
 msgstr "Vaša relácia vypršala"
 
-#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:101 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "Vaše spoločné kontakty:"
 

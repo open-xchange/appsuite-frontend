@@ -141,7 +141,7 @@ msgstr "%1$s (Tentativă)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:180 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s la %2$s"
 
@@ -200,7 +200,7 @@ msgstr "%1$s și-a actualizat profilul:"
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:68 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr "%1$s%2$s %3$s%4$s%5$s"
 
@@ -737,7 +737,7 @@ msgstr "Modifică data de început"
 msgid "Administrator"
 msgstr "Administrator"
 
-#: apps/io.ox/settings/main.js:374 module:io.ox/core
+#: apps/io.ox/settings/main.js:377 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Setări avansate"
 
@@ -1112,7 +1112,7 @@ msgid "Business Address"
 msgstr "Adresă profesională"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:155 module:plugins/portal
 msgid "Business address"
 msgstr "Adresă profesională"
 
@@ -1830,7 +1830,7 @@ msgid "Date completed"
 msgstr "Data încheierii"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:146 module:plugins/portal
 msgid "Date of birth"
 msgstr "Data nașterii"
 
@@ -2479,7 +2479,7 @@ msgstr "Identificator angajat"
 msgid "Employee type"
 msgstr "Tip de angajat"
 
-#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:190 module:plugins/portal
 msgid "Employment"
 msgstr "Loc de muncă"
 
@@ -4977,7 +4977,7 @@ msgstr "Declarație de confidențialitate"
 msgid "Private"
 msgstr "Personal"
 
-#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:164 module:plugins/portal
 msgid "Private address"
 msgstr "Adresă personală"
 
@@ -5913,11 +5913,11 @@ msgstr "A apărut o eroare la noua autorizare a contului."
 msgid "Something went wrong saving your changes."
 msgstr "A apărut o eroare la salvarea modificărilor."
 
-#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:245 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "Ne pare rău, conectarea la %s este imposibilă pentru moment."
 
-#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:269 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Ne pare rău, nu sunt date disponibile pe %s."
 
@@ -7424,7 +7424,7 @@ msgstr ""
 "Nu aveți permisiune pentru a crea întâlniri în \"%1$s\". Prin urmare, "
 "întâlnirile vor fi create în calendarul dumneavoastră personal."
 
-#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:77 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
@@ -7693,7 +7693,7 @@ msgstr "Imaginea selectată va fi afișată după salvare"
 msgid "Your session is expired"
 msgstr "Sesiunea dumneavoastră a expirat"
 
-#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:101 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "Contactele dumneavoastră partajate:"
 

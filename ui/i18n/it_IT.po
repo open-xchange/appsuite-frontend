@@ -135,7 +135,7 @@ msgstr "%1$s (Provvisorio)"
 
 #. %1$s is the employee position or status, e.g. student
 #. %2$s is the employer name, e.g. University of Meinerzhagen-Valbert
-#: apps/plugins/halo/xing/register.js:179 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:180 module:plugins/portal
 msgid "%1$s at %2$s"
 msgstr "%1$s presso %2$s"
 
@@ -194,7 +194,7 @@ msgstr "%1$s hanno cambiato il loro profilo:"
 #. %5$s is the country
 #: apps/io.ox/contacts/edit/view-form.js:135 module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js:407
-#: apps/plugins/halo/xing/register.js:73 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:68 module:plugins/portal
 msgid "%1$s%2$s %3$s%4$s%5$s"
 msgstr "%1$s%2$s %3$s%4$s%5$s"
 
@@ -723,7 +723,7 @@ msgstr "Modifica la data iniziale"
 msgid "Administrator"
 msgstr "Amministratore"
 
-#: apps/io.ox/settings/main.js:374 module:io.ox/core
+#: apps/io.ox/settings/main.js:377 module:io.ox/core
 msgid "Advanced Settings"
 msgstr "Impostazioni avanzate"
 
@@ -1096,7 +1096,7 @@ msgid "Business Address"
 msgstr "Indirizzo di lavoro"
 
 #: apps/io.ox/contacts/edit/view-form.js:107 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:154 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:155 module:plugins/portal
 msgid "Business address"
 msgstr "Indirizzo di lavoro"
 
@@ -1810,7 +1810,7 @@ msgid "Date completed"
 msgstr "Data di completamento"
 
 #: apps/io.ox/contacts/model.js:234 module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js:145 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:146 module:plugins/portal
 msgid "Date of birth"
 msgstr "Data di nascita"
 
@@ -2455,7 +2455,7 @@ msgstr "Matricola dell'impiegato"
 msgid "Employee type"
 msgstr "Tipo di impiegato"
 
-#: apps/plugins/halo/xing/register.js:189 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:190 module:plugins/portal
 msgid "Employment"
 msgstr "Occupazione"
 
@@ -4949,7 +4949,7 @@ msgstr "Avviso di riservatezza"
 msgid "Private"
 msgstr "Privato"
 
-#: apps/plugins/halo/xing/register.js:163 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:164 module:plugins/portal
 msgid "Private address"
 msgstr "Indirizzo privato"
 
@@ -5884,11 +5884,11 @@ msgstr ""
 msgid "Something went wrong saving your changes."
 msgstr "Qualcosa non ha funzionato durante il salvataggio delle modifiche."
 
-#: apps/plugins/halo/xing/register.js:244 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:245 module:plugins/portal
 msgid "Sorry, could not connect to %s right now."
 msgstr "Spiacenti, impossibile connettersi a %s in questo momento."
 
-#: apps/plugins/halo/xing/register.js:268 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:269 module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Spiacenti, non ci sono dati disponibili per te su %s."
 
@@ -7392,7 +7392,7 @@ msgstr ""
 "Non hai il permesso di creare appuntamenti in \"%1$s\". Gli appuntamenti "
 "saranno quindi creati nel tuo calendario privato."
 
-#: apps/plugins/halo/xing/register.js:82 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:77 module:plugins/portal
 msgid ""
 "You are not directly linked to %s. Here are people who are linked to %s:"
 msgstr ""
@@ -7658,7 +7658,7 @@ msgstr "L'immagine selezionata sarà visualizzata dopo averla salvata"
 msgid "Your session is expired"
 msgstr "La sessione è scaduta"
 
-#: apps/plugins/halo/xing/register.js:106 module:plugins/portal
+#: apps/plugins/halo/xing/register.js:101 module:plugins/portal
 msgid "Your shared contacts:"
 msgstr "I tuoi contatti condivisi:"
 
