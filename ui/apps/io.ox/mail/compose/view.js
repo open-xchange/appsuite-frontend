@@ -600,16 +600,10 @@ define('io.ox/mail/compose/view',
 
         setFormat: function (mode) {
             var self = this;
-            var test = _.queued(function (mode) {
-                // change?
-                return (mode === self.editorMode ?
-                    $.when() :
-                    self.changeEditorMode(mode).done(function () {
-                        self.editorMode = mode;
-                    })
-                );
+
+            return this.changeEditorMode(mode).done(function () {
+                self.editorMode = mode;
             });
-            return test();
         },
 
         setRawBody: function (str) {
@@ -618,6 +612,8 @@ define('io.ox/mail/compose/view',
 
         setBody: function (str) {
 
+            var self = this;
+
             function trimContent(str) {
                 // remove white-space at beginning except in first-line
                 str = String(str || '').replace(/^[\s\xA0]*\n([\s\xA0]*\S)/, '$1');
@@ -625,11 +621,18 @@ define('io.ox/mail/compose/view',
                 return str.replace(/[\s\uFEFF\xA0]+$/, '');
             }
 
-            var content = trimContent(str), dsID, ds;
+            function prependNewLine(content) {
+                var nl = self.editorMode === 'html' ? '<p><br></p>' : '\n\n';
+                if (content !== '' && content.indexOf(nl) !== 0) {
+                    content = nl + content;
+                }
+                return content;
+            }
+
+            var content = prependNewLine(trimContent(str));
 
             //set content
             this.editor.setContent(content);
-
         },
 
         getFrom: function () {
@@ -713,16 +716,19 @@ define('io.ox/mail/compose/view',
         setMail: function (mail) {
             var self = this,
                 data = mail || {};
+
+            data.initial = data.initial || true;
+
             return this.setFormat(this.editorMode).done(function () {
                 var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[self.editorMode] || []) : (undefined);
                 var content = attachments && attachments.length ? (attachments[0].content || '') : '';
                 var format = attachments && attachments.length && attachments[0].content_type === 'text/plain' ? 'text' : 'html';
 
-                if (this.editorMode === 'text') {
+                if (self.editorMode === 'text') {
                     content = _.unescapeHTML(content.replace(/<br\s*\/?>/g, '\n'));
                 }
                 // image URL fix
-                if (this.editorMode === 'html') {
+                if (self.editorMode === 'html') {
                     content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
                 }
                 // convert different emoji encodings to unified
