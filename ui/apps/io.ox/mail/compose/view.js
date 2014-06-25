@@ -326,8 +326,6 @@ define('io.ox/mail/compose/view',
                 def = $.Deferred(),
                 convert = emoji.converterFor({to: emoji.sendEncoding()});
 
-            mail.data.from = [['David Bauer', 'david.bauer@open-xchange.com']];
-
             this.blockReuse(mail.data.sendtype);
             this.prepareMailForSending(mail);
 
@@ -342,12 +340,8 @@ define('io.ox/mail/compose/view',
                 mail.data.attachments[0].content = convert(mail.data.attachments[0].content, mail.format);
             }
 
-            // fix inline images
-            mail.data.attachments[0].content = mail.data.attachments[0].content
-                    .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
-                    .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
-                    .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
-                    .replace(/data-mce-src="[^"]+"\s?/, '');
+             // fix inline images
+            mail.data.attachments[0].content = mailUtil.fixInlineImages(mail.data.attachments[0].content);
 
             function cont() {
                 var win = self.app.getWindow();
@@ -563,46 +557,24 @@ define('io.ox/mail/compose/view',
             return def;
         },
 
-        changeEditorMode: function (mode) {
+        changeEditorMode: function () {
             // be busy
             this.textarea.prop('disabled', true).busy();
             if (this.editor) {
                 var content = this.editor.getPlainText();
                 this.editor.clear();
                 this.editor.handleHide();
-                if (this.editor.tinymce) {
-                    // changing from HTML to TEXT
-                    this.editorMode = 'text';
-                    if (!this.editorHash.text) {
-                        // load TEXT editor for the first time
-                        return this.loadEditor(content);
-                    } else {
-                        // reuse TEXT editor
-                        return this.reuseEditor(content);
-                    }
-                } else {
-                    // changing from TEXT to HTML
-                    this.editorMode = 'html';
-                    if (!this.editorHash.html) {
-                        // load HTML editor for the first time
-                        return this.loadEditor(content);
-                    } else {
-                        // reuse HTML editor
-                        return this.reuseEditor(content);
-                    }
-                }
+
+                // toggle editor
+                this.editorMode = this.editor.tinymce ? 'text' : 'html';
+
+                // load TEXT/HTML editor for the first time or reuse TEXT/HTML editor
+                return !this.editorHash[this.editorMode] ? this.loadEditor(content) : this.reuseEditor(content);
+
             } else {
                 // initial editor
-                return this.loadEditor(mode);
+                return this.loadEditor(this.editorMode);
             }
-        },
-
-        setFormat: function (mode) {
-            var self = this;
-
-            return this.changeEditorMode(mode).done(function () {
-                self.editorMode = mode;
-            });
         },
 
         setRawBody: function (str) {
@@ -685,7 +657,7 @@ define('io.ox/mail/compose/view',
             }
 
             mail = {
-                from: [data.from] || [],
+                from: data.from,
                 to: data.to,
                 cc: data.cc,
                 bcc: data.bcc,
@@ -718,7 +690,7 @@ define('io.ox/mail/compose/view',
 
             data.initial = data.initial || true;
 
-            return this.setFormat(this.editorMode).done(function () {
+            return this.changeEditorMode().done(function () {
                 var attachments = data.attachments ? (_.isArray(data.attachments) ? data.attachments : data.attachments[self.editorMode] || []) : (undefined);
                 var content = attachments && attachments.length ? (attachments[0].content || '') : '';
                 var format = attachments && attachments.length && attachments[0].content_type === 'text/plain' ? 'text' : 'html';

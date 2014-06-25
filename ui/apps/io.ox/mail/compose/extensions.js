@@ -90,7 +90,7 @@ define('io.ox/mail/compose/extensions',
 
         sender: function (baton) {
 
-          /*  var node = $('<div class="row" data-extension-id="sender">');
+          var node = $('<div class="row" data-extension-id="sender">');
 
             var dropdown = new SenderDropdown({ model: baton.model, label: gt('From') });
 
@@ -104,7 +104,7 @@ define('io.ox/mail/compose/extensions',
                 }
             });
 
-            this.append(node);*/
+            this.append(node);
         },
         to: function () {
             this.append(
