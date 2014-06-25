@@ -269,6 +269,7 @@ done
 mv "%{buildroot}/opt/open-xchange/sbin/touch-appsuite" "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
 cat "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp" | sed -e "s:## cd ##:cd %{docroot}:" > \
     "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
+chmod +x "%{buildroot}/opt/open-xchange/sbin/touch-appsuite"
 rm "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
 
 %clean
