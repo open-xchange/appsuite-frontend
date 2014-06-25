@@ -711,6 +711,11 @@ define('io.ox/core/main',
                     // only requests are delayed by 2s, the badge is drawn normally
                     self.append(notifications.attach(addLauncher, 2000));
                     tabManager();
+                } else {
+                    ox.one('connection:online', function () {//lets wait till we are online
+                        self.append(notifications.attach(addLauncher, 2000));
+                        tabManager();
+                    });
                 }
             }
         });
