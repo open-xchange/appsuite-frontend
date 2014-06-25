@@ -37,17 +37,11 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
                 return text;
             }
 
-            var i = 0, asciiOnly = true, exceptions = {
-                '\u00a9': true,
-                '\u00ae': true
-            };
-
-            // check if there might be any emojis; pure ascii cannot contain them
-            for (var i = 0; asciiOnly && i < text.length; i++) {
-                if (text.charCodeAt(i) > 255 || exceptions[text.charAt(i)]) asciiOnly = false;
+            // check if there might be any emojis; pure ascii cannot contain them (except 0xA9 and 0xAE)
+            // using a regex is 50-100 times faster than looping over the characters
+            if (!/[\xa9\xae\u0100-\uffff]/.test(text)) {
+                return text;
             }
-
-            if (asciiOnly) return text;
 
             if (emoji && !cb) {
                 text = convert(text);
