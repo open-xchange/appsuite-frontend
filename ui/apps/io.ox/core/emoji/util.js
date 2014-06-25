@@ -32,6 +32,11 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
 
         processEmoji: function (text, cb) {
 
+            if (text.length > (1024 * (_.device('chrome >= 30') ? 64 : 32)) {
+                //text is large
+                return text;
+            }
+
             var i = 0, asciiOnly = true, exceptions = {
                 '\u00a9': true,
                 '\u00ae': true
