@@ -541,7 +541,9 @@ define('io.ox/core/notifications',
     // auto-close if other apps are started; see bug #32768
     // users might open mails from notification area, open a contact halo, clicking edit
     ox.on('app:start', function () {
-        controller.hideList();
+        if (controller.badgeView) {//don't trigger to early
+            controller.hideList();
+        }
     });
 
     return controller;
