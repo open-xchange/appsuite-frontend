@@ -826,13 +826,12 @@ define('io.ox/mail/compose/view',
                         var val = $(this).val();
                         if ((/^to:?\s/i).test(val)) {
                             $(this).val('');
-                            // self.showSection('to');
                         } else if ((/^cc:?\s/i).test(val)) {
                             $(this).val('');
-                            this.$el.find('[data-extension-id="cc"]').removeClass('hidden');
+                            el.find('[data-extension-id="cc"]').removeClass('hidden');
                         } else if ((/^bcc:?\s/i).test(val)) {
                             $(this).val('');
-                            this.$el.find('[data-extension-id="bcc"]').removeClass('hidden');
+                            el.find('[data-extension-id="bcc"]').removeClass('hidden');
                         }
                     }
                 });
@@ -853,40 +852,6 @@ define('io.ox/mail/compose/view',
         }
 
     });
-
-    // function copyRecipients(to, node, e) {
-
-    //     var valBase, list;
-
-    //     // normalize data
-    //     if (e && e.data && e.data.distlistarray !== null) {
-    //         // distribution list
-    //         list = _(e.data.distlistarray).map(function (member) {
-    //             return {
-    //                 label: member.display_name,
-    //                 value: member.mail
-    //             };
-    //         });
-    //     } else if (e && e.data && e.data.id) {
-    //         // selected contact list
-    //         list = [e.data];
-    //     } else {
-    //         valBase = node.val();
-    //         list = mailUtil.parseRecipients(valBase);
-    //     }
-
-    //     if (list.length) {
-    //         // add
-    //         //this.addRecipients(id, list);
-    //         to.tokenfield('createToken', list);
-    //         // don't refocus on blur
-    //         if (e.type !== 'blur') node.val('').focus();
-    //         //clear the input field
-    //         node.val('');
-    //     } else if ($.trim(node.val()) !== '') {
-    //         // not accepted but has content
-    //     }
-    // }
 
     return MailComposeView;
 });
