@@ -108,6 +108,9 @@ define('io.ox/preview/main',
             if (options.height === 'auto') {
                 delete param.height;
             }
+            if (options.width === 'auto') {
+                delete param.width;
+            }
             this.append(
                 $('<img>', { src: file.dataURL + '&' + $.param(param), alt: 'Preview' }));
         }

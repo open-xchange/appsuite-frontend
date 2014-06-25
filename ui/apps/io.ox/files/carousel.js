@@ -18,12 +18,14 @@ define('io.ox/files/carousel',
      'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/core/api/folder',
+     'io.ox/preview/main',
      'less!io.ox/files/carousel'
-    ], function (commons, capabilities, gt, api, folderAPI) {
+    ], function (commons, capabilities, gt, api, folderAPI, preview) {
 
     'use strict';
 
-    var regIsImage = /\.(gif|tiff|jpe?g|gmp|png)$/i,
+    var regIsImage = /\.(gif|tiff|jpe?g|bmp|png)$/i,
+        regIsPlainText = /\.(txt|asc|js|md|json)$/i,//list from our text preview renderer
         regIsDocument = /\.(pdf|docx?|xlsx?|pptx?)$/i;
 
     var carouselSlider = {
@@ -207,7 +209,7 @@ define('io.ox/files/carousel',
         filterImagesList: function (list) {
             var supportsDocuments = capabilities.has('document_preview');
             return _(list).filter(function (o) {
-                return regIsImage.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
+                return regIsImage.test(o.filename) || regIsPlainText.test(o.filename) || (supportsDocuments && regIsDocument.test(o.filename));
             });
         },
 
@@ -270,22 +272,36 @@ define('io.ox/files/carousel',
                 this.firstStart = false;
             }
 
+            function parseArguments(file) {
+                if (!file.filename) {
+                    return null;
+                }
+                return {
+                    name: file.filename,
+                    filename: file.filename,
+                    mimetype: file.file_mimetype,
+                    size: file.file_size,
+                    dataURL: api.getUrl(file, 'bare'),
+                    version: file.version,
+                    id: file.id,
+                    folder_id: file.folder_id
+                };
+            }
+
             if (item.children().length === 0) {
                 if (!this.config.attachmentMode) {
-                    item.busy().append(
-                        $('<img>', { alt: '', src: this.urlFor(file) })
-                            .on('load', this.imgLoad)
-                            .on('error', this.imgError), /* error doesn't seem to bubble */
+                    var prev = new preview.Preview(parseArguments(file), { width: 'auto', height: $(window).height()});
+                    prev.appendTo(item);
+                    item.append(
                         $('<div class="carousel-caption">').append(
                             $('<h4>').text(gt.noI18n(file.filename)),
                             file.folder_id ? folderAPI.getBreadcrumb(file.folder_id, { handler: hChangeFolder, subfolder: false, last: false }) : $()
                         )
                     );
                 } else {
+                    var prev = new preview.Preview(parseArguments(file), { width: 'auto', height: $(window).height()});
+                    prev.appendTo(item);
                     item.busy().append(
-                        $('<img>', { alt: '', src: this.urlFor(file) })
-                            .on('load', this.imgLoad)
-                            .on('error', this.imgError), /* error doesn't seem to bubble */
                         $('<div class="carousel-caption">').append($('<h4>').text(gt.noI18n(file.filename)))
                     );
                 }
