@@ -216,6 +216,7 @@ define('io.ox/mail/main',
 
             // initialize folder view
             FolderView.initialize(app);
+            app.folderView.resize.enable();
             // commons.addFolderView(app, { type: 'mail' });
 
             require(['io.ox/core/folder/tree'], function (TreeView) {
@@ -234,7 +235,7 @@ define('io.ox/mail/main',
         'folder-view-toggle': function (app) {
             if (_.device('small')) return;
             app.getWindow().nodes.main.on('dblclick', '.list-view-control .toolbar', function () {
-                app.toggleFolderView();
+                app.folderView.toggle();
             });
         },
 
@@ -964,7 +965,7 @@ define('io.ox/mail/main',
         'change:folderview': function (app) {
             if (_.device('small')) return;
             app.props.on('change:folderview', function (model, value) {
-                app.toggleFolderView(value);
+                app.folderView.toggle(value);
             });
             app.on('folderview:close', function () {
                 app.props.set('folderview', false);

@@ -32,6 +32,10 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
             }
         },
 
+        hasCollection: function (id) {
+            return this.collections[id] !== undefined;
+        },
+
         addCollection: function (id, list) {
             // add folder models first
             _(list).each(this.addModel, this);
@@ -54,6 +58,20 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
             return this.collections[id] || (this.collections[id] = new Backbone.Collection());
         }
     };
+
+    // use ramp-up data
+    _(ox.rampup.folder).each(function (data) {
+        pool.addModel(data);
+    });
+
+    _(ox.rampup.folderlist || {}).each(function (list, id) {
+        // make objects
+        list = _(list).map(function (data) {
+            return _.isArray(data) ? http.makeObject(data, 'folders') : data;
+        });
+        // add
+        pool.addCollection(id, list);
+    });
 
     // get a folder
     function get(id) {
@@ -80,6 +98,9 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
     function list(id, options) {
 
         options = _.extend({ all: false }, options);
+
+        // already cached?
+        if (pool.hasCollection(id)) return $.when(pool.getSubFolderCollection(id).toJSON());
 
         return http.GET({
             module: 'folders',

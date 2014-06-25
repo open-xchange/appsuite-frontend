@@ -86,7 +86,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             // toggle subfolder node
             this.$.subfolders.toggle(hasSubFolders && isOpen);
             // fetch sub-folders
-            if (hasSubFolders && isOpen) api.list(o.model_id);
+            if (hasSubFolders && isOpen) { this.onReset(); api.list(o.model_id); }
         },
 
         // respond to cursor left/right
@@ -184,7 +184,7 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
             if (this.isVirtual) this.$.selectable.addClass('virtual');
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
-            if (o.tree.contextmenu && this.options.tree.app && !this.isVirtual) this.renderContextControl();
+            if (o.tree.options.contextmenu && this.options.tree.app && !this.isVirtual) this.renderContextControl();
 
             // get data
             api.get(o.model_id);

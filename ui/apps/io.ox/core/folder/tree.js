@@ -37,12 +37,12 @@ define('io.ox/core/folder/tree',
             this.app = options.app;
             this.root = options.root;
             this.module = options.module;
-            this.contextmenu = options.contextmenu;
             this.selection = new Selection(this);
             this.$el.attr({ role: 'tree', tabindex: '1' }).data('view', this);
+            this.$contextmenu = $();
 
             // add contextmenu?
-            if (this.contextmenu) this.renderContextMenu();
+            if (this.options.contextmenu) _.defer(this.renderContextMenu.bind(this));
         },
 
         filter: function (folder, model) {
@@ -71,7 +71,7 @@ define('io.ox/core/folder/tree',
 
             return function (e) {
 
-                var dropdown = this.$el.find('.context-dropdown'),
+                var dropdown = this.$contextmenu,
                     isOpen = dropdown.hasClass('open'),
                     target = $(e.currentTarget);
 
@@ -97,7 +97,7 @@ define('io.ox/core/folder/tree',
 
         onKeydown: function (e) {
 
-            var dropdown = this.$el.find('.context-dropdown');
+            var dropdown = this.$contextmenu;
             if (!dropdown.hasClass('open')) return; // done if not open
             if (e.shiftKey && e.which === 9) return; // shift-tab
 
@@ -118,7 +118,7 @@ define('io.ox/core/folder/tree',
             var id = this.selection.get(),
                 app = this.app,
                 module = this.module,
-                ul = this.$el.find('.context-dropdown .dropdown-menu').empty(),
+                ul = this.$contextmenu.find('.dropdown-menu').empty(),
                 point = 'io.ox/core/foldertree/contextmenu';
             // get folder data and redraw
             api.get({ folder: id }).done(function (data) {
@@ -128,8 +128,8 @@ define('io.ox/core/folder/tree',
         },
 
         renderContextMenu: function () {
-            this.$el.append(
-                $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
+            this.$el.after(
+                this.$contextmenu = $('<div class="context-dropdown dropdown" data-action="context-menu">').append(
                     $('<div class="abs context-dropdown-overlay">'),
                     $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">'),
                     $('<ul class="dropdown-menu" role="menu">')

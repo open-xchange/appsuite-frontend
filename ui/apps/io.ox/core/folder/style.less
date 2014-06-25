@@ -115,9 +115,6 @@
         min-height: 30px;
     }
 
-    &.top-toolbar { top: 45px; }
-    &.bottom-toolbar { bottom: 45px; }
-
     h2 {
         font-size: 14px;
         font-weight: bold;
@@ -130,4 +127,7 @@
         margin: 14px 0;
         padding: 0 14px;
     }
+
+    .window-sidepanel.top-toolbar & { top: 45px; }
+    .window-sidepanel.bottom-toolbar & { bottom: 45px; }
 }

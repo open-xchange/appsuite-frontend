@@ -1225,9 +1225,29 @@ div.hopscotch-bubble {
     overflow: hidden;
     display: none;
 
+    background-color: #f5f5f5;
+
     &.visible {
         display:block;
         overflow: visible;
+    }
+
+    .resizebar {
+        background: transparent;
+        width: 5px;
+        height: 100%;
+        position: relative;
+        z-index: 1;
+        float: right;
+        cursor: e-resize;
+        cursor: ew-resize;
+        cursor: col-resize;
+        right: -3px;
+    }
+
+    .generic-toolbar.bottom {
+        border-color: rgba(0, 0, 0, 0.10);
+        background-color: rgba(0, 0, 0, 0.015);
     }
 }
 
@@ -3257,19 +3277,6 @@ ul.io-ox-inline-links + header {
 
     html.high-contrast & {
         background: none; // HC
-    }
-
-    .resizebar {
-        background: transparent;
-        width: 5px;
-        height: 100%;
-        position: relative;
-        z-index: 1;
-        float: right;
-        cursor: e-resize;
-        cursor: ew-resize;
-        cursor: col-resize;
-        right: -3px;
     }
 
     .foldertree-container {

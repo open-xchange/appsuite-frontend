@@ -25,11 +25,12 @@ define('io.ox/core/folder/view',
 
     function initialize(app, options) {
 
-        var POINT = 'hurz',
+        var POINT = app.get('name') + '/folderview',
             visible = false,
             open = app.settings.get('folderview/open', {}),
-            sidepanel = app.getWindow().nodes.sidepanel,
-            hiddenByResize = false;
+            nodes = app.getWindow().nodes,
+            sidepanel = nodes.sidepanel,
+            hiddenByWindowResize = false;
 
         //
         // Utility functions
@@ -37,6 +38,30 @@ define('io.ox/core/folder/view',
 
         function storeVisibleState() {
             app.settings.set('folderview/visible/' + _.display(), visible).save();
+        }
+
+        function storeWidth(width) {
+            app.settings.set('folderview/width/' + _.display(), width).save();
+        }
+
+        function getWidth() {
+            return app.settings.get('folderview/width/' + _.display(), 250);
+        }
+
+        function applyWidth(x) {
+            nodes.body.css('left', x + 'px');
+            nodes.sidepanel.css('width', x + 'px');
+        }
+
+        function applyInitialWidth() {
+            applyWidth(getWidth());
+        }
+
+        function resetLeftPosition() {
+            var win = app.getWindow(),
+                chromeless = win.options.chromeless,
+                tooSmall = $(document).width() <= 700;
+            nodes.body.css('left', chromeless || tooSmall ? 0 : 50);
         }
 
         //
@@ -51,14 +76,16 @@ define('io.ox/core/folder/view',
 
             show: function () {
                 visible = true;
-                if (!hiddenByResize) storeVisibleState();
+                if (!hiddenByWindowResize) storeVisibleState();
+                applyInitialWidth();
                 sidepanel.addClass('visible');
                 app.trigger('folderview:open');
             },
 
             hide: function () {
                 visible = false;
-                if (!hiddenByResize) storeVisibleState();
+                if (!hiddenByWindowResize) storeVisibleState();
+                resetLeftPosition();
                 sidepanel.removeClass('visible').css('width', '');
                 app.trigger('folderview:close');
             },
@@ -66,12 +93,71 @@ define('io.ox/core/folder/view',
             toggle: function (state) {
                 if (state === undefined) state = !visible;
                 if (state) this.show(); else this.hide();
-            }
+            },
+
+            resize: (function () {
+
+                var bar = $(),
+                    maxSidePanelWidth = 0,
+                    minSidePanelWidth = 150,
+                    width = 0;
+
+                function mousemove(e) {
+                    var x = e.pageX;
+                    if (x > maxSidePanelWidth || x < minSidePanelWidth) return;
+                    app.trigger('folderview:resize');
+                    applyWidth(width = x);
+                }
+
+                function mouseup(e) {
+                    $(this).off('mousemove.resize mouseup.resize');
+                    // auto-close?
+                    if (e.pageX < minSidePanelWidth) app.folderView.hide();
+                    else storeWidth(width || 250);
+                }
+
+                return {
+
+                    enable: function () {
+                        sidepanel.append(
+                            bar = $('<div class="resizebar">').on('mousedown', function (e) {
+                                e.preventDefault();
+                                maxSidePanelWidth = $(document).width() / 2;
+                                $(document).on({
+                                    'mousemove.resize': mousemove,
+                                    'mouseup.resize': mouseup
+                                });
+                            })
+                        );
+                    }
+                };
+            }())
         };
 
         app.folderViewIsVisible = function () {
             return visible;
         };
+
+        //
+        // Respond to window resize
+        //
+
+        function handleWindowResize() {
+            // get current width
+            var width = $(document).width();
+            // skip if window is invisible
+            if (!nodes.outer.is(':visible')) return;
+            // respond to current width
+            if (!hiddenByWindowResize && visible && width <= 700) {
+                app.folderView.hide();
+                hiddenByWindowResize = true;
+            } else if (hiddenByWindowResize && width > 700) {
+                app.folderView.show();
+                hiddenByWindowResize = false;
+            }
+        }
+
+        $(window).on('resize', _.throttle(handleWindowResize, 200));
 
         //
         // Extensions
@@ -130,7 +216,6 @@ define('io.ox/core/folder/view',
         });
 
         // show
-        console.log('Soooo', options.visible);
         if (options.visible) app.folderView.show();
     }
 

@@ -118,7 +118,7 @@ define('io.ox/mail/view-options',
 
     function toggleFolderView(e) {
         e.preventDefault();
-        e.data.app.toggleFolderView(e.data.state);
+        e.data.app.folderView.toggle(e.data.state);
     }
 
     function onFolderViewOpen(app) {
@@ -145,8 +145,8 @@ define('io.ox/mail/view-options',
 
             var side = baton.app.getWindow().nodes.sidepanel;
 
-            side.find('.foldertree-container').addClass('bottom-toolbar');
-            side.find('.foldertree-sidepanel').append(
+            side.addClass('bottom-toolbar');
+            side.append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
                     $('<a href="#" class="toolbar-item" tabindex="1">')
                     .attr('title', gt('Close folder view'))
