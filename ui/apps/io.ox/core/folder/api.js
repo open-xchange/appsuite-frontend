@@ -124,8 +124,8 @@ define('io.ox/core/folder/api', ['io.ox/core/http'], function (http) {
             appendColumns: true
         })
         .done(function (list) {
+            pool.addCollection(id, list);
             collection.fetched = true;
-            collection.reset(list);
         });
     }
 
