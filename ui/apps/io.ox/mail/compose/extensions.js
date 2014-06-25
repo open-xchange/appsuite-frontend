@@ -115,7 +115,7 @@ define('io.ox/mail/compose/extensions',
                             $('<span data-action="add-cc">').text('CC'),
                             $('<span data-action="add-bcc">').text('BCC')
                         ),
-                        $('<input type="text" class="form-control to tokenfield">')
+                        $('<input type="text" class="form-control to tokenfield">').data('type', 'to')
                     )
                 )
             );
@@ -125,7 +125,7 @@ define('io.ox/mail/compose/extensions',
                 $('<div class="row hidden" data-extension-id="cc">').append(
                     $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text('CC')),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control tokenfield">')
+                        $('<input type="text" class="form-control cc tokenfield">').data('type', 'cc')
                     )
                 )
             );
@@ -135,7 +135,7 @@ define('io.ox/mail/compose/extensions',
                 $('<div class="row hidden" data-extension-id="bcc">').append(
                     $('<div class="col-xs-2 col-md-1">').append($('<span class="maillabel">').text('BCC')),
                     $('<div class="col-xs-10 col-md-11">').append(
-                        $('<input type="text" class="form-control tokenfield">')
+                        $('<input type="text" class="form-control bcc tokenfield">').data('type', 'bcc')
                     )
                 )
             );

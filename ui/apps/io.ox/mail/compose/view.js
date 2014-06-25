@@ -734,11 +734,47 @@ define('io.ox/mail/compose/view',
         },
 
         postRender: function () {
-            var el = this.$el;
+            var model = this.model,
+                el = this.$el;
 
-            var tokenfields = el.find('.tokenfield').tokenfield({
-                createTokensOnBlur: true,
-                autocomplete: {
+            el.find('.tokenfield').each(function () {
+
+                var self = $(this),
+                    type = self.data('type');
+
+                self.tokenfield({
+                    createTokensOnBlur: true,
+                    minLength: 1
+                }).on({
+                    'tokenfield:createtoken': function (e) {
+                        var ac = $(this).data('bs.tokenfield').$input;
+                        // prevent default token creation on autocomplete select event
+                        if (ac.isOpen() && !ac.preventToken) {
+                            ac.preventToken = true;
+                            e.preventDefault();
+                        } else {
+                            ac.preventToken = false;
+                        }
+                    },
+                    'tokenfield:createdtoken': function (e) {
+                        var title = '';
+                        if (e.attrs) {
+                            if (e.attrs.label !== e.attrs.value) {
+                                title = e.attrs.label ? '"' + e.attrs.label + '" <' + e.attrs.value + '>' : e.attrs.value;
+                            } else {
+                                title = e.attrs.label;
+                            }
+                        }
+                        $(e.relatedTarget).attr({
+                            title: title
+                        });
+                    },
+                    'change': function () {
+                        model.set(type, self.tokenfield('getTokens'));
+                    }
+                });
+
+                self.data('bs.tokenfield').$input.autocomplete({
                     api: autocompleteAPI,
                     keyupRefocus: false, // suppress focus on keyup
                     reduce: function (data) {
@@ -756,13 +792,20 @@ define('io.ox/mail/compose/view',
                     stringify: function (data) {
                         var name = contactsUtil.getMailFullName(data),
                             address = data.email || data.phone || '';
-                        return name ? '"' + name + '"' : address;
+                        return name ? '"' + name + '" <' + address + '>' : address;
+                    },
+                    click: function (e) {
+                        var data = e.data,
+                            name = contactsUtil.getMailFullName(data),
+                            address = data.email || data.phone || '';
+                        self.tokenfield('createToken', { value: address, label: name ? name : address });
                     }
-                }
-            });
+                });
 
-            tokenfields.each(function () {
-                $(this).data('bs.tokenfield').$input.on({
+                // set initial values
+                self.tokenfield('setTokens', model.get(type), true, false);
+
+                self.data('bs.tokenfield').$input.on({
                     // IME support (e.g. for Japanese)
                     compositionstart: function () {
                         $(this).attr('data-ime', 'active');
