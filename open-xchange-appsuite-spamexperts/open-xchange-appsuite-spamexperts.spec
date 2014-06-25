@@ -86,7 +86,7 @@ if [ -x %{update} ]; then %{update}; fi
 #%{docroot}
 
 %changelog
-* Mon Jun 23 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
+* Wed Jun 25 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Seventh candidate for 7.6.0 release
 * Fri Jun 20 2014 Viktor Pracht <viktor.pracht@open-xchange.com>
 Sixth candidate for 7.6.0 release

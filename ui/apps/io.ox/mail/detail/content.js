@@ -398,7 +398,9 @@ define('io.ox/mail/detail/content',
 
     var explandBlockquote = function (e) {
         e.preventDefault();
-        $(this).hide().prev().slideDown('fast');
+        $(this).hide().prev().slideDown('fast', function () {
+            $(e.delegateTarget).trigger('resize');
+        });
     };
 
     ext.point('io.ox/mail/detail/content').extend({
@@ -426,9 +428,13 @@ define('io.ox/mail/detail/content',
         }
     });
 
+    function isBlockquoteToggle(node) {
+        return node.parent().hasClass('blockquote-toggle');
+    }
+
     function findFarthestElement(memo, node) {
         var pos;
-        if (node.css('position') === 'absolute' && (pos = node.position())) {
+        if (node.css('position') === 'absolute' && !isBlockquoteToggle(node) && (pos = node.position())) {
             memo.x = Math.max(memo.x, pos.left + node.width());
             memo.y = Math.max(memo.y, pos.top + node.height());
             memo.found = true;
@@ -447,6 +453,10 @@ define('io.ox/mail/detail/content',
             content.css('overflow-x', 'auto');
             if (farthest.y > height) content.css('height', Math.round(farthest.y) + 'px');
         }
+        // look for resize event
+        content.one('resize', function () {
+            fixAbsolutePositions($(this));
+        });
     }
 
     return {

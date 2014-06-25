@@ -234,7 +234,7 @@ done
 %{docroot}/appsuite/help-drive/l10n/zh_TW
 
 %changelog
-* Mon Jun 23 2014 Marcus Klein <marcus.klein@open-xchange.com>
+* Wed Jun 25 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Seventh candidate for 7.6.0 release
 * Fri Jun 20 2014 Marcus Klein <marcus.klein@open-xchange.com>
 Sixth candidate for 7.6.0 release
