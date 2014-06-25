@@ -14,24 +14,16 @@
 
 define('io.ox/mail/compose/main',
     ['io.ox/mail/api',
-     'io.ox/mail/util',
      'io.ox/core/extensions',
-     'io.ox/contacts/api',
-     'io.ox/contacts/util',
-     'io.ox/core/api/user',
-     'io.ox/core/api/account',
      'io.ox/core/tk/upload',
      'io.ox/emoji/main',
      'io.ox/core/notifications',
-     'io.ox/mail/sender',
-     'settings!io.ox/mail',
-     'settings!io.ox/core',
      'gettext!io.ox/mail',
      'io.ox/mail/compose/view',
      'io.ox/mail/compose/model',
      'less!io.ox/mail/style',
      'less!io.ox/mail/compose/style'
-    ], function (mailAPI, mailUtil, ext, contactsAPI, contactsUtil, userAPI, accountAPI, upload, emoji, notifications, sender, settings, coreSettings, gt, MailComposeView, MailModel) {
+    ], function (mailAPI, ext, upload, emoji, notifications, gt, MailComposeView, MailModel) {
 
     'use strict';
 

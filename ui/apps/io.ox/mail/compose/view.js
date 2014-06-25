@@ -326,8 +326,7 @@ define('io.ox/mail/compose/view',
                 def = $.Deferred(),
                 convert = emoji.converterFor({to: emoji.sendEncoding()});
 
-            //mail.data.to = [['David Bauer', 'david.bauer@open-xchange.com']];
-            //mail.data.from = [['David Bauer', 'david.bauer@open-xchange.com']];
+            mail.data.from = [['David Bauer', 'david.bauer@open-xchange.com']];
 
             this.blockReuse(mail.data.sendtype);
             this.prepareMailForSending(mail);
@@ -687,9 +686,9 @@ define('io.ox/mail/compose/view',
 
             mail = {
                 from: [data.from] || [],
-                to: parse(data.to),
-                cc: parse(data.cc),
-                bcc: parse(data.bcc),
+                to: data.to,
+                cc: data.cc,
+                bcc: data.bcc,
                 headers: headers,
                 reply_to: mailUtil.formatSender(replyTo),
                 subject: String(data.subject),

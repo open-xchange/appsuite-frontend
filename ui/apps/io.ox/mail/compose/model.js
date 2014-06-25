@@ -65,23 +65,16 @@ define('io.ox/mail/compose/model',
                 });
         },
         setFrom: function () {
-            /*var select = view.leftside.find('.sender-dropdown'),
-                filteredAccountId;
-
-            filteredAccountId = accountAPI.isUnified(data.account_id) ? accountAPI.parseAccountId(data.msgref) : data.account_id;
-
-            accountAPI.getPrimaryAddressFromFolder(filteredAccountId || folder_id).done(function (from) {
-                sender.set(select, from);
-
-            });*/
         },
-        getMail: function () {
-            var mail = {
-                to: [['David Bauer', 'david.bauer@open-xchange.com']],
-                from: [['David Bauer', 'david.bauer@open-xchange.com']],
-                subject: this.get('subject')
-            };
-            return mail;
+
+        getMail: function() {
+            var self = this;
+
+            _.each(['to', 'cc', 'bcc'], function (field) {
+                self.set(field, _.map(self.get(field), function (o) { return [o.label, o.value]; }));
+            });
+
+            return this.toJSON();
         },
         convertAllToUnified: emoji.converterFor({
             from: 'all',
