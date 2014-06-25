@@ -29,21 +29,24 @@ define('io.ox/core/folder/node', ['io.ox/core/folder/api', 'gettext!io.ox/core']
         },
 
         onReset: function () {
-            var o = this.options;
+
+            var o = this.options,
+                models = _(this.collection.filter(o.tree.filter.bind(o.tree, o.model_id)));
+
             this.$.subfolders
                 .empty()
-                .append(
-                    this.collection
-                    .chain()
-                    .filter(o.tree.filter.bind(o.tree, o.model_id))
-                    .map(this.getTreeNode, this)
-                    .value()
-                )
+                .append(models.map(this.getTreeNode, this))
                 .show();
+
+            // trigger events
+            models.each(function (model) {
+                o.tree.trigger('appear:' + model.id, model);
+            });
         },
 
         onAdd: function (model) {
             this.$.subfolders.append(this.getTreeNode(model));
+            this.options.tree.trigger('appear:' + model.id, model);
         },
 
         onRemove: function (model) {

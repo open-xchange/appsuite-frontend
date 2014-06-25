@@ -30,6 +30,20 @@ define('io.ox/core/folder/selection', [], function () {
             return this.view.$el.find('.selectable.selected').attr('data-id');
         },
 
+        set: function (id) {
+            var items = this.getItems(),
+                node = items.filter('[data-id="' + $.escape(id) + '"]'),
+                index = items.index(node);
+            // check if already selected to avoid event loops
+            if (index === -1 || node.hasClass('selected')) return;
+            this.pick(index, items, { focus: false });
+        },
+
+        preselect: function (id) {
+            var node = this.getItems().filter('[data-id="' + $.escape(id) + '"]');
+            this.check(node);
+        },
+
         onClick: function (e) {
 
             var items = this.getItems(),

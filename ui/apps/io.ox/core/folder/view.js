@@ -23,9 +23,13 @@ define('io.ox/core/folder/view',
 
     'use strict';
 
-    function initialize(app, options) {
+    function initialize(options) {
 
-        var POINT = app.get('name') + '/folderview',
+        options = options || {};
+
+        var app = options.app,
+            tree = options.tree,
+            POINT = app.get('name') + '/folderview',
             visible = false,
             open = app.settings.get('folderview/open', {}),
             nodes = app.getWindow().nodes,
@@ -204,7 +208,10 @@ define('io.ox/core/folder/view',
         //
 
         // add border
-        app.getWindow().nodes.sidepanel.addClass('border-right');
+        sidepanel.addClass('border-right');
+
+        // render tree and add to DOM
+        sidepanel.append(tree.render().$el);
 
         // work with old non-device specific setting (<= 7.2.2) and new device-specific approach (>= 7.4)
         if (open && open[_.display()]) open = open[_.display()];
@@ -214,6 +221,24 @@ define('io.ox/core/folder/view',
         _(ext.point(POINT + '/options').all()).each(function (obj) {
             options = _.extend(obj, options || {});
         });
+
+        // respond to folder change events
+
+        tree.on('change', function (id) {
+            app.folder.set(id);
+        });
+
+        app.on('folder:change', function (id) {
+            tree.selection.set(id);
+        });
+
+        // set initial folder
+        var id = app.folder.get();
+        if (id) {
+            tree.on('appear:' + id, function () {
+                tree.selection.preselect(id);
+            });
+        }
 
         // show
         if (options.visible) app.folderView.show();

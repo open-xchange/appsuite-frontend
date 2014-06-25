@@ -26,6 +26,7 @@ define('io.ox/mail/main',
      'io.ox/core/toolbars-mobile',
      'io.ox/core/page-controller',
      'io.ox/core/capabilities',
+     'io.ox/core/folder/tree',
      'io.ox/core/folder/view',
      'gettext!io.ox/mail',
      'settings!io.ox/mail',
@@ -35,7 +36,7 @@ define('io.ox/mail/main',
      'io.ox/mail/import',
      'less!io.ox/mail/style',
      'io.ox/mail/folderview-extensions'
-    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, FolderView, PageController, capabilities, FolderView, gt, settings) {
+    ], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, account, notifications, Bars, PageController, capabilities, FolderView, TreeView, gt, settings) {
 
     'use strict';
 
@@ -214,19 +215,12 @@ define('io.ox/mail/main',
 
             if (_.device('small')) return;
 
-            // initialize folder view
-            FolderView.initialize(app);
-            app.folderView.resize.enable();
-            // commons.addFolderView(app, { type: 'mail' });
+            // tree view
+            var tree = new TreeView({ app: app, module: 'mail', root: 1, contextmenu: true });
 
-            require(['io.ox/core/folder/tree'], function (TreeView) {
-                var view = new TreeView({ app: app, module: 'mail', root: 1, contextmenu: true });
-                app.getWindow().nodes.sidepanel.append(view.render().$el);
-                // respond to selection change
-                view.on('change', function (id) {
-                    app.folder.set(id);
-                });
-            });
+            // initialize folder view
+            FolderView.initialize({ app: app, tree: tree });
+            app.folderView.resize.enable();
         },
 
         /*

@@ -101,7 +101,7 @@ define('io.ox/core/folder/tree',
             if (!dropdown.hasClass('open')) return; // done if not open
             if (e.shiftKey && e.which === 9) return; // shift-tab
 
-            switch (e.which) {
+            switch (e.whxich) {
             case 9:  // tab
             case 40: // cursor down
                 e.preventDefault();
