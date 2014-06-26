@@ -351,6 +351,11 @@
         i.icon-unread { color: @link-color; }
         i.icon-answered { color: #aaa; }
         i.icon-forwarded { color: #888; }
+
+        .subject {
+        	overflow: hidden;
+            text-overflow: ellipsis;
+        }
     }
 
     &.visible-selection.has-focus .list-item.selected i {
