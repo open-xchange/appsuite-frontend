@@ -65,6 +65,14 @@ define('io.ox/mail/compose/model',
                 });
         },
 
+        setTokens: function (type, tokens) {
+            this.set(type, _.map(tokens, function (o) { return [o.label, o.value]; }));
+        },
+
+        getTokens: function (type) {
+            return this.get(type, []).map(function (o) { return { label: o[0] || '', value: o[1] || '' }; });
+        },
+
         getMail: function() {
             return _(this.toJSON()).pick(
                 'from',

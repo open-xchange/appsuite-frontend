@@ -707,7 +707,7 @@ define('io.ox/mail/compose/view',
                         });
                     },
                     'change': function () {
-                        model.set(type, _.map(self.tokenfield('getTokens'), function (o) { return [o.label, o.value]; }));
+                        model.setTokens(type, self.tokenfield('getTokens'));
                     }
                 });
 
@@ -740,7 +740,7 @@ define('io.ox/mail/compose/view',
                 });
 
                 // set initial values
-                self.tokenfield('setTokens', model.get(type, []).map(function (o) { return { label: o[0] || '', value: o[1] || '' }; }), true, false);
+                self.tokenfield('setTokens', model.getTokens(type), true, false);
 
                 self.data('bs.tokenfield').$input.on({
                     // IME support (e.g. for Japanese)
