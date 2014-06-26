@@ -747,7 +747,7 @@ define('io.ox/mail/compose/view',
                         });
                     },
                     'change': function () {
-                        model.set(type, self.tokenfield('getTokens'));
+                        model.set(type, _.map(self.tokenfield('getTokens'), function (o) { return [o.label, o.value]; }));
                     }
                 });
 

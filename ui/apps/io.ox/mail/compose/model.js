@@ -16,8 +16,9 @@ define('io.ox/mail/compose/model',
     ['io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/emoji/main',
+     'io.ox/mail/sender',
      'settings!io.ox/mail'
-    ], function (mailAPI, mailUtil, emoji, settings) {
+    ], function (mailAPI, mailUtil, emoji, sender, settings) {
 
     'use strict';
 
@@ -36,7 +37,7 @@ define('io.ox/mail/compose/model',
             flag_seen: '',
             flags: '',
             folder_id: 'default0/INBOX',
-            from: [],
+            from: sender.getDefaultSendAddressWithDisplayname(),
             headers: {},
             infostore_ids: [],
             level: '',
@@ -65,15 +66,10 @@ define('io.ox/mail/compose/model',
                 });
         },
         setFrom: function () {
+
         },
 
         getMail: function() {
-            var self = this;
-
-            _.each(['to', 'cc', 'bcc'], function (field) {
-                self.set(field, _.map(self.get(field), function (o) { return [o.label, o.value]; }));
-            });
-
             return this.toJSON();
         },
         convertAllToUnified: emoji.converterFor({

@@ -112,11 +112,19 @@ define('io.ox/mail/sender',
         },
 
         /**
-         * default send adresse from settigns
+         * default send adresse from settings
          * @return {string}
          */
         getDefaultSendAddress: function () {
             return $.trim(settings.get('defaultSendAddress', ''));
+        },
+
+         /**
+         * default send adresse from settings
+         * @return {string}
+         */
+        getDefaultSendAddressWithDisplayname: function () {
+            return [[api.getDefaultDisplayName(), $.trim(settings.get('defaultSendAddress', ''))]];
         },
 
         /**
